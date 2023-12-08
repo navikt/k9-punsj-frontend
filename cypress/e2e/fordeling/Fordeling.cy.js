@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
 
@@ -54,7 +54,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText('Korrigere/trekke refusjonskrav omsorgspenger').click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/korrigering-av-inntektsmelding');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/korrigering-av-inntektsmelding/');
     });
 
     it('Midlertidig alene - kan navigere til eksisterende søknader', () => {
@@ -65,7 +65,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-midlertidig-alene/hentsoknader');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-midlertidig-alene/soknader/');
     });
 
     it('Alene om omsorgen - kan navigere til eksisterende søknader', () => {
@@ -76,13 +76,13 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/soeknader');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/soknader/');
     });
 
     it('Omsorgspenger - behandlingsår vises når fagsaker ikke finnes', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
-            worker.use(rest.get(`${LOCAL_API_URL}/saker/hent`, (req, res, ctx) => res(ctx.status(200), ctx.json([]))));
+            worker.use(http.get(`${LOCAL_API_URL}/saker/hent`, () => HttpResponse.json([], { status: 200 })));
         });
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
@@ -94,7 +94,7 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/soknader/');
     });
 
     it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
@@ -107,14 +107,15 @@ describe('Fordeling', () => {
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/soeknader');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/soknader/');
     });
     it('Omsorgspenger - blir stoppet hvis behandlingsaar ikke settes', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                rest.post(`${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`, (req, res, ctx) =>
-                    res(ctx.status(403)),
+                http.post(
+                    `${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`,
+                    () => new HttpResponse(null, { status: 403 }),
                 ),
             );
         });

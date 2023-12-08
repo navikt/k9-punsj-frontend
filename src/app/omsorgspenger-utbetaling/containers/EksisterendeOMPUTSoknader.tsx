@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-import { datetime, setHash } from 'app/utils';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
@@ -20,19 +23,18 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
     pleietrengendeId: string | null;
 }
 
-type IEksisterendeOMPUTSoknaderProps = WrappedComponentProps & IEksisterendeOMPUTSoknaderComponentProps;
-
-export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksisterendeOMPUTSoknaderProps> = (
-    props: IEksisterendeOMPUTSoknaderProps,
-) => {
-    const { intl, søkerId, pleietrengendeId } = props;
+export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMPUTSoknaderComponentProps> = (props) => {
+    const { søkerId, pleietrengendeId } = props;
+    const intl = useIntl();
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
-    const routingPaths = React.useContext(RoutingPathsContext);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            setHash('/');
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
 
@@ -55,7 +57,7 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
     }
 
     const gaaVidereMedSoeknad = (soknad: IOMPUTSoknad) => {
-        setHash(`${routingPaths.skjema}${soknad.soeknadId}`);
+        navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
 
     function showSoknader() {
@@ -91,7 +93,6 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
                     onClose={() => setValgtSoeknad(undefined)}
                     aria-label={soknadId}
                     open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
-                    closeButton={false}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
@@ -135,5 +136,3 @@ export const EksisterendeOMPUTSoknaderComponent: React.FunctionComponent<IEksist
         </Alert>
     );
 };
-
-export const EksisterendeOMPUTSoknader = injectIntl(EksisterendeOMPUTSoknaderComponent);

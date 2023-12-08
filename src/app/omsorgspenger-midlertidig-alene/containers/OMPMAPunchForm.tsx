@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikErrors, FormikProps, FormikValues } from 'form
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 
@@ -15,10 +15,8 @@ import Personvelger from 'app/components/person-velger/Personvelger';
 import { IInputError, ISignaturState } from 'app/models/types';
 import {
     resetPunchFormAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
 import { capitalize } from 'app/utils';
@@ -49,11 +47,12 @@ import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 export interface IPunchOMPMAFormComponentProps {
     journalpostid: string;
     id: string;
-    formik: FormikProps<FormikValues>;
+    formik: FormikProps<IOMPMASoknad>;
     schema: yup.AnyObjectSchema;
 }
 
@@ -67,9 +66,6 @@ export interface IPunchOMPMAFormStateProps {
 export interface IPunchOMPMAFormDispatchProps {
     getSoknad: typeof getOMPMASoknad;
     resetSoknadAction: typeof resetOMPMASoknadAction;
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPMASoknadAction;
     updateSoknad: typeof updateOMPMASoknad;
     submitSoknad: typeof submitOMPMASoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
@@ -80,10 +76,7 @@ export interface IPunchOMPMAFormDispatchProps {
     validerSoknadReset: typeof validerOMPMASoknadResetAction;
 }
 
-type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps &
-    WrappedComponentProps &
-    IPunchOMPMAFormStateProps &
-    IPunchOMPMAFormDispatchProps;
+type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     try {
@@ -107,13 +100,13 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
     const {
-        intl,
         punchFormState,
         signaturState,
         schema,
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
+    const intl = useIntl();
 
     const updateSoknad = (soknad: IOMPMASoknad) => {
         setShowStatus(true);
@@ -212,6 +205,8 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
+
             {statusetikett()}
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPMASoknad
@@ -346,7 +341,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     onClose={() => setShowSettPaaVentModal(false)}
                     aria-label={'settpaaventmodal'}
                     open={showSettPaaVentModal}
-                    closeButton={false}
                 >
                     <div className="">
                         <SettPaaVentModal
@@ -365,7 +359,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     key={'settpaaventokmodal'}
                     onClose={() => props.settPaaventResetAction()}
                     aria-label={'settpaaventokmodal'}
-                    closeButton={false}
                     open={punchFormState.settPaaVentSuccess}
                 >
                     <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -376,7 +369,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     key={'settpaaventerrormodal'}
                     onClose={() => props.settPaaventResetAction()}
                     aria-label={'settpaaventokmodal'}
-                    closeButton={false}
                     open={!!punchFormState.settPaaVentError}
                 >
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
@@ -388,12 +380,11 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     className={'validertSoknadModal'}
                     onClose={() => props.validerSoknadReset()}
                     aria-label={'validertSoknadModal'}
-                    closeButton={false}
                     open={!!props.punchFormState.isValid}
                 >
-                    <Modal.Content>
+                    <Modal.Body>
                         <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering intl={intl} response={props.punchFormState.validertSoknad} />
+                            <OMPMASoknadKvittering response={props.punchFormState.validertSoknad} />
                         </div>
                         <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                             <Button
@@ -412,7 +403,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 {intlHelper(intl, 'skjema.knapp.avbryt')}
                             </Button>
                         </div>
-                    </Modal.Content>
+                    </Modal.Body>
                 </Modal>
             )}
             {visErDuSikkerModal && (
@@ -421,7 +412,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     className={'erdusikkermodal'}
                     onClose={() => props.validerSoknadReset()}
                     aria-label={'erdusikkermodal'}
-                    closeButton={false}
                     open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
@@ -449,8 +439,6 @@ const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
     updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),
@@ -464,5 +452,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerOMPMASoknadResetAction()),
 });
 
-export const OMPMAPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent));
+export const OMPMAPunchForm = connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent);
 /* eslint-enable */

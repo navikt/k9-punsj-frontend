@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import React from 'react';
 
 import PdfVisning from '../../../app/components/pdf/PdfVisning';
-import { renderWithRouterAndIntl } from '../../testUtils';
+import { renderWithIntl } from '../../testUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
@@ -15,7 +15,7 @@ describe('<PdfVisning>', () => {
         const journalpostid = '200';
         const dokumentid = { dokumentId: '123' };
         const journalpostDokumenter = [{ journalpostid, dokumenter: [dokumentid] }];
-        renderWithRouterAndIntl(<PdfVisning journalpostDokumenter={journalpostDokumenter} />);
+        renderWithIntl(<PdfVisning journalpostDokumenter={journalpostDokumenter} />);
 
         expect(screen.getByTitle('pdf')).toBeDefined();
     });

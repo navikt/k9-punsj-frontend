@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 
-import { Button } from '@navikt/ds-react';
+import { Button, Modal } from '@navikt/ds-react';
 
 import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
 import { getEnvironmentVariable } from '../../utils';
@@ -26,25 +26,27 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
     const { intl, melding } = props;
 
     return (
-        <div className="ok-gaa-til-los">
-            <CheckCircleSvg title="check" />
-            <div className="vl" />
-            <div className="info">
-                <div className="flex flex-wrap">{utledMelding(melding)}</div>
-                <div className="flex flex-wrap">
-                    <FormattedMessage id="modal.okgaatillos.tillos" />
+        <Modal.Body>
+            <div className="ok-gaa-til-los">
+                <CheckCircleSvg title="check" />
+                <div className="vl" />
+                <div className="info">
+                    <div className="flex flex-wrap">{utledMelding(melding)}</div>
+                    <div className="flex flex-wrap">
+                        <FormattedMessage id="modal.okgaatillos.tillos" />
+                    </div>
                 </div>
+                <Button
+                    className="okknapp"
+                    size="small"
+                    onClick={() => {
+                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                    }}
+                >
+                    {intlHelper(intl, 'modal.okgaatillos.ok')}
+                </Button>
             </div>
-            <Button
-                className="okknapp"
-                size="small"
-                onClick={() => {
-                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                }}
-            >
-                {intlHelper(intl, 'modal.okgaatillos.ok')}
-            </Button>
-        </div>
+        </Modal.Body>
     );
 };
 

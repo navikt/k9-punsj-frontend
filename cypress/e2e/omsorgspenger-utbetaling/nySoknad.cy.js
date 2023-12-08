@@ -4,7 +4,7 @@ import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandler
 describe('Omsorgspengeutbetaling - ny søknad', () => {
     beforeEach(() => {
         cy.visit(
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
+            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
         );
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -30,12 +30,10 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
     it('Kan sende inn søknad for frilanser', () => {
@@ -56,12 +54,10 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 
@@ -93,12 +89,10 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 

@@ -60,21 +60,22 @@ export default function ArbeidstidKalender({
             }
         };
 
-    const lagreTimer = ({
-        faktiskArbeidPerDag,
-        jobberNormaltPerDag,
-        selectedDates,
-    }: {
-        faktiskArbeidPerDag: ITimerOgMinutterString;
-        jobberNormaltPerDag: ITimerOgMinutterString;
-        selectedDates: Date[];
-    }) => {
+    const lagreTimer = (
+        {
+            faktiskArbeidPerDag,
+            jobberNormaltPerDag,
+        }: {
+            faktiskArbeidPerDag: ITimerOgMinutterString;
+            jobberNormaltPerDag: ITimerOgMinutterString;
+        },
+        selectedDates: Date[],
+    ) => {
         const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
             arbeidstidInfo.perioder,
             selectedDates,
         ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
 
-        const payload = selectedDates.map((day) => ({
+        const payload = selectedDates.map((day: Date) => ({
             periode: new Periode({
                 fom: dayjs(day).format(formats.YYYYMMDD),
                 tom: dayjs(day).format(formats.YYYYMMDD),
@@ -99,10 +100,10 @@ export default function ArbeidstidKalender({
             <VerticalSpacer twentyPx />
             <Modal
                 open={visArbeidstidLengrePerioder}
-                onClose={toggleVisArbeidstidLengrePerioder}
+                onClose={() => setVisArbeidstidLengrePerioder(false)}
                 className="venstrestilt lengre-periode-modal"
             >
-                <Modal.Content>
+                <Modal.Body>
                     <ArbeidstidPeriodeListe
                         heading="Periode med jobb"
                         arbeidstidPerioder={arbeidstidInfo.perioder}
@@ -117,9 +118,9 @@ export default function ArbeidstidKalender({
                         }}
                         avbryt={toggleVisArbeidstidLengrePerioder}
                     />
-                </Modal.Content>
+                </Modal.Body>
             </Modal>
-            {gyldigePerioder && (
+            {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={gyldigePerioder}
                     ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}

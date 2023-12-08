@@ -3,9 +3,9 @@ import { IPeriode } from 'app/models/types';
 import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 
 import nb from '../i18n/nb.json';
-import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
+import { OLPSoknad } from '../models/types/OLPSoknad';
 
-export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder: IPeriode[]) => ({
+export const getSchemaContext = (soknad: OLPSoknad, eksisterendePerioder: IPeriode[]) => ({
     ...soknad.opptjeningAktivitet,
     bosteder: soknad?.bosteder,
     utenlandsopphold: soknad?.utenlandsopphold,

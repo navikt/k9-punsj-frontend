@@ -3,30 +3,29 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 /* eslint-disable import/prefer-default-export */
-import { rest } from 'msw';
+import { HttpResponse, delay, http } from 'msw';
 
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
+import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
 import { testHandlers } from './testHandlers';
 
 let handlers = [
-    rest.get('/api/test', (req, res, ctx) => res(ctx.status(200), ctx.json({ name: 'Bobby Binders' }))),
-    rest.get(
-        'http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ',
-        (req, res, ctx) =>
-            res(
-                ctx.status(200),
-                ctx.json({
-                    INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
-                    GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
-                }),
-            ),
+    http.get('/api/test', () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
+    http.get('http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ', () =>
+        HttpResponse.json(
+            {
+                INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
+                GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
+            },
+            { status: 200 },
+        ),
     ),
-    rest.get('http://localhost:8101/api/k9-punsj/journalpost/202', (req, res, ctx) =>
-        res(
-            ctx.status(200),
-            ctx.json({
+
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/202', () =>
+        HttpResponse.json(
+            {
                 journalpostId: '202',
                 norskIdent: '29099000129',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
@@ -41,33 +40,37 @@ let handlers = [
                 journalpostStatus: 'MOTTATT',
                 kanOpprettesJournalføringsoppgave: true,
                 kanKopieres: true,
-            }),
+            },
+            { status: 200 },
         ),
     ),
-    rest.post('http://localhost:8101/api/k9-punsj/brev/bestill', (req, res, ctx) => res(ctx.status(200))),
-    rest.get('http://localhost:8101/api/k9-punsj/person', (req, res, ctx) =>
-        res(
-            ctx.status(200),
-            ctx.json({
+
+    http.post('http://localhost:8101/api/k9-punsj/brev/bestill', () => new HttpResponse(null, { status: 200 })),
+    http.get('http://localhost:8101/api/k9-punsj/person', () =>
+        HttpResponse.json(
+            {
                 etternavn: 'KAKE',
                 fornavn: 'TUNGSINDIG',
                 fødselsdato: '1981-12-18',
                 identitetsnummer: '18128103429',
                 mellomnavn: null,
                 sammensattNavn: 'TUNGSINDIG KAKE',
-            }),
+            },
+            { status: 200 },
         ),
     ),
     testHandlers.barn,
-    rest.post('http://localhost:8101/api/k9-punsj/notat/opprett', (req, res, ctx) =>
-        res(ctx.status(201), ctx.delay(500), ctx.json({ journalpostId: '200' })),
-    ),
+    http.post('http://localhost:8101/api/k9-punsj/notat/opprett', async () => {
+        await delay(500);
+        return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
+    }),
 ];
 
 if (process.env.MSW_MODE === 'test') {
     handlers = handlers
         .concat(Object.values(testHandlers))
-        .concat([omsorgspengerutbetalingHandlers.eksisterendePerioderOmsorgspengeutbetaling]);
+        .concat(Object.values(omsorgspengerutbetalingHandlers))
+        .concat(Object.values(midlertidigAleneHandlers));
 }
 
 export { handlers };

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
-import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
+import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
     ISignaturState,
@@ -22,10 +22,9 @@ import {
     resetPunchFormAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
 } from 'app/state/actions';
-import { nummerPrefiks, setHash } from 'app/utils';
+import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdPanel';
@@ -68,13 +67,17 @@ import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSok
 import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from 'app/constants/routes';
+import JournalposterSync from 'app/components/JournalposterSync';
+import { PSBKvitteringContainer } from 'app/containers/pleiepenger/SoknadKvittering/SoknadKvitteringContainer';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchPLSFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
+    navigate: NavigateFunction;
 }
-
 export interface IPunchPLSFormStateProps {
     punchFormState: IPunchPLSFormState;
     signaturState: ISignaturState;
@@ -89,10 +92,10 @@ export interface IPunchPLSFormDispatchProps {
     hentPerioder: typeof hentPLSPerioderFraK9Sak;
     resetSoknadAction: typeof resetPLSSoknadAction;
     setIdentAction: typeof setIdentFellesAction;
-    setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendePLSSoknadAction;
     updateSoknad: typeof updatePLSSoknad;
     submitSoknad: typeof submitPLSSoknad;
+    resetAllStateAction: typeof resetAllStateAction;
     resetPunchFormAction: typeof resetPunchFormAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
@@ -132,6 +135,14 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
     WrappedComponentProps &
     IPunchPLSFormStateProps &
     IPunchPLSFormDispatchProps;
+
+function withHooks(Component) {
+    return (props) => {
+        const { id, journalpostid } = useParams();
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
+    };
+}
 
 export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPunchPLSFormComponentState> {
     state: IPunchPLSFormComponentState = {
@@ -191,15 +202,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             },
             organisasjonsnummer: '',
             norskIdent: null,
-        });
-
-    private initialArbeidstidInfo = () =>
-        new ArbeidstidInfo({
-            perioder: this.getSoknadsperiode().map((periode) => ({
-                periode,
-                faktiskArbeidTimerPerDag: '',
-                jobberNormaltTimerPerDag: '',
-            })),
         });
 
     private initialFrilanser = new FrilanserOpptjening({
@@ -273,7 +275,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     componentDidMount(): void {
         const { id, søkersIdent, pleietrengendeIdent } = this.props;
         this.props.getSoknad(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
 
         if (søkersIdent && pleietrengendeIdent) {
@@ -288,7 +289,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     ): void {
         const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
             this.props;
-        const { soknad } = punchFormState;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
@@ -310,6 +312,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
     }
 
+    componentWillUnmount(): void {
+        this.props.resetSoknadAction();
+        this.props.resetPunchFormAction();
+        this.props.validerSoknadReset();
+    }
+
     render() {
         const { intl, punchFormState, signaturState } = this.props;
 
@@ -317,9 +325,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
 
-        if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
-            return null;
+        if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+            return <PSBKvitteringContainer />;
         }
 
         if (punchFormState.isSoknadLoading) {
@@ -347,6 +354,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         return (
             <>
+                <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder
@@ -409,7 +417,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     />
                     {!!soknad.utenlandsopphold.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.utenlandsopphold}
                             component={pfLand()}
                             panelid={(i) => `utenlandsoppholdpanel_${i}`}
@@ -447,7 +454,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         <Periodepaneler
                             intl={intl}
                             periods={soknad.lovbestemtFerie}
-                            panelid={(i) => `ferieperiodepanel_${i}`}
                             initialPeriode={this.initialPeriode}
                             editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
                             editSoknadState={(perioder, showStatus) =>
@@ -456,7 +462,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             getErrorMessage={this.getErrorMessage}
                             getUhaandterteFeil={this.getUhaandterteFeil}
                             feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                            minstEn={false}
                             kanHaFlere={true}
                         />
                     )}
@@ -477,7 +482,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     <Periodepaneler
                                         intl={intl}
                                         periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                        panelid={(i) => `ferieperiodepanel_${i}`}
                                         initialPeriode={this.initialPeriode}
                                         editSoknad={(perioder) =>
                                             this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
@@ -491,7 +495,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         getErrorMessage={() => undefined}
                                         getUhaandterteFeil={this.getUhaandterteFeil}
                                         feilkodeprefiks={'ytelse.lovbestemtFerie'}
-                                        minstEn={false}
                                         kanHaFlere={true}
                                     />
                                 </>
@@ -535,7 +538,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     />
                     {!!soknad.bosteder.length && (
                         <PeriodeinfoPaneler
-                            intl={intl}
                             periods={soknad.bosteder}
                             component={pfLand()}
                             panelid={(i) => `bostederpanel_${i}`}
@@ -636,7 +638,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         onClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label={'settpaaventmodal'}
                         open={this.state.showSettPaaVentModal}
-                        closeButton={false}
                     >
                         <div className="">
                             <SettPaaVentModal
@@ -655,7 +656,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         key={'settpaaventokmodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -666,7 +666,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         key={'settpaaventerrormodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
@@ -681,10 +680,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             className={'validertSoknadModal'}
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label={'validertSoknadModal'}
-                            closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <Modal.Content>
+                            <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
                                     <PLSSoknadKvittering
                                         intl={intl}
@@ -708,7 +706,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         {intlHelper(intl, 'skjema.knapp.avbryt')}
                                     </Button>
                                 </div>
-                            </Modal.Content>
+                            </Modal.Body>
                         </Modal>
                     )}
 
@@ -718,7 +716,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         className={'erdusikkermodal'}
                         onClose={() => this.props.validerSoknadReset()}
                         aria-label={'erdusikkermodal'}
-                        closeButton={false}
                         open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
@@ -1158,8 +1155,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPLSSoknad>) => ({
@@ -1231,9 +1228,9 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
+    resetAllStateAction: () => dispatch(resetAllStateAction()),
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),
     resetPunchFormAction: () => dispatch(resetPLSPunchFormAction()),
@@ -1243,5 +1240,5 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
 });
 
-export const PLSPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+export const PLSPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
 /* eslint-enable */

@@ -58,7 +58,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             <div>
                 <b>
                     <FormattedMessage id="journalpost.norskIdent" />
-                </b>{' '}
+                </b>
                 {sokersIdent} <Kopier verdi={sokersIdent} />
             </div>
             <VerticalSpacer eightPx />

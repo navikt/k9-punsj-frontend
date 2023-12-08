@@ -11,17 +11,15 @@ import { Alert, Button, Checkbox, HelpText, Modal, Select, Tag, TextField } from
 import { Loader } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
-import { Arbeidsforhold, JaNei, PunchStep } from 'app/models/enums';
+import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
     hentPerioderFraK9Sak,
     resetPunchFormAction,
     resetSoknadAction,
-    setIdentAction,
     setJournalpostPaaVentResetAction,
     setSignaturAction,
-    setStepAction,
     settJournalpostPaaVent,
     submitSoknad,
     undoChoiceOfEksisterendeSoknadAction,
@@ -62,15 +60,20 @@ import { PeriodeinfoPaneler } from './PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
-import SoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import JournalposterSync from 'app/components/JournalposterSync';
+import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
+import { ROUTES } from 'app/constants/routes';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchFormComponentProps {
-    getPunchPath: (step: PunchStep, values?: any) => string;
     journalpostid: string;
     id: string;
+    navigate: NavigateFunction;
 }
 
 export interface IPunchFormStateProps {
@@ -80,16 +83,23 @@ export interface IPunchFormStateProps {
     identState: IIdentState;
 }
 
+function withHooks(Component) {
+    return (props) => {
+        const { id, journalpostid } = useParams();
+        const navigate = useNavigate();
+        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
+    };
+}
+
 export interface IPunchFormDispatchProps {
     getSoknad: typeof getSoknad;
     hentPerioder: typeof hentPerioderFraK9Sak;
     resetSoknadAction: typeof resetSoknadAction;
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeSoknadAction;
     updateSoknad: typeof updateSoknad;
     submitSoknad: typeof submitSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
+    resetAllStateAction: typeof resetAllStateAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
@@ -234,7 +244,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidMount(): void {
         const { id } = this.props;
         this.props.getSoknad(id);
-        this.props.setStepAction(PunchStep.FILL_FORM);
         this.setState(this.state);
         const { søkerId, pleietrengendeId } = this.props.identState;
         if (søkerId && pleietrengendeId) {
@@ -246,8 +255,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         prevProps: Readonly<IPunchFormProps>,
         prevState: Readonly<IPunchFormComponentState>,
         snapshot?: any,
-    ): void {
+    ): void | null {
         const { soknad } = this.props.punchFormState;
+        // this.props.updateJournalposter(this.state.soknad.journalposter);
         if (!!soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
@@ -260,6 +270,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
     }
 
+    componentWillUnmount(): void {
+        this.props.resetSoknadAction();
+        this.props.resetPunchFormAction();
+        this.props.validerSoknadReset();
+    }
+
     render() {
         const { intl, punchFormState, signaturState } = this.props;
 
@@ -267,11 +283,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const { signert } = signaturState;
         const eksisterendePerioder = punchFormState.perioder || [];
 
-        if (punchFormState.isComplete) {
-            setHash(this.props.getPunchPath(PunchStep.COMPLETED));
-            return null;
+        if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+            return <PSBKvitteringContainer />;
         }
-
         if (punchFormState.isSoknadLoading) {
             return <Loader size="large" />;
         }
@@ -341,6 +355,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         return (
             <>
+                <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx={true} />
                 <Soknadsperioder
@@ -716,10 +731,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <Modal
                         key={'settpaaventmodal'}
                         className={'settpaaventmodal'}
-                        onClose={() => this.setState({ showSettPaaVentModal: false })}
+                        onBeforeClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label={'settpaaventmodal'}
                         open={this.state.showSettPaaVentModal}
-                        closeButton={false}
                     >
                         <div>
                             <SettPaaVentModal
@@ -738,7 +752,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         key={'settpaaventokmodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={punchFormState.settPaaVentSuccess}
                     >
                         <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
@@ -749,7 +762,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         key={'settpaaventerrormodal'}
                         onClose={() => this.props.settPaaventResetAction()}
                         aria-label={'settpaaventokmodal'}
-                        closeButton={false}
                         open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
@@ -764,12 +776,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             className={'validertSoknadModal'}
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label={'validertSoknadModal'}
-                            closeButton={false}
                             open={!!this.props.punchFormState.isValid}
                         >
-                            <Modal.Content>
+                            <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <SoknadKvittering intl={intl} response={this.props.punchFormState.validertSoknad} />
+                                    <PSBSoknadKvittering innsendtSøknad={this.props.punchFormState.validertSoknad} />
                                 </div>
                                 <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                                     <Button
@@ -788,7 +799,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         {intlHelper(intl, 'skjema.knapp.avbryt')}
                                     </Button>
                                 </div>
-                            </Modal.Content>
+                            </Modal.Body>
                         </Modal>
                     )}
 
@@ -798,7 +809,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         className={'erdusikkermodal'}
                         onClose={() => this.props.validerSoknadReset()}
                         aria-label={'erdusikkermodal'}
-                        closeButton={false}
                         open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
@@ -1318,8 +1328,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IPSBSoknad>) => ({
@@ -1391,13 +1401,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     hentPerioder: (søkerId: string, pleietrengendeId: string) =>
         dispatch(hentPerioderFraK9Sak(søkerId, pleietrengendeId)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitSoknad(ident, soeknadid)),
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
+    resetAllStateAction: () => dispatch(resetAllStateAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
@@ -1407,5 +1415,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent));
+export const PSBPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
+
 /* eslint-enable */

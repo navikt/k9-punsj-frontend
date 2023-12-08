@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-midlertidig-alene/eksist
 
 describe('Eksisterende søknader midlertidig alene', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/205#/omsorgspenger-midlertidig-alene/hentsoknader', {
+        cy.visit('/journalpost/205/omsorgspenger-midlertidig-alene/soknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
@@ -57,7 +57,7 @@ describe('Eksisterende søknader midlertidig alene', () => {
                 .click();
             cy.url().should(
                 'eq',
-                'http://localhost:8080/journalpost/205#/omsorgspenger-midlertidig-alene/skjema/db054295-f1bd-45d2-b0fe-0d032ce25295',
+                'http://localhost:8080/journalpost/205/omsorgspenger-midlertidig-alene/skjema/db054295-f1bd-45d2-b0fe-0d032ce25295/',
             );
         });
     });
@@ -67,7 +67,7 @@ describe('Eksisterende søknader midlertidig alene', () => {
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.findByRole('button', { name: /tilbake/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/205#/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/205');
     });
 
     it('kan starte ny registrering av midlertidig alene skjema', () => {
@@ -84,7 +84,7 @@ describe('Eksisterende søknader midlertidig alene', () => {
 
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/205#/omsorgspenger-midlertidig-alene/skjema/db054295-f1bd-45d2-b0fe-0d032ce25295',
+            'http://localhost:8080/journalpost/205/omsorgspenger-midlertidig-alene/skjema/db054295-f1bd-45d2-b0fe-0d032ce25295/',
         );
     });
 
@@ -120,9 +120,10 @@ describe('Eksisterende søknader midlertidig alene', () => {
 
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should('eq', 'http://localhost:8080/journalpost/205#/omsorgspenger-midlertidig-alene/fullfort');
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 

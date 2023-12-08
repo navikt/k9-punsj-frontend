@@ -30,7 +30,10 @@ const UtregningArbeidstidDesimaler = ({
 
     return (
         <div>
-            <div>{`= ${convert(arbeidstid) * 5} ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerperuke')}`}</div>
+            <div>{`= ${(convert(arbeidstid) * 5).toLocaleString(undefined, {
+                maximumFractionDigits: 3,
+                minimumFractionDigits: 0,
+            })} ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.timerperuke')}`}</div>
             {skalViseProsent && (
                 <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${tallTilString(
                     Number(prosentArbeid),

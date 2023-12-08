@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { Alert, Loader, Modal } from '@navikt/ds-react';
 
@@ -30,7 +31,6 @@ interface IJournaPostStateProps {
 
 interface IJournalpostProps {
     renderOnLoadComplete: () => React.ReactNode;
-    journalpostId: string;
 }
 
 interface IDispatchProps {
@@ -45,7 +45,6 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     isJournalpostLoading,
     getJournalpost,
     lukkOppgaveReset,
-    journalpostId,
     journalpost,
     journalpostConflictError,
     journalpostRequestError,
@@ -54,11 +53,13 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     notFound,
     lukkOppgaveDone,
 }) => {
+    const { journalpostid } = useParams<{ journalpostid: string }>();
+
     useEffect(() => {
-        if (journalpostId) {
-            getJournalpost(journalpostId);
+        if (journalpostid) {
+            getJournalpost(journalpostid);
         }
-    }, [journalpostId]);
+    }, [journalpostid]);
 
     if (isJournalpostLoading) {
         return (
@@ -80,13 +81,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 
     if (lukkOppgaveDone) {
         return (
-            <Modal
-                key="lukkoppgaveokmodal"
-                onClose={() => lukkOppgaveReset()}
-                aria-label="settpaaventokmodal"
-                closeButton={false}
-                open
-            >
+            <Modal key="lukkoppgaveokmodal" onClose={() => lukkOppgaveReset()} aria-label="settpaaventokmodal" open>
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </Modal>
         );

@@ -3,6 +3,7 @@ import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 
 import { GosysOppgaveActionKeys } from '../../models/enums/GosysOppgaveActionKeys';
+import { IResetStateAction } from './GlobalActions';
 
 interface IOpprettGosysOppgaveRequestAction {
     type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST;
@@ -22,7 +23,8 @@ export type IOpprettGosysOppgaveActionTypes =
     | IOpprettGosysOppgaveRequestAction
     | IOpprettGosysOppgaveSuccessAction
     | IOpprettGosysOppgaveErrorAction
-    | IOpprettGosysOppgaveResetAction;
+    | IOpprettGosysOppgaveResetAction
+    | IResetStateAction;
 
 const opprettGosysOppgaveRequestAction = (): IOpprettGosysOppgaveRequestAction => ({
     type: GosysOppgaveActionKeys.OPPRETT_OPPGAVE_REQUEST,

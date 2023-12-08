@@ -6,6 +6,13 @@ import React from 'react';
 import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
 import { IJournalpost } from '../../app/models/types';
 
+// Mock useParams
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useParams: () => ({
+        journalpostid: '1234',
+    }),
+}));
 jest.mock('app/utils/envUtils');
 jest.mock('react-intl');
 

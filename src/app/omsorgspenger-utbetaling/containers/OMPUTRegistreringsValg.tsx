@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import RoutingPathsContext from 'app/state/context/RoutingPathsContext';
-
+import { ROUTES } from 'app/constants/routes';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import { setHash } from '../../utils';
 import api, { hentEksisterendeSoeknader } from '../api';
 import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 
@@ -26,8 +25,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     props: IOMPUTRegistreringsValgProps,
 ) => {
     const { journalpostid, identState } = props;
-    const routingPaths = useContext(RoutingPathsContext);
     const { søkerId, pleietrengendeId } = identState;
+    const navigate = useNavigate();
 
     const {
         isLoading: oppretterSoknad,
@@ -35,15 +34,15 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         mutate: opprettSoknad,
     } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
         onSuccess: (soeknad) => {
-            setHash(`${routingPaths.skjema}${soeknad.soeknadId}`);
+            navigate(`../${ROUTES.PUNCH.replace(':id', soeknad.soeknadId)}`);
         },
     });
 
     const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
 
-    const redirectToPreviousStep = () => {
-        setHash('/');
-    };
+    if (!journalpostid) {
+        throw Error('Mangler journalpostid');
+    }
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -65,14 +64,15 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPUTSoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                journalpostid={journalpostid}
-            />
+            <EksisterendeOMPUTSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
+                <Button
+                    variant="secondary"
+                    className="knapp knapp1"
+                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    size="small"
+                >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (

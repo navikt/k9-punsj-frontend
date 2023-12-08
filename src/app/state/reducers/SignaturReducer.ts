@@ -1,6 +1,7 @@
 import { SignaturActionKeys } from 'app/models/enums';
 import { ISignaturState } from 'app/models/types';
 import { SignaturActionTypes } from 'app/state/actions';
+import { RESET_ALL } from '../actions/GlobalActions';
 
 const initialState: ISignaturState = {
     signert: null,
@@ -50,6 +51,10 @@ export function SignaturReducer(
                 usignertRequestSuccess: undefined,
                 usignertRequestError: undefined,
             };
+
+        case RESET_ALL: {
+            return { ...initialState };
+        }
 
         default:
             return signaturState;

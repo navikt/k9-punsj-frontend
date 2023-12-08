@@ -2,7 +2,7 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 import { connect } from 'react-redux';
 
@@ -17,6 +17,7 @@ import { Periode } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -33,7 +34,6 @@ import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFilter } from '../utils';
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
-import { KvitteringContext } from './SoknadKvittering/KvitteringContext';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 
 export interface IPunchOMPUTFormComponentProps {
@@ -44,17 +44,18 @@ export interface IPunchOMPUTFormComponentProps {
     setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
     eksisterendePerioder: Periode[];
+    setKvittering: (kvittering?: IOMPUTSoknadKvittering) => void;
+    kvittering?: IOMPUTSoknadKvittering;
 }
 
 export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
 }
 
-type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & WrappedComponentProps & IPunchOMPUTFormStateProps;
+type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & IPunchOMPUTFormStateProps;
 
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const {
-        intl,
         identState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
@@ -63,14 +64,17 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
         journalpostid,
         submitError,
         eksisterendePerioder,
+        kvittering,
+        setKvittering,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+    const intl = useIntl();
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
-    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
+
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -168,6 +172,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad />
@@ -274,7 +279,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                     className="erdusikkermodal"
                     onClose={() => setVisErDuSikkerModal(false)}
                     aria-label="erdusikkermodal"
-                    closeButton={false}
                     open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
@@ -298,5 +302,5 @@ const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
     identState: state.identState,
 });
 
-export const OMPUTPunchForm = injectIntl(connect(mapStateToProps)(PunchOMPUTFormComponent));
+export const OMPUTPunchForm = connect(mapStateToProps)(PunchOMPUTFormComponent);
 /* eslint-enable */

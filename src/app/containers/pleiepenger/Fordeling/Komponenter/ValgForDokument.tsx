@@ -156,7 +156,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.ANNET && (
                 <div className="fordeling-page__gosysGjelderKategorier">
                     <Alert size="small" variant="info">
-                        {' '}
                         {intlHelper(intl, 'fordeling.infobox.opprettigosys')}
                     </Alert>
                     <GosysGjelderKategorier />
@@ -164,7 +163,6 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
             )}
             {!!fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
                 <Alert size="small" variant="info">
-                    {' '}
                     {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
                 </Alert>
             )}

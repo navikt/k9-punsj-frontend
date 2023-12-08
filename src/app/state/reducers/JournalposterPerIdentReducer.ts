@@ -1,5 +1,6 @@
 import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/JournalposterPerIdentActionKeys';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
+import { RESET_ALL } from '../actions/GlobalActions';
 import { IJournalposterPerIdentActions } from '../actions/JournalposterPerIdentActions';
 
 const initialState: IJournalposterPerIdentState = {
@@ -34,6 +35,9 @@ export function JournalposterPerIdentReducer(
                 isJournalposterLoading: false,
                 journalposterRequestError: action.error,
             };
+        case RESET_ALL: {
+            return { ...initialState };
+        }
 
         default:
             return journalposterPerIdentState;

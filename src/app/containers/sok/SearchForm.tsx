@@ -1,187 +1,135 @@
-import React from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-
+import React, { useState, useCallback, useEffect } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useSelector, useDispatch } from 'react-redux';
 import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
-
-import Fagsak from 'app/types/Fagsak';
-
+import { useNavigate } from 'react-router';
+import { ROUTES } from 'app/constants/routes';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
-import { IError, IJournalpost } from '../../models/types';
-import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 import { RootStateType } from '../../state/RootState';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../../state/actions';
+import { lukkOppgaveResetAction } from '../../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import './sok.less';
 
-export interface ISearchFormStateProps {
-    journalpost?: IJournalpost;
-    notFound: boolean;
-    forbidden: boolean;
-    conflict?: boolean;
-    journalpostConflictError?: IJournalpostConflictResponse;
-    journalpostRequestError?: IError;
-    lukkOppgaveDone?: boolean;
-    lukkOppgaveReset: () => void;
-}
+export const SearchForm = () => {
+    const [journalpostid, setJournalpostid] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-export interface ISearchFormDispatchProps {
-    getJournalpost: typeof fellesReducerGetJournalpost;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-}
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const notFound = useSelector((state: RootStateType) => state.felles.journalpostNotFound);
+    const forbidden = useSelector((state: RootStateType) => state.felles.journalpostForbidden);
+    const conflict = useSelector((state: RootStateType) => state.felles.journalpostConflict);
+    const journalpostConflictError = useSelector((state: RootStateType) => state.felles.journalpostConflictError);
+    const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
+    const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
 
-export interface ISearchFormComponentState {
-    journalpostid?: string;
-}
-
-type ISearchFormProps = WrappedComponentProps &
-    ISearchFormStateProps &
-    ISearchFormDispatchProps &
-    ISearchFormComponentState;
-
-export class SearchFormComponent extends React.Component<ISearchFormProps, ISearchFormComponentState> {
-    constructor(props: ISearchFormProps) {
-        super(props);
-        this.state = {
-            journalpostid: '',
-        };
-    }
-
-    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const journalpostId = e.target.value;
-        // Only allow numbers (0-9)
         const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
-        this.setState({ journalpostid: sanitizedJournalpostId });
-    };
+        setJournalpostid(sanitizedJournalpostId);
+    }, []);
 
-    onClick = (): void => {
-        const { journalpostid } = this.state;
-        const { getJournalpost } = this.props;
+    const onClick = useCallback(() => {
         if (journalpostid) {
-            getJournalpost(journalpostid);
+            dispatch(fellesReducerGetJournalpost(journalpostid));
         }
-    };
+    }, [journalpostid, dispatch]);
 
-    handleKeydown = (event: React.KeyboardEvent): void => {
-        if (event.key === 'Enter') {
-            this.onClick();
-        }
-    };
+    const handleKeydown = useCallback(
+        (event: React.KeyboardEvent) => {
+            if (event.key === 'Enter') {
+                onClick();
+            }
+        },
+        [onClick],
+    );
 
-    render() {
-        const { journalpostid } = this.state;
-        const {
-            notFound,
-            forbidden,
-            conflict,
-            journalpostConflictError,
-            journalpostRequestError,
-            journalpost,
-            lukkOppgaveDone,
-            lukkOppgaveReset,
-        } = this.props;
+    const lukkOppgaveReset = useCallback(() => {
+        dispatch(lukkOppgaveResetAction());
+    }, [dispatch]);
 
-        const disabled = !journalpostid;
+    const disabled = !journalpostid;
 
+    useEffect(() => {
         if (journalpost?.journalpostId) {
-            window.location.assign(`journalpost/${journalpostid}`);
+            // Her har jeg lagt inn en reset av redux state fordi tidligere ble window.location.href brukt for å navigere til journalposten.
+            // så hvis man ikke resetter state først skjer det rare ting.
+            // TODO: fiks dette så vi slipper å kjøre kall for å hente ut journalpost to ganger
+            dispatch(resetAllStateAction());
+            navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
+    }, [journalpost]);
 
-        if (lukkOppgaveDone) {
-            return (
-                <Modal
-                    key="lukkoppgaveokmodal"
-                    onClose={() => lukkOppgaveReset()}
-                    aria-label="settpaaventokmodal"
-                    closeButton={false}
-                    open
-                >
-                    <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-                </Modal>
-            );
-        }
-
+    if (lukkOppgaveDone) {
         return (
-            <>
-                <div className="sok-container">
-                    <h1 className="sok-heading">
-                        <FormattedMessage id="søk.overskrift" />
-                    </h1>
-                    <Fieldset>
-                        <div className="input-rad">
-                            <TextField
-                                value={journalpostid}
-                                className="w-64"
-                                onChange={this.onChange}
-                                label={<FormattedMessage id="søk.label.jpid" />}
-                                onKeyDown={this.handleKeydown}
-                            />
-                            <SokKnapp onClick={this.onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                            <VerticalSpacer sixteenPx />
-                        </div>
-
-                        {!!notFound && (
-                            <Alert size="small" variant="info">
-                                <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                            </Alert>
-                        )}
-
-                        {!!forbidden && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                            </Alert>
-                        )}
-
-                        {conflict &&
-                            journalpostConflictError &&
-                            journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                                <Alert size="small" variant="warning">
-                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                </Alert>
-                            )}
-
-                        {journalpostRequestError?.message && (
-                            <Alert size="small" variant="error">
-                                <FormattedMessage id="søk.jp.internalServerError" />
-                            </Alert>
-                        )}
-
-                        {!!journalpost && !journalpost?.kanSendeInn && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="fordeling.kanikkesendeinn" />
-                            </Alert>
-                        )}
-                    </Fieldset>
-                </div>
-                <div className="inngangContainer">
-                    <OpprettJournalpostInngang />
-                    <SendBrevIAvsluttetSakInngang />
-                </div>
-            </>
+            <Modal key="lukkoppgaveokmodal" onBeforeClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
+                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
+            </Modal>
         );
     }
-}
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    notFound: state.felles.journalpostNotFound,
-    forbidden: state.felles.journalpostForbidden,
-    conflict: state.felles.journalpostConflict,
-    journalpostConflictError: state.felles.journalpostConflictError,
-    journalpostRequestError: state.felles.journalpostRequestError,
-    lukkOppgaveDone: state.fordelingState.lukkOppgaveDone,
-});
+    return (
+        <>
+            <div className="sok-container">
+                <h1 className="sok-heading">
+                    <FormattedMessage id="søk.overskrift" />
+                </h1>
+                <Fieldset>
+                    <div className="input-rad">
+                        <TextField
+                            value={journalpostid}
+                            className="w-64"
+                            onChange={onChange}
+                            label={<FormattedMessage id="søk.label.jpid" />}
+                            onKeyDown={handleKeydown}
+                        />
+                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                        <VerticalSpacer sixteenPx />
+                    </div>
 
-const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (journalpostid: string) => dispatch(fellesReducerGetJournalpost(journalpostid)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
-});
+                    {!!notFound && (
+                        <Alert size="small" variant="info">
+                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
+                        </Alert>
+                    )}
 
-export const SearchForm = injectIntl(connect(mapStateToProps, mapDispatchToProps)(SearchFormComponent));
+                    {!!forbidden && (
+                        <Alert size="small" variant="warning">
+                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                        </Alert>
+                    )}
+
+                    {conflict &&
+                        journalpostConflictError &&
+                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                            <Alert size="small" variant="warning">
+                                <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                            </Alert>
+                        )}
+
+                    {journalpostRequestError?.message && (
+                        <Alert size="small" variant="error">
+                            <FormattedMessage id="søk.jp.internalServerError" />
+                        </Alert>
+                    )}
+
+                    {!!journalpost && !journalpost?.kanSendeInn && (
+                        <Alert size="small" variant="warning">
+                            <FormattedMessage id="fordeling.kanikkesendeinn" />
+                        </Alert>
+                    )}
+                </Fieldset>
+            </div>
+            <div className="inngangContainer">
+                <OpprettJournalpostInngang />
+                <SendBrevIAvsluttetSakInngang />
+            </div>
+        </>
+    );
+};

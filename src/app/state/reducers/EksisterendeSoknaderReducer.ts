@@ -1,6 +1,7 @@
 import { EksisterendeSoknaderActionKeys } from 'app/models/enums';
 import { IEksisterendeSoknaderState } from 'app/models/types';
 import { IEksisterendeSoknaderActionTypes } from 'app/state/actions';
+import { RESET_ALL } from '../actions/GlobalActions';
 
 const initialState: IEksisterendeSoknaderState = {
     eksisterendeSoknaderSvar: {},
@@ -96,6 +97,10 @@ export function EksisterendeSoknaderReducer(
                 soknadid: undefined,
                 isSoknadCreated: false,
             };
+
+        case RESET_ALL: {
+            return { ...initialState };
+        }
 
         default:
             return eksisterendeSoknaderState;

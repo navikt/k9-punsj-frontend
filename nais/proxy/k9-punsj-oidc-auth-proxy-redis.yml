@@ -25,3 +25,4 @@ spec:
     port: 6379
   envFrom:
     - secret: k9-punsj-oidc-auth-proxy-redis-password
+

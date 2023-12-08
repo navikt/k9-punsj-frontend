@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 import { connect } from 'react-redux';
 
@@ -24,8 +24,6 @@ import intlHelper from 'app/utils/intlUtils';
 
 import FormPanel from '../../../components/FormPanel';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { JournalpostPanel } from '../../../components/journalpost-panel/JournalpostPanel';
-import PdfVisning from '../../../components/pdf/PdfVisning';
 import { ISakstypeDefault } from '../../../models/Sakstype';
 import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
 import { IIdentState } from '../../../models/types/IdentState';
@@ -55,7 +53,6 @@ import './fordeling.less';
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
     fordelingState: IFordelingState;
-    journalpostId: string;
     identState: IIdentState;
     opprettIGosysState: IGosysOppgaveState;
     fellesState: IFellesState;
@@ -77,11 +74,10 @@ export interface IFordelingDispatchProps {
     resetBarn: typeof resetBarnAction;
 }
 
-export type IFordelingProps = WrappedComponentProps & IFordelingStateProps & IFordelingDispatchProps;
+export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
     const {
-        intl,
         fordelingState,
         omfordel,
         journalpost,
@@ -100,6 +96,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetBarn,
     } = props;
     const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
+    const intl = useIntl();
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
         [],
@@ -313,12 +310,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="opprettigosysokmodal"
-                onClose={() => {
+                onBeforeClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
                 aria-label="settpaaventokmodal"
-                closeButton={false}
                 open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
             >
                 <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
@@ -334,9 +330,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="lukkoppgaveokmodal"
-                onClose={() => lukkOppgaveReset()}
+                onBeforeClose={() => {
+                    lukkOppgaveReset();
+                }}
                 aria-label="settpaaventokmodal"
-                closeButton={false}
                 open={!!fordelingState.lukkOppgaveDone}
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
@@ -357,7 +354,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         <div className="fordeling-container">
             {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
                 <FormPanel>
-                    <JournalpostPanel />
                     {erInntektsmeldingUtenKrav && (
                         <>
                             <VerticalSpacer thirtyTwoPx />
@@ -528,14 +524,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     </Alert>
                 </div>
             )}
-
-            {journalpost && (
-                <PdfVisning
-                    journalpostDokumenter={[
-                        { journalpostid: journalpost?.journalpostId, dokumenter: journalpost?.dokumenter },
-                    ]}
-                />
-            )}
         </div>
     );
 };
@@ -573,6 +561,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetBarn: () => dispatch(resetBarnAction()),
 });
 
-const Fordeling = injectIntl(connect(mapStateToProps, mapDispatchToProps)(FordelingComponent));
+const Fordeling = connect(mapStateToProps, mapDispatchToProps)(FordelingComponent);
 
 export { Fordeling, FordelingComponent };

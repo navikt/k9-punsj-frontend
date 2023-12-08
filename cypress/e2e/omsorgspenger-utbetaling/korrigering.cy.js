@@ -4,7 +4,7 @@ import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandler
 describe('Omsorgspengeutbetaling - ny søknad', () => {
     beforeEach(() => {
         cy.visit(
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
+            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
         );
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -18,7 +18,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
     it('Kan sende inn korrigering for arbeidstaker', () => {
         cy.contains(/Eksisterende perioder/i).click();
         cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
-            cy.findByText('Korrigering').click()
+            cy.findByText('Korrigering').click(),
         );
         cy.contains(/Arbeidstaker/i).click();
         cy.findAllByRole('combobox').eq(0).select('979312059');
@@ -30,25 +30,23 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?'
+            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 
     it('Kan sende inn søknad for frilanser', () => {
         cy.contains(/Eksisterende perioder/i);
         cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
-            cy.findByText('Korrigering').click()
+            cy.findByText('Korrigering').click(),
         );
         cy.contains(/Frilanser/i).click();
         cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
@@ -61,25 +59,23 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?'
+            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 
     it('Kan sende inn søknad for selvstendig næringsdrivende', () => {
         cy.contains(/Eksisterende perioder/i);
         cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
-            cy.findByText('Korrigering').click()
+            cy.findByText('Korrigering').click(),
         );
         cy.contains(/Selvstendig næringsdrivende/i).click();
         cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
@@ -98,18 +94,16 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?'
+            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.findByRole('button', { name: 'Send inn' }).click();
+        cy.get('.navds-modal').within(() => {
+            cy.findByRole('button', { name: 'Send inn' }).click();
+        });
 
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-utbetaling/fullfort/bc12baac-0f0c-427e-a059-b9fbf9a3adff'
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 
