@@ -4949,15 +4949,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redux-devtools/extension@npm:3.2.6":
-  version: 3.2.6
-  resolution: "@redux-devtools/extension@npm:3.2.6"
+"@redux-devtools/extension@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@redux-devtools/extension@npm:3.3.0"
   dependencies:
     "@babel/runtime": ^7.23.2
     immutable: ^4.3.4
   peerDependencies:
-    redux: ^3.1.0 || ^4.0.0
-  checksum: f3b6a83c6bfae25c9af030faf7e4cc84951a00d7f55403b63ba363915fd566428ebd7573b45b34376fbb624d9af672c02c660fb2c78a059e61954a28923173d9
+    redux: ^3.1.0 || ^4.0.0 || ^5.0.0
+  checksum: bb7e3cd79c9a06871819ed7cf8f16a195253b59d1712c5f0dafeb40a0cdb3fd69783ad6c2032590b13c0dcda69fab3f5e0beb36ec32499d5cc7e5273fe3043eb
   languageName: node
   linkType: hard
 
@@ -14765,7 +14765,7 @@ __metadata:
     "@navikt/k9-fe-period-utils": 1.0.9
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@popperjs/core": ^2.11.8
-    "@redux-devtools/extension": 3.2.6
+    "@redux-devtools/extension": 3.3.0
     "@sentry/cli": 2.21.5
     "@sentry/react": 7.81.1
     "@storybook/addon-actions": 7.5.3
