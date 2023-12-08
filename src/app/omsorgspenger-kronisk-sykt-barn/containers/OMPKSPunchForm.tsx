@@ -1,24 +1,20 @@
-import React from 'react';
+import React, { ComponentType } from 'react';
 import classNames from 'classnames';
 import { CheckboksPanel } from 'nav-frontend-skjema';
-
-import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
 import { Alert, Button, HelpText, Modal, Tag, Loader } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
-import {
-    resetPunchFormAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
-import { resetPunchFormAction, setIdentAction, setSignaturAction, setStepAction } from 'app/state/actions';
-import { nummerPrefiks, setHash } from 'app/utils';
+import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
+import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import JournalposterSync from 'app/components/JournalposterSync';
 
+import { ROUTES } from 'app/constants/routes';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -47,10 +43,7 @@ import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
 import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
-import { ROUTES } from 'app/constants/routes';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
@@ -68,8 +61,6 @@ export interface IPunchOMPKSFormStateProps {
 export interface IPunchOMPKSFormDispatchProps {
     getSoknad: typeof getOMPKSSoknad;
     resetSoknadAction: typeof resetOMPKSSoknadAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPKSSoknadAction;
-    setStepAction: typeof setStepAction;
     updateSoknad: typeof updateOMPKSSoknad;
     submitSoknad: typeof submitOMPKSSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
@@ -96,8 +87,8 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
 
-function withHooks(Component) {
-    return (props) => {
+function withHooks<P>(Component: ComponentType<P>) {
+    return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
         return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
@@ -171,6 +162,12 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         }
     }
 
+    componentWillUnmount(): void {
+        this.props.resetSoknadAction();
+        this.props.resetPunchFormAction();
+        this.props.validerSoknadReset();
+    }
+
     private handleSubmit = () => {
         const navarandeSoknad: IOMPKSSoknad = this.state.soknad;
         const journalposter = {
@@ -196,8 +193,8 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     };
 
     private handleStartButtonClick = () => {
-        this.props.resetPunchFormAction();
-        setHash('/');
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
     };
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
@@ -358,18 +355,6 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     private updateMedisinskeOpplysninger(checked: boolean) {
         this.updateSoknadState({ harMedisinskeOpplysninger: checked }, true);
         this.updateSoknad({ harMedisinskeOpplysninger: checked });
-    }
-
-    componentWillUnmount(): void {
-        this.props.resetSoknadAction();
-        this.props.resetPunchFormAction();
-        this.props.validerSoknadReset();
-    }
-
-    componentWillUnmount(): void {
-        this.props.resetSoknadAction();
-        this.props.resetPunchFormAction();
-        this.props.validerSoknadReset();
     }
 
     render() {
