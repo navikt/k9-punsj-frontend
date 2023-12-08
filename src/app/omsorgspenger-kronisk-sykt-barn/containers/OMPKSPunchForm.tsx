@@ -9,14 +9,7 @@ import { Alert, Button, HelpText, Modal, Tag, Loader } from '@navikt/ds-react';
 
 import { PunchStep } from 'app/models/enums';
 import { IInputError, ISignaturState } from 'app/models/types';
-import {
-    resetPunchFormAction,
-    setIdentAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    setStepAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
+import { resetPunchFormAction, setIdentAction, setSignaturAction, setStepAction } from 'app/state/actions';
 import { nummerPrefiks, setHash } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -40,6 +33,8 @@ import {
     updateOMPKSSoknad,
     validerOMPKSSoknad,
     validerOMPKSSoknadResetAction,
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
 } from '../state/actions/OMPKSPunchFormActions';
 import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';

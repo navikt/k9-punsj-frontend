@@ -55,8 +55,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     const intl = useIntl();
 
-    console.log(values);
-
     const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
         setKvittering,
         setK9FormatErrors,

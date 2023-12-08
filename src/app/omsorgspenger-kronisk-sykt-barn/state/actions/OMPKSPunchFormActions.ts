@@ -93,6 +93,41 @@ interface IValiderOMPKSSoknadResetAction {
     type: PunchFormActionKeys.SOKNAD_VALIDER_RESET;
 }
 
+interface ISettJournalpostPaaVentAction {
+    type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT;
+}
+interface ISettJournalpostPaaVentSuccessAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+}
+interface ISettJournalpostPaaVentErrorAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
+    error: IError;
+}
+interface ISettJournalpostPaaVentResetAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET;
+}
+
+export function setJournalpostPaaVentAction(): ISettJournalpostPaaVentAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT };
+}
+export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS,
+    };
+}
+export function setJournalpostPaaVentErrorAction(error: IError): ISettJournalpostPaaVentErrorAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR,
+        error,
+    };
+}
+
+export function setJournalpostPaaVentResetAction(): ISettJournalpostPaaVentResetAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET,
+    };
+}
+
 type IOMPKSSoknadActionTypes =
     | IGetOMPKSSoknadLoadingAction
     | IGetOMPKSSoknadErrorAction
@@ -118,11 +153,18 @@ type IValiderOMPKSSoknadActionTypes =
     | IValiderOMPKSSoknadResetAction
     | IValiderOMPKSSoknadUncompleteAction;
 
+type ISettPaaVentActionTypes =
+    | ISettJournalpostPaaVentAction
+    | ISettJournalpostPaaVentSuccessAction
+    | ISettJournalpostPaaVentErrorAction
+    | ISettJournalpostPaaVentResetAction;
+
 export type IPunchOMPKSFormActionTypes =
     | IResetPunchOMPKSFormAction
     | IOMPKSSoknadActionTypes
     | IOMPKSSoknadUpdateActionTypes
     | IOMPKSSoknadSubmitActionTypes
+    | ISettPaaVentActionTypes
     | IValiderOMPKSSoknadActionTypes;
 
 export const resetPunchOMPKSFormAction = (): IResetPunchOMPKSFormAction => ({
@@ -325,6 +367,24 @@ export function validerOMPKSSoknad(soknad: IOMPKSSoknadUt, erMellomlagring?: boo
                     default:
                         return dispatch(validerOMPKSSoknadErrorAction(convertResponseToError(response)));
                 }
+            },
+        );
+    };
+}
+
+export function settJournalpostPaaVent(journalpostid: string, soeknadId: string) {
+    return (dispatch: any) => {
+        dispatch(setJournalpostPaaVentAction());
+        return post(
+            ApiPath.JOURNALPOST_SETT_PAA_VENT,
+            { journalpostId: journalpostid },
+            undefined,
+            { soeknadId },
+            (response) => {
+                if (response.ok) {
+                    return dispatch(setJournalpostPaaVentSuccessAction());
+                }
+                return dispatch(setJournalpostPaaVentErrorAction(convertResponseToError(response)));
             },
         );
     };
