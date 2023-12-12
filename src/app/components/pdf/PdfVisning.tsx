@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
@@ -41,6 +41,12 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
 
     const [aktivtDokument, setAktivtDokument] = useState<string>(dok || '1');
 
+    useEffect(() => {
+        if (!dok) {
+            goToDok(aktivtDokument);
+        }
+    }, []);
+
     const mapDokument = (dokument: IDokument, journalpostid: string) => ({
         journalpostid,
         dokumentId: dokument.dokumentId,
@@ -55,8 +61,8 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     );
 
     const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
-    const foersteDokument = dokumenter[dokumentnummer - 1];
-    const { dokumentId, journalpostid: journalpostId } = foersteDokument;
+    const dokument = dokumenter[dokumentnummer - 1];
+    const { dokumentId, journalpostid: journalpostId } = dokument;
 
     const pdfUrl = useMemo<string>(
         () =>
@@ -66,6 +72,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             }),
         [journalpostId, dokumentId],
     );
+    console.log('pdfUrl', pdfUrl);
     const [showPdf, setShowPdf] = useState<boolean>(true);
 
     const togglePdf = () => {
@@ -108,7 +115,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                         >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <ToggleGroup.Item key={i} value={String(i + 1)}>
+                                <ToggleGroup.Item key={i} value={String(i + 1)} data-testid={`dok-${i + 1}`}>
                                     {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>
                             ))}

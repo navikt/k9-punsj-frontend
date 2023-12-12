@@ -26,5 +26,5 @@
     "tsLoaderOptions": {
         "useCache": false
     },
-    "exclude": ["node_modules", "src/build", "**.js", "dist", "**/*.spec.ts"]
+    "exclude": ["node_modules", "src/build", "**.js", "dist"]
 }
