@@ -12,15 +12,9 @@ export const setHash = (hash: string) => {
 
 export const getHash = () => window.location.hash;
 
-export const setQueryInHash = (query: { [key: string]: string }) => {
-    const queryRegex = /\?.*$/;
-    const hash = getHash();
-    const newQueryString = `?${querystring.stringify(query)}`;
-    let newHash: string;
-    if (queryRegex.test(hash)) {
-        newHash = hash.replace(queryRegex, newQueryString);
-    } else {
-        newHash = hash + newQueryString;
-    }
-    setHash(newHash);
+export const setDokQuery = (query: { [key: string]: string }) => {
+    // change the dok query
+    const dokQuery = querystring.stringify(query);
+    const newUrl = `${getLocation().replace(/\?.*/, '')}?${dokQuery}`;
+    window.history.replaceState(null, '', newUrl);
 };

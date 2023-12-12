@@ -9,9 +9,8 @@ import { Button, Panel, ToggleGroup } from '@navikt/ds-react';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
 import { ApiPath } from '../../apiConfig';
-import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
-import { apiUrl, setQueryInHash } from '../../utils';
+import { apiUrl, setDokQuery } from '../../utils';
 import './pdfVisning.less';
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
@@ -24,7 +23,7 @@ const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = 
 };
 
 const goToDok = (dok: string) => {
-    setQueryInHash({ dok });
+    setDokQuery({ dok });
 };
 
 interface IPdfVisningProps {
@@ -37,7 +36,8 @@ interface IDokumentMedJournalpost {
 }
 
 const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
-    const dok = useQuery().get('dok');
+    const urlParams = new URLSearchParams(window.location.search);
+    const dok = urlParams.get('dok');
 
     const [aktivtDokument, setAktivtDokument] = useState<string>(dok || '1');
 
