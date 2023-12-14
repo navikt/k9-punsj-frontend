@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Checkbox, Select, TextField } from '@navikt/ds-react';
@@ -33,14 +33,10 @@ export interface IPleietrengende {
     skalHenteBarn?: boolean;
 }
 
-type IPleietrengendeProps = WrappedComponentProps &
-    IPleietrengendeStateProps &
-    IPleietrengendeDispatchProps &
-    IPleietrengende;
+type IPleietrengendeProps = IPleietrengendeStateProps & IPleietrengendeDispatchProps & IPleietrengende;
 
 const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (props) => {
     const {
-        intl,
         pleietrengendeHarIkkeFnrFn,
         identState,
         sokersIdent,
@@ -50,21 +46,21 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         visPleietrengende,
         skalHenteBarn,
     } = props;
-
-    if (!visPleietrengende) {
-        return null;
-    }
+    const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
 
     useEffect(() => {
-        if (sokersIdent.length > 0 && skalHenteBarn) {
+        if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
             henteBarn(sokersIdent);
         }
-    }, [sokersIdent]);
+    }, [sokersIdent, visPleietrengende, skalHenteBarn]);
 
+    if (!visPleietrengende) {
+        return null;
+    }
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
     };
@@ -86,7 +82,9 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.søkerId, null);
         }
     };
-
+    if (!visPleietrengende) {
+        return null;
+    }
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
@@ -186,6 +184,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     henteBarn: (søkerId: string) => dispatch(hentBarn(søkerId)),
 });
 
-const Pleietrengende = injectIntl(connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent));
+const Pleietrengende = connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent);
 
 export { Pleietrengende, PleietrengendeComponent };

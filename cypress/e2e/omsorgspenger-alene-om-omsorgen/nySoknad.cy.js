@@ -5,7 +5,7 @@ import { fraværÅrsak, søknadÅrsak } from 'app/omsorgspenger-utbetaling/konst
 describe('Alene om omsorgen - ny søknad', () => {
     beforeEach(() => {
         cy.visit(
-            'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537',
+            'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/skjema/9356c863-ab88-41eb-89ec-3ca8cd555537/',
         );
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -23,11 +23,6 @@ describe('Alene om omsorgen - ny søknad', () => {
         cy.get('.navds-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
-
-        cy.url().should(
-            'eq',
-            'http://localhost:8080/journalpost/200#/omsorgspenger-alene-om-omsorgen/fullfort/9356c863-ab88-41eb-89ec-3ca8cd555537',
-        );
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
     });
 

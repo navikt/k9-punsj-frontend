@@ -25,7 +25,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
     return (
         <div className="timer-og-minutter">
             <div>
-                <Label>{label}</Label>
+                <Label size="small">{label}</Label>
             </div>
             <div className="tid-container">
                 <div className="input-row">

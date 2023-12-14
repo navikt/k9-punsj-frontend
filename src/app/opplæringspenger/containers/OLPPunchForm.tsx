@@ -3,9 +3,9 @@ import { debounce } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useCallback, useEffect, useState } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 
@@ -26,6 +26,7 @@ import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { IdentActionKeys } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
+import JournalposterSync from 'app/components/JournalposterSync';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -39,10 +40,10 @@ import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
-import { KvitteringContext } from './kvittering/KvitteringContext';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 
-export interface IPunchOLPFormComponentProps {
+export interface OwnProps {
     journalpostid: string;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
@@ -51,13 +52,12 @@ export interface IPunchOLPFormComponentProps {
     submitError: unknown;
     eksisterendePerioder: Periode[];
     hentEksisterendePerioderError: boolean;
+    setKvittering?: (kvittering?: IOLPSoknadKvittering) => void;
+    kvittering: IOLPSoknadKvittering | undefined;
 }
 
-type IPunchOLPFormProps = IPunchOLPFormComponentProps & WrappedComponentProps;
-
-export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
+export const OLPPunchForm: React.FC<OwnProps> = (props) => {
     const {
-        intl,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
@@ -66,6 +66,8 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         submitError,
         eksisterendePerioder,
         hentEksisterendePerioderError,
+        setKvittering,
+        kvittering,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -77,6 +79,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
     const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
     const dispatch = useDispatch();
+    const intl = useIntl();
     const identState = useSelector((state: RootStateType) => state.identState);
 
     const handlePanelClick = (panel: string) => {
@@ -124,7 +127,6 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         setÅpnePaneler([...åpnePaneler, ...panelerSomSkalÅpnes]);
     }, []);
 
-    const { kvittering, setKvittering } = React.useContext(KvitteringContext);
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -137,16 +139,12 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
                     setVisForhaandsvisModal(true);
                     if (setKvittering) {
                         setKvittering(kvitteringResponse);
-                    } else {
-                        throw Error('Kvittering-context er ikke satt');
                     }
                 }
                 if (data?.feil?.length) {
                     setK9FormatErrors(data.feil);
                     if (setKvittering) {
                         setKvittering(undefined);
-                    } else {
-                        throw Error('Kvittering-context er ikke satt');
                     }
                     const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
                     uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
@@ -267,6 +265,7 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
 
     return (
         <>
+            <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer sixteenPx />
             <Soknadsperioder
@@ -476,5 +475,3 @@ export const PunchOLPFormComponent: React.FC<IPunchOLPFormProps> = (props) => {
         </>
     );
 };
-
-export const OLPPunchForm = injectIntl(PunchOLPFormComponent);

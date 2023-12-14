@@ -6,7 +6,6 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { RootStateType } from 'app/state/RootState';
 import { createOMSKorrigering } from 'app/state/actions/OMSPunchFormActions';
 
-import { SplitView } from '../../../components/SplitView';
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 export interface KorrigeringAvInntektsmeldingContainerProps {
@@ -26,25 +25,21 @@ const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContain
         });
     }, [søkerId, journalpost]);
     const journalposterFraSoknad = soknad?.journalposter || [];
-
+    const journalposter = Array.from(journalposterFraSoknad);
     return (
-        <SplitView soknad={soknad}>
-            <KorrigeringAvInntektsmeldingForm
-                søkerId={søkerId}
-                søknadId={soknad?.soeknadId || ''}
-                journalposter={Array.from(journalposterFraSoknad)}
-            />
-        </SplitView>
+        <KorrigeringAvInntektsmeldingForm
+            søkerId={søkerId}
+            søknadId={soknad?.soeknadId || ''}
+            journalposter={journalposter}
+        />
     );
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     journalpost: state.felles.journalpost,
     identState: state.identState,
     forbidden: state.felles.journalpostForbidden,
     punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    journalposterIAktivPunchForm: state.PLEIEPENGER_SYKT_BARN.punchFormState.soknad?.journalposter,
 });
 
 const KorrigeringAvInntektsmeldingContainer = connect(mapStateToProps)(KorrigeringAvInntektsmelding);

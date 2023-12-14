@@ -1,27 +1,24 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
 
-import { undoSearchForEksisterendeSoknaderAction } from 'app/state/actions';
+import { ROUTES } from 'app/constants/routes';
 
-import { PunchStep } from '../../models/enums';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { setHash } from '../../utils';
 import { createOMPMASoknad, resetOMPMASoknadidAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import { IEksisterendeOMPMASoknaderState } from '../types/EksisterendeOMPMASoknaderState';
 import { EksisterendeOMPMASoknader } from './EksisterendeOMPMASoknader';
 
 export interface IOMPMARegistreringsValgComponentProps {
     journalpostid: string;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 export interface IOMPMARegistreringsValgDispatchProps {
-    undoSearchForEksisterendeSoknaderAction: typeof undoSearchForEksisterendeSoknaderAction;
     createSoknad: typeof createOMPMASoknad;
     resetSoknadidAction: typeof resetOMPMASoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
@@ -39,28 +36,25 @@ type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
     props: IOMPMARegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, getPunchPath, eksisterendeSoknaderState } = props;
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
     const { søkerId, pleietrengendeId, annenPart } = identState;
 
+    const navigate = useNavigate();
+
     React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeSoknaderState.soknadid,
-                }),
-            );
+        if (
+            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
+            eksisterendeSoknaderState.isSoknadCreated &&
+            eksisterendeSoknaderState.soknadid
+        ) {
             props.resetSoknadidAction();
+            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
     React.useEffect(() => {
         props.getAlleJournalposter(søkerId);
     }, [søkerId]);
-
-    const redirectToPreviousStep = () => {
-        setHash('/');
-        props.undoSearchForEksisterendeSoknaderAction();
-    };
 
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
@@ -87,15 +81,15 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPMASoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                getPunchPath={getPunchPath}
-                journalpostid={journalpostid}
-            />
+            <EksisterendeOMPMASoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
 
             <div className="knapperad">
-                <Button variant="secondary" className="knapp knapp1" onClick={redirectToPreviousStep} size="small">
+                <Button
+                    variant="secondary"
+                    className="knapp knapp1"
+                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    size="small"
+                >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
@@ -110,7 +104,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
 const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, søkerId: string, annenPart: string) =>
         dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });

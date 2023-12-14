@@ -1,21 +1,17 @@
 import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { useNavigate } from 'react-router';
 
-import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IPunchState } from 'app/models/types';
+import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import {
-    resetPunchAction,
-    setIdentAction,
-    setStepAction,
-    undoSearchForEksisterendeSoknaderAction,
-} from 'app/state/actions';
-import { datetime, setHash } from 'app/utils';
+import { ROUTES } from 'app/constants/routes';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -31,60 +27,44 @@ import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderS
 import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 
 export interface IEksisterendePLSSoknaderStateProps {
-    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
 }
 
 export interface IEksisterendePLSSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendePLSSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendePLSSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendePLSSoknadAction;
     resetSoknadidAction: typeof resetPLSSoknadidAction;
-    resetPunchAction: typeof resetPunchAction;
+    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendePLSSoknaderComponentProps {
     søkerId: string;
-    pleietrengendeId: string | null;
-    getPunchPath: (step: PunchStep, values?: any) => string;
+    pleietrengendeId: string;
 }
 
-type IEksisterendePLSSoknaderProps = WrappedComponentProps &
-    IEksisterendePLSSoknaderComponentProps &
+type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
     IEksisterendePLSSoknaderStateProps &
     IEksisterendePLSSoknaderDispatchProps;
 
 export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
     props: IEksisterendePLSSoknaderProps,
 ) => {
-    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
+    const { eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
+    const intl = useIntl();
+    const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
-            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            props.resetPunchAction();
-            setHash('/');
+            props.resetAllAction();
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
-
-    React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeSoknaderState.soknadid,
-                }),
-            );
-            props.resetSoknadidAction();
-        }
-    }, [eksisterendeSoknaderState.soknadid]);
 
     if (!søkerId || søkerId === '') {
         return null;
@@ -98,11 +78,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         );
     }
 
-    if (
-        punchState.step !== PunchStep.CHOOSE_SOKNAD ||
-        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
-        eksisterendeSoknaderState.isAwaitingSoknadCreation
-    ) {
+    if (eksisterendeSoknaderState.isEksisterendeSoknaderLoading || eksisterendeSoknaderState.isAwaitingSoknadCreation) {
         return (
             <div>
                 <Loader size="large" />
@@ -126,8 +102,13 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         ) : null;
 
     const chooseSoknad = (soknad: IPLSSoknad) => {
-        props.chooseEksisterendeSoknadAction(soknad);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
+        if (soknad.soeknadId) {
+            props.chooseEksisterendeSoknadAction(soknad);
+            props.resetSoknadidAction();
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
+        } else {
+            throw new Error('Søknad mangler søknadid');
+        }
     };
 
     function showSoknader() {
@@ -223,26 +204,19 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 };
 
 const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStateProps => ({
-    punchState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchState,
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendePLSSoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(openEksisterendePLSSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendePLSSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(chooseEksisterendePLSSoknadAction(info)),
     createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
-    resetPunchAction: () => dispatch(resetPunchAction()),
+    resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
-export const EksisterendePLSSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent),
-);
+export const EksisterendePLSSoknader = connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent);

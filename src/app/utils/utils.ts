@@ -1,4 +1,6 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import { Tidsformat } from './timeUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
@@ -132,4 +134,55 @@ export const getModiaPath = (fødselsnummer?: string) => {
         return `https://app.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
     return null;
+};
+
+export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: { timer: string; minutter: string }): string {
+    const totalMinutes = parseInt(timer || '0', 10) * 60 + parseInt(minutter || '0', 10);
+    const timerOgDesimaler = totalMinutes / 60;
+    if (Number.isNaN(timerOgDesimaler)) {
+        return '0';
+    }
+
+    const rounded = parseFloat(timerOgDesimaler.toFixed(2));
+    return rounded === 0 ? '0' : String(rounded);
+}
+
+export function timerMedDesimalerTilTimerOgMinutter(timerOgDesimaler = 0): [string, string] {
+    const totalMinutes = Math.round(timerOgDesimaler * 60);
+    const minutes = totalMinutes % 60;
+    const timer = Math.floor(totalMinutes / 60);
+    return [!Number.isNaN(timer) ? String(timer) : '0', !Number.isNaN(minutes) ? String(minutes) : '0'];
+}
+export const konverterPeriodeTilTimerOgMinutter = (periode: Periodeinfo<IArbeidstidPeriodeMedTimer>) => {
+    const { tidsformat, faktiskArbeidTimerPerDag, jobberNormaltTimerPerDag, jobberNormaltPerDag, faktiskArbeidPerDag } =
+        periode;
+    const timerOgMinutter =
+        tidsformat === Tidsformat.Desimaler
+            ? {
+                  jobberNormaltPerDag: {
+                      timer: timerMedDesimalerTilTimerOgMinutter(Number(jobberNormaltTimerPerDag))[0],
+                      minutter: timerMedDesimalerTilTimerOgMinutter(Number(jobberNormaltTimerPerDag))[1],
+                  },
+                  faktiskArbeidPerDag: {
+                      timer: timerMedDesimalerTilTimerOgMinutter(Number(faktiskArbeidTimerPerDag))[0],
+                      minutter: timerMedDesimalerTilTimerOgMinutter(Number(faktiskArbeidTimerPerDag))[1],
+                  },
+              }
+            : {
+                  jobberNormaltPerDag,
+                  faktiskArbeidPerDag,
+              };
+
+    return new ArbeidstidPeriodeMedTimer({
+        ...periode,
+        periode: periode.periode,
+        jobberNormaltPerDag: {
+            timer: timerOgMinutter.jobberNormaltPerDag?.timer || '0',
+            minutter: timerOgMinutter.jobberNormaltPerDag?.minutter || '0',
+        },
+        faktiskArbeidPerDag: {
+            timer: timerOgMinutter.faktiskArbeidPerDag?.timer || '0',
+            minutter: timerOgMinutter.faktiskArbeidPerDag?.minutter || '0',
+        },
+    });
 };

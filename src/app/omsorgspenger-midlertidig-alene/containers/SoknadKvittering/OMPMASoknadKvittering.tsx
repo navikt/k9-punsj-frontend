@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
 import { connect } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import Kopier from 'app/components/kopier/Kopier';
 import LabelValue from 'app/components/skjema/LabelValue';
@@ -22,20 +23,18 @@ import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 import './ompMASoknadKvittering.less';
 
 interface IOwnProps {
-    intl: any;
     response: IOMPMASoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
 export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
     response,
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
-
+    const intl = useIntl();
     const { journalposter, ytelse } = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 

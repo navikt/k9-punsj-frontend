@@ -5,7 +5,7 @@ import { testHandlers } from 'mocks/testHandlers';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200#/pleiepenger/hentsoknader', {
+        cy.visit('/journalpost/200/pleiepenger-sykt-barn/soknader', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
@@ -34,7 +34,7 @@ describe('Eksisterende søknader pleiepenger', () => {
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
         cy.findByRole('button', { name: /tilbake/i }).click();
-        cy.url().should('eq', 'http://localhost:8080/journalpost/200#/');
+        cy.url().should('eq', 'http://localhost:8080/journalpost/200');
     });
 
     it('kan starte ny registrering av pleiepengeskjema', () => {
@@ -50,7 +50,7 @@ describe('Eksisterende søknader pleiepenger', () => {
             .click();
         cy.url().should(
             'eq',
-            'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
+            'http://localhost:8080/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe/',
         );
     });
 
@@ -87,7 +87,7 @@ describe('Eksisterende søknader pleiepenger', () => {
                 .click();
             cy.url().should(
                 'eq',
-                'http://localhost:8080/journalpost/200#/pleiepenger/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
+                'http://localhost:8080/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe/',
             );
         });
     });

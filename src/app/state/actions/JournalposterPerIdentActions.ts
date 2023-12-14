@@ -3,6 +3,7 @@ import { JournalposterPerIdentActionKeys } from '../../models/enums/Journalpost/
 import { IError, IJournalpostInfo } from '../../models/types';
 import { IHentSoknad } from '../../models/types/RequestBodies';
 import { convertResponseToError, post } from '../../utils';
+import { IResetStateAction } from './GlobalActions';
 
 interface ISetJournalposterPerIdentAction {
     type: JournalposterPerIdentActionKeys.JOURNALPOSTER_PER_IDENT_SET;
@@ -22,7 +23,8 @@ interface IGetJournalposterPerIdentErrorAction {
 export type IJournalposterPerIdentActions =
     | ISetJournalposterPerIdentAction
     | IGetJournalposterPerIdentLoadAction
-    | IGetJournalposterPerIdentErrorAction;
+    | IGetJournalposterPerIdentErrorAction
+    | IResetStateAction;
 
 export function setJournalposterPerIdentAction(journalposter: IJournalpostInfo[]): ISetJournalposterPerIdentAction {
     return {

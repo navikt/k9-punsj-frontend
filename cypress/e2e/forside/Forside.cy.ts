@@ -8,7 +8,7 @@ describe('forside', () => {
     });
     it('kan søke opp journalpost', () => {
         cy.soekPaaJournalpost();
-        cy.url().should('contains', '/journalpost/200#/');
+        cy.url().should('contains', '/journalpost/200');
     });
 
     it('får feilmelding når journalposten ikke finnes', () => {

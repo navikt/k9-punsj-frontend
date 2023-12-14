@@ -1,52 +1,46 @@
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
-import { PunchStep, TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState, IPunchState } from 'app/models/types';
+import { TimeFormat } from 'app/models/enums';
+import { IEksisterendeSoknaderState } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
+import { ROUTES } from 'app/constants/routes';
 import {
     chooseEksisterendeSoknadAction,
     closeEksisterendeSoknadAction,
-    createSoknad,
     findEksisterendeSoknader,
     openEksisterendeSoknadAction,
-    resetPunchAction,
     resetSoknadidAction,
-    setIdentAction,
-    setStepAction,
-    undoSearchForEksisterendeSoknaderAction,
 } from 'app/state/actions';
-import { datetime, setHash } from 'app/utils';
+import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 import ErDuSikkerModal from './ErDuSikkerModal';
 
 export interface IEksisterendeSoknaderStateProps {
-    punchState: IPunchState;
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
-    setIdentAction: typeof setIdentAction;
-    setStepAction: typeof setStepAction;
     findEksisterendeSoknader: typeof findEksisterendeSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
-    resetPunchAction: typeof resetPunchAction;
+    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendeSoknaderComponentProps {
     søkerId: string;
     pleietrengendeId: string | null;
-    getPunchPath: (step: PunchStep, values?: any) => string;
 }
 
 type IEksisterendeSoknaderProps = WrappedComponentProps &
@@ -57,35 +51,19 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
 export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
 ) => {
-    const { intl, punchState, eksisterendeSoknaderState, getPunchPath, søkerId, pleietrengendeId } = props;
+    const { intl, eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
+    const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.setIdentAction(søkerId, pleietrengendeId);
             props.findEksisterendeSoknader(søkerId, null);
-            props.setStepAction(PunchStep.CHOOSE_SOKNAD);
         } else {
-            props.resetPunchAction();
-            setHash('/');
+            props.resetAllAction();
+            navigate(ROUTES.HOME);
         }
     }, [søkerId, pleietrengendeId]);
-
-    React.useEffect(() => {
-        if (!!eksisterendeSoknaderState.eksisterendeSoknaderSvar && eksisterendeSoknaderState.isSoknadCreated) {
-            setHash(
-                getPunchPath(PunchStep.FILL_FORM, {
-                    id: eksisterendeSoknaderState.soknadid,
-                }),
-            );
-            props.resetSoknadidAction();
-        }
-    }, [eksisterendeSoknaderState.soknadid]);
-
-    if (!søkerId || søkerId === '') {
-        return null;
-    }
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
@@ -95,11 +73,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         );
     }
 
-    if (
-        punchState.step !== PunchStep.CHOOSE_SOKNAD ||
-        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
-        eksisterendeSoknaderState.isAwaitingSoknadCreation
-    ) {
+    if (eksisterendeSoknaderState.isEksisterendeSoknaderLoading || eksisterendeSoknaderState.isAwaitingSoknadCreation) {
         return (
             <div>
                 <Loader size="large" />
@@ -123,8 +97,13 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         ) : null;
 
     const chooseSoknad = (soknad: IPSBSoknad) => {
-        props.chooseEksisterendeSoknadAction(soknad);
-        setHash(getPunchPath(PunchStep.FILL_FORM, { id: soknad.soeknadId }));
+        if (soknad.soeknadId) {
+            props.chooseEksisterendeSoknadAction(soknad);
+            props.resetSoknadidAction();
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
+        } else {
+            throw new Error('Søknad mangler søknadid');
+        }
     };
 
     function showSoknader() {
@@ -224,24 +203,17 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 };
 
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    punchState: state.PLEIEPENGER_SYKT_BARN.punchState,
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(setIdentAction(søkerId, pleietrengendeId)),
-    setStepAction: (step: PunchStep) => dispatch(setStepAction(step)),
     findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
-    undoSearchForEksisterendeSoknaderAction: () => dispatch(undoSearchForEksisterendeSoknaderAction()),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
-    resetPunchAction: () => dispatch(resetPunchAction()),
+    resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
 export const EksisterendeSoknader = injectIntl(

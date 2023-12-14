@@ -16,9 +16,9 @@ import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsendin
 import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
 
 export interface IPLSSoknad {
-    soeknadId?: string;
+    soeknadId: string;
     soekerId: string;
-    journalposter?: Set<string>;
+    journalposter: Set<string>;
     mottattDato?: string;
     klokkeslett?: string;
     soeknadsperiode?: IPeriode[] | null;

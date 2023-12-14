@@ -2,7 +2,6 @@ export * from './AuthReducer';
 export * from './FordelingReducer';
 export * from './EksisterendeSoknaderReducer';
 export * from './PunchFormReducer';
-export * from './PunchReducer';
 export * from './SignaturReducer';
 export * from './GosysOppgaveReducer';
 export * from './FordelingSettPaaVentReducer';

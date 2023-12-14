@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 
-import { BodyShort, Button, ExpansionCard, Heading, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -176,7 +176,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                 className="mt-3"
             >
                 <ExpansionCard.Header>
-                    <ExpansionCard.Title id={gyldigePerioder[0].fom.toISOString()}>{tittel}</ExpansionCard.Title>
+                    <Label>{tittel}</Label>
                 </ExpansionCard.Header>
                 <ExpansionCard.Content>
                     {visKalender && (

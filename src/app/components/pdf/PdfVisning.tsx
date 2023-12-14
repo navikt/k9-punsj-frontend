@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Resizable } from 're-resizable';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
@@ -9,9 +9,8 @@ import { Button, Panel, ToggleGroup } from '@navikt/ds-react';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
 import { ApiPath } from '../../apiConfig';
-import useQuery from '../../hooks/useQuery';
 import { IDokument } from '../../models/types';
-import { apiUrl, setQueryInHash } from '../../utils';
+import { apiUrl, setDokQuery } from '../../utils';
 import './pdfVisning.less';
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
@@ -24,7 +23,7 @@ const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = 
 };
 
 const goToDok = (dok: string) => {
-    setQueryInHash({ dok });
+    setDokQuery({ dok });
 };
 
 interface IPdfVisningProps {
@@ -37,9 +36,16 @@ interface IDokumentMedJournalpost {
 }
 
 const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDokumenter }) => {
-    const dok = useQuery().get('dok');
+    const urlParams = new URLSearchParams(window.location.search);
+    const dok = urlParams.get('dok');
 
     const [aktivtDokument, setAktivtDokument] = useState<string>(dok || '1');
+
+    useEffect(() => {
+        if (!dok) {
+            goToDok(aktivtDokument);
+        }
+    }, []);
 
     const mapDokument = (dokument: IDokument, journalpostid: string) => ({
         journalpostid,
@@ -55,8 +61,8 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     );
 
     const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
-    const foersteDokument = dokumenter[dokumentnummer - 1];
-    const { dokumentId, journalpostid: journalpostId } = foersteDokument;
+    const dokument = dokumenter[dokumentnummer - 1];
+    const { dokumentId, journalpostid: journalpostId } = dokument;
 
     const pdfUrl = useMemo<string>(
         () =>
@@ -66,6 +72,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             }),
         [journalpostId, dokumentId],
     );
+    console.log('pdfUrl', pdfUrl);
     const [showPdf, setShowPdf] = useState<boolean>(true);
 
     const togglePdf = () => {
@@ -104,10 +111,11 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                                 goToDok(v);
                             }}
                             value={aktivtDokument}
+                            size="small"
                         >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <ToggleGroup.Item key={i} value={String(i + 1)}>
+                                <ToggleGroup.Item key={i} value={String(i + 1)} data-testid={`dok-${i + 1}`}>
                                     {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>
                             ))}

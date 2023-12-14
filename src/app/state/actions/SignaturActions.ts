@@ -4,6 +4,7 @@ import { IError } from 'app/models/types';
 import { convertResponseToError, post } from 'app/utils';
 
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
+import { IResetStateAction } from './GlobalActions';
 
 interface ISetSignaturAction {
     type: SignaturActionKeys.SET;
@@ -28,7 +29,8 @@ type UsignertActionTypes =
     | IUsignertRequestAction
     | IUsignertSuccessAction
     | IUsignertErrorAction
-    | IUsignertResetAction;
+    | IUsignertResetAction
+    | IResetStateAction;
 
 export type SignaturActionTypes = ISetSignaturAction | UsignertActionTypes;
 
