@@ -60,7 +60,7 @@ const DateInput: React.FC<DateInputProps> = ({
                 calendarSettings={{ showWeekNumbers: true }}
                 showYearSelector
                 disabled={disabled}
-                inputProps={{ inputRef }}
+                inputProps={inputRef ? { inputRef } : undefined}
                 limitations={limitations}
             />
             {error && <ErrorMessage size="small">{error}</ErrorMessage>}

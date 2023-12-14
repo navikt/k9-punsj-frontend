@@ -1,24 +1,20 @@
-/* eslint-disable */
+import React, { ComponentType } from 'react';
 import classNames from 'classnames';
 import { CheckboksPanel } from 'nav-frontend-skjema';
-import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
-import { Alert, Button, HelpText, Modal, Tag } from '@navikt/ds-react';
-import { Loader } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Modal, Tag, Loader } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
-import {
-    resetPunchFormAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
-import { nummerPrefiks, setHash } from 'app/utils';
+import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
+import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import JournalposterSync from 'app/components/JournalposterSync';
 
+import { ROUTES } from 'app/constants/routes';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
@@ -26,7 +22,6 @@ import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
-import { PunchFormPaneler } from '../../models/enums/PunchFormPaneler';
 import { IIdentState } from '../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../state/RootState';
@@ -40,16 +35,15 @@ import {
     updateOMPKSSoknad,
     validerOMPKSSoknad,
     validerOMPKSSoknadResetAction,
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
 } from '../state/actions/OMPKSPunchFormActions';
 import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
 import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
-import { ROUTES } from 'app/constants/routes';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
@@ -67,7 +61,6 @@ export interface IPunchOMPKSFormStateProps {
 export interface IPunchOMPKSFormDispatchProps {
     getSoknad: typeof getOMPKSSoknad;
     resetSoknadAction: typeof resetOMPKSSoknadAction;
-    undoChoiceOfEksisterendeSoknadAction: typeof undoChoiceOfEksisterendeOMPKSSoknadAction;
     updateSoknad: typeof updateOMPKSSoknad;
     submitSoknad: typeof submitOMPKSSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
@@ -83,12 +76,8 @@ export interface IPunchOMPKSFormComponentState {
     soknad: IOMPKSSoknad;
     isFetched: boolean;
     showStatus: boolean;
-    faktiskeTimer: string[][];
-    expandAll: boolean;
-    aapnePaneler: PunchFormPaneler[];
     showSettPaaVentModal: boolean;
     visErDuSikkerModal: boolean;
-    errors: IInputError[];
     feilmeldingStier: Set<string>;
     harForsoektAaSendeInn: boolean;
 }
@@ -98,8 +87,8 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
 
-function withHooks(Component) {
-    return (props) => {
+function withHooks<P>(Component: ComponentType<P>) {
+    return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
         return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
@@ -107,50 +96,68 @@ function withHooks(Component) {
 }
 
 export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProps, IPunchOMPKSFormComponentState> {
-    state: IPunchOMPKSFormComponentState = {
-        soknad: {
-            soeknadId: '',
-            soekerId: '',
-            mottattDato: '',
-            journalposter: new Set([]),
-            barn: {
-                norskIdent: '',
-                foedselsdato: '',
+    constructor(props: IPunchOMPKSFormProps) {
+        super(props);
+        this.state = {
+            soknad: {
+                soeknadId: '',
+                soekerId: '',
+                mottattDato: '',
+                journalposter: new Set([]),
+                barn: {
+                    norskIdent: '',
+                    foedselsdato: '',
+                },
+                harInfoSomIkkeKanPunsjes: false,
+                harMedisinskeOpplysninger: false,
             },
-            harInfoSomIkkeKanPunsjes: false,
-            harMedisinskeOpplysninger: false,
-        },
-        isFetched: false,
-        showStatus: false,
-        faktiskeTimer: [], // Lagrer tilstedeværelsesgrad i stringformat her for å gjøre det enklere å redigere feltet}
-        expandAll: false,
-        aapnePaneler: [],
-        showSettPaaVentModal: false,
-        visErDuSikkerModal: false,
-        errors: [],
-        feilmeldingStier: new Set(),
-        harForsoektAaSendeInn: false,
-    };
-
-    componentDidMount(): void {
-        const { id } = this.props;
-        this.props.getSoknad(id);
-        this.setState(this.state);
+            isFetched: false,
+            showStatus: false,
+            showSettPaaVentModal: false,
+            visErDuSikkerModal: false,
+            feilmeldingStier: new Set(),
+            harForsoektAaSendeInn: false,
+        };
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<IPunchOMPKSFormProps>,
-        prevState: Readonly<IPunchOMPKSFormComponentState>,
-        snapshot?: any,
-    ): void {
+    componentDidMount() {
+        const { id } = this.props;
+        this.props.getSoknad(id);
+
+        this.setState((prevState) => {
+            const updatedFeilmeldingStier = new Set(prevState.feilmeldingStier); // Create a copy of the previous state
+
+            if (!updatedFeilmeldingStier.has('mottattDato')) {
+                updatedFeilmeldingStier.add('mottattDato'); // Add 'mottattDato' if it doesn't exist
+            }
+            if (!updatedFeilmeldingStier.has('klokkeslett')) {
+                updatedFeilmeldingStier.add('klokkeslett'); // Add 'klokkeslett' if it doesn't exist
+            }
+
+            return { feilmeldingStier: updatedFeilmeldingStier }; // Update state with the modified Set
+        });
+    }
+
+    componentDidUpdate() {
         const { soknad } = this.props.punchFormState;
-        if (!!soknad && !this.state.isFetched) {
+
+        if (soknad && !this.state.isFetched) {
+            const barn: Partial<IOMPKSSoknad> = {
+                barn: { norskIdent: this.props.identState.pleietrengendeId || '', foedselsdato: '' },
+            };
+            const soknadForState = () => {
+                if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
+                    return { ...new OMPKSSoknad(soknad as IOMPKSSoknad), ...barn };
+                }
+                return new OMPKSSoknad(soknad as IOMPKSSoknad);
+            };
+
             this.setState({
-                soknad: new OMPKSSoknad(this.props.punchFormState.soknad as IOMPKSSoknad),
+                soknad: soknadForState(),
                 isFetched: true,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
+                this.updateSoknad(barn);
             }
         }
     }
@@ -159,6 +166,195 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         this.props.resetSoknadAction();
         this.props.resetPunchFormAction();
         this.props.validerSoknadReset();
+    }
+
+    private handleSubmit = () => {
+        const navarandeSoknad: IOMPKSSoknad = this.state.soknad;
+        const journalposter = {
+            journalposter: Array.from(
+                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
+            ),
+        };
+        this.setState({ harForsoektAaSendeInn: true });
+        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
+    };
+
+    private handleSettPaaVent = () => {
+        this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
+        this.setState({ showSettPaaVentModal: false });
+    };
+
+    private handleShowSettPaaVentModal = (showSettPaaVentModal: boolean) => {
+        this.setState({ showSettPaaVentModal });
+    };
+
+    private handleVisErDuSikkerModal = (visErDuSikkerModal: boolean) => {
+        this.setState({ visErDuSikkerModal });
+    };
+
+    private handleStartButtonClick = () => {
+        this.props.resetAllStateAction();
+        this.props.navigate(ROUTES.HOME);
+    };
+
+    private getErrorMessage = (attribute: string, indeks?: number) => {
+        const { mottattDato, klokkeslett } = this.state.soknad;
+
+        const erFremITid = (dato: string) => {
+            const naa = new Date();
+            return naa < new Date(dato);
+        };
+
+        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
+            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
+                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+            }
+        }
+
+        if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        if (attribute === 'klokkeslett' && klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
+            ?.feilmelding;
+
+        return errorMsg
+            ? intlHelper(
+                  this.props.intl,
+                  `skjema.feil.${attribute}.${errorMsg}`
+                      .replace(/\[\d+]/g, '[]')
+                      .replace(
+                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
+                      )
+                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
+                      .replace(
+                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
+                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
+                      )
+                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
+                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
+              )
+            : undefined;
+    };
+
+    private statusetikett = () => {
+        if (!this.state.showStatus) {
+            return null;
+        }
+
+        const { punchFormState } = this.props;
+        const className = 'statusetikett';
+
+        if (punchFormState.isAwaitingUpdateResponse) {
+            return (
+                <Tag variant="warning" {...{ className }}>
+                    Lagrer …
+                </Tag>
+            );
+        }
+        if (punchFormState.updateSoknadError) {
+            return (
+                <Tag variant="error" {...{ className }}>
+                    Lagring feilet
+                </Tag>
+            );
+        }
+        return (
+            <Tag variant="success" {...{ className }}>
+                Lagret
+            </Tag>
+        );
+    };
+
+    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
+        onChange: (event: any) => this.updateSoknadState(change(event), false),
+        onBlur: (event: any) => this.updateSoknad(change(event)),
+    });
+
+    private getSoknadFromStore = () => new OMPKSSoknadUt(this.props.punchFormState.soknad as IOMPKSSoknadUt);
+
+    private getManglerFromStore = () => this.props.punchFormState.inputErrors;
+
+    private getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
+        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
+            const felter = m.felt?.split('.') || [];
+            for (let index = felter.length - 1; index >= -1; index--) {
+                const felt = felter.slice(0, index + 1).join('.');
+                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
+                andreFeilmeldingStier.delete(attribute);
+                if (attribute === felt) {
+                    return true;
+                }
+                if (andreFeilmeldingStier.has(felt)) {
+                    return false;
+                }
+            }
+            return false;
+        });
+
+        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
+            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
+        }
+        return [];
+    };
+
+    private updateSoknadState = (soknad: Partial<IOMPKSSoknad>, showStatus?: boolean) => {
+        this.setState((prevState) => {
+            const updatedSoknad = {
+                ...prevState.soknad,
+                ...soknad,
+                journalposter: new Set([...(prevState.soknad.journalposter || []), this.props.journalpostid]),
+            };
+            return {
+                soknad: updatedSoknad,
+                showStatus: showStatus || prevState.showStatus,
+            };
+        });
+    };
+
+    private updateSoknad = (soknad: Partial<IOMPKSSoknad>) => {
+        this.setState({ showStatus: true });
+        const navarandeSoknad: OMPKSSoknadUt = this.getSoknadFromStore();
+        const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
+
+        if (!journalposter.includes(this.props.journalpostid)) {
+            journalposter.push(this.props.journalpostid);
+        }
+
+        if (this.state.harForsoektAaSendeInn) {
+            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter }, true);
+        }
+
+        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter });
+    };
+
+    private erFremITidKlokkeslett(klokkeslett: string) {
+        const { mottattDato } = this.state.soknad;
+        const naa = new Date();
+
+        if (
+            mottattDato &&
+            naa.toDateString() === new Date(mottattDato!).toDateString() &&
+            initializeDate(naa).format('HH:mm') < klokkeslett
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
+        this.updateSoknadState({ harInfoSomIkkeKanPunsjes: checked }, true);
+        this.updateSoknad({ harInfoSomIkkeKanPunsjes: checked });
+    }
+
+    private updateMedisinskeOpplysninger(checked: boolean) {
+        this.updateSoknadState({ harMedisinskeOpplysninger: checked }, true);
+        this.updateSoknad({ harMedisinskeOpplysninger: checked });
     }
 
     render() {
@@ -175,7 +371,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return <Loader size="large" />;
         }
 
-        if (!!punchFormState.error) {
+        if (punchFormState.error) {
             return (
                 <>
                     <Alert size="small" variant="error">
@@ -198,9 +394,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             <>
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
-                <VerticalSpacer sixteenPx={true} />
+                <VerticalSpacer sixteenPx />
 
-                <VerticalSpacer sixteenPx={true} />
+                <VerticalSpacer sixteenPx />
+
                 <OpplysningerOmOMPKSSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -209,48 +406,52 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     signert={signert}
                     soknad={soknad}
                 />
-                <VerticalSpacer twentyPx={true} />
-                <p className={'ikkeregistrert'}>{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
-                <div className={'flex-container'}>
+                <VerticalSpacer twentyPx />
+                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+
+                <div className="flex-container">
                     <CheckboksPanel
-                        id={'medisinskeopplysningercheckbox'}
+                        id="medisinskeopplysningercheckbox"
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                        checked={!!soknad.harMedisinskeOpplysninger}
+                        checked={soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
-                    <HelpText className={'hjelpetext'} placement="top-end">
+                    <HelpText className="hjelpetext" placement="top-end">
                         {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
                     </HelpText>
                 </div>
-                <VerticalSpacer eightPx={true} />
-                <div className={'flex-container'}>
+                <VerticalSpacer eightPx />
+
+                <div className="flex-container">
                     <CheckboksPanel
-                        id={'opplysningerikkepunsjetcheckbox'}
+                        id="opplysningerikkepunsjetcheckbox"
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                        checked={!!soknad.harInfoSomIkkeKanPunsjes}
+                        checked={soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
-                    <HelpText className={'hjelpetext'} placement="top-end">
+                    <HelpText className="hjelpetext" placement="top-end">
                         {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
                     </HelpText>
                 </div>
-                <VerticalSpacer twentyPx={true} />
+                <VerticalSpacer twentyPx />
+
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                    .map((feilmelding) => {
-                        return <Feilmelding key={feilmelding} feil={feilmelding} />;
-                    })}
+                    .map((feilmelding) => (
+                        <Feilmelding key={feilmelding} feil={feilmelding} />
+                    ))}
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className={classNames('loadingSpinner')}>
                         <Loader size="large" />
                     </div>
                 )}
-                <div className={'submit-knapper'}>
+
+                <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
                         <Button
                             variant="secondary"
-                            className={'send-knapp'}
+                            className="send-knapp"
                             onClick={() => this.handleSubmit()}
                             disabled={false}
                         >
@@ -259,8 +460,8 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                         <Button
                             variant="secondary"
-                            className={'vent-knapp'}
-                            onClick={() => this.setState({ showSettPaaVentModal: true })}
+                            className="vent-knapp"
+                            onClick={() => this.handleShowSettPaaVentModal(true)}
                             disabled={false}
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
@@ -268,24 +469,24 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     </p>
                 </div>
 
-                <VerticalSpacer sixteenPx={true} />
+                <VerticalSpacer sixteenPx />
 
-                {!!punchFormState.updateSoknadError && (
+                {punchFormState.updateSoknadError && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.ikke_lagret')}
                     </Alert>
                 )}
-                {!!punchFormState.inputErrors?.length && (
-                    <Alert size="small" variant="error" className={'valideringstripefeil'}>
+                {punchFormState.inputErrors?.length && (
+                    <Alert size="small" variant="error" className="valideringstripefeil">
                         {intlHelper(intl, 'skjema.feil.validering')}
                     </Alert>
                 )}
-                {!!punchFormState.submitSoknadError && (
+                {punchFormState.submitSoknadError && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.ikke_sendt')}
                     </Alert>
                 )}
-                {!!punchFormState.submitSoknadConflict && (
+                {punchFormState.submitSoknadConflict && (
                     <Alert size="small" variant="error">
                         {intlHelper(intl, 'skjema.feil.konflikt')}
                     </Alert>
@@ -293,10 +494,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 {this.state.showSettPaaVentModal && (
                     <Modal
-                        key={'settpaaventmodal'}
-                        className={'settpaaventmodal'}
-                        onClose={() => this.setState({ showSettPaaVentModal: false })}
-                        aria-label={'settpaaventmodal'}
+                        key="settpaaventmodal"
+                        className="settpaaventmodal"
+                        onClose={() => this.handleShowSettPaaVentModal(false)}
+                        aria-label="settpaaventmodal"
                         open={this.state.showSettPaaVentModal}
                     >
                         <div className="">
@@ -306,7 +507,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                                 )}
                                 soknadId={soknad.soeknadId}
                                 submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                                avbryt={() => this.handleShowSettPaaVentModal(false)}
                             />
                         </div>
                     </Modal>
@@ -314,20 +515,20 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 {punchFormState.settPaaVentSuccess && (
                     <Modal
-                        key={'settpaaventokmodal'}
+                        key="settpaaventokmodal"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label={'settpaaventokmodal'}
+                        aria-label="settpaaventokmodal"
                         open={punchFormState.settPaaVentSuccess}
                     >
-                        <OkGaaTilLosModal melding={'modal.settpaavent.til'} />
+                        <OkGaaTilLosModal melding="modal.settpaavent.til" />
                     </Modal>
                 )}
 
-                {!!punchFormState.settPaaVentError && (
+                {punchFormState.settPaaVentError && (
                     <Modal
-                        key={'settpaaventerrormodal'}
+                        key="settpaaventerrormodal"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label={'settpaaventokmodal'}
+                        aria-label="settpaaventokmodal"
                         open={!!punchFormState.settPaaVentError}
                     >
                         <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
@@ -338,11 +539,11 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     !this.state.visErDuSikkerModal &&
                     this.props.punchFormState.validertSoknad && (
                         <Modal
-                            key={'validertSoknadModal'}
-                            className={'validertSoknadModal'}
+                            key="validertSoknadModal"
+                            className="validertSoknadModal"
                             onClose={() => this.props.validerSoknadReset()}
-                            aria-label={'validertSoknadModal'}
-                            open={!!this.props.punchFormState.isValid}
+                            aria-label="validertSoknadModal"
+                            open={this.props.punchFormState.isValid}
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
@@ -371,213 +572,25 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 {this.state.visErDuSikkerModal && (
                     <Modal
-                        key={'erdusikkermodal'}
-                        className={'erdusikkermodal'}
+                        key="erdusikkermodal"
+                        className="erdusikkermodal"
                         onClose={() => this.props.validerSoknadReset()}
-                        aria-label={'erdusikkermodal'}
+                        aria-label="erdusikkermodal"
                         open={this.state.visErDuSikkerModal}
                     >
                         <ErDuSikkerModal
-                            melding={'modal.erdusikker.sendinn'}
-                            extraInfo={'modal.erdusikker.sendinn.extrainfo'}
+                            melding="modal.erdusikker.sendinn"
+                            extraInfo="modal.erdusikker.sendinn.extrainfo"
                             onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
-                            submitKnappText={'skjema.knapp.send'}
+                            submitKnappText="skjema.knapp.send"
                             onClose={() => {
                                 this.props.validerSoknadReset();
-                                this.setState({ visErDuSikkerModal: false });
+                                this.handleVisErDuSikkerModal(false);
                             }}
                         />
                     </Modal>
                 )}
             </>
-        );
-    }
-
-    private handleSubmit = () => {
-        let navarandeSoknad: IOMPKSSoknad = this.state.soknad;
-        const journalposter = {
-            journalposter: Array.from(
-                navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
-            ),
-        };
-        this.setState({ harForsoektAaSendeInn: true });
-        this.props.validateSoknad({ ...navarandeSoknad, ...journalposter });
-    };
-
-    private handleSettPaaVent = () => {
-        this.props.settJournalpostPaaVent(this.props.journalpostid, this.state.soknad.soeknadId!);
-        this.setState({ showSettPaaVentModal: false });
-    };
-
-    private updateMedisinskeOpplysninger(checked: boolean) {
-        this.updateSoknadState({ harMedisinskeOpplysninger: checked }, true);
-        this.updateSoknad({ harMedisinskeOpplysninger: checked });
-    }
-
-    private updateOpplysningerIkkeKanPunsjes(checked: boolean) {
-        this.updateSoknadState({ harInfoSomIkkeKanPunsjes: checked }, true);
-        this.updateSoknad({ harInfoSomIkkeKanPunsjes: checked });
-    }
-
-    private getSoknadFromStore = () => {
-        return new OMPKSSoknadUt(this.props.punchFormState.soknad as IOMPKSSoknadUt);
-    };
-
-    private getManglerFromStore = () => {
-        return this.props.punchFormState.inputErrors;
-    };
-
-    private erFremITid(dato: string) {
-        const naa = new Date();
-        return naa < new Date(dato);
-    }
-
-    private erFremITidKlokkeslett(klokkeslett: string) {
-        const { mottattDato } = this.state.soknad;
-        const naa = new Date();
-
-        if (
-            !!mottattDato &&
-            naa.toDateString() === new Date(mottattDato!).toDateString() &&
-            initializeDate(naa).format('HH:mm') < klokkeslett
-        ) {
-            return true;
-        }
-        return false;
-    }
-
-    getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
-        }
-
-        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
-        });
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error.feilmelding).filter(Boolean);
-        }
-        return [];
-    };
-
-    private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett } = this.state.soknad;
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState({ feilmeldingStier: this.state.feilmeldingStier.add(attribute) });
-        }
-
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
-        }
-
-        if (attribute === 'mottattDato' && !!mottattDato && this.erFremITid(mottattDato)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        return !!errorMsg
-            ? // intlHelper(intl, `skjema.feil.${attribute}`) : undefined;
-
-              intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
-              )
-            : undefined;
-    };
-
-    private updateSoknadState = (soknad: Partial<IOMPKSSoknad>, showStatus?: boolean) => {
-        this.state.soknad.journalposter!.add(this.props.journalpostid);
-        this.setState({
-            soknad: { ...this.state.soknad, ...soknad },
-            showStatus: !!showStatus,
-        });
-    };
-
-    private updateSoknad = (soknad: Partial<IOMPKSSoknad>) => {
-        this.setState({ showStatus: true });
-        const navarandeSoknad: OMPKSSoknadUt = this.getSoknadFromStore();
-        const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
-
-        if (!journalposter.includes(this.props.journalpostid)) {
-            journalposter.push(this.props.journalpostid);
-        }
-
-        if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter }, true);
-        }
-
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter: journalposter });
-    };
-
-    private handleStartButtonClick = () => {
-        this.props.resetAllStateAction();
-        this.props.navigate(ROUTES.HOME);
-    };
-
-    private changeAndBlurUpdatesSoknad = (change: (event: any) => Partial<IOMPKSSoknad>) => ({
-        onChange: (event: any) => this.updateSoknadState(change(event), false),
-        onBlur: (event: any) => this.updateSoknad(change(event)),
-    });
-
-    private statusetikett() {
-        if (!this.state.showStatus) {
-            return null;
-        }
-
-        const { punchFormState } = this.props;
-        const className = 'statusetikett';
-
-        if (punchFormState.isAwaitingUpdateResponse) {
-            return (
-                <Tag variant="warning" {...{ className }}>
-                    Lagrer …
-                </Tag>
-            );
-        }
-        if (!!punchFormState.updateSoknadError) {
-            return (
-                <Tag variant="error" {...{ className }}>
-                    Lagring feilet
-                </Tag>
-            );
-        }
-        return (
-            <Tag variant="success" {...{ className }}>
-                Lagret
-            </Tag>
         );
     }
 }
@@ -609,4 +622,3 @@ const mapDispatchToProps = (dispatch: any) => ({
 export const OMPKSPunchForm = withHooks(
     injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent)),
 );
-/* eslint-enable */

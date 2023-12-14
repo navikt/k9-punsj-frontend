@@ -13,7 +13,7 @@ import { testHandlers } from './testHandlers';
 
 let handlers = [
     http.get('/api/test', () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
-    http.get('http://localhost:8101/api/k9-formidling/brev/maler?sakstype=OMP&avsenderApplikasjon=K9PUNSJ', () =>
+    http.get('http://localhost:8101/api/k9-formidling/brev/maler', () =>
         HttpResponse.json(
             {
                 INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },

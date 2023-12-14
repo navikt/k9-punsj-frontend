@@ -82,7 +82,9 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.søkerId, null);
         }
     };
-
+    if (!visPleietrengende) {
+        return null;
+    }
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
