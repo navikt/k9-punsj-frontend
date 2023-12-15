@@ -11,7 +11,6 @@ import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { get, post } from 'app/utils';
 
 import { finnArbeidsgivere } from '../../api/api';
@@ -25,49 +24,7 @@ import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import './brev.less';
 import dokumentMalType from './dokumentMalType';
-
-const previewMessage = (
-    values: BrevFormValues,
-    aktørId: string,
-    sakstype: string,
-    journalpostId?: string,
-    fagsakId?: string,
-) => {
-    const mottaker = {
-        type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
-        id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
-    };
-
-    const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
-
-    fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
-        method: 'post',
-        credentials: 'include',
-        body: JSON.stringify({
-            aktørId,
-            eksternReferanse: journalpostId || fagsakId,
-            ytelseType: {
-                kode: sakstype,
-                kodeverk: 'FAGSAK_YTELSE',
-            },
-            saksnummer: fagsakId || 'GENERELL_SAK',
-            avsenderApplikasjon: 'K9PUNSJ',
-            overstyrtMottaker: mottaker,
-            dokumentMal: values.brevmalkode,
-            dokumentdata: {
-                fritekst: !brevmalErGenereltFritekstbrev ? values.fritekst : undefined,
-                fritekstbrev: brevmalErGenereltFritekstbrev ? values.fritekstbrev : undefined,
-            },
-        }),
-        headers: { 'Content-Type': 'application/json' },
-    })
-        .then((response) => response.blob())
-        .then((data) => {
-            if (URL.createObjectURL) {
-                window.open(URL.createObjectURL(data));
-            }
-        });
-};
+import { previewMessage } from './PrewiewMessage';
 
 interface BrevProps {
     søkerId: string;
@@ -100,6 +57,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [submitet, setSubmitet] = useState(false);
+    const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
     useEffect(() => {
         fetch(`${URL_BACKEND()}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
@@ -226,6 +184,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 />
                                 <MottakerVelger
                                     resetBrevStatus={() => {
+                                        setPreviewMessageFeil(undefined);
                                         setBrevErSendt(false);
                                         setSendBrevFeilet(false);
                                     }}
@@ -255,17 +214,27 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 )}
                                 <VerticalSpacer sixteenPx />
                                 {values.brevmalkode && (
-                                    <Button
-                                        size="small"
-                                        type="button"
-                                        variant="tertiary"
-                                        icon={<FileSearchIcon aria-hidden />}
-                                        onClick={() =>
-                                            previewMessage(values, aktørId, sakstype, journalpostId, fagsakId)
-                                        }
-                                    >
-                                        {intl.formatMessage({ id: 'Messages.Preview' })}
-                                    </Button>
+                                    <>
+                                        <Button
+                                            size="small"
+                                            type="button"
+                                            variant="tertiary"
+                                            icon={<FileSearchIcon aria-hidden />}
+                                            onClick={() => {
+                                                previewMessage(values, aktørId, sakstype, journalpostId, fagsakId).then(
+                                                    (feil) => setPreviewMessageFeil(feil),
+                                                );
+                                            }}
+                                        >
+                                            {intl.formatMessage({ id: 'Messages.Preview' })}
+                                        </Button>
+
+                                        {previewMessageFeil && (
+                                            <Alert variant="error" size="medium" fullWidth inline>
+                                                {previewMessageFeil}
+                                            </Alert>
+                                        )}
+                                    </>
                                 )}
                                 <div className="brevStatusContainer">
                                     {brevErSendt && (

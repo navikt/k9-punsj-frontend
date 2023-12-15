@@ -92,7 +92,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         {...field}
                         size="small"
                         label={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
-                        placeholder={intl.formatMessage({ id: 'Messages.ChooseRecipient' })}
                         className="w-[400px] "
                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         onChange={(event) => {
