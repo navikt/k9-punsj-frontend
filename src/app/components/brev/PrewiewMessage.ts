@@ -46,6 +46,7 @@ export const previewMessage = async (
             }
             return undefined;
         }
+        console.log('response: ', response);
         throw new Error(response.statusText);
     } catch (error) {
         return error.message as string;
