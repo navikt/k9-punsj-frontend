@@ -2,6 +2,34 @@ import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { URL_BACKEND } from 'app/apiConfig';
 import dokumentMalType from './dokumentMalType';
 
+interface ErrType {
+    feilmelding: string;
+}
+
+const getErrorString = (errorText: string): string => {
+    const jsonStart = errorText.indexOf('{"');
+    if (jsonStart !== -1) {
+        const jsonEnd = errorText.lastIndexOf('}') + 1;
+        const jsonString = errorText.substring(jsonStart, jsonEnd);
+        try {
+            const errorObject = JSON.parse(jsonString);
+            if (errorObject && errorObject.melding) {
+                return errorObject.melding;
+            }
+        } catch (error) {
+            return errorText;
+        }
+    }
+
+    const errorStart = 'Årsak: ';
+    const errorIndex = errorText.indexOf(errorStart);
+    if (errorIndex !== -1) {
+        return errorText.substring(errorIndex + errorStart.length);
+    }
+
+    return errorText;
+};
+
 export const previewMessage = async (
     values: BrevFormValues,
     aktørId: string,
@@ -9,12 +37,10 @@ export const previewMessage = async (
     journalpostId?: string,
     fagsakId?: string,
 ): Promise<string | undefined> => {
-    const mottaker = {
-        type: values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR',
-        id: values.velgAnnenMottaker ? values.orgNummer : values.mottaker,
-    };
+    const mottakerType = values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR';
+    const mottakerId = values.velgAnnenMottaker ? values.orgNummer : values.mottaker;
 
-    const brevmalErGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
+    const isGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
     try {
         const response = await fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
@@ -29,11 +55,11 @@ export const previewMessage = async (
                 },
                 saksnummer: fagsakId || 'GENERELL_SAK',
                 avsenderApplikasjon: 'K9PUNSJ',
-                overstyrtMottaker: mottaker,
+                overstyrtMottaker: { type: mottakerType, id: mottakerId },
                 dokumentMal: values.brevmalkode,
                 dokumentdata: {
-                    fritekst: !brevmalErGenereltFritekstbrev ? values.fritekst : undefined,
-                    fritekstbrev: brevmalErGenereltFritekstbrev ? values.fritekstbrev : undefined,
+                    fritekst: !isGenereltFritekstbrev ? values.fritekst : undefined,
+                    fritekstbrev: isGenereltFritekstbrev ? values.fritekstbrev : undefined,
                 },
             }),
             headers: { 'Content-Type': 'application/json' },
@@ -46,7 +72,13 @@ export const previewMessage = async (
             }
             return undefined;
         }
-        console.log('response: ', response);
+
+        if (response.status === 500) {
+            const errorText: ErrType = await response.json();
+            const errorString = getErrorString(errorText.feilmelding);
+            throw new Error(errorString);
+        }
+
         throw new Error(response.statusText);
     } catch (error) {
         return error.message as string;
