@@ -586,8 +586,8 @@
     "Messages.PreviewText": "Forhåndsvis varselbrev",
     "Messages.Beskrivelse": "Foretrukket språk",
     "ValidationMessage.brev.orgNummer.konkurs": "Konkurs",
-    "orgNumberHasInvalidFormat": "Du har oppgitt et ugyldig organisasjonsnummer eller ingen treff.",
-    "orgNumberHasNoValue": "Skriv inn organisasjonsnummer.",
+    "orgNumberHasInvalidFormat": "Organisasjonsnummeret ({orgnr}) er på et ugyldig format",
+    "orgNumberHasNoValue": "Skriv inn organisasjonsnummer",
     "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}",
 
     "AT": "Arbeidstaker",

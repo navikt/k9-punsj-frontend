@@ -66,7 +66,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 }
                 if (response.status === 404) {
                     setOrgInfoPending(false);
-                    setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }));
+                    setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr }));
                 }
             },
         );
@@ -130,9 +130,9 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             const error = getOrgNumberValidator({ required: true })(value);
 
                             if (errorOrgInfo) {
-                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' });
+                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr: value });
                             }
-                            return error ? intl.formatMessage({ id: error }) : undefined;
+                            return error ? intl.formatMessage({ id: error }, { orgnr: value }) : undefined;
                         }}
                     >
                         {({ field, meta }: FieldProps) => (

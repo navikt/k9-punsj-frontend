@@ -26,6 +26,7 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                 {({ field, meta }: FieldProps) => (
                     <TextField
                         {...field}
+                        size="small"
                         label={intl.formatMessage({ id: 'Messages.FritekstTittel' })}
                         maxLength={200}
                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}

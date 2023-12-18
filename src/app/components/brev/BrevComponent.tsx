@@ -150,10 +150,11 @@ const BrevComponent: React.FC<BrevProps> = ({
                 actions.setSubmitting(false);
             }}
         >
-            {({ values, isSubmitting, handleSubmit, submitCount }) => {
+            {({ values, isSubmitting, handleSubmit, submitCount, validateForm, setFieldTouched, isValid }) => {
                 if (submitCount > 0) {
                     setSubmitet(true);
                 }
+
                 return (
                     <>
                         <Modal
@@ -221,6 +222,15 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             variant="tertiary"
                                             icon={<FileSearchIcon aria-hidden />}
                                             onClick={() => {
+                                                setSubmitet(true);
+                                                validateForm(values);
+
+                                                setFieldTouched('mottaker');
+                                                setFieldTouched('orgNummer');
+                                                setFieldTouched('fritekst');
+                                                setFieldTouched('fritekstbrev.overskrift');
+                                                setFieldTouched('fritekstbrev.brødtekst');
+
                                                 previewMessage(values, aktørId, sakstype, journalpostId, fagsakId).then(
                                                     (feil) => setPreviewMessageFeil(feil),
                                                 );
@@ -229,7 +239,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             {intl.formatMessage({ id: 'Messages.Preview' })}
                                         </Button>
 
-                                        {previewMessageFeil && (
+                                        {previewMessageFeil && isValid && (
                                             <Alert variant="error" size="medium" fullWidth inline>
                                                 {previewMessageFeil}
                                             </Alert>
