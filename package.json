@@ -180,7 +180,7 @@
         "regenerator-runtime": "0.14.0",
         "storybook": "7.6.4",
         "style-loader": "3.3.3",
-        "stylelint": "16.0.2",
+        "stylelint": "16.1.0",
         "stylelint-config-prettier": "9.0.5",
         "stylelint-config-standard": "35.0.0",
         "terser-webpack-plugin": "5.3.9",
