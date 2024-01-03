@@ -196,6 +196,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     aktørId={aktørId}
                                     person={person}
                                     arbeidsgivereMedNavn={arbeidsgivereMedNavn}
+                                    formSubmitted={submitet}
                                 />
                                 {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                                     <InnhentDokumentasjonMal

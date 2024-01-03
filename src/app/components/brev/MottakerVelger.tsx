@@ -35,6 +35,7 @@ interface MottakerVelgerProps {
     orgInfoPending: boolean;
     setOrgInfoPending: (value: boolean) => void;
     arbeidsgivereMedNavn: Organisasjon[];
+    formSubmitted: boolean;
 }
 
 const MottakerVelger: React.FC<MottakerVelgerProps> = ({
@@ -44,12 +45,12 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     orgInfoPending,
     setOrgInfoPending,
     arbeidsgivereMedNavn,
+    formSubmitted,
 }) => {
     const intl = useIntl();
     const { values, setFieldValue } = useFormikContext<BrevFormValues>();
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
-    const [visOrgErrorInfo, setVisOrgErrorInfo] = useState<boolean | undefined>();
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -67,7 +68,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 }
                 if (response.status === 404) {
                     setOrgInfoPending(false);
-                    setVisOrgErrorInfo(true);
                     setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr }));
                 }
             },
@@ -138,35 +138,32 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         }}
                     >
                         {({ field, meta }: FieldProps) => (
-                            <>
-                                <TextField
-                                    label={intl.formatMessage({ id: 'Messages.orgNummer' })}
-                                    {...field}
-                                    type="text"
-                                    size="small"
-                                    inputMode="numeric"
-                                    pattern="[0-9]*"
-                                    maxLength={9}
-                                    autoComplete="off"
-                                    readOnly={orgInfoPending}
-                                    onChange={(event) => {
-                                        setFieldValue(field.name, event.target.value);
-                                        setErrorOrgInfo(undefined);
-                                        setOrgInfo(undefined);
-                                        resetBrevStatus();
-                                        const { value } = event.target;
-                                        if (
-                                            !orgInfoPending &&
-                                            value.length === 9 &&
-                                            getOrgNumberValidator({ required: true })(value) === undefined
-                                        ) {
-                                            hentOrgInfo(value);
-                                        }
-                                    }}
-                                    error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                />
-                                {meta.touched && meta.error && setVisOrgErrorInfo(false)}
-                            </>
+                            <TextField
+                                label={intl.formatMessage({ id: 'Messages.orgNummer' })}
+                                {...field}
+                                type="text"
+                                size="small"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                maxLength={9}
+                                autoComplete="off"
+                                readOnly={orgInfoPending}
+                                onChange={(event) => {
+                                    setFieldValue(field.name, event.target.value);
+                                    setErrorOrgInfo(undefined);
+                                    setOrgInfo(undefined);
+                                    resetBrevStatus();
+                                    const { value } = event.target;
+
+                                    if (!orgInfoPending && value.length === 9) {
+                                        const error = getOrgNumberValidator({ required: true })(value);
+                                        if (error) {
+                                            setErrorOrgInfo(intl.formatMessage({ id: error }, { orgnr: value }));
+                                        } else hentOrgInfo(value);
+                                    }
+                                }}
+                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                            />
                         )}
                     </Field>
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
@@ -177,7 +174,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                                 </span>
                             </BodyShort>
                             {orgInfoPending && <Loader size="small" title="venter..." />}
-                            {visOrgErrorInfo && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
+                            {!formSubmitted && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
                             {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
                         </VStack>
                     )}
