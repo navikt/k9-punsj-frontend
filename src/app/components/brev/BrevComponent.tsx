@@ -204,6 +204,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             setVisBrevIkkeSendtInfoboks &&
                                             setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
                                         }
+                                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
                                     />
                                 )}
                                 {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
@@ -212,6 +213,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             setVisBrevIkkeSendtInfoboks &&
                                             setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
                                         }
+                                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
                                     />
                                 )}
                                 <VerticalSpacer sixteenPx />
@@ -225,7 +227,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             onClick={() => {
                                                 setSubmitet(true);
                                                 validateForm(values);
-
+                                                setPreviewMessageFeil(undefined);
                                                 setFieldTouched('mottaker');
                                                 setFieldTouched('orgNummer');
                                                 setFieldTouched('fritekst');

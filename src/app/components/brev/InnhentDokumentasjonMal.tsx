@@ -11,9 +11,13 @@ import VerticalSpacer from '../VerticalSpacer';
 
 interface InnhentDokumentasjonMalProps {
     setVisBrevIkkeSendtInfoboks: () => void;
+    setPreviewMessageFeil: () => void;
 }
 
-const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({ setVisBrevIkkeSendtInfoboks }) => {
+const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({
+    setVisBrevIkkeSendtInfoboks,
+    setPreviewMessageFeil,
+}) => {
     const intl = useIntl();
     const { setFieldValue } = useFormikContext();
 
@@ -29,6 +33,7 @@ const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({ setVi
                             onChange={(event) => {
                                 setFieldValue(field.name, event.target.value);
                                 setVisBrevIkkeSendtInfoboks();
+                                setPreviewMessageFeil();
                             }}
                             label={intl.formatMessage({ id: 'Messages.InnholdIBrev' })}
                             maxLength={4000}
