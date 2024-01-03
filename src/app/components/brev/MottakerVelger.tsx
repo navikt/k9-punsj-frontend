@@ -143,6 +143,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                                 size="small"
                                 inputMode="numeric"
                                 pattern="[0-9]*"
+                                maxLength={9}
                                 autoComplete="off"
                                 readOnly={orgInfoPending}
                                 onChange={(event) => {
