@@ -150,7 +150,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                 actions.setSubmitting(false);
             }}
         >
-            {({ values, isSubmitting, handleSubmit, submitCount, validateForm, setFieldTouched, isValid }) => {
+            {({ values, isSubmitting, handleSubmit, submitCount, validateForm, setFieldTouched, isValid, errors }) => {
                 if (submitCount > 0) {
                     setSubmitet(true);
                 }
@@ -231,15 +231,21 @@ const BrevComponent: React.FC<BrevProps> = ({
                                                 setFieldTouched('fritekstbrev.overskrift');
                                                 setFieldTouched('fritekstbrev.brødtekst');
 
-                                                previewMessage(values, aktørId, sakstype, journalpostId, fagsakId).then(
-                                                    (feil) => setPreviewMessageFeil(feil),
-                                                );
+                                                if (Object.keys(errors).length === 0) {
+                                                    previewMessage(
+                                                        values,
+                                                        aktørId,
+                                                        sakstype,
+                                                        journalpostId,
+                                                        fagsakId,
+                                                    ).then((feil) => setPreviewMessageFeil(feil));
+                                                }
                                             }}
                                         >
                                             {intl.formatMessage({ id: 'Messages.Preview' })}
                                         </Button>
 
-                                        {previewMessageFeil && isValid && (
+                                        {isValid && previewMessageFeil && (
                                             <Alert variant="error" size="medium" fullWidth inline>
                                                 {previewMessageFeil}
                                             </Alert>
