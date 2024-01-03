@@ -65,7 +65,7 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                                 <Table.Row key={j.journalpostId}>
                                     <Table.DataCell>{j.journalpostId}</Table.DataCell>
                                     <Table.DataCell>{j.dato}</Table.DataCell>
-                                    <Table.DataCell>{j.punsjInnsendingType.navn}</Table.DataCell>
+                                    <Table.DataCell>{j.punsjInnsendingType?.navn || ''}</Table.DataCell>
                                     <Table.DataCell>
                                         <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
                                             <VisSvg title="vis" />
