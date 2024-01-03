@@ -168,11 +168,14 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                     </Field>
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
                         <VStack gap="2" className="ml-7">
-                            <BodyShort>
-                                <span className="navds-form-field__label navds-label navds-label--small">
-                                    <FormattedMessage id="Messages.annenMottaker.navn" />
-                                </span>
-                            </BodyShort>
+                            {(orgInfo || orgInfoPending) && (
+                                <BodyShort>
+                                    <span className="navds-form-field__label navds-label navds-label--small">
+                                        <FormattedMessage id="Messages.annenMottaker.navn" />
+                                    </span>
+                                </BodyShort>
+                            )}
+
                             {orgInfoPending && <Loader size="small" title="venter..." />}
                             {!formSubmitted && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
                             {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
