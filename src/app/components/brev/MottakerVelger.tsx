@@ -49,6 +49,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     const { values, setFieldValue } = useFormikContext<BrevFormValues>();
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
+    const [visOrgErrorInfo, setVisOrgErrorInfo] = useState<boolean | undefined>();
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -66,6 +67,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 }
                 if (response.status === 404) {
                     setOrgInfoPending(false);
+                    setVisOrgErrorInfo(true);
                     setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr }));
                 }
             },
@@ -136,43 +138,46 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         }}
                     >
                         {({ field, meta }: FieldProps) => (
-                            <TextField
-                                label={intl.formatMessage({ id: 'Messages.orgNummer' })}
-                                {...field}
-                                type="text"
-                                size="small"
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-                                maxLength={9}
-                                autoComplete="off"
-                                readOnly={orgInfoPending}
-                                onChange={(event) => {
-                                    setFieldValue(field.name, event.target.value);
-                                    setErrorOrgInfo(undefined);
-                                    setOrgInfo(undefined);
-                                    resetBrevStatus();
-                                    const { value } = event.target;
-                                    if (
-                                        !orgInfoPending &&
-                                        value.length === 9 &&
-                                        getOrgNumberValidator({ required: true })(value) === undefined
-                                    ) {
-                                        hentOrgInfo(value);
-                                    }
-                                }}
-                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                            />
+                            <>
+                                <TextField
+                                    label={intl.formatMessage({ id: 'Messages.orgNummer' })}
+                                    {...field}
+                                    type="text"
+                                    size="small"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    maxLength={9}
+                                    autoComplete="off"
+                                    readOnly={orgInfoPending}
+                                    onChange={(event) => {
+                                        setFieldValue(field.name, event.target.value);
+                                        setErrorOrgInfo(undefined);
+                                        setOrgInfo(undefined);
+                                        resetBrevStatus();
+                                        const { value } = event.target;
+                                        if (
+                                            !orgInfoPending &&
+                                            value.length === 9 &&
+                                            getOrgNumberValidator({ required: true })(value) === undefined
+                                        ) {
+                                            hentOrgInfo(value);
+                                        }
+                                    }}
+                                    error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                />
+                                {meta.touched && meta.error && setVisOrgErrorInfo(false)}
+                            </>
                         )}
                     </Field>
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
                         <VStack gap="2" className="ml-7">
                             <BodyShort>
-                                <span className="font-extrabold">
+                                <span className="navds-form-field__label navds-label navds-label--small">
                                     <FormattedMessage id="Messages.annenMottaker.navn" />
                                 </span>
                             </BodyShort>
                             {orgInfoPending && <Loader size="small" title="venter..." />}
-                            {errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
+                            {visOrgErrorInfo && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
                             {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
                         </VStack>
                     )}
