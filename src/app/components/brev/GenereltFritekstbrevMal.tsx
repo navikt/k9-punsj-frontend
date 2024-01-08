@@ -11,9 +11,13 @@ import VerticalSpacer from '../VerticalSpacer';
 
 interface GenereltFritekstbrevMalProps {
     setVisBrevIkkeSendtInfoboks: () => void;
+    setPreviewMessageFeil: () => void;
 }
 
-const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVisBrevIkkeSendtInfoboks }) => {
+const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
+    setVisBrevIkkeSendtInfoboks,
+    setPreviewMessageFeil,
+}) => {
     const intl = useIntl();
     const { setFieldValue } = useFormikContext();
     return (
@@ -26,6 +30,12 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                 {({ field, meta }: FieldProps) => (
                     <TextField
                         {...field}
+                        onChange={(event) => {
+                            setFieldValue(field.name, event.target.value);
+                            setPreviewMessageFeil();
+                            setVisBrevIkkeSendtInfoboks();
+                        }}
+                        size="small"
                         label={intl.formatMessage({ id: 'Messages.FritekstTittel' })}
                         maxLength={200}
                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
@@ -42,11 +52,13 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({ setVi
                     <div className="textareaContainer">
                         <Textarea
                             {...field}
+                            size="small"
                             onChange={(event) => {
                                 setFieldValue(field.name, event.target.value);
+                                setPreviewMessageFeil();
                                 setVisBrevIkkeSendtInfoboks();
                             }}
-                            label={intl.formatMessage({ id: 'Messages.Fritekst' })}
+                            label={intl.formatMessage({ id: 'Messages.InnholdIBrev' })}
                             maxLength={100000}
                             error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />

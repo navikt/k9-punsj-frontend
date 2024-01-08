@@ -6,9 +6,10 @@ import dokumentMalType from './dokumentMalType';
 
 const lagDokumentdata = (values: BrevFormValues) => {
     const felterSomSkalMed: Partial<BrevFormValues> = {};
+
     Object.keys(values)
-        .filter((key) => key !== BrevFormKeys.mottaker && key !== BrevFormKeys.brevmalkode && values[key])
-        .forEach((key) => {
+        .filter((key: BrevFormKeys) => key !== BrevFormKeys.mottaker && key !== BrevFormKeys.brevmalkode && values[key])
+        .forEach((key: BrevFormKeys) => {
             if (key === BrevFormKeys.fritekst) {
                 if (values.brevmalkode === dokumentMalType.INNHENT_DOK) {
                     felterSomSkalMed[key] = values[key];

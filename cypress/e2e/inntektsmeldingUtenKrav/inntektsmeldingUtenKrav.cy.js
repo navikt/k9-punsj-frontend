@@ -26,11 +26,11 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
-        cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
-        cy.findByLabelText('Mottaker').should('exist');
-        cy.findByLabelText('Fritekst').should('exist');
+        cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
+        cy.findByLabelText('Velg mottaker').should('exist');
+        cy.findByLabelText('Innhold i brev').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
-        cy.findByLabelText('Mal').should('exist').select('Fritekst generelt brev');
+        cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
     });
 
@@ -46,16 +46,17 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
-        cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
-        cy.findByLabelText('Mottaker').should('exist');
-        cy.findByLabelText('Fritekst').should('exist');
+        cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
+        cy.findByLabelText('Velg mottaker').should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
+        cy.findByLabelText('Innhold i brev').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
-        cy.findByLabelText('Mal').should('exist').select('Fritekst generelt brev');
+        cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
-        cy.findByLabelText('Mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
-
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Send til tredjepart').should('exist');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
-        cy.findByLabelText('Fritekst').should('exist').type('Fritekst her');
+        cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
 
         cy.findByText('Send brev').should('exist').click();
         cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
@@ -75,26 +76,27 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
         cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
-        cy.findByLabelText('Mal').should('exist').select('Innhent dokumentasjon');
-        cy.findByLabelText('Mottaker').should('exist');
-        cy.findByLabelText('Fritekst').should('exist');
+        cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
+        cy.findByLabelText('Velg mottaker').should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
+        cy.findByLabelText('Innhold i brev').should('exist');
         cy.findByLabelText('Tittel').should('not.exist');
-        cy.findByLabelText('Mal').should('exist').select('Fritekst generelt brev');
+        cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
-        cy.findByLabelText('Mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
-        cy.findByLabelText('Fritekst').should('exist').type('Fritekst her');
+        cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
         cy.findByText('Send brev').should('exist').click();
         cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
 
         cy.findByText('Avbryt').should('exist').click();
-        cy.findByLabelText('Fritekst').type('test');
+        cy.findByLabelText('Innhold i brev').type('test');
         cy.findByText('Sett på vent').click();
         cy.findByRole('button', { name: /Sett på vent/i })
             .should('exist')
             .click();
         cy.findByText(
-            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.'
+            'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.',
         ).should('exist');
     });
 });
