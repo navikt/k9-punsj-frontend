@@ -10,10 +10,11 @@ import { areBothDatesDefined, generateDateString } from 'app/components/skjema/s
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { datetime } from 'app/utils';
+import { datetime, IDokUrlParametre, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
@@ -28,6 +29,7 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 
 export interface IEksisterendeOMPMASoknaderStateProps {
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
@@ -48,10 +50,22 @@ type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
     IEksisterendeOMPMASoknaderStateProps &
     IEksisterendeOMPMASoknaderDispatchProps;
 
+const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
+    <ul className="list-none p-0">
+        {dokUrlParametre.map((dok) => (
+            <li key={dok.dokumentId}>
+                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
+                    {dok.dokumentId}
+                </a>
+            </li>
+        ))}
+    </ul>
+);
+
 export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksisterendeOMPMASoknaderProps> = (
     props: IEksisterendeOMPMASoknaderProps,
 ) => {
-    const { eksisterendeOMPMASoknaderState, søkerId, pleietrengendeId } = props;
+    const { eksisterendeOMPMASoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
@@ -116,10 +130,15 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                journalposterState,
+            );
             const { chosenSoknad } = props.eksisterendeOMPMASoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.barn?.map((barn) => barn.norskIdent).join(', '),
+                getListAvDokumenterFraJournalposter(dokUrlParametre),
                 Array.from(søknad.journalposter).join(', '),
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
@@ -173,6 +192,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
@@ -208,6 +228,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
     eksisterendeOMPMASoknaderState: state.eksisterendeOMPMASoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

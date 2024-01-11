@@ -51,7 +51,7 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
 
 const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none">
+    <ul className="list-none p-0">
         {dokUrlParametre.map((dok) => (
             <li key={dok.dokumentId}>
                 <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
