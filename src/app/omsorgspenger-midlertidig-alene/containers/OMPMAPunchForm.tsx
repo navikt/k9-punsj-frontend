@@ -13,12 +13,7 @@ import { Loader } from '@navikt/ds-react';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
 import { IInputError, ISignaturState } from 'app/models/types';
-import {
-    resetPunchFormAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
+import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -37,6 +32,8 @@ import {
     getOMPMASoknad,
     resetOMPMASoknadAction,
     resetPunchOMPMAFormAction,
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
     submitOMPMASoknad,
     updateOMPMASoknad,
     validerOMPMASoknad,
