@@ -8,14 +8,13 @@ import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { apiUrl, datetime } from 'app/utils';
+import { datetime, IDokUrlParametre, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
-import { IDokumentInfo } from 'app/models/types/Journalpost/Journalpost';
-import { ApiPath } from 'app/apiConfig';
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
@@ -51,33 +50,11 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPKSSoknaderStateProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
 
-export interface IDokUrlParametre {
-    journalpostId: string;
-    dokumentId: string;
-}
-
-export const pdfUrl = (dokUrlParametre: IDokUrlParametre) => apiUrl(ApiPath.DOKUMENT, dokUrlParametre);
-
-export const getDokUrlParametreFraJournalposter = (
-    journalposter: string[],
-    journalposterState: IJournalposterPerIdentState,
-): IDokUrlParametre[] =>
-    journalposter.flatMap((jp) => {
-        const journalpost = journalposterState.journalposter.find((jpost) => jpost.journalpostId === jp);
-        if (journalpost?.dokumenter) {
-            return journalpost.dokumenter.map((dok: IDokumentInfo) => ({
-                journalpostId: journalpost.journalpostId,
-                dokumentId: dok.dokument_id,
-            }));
-        }
-        return [];
-    });
-
-export const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
+const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
     <ul className="list-none">
         {dokUrlParametre.map((dok) => (
             <li key={dok.dokumentId}>
-                <a href={pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
+                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
                     {dok.dokumentId}
                 </a>
             </li>
@@ -153,7 +130,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
             const søknad = new OMPKSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
 
-            const dokUrlParametre = getDokUrlParametreFraJournalposter(
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState,
             );
