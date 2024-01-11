@@ -195,7 +195,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
