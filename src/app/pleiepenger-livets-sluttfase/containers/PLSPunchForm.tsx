@@ -18,12 +18,7 @@ import {
     SelvstendigNaerinsdrivende,
 } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
-import {
-    resetPunchFormAction,
-    setJournalpostPaaVentResetAction,
-    setSignaturAction,
-    settJournalpostPaaVent,
-} from 'app/state/actions';
+import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -54,6 +49,8 @@ import {
     hentPLSPerioderFraK9Sak,
     resetPLSPunchFormAction,
     resetPLSSoknadAction,
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
     submitPLSSoknad,
     updatePLSSoknad,
     validerPLSSoknad,
