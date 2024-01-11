@@ -74,7 +74,7 @@ export const getDokUrlParametreFraJournalposter = (
     });
 
 export const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul>
+    <ul className="list-none">
         {dokUrlParametre.map((dok) => (
             <li key={dok.dokumentId}>
                 <a href={pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
