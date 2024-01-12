@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { Alert, Fieldset, Panel } from '@navikt/ds-react';
+import { Alert, Panel } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
 
@@ -116,26 +116,24 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <Fieldset>
-                    <div className="soknadsperiodecontainer">
-                        <Periodepaneler
-                            intl={intl}
-                            periods={getPerioder()}
-                            initialPeriode={initialPeriode}
-                            editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
-                            editSoknadState={(perioder) => {
-                                updateSoknadState({ soeknadsperiode: perioder });
-                            }}
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            feilkodeprefiks="ytelse.søknadsperiode"
-                            getErrorMessage={getErrorMessage}
-                            getUhaandterteFeil={getUhaandterteFeil}
-                            kanHaFlere
-                            onRemove={() => setHarSlettetPerioder(true)}
-                        />
-                    </div>
-                </Fieldset>
+                <div className="soknadsperiodecontainer">
+                    <Periodepaneler
+                        intl={intl}
+                        periods={getPerioder()}
+                        initialPeriode={initialPeriode}
+                        editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
+                        editSoknadState={(perioder) => {
+                            updateSoknadState({ soeknadsperiode: perioder });
+                        }}
+                        textLeggTil="skjema.perioder.legg_til"
+                        textFjern="skjema.perioder.fjern"
+                        feilkodeprefiks="ytelse.søknadsperiode"
+                        getErrorMessage={getErrorMessage}
+                        getUhaandterteFeil={getUhaandterteFeil}
+                        kanHaFlere
+                        onRemove={() => setHarSlettetPerioder(true)}
+                    />
+                </div>
             )}
             {overlappendeSoknadsperiode() && (
                 <Alert size="small" variant="warning">

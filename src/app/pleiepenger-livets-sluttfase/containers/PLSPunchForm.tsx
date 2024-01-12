@@ -531,10 +531,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
-        }
-
         const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
