@@ -17,7 +17,7 @@ jobs:
       - name: Hente kode
         uses: actions/checkout@v4
       - name: Deploy dev-fss
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
@@ -25,7 +25,7 @@ jobs:
           VARS: nais/proxy/dev.json
       - name: Deploy prod-fss
         if: github.ref == 'refs/heads/master'
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
