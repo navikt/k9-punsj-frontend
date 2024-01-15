@@ -70,8 +70,9 @@ import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjon
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
-import { PSBKvitteringContainer } from 'app/containers/pleiepenger/SoknadKvittering/SoknadKvitteringContainer';
+
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { PLSKvitteringContainer } from './PLSKvittering';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
@@ -326,7 +327,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const eksisterendePerioder = punchFormState.perioder || [];
 
         if (punchFormState.isComplete && punchFormState.innsentSoknad) {
-            return <PSBKvitteringContainer />;
+            return <PLSKvitteringContainer />;
         }
 
         if (punchFormState.isSoknadLoading) {

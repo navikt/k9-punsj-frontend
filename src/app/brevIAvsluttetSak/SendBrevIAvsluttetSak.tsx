@@ -62,7 +62,11 @@ const SendBrevIAvsluttetSak = () => {
                 <TextField
                     className="fnrInput"
                     label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.søkersFødselsnummer' })}
-                    type="number"
+                    type="text"
+                    size="small"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     onChange={(event) => {
                         const { value } = event.target;
                         setSøkerId(value);
@@ -76,7 +80,6 @@ const SendBrevIAvsluttetSak = () => {
                             }
                         }
                     }}
-                    size="medium"
                 />
                 {fødselsnummerError && (
                     <ErrorMessage>
@@ -93,6 +96,7 @@ const SendBrevIAvsluttetSak = () => {
                                 label={intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velgFagsak' })}
                                 disabled={fagsaker.length === 0}
                                 onChange={(event) => setValgtFagsak(event.target.value)}
+                                size="small"
                             >
                                 <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
                                 {fagsaker.map(({ fagsakId, sakstype }) => (
