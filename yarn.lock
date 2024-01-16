@@ -14202,7 +14202,7 @@ __metadata:
     jest-extended: ^4.0.2
     jest-mock: 29.7.0
     less: 4.2.0
-    less-loader: 11.1.4
+    less-loader: 12.0.0
     lint-staged: 15.2.0
     lodash: 4.17.21
     lodash.throttle: 4.1.1
@@ -14356,13 +14356,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less-loader@npm:11.1.4":
-  version: 11.1.4
-  resolution: "less-loader@npm:11.1.4"
+"less-loader@npm:12.0.0":
+  version: 12.0.0
+  resolution: "less-loader@npm:12.0.0"
   peerDependencies:
     less: ^3.5.0 || ^4.0.0
     webpack: ^5.0.0
-  checksum: 29b2055a05283e16e99d0333802c185b6e1a5408212336e25b07f53d56acd8683dcd643b3e3c0c32abba0d9d5fda5ccf73cb8da00ae634ec6b929307861955c8
+  checksum: d83725f8ef6e37c2eba89597675c890aef919f21a6b455cab416f21e4cb016f8e9d56cc32612c492bdc474b468afe7c87c13125cbdb384e17a3a965caf89c521
   languageName: node
   linkType: hard
 
