@@ -1,14 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Period } from '@navikt/k9-fe-period-utils';
-
 import LabelValue from 'app/components/skjema/LabelValue';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
 import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from 'app/utils';
 
 import './klassifiseringInfo.css';
+import Period from 'app/utils/Period';
 
 const KlassifiseringInfo = () => {
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
