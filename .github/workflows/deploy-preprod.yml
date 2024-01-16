@@ -24,6 +24,8 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             packages: write
+            contents: read
+            id-token: write
         needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
@@ -72,7 +74,6 @@ jobs:
             - name: Deploye til dev
               uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: dev-fss
                   RESOURCE: nais/frontend/k9-punsj-frontend.yml
                   VARS: nais/frontend/dev.json
