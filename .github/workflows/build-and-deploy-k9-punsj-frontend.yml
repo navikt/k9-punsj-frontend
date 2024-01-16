@@ -35,6 +35,8 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             packages: write
+            contents: read
+            id-token: write
         needs: [lint, test, test-cypress, build]
         outputs:
             image: ${{ steps.docker-push.outputs.image }}
@@ -92,7 +94,6 @@ jobs:
             - name: Deploye til prod
               uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: prod-fss
                   RESOURCE: nais/frontend/k9-punsj-frontend.yml
                   VARS: nais/frontend/prod.json
