@@ -175,7 +175,7 @@
         "nav-frontend-skjema-style": "3.0.3",
         "postcss": "^8.4.33",
         "postcss-less": "6.0.0",
-        "postcss-loader": "7.3.4",
+        "postcss-loader": "8.0.0",
         "prettier": "3.2.2",
         "react-refresh": "0.14.0",
         "regenerator-runtime": "0.14.1",
