@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, Loader, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -15,9 +16,11 @@ import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import './sok.less';
+import { WrenchIcon } from '@navikt/aksel-icons';
 
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,6 +31,23 @@ export const SearchForm = () => {
     const journalpostConflictError = useSelector((state: RootStateType) => state.felles.journalpostConflictError);
     const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
     const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
+
+    const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
+    const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
+    const [ingenJp, setIngenJp] = useState(false);
+
+    const handleLukkDebugg = () => {
+        if (journalpostid) {
+            setPendinglukkDebuggJp(true);
+            setLukkDebuggJpStatus(undefined);
+            lukkDebuggJp(journalpostid).then((status: number) => {
+                setPendinglukkDebuggJp(false);
+                setLukkDebuggJpStatus(status);
+            });
+        } else {
+            setIngenJp(true);
+        }
+    };
 
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const journalpostId = e.target.value;
@@ -108,9 +128,54 @@ export const SearchForm = () => {
                     {conflict &&
                         journalpostConflictError &&
                         journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                            </Alert>
+                            <>
+                                {!lukkDebuggJpStatus && (
+                                    <Alert size="small" variant="warning">
+                                        <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                    </Alert>
+                                )}
+
+                                {lukkDebuggJpStatus && [200, 400, 404].includes(lukkDebuggJpStatus) && (
+                                    <Alert size="small" variant="success">
+                                        <FormattedMessage
+                                            id={`startPage.feil.ikkeStøttet.lukkDebugg.status.${lukkDebuggJpStatus}`}
+                                            values={{ jp: journalpostid }}
+                                        />
+                                    </Alert>
+                                )}
+
+                                {lukkDebuggJpStatus && ![200, 400, 404].includes(lukkDebuggJpStatus) && (
+                                    <Alert size="small" variant="error">
+                                        <FormattedMessage
+                                            id="startPage.feil.ikkeStøttet.lukkDebugg.status.ukjent"
+                                            values={{ status: lukkDebuggJpStatus }}
+                                        />
+                                    </Alert>
+                                )}
+
+                                {ingenJp && (
+                                    <Alert size="small" variant="error">
+                                        <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.ingenJp" />
+                                    </Alert>
+                                )}
+                                <div className="flex self-center justify-center">
+                                    <Box background="surface-default" padding="6">
+                                        <Button
+                                            variant="primary"
+                                            icon={
+                                                pendinglukkDebuggJp ? (
+                                                    <Loader size="medium" />
+                                                ) : (
+                                                    <WrenchIcon aria-hidden />
+                                                )
+                                            }
+                                            onClick={handleLukkDebugg}
+                                        >
+                                            <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.btn" />
+                                        </Button>
+                                    </Box>
+                                </div>
+                            </>
                         )}
 
                     {journalpostRequestError?.message && (
