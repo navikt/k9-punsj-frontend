@@ -59,6 +59,15 @@ let handlers = [
             { status: 200 },
         ),
     ),
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/123456789', async () =>
+        HttpResponse.json({ type: 'punsj://ikke-støttet-journalpost' }, { status: 409 }),
+    ),
+
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/lukkDebugg/123456789', async () => {
+        await delay(1000);
+        return HttpResponse.json({}, { status: 404 });
+    }),
+
     testHandlers.barn,
     http.post('http://localhost:8101/api/k9-punsj/notat/opprett', async () => {
         await delay(500);

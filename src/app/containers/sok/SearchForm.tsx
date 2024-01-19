@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Box, Button, Loader, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
+import { WrenchIcon } from '@navikt/aksel-icons';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -18,6 +20,7 @@ import './sok.less';
 
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,6 +31,23 @@ export const SearchForm = () => {
     const journalpostConflictError = useSelector((state: RootStateType) => state.felles.journalpostConflictError);
     const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
     const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
+
+    const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
+    const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
+    const [ingenJp, setIngenJp] = useState(false);
+
+    const handleLukkDebugg = () => {
+        if (journalpostid) {
+            setPendinglukkDebuggJp(true);
+            setLukkDebuggJpStatus(undefined);
+            lukkDebuggJp(journalpostid).then((status: number) => {
+                setPendinglukkDebuggJp(false);
+                setLukkDebuggJpStatus(status);
+            });
+        } else {
+            setIngenJp(true);
+        }
+    };
 
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const journalpostId = e.target.value;
@@ -80,51 +100,90 @@ export const SearchForm = () => {
                 <h1 className="sok-heading">
                     <FormattedMessage id="søk.overskrift" />
                 </h1>
-                <Fieldset>
-                    <div className="input-rad">
-                        <TextField
-                            value={journalpostid}
-                            className="w-64"
-                            onChange={onChange}
-                            label={<FormattedMessage id="søk.label.jpid" />}
-                            onKeyDown={handleKeydown}
-                        />
-                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                        <VerticalSpacer sixteenPx />
-                    </div>
+                <div className="input-rad">
+                    <TextField
+                        value={journalpostid}
+                        className="w-64"
+                        onChange={onChange}
+                        label={<FormattedMessage id="søk.label.jpid" />}
+                        onKeyDown={handleKeydown}
+                    />
+                    <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                    <VerticalSpacer sixteenPx />
+                </div>
 
-                    {!!notFound && (
-                        <Alert size="small" variant="info">
-                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                        </Alert>
+                {!!notFound && (
+                    <Alert size="small" variant="info">
+                        <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
+                    </Alert>
+                )}
+
+                {!!forbidden && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                    </Alert>
+                )}
+
+                {conflict &&
+                    journalpostConflictError &&
+                    journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                        <>
+                            {!lukkDebuggJpStatus && (
+                                <Alert size="small" variant="warning">
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
+                                </Alert>
+                            )}
+
+                            {lukkDebuggJpStatus && [200, 400, 404].includes(lukkDebuggJpStatus) && (
+                                <Alert size="small" variant="success">
+                                    <FormattedMessage
+                                        id={`startPage.feil.ikkeStøttet.lukkDebugg.status.${lukkDebuggJpStatus}`}
+                                        values={{ jp: journalpostid }}
+                                    />
+                                </Alert>
+                            )}
+
+                            {lukkDebuggJpStatus && ![200, 400, 404].includes(lukkDebuggJpStatus) && (
+                                <Alert size="small" variant="error">
+                                    <FormattedMessage
+                                        id="startPage.feil.ikkeStøttet.lukkDebugg.status.ukjent"
+                                        values={{ status: lukkDebuggJpStatus }}
+                                    />
+                                </Alert>
+                            )}
+
+                            {ingenJp && (
+                                <Alert size="small" variant="error">
+                                    <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.ingenJp" />
+                                </Alert>
+                            )}
+                            <div className="flex self-center justify-center">
+                                <Box background="surface-default" padding="6">
+                                    <Button
+                                        variant="primary"
+                                        icon={
+                                            pendinglukkDebuggJp ? <Loader size="medium" /> : <WrenchIcon aria-hidden />
+                                        }
+                                        onClick={handleLukkDebugg}
+                                    >
+                                        <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.btn" />
+                                    </Button>
+                                </Box>
+                            </div>
+                        </>
                     )}
 
-                    {!!forbidden && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                        </Alert>
-                    )}
+                {journalpostRequestError?.message && (
+                    <Alert size="small" variant="error">
+                        <FormattedMessage id="søk.jp.internalServerError" />
+                    </Alert>
+                )}
 
-                    {conflict &&
-                        journalpostConflictError &&
-                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                            </Alert>
-                        )}
-
-                    {journalpostRequestError?.message && (
-                        <Alert size="small" variant="error">
-                            <FormattedMessage id="søk.jp.internalServerError" />
-                        </Alert>
-                    )}
-
-                    {!!journalpost && !journalpost?.kanSendeInn && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="fordeling.kanikkesendeinn" />
-                        </Alert>
-                    )}
-                </Fieldset>
+                {!!journalpost && !journalpost?.kanSendeInn && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id="fordeling.kanikkesendeinn" />
+                    </Alert>
+                )}
             </div>
             <div className="inngangContainer">
                 <OpprettJournalpostInngang />
