@@ -8,10 +8,12 @@ import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { datetime } from 'app/utils';
+import { datetime, IDokUrlParametre, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
@@ -26,6 +28,7 @@ import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 
 export interface IEksisterendeOMPKSSoknaderStateProps {
     eksisterendeOMPKSSoknaderState: IEksisterendeOMPKSSoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IEksisterendeOMPKSSoknaderDispatchProps {
@@ -47,10 +50,22 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPKSSoknaderStateProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
 
+const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
+    <ul className="list-none p-0">
+        {dokUrlParametre.map((dok) => (
+            <li key={dok.dokumentId}>
+                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
+                    {dok.dokumentId}
+                </a>
+            </li>
+        ))}
+    </ul>
+);
+
 export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksisterendeOMPKSSoknaderProps> = (
     props: IEksisterendeOMPKSSoknaderProps,
 ) => {
-    const { eksisterendeOMPKSSoknaderState, søkerId, pleietrengendeId } = props;
+    const { eksisterendeOMPKSSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const intl = useIntl();
     const navigate = useNavigate();
     const soknader = eksisterendeOMPKSSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -114,6 +129,11 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPKSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                journalposterState,
+            );
             const { chosenSoknad } = props.eksisterendeOMPKSSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
@@ -121,6 +141,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
+                getListAvDokumenterFraJournalposter(dokUrlParametre),
                 Array.from(søknad.journalposter).join(', '),
 
                 <Button
@@ -171,9 +192,9 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
@@ -206,6 +227,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPKSSoknaderStateProps => ({
     eksisterendeOMPKSSoknaderState: state.eksisterendeOMPKSSoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

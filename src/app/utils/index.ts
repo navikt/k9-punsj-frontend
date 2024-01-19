@@ -9,3 +9,4 @@ export * from 'app/utils/pathUtils';
 export * from 'app/utils/timeUtils';
 export * from 'app/utils/utils';
 export * from 'app/utils/periodUtils';
+export * from 'app/utils/dokumenterPreviewUtils';
