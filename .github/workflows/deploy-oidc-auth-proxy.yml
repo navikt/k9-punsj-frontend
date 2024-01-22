@@ -11,6 +11,9 @@ on:
     - cron: '0 2 * * 6' # At 02:00 on Saturday.
 jobs:
   deploy:
+    permissions: 
+      contents: read
+      id-token: write
     name: deploy k9-punsj-oidc-auth-proxy
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +22,6 @@ jobs:
       - name: Deploy dev-fss
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
           VARS: nais/proxy/dev.json
@@ -27,7 +29,6 @@ jobs:
         if: github.ref == 'refs/heads/master'
         uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy.yml
           VARS: nais/proxy/prod.json
