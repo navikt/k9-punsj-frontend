@@ -102,11 +102,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    if (
-        conflict &&
-        journalpostConflictError &&
-        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET
-    ) {
+    if (conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {
         return (
             <ConflictErrorComponent
                 journalpostid={journalpostid || 'ukjent'}

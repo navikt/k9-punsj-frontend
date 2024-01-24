@@ -126,17 +126,15 @@ export const SearchForm = () => {
                     </Alert>
                 )}
 
-                {conflict &&
-                    journalpostConflictError &&
-                    journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                        <ConflictErrorComponent
-                            journalpostid={journalpostid}
-                            ingenJp={ingenJp}
-                            pendingLukkDebuggJp={pendinglukkDebuggJp}
-                            lukkDebuggJpStatus={lukkDebuggJpStatus}
-                            handleLukkDebugg={handleLukkDebugg}
-                        />
-                    )}
+                {conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                    <ConflictErrorComponent
+                        journalpostid={journalpostid}
+                        ingenJp={ingenJp}
+                        pendingLukkDebuggJp={pendinglukkDebuggJp}
+                        lukkDebuggJpStatus={lukkDebuggJpStatus}
+                        handleLukkDebugg={handleLukkDebugg}
+                    />
+                )}
 
                 {journalpostRequestError?.message && (
                     <Alert size="small" variant="error">
