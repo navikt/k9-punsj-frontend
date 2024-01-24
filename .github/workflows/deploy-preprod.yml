@@ -54,23 +54,16 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-            - uses: docker/login-action@v3.0.0
+            - uses: nais/docker-build-push@v0
+              id: docker-push
               with:
-                  registry: ghcr.io
-                  username: ${{ github.REPOSITORY_OWNER }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Sett tag for docker image
-              run: echo "TAG=$(date "+%Y.%m.%d")-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-            - name: Bygge & laste opp Docker image
-              run: |
-                  docker build --pull --tag ${DOCKER_IMAGE}:${TAG} --tag ${DOCKER_IMAGE}:latest .
-                  docker push ${DOCKER_IMAGE} --all-tags
-
-            - name: Sett image for nais deploy
-              run: echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
-
+                  tag: 'latest'
+                  team: k9saksbehandling
+                  pull: true
+                  project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+                  identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+            - name: Set image
+              run: echo "IMAGE=${{steps.docker-push.outputs.image}}"
             - name: Deploye til dev
               uses: nais/deploy/actions/deploy@v2
               env:
