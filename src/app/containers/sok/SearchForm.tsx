@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, Box, Button, Loader, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
-import { WrenchIcon } from '@navikt/aksel-icons';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -16,6 +15,7 @@ import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reduc
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
 import './sok.less';
 
 export const SearchForm = () => {
@@ -50,6 +50,8 @@ export const SearchForm = () => {
     };
 
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setLukkDebuggJpStatus(undefined);
+        dispatch(resetAllStateAction());
         const journalpostId = e.target.value;
         const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
         setJournalpostid(sanitizedJournalpostId);
@@ -112,66 +114,27 @@ export const SearchForm = () => {
                     <VerticalSpacer sixteenPx />
                 </div>
 
-                {!!notFound && (
+                {notFound && (
                     <Alert size="small" variant="info">
                         <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                     </Alert>
                 )}
 
-                {!!forbidden && (
+                {forbidden && (
                     <Alert size="small" variant="warning">
                         <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                     </Alert>
                 )}
 
-                {conflict &&
-                    journalpostConflictError &&
-                    journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                        <>
-                            {!lukkDebuggJpStatus && (
-                                <Alert size="small" variant="warning">
-                                    <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                                </Alert>
-                            )}
-
-                            {lukkDebuggJpStatus && [200, 400, 404].includes(lukkDebuggJpStatus) && (
-                                <Alert size="small" variant="success">
-                                    <FormattedMessage
-                                        id={`startPage.feil.ikkeStøttet.lukkDebugg.status.${lukkDebuggJpStatus}`}
-                                        values={{ jp: journalpostid }}
-                                    />
-                                </Alert>
-                            )}
-
-                            {lukkDebuggJpStatus && ![200, 400, 404].includes(lukkDebuggJpStatus) && (
-                                <Alert size="small" variant="error">
-                                    <FormattedMessage
-                                        id="startPage.feil.ikkeStøttet.lukkDebugg.status.ukjent"
-                                        values={{ status: lukkDebuggJpStatus }}
-                                    />
-                                </Alert>
-                            )}
-
-                            {ingenJp && (
-                                <Alert size="small" variant="error">
-                                    <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.ingenJp" />
-                                </Alert>
-                            )}
-                            <div className="flex self-center justify-center">
-                                <Box background="surface-default" padding="6">
-                                    <Button
-                                        variant="primary"
-                                        icon={
-                                            pendinglukkDebuggJp ? <Loader size="medium" /> : <WrenchIcon aria-hidden />
-                                        }
-                                        onClick={handleLukkDebugg}
-                                    >
-                                        <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.btn" />
-                                    </Button>
-                                </Box>
-                            </div>
-                        </>
-                    )}
+                {conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                    <ConflictErrorComponent
+                        journalpostid={journalpostid}
+                        ingenJp={ingenJp}
+                        pendingLukkDebuggJp={pendinglukkDebuggJp}
+                        lukkDebuggJpStatus={lukkDebuggJpStatus}
+                        handleLukkDebugg={handleLukkDebugg}
+                    />
+                )}
 
                 {journalpostRequestError?.message && (
                     <Alert size="small" variant="error">
@@ -179,7 +142,7 @@ export const SearchForm = () => {
                     </Alert>
                 )}
 
-                {!!journalpost && !journalpost?.kanSendeInn && (
+                {journalpost && !journalpost?.kanSendeInn && (
                     <Alert size="small" variant="warning">
                         <FormattedMessage id="fordeling.kanikkesendeinn" />
                     </Alert>

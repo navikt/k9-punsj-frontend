@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
-import { Alert, Box, Button, Loader, Modal } from '@navikt/ds-react';
-
+import { Alert, Loader, Modal } from '@navikt/ds-react';
 import Fagsak from 'app/types/Fagsak';
-
-import { WrenchIcon } from '@navikt/aksel-icons';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
@@ -16,8 +12,8 @@ import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJourn
 import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-
 import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
+import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import './journalpostLoader.less';
 
 interface IJournaPostStateProps {
@@ -106,49 +102,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    if (
-        !!conflict &&
-        journalpostConflictError &&
-        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET
-    ) {
+    if (conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {
         return (
-            <>
-                {!lukkDebuggJpStatus && <FeilmeldingPanel messageId="startPage.feil.ikkeStøttet" />}
-
-                {lukkDebuggJpStatus && [200, 400, 404].includes(lukkDebuggJpStatus) && (
-                    <FeilmeldingPanel background="surface-success-subtle">
-                        <FormattedMessage
-                            id={`startPage.feil.ikkeStøttet.lukkDebugg.status.${lukkDebuggJpStatus}`}
-                            values={{ jp: journalpostid }}
-                        />
-                    </FeilmeldingPanel>
-                )}
-                {lukkDebuggJpStatus && ![200, 400, 404].includes(lukkDebuggJpStatus) && (
-                    <FeilmeldingPanel background="surface-warning-subtle">
-                        <FormattedMessage
-                            id="startPage.feil.ikkeStøttet.lukkDebugg.status.ukjent"
-                            values={{ status: lukkDebuggJpStatus }}
-                        />
-                    </FeilmeldingPanel>
-                )}
-                {ingenJp && (
-                    <FeilmeldingPanel background="surface-warning-subtle">
-                        <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.ingenJp" />
-                    </FeilmeldingPanel>
-                )}
-
-                <div className="flex self-center justify-center">
-                    <Box background="surface-default" padding="6">
-                        <Button
-                            variant="primary"
-                            icon={pendinglukkDebuggJp ? <Loader size="medium" /> : <WrenchIcon aria-hidden />}
-                            onClick={handleLukkDebugg}
-                        >
-                            <FormattedMessage id="startPage.feil.ikkeStøttet.lukkDebugg.btn" />
-                        </Button>
-                    </Box>
-                </div>
-            </>
+            <ConflictErrorComponent
+                journalpostid={journalpostid || 'ukjent'}
+                ingenJp={ingenJp}
+                pendingLukkDebuggJp={pendinglukkDebuggJp}
+                lukkDebuggJpStatus={lukkDebuggJpStatus}
+                handleLukkDebugg={handleLukkDebugg}
+            />
         );
     }
 
