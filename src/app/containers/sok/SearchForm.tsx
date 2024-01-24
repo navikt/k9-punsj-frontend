@@ -15,7 +15,7 @@ import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reduc
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
-import { ConflictErrorComponent } from './ConflictErrorComponent';
+import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
 import './sok.less';
 
 export const SearchForm = () => {
