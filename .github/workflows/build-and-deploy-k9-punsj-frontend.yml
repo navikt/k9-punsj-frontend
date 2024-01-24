@@ -31,7 +31,6 @@ jobs:
         name: Deploye til PROD
         runs-on: ubuntu-latest
         permissions:
-            packages: write
             contents: read
             id-token: write
         needs: [lint, test, test-cypress, build]
