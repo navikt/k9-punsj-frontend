@@ -10,9 +10,6 @@ on:
         branches:
             - master
 
-env:
-    DOCKER_IMAGE: ghcr.io/${{ github.repository }}
-
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml
@@ -79,14 +76,13 @@ jobs:
               with:
                   tag: 'latest'
                   team: k9saksbehandling
-                  pull: true
                   project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
                   identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
             - name: Sett image for nais deploy
               run: |
-                  echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
-                  echo "IMAGE=${DOCKER_IMAGE}:${TAG}" >> $GITHUB_ENV
+                  echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_OUTPUT
+                  echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod
               uses: nais/deploy/actions/deploy@v2
@@ -96,7 +92,7 @@ jobs:
                   VARS: nais/frontend/prod.json
     trivy:
         needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy-ghcr.yml@main
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@main
         permissions:
             contents: write
             security-events: write
