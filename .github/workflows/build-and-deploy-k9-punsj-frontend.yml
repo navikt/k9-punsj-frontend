@@ -98,4 +98,5 @@ jobs:
             actions: read
         secrets: inherit
         with:
+            team: k9saksbehandling
             image: ${{ needs.deploy.outputs.image }}
