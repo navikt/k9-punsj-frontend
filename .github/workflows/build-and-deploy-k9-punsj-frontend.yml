@@ -96,6 +96,7 @@ jobs:
             contents: write
             security-events: write
             actions: read
+            id-token: write
         secrets: inherit
         with:
             team: k9saksbehandling
