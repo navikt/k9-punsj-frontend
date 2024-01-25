@@ -8,13 +8,14 @@ import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { datetime, IDokUrlParametre, dokumenterPreviewUtils } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
@@ -49,18 +50,6 @@ type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
     IEksisterendeOMPKSSoknaderComponentProps &
     IEksisterendeOMPKSSoknaderStateProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
-
-const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none p-0">
-        {dokUrlParametre.map((dok) => (
-            <li key={dok.dokumentId}>
-                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
-                    {dok.dokumentId}
-                </a>
-            </li>
-        ))}
-    </ul>
-);
 
 export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksisterendeOMPKSSoknaderProps> = (
     props: IEksisterendeOMPKSSoknaderProps,
@@ -132,7 +121,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
-                journalposterState,
+                journalposterState.journalposter,
             );
             const { chosenSoknad } = props.eksisterendeOMPKSSoknaderState;
             const rowContent = [
@@ -141,7 +130,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                getListAvDokumenterFraJournalposter(dokUrlParametre),
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
 
                 <Button

@@ -17,16 +17,19 @@ import {
     openEksisterendeSoknadAction,
     resetSoknadidAction,
 } from 'app/state/actions';
-import { datetime } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 import ErDuSikkerModal from './ErDuSikkerModal';
 
 export interface IEksisterendeSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
@@ -48,10 +51,10 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
     IEksisterendeSoknaderStateProps &
     IEksisterendeSoknaderDispatchProps;
 
-export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
+export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
 ) => {
-    const { intl, eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
+    const { intl, eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
@@ -73,7 +76,11 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         );
     }
 
-    if (eksisterendeSoknaderState.isEksisterendeSoknaderLoading || eksisterendeSoknaderState.isAwaitingSoknadCreation) {
+    if (
+        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
+        eksisterendeSoknaderState.isAwaitingSoknadCreation ||
+        journalposterState.isJournalposterLoading
+    ) {
         return (
             <div>
                 <Loader size="large" />
@@ -113,6 +120,12 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         soknader?.forEach((soknadInfo) => {
             const søknad = new PSBSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                journalposterState.journalposter,
+            );
+
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
@@ -120,6 +133,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button
@@ -169,6 +183,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
@@ -204,6 +219,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
 
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
