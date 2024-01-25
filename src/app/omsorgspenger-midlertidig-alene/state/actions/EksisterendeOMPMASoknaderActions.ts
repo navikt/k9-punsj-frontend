@@ -111,10 +111,10 @@ export function findEksisterendeOMPMASoknaderErrorAction(error: IError): IFindEk
     };
 }
 
-export function findEksisterendeOMPMASoknader(søkerId: string, pleietrengendeId: string | null) {
+export function findEksisterendeOMPMASoknader(søkerId: string) {
     return (dispatch: any) => {
         dispatch(findEksisterendeOMPMASoknaderLoadingAction(true));
-        const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
+        const idents = søkerId;
         return get(
             ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND,
             undefined,

@@ -37,7 +37,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
     props: IOMPMARegistreringsValgProps,
 ) => {
     const { journalpostid, identState, eksisterendeSoknaderState } = props;
-    const { søkerId, pleietrengendeId, annenPart } = identState;
+    const { søkerId, annenPart } = identState;
 
     const navigate = useNavigate();
 
@@ -81,7 +81,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPMASoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendeOMPMASoknader søkerId={søkerId} annenPart={annenPart} />
 
             <div className="knapperad">
                 <Button
