@@ -133,7 +133,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const soknadId = søknad.soeknadId;
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
-                journalposterState,
+                journalposterState.journalposter,
             );
             const { chosenSoknad } = props.eksisterendeOMPMASoknaderState;
             const rowContent = [

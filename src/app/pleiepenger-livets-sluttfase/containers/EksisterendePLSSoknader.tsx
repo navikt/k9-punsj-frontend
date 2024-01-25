@@ -139,7 +139,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
-                journalposterState,
+                journalposterState.journalposter,
             );
 
             const { chosenSoknad } = props.eksisterendeSoknaderState;

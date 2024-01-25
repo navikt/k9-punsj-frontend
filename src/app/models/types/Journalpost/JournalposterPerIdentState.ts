@@ -7,3 +7,7 @@ export interface IJournalposterPerIdentState {
     isJournalposterLoading?: boolean;
     journalposterRequestError?: IError;
 }
+
+export interface IAlleJournalposterPerIdent {
+    poster: IJournalpostInfo[];
+}

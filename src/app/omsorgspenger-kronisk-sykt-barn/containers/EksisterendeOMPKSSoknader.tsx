@@ -132,7 +132,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
-                journalposterState,
+                journalposterState.journalposter,
             );
             const { chosenSoknad } = props.eksisterendeOMPKSSoknaderState;
             const rowContent = [

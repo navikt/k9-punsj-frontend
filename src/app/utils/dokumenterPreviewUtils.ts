@@ -1,6 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
-import { IDokumentInfo } from 'app/models/types';
+import { IDokumentInfo, IJournalpostInfo } from 'app/models/types';
 import { apiUrl } from './apiUtils';
 
 export interface IDokUrlParametre {
@@ -12,10 +11,10 @@ const pdfUrl = (dokUrlParametre: IDokUrlParametre) => apiUrl(ApiPath.DOKUMENT, d
 
 const getDokUrlParametreFraJournalposter = (
     journalposter: string[],
-    journalposterState: IJournalposterPerIdentState,
+    alleJournalposterPerIdent: IJournalpostInfo[],
 ): IDokUrlParametre[] =>
     journalposter.flatMap((jp) => {
-        const journalpost = journalposterState.journalposter.find((jpost) => jpost.journalpostId === jp);
+        const journalpost = alleJournalposterPerIdent.find((jpost) => jpost.journalpostId === jp);
         if (journalpost?.dokumenter) {
             return journalpost.dokumenter.map((dok: IDokumentInfo) => ({
                 journalpostId: journalpost.journalpostId,
