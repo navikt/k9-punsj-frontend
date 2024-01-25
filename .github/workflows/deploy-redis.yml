@@ -11,19 +11,20 @@ jobs:
   deploy:
     name: deploy redis
     runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      id-token: write
     steps:
       - name: Hente kode
         uses: actions/checkout@v4
       - name: Deploy dev-fss
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml
       - name: Deploy prod-fss
         if: github.ref == 'refs/heads/master'
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: nais/proxy/k9-punsj-oidc-auth-proxy-redis.yml

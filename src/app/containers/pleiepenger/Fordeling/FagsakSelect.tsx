@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { BodyShort, Checkbox, Select } from '@navikt/ds-react';
-import { Period } from '@navikt/k9-fe-period-utils';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
+import Period from 'app/utils/Period';
 
 interface Props {
     fagsaker: Fagsak[];
