@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -9,11 +9,12 @@ import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
-import { IDokUrlParametre, datetime, dokumenterPreviewUtils } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import {
@@ -50,18 +51,6 @@ type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
     IEksisterendePLSSoknaderStateProps &
     IEksisterendePLSSoknaderDispatchProps;
 
-const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none p-0">
-        {dokUrlParametre.map((dok) => (
-            <li key={dok.dokumentId}>
-                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
-                    {dok.dokumentId}
-                </a>
-            </li>
-        ))}
-    </ul>
-);
-
 export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
     props: IEksisterendePLSSoknaderProps,
 ) => {
@@ -71,7 +60,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             props.findEksisterendeSoknader(søkerId, null);
         } else {
@@ -129,7 +118,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         }
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
@@ -146,7 +135,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
-                getListAvDokumenterFraJournalposter(dokUrlParametre),
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button
@@ -206,7 +195,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                 {modaler}
             </>
         );
-    }
+    };
 
     if (soknader && soknader.length) {
         return (

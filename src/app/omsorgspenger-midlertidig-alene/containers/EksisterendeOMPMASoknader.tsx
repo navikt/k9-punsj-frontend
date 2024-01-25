@@ -10,11 +10,12 @@ import { areBothDatesDefined, generateDateString } from 'app/components/skjema/s
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { datetime, IDokUrlParametre, dokumenterPreviewUtils } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
@@ -49,18 +50,6 @@ type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
     IEksisterendeOMPMASoknaderComponentProps &
     IEksisterendeOMPMASoknaderStateProps &
     IEksisterendeOMPMASoknaderDispatchProps;
-
-const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none p-0">
-        {dokUrlParametre.map((dok) => (
-            <li key={dok.dokumentId}>
-                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
-                    {dok.dokumentId}
-                </a>
-            </li>
-        ))}
-    </ul>
-);
 
 export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASoknaderProps> = (
     props: IEksisterendeOMPMASoknaderProps,
@@ -139,7 +128,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.annenForelder.norskIdent,
-                getListAvDokumenterFraJournalposter(dokUrlParametre),
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)

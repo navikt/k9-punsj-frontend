@@ -17,11 +17,12 @@ import {
     openEksisterendeSoknadAction,
     resetSoknadidAction,
 } from 'app/state/actions';
-import { IDokUrlParametre, datetime, dokumenterPreviewUtils } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
 import ErDuSikkerModal from './ErDuSikkerModal';
@@ -49,18 +50,6 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
     IEksisterendeSoknaderComponentProps &
     IEksisterendeSoknaderStateProps &
     IEksisterendeSoknaderDispatchProps;
-
-const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none p-0">
-        {dokUrlParametre.map((dok) => (
-            <li key={dok.dokumentId}>
-                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
-                    {dok.dokumentId}
-                </a>
-            </li>
-        ))}
-    </ul>
-);
 
 export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
@@ -144,7 +133,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                getListAvDokumenterFraJournalposter(dokUrlParametre),
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button

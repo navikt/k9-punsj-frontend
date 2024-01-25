@@ -11,10 +11,11 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
-import { IDokUrlParametre, datetime, dokumenterPreviewUtils } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -23,18 +24,6 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
     søkerId: string;
     pleietrengendeId: string | null;
 }
-
-const getListAvDokumenterFraJournalposter = (dokUrlParametre: IDokUrlParametre[]): React.JSX.Element => (
-    <ul className="list-none p-0">
-        {dokUrlParametre.map((dok) => (
-            <li key={dok.dokumentId}>
-                <a href={dokumenterPreviewUtils.pdfUrl(dok)} target="_blank" rel="noopener noreferrer">
-                    {dok.dokumentId}
-                </a>
-            </li>
-        ))}
-    </ul>
-);
 
 export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderComponentProps> = (props) => {
     const { søkerId, pleietrengendeId } = props;
@@ -102,7 +91,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.soekerId,
-                getListAvDokumenterFraJournalposter(dokUrlParametre),
+                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
                 Array.from(søknad.journalposter).join(', '),
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
