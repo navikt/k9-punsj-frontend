@@ -50,7 +50,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
         data: alleJournalposterPerIdent,
         isLoading: lasterAlleJournalposterPerIdent,
         error: hentAlleJournalposterPerIdentError,
-    } = useQuery('hentAlleJournalposterPerIdentOMPUT', () => hentAlleJournalposterPerIdent(søkerId));
+    } = useQuery(`hentAlleJPPerIdentOMPUT_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
 
     if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;

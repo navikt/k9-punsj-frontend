@@ -52,7 +52,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
         data: alleJournalposterPerIdent,
         isLoading: lasterAlleJournalposterPerIdent,
         error: hentAlleJournalposterPerIdentError,
-    } = useQuery('hentAlleJournalposterPerIdentOMPAO', () => hentAlleJournalposterPerIdent(søkerId));
+    } = useQuery(`hentAlleJPPerIdentOMPAO_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
 
     if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;
