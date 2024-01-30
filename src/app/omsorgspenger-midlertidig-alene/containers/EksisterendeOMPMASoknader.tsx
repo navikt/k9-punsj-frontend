@@ -128,7 +128,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.annenForelder.norskIdent,
-                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)

@@ -133,7 +133,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button

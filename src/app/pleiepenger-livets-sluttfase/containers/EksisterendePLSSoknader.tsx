@@ -135,7 +135,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} key={soknadId} />,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button
