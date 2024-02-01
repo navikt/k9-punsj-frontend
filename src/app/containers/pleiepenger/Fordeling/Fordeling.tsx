@@ -460,6 +460,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     setValgtFagsak={setValgtFagsak}
                                     valgtFagsak={valgtFagsak}
                                     setBehandlingsAar={setBehandlingsAar}
+                                    barn={fellesState.barn}
                                 />
                             )}
                             {visValgAvBehandlingsaar && <ValgAvBehandlingsÅr onChange={setBehandlingsAar} />}

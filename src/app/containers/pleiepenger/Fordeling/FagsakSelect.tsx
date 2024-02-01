@@ -7,27 +7,58 @@ import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
 import Period from 'app/utils/Period';
 
+import { DokumenttypeForkortelse } from 'app/models/enums';
+import { IBarn } from 'app/models/types/Barn';
+import { FormattedMessage } from 'react-intl';
+
 interface Props {
     fagsaker: Fagsak[];
     brukEksisterendeFagsak: boolean;
+    identState: IIdentState;
+    valgtFagsak?: Fagsak;
+    barn?: IBarn[];
     setValgtFagsak: (fagsak: string) => void;
     finnVisningsnavnForSakstype: (sakstype: string) => string;
-    valgtFagsak: Fagsak | undefined;
     setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
-    identState: IIdentState;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
 }
+
+const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
+    const { sakstype, pleietrengendeIdent } = valgtFagsak;
+
+    if (sakstype === DokumenttypeForkortelse.PPN) {
+        return (
+            <FormattedMessage
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
+                values={{ pleietrengendeIdent }}
+            />
+        );
+    }
+    const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
+
+    if (barnet) {
+        const navn = `${barnet.fornavn} ${barnet.etternavn}`;
+        return (
+            <FormattedMessage
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn"
+                values={{ navn, pleietrengendeIdent }}
+            />
+        );
+    }
+    return <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt" />;
+};
 
 const FagsakSelect = ({
     fagsaker,
     brukEksisterendeFagsak,
+    identState,
+    valgtFagsak,
+    barn,
     setValgtFagsak,
     finnVisningsnavnForSakstype,
-    valgtFagsak,
     setBrukEksisterendeFagsak,
     setIdentAction,
-    identState,
     setBehandlingsAar,
 }: Props) => (
     <>
@@ -48,14 +79,18 @@ const FagsakSelect = ({
             </Select>
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">Fødselsnummer: {valgtFagsak.pleietrengendeIdent}</BodyShort>
+                    <BodyShort as="p">{getPleietrengendeInfo(valgtFagsak, barn)}</BodyShort>
                     {valgtFagsak.gyldigPeriode?.fom && (
                         <BodyShort as="p">
-                            Periode:{' '}
-                            {new Period(
-                                valgtFagsak.gyldigPeriode.fom,
-                                valgtFagsak.gyldigPeriode.tom,
-                            ).prettifyPeriodYears()}
+                            <FormattedMessage
+                                id="fordeling.fagsakSelect.fagsakSelectedInfo.periode"
+                                values={{
+                                    periode: new Period(
+                                        valgtFagsak.gyldigPeriode.fom,
+                                        valgtFagsak.gyldigPeriode.tom,
+                                    ).prettifyPeriodYears(),
+                                }}
+                            />
                         </BodyShort>
                     )}
                 </div>
@@ -69,7 +104,7 @@ const FagsakSelect = ({
                 setBehandlingsAar(undefined);
             }}
         >
-            Har ikke tilhørende fagsak
+            <FormattedMessage id="fordeling.fagsakSelect.checkbox.harIkkeTilhørendeFagsak" />
         </Checkbox>
         <VerticalSpacer twentyPx />
     </>
