@@ -22,6 +22,7 @@ export enum ApiPath {
     JOURNALPOST_MOTTAK = '/journalpost/mottak',
     JOURNALPOST_SETT_BEHANDLINGSÅR = '/journalpost/settBehandlingsAar/{journalpostId}',
     JOURNALPOST_LUKK_OPPGAVE = '/journalpost/lukk/{journalpostId}',
+    JOURNALPOST_LUKK_DEBUGG = '/journalpost/lukkDebugg/{journalpostId}',
     JOURNALPOST_OMFORDEL = '/journalpost/{journalpostId}/omfordel',
     JOURNALPOST_USIGNERT = '/journalpost/{journalpostId}/usignert',
     JOURNALPOST_KOPIERE = '/journalpost/kopier/{journalpostId}',
