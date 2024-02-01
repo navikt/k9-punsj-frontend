@@ -130,17 +130,14 @@ describe('JournalpostLoader', () => {
         expect(alert.childAt(0).prop('id')).toEqual('startPage.feil.ingendokumenter');
     });
 
-    it('Viser feilmelding når journalposten ikke stöttes', () => {
-        const journalpostId = '200';
+    it('Viser feilmelding når journalposten ikke støttes', () => {
         const testId = 'test-id';
         const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
                 renderOnLoadComplete={renderedOnLoad}
-                journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
-                lukkJournalpostOppgave={jest.fn()}
                 forbidden={false}
                 conflict
                 journalpostConflictError={{ type: 'punsj://ikke-støttet-journalpost' }}
@@ -150,22 +147,19 @@ describe('JournalpostLoader', () => {
             />,
         );
 
-        const felmelding = journalpost.find('FeilmeldingPanel');
+        const felmelding = journalpost.find('ConflictErrorComponent');
         expect(felmelding).toHaveLength(1);
-        expect(felmelding.prop('messageId')).toEqual('startPage.feil.ikkeStøttet');
+        expect(felmelding.prop('lukkDebuggJpStatus')).toEqual(undefined);
     });
 
     it('Viser feilmelding når SB ikke har tillgang att se journalposten', () => {
-        const journalpostId = '200';
         const testId = 'test-id';
         const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
                 renderOnLoadComplete={renderedOnLoad}
-                journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
-                lukkJournalpostOppgave={jest.fn()}
                 forbidden
                 conflict={false}
                 notFound={false}

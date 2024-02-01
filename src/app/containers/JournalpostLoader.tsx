@@ -1,22 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
 import { Alert, Loader, Modal } from '@navikt/ds-react';
-
 import Fagsak from 'app/types/Fagsak';
-
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
-import VerticalSpacer from '../components/VerticalSpacer';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { IError, IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
 import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-import './journalpostLoader.less';
 import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
+import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
+import './journalpostLoader.less';
 
 interface IJournaPostStateProps {
     journalpost?: IJournalpost;
@@ -55,6 +53,23 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
 }) => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
 
+    const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
+    const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
+    const [ingenJp, setIngenJp] = useState(false);
+
+    const handleLukkDebugg = () => {
+        if (journalpostid) {
+            setPendinglukkDebuggJp(true);
+            setLukkDebuggJpStatus(undefined);
+            lukkDebuggJp(journalpostid).then((status: number) => {
+                setPendinglukkDebuggJp(false);
+                setLukkDebuggJpStatus(status);
+            });
+        } else {
+            setIngenJp(true);
+        }
+    };
+
     useEffect(() => {
         if (journalpostid) {
             getJournalpost(journalpostid);
@@ -87,16 +102,15 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    if (
-        !!conflict &&
-        journalpostConflictError &&
-        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET
-    ) {
+    if (conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {
         return (
-            <>
-                <FeilmeldingPanel messageId="startPage.feil.ikkeStøttet" />
-                <VerticalSpacer eightPx />
-            </>
+            <ConflictErrorComponent
+                journalpostid={journalpostid || 'ukjent'}
+                ingenJp={ingenJp}
+                pendingLukkDebuggJp={pendinglukkDebuggJp}
+                lukkDebuggJpStatus={lukkDebuggJpStatus}
+                handleLukkDebugg={handleLukkDebugg}
+            />
         );
     }
 

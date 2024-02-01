@@ -1,20 +1,21 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import { Heading, Panel } from '@navikt/ds-react';
-
-import './feilmeldingPanel.less';
+import { Box, Heading } from '@navikt/ds-react';
+import { BackgroundToken } from '@navikt/ds-react/esm/layout/utilities/types';
 
 export interface IFeilmeldingPanel {
-    messageId: string;
+    children?: React.ReactNode;
+    messageId?: string;
+    background?: BackgroundToken;
 }
 
-const FeilmeldingPanel: React.FunctionComponent<IFeilmeldingPanel> = ({ messageId }) => (
-    <Panel className="container">
+const FeilmeldingPanel: React.FC<IFeilmeldingPanel> = ({ children, messageId, background }) => (
+    <Box padding="4" background={background} className="text-center">
         <Heading size="small">
-            <FormattedMessage id={messageId} />
+            {messageId && children === undefined && <FormattedMessage id={messageId} />}
+            {children !== undefined && children}
         </Heading>
-    </Panel>
+    </Box>
 );
 
 export default FeilmeldingPanel;

@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, Fieldset, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
@@ -14,10 +15,12 @@ import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reduc
 import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
 import './sok.less';
 
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -29,7 +32,26 @@ export const SearchForm = () => {
     const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
     const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
 
+    const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
+    const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
+    const [ingenJp, setIngenJp] = useState(false);
+
+    const handleLukkDebugg = () => {
+        if (journalpostid) {
+            setPendinglukkDebuggJp(true);
+            setLukkDebuggJpStatus(undefined);
+            lukkDebuggJp(journalpostid).then((status: number) => {
+                setPendinglukkDebuggJp(false);
+                setLukkDebuggJpStatus(status);
+            });
+        } else {
+            setIngenJp(true);
+        }
+    };
+
     const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setLukkDebuggJpStatus(undefined);
+        dispatch(resetAllStateAction());
         const journalpostId = e.target.value;
         const sanitizedJournalpostId = journalpostId.replace(/[^0-9]/g, '');
         setJournalpostid(sanitizedJournalpostId);
@@ -80,51 +102,51 @@ export const SearchForm = () => {
                 <h1 className="sok-heading">
                     <FormattedMessage id="søk.overskrift" />
                 </h1>
-                <Fieldset>
-                    <div className="input-rad">
-                        <TextField
-                            value={journalpostid}
-                            className="w-64"
-                            onChange={onChange}
-                            label={<FormattedMessage id="søk.label.jpid" />}
-                            onKeyDown={handleKeydown}
-                        />
-                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
-                        <VerticalSpacer sixteenPx />
-                    </div>
+                <div className="input-rad">
+                    <TextField
+                        value={journalpostid}
+                        className="w-64"
+                        onChange={onChange}
+                        label={<FormattedMessage id="søk.label.jpid" />}
+                        onKeyDown={handleKeydown}
+                    />
+                    <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                    <VerticalSpacer sixteenPx />
+                </div>
 
-                    {!!notFound && (
-                        <Alert size="small" variant="info">
-                            <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
-                        </Alert>
-                    )}
+                {notFound && (
+                    <Alert size="small" variant="info">
+                        <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
+                    </Alert>
+                )}
 
-                    {!!forbidden && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
-                        </Alert>
-                    )}
+                {forbidden && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
+                    </Alert>
+                )}
 
-                    {conflict &&
-                        journalpostConflictError &&
-                        journalpostConflictError.type === JournalpostConflictTyper.IKKE_STØTTET && (
-                            <Alert size="small" variant="warning">
-                                <FormattedMessage id="startPage.feil.ikkeStøttet" />
-                            </Alert>
-                        )}
+                {conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                    <ConflictErrorComponent
+                        journalpostid={journalpostid}
+                        ingenJp={ingenJp}
+                        pendingLukkDebuggJp={pendinglukkDebuggJp}
+                        lukkDebuggJpStatus={lukkDebuggJpStatus}
+                        handleLukkDebugg={handleLukkDebugg}
+                    />
+                )}
 
-                    {journalpostRequestError?.message && (
-                        <Alert size="small" variant="error">
-                            <FormattedMessage id="søk.jp.internalServerError" />
-                        </Alert>
-                    )}
+                {journalpostRequestError?.message && (
+                    <Alert size="small" variant="error">
+                        <FormattedMessage id="søk.jp.internalServerError" />
+                    </Alert>
+                )}
 
-                    {!!journalpost && !journalpost?.kanSendeInn && (
-                        <Alert size="small" variant="warning">
-                            <FormattedMessage id="fordeling.kanikkesendeinn" />
-                        </Alert>
-                    )}
-                </Fieldset>
+                {journalpost && !journalpost?.kanSendeInn && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id="fordeling.kanikkesendeinn" />
+                    </Alert>
+                )}
             </div>
             <div className="inngangContainer">
                 <OpprettJournalpostInngang />
