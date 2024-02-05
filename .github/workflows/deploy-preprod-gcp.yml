@@ -17,8 +17,8 @@ jobs:
         uses: ./.github/workflows/build.yml
         secrets:
             READER_TOKEN: ${{ secrets.READER_TOKEN }}
-    deploy-dev:
-        name: Deploye til DEV
+    deploy-dev-gcp:
+        name: Deploye til DEV GCP
         runs-on: ubuntu-latest
         permissions:
             packages: write
