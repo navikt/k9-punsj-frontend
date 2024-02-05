@@ -33,6 +33,12 @@ spec:
     requests:
       cpu: 50m
       memory: 128Mi
+  accessPolicy:
+    inbound:
+      rules:
+        {{#each outboundApplications as |outbound|}}
+          - application: {{outbound.application}}
+        {{/each}}
   ingresses:
   {{#each ingresses as |url|}}
      - {{url}}

@@ -69,4 +69,4 @@ jobs:
               env:
                   CLUSTER: dev-gcp
                   RESOURCE: nais/frontend/k9-punsj-frontend-wonderwall.yml
-                  VARS: nais/frontend/dev-gcp.json
+                  VARS: nais/frontend/dev-gcp.yml
