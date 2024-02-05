@@ -1,7 +1,7 @@
 import { getEnvironmentVariable } from 'app/utils/envUtils';
 
 const OICD_AUTH_PROXY = () => getEnvironmentVariable('OIDC_AUTH_PROXY') as string;
-const K9_PUNSJ_API_URL = getEnvironmentVariable('K9_PUNSJ_API_URL') as string;
+const K9_PUNSJ_API_URL = () => getEnvironmentVariable('K9_PUNSJ_API_URL') as string;
 const IS_OICD_AUTH_PROXY_SET = () => !!OICD_AUTH_PROXY() && OICD_AUTH_PROXY() !== 'undefined';
 export const URL_BACKEND = () => {
     if (K9_PUNSJ_API_URL) {
@@ -97,4 +97,7 @@ export enum ApiPath {
 }
 
 export const URL_AUTH_CHECK = () => `${URL_BACKEND()}/me`;
-export const URL_AUTH_LOGIN = () => `/oauth2/login/login?redirect_uri={uri}`;
+export const URL_AUTH_LOGIN = () =>
+    K9_PUNSJ_API_URL()
+        ? `/oauth2/login/login?redirect_uri={uri}`
+        : `${URL_BACKEND()}/oauth2/login/login?redirect_uri={uri}`;

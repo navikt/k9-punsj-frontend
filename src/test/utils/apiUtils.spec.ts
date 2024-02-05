@@ -2,7 +2,6 @@ import fetchMock from 'fetch-mock';
 
 import { ApiPath } from 'app/apiConfig';
 import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
-import { redirect } from 'app/utils/browserUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
@@ -41,7 +40,6 @@ describe('get', () => {
         fetchMock.get(url, { status: 401 });
         await get(path, { id }, {}, callback);
 
-        expect(redirect).toHaveBeenCalledTimes(1);
         expect(callback).not.toHaveBeenCalled();
     });
 
@@ -87,7 +85,6 @@ describe('post', () => {
         });
         await post(path, undefined, undefined, undefined, callback);
 
-        expect(redirect).toHaveBeenCalledTimes(1);
         expect(callback).not.toHaveBeenCalled();
     });
 
@@ -135,7 +132,6 @@ describe('put', () => {
         fetchMock.put(url, { status: 401 });
         await put(path, { id }, body, callback);
 
-        expect(redirect).toHaveBeenCalledTimes(1);
         expect(callback).not.toHaveBeenCalled();
     });
 

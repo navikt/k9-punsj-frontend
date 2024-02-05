@@ -1,10 +1,6 @@
 import * as querystring from 'querystring';
 
-export const redirect = (url: string) => {
-    window.location.href = url;
-};
-
-export const getLocation = () => window.location.href;
+const getLocation = () => window.location.href;
 
 export const setHash = (hash: string) => {
     window.location.hash = hash;
