@@ -64,8 +64,8 @@ map $upstream_http_cache_control $custom_cache_control {
         try_files $uri $uri/ /index.html;    
         }
 
-    location /api/ {
-        proxy_pass "${K9_PUNSJ_API_URL}/";
+    location /api {
+        proxy_pass "${K9_PUNSJ_API_URL}/api/";
     }
 
     location = /getEnvVariables {
