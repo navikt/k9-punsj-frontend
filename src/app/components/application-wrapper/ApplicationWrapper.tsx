@@ -58,7 +58,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
     if (authState.isLoading) {
         return (
             <div className="justify-content-center align-items-center h-screen flex flex-wrap">
-                <Loader size="large" />
+                <Loader size="large" className="m-auto" />
             </div>
         );
     }
