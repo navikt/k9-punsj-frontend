@@ -34,7 +34,7 @@ spec:
       cpu: 50m
       memory: 128Mi
   accessPolicy:
-    inbound:
+    outbound:
       rules:
         {{#each outboundApplications as |outbound|}}
           - application: {{outbound.application}}
