@@ -15,7 +15,7 @@ export APP_HOSTNAME="${HOSTNAME:-localhost}"
 export APP_PORT="${APP_PORT:-443}"
 export APP_NAME="${APP_NAME:-devimg}"
 
-envsubst '$APP_PORT $APP_HOSTNAME $APP_NAME $OIDC_AUTH_PROXY' < /etc/nginx/conf.d/app.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '$APP_PORT $APP_HOSTNAME $APP_NAME $OIDC_AUTH_PROXY $K9_PUNSJ_API_URL' < /etc/nginx/conf.d/app.conf.template > /etc/nginx/conf.d/default.conf
 
 
 echo "### Nginx conf ###"

@@ -54,7 +54,7 @@ map $upstream_http_cache_control $custom_cache_control {
         sendfile                on;
 
         add_header              X-Application-Id "${APP_NAME}, pod=${APP_HOSTNAME}";
-        add_header              Content-Security-Policy "default-src 'self'; connect-src 'self' ${OIDC_AUTH_PROXY} https://sentry.gc.nav.no; frame-src 'self' ${OIDC_AUTH_PROXY}; font-src 'self' data: https://cdn.nav.no; img-src 'self' data:; style-src 'self' 'unsafe-inline';";        
+        add_header              Content-Security-Policy "default-src 'self'; connect-src 'self' ${OIDC_AUTH_PROXY} ${K9_PUNSJ_API_URL} https://sentry.gc.nav.no; frame-src 'self' ${OIDC_AUTH_PROXY}; font-src 'self' data: https://cdn.nav.no; img-src 'self' data:; style-src 'self' 'unsafe-inline';";        
         add_header              X-Content-Type-Options "nosniff";
         add_header              X-XSS-Protection "1;mode=block";
         add_header              Strict-Transport-Security "max-age=31536000";
