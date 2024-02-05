@@ -1,0 +1,72 @@
+name: Deploy til preprod
+on: [workflow_dispatch]
+jobs:
+    lint:
+        uses: ./.github/workflows/lint.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    test:
+        uses: ./.github/workflows/test.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    test-cypress:
+        uses: ./.github/workflows/cypress-tester.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    build:
+        uses: ./.github/workflows/build.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    deploy-dev:
+        name: Deploye til DEV
+        runs-on: ubuntu-latest
+        permissions:
+            packages: write
+            contents: read
+            id-token: write
+        needs: [lint, test, test-cypress, build]
+        steps:
+            - name: Hente kode
+              uses: actions/checkout@v4
+            - name: Setup .yarnrc.yml
+              run: |
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+            - name: Sette opp Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18.x
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@navikt'
+
+            - uses: actions/download-artifact@v4
+              with:
+                  name: dist
+                  path: ./dist
+
+            - name: Installere moduler
+              run: yarn install --immutable
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+            - uses: nais/docker-build-push@v0
+              id: docker-push
+              with:
+                  tag: 'latest'
+                  team: k9saksbehandling
+                  pull: true
+                  project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+                  identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+
+            - name: Set image
+              run: echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
+
+            - name: Deploye til dev
+              uses: nais/deploy/actions/deploy@v2
+              env:
+                  CLUSTER: dev-gcp
+                  RESOURCE: nais/frontend/k9-punsj-frontend.yml
+                  VARS: nais/frontend/dev-gcp.json

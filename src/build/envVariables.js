@@ -6,6 +6,10 @@ const envVariables = () => [
         value: process.env.OIDC_AUTH_PROXY,
     },
     {
+        key: 'K9_PUNSJ_API_URL',
+        value: process.env.K9_PUNSJ_API_URL,
+    },
+    {
         key: 'K9_LOS_URL',
         value: process.env.K9_LOS_URL,
     },

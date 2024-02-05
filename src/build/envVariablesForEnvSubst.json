@@ -4,6 +4,10 @@
         "value": "${OIDC_AUTH_PROXY}"
     },
     {
+        "key": "K9_PUNSJ_API_URL",
+        "value": "${K9_PUNSJ_API_URL}"
+    },
+    {
         "key": "K9_LOS_URL",
         "value": "${K9_LOS_URL}"
     },
