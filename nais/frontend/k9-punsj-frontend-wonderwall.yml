@@ -24,13 +24,13 @@ spec:
       - /getEnvVariables
 
   liveness:
-    path: health/isAlive
+    path: /isAlive
     initialDelay: 20
     periodSeconds: 5
     timeout: 1
     failureThreshold: 10
   readiness:
-    path: health/isReady
+    path: /isReady
     initialDelay: 20
     timeout: 1
   resources:
