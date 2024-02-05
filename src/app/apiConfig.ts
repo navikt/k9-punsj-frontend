@@ -12,7 +12,7 @@ export const URL_BACKEND = () => {
     }
     return 'http://localhost:8101';
 };
-export const URL_API = () => `${URL_BACKEND()}/api/k9-punsj`;
+export const URL_API = () => (IS_OICD_AUTH_PROXY_SET() ? `${URL_BACKEND()}/api/k9-punsj` : `${K9_PUNSJ_API_URL()}/api`);
 
 export enum ApiPath {
     ENV_VARIABLES = '/envVariables',
@@ -98,6 +98,4 @@ export enum ApiPath {
 
 export const URL_AUTH_CHECK = () => `${URL_BACKEND()}/me`;
 export const URL_AUTH_LOGIN = () =>
-    K9_PUNSJ_API_URL()
-        ? `/oauth2/login/login?redirect_uri={uri}`
-        : `${URL_BACKEND()}/oauth2/login/login?redirect_uri={uri}`;
+    K9_PUNSJ_API_URL() ? `/oauth2/login` : `${URL_BACKEND()}/oauth2/login/login?redirect_uri={uri}`;
