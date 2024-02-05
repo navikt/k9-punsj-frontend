@@ -1,4 +1,4 @@
-name: Deploy til preprod
+name: Deploy til preprod gcp
 on: [workflow_dispatch]
 jobs:
     lint:
