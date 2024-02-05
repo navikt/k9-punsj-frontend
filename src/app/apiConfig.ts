@@ -12,7 +12,7 @@ export const URL_BACKEND = () => {
     }
     return 'http://localhost:8101';
 };
-export const URL_API = () => (IS_OICD_AUTH_PROXY_SET() ? `${URL_BACKEND()}/api/k9-punsj` : `${K9_PUNSJ_API_URL()}/api`);
+export const URL_API = () => (K9_PUNSJ_API_URL() ? `${K9_PUNSJ_API_URL()}/api` : `${URL_BACKEND()}/api/k9-punsj`);
 
 export enum ApiPath {
     ENV_VARIABLES = '/envVariables',
