@@ -1,5 +1,9 @@
 name: Deploy til preprod gcp
-on: [workflow_dispatch]
+on:
+    push:
+        branches:
+            - gcp
+    workflow_dispatch:
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml
