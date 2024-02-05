@@ -1,7 +1,7 @@
-import { URL_AUTH_CHECK } from 'app/apiConfig';
+import { URL_AUTH_CHECK, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { AuthActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
-import { convertResponseToError, loginUrl } from 'app/utils';
+import { convertResponseToError } from 'app/utils';
 
 interface IAuthLoadAction {
     type: AuthActionKeys.LOAD;
@@ -43,7 +43,7 @@ export function checkAuth() {
                 case 200:
                     return response.json().then((user) => dispatch(authOkAction(user.name)));
                 case 401:
-                    return dispatch(redirectAction(loginUrl()));
+                    return dispatch(redirectAction(URL_AUTH_LOGIN()));
                 default:
                     return dispatch(authErrorAction(convertResponseToError(response)));
             }
