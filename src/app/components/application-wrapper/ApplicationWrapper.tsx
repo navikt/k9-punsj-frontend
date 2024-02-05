@@ -24,15 +24,11 @@ interface IApplicationWrapperComponentProps {
 interface IApplicationWrapperStateProps {
     authState: IAuthState;
 }
-interface IApplicationWrapperDispatchProps {
-    checkAuth: typeof checkAuth;
-}
 
 const isDev = window.location.hostname.includes('dev.adeo.no');
 
 type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
-    IApplicationWrapperStateProps &
-    IApplicationWrapperDispatchProps;
+    IApplicationWrapperStateProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
     const { authState, locale, children } = props;
@@ -42,33 +38,12 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         setK9LosUrl(getEnvironmentVariable('K9_LOS_URL') || 'http://localhost:8080');
     }, [window.appSettings]);
 
-    if (authState.error) {
-        return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
-    }
-
-    if (!authState.loggedIn && !authState.isLoading) {
-        if (!authState.redirectUrl) {
-            props.checkAuth();
-            return null;
-        }
-        window.location.replace(authState.redirectUrl);
-        return null;
-    }
-
-    if (authState.isLoading) {
-        return (
-            <div className="justify-content-center align-items-center h-screen flex flex-wrap">
-                <Loader size="large" className="m-auto" />
-            </div>
-        );
-    }
-
     return (
         <IntlProvider {...{ locale }}>
             <div className="app fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
                     <Header title="K9-punsj" titleHref={k9LosUrl}>
-                        <UserPanel name={authState.userName!} />
+                        <UserPanel name={authState.userName} />
                     </Header>
                 </div>
                 <AppContainer>
@@ -82,8 +57,5 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 function mapStateToProps(state: RootStateType) {
     return { authState: state.authState };
 }
-function mapDispatchToProps(dispatch: any) {
-    return { checkAuth: () => dispatch(checkAuth()) };
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ApplicationWrapper);
+export default connect(mapStateToProps)(ApplicationWrapper);
