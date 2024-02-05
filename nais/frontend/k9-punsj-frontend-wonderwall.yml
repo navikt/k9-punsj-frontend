@@ -15,8 +15,14 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
+      tenant: {{ azureTenant }}
     sidecar:
       enabled: true
+      autoLogin: true
+      autoLoginIgnorePaths:
+      - /dist/*
+      - /getEnvVariables
+
   liveness:
     path: health/isAlive
     initialDelay: 20

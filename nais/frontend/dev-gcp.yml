@@ -1,8 +1,10 @@
 ingresses:
     - https://k9-punsj-frontend.intern.dev.nav.no
-outboundExternalHosts: [k9-punsj.dev-fss-pub.nais.io]
+outboundExternalHosts: 
+    - k9-punsj.dev-fss-pub.nais.io
+azureTenant: trygdeetaten.no
 env:
-    K9_PUNSJ_API_URL: https://k9-punsj.dev-fss-pub.nais.io
+    K9_PUNSJ_API_URL: https://k9-punsj.dev-fss-pub.nais.io/api/
     K9_LOS_URL: https://k9-los-web.dev.adeo.no/
     OMP_KS_ENABLED: "true"
     PLS_ENABLED: "true"
