@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Loader } from '@navikt/ds-react';
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
@@ -10,7 +9,6 @@ import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
-import { checkAuth } from 'app/state/actions';
 
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
