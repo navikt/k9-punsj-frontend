@@ -11,6 +11,11 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
+  azure:
+    application:
+      enabled: true
+    sidecar:
+      enabled: true
   liveness:
     path: health/isAlive
     initialDelay: 20

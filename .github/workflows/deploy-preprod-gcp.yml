@@ -68,5 +68,5 @@ jobs:
               uses: nais/deploy/actions/deploy@v2
               env:
                   CLUSTER: dev-gcp
-                  RESOURCE: nais/frontend/k9-punsj-frontend.yml
+                  RESOURCE: nais/frontend/k9-punsj-frontend-wonderwall.yml
                   VARS: nais/frontend/dev-gcp.json
