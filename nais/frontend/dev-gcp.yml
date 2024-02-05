@@ -1,7 +1,6 @@
 ingresses:
     - https://k9-punsj-frontend.intern.dev.nav.no
-outboundApplications:
-    - application: https://k9-punsj.dev-fss-pub.nais.io
+outboundExternalHosts: [https://k9-punsj.dev-fss-pub.nais.io]
 env:
     K9_PUNSJ_API_URL: https://k9-punsj.dev-fss-pub.nais.io
     K9_LOS_URL: https://k9-los-web.dev.adeo.no/
