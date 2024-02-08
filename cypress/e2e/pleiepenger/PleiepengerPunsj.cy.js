@@ -2,11 +2,14 @@ import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Pleiepenger punsj', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
+        cy.visit(
+            '/journalpost/200/pleiepenger-sykt-barn/journalfor-og-fortsett/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe',
+            {
+                onBeforeLoad: (window) => {
+                    window.__initialState__ = initialState;
+                },
             },
-        });
+        );
     });
     it('kan sende inn søknad om pleiepenger', () => {
         cy.soknadperioderInput('08.11.2021', '11.11.2021');

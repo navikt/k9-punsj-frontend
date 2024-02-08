@@ -4,7 +4,7 @@ import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandler
 describe('Omsorgspengeutbetaling - ny søknad', () => {
     beforeEach(() => {
         cy.visit(
-            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
+            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/journalfor-og-fortsett/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
         );
         cy.window().then((window) => {
             const { worker } = window.msw;
