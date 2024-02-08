@@ -35,12 +35,13 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
 
     if (sakstypeConfig?.punchPath) {
         return (
-            <Button onClick={() => navigate(sakstypeConfig.punchPath)}>
+            <Button size="small" onClick={() => navigate(sakstypeConfig.punchPath)}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );
     }
 
+    // TODO slette denne
     if (sakstypeConfig.navn === Sakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
         return (
             <>

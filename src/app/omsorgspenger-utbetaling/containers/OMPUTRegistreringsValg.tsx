@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
@@ -26,6 +26,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 ) => {
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
+
+    const location = useLocation();
+
     const navigate = useNavigate();
 
     const {
@@ -70,7 +73,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
                     size="small"
                 >
                     Tilbake

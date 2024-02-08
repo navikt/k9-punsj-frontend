@@ -128,6 +128,7 @@ const ValgForDokument: React.FC<IValgForDokument> = ({
 
         return true;
     });
+
     return (
         <>
             <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')} className="fordeling-page__options">

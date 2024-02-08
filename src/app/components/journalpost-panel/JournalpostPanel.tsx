@@ -71,6 +71,16 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 )}
             </div>
             <div>
+                {fordelingState.fagsak?.sakstype && (
+                    <LabelValue
+                        labelTextId="journalpost.sakstype"
+                        value={fordelingState.fagsak?.sakstype}
+                        retning="horisontal"
+                    />
+                )}
+            </div>
+
+            <div>
                 {!!pleietrengendeId && (
                     <LabelValue
                         labelTextId={
@@ -79,6 +89,15 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                                 : 'journalpost.barnetsId'
                         }
                         value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                        retning="horisontal"
+                    />
+                )}
+            </div>
+            <div>
+                {fordelingState.fagsak?.fagsakId && (
+                    <LabelValue
+                        labelTextId="journalpost.saksnummer"
+                        value={fordelingState.fagsak?.fagsakId}
                         retning="horisontal"
                     />
                 )}
