@@ -47,6 +47,13 @@ jobs:
                   name: dist
                   path: ./dist
 
+            - name: Installere moduler
+              run: |
+                  cd server
+                  yarn install --immutable
+                  env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - uses: nais/docker-build-push@v0
               id: docker-push
               with:
