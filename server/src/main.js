@@ -4,7 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import { fileURLToPath } from 'url';
-import { dirname, path } from 'path';
+import path, { dirname } from 'path';
 
 import * as headers from './headers.js';
 import logger from './log.js';
