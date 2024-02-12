@@ -64,6 +64,10 @@ map $upstream_http_cache_control $custom_cache_control {
         try_files $uri $uri/ /index.html;    
         }
 
+    location /api {
+        proxy_pass "${K9_PUNSJ_API_URL}/api";
+    }
+
     location = /getEnvVariables {
         alias /tmp/k9-punsj/env.json;
         default_type application/json;
