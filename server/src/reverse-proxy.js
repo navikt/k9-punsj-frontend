@@ -30,6 +30,7 @@ const proxyOptions = (api) => ({
         );
     },
     proxyReqPathResolver: (req) => {
+        console.log(req.headers.authorization);
         const urlFromApi = url.parse(api.url);
         const pathFromApi = urlFromApi.pathname === '/' ? '' : urlFromApi.pathname;
 
