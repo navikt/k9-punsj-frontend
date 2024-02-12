@@ -20,17 +20,17 @@ spec:
       enabled: true
       autoLogin: true
       autoLoginIgnorePaths:
-      - /dist/*
-      - /getEnvVariables
+      - /health/*
+      - /logout
 
   liveness:
-    path: /isAlive
+    path: health/isAlive
     initialDelay: 20
     periodSeconds: 5
     timeout: 1
     failureThreshold: 10
   readiness:
-    path: /isReady
+    path: health/isReady
     initialDelay: 20
     timeout: 1
   resources:
