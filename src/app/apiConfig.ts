@@ -13,7 +13,7 @@ export const URL_BACKEND = () => {
     return 'http://localhost:8101';
 };
 export const URL_API = () => (K9_PUNSJ_API_URL() ? `/k9-punsj` : `${URL_BACKEND()}/api/k9-punsj`);
-console.log('URL_API', URL_API());
+
 export enum ApiPath {
     ENV_VARIABLES = '/envVariables',
     EKSISTERENDE_SOKNADER_SOK = '/mapper',
