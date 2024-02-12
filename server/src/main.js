@@ -19,8 +19,6 @@ import { envVariables } from '../envVariables.js';
 const server = express();
 const { port } = config.server;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const globalErrorHandler = (err, req, res) => {
     logger.warning(err.stack);

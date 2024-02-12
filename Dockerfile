@@ -6,7 +6,6 @@ ENV NODE_ENV production
 WORKDIR /app
 
 COPY ./dist ./dist
-COPY ./src/build/envVariables.js ./envVariables.js
 COPY server ./
 
 EXPOSE 8080
