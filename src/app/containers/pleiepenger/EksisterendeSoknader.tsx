@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
@@ -52,12 +52,16 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
     props: IEksisterendeSoknaderProps,
 ) => {
     const { intl, eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+
+    const søkerIdFraJournalpost = journalpost && journalpost.erFerdigstilt ? journalpost?.norskIdent : undefined;
+
     const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+        if (IdentRules.erAlleIdenterGyldige(søkerIdFraJournalpost || søkerId, pleietrengendeId)) {
             props.findEksisterendeSoknader(søkerId, null);
         } else {
             props.resetAllAction();

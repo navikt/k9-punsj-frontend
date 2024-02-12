@@ -1,5 +1,6 @@
-import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import { DokumenttypeForkortelse, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import { ROUTES } from 'app/constants/routes';
 import { Tidsformat } from './timeUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
@@ -41,6 +42,7 @@ export const erEldreEnn4år = (dato: string) => {
 };
 
 export const printAndReturnValue = (value: any) => {
+    // eslint-disable-next-line no-console
     console.log(value);
     return value;
 };
@@ -185,4 +187,71 @@ export const konverterPeriodeTilTimerOgMinutter = (periode: Periodeinfo<IArbeids
             minutter: timerOgMinutter.faktiskArbeidPerDag?.minutter || '0',
         },
     });
+};
+
+export const getPathFraForkortelse = (ytelseType: DokumenttypeForkortelse) => {
+    switch (ytelseType) {
+        case DokumenttypeForkortelse.PSB:
+            return ROUTES.PSB_ROOT;
+        case DokumenttypeForkortelse.PPN:
+            return ROUTES.PLS_ROOT;
+        case DokumenttypeForkortelse.OMP_KS:
+            return ROUTES.OMPKS_ROOT;
+        case DokumenttypeForkortelse.OMP_MA:
+            return ROUTES.OMPMA_ROOT;
+        case DokumenttypeForkortelse.OMP_AO:
+            return ROUTES.OMPMA_ROOT;
+        case DokumenttypeForkortelse.OMP_UT:
+            return ROUTES.OMPUT_ROOT;
+        case DokumenttypeForkortelse.OLP:
+            return ROUTES.OLP_ROOT;
+        default:
+            return '/';
+    }
+};
+
+export const getSakstypeFraForkortelse = (ytelseType?: DokumenttypeForkortelse): Sakstype | undefined => {
+    switch (ytelseType) {
+        case DokumenttypeForkortelse.PSB:
+            return Sakstype.PLEIEPENGER_SYKT_BARN;
+        case DokumenttypeForkortelse.PPN:
+            return Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE;
+        case DokumenttypeForkortelse.OMP_KS:
+            return Sakstype.OMSORGSPENGER_KRONISK_SYKT_BARN;
+        case DokumenttypeForkortelse.OMP_MA:
+            return Sakstype.OMSORGSPENGER_MIDLERTIDIG_ALENE;
+        case DokumenttypeForkortelse.OMP_AO:
+            return Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN;
+        case DokumenttypeForkortelse.OMP_UT:
+            return Sakstype.OMSORGSPENGER_UTBETALING;
+        case DokumenttypeForkortelse.OLP:
+            return Sakstype.OPPLAERINGSPENGER;
+        default:
+            return undefined;
+    }
+};
+
+export const getDokumenttypeFraForkortelse = (
+    ytelseType?: DokumenttypeForkortelse,
+): FordelingDokumenttype | undefined => {
+    switch (ytelseType) {
+        case DokumenttypeForkortelse.PSB:
+            return FordelingDokumenttype.PLEIEPENGER;
+        case DokumenttypeForkortelse.PPN:
+            return FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE;
+        case DokumenttypeForkortelse.OMP:
+            return FordelingDokumenttype.OMSORGSPENGER;
+        case DokumenttypeForkortelse.OMP_KS:
+            return FordelingDokumenttype.OMSORGSPENGER_KS;
+        case DokumenttypeForkortelse.OMP_MA:
+            return FordelingDokumenttype.OMSORGSPENGER_MA;
+        case DokumenttypeForkortelse.OMP_AO:
+            return FordelingDokumenttype.OMSORGSPENGER_AO;
+        case DokumenttypeForkortelse.OMP_UT:
+            return FordelingDokumenttype.OMSORGSPENGER_UT;
+        case DokumenttypeForkortelse.OLP:
+            return FordelingDokumenttype.OPPLAERINGSPENGER;
+        default:
+            return undefined;
+    }
 };

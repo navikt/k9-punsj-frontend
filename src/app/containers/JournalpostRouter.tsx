@@ -26,7 +26,7 @@ import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAv
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import JournalførOgFortsettValg from './pleiepenger/Fordeling/Komponenter/JournalførOgFortsettValg';
 
-const JournalpostRouter: React.FunctionComponent = () => {
+const JournalpostRouter: React.FC = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
     const journalposterIAapenSoknad = useSelector((state: RootStateType) => state.felles.journalposterIAapenSoknad);
 

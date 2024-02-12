@@ -45,6 +45,31 @@ let handlers = [
         ),
     ),
 
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/203', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '203',
+                erFerdigstilt: true,
+                norskIdent: '29099000129',
+                fagsakYtelseType: { kode: 'PSB', kodeverk: 'FAGSAK_YTELSE' },
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'MOTTATT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+                sak: {
+                    fagsakId: 'ABC123',
+                    gyldigPeriode: { fom: '2022-08-01', tom: '2022-08-15' },
+                    pleietrengendeIdent: '26838796566',
+                    sakstype: 'PSB',
+                },
+            },
+            { status: 200 },
+        ),
+    ),
+
     http.post('http://localhost:8101/api/k9-punsj/brev/bestill', () => new HttpResponse(null, { status: 200 })),
     http.get('http://localhost:8101/api/k9-punsj/person', () =>
         HttpResponse.json(

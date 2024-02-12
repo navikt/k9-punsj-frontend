@@ -22,6 +22,8 @@ import {
 import Fagsak from 'app/types/Fagsak';
 import intlHelper from 'app/utils/intlUtils';
 
+import { ROUTES } from 'app/constants/routes';
+import { useNavigate } from 'react-router';
 import FormPanel from '../../../components/FormPanel';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { ISakstypeDefault } from '../../../models/Sakstype';
@@ -34,7 +36,12 @@ import {
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
-import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from '../../../utils';
+import {
+    finnForkortelseForDokumenttype,
+    finnVisningsnavnForSakstype,
+    getDokumenttypeFraForkortelse,
+    getPathFraForkortelse,
+} from '../../../utils';
 import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
@@ -48,10 +55,8 @@ import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import ValgForDokument from './Komponenter/ValgForDokument';
-import './fordeling.less';
 import KlassifiserModal, { getJounalførOgFortsettPath } from './Komponenter/KlassifiserModal';
-// eslint-disable-next-line import/order
-import { useNavigate } from 'react-router';
+import './fordeling.less';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -132,7 +137,28 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
 
     useEffect(() => {
-        if (valgtFagsak) {
+        if (journalpost.erFerdigstilt && journalpost.fagsakYtelseType && journalpost?.norskIdent) {
+            const fagsakYtelsePath = getPathFraForkortelse(journalpost.fagsakYtelseType.kode);
+
+            // set fordeling state
+            setIdentAction(journalpost.norskIdent, journalpost.sak?.pleietrengendeIdent);
+            setErSøkerIdBekreftet(true);
+            setFagsak(journalpost.sak);
+            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.fagsakYtelseType.kode));
+
+            // redirect to ferdigstilt page
+            navigate(
+                // eslint-disable-next-line prefer-template
+                ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId) +
+                    '/' +
+                    fagsakYtelsePath +
+                    ROUTES.JOURNALFØR_OG_FORTSETT,
+            );
+        }
+    }, []);
+
+    useEffect(() => {
+        if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
             setBrukEksisterendeFagsak(false);
         }
@@ -151,7 +177,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     ]);
 
     useEffect(() => {
-        if (sakstype) {
+        if (sakstype && !journalpost.erFerdigstilt) {
             setSakstypeAction(undefined);
         }
     }, [dokumenttype]);
@@ -273,7 +299,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                 setVisKlassifiserModal(true);
             }
-        }, 1000);
+        }, 500);
     };
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
@@ -299,7 +325,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
     useEffect(() => {
-        if (identState.søkerId && dokumenttype && gjelderPsbOmsOlp) {
+        if (!journalpost.erFerdigstilt && identState.søkerId && dokumenttype && gjelderPsbOmsOlp) {
             setHenteFagsakFeilet(false);
             setIsFetchingFagsaker(true);
             setFagsak(undefined);
@@ -369,7 +395,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const viseValgForDokument = false;
+    const viseValgForDokument = true;
 
     return (
         <div className="fordeling-container">

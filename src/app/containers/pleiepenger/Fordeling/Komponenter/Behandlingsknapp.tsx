@@ -29,6 +29,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const navigate = useNavigate();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
+
     if (!sakstypeConfig || !journalpost) {
         return null;
     }

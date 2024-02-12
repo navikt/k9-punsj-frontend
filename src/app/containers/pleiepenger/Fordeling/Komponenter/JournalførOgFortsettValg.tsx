@@ -9,7 +9,6 @@ import {
     FordelingDokumenttype,
     Sakstype,
     TilgjengeligSakstype,
-    korrigeringAvInntektsmeldingSakstyper,
     omsorgspengerAleneOmOmsorgenSakstyper,
     omsorgspengerKroniskSyktBarnSakstyper,
     omsorgspengerMidlertidigAleneSakstyper,
@@ -72,9 +71,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
-    const korrigeringIM = () =>
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
-
     const pleiepengerSyktBarn = () => dokumenttype === FordelingDokumenttype.PLEIEPENGER && pleiepengerSakstyper;
 
     const pleiepengerILivetsSluttfase = () =>
@@ -93,7 +89,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
     const sakstypekeys =
-        korrigeringIM() ||
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
         omsorgspengerKroniskSyktBarn() ||
