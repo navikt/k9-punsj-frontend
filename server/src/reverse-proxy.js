@@ -30,15 +30,13 @@ const proxyOptions = (api) => ({
         );
     },
     proxyReqPathResolver: (req) => {
-        console.log(req.headers.authorization);
         const urlFromApi = url.parse(api.url);
-        console.log('url from api', urlFromApi);
         const pathFromApi = urlFromApi.pathname === '/' ? '' : urlFromApi.pathname;
-        console.log('path from api', pathFromApi);
         const urlFromRequest = url.parse(req.originalUrl);
-        console.log('url from request', urlFromRequest);
-        const pathFromRequest = urlFromRequest.pathname;
-        console.log('path from request', pathFromRequest);
+        let pathFromRequest = urlFromRequest.pathname;
+
+        // Remove /k9-punsj from the path
+        pathFromRequest = pathFromRequest.replace('/k9-punsj', '');
         const queryString = urlFromRequest.query;
         const newPath = (pathFromApi || '') + (pathFromRequest || '') + (queryString ? `?${queryString}` : '');
 
