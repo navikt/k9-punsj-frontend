@@ -133,6 +133,7 @@ async function startApp() {
             res.sendFile('index.html', { root: rootDir });
         });
 
+        server.use(globalErrorHandler);
 
         server.listen(port, () => logger.info(`Listening on port ${port}`));
     } catch (error) {
