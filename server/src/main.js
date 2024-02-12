@@ -15,6 +15,7 @@ import config from './config.js';
 import msgraph from './azure/msgraph.js';
 import reverseProxy from './reverse-proxy.js';
 import { validateAuthorization } from './azure/validate.js';
+import { envVariables } from '../envVariables.js';
 
 const server = express();
 const { port } = config.server;
@@ -127,6 +128,9 @@ async function startApp() {
                 .catch((err) => res.status(500).json(err));
         });
 
+        server.get('/envVariables', (req, res) => {
+            res.json(envVariables());
+        });
         reverseProxy.setup(server);
 
         // serve static files

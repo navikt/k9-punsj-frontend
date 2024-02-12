@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-const envVariables = () => [
+export const envVariables = () => [
     {
         key: 'OIDC_AUTH_PROXY',
         value: process.env.OIDC_AUTH_PROXY,
@@ -46,5 +44,3 @@ const envVariables = () => [
         value: process.env.POSTMOTTAK_TOGGLE,
     },
 ];
-
-module.exports = envVariables;
