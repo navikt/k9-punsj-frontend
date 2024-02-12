@@ -131,7 +131,7 @@ async function startApp() {
 
         // serve static files
         const rootDir = './dist';
-        server.use(express.static(resolve(__dirname, '../dist')));
+        server.use('/dist', express.static('./dist'));
         server.use(/^\/(?!.*dist).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
