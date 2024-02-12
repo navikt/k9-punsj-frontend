@@ -1,8 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, path } from 'path';
+
 import * as headers from './headers.js';
 import logger from './log.js';
 import { getIssuer } from './azure/issuer.js';
@@ -15,6 +18,9 @@ import { validateAuthorization } from './azure/validate.js';
 
 const server = express();
 const { port } = config.server;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const globalErrorHandler = (err, req, res) => {
     logger.warning(err.stack);
