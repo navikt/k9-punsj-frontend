@@ -395,7 +395,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const viseValgForDokument = true;
+    // TODO: Fjern dette etter testing
+    const viseValgForDokument = false;
 
     return (
         <div className="fordeling-container">
