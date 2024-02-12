@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
+import path from 'path';
 import * as headers from './headers.js';
 import logger from './log.js';
 import { getIssuer } from './azure/issuer.js';
@@ -125,6 +126,9 @@ async function startApp() {
         // serve static files
         const rootDir = './dist';
         server.use(express.static(rootDir));
+        server.use('/dist/js', express.static(path.resolve(rootDir, 'dist/js')));
+        server.use('/dist/css', express.static(path.resolve(rootDir, 'dist/css')));
+        server.use('/dist/favicon.png', express.static(path.resolve(rootDir, 'dist/favicon.png')));
         server.use(/^\/(?!.*dist).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
