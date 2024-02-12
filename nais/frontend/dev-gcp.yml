@@ -6,7 +6,7 @@ azureTenant: trygdeetaten.no
 proxyRedirects:
   - path: "/k9-punsj"
     scope: "api://dev-fss.k9saksbehandling.k9-punsj/.default"
-    url: "https://k9-punsj.dev-fss-pub.nais.io/api"
+    url: "https://k9-punsj.dev-fss-pub.nais.io"
   - path: "/k9-formidling"
     scope: "api://dev-fss.k9saksbehandling.k9-formidling/.default"
     url: "http://k9-formidling.k9saksbehandling.svc.nais.local/k9/formidling/api"
