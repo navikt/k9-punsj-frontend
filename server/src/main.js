@@ -19,7 +19,18 @@ import { envVariables } from '../envVariables.js';
 const server = express();
 const { port } = config.server;
 
-
+function logRoutes(app) {
+    app._router.stack.forEach((middleware) => {
+        if (middleware.route) {
+            console.log(`Route: ${middleware.route.path}`);
+        } else if (middleware.name === 'router') {
+            middleware.handle.stack.forEach((handler) => {
+                const route = handler.route;
+                route && console.log(`Route: ${route.path}`);
+            });
+        }
+    });
+}
 const globalErrorHandler = (err, req, res) => {
     logger.warning(err.stack);
     res.status(err.status || 500).send({ error: err });
@@ -27,6 +38,7 @@ const globalErrorHandler = (err, req, res) => {
 
 async function startApp() {
     try {
+        // log request
         server.use(timeout('10m'));
         headers.setup(server);
 
@@ -143,4 +155,6 @@ async function startApp() {
     }
 }
 
-startApp().catch((err) => logger.error(err));
+startApp()
+    .then(() => logRoutes(server))
+    .catch((err) => logger.error(err));
