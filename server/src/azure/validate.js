@@ -1,8 +1,8 @@
 import { jwtVerify } from 'jose';
-import { getIssuer } from './issuer';
-import { getJwkSet } from './jwk';
-import config from '../config';
-import logger from '../log';
+import { getIssuer } from './issuer.js';
+import { getJwkSet } from './jwk.js';
+import config from '../config.js';
+import logger from '../log.js';
 
 const isTokenValid = async (token) => jwtVerify(token, await getJwkSet(), {
   issuer: (await getIssuer()).metadata.issuer,

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import logger from './log';
+import logger from './log.js';
 
 const envVar = ({
   name,

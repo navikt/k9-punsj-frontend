@@ -1,1 +1,1 @@
-export * from './cache-actions';
+export * from './cache-actions.js';

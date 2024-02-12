@@ -1,5 +1,5 @@
-import { getIssuer } from './issuer';
-import config from '../config';
+import { getIssuer } from './issuer.js';
+import config from '../config.js';
 
 let client;
 

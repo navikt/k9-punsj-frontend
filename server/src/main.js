@@ -2,15 +2,15 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
-import * as headers from './headers';
-import logger from './log';
-import { getIssuer } from './azure/issuer';
+import * as headers from './headers.js';
+import logger from './log.js';
+import { getIssuer } from './azure/issuer.js';
 
 // for debugging during development
-import config from './config';
-import msgraph from './azure/msgraph';
-import reverseProxy from './reverse-proxy';
-import { validateAuthorization } from './azure/validate';
+import config from './config.js';
+import msgraph from './azure/msgraph.js';
+import reverseProxy from './reverse-proxy.js';
+import { validateAuthorization } from './azure/validate.js';
 
 const server = express();
 const { port } = config.server;
@@ -115,17 +115,17 @@ async function startApp() {
     // return user info fetched from the Microsoft Graph API
     server.get('/me', (req, res) => {
       msgraph.getUserInfoFromGraphApi(req.headers.authorization)
-        .then((userinfo) => reson(userinfo))
+        .then((userinfo) => res.json(userinfo))
         .catch((err) => res.status(500)
-          on(err));
+          .json(err));
     });
 
     // return groups that the user is a member of from the Microsoft Graph API
     server.get('/me/memberOf', (req, res) => {
       msgraph.getUserGroups(req.headers.authorization)
-        .then((userinfo) => reson(userinfo))
+        .then((userinfo) => res.json(userinfo))
         .catch((err) => res.status(500)
-          on(err));
+          .json(err));
     });
 
     reverseProxy.setup(server);

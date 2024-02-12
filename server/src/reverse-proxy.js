@@ -1,10 +1,10 @@
 import proxy from 'express-http-proxy';
 import url from 'url';
 
-import { grantAzureOboToken } from './azure/grant';
+import { grantAzureOboToken } from './azure/grant.js';
 
-import config from './config';
-import log from './log';
+import config from './config.js';
+import log from './log.js';
 
 const xTimestamp = 'x-Timestamp';
 const stripTrailingSlash = (str) => (str.endsWith('/') ? str.slice(0, -1) : str);

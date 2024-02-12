@@ -1,7 +1,7 @@
-import logger from '../log';
-import { getTokenInCache, setTokenInCache } from '../cache/index';
-import { createOidcUnknownError } from '../utils/oidcUtils';
-import { getAuthClient } from './client';
+import logger from '../log.js';
+import { getTokenInCache, setTokenInCache } from '../cache/index.js';
+import { createOidcUnknownError } from '../utils/oidcUtils.js';
+import { getAuthClient } from './client.js';
 
 // eslint-disable-next-line no-async-promise-executor
 export const grantAzureOboToken = (userToken, scope) => new Promise((async (resolve, reject) => { // NOSONAR
