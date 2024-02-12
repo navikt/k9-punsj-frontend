@@ -51,7 +51,7 @@ jobs:
               run: |
                   cd server
                   yarn install --immutable
-                  env:
+              env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - uses: nais/docker-build-push@v0
