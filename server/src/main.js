@@ -16,7 +16,6 @@ import msgraph from './azure/msgraph.js';
 import reverseProxy from './reverse-proxy.js';
 import { validateAuthorization } from './azure/validate.js';
 import { envVariables } from '../envVariables.js';
-
 const server = express();
 const { port } = config.server;
 
