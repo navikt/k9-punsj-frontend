@@ -126,9 +126,9 @@ async function startApp() {
         // serve static files
         const rootDir = './dist';
         server.use(express.static(rootDir));
-        server.use('/dist/js', express.static(path.resolve(rootDir, 'dist/js')));
-        server.use('/dist/css', express.static(path.resolve(rootDir, 'dist/css')));
-        server.use('/dist/favicon.png', express.static(path.resolve(rootDir, 'dist/favicon.png')));
+        server.use('/dist/js', express.static(path.resolve(__dirname, 'dist/js')));
+        server.use('/dist/css', express.static(path.resolve(__dirname, 'dist/css')));
+        server.use('/dist/favicon.png', express.static(path.resolve(__dirname, 'dist/favicon.png')));
         server.use(/^\/(?!.*dist).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
