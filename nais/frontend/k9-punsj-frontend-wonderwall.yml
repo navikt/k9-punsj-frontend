@@ -54,7 +54,13 @@ spec:
     min: 2
     max: 4
     cpuThresholdPercentage: 90
-  env:
+  env: 
+    - name: PROXY_CONFIG
+      value: '{"apis":[
+              {{#each proxyRedirects}}
+                {"path":"{{path}}", "url":"{{url}}", "scopes":"{{scope}}"}{{#unless @last}},{{/unless}}
+              {{/each}}
+              ]}'
   {{#each env}}
     - name: {{@key}}
       value: "{{this}}"
