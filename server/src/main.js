@@ -4,7 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
+import { dirname, resolve } from 'path';
 
 import * as headers from './headers.js';
 import logger from './log.js';
@@ -131,14 +131,10 @@ async function startApp() {
 
         // serve static files
         const rootDir = './dist';
-        server.use(express.static(rootDir));
-        server.use('/dist/js', express.static(path.resolve(__dirname, 'dist/js')));
-        server.use('/dist/css', express.static(path.resolve(__dirname, 'dist/css')));
-        server.use('/dist/favicon.png', express.static(path.resolve(__dirname, 'dist/favicon.png')));
+        server.use(express.static(resolve(__dirname, '../dist')));
         server.use(/^\/(?!.*dist).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
-
 
         server.listen(port, () => logger.info(`Listening on port ${port}`));
     } catch (error) {
