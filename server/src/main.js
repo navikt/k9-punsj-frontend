@@ -16,21 +16,10 @@ import msgraph from './azure/msgraph.js';
 import reverseProxy from './reverse-proxy.js';
 import { validateAuthorization } from './azure/validate.js';
 import { envVariables } from '../envVariables.js';
+
 const server = express();
 const { port } = config.server;
 
-function logRoutes(app) {
-    app._router.stack.forEach((middleware) => {
-        if (middleware.route) {
-            console.log(`Route: ${middleware.route.path}`);
-        } else if (middleware.name === 'router') {
-            middleware.handle.stack.forEach((handler) => {
-                const route = handler.route;
-                route && console.log(`Route: ${route.path}`);
-            });
-        }
-    });
-}
 const globalErrorHandler = (err, req, res) => {
     logger.warning(err.stack);
     res.status(err.status || 500).send({ error: err });
