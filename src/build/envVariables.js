@@ -45,4 +45,4 @@ const envVariables = () => [
     },
 ];
 
-export default envVariables;
+module.exports = envVariables;
