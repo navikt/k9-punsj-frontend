@@ -128,7 +128,7 @@ async function startApp() {
                 .catch((err) => res.status(500).json(err));
         });
 
-        server.get('/envVariables', (req, res) => {
+        server.get('/getEnvVariables', (req, res) => {
             res.json(envVariables());
         });
         reverseProxy.setup(server);
