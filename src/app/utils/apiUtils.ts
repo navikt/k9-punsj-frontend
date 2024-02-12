@@ -5,8 +5,10 @@ import { IError } from 'app/models/types';
 
 import { canStringBeParsedToJSON } from './formatUtils';
 
-export const apiUrl = (path: ApiPath | string, parameters?: any) =>
-    URL_API() + (parameters ? String.Format(path, parameters) : path);
+export const apiUrl = (path: ApiPath | string, parameters?: any) => {
+    console.log('URL_API', URL_API());
+    return URL_API() + (parameters ? String.Format(path, parameters) : path);
+};
 
 export function login() {
     window.location.href = URL_AUTH_LOGIN();
