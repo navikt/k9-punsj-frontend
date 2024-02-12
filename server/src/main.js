@@ -144,6 +144,4 @@ async function startApp() {
     }
 }
 
-startApp()
-    .then(() => logRoutes(server))
-    .catch((err) => logger.error(err));
+startApp().catch((err) => logger.error(err));
