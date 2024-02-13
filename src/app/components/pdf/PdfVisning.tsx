@@ -72,7 +72,6 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             }),
         [journalpostId, dokumentId],
     );
-    console.log('pdfUrl', pdfUrl);
     const [showPdf, setShowPdf] = useState<boolean>(true);
 
     const togglePdf = () => {
