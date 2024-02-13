@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 
@@ -63,6 +63,12 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
             }),
     });
 
+    useEffect(() => {
+        if (isSuccess && fortsett) {
+            navigate(getJounalførOgFortsettPath(dokumenttype));
+        }
+    }, [isSuccess]);
+
     const disabled = ['loading', 'success'].includes(status);
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean) => {
@@ -72,14 +78,6 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
                 <FormattedMessage id={messageId} />
             </Alert>
         );
-    };
-
-    const handleFortsett = () => {
-        mutate();
-        if (isSuccess) {
-            lukkModal();
-            navigate(getJounalførOgFortsettPath(dokumenttype));
-        }
     };
 
     return (
@@ -98,8 +96,9 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
                 </>
             </Modal.Body>
             <Modal.Footer>
-                {isSuccess ? (
+                {!fortsett && isSuccess ? (
                     <Button
+                        size="small"
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
@@ -108,12 +107,7 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
                     </Button>
                 ) : (
                     <>
-                        <Button
-                            type="button"
-                            disabled={disabled}
-                            onClick={() => (fortsett ? handleFortsett() : mutate())}
-                            size="small"
-                        >
+                        <Button type="button" disabled={disabled} onClick={() => mutate()} size="small">
                             {status !== 'loading' ? (
                                 <FormattedMessage id="fordeling.klassifiserModal.btn.JournalførJournalposten" />
                             ) : (
