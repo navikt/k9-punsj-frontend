@@ -1,6 +1,7 @@
 import proxy from 'express-http-proxy';
 import url from 'url';
-import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
+
+import { grantAzureOboToken } from './azure/grant.js';
 
 import config from './config.js';
 import log from './log.js';
@@ -16,21 +17,17 @@ const proxyOptions = (api) => ({
         options.headers[xTimestamp] = requestTime;
         delete options.headers.cookie;
         // eslint-disable-next-line no-promise-executor-return
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) =>
             grantAzureOboToken(req.headers.authorization, api.scopes).then(
-                (oboToken) => {
-                    if (isInvalidTokenSet(oboToken)) {
-                        console.error(oboToken.message);
-                        throw new Error('Invalid token');
-                    }
+                (accessToken) => {
                     log.info(`Token veksling tok: (${Date.now() - requestTime}ms)`);
                     // eslint-disable-next-line camelcase
-                    options.headers.Authorization = `Bearer ${oboToken}`;
+                    options.headers.Authorization = `Bearer ${accessToken}`;
                     resolve(options);
                 },
                 (error) => reject(error),
-            );
-        });
+            ),
+        );
     },
     proxyReqPathResolver: (req) => {
         const urlFromApi = url.parse(api.url);
