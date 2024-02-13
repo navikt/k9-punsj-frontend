@@ -40,6 +40,16 @@
             "warn",
             { "devDependencies": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"] }
         ],
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
         "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
         "react/require-default-props": "off",
         "react/prop-types": "off",
