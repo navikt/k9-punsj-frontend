@@ -52,7 +52,7 @@ async function startApp() {
                         'base-uri': ["'self'"],
                         'connect-src': ["'self'", 'https://sentry.gc.nav.no', 'https://graph.microsoft.com'],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
-                        'img-src': ["'self'", 'data:'],
+                        'img-src': ["'self'", 'data:', 'blob:'],
                         'style-src': ["'self'", "'unsafe-inline'"],
                         'frame-src': ["'self'"],
                         'child-src': ["'self'"],
