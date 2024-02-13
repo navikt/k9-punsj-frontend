@@ -3,8 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import rateLimit from 'express-rate-limit';
 
 import * as headers from './headers.js';
 import logger from './log.js';
@@ -20,6 +19,12 @@ import { envVariables } from '../envVariables.js';
 const server = express();
 const { port } = config.server;
 
+// Enable rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+});
+
 const globalErrorHandler = (err, req, res) => {
     logger.warning(err.stack);
     res.status(err.status || 500).send({ error: err });
@@ -30,6 +35,8 @@ async function startApp() {
         // log request
         server.use(timeout('10m'));
         headers.setup(server);
+
+        server.use(limiter);
 
         // Logging i json format
         server.use(logger.morganMiddleware);
@@ -137,6 +144,8 @@ async function startApp() {
         server.use(/^\/(?!.*dist).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
+
+        server.use(globalErrorHandler);
 
         server.listen(port, () => logger.info(`Listening on port ${port}`));
     } catch (error) {
