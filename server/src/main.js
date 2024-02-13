@@ -4,6 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import rateLimit from 'express-rate-limit';
+import { validateAzureToken } from '@navikt/next-auth-wonderwall';
 
 import * as headers from './headers.js';
 import logger from './log.js';
@@ -13,7 +14,6 @@ import { getIssuer } from './azure/issuer.js';
 import config from './config.js';
 import msgraph from './azure/msgraph.js';
 import reverseProxy from './reverse-proxy.js';
-import { validateAuthorization } from './azure/validate.js';
 import { envVariables } from '../envVariables.js';
 
 const server = express();
@@ -98,7 +98,7 @@ async function startApp() {
             } else {
                 // Validate token and continue to app
                 // eslint-disable-next-line no-lonely-if
-                if (await validateAuthorization(authorization)) {
+                if ((await validateAzureToken(authorization)) === 'valid') {
                     logger.debug('User token is valid. Continue.');
                     next();
                 } else {

@@ -44,12 +44,6 @@ const proxyOptions = (api) => ({
         return newPath;
     },
     userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
-        // FPSAK og TILBAKE sender er redirect med full hostname - dette må man modifisere slik at det går tilbake via proxy.
-        const location = proxyRes.headers.location;
-        if (location && location.includes(api.url)) {
-            headers.location = location.split(api.url)[1];
-            log.debug(`Location header etter endring: ${headers.location}`);
-        }
         const { statusCode } = proxyRes;
         const requestTime = Date.now() - proxyReq.getHeader(xTimestamp);
         const melding = `${statusCode} ${proxyRes.statusMessage}: ${userReq.method} - ${userReq.originalUrl} (${requestTime}ms)`;
@@ -61,7 +55,8 @@ const proxyOptions = (api) => ({
         }
         return headers;
     },
-    proxyErrorHandler: function (err, res, next) {
+    // eslint-disable-next-line consistent-return
+    proxyErrorHandler(err, res, next) {
         switch (err && err.code) {
             case 'ENOTFOUND': {
                 log.warning(`${err}, with code: ${err.code}`);
