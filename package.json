@@ -169,7 +169,7 @@
         "less": "4.2.0",
         "less-loader": "12.2.0",
         "lint-staged": "15.2.1",
-        "msw": "2.1.5",
+        "msw": "2.2.0",
         "nav-frontend-ekspanderbartpanel-style": "2.0.2",
         "nav-frontend-skjema-style": "3.0.3",
         "postcss": "^8.4.33",
