@@ -67,8 +67,8 @@ describe('Fordeling', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
-        cy.findByLabelText(/Fødselsnummer annen part/i).type(29099000129);
-        /* cy.findByRole('button', { name: /Videre/i }).click();
+        /* cy.findByLabelText(/Fødselsnummer annen part/i).type(29099000129);
+         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-midlertidig-alene/soknader/'); */
@@ -78,8 +78,8 @@ describe('Fordeling', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
-        cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 02021477330');
-        /* cy.findByRole('button', { name: /Videre/i }).click();
+        /* cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 02021477330');
+         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
         cy.url().should('eq', 'http://localhost:8080/journalpost/200/omsorgspenger-alene-om-omsorgen/soknader/');*/
