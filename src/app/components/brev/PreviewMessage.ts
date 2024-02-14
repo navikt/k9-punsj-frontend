@@ -1,5 +1,5 @@
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import { ApiPath, URL_BACKEND } from 'app/apiConfig';
+import { ApiPath } from 'app/apiConfig';
 import dokumentMalType from './dokumentMalType';
 
 interface ErrType {

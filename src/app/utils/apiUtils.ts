@@ -7,11 +7,21 @@ import { canStringBeParsedToJSON } from './formatUtils';
 export const apiUrl = (path: string | string, parameters?: any) =>
     parameters ? String.Format(path, parameters) : path;
 
-export async function get(path: string, parameters?: any, headers?: HeadersInit): Promise<Response> {
+export async function get(
+    path: string,
+    parameters?: any,
+    headers?: HeadersInit,
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
+): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         credentials: 'include',
         headers: new Headers(headers),
     });
+    if (callbackIfAuth) {
+        const data = await response.text();
+        const jsonData = data ? JSON.parse(data) : undefined;
+        await callbackIfAuth(response, jsonData);
+    }
     return response;
 }
 
