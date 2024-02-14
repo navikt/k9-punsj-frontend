@@ -37,6 +37,8 @@ export const getJounalførOgFortsettPath = (dokumenttype?: FordelingDokumenttype
             return ROUTES.OMPAO_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
         case FordelingDokumenttype.OPPLAERINGSPENGER:
             return ROUTES.OLP_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.KORRIGERING_IM:
+            return ROUTES.KORRIGERING_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
         default:
             return '/'; // TODO: Hva skal vi gjøre her?
     }

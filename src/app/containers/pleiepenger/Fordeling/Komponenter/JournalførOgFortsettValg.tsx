@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
+import { Alert } from '@navikt/ds-react';
+import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
-import { Alert } from '@navikt/ds-react';
-
+import { useNavigate } from 'react-router';
+import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import {
     FordelingDokumenttype,
@@ -15,14 +18,15 @@ import {
     omsorgspengerUtbetalingSakstyper,
     pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
+    korrigeringAvInntektsmeldingSakstyper,
+    dokumenttyperForPsbOmsOlp,
 } from 'app/models/enums';
-import FormPanel from 'app/components/FormPanel';
+import Fagsak from 'app/types/Fagsak';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import { ISakstypeDefault } from 'app/models/Sakstype';
 import { Sakstyper } from 'app/containers/SakstypeImpls';
-import Fagsak from 'app/types/Fagsak';
 import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -31,11 +35,10 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
-import { useNavigate } from 'react-router';
-import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
-import Behandlingsknapp from './Behandlingsknapp';
 import { Pleietrengende } from './Pleietrengende';
+import Behandlingsknapp from './Behandlingsknapp';
 import AnnenPart from './AnnenPart';
+import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -74,6 +77,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         }
     }, []);
 
+    // TODO Trenges denne?
     const erJournalfoertEllerFerdigstilt =
         journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT ||
         journalpost?.journalpostStatus === journalpostStatus.FERDIGSTILT;
@@ -102,6 +106,9 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     const omsorgspengerUtbetaling = () =>
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT && omsorgspengerUtbetalingSakstyper;
 
+    const korrigeringIM = () =>
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
+
     const sakstypekeys =
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
@@ -109,6 +116,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         omsorgspengerMidlertidigAlene() ||
         omsorgspengerAleneOmOmsorgen() ||
         omsorgspengerUtbetaling() ||
+        korrigeringIM() ||
         [];
 
     const keys = sakstypekeys.filter((key) => {
@@ -129,22 +137,11 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
 
-    const dokumenttyperForPsbOmsOlp = [
-        FordelingDokumenttype.PLEIEPENGER,
-        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
-        FordelingDokumenttype.OMSORGSPENGER_KS,
-        FordelingDokumenttype.OMSORGSPENGER_MA,
-        FordelingDokumenttype.OMSORGSPENGER_AO,
-        FordelingDokumenttype.OMSORGSPENGER_UT,
-        FordelingDokumenttype.KORRIGERING_IM,
-        FordelingDokumenttype.OPPLAERINGSPENGER,
-    ];
-
-    const harSak = !!journalpost.sak || !!fagsak;
+    const harFagsak = !!fagsak;
 
     const gjelderPsbOmsOlp = dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
-    const visPleietrengendeComponent = gjelderPsbOmsOlp && !harSak;
+    const visPleietrengendeComponent = gjelderPsbOmsOlp && !harFagsak;
 
     const visFordelingSakstype = () => {
         const dokumenttypeMedAnnenPart =
@@ -153,8 +150,10 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
             !IdentRules.erUgyldigIdent(identState.annenPart);
 
         return (
-            harSak ||
+            harFagsak ||
             dokumenttypeMedAnnenPart ||
+            dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
             barnetHarIkkeFnr ||
             !IdentRules.erUgyldigIdent(identState.pleietrengendeId)
         );

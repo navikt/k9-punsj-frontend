@@ -87,11 +87,11 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
 
-function withHooks<P>(Component: ComponentType<P>) {
+function withHooks<P>(Component: ComponentType<IPunchOMPKSFormComponentProps>) {
     return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
-        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
+        return <Component {...props} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
     };
 }
 

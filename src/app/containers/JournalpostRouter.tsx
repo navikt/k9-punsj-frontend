@@ -72,7 +72,7 @@ const JournalpostRouter: React.FC = () => {
                                 element={<OMPKSRegistreringsValg journalpostid={journalpostid} />}
                             />
                             <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route path={ROUTES.PUNCH} element={<OMPKSPunchForm journalpostid={journalpostid} />} />
+                            <Route path={ROUTES.PUNCH} element={<OMPKSPunchForm />} />
                             <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                         </Route>
                     </Route>
@@ -136,10 +136,15 @@ const JournalpostRouter: React.FC = () => {
                             <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                         </Route>
                     </Route>
-                    <Route
-                        path={ROUTES.KORRIGERING_INNTEKTSMELDING}
-                        element={<KorrigeringAvInntektsmeldingContainer />}
-                    />
+                    <Route path={ROUTES.KORRIGERING_ROOT}>
+                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
+                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
+                            <Route
+                                path={ROUTES.KORRIGERING_INNTEKTSMELDING}
+                                element={<KorrigeringAvInntektsmeldingContainer />}
+                            />
+                        </Route>
+                    </Route>
                     <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
