@@ -4,8 +4,7 @@ import { IError } from 'app/models/types';
 
 import { canStringBeParsedToJSON } from './formatUtils';
 
-export const apiUrl = (path: string | string, parameters?: any) =>
-    parameters ? String.Format(path, parameters) : path;
+export const apiUrl = (path: string, parameters?: any) => (parameters ? String.Format(path, parameters) : path);
 
 export async function get(
     path: string,

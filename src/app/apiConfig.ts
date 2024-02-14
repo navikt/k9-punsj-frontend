@@ -3,12 +3,12 @@ const BASE_PATHS = {
     K9_FORMIDLING: '/k9/formidling/api',
 };
 
-type ApiPathType = {
-    [key: string]: string;
-};
-
-export const ApiPath: ApiPathType = {
+export const ApiPath = {
+    // generelt
     ENV_VARIABLES: `/envVariables`,
+    ME: `/me`,
+
+    // punsj backend
     EKSISTERENDE_SOKNADER_SOK: `${BASE_PATHS.K9_PUNSJ}/mapper`,
     BARN_GET: `${BASE_PATHS.K9_PUNSJ}/barn`,
     PSB_EKSISTERENDE_SOKNADER_FIND: `${BASE_PATHS.K9_PUNSJ}/pleiepenger-sykt-barn-soknad/mappe`,
@@ -68,10 +68,6 @@ export const ApiPath: ApiPathType = {
     OMP_UT_SOKNAD_VALIDER: `${BASE_PATHS.K9_PUNSJ}/omsorgspengerutbetaling-soknad/valider`,
     OMP_UT_SOKNAD_SUBMIT: `${BASE_PATHS.K9_PUNSJ}/omsorgspengerutbetaling-soknad/send`,
     OMP_UT_K9_PERIODER: `${BASE_PATHS.K9_PUNSJ}/omsorgspengerutbetaling-soknad/k9sak/info`,
-    BREV_BESTILL: `${BASE_PATHS.K9_FORMIDLING}/brev/bestill`,
-    BREV_AKTØRID: `${BASE_PATHS.K9_FORMIDLING}/brev/aktorId`,
-    BREV_MALER: `${BASE_PATHS.K9_FORMIDLING}/brev/maler`,
-    BREV_FORHAANDSVIS: `${BASE_PATHS.K9_FORMIDLING}/brev/forhaandsvis`,
     PERSON: `${BASE_PATHS.K9_PUNSJ}/person`,
     PLS_EKSISTERENDE_SOKNADER_FIND: `${BASE_PATHS.K9_PUNSJ}/pleiepenger-livets-sluttfase-soknad/mappe`,
     PLS_SOKNAD_GET: `${BASE_PATHS.K9_PUNSJ}/pleiepenger-livets-sluttfase-soknad/mappe/{id}`,
@@ -89,4 +85,10 @@ export const ApiPath: ApiPathType = {
     OLP_SOKNAD_VALIDER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/valider`,
     OLP_SOKNAD_SUBMIT: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/send`,
     OLP_K9_PERIODER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/k9sak/info`,
+
+    // Formidling backend
+    BREV_BESTILL: `${BASE_PATHS.K9_FORMIDLING}/brev/bestill`,
+    BREV_AKTØRID: `${BASE_PATHS.K9_FORMIDLING}/brev/aktorId`,
+    BREV_MALER: `${BASE_PATHS.K9_FORMIDLING}/brev/maler`,
+    BREV_FORHAANDSVIS: `${BASE_PATHS.K9_FORMIDLING}/brev/forhaandsvis`,
 };
