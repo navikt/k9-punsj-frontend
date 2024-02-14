@@ -85,10 +85,10 @@ export const ApiPath = {
     OLP_SOKNAD_VALIDER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/valider`,
     OLP_SOKNAD_SUBMIT: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/send`,
     OLP_K9_PERIODER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/k9sak/info`,
+    BREV_AKTØRID: `${BASE_PATHS.K9_PUNSJ}/brev/aktorId`,
 
     // Formidling backend
     BREV_BESTILL: `${BASE_PATHS.K9_FORMIDLING}/brev/bestill`,
-    BREV_AKTØRID: `${BASE_PATHS.K9_FORMIDLING}/brev/aktorId`,
     BREV_MALER: `${BASE_PATHS.K9_FORMIDLING}/brev/maler`,
     BREV_FORHAANDSVIS: `${BASE_PATHS.K9_FORMIDLING}/brev/forhaandsvis`,
 };
