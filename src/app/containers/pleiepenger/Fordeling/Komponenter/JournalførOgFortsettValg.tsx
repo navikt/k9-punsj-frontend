@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
@@ -34,6 +34,9 @@ import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions
 import Behandlingsknapp from './Behandlingsknapp';
 import { Pleietrengende } from './Pleietrengende';
 import AnnenPart from './AnnenPart';
+import { use } from 'chai';
+import { ROUTES } from 'app/constants/routes';
+import { useNavigate } from 'react-router';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -60,9 +63,17 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     } = props;
 
     const intl = useIntl();
+    const navigate = useNavigate();
     const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
     const { sakstype, dokumenttype, fagsak } = fordelingState;
+
+    // Navigerer til journalpost ROOT hvis sakstype eller dokumenttype mangler ved oppdatering av side
+    useEffect(() => {
+        if (!sakstype && !dokumenttype) {
+            navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
+        }
+    }, []);
 
     const erJournalfoertEllerFerdigstilt =
         journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT ||
