@@ -2,6 +2,8 @@ import { String } from 'typescript-string-operations';
 
 import { IError } from 'app/models/types';
 
+import { canStringBeParsedToJSON } from './formatUtils';
+
 export const apiUrl = (path: string | string, parameters?: any) =>
     parameters ? String.Format(path, parameters) : path;
 
@@ -18,6 +20,7 @@ export async function post<BodyType>(
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
+    callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
 ): Promise<Response> {
     try {
         const response = await fetch(apiUrl(path, parameters), {
@@ -26,20 +29,32 @@ export async function post<BodyType>(
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json', ...headers },
         });
-
+        if (callbackIfAuth) {
+            const data = await response.text();
+            const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
+            await callbackIfAuth(response, jsonData);
+        }
         return response;
     } catch (error) {
         return error;
     }
 }
 
-export async function put(path: string, parameters?: any, body?: any): Promise<Response> {
+export async function put(
+    path: string,
+    parameters?: any,
+    body?: any,
+    callbackIfAuth?: (response: Response) => Promise<Response> | void,
+): Promise<Response> {
     const response = await fetch(apiUrl(path, parameters), {
         method: 'put',
         credentials: 'include',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
     });
+    if (callbackIfAuth) {
+        await callbackIfAuth(response);
+    }
     return response;
 }
 

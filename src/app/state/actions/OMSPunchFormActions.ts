@@ -3,7 +3,7 @@ import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import { apiUrl, initializeDate, post, put } from 'app/utils';
 
 async function postPromise<BodyType>(
-    path: ApiPath,
+    path: string,
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
