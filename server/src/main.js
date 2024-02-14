@@ -6,15 +6,15 @@ import timeout from 'connect-timeout';
 import rateLimit from 'express-rate-limit';
 import { validateAzureToken } from '@navikt/next-auth-wonderwall';
 
-import * as headers from './headers.js';
-import logger from './log.js';
-import { getIssuer } from './azure/issuer.js';
+import * as headers from './headers';
+import logger from './log';
+import { getIssuer } from './azure/issuer';
 
 // for debugging during development
-import config from './config.js';
-import msgraph from './azure/msgraph.js';
-import reverseProxy from './reverse-proxy.js';
-import { envVariables } from '../envVariables.js';
+import config from './config';
+import msgraph from './azure/msgraph';
+import reverseProxy from './reverse-proxy';
+import { envVariables } from '../envVariables';
 
 const server = express();
 const { port } = config.server;

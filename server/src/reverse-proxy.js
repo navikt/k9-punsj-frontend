@@ -2,8 +2,8 @@ import proxy from 'express-http-proxy';
 import url from 'url';
 import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
 
-import config from './config.js';
-import log from './log.js';
+import config from './config';
+import log from './log';
 
 const xTimestamp = 'x-Timestamp';
 const stripTrailingSlash = (str) => (str.endsWith('/') ? str.slice(0, -1) : str);

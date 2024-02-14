@@ -1,6 +1,6 @@
 import axios from 'axios';
-import logger from '../log.js';
 import { grantAzureOboToken } from '@navikt/next-auth-wonderwall';
+import logger from '../log';
 
 const getGraphRequest = (bearerToken, graphUrl) =>
     new Promise((resolve, reject) => {
