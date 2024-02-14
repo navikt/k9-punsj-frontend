@@ -112,10 +112,8 @@
     "fordeling.klassifiserModal.tittel": "Vil lagre følgende informasjon til journalposten?",
     "fordeling.klassifiserModal.klassifiseringInfo.sakstype": "Sakstype:",
     "fordeling.klassifiserModal.klassifiseringInfo.søkersID": "Søkers ID:",
-    "fordeling.klassifiserModal.klassifiseringInfo.annenSøker": "Annen søker:",
     "fordeling.klassifiserModal.klassifiseringInfo.saksnummer": "Saksnummer:",
     "fordeling.klassifiserModal.klassifiseringInfo.periode": "Periode:",
-    "fordeling.klassifiserModal.klassifiseringInfo.pleietrengendesID": "Pleietrengendes ID:",
     "fordeling.klassifiserModal.alert.warning": "Informasjonen kan ikke endres etter journalposten er journalført.",
     "fordeling.klassifiserModal.alert.success": "Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.",
     "fordeling.klassifiserModal.alert.error": "Noe gikk galt under lagring.",
@@ -429,6 +427,7 @@
     "journalpost.sakstype": "Sakstype:",
     "journalpost.saksnummer": "Saksnummer:",
     "journalpost.barnetsId": "Barnets fødselsnummer:",
+    "journalpost.annenPart": "Annen part ID:",
     "journalpost.norskIdent.ikkeOppgitt": "Ikke oppgitt",
     "modia.lenke": "Se dialog i Modia",
 

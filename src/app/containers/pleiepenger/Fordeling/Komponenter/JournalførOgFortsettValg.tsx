@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
@@ -29,8 +29,11 @@ import {
     setSakstypeAction as setSakstype,
 } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
+import { IdentRules } from 'app/rules';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
+import { Pleietrengende } from './Pleietrengende';
+import AnnenPart from './AnnenPart';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -57,8 +60,9 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     } = props;
 
     const intl = useIntl();
+    const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
 
-    const { sakstype, dokumenttype } = fordelingState;
+    const { sakstype, dokumenttype, fagsak } = fordelingState;
 
     const erJournalfoertEllerFerdigstilt =
         journalpost?.journalpostStatus === journalpostStatus.JOURNALFOERT ||
@@ -108,33 +112,90 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         return true;
     });
 
+    const visPleietrengende =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
+
+    const dokumenttyperForPsbOmsOlp = [
+        FordelingDokumenttype.PLEIEPENGER,
+        FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+        FordelingDokumenttype.OMSORGSPENGER_KS,
+        FordelingDokumenttype.OMSORGSPENGER_MA,
+        FordelingDokumenttype.OMSORGSPENGER_AO,
+        FordelingDokumenttype.OMSORGSPENGER_UT,
+        FordelingDokumenttype.KORRIGERING_IM,
+        FordelingDokumenttype.OPPLAERINGSPENGER,
+    ];
+
+    const harSak = !!journalpost.sak || !!fagsak;
+
+    const gjelderPsbOmsOlp = dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
+
+    const visPleietrengendeComponent = gjelderPsbOmsOlp && !harSak;
+
+    const visFordelingSakstype = () => {
+        const dokumenttypeMedAnnenPart =
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+            identState.annenPart &&
+            !IdentRules.erUgyldigIdent(identState.annenPart);
+
+        return (
+            harSak ||
+            dokumenttypeMedAnnenPart ||
+            barnetHarIkkeFnr ||
+            !IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+        );
+    };
     return (
         <FormPanel>
             <Alert variant="success" size="small" className="max-w-2xl mb-5">
                 <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
             </Alert>
 
-            <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')}>
-                {keys &&
-                    keys.map((key) => {
-                        if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
-                            return null;
-                        }
+            {visPleietrengendeComponent && (
+                <Pleietrengende
+                    pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) => setBarnetHarIkkeFnr(harBarnetFnr)}
+                    sokersIdent={identState.søkerId}
+                    skalHenteBarn={dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                    visPleietrengende={visPleietrengende}
+                />
+            )}
+            <div className="mb-5">
+                <AnnenPart
+                    vis={
+                        (!journalpost.sak?.annenPart || !fagsak?.annenPart) &&
+                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA
+                    }
+                />
+            </div>
 
-                        return (
-                            <div className="max-w-sm mb-2.5" key={key}>
-                                <RadioPanel
-                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                    value={Sakstype[key]}
-                                    onChange={() => {
-                                        sakstypeAction(Sakstype[key]);
-                                    }}
-                                    checked={(konfigForValgtSakstype?.navn as any) === key}
-                                />
-                            </div>
-                        );
-                    })}
-            </RadioGruppe>
+            {visFordelingSakstype() && (
+                <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')}>
+                    {keys &&
+                        keys.map((key) => {
+                            if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES && !erJournalfoertEllerFerdigstilt) {
+                                return null;
+                            }
+
+                            return (
+                                <div className="max-w-sm mb-2.5" key={key}>
+                                    <RadioPanel
+                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                        value={Sakstype[key]}
+                                        onChange={() => {
+                                            sakstypeAction(Sakstype[key]);
+                                        }}
+                                        checked={(konfigForValgtSakstype?.navn as any) === key}
+                                    />
+                                </div>
+                            );
+                        })}
+                </RadioGruppe>
+            )}
+
             <VerticalSpacer eightPx />
 
             {fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (

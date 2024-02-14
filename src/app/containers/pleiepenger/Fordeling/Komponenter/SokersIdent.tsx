@@ -16,7 +16,6 @@ interface ISokersIdentProps {
     journalpost: IJournalpost;
     handleSøkerIdChange: (event: any) => void;
     handleSøkerIdBlur: (event: any) => void;
-    setVisSokersBarn: (event: any) => void;
     setSokersIdent: (event: any) => void;
     setIdentAction: typeof setIdentFellesAction;
     setErSøkerIdBekreftet: (event: any) => void;
@@ -33,7 +32,6 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     handleSøkerIdBlur,
     sokersIdent,
     identState,
-    setVisSokersBarn,
     setSokersIdent,
     setIdentAction,
     setErSøkerIdBekreftet,
@@ -57,12 +55,10 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
 
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
-        setVisSokersBarn(false);
+
         if (jn === JaNei.JA) {
+            // TODO sjekke dette
             setIdentAction(journalpostident || '', identState.pleietrengendeId);
-            if (journalpost?.norskIdent) {
-                setVisSokersBarn(true);
-            }
         } else {
             setSokersIdent('');
             setIdentAction('', identState.pleietrengendeId);

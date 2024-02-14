@@ -20,6 +20,7 @@ export interface IJournalpost {
     erFerdigstilt?: boolean;
     fagsakYtelseType?: { kode: DokumenttypeForkortelse };
     sak?: Fagsak;
+    reservertSaksnummer?: boolean;
 }
 
 export interface IDokument {

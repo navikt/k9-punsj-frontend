@@ -5,6 +5,7 @@ interface Fagsak {
     sakstype: DokumenttypeForkortelse;
     pleietrengendeIdent: string;
     gyldigPeriode: { fom: string; tom: string };
+    annenPart?: string;
 }
 
 export default Fagsak;

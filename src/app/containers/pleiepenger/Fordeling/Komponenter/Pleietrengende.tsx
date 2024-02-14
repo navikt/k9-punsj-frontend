@@ -132,6 +132,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
                             maxLength={11}
+                            size="small"
                             error={
                                 identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')

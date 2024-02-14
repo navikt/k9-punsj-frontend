@@ -39,8 +39,6 @@ const KlassifiseringInfo = () => {
             )}
             {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.søkersID', identState.søkerId)}
 
-            {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.annenSøker', identState?.annenPart)}
-
             {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.saksnummer', fagsak?.fagsakId)}
 
             {renderLabelValue(
@@ -48,11 +46,6 @@ const KlassifiseringInfo = () => {
                 fagsak?.gyldigPeriode
                     ? new Period(fagsak?.gyldigPeriode.fom, fagsak?.gyldigPeriode.tom).prettifyPeriod()
                     : undefined,
-            )}
-
-            {renderLabelValue(
-                'fordeling.klassifiserModal.klassifiseringInfo.pleietrengendesID',
-                fagsak?.pleietrengendeIdent || identState.pleietrengendeId,
             )}
         </div>
     );

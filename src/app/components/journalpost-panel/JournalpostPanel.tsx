@@ -31,7 +31,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
     const {
         journalpost,
         fordelingState,
-        identState: { søkerId, pleietrengendeId },
+        identState: { søkerId, pleietrengendeId, annenPart },
         journalposter,
     } = props;
 
@@ -81,7 +81,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
             </div>
 
             <div>
-                {!!pleietrengendeId && (
+                {pleietrengendeId && (
                     <LabelValue
                         labelTextId={
                             fordelingState.sakstype !== Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN
@@ -92,6 +92,9 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         retning="horisontal"
                     />
                 )}
+            </div>
+            <div>
+                {annenPart && <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />}
             </div>
             <div>
                 {fordelingState.fagsak?.fagsakId && (

@@ -46,16 +46,16 @@ import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
 import OkGaaTilLosModal from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
-import AnnenPart from './Komponenter/AnnenPart';
+
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
-import { Pleietrengende } from './Komponenter/Pleietrengende';
+
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import ValgForDokument from './Komponenter/ValgForDokument';
-import KlassifiserModal, { getJounalførOgFortsettPath } from './Komponenter/KlassifiserModal';
+import KlassifiserModal from './Komponenter/KlassifiserModal';
 import './fordeling.less';
 
 export interface IFordelingStateProps {
@@ -115,11 +115,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const konfigForValgtSakstype = useMemo(() => sakstyper.find((st) => st.navn === sakstype), [sakstype]);
 
-    const [barnetHarIkkeFnr, setBarnetHarIkkeFnr] = useState<boolean>(false);
-
     const [sokersIdent, setSokersIdent] = useState<string>('');
     const [harLagretBehandlingsår, setHarLagretBehandlingsår] = useState(false);
-    const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
+
     const [visValgForDokument, setVisValgForDokument] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
@@ -204,7 +202,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
-    const visPleietrengendeComponent = gjelderPsbOmsOlp && !isFetchingFagsaker && !brukEksisterendeFagsak;
     const visFagsakSelect = gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11;
     const visValgAvBehandlingsaar =
         dokumenttype &&
@@ -229,9 +226,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (harFagsaker && brukEksisterendeFagsak) {
                 return !valgtFagsak;
             }
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
-                return true;
-            }
         }
         if (dokumenttype && dokumenttyperOmput.includes(dokumenttype) && !behandlingsAar && !harLagretBehandlingsår) {
             return true;
@@ -246,24 +240,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (ident.length === 11) {
             setIdentAction(ident, identState.pleietrengendeId);
             setErSøkerIdBekreftet(true);
-            setVisSokersBarn(true);
         }
     };
 
     const handleSøkerIdBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIdentAction(event.target.value, identState.pleietrengendeId);
         setErSøkerIdBekreftet(true);
-        setVisSokersBarn(true);
     };
-
-    const visPleietrengende =
-        visSokersBarn &&
-        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO) &&
-        !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const handleVidereClick = () => {
         if (
@@ -348,10 +331,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [identState.søkerId, dokumenttype, gjelderPsbOmsOlp]);
 
+    // TODO SLETTE GOSYS
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
     }
 
+    // TODO SLETTE GOSYS
     if (!!opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
             <Modal
@@ -396,12 +381,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    // TODO: Fjern dette etter testing
-    const viseValgForDokument = false;
-
     return (
         <div className="fordeling-container">
-            {!!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
+            {journalpost?.kanSendeInn && journalpost?.erSaksbehandler && (
                 <FormPanel>
                     {erInntektsmeldingUtenKrav && (
                         <>
@@ -445,6 +427,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     handleDokumenttype={(type: FordelingDokumenttype) => {
                                         handleDokumenttype(type);
                                         resetIdentStateAction();
+                                        // TODO Trenges det?
                                         resetBarn();
                                     }}
                                     valgtDokumentType={dokumenttype as string}
@@ -472,7 +455,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     handleSøkerIdChange={handleSøkerIdChange}
                                     sokersIdent={sokersIdent}
                                     identState={identState}
-                                    setVisSokersBarn={setVisSokersBarn}
                                     setSokersIdent={setSokersIdent}
                                     setIdentAction={setIdentAction}
                                     setErSøkerIdBekreftet={setErSøkerIdBekreftet}
@@ -481,7 +463,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                                 />
                             )}
-                            <AnnenPart vis={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA} />
+
                             <ToSoekere
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -515,32 +497,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {visValgAvBehandlingsaar && <ValgAvBehandlingsÅr onChange={setBehandlingsAar} />}
                             {henteFagsakFeilet && <ErrorMessage>Henting av fagsak feilet</ErrorMessage>}
                             {isFetchingFagsaker && <Loader />}
-                            {visPleietrengendeComponent && (
-                                <Pleietrengende
-                                    pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
-                                        setBarnetHarIkkeFnr(harBarnetFnr)
-                                    }
-                                    sokersIdent={identState.søkerId}
-                                    skalHenteBarn={
-                                        dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                                    }
-                                    visPleietrengende={visPleietrengende}
-                                />
-                            )}
-                            {viseValgForDokument &&
-                                gjelderPsbOmsOlp &&
-                                !isFetchingFagsaker &&
-                                !harLagretBehandlingsår && (
-                                    <Button
-                                        variant="secondary"
-                                        size="small"
-                                        onClick={handleVidereClick}
-                                        disabled={disableVidereKnapp()}
-                                    >
-                                        {intlHelper(intl, 'fordeling.knapp.videre')}
-                                    </Button>
-                                )}
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !harLagretBehandlingsår && (
+
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && (
                                 <div className="flex">
                                     <div className="mr-4">
                                         <Button
@@ -570,13 +528,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             />
                         )}
                         <VerticalSpacer sixteenPx />
-                        {viseValgForDokument && (
-                            <Button onClick={() => navigate(getJounalførOgFortsettPath(dokumenttype))}>
-                                TEST NAVIGATE
-                            </Button>
-                        )}
-
-                        {viseValgForDokument && (
+                        {!gjelderPsbOmsOlp && (
                             <ValgForDokument
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -600,7 +552,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 {intlHelper(intl, 'fordeling.error')}
                             </Alert>
                         )}
-
                         {settBehandlingsÅrMutation.isLoading && <Loader size="large" />}
                     </div>
                 </FormPanel>
