@@ -54,8 +54,6 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
         mutationFn: () =>
             klassifiserDokument({
                 brukerIdent: identState.søkerId,
-                barnIdent: identState.pleietrengendeId,
-                annenPart: identState.annenPart ? identState.annenPart : undefined,
                 journalpostId,
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,

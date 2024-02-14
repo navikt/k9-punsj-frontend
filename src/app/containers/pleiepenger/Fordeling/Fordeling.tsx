@@ -274,6 +274,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpost?.kanKopieres &&
             !erInntektsmeldingUtenKrav
         ) {
+            // Kopier journalpost hvis det er en annen søker
             props.kopierJournalpost(
                 identState.søkerId,
                 identState.pleietrengendeId,
