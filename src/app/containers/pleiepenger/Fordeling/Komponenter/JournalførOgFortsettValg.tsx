@@ -30,13 +30,12 @@ import {
 } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
+import { ROUTES } from 'app/constants/routes';
+import { useNavigate } from 'react-router';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import { Pleietrengende } from './Pleietrengende';
 import AnnenPart from './AnnenPart';
-import { use } from 'chai';
-import { ROUTES } from 'app/constants/routes';
-import { useNavigate } from 'react-router';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
