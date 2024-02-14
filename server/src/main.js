@@ -120,7 +120,7 @@ async function startApp() {
         // return user info fetched from the Microsoft Graph API
         server.get('/me', (req, res) => {
             msgraph
-                .getUserInfoFromGraphApi(req.headers.authorization)
+                .getUserInfoFromGraphApi(req.headers.authorization.replace('Bearer ', ''))
                 .then((userinfo) => res.json(userinfo))
                 .catch((err) => res.status(500).json(err));
         });
