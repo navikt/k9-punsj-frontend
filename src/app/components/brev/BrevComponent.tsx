@@ -59,7 +59,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [submitet, setSubmitet] = useState(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
     useEffect(() => {
-        fetch(`${URL_BACKEND()}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
+        fetch(`${ApiPath.BREV_MALER}?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {

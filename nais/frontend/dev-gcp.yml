@@ -2,14 +2,15 @@ ingresses:
   - https://k9-punsj-frontend.intern.dev.nav.no
 outboundExternalHosts:
   - k9-punsj.dev-fss-pub.nais.io
+  - k9-formidling.dev-fss-pub.nais.io
 azureTenant: trygdeetaten.no
 proxyRedirects:
-  - path: "/k9-punsj"
+  - path: "/k9-punsj/api"
     scope: "api://dev-fss.k9saksbehandling.k9-punsj/.default"
-    url: "https://k9-punsj.dev-fss-pub.nais.io/api"
-  - path: "/k9-formidling"
+    url: "https://k9-punsj.dev-fss-pub.nais.io"
+  - path: "/k9/formidling/api"
     scope: "api://dev-fss.k9saksbehandling.k9-formidling/.default"
-    url: "http://k9-formidling.k9saksbehandling.svc.nais.local/k9/formidling/api"
+    url: "https://k9-formidling.dev-fss-pub.nais.io"
 env:
   K9_PUNSJ_API_URL: https://k9-punsj.dev-fss-pub.nais.io
   K9_LOS_URL: https://k9-los-web.dev.adeo.no/

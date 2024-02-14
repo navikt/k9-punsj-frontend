@@ -1,3 +1,5 @@
+import { ApiPath } from './apiConfig';
+
 interface EnvVariable {
     key: string;
     value: string;
@@ -36,7 +38,7 @@ interface EnvVariables {
 }
 
 export default async function setEnvVariables(): Promise<void> {
-    const response = await fetch('/getEnvVariables');
+    const response = await fetch(ApiPath.ENV_VARIABLES);
     const data: EnvVariable[] = await response.json();
     const envVariables = data.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {}) as EnvVariables;
     const appSettings = {
