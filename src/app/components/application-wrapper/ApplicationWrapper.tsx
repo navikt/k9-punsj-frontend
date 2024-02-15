@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
@@ -9,6 +9,7 @@ import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
+import { checkAuth } from 'app/state/actions';
 
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
@@ -23,6 +24,7 @@ interface IApplicationWrapperStateProps {
     authState: IAuthState;
 }
 
+// fiks
 const isDev = window.location.hostname.includes('dev.adeo.no');
 
 type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
@@ -31,10 +33,19 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
     const { authState, locale, children } = props;
     const [k9LosUrl, setK9LosUrl] = React.useState<string>('http://localhost:8080');
-
+    const dispatch = useDispatch();
     React.useEffect(() => {
         setK9LosUrl(getEnvironmentVariable('K9_LOS_URL') || 'http://localhost:8080');
     }, [window.appSettings]);
+
+    React.useEffect(() => {
+        console.log('hallo');
+        console.log(authState);
+        if (!authState.userName) {
+            console.log('sjekk da');
+            dispatch(checkAuth());
+        }
+    }, []);
 
     return (
         <IntlProvider {...{ locale }}>

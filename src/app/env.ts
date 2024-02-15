@@ -6,24 +6,7 @@ interface EnvVariable {
 }
 
 interface EnvVariables {
-    OIDC_AUTH_PROXY: string;
-    K9_LOS_URL: string;
-    OMP_KS_ENABLED: string;
-    PLS_ENABLED: string;
-    OMP_MA_FEATURE_TOGGLE: string;
-    OMP_UT_FEATURE_TOGGLE: string;
-    SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
-    OLP_ENABLED: string;
-    OMP_AO_ENABLED: string;
-    POSTMOTTAK_TOGGLE: string;
-}
-
-interface EnvVariable {
-    key: string;
-    value: string;
-}
-
-interface EnvVariables {
+    IS_LOCAL: string;
     OIDC_AUTH_PROXY: string;
     K9_PUNSJ_API_URL: string;
     K9_LOS_URL: string;
@@ -42,6 +25,7 @@ export default async function setEnvVariables(): Promise<void> {
     const data: EnvVariable[] = await response.json();
     const envVariables = data.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {}) as EnvVariables;
     const appSettings = {
+        IS_LOCAL: envVariables.IS_LOCAL,
         OIDC_AUTH_PROXY: envVariables.OIDC_AUTH_PROXY,
         K9_PUNSJ_API_URL: envVariables.K9_PUNSJ_API_URL,
         K9_LOS_URL: envVariables.K9_LOS_URL,

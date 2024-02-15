@@ -3,9 +3,16 @@ import { String } from 'typescript-string-operations';
 import { IError } from 'app/models/types';
 
 import { canStringBeParsedToJSON } from './formatUtils';
+import { getEnvironmentVariable } from './envUtils';
 
 export const apiUrl = (path: string, parameters?: any) => (parameters ? String.Format(path, parameters) : path);
-
+// eslint-disable-next-line no-return-assign
+const login = () =>
+    getEnvironmentVariable('IS_LOCAL') !== 'true'
+        ? (window.location.pathname = '/oauth2/login')
+        : window.location.assign(
+              `http://localhost:8101/login?redirect_uri=${encodeURIComponent('http://localhost:8080')}`,
+          );
 export async function get(
     path: string,
     parameters?: any,
@@ -16,7 +23,9 @@ export async function get(
         credentials: 'include',
         headers: new Headers(headers),
     });
-    if (callbackIfAuth) {
+    if (response.status === 401) {
+        login();
+    } else if (callbackIfAuth) {
         const data = await response.text();
         const jsonData = data ? JSON.parse(data) : undefined;
         await callbackIfAuth(response, jsonData);
@@ -38,7 +47,10 @@ export async function post<BodyType>(
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json', ...headers },
         });
-        if (callbackIfAuth) {
+
+        if (response.status === 401) {
+            login();
+        } else if (callbackIfAuth) {
             const data = await response.text();
             const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
             await callbackIfAuth(response, jsonData);
@@ -61,7 +73,9 @@ export async function put(
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
     });
-    if (callbackIfAuth) {
+    if (response.status === 401) {
+        login();
+    } else if (callbackIfAuth) {
         await callbackIfAuth(response);
     }
     return response;

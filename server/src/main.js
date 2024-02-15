@@ -79,8 +79,11 @@ async function startApp() {
         await getIssuer();
 
         // Liveness and readiness probes for Kubernetes / nais
-        server.get(['/health/isAlive', '/health/isReady'], (req, res) => {
+        server.get('/health/isAlive', (req, res) => {
             res.status(200).send('Alive');
+        });
+        server.get('/health/isReady', (req, res) => {
+            res.status(200).send('Ready');
         });
 
         server.get(['/oauth2/login'], async (req, res) => {

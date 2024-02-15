@@ -7,6 +7,7 @@ export const ApiPath = {
     // generelt
     ENV_VARIABLES: `/envVariables`,
     ME: `/me`,
+    LOGIN: `/oauth2/login`,
 
     // punsj backend
     EKSISTERENDE_SOKNADER_SOK: `${BASE_PATHS.K9_PUNSJ}/mapper`,
