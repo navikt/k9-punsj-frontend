@@ -104,7 +104,7 @@ const FagsakSelect = ({
                 setBehandlingsAar(undefined);
             }}
         >
-            <FormattedMessage id="fordeling.fagsakSelect.checkbox.harIkkeTilhørendeFagsak" />
+            <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>
         <VerticalSpacer twentyPx />
     </>

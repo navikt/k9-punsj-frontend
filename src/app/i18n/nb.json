@@ -78,7 +78,7 @@
     "fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn": "Barn: {navn} ({pleietrengendeIdent})",
     "fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt": "Barn: ",
     "fordeling.fagsakSelect.fagsakSelectedInfo.periode": "Periode: {periode}",
-    "fordeling.fagsakSelect.checkbox.harIkkeTilhørendeFagsak": "Har ikke tilhørende fagsak",
+    "fordeling.fagsakSelect.checkbox.reserverSaksnummer": "Reserver saksnummer til ny fagsak",
     "fordeling.sakstype.SKAL_IKKE_PUNSJES": "Lukk oppgave i LOS",
     "fordeling.sakstype.SEND_BREV": "Send brev og lukk oppgave i LOS",
     "fordeling.sakstype.KLASSIFISER_OG_GAA_TIL_LOS": "Klassifiser journalpost og gå til LOS",

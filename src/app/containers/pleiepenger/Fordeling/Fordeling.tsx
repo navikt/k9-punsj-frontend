@@ -162,6 +162,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
     const visFagsakSelect = gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11;
+
     const visValgAvBehandlingsaar =
         dokumenttype &&
         dokumenttyperOmput.includes(dokumenttype) &&
@@ -170,10 +171,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
-
-    const disableVidereMidlertidigAlene =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
 
     const disableJournalførKnapper = () => {
         if (
@@ -190,7 +187,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             return true;
         }
 
-        return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
+        return IdentRules.erUgyldigIdent(identState.søkerId);
     };
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -435,6 +432,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             ) : (
                                 <VerticalSpacer twentyPx />
                             )}
+
                             {visFagsakSelect && (
                                 <FagsakSelect
                                     brukEksisterendeFagsak={brukEksisterendeFagsak}
@@ -449,6 +447,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     barn={fellesState.barn}
                                 />
                             )}
+
                             {visValgAvBehandlingsaar && <ValgAvBehandlingsÅr onChange={setBehandlingsAar} />}
                             {henteFagsakFeilet && <ErrorMessage>Henting av fagsak feilet</ErrorMessage>}
                             {isFetchingFagsaker && <Loader />}
