@@ -39,10 +39,7 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
     }, [window.appSettings]);
 
     React.useEffect(() => {
-        console.log('hallo');
-        console.log(authState);
-        if (!authState.userName) {
-            console.log('sjekk da');
+        if (!authState.loggedIn) {
             dispatch(checkAuth());
         }
     }, []);

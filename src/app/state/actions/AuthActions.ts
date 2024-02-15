@@ -37,7 +37,10 @@ export function checkAuth() {
         get(ApiPath.ME, { credentials: 'include' }).then((response) => {
             switch (response.status) {
                 case 200:
-                    return response.json().then((user) => dispatch(authOkAction(user.name)));
+                    return response.json().then((user) => {
+                        const username = user.name || user.displayName;
+                        dispatch(authOkAction(username));
+                    });
                 default:
                     return dispatch(authErrorAction(convertResponseToError(response)));
             }
