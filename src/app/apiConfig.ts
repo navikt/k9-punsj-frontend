@@ -1,6 +1,6 @@
 const BASE_PATHS = {
-    K9_PUNSJ: '/k9-punsj/api',
-    K9_FORMIDLING: '/k9/formidling/api',
+    K9_PUNSJ: '/api/k9-punsj',
+    K9_FORMIDLING: '/api/k9-formidling',
 };
 
 export const ApiPath = {

@@ -11,11 +11,11 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
-import { BACKEND_BASE_URL, LOCAL_API_URL } from './konstanter';
+import { LOCAL_API_URL } from './konstanter';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    me: http.get(`${BACKEND_BASE_URL}/me`, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
+    me: http.get(`/me`, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
     hentJournalpost: http.get(`${LOCAL_API_URL}/journalpost/:id`, ({ params }) =>
         HttpResponse.json({ ...journalpost, journalpostId: params.id }),
     ),

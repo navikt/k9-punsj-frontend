@@ -1,14 +1,12 @@
 require('dotenv').config();
 const mustacheExpress = require('mustache-express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
 const envVariables = require('../envVariables');
 
 const configureDevServer = () => ({
     proxy: {
-        '/k9-punsj/api': {
+        '/api/k9-punsj': {
             target: 'http://localhost:8101',
-            pathRewrite: { '^/k9-punsj/api': '/api/k9-punsj' },
             changeOrigin: true,
         },
         '/me': { target: 'http://localhost:8101', changeOrigin: true },
