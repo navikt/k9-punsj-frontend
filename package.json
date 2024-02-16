@@ -205,8 +205,5 @@
             "dist"
         ]
     },
-    "workspaces": [
-        "server"
-    ],
     "packageManager": "yarn@3.4.1"
 }
