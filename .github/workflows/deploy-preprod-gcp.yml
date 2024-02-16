@@ -1,8 +1,5 @@
 name: Deploy til preprod gcp
 on:
-    push:
-        branches:
-            - gcp
     workflow_dispatch:
 jobs:
     lint:
@@ -11,6 +8,10 @@ jobs:
             READER_TOKEN: ${{ secrets.READER_TOKEN }}
     test:
         uses: ./.github/workflows/test.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    test-cypress:
+        uses: ./.github/workflows/cypress-tester.yml
         secrets:
             READER_TOKEN: ${{ secrets.READER_TOKEN }}
     build:
@@ -24,7 +25,7 @@ jobs:
             packages: write
             contents: read
             id-token: write
-        needs: [lint, test, build]
+        needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
               uses: actions/checkout@v4

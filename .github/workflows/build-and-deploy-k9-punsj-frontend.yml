@@ -83,12 +83,19 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_OUTPUT
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
-            - name: Deploye til prod
+            - name: Deploye til prod fss
               uses: nais/deploy/actions/deploy@v2
               env:
                   CLUSTER: prod-fss
                   RESOURCE: nais/frontend/k9-punsj-frontend.yml
                   VARS: nais/frontend/prod.json
+
+            - name: Deploye til prod gcp
+              uses: nais/deploy/actions/deploy@v2
+              env:
+                CLUSTER: prod-gcp
+                RESOURCE: nais/frontend/k9-punsj-frontend-wonderwall.yml
+                VARS: nais/frontend/prod-gcp.yml
     trivy:
         needs: [deploy]
         uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@main
