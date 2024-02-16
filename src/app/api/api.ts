@@ -53,6 +53,7 @@ export const finnFagsaker = (søkersFødselsnummer: string, callback: (response:
 
 export const klassifiserDokument = (body: {
     brukerIdent: string;
+    barnIdent?: string;
     journalpostId: string;
     fagsakYtelseTypeKode?: DokumenttypeForkortelse;
     periode?: IPeriode;

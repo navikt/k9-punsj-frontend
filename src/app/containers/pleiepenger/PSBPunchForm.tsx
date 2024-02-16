@@ -5,7 +5,7 @@ import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import * as React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import { Alert, Button, Checkbox, HelpText, Modal, Select, Tag, TextField } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
@@ -69,6 +69,7 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -100,6 +101,7 @@ export interface IPunchFormDispatchProps {
     submitSoknad: typeof submitSoknad;
     resetPunchFormAction: typeof resetPunchFormAction;
     resetAllStateAction: typeof resetAllStateAction;
+    setIdentAction: typeof setIdentFellesAction;
     setSignaturAction: typeof setSignaturAction;
     settJournalpostPaaVent: typeof settJournalpostPaaVent;
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
@@ -189,6 +191,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
+    s;
+
     private getSoknadsperiode = () => {
         const { soknad } = this.state;
         if (soknad?.soeknadsperiode && soknad.soeknadsperiode.length > 0) {
@@ -245,6 +249,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const { id } = this.props;
         this.props.getSoknad(id);
         this.setState(this.state);
+        // TODO: Sett ident Søker og Pleietrengende etter sideoppdatering
+        // eller fra jp eller fra info eller fra søknad
+        // for å vise right info i JournalpostPanel
+
         const { søkerId, pleietrengendeId } = this.props.identState;
         if (søkerId && pleietrengendeId) {
             this.props.hentPerioder(søkerId, pleietrengendeId);
@@ -1410,6 +1418,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring: boolean) =>
         dispatch(validerSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),

@@ -52,10 +52,14 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
     const navigate = useNavigate();
+
+    // TODO Kanskje få tilbake reservert saksnummer og sette i fordeling state
+    // TODO ogKanskje oppdatere journalpost med erFerdistilt = true eller hele jp objektet
     const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () =>
             klassifiserDokument({
                 brukerIdent: identState.søkerId,
+                barnIdent: identState.pleietrengendeId,
                 journalpostId,
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
@@ -90,8 +94,17 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
             <Modal.Body>
                 <>
                     <KlassifiseringInfo />
-                    {renderAlert('success', 'fordeling.klassifiserModal.alert.success', isSuccess)}
-                    {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !isSuccess || !error)}
+                    {renderAlert(
+                        'success',
+                        'fordeling.klassifiserModal.alert.success',
+                        isSuccess && !!fagsak?.fagsakId,
+                    )}
+                    {renderAlert(
+                        'success',
+                        'fordeling.klassifiserModal.alert.success.reservert',
+                        isSuccess && !fagsak?.fagsakId,
+                    )}
+                    {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !isSuccess && !error)}
                     {renderAlert('error', 'fordeling.klassifiserModal.alert.error', !!error)}
                 </>
             </Modal.Body>

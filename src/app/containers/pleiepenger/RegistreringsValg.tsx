@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
@@ -37,14 +37,21 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     props: IRegistreringsValgProps,
 ) => {
     const { journalpostid, identState, eksisterendeSoknaderState } = props;
-
     const { søkerId, pleietrengendeId } = identState;
+
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
     const location = useLocation();
 
     const navigate = useNavigate();
 
-    React.useEffect(() => {
+    useEffect(() => {
+        if (!fordelingState.dokumenttype) {
+            navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''));
+        }
+    }, []);
+
+    useEffect(() => {
         if (
             !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
             eksisterendeSoknaderState.isSoknadCreated &&
@@ -55,7 +62,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         props.getAlleJournalposter(søkerId);
     }, [søkerId]);
 

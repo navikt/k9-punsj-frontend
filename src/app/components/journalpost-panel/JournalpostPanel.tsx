@@ -49,7 +49,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 />
             </div>
             <div>
-                {fordelingState.erSøkerIdBekreftet && (
+                {(fordelingState.erSøkerIdBekreftet || journalpost?.erFerdigstilt) && (
                     <div>
                         <LabelValue
                             labelTextId="journalpost.norskIdent"
