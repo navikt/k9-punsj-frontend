@@ -73,9 +73,6 @@ let handlers = [
         await delay(500);
         return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
     }),
-    http.get(ApiPath.DOKUMENT.replace('{journalpostId}', '200').replace('{dokumentId}', ':id'), async () =>
-        HttpResponse.json({}, { status: 500 }),
-    ),
 ];
 
 if (process.env.MSW_MODE === 'test') {

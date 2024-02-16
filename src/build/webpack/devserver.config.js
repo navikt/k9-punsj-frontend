@@ -43,14 +43,11 @@ const configureDevServer = () => ({
             res.set('content-type', 'application/javascript');
             res.sendFile(path.resolve(`${__dirname}/../../mocks/mockServiceWorker.js`));
         });
-
-        return middlewares;
-    },
-    onAfterSetupMiddleware: (devServer) => {
-        const { app } = devServer;
-        app.get(/^\/(?!.*dist).*$/, (req, res) => {
+        app.get(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
             res.render('index.html');
         });
+
+        return middlewares;
     },
     static: ['app'],
     client: {
