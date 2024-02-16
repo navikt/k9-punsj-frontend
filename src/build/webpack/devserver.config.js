@@ -3,14 +3,20 @@ const mustacheExpress = require('mustache-express');
 const path = require('path');
 const envVariables = require('../envVariables');
 
+// Lokal utvikling med mock trenger ikke proxy.
+const proxyConfig =
+    process.env.MSW_MODE === 'test'
+        ? {}
+        : {
+              '/api/k9-punsj': {
+                  target: 'http://localhost:8101',
+                  changeOrigin: true,
+              },
+              '/me': { target: 'http://localhost:8101', changeOrigin: true },
+          };
+
 const configureDevServer = () => ({
-    proxy: {
-        '/api/k9-punsj': {
-            target: 'http://localhost:8101',
-            changeOrigin: true,
-        },
-        '/me': { target: 'http://localhost:8101', changeOrigin: true },
-    },
+    proxy: proxyConfig,
     setupMiddlewares: (middlewares, devServer) => {
         const { app } = devServer;
         app.engine('html', mustacheExpress());

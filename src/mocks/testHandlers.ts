@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse, delay } from 'msw';
+import { ApiPath } from 'app/apiConfig';
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';
 import journalpost from '../../cypress/fixtures/journalpost.json';
-import korrigeringAvInntektsmeldingSoknad from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknad.json';
 import korrigeringAvInntektsmeldingSoknadSomKanSendesInn from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadSomKanSendesInn.json';
 import korrigeringAvInntektsmeldingSoknadValidering from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadValidering.json';
 import korrigeringAvInntektsmeldingSoknadValideringFailed from '../../cypress/fixtures/korrigeringAvInntektsmeldingSoknadValideringFailed.json';
@@ -11,57 +11,47 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
-import { LOCAL_API_URL } from './konstanter';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    me: http.get(`/me`, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
-    hentJournalpost: http.get(`${LOCAL_API_URL}/journalpost/:id`, ({ params }) =>
+    me: http.get(ApiPath.ME, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
+    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) =>
         HttpResponse.json({ ...journalpost, journalpostId: params.id }),
     ),
-    opprettePleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad`, () =>
+    opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
         HttpResponse.json(pleiepengerSoknad, { status: 201 }),
     ),
-    hentSoknader: http.post(`${LOCAL_API_URL}/journalpost/hent`, () => HttpResponse.json({ poster: [] })),
-    hentMappe: http.get(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe`, () =>
+    hentMappe: http.get(ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'PSB',
             søknader: [],
         }),
     ),
-    infoPleiepenger: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/k9sak/info`, () => HttpResponse.json([])),
+    infoPleiepenger: http.post(ApiPath.PSB_K9SAK_PERIODER, () => HttpResponse.json([])),
     eksisterendePleiepengesoknad: http.get(
-        `${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/mappe/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe`,
+        ApiPath.PSB_SOKNAD_GET.replace('{id}', '0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'),
         () => HttpResponse.json(journalpost),
     ),
-    oppdaterPleiepengesoknad: http.put(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/oppdater`, () =>
+    oppdaterPleiepengesoknad: http.put(ApiPath.PSB_SOKNAD_UPDATE, () =>
         HttpResponse.json(pleiepengerSoknadSomKanSendesInn),
     ),
 
-    validerPleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/valider`, () =>
+    validerPleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_VALIDER, () =>
         HttpResponse.json(pleiepengerSoknadValidering, { status: 202 }),
     ),
-    sendPleiepengesoknad: http.post(`${LOCAL_API_URL}/pleiepenger-sykt-barn-soknad/send`, () =>
+    sendPleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_SUBMIT, () =>
         HttpResponse.json(pleiepengerSoknadValidering, { status: 202 }),
     ),
 
-    hentArbeidsgivere: http.get(`${LOCAL_API_URL}/arbeidsgivere`, () =>
-        HttpResponse.json(arbeidsgivere, { status: 202 }),
-    ),
-    hentArbeidsforholdMedIDer: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/k9sak/arbeidsforholdIder`, () =>
-        HttpResponse.json([], { status: 202 }),
-    ),
+    hentArbeidsgivere: http.get(ApiPath.FINN_ARBEIDSGIVERE, () => HttpResponse.json(arbeidsgivere, { status: 202 })),
+    hentArbeidsforholdMedIDer: http.post(ApiPath.OMS_FINN_ARBEIDSFORHOLD, () => HttpResponse.json([], { status: 202 })),
 
-    oppretteKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad`, () =>
-        HttpResponse.json(korrigeringAvInntektsmeldingSoknad, { status: 201 }),
-    ),
-
-    oppdaterKorrigering: http.put(`${LOCAL_API_URL}/omsorgspenger-soknad/oppdater`, () =>
+    oppdaterKorrigering: http.put(ApiPath.OMS_SOKNAD_UPDATE, () =>
         HttpResponse.json(korrigeringAvInntektsmeldingSoknadSomKanSendesInn),
     ),
 
-    validerKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/valider`, async ({ request }) => {
+    validerKorrigering: http.post(ApiPath.OMS_SOKNAD_VALIDER, async ({ request }) => {
         const body = await request.json();
 
         if (
@@ -77,47 +67,40 @@ export const testHandlers = {
 
         return HttpResponse.json(korrigeringAvInntektsmeldingSoknadValidering, { status: 202 });
     }),
-    sendKorrigering: http.post(`${LOCAL_API_URL}/omsorgspenger-soknad/send`, () =>
+    sendKorrigering: http.post(ApiPath.OMS_SOKNAD_SUBMIT, () =>
         HttpResponse.json(korrigeringAvInntektsmeldingSoknadValidering, { status: 202 }),
     ),
 
-    aktørId: http.get('http://localhost:8101/api/k9-punsj/brev/aktorId', () =>
-        HttpResponse.json(81549300, { status: 200 }),
-    ),
+    aktørId: http.get(ApiPath.BREV_AKTØRID, () => HttpResponse.json(81549300, { status: 200 })),
 
     /**
      * Omsorgspenger kronisk sykt barn
      */
-    hentOmsorgspengerKroniskSyktBarnMappe: http.get(
-        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/mappe`,
-        () =>
-            HttpResponse.json({
-                søker: '29099000129',
-                fagsakTypeKode: 'OMP_KS',
-                søknader: [],
-            }),
+    hentOmsorgspengerKroniskSyktBarnMappe: http.get(ApiPath.OMP_KS_EKSISTERENDE_SOKNADER_FIND, () =>
+        HttpResponse.json({
+            søker: '29099000129',
+            fagsakTypeKode: 'OMP_KS',
+            søknader: [],
+        }),
     ),
 
-    oppdaterOmsorgspengerKroniskSyktBarnSøknad: http.put(
-        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/oppdater`,
-        () => HttpResponse.json(omsorgspengerKsSoknadSomKanSendesInn),
+    oppdaterOmsorgspengerKroniskSyktBarnSøknad: http.put(ApiPath.OMP_KS_SOKNAD_UPDATE, () =>
+        HttpResponse.json(omsorgspengerKsSoknadSomKanSendesInn),
     ),
 
-    validerOmsorgspengerKroniskSyktBarnSøknad: http.post(
-        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/valider`,
-        () => HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
+    validerOmsorgspengerKroniskSyktBarnSøknad: http.post(ApiPath.OMP_KS_SOKNAD_VALIDER, () =>
+        HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
     ),
 
-    sendOmsorgspengerKroniskSyktBarnSøknad: http.post(
-        `${LOCAL_API_URL}/omsorgspenger-kronisk-sykt-barn-soknad/send`,
-        () => HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
+    sendOmsorgspengerKroniskSyktBarnSøknad: http.post(ApiPath.OMP_KS_SOKNAD_SUBMIT, () =>
+        HttpResponse.json(omsorgspengerKsSoknadValidering, { status: 202 }),
     ),
 
     /*
         Omsorgspenger - utbetaling
     */
 
-    barn: http.get(`${LOCAL_API_URL}/barn`, () =>
+    barn: http.get(ApiPath.BARN_GET, () =>
         HttpResponse.json(
             {
                 barn: [
@@ -130,7 +113,7 @@ export const testHandlers = {
         ),
     ),
 
-    gosysKategorier: http.get(`${LOCAL_API_URL}/gosys/gjelder`, () =>
+    gosysKategorier: http.get(ApiPath.GOSYS_GJELDER, () =>
         HttpResponse.json({
             Anke: 'Anke',
             Annet: 'Gjelder noe annet, må velges i Gosys',
@@ -142,7 +125,7 @@ export const testHandlers = {
         }),
     ),
 
-    hentFagsaker: http.get('http://localhost:8101/api/k9-punsj/saker/hent', async () => {
+    hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
         await delay(500);
         return HttpResponse.json(
             [
@@ -160,7 +143,7 @@ export const testHandlers = {
     }),
 
     settBehandlingsaar: http.post(
-        `${LOCAL_API_URL}/journalpost/settBehandlingsAar/:journalpost`,
+        ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR.replace('{journalpostId}', ':id'),
         () =>
             new HttpResponse(null, {
                 status: 200,

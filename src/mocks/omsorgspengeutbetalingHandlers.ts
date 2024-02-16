@@ -3,10 +3,8 @@ import { HttpResponse, http } from 'msw';
 
 import { ApiPath } from 'app/apiConfig';
 
-import { LOCAL_API_URL } from './konstanter';
-
 const omsorgspengerutbetalingHandlers = {
-    tomMappe: http.get(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe`, () =>
+    tomMappe: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP',
@@ -14,7 +12,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    mappeMedSøknad: http.get(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe`, () =>
+    mappeMedSøknad: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP',
@@ -125,7 +123,7 @@ const omsorgspengerutbetalingHandlers = {
             ],
         }),
     ),
-    nySoeknad: http.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad`, () =>
+    nySoeknad: http.post(ApiPath.OMP_UT_SOKNAD_CREATE, () =>
         HttpResponse.json({
             soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
             soekerId: '29099000129',
@@ -143,7 +141,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    soknad: http.get(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/mappe/bc12baac-0f0c-427e-a059-b9fbf9a3adff`, () =>
+    soknad: http.get(ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', 'bc12baac-0f0c-427e-a059-b9fbf9a3adff'), () =>
         HttpResponse.json({
             soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
             soekerId: '29099000129',
@@ -161,9 +159,9 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    oppdater: http.put(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/oppdater`, () => HttpResponse.json({})),
-    ingenEksisterendePerioder: http.post(`${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`, () => HttpResponse.json([])),
-    eksisterendePerioderOmsorgspengeutbetaling: http.post(`${LOCAL_API_URL}${ApiPath.OMP_UT_K9_PERIODER}`, () =>
+    oppdater: http.put(ApiPath.OMP_UT_SOKNAD_UPDATE, () => HttpResponse.json({})),
+    ingenEksisterendePerioder: http.post(ApiPath.OMP_UT_K9_PERIODER, () => HttpResponse.json([])),
+    eksisterendePerioderOmsorgspengeutbetaling: http.post(ApiPath.OMP_UT_K9_PERIODER, () =>
         HttpResponse.json([
             {
                 fom: '2022-09-01',
@@ -188,7 +186,7 @@ const omsorgspengerutbetalingHandlers = {
         ]),
     ),
 
-    sendInn: http.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/send`, () =>
+    sendInn: http.post(ApiPath.OMP_UT_SOKNAD_SUBMIT, () =>
         HttpResponse.json({
             søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
             versjon: '1.1.0',
@@ -234,7 +232,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    valider: http.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, () =>
+    valider: http.post(ApiPath.OMP_UT_SOKNAD_VALIDER, () =>
         HttpResponse.json({
             søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
             versjon: '1.1.0',
@@ -280,7 +278,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    validerFeil: http.post(`${LOCAL_API_URL}/omsorgspengerutbetaling-soknad/valider`, () =>
+    validerFeil: http.post(ApiPath.OMP_UT_SOKNAD_VALIDER, () =>
         HttpResponse.json(
             {
                 feil: [

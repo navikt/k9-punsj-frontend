@@ -1,4 +1,4 @@
-import { LOCAL_API_URL } from '../../../src/mocks/konstanter';
+import { ApiPath } from 'app/apiConfig';
 
 describe('forside', () => {
     beforeEach(() => {
@@ -14,7 +14,12 @@ describe('forside', () => {
     it('får feilmelding når journalposten ikke finnes', () => {
         cy.window().then((window) => {
             const { worker, http, HttpResponse } = window.msw;
-            worker.use(http.get(`${LOCAL_API_URL}/journalpost/201`, () => new HttpResponse(null, { status: 404 })));
+            worker.use(
+                http.get(
+                    ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '201'),
+                    () => new HttpResponse(null, { status: 404 }),
+                ),
+            );
         });
 
         cy.soekPaaJournalpost('201');
@@ -24,7 +29,12 @@ describe('forside', () => {
     it('viser feilmelding ved forbidden', () => {
         cy.window().then((window) => {
             const { worker, http, HttpResponse } = window.msw;
-            worker.use(http.get(`${LOCAL_API_URL}/journalpost/203`, () => new HttpResponse(null, { status: 403 })));
+            worker.use(
+                http.get(
+                    ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '203'),
+                    () => new HttpResponse(null, { status: 403 }),
+                ),
+            );
         });
         cy.soekPaaJournalpost('203');
         cy.contains(/Du har ikke tilgang til å slå opp denne personen/i).should('exist');
