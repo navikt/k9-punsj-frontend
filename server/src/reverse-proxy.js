@@ -39,7 +39,7 @@ const proxyOptions = (api) => ({
         let pathFromRequest = urlFromRequest.pathname;
 
         // Remove /k9-punsj from the path
-        pathFromRequest = pathFromRequest.replace('/k9-punsj', '');
+        pathFromRequest = pathFromRequest.replace('/api/k9-punsj', '/api');
         pathFromRequest = pathFromRequest.replace('/api/k9-formidling', '/k9/formidling/api');
         const queryString = urlFromRequest.query;
         const newPath = (pathFromApi || '') + (pathFromRequest || '') + (queryString ? `?${queryString}` : '');
