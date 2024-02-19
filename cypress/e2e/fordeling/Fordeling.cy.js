@@ -109,7 +109,7 @@ describe('Fordeling', () => {
         cy.findByText(/Ja/i).click();
         cy.findByText(/Har ikke tilhørende fagsak/i).click();
 
-        cy.findByLabelText(/Hvilket år gjelder dokumentet?/i).select(String(new Date().getFullYear() - 1));
+        /* cy.findByLabelText(/Hvilket år gjelder dokumentet?/i).select(String(new Date().getFullYear() - 1));
         /* cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();

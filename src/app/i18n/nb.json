@@ -476,7 +476,6 @@
     "skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding": "Du må legge inn en begrunnelse for å trekke perioder.",
     "skjema.validering.påkrevd": "Påkrevd felt",
     "skjema.validering.11siffer": "Fødsels- / D-nummer består av 11 siffer",
-    "skjema.validering.minstEn": "Må velge minst én",
     "skjema.validering.positivtheltall": "Må være et heltall større enn null",
     "skjema.validering.ugyldigdato": "Ugyldig datoformat",
     "skjema.validering.ugyldigfødselsdato": "Fødselsdato kan ikke være frem i tid",
