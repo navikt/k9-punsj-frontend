@@ -4,15 +4,14 @@ import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import rateLimit from 'express-rate-limit';
-import { validateAzureToken } from '@navikt/next-auth-wonderwall';
+import { decodeJwt, getSession } from '@navikt/oasis';
 
+import { ApiPath } from 'app/apiConfig.js';
 import * as headers from './headers.js';
 import logger from './log.js';
-import { getIssuer } from './azure/issuer.js';
 
 // for debugging during development
 import config from './config.js';
-import msgraph from './azure/msgraph.js';
 import reverseProxy from './reverse-proxy.js';
 import { envVariables } from '../envVariables.js';
 
@@ -76,8 +75,6 @@ async function startApp() {
             }),
         );
 
-        await getIssuer();
-
         // Liveness and readiness probes for Kubernetes / nais
         server.get('/health/isAlive', (req, res) => {
             res.status(200).send('Alive');
@@ -93,21 +90,18 @@ async function startApp() {
         });
 
         const ensureAuthenticated = async (req, res, next) => {
-            const { authorization } = req.headers;
-            const loginPath = `/oauth2/login?redirect=${req.originalUrl}`;
-            if (!authorization) {
-                logger.debug('User token missing. Redirect til login.');
-                res.redirect(loginPath);
-            } else {
-                // Validate token and continue to app
-                // eslint-disable-next-line no-lonely-if
-                if ((await validateAzureToken(authorization)) === 'valid') {
+            try {
+                const session = await getSession(req);
+                if (!session) {
+                    logger.debug('User token missing. Redirecting to login.');
+                    res.redirect(`${ApiPath.LOGIN}?redirect=${req.originalUrl}`);
+                } else {
                     logger.debug('User token is valid. Continue.');
                     next();
-                } else {
-                    logger.debug('User token is NOT valid. Redirect til login.');
-                    res.redirect(loginPath);
                 }
+            } catch (error) {
+                logger.error('Error getting session:', error);
+                res.redirect(`${ApiPath.LOGIN}?redirect=${req.originalUrl}`);
             }
         };
 
@@ -122,18 +116,9 @@ async function startApp() {
 
         // return user info fetched from the Microsoft Graph API
         server.get('/me', (req, res) => {
-            msgraph
-                .getUserInfoFromGraphApi(req.headers.authorization.replace('Bearer ', ''))
-                .then((userinfo) => res.json(userinfo))
-                .catch((err) => res.status(500).json(err));
-        });
-
-        // return groups that the user is a member of from the Microsoft Graph API
-        server.get('/me/memberOf', (req, res) => {
-            msgraph
-                .getUserGroups(req.headers.authorization)
-                .then((userinfo) => res.json(userinfo))
-                .catch((err) => res.status(500).json(err));
+            decodeJwt(req.headers.authorization).then((decoded) => {
+                console.log('decoded', decoded);
+            });
         });
 
         server.get('/envVariables', (req, res) => {

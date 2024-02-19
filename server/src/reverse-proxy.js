@@ -1,6 +1,6 @@
 import proxy from 'express-http-proxy';
+import { getSession } from '@navikt/oasis';
 import url from 'url';
-import { grantAzureOboToken, isInvalidTokenSet } from '@navikt/next-auth-wonderwall';
 
 import config from './config.js';
 import log from './log.js';
@@ -10,27 +10,29 @@ const stripTrailingSlash = (str) => (str.endsWith('/') ? str.slice(0, -1) : str)
 
 const proxyOptions = (api) => ({
     timeout: 60000,
-    proxyReqOptDecorator: (options, req) => {
-        console.log(req.headers.authorization);
-        const requestTime = Date.now();
-        options.headers[xTimestamp] = requestTime;
-        delete options.headers.cookie;
-        // eslint-disable-next-line no-promise-executor-return
-        return new Promise((resolve, reject) => {
-            grantAzureOboToken(req.headers.authorization.replace('Bearer ', ''), api.scopes).then(
-                (oboToken) => {
-                    if (isInvalidTokenSet(oboToken)) {
-                        console.error(oboToken.message);
-                        throw new Error('Invalid token');
-                    }
-                    log.info(`Token veksling tok: (${Date.now() - requestTime}ms)`);
-                    // eslint-disable-next-line camelcase
-                    options.headers.Authorization = `Bearer ${oboToken}`;
-                    resolve(options);
-                },
-                (error) => reject(error),
-            );
-        });
+    proxyReqOptDecorator: async (options, req) => {
+        try {
+            const session = await getSession(req);
+            const requestTime = Date.now();
+            options.headers[xTimestamp] = requestTime;
+            delete options.headers.cookie;
+
+            return new Promise((resolve, reject) => {
+                session.apiToken(api.scopes).then(
+                    (oboToken) => {
+                        options.headers.Authorization = `Bearer ${oboToken}`;
+                        resolve(options);
+                    },
+                    (error) => {
+                        console.log(error);
+                        reject(error);
+                    },
+                );
+            });
+        } catch (error) {
+            console.log(error);
+            throw error; // re-throw the error so it can be handled by the caller
+        }
     },
     proxyReqPathResolver: (req) => {
         const urlFromApi = url.parse(api.url);
