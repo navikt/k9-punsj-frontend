@@ -200,13 +200,35 @@ export const getPathFraForkortelse = (ytelseType: DokumenttypeForkortelse) => {
         case DokumenttypeForkortelse.OMP_MA:
             return ROUTES.OMPMA_ROOT;
         case DokumenttypeForkortelse.OMP_AO:
-            return ROUTES.OMPMA_ROOT;
+            return ROUTES.OMPAO_ROOT;
         case DokumenttypeForkortelse.OMP_UT:
             return ROUTES.OMPUT_ROOT;
         case DokumenttypeForkortelse.OLP:
             return ROUTES.OLP_ROOT;
         default:
             return '/';
+    }
+};
+
+export const getPathFraDokumenttype = (dokumenttype: FordelingDokumenttype) => {
+    switch (dokumenttype) {
+        case FordelingDokumenttype.PLEIEPENGER:
+            return ROUTES.PSB_ROOT;
+        case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+            return ROUTES.PLS_ROOT;
+        case FordelingDokumenttype.OMSORGSPENGER_KS:
+            return ROUTES.OMPKS_ROOT;
+        case FordelingDokumenttype.OMSORGSPENGER_MA:
+            return ROUTES.OMPMA_ROOT;
+        case FordelingDokumenttype.OMSORGSPENGER_AO:
+            return ROUTES.OMPAO_ROOT;
+        case FordelingDokumenttype.OMSORGSPENGER_UT:
+            return ROUTES.OMPUT_ROOT;
+
+        case FordelingDokumenttype.OPPLAERINGSPENGER:
+            return ROUTES.OLP_ROOT;
+        default:
+            return '/'; // TODO: Hva skal vi gjøre her?
     }
 };
 

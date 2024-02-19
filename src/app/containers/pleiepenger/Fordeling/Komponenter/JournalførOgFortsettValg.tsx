@@ -149,14 +149,18 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO) &&
         !identState.pleietrengendeId;
 
+    // TODO: Vise alert hvis saksnummer reservert
+    // men har ikke info om at saksnummer reservert hvis bruker kommer hit rett etter klassifisering
+    // Hvis bruker kommer hit fra los så har vi info om at saksnummer reservert
     return (
         <FormPanel>
-            <Alert variant="success" size="small" className="max-w-2xl mb-5">
-                {journalpost.reservertSaksnummer && (
-                    <FormattedMessage id="fordeling.klassifiserModal.alert.success.reservert" />
-                )}
-                <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
-            </Alert>
+            {!journalpost.reservertSaksnummer && (
+                <Alert variant="success" size="small" className="max-w-2xl mb-5">
+                    {!journalpost.reservertSaksnummer && (
+                        <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
+                    )}
+                </Alert>
+            )}
 
             <div className="mb-5">
                 <AnnenPart

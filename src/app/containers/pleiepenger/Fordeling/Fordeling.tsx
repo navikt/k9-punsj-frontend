@@ -36,6 +36,7 @@ import {
     finnForkortelseForDokumenttype,
     finnVisningsnavnForSakstype,
     getDokumenttypeFraForkortelse,
+    getPathFraDokumenttype,
     getPathFraForkortelse,
 } from '../../../utils';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
@@ -249,6 +250,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
         ) {
+            if (journalpost.erFerdigstilt && journalpost.reservertSaksnummer) {
+                return true;
+            }
             if (harFagsaker && brukEksisterendeFagsak) {
                 return !valgtFagsak;
             }
@@ -310,6 +314,39 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setVisKlassifiserModal(true);
             }
         }, 200);
+    };
+
+    // Redirect bruker til fortsett side hvis journalpost er klassifisert, med reservert saksnummer uten fagsak ytelse type
+    // Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
+    // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
+    const handleRedirectVidere = () => {
+        if (fordelingState.dokumenttype) {
+            navigate(
+                `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${getPathFraDokumenttype(fordelingState.dokumenttype)}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
+            );
+        }
+    };
+
+    // TODO: Kanskje slette denne når vi får riktig fagsak ytelse type ved reservert saksnummer
+    const disableRedirectVidere = () => {
+        if (
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
+        ) {
+            if (harFagsaker && brukEksisterendeFagsak) {
+                return !valgtFagsak;
+            }
+            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
+                return true;
+            }
+        }
+        if (dokumenttype && dokumenttyperOmpUt.includes(dokumenttype) && !behandlingsAar && !harLagretBehandlingsår) {
+            return true;
+        }
+
+        return IdentRules.erUgyldigIdent(identState.søkerId);
     };
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
@@ -517,31 +554,54 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     visPleietrengende={visPleietrengende}
                                 />
                             )}
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && (
-                                <div className="flex">
-                                    <div className="mr-4">
+                            {gjelderPsbOmsOlp &&
+                                !isFetchingFagsaker &&
+                                !(journalpost.erFerdigstilt && journalpost.reservertSaksnummer) && (
+                                    <div className="flex">
+                                        <div className="mr-4">
+                                            <Button
+                                                variant="primary"
+                                                size="small"
+                                                onClick={() => handleJournalfør(true)}
+                                                disabled={disableJournalførKnapper()}
+                                                loading={settBehandlingsÅrMutation.isLoading}
+                                            >
+                                                <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
+                                            </Button>
+                                        </div>
                                         <Button
-                                            variant="primary"
+                                            variant="secondary"
                                             size="small"
-                                            onClick={() => handleJournalfør(true)}
+                                            onClick={() => handleJournalfør(false)}
                                             disabled={disableJournalførKnapper()}
                                             loading={settBehandlingsÅrMutation.isLoading}
                                         >
-                                            <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
+                                            <FormattedMessage id="fordeling.knapp.journalfør.kø" />
                                         </Button>
                                     </div>
-                                    <Button
-                                        variant="secondary"
-                                        size="small"
-                                        onClick={() => handleJournalfør(false)}
-                                        disabled={disableJournalførKnapper()}
-                                        loading={settBehandlingsÅrMutation.isLoading}
-                                    >
-                                        <FormattedMessage id="fordeling.knapp.journalfør.kø" />
-                                    </Button>
-                                </div>
-                            )}
+                                )}
+
+                            {gjelderPsbOmsOlp &&
+                                !isFetchingFagsaker &&
+                                journalpost.erFerdigstilt &&
+                                journalpost.reservertSaksnummer &&
+                                !disableRedirectVidere() && (
+                                    <div className="flex">
+                                        <div className="mr-4">
+                                            <Button
+                                                variant="primary"
+                                                size="small"
+                                                onClick={handleRedirectVidere}
+                                                disabled={disableRedirectVidere()}
+                                                loading={settBehandlingsÅrMutation.isLoading}
+                                            >
+                                                <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                         </div>
+
                         {!settBehandlingsÅrMutation.error &&
                             !settBehandlingsÅrMutation.isLoading &&
                             visKlassifiserModal && (
@@ -550,7 +610,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     fortsett={fortsettEtterKlassifiseringModal}
                                 />
                             )}
-
                         <VerticalSpacer sixteenPx />
                         {!!settBehandlingsÅrMutation.error && (
                             <Alert size="small" variant="error">
