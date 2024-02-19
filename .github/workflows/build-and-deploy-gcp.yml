@@ -56,7 +56,9 @@ jobs:
                   path: ./dist
 
             - name: Installere moduler
-              run: yarn install --immutable
+              run: |
+                  cd server
+                  yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
