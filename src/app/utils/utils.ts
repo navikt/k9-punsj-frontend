@@ -189,7 +189,7 @@ export const konverterPeriodeTilTimerOgMinutter = (periode: Periodeinfo<IArbeids
     });
 };
 
-export const getPathFraForkortelse = (ytelseType: DokumenttypeForkortelse) => {
+export const getPathFraForkortelse = (ytelseType?: DokumenttypeForkortelse) => {
     switch (ytelseType) {
         case DokumenttypeForkortelse.PSB:
             return ROUTES.PSB_ROOT;

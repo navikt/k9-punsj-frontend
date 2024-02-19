@@ -130,12 +130,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
-            journalpost.fagsakYtelseType &&
+            (journalpost.fagsakYtelseType || journalpost.sak?.sakstype) &&
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             journalpost?.norskIdent
         ) {
-            const fagsakYtelsePath = getPathFraForkortelse(journalpost.fagsakYtelseType.kode);
+            // TODO: Bruker vi fortsatt fagsakYtelseType?
+            const fagsakYtelsePath = getPathFraForkortelse(
+                journalpost.fagsakYtelseType?.kode || journalpost.sak?.sakstype,
+            );
 
             // Kanskje hente annenPart ved reservert sak og sette den til ident state
             // Get barn from journalpost ved reservert sak - IKKE sikkert, kanskje trenges å hente barn fra annen tjeneste
@@ -151,7 +154,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setIdentAction(journalpost.norskIdent, journalpost.sak?.pleietrengendeIdent);
             setErSøkerIdBekreftet(true);
             setFagsak(journalpost.sak);
-            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.fagsakYtelseType.kode));
+            setDokumenttype(
+                getDokumenttypeFraForkortelse(journalpost.fagsakYtelseType?.kode || journalpost.sak?.sakstype),
+            );
 
             // Redirect to ferdigstilt side
             navigate(
