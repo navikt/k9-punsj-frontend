@@ -3373,10 +3373,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:5.17.2":
-  version: 5.17.2
-  resolution: "@navikt/ds-css@npm:5.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.17.2%2Ff76f5693fbd5eaed31f4190e1662ceb6253b1b30"
-  checksum: d9b95bd8a0bf5c7253d0fd51bcc8a2fa86c2c364b60fda8568e05ad9da290f4c0cc9d60aa675e2ae54781b6227e0122b412f4f320b2b269958aa990e854c8fc3
+"@navikt/ds-css@npm:5.18.2":
+  version: 5.18.2
+  resolution: "@navikt/ds-css@npm:5.18.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.18.2%2Fde254df5c2831d10daf98517a49241c5fb13ef7e"
+  checksum: 7e0af622d0a3009c833d4928266c7372c3a0d355c7a65665ab98e3b9ed413612a0e41c27655fb14e48d2fe76fed02797d82e58c06e0161f19d7a3b3048dc49b1
   languageName: node
   linkType: hard
 
@@ -14289,7 +14289,7 @@ __metadata:
     "@babel/preset-typescript": 7.23.3
     "@babel/runtime": 7.23.9
     "@navikt/aksel-icons": ^5.17.2
-    "@navikt/ds-css": 5.17.2
+    "@navikt/ds-css": 5.18.2
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 5.17.2
     "@navikt/fnrvalidator": 1.3.3
