@@ -49,18 +49,12 @@ jobs:
                   node-version: 18.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
-
-            - uses: actions/download-artifact@v4
-              with:
-                  name: dist
-                  path: ./dist
-
             - name: Installere moduler
-              run: |
-                  cd server
-                  yarn install --immutable
+              run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+            - name: Bygge kode
+              run: yarn build
 
             - name: Opprett release med Sentry
               run: yarn sentry-release

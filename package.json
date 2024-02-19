@@ -200,6 +200,9 @@
         "*.(le|c)ss": "stylelint --fix",
         "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
     },
+    "workspaces": [
+        "server"
+    ],
     "msw": {
         "workerDirectory": [
             "dist"
