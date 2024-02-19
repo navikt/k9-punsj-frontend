@@ -6,7 +6,6 @@ import timeout from 'connect-timeout';
 import rateLimit from 'express-rate-limit';
 import { decodeJwt, getSession } from '@navikt/oasis';
 
-import { ApiPath } from 'app/apiConfig.js';
 import * as headers from './headers.js';
 import logger from './log.js';
 
@@ -94,14 +93,14 @@ async function startApp() {
                 const session = await getSession(req);
                 if (!session) {
                     logger.debug('User token missing. Redirecting to login.');
-                    res.redirect(`${ApiPath.LOGIN}?redirect=${req.originalUrl}`);
+                    res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
                 } else {
                     logger.debug('User token is valid. Continue.');
                     next();
                 }
             } catch (error) {
                 logger.error('Error getting session:', error);
-                res.redirect(`${ApiPath.LOGIN}?redirect=${req.originalUrl}`);
+                res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
             }
         };
 
