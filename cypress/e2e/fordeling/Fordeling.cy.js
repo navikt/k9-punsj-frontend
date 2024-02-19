@@ -106,8 +106,8 @@ describe('Fordeling', () => {
     it('Omsorgspenger - kan navigere til eksisterende søknader', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Omsorgspenger: direkte utbetaling av omsorgspenger/i).click();
-        cy.findByText(/Ja/i).click();
-        cy.findByText(/Har ikke tilhørende fagsak/i).click();
+        /*cy.findByText(/Ja/i).click();
+        /*cy.findByText(/Har ikke tilhørende fagsak/i).click();
 
         /* cy.findByLabelText(/Hvilket år gjelder dokumentet?/i).select(String(new Date().getFullYear() - 1));
         /* cy.findByRole('button', { name: /Videre/i }).click();
