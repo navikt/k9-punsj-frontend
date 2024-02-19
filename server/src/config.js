@@ -83,7 +83,6 @@ const getProxyConfig = () => {
 
 export default {
     server,
-    azureAd,
     reverseProxyConfig: getProxyConfig(),
     cors,
 };
