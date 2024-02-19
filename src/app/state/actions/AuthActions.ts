@@ -38,7 +38,7 @@ export function checkAuth() {
             switch (response.status) {
                 case 200:
                     return response.json().then((user) => {
-                        const username = user.name || user.displayName;
+                        const username = user.name;
                         dispatch(authOkAction(username));
                     });
                 default:

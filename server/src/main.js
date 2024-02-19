@@ -115,7 +115,10 @@ async function startApp() {
 
         // return user info fetched from the Microsoft Graph API
         server.get('/me', (req, res) => {
-            console.log('decode', decodeJwt(req.headers.authorization));
+            const user = decodeJwt(req.headers.authorization);
+            res.send({
+                name: user.name,
+            });
         });
 
         server.get('/envVariables', (req, res) => {
