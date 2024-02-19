@@ -1170,7 +1170,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
                 )}
                 {!!punchFormState.submitSoknadConflict && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
+                    <Alert variant="error">
+                        {punchFormState.submitSoknadConflict.feil ||
+                            punchFormState.submitSoknadConflict.message ||
+                            intlHelper(intl, 'skjema.feil.konflikt')}
+                    </Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (

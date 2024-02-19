@@ -381,7 +381,7 @@
     "skjema.feil.sletteferie_manglerarbeidstid": "Mangler informasjon om arbeidstid for periodene som er fjernet.",
     "skjema.feil.ikke_lagret": "Det oppsto en feil under lagring av endringer.",
     "skjema.feil.ikke_sendt": "Det oppsto en feil under innsending av søknad. Prøv igjen senere.",
-    "skjema.feil.konflikt": "Denne journalposten har allerede blitt sendt inn.",
+    "skjema.feil.konflikt": "Denne journalposten har konflikt.",
     "skjema.feil.søknadsperiode/endringsperiode": "Mangler søknadsperiode.",
     "skjema.feil.datoMottatt.MAA_SETTES": "Mottakelsesdato må være satt",
     "skjema.feil.mottattDato.MAA_VAERE_I_FORTIDEN": "Mottakelsesdato kan ikke være fremtidig.",
