@@ -75,11 +75,12 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
 
     const disabled = ['loading', 'success'].includes(status);
 
-    const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean) => {
+    const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
         return (
             <Alert variant={variant} size="small">
-                <FormattedMessage id={messageId} />
+                {!!message && message}
+                {!message && <FormattedMessage id={messageId} />}
             </Alert>
         );
     };
@@ -105,7 +106,8 @@ const KlassifiserModal = ({ lukkModal, fortsett }: OwnProps) => {
                         isSuccess && !fagsak?.fagsakId,
                     )}
                     {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !isSuccess && !error)}
-                    {renderAlert('error', 'fordeling.klassifiserModal.alert.error', !!error)}
+                    {/* Vise feilen fra serveren */}
+                    {renderAlert('error', 'fordeling.klassifiserModal.alert.error', !!error, (error as Error)?.message)}
                 </>
             </Modal.Body>
             <Modal.Footer>
