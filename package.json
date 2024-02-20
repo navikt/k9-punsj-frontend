@@ -6,7 +6,7 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "7.23.9",
-        "@navikt/aksel-icons": "^5.17.2",
+        "@navikt/aksel-icons": "^6.0.0",
         "@navikt/ds-css": "5.17.2",
         "@navikt/ds-icons": "3.4.3",
         "@navikt/ds-react": "5.17.2",
