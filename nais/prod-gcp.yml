@@ -5,10 +5,10 @@ outboundExternalHosts:
   - k9-formidling.prod-fss-pub.nais.io
 azureTenant: nav.no
 proxyRedirects:
-  - path: "/k9-punsj/api"
+  - path: "/api/k9-punsj"
     scope: "api://prod-fss.k9saksbehandling.k9-punsj/.default"
     url: "https://k9-punsj.prod-fss-pub.nais.io"
-  - path: "/k9/formidling/api"
+  - path: "/api/k9-formidling"
     scope: "api://prod-fss.k9saksbehandling.k9-formidling/.default"
     url: "https://k9-formidling.prod-fss-pub.nais.io"
 env:
