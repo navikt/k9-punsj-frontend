@@ -78,8 +78,8 @@ jobs:
               uses: nais/deploy/actions/deploy@v2
               env:
                   CLUSTER: prod-gcp
-                  RESOURCE: nais/frontend/k9-punsj-frontend-wonderwall.yml
-                  VARS: nais/frontend/prod-gcp.yml
+                  RESOURCE: nais/k9-punsj-frontend-wonderwall.yml
+                  VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]
         uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@main
