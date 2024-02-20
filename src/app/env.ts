@@ -7,8 +7,6 @@ interface EnvVariable {
 
 interface EnvVariables {
     IS_LOCAL: string;
-    OIDC_AUTH_PROXY: string;
-    K9_PUNSJ_API_URL: string;
     K9_LOS_URL: string;
     OMP_KS_ENABLED: string;
     PLS_ENABLED: string;
@@ -26,8 +24,6 @@ export default async function setEnvVariables(): Promise<void> {
     const envVariables = data.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {}) as EnvVariables;
     const appSettings = {
         IS_LOCAL: envVariables.IS_LOCAL,
-        OIDC_AUTH_PROXY: envVariables.OIDC_AUTH_PROXY,
-        K9_PUNSJ_API_URL: envVariables.K9_PUNSJ_API_URL,
         K9_LOS_URL: envVariables.K9_LOS_URL,
         OMP_KS_ENABLED: envVariables.OMP_KS_ENABLED,
         PLS_ENABLED: envVariables.PLS_ENABLED,
