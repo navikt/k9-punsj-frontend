@@ -71,10 +71,7 @@ const webpackConfig = {
         }),
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
         new CopyPlugin({
-            patterns: [
-                { from: 'src/app/favicon.png' },
-                { from: 'src/build/envVariablesForEnvSubst.json', to: 'envVariablesForEnvSubst.json' },
-            ],
+            patterns: [{ from: 'src/app/favicon.png' }],
         }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
