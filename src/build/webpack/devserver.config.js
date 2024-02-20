@@ -1,9 +1,8 @@
 require('dotenv').config();
 const mustacheExpress = require('mustache-express');
 const path = require('path');
-const envVariables = require('../envVariables');
 
-// Lokal utvikling med mock trenger ikke proxy.
+// Lokal utvikling med msw trenger ikke proxy.
 const proxyConfig =
     process.env.MSW_MODE === 'test'
         ? {}
@@ -29,7 +28,9 @@ const configureDevServer = () => ({
         app.get('/health/isReady', (req, res) => {
             res.send('ready');
         });
-        app.get(`/envVariables`, (req, res) => {
+        app.get(`/envVariables`, async (req, res) => {
+            // eslint-disable-next-line import/extensions
+            const { envVariables } = await import('@k9-punsj-frontend/server/envVariables.js');
             res.set('content-type', 'application/javascript');
             res.json([
                 {
