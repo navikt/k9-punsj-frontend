@@ -11,7 +11,6 @@ const proxyConfig =
                   target: 'http://localhost:8101',
                   changeOrigin: true,
               },
-              '/me': { target: 'http://localhost:8101', changeOrigin: true },
           };
 
 const configureDevServer = () => ({

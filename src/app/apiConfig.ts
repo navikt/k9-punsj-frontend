@@ -6,7 +6,6 @@ const BASE_PATHS = {
 export const ApiPath = {
     // generelt
     ENV_VARIABLES: `/envVariables`,
-    ME: `/me`,
     LOGIN: `/oauth2/login`,
 
     // punsj backend
