@@ -548,37 +548,34 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     visPleietrengende={visPleietrengende}
                                 />
                             )}
-                            {gjelderPsbOmsOlp &&
-                                !isFetchingFagsaker &&
-                                !(journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) && (
-                                    <div className="flex">
-                                        <div className="mr-4">
-                                            <Button
-                                                variant="primary"
-                                                size="small"
-                                                onClick={() => handleJournalfør(true)}
-                                                disabled={disableJournalførKnapper()}
-                                                loading={settBehandlingsÅrMutation.isLoading}
-                                            >
-                                                <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
-                                            </Button>
-                                        </div>
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
+                                <div className="flex">
+                                    <div className="mr-4">
                                         <Button
-                                            variant="secondary"
+                                            variant="primary"
                                             size="small"
-                                            onClick={() => handleJournalfør(false)}
+                                            onClick={() => handleJournalfør(true)}
                                             disabled={disableJournalførKnapper()}
                                             loading={settBehandlingsÅrMutation.isLoading}
                                         >
-                                            <FormattedMessage id="fordeling.knapp.journalfør.kø" />
+                                            <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
                                         </Button>
                                     </div>
-                                )}
+                                    <Button
+                                        variant="secondary"
+                                        size="small"
+                                        onClick={() => handleJournalfør(false)}
+                                        disabled={disableJournalførKnapper()}
+                                        loading={settBehandlingsÅrMutation.isLoading}
+                                    >
+                                        <FormattedMessage id="fordeling.knapp.journalfør.kø" />
+                                    </Button>
+                                </div>
+                            )}
 
                             {gjelderPsbOmsOlp &&
                                 !isFetchingFagsaker &&
                                 journalpost.erFerdigstilt &&
-                                journalpost.sak?.reservertSaksnummer &&
                                 !disableRedirectVidere() && (
                                     <div className="flex">
                                         <div className="mr-4">
