@@ -2502,6 +2502,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/next-auth-wonderwall": ^1.5.0
+    "@navikt/oasis": ^2.1.0
     axios: ^1.6.5
     connect-timeout: ^1.9.0
     cors: ^2.8.5
@@ -2719,18 +2720,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@navikt/oasis@npm:1.0.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F1.0.3%2Fd8525baa02b2fec6f6166724f702d09f400b9c38"
+"@navikt/oasis@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@navikt/oasis@npm:2.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F2.1.0%2F12d121b408de49e0179856dcda792fb0053d1835"
   dependencies:
     jose: ^5.2.2
-    lodash.memoize: ^4.1.2
     openid-client: ^5.6.4
     prom-client: ">=15"
   dependenciesMeta:
     prom-client:
       optional: true
-  checksum: ddf7875cb9a8e318b289c051fa073b25db9853fae35881c687b0cafd85422e0d03543079e25bb839f47f304f2f38943898f0198e74906e874d45afb203a6901a
+  checksum: 991d91cd96a84d0b164501c1de2e8fd572dec7083156e867632c00eb461e4386254d1f1cfebd8777a9d51076e2b83280dc4be5507c422540d20b52c08d03f5ca
   languageName: node
   linkType: hard
 
@@ -13579,7 +13579,6 @@ __metadata:
     "@navikt/ds-react": 5.17.2
     "@navikt/fnrvalidator": 1.3.3
     "@navikt/ft-plattform-komponenter": 2.3.18
-    "@navikt/oasis": ^1.0.3
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@popperjs/core": ^2.11.8
     "@redux-devtools/extension": 3.3.0
