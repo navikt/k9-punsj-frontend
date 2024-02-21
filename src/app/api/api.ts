@@ -62,8 +62,8 @@ export const klassifiserDokument = (body: {
     post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
         async (response) => {
             if (!response.ok) {
-                const boby = await response.json();
-                const feil = boby.feil || boby.message || 'Det oppstod en feil.';
+                const responseBody = await response.json();
+                const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
                 throw Error(feil);
             }
         },
