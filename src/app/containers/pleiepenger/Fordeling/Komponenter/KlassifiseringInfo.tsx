@@ -39,6 +39,11 @@ const KlassifiseringInfo = () => {
             )}
             {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.søkersID', identState.søkerId)}
 
+            {renderLabelValue(
+                'fordeling.klassifiserModal.klassifiseringInfo.pleitrengendeID',
+                identState.pleietrengendeId,
+            )}
+
             {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.saksnummer', fagsak?.fagsakId)}
 
             {renderLabelValue(
