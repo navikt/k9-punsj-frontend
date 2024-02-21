@@ -130,33 +130,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
-            (journalpost.fagsakYtelseType || journalpost.sak?.sakstype) &&
+            journalpost.sak?.k9FagsakYtelseType &&
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             journalpost?.norskIdent
         ) {
-            // TODO: Bruker vi fortsatt fagsakYtelseType?
-            const fagsakYtelsePath = getPathFraForkortelse(
-                journalpost.fagsakYtelseType?.kode || journalpost.sak?.sakstype,
-            );
-
-            // Kanskje hente annenPart ved reservert sak og sette den til ident state
-            // Get barn from journalpost ved reservert sak - IKKE sikkert, kanskje trenges å hente barn fra annen tjeneste
-            /*
-            if (journalpost.reservertSaksnummer && journalpost.sak?.fagsakId) {
-                // TODO get pleitrengendeIdent for reservertSaksnummer
-                // og sette identState.pleietrengendeId fra dette
-                // eller backend må legge til pleietrengendeIdent i journalpost til sak
-            }
-            */
+            const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.k9FagsakYtelseType);
 
             // Set fordeling state ved ferdistilt (journalført) sak
             setIdentAction(journalpost.norskIdent, journalpost.sak?.pleietrengendeIdent);
             setErSøkerIdBekreftet(true);
             setFagsak(journalpost.sak);
-            setDokumenttype(
-                getDokumenttypeFraForkortelse(journalpost.fagsakYtelseType?.kode || journalpost.sak?.sakstype),
-            );
+            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.k9FagsakYtelseType));
 
             // Redirect to ferdigstilt side
             navigate(
@@ -173,6 +158,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, []);
 
+    // Reset fagsak ved endring av dokumenttype eller søkerId
     useEffect(() => {
         if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
@@ -180,10 +166,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [dokumenttype, identState.søkerId]);
 
+    // Reset behandlingsår ved endring av dokumenttype eller søkerId
     useEffect(() => {
         setHarLagretBehandlingsår(false);
     }, [dokumenttype, identState.søkerId, valgtFagsak, behandlingsAar]);
 
+    // Reset sakstype ved endring av dokumenttype
     useEffect(() => {
         if (sakstype && !journalpost.erFerdigstilt) {
             setSakstypeAction(undefined);
@@ -225,6 +213,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
+    // Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
+    // Hvis det er ingen fagsaker, viser vi pleietrengende component
     useEffect(() => {
         if (!journalpost.erFerdigstilt && identState.søkerId && dokumenttype && gjelderPsbOmsOlp) {
             setHenteFagsakFeilet(false);
@@ -235,7 +225,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 if (response.status === 200) {
                     const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
                     const filtrerteFagsaker = data.filter(
-                        (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse,
+                        (fsak) => !dokumenttypeForkortelse || fsak.k9FagsakYtelseType === dokumenttypeForkortelse,
                     );
                     setFagsaker(filtrerteFagsaker);
                     if (filtrerteFagsaker.length > 0) {
@@ -255,7 +245,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
         ) {
-            if (journalpost.erFerdigstilt && journalpost.reservertSaksnummer) {
+            if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
                 return true;
             }
             if (harFagsaker && brukEksisterendeFagsak) {
@@ -476,7 +466,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {dokumenttype === FordelingDokumenttype.ANNET && (
                                 <InnholdForDokumenttypeAnnet
-                                    dokumenttype={dokumenttype}
                                     journalpost={journalpost}
                                     lukkJournalpostOppgave={lukkJournalpostOppgave}
                                     kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
@@ -561,7 +550,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {gjelderPsbOmsOlp &&
                                 !isFetchingFagsaker &&
-                                !(journalpost.erFerdigstilt && journalpost.reservertSaksnummer) && (
+                                !(journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) && (
                                     <div className="flex">
                                         <div className="mr-4">
                                             <Button
@@ -589,7 +578,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {gjelderPsbOmsOlp &&
                                 !isFetchingFagsaker &&
                                 journalpost.erFerdigstilt &&
-                                journalpost.reservertSaksnummer &&
+                                journalpost.sak?.reservertSaksnummer &&
                                 !disableRedirectVidere() && (
                                     <div className="flex">
                                         <div className="mr-4">

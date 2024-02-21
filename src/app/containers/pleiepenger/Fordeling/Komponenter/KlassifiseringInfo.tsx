@@ -33,8 +33,8 @@ const KlassifiseringInfo = () => {
         <div className="fagsakContainer">
             {renderLabelValue(
                 'fordeling.klassifiserModal.klassifiseringInfo.sakstype',
-                fagsak?.sakstype
-                    ? finnVisningsnavnForSakstype(fagsak?.sakstype)
+                fagsak?.k9FagsakYtelseType
+                    ? finnVisningsnavnForSakstype(fagsak?.k9FagsakYtelseType)
                     : finnVisningsnavnForSakstype(finnForkortelseForDokumenttype(dokumenttype) as string),
             )}
             {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.søkersID', identState.søkerId)}

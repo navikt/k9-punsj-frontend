@@ -111,9 +111,9 @@ const OpprettJournalpost: React.FC = () => {
                                             <option value="">
                                                 {intl.formatMessage({ id: 'OpprettJournalpost.velg' })}
                                             </option>
-                                            {fagsaker.map(({ fagsakId, sakstype }) => (
+                                            {fagsaker.map(({ fagsakId, k9FagsakYtelseType }) => (
                                                 <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
+                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(k9FagsakYtelseType)})`}
                                                 </option>
                                             ))}
                                         </Select>

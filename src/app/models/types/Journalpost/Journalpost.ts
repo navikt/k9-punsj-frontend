@@ -1,4 +1,3 @@
-import { DokumenttypeForkortelse } from 'app/models/enums';
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import Fagsak from 'app/types/Fagsak';
 
@@ -18,9 +17,7 @@ export interface IJournalpost {
     kanSendeInn: boolean;
     erSaksbehandler: boolean;
     erFerdigstilt?: boolean;
-    fagsakYtelseType?: { kode: DokumenttypeForkortelse };
     sak?: Fagsak;
-    reservertSaksnummer?: boolean;
 }
 
 export interface IDokument {

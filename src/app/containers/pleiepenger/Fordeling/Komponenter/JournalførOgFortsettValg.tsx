@@ -154,9 +154,9 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     // Hvis bruker kommer hit fra los så har vi info om at saksnummer reservert
     return (
         <FormPanel>
-            {!journalpost.reservertSaksnummer && (
+            {!journalpost.sak?.reservertSaksnummer && (
                 <Alert variant="success" size="small" className="max-w-2xl mb-5">
-                    {!journalpost.reservertSaksnummer && (
+                    {!journalpost.sak?.reservertSaksnummer && (
                         <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
                     )}
                 </Alert>

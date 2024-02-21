@@ -47,7 +47,7 @@ const SendBrevIAvsluttetSak = () => {
     const sakstypeForValgtFagsak = () => {
         if (fagsaker?.length > 0 && valgtFagsak) {
             const fagsak = fagsaker.find((fsak) => fsak.fagsakId === valgtFagsak);
-            return fagsak?.sakstype || '';
+            return fagsak?.k9FagsakYtelseType || '';
         }
         return '';
     };
@@ -99,9 +99,9 @@ const SendBrevIAvsluttetSak = () => {
                                 size="small"
                             >
                                 <option value="">{intl.formatMessage({ id: 'SendBrevIAvsluttetSak.velg' })}</option>
-                                {fagsaker.map(({ fagsakId, sakstype }) => (
+                                {fagsaker.map(({ fagsakId, k9FagsakYtelseType }) => (
                                     <option key={fagsakId} value={fagsakId}>
-                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
+                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(k9FagsakYtelseType)})`}
                                     </option>
                                 ))}
                             </Select>

@@ -71,10 +71,10 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 )}
             </div>
             <div>
-                {fordelingState.fagsak?.sakstype && (
+                {fordelingState.fagsak?.k9FagsakYtelseType && (
                     <LabelValue
                         labelTextId="journalpost.sakstype"
-                        value={fordelingState.fagsak?.sakstype}
+                        value={fordelingState.fagsak?.k9FagsakYtelseType}
                         retning="horisontal"
                     />
                 )}
