@@ -40,7 +40,6 @@ import { resetIdentState, setIdentFellesAction } from '../../../state/actions/Id
 import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
-    finnVisningsnavnForSakstype,
     getDokumenttypeFraForkortelse,
     getPathFraDokumenttype,
     getPathFraForkortelse,
@@ -538,7 +537,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <FagsakSelect
                                     brukEksisterendeFagsak={brukEksisterendeFagsak}
                                     fagsaker={fagsaker}
-                                    finnVisningsnavnForSakstype={finnVisningsnavnForSakstype}
                                     identState={identState}
                                     setBrukEksisterendeFagsak={setBrukEksisterendeFagsak}
                                     setIdentAction={setIdentAction}

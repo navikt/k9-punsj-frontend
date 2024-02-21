@@ -47,6 +47,7 @@ export const printAndReturnValue = (value: any) => {
     return value;
 };
 
+// TODO: Lage en fil med sakstype koder og navn
 export const finnVisningsnavnForSakstype = (kode: string) => {
     const sakstyper = [
         {

@@ -10,6 +10,7 @@ import Period from 'app/utils/Period';
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IBarn } from 'app/models/types/Barn';
 import { FormattedMessage } from 'react-intl';
+import { finnVisningsnavnForSakstype } from 'app/utils';
 
 interface Props {
     fagsaker: Fagsak[];
@@ -18,7 +19,6 @@ interface Props {
     valgtFagsak?: Fagsak;
     barn?: IBarn[];
     setValgtFagsak: (fagsak: string) => void;
-    finnVisningsnavnForSakstype: (sakstype: string) => string;
     setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
@@ -56,7 +56,6 @@ const FagsakSelect = ({
     valgtFagsak,
     barn,
     setValgtFagsak,
-    finnVisningsnavnForSakstype,
     setBrukEksisterendeFagsak,
     setIdentAction,
     setBehandlingsAar,

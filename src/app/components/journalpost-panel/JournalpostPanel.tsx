@@ -6,7 +6,7 @@ import { ExternalLink } from '@navikt/ds-icons';
 import { Link, Panel } from '@navikt/ds-react';
 
 import { Sakstype } from 'app/models/enums';
-import { getModiaPath } from 'app/utils';
+import { finnVisningsnavnForSakstype, getModiaPath } from 'app/utils';
 
 import { IFordelingState, IJournalpost } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
@@ -74,7 +74,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 {fordelingState.fagsak?.sakstype && (
                     <LabelValue
                         labelTextId="journalpost.sakstype"
-                        value={fordelingState.fagsak?.sakstype}
+                        value={finnVisningsnavnForSakstype(fordelingState.fagsak?.sakstype)}
                         retning="horisontal"
                     />
                 )}
