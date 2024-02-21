@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 import { finnFagsaker, postBehandlingsAar } from 'app/api/api';
-import { FordelingDokumenttype, JaNei, Sakstype, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
+import {
+    DokumenttypeForkortelse,
+    FordelingDokumenttype,
+    JaNei,
+    Sakstype,
+    dokumenttyperForPsbOmsOlp,
+} from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
@@ -120,6 +126,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const harFagsaker = fagsaker?.length > 0;
 
+    const isDokumenttypeMedPleietrengende =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
+
+    const sakstyperMedPleietrengende = [
+        DokumenttypeForkortelse.PSB,
+        DokumenttypeForkortelse.OMP_KS,
+        DokumenttypeForkortelse.PPN,
+        DokumenttypeForkortelse.OLP,
+        DokumenttypeForkortelse.OMP_AO,
+    ];
+
+    const isSakstypeMedPleietrengende =
+        journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
+
     const settBehandlingsÅrMutation = useMutation(
         ({ journalpostId, søkerId }: { journalpostId: string; søkerId: string }) =>
             postBehandlingsAar(journalpostId, søkerId, behandlingsAar),
@@ -133,7 +157,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpost.sak?.sakstype &&
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
-            journalpost?.norskIdent
+            journalpost?.norskIdent &&
+            (!isSakstypeMedPleietrengende || journalpost.sak.pleietrengendeIdent)
         ) {
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
@@ -190,13 +215,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visPleietrengendeComponent = gjelderPsbOmsOlp && !isFetchingFagsaker && !brukEksisterendeFagsak;
 
     const visPleietrengende =
-        visSokersBarn &&
-        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO) &&
-        !IdentRules.erUgyldigIdent(identState.søkerId);
+        visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const visValgAvBehandlingsaar =
         dokumenttype &&
