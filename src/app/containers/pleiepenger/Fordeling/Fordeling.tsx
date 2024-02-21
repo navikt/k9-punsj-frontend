@@ -316,6 +316,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
     const handleRedirectVidere = () => {
         if (fordelingState.dokumenttype) {
+            if (!valgtFagsak) {
+                setFagsak(journalpost.sak);
+            }
             navigate(
                 `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${getPathFraDokumenttype(fordelingState.dokumenttype)}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
             );
