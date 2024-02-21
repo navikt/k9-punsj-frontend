@@ -38,7 +38,7 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
         return null;
     }
 
-    const sakstype = fagsak?.k9FagsakYtelseType || finnForkortelseForDokumenttype(dokumenttype) || '';
+    const sakstype = fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype) || '';
 
     return (
         <div className="sendBrevPåFagsak">

@@ -130,18 +130,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
-            journalpost.sak?.k9FagsakYtelseType &&
+            journalpost.sak?.sakstype &&
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             journalpost?.norskIdent
         ) {
-            const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.k9FagsakYtelseType);
+            const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
             // Set fordeling state ved ferdistilt (journalført) sak
             setIdentAction(journalpost.norskIdent, journalpost.sak?.pleietrengendeIdent);
             setErSøkerIdBekreftet(true);
             setFagsak(journalpost.sak);
-            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.k9FagsakYtelseType));
+            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
 
             // Redirect to ferdigstilt side
             navigate(
@@ -225,7 +225,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 if (response.status === 200) {
                     const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
                     const filtrerteFagsaker = data.filter(
-                        (fsak) => !dokumenttypeForkortelse || fsak.k9FagsakYtelseType === dokumenttypeForkortelse,
+                        (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse,
                     );
                     setFagsaker(filtrerteFagsaker);
                     if (filtrerteFagsaker.length > 0) {

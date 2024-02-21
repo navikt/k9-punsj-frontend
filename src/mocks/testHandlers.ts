@@ -148,11 +148,11 @@ export const testHandlers = {
             [
                 {
                     fagsakId: '1DMU93M',
-                    k9FagsakYtelseType: 'PSB',
+                    sakstype: 'PSB',
                 },
                 {
                     fagsakId: '1DMUDF6',
-                    k9FagsakYtelseType: 'OMP',
+                    sakstype: 'OMP',
                 },
             ],
             { status: 200 },

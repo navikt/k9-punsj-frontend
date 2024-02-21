@@ -25,9 +25,9 @@ interface Props {
 }
 
 const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
-    const { k9FagsakYtelseType, pleietrengendeIdent } = valgtFagsak;
+    const { sakstype, pleietrengendeIdent } = valgtFagsak;
 
-    if (k9FagsakYtelseType === DokumenttypeForkortelse.PPN) {
+    if (sakstype === DokumenttypeForkortelse.PPN) {
         return (
             <FormattedMessage
                 id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
@@ -71,9 +71,9 @@ const FagsakSelect = ({
             >
                 <option value="">Velg</option>
                 {brukEksisterendeFagsak &&
-                    fagsaker.map(({ fagsakId, k9FagsakYtelseType: stype }) => (
+                    fagsaker.map(({ fagsakId, sakstype }) => (
                         <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
                         </option>
                     ))}
             </Select>
