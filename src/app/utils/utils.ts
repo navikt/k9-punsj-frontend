@@ -224,7 +224,8 @@ export const getPathFraDokumenttype = (dokumenttype: FordelingDokumenttype) => {
             return ROUTES.OMPAO_ROOT;
         case FordelingDokumenttype.OMSORGSPENGER_UT:
             return ROUTES.OMPUT_ROOT;
-
+        case FordelingDokumenttype.KORRIGERING_IM:
+            return ROUTES.KORRIGERING_ROOT;
         case FordelingDokumenttype.OPPLAERINGSPENGER:
             return ROUTES.OLP_ROOT;
         default:
