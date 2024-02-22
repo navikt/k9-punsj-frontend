@@ -100,7 +100,11 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 {fordelingState.fagsak?.fagsakId && (
                     <LabelValue
                         labelTextId="journalpost.saksnummer"
-                        value={fordelingState.fagsak?.fagsakId}
+                        value={
+                            fordelingState.fagsak?.reservertSaksnummer
+                                ? `${fordelingState.fagsak?.fagsakId} (reservert)`
+                                : fordelingState.fagsak?.fagsakId
+                        }
                         retning="horisontal"
                     />
                 )}

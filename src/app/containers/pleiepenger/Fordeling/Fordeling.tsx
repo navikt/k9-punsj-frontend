@@ -57,6 +57,9 @@ import KlassifiserModal from './Komponenter/KlassifiserModal';
 import { Pleietrengende } from './Komponenter/Pleietrengende';
 
 import './fordeling.less';
+import { use } from 'chai';
+import { j } from 'msw/lib/core/RequestHandler-CwjkprZE';
+import { set } from 'lodash';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -149,7 +152,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         { onSuccess: () => setHarLagretBehandlingsår(true) },
     );
 
-    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak
+    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
@@ -174,6 +177,22 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, []);
 
+    // Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer
+    useEffect(() => {
+        if (
+            journalpost.erFerdigstilt &&
+            journalpost.sak?.reservertSaksnummer &&
+            journalpost.sak?.fagsakId &&
+            journalpost?.norskIdent &&
+            !(!isSakstypeMedPleietrengende || journalpost.sak.pleietrengendeIdent)
+        ) {
+            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
+            setErSøkerIdBekreftet(true);
+            setIdentAction(journalpost.norskIdent);
+            setFagsak(journalpost.sak);
+        }
+    }, []);
+
     useEffect(() => {
         if (journalpost.journalpostId === 'undefined') {
             // Redirect to HOME page if journalpostid is undefined (string)
@@ -182,7 +201,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, []);
 
-    // Reset fagsak ved endring av dokumenttype eller søkerId
+    // Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
     useEffect(() => {
         if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
