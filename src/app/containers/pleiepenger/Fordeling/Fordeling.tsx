@@ -57,9 +57,6 @@ import KlassifiserModal from './Komponenter/KlassifiserModal';
 import { Pleietrengende } from './Komponenter/Pleietrengende';
 
 import './fordeling.less';
-import { use } from 'chai';
-import { j } from 'msw/lib/core/RequestHandler-CwjkprZE';
-import { set } from 'lodash';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
