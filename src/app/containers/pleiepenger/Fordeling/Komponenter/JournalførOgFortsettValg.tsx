@@ -66,7 +66,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
     const { sakstype, dokumenttype, fagsak } = fordelingState;
 
-    // Navigerer til journalpost ROOT hvis sakstype eller dokumenttype mangler ved oppdatering av side
+    // Navigerer til journalpost ROOT hvis sakstype eller dokumenttype mangler i fordelingState ved oppdatering av side
     useEffect(() => {
         if (!sakstype && !dokumenttype) {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));

@@ -150,8 +150,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         { onSuccess: () => setHarLagretBehandlingsår(true) },
     );
 
-    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
+    useEffect(() => {
+        if (!journalpost.erFerdigstilt && journalpost.sak?.sakstype) {
+            const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
+            if (dokumenttypeFraForkortelse) {
+                setDokumenttype(dokumenttypeFraForkortelse);
+            }
+        }
+    }, []);
 
+    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
@@ -239,6 +247,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, [dokumenttype, identState.søkerId, valgtFagsak, behandlingsAar]);
 
     // Reset sakstype ved endring av dokumenttype
+    // Kanskje slette dette fordi vi setter sakstype (fordelinstate) etter klassifisering
     useEffect(() => {
         if (sakstype && !journalpost.erFerdigstilt) {
             setSakstypeAction(undefined);
