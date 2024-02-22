@@ -18,6 +18,7 @@ interface ISokersIdentProps {
     dokumenttype?: FordelingDokumenttype;
     riktigIdentIJournalposten?: JaNei;
     erInntektsmeldingUtenKrav?: boolean;
+    disableRadios?: boolean;
 
     handleSøkerIdChange: (event: any) => void;
     handleSøkerIdBlur: (event: any) => void;
@@ -35,6 +36,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     dokumenttype,
     riktigIdentIJournalposten,
     erInntektsmeldingUtenKrav,
+    disableRadios,
 
     handleSøkerIdChange,
     handleSøkerIdBlur,
@@ -78,6 +80,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                 radios={Object.values(JaNei).map((jn) => ({
                     label: intlHelper(intl, jn),
                     value: jn,
+                    disabled: jn === JaNei.NEI && disableRadios,
                 }))}
                 legend={
                     <FormattedMessage

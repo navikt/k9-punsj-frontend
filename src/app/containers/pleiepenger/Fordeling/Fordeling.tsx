@@ -123,6 +123,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
+    const [disableRadios, setDisableRadios] = useState<boolean | undefined>(undefined);
     const harFagsaker = fagsaker?.length > 0;
 
     const isDokumenttypeMedPleietrengende =
@@ -150,22 +151,33 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
 
     // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
+
     useEffect(() => {
         if (
             journalpost.erFerdigstilt &&
-            journalpost.sak?.sakstype &&
+            !!journalpost.sak?.sakstype &&
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
-            journalpost?.norskIdent &&
-            (!isSakstypeMedPleietrengende || journalpost.sak.pleietrengendeIdent)
+            !!journalpost?.norskIdent &&
+            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
         ) {
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
+            // Ved feil. kanskje det trenges ikke fordi det kan ikke være ferdigstilt journalpost med reservert saksnummer med Annet sakstype
+            if (!fagsakYtelsePath) {
+                setDokumenttype(FordelingDokumenttype.ANNET);
+                setDisableRadios(true);
+                setSokersIdent(journalpost?.norskIdent);
+                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
+                return;
+            }
+
             // Set fordeling state ved ferdistilt (journalført) sak
-            setIdentAction(journalpost.norskIdent, journalpost.sak?.pleietrengendeIdent);
-            setErSøkerIdBekreftet(true);
-            setFagsak(journalpost.sak);
             setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
+            setErSøkerIdBekreftet(true);
+            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengendeIdent);
+
+            setFagsak(journalpost.sak);
 
             // Redirect to ferdigstilt side
             navigate(
@@ -175,17 +187,32 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     }, []);
 
     // Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer
+    // Brukes nå kun for å legge til pleitrengende ident
+    // Men pleitrengende indent oppdateres ikke i journalposten og kun legges til i fordeling state og til ny søknad
+    // Kanskje vi må oppdatere journalposten med pleietrengende ident hvis bruker kommer hit
+
+    const jpErFerdigstiltOgHarReservertSaksnummerMenUtenPleietrengende =
+        journalpost.erFerdigstilt &&
+        journalpost.sak?.reservertSaksnummer &&
+        !!journalpost.sak?.fagsakId &&
+        !!journalpost?.norskIdent &&
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+
     useEffect(() => {
-        if (
-            journalpost.erFerdigstilt &&
-            journalpost.sak?.reservertSaksnummer &&
-            journalpost.sak?.fagsakId &&
-            journalpost?.norskIdent &&
-            !(!isSakstypeMedPleietrengende || journalpost.sak.pleietrengendeIdent)
-        ) {
+        if (jpErFerdigstiltOgHarReservertSaksnummerMenUtenPleietrengende) {
+            const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
+
+            // Ved feil
+            if (!dokumenttypeFraForkortelse) {
+                return;
+            }
+
+            setDisableRadios(true);
             setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
+            setRiktigIdentIJournalposten(JaNei.JA);
             setErSøkerIdBekreftet(true);
-            setIdentAction(journalpost.norskIdent);
+            setIdentAction(journalpost.norskIdent!);
+            setVisSokersBarn(true);
             setFagsak(journalpost.sak);
         }
     }, []);
@@ -353,9 +380,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (!valgtFagsak) {
                 setFagsak(journalpost.sak);
             }
-            navigate(
-                `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${getPathFraDokumenttype(fordelingState.dokumenttype)}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
-            );
+            const pathFraDokumenttype = getPathFraDokumenttype(fordelingState.dokumenttype);
+
+            if (pathFraDokumenttype) {
+                navigate(
+                    `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${pathFraDokumenttype}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
+                );
+            }
         }
     };
 
@@ -499,6 +530,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         resetBarn();
                                     }}
                                     valgtDokumentType={dokumenttype as string}
+                                    disableRadios={disableRadios}
                                 />
                             )}
                             {dokumenttype === FordelingDokumenttype.ANNET && (
@@ -529,6 +561,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     riktigIdentIJournalposten={riktigIdentIJournalposten}
                                     setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
                                     erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
+                                    disableRadios={disableRadios}
                                 />
                             )}
 
@@ -538,6 +571,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 identState={identState}
                                 fellesState={fellesState}
                                 setIdentAction={setIdentAction}
+                                disabled={disableRadios}
                             />
 
                             {erInntektsmeldingUtenKrav && identState.søkerId ? (

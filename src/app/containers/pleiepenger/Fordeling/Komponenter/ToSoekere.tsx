@@ -20,6 +20,7 @@ interface IToSoekereProps {
     identState: IIdentState;
     setIdentAction: typeof setIdentFellesAction;
     fellesState: IFellesState;
+    disabled?: boolean;
 }
 
 const ToSoekere: React.FC<IToSoekereProps> = ({
@@ -27,6 +28,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     journalpost,
     identState,
     fellesState,
+    disabled,
     setIdentAction,
 }) => {
     const skalVises =
@@ -50,6 +52,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                 onChange={(e) => {
                     setToSokereIJournalpost(e.target.checked);
                 }}
+                disabled={disabled}
             >
                 {intlHelper(intl, 'ident.identifikasjon.tosokere')}
             </Checkbox>

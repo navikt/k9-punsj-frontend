@@ -207,7 +207,7 @@ export const getPathFraForkortelse = (ytelseType?: DokumenttypeForkortelse) => {
         case DokumenttypeForkortelse.OLP:
             return ROUTES.OLP_ROOT;
         default:
-            return '/';
+            return undefined;
     }
 };
 
@@ -230,7 +230,7 @@ export const getPathFraDokumenttype = (dokumenttype: FordelingDokumenttype) => {
         case FordelingDokumenttype.OPPLAERINGSPENGER:
             return ROUTES.OLP_ROOT;
         default:
-            return '/'; // TODO: Hva skal vi gjøre her?
+            return undefined;
     }
 };
 
