@@ -71,10 +71,12 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 )}
             </div>
             <div>
-                {fordelingState.fagsak?.sakstype && (
+                {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
                     <LabelValue
                         labelTextId="journalpost.sakstype"
-                        value={finnVisningsnavnForSakstype(fordelingState.fagsak?.sakstype)}
+                        value={finnVisningsnavnForSakstype(
+                            fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
+                        )}
                         retning="horisontal"
                     />
                 )}
@@ -84,7 +86,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 {pleietrengendeId && (
                     <LabelValue
                         labelTextId={
-                            fordelingState.sakstype !== Sakstype.OMSORGSPENGER_ALENE_OM_OMSORGEN
+                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                 ? 'journalpost.pleietrengendeId'
                                 : 'journalpost.barnetsId'
                         }
@@ -97,13 +99,13 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 {annenPart && <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />}
             </div>
             <div>
-                {fordelingState.fagsak?.fagsakId && (
+                {(fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId) && (
                     <LabelValue
                         labelTextId="journalpost.saksnummer"
                         value={
-                            fordelingState.fagsak?.reservertSaksnummer
-                                ? `${fordelingState.fagsak?.fagsakId} (reservert)`
-                                : fordelingState.fagsak?.fagsakId
+                            fordelingState.fagsak?.reservertSaksnummer || journalpost?.sak?.reservertSaksnummer
+                                ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
+                                : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
                         }
                         retning="horisontal"
                     />
