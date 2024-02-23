@@ -64,6 +64,9 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         if (IdentRules.erAlleIdenterGyldige(søkerIdFraJournalpost || søkerId, pleietrengendeId)) {
             props.findEksisterendeSoknader(søkerId, null);
         } else {
+            // I Dev hvis pleietrengendeId kan være ikke gyldig og redirecter til home uten info
+            // Utvide fnr validering for test identer
+            // Eller vise feilmelding eller annen håndtering
             props.resetAllAction();
             navigate(ROUTES.HOME);
         }

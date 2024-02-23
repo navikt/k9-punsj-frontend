@@ -172,11 +172,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
             // Ved feil. kanskje det trenges ikke fordi det kan ikke være ferdigstilt journalpost med reservert saksnummer med Annet sakstype
-            if (!fagsakYtelsePath) {
+            if (!fagsakYtelsePath && journalpost.sak?.sakstype !== DokumenttypeForkortelse.OMP) {
                 setDokumenttype(FordelingDokumenttype.ANNET);
                 setDisableRadios(true);
                 setSokersIdent(journalpost?.norskIdent);
                 setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
+                return;
+            }
+
+            if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
                 return;
             }
 
