@@ -61,6 +61,7 @@ let handlers = [
                 reservertSaksnummer: true,
                 sak: {
                     fagsakId: '1DQAW94',
+                    behandlingsÅr: 2021,
                     sakstype: 'OMP',
                     gyldigPeriode: null,
                     pleietrengendeIdent: null,

@@ -277,7 +277,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype &&
         dokumenttyperOmpUt.includes(dokumenttype) &&
         identState.søkerId.length === 11 &&
-        !brukEksisterendeFagsak;
+        !brukEksisterendeFagsak &&
+        !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -372,6 +373,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             );
         }
 
+        // Trenges det å lagre behandlingsår ikke i OMS?
         settBehandlingsÅrMutation.mutate({
             journalpostId: journalpost.journalpostId,
             søkerId: identState.søkerId,
@@ -418,9 +420,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
                 return true;
             }
-        }
-        if (dokumenttype && dokumenttyperOmpUt.includes(dokumenttype) && !behandlingsAar && !harLagretBehandlingsår) {
-            return true;
         }
 
         return IdentRules.erUgyldigIdent(identState.søkerId);

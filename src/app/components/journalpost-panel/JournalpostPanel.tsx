@@ -41,76 +41,73 @@ export const JournalpostPanelComponent: React.FunctionComponent<
 
     return (
         <Panel border className="journalpostpanel">
-            <div>
+            <LabelValue
+                labelTextId="journalpost.id"
+                value={journalposter?.join(', ') || journalpost?.journalpostId}
+                retning="horisontal"
+            />
+
+            {(fordelingState.erSøkerIdBekreftet || journalpost?.erFerdigstilt) && (
+                <>
+                    <LabelValue
+                        labelTextId="journalpost.norskIdent"
+                        value={
+                            søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+                        }
+                        retning="horisontal"
+                        visKopier
+                    />
+                    {modiaPath && (
+                        <Link className="modia-lenke" href={modiaPath}>
+                            {intlHelper(intl, 'modia.lenke')}
+                            <ExternalLink />
+                        </Link>
+                    )}
+                </>
+            )}
+
+            {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
                 <LabelValue
-                    labelTextId="journalpost.id"
-                    value={journalposter?.join(', ') || journalpost?.journalpostId}
+                    labelTextId="journalpost.sakstype"
+                    value={finnVisningsnavnForSakstype(
+                        fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
+                    )}
                     retning="horisontal"
                 />
-            </div>
-            <div>
-                {(fordelingState.erSøkerIdBekreftet || journalpost?.erFerdigstilt) && (
-                    <div>
-                        <LabelValue
-                            labelTextId="journalpost.norskIdent"
-                            value={
-                                søkerId ||
-                                journalpost?.norskIdent ||
-                                intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
-                            }
-                            retning="horisontal"
-                            visKopier
-                        />
-                        {modiaPath && (
-                            <Link className="modia-lenke" href={modiaPath}>
-                                {intlHelper(intl, 'modia.lenke')}
-                                <ExternalLink />
-                            </Link>
-                        )}
-                    </div>
-                )}
-            </div>
-            <div>
-                {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
-                    <LabelValue
-                        labelTextId="journalpost.sakstype"
-                        value={finnVisningsnavnForSakstype(
-                            fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
-                        )}
-                        retning="horisontal"
-                    />
-                )}
-            </div>
+            )}
 
-            <div>
-                {pleietrengendeId && (
-                    <LabelValue
-                        labelTextId={
-                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                                ? 'journalpost.pleietrengendeId'
-                                : 'journalpost.barnetsId'
-                        }
-                        value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
-                        retning="horisontal"
-                    />
-                )}
-            </div>
-            <div>
-                {annenPart && <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />}
-            </div>
-            <div>
-                {(fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId) && (
-                    <LabelValue
-                        labelTextId="journalpost.saksnummer"
-                        value={
-                            fordelingState.fagsak?.reservertSaksnummer || journalpost?.sak?.reservertSaksnummer
-                                ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
-                                : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
-                        }
-                        retning="horisontal"
-                    />
-                )}
-            </div>
+            {pleietrengendeId && (
+                <LabelValue
+                    labelTextId={
+                        fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                            ? 'journalpost.pleietrengendeId'
+                            : 'journalpost.barnetsId'
+                    }
+                    value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                    retning="horisontal"
+                />
+            )}
+
+            {annenPart && <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />}
+
+            {(fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId) && (
+                <LabelValue
+                    labelTextId="journalpost.saksnummer"
+                    value={
+                        fordelingState.fagsak?.reservertSaksnummer || journalpost?.sak?.reservertSaksnummer
+                            ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
+                            : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
+                    }
+                    retning="horisontal"
+                />
+            )}
+            {journalpost?.sak?.behandlingsÅr && (
+                <LabelValue
+                    labelTextId="journalpost.behandlingsÅr"
+                    value={journalpost?.sak?.behandlingsÅr}
+                    retning="horisontal"
+                />
+            )}
         </Panel>
     );
 };
