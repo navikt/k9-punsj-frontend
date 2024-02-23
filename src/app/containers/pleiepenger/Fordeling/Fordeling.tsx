@@ -179,8 +179,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
                 return;
             }
-
+            // Får samme sakstype på korrigering og omp_ut - ser ut som feil
             if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
+                setFagsak(journalpost.sak);
                 return;
             }
 
