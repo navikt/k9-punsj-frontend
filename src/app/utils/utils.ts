@@ -234,6 +234,29 @@ export const getPathFraDokumenttype = (dokumenttype: FordelingDokumenttype) => {
     }
 };
 
+export const getJounalførOgFortsettPath = (dokumenttype?: FordelingDokumenttype) => {
+    switch (dokumenttype) {
+        case FordelingDokumenttype.OMSORGSPENGER_KS:
+            return ROUTES.OMPKS_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.PLEIEPENGER:
+            return ROUTES.PSB_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+            return ROUTES.PLS_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.OMSORGSPENGER_MA:
+            return ROUTES.OMPMA_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.OMSORGSPENGER_UT:
+            return ROUTES.OMPUT_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.OMSORGSPENGER_AO:
+            return ROUTES.OMPAO_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.OPPLAERINGSPENGER:
+            return ROUTES.OLP_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        case FordelingDokumenttype.KORRIGERING_IM:
+            return ROUTES.KORRIGERING_ROOT + ROUTES.JOURNALFØR_OG_FORTSETT;
+        default:
+            return '/'; // TODO: Hva skal vi gjøre her?
+    }
+};
+
 export const getSakstypeFraForkortelse = (ytelseType?: DokumenttypeForkortelse): Sakstype | undefined => {
     switch (ytelseType) {
         case DokumenttypeForkortelse.PSB:
@@ -275,6 +298,29 @@ export const getDokumenttypeFraForkortelse = (
             return FordelingDokumenttype.OMSORGSPENGER_UT;
         case DokumenttypeForkortelse.OLP:
             return FordelingDokumenttype.OPPLAERINGSPENGER;
+        default:
+            return undefined;
+    }
+};
+
+export const gerForkortelseFraDokumenttype = (
+    dokumenttype: FordelingDokumenttype,
+): DokumenttypeForkortelse | undefined => {
+    switch (dokumenttype) {
+        case FordelingDokumenttype.PLEIEPENGER:
+            return DokumenttypeForkortelse.PSB;
+        case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+            return DokumenttypeForkortelse.PPN;
+        case FordelingDokumenttype.OMSORGSPENGER_KS:
+            return DokumenttypeForkortelse.OMP_KS;
+        case FordelingDokumenttype.OMSORGSPENGER_MA:
+            return DokumenttypeForkortelse.OMP_MA;
+        case FordelingDokumenttype.OMSORGSPENGER_AO:
+            return DokumenttypeForkortelse.OMP_AO;
+        case FordelingDokumenttype.OMSORGSPENGER_UT:
+            return DokumenttypeForkortelse.OMP_UT;
+        case FordelingDokumenttype.OPPLAERINGSPENGER:
+            return DokumenttypeForkortelse.OLP;
         default:
             return undefined;
     }

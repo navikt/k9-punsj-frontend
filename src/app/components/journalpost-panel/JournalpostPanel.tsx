@@ -41,14 +41,16 @@ export const JournalpostPanelComponent: React.FunctionComponent<
 
     return (
         <Panel border className="journalpostpanel">
-            <LabelValue
-                labelTextId="journalpost.id"
-                value={journalposter?.join(', ') || journalpost?.journalpostId}
-                retning="horisontal"
-            />
+            <div>
+                <LabelValue
+                    labelTextId="journalpost.id"
+                    value={journalposter?.join(', ') || journalpost?.journalpostId}
+                    retning="horisontal"
+                />
+            </div>
 
             {(fordelingState.erSøkerIdBekreftet || journalpost?.erFerdigstilt) && (
-                <>
+                <div>
                     <LabelValue
                         labelTextId="journalpost.norskIdent"
                         value={
@@ -63,50 +65,62 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                             <ExternalLink />
                         </Link>
                     )}
-                </>
+                </div>
             )}
 
             {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
-                <LabelValue
-                    labelTextId="journalpost.sakstype"
-                    value={finnVisningsnavnForSakstype(
-                        fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
-                    )}
-                    retning="horisontal"
-                />
+                <div>
+                    <LabelValue
+                        labelTextId="journalpost.sakstype"
+                        value={finnVisningsnavnForSakstype(
+                            fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
+                        )}
+                        retning="horisontal"
+                    />
+                </div>
             )}
 
             {pleietrengendeId && (
-                <LabelValue
-                    labelTextId={
-                        fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
-                            ? 'journalpost.pleietrengendeId'
-                            : 'journalpost.barnetsId'
-                    }
-                    value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
-                    retning="horisontal"
-                />
+                <div>
+                    <LabelValue
+                        labelTextId={
+                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                                ? 'journalpost.pleietrengendeId'
+                                : 'journalpost.barnetsId'
+                        }
+                        value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                        retning="horisontal"
+                    />
+                </div>
             )}
 
-            {annenPart && <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />}
+            {annenPart && (
+                <div>
+                    <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />
+                </div>
+            )}
 
             {(fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId) && (
-                <LabelValue
-                    labelTextId="journalpost.saksnummer"
-                    value={
-                        fordelingState.fagsak?.reservertSaksnummer || journalpost?.sak?.reservertSaksnummer
-                            ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
-                            : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
-                    }
-                    retning="horisontal"
-                />
+                <div>
+                    <LabelValue
+                        labelTextId="journalpost.saksnummer"
+                        value={
+                            fordelingState.fagsak?.reservertSaksnummer || journalpost?.sak?.reservertSaksnummer
+                                ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
+                                : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
+                        }
+                        retning="horisontal"
+                    />
+                </div>
             )}
             {journalpost?.sak?.behandlingsÅr && (
-                <LabelValue
-                    labelTextId="journalpost.behandlingsÅr"
-                    value={journalpost?.sak?.behandlingsÅr}
-                    retning="horisontal"
-                />
+                <div>
+                    <LabelValue
+                        labelTextId="journalpost.behandlingsÅr"
+                        value={journalpost?.sak?.behandlingsÅr}
+                        retning="horisontal"
+                    />
+                </div>
             )}
         </Panel>
     );

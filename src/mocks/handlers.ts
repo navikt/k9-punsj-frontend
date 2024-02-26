@@ -72,7 +72,14 @@ let handlers = [
         ),
     ),
 
-    http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () => new HttpResponse(null, { status: 200 })),
+    http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
+        HttpResponse.json(
+            {
+                saksnummer: '1DQAW94',
+            },
+            { status: 200 },
+        ),
+    ),
 
     /* http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
         HttpResponse.json(
