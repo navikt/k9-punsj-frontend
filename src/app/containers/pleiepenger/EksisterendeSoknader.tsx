@@ -1,19 +1,19 @@
-import * as React from 'react';
+import React from 'react';
+
 import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
 import { IEksisterendeSoknaderState } from 'app/models/types';
-import { IdentRules } from 'app/rules';
+
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import {
     chooseEksisterendeSoknadAction,
     closeEksisterendeSoknadAction,
-    findEksisterendeSoknader,
     openEksisterendeSoknadAction,
     resetSoknadidAction,
 } from 'app/state/actions';
@@ -30,16 +30,13 @@ export interface IEksisterendeSoknaderStateProps {
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
-    findEksisterendeSoknader: typeof findEksisterendeSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
-    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendeSoknaderComponentProps {
-    søkerId: string;
     pleietrengendeId: string | null;
 }
 
@@ -48,29 +45,12 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
     IEksisterendeSoknaderStateProps &
     IEksisterendeSoknaderDispatchProps;
 
-export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterendeSoknaderProps> = (
+export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
 ) => {
-    const { intl, eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
-    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
-
-    const søkerIdFraJournalpost = journalpost && journalpost.erFerdigstilt ? journalpost?.norskIdent : undefined;
-
     const navigate = useNavigate();
-
+    const { intl, eksisterendeSoknaderState, pleietrengendeId } = props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-
-    React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(søkerIdFraJournalpost || søkerId, pleietrengendeId)) {
-            props.findEksisterendeSoknader(søkerId, null);
-        } else {
-            // I Dev hvis pleietrengendeId kan være ikke gyldig og redirecter til home uten info
-            // Utvide fnr validering for test identer
-            // Eller vise feilmelding eller annen håndtering
-            props.resetAllAction();
-            navigate(ROUTES.HOME);
-        }
-    }, [søkerId, pleietrengendeId]);
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
@@ -113,7 +93,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
         }
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
@@ -186,7 +166,7 @@ export const EksisterendeSoknaderComponent: React.FunctionComponent<IEksisterend
                 {modaler}
             </>
         );
-    }
+    };
 
     if (soknader && soknader.length) {
         return (
@@ -214,8 +194,6 @@ const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps 
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),

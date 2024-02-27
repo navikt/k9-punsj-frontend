@@ -33,6 +33,7 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
+import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import AnnenPart from './AnnenPart';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
@@ -46,6 +47,7 @@ interface IJournalførOgFortsettStateProps {
 interface IJournalførOgFortsettDispatchProps {
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
+    setAnnenPart: typeof setAnnenPartAction;
     omfordel: typeof omfordelAction;
 }
 
@@ -58,6 +60,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         fordelingState,
         setSakstypeAction: sakstypeAction,
         lukkJournalpostOppgave,
+        setAnnenPart,
         omfordel,
     } = props;
 
@@ -155,64 +158,68 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     // Hvis bruker kommer hit fra los så har vi info om at saksnummer reservert
     return (
         <FormPanel>
-            {!erSaksnummerReservert && (
-                <Alert variant="success" size="small" className="max-w-2xl mb-5">
-                    <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
-                </Alert>
-            )}
+            <div className="max-w-md">
+                {!erSaksnummerReservert && (
+                    <Alert variant="success" size="small" className="mb-5">
+                        <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
+                    </Alert>
+                )}
 
-            {erSaksnummerReservert && (
-                <Alert variant="success" size="small" className="max-w-2xl mb-5">
-                    <FormattedMessage id="fordeling.klassifiserModal.alert.success.reservert" />
-                </Alert>
-            )}
+                {erSaksnummerReservert && (
+                    <Alert variant="success" size="small" className="mb-5">
+                        <FormattedMessage id="fordeling.klassifiserModal.alert.success.reservert" />
+                    </Alert>
+                )}
 
-            <div className="mb-5">
-                <AnnenPart
-                    vis={
-                        (!journalpost.sak?.annenPart || !fagsak?.annenPart) &&
-                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA
-                    }
-                />
+                <div className="mb-5">
+                    <AnnenPart
+                        annenPart={identState.annenPart}
+                        showComponent={
+                            (!journalpost.sak?.annenPart || !fagsak?.annenPart) &&
+                            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA
+                        }
+                        setAnnenPart={setAnnenPart}
+                    />
+                </div>
+
+                {visPleietrengendeVarsel && (
+                    <div className="mb-5">
+                        <Alert size="small" variant="info" className="max-w-2xl mb-5">
+                            <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon" />
+                        </Alert>
+                    </div>
+                )}
+
+                {visFordelingSakstype() && (
+                    <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')}>
+                        {keys &&
+                            keys.map((key) => (
+                                <div className="max-w-sm mb-2.5" key={key}>
+                                    <RadioPanel
+                                        label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
+                                        value={Sakstype[key]}
+                                        onChange={() => {
+                                            sakstypeAction(Sakstype[key]);
+                                        }}
+                                        checked={(konfigForValgtSakstype?.navn as any) === key}
+                                    />
+                                </div>
+                            ))}
+                    </RadioGruppe>
+                )}
+
+                <VerticalSpacer eightPx />
+
+                {fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
+                    <>
+                        <Alert size="small" variant="info">
+                            {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
+                        </Alert>
+                        <VerticalSpacer eightPx />
+                    </>
+                )}
             </div>
 
-            {visPleietrengendeVarsel && (
-                <div className="mb-5">
-                    <Alert size="small" variant="info" className="max-w-2xl mb-5">
-                        <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon" />
-                    </Alert>
-                </div>
-            )}
-
-            {visFordelingSakstype() && (
-                <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')}>
-                    {keys &&
-                        keys.map((key) => (
-                            <div className="max-w-sm mb-2.5" key={key}>
-                                <RadioPanel
-                                    label={intlHelper(intl, `fordeling.sakstype.${Sakstype[key]}`)}
-                                    value={Sakstype[key]}
-                                    onChange={() => {
-                                        sakstypeAction(Sakstype[key]);
-                                    }}
-                                    checked={(konfigForValgtSakstype?.navn as any) === key}
-                                />
-                            </div>
-                        ))}
-                </RadioGruppe>
-            )}
-
-            <VerticalSpacer eightPx />
-
-            {/* TODO Når settes Sakstype.SKAL_IKKE_PUNSJES */}
-            {fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
-                <>
-                    <Alert size="small" variant="info">
-                        {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
-                    </Alert>
-                    <VerticalSpacer eightPx />
-                </>
-            )}
             <Behandlingsknapp
                 norskIdent={identState.søkerId}
                 omfordel={omfordel}
@@ -233,6 +240,7 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstype(sakstype)),
+    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>

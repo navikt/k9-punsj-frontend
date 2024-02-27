@@ -5,7 +5,7 @@ import { testHandlers } from 'mocks/testHandlers';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200/pleiepenger-sykt-barn/journalfor-og-fortsett/soknader', {
+        cy.visit('/journalpost/200/pleiepenger-sykt-barn/soknader', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },

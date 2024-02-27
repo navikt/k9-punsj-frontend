@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -36,14 +36,20 @@ type IOMPMARegistreringsValgProps = IOMPMARegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistreringsValgProps> = (
     props: IOMPMARegistreringsValgProps,
 ) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { journalpostid, identState, eksisterendeSoknaderState } = props;
     const { søkerId, pleietrengendeId, annenPart } = identState;
 
-    const location = useLocation();
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId) {
+            navigate(location.pathname.replace('soknader', ''));
+        }
+    }, []);
 
-    const navigate = useNavigate();
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (
             !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
             eksisterendeSoknaderState.isSoknadCreated &&
@@ -54,7 +60,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         props.getAlleJournalposter(søkerId);
     }, [søkerId]);
 
@@ -74,8 +80,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
         if (soknader?.length) {
             return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((eksisterendeSoknad) =>
-                // eslint-disable-next-line eqeqeq
-                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp == journalpostid),
+                Array.from(eksisterendeSoknad.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;
@@ -89,7 +94,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
                     Tilbake

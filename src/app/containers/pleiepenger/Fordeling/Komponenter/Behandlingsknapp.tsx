@@ -32,7 +32,7 @@ const Behandlingsknapp: React.FC<BehandlingsknappProps> = ({
 
     if (sakstypeConfig?.punchPath) {
         return (
-            <Button size="small" onClick={() => navigate(sakstypeConfig.punchPath)}>
+            <Button size="small" onClick={() => navigate('soknader')}>
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );

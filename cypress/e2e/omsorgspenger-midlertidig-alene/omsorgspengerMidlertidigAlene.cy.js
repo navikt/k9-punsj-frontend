@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-midlertidig-alene/eksist
 
 describe('Eksisterende søknader midlertidig alene', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/205/omsorgspenger-midlertidig-alene/journalfor-og-fortsett/soknader/', {
+        cy.visit('/journalpost/205/omsorgspenger-midlertidig-alene/soknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },

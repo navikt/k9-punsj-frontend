@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-alene-om-omsorgen/eksist
 
 describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200/omsorgspenger-alene-om-omsorgen/journalfor-og-fortsett/soknader/', {
+        cy.visit('/journalpost/200/omsorgspenger-alene-om-omsorgen/soknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },

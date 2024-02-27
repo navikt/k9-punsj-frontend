@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
+import { useIntl } from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
 import { TextField } from '@navikt/ds-react';
 
 import { getValidationErrors, identifikator } from 'app/rules/yup';
-import { RootStateType } from 'app/state/RootState';
-import { setAnnenPartAction } from 'app/state/actions/IdentActions';
-import intlHelper from 'app/utils/intlUtils';
 
-type ownProps = {
-    vis: boolean;
+interface Props {
     annenPart: string;
+    showComponent: boolean;
     setAnnenPart: (annenPart: string) => void;
-};
-const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | null => {
+}
+const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
+    const intl = useIntl();
+    const [visFeil, setVisFeil] = useState(false);
+
+    const validators = [identifikator];
+
+    // Trenges dette her?
     useEffect(() => {
         setAnnenPart('');
     }, []);
-    const intl = useIntl();
-    const [visFeil, setVisFeil] = useState<boolean>(false);
 
-    if (!vis) {
-        return null;
-    }
-
-    const onChangeHandler = (e) => {
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const identifikatorUtenWhitespace = e.target.value.replace(/\D+/, '');
         if (identifikatorUtenWhitespace.length < 12) {
             setAnnenPart(identifikatorUtenWhitespace);
         }
     };
-    const validators = [identifikator];
-    const handleIdentAnnenSokerBlur = () => setVisFeil(true);
+
+    const onBlurHandler = () => setVisFeil(true);
+
+    if (!showComponent) {
+        return null;
+    }
     return (
         <TextField
             label={intlHelper(intl, 'ident.identifikasjon.annenPart')}
             onChange={onChangeHandler}
-            onBlur={handleIdentAnnenSokerBlur}
+            onBlur={onBlurHandler}
             value={annenPart}
             error={visFeil && getValidationErrors(validators, annenPart)}
             className="bold-label"
@@ -48,12 +48,4 @@ const AnnenPart = ({ vis, annenPart, setAnnenPart }: ownProps): JSX.Element | nu
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    annenPart: state.identState.annenPart,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AnnenPart);
+export default AnnenPart;

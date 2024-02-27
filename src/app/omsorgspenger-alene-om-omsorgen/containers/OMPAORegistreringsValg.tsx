@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect } from 'react-redux';
@@ -21,15 +21,21 @@ export interface IEksisterendeOMPAOSoknaderStateProps {
 
 type IOMPAORegistreringsValgProps = IOMPAORegistreringsValgComponentProps & IEksisterendeOMPAOSoknaderStateProps;
 
-export const RegistreringsValgComponent: React.FunctionComponent<IOMPAORegistreringsValgProps> = (
+export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> = (
     props: IOMPAORegistreringsValgProps,
 ) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
 
-    const location = useLocation();
-
-    const navigate = useNavigate();
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId) {
+            navigate(location.pathname.replace('soknader', ''));
+        }
+    }, []);
 
     const {
         isLoading: oppretterSoknad,
@@ -69,7 +75,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPAORegistrer
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
                     Tilbake

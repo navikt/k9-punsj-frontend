@@ -9,7 +9,7 @@ import { klassifiserDokument } from 'app/api/api';
 import Fagsak from 'app/types/Fagsak';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, getEnvironmentVariable, getJounalførOgFortsettPath } from 'app/utils';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable, getPathFraDokumenttype } from 'app/utils';
 import KlassifiseringInfo from './KlassifiseringInfo';
 
 interface OwnProps {
@@ -57,7 +57,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                 setFagsak(reservertSak);
             }
 
-            navigate(getJounalførOgFortsettPath(dokumenttype));
+            navigate(getPathFraDokumenttype(dokumenttype) || '/');
         }
     }, [isSuccess]);
 

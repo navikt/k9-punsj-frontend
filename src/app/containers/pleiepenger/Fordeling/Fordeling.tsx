@@ -194,7 +194,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
             // Redirect to ferdigstilt side
             navigate(
-                `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${fagsakYtelsePath}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
+                `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${fagsakYtelsePath}`,
             );
         }
     }, []);
@@ -400,7 +400,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
             if (pathFraDokumenttype) {
                 navigate(
-                    `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${pathFraDokumenttype}${ROUTES.JOURNALFØR_OG_FORTSETT}`,
+                    `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${pathFraDokumenttype}`,
                 );
             }
         }

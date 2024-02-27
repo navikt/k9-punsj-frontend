@@ -6,10 +6,11 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+import { IdentRules } from 'app/rules';
 import { IEksisterendeSoknaderState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import { createSoknad, resetSoknadidAction } from '../../state/actions';
+import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { EksisterendeSoknader } from './EksisterendeSoknader';
 import './registreringsValg.less';
@@ -22,6 +23,7 @@ export interface IRegistreringsValgDispatchProps {
     createSoknad: typeof createSoknad;
     resetSoknadidAction: typeof resetSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
+    findEksisterendeSoknader: typeof findEksisterendeSoknader;
 }
 
 export interface IEksisterendeSoknaderStateProps {
@@ -36,20 +38,26 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (
     props: IRegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, eksisterendeSoknaderState } = props;
-    const { søkerId, pleietrengendeId } = identState;
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
-    const location = useLocation();
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
+    const { søkerId, pleietrengendeId } = identState;
 
-    const navigate = useNavigate();
-
+    // Redirect tilbake ved side reload
     useEffect(() => {
         if (!fordelingState.dokumenttype) {
-            navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''));
+            navigate(location.pathname.replace('soknader', ''));
         }
     }, []);
+
+    useEffect(() => {
+        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+            props.findEksisterendeSoknader(søkerId, null);
+        }
+    }, [søkerId, pleietrengendeId]);
 
     useEffect(() => {
         if (
@@ -88,15 +96,15 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
 
     return (
         <div className="registrering-page">
-            <EksisterendeSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendeSoknader pleietrengendeId={pleietrengendeId} />
             <div className="knapperad">
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
-                    Tilbake
+                    <FormattedMessage id="fordeling.registreringsValg.tilbake" />
                 </Button>
                 {kanStarteNyRegistrering() && (
                     <Button onClick={newSoknad} className="knapp2" size="small">
@@ -111,6 +119,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetSoknadidAction()),
+    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 

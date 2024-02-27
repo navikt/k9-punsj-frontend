@@ -16,5 +16,4 @@ export const ROUTES = {
     KORRIGERING_ROOT: 'korrigering/',
     VELG_SOKNAD: 'soknader/',
     PUNCH: `skjema/:id/`,
-    JOURNALFØR_OG_FORTSETT: 'journalfor-og-fortsett/',
 };

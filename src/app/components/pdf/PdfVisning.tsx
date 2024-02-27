@@ -99,7 +99,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                 bottomLeft: false,
                 topLeft: false,
             }}
-            defaultSize={{ width: '50%', height: '100%' }}
+            defaultSize={{ width: '60%', height: '100%' }}
             minWidth={400}
         >
             <Panel className="punch_pdf">

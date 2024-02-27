@@ -24,7 +24,7 @@ export interface Props {
     pleietrengendeId: string | null;
 }
 
-const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
+const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
     const { søkerId, pleietrengendeId } = props;
 
     const intl = useIntl();

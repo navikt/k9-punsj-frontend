@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ExternalLink } from '@navikt/ds-icons';
 import { Link, Panel } from '@navikt/ds-react';
 
-import { Sakstype } from 'app/models/enums';
+import { DokumenttypeForkortelse, Sakstype } from 'app/models/enums';
 import { finnVisningsnavnForSakstype, getModiaPath } from 'app/utils';
 
 import { IFordelingState, IJournalpost } from '../../models/types';
@@ -80,15 +80,20 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 </div>
             )}
 
-            {pleietrengendeId && (
+            {(pleietrengendeId || journalpost?.sak?.pleietrengendeIdent) && (
                 <div>
                     <LabelValue
                         labelTextId={
-                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE
+                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+                            journalpost?.sak?.sakstype === DokumenttypeForkortelse.PPN
                                 ? 'journalpost.pleietrengendeId'
                                 : 'journalpost.barnetsId'
                         }
-                        value={pleietrengendeId || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                        value={
+                            pleietrengendeId ||
+                            journalpost?.sak?.pleietrengendeIdent ||
+                            intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
+                        }
                         retning="horisontal"
                     />
                 </div>

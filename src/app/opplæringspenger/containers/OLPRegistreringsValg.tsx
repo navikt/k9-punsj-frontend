@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
 
@@ -24,9 +24,18 @@ type IOLPRegistreringsValgProps = IOLPRegistreringsValgComponentProps & IEksiste
 export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistreringsValgProps> = (
     props: IOLPRegistreringsValgProps,
 ) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
-    const navigate = useNavigate();
+
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId) {
+            navigate(location.pathname.replace('soknader', ''));
+        }
+    }, []);
 
     const {
         isLoading: oppretterSoknad,
@@ -66,7 +75,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
                     Tilbake

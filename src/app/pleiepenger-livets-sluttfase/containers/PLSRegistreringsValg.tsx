@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -36,14 +36,20 @@ type IPLSRegistreringsValgProps = IPLSRegistreringsValgComponentProps &
 export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistreringsValgProps> = (
     props: IPLSRegistreringsValgProps,
 ) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { journalpostid, identState, eksisterendeSoknaderState } = props;
     const { søkerId, pleietrengendeId } = identState;
 
-    const location = useLocation();
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId) {
+            navigate(location.pathname.replace('soknader', ''));
+        }
+    }, []);
 
-    const navigate = useNavigate();
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (
             !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
             eksisterendeSoknaderState.isSoknadCreated &&
@@ -53,7 +59,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
             navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
         }
     }, [eksisterendeSoknaderState.soknadid]);
-    React.useEffect(() => {
+
+    useEffect(() => {
         props.getAlleJournalposter(søkerId);
     }, [søkerId]);
 
@@ -84,7 +91,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
                     Tilbake

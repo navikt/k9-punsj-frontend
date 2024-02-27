@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -35,20 +35,26 @@ type IOMPKSRegistreringsValgProps = IOMPKSRegistreringsValgComponentProps &
 export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistreringsValgProps> = (
     props: IOMPKSRegistreringsValgProps,
 ) => {
-    const { journalpostid, identState, eksisterendeSoknaderState } = props;
-
-    const { søkerId, pleietrengendeId } = identState;
-
+    const navigate = useNavigate();
     const location = useLocation();
 
-    const navigate = useNavigate();
-    React.useEffect(() => {
+    const { journalpostid, identState, eksisterendeSoknaderState } = props;
+    const { søkerId, pleietrengendeId } = identState;
+
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId) {
+            navigate(location.pathname.replace('soknader', ''));
+        }
+    }, []);
+
+    useEffect(() => {
         if (eksisterendeSoknaderState.isSoknadCreated && eksisterendeSoknaderState.soknadid) {
             navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
         }
     }, [eksisterendeSoknaderState.soknadid]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         props.getAlleJournalposter(søkerId);
     }, [søkerId]);
 
@@ -78,7 +84,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPKSRegistrer
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace(ROUTES.VELG_SOKNAD, ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
                     size="small"
                 >
                     Tilbake

@@ -4,7 +4,7 @@ import { initialState } from '../../state/omsorgspenger-utbetaling/eksisterendeS
 
 describe('Eksisterende søknader omsorgspengeutbetaling', () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200/omsorgspenger-utbetaling/journalfor-og-fortsett/soknader/', {
+        cy.visit('/journalpost/200/omsorgspenger-utbetaling/soknader/', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },

@@ -40,112 +40,101 @@ const JournalpostRouter: React.FC = () => {
         >
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Routes>
+                    <Route path={ROUTES.PSB_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.PSB_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<PSBRegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route path={ROUTES.PUNCH} element={<PSBPunchForm />} />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<PSBRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route path={ROUTES.PUNCH} element={<PSBPunchForm />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.PLS_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.PLS_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<PLSRegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route path={ROUTES.PUNCH} element={<PLSPunchForm journalpostid={journalpostid} />} />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<PLSRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route path={ROUTES.PUNCH} element={<PLSPunchForm journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.OMPKS_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.OMPKS_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<OMPKSRegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route path={ROUTES.PUNCH} element={<OMPKSPunchForm />} />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPKSRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route path={ROUTES.PUNCH} element={<OMPKSPunchForm />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.OMPMA_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.OMPMA_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<OMPMARegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route
-                                path={ROUTES.PUNCH}
-                                element={<OMPMAPunchFormContainer journalpostid={journalpostid} />}
-                            />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPMARegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route
+                            path={ROUTES.PUNCH}
+                            element={<OMPMAPunchFormContainer journalpostid={journalpostid} />}
+                        />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.OMPUT_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.OMPUT_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<OMPUTRegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route
-                                path={ROUTES.PUNCH}
-                                element={<OMPUTPunchFormContainer journalpostid={journalpostid} />}
-                            />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPUTRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route
+                            path={ROUTES.PUNCH}
+                            element={<OMPUTPunchFormContainer journalpostid={journalpostid} />}
+                        />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.OMPAO_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.OMPAO_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<OMPAORegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route
-                                path={ROUTES.PUNCH}
-                                element={<OMPAOPunchFormContainer journalpostid={journalpostid} />}
-                            />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OMPAORegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route
+                            path={ROUTES.PUNCH}
+                            element={<OMPAOPunchFormContainer journalpostid={journalpostid} />}
+                        />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.OLP_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.OLP_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.VELG_SOKNAD}
-                                element={<OLPRegistreringsValg journalpostid={journalpostid} />}
-                            />
-                            <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                            <Route
-                                path={ROUTES.PUNCH}
-                                element={<OLPPunchFormContainer journalpostid={journalpostid} />}
-                            />
-                            <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
-                        </Route>
+                        <Route
+                            path={ROUTES.VELG_SOKNAD}
+                            element={<OLPRegistreringsValg journalpostid={journalpostid} />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                        <Route path={ROUTES.PUNCH} element={<OLPPunchFormContainer journalpostid={journalpostid} />} />
+                        <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
+
+                    <Route path={ROUTES.KORRIGERING_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.KORRIGERING_ROOT}>
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT} element={<JournalførOgFortsettValg />} />
-                        <Route path={ROUTES.JOURNALFØR_OG_FORTSETT}>
-                            <Route
-                                path={ROUTES.KORRIGERING_INNTEKTSMELDING}
-                                element={<KorrigeringAvInntektsmeldingContainer />}
-                            />
-                        </Route>
+                        <Route
+                            path={ROUTES.KORRIGERING_INNTEKTSMELDING}
+                            element={<KorrigeringAvInntektsmeldingContainer />}
+                        />
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                     </Route>
-                    <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
             </ErrorBoundary>
