@@ -8,6 +8,7 @@ interface Fagsak {
     reservertSaksnummer?: boolean;
     annenPart?: string; // TODO: Kanskje ikke nødvendig
     behandlingsÅr?: string; // For OMS
+    reservert?: boolean;
 }
 
 export default Fagsak;

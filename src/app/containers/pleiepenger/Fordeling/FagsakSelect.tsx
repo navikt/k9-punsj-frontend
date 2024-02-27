@@ -70,9 +70,9 @@ const FagsakSelect = ({
             >
                 <option value="">Velg</option>
                 {brukEksisterendeFagsak &&
-                    fagsaker.map(({ fagsakId, sakstype }) => (
+                    fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                         <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})`}
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
                         </option>
                     ))}
             </Select>
