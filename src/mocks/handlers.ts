@@ -64,7 +64,7 @@ let handlers = [
                     sakstype: 'PSB',
                     gyldigPeriode: null,
                     pleietrengendeIdent: 27522068417,
-                    reservertSaksnummer: true,
+                    reservertSaksnummer: false,
                 },
             },
             { status: 200 },

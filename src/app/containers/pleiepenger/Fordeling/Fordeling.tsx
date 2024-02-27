@@ -204,15 +204,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     // Men pleitrengende indent oppdateres ikke i journalposten og kun legges til i fordeling state og til ny søknad
     // Kanskje vi må oppdatere journalposten med pleietrengende ident hvis bruker kommer hit
 
-    const jpErFerdigstiltOgHarReservertSaksnummerMenUtenPleietrengende =
+    const jpErFerdigstiltOgUtenPleietrengende =
         journalpost.erFerdigstilt &&
-        journalpost.sak?.reservertSaksnummer &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
     useEffect(() => {
-        if (jpErFerdigstiltOgHarReservertSaksnummerMenUtenPleietrengende) {
+        if (jpErFerdigstiltOgUtenPleietrengende) {
             const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
 
             // Ved feil
