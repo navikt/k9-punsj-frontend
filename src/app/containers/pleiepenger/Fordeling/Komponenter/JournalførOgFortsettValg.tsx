@@ -121,8 +121,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
             return false;
         }
 
-        // TODO: Sjekke hvis det trenges
-        // Skjoler fordelings sakstype SKAL_IKKE_PUNSJES
         if (key === TilgjengeligSakstype.SKAL_IKKE_PUNSJES) {
             return false;
         }
@@ -153,7 +151,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
     const erSaksnummerReservert = journalpost.sak?.reservertSaksnummer || fagsak?.reservertSaksnummer;
 
-    // TODO: Vise alert hvis saksnummer reservert
     // men har ikke info om at saksnummer reservert hvis bruker kommer hit rett etter klassifisering
     // Hvis bruker kommer hit fra los så har vi info om at saksnummer reservert
     return (
