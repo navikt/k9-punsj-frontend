@@ -111,7 +111,7 @@ let handlers = [
                     },
                 },
                 {
-                    fagsakId: 'GHI789',
+                    fagsakId: '1DMU93M',
                     sakstype: 'PSB',
                     pleietrengendeIdent: null,
                     gyldigPeriode: null,
