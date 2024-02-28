@@ -57,3 +57,9 @@ export interface IKopierJournalpost {
     til: string;
     barn: string;
 }
+
+export interface IKopierJournalpostUtenBarn {
+    dedupKey: string;
+    fra: string;
+    til: string;
+}

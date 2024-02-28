@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ExternalLink } from '@navikt/ds-icons';
 import { Link, Panel } from '@navikt/ds-react';
 
-import { DokumenttypeForkortelse, Sakstype } from 'app/models/enums';
+import { DokumenttypeForkortelse, FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { finnVisningsnavnForSakstype, getModiaPath } from 'app/utils';
 
 import { IFordelingState, IJournalpost } from '../../models/types';
@@ -84,7 +84,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 <div>
                     <LabelValue
                         labelTextId={
-                            fordelingState.sakstype === Sakstype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+                            fordelingState.dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
                             journalpost?.sak?.sakstype === DokumenttypeForkortelse.PPN
                                 ? 'journalpost.pleietrengendeId'
                                 : 'journalpost.barnetsId'

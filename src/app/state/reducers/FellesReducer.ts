@@ -4,7 +4,7 @@ import { ApiPath } from '../../apiConfig';
 import { IError, IJournalpost } from '../../models/types';
 import { IBarn } from '../../models/types/Barn';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
-import { IKopierJournalpost } from '../../models/types/RequestBodies';
+import { IKopierJournalpost, IKopierJournalpostUtenBarn } from '../../models/types/RequestBodies';
 import { convertResponseToError, get, post } from '../../utils';
 import {
     ActiontypesHentBarn,
@@ -236,6 +236,36 @@ export function kopierJournalpost(
             ApiPath.JOURNALPOST_KOPIERE,
             { journalpostId: journalPostID },
             { 'X-Nav-NorskIdent': kopierFraIdent },
+            requestBody,
+            (response) => {
+                switch (response.status) {
+                    case 202:
+                        return dispatch(getJournalpostKopiereSuccessAction());
+                    case 403:
+                        return dispatch(getJournalpostKopiereForbiddenAction());
+                    case 409:
+                        return dispatch(getJournalpostKopiereConflictAction());
+                    default:
+                        return dispatch(getJournalpostKopiereErrorAction());
+                }
+            },
+        );
+    };
+}
+
+export function kopierJournalpostUtenBarn(søkerId: string, journalpostId: string, dedupKey: string) {
+    return (dispatch: any) => {
+        const requestBody: IKopierJournalpostUtenBarn = {
+            dedupKey,
+            fra: søkerId,
+            til: søkerId,
+        };
+
+        dispatch(getJournalpostKopiereRequestAction());
+        post(
+            ApiPath.JOURNALPOST_KOPIERE,
+            { journalpostId },
+            { 'X-Nav-NorskIdent': søkerId },
             requestBody,
             (response) => {
                 switch (response.status) {

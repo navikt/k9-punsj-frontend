@@ -58,18 +58,68 @@ let handlers = [
                 journalpostStatus: 'JOURNALFOERT',
                 kanOpprettesJournalføringsoppgave: true,
                 kanKopieres: true,
-                reservertSaksnummer: true,
                 sak: {
                     fagsakId: '1DQAW94',
                     sakstype: 'PSB',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: 27522068417,
-                    reservertSaksnummer: false,
+                    pleietrengendeIdent: null,
+                    reservertSaksnummer: true,
                 },
             },
             { status: 200 },
         ),
     ),
+
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/204', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '204',
+                erFerdigstilt: false,
+                norskIdent: '29099000129',
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'MOTTATT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+            },
+            { status: 200 },
+        ),
+    ),
+
+    http.get('http://localhost:8101/api/k9-punsj/saker/hent', async () => {
+        await delay(500);
+        return HttpResponse.json(
+            [
+                {
+                    fagsakId: 'ABC123',
+                    sakstype: 'PSB',
+                    pleietrengendeIdent: '03091477490',
+                    gyldigPeriode: {
+                        fom: '2022-08-01',
+                        tom: '2022-08-15',
+                    },
+                },
+                {
+                    fagsakId: 'DEF456',
+                    sakstype: 'PSB',
+                    pleietrengendeIdent: null,
+                    gyldigPeriode: {
+                        fom: '2022-08-01',
+                        tom: '2022-08-15',
+                    },
+                },
+                {
+                    fagsakId: 'GHI789',
+                    sakstype: 'PSB',
+                    pleietrengendeIdent: null,
+                    gyldigPeriode: null,
+                },
+            ],
+            { status: 200 },
+        );
+    }),
 
     http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
         HttpResponse.json(
