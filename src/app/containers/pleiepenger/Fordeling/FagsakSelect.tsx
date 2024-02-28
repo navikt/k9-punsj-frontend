@@ -28,24 +28,39 @@ const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
     const { sakstype, pleietrengendeIdent } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
+        if (pleietrengendeIdent) {
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
+                    values={{ pleietrengendeIdent }}
+                />
+            );
+        }
+
+        return (
+            <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.utenPleietrengende" />
+        );
+    }
+
+    if (pleietrengendeIdent) {
+        const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
+        if (barnet) {
+            const navn = `${barnet.fornavn} ${barnet.etternavn}`;
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn"
+                    values={{ navn, pleietrengendeIdent }}
+                />
+            );
+        }
         return (
             <FormattedMessage
-                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnKunMedFnr"
                 values={{ pleietrengendeIdent }}
             />
         );
     }
-    const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
 
-    if (barnet) {
-        const navn = `${barnet.fornavn} ${barnet.etternavn}`;
-        return (
-            <FormattedMessage
-                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn"
-                values={{ navn, pleietrengendeIdent }}
-            />
-        );
-    }
     return <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt" />;
 };
 
