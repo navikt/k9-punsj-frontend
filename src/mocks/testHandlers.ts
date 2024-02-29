@@ -14,7 +14,6 @@ import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSokna
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    me: http.get(ApiPath.ME, () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
     hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) =>
         HttpResponse.json({ ...journalpost, journalpostId: params.id }),
     ),
