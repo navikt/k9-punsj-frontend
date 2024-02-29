@@ -144,6 +144,7 @@
     "ident.identifikasjon.annetBarn": "Det gjelder et annet barn",
     "ident.identifikasjon.pleietrengendeHarIkkeFnr": "Pleietrengende har ikke fødselsnummer",
     "ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon": "Dokumentet kan ikke sendes til K9 uten pleietrengendes fødselsnummer. Registrer opplysningene fra dokumentet og sett Punsj-oppgaven på vent.",
+    "ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt": "Dokumentet kan ikke sendes til K9 uten pleietrengendes fødselsnummer når journalposten journalført.",
     "ident.identifikasjon.dobbelsjekkident": "Det er viktig at fødselsnummer er riktig. Dobbeltsjekk at fødselsnummer er korrekt.",
     "ident.identifikasjon.sjekkident": "Stemmer det at søkers fødselsnummer er {ident}?",
     "ident.identifikasjon.tosokere": "Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)",

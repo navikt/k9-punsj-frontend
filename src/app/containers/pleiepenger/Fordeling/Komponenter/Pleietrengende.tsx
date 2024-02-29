@@ -19,6 +19,7 @@ import './pleietrengende.less';
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
+    jpErFerdigstiltOgUtenPleietrengende: boolean;
 }
 
 export interface IPleietrengendeDispatchProps {
@@ -45,6 +46,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         henteBarn,
         visPleietrengende,
         skalHenteBarn,
+        jpErFerdigstiltOgUtenPleietrengende,
     } = props;
     const intl = useIntl();
 
@@ -158,10 +160,18 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
                                 {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
-                            {pleietrengendeHarIkkeFnr && (
+                            {pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
                                     {' '}
                                     {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
+                                </Alert>
+                            )}
+                            {jpErFerdigstiltOgUtenPleietrengende && (
+                                <Alert size="small" variant="info" className="infotrygd_info">
+                                    {intlHelper(
+                                        intl,
+                                        'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt',
+                                    )}
                                 </Alert>
                             )}
                         </>

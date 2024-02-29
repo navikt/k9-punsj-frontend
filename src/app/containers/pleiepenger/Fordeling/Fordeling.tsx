@@ -443,7 +443,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
+            if (
+                IdentRules.erUgyldigIdent(identState.pleietrengendeId) &&
+                (!barnetHarIkkeFnr || jpErFerdigstiltOgUtenPleietrengende)
+            ) {
                 return true;
             }
         }
@@ -653,6 +656,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                     }
                                     visPleietrengende={visPleietrengende}
+                                    jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
