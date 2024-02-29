@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ExternalLink } from '@navikt/ds-icons';
 import { Link, Panel } from '@navikt/ds-react';
 
-import { DokumenttypeForkortelse, FordelingDokumenttype, Sakstype } from 'app/models/enums';
+import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
 import { finnVisningsnavnForSakstype, getModiaPath } from 'app/utils';
 
 import { IFordelingState, IJournalpost } from '../../models/types';
