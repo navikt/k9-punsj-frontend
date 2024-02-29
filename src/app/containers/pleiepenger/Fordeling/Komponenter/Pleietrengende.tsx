@@ -19,7 +19,7 @@ import './pleietrengende.less';
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
-    jpErFerdigstiltOgUtenPleietrengende: boolean;
+    jpErFerdigstiltOgUtenPleietrengende?: boolean;
 }
 
 export interface IPleietrengendeDispatchProps {
