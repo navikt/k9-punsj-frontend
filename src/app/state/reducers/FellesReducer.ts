@@ -4,7 +4,7 @@ import { ApiPath } from '../../apiConfig';
 import { IError, IJournalpost } from '../../models/types';
 import { IBarn } from '../../models/types/Barn';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
-import { IKopierJournalpost, IKopierJournalpostUtenBarn } from '../../models/types/RequestBodies';
+import { IKopierJournalpost } from '../../models/types/RequestBodies';
 import { convertResponseToError, get, post } from '../../utils';
 import {
     ActiontypesHentBarn,
@@ -253,12 +253,19 @@ export function kopierJournalpost(
     };
 }
 
-export function kopierJournalpostUtenBarn(søkerId: string, journalpostId: string, dedupKey: string) {
+// TODO: Rename funk
+export function kopierJournalpostUtenBarn(
+    søkerId: string,
+    pleietrengendeId: string,
+    journalpostId: string,
+    dedupKey: string,
+) {
     return (dispatch: any) => {
-        const requestBody: IKopierJournalpostUtenBarn = {
+        const requestBody: IKopierJournalpost = {
             dedupKey,
             fra: søkerId,
             til: søkerId,
+            barn: pleietrengendeId,
         };
 
         dispatch(getJournalpostKopiereRequestAction());

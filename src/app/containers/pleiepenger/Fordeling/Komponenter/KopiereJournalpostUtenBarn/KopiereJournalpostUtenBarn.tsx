@@ -68,7 +68,12 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                         return;
                     }
                     if (søkerId) {
-                        kopiereJournalpostUtenBarn(søkerId, journalpost?.journalpostId, dedupkey);
+                        kopiereJournalpostUtenBarn(
+                            søkerId,
+                            identState.pleietrengendeId,
+                            journalpost?.journalpostId,
+                            dedupkey,
+                        );
                     }
                 }}
             >
@@ -106,8 +111,8 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpostUtenBarn: (søkerId: string, journalpostId: string, dedupkey: string) =>
-        dispatch(kopierJournalpostUtenBarn(søkerId, journalpostId, dedupkey)),
+    kopiereJournalpostUtenBarn: (søkerId: string, pleietrengendeId: string, journalpostId: string, dedupkey: string) =>
+        dispatch(kopierJournalpostUtenBarn(søkerId, pleietrengendeId, journalpostId, dedupkey)),
 });
 
 const KopiereJournalpostUtenBarn = injectIntl(

@@ -62,4 +62,5 @@ export interface IKopierJournalpostUtenBarn {
     dedupKey: string;
     fra: string;
     til: string;
+    pleietrengendeId: string;
 }
