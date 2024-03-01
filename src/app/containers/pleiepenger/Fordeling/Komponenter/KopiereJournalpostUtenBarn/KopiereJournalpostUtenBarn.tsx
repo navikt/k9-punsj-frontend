@@ -16,6 +16,7 @@ import { IFellesState, kopierJournalpostUtenBarn } from '../../../../../state/re
 import { getEnvironmentVariable } from '../../../../../utils';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import './kopiereJournalpostUtenBarn.less';
+import KopierModal from '../KopierModal';
 
 export interface IKopiereJournalpostUtenBarnStateProps {
     intl: IntlShape;
@@ -37,6 +38,7 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
 ) => {
     const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostUtenBarn } = props;
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
+    const [visModal, setVisModal] = useState(false);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -69,12 +71,7 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                                 return;
                             }
                             if (søkerId) {
-                                kopiereJournalpostUtenBarn(
-                                    søkerId,
-                                    identState.pleietrengendeId,
-                                    journalpost?.journalpostId,
-                                    dedupkey,
-                                );
+                                setVisModal(true);
                             }
                         }}
                     >
@@ -103,6 +100,18 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                         <li>Kan ikke være inntektsmelding uten søknad</li>
                     </ul>
                 </Alert>
+            )}
+            {visModal && (
+                <KopierModal
+                    søkerId={søkerId}
+                    pleietrengendeId={identState.pleietrengendeId}
+                    journalpostId={journalpost?.journalpostId}
+                    fellesState={fellesState}
+                    dedupkey={dedupkey}
+                    kopiereJournalpostUtenBarn={kopiereJournalpostUtenBarn}
+                    lukkModal={() => setVisModal(false)}
+                    intl={intl}
+                />
             )}
         </div>
     );
