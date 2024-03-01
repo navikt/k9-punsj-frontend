@@ -2,7 +2,6 @@ import React from 'react';
 
 import { BodyShort, Checkbox, Select } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
 import Period from 'app/utils/Period';
@@ -120,7 +119,6 @@ const FagsakSelect = ({
         >
             <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>
-        <VerticalSpacer twentyPx />
     </>
 );
 
