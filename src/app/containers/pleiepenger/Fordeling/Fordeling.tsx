@@ -41,6 +41,7 @@ import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
+    getEnvironmentVariable,
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from '../../../utils';
@@ -443,10 +444,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
-            if (
-                IdentRules.erUgyldigIdent(identState.pleietrengendeId) &&
-                (!barnetHarIkkeFnr || jpErFerdigstiltOgUtenPleietrengende)
-            ) {
+            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
                 return true;
             }
         }
@@ -660,7 +658,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
-                                <Alert size="small" variant="error">
+                                <Alert size="small" variant="warning">
                                     <FormattedMessage
                                         id="fordeling.error.pleietrengendeHarFagsak"
                                         values={{
@@ -674,7 +672,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>
                                     {!fellesState.kopierJournalpostSuccess && (
-                                        <Alert size="small" variant="error">
+                                        <Alert size="small" variant="warning">
                                             <FormattedMessage
                                                 id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
                                                 values={{
@@ -686,7 +684,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     )}
 
                                     <div className="md-5">
-                                        <KopiereJournalpostUtenBarn />
+                                        <KopiereJournalpostUtenBarn barnMedFagsak={barnMedFagsak} />
                                     </div>
                                 </>
                             )}
@@ -697,7 +695,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             variant="primary"
                                             size="small"
                                             onClick={() => handleJournalfør(true)}
-                                            disabled={disableJournalførKnapper()}
+                                            disabled={disableJournalførKnapper() || barnetHarIkkeFnr}
                                             loading={settBehandlingsÅrMutation.isLoading}
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
@@ -731,6 +729,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                             </Button>
                                         </div>
+                                        <Button
+                                            size="small"
+                                            variant="secondary"
+                                            onClick={() => {
+                                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                            }}
+                                        >
+                                            Avbryt og legg i kø
+                                        </Button>
                                     </div>
                                 )}
                         </div>

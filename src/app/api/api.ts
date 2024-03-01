@@ -70,3 +70,17 @@ export const klassifiserDokument = (body: {
             return responseBody;
         },
     );
+
+export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) =>
+    post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, {
+        norskIdent: soekersIdent,
+        sak: fagsak,
+    }).then(async (response) => {
+        if (!response.ok) {
+            const responseBody = await response.json();
+            const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+            throw Error(feil);
+        }
+        const responseBody = await response.json();
+        return responseBody;
+    });

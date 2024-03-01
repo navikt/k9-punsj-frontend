@@ -130,6 +130,15 @@ let handlers = [
         ),
     ),
 
+    http.post('http://localhost:8101/api/k9-punsj/journalpost/lukk/203', () =>
+        HttpResponse.json(
+            {
+                saksnummer: '1DQAW94',
+            },
+            { status: 200 },
+        ),
+    ),
+
     http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
         HttpResponse.json(
             {

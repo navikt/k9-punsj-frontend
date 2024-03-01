@@ -9,16 +9,17 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
+import Fagsak from 'app/types/Fagsak';
+import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpostUtenBarn } from '../../../../../state/reducers/FellesReducer';
-import { getEnvironmentVariable } from '../../../../../utils';
-import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
-import './kopiereJournalpostUtenBarn.less';
 import KopierModal from '../KopierModal';
+import './kopiereJournalpostUtenBarn.less';
 
 export interface IKopiereJournalpostUtenBarnStateProps {
+    barnMedFagsak: Fagsak;
     intl: IntlShape;
     journalpost?: IJournalpost;
     identState: IIdentState;
@@ -36,7 +37,7 @@ type IKopiereJournalpostUtenBarnStatePropsProps = IKopiereJournalpostUtenBarnSta
 const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnStatePropsProps> = (
     props: IKopiereJournalpostUtenBarnStatePropsProps,
 ) => {
-    const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostUtenBarn } = props;
+    const { barnMedFagsak, intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostUtenBarn } = props;
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [visModal, setVisModal] = useState(false);
 
@@ -55,7 +56,6 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
         <div>
             <VerticalSpacer eightPx />
 
-            <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
             <div className="flex">
                 <div className="mr-4">
                     <Button
@@ -78,16 +78,6 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                         <FormattedMessage id="fordeling.kopiereOgLukkJournalpost" />
                     </Button>
                 </div>
-                {!!fellesState.kopierJournalpostSuccess && (
-                    <Button
-                        size="small"
-                        onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                        }}
-                    >
-                        {intlHelper(intl, 'tilbaketilLOS')}
-                    </Button>
-                )}
             </div>
 
             {visKanIkkeKopiere && (
@@ -111,6 +101,7 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                     kopiereJournalpostUtenBarn={kopiereJournalpostUtenBarn}
                     lukkModal={() => setVisModal(false)}
                     intl={intl}
+                    fagsakId={barnMedFagsak.fagsakId}
                 />
             )}
         </div>
@@ -127,6 +118,8 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     kopiereJournalpostUtenBarn: (søkerId: string, pleietrengendeId: string, journalpostId: string, dedupkey: string) =>
         dispatch(kopierJournalpostUtenBarn(søkerId, pleietrengendeId, journalpostId, dedupkey)),
+    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });
 
 const KopiereJournalpostUtenBarn = injectIntl(
