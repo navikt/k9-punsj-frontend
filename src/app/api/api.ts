@@ -84,6 +84,4 @@ export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIden
             const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
             throw Error(feil);
         }
-        const responseBody = await response.json();
-        return responseBody;
     });

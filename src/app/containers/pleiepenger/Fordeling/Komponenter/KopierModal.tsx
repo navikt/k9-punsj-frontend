@@ -88,7 +88,7 @@ const KopierModal = ({
                     )}
                     {!!error && (
                         <div>
-                            <Alert size="small" variant="success">
+                            <Alert size="small" variant="warning">
                                 Error ved lukking av journalpost
                             </Alert>
                         </div>
