@@ -4,6 +4,7 @@ import { IPeriode } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
+import sakstyper from 'app/constants/sakstyper';
 
 export const finnArbeidsgivere = (
     søkerId: string,
@@ -74,7 +75,9 @@ export const klassifiserDokument = (body: {
 export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) =>
     post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, {
         norskIdent: soekersIdent,
-        sak: fagsak,
+        sak: fagsak?.fagsakId
+            ? { fagsakId: fagsak.fagsakId, sakstype: sakstyper.FAGSAK }
+            : { sakstype: sakstyper.GENERELL_SAK },
     }).then(async (response) => {
         if (!response.ok) {
             const responseBody = await response.json();
