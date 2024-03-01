@@ -108,6 +108,7 @@
     "fordeling.ikkesaksbehandler": "Du har ikke tilgang til denne applikasjonen.",
     "fordeling.detteGjelder": "Dette gjelder:",
     "fordeling.kopiereJournal": "Kopier journalpost",
+    "fordeling.kopiereOgLukkJournalpost": "Kopier og lukk journalpost",
     "fordeling.kopiereJournal.hjelpetekst": "Bør krysses av dersom det er opplysninger i dokumentet som må legges inn i saken. Dette vil skape en ny Punsj-oppgave i K9-Los.",
     "fordeling.kategoriGosys": "Velg hva journalposten gjelder",
     "fordeling.kanIkkeOppretteJPIGosys.info": "Dokumentet er allerede journalført.",

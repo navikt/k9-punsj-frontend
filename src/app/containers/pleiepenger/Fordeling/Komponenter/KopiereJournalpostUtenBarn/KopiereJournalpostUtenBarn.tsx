@@ -54,40 +54,45 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
             <VerticalSpacer eightPx />
 
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
+            <div className="flex">
+                <div className="mr-4">
+                    <Button
+                        variant="secondary"
+                        size="small"
+                        disabled={
+                            IdentRules.erUgyldigIdent(identState.pleietrengendeId) ||
+                            fellesState.kopierJournalpostSuccess
+                        }
+                        onClick={() => {
+                            if (fellesState.kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
+                                setVisKanIkkeKopiere(true);
+                                return;
+                            }
+                            if (søkerId) {
+                                kopiereJournalpostUtenBarn(
+                                    søkerId,
+                                    identState.pleietrengendeId,
+                                    journalpost?.journalpostId,
+                                    dedupkey,
+                                );
+                            }
+                        }}
+                    >
+                        <FormattedMessage id="fordeling.kopiereOgLukkJournalpost" />
+                    </Button>
+                </div>
+                {!!fellesState.kopierJournalpostSuccess && (
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        }}
+                    >
+                        {intlHelper(intl, 'tilbaketilLOS')}
+                    </Button>
+                )}
+            </div>
 
-            <Button
-                variant="secondary"
-                className="kopier__button"
-                size="small"
-                disabled={
-                    IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
-                }
-                onClick={() => {
-                    if (fellesState.kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
-                        setVisKanIkkeKopiere(true);
-                        return;
-                    }
-                    if (søkerId) {
-                        kopiereJournalpostUtenBarn(
-                            søkerId,
-                            identState.pleietrengendeId,
-                            journalpost?.journalpostId,
-                            dedupkey,
-                        );
-                    }
-                }}
-            >
-                <FormattedMessage id="fordeling.kopiereJournal" />
-            </Button>
-            {!!fellesState.kopierJournalpostSuccess && (
-                <Button
-                    onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                    }}
-                >
-                    {intlHelper(intl, 'tilbaketilLOS')}
-                </Button>
-            )}
             {visKanIkkeKopiere && (
                 <Alert variant="warning">
                     Journalposten kan ikke kopieres. En journalpost kan kun kopieres dersom den oppfyller alle de

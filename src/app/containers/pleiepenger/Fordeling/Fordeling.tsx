@@ -673,15 +673,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>
-                                    <Alert size="small" variant="error">
-                                        <FormattedMessage
-                                            id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
-                                            values={{
-                                                pleietrengendeId: barnMedFagsak.pleietrengendeIdent,
-                                                fagsakId: barnMedFagsak.fagsakId,
-                                            }}
-                                        />
-                                    </Alert>
+                                    {!fellesState.kopierJournalpostSuccess && (
+                                        <Alert size="small" variant="error">
+                                            <FormattedMessage
+                                                id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
+                                                values={{
+                                                    pleietrengendeId: barnMedFagsak.pleietrengendeIdent,
+                                                    fagsakId: barnMedFagsak.fagsakId,
+                                                }}
+                                            />
+                                        </Alert>
+                                    )}
+
                                     <div className="md-5">
                                         <KopiereJournalpostUtenBarn />
                                     </div>
