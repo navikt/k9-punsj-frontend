@@ -3,8 +3,8 @@ import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IPeriode } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
-import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 import sakstyper from 'app/constants/sakstyper';
+import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
     søkerId: string,
