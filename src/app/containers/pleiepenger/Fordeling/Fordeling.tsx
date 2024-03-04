@@ -584,7 +584,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     omfordel={omfordel}
                                 />
                             )}
-                            {dokumenttype !== FordelingDokumenttype.OMSORGSPENGER && (
+                            {(erInntektsmeldingUtenKrav || dokumenttype !== FordelingDokumenttype.OMSORGSPENGER) && (
                                 <SokersIdent
                                     dokumenttype={dokumenttype}
                                     journalpost={journalpost}
