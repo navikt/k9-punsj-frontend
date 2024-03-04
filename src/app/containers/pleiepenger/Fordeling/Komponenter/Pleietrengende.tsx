@@ -100,7 +100,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     }
     return (
         <div>
-            {!jpErFerdigstiltOgUtenPleietrengende && (
+            {!jpErFerdigstiltOgUtenPleietrengende && skalHenteBarn && (
                 <>
                     <Checkbox onChange={(e) => ingenInfoOmBarnCheckboks(e.target.checked)}>
                         Dokument har ikke informasjon om barn
