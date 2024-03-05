@@ -1,5 +1,5 @@
 import proxy from 'express-http-proxy';
-import { getSession } from '@navikt/oasis';
+import { requestOboToken, validateToken } from '@navikt/oasis';
 import url from 'url';
 
 import config from './config.js';
@@ -12,15 +12,19 @@ const proxyOptions = (api) => ({
     timeout: 60000,
     proxyReqOptDecorator: async (options, req) => {
         try {
-            const session = await getSession(req);
+            const token = req.headers.authorization.replace('Bearer ', '');
+            await validateToken(token);
             const requestTime = Date.now();
             options.headers[xTimestamp] = requestTime;
             delete options.headers.cookie;
 
             return new Promise((resolve, reject) => {
-                session.apiToken(api.scopes).then(
-                    (oboToken) => {
-                        options.headers.Authorization = `Bearer ${oboToken}`;
+                requestOboToken(token, api.scopes).then(
+                    (obo) => {
+                        if (!obo.ok) {
+                            reject(obo.error);
+                        }
+                        options.headers.Authorization = `Bearer ${obo.token}`;
                         resolve(options);
                     },
                     (error) => {
