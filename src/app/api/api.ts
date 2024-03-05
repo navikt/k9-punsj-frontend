@@ -31,6 +31,7 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         },
     );
+
 export const postBehandlingsAar = (
     journalpostid: string,
     søkerId: string,
@@ -85,3 +86,18 @@ export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIden
             throw Error(feil);
         }
     });
+
+export const settJournalpostPaaVentUtenSøknadId = (journalpostid: string) =>
+    post(ApiPath.JOURNALPOST_SETT_PAA_VENT, { journalpostId: journalpostid }, undefined, undefined).then(
+        async (response) => {
+            if (!response.ok) {
+                const responseBody = await response.json();
+                const feil =
+                    responseBody.detail ||
+                    responseBody.feil ||
+                    responseBody.message ||
+                    'Det oppstod en feil når journalpost skulle settes på vent.';
+                throw Error(feil);
+            }
+        },
+    );

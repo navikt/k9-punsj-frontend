@@ -27,7 +27,11 @@ const Behandlingsknapp: React.FC<BehandlingsknappProps> = ({
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
 
     if (!sakstypeConfig || !journalpost) {
-        return null;
+        return (
+            <Button disabled size="small" onClick={() => null}>
+                <FormattedMessage id="fordeling.knapp.punsj" />
+            </Button>
+        );
     }
 
     if (sakstypeConfig?.punchPath) {
