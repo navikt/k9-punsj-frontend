@@ -86,6 +86,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPMARegistrer
         return true;
     };
 
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+        if (!soknader?.length) {
+            newSoknad();
+        }
+    }, [eksisterendeSoknaderState.eksisterendeSoknaderSvar]);
+
     return (
         <div className="registrering-page">
             <EksisterendeOMPMASoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />

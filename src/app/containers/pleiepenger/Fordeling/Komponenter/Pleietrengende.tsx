@@ -19,7 +19,6 @@ import './pleietrengende.less';
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
-    jpErFerdigstiltOgUtenPleietrengende?: boolean;
 }
 
 export interface IPleietrengendeDispatchProps {
@@ -31,6 +30,8 @@ export interface IPleietrengende {
     sokersIdent: string;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
+    visFagsakSelect: boolean;
+    jpErFerdigstiltOgUtenPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
 
@@ -47,13 +48,14 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         visPleietrengende,
         skalHenteBarn,
         jpErFerdigstiltOgUtenPleietrengende,
+        visFagsakSelect,
     } = props;
     const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
-    const [ingenInfoOmBarn, setingenInfoOmBarn] = useState<boolean>(false);
+    const [ingenInfoOmBarn, setIngenInfoOmBarn] = useState<boolean>(false);
 
     useEffect(() => {
         if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
@@ -87,9 +89,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     };
 
     const ingenInfoOmBarnCheckboks = (checked: boolean) => {
-        setingenInfoOmBarn(checked);
+        setIngenInfoOmBarn(checked);
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
+            setGjelderAnnenPleietrengende(false);
             setPleietrengendeIdent('');
             setIdentAction(identState.søkerId, null);
         }
@@ -100,117 +103,115 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     }
     return (
         <div>
-            {!jpErFerdigstiltOgUtenPleietrengende && skalHenteBarn && (
+            {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
                 <>
-                    <Checkbox onChange={(e) => ingenInfoOmBarnCheckboks(e.target.checked)}>
+                    <VerticalSpacer eightPx />
+                    <Select
+                        className="pleietrengendeSelect"
+                        label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
+                        onChange={(e) => {
+                            pleietrengendeIdentInputFieldOnChange(e);
+                            oppdaterStateMedPleietrengendeFnr(e);
+                        }}
+                        disabled={gjelderAnnenPleietrengende || ingenInfoOmBarn}
+                    >
+                        <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
+                        {!ingenInfoOmBarn &&
+                            !gjelderAnnenPleietrengende &&
+                            fellesState.barn.map((b) => (
+                                <option key={b.identitetsnummer} value={b.identitetsnummer}>
+                                    {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
+                                </option>
+                            ))}
+                    </Select>
+                    <VerticalSpacer eightPx />
+                    <Checkbox
+                        onChange={(e) => {
+                            setGjelderAnnenPleietrengende(e.target.checked);
+                            nullUtPleietrengendeIdent();
+                        }}
+                        checked={gjelderAnnenPleietrengende}
+                        disabled={ingenInfoOmBarn}
+                    >
+                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                    </Checkbox>
+                </>
+            )}
+
+            {!visFagsakSelect && skalHenteBarn && (
+                <>
+                    <Checkbox
+                        onChange={(e) => ingenInfoOmBarnCheckboks(e.target.checked)}
+                        disabled={gjelderAnnenPleietrengende}
+                    >
                         Dokument har ikke informasjon om barn
                     </Checkbox>
                     {ingenInfoOmBarn && (
                         <Alert size="small" variant="info">
-                            Du kan journalføre uten å koble til barn, men kan ikke registrere opplysninger til K9 før du
-                            vet barnet. Ved journalføring vil det bli reservert ett saksnummer i K9.
+                            Du kan journalføre uten å koble til pleietrengende, men kan ikke sende opplysninger til K9.
+                            Hvis du fortsetter kan du registrere opplysningene fra dokumentet, men må sette
+                            punsj-oppgaven på vent.
                         </Alert>
                     )}
                 </>
             )}
-
-            {!ingenInfoOmBarn && (
+            {(gjelderAnnenPleietrengende ||
+                !skalHenteBarn ||
+                !!fellesState.hentBarnError ||
+                !!fellesState.hentBarnForbidden ||
+                (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
-                    {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
+                    <div className="fyllUtIdentAnnetBarnContainer">
+                        <TextField
+                            label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
+                            onChange={pleietrengendeIdentInputFieldOnChange}
+                            onBlur={oppdaterStateMedPleietrengendeFnr}
+                            value={pleietrengendeIdent}
+                            className="bold-label ident-soker-2"
+                            maxLength={11}
+                            size="medium"
+                            error={
+                                identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                    : undefined
+                            }
+                            disabled={pleietrengendeHarIkkeFnr}
+                        />
+                        {pleietrengendeIdent.length === 11 &&
+                            !IdentRules.erUgyldigIdent(identState.pleietrengendeId) && (
+                                <div className="dobbelSjekkIdent">
+                                    <div>
+                                        <WarningCircle />
+                                    </div>
+                                    <p>
+                                        <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b>
+                                    </p>
+                                </div>
+                            )}
+                    </div>
+                    <VerticalSpacer eightPx />
+                    {!skalHenteBarn && pleietrengendeHarIkkeFnrFn && (
                         <>
-                            <VerticalSpacer eightPx />
-                            <Select
-                                className="pleietrengendeSelect"
-                                label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
-                                onChange={(e) => {
-                                    pleietrengendeIdentInputFieldOnChange(e);
-                                    oppdaterStateMedPleietrengendeFnr(e);
-                                }}
-                                disabled={gjelderAnnenPleietrengende}
-                            >
-                                <option key="default" value="" label=" " aria-label="Tomt valg" />
-                                {fellesState.barn.map((b) => (
-                                    <option key={b.identitetsnummer} value={b.identitetsnummer}>
-                                        {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
-                                    </option>
-                                ))}
-                            </Select>
-                            <VerticalSpacer eightPx />
-                            <Checkbox
-                                onChange={(e) => {
-                                    setGjelderAnnenPleietrengende(e.target.checked);
-                                    nullUtPleietrengendeIdent();
-                                }}
-                                checked={gjelderAnnenPleietrengende}
-                            >
-                                {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                            <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
+                                {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
+                            {pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende && (
+                                <Alert size="small" variant="info" className="infotrygd_info">
+                                    {' '}
+                                    {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
+                                </Alert>
+                            )}
+                            {jpErFerdigstiltOgUtenPleietrengende && !pleietrengendeIdent && (
+                                <Alert size="small" variant="info" className="infotrygd_info">
+                                    {intlHelper(
+                                        intl,
+                                        'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt',
+                                    )}
+                                </Alert>
+                            )}
                         </>
                     )}
                     <VerticalSpacer sixteenPx />
-                    {(gjelderAnnenPleietrengende ||
-                        !skalHenteBarn ||
-                        !!fellesState.hentBarnError ||
-                        !!fellesState.hentBarnForbidden ||
-                        (!!fellesState.barn && fellesState.barn.length === 0)) && (
-                        <>
-                            <div className="fyllUtIdentAnnetBarnContainer">
-                                <TextField
-                                    label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
-                                    onChange={pleietrengendeIdentInputFieldOnChange}
-                                    onBlur={oppdaterStateMedPleietrengendeFnr}
-                                    value={pleietrengendeIdent}
-                                    className="bold-label ident-soker-2"
-                                    maxLength={11}
-                                    size="small"
-                                    error={
-                                        identState.pleietrengendeId &&
-                                        IdentRules.erUgyldigIdent(identState.pleietrengendeId)
-                                            ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                            : undefined
-                                    }
-                                    disabled={pleietrengendeHarIkkeFnr}
-                                />
-                                {pleietrengendeIdent.length === 11 &&
-                                    !IdentRules.erUgyldigIdent(identState.pleietrengendeId) && (
-                                        <div className="dobbelSjekkIdent">
-                                            <div>
-                                                <WarningCircle />
-                                            </div>
-                                            <p>
-                                                <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b>
-                                            </p>
-                                        </div>
-                                    )}
-                            </div>
-                            <VerticalSpacer eightPx />
-                            {pleietrengendeHarIkkeFnrFn && (
-                                <>
-                                    <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
-                                        {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
-                                    </Checkbox>
-                                    {pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende && (
-                                        <Alert size="small" variant="info" className="infotrygd_info">
-                                            {' '}
-                                            {intlHelper(
-                                                intl,
-                                                'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon',
-                                            )}
-                                        </Alert>
-                                    )}
-                                    {jpErFerdigstiltOgUtenPleietrengende && !pleietrengendeIdent && (
-                                        <Alert size="small" variant="info" className="infotrygd_info">
-                                            {intlHelper(
-                                                intl,
-                                                'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt',
-                                            )}
-                                        </Alert>
-                                    )}
-                                </>
-                            )}
-                            <VerticalSpacer sixteenPx />
-                        </>
-                    )}
                 </>
             )}
         </div>

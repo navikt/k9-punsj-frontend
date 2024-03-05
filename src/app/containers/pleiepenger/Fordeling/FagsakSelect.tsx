@@ -15,6 +15,7 @@ interface Props {
     fagsaker: Fagsak[];
     brukEksisterendeFagsak: boolean;
     identState: IIdentState;
+    ingenInfoOmBarnIDokument?: boolean;
     valgtFagsak?: Fagsak;
     barn?: IBarn[];
     setValgtFagsak: (fagsak: string) => void;
@@ -67,6 +68,7 @@ const FagsakSelect = ({
     fagsaker,
     brukEksisterendeFagsak,
     identState,
+    ingenInfoOmBarnIDokument,
     valgtFagsak,
     barn,
     setValgtFagsak,
@@ -79,11 +81,12 @@ const FagsakSelect = ({
             <Select
                 className="fagsakSelect"
                 label="Velg fagsak"
-                disabled={fagsaker.length === 0 || !brukEksisterendeFagsak}
+                disabled={fagsaker.length === 0 || !brukEksisterendeFagsak || ingenInfoOmBarnIDokument}
                 onChange={(event) => setValgtFagsak(event.target.value)}
             >
                 <option value="">Velg</option>
-                {brukEksisterendeFagsak &&
+                {!ingenInfoOmBarnIDokument &&
+                    brukEksisterendeFagsak &&
                     fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                         <option key={fagsakId} value={fagsakId}>
                             {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
@@ -116,6 +119,7 @@ const FagsakSelect = ({
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                 setBehandlingsAar(undefined);
             }}
+            disabled={ingenInfoOmBarnIDokument}
         >
             <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>

@@ -167,7 +167,10 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
                 {erSaksnummerReservert && (
                     <Alert variant="success" size="small" className="mb-5">
-                        <FormattedMessage id="fordeling.klassifiserModal.alert.success.reservert" />
+                        <FormattedMessage
+                            id="fordeling.klassifiserModal.alert.success.reservert"
+                            values={{ saksnummer: fagsak?.fagsakId || '' }}
+                        />
                     </Alert>
                 )}
 

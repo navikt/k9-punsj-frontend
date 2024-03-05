@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 import { finnFagsaker, postBehandlingsAar } from 'app/api/api';
 import {
     DokumenttypeForkortelse,
@@ -127,6 +127,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const [disableRadios, setDisableRadios] = useState<boolean | undefined>(undefined);
     const [barnMedFagsak, setBarnMedFagsak] = useState<Fagsak | undefined>(undefined);
+    const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
 
     const harFagsaker = fagsaker?.length > 0;
 
@@ -246,6 +247,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
             setBrukEksisterendeFagsak(false);
+            setIngenInfoOmPleitrengende(false);
         }
     }, [dokumenttype, identState.søkerId]);
 
@@ -281,7 +283,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visFagsakSelect =
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
 
-    const visPleietrengendeComponent = gjelderPsbOmsOlp && !isFetchingFagsaker && !brukEksisterendeFagsak;
+    const visPleietrengendeComponent =
+        gjelderPsbOmsOlp && !isFetchingFagsaker && !brukEksisterendeFagsak && !ingenInfoOmPleitrengende;
 
     const visPleietrengende =
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
@@ -336,13 +339,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (
             dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
         ) {
             if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
                 return true;
             }
-            if (harFagsaker && brukEksisterendeFagsak) {
+            if (harFagsaker && brukEksisterendeFagsak && !ingenInfoOmPleitrengende) {
                 return !valgtFagsak;
             }
 
@@ -350,7 +354,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
+            if (
+                !barnetHarIkkeFnr &&
+                !ingenInfoOmPleitrengende &&
+                IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+            ) {
                 return true;
             }
         }
@@ -433,18 +441,19 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (
             dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
         ) {
-            if (harFagsaker && brukEksisterendeFagsak) {
-                return !valgtFagsak;
-            }
-
             if (barnMedFagsak) {
                 return true;
             }
 
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId) && !barnetHarIkkeFnr) {
+            if (
+                !barnetHarIkkeFnr &&
+                !ingenInfoOmPleitrengende &&
+                IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+            ) {
                 return true;
             }
         }
@@ -479,7 +488,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    // TODO SLETTE GOSYS?
+    useEffect(() => {
+        if (ingenInfoOmPleitrengende) {
+            setBehandlingsAar(undefined);
+            setValgtFagsak('');
+        }
+    }, [ingenInfoOmPleitrengende]);
+
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
     }
@@ -532,7 +547,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             <VerticalSpacer twentyPx />
                         </>
                     )}
+
                     <div className="fordeling-page">
+                        {jpErFerdigstiltOgUtenPleietrengende && (
+                            <Alert size="small" variant="info" className="mb-5">
+                                <FormattedMessage id="fordeling.infobox.jpErFerdigstiltOgUtenPleietrengende" />
+                            </Alert>
+                        )}
                         {!!opprettIGosysState.gosysOppgaveRequestError && (
                             <Alert size="small" variant="error">
                                 <FormattedMessage id="fordeling.omfordeling.feil" />
@@ -626,6 +647,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     brukEksisterendeFagsak={brukEksisterendeFagsak}
                                     fagsaker={fagsaker}
                                     identState={identState}
+                                    ingenInfoOmBarnIDokument={ingenInfoOmPleitrengende}
                                     setBrukEksisterendeFagsak={setBrukEksisterendeFagsak}
                                     setIdentAction={setIdentAction}
                                     setValgtFagsak={setValgtFagsak}
@@ -633,6 +655,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     setBehandlingsAar={setBehandlingsAar}
                                     barn={fellesState.barn}
                                 />
+                            )}
+
+                            {visFagsakSelect && !jpErFerdigstiltOgUtenPleietrengende && (
+                                <Checkbox
+                                    onChange={(e) => setIngenInfoOmPleitrengende(e.target.checked)}
+                                    disabled={!brukEksisterendeFagsak}
+                                >
+                                    Dokument har ikke informasjon om barn eller barnet har ikke fødselsnummer
+                                </Checkbox>
                             )}
 
                             {visValgAvBehandlingsaar && (
@@ -655,6 +686,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     }
                                     visPleietrengende={visPleietrengende}
                                     jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
+                                    visFagsakSelect={visFagsakSelect}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
@@ -688,6 +720,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     </div>
                                 </>
                             )}
+                            {!journalpost.erFerdigstilt &&
+                                !valgtFagsak &&
+                                !disableJournalførKnapper() &&
+                                identState.pleietrengendeId && (
+                                    <Alert size="small" variant="info">
+                                        <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
+                                    </Alert>
+                                )}
                             {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
                                 <div className="flex">
                                     <div className="mr-4">
@@ -695,7 +735,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             variant="primary"
                                             size="small"
                                             onClick={() => handleJournalfør(true)}
-                                            disabled={disableJournalførKnapper() || barnetHarIkkeFnr}
+                                            disabled={disableJournalførKnapper()}
                                             loading={settBehandlingsÅrMutation.isLoading}
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />

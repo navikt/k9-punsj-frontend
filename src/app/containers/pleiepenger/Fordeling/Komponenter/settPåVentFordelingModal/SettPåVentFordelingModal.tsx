@@ -39,14 +39,14 @@ const SettPåVentFordelingModal = ({ journalpostId, lukkModal }: Props) => {
                 </Heading>
             </Modal.Header>
             <Modal.Body>
-                <>
+                <div className="max-w-md min-w-96">
                     <FormattedMessage id="fordeling.settJpPåVent.modal.info" values={{ dato: get3WeeksDate() }} />
 
                     {renderAlert('success', 'fordeling.settJpPåVent.modal.btn.success', isSuccess)}
 
                     {/* Vise feilen fra serveren */}
                     {renderAlert('error', 'fordeling.settJpPåVent.modal.btn.error', !!error, (error as Error)?.message)}
-                </>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 {isSuccess ? (

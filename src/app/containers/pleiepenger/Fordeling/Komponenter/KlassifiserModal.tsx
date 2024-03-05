@@ -65,10 +65,13 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
+        const reservertFagsakId = isSuccess && (data.saksnummer as string) ? (data.saksnummer as string) : '';
+        const messageContent = message || (
+            <FormattedMessage id={messageId} values={{ saksnummer: reservertFagsakId }} />
+        );
         return (
             <Alert variant={variant} size="small">
-                {!!message && message}
-                {!message && <FormattedMessage id={messageId} />}
+                {messageContent}
             </Alert>
         );
     };
@@ -81,7 +84,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                 </Heading>
             </Modal.Header>
             <Modal.Body>
-                <>
+                <div className="max-w-lg">
                     <KlassifiseringInfo />
                     {renderAlert(
                         'success',
@@ -96,7 +99,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                     {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !isSuccess && !error)}
                     {/* Vise feilen fra serveren */}
                     {renderAlert('error', 'fordeling.klassifiserModal.alert.error', !!error, (error as Error)?.message)}
-                </>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 {!fortsett && isSuccess ? (

@@ -71,6 +71,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         return true;
     };
 
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        const soknader = eksisterendeSoeknader?.søknader;
+        if (!soknader?.length) {
+            opprettSoknad();
+        }
+    }, [eksisterendeSoeknader?.søknader]);
+
     return (
         <div className="registrering-page">
             <EksisterendeOMPUTSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />

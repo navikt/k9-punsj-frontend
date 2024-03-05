@@ -94,6 +94,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         return true;
     };
 
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+        if (!soknader?.length) {
+            newSoknad();
+        }
+    }, [eksisterendeSoknaderState.eksisterendeSoknaderSvar]);
+
     return (
         <div className="registrering-page">
             <EksisterendeSoknader pleietrengendeId={pleietrengendeId} />
