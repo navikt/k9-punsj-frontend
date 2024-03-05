@@ -4,7 +4,9 @@ import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import rateLimit from 'express-rate-limit';
-import { decodeJwt, validateToken } from '@navikt/oasis';
+import { validateToken } from '@navikt/oasis';
+
+import { decodeJwt } from 'jose';
 
 import * as headers from './src/headers.js';
 import logger from './src/log.js';
@@ -83,28 +85,28 @@ async function startApp() {
             });
         });
 
-		const ensureAuthenticated = async (req, res, next) => {
-			try {
-				const token = req.headers.authorization.replace('Bearer ', '');
+        const ensureAuthenticated = async (req, res, next) => {
+            try {
+                const token = req.headers.authorization.replace('Bearer ', '');
 
-				if (!token) {
-					logger.debug('User token missing. Redirecting to login.');
-					res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
-				}
-				const validation = await validateToken(token);
+                if (!token) {
+                    logger.debug('User token missing. Redirecting to login.');
+                    res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+                }
+                const validation = await validateToken(token);
 
-				if (!validation.ok) {
-					logger.debug('User token not valid. Redirecting to login.');
-					res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
-				} else {
-					logger.debug('User token is valid. Continue.');
-					next();
-				}
-			} catch (error) {
-				logger.error('Error getting session:', error);
-				res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
-			}
-		};
+                if (!validation.ok) {
+                    logger.debug('User token not valid. Redirecting to login.');
+                    res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+                } else {
+                    logger.debug('User token is valid. Continue.');
+                    next();
+                }
+            } catch (error) {
+                logger.error('Error getting session:', error);
+                res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+            }
+        };
 
         // The routes below require the user to be authenticated
         server.use(ensureAuthenticated);
