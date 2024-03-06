@@ -437,11 +437,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
-            if (
-                !barnetHarIkkeFnr &&
-                !ingenInfoOmPleitrengende &&
-                IdentRules.erUgyldigIdent(identState.pleietrengendeId)
-            ) {
+            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId)) {
                 return true;
             }
         }
@@ -756,33 +752,30 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </div>
                             )}
 
-                            {gjelderPsbOmsOlp &&
-                                !isFetchingFagsaker &&
-                                journalpost.erFerdigstilt &&
-                                !disableRedirectVidere() && (
-                                    <div className="flex">
-                                        <div className="mr-4">
-                                            <Button
-                                                variant="primary"
-                                                size="small"
-                                                onClick={handleRedirectVidere}
-                                                disabled={disableRedirectVidere()}
-                                                loading={settBehandlingsÅrMutation.isLoading}
-                                            >
-                                                <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
-                                            </Button>
-                                        </div>
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && journalpost.erFerdigstilt && !barnMedFagsak && (
+                                <div className="flex">
+                                    <div className="mr-4">
                                         <Button
+                                            variant="primary"
                                             size="small"
-                                            variant="secondary"
-                                            onClick={() => {
-                                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                            }}
+                                            onClick={handleRedirectVidere}
+                                            disabled={disableRedirectVidere()}
+                                            loading={settBehandlingsÅrMutation.isLoading}
                                         >
-                                            Avbryt og legg i kø
+                                            <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
                                     </div>
-                                )}
+                                    <Button
+                                        size="small"
+                                        variant="secondary"
+                                        onClick={() => {
+                                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                        }}
+                                    >
+                                        Avbryt og legg i kø
+                                    </Button>
+                                </div>
+                            )}
                         </div>
 
                         {!settBehandlingsÅrMutation.error &&
