@@ -70,6 +70,7 @@ let handlers = [
         ),
     ),
 
+    // PILS Uten pleietrengende
     http.get('http://localhost:8101/api/k9-punsj/journalpost/204', () =>
         HttpResponse.json(
             {
@@ -83,6 +84,90 @@ let handlers = [
                 journalpostStatus: 'MOTTATT',
                 kanOpprettesJournalføringsoppgave: true,
                 kanKopieres: true,
+                sak: {
+                    fagsakId: null,
+                    sakstype: null,
+                    gyldigPeriode: null,
+                    pleietrengendeIdent: null,
+                    reservertSaksnummer: false,
+                },
+            },
+            { status: 200 },
+        ),
+    ),
+
+    // PILS Med pleietrengende
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/205', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '205',
+                erFerdigstilt: false,
+                norskIdent: '29099000129',
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'JOURNALFOERT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+                sak: {
+                    fagsakId: '1DQAW97',
+                    sakstype: 'PPN',
+                    gyldigPeriode: null,
+                    pleietrengendeIdent: '15447308840',
+                    reservertSaksnummer: true,
+                },
+            },
+            { status: 200 },
+        ),
+    ),
+
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/207', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '207',
+                erFerdigstilt: true,
+                norskIdent: '29099000129',
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'JOURNALFOERT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+                sak: {
+                    fagsakId: '1DQAW94',
+                    sakstype: 'OMP_KS',
+                    gyldigPeriode: null,
+                    pleietrengendeIdent: null,
+                    reservertSaksnummer: true,
+                },
+            },
+            { status: 200 },
+        ),
+    ),
+
+    // Tomt
+    http.get('http://localhost:8101/api/k9-punsj/journalpost/206', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '206',
+                erFerdigstilt: false,
+                norskIdent: '29099000129',
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'MOTTATT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+                sak: {
+                    fagsakId: null,
+                    sakstype: null,
+                    gyldigPeriode: null,
+                    pleietrengendeIdent: null,
+                    reservertSaksnummer: false,
+                },
             },
             { status: 200 },
         ),
@@ -103,8 +188,8 @@ let handlers = [
                 },
                 {
                     fagsakId: 'DEF456',
-                    sakstype: 'PSB',
-                    pleietrengendeIdent: null,
+                    sakstype: 'PPN',
+                    pleietrengendeIdent: '03091477490',
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',

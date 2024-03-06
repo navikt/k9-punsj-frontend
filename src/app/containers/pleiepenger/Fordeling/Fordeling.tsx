@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, Checkbox, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 import { finnFagsaker, postBehandlingsAar } from 'app/api/api';
-import {
-    DokumenttypeForkortelse,
-    FordelingDokumenttype,
-    JaNei,
-    Sakstype,
-    dokumenttyperForPsbOmsOlp,
-} from 'app/models/enums';
+import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
@@ -17,7 +11,6 @@ import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
     lukkOppgaveResetAction,
     setErSøkerIdBekreftetAction,
-    setSakstypeAction,
 } from 'app/state/actions';
 import Fagsak from 'app/types/Fagsak';
 import { ROUTES } from 'app/constants/routes';
@@ -81,12 +74,12 @@ export interface IFordelingDispatchProps {
     setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
     resetBarn: typeof resetBarnAction;
-    resetAllState: typeof resetAllStateAction;
 }
 
 export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
 
 // TODO Flytte til felles sted?
+// TODO Sjekke alle useEffect
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
     const {
@@ -105,10 +98,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setDokumenttype,
         omfordel,
         resetBarn,
-        resetAllState,
     } = props;
 
-    const { sakstype, fagsak: valgtFagsak, dokumenttype } = fordelingState;
+    const { fagsak: valgtFagsak, dokumenttype } = fordelingState;
 
     const navigate = useNavigate();
 
@@ -138,6 +130,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
 
+    const isBarn = dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE;
+
     const sakstyperMedPleietrengende = [
         DokumenttypeForkortelse.PSB,
         DokumenttypeForkortelse.OMP_KS,
@@ -155,6 +149,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         { onSuccess: () => setHarLagretBehandlingsår(true) },
     );
 
+    /**
+     * Sette fordelingState.dokumenttype når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
+     */
     useEffect(() => {
         if (!journalpost.erFerdigstilt && journalpost.sak?.sakstype) {
             const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
@@ -184,7 +181,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
                 return;
             }
-            // Får samme sakstype på korrigering og omp_ut - ser ut som feil
+
+            // Får samme sakstype på korrigering og omp_ut
             if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
                 setFagsak(journalpost.sak);
                 return;
@@ -204,10 +202,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, []);
 
-    // Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer
-    // Brukes nå kun for å legge til pleietrengende ident
-    // Men pleietrengende indent oppdateres ikke i journalposten og kun legges til i fordeling state og til ny søknad
-    // Kanskje vi må oppdatere journalposten med pleietrengende ident hvis bruker kommer hit
+    /**
+     * Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer.
+     *
+     * Brukes kun for å velge barn/pleietrengende ident. Barn/pleietrengende indent oppdateres ikke i journalposten.
+     * Den kun legges til i fordeling state og til ny søknad. Pleitrengende ident oppdateres i journalposten etter innsending av søknad.
+     */
 
     const jpErFerdigstiltOgUtenPleietrengende =
         journalpost.erFerdigstilt &&
@@ -234,15 +234,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, []);
 
-    useEffect(() => {
-        if (journalpost.journalpostId === 'undefined') {
-            // Redirect to HOME page if journalpostid is undefined (string)
-            resetAllState();
-            navigate(ROUTES.HOME);
-        }
-    }, []);
-
-    // Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
+    /**
+     * Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
+     */
     useEffect(() => {
         if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
@@ -251,18 +245,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [dokumenttype, identState.søkerId]);
 
-    // Reset behandlingsår ved endring av dokumenttype eller søkerId
+    /**
+     * Reset behandlingsår ved endring av dokumenttype eller søkerId
+     */
     useEffect(() => {
         setHarLagretBehandlingsår(false);
     }, [dokumenttype, identState.søkerId, valgtFagsak, behandlingsAar]);
-
-    // Reset sakstype ved endring av dokumenttype
-    // Kanskje slette dette fordi vi setter sakstype (fordelinstate) etter klassifisering
-    useEffect(() => {
-        if (sakstype && !journalpost.erFerdigstilt) {
-            setSakstypeAction(undefined);
-        }
-    }, [dokumenttype]);
 
     useEffect(() => {
         if (!brukEksisterendeFagsak && fagsaker) {
@@ -488,12 +476,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    useEffect(() => {
-        if (ingenInfoOmPleitrengende) {
+    const handleDokumentUtenPleietrengendeCheckbox = (checked: boolean) => {
+        if (checked) {
+            setIngenInfoOmPleitrengende(true);
             setBehandlingsAar(undefined);
             setValgtFagsak('');
+        } else {
+            setIngenInfoOmPleitrengende(false);
         }
-    }, [ingenInfoOmPleitrengende]);
+    };
 
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
@@ -658,12 +649,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
 
                             {visFagsakSelect && !jpErFerdigstiltOgUtenPleietrengende && (
-                                <Checkbox
-                                    onChange={(e) => setIngenInfoOmPleitrengende(e.target.checked)}
-                                    disabled={!brukEksisterendeFagsak}
-                                >
-                                    Dokument har ikke informasjon om barn eller barnet har ikke fødselsnummer
-                                </Checkbox>
+                                <>
+                                    <Checkbox
+                                        onChange={(e) => handleDokumentUtenPleietrengendeCheckbox(e.target.checked)}
+                                        disabled={!brukEksisterendeFagsak}
+                                    >
+                                        <FormattedMessage
+                                            id={`fordeling.checkbox.dokumentUten.${isBarn ? 'barn' : 'pleitrengende'}`}
+                                        />
+                                    </Checkbox>
+
+                                    {ingenInfoOmPleitrengende && (
+                                        <Alert size="small" variant="info" className="mb-4">
+                                            Du kan journalføre uten å koble til pleietrengende, men kan ikke sende
+                                            opplysninger til K9. Hvis du fortsetter kan du registrere opplysningene fra
+                                            dokumentet, men må sette punsj-oppgaven på vent.
+                                        </Alert>
+                                    )}
+                                </>
                             )}
 
                             {visValgAvBehandlingsaar && (
@@ -690,7 +693,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
-                                <Alert size="small" variant="warning">
+                                <Alert size="small" variant="warning" className="mb-4">
                                     <FormattedMessage
                                         id="fordeling.error.pleietrengendeHarFagsak"
                                         values={{
@@ -724,7 +727,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 !valgtFagsak &&
                                 !disableJournalførKnapper() &&
                                 identState.pleietrengendeId && (
-                                    <Alert size="small" variant="info">
+                                    <Alert size="small" variant="info" className="mb-4">
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
                                     </Alert>
                                 )}
@@ -822,7 +825,6 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstypeAction(sakstype)),
     setDokumenttype: (dokumenttype: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype)),
     setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>

@@ -144,7 +144,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         onChange={(e) => ingenInfoOmBarnCheckboks(e.target.checked)}
                         disabled={gjelderAnnenPleietrengende}
                     >
-                        Dokument har ikke informasjon om barn
+                        Dokument har ikke informasjon om barn eller barnet har ikke fødselsnummer
                     </Checkbox>
                     {ingenInfoOmBarn && (
                         <Alert size="small" variant="info">

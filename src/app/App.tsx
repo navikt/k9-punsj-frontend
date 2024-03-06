@@ -81,6 +81,7 @@ export const App: React.FunctionComponent = () => {
                         }}
                     >
                         <Routes>
+                            <Route path="/journalpost/undefined/*" element={<Navigate to={ROUTES.HOME} />} />
                             <Route
                                 path={ROUTES.JOURNALPOST_ROOT}
                                 element={<JournalpostLoader renderOnLoadComplete={() => <JournalpostRouter />} />}
