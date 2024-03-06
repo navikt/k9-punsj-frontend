@@ -176,7 +176,7 @@
     "ident.usignert.feil.melding": "Det oppsto en feil.",
     "ident.usignert.feil.tilbake": "Tilbake",
     "ident.feil.identitetsnummer.lengde": "Fødsels- eller D-nummer må ha 11 siffer.",
-    "ident.feil.ugyldigident": "Dette er ikke et gyldig fødsels- eller D-nummer.",
+    "ident.feil.ugyldigident": "Dette er ikke et gyldig fødsels- eller D-nummer eller søker sin fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiSoker": "Fødselsnummeret kan ikke være søkers fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være pleietrengendes fødselsnummer.",
     "arbeidsforhold.arbeidstaker": "Arbeidstaker",

@@ -342,6 +342,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
+            if (identState.søkerId === identState.pleietrengendeId) {
+                return true;
+            }
+
             if (
                 !barnetHarIkkeFnr &&
                 !ingenInfoOmPleitrengende &&
@@ -434,6 +438,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
         ) {
             if (barnMedFagsak) {
+                return true;
+            }
+
+            if (identState.søkerId === identState.pleietrengendeId) {
                 return true;
             }
 

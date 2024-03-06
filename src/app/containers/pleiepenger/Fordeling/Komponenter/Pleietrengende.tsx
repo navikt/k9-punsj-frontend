@@ -8,7 +8,6 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
@@ -66,6 +65,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     if (!visPleietrengende) {
         return null;
     }
+    // TODO FIKS
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
     };
@@ -97,6 +97,8 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.søkerId, null);
         }
     };
+
+    const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
 
     if (!visPleietrengende) {
         return null;
@@ -171,22 +173,19 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             maxLength={11}
                             size="medium"
                             error={
-                                identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+                                isPleitrengendeFnrErSammeSomSøker ||
+                                (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }
                             disabled={pleietrengendeHarIkkeFnr}
                         />
                         {pleietrengendeIdent.length === 11 &&
-                            !IdentRules.erUgyldigIdent(identState.pleietrengendeId) && (
-                                <div className="dobbelSjekkIdent">
-                                    <div>
-                                        <WarningCircle />
-                                    </div>
-                                    <p>
-                                        <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b>
-                                    </p>
-                                </div>
+                            !IdentRules.erUgyldigIdent(identState.pleietrengendeId) &&
+                            !isPleitrengendeFnrErSammeSomSøker && (
+                                <Alert size="small" variant="warning">
+                                    {intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}
+                                </Alert>
                             )}
                     </div>
                     <VerticalSpacer eightPx />
