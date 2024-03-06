@@ -2508,7 +2508,6 @@ __metadata:
     dotenv: ^16.3.1
     express: ^4.18.2
     express-http-proxy: ^2.0.0
-    express-rate-limit: ^7.1.5
     helmet: ^7.1.0
     jose: ^5.2.2
     morgan: ^1.10.0
@@ -10322,15 +10321,6 @@ __metadata:
     es6-promise: ^4.1.1
     raw-body: ^2.3.0
   checksum: 7d96105bd570d2231a435fd2b8476613b8680300f0d8ab0723268eb4f0da5f988ae7addb832a213234f6f28a6ca5632cec3e5554bf1cb8151195c22707aa9a56
-  languageName: node
-  linkType: hard
-
-"express-rate-limit@npm:^7.1.5":
-  version: 7.1.5
-  resolution: "express-rate-limit@npm:7.1.5"
-  peerDependencies:
-    express: 4 || 5 || ^5.0.0-beta.1
-  checksum: bdf6ddf4f8c8659d31de6ec1f088b473b2cb4180eb09ae234a279c88744832276e5c1482d530875110c90e314b51a7720bcfb2b3139c1b9e6bf652ba4b59f192
   languageName: node
   linkType: hard
 

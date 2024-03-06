@@ -3,7 +3,6 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import timeout from 'connect-timeout';
-import rateLimit from 'express-rate-limit';
 import { validateToken } from '@navikt/oasis';
 
 import { decodeJwt } from 'jose';
@@ -20,10 +19,6 @@ const server = express();
 const { port } = config.server;
 
 // Enable rate limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-});
 
 async function startApp() {
     try {
@@ -31,7 +26,6 @@ async function startApp() {
         server.use(timeout('10m'));
         headers.setup(server);
 
-        server.use(limiter);
 
         // Logging i json format
         server.use(logger.morganMiddleware);
