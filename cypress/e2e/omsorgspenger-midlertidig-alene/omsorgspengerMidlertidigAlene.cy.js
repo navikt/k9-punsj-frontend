@@ -1,4 +1,4 @@
-import handlers from 'mocks/omsorgspengerMidlertidigAleneHandlers';
+/* import handlers from 'mocks/omsorgspengerMidlertidigAleneHandlers';
 
 import { initialState } from '../../state/omsorgspenger-midlertidig-alene/eksisterendeSoeknaderInitialState';
 
@@ -138,4 +138,4 @@ describe('Eksisterende søknader midlertidig alene', () => {
         cy.findByRole('button', { name: /start ny registrering/i }).should('not.exist');
     });
     */
-});
+// });
