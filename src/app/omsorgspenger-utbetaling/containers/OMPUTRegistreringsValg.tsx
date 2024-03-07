@@ -35,7 +35,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         if (!søkerId) {
             navigate(location.pathname.replace('soknader', ''));
         }
-    }, []);
+    }, [søkerId, location.pathname, navigate]);
 
     const {
         isLoading: oppretterSoknad,
@@ -52,6 +52,14 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
     if (!journalpostid) {
         throw Error('Mangler journalpostid');
     }
+
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        const soknader = eksisterendeSoeknader?.søknader;
+        if (soknader?.length === 0) {
+            opprettSoknad();
+        }
+    }, [eksisterendeSoeknader?.søknader, opprettSoknad]);
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -70,14 +78,6 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         }
         return true;
     };
-
-    // Starte søknad automatisk hvis ingen søknader finnes
-    useEffect(() => {
-        const soknader = eksisterendeSoeknader?.søknader;
-        if (!soknader?.length) {
-            opprettSoknad();
-        }
-    }, [eksisterendeSoeknader?.søknader]);
 
     return (
         <div className="registrering-page">

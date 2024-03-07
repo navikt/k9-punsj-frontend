@@ -6,12 +6,15 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+import { IdentRules } from 'app/rules';
+import { findEksisterendeSoknader } from 'app/state/actions';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/EksisterendePLSSoknaderActions';
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
+
 import './plsRegistreringsValg.less';
 
 export interface IPLSRegistreringsValgComponentProps {
@@ -22,6 +25,7 @@ export interface IPLSRegistreringsValgDispatchProps {
     createSoknad: typeof createPLSSoknad;
     resetSoknadidAction: typeof resetPLSSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
+    getEksisterendeSoknader: typeof findEksisterendeSoknader;
 }
 
 export interface IEksisterendeSoknaderStateProps {
@@ -39,58 +43,62 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { journalpostid, identState, eksisterendeSoknaderState } = props;
+    const {
+        journalpostid,
+        identState,
+        eksisterendeSoknaderState,
+        createSoknad,
+        resetSoknadidAction,
+        getAlleJournalposter,
+        getEksisterendeSoknader,
+    } = props;
     const { søkerId, pleietrengendeId } = identState;
+    const { eksisterendeSoknaderSvar, soknadid, isSoknadCreated, createSoknadRequestError } = eksisterendeSoknaderState;
+    const { søknader } = eksisterendeSoknaderSvar;
 
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
             navigate(location.pathname.replace('soknader', ''));
         }
-    }, []);
+    }, [location.pathname, navigate, søkerId]);
 
     useEffect(() => {
-        if (
-            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeSoknaderState.isSoknadCreated &&
-            eksisterendeSoknaderState.soknadid
-        ) {
-            props.resetSoknadidAction();
-            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
+        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+            getEksisterendeSoknader(søkerId, null);
         }
-    }, [eksisterendeSoknaderState.soknadid]);
+
+        getAlleJournalposter(søkerId);
+    }, [søkerId, pleietrengendeId, getEksisterendeSoknader, getAlleJournalposter]);
+
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        if (søknader?.length === 0) {
+            createSoknad(journalpostid, søkerId, pleietrengendeId);
+        }
+    }, [createSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
 
     useEffect(() => {
-        props.getAlleJournalposter(søkerId);
-    }, [søkerId]);
+        if (eksisterendeSoknaderSvar && isSoknadCreated && soknadid) {
+            resetSoknadidAction();
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
+        }
+    }, [eksisterendeSoknaderSvar, isSoknadCreated, navigate, resetSoknadidAction, soknadid]);
 
-    if (eksisterendeSoknaderState.createSoknadRequestError) {
+    const kanStarteNyRegistrering = () => {
+        if (søknader?.length) {
+            return !søknader?.some((es) => Array.from(es.journalposter!).some((jp) => jp === journalpostid));
+        }
+        return true;
+    };
+
+    if (createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
                 Det oppsto en feil under opprettelse av søknad.
             </Alert>
         );
     }
-
-    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
-
-    const kanStarteNyRegistrering = () => {
-        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
-            );
-        }
-        return true;
-    };
-
-    // Starte søknad automatisk hvis ingen søknader finnes
-    useEffect(() => {
-        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (!soknader?.length) {
-            newSoknad();
-        }
-    }, [eksisterendeSoknaderState.eksisterendeSoknaderSvar]);
 
     return (
         <div className="registrering-page">
@@ -105,7 +113,11 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={newSoknad} className="knapp knapp2" size="small">
+                    <Button
+                        onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId)}
+                        className="knapp knapp2"
+                        size="small"
+                    >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>
                 )}
@@ -118,6 +130,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
+    getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
 });
 
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({

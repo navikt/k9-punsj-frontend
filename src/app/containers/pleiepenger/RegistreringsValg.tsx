@@ -20,10 +20,10 @@ export interface IRegistreringsValgComponentProps {
 }
 
 export interface IRegistreringsValgDispatchProps {
-    createSoknad: typeof createSoknad;
-    resetSoknadidAction: typeof resetSoknadidAction;
+    createNewSoknad: typeof createSoknad;
+    resetSoknadId: typeof resetSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
-    findEksisterendeSoknader: typeof findEksisterendeSoknader;
+    getEksisterendeSoknader: typeof findEksisterendeSoknader;
 }
 
 export interface IEksisterendeSoknaderStateProps {
@@ -35,72 +35,70 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps &
     IEksisterendeSoknaderStateProps &
     IRegistreringsValgDispatchProps;
 
-export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (
-    props: IRegistreringsValgProps,
-) => {
+export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
-    const { journalpostid, identState, eksisterendeSoknaderState } = props;
+    const {
+        journalpostid,
+        identState,
+        eksisterendeSoknaderState,
+        getEksisterendeSoknader,
+        getAlleJournalposter,
+        createNewSoknad,
+        resetSoknadId,
+    } = props;
     const { søkerId, pleietrengendeId } = identState;
+    const { eksisterendeSoknaderSvar, soknadid, isSoknadCreated, createSoknadRequestError } = eksisterendeSoknaderState;
+    const { søknader } = eksisterendeSoknaderSvar;
 
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!fordelingState.dokumenttype) {
             navigate(location.pathname.replace('soknader', ''));
         }
-    }, []);
+    }, [fordelingState.dokumenttype, location.pathname, navigate]);
 
     useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.findEksisterendeSoknader(søkerId, null);
+            getEksisterendeSoknader(søkerId, null);
         }
-    }, [søkerId, pleietrengendeId]);
+
+        getAlleJournalposter(søkerId);
+    }, [søkerId, pleietrengendeId, getEksisterendeSoknader, getAlleJournalposter]);
+
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        if (søknader?.length === 0) {
+            createNewSoknad(journalpostid, søkerId, pleietrengendeId);
+        }
+    }, [søknader, journalpostid, pleietrengendeId, søkerId, createNewSoknad]);
 
     useEffect(() => {
-        if (
-            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeSoknaderState.isSoknadCreated &&
-            eksisterendeSoknaderState.soknadid
-        ) {
-            props.resetSoknadidAction();
-            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
+        if (isSoknadCreated && soknadid) {
+            resetSoknadId();
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
         }
-    }, [eksisterendeSoknaderState.soknadid]);
-
-    useEffect(() => {
-        props.getAlleJournalposter(søkerId);
-    }, [søkerId]);
-
-    if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return (
-            <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
-            </Alert>
-        );
-    }
-
-    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
+    }, [isSoknadCreated, soknadid, navigate, resetSoknadId]);
 
     const kanStarteNyRegistrering = () => {
-        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
+        if (søknader?.length) {
+            return !eksisterendeSoknaderSvar.søknader?.some((es) =>
                 Array.from(es.journalposter!).some((jp) => jp === journalpostid),
             );
         }
         return true;
     };
 
-    // Starte søknad automatisk hvis ingen søknader finnes
-    useEffect(() => {
-        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (!soknader?.length) {
-            newSoknad();
-        }
-    }, [eksisterendeSoknaderState.eksisterendeSoknaderSvar]);
+    if (createSoknadRequestError) {
+        return (
+            <Alert size="small" variant="error">
+                Det oppsto en feil under opprettelse av søknad.
+            </Alert>
+        );
+    }
 
     return (
         <div className="registrering-page">
@@ -115,7 +113,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
                     <FormattedMessage id="fordeling.registreringsValg.tilbake" />
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={newSoknad} className="knapp2" size="small">
+                    <Button
+                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId)}
+                        className="knapp2"
+                        size="small"
+                    >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>
                 )}
@@ -124,10 +126,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+    createNewSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
-    resetSoknadidAction: () => dispatch(resetSoknadidAction()),
-    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+    resetSoknadId: () => dispatch(resetSoknadidAction()),
+    getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
