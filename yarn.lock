@@ -3442,10 +3442,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/fnrvalidator@npm:1.3.3":
-  version: 1.3.3
-  resolution: "@navikt/fnrvalidator@npm:1.3.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F1.3.3%2F8414963a30e59e3056c9befea7bb022498a2a742"
-  checksum: 49b2f481e1d5fdd107ba3cfd13a7a6fdb32371da2a634b97d5142d3940b73fe6cc90201c23381484def2859aecbd51b7e897ff3d69be483dafb13f1e2dd3060e
+"@navikt/fnrvalidator@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@navikt/fnrvalidator@npm:2.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F2.0.1%2F57de4e00f3f1ed9f545b5d6de552b3801d946553"
+  checksum: f129c084b7b627d8fc334c0f6b32023ca1e0f2c11075c0083387a9e1e51e33a2c7cb6f59ee73bc6cb2351bf31d2ea88876ba6e5bdb790dabad2bebe6e29fc656
   languageName: node
   linkType: hard
 
@@ -14292,7 +14292,7 @@ __metadata:
     "@navikt/ds-css": 5.17.2
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 5.17.2
-    "@navikt/fnrvalidator": 1.3.3
+    "@navikt/fnrvalidator": 2.0.1
     "@navikt/ft-plattform-komponenter": 2.3.18
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@popperjs/core": ^2.11.8
