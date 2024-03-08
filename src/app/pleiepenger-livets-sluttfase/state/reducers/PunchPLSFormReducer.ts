@@ -176,7 +176,35 @@ export function PunchPLSFormReducer(
                 validateSoknadError: undefined,
                 isValid: undefined,
             };
+        case PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: true,
+            };
 
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: action.error,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: true,
+                settPaaVentError: undefined,
+            };
+
+        case PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET:
+            return {
+                ...punchFormState,
+                awaitingSettPaaVentResponse: false,
+                settPaaVentSuccess: false,
+                settPaaVentError: undefined,
+            };
         default:
             return punchFormState;
     }

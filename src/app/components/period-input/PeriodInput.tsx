@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { IntlShape } from 'react-intl';
 
 import { Fieldset } from '@navikt/ds-react';
@@ -51,25 +51,30 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         limitations,
     } = props;
 
-    const renderDato = (property: string) => {
-        if (periode?.[property] && periode?.[property].length) return periode?.[property];
-        if (typeof initialValues !== 'undefined' && typeof initialValues[property] !== 'undefined')
-            return initialValues?.[property];
-        return '';
+    const handleOnChange = (selectedDate: string, isFom: boolean) => {
+        const newPeriod = isFom
+            ? { fom: selectedDate, tom: periode?.tom || '' }
+            : { fom: periode?.fom || '', tom: selectedDate };
+        onChange(newPeriod);
+    };
+
+    const handleOnBlur = (selectedDate: string, isFom: boolean) => {
+        if (onBlur) {
+            const newPeriod = isFom
+                ? { fom: selectedDate, tom: periode?.tom || '' }
+                : { fom: periode?.fom || '', tom: selectedDate };
+            onBlur(newPeriod);
+        }
     };
 
     return (
-        <Fieldset error={errorMessage} className={classNames('periodInput', className)}>
+        <Fieldset error={errorMessage} className={classNames('periodInput', className)} legend={undefined}>
             <div className="flex flex-wrap">
                 <DateInput
                     className="periodInput__fom-container"
-                    value={renderDato('fom')}
-                    onChange={(selectedDate) => {
-                        onChange({ fom: selectedDate, tom: periode?.tom || '' });
-                        if (onBlur) {
-                            onBlur({ fom: selectedDate, tom: periode?.tom || '' });
-                        }
-                    }}
+                    value={periode.fom || initialValues?.fom || ''}
+                    onChange={(selectedDate) => handleOnChange(selectedDate, true)}
+                    onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
                     id={inputIdFom}
                     disabled={disabled || disabledFom}
                     errorMessage={errorMessageFom}
@@ -79,13 +84,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                 />
                 <div className="periodInput__tom-container">
                     <DateInput
-                        value={renderDato('tom')}
-                        onChange={(selectedDate) => {
-                            onChange({ fom: periode?.fom || '', tom: selectedDate });
-                            if (onBlur) {
-                                onBlur({ fom: periode?.fom || '', tom: selectedDate });
-                            }
-                        }}
+                        value={periode.tom || initialValues?.tom || ''}
+                        onChange={(selectedDate) => handleOnChange(selectedDate, false)}
+                        onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
                         id={inputIdTom}
                         disabled={disabled || disabledTom}
                         errorMessage={errorMessageTom}

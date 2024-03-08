@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -9,10 +9,12 @@ import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
-import { datetime } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import {
@@ -28,6 +30,7 @@ import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 
 export interface IEksisterendePLSSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IEksisterendePLSSoknaderDispatchProps {
@@ -51,13 +54,13 @@ type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
 export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
     props: IEksisterendePLSSoknaderProps,
 ) => {
-    const { eksisterendeSoknaderState, søkerId, pleietrengendeId } = props;
+    const { eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             props.findEksisterendeSoknader(søkerId, null);
         } else {
@@ -78,7 +81,11 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         );
     }
 
-    if (eksisterendeSoknaderState.isEksisterendeSoknaderLoading || eksisterendeSoknaderState.isAwaitingSoknadCreation) {
+    if (
+        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
+        eksisterendeSoknaderState.isAwaitingSoknadCreation ||
+        journalposterState.isJournalposterLoading
+    ) {
         return (
             <div>
                 <Loader size="large" />
@@ -111,17 +118,24 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         }
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
         soknader?.forEach((soknadInfo) => {
             const søknad = new PLSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                journalposterState.journalposter,
+            );
+
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 generateDateString(søknad.soeknadsperiode),
                 <Button
@@ -170,17 +184,18 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
-                    <tbody>{rows}</tbody>
+                    <Table.Body>{rows}</Table.Body>
                 </Table>
                 {modaler}
             </>
         );
-    }
+    };
 
     if (soknader && soknader.length) {
         return (
@@ -205,6 +220,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
 const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

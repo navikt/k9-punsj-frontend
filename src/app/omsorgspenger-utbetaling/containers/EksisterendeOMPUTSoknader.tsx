@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
@@ -11,9 +11,11 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
-import { datetime } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
+import { hentAlleJournalposterPerIdent } from 'app/api/api';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -23,7 +25,7 @@ export interface IEksisterendeOMPUTSoknaderComponentProps {
     pleietrengendeId: string | null;
 }
 
-export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMPUTSoknaderComponentProps> = (props) => {
+export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderComponentProps> = (props) => {
     const { søkerId, pleietrengendeId } = props;
     const intl = useIntl();
 
@@ -31,7 +33,7 @@ export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMP
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
@@ -44,7 +46,13 @@ export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMP
         error: eksisterendeSoeknaderError,
     } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
 
-    if (lasterSoeknader) {
+    const {
+        data: alleJournalposterPerIdent,
+        isLoading: lasterAlleJournalposterPerIdent,
+        error: hentAlleJournalposterPerIdentError,
+    } = useQuery(`hentAlleJPPerIdentOMPUT_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
+
+    if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;
     }
 
@@ -56,21 +64,35 @@ export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMP
         );
     }
 
+    if (hentAlleJournalposterPerIdentError instanceof Error) {
+        return (
+            <Alert size="small" variant="error">
+                {hentAlleJournalposterPerIdentError.message}
+            </Alert>
+        );
+    }
+
     const gaaVidereMedSoeknad = (soknad: IOMPUTSoknad) => {
         navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
         eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad) => {
             const soknadId = søknad.soeknadId;
+
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                alleJournalposterPerIdent?.poster || [],
+            );
+
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.soekerId,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
-
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Button>,
@@ -112,6 +134,7 @@ export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMP
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
@@ -122,7 +145,7 @@ export const EksisterendeOMPUTSoknader: React.FunctionComponent<IEksisterendeOMP
                 {modaler}
             </>
         );
-    }
+    };
 
     if (eksisterendeSoeknader?.søknader && eksisterendeSoeknader.søknader.length) {
         return <>{showSoknader()}</>;

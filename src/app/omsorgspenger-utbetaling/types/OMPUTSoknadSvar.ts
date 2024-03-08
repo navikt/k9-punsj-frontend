@@ -1,4 +1,4 @@
-import { IOMPUTSoknad, OMPUTSoknad } from './OMPUTSoknad';
+import { IOMPUTSoknad } from './OMPUTSoknad';
 
 export interface IOMPUTSoknadSvar {
     søker?: string;
@@ -11,11 +11,11 @@ export class OMPUTSoknadSvar implements IOMPUTSoknadSvar {
 
     fagsakTypeKode: string;
 
-    søknader: OMPUTSoknad[];
+    søknader: IOMPUTSoknad[];
 
     constructor(svar: IOMPUTSoknadSvar) {
         this.søker = svar.søker || '';
         this.fagsakTypeKode = svar.fagsakTypeKode || '';
-        this.søknader = (svar.søknader || []).map((s) => new OMPUTSoknad(s));
+        this.søknader = svar.søknader || [];
     }
 }

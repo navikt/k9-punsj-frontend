@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -10,10 +10,12 @@ import { areBothDatesDefined, generateDateString } from 'app/components/skjema/s
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import { datetime } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
@@ -28,6 +30,7 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 
 export interface IEksisterendeOMPMASoknaderStateProps {
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
+    journalposterState: IJournalposterPerIdentState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
@@ -40,7 +43,7 @@ export interface IEksisterendeOMPMASoknaderDispatchProps {
 
 export interface IEksisterendeOMPMASoknaderComponentProps {
     søkerId: string;
-    pleietrengendeId: string | null;
+    annenPart: string;
 }
 
 type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
@@ -48,23 +51,23 @@ type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
     IEksisterendeOMPMASoknaderStateProps &
     IEksisterendeOMPMASoknaderDispatchProps;
 
-export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksisterendeOMPMASoknaderProps> = (
+export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASoknaderProps> = (
     props: IEksisterendeOMPMASoknaderProps,
 ) => {
-    const { eksisterendeOMPMASoknaderState, søkerId, pleietrengendeId } = props;
+    const { eksisterendeOMPMASoknaderState, journalposterState, søkerId, annenPart } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
     const soknader = eksisterendeOMPMASoknaderState.eksisterendeSoknaderSvar.søknader;
 
-    React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.findEksisterendeSoknader(søkerId, null);
+    useEffect(() => {
+        if (IdentRules.erAlleIdenterGyldige(søkerId, annenPart)) {
+            props.findEksisterendeSoknader(søkerId);
         } else {
             props.resetAllAction();
             navigate(ROUTES.HOME);
         }
-    }, [søkerId, pleietrengendeId]);
+    }, [søkerId, annenPart]);
 
     if (!søkerId) {
         return null;
@@ -80,7 +83,8 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 
     if (
         eksisterendeOMPMASoknaderState.isEksisterendeSoknaderLoading ||
-        eksisterendeOMPMASoknaderState.isAwaitingSoknadCreation
+        eksisterendeOMPMASoknaderState.isAwaitingSoknadCreation ||
+        journalposterState.isJournalposterLoading
     ) {
         return <Loader size="large" />;
     }
@@ -109,17 +113,22 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         }
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                journalposterState.journalposter,
+            );
             const { chosenSoknad } = props.eksisterendeOMPMASoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                søknad.barn?.map((barn) => barn.norskIdent).join(', '),
+                søknad.annenForelder.norskIdent,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
@@ -168,14 +177,15 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
         return (
             <>
                 <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
-                <Table className="punch_mappetabell">
+                <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.annenForelder')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
-                            <th aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
@@ -183,7 +193,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
                 {modaler}
             </>
         );
-    }
+    };
 
     if (soknader && soknader.length) {
         return (
@@ -199,7 +209,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
             {technicalError}
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
+                    antallSokere: annenPart ? '2' : '1',
                 })}
             </Alert>
         </>
@@ -208,16 +218,16 @@ export const EksisterendeOMPMASoknaderComponent: React.FunctionComponent<IEksist
 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPMASoknaderStateProps => ({
     eksisterendeOMPMASoknaderState: state.eksisterendeOMPMASoknaderState,
+    journalposterState: state.journalposterPerIdentState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeOMPMASoknader(søkerId, pleietrengendeId)),
+    findEksisterendeSoknader: (søkerId: string) => dispatch(findEksisterendeOMPMASoknader(søkerId)),
     openEksisterendeSoknadAction: (info: IOMPMASoknad) => dispatch(openEksisterendeOMPMASoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeOMPMASoknadAction()),
     chooseEksisterendeSoknadAction: (info: IOMPMASoknad) => dispatch(chooseEksisterendeOMPMASoknadAction(info)),
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createOMPMASoknad(journalpostid, søkerId, pleietrengendeId)),
+    createSoknad: (journalpostid: string, søkerId: string, annenPart: string) =>
+        dispatch(createOMPMASoknad(journalpostid, søkerId, annenPart)),
     resetSoknadidAction: () => dispatch(resetOMPMASoknadidAction()),
     resetAllAction: () => dispatch(resetAllStateAction()),
 });
