@@ -24,8 +24,7 @@ interface IApplicationWrapperStateProps {
     authState: IAuthState;
 }
 
-// fiks
-const isDev = window.location.hostname.includes('dev.adeo.no');
+const isDev = window.location.hostname.includes('intern.dev.nav.no');
 
 type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
     IApplicationWrapperStateProps;
