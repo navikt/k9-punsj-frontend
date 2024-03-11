@@ -14,7 +14,7 @@
         "@navikt/ft-plattform-komponenter": "2.3.18",
         "@popperjs/core": "^2.11.8",
         "@redux-devtools/extension": "3.3.0",
-        "@sentry/react": "7.99.0",
+        "@sentry/react": "7.106.0",
         "@storybook/testing-react": "2.0.1",
         "@types/classnames": "2.3.1",
         "@types/redux-logger": "3.0.13",
