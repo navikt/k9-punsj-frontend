@@ -170,6 +170,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             onBlur={oppdaterStateMedPleietrengendeFnr}
                             value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
+                            autoComplete="off"
                             maxLength={11}
                             size="medium"
                             error={
