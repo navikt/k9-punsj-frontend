@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { BodyShort, Checkbox, Select } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Link, Select } from '@navikt/ds-react';
 
 import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
-import Period from 'app/utils/Period';
 
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IBarn } from 'app/models/types/Barn';
 import { FormattedMessage } from 'react-intl';
-import { finnVisningsnavnForSakstype } from 'app/utils';
+import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
+import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
     fagsaker: Fagsak[];
@@ -64,6 +64,11 @@ const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
     return <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt" />;
 };
 
+const getLenkeTilK9Sak = (fagsakId: string) => {
+    const k9sakUrl = getEnvironmentVariable('APP_K9SAK_FAGSAK_FRONTEND_URL');
+    return `${k9sakUrl}${fagsakId}`;
+};
+
 const FagsakSelect = ({
     fagsaker,
     brukEksisterendeFagsak,
@@ -96,18 +101,13 @@ const FagsakSelect = ({
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
                     <BodyShort as="p">{getPleietrengendeInfo(valgtFagsak, barn)}</BodyShort>
-                    {valgtFagsak.gyldigPeriode?.fom && (
-                        <BodyShort as="p">
-                            <FormattedMessage
-                                id="fordeling.fagsakSelect.fagsakSelectedInfo.periode"
-                                values={{
-                                    periode: new Period(
-                                        valgtFagsak.gyldigPeriode.fom,
-                                        valgtFagsak.gyldigPeriode.tom,
-                                    ).prettifyPeriodYears(),
-                                }}
-                            />
-                        </BodyShort>
+                    {!valgtFagsak.reservert && (
+                        <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
+                            <BodyShort as="p">
+                                <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
+                            </BodyShort>
+                            <ExternalLink />
+                        </Link>
                     )}
                 </div>
             )}

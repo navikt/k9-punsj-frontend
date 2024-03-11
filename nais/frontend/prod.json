@@ -3,6 +3,7 @@
     "env": {
         "OIDC_AUTH_PROXY": "https://k9-punsj-oidc-auth-proxy.intern.nav.no",
         "K9_LOS_URL": "https://k9-los-web.nais.adeo.no/",
+        "APP_K9SAK_FAGSAK_FRONTEND_URL": "https://k9.intern.nav.no/k9/web/fagsak/",
         "OMP_KS_ENABLED": "true",
         "PLS_ENABLED": "true",
         "OMP_MA_FEATURE_TOGGLE": "true",
