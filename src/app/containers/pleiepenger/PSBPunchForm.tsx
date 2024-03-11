@@ -1146,7 +1146,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
-                        <Button variant="secondary" className="send-knapp" onClick={() => this.handleSubmit()}>
+                        <Button className="send-knapp" onClick={() => this.handleSubmit()}>
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Button>
 

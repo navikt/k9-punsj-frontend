@@ -449,12 +449,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
-                        <Button
-                            variant="secondary"
-                            className="send-knapp"
-                            onClick={() => this.handleSubmit()}
-                            disabled={false}
-                        >
+                        <Button className="send-knapp" onClick={() => this.handleSubmit()} disabled={false}>
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Button>
 
