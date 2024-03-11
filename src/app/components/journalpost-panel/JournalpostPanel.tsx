@@ -45,22 +45,22 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 <LabelValue
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
-                    retning="horisontal"
                 />
             </div>
 
-            <div>
+            <div className="flex">
                 <LabelValue
                     labelTextId="journalpost.norskIdent"
                     value={søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
-                    retning="horisontal"
                     visKopier
                 />
                 {modiaPath && (
-                    <Link className="modia-lenke" href={modiaPath}>
-                        {intlHelper(intl, 'modia.lenke')}
-                        <ExternalLink />
-                    </Link>
+                    <div className="flex-auto">
+                        <Link className="modia-lenke" href={modiaPath}>
+                            {intlHelper(intl, 'modia.lenke')}
+                            <ExternalLink />
+                        </Link>
+                    </div>
                 )}
             </div>
 
@@ -71,7 +71,6 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         value={finnVisningsnavnForSakstype(
                             fordelingState.fagsak?.sakstype || journalpost?.sak?.sakstype || '',
                         )}
-                        retning="horisontal"
                     />
                 </div>
             )}
@@ -90,14 +89,13 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                             journalpost?.sak?.pleietrengendeIdent ||
                             intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                         }
-                        retning="horisontal"
                     />
                 </div>
             )}
 
             {annenPart && (
                 <div>
-                    <LabelValue labelTextId="journalpost.annenPart" value={annenPart} retning="horisontal" />
+                    <LabelValue labelTextId="journalpost.annenPart" value={annenPart} />
                 </div>
             )}
 
@@ -110,17 +108,12 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                                 ? `${fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId} (reservert)`
                                 : fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId
                         }
-                        retning="horisontal"
                     />
                 </div>
             )}
             {journalpost?.sak?.behandlingsÅr && (
                 <div>
-                    <LabelValue
-                        labelTextId="journalpost.behandlingsÅr"
-                        value={journalpost?.sak?.behandlingsÅr}
-                        retning="horisontal"
-                    />
+                    <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsÅr} />
                 </div>
             )}
         </Panel>
