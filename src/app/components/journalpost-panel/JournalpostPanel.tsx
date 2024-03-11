@@ -49,24 +49,20 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 />
             </div>
 
-            {(fordelingState.erSøkerIdBekreftet || journalpost?.erFerdigstilt) && (
-                <div>
-                    <LabelValue
-                        labelTextId="journalpost.norskIdent"
-                        value={
-                            søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
-                        }
-                        retning="horisontal"
-                        visKopier
-                    />
-                    {modiaPath && (
-                        <Link className="modia-lenke" href={modiaPath}>
-                            {intlHelper(intl, 'modia.lenke')}
-                            <ExternalLink />
-                        </Link>
-                    )}
-                </div>
-            )}
+            <div>
+                <LabelValue
+                    labelTextId="journalpost.norskIdent"
+                    value={søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
+                    retning="horisontal"
+                    visKopier
+                />
+                {modiaPath && (
+                    <Link className="modia-lenke" href={modiaPath}>
+                        {intlHelper(intl, 'modia.lenke')}
+                        <ExternalLink />
+                    </Link>
+                )}
+            </div>
 
             {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
                 <div>

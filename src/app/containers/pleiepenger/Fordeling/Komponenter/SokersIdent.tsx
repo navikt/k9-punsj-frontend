@@ -101,6 +101,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                     <TextField
                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
                         onChange={handleSøkerIdChange}
+                        autoComplete="off"
                         onBlur={handleSøkerIdBlur}
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
