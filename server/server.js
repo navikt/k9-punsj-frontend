@@ -26,7 +26,6 @@ async function startApp() {
         server.use(timeout('10m'));
         headers.setup(server);
 
-
         // Logging i json format
         server.use(logger.morganMiddleware);
 
@@ -39,7 +38,11 @@ async function startApp() {
                     directives: {
                         'default-src': ["'self'"],
                         'base-uri': ["'self'"],
-                        'connect-src': ["'self'", 'https://sentry.gc.nav.no'],
+                        'connect-src': [
+                            "'self'",
+                            'https://sentry.gc.nav.no',
+                            process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
+                        ],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
                         'img-src': ["'self'", 'data:', 'blob:'],
                         'style-src': ["'self'", "'unsafe-inline'"],

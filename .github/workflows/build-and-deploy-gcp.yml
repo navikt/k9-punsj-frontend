@@ -78,7 +78,7 @@ jobs:
               uses: nais/deploy/actions/deploy@v2
               env:
                   CLUSTER: prod-gcp
-                  RESOURCE: nais/k9-punsj-frontend-wonderwall.yml
+                  RESOURCE: nais/k9-punsj-frontend.yml
                   VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]

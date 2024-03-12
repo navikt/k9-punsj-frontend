@@ -19,7 +19,6 @@ spec:
       autoLoginIgnorePaths:
       - /health/*
       - /logout
-
   liveness:
     path: health/isAlive
     initialDelay: 20
@@ -43,6 +42,9 @@ spec:
       {{#each outboundExternalHosts as |host|}}
        - host: {{host}}
       {{/each}}
+  frontend:
+    generatedConfig:
+      mountPath: /app/dist/nais.js
   ingresses:
   {{#each ingresses as |url|}}
      - {{url}}

@@ -75,6 +75,9 @@ const webpackConfig = {
         }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
+    externals: {
+        '../../../nais/observability/nais.js': 'excludedFile',
+    },
 };
 
 module.exports = webpackConfig;

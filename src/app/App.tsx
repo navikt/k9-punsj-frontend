@@ -12,6 +12,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
+import { initializeFaro } from '@grafana/faro-web-sdk';
+import faroConfig from '../../nais/observability/faroConfig';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
@@ -38,6 +40,11 @@ Sentry.init({
     environment,
     integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
     beforeSend: (event) => event,
+});
+
+initializeFaro({
+    url: faroConfig.telemetryCollectorURL,
+    app: faroConfig.app,
 });
 
 function prepare() {

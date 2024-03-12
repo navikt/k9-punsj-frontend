@@ -6,6 +6,7 @@ ENV NODE_ENV production
 WORKDIR /app
 
 COPY ./dist ./dist
+COPY ./nais/observability/faroConfig.js ./dist/nais.js
 COPY ./node_modules ./node_modules
 COPY server ./
 
