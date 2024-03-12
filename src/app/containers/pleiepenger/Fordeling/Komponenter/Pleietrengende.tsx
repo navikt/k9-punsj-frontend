@@ -30,7 +30,6 @@ export interface IPleietrengende {
     sokersIdent: string;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
-    visFagsakSelect: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
@@ -48,14 +47,12 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         visPleietrengende,
         skalHenteBarn,
         jpErFerdigstiltOgUtenPleietrengende,
-        visFagsakSelect,
     } = props;
     const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
-    const [ingenInfoOmBarn, setIngenInfoOmBarn] = useState<boolean>(false);
 
     useEffect(() => {
         if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
@@ -98,16 +95,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         }
     };
 
-    const ingenInfoOmBarnCheckboks = (checked: boolean) => {
-        setIngenInfoOmBarn(checked);
-        if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
-        if (checked) {
-            setGjelderAnnenPleietrengende(false);
-            setPleietrengendeIdent('');
-            setIdentAction(identState.søkerId, null);
-        }
-    };
-
     const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
 
     if (!visPleietrengende) {
@@ -125,11 +112,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             pleietrengendeIdentInputFieldOnChange(e);
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
-                        disabled={gjelderAnnenPleietrengende || ingenInfoOmBarn}
+                        disabled={gjelderAnnenPleietrengende}
                     >
                         <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
-                        {!ingenInfoOmBarn &&
-                            !gjelderAnnenPleietrengende &&
+                        {!gjelderAnnenPleietrengende &&
                             fellesState.barn.map((b) => (
                                 <option key={b.identitetsnummer} value={b.identitetsnummer}>
                                     {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
@@ -143,30 +129,12 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             nullUtPleietrengendeIdent();
                         }}
                         checked={gjelderAnnenPleietrengende}
-                        disabled={ingenInfoOmBarn}
                     >
                         {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
                     </Checkbox>
                 </>
             )}
 
-            {!visFagsakSelect && skalHenteBarn && (
-                <>
-                    <Checkbox
-                        onChange={(e) => ingenInfoOmBarnCheckboks(e.target.checked)}
-                        disabled={gjelderAnnenPleietrengende}
-                    >
-                        Dokument har ikke informasjon om barn eller barnet har ikke fødselsnummer
-                    </Checkbox>
-                    {ingenInfoOmBarn && (
-                        <Alert size="small" variant="info">
-                            Du kan journalføre uten å koble til pleietrengende, men kan ikke sende opplysninger til K9.
-                            Hvis du fortsetter kan du registrere opplysningene fra dokumentet, men må sette
-                            punsj-oppgaven på vent.
-                        </Alert>
-                    )}
-                </>
-            )}
             {(gjelderAnnenPleietrengende ||
                 !skalHenteBarn ||
                 !!fellesState.hentBarnError ||
@@ -198,14 +166,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             )}
                     </div>
                     <VerticalSpacer eightPx />
-                    {!skalHenteBarn && pleietrengendeHarIkkeFnrFn && (
+                    {pleietrengendeHarIkkeFnrFn && (
                         <>
                             <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
                                 {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
                             {pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
-                                    {' '}
                                     {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
                                 </Alert>
                             )}

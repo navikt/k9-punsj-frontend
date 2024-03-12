@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Button, Checkbox, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
 import { finnFagsaker, postBehandlingsAar } from 'app/api/api';
 import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
@@ -129,8 +129,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
         dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
-
-    const isBarn = dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE;
 
     const sakstyperMedPleietrengende = [
         DokumenttypeForkortelse.PSB,
@@ -487,16 +485,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const handleDokumentUtenPleietrengendeCheckbox = (checked: boolean) => {
-        if (checked) {
-            setIngenInfoOmPleitrengende(true);
-            setBehandlingsAar(undefined);
-            setValgtFagsak('');
-        } else {
-            setIngenInfoOmPleitrengende(false);
-        }
-    };
-
     if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
     }
@@ -658,27 +646,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
 
-                            {visFagsakSelect && !jpErFerdigstiltOgUtenPleietrengende && (
-                                <>
-                                    <Checkbox
-                                        onChange={(e) => handleDokumentUtenPleietrengendeCheckbox(e.target.checked)}
-                                        disabled={!brukEksisterendeFagsak}
-                                    >
-                                        <FormattedMessage
-                                            id={`fordeling.checkbox.dokumentUten.${isBarn ? 'barn' : 'pleitrengende'}`}
-                                        />
-                                    </Checkbox>
-
-                                    {ingenInfoOmPleitrengende && (
-                                        <Alert size="small" variant="info" className="mb-4">
-                                            Du kan journalføre uten å koble til pleietrengende, men kan ikke sende
-                                            opplysninger til K9. Hvis du fortsetter kan du registrere opplysningene fra
-                                            dokumentet, men må sette punsj-oppgaven på vent.
-                                        </Alert>
-                                    )}
-                                </>
-                            )}
-
                             {visValgAvBehandlingsaar && (
                                 <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
                             )}
@@ -699,7 +666,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     }
                                     visPleietrengende={visPleietrengende}
                                     jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
-                                    visFagsakSelect={visFagsakSelect}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
