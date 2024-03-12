@@ -1,0 +1,21 @@
+name: Deploy redirect
+on:
+    workflow_dispatch:
+    push:
+        paths:
+            - 'nais/redirect.yml'
+            - '.github/workflows/deploy-redirect.yml'
+        branches:
+            - gcp
+jobs:
+    deploy-dev-gcp:
+        name: Deploye til DEV GCP
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+        steps:
+            - name: Deploye til dev
+              uses: nais/deploy/actions/deploy@v2
+              env:
+                  CLUSTER: dev-gcp
+                  RESOURCE: nais/redirect.yml
