@@ -8,7 +8,7 @@ metadata:
   labels:
     team: k9saksbehandling
 spec:
-  ingressClassName: k9-punsj-frontend-dev-redirect
+  ingressClassName: nais-ingress
   rules:
     - host: k9-punsj-frontend.intern.dev.nav.no
       http:
