@@ -21,7 +21,6 @@ interface ISokersIdentProps {
     disableRadios?: boolean;
 
     handleSøkerIdChange: (event: any) => void;
-    handleSøkerIdBlur: (event: any) => void;
 
     setVisSokersBarn: (event: any) => void;
     setSokersIdent: (event: any) => void;
@@ -39,8 +38,6 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     disableRadios,
 
     handleSøkerIdChange,
-    handleSøkerIdBlur,
-
     setVisSokersBarn,
     setSokersIdent,
     setIdentAction,
@@ -102,7 +99,6 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         label={intlHelper(intl, 'ident.identifikasjon.felt')}
                         onChange={handleSøkerIdChange}
                         autoComplete="off"
-                        onBlur={handleSøkerIdBlur}
                         value={sokersIdent}
                         className="bold-label ident-soker-1"
                         maxLength={11}
