@@ -20,4 +20,4 @@ spec:
               service:
                 name: k9-punsj-frontend
                 port:
-                  number: 80
+                  number: 8080
