@@ -76,7 +76,7 @@ const webpackConfig = {
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
     externals: {
-        './nais.js': 'excludedFile',
+        '../build/webpack/faroConfig': 'excludedFile',
     },
 };
 
