@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - gcp
-
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml

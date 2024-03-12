@@ -1,7 +1,13 @@
 name: Deploy redirect
 on:
     workflow_dispatch:
-
+    push:
+        paths:
+            - 'nais/dev-fss-redirect.yml'
+            - 'nais/prod-fss-redirect.yml'
+            - '.github/workflows/deploy-redirect.yml'
+        branches:
+            - master
 jobs:
     deploy-redirect-gcp:
         name: Deploye redirect fra dev-gcp til dev-fss
@@ -14,4 +20,9 @@ jobs:
               uses: nais/deploy/actions/deploy@v2
               env:
                   CLUSTER: dev-gcp
-                  RESOURCE: nais/redirect.yml
+                  RESOURCE: nais/dev-fss-redirect.yml
+            - name: Deploye til dev
+              uses: nais/deploy/actions/deploy@v2
+              env:
+                  CLUSTER: prod-gcp
+                  RESOURCE: nais/prod-fss-redirect.yml

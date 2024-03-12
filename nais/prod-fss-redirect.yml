@@ -3,7 +3,7 @@ kind: "Ingress"
 metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: "https://k9-punsj-frontend.dev.adeo.no/$1"
+    nginx.ingress.kubernetes.io/rewrite-target: "https://k9-punsj-frontend.intern.nav.no/$1"
   name: k9-punsj-frontend-redirect
   namespace: k9saksbehandling
   labels:
@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nais-ingress
   rules:
-    - host: k9-punsj-frontend.intern.dev.nav.no
+    - host: k9-punsj-frontend.adeo.no
       http:
         paths:
           - path: "/(.*)"
