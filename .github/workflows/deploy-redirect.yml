@@ -9,7 +9,7 @@ on:
             - gcp
 jobs:
     deploy-redirect-gcp:
-        name: Deploye til DEV GCP
+        name: Deploye redirect fra dev-gcp til dev-fss
         runs-on: ubuntu-latest
         permissions:
             contents: read
