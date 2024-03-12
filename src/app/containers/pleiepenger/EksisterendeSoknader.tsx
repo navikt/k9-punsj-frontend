@@ -49,12 +49,10 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
     IEksisterendeSoknaderDispatchProps;
 
 export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
-export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
 ) => {
-    const { intl, eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const navigate = useNavigate();
-    const { intl, eksisterendeSoknaderState, pleietrengendeId } = props;
+    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState } = props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
