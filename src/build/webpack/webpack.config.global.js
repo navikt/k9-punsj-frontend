@@ -76,7 +76,7 @@ const webpackConfig = {
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
     externals: {
-        '../../app/nais.js': 'excludedFile',
+        './nais.js': 'nais.js',
     },
 };
 
