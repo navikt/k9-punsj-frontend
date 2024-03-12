@@ -13,7 +13,9 @@ spec:
     - host: k9-punsj-frontend.intern.dev.nav.no
       http:
         paths:
-          - backend:
+          - path: "/"
+            pathType: Prefix
+            backend:
               service:
                 name: k9-punsj-frontend
                 port:
