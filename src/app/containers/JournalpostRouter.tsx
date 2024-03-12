@@ -58,7 +58,7 @@ const JournalpostRouter: React.FC = () => {
                             element={<PLSRegistreringsValg journalpostid={journalpostid} />}
                         />
                         <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
-                        <Route path={ROUTES.PUNCH} element={<PLSPunchForm journalpostid={journalpostid} />} />
+                        <Route path={ROUTES.PUNCH} element={<PLSPunchForm />} />
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
