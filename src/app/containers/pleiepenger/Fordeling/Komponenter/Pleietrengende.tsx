@@ -69,7 +69,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
-        if (identFromInput.length < pleietrengendeIdent.length) {
+        if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
             setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
         }
 
