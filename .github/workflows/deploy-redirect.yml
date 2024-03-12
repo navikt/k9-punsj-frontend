@@ -15,6 +15,7 @@ jobs:
             contents: read
             id-token: write
         steps:
+            - uses: actions/checkout@v3
             - name: Deploye til dev
               uses: nais/deploy/actions/deploy@v2
               env:
