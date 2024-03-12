@@ -363,12 +363,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
-        setSokersIdent(ident);
+        console.log('TEST indent from evente', ident);
+        console.log('TEST ident from');
+        if (ident.length < sokersIdent.length) {
+            setIdentAction('', identState.pleietrengendeId);
+            setErSøkerIdBekreftet(false);
+            setVisSokersBarn(false);
+        }
+
         if (ident.length === 11) {
             setIdentAction(ident, identState.pleietrengendeId);
             setErSøkerIdBekreftet(true);
             setVisSokersBarn(true);
         }
+        setSokersIdent(ident);
     };
 
     const handleSøkerIdBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
