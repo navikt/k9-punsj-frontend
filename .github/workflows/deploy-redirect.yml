@@ -12,6 +12,7 @@ jobs:
         name: Deploye til DEV GCP
         runs-on: ubuntu-latest
         permissions:
+            contents: read
             id-token: write
         steps:
             - name: Deploye til dev
