@@ -93,6 +93,20 @@ interface IValiderOMPMASoknadResetAction {
     type: PunchFormActionKeys.SOKNAD_VALIDER_RESET;
 }
 
+interface ISettJournalpostPaaVentAction {
+    type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT;
+}
+interface ISettJournalpostPaaVentSuccessAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS;
+}
+interface ISettJournalpostPaaVentErrorAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR;
+    error: IError;
+}
+interface ISettJournalpostPaaVentResetAction {
+    type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET;
+}
+
 type IOMPMASoknadActionTypes =
     | IGetOMPMASoknadLoadingAction
     | IGetOMPMASoknadErrorAction
@@ -118,11 +132,18 @@ type IValiderOMPMASoknadActionTypes =
     | IValiderOMPMASoknadResetAction
     | IValiderOMPMASoknadUncompleteAction;
 
+type ISettPaaVentActionTypes =
+    | ISettJournalpostPaaVentAction
+    | ISettJournalpostPaaVentSuccessAction
+    | ISettJournalpostPaaVentErrorAction
+    | ISettJournalpostPaaVentResetAction;
+
 export type IPunchOMPMAFormActionTypes =
     | IResetPunchOMPMAFormAction
     | IOMPMASoknadActionTypes
     | IOMPMASoknadUpdateActionTypes
     | IOMPMASoknadSubmitActionTypes
+    | ISettPaaVentActionTypes
     | IValiderOMPMASoknadActionTypes;
 
 export const resetPunchOMPMAFormAction = (): IResetPunchOMPMAFormAction => ({
@@ -325,6 +346,45 @@ export function validerOMPMASoknad(soknad: IOMPMASoknadUt, erMellomlagring?: boo
                     default:
                         return dispatch(validerOMPMASoknadErrorAction(convertResponseToError(response)));
                 }
+            },
+        );
+    };
+}
+
+export function setJournalpostPaaVentAction(): ISettJournalpostPaaVentAction {
+    return { type: PunchFormActionKeys.JOURNALPOST_SETT_PAA_VENT };
+}
+export function setJournalpostPaaVentSuccessAction(): ISettJournalpostPaaVentSuccessAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_SUCCESS,
+    };
+}
+export function setJournalpostPaaVentErrorAction(error: IError): ISettJournalpostPaaVentErrorAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_ERROR,
+        error,
+    };
+}
+
+export function setJournalpostPaaVentResetAction(): ISettJournalpostPaaVentResetAction {
+    return {
+        type: PunchFormActionKeys.JOURNALPOST_JOURNALPOST_SETT_PAA_VENT_RESET,
+    };
+}
+
+export function settJournalpostPaaVent(journalpostid: string, soeknadId: string) {
+    return (dispatch: any) => {
+        dispatch(setJournalpostPaaVentAction());
+        return post(
+            ApiPath.JOURNALPOST_SETT_PAA_VENT,
+            { journalpostId: journalpostid },
+            undefined,
+            { soeknadId },
+            (response) => {
+                if (response.ok) {
+                    return dispatch(setJournalpostPaaVentSuccessAction());
+                }
+                return dispatch(setJournalpostPaaVentErrorAction(convertResponseToError(response)));
             },
         );
     };
