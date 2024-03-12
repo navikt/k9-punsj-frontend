@@ -13,6 +13,7 @@ import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
+
 import './pleietrengende.less';
 
 export interface IPleietrengendeStateProps {
@@ -65,8 +66,17 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     if (!visPleietrengende) {
         return null;
     }
-    // TODO FIKS
+
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
+        const identFromInput = event.target.value.replace(/\D+/, '');
+        if (identFromInput.length < pleietrengendeIdent.length) {
+            setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+        }
+
+        if (identFromInput.length === 11) {
+            setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
+        }
+
         setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
     };
 
@@ -167,8 +177,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         <TextField
                             label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
                             onChange={pleietrengendeIdentInputFieldOnChange}
-                            onBlur={oppdaterStateMedPleietrengendeFnr}
-                            value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
                             autoComplete="off"
                             maxLength={11}
