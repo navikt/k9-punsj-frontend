@@ -2,22 +2,21 @@ apiVersion: networking.k8s.io/v1
 kind: "Ingress"
 metadata:
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: "https://k9-punsj-frontend.dev.adeo.no/$2"
   name: k9-punsj-frontend-redirect
   namespace: k9saksbehandling
   labels:
     team: k9saksbehandling
 spec:
-  ingressClassName: gw-dev-intern-nav-no
+  ingressClassName: k9-punsj-frontend-dev-redirect
   rules:
     - host: k9-punsj-frontend.intern.dev.nav.no
       http:
         paths:
-          - path: "/(.*)"
+          - path: "(/|$)(.*)"
             pathType: ImplementationSpecific
             backend:
               service:
                 name: k9-punsj-frontend
                 port:
-                  number: 8080
+                  number: 80
