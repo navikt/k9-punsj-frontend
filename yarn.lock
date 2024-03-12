@@ -2110,7 +2110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.4.2":
+"@grafana/faro-web-sdk@npm:1.4.2, @grafana/faro-web-sdk@npm:^1.4.2":
   version: 1.4.2
   resolution: "@grafana/faro-web-sdk@npm:1.4.2"
   dependencies:
@@ -2121,7 +2121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:^1.4.2":
+"@grafana/faro-web-tracing@npm:1.4.2":
   version: 1.4.2
   resolution: "@grafana/faro-web-tracing@npm:1.4.2"
   dependencies:
@@ -13881,8 +13881,8 @@ __metadata:
     "@babel/preset-react": 7.23.3
     "@babel/preset-typescript": 7.23.3
     "@babel/runtime": 7.23.9
-    "@grafana/faro-web-sdk": ^1.4.2
-    "@grafana/faro-web-tracing": ^1.4.2
+    "@grafana/faro-web-sdk": 1.4.2
+    "@grafana/faro-web-tracing": 1.4.2
     "@k9-punsj-frontend/server": "workspace:^"
     "@navikt/aksel-icons": ^5.17.2
     "@navikt/ds-css": 5.17.2
