@@ -13,7 +13,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 import { initializeFaro } from '@grafana/faro-web-sdk';
-import faroConfig from '../build/webpack/faroConfig';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
