@@ -70,11 +70,13 @@ export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     React.useEffect(() => {
+        console.log(window.nais);
+
         initializeFaro({
-            url: window.nais.telemetryCollectorURL,
-            app: window.nais.app,
+            url: window.nais?.telemetryCollectorURL,
+            app: window.nais?.app,
         });
-    }, [window.nais]);
+    }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
 
     return (
         <Sentry.ErrorBoundary>
