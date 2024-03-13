@@ -42,11 +42,6 @@ Sentry.init({
     beforeSend: (event) => event,
 });
 
-initializeFaro({
-    url: faroConfig.telemetryCollectorURL,
-    app: faroConfig.app,
-});
-
 function prepare() {
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
@@ -74,6 +69,13 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
+
+    if (window.nais) {
+        initializeFaro({
+            url: faroConfig.telemetryCollectorURL,
+            app: faroConfig.app,
+        });
+    }
 
     return (
         <Sentry.ErrorBoundary>
