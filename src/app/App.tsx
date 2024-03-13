@@ -70,12 +70,12 @@ queryClient.setDefaultOptions({
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
-    if (window.nais) {
+    React.useEffect(() => {
         initializeFaro({
             url: faroConfig.telemetryCollectorURL,
             app: faroConfig.app,
         });
-    }
+    }, [window.nais]);
 
     return (
         <Sentry.ErrorBoundary>
