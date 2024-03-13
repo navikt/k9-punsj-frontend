@@ -4,6 +4,10 @@ export const envVariables = () => [
         value: process.env.K9_LOS_URL,
     },
     {
+        key: 'TELEMETRY_COLLECTOR_URL',
+        value: process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
+    },
+    {
         key: 'OMP_KS_ENABLED',
         value: process.env.OMP_KS_ENABLED,
     },

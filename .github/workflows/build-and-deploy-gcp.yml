@@ -1,10 +1,6 @@
 name: Build and deploy to prod gcp
 on:
     workflow_dispatch:
-    push:
-        branches:
-            - gcp
-    
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml
