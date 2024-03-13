@@ -72,8 +72,8 @@ export const App: React.FunctionComponent = () => {
 
     React.useEffect(() => {
         initializeFaro({
-            url: faroConfig.telemetryCollectorURL,
-            app: faroConfig.app,
+            url: window.nais.telemetryCollectorURL,
+            app: window.nais.app,
         });
     }, [window.nais]);
 
