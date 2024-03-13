@@ -3,7 +3,22 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/png" href="/dist/favicon.png" />
-        <script type="module" src="/dist/js/main.js"></script>
+        <script type="module">
+            // Dynamically import nais.js
+            import('/dist/js/nais.js')
+                .then((naisModule) => {
+                    // Assuming nais.js is using default export
+                    const faroConfig = naisModule.default;
+                    // Now `nais` is available for use here
+                    // You might want to attach `nais` to the window or handle it differently depending on your needs
+
+                    // Example: attaching to window for global access
+                    window.nais = faroConfig;
+                })
+                .catch((error) => {
+                    console.error('Failed to load nais.js:', error);
+                });
+        </script>
     </head>
     <title>K9 Punsj</title>
     <body>
