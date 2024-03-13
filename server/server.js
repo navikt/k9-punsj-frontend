@@ -36,8 +36,8 @@ async function startApp() {
                 contentSecurityPolicy: {
                     useDefaults: false,
                     directives: {
-                        'default-src': ["'self'"],
-                        'base-uri': ["'self'", "'unsafe-inline'"],
+                        'default-src': ["'self'", "'unsafe-inline'"],
+                        'base-uri': ["'self'"],
                         'connect-src': [
                             "'self'",
                             'https://sentry.gc.nav.no',
