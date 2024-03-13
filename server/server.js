@@ -37,7 +37,7 @@ async function startApp() {
                     useDefaults: false,
                     directives: {
                         'default-src': ["'self'"],
-                        'base-uri': ["'self'"],
+                        'base-uri': ["'self'", "'unsafe-inline'"],
                         'connect-src': [
                             "'self'",
                             'https://sentry.gc.nav.no',
