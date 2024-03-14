@@ -183,7 +183,7 @@
     "mapper.infoboks": "Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.",
     "mapper.infoboks.ingensoknader": "Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.",
     "mapper.infoboks.ingentreff": "Det finnes ingen påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}.",
-    "tabell.overskrift": "Påbegynte registreringer",
+    "tabell.overskrift": "Påbegynte registreringer på søker:",
     "tabell.mottakelsesdato": "Mottakelsesdato",
     "tabell.typeinnsdending": "Type innsending",
     "tabell.søknadtype": "Søknadtype",

@@ -165,6 +165,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 
         return (
             <>
+                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
