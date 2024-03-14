@@ -75,7 +75,7 @@ const webpackConfig = {
         }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
-    externals: {'../build/webpack/faroConfig': 'faroConfig'},
+    externals: {'../build/webpack/faroConfig': 'false'},
 };
 
 module.exports = webpackConfig;

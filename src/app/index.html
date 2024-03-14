@@ -7,12 +7,7 @@
             // Dynamically import nais.js
             import('/dist/js/nais.js')
                 .then((naisModule) => {
-                    // Assuming nais.js is using default export
                     const faroConfig = naisModule.default;
-                    // Now `nais` is available for use here
-                    // You might want to attach `nais` to the window or handle it differently depending on your needs
-
-                    // Example: attaching to window for global access
                     window.nais = faroConfig;
                 })
                 .catch((error) => {

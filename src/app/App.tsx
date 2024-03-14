@@ -70,8 +70,6 @@ export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     React.useEffect(() => {
-        console.log(window.nais);
-
         initializeFaro({
             url: window.nais?.telemetryCollectorURL,
             app: window.nais?.app,
