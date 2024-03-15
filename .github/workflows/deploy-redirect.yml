@@ -7,7 +7,7 @@ on:
         required: true
 jobs:
   deploy-redirect-gcp:
-    name: Deploye redirect fra dev-gcp til dev-fss
+    name: Deploye redirect fra dev-fss til prod-fss
     runs-on: ubuntu-latest
     permissions:
       id-token: write
