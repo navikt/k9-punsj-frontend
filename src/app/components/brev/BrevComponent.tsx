@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
 
-import { ApiPath, URL_BACKEND } from 'app/apiConfig';
+import { ApiPath } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
@@ -24,7 +24,7 @@ import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import './brev.less';
 import dokumentMalType from './dokumentMalType';
-import { previewMessage } from './PrewiewMessage';
+import { previewMessage } from './PreviewMessage';
 
 interface BrevProps {
     søkerId: string;
@@ -60,7 +60,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [submitet, setSubmitet] = useState(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
     useEffect(() => {
-        fetch(`${URL_BACKEND()}/api/k9-formidling/brev/maler?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
+        fetch(`${ApiPath.BREV_MALER}?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {

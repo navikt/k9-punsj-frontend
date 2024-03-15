@@ -2,7 +2,19 @@
 <html lang="no">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/png" href="dist/favicon.png" />
+        <link rel="icon" type="image/png" href="/dist/favicon.png" />
+        <script type="module">
+            // Dynamically import nais.js. Workaround til vi kan importere nais.js direkte i app.tsx via relative path når vi bytter til vite
+            // https://docs.nais.io/explanation/observability/frontend/?h=faro#tracing-opentelemetry
+            import('/dist/js/nais.js')
+                .then((naisModule) => {
+                    const faroConfig = naisModule.default;
+                    window.nais = faroConfig;
+                })
+                .catch((error) => {
+                    console.error('Failed to load nais.js:', error);
+                });
+        </script>
     </head>
     <title>K9 Punsj</title>
     <body>

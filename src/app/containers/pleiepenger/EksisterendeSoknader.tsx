@@ -147,7 +147,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
             modaler.push(
                 <Modal
                     key={soknadId}
-                    onBeforeClose={() => {
+                    onCancel={() => {
+                        props.closeEksisterendeSoknadAction();
+                    }}
+                    onClose={() => {
                         props.closeEksisterendeSoknadAction();
                     }}
                     aria-label={soknadId}

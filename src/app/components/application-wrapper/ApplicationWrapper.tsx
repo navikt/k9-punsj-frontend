@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { Loader } from '@navikt/ds-react';
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
@@ -24,51 +23,32 @@ interface IApplicationWrapperComponentProps {
 interface IApplicationWrapperStateProps {
     authState: IAuthState;
 }
-interface IApplicationWrapperDispatchProps {
-    checkAuth: typeof checkAuth;
-}
 
-const isDev = window.location.hostname.includes('dev.adeo.no');
+const isDev = window.location.hostname.includes('intern.dev.nav.no');
 
 type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperComponentProps> &
-    IApplicationWrapperStateProps &
-    IApplicationWrapperDispatchProps;
+    IApplicationWrapperStateProps;
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
     const { authState, locale, children } = props;
     const [k9LosUrl, setK9LosUrl] = React.useState<string>('http://localhost:8080');
-
+    const dispatch = useDispatch();
     React.useEffect(() => {
         setK9LosUrl(getEnvironmentVariable('K9_LOS_URL') || 'http://localhost:8080');
     }, [window.appSettings]);
 
-    if (authState.error) {
-        return <p>Ai! Det oppsto en feil i tilkoblingen til innloggingstjeneren.</p>;
-    }
-
-    if (!authState.loggedIn && !authState.isLoading) {
-        if (!authState.redirectUrl) {
-            props.checkAuth();
-            return null;
+    React.useEffect(() => {
+        if (!authState.loggedIn) {
+            dispatch(checkAuth());
         }
-        window.location.replace(authState.redirectUrl);
-        return null;
-    }
-
-    if (authState.isLoading) {
-        return (
-            <div className="justify-content-center align-items-center h-screen flex flex-wrap">
-                <Loader size="large" />
-            </div>
-        );
-    }
+    }, []);
 
     return (
         <IntlProvider {...{ locale }}>
             <div className="app fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
                     <Header title="K9-punsj" titleHref={k9LosUrl}>
-                        <UserPanel name={authState.userName!} />
+                        <UserPanel name={authState.userName} />
                     </Header>
                 </div>
                 <AppContainer>
@@ -82,8 +62,5 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
 function mapStateToProps(state: RootStateType) {
     return { authState: state.authState };
 }
-function mapDispatchToProps(dispatch: any) {
-    return { checkAuth: () => dispatch(checkAuth()) };
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ApplicationWrapper);
+export default connect(mapStateToProps)(ApplicationWrapper);

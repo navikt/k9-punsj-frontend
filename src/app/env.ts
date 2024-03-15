@@ -23,7 +23,7 @@ interface EnvVariable {
 }
 
 interface EnvVariables {
-    OIDC_AUTH_PROXY: string;
+    IS_LOCAL: string;
     K9_LOS_URL: string;
     APP_K9SAK_FAGSAK_FRONTEND_URL: string;
     OMP_KS_ENABLED: string;
@@ -37,11 +37,11 @@ interface EnvVariables {
 }
 
 export default async function setEnvVariables(): Promise<void> {
-    const response = await fetch('/getEnvVariables');
+    const response = await fetch(ApiPath.ENV_VARIABLES);
     const data: EnvVariable[] = await response.json();
     const envVariables = data.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {}) as EnvVariables;
     const appSettings = {
-        OIDC_AUTH_PROXY: envVariables.OIDC_AUTH_PROXY,
+        IS_LOCAL: envVariables.IS_LOCAL,
         K9_LOS_URL: envVariables.K9_LOS_URL,
         APP_K9SAK_FAGSAK_FRONTEND_URL: envVariables.APP_K9SAK_FAGSAK_FRONTEND_URL,
         OMP_KS_ENABLED: envVariables.OMP_KS_ENABLED,

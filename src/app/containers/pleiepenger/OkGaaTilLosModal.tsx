@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Button, Modal } from '@navikt/ds-react';
 
@@ -22,8 +22,9 @@ const utledMelding = (mld: string) => {
     return <FormattedMessage id={mld} />;
 };
 
-const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps) => {
-    const { intl, melding } = props;
+export const OkGaaTilLosModal = (props: IOkGaaTilLOsModalProps) => {
+    const intl = useIntl();
+    const { melding } = props;
 
     return (
         <Modal.Body>
@@ -49,5 +50,3 @@ const OkGaaTilLosModal = (props: WrappedComponentProps & IOkGaaTilLOsModalProps)
         </Modal.Body>
     );
 };
-
-export default injectIntl(OkGaaTilLosModal);

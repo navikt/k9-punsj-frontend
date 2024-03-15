@@ -13,7 +13,7 @@ import { lukkOppgaveResetAction } from '../../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import SokKnapp from '../../components/knapp/SokKnapp';
-import OkGaaTilLosModal from '../pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
@@ -93,7 +93,7 @@ export const SearchForm = () => {
 
     if (lukkOppgaveDone) {
         return (
-            <Modal key="lukkoppgaveokmodal" onBeforeClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
+            <Modal key="lukkoppgaveokmodal" onClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </Modal>
         );

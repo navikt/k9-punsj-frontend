@@ -1,5 +1,5 @@
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import { URL_BACKEND } from 'app/apiConfig';
+import { ApiPath } from 'app/apiConfig';
 import dokumentMalType from './dokumentMalType';
 
 interface ErrType {
@@ -43,7 +43,7 @@ export const previewMessage = async (
     const isGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
 
     try {
-        const response = await fetch(`${URL_BACKEND()}/api/k9-formidling/brev/forhaandsvis`, {
+        const response = await fetch(ApiPath.BREV_FORHAANDSVIS, {
             method: 'post',
             credentials: 'include',
             body: JSON.stringify({

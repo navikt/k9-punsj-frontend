@@ -10,6 +10,11 @@ jobs:
     test:
         name: Cypress-tester
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                ci_index: [0, 1, 2, 3]
+                ci_total: [4]
         steps:
             - name: Hente kode
               uses: actions/checkout@v4
@@ -39,3 +44,8 @@ jobs:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
                   wait-on-timeout: 60
+                  runTests: false
+            - run: node split.js | xargs yarn cypress run --spec
+              env:
+                CI_TOTAL: ${{ matrix.ci_total }}
+                CI_INDEX: ${{ matrix.ci_index }}

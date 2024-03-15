@@ -1,15 +1,6 @@
-name: Build and deploy to prod
+name: Deploy til preprod gcp
 on:
-    push:
-        paths-ignore:
-            - '**.md'
-            - '.gitignore'
-            - 'LICENCE'
-            - 'CODEOWNERS'
-            - 'nais/proxy/*'
-        branches:
-            - master
-
+    workflow_dispatch:
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml
@@ -27,19 +18,17 @@ jobs:
         uses: ./.github/workflows/build.yml
         secrets:
             READER_TOKEN: ${{ secrets.READER_TOKEN }}
-    deploy:
-        name: Deploye til PROD
+    deploy-dev-gcp:
+        name: Deploye til DEV GCP
         runs-on: ubuntu-latest
         permissions:
+            packages: write
             contents: read
             id-token: write
         needs: [lint, test, test-cypress, build]
-        outputs:
-            image: ${{ steps.docker-push.outputs.image }}
         steps:
             - name: Hente kode
               uses: actions/checkout@v4
-
             - name: Setup .yarnrc.yml
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
@@ -47,7 +36,6 @@ jobs:
                   yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
             - name: Sette opp Node
               uses: actions/setup-node@v4
               with:
@@ -61,43 +49,27 @@ jobs:
                   path: ./dist
 
             - name: Installere moduler
-              run: yarn install --immutable
+              run: |
+                  cd server
+                  yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Opprett release med Sentry
-              run: yarn sentry-release
-              env:
-                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
             - uses: nais/docker-build-push@v0
               id: docker-push
               with:
                   tag: 'latest'
                   team: k9saksbehandling
+                  pull: true
                   project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
                   identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
 
-            - name: Sett image for nais deploy
-              run: |
-                  echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_OUTPUT
-                  echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
+            - name: Set image
+              run: echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
-            - name: Deploye til prod
+            - name: Deploye til dev
               uses: nais/deploy/actions/deploy@v2
               env:
-                  CLUSTER: prod-fss
-                  RESOURCE: nais/frontend/k9-punsj-frontend.yml
-                  VARS: nais/frontend/prod.json
-    trivy:
-        needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@main
-        permissions:
-            contents: write
-            security-events: write
-            actions: read
-            id-token: write
-        secrets: inherit
-        with:
-            team: k9saksbehandling
-            image: ${{ needs.deploy.outputs.image }}
+                  CLUSTER: dev-gcp
+                  RESOURCE: nais/k9-punsj-frontend.yml
+                  VARS: nais/dev-gcp.yml

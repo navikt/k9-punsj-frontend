@@ -1,0 +1,20 @@
+name: Deploy redirect
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to (dev or prod)' 
+        required: true
+jobs:
+  deploy-redirect-gcp:
+    name: Deploye redirect fra dev-fss til dev-gcp
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploye til dev
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: ${{ github.event.inputs.environment }}-fss
+          RESOURCE: nais/${{ github.event.inputs.environment }}-fss-redirect.yml

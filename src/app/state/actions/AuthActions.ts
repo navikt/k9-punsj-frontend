@@ -1,7 +1,7 @@
-import { URL_AUTH_CHECK } from 'app/apiConfig';
+import { ApiPath } from 'app/apiConfig';
 import { AuthActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
-import { convertResponseToError, loginUrl } from 'app/utils';
+import { convertResponseToError, get } from 'app/utils';
 
 interface IAuthLoadAction {
     type: AuthActionKeys.LOAD;
@@ -22,10 +22,6 @@ interface IAuthErrorAction {
 export type IAuthActionTypes = IAuthLoadAction | IAuthRedirectAction | IAuthOkAction | IAuthErrorAction;
 
 const loadingAction = (): IAuthLoadAction => ({ type: AuthActionKeys.LOAD });
-const redirectAction = (redirectUrl: string): IAuthRedirectAction => ({
-    type: AuthActionKeys.REDIRECT,
-    redirectUrl,
-});
 const authOkAction = (name: string): IAuthOkAction => ({
     type: AuthActionKeys.OK,
     name,
@@ -38,12 +34,13 @@ const authErrorAction = (error: IError): IAuthErrorAction => ({
 export function checkAuth() {
     return (dispatch: any) => {
         dispatch(loadingAction());
-        fetch(URL_AUTH_CHECK(), { credentials: 'include' }).then((response) => {
+        get(ApiPath.ME, { credentials: 'include' }).then((response) => {
             switch (response.status) {
                 case 200:
-                    return response.json().then((user) => dispatch(authOkAction(user.name)));
-                case 401:
-                    return dispatch(redirectAction(loginUrl()));
+                    return response.json().then((user) => {
+                        const username = user.name;
+                        dispatch(authOkAction(username));
+                    });
                 default:
                     return dispatch(authErrorAction(convertResponseToError(response)));
             }

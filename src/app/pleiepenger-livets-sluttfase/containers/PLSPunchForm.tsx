@@ -29,7 +29,7 @@ import ArbeidsforholdPanel from '../../arbeidsforhold/containers/ArbeidsforholdP
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../../containers/pleiepenger/OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from '../../containers/pleiepenger/PeriodeinfoPaneler';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';

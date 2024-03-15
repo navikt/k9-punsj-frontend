@@ -157,7 +157,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
             modaler.push(
                 <Modal
                     key={soknadId}
-                    onBeforeClose={() => {
+                    onClose={() => {
                         props.closeEksisterendeSoknadAction();
                     }}
                     aria-label={soknadId}

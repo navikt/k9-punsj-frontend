@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { Button } from '@navikt/ds-react';
 
@@ -14,8 +14,9 @@ interface IErDuSikkerModalProps {
     submitKnappText: string;
 }
 
-const ErDuSikkerModal = (props: WrappedComponentProps & IErDuSikkerModalProps) => {
-    const { intl, melding, onSubmit, onClose, submitKnappText, extraInfo } = props;
+const ErDuSikkerModal = (props: IErDuSikkerModalProps) => {
+    const intl = useIntl();
+    const { melding, onSubmit, onClose, submitKnappText, extraInfo } = props;
 
     return (
         <div className="modal_content">
@@ -41,4 +42,4 @@ const ErDuSikkerModal = (props: WrappedComponentProps & IErDuSikkerModalProps) =
     );
 };
 
-export default injectIntl(ErDuSikkerModal);
+export default ErDuSikkerModal;

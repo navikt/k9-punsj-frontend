@@ -12,6 +12,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
+import { initializeFaro } from '@grafana/faro-web-sdk';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
@@ -67,6 +68,13 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
+
+    React.useEffect(() => {
+        initializeFaro({
+            url: window.nais?.telemetryCollectorURL,
+            app: window.nais?.app,
+        });
+    }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
 
     return (
         <Sentry.ErrorBoundary>

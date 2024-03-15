@@ -20,7 +20,7 @@ import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
-import OkGaaTilLosModal from './OkGaaTilLosModal';
+import { OkGaaTilLosModal } from './OkGaaTilLosModal';
 import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
@@ -148,7 +148,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {showSettPaaVentModal && (
                 <Modal
                     className="settpaaventmodal"
-                    onBeforeClose={() => setShowSettPaaVentModal(false)}
+                    onClose={() => setShowSettPaaVentModal(false)}
                     aria-label="settpaaventmodal"
                     open
                 >
@@ -159,7 +159,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showSettPaaVentSuccessModal && (
                 <Modal
-                    onBeforeClose={() => {
+                    onClose={() => {
                         resetSetPåVent();
                     }}
                     aria-label="settpaaventokmodal"
@@ -170,7 +170,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showSettPaaVentErrorModal && (
                 <Modal
-                    onBeforeClose={() => {
+                    onClose={() => {
                         resetSetPåVent();
                     }}
                     aria-label="settpaaventokmodal"
@@ -181,7 +181,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showFerdigstillJournalpostModal && (
                 <Modal
-                    onBeforeClose={() => setShowFerdigstillJournalpostModal(false)}
+                    onClose={() => setShowFerdigstillJournalpostModal(false)}
                     aria-label="ferdigstill journalpostmodal"
                     open
                 >
@@ -196,7 +196,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {journalpost && showOpprettOppgaveIGosysModal && (
                 <Modal
                     className="opprettOppgaveIGosysModal"
-                    onBeforeClose={() => setShowOpprettOppgaveIGosysModal(false)}
+                    onClose={() => setShowOpprettOppgaveIGosysModal(false)}
                     aria-label="opprettOppgaveIGosysModal"
                     open
                 >
@@ -210,7 +210,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showFerdigstillJournalpostSuccessModal && (
                 <Modal
-                    onBeforeClose={() => {
+                    onClose={() => {
                         resetFerdigstillJournalpost();
                     }}
                     aria-label="ferdigstill journalpostOkModal"
@@ -221,7 +221,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
             {showFerdigstillJournalpostErrorModal && (
                 <Modal
-                    onBeforeClose={() => {
+                    onClose={() => {
                         resetFerdigstillJournalpost();
                     }}
                     aria-label="ferdigstill journalpostFeilModal"

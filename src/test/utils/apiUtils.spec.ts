@@ -1,8 +1,7 @@
 import fetchMock from 'fetch-mock';
 
-import { ApiPath } from 'app/apiConfig';
-import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
-import { redirect } from 'app/utils/browserUtils';
+import { ApiPath } from '../../app/apiConfig';
+import { apiUrl, convertResponseToError, get, post, put } from '../../app/utils/apiUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
@@ -30,19 +29,6 @@ describe('get', () => {
         await get(path, { id });
 
         expect(fetchMock.called(url, { method: 'get' })).toEqual(true);
-    });
-
-    it('Videresender til innlogging dersom get-spørring responderer med status 401', async () => {
-        const path = ApiPath.PSB_SOKNAD_GET;
-        const id = 'abc123';
-        const url = apiUrl(path, { id });
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
-
-        fetchMock.get(url, { status: 401 });
-        await get(path, { id }, {}, callback);
-
-        expect(redirect).toHaveBeenCalledTimes(1);
-        expect(callback).not.toHaveBeenCalled();
     });
 
     it('Behandler respons fra get-spørring', async () => {
@@ -74,21 +60,6 @@ describe('post', () => {
         await post(path, undefined, undefined, body);
 
         expect(fetchMock.called(url, { method: 'post', body })).toEqual(true);
-    });
-
-    it('Videresender til innlogging dersom post-spørring responderer med status 401', async () => {
-        const path = ApiPath.PSB_SOKNAD_CREATE;
-        const url = apiUrl(path);
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
-
-        fetchMock.post(url, {
-            status: 401,
-            body: JSON.stringify({ message: 'Hello' }),
-        });
-        await post(path, undefined, undefined, undefined, callback);
-
-        expect(redirect).toHaveBeenCalledTimes(1);
-        expect(callback).not.toHaveBeenCalled();
     });
 
     it('Behandler respons fra post-spørring', async () => {
@@ -123,20 +94,6 @@ describe('put', () => {
         await put(path, { id }, body);
 
         expect(fetchMock.called(url, { method: 'put', body })).toEqual(true);
-    });
-
-    it('Videresender til innlogging dersom put-spørring responderer med status 401', async () => {
-        const path = ApiPath.PSB_SOKNAD_UPDATE;
-        const id = 'abc123';
-        const url = apiUrl(path, { id });
-        const body = { test: 'Lorem ipsum dolor sit amet.' };
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
-
-        fetchMock.put(url, { status: 401 });
-        await put(path, { id }, body, callback);
-
-        expect(redirect).toHaveBeenCalledTimes(1);
-        expect(callback).not.toHaveBeenCalled();
     });
 
     it('Behandler respons fra put-spørring', async () => {

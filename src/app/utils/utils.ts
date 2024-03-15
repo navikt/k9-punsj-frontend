@@ -130,10 +130,10 @@ export const getModiaPath = (fødselsnummer?: string) => {
     if (!fødselsnummer) {
         return null;
     }
-    if (host.includes('dev.adeo.no') || host.includes('localhost')) {
+    if (host.includes('intern.dev.nav.no') || host.includes('localhost')) {
         return `https://app-q1.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
-    if (host.includes('nais.adeo.no')) {
+    if (host.includes('intern.nav.no')) {
         return `https://app.adeo.no/modiapersonoversikt/person/${fødselsnummer}/meldinger/`;
     }
     return null;

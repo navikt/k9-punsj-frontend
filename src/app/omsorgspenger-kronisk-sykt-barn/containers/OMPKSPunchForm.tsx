@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import Feilmelding from '../../components/Feilmelding';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';

@@ -39,7 +39,7 @@ import {
     getPathFraForkortelse,
 } from '../../../utils';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
-import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
@@ -493,7 +493,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="opprettigosysokmodal"
-                onBeforeClose={() => {
+                onClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
@@ -513,7 +513,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="lukkoppgaveokmodal"
-                onBeforeClose={() => {
+                onClose={() => {
                     lukkOppgaveReset();
                 }}
                 aria-label="settpaaventokmodal"

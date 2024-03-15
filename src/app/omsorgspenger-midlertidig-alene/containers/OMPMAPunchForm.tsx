@@ -18,7 +18,7 @@ import intlHelper from 'app/utils/intlUtils';
 import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import OkGaaTilLosModal from '../../containers/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../../containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';

@@ -1,7 +1,7 @@
 import initialState from '../../state/EksisterendeSoknaderInitialState';
-import { BACKEND_BASE_URL } from '../../../src/mocks/konstanter';
 import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
 import { testHandlers } from 'mocks/testHandlers';
+import { ApiPath } from 'app/apiConfig';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {
@@ -59,7 +59,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         cy.window().then((window) => {
             const { worker, http, HttpResponse } = window.msw;
             worker.use(
-                http.get(`${BACKEND_BASE_URL}/api/k9-punsj/pleiepenger-sykt-barn-soknad/mappe`, () =>
+                http.get(ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND, () =>
                     HttpResponse.json({
                         søker: '29099000129',
                         fagsakTypeKode: 'PSB',

@@ -1,10 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { HttpResponse, http } from 'msw';
-
-import { LOCAL_API_URL } from './konstanter';
+import { ApiPath } from 'app/apiConfig';
 
 const handlers = {
-    tomMappe: http.get(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/mappe`, () =>
+    tomMappe: http.get(ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP_MA',
@@ -12,7 +11,7 @@ const handlers = {
         }),
     ),
 
-    mappeMedSøknad: http.get(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/mappe`, () =>
+    mappeMedSøknad: http.get(ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP_MA',
@@ -54,7 +53,7 @@ const handlers = {
         }),
     ),
 
-    nySoeknad: http.post(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad`, () =>
+    nySoeknad: http.post(ApiPath.OMP_MA_SOKNAD_CREATE, () =>
         HttpResponse.json(
             {
                 soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
@@ -77,30 +76,28 @@ const handlers = {
         ),
     ),
 
-    soknad: http.get(
-        `${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/mappe/db054295-f1bd-45d2-b0fe-0d032ce25295`,
-        () =>
-            HttpResponse.json({
-                soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
-                soekerId: '29099000129',
-                mottattDato: '2020-10-12',
-                klokkeslett: '12:53',
-                barn: [],
-                annenForelder: {
-                    norskIdent: '07827599802',
-                    situasjonType: null,
-                    situasjonBeskrivelse: null,
-                    periode: null,
-                },
-                journalposter: ['205'],
-                harInfoSomIkkeKanPunsjes: null,
-                harMedisinskeOpplysninger: null,
-                metadata: null,
-            }),
+    soknad: http.get(ApiPath.OMP_MA_SOKNAD_GET.replace('{id}', 'db054295-f1bd-45d2-b0fe-0d032ce25295'), () =>
+        HttpResponse.json({
+            soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
+            soekerId: '29099000129',
+            mottattDato: '2020-10-12',
+            klokkeslett: '12:53',
+            barn: [],
+            annenForelder: {
+                norskIdent: '07827599802',
+                situasjonType: null,
+                situasjonBeskrivelse: null,
+                periode: null,
+            },
+            journalposter: ['205'],
+            harInfoSomIkkeKanPunsjes: null,
+            harMedisinskeOpplysninger: null,
+            metadata: null,
+        }),
     ),
 
-    oppdater: http.put(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/oppdater`, () => HttpResponse.json({})),
-    sendInn: http.post(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/send`, () =>
+    oppdater: http.put(ApiPath.OMP_MA_SOKNAD_UPDATE, () => HttpResponse.json({})),
+    sendInn: http.post(ApiPath.OMP_MA_SOKNAD_SUBMIT, () =>
         HttpResponse.json(
             {
                 søknadId: '78415bd0-dd83-471d-b9e1-018b57cfdc10',
@@ -151,7 +148,7 @@ const handlers = {
         ),
     ),
 
-    valider: http.post(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/valider`, () =>
+    valider: http.post(ApiPath.OMP_MA_SOKNAD_VALIDER, () =>
         HttpResponse.json(
             {
                 søknadId: '78415bd0-dd83-471d-b9e1-018b57cfdc10',
@@ -202,7 +199,7 @@ const handlers = {
         ),
     ),
 
-    validerFeil: http.post(`${LOCAL_API_URL}/omsorgspenger-midlertidig-alene-soknad/valider`, () =>
+    validerFeil: http.post(ApiPath.OMP_MA_SOKNAD_VALIDER, () =>
         HttpResponse.json(
             {
                 feil: [

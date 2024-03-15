@@ -406,7 +406,7 @@ export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
         };
 
         dispatch(hentPerioderRequestAction());
-        post(ApiPath.K9SAK_PERIODER, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, perioder) => {
+        post(ApiPath.PSB_K9SAK_PERIODER, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, perioder) => {
             if (response.ok) {
                 return dispatch(hentPerioderSuccessAction(perioder));
             }
