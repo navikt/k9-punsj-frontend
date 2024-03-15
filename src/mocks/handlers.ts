@@ -11,6 +11,7 @@ import { ApiPath } from 'app/apiConfig';
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
 import { testHandlers } from './testHandlers';
+import aleneOmOmsorgenHandlers from './aleneOmOmsorgenHandlers';
 
 let handlers = [
     http.get(ApiPath.BREV_MALER, () =>
@@ -67,6 +68,7 @@ let handlers = [
         await delay(1000);
         return HttpResponse.json({}, { status: 404 });
     }),
+    http.get(ApiPath.JOURNALPOST_HENT, async () => HttpResponse.json({ poste: [] })),
 
     testHandlers.barn,
     http.post(ApiPath.OPPRETT_NOTAT, async () => {
@@ -79,7 +81,8 @@ if (process.env.MSW_MODE === 'test') {
     handlers = handlers
         .concat(Object.values(testHandlers))
         .concat(Object.values(omsorgspengerutbetalingHandlers))
-        .concat(Object.values(midlertidigAleneHandlers));
+        .concat(Object.values(midlertidigAleneHandlers))
+        .concat(Object.values(aleneOmOmsorgenHandlers));
 }
 
 export { handlers };
