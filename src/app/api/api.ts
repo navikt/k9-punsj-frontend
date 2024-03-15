@@ -3,6 +3,7 @@ import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IPeriode } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
+import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -67,3 +68,11 @@ export const klassifiserDokument = (body: {
             }
         },
     );
+
+export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlleJournalposterPerIdent> =>
+    post(ApiPath.JOURNALPOST_HENT, undefined, { 'X-Nav-NorskIdent': norskIdent }, { norskIdent }).then((response) => {
+        if (!response.ok) {
+            throw Error('Det oppstod en feil under hent av alle journalposter per ident.');
+        }
+        return response.json();
+    });

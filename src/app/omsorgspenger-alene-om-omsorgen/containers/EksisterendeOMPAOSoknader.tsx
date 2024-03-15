@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { useState } from 'react';
-import * as React from 'react';
+
 import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
@@ -11,10 +11,12 @@ import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
-import { datetime } from 'app/utils';
+import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
+import { hentAlleJournalposterPerIdent } from 'app/api/api';
+import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
@@ -33,7 +35,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPAOSoknad | undefined>(undefined);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
@@ -46,7 +48,13 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
         error: eksisterendeSoeknaderError,
     } = useQuery('hentSoeknaderOMPAO', () => hentEksisterendeSoeknader(søkerId));
 
-    if (lasterSoeknader) {
+    const {
+        data: alleJournalposterPerIdent,
+        isLoading: lasterAlleJournalposterPerIdent,
+        error: hentAlleJournalposterPerIdentError,
+    } = useQuery(`hentAlleJPPerIdentOMPAO_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
+
+    if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;
     }
 
@@ -58,19 +66,34 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
         );
     }
 
+    if (hentAlleJournalposterPerIdentError instanceof Error) {
+        return (
+            <Alert size="small" variant="error">
+                {hentAlleJournalposterPerIdentError.message}
+            </Alert>
+        );
+    }
+
     const gaaVidereMedSoeknad = (soknad: IOMPAOSoknad) => {
         navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
 
-    function showSoknader() {
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
         eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPAOSoknad) => {
             const soknadId = søknad.soeknadId;
+
+            const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
+                Array.from(søknad.journalposter),
+                alleJournalposterPerIdent?.poster || [],
+            );
+
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.soekerId,
+                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 søknad.periode && søknad.periode.fom ? dayjs(søknad.periode.fom).format('DD.MM.YYYY') : '',
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
@@ -114,6 +137,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
@@ -124,7 +148,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                 {modaler}
             </>
         );
-    }
+    };
 
     if (eksisterendeSoeknader?.søknader && eksisterendeSoeknader.søknader.length) {
         return <>{showSoknader()}</>;
