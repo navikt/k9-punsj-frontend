@@ -28,7 +28,7 @@ jobs:
             packages: write
             contents: read
             id-token: write
-        needs: [build]
+        needs: [lint, test, test-cypress, build]
         steps:
             - name: Hente kode
               uses: actions/checkout@v4
