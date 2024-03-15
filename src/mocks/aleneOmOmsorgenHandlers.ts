@@ -3,7 +3,7 @@ import { HttpResponse, http } from 'msw';
 
 import { ApiPath } from 'app/apiConfig';
 
-const omsorgspengerutbetalingHandlers = {
+const aleneOmOmsorgenHandlers = {
     tomMappe: http.get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
@@ -195,4 +195,4 @@ const omsorgspengerutbetalingHandlers = {
     ),
 };
 
-export default omsorgspengerutbetalingHandlers;
+export default aleneOmOmsorgenHandlers;

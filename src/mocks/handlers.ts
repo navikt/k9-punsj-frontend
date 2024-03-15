@@ -11,7 +11,6 @@ import { ApiPath } from 'app/apiConfig';
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
 import { testHandlers } from './testHandlers';
-
 let handlers = [
     http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
