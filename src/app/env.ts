@@ -1,3 +1,5 @@
+import { ApiPath } from './apiConfig';
+
 interface EnvVariable {
     key: string;
     value: string;
