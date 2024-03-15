@@ -68,7 +68,7 @@ let handlers = [
         await delay(1000);
         return HttpResponse.json({}, { status: 404 });
     }),
-    http.get(ApiPath.JOURNALPOST_HENT, async () => HttpResponse.json({ poste: [] })),
+    http.post(ApiPath.JOURNALPOST_HENT, async () => HttpResponse.json({ poster: [] })),
 
     testHandlers.barn,
     http.post(ApiPath.OPPRETT_NOTAT, async () => {
