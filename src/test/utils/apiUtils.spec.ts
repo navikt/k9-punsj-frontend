@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 
-import { ApiPath } from 'app/apiConfig';
-import { apiUrl, convertResponseToError, get, post, put } from 'app/utils';
+import { ApiPath } from '../../app/apiConfig';
+import { apiUrl, convertResponseToError, get, post, put } from '../../app/utils/apiUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');

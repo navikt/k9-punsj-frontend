@@ -226,7 +226,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     </Form>
                     {visBekreftelsemodal && (
                         <Modal
-                            onBeforeClose={() => {
+                            onClose={() => {
                                 dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
                             }}
                             aria-label="Er du sikker?"
@@ -245,7 +245,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                     )}
                     {visErDuSikkerModal && (
                         <Modal
-                            onBeforeClose={() => {
+                            onClose={() => {
                                 dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                             }}
                             aria-label="Er du sikker?"

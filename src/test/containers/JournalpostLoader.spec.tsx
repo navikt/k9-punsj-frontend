@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import React from 'react';
 
 import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
-import { IJournalpost } from '../../app/models/types';
+import { IJournalpost } from '../../app/models/types/Journalpost/Journalpost';
 
 // Mock useParams
 jest.mock('react-router-dom', () => ({
@@ -20,8 +20,6 @@ const setupLoader = ({
     journalpost,
     renderOnLoadComplete = () => '',
     getJournalpost = jest.fn(),
-    lukkJournalpostOppgave = jest.fn(),
-    journalpostId = '200',
     journalpostRequestError,
     isJournalpostLoading,
     forbidden,
@@ -29,10 +27,8 @@ const setupLoader = ({
 }: Partial<JournapostLoaderProps>): RenderResult => {
     const loader = render(
         <JournalpostLoaderImpl
-            journalpostId={journalpostId}
             renderOnLoadComplete={renderOnLoadComplete}
             getJournalpost={getJournalpost}
-            lukkJournalpostOppgave={lukkJournalpostOppgave}
             journalpost={journalpost}
             journalpostRequestError={journalpostRequestError}
             isJournalpostLoading={isJournalpostLoading}
@@ -76,7 +72,6 @@ describe('JournalpostLoader', () => {
     });
 
     it('Viser spinner mens journalpost lastes inn', () => {
-        const journalpostId = '200';
         const testId = 'test-id';
         const renderedOnLoad = () => <div data-testid={testId} />;
 
@@ -84,9 +79,7 @@ describe('JournalpostLoader', () => {
             <JournalpostLoaderImpl
                 isJournalpostLoading
                 renderOnLoadComplete={renderedOnLoad}
-                journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
-                lukkJournalpostOppgave={jest.fn()}
                 forbidden={false}
                 conflict={false}
                 notFound={false}
@@ -108,15 +101,14 @@ describe('JournalpostLoader', () => {
             journalpostId,
             kanSendeInn: true,
             erSaksbehandler: true,
+            journalpostStatus: undefined,
         };
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
                 journalpost={journalpostIngenDokumenter}
                 renderOnLoadComplete={renderedOnLoad}
-                journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
-                lukkJournalpostOppgave={jest.fn()}
                 forbidden={false}
                 conflict={false}
                 notFound={false}
@@ -174,16 +166,13 @@ describe('JournalpostLoader', () => {
     });
 
     it('Viser LOS lukk oppgave modal etter att oppgaven har blivit lukket', () => {
-        const journalpostId = '200';
         const testId = 'test-id';
         const renderedOnLoad = () => <div data-testid={testId} />;
 
         const journalpost = shallow(
             <JournalpostLoaderImpl
                 renderOnLoadComplete={renderedOnLoad}
-                journalpostId={journalpostId}
                 getJournalpost={jest.fn()}
-                lukkJournalpostOppgave={jest.fn()}
                 forbidden={false}
                 conflict={false}
                 notFound={false}

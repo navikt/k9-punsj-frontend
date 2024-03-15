@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 
 import PdfVisning from '../../../app/components/pdf/PdfVisning';
 import { renderWithIntl } from '../../testUtils';
@@ -53,13 +53,18 @@ describe('<PdfVisning>', () => {
 
         expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/123');
 
-        screen.getByTestId('dok-2').click();
+        act(() => {
+            screen.getByTestId('dok-2').click();
+        });
 
         await waitFor(() => {
             expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/456');
         });
 
-        screen.getByTestId('dok-1').click();
+        act(() => {
+            screen.getByTestId('dok-1').click();
+        });
+
         await waitFor(() => {
             expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/123');
         });

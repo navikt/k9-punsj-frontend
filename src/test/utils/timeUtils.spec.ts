@@ -4,7 +4,7 @@ import {
     hoursFromString,
     isWeekdayWithinPeriod,
     minutesFromString,
-} from 'app/utils';
+} from '../../app/utils/timeUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/apiUtils');

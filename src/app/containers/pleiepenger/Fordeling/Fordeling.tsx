@@ -37,7 +37,7 @@ import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state
 import { finnForkortelseForDokumenttype, finnVisningsnavnForSakstype } from '../../../utils';
 import { Sakstyper } from '../../SakstypeImpls';
 import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
-import OkGaaTilLosModal from '../OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
 import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
@@ -310,7 +310,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="opprettigosysokmodal"
-                onBeforeClose={() => {
+                onClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
@@ -330,7 +330,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return (
             <Modal
                 key="lukkoppgaveokmodal"
-                onBeforeClose={() => {
+                onClose={() => {
                     lukkOppgaveReset();
                 }}
                 aria-label="settpaaventokmodal"
