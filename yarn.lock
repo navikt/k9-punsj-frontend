@@ -1699,7 +1699,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.24.0, @babel/runtime@npm:^7.21.0":
+"@babel/runtime@npm:7.24.0":
   version: 7.24.0
   resolution: "@babel/runtime@npm:7.24.0"
   dependencies:
@@ -2825,31 +2825,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:5.13.0":
-  version: 5.13.0
-  resolution: "@navikt/aksel-icons@npm:5.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.13.0%2F57c8544b3e7d54503ddc4f51c4a798710dcbcd84"
-  checksum: d1712e708c3c0c6620eaf83ea739eca478e8a6466513e76bbe63ccc64161bdb1c49082dd617f749f9e6c5da7300349c709fa41ac7dbf453ad7a78227425e0b9f
+"@navikt/aksel-icons@npm:6.1.1":
+  version: 6.1.1
+  resolution: "@navikt/aksel-icons@npm:6.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.1.1%2F0ae4f2c1220ccec1018dcadc0ecb798fb30726c8"
+  checksum: 50c321726e14a9e555d4aeeba00a2e6a75e0b8d1e8b57e6981deb4384d034ae9f9de93838cf2b53c8b37ac8c722cdbe26063f92c62c417e4e6c9d6f02578ca40
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^5.13.0":
-  version: 5.18.3
-  resolution: "@navikt/aksel-icons@npm:5.18.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F5.18.3%2F0e8ff38b54ec91be6c5e8d8574a3341ee87eb792"
-  checksum: 992f8822d7c8453baa21a4add4ac9f0f3574ef216c655da618007d7ee47e6fcbe57c2d299d00fa2c412d6ca55be420af771727956160c42b1c1d20351dc13744
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^6.2.0":
+"@navikt/aksel-icons@npm:^6.1.1, @navikt/aksel-icons@npm:^6.2.0":
   version: 6.2.0
   resolution: "@navikt/aksel-icons@npm:6.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.2.0%2F2bb2e3174b9608894845932ee463f5548418875f"
   checksum: 5183e330483f191866e7d4ec2587dd40ccd73d1f7e7a09ef07af14e882301b335f04698e26b1b3b36cf8998f6c45720a1317561975df92b0cb5305eda3b8d3bd
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:5.13.0":
-  version: 5.13.0
-  resolution: "@navikt/ds-css@npm:5.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.13.0%2F0af3ec887655728dd6f8bc45c31034783675982c"
-  checksum: 46a0289a8dd5f7b55b1a9e033d7efd3c17fd20128ff68a7277b43795e5e3cb5fa97bf44078e06506d27a7838e22d81191c9901aab1327d80d272bf1f5bb9a44b
+"@navikt/ds-css@npm:6.1.1":
+  version: 6.1.1
+  resolution: "@navikt/ds-css@npm:6.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.1.1%2F62b6cc286e73e7aef7a9608dd3a3eb576536dac9"
+  checksum: 6d16eeddbb8652a7580d0f74687213c97c52c1c5ae25504105677b0542713b98f49183628e6af173eb866a08158060389b98a0ea8703db150f9d43ce0bb8e943
   languageName: node
   linkType: hard
 
@@ -2870,22 +2863,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:5.13.0":
-  version: 5.13.0
-  resolution: "@navikt/ds-react@npm:5.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F5.13.0%2F31658274d2e3b9aa48bd04670bcebb438aa871cd"
+"@navikt/ds-react@npm:6.1.1":
+  version: 6.1.1
+  resolution: "@navikt/ds-react@npm:6.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.1.1%2F78cd84ba40932cdea85073b9ddc53e2b8a0b7562"
   dependencies:
     "@floating-ui/react": 0.25.4
-    "@navikt/aksel-icons": ^5.13.0
-    "@navikt/ds-tokens": ^5.13.0
+    "@navikt/aksel-icons": ^6.1.1
+    "@navikt/ds-tokens": ^6.1.1
     "@radix-ui/react-tabs": 1.0.0
     "@radix-ui/react-toggle-group": 1.0.0
-    clsx: ^1.2.1
-    date-fns: ^2.30.0
-    react-day-picker: 8.3.4
+    clsx: ^2.1.0
+    date-fns: ^3.0.0
+    react-day-picker: 8.10.0
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: c6bdc10e40ae97be1235baf8c964f3f1b0ba1be68d07f0b94f6f422bd89303db2129c32ab576c2a186938f6b0bccab716e660564324b315c6381640c113382b0
+  checksum: b27aa4b62e1757398f4e1c50c8f8f3c44f83ce099d5ca35f97d5a9d723ecf1b9772fe2707d0a182af035b08f0d4d6ad850c884a66503196e5e68433d0914f286
   languageName: node
   linkType: hard
 
@@ -2908,14 +2901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^5.13.0":
-  version: 5.18.3
-  resolution: "@navikt/ds-tokens@npm:5.18.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F5.18.3%2Fc03906e7264f2534ab5f6238a2e2850307e51af3"
-  checksum: edd9a4f2714d4f2514eb1c1bcfee50016ece9850093a267a0f2c2c45ffd9d47efd73dcde02b1e48f8304aa942afd7f5c3c633e62d6901b4ee18fe1ef28c1cefe
-  languageName: node
-  linkType: hard
-
-"@navikt/ds-tokens@npm:^6.2.0":
+"@navikt/ds-tokens@npm:^6.1.1, @navikt/ds-tokens@npm:^6.2.0":
   version: 6.2.0
   resolution: "@navikt/ds-tokens@npm:6.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.2.0%2F0283ef29deb154cb801d39624a02be1cff90d206"
   checksum: 75e9103d40e4d78aae8620103aa8da572cb2287a2a1a4ee10743d44ead185dfc674601cc2bbd177327c7a274f31538721f068bd79182e9bcbafed680985a49ce
@@ -2936,14 +2922,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ft-plattform-komponenter@npm:2.3.18":
-  version: 2.3.18
-  resolution: "@navikt/ft-plattform-komponenter@npm:2.3.18::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fft-plattform-komponenter%2F2.3.18%2F311bdff5e28cb10f0188e3c400368a2012d0dde7"
+"@navikt/ft-plattform-komponenter@npm:2.5.1":
+  version: 2.5.1
+  resolution: "@navikt/ft-plattform-komponenter@npm:2.5.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fft-plattform-komponenter%2F2.5.1%2F730bf499992992fc7f501db0f018de7f5ae899d5"
   dependencies:
-    "@navikt/aksel-icons": 5.13.0
-    "@navikt/ds-css": 5.13.0
-    "@navikt/ds-react": 5.13.0
-    "@navikt/ft-utils": ^2.1.14
+    "@navikt/aksel-icons": 6.1.1
+    "@navikt/ds-css": 6.1.1
+    "@navikt/ds-react": 6.1.1
+    "@navikt/ft-utils": ^2.3.1
     classnames: 2.5.1
   peerDependencies:
     "@popperjs/core": 2.11.7
@@ -2955,7 +2941,7 @@ __metadata:
     react-collapse: 5.1.1
     react-dom: 18.2.0
     react-popper: 2.3.0
-  checksum: 293383fd5d5cf853c4b410c8c1c96fbd621594279e5eea9e6ab375382cbd54537c4a6ff2468d210842831b05b20f065b606f9a54c88663929a1754aeaa17555c
+  checksum: 70dcc71df8d69172c4c3a8a7f85186f3a3cc508a6a7e781a8f662f36c25ade7ed1516e8dd59e692d79ada44e698e0c5577ccad8cd4fcfba0556e8989a6d3c0d3
   languageName: node
   linkType: hard
 
@@ -2970,7 +2956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ft-utils@npm:^2.1.14":
+"@navikt/ft-utils@npm:^2.3.1":
   version: 2.3.1
   resolution: "@navikt/ft-utils@npm:2.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fft-utils%2F2.3.1%2F7b4cf6d8bf38ba91ea37f33225cb0b7f3bf7efd2"
   dependencies:
@@ -7898,13 +7884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "clsx@npm:1.2.1"
-  checksum: 30befca8019b2eb7dbad38cff6266cf543091dae2825c856a62a8ccf2c3ab9c2907c4d12b288b73101196767f66812365400a227581484a05f968b0307cfaf12
-  languageName: node
-  linkType: hard
-
 "clsx@npm:^2.1.0":
   version: 2.1.0
   resolution: "clsx@npm:2.1.0"
@@ -8743,15 +8722,6 @@ __metadata:
     whatwg-mimetype: ^3.0.0
     whatwg-url: ^11.0.0
   checksum: 033fc3dd0fba6d24bc9a024ddcf9923691dd24f90a3d26f6545d6a2f71ec6956f93462f2cdf2183cc46f10dc01ed3bcb36731a8208456eb1a08147e571fe2a76
-  languageName: node
-  linkType: hard
-
-"date-fns@npm:^2.30.0":
-  version: 2.30.0
-  resolution: "date-fns@npm:2.30.0"
-  dependencies:
-    "@babel/runtime": ^7.21.0
-  checksum: f7be01523282e9bb06c0cd2693d34f245247a29098527d4420628966a2d9aad154bd0e90a6b1cf66d37adcb769cd108cf8a7bd49d76db0fb119af5cdd13644f4
   languageName: node
   linkType: hard
 
@@ -13544,7 +13514,7 @@ __metadata:
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 6.2.0
     "@navikt/fnrvalidator": 1.3.3
-    "@navikt/ft-plattform-komponenter": 2.3.18
+    "@navikt/ft-plattform-komponenter": 2.5.1
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@popperjs/core": ^2.11.8
     "@redux-devtools/extension": 3.3.0
@@ -17198,16 +17168,6 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: a265e8c2f3f0e92e5a23e2edeca40fe67c67c00bae64aa9e1a99c6fe7f58b2f697b538937822b8f68d4b890d7903a06f074f1365deb465a0aeef1a14c701cc65
-  languageName: node
-  linkType: hard
-
-"react-day-picker@npm:8.3.4":
-  version: 8.3.4
-  resolution: "react-day-picker@npm:8.3.4"
-  peerDependencies:
-    date-fns: ^2.28.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 789e124e831383fc8219711f0b0610c1541ad283c37c71765ad1012288e4648bca504b1c21646363a9659ccc825d33f8600013fd0d119f9d13b1ff73196a7eaa
   languageName: node
   linkType: hard
 
