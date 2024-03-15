@@ -12,7 +12,7 @@ import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJourn
 import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-import OkGaaTilLosModal from './pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from './pleiepenger/OkGaaTilLosModal';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import './journalpostLoader.less';
 

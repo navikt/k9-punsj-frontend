@@ -216,7 +216,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                                         setVisModal(false);
                                         clearSelectedDates();
                                     }}
-                                    closeButton
+                                    aria-label="Modal"
                                 >
                                     <Modal.Body>
                                         {React.cloneElement(ModalContent, {

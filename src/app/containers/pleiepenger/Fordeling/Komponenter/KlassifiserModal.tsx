@@ -40,7 +40,7 @@ export default function KlassifiserModal({ lukkModal }: OwnProps) {
 
     return (
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        <Modal open onBeforeClose={lukkModal} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={!disabled}>
                 <Heading level="1" size="small" id="modal-heading">
                     Lagre sakstype på journalpost

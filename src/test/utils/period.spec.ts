@@ -1,4 +1,4 @@
-import Period from './Period';
+import Period from '../../app/utils/Period';
 
 const firstDayOf2028 = '2028-01-01';
 const tenthDayOf2028 = '2028-01-10';

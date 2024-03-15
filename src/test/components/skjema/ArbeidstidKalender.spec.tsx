@@ -1,5 +1,5 @@
 import { expect } from '@jest/globals';
-import { Story, composeStories } from '@storybook/react';
+import { StoryFn, composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
@@ -8,7 +8,7 @@ import ArbeidstidKalender from '../../../app/components/arbeidstid/ArbeidstidKal
 import * as stories from '../../../app/components/arbeidstid/ArbeidstidKalender.stories';
 
 const { Default, MedArbeidstidperiode } = composeStories(stories) as {
-    [key: string]: Story<Partial<typeof ArbeidstidKalender>>;
+    [key: string]: StoryFn<Partial<typeof ArbeidstidKalender>>;
 };
 describe('ArbeidstidKalender', () => {
     test('oppretter arbeidstidperioder for hver søknadsperiode som finnes', async () => {

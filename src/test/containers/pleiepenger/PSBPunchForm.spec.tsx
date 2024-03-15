@@ -1,23 +1,26 @@
+import React from 'react';
 import { expect } from '@jest/globals';
 import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
-import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
-import * as reactRedux from 'react-redux';
 
+import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+import reactRedux from 'react-redux';
+
+import intlHelper from '../../../app/utils/intlUtils';
 import {
     IPunchFormComponentProps,
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent,
-} from 'app/containers/pleiepenger/PSBPunchForm';
-import { IPSBSoknad, IPunchPSBFormState, ISignaturState } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
+} from '../../../app/containers/pleiepenger/PSBPunchForm';
 
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
+import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
+import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState';
+import { ISignaturState } from '../../../app/models/types/SignaturState';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -107,6 +110,7 @@ const validertSoknad: IPSBSoknadKvittering = {
         opptjeningAktivitet: {},
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
+    begrunnelseForInnsending: undefined,
 };
 
 const setupPunchForm = (
@@ -130,6 +134,7 @@ const setupPunchForm = (
         settPaaventResetAction: jest.fn(),
         validateSoknad: jest.fn(),
         validerSoknadReset: jest.fn(),
+        resetAllStateAction: jest.fn(),
         ...punchFormDispatchPropsSetup,
     };
 
@@ -142,6 +147,7 @@ const setupPunchForm = (
         søkerId: '122345',
         pleietrengendeId: '678908',
         annenSokerIdent: null,
+        annenPart: '',
     };
 
     const signaturState: ISignaturState = {
@@ -177,9 +183,9 @@ const setupPunchForm = (
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
-        getPunchPath: jest.fn(),
         journalpostid,
         id: soknadId,
+        navigate: undefined,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
@@ -214,8 +220,13 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('PunchForm', () => {
+    jest.mock('react-redux', () => ({
+        ...jest.requireActual('react-redux'),
+        useSelector: jest.fn(),
+    }));
+
     beforeEach(() => {
-        reactRedux.useSelector.mockImplementation((callback) => callback({}));
+        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) => callback({}));
     });
 
     it('Viser skjema', () => {
@@ -270,7 +281,7 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
-        reactRedux.useSelector.mockImplementation((callback) =>
+        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {},
@@ -440,7 +451,7 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        reactRedux.useSelector.mockImplementation((callback) =>
+        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {
@@ -524,7 +535,7 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }] }, {});
-        reactRedux.useSelector.mockImplementation((callback) =>
+        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {

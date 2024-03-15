@@ -81,6 +81,7 @@ export default function TilsynKalender({
                 open={visLengrePerioder}
                 onClose={() => setVisLengrePerioder(false)}
                 className="venstrestilt lengre-periode-modal"
+                aria-label="Lengre periode modal"
             >
                 <Modal.Body>
                     <TilsynPeriodeListe
