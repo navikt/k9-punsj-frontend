@@ -1,11 +1,14 @@
 {
     "name": "k9-punsj-frontend",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "main": "dist/index.html",
     "repository": "https://github.com/navikt/k9-punsj-frontend",
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "7.23.9",
+        "@grafana/faro-web-sdk": "1.4.2",
+        "@grafana/faro-web-tracing": "1.4.2",
+        "@k9-punsj-frontend/server": "workspace:^",
         "@navikt/aksel-icons": "^5.17.2",
         "@navikt/ds-css": "5.17.2",
         "@navikt/ds-icons": "3.4.3",
@@ -200,6 +203,9 @@
         "*.(le|c)ss": "stylelint --fix",
         "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
     },
+    "workspaces": [
+        "server"
+    ],
     "msw": {
         "workerDirectory": [
             "dist"

@@ -26,10 +26,7 @@ describe('<PdfVisning>', () => {
         const journalpostDokumenter = [{ journalpostid, dokumenter: [dokumentid] }];
         renderWithIntl(<PdfVisning journalpostDokumenter={journalpostDokumenter} />);
 
-        expect(screen.getByTitle('pdf')).toHaveAttribute(
-            'src',
-            'http://localhost:8101/api/k9-punsj/journalpost/200/dokument/123',
-        );
+        expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/123');
     });
 
     it('iframe viser dokument 2 hvis ?dok=2 er i url', () => {
@@ -40,10 +37,7 @@ describe('<PdfVisning>', () => {
         const journalpostDokumenter = [{ journalpostid, dokumenter }];
         renderWithIntl(<PdfVisning journalpostDokumenter={journalpostDokumenter} />);
 
-        expect(screen.getByTitle('pdf')).toHaveAttribute(
-            'src',
-            'http://localhost:8101/api/k9-punsj/journalpost/200/dokument/456',
-        );
+        expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/456');
     });
 
     it('Skal vise toggle knapper likt antall dokumenter i journalpost', async () => {
@@ -57,26 +51,17 @@ describe('<PdfVisning>', () => {
         expect(screen.getByText('Dokument 1 / 2')).toBeDefined();
         expect(screen.getByText('Dokument 2 / 2')).toBeDefined();
 
-        expect(screen.getByTitle('pdf')).toHaveAttribute(
-            'src',
-            'http://localhost:8101/api/k9-punsj/journalpost/200/dokument/123',
-        );
+        expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/123');
 
         screen.getByTestId('dok-2').click();
 
         await waitFor(() => {
-            expect(screen.getByTitle('pdf')).toHaveAttribute(
-                'src',
-                'http://localhost:8101/api/k9-punsj/journalpost/200/dokument/456',
-            );
+            expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/456');
         });
 
         screen.getByTestId('dok-1').click();
         await waitFor(() => {
-            expect(screen.getByTitle('pdf')).toHaveAttribute(
-                'src',
-                'http://localhost:8101/api/k9-punsj/journalpost/200/dokument/123',
-            );
+            expect(screen.getByTitle('pdf')).toHaveAttribute('src', '/api/k9-punsj/journalpost/200/dokument/123');
         });
     });
 });

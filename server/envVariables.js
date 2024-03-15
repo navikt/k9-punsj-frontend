@@ -1,10 +1,4 @@
-require('dotenv').config();
-
-const envVariables = () => [
-    {
-        key: 'OIDC_AUTH_PROXY',
-        value: process.env.OIDC_AUTH_PROXY,
-    },
+export const envVariables = () => [
     {
         key: 'K9_LOS_URL',
         value: process.env.K9_LOS_URL,
@@ -42,5 +36,3 @@ const envVariables = () => [
         value: process.env.POSTMOTTAK_TOGGLE,
     },
 ];
-
-module.exports = envVariables;

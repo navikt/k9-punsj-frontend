@@ -6,14 +6,15 @@
 import { HttpResponse, delay, http } from 'msw';
 
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
+import { ApiPath } from 'app/apiConfig';
 
 import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
 import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
 import { testHandlers } from './testHandlers';
+import aleneOmOmsorgenHandlers from './aleneOmOmsorgenHandlers';
 
 let handlers = [
-    http.get('/api/test', () => HttpResponse.json({ name: 'Bobby Binders' }, { status: 200 })),
-    http.get('http://localhost:8101/api/k9-formidling/brev/maler', () =>
+    http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
             {
                 INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
@@ -23,7 +24,7 @@ let handlers = [
         ),
     ),
 
-    http.get('http://localhost:8101/api/k9-punsj/journalpost/202', () =>
+    http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '202'), () =>
         HttpResponse.json(
             {
                 journalpostId: '202',
@@ -45,8 +46,8 @@ let handlers = [
         ),
     ),
 
-    http.post('http://localhost:8101/api/k9-punsj/brev/bestill', () => new HttpResponse(null, { status: 200 })),
-    http.get('http://localhost:8101/api/k9-punsj/person', () =>
+    http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
+    http.get(ApiPath.PERSON, () =>
         HttpResponse.json(
             {
                 etternavn: 'KAKE',
@@ -59,17 +60,18 @@ let handlers = [
             { status: 200 },
         ),
     ),
-    http.get('http://localhost:8101/api/k9-punsj/journalpost/123456789', async () =>
+    http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '123456789'), async () =>
         HttpResponse.json({ type: 'punsj://ikke-støttet-journalpost' }, { status: 409 }),
     ),
 
-    http.get('http://localhost:8101/api/k9-punsj/journalpost/lukkDebugg/123456789', async () => {
+    http.get(ApiPath.JOURNALPOST_LUKK_DEBUGG.replace('{journalpostId}', '123456789'), async () => {
         await delay(1000);
         return HttpResponse.json({}, { status: 404 });
     }),
+    http.post(ApiPath.JOURNALPOST_HENT, async () => HttpResponse.json({ poster: [] })),
 
     testHandlers.barn,
-    http.post('http://localhost:8101/api/k9-punsj/notat/opprett', async () => {
+    http.post(ApiPath.OPPRETT_NOTAT, async () => {
         await delay(500);
         return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
     }),
@@ -79,7 +81,8 @@ if (process.env.MSW_MODE === 'test') {
     handlers = handlers
         .concat(Object.values(testHandlers))
         .concat(Object.values(omsorgspengerutbetalingHandlers))
-        .concat(Object.values(midlertidigAleneHandlers));
+        .concat(Object.values(midlertidigAleneHandlers))
+        .concat(Object.values(aleneOmOmsorgenHandlers));
 }
 
 export { handlers };

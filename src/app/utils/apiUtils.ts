@@ -1,22 +1,20 @@
 import { String } from 'typescript-string-operations';
 
-import { ApiPath, URL_API, URL_AUTH_LOGIN } from 'app/apiConfig';
 import { IError } from 'app/models/types';
-import { getLocation, redirect } from 'app/utils/browserUtils';
 
 import { canStringBeParsedToJSON } from './formatUtils';
+import { getEnvironmentVariable } from './envUtils';
 
-export const apiUrl = (path: ApiPath | string, parameters?: any) =>
-    URL_API() + (parameters ? String.Format(path, parameters) : path);
-
-export const loginUrl = () => String.Format(URL_AUTH_LOGIN(), { uri: encodeURIComponent(getLocation()) });
-
-export function login() {
-    redirect(loginUrl());
-}
-
+export const apiUrl = (path: string, parameters?: any) => (parameters ? String.Format(path, parameters) : path);
+// eslint-disable-next-line no-return-assign
+const login = () =>
+    getEnvironmentVariable('IS_LOCAL') !== 'true'
+        ? (window.location.pathname = '/oauth2/login')
+        : window.location.assign(
+              `http://localhost:8101/login?redirect_uri=${encodeURIComponent('http://localhost:8080')}`,
+          );
 export async function get(
-    path: ApiPath | string,
+    path: string,
     parameters?: any,
     headers?: HeadersInit,
     callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
@@ -36,12 +34,11 @@ export async function get(
 }
 
 export async function post<BodyType>(
-    path: ApiPath,
+    path: string,
     parameters?: any,
     headers?: HeadersInit,
     body?: BodyType,
     callbackIfAuth?: (response: Response, responseData?: any) => Promise<Response> | void,
-    callbackIfError?: (error: any) => any,
 ): Promise<Response> {
     try {
         const response = await fetch(apiUrl(path, parameters), {
@@ -50,6 +47,7 @@ export async function post<BodyType>(
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json', ...headers },
         });
+
         if (response.status === 401) {
             login();
         } else if (callbackIfAuth) {
@@ -59,15 +57,12 @@ export async function post<BodyType>(
         }
         return response;
     } catch (error) {
-        if (callbackIfError) {
-            return callbackIfError(error);
-        }
         return error;
     }
 }
 
 export async function put(
-    path: ApiPath,
+    path: string,
     parameters?: any,
     body?: any,
     callbackIfAuth?: (response: Response) => Promise<Response> | void,

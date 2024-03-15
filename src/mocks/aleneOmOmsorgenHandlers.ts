@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { HttpResponse, http } from 'msw';
 
-import { LOCAL_API_URL } from './konstanter';
+import { ApiPath } from 'app/apiConfig';
 
-const omsorgspengerutbetalingHandlers = {
-    tomMappe: http.get(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/mappe`, () =>
+const aleneOmOmsorgenHandlers = {
+    tomMappe: http.get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP_AO',
@@ -12,7 +12,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    mappeMedSøknad: http.get(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/mappe`, () =>
+    mappeMedSøknad: http.get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
             fagsakTypeKode: 'OMP_AO',
@@ -42,7 +42,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    nySoeknad: http.post(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad`, () =>
+    nySoeknad: http.post(ApiPath.OMP_AO_SOKNAD_CREATE, () =>
         HttpResponse.json({
             soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
             soekerId: '29099000129',
@@ -61,34 +61,32 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    soknad: http.get(
-        `${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/mappe/9356c863-ab88-41eb-89ec-3ca8cd555537`,
-        () =>
-            HttpResponse.json({
-                soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
-                soekerId: '29099000129',
-                mottattDato: '2020-10-12',
-                klokkeslett: '12:53',
-                barn: {
-                    norskIdent: '02021477330',
-                    foedselsdato: null,
-                },
-                journalposter: ['200'],
-                periode: {
-                    fom: null,
-                    tom: null,
-                },
-                begrunnelseForInnsending: null,
-                harInfoSomIkkeKanPunsjes: false,
-                harMedisinskeOpplysninger: false,
-                metadata: {
-                    signatur: '',
-                },
-            }),
+    soknad: http.get(ApiPath.OMP_AO_SOKNAD_GET.replace('{id}', '9356c863-ab88-41eb-89ec-3ca8cd555537'), () =>
+        HttpResponse.json({
+            soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
+            soekerId: '29099000129',
+            mottattDato: '2020-10-12',
+            klokkeslett: '12:53',
+            barn: {
+                norskIdent: '02021477330',
+                foedselsdato: null,
+            },
+            journalposter: ['200'],
+            periode: {
+                fom: null,
+                tom: null,
+            },
+            begrunnelseForInnsending: null,
+            harInfoSomIkkeKanPunsjes: false,
+            harMedisinskeOpplysninger: false,
+            metadata: {
+                signatur: '',
+            },
+        }),
     ),
 
-    oppdater: http.put(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/oppdater`, () => HttpResponse.json({})),
-    sendInn: http.post(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/send`, () =>
+    oppdater: http.put(ApiPath.OMP_AO_SOKNAD_UPDATE, () => HttpResponse.json({})),
+    sendInn: http.post(ApiPath.OMP_AO_SOKNAD_SUBMIT, () =>
         HttpResponse.json({
             søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
             versjon: '1.1.0',
@@ -134,7 +132,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    valider: http.post(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/valider`, () =>
+    valider: http.post(ApiPath.OMP_AO_SOKNAD_VALIDER, () =>
         HttpResponse.json({
             søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
             versjon: '1.1.0',
@@ -180,7 +178,7 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
 
-    validerFeil: http.post(`${LOCAL_API_URL}/omsorgspenger-alene-om-omsorgen-soknad/valider`, () =>
+    validerFeil: http.post(ApiPath.OMP_AO_SOKNAD_VALIDER, () =>
         HttpResponse.json(
             {
                 feil: [
@@ -197,4 +195,4 @@ const omsorgspengerutbetalingHandlers = {
     ),
 };
 
-export default omsorgspengerutbetalingHandlers;
+export default aleneOmOmsorgenHandlers;

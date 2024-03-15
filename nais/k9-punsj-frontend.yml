@@ -5,12 +5,20 @@ metadata:
   namespace: k9saksbehandling
   labels:
     team: k9saksbehandling
-  annotations:
-    nais.io/run-as-user: "101" # Fix permissions for nginx
-    nais.io/read-only-file-system: "false" # Fix permissions for nginx
 spec:
   image: {{ image }}
   port: 8080
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
+      tenant: {{ azureTenant }}
+    sidecar:
+      enabled: true
+      autoLogin: true
+      autoLoginIgnorePaths:
+      - /health/*
+      - /logout
   liveness:
     path: health/isAlive
     initialDelay: 20
@@ -28,6 +36,15 @@ spec:
     requests:
       cpu: 50m
       memory: 128Mi
+  accessPolicy:
+    outbound:
+      external:
+      {{#each outboundExternalHosts as |host|}}
+       - host: {{host}}
+      {{/each}}
+  frontend:
+    generatedConfig:
+      mountPath: /app/dist/js/nais.js
   ingresses:
   {{#each ingresses as |url|}}
      - {{url}}
@@ -36,7 +53,13 @@ spec:
     min: 2
     max: 4
     cpuThresholdPercentage: 90
-  env:
+  env: 
+    - name: PROXY_CONFIG
+      value: '{"apis":[
+              {{#each proxyRedirects}}
+                {"path":"{{path}}", "url":"{{url}}", "scopes":"{{scope}}"}{{#unless @last}},{{/unless}}
+              {{/each}}
+              ]}'
   {{#each env}}
     - name: {{@key}}
       value: "{{this}}"
