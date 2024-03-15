@@ -1,6 +1,14 @@
 name: Build and deploy to prod gcp
 on:
-    workflow_dispatch:
+    push:
+        paths-ignore:
+            - '**.md'
+            - '.gitignore'
+            - 'LICENCE'
+            - 'CODEOWNERS'
+            - 'nais/proxy/*'
+        branches:
+            - master
 jobs:
     lint:
         uses: ./.github/workflows/lint.yml
