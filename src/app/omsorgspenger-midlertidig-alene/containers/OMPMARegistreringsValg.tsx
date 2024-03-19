@@ -104,7 +104,11 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPMASoknader søkerId={søkerId} annenPart={annenPart} />
+            <EksisterendeOMPMASoknader
+                søkerId={søkerId}
+                annenPart={annenPart}
+                kanStarteNyRegistrering={kanStarteNyRegistrering()}
+            />
 
             <div className="knapperad">
                 <Button

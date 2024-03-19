@@ -58,7 +58,7 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [location.pathname, navigate, søkerId]);
 
@@ -102,13 +102,17 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPKSSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendeOMPKSSoknader
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
+                kanStarteNyRegistrering={kanStarteNyRegistrering()}
+            />
 
             <div className="knapperad">
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
                 >
                     Tilbake

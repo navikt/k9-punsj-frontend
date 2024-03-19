@@ -59,7 +59,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [location.pathname, navigate, søkerId]);
 
@@ -102,12 +102,16 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
 
     return (
         <div className="registrering-page">
-            <EksisterendePLSSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendePLSSoknader
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
+                kanStarteNyRegistrering={kanStarteNyRegistrering()}
+            />
             <div className="knapperad">
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
                 >
                     Tilbake

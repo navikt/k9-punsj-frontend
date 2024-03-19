@@ -81,7 +81,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
 
     return (
         <div className="registrering-page">
-            <EksisterendeOMPUTSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendeOMPUTSoknader
+                søkerId={søkerId}
+                pleietrengendeId={pleietrengendeId}
+                kanStarteNyRegistrering={kanStarteNyRegistrering()}
+            />
 
             <div className="knapperad">
                 <Button

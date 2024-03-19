@@ -45,7 +45,7 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [location.pathname, navigate, søkerId]);
 
@@ -83,7 +83,7 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
                 >
                     Tilbake

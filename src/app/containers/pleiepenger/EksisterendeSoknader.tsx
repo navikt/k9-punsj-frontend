@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState } from 'app/models/types';
+import { IEksisterendeSoknaderState, IFordelingState, IJournalpost } from 'app/models/types';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
@@ -29,6 +29,8 @@ import ErDuSikkerModal from './ErDuSikkerModal';
 export interface IEksisterendeSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    journalpost?: IJournalpost;
+    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
@@ -52,7 +54,8 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     props: IEksisterendeSoknaderProps,
 ) => {
     const navigate = useNavigate();
-    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState } = props;
+    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState, journalpost, fordelingState } =
+        props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
@@ -100,6 +103,8 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         }
     };
 
+    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -127,6 +132,12 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     variant="secondary"
                     key={soknadId}
                     size="small"
+                    disabled={
+                        (pleietrengendeId !== søknad.barn.norskIdent &&
+                            !!pleietrengendeId &&
+                            pleietrengendeId !== null) ||
+                        (!!søknad.fagsakId && fagsakId !== søknad.fagsakId)
+                    }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     <FormattedMessage id="mappe.lesemodus.knapp.velg" />
@@ -180,22 +191,22 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.mottakelsesdato" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.barnetsfnrellerfdato" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.dokumenter" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.journalpostid" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
                                 <FormattedMessage id="skjema.periode" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell aria-label="mappe.lesemodus.knapp.velg" />
+                            <Table.HeaderCell scope="col" aria-label="mappe.lesemodus.knapp.velg" />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
@@ -230,6 +241,8 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
+    journalpost: state.felles.journalpost,
+    fordelingState: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

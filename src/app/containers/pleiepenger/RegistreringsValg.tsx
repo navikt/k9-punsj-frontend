@@ -57,7 +57,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!fordelingState.dokumenttype) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [fordelingState.dokumenttype, location.pathname, navigate]);
 
@@ -110,7 +110,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
                 >
                     <FormattedMessage id="fordeling.registreringsValg.tilbake" />
