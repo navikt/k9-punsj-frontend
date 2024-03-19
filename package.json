@@ -102,12 +102,12 @@
         "docker-down": "docker-compose -f dev/docker-compose.yml down"
     },
     "devDependencies": {
-        "@babel/cli": "7.23.9",
+        "@babel/cli": "7.24.1",
         "@babel/core": "7.24.0",
         "@babel/plugin-transform-runtime": "7.24.0",
         "@babel/preset-env": "7.24.0",
-        "@babel/preset-react": "7.23.3",
-        "@babel/preset-typescript": "7.23.3",
+        "@babel/preset-react": "7.24.1",
+        "@babel/preset-typescript": "7.24.1",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
         "@sentry/cli": "2.30.2",
         "@storybook/addon-actions": "8.0.0",
