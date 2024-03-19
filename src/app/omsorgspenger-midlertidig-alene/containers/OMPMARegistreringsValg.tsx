@@ -53,13 +53,19 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
     } = props;
 
     const { søkerId, pleietrengendeId, annenPart } = identState;
-    const { eksisterendeSoknaderSvar, soknadid, isSoknadCreated, createSoknadRequestError } = eksisterendeSoknaderState;
+    const {
+        eksisterendeSoknaderSvar,
+        soknadid,
+        isSoknadCreated,
+        createSoknadRequestError,
+        isEksisterendeSoknaderLoading,
+    } = eksisterendeSoknaderState;
     const { søknader } = eksisterendeSoknaderSvar;
 
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [location.pathname, navigate, søkerId]);
 
@@ -114,8 +120,9 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>
@@ -124,6 +131,7 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
                         onClick={() => createSoknad(journalpostid, søkerId, annenPart)}
                         className="knapp knapp2"
                         size="small"
+                        disabled={isEksisterendeSoknaderLoading}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

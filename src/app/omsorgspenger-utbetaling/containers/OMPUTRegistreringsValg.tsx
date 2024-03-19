@@ -21,7 +21,7 @@ export interface IEksisterendeOMPUTSoknaderStateProps {
 
 type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEksisterendeOMPUTSoknaderStateProps;
 
-export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistreringsValgProps> = (
+export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> = (
     props: IOMPUTRegistreringsValgProps,
 ) => {
     const navigate = useNavigate();
@@ -47,7 +47,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
         },
     });
 
-    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
+    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery(
+        'hentSoeknaderOMPUT',
+        () => hentEksisterendeSoeknader(søkerId),
+    );
 
     if (!journalpostid) {
         throw Error('Mangler journalpostid');
@@ -93,11 +96,17 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOMPUTRegistrer
                     className="knapp knapp1"
                     onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={() => opprettSoknad()} className="knapp knapp2" size="small">
+                    <Button
+                        onClick={() => opprettSoknad()}
+                        className="knapp knapp2"
+                        size="small"
+                        disabled={isEksisterendeSoknaderLoading}
+                    >
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
                     </Button>
                 )}

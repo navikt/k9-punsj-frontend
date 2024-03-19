@@ -53,7 +53,13 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
         getEksisterendeSoknader,
     } = props;
     const { søkerId, pleietrengendeId } = identState;
-    const { eksisterendeSoknaderSvar, soknadid, isSoknadCreated, createSoknadRequestError } = eksisterendeSoknaderState;
+    const {
+        eksisterendeSoknaderSvar,
+        soknadid,
+        isSoknadCreated,
+        createSoknadRequestError,
+        isEksisterendeSoknaderLoading,
+    } = eksisterendeSoknaderState;
     const { søknader } = eksisterendeSoknaderSvar;
 
     // Redirect tilbake ved side reload
@@ -113,6 +119,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                     className="knapp knapp1"
                     onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>
@@ -121,6 +128,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                         onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId)}
                         className="knapp knapp2"
                         size="small"
+                        disabled={isEksisterendeSoknaderLoading}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

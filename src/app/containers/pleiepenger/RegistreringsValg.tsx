@@ -51,7 +51,13 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
         resetSoknadId,
     } = props;
     const { søkerId, pleietrengendeId } = identState;
-    const { eksisterendeSoknaderSvar, soknadid, isSoknadCreated, createSoknadRequestError } = eksisterendeSoknaderState;
+    const {
+        eksisterendeSoknaderSvar,
+        soknadid,
+        isSoknadCreated,
+        createSoknadRequestError,
+        isEksisterendeSoknaderLoading,
+    } = eksisterendeSoknaderState;
     const { søknader } = eksisterendeSoknaderSvar;
 
     // Redirect tilbake ved side reload
@@ -112,6 +118,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
                     className="knapp knapp1"
                     onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     <FormattedMessage id="fordeling.registreringsValg.tilbake" />
                 </Button>
@@ -120,6 +127,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
                         onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId)}
                         className="knapp2"
                         size="small"
+                        disabled={isEksisterendeSoknaderLoading}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

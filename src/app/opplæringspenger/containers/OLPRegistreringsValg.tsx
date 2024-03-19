@@ -33,7 +33,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     // Redirect tilbake ved side reload
     useEffect(() => {
         if (!søkerId) {
-            navigate(location.pathname.replace('soknader', ''));
+            navigate(location.pathname.replace('soknader/', ''));
         }
     }, [søkerId, location.pathname, navigate]);
 
@@ -47,7 +47,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
         },
     });
 
-    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
+    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery('hentSoeknaderOLP', () =>
+        hentEksisterendeSoeknader(søkerId),
+    );
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
@@ -83,8 +85,9 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader', ''))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>

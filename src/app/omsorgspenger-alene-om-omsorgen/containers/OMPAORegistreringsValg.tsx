@@ -30,7 +30,10 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
 
-    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPAO', () => hentEksisterendeSoeknader(søkerId));
+    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery(
+        'hentSoeknaderOMPAO',
+        () => hentEksisterendeSoeknader(søkerId),
+    );
 
     const {
         isLoading: oppretterSoknad,
@@ -85,11 +88,17 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
                     className="knapp knapp1"
                     onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={() => opprettSoknad()} className="knapp knapp2" size="small">
+                    <Button
+                        onClick={() => opprettSoknad()}
+                        className="knapp knapp2"
+                        size="small"
+                        disabled={isEksisterendeSoknaderLoading}
+                    >
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
                     </Button>
                 )}
