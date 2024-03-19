@@ -727,7 +727,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         disabled={disableJournalførKnapper()}
                                         loading={settBehandlingsÅrMutation.isLoading}
                                     >
-                                        <FormattedMessage id="fordeling.knapp.journalfør.kø" />
+                                        <FormattedMessage id="fordeling.knapp.journalfør.vent" />
                                     </Button>
                                 </div>
                             )}

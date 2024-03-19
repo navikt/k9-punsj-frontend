@@ -32,7 +32,7 @@ const SettPåVentFordelingModal = ({ journalpostId, lukkModal }: Props) => {
     };
 
     return (
-        <Modal open onBeforeClose={lukkModal} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading">
                     <FormattedMessage id="fordeling.settJpPåVent.modal.tittel" />

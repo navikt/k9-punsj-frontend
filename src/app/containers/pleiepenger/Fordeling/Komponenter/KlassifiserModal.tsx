@@ -5,7 +5,7 @@ import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-re
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
 
-import { klassifiserDokument } from 'app/api/api';
+import { klassifiserDokument, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import Fagsak from 'app/types/Fagsak';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
@@ -40,9 +40,13 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
             }),
     });
 
+    const settPåVentMutation = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpostId),
+    });
+
     // Sette fagsak i fordeling state og navigere til journalfør og fortsett
     useEffect(() => {
-        if (isSuccess && fortsett) {
+        if (fortsett && isSuccess) {
             const sakstype = finnForkortelseForDokumenttype(dokumenttype);
             const fagsakId = data.saksnummer as string;
 
@@ -59,9 +63,13 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
 
             navigate(getPathFraDokumenttype(dokumenttype) || '/');
         }
+        if (!fortsett && isSuccess) {
+            settPåVentMutation.mutate();
+        }
     }, [isSuccess]);
 
-    const disabled = ['loading', 'success'].includes(status);
+    const disabled =
+        ['loading', 'success'].includes(status) && ['loading', 'success'].includes(settPåVentMutation.status);
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
@@ -80,11 +88,11 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading">
-                    <FormattedMessage id="fordeling.klassifiserModal.tittel" />
+                    <FormattedMessage id={`fordeling.klassifiserModal.tittel${fortsett ? '' : '.settPåVent'}`} />
                 </Heading>
             </Modal.Header>
             <Modal.Body>
-                <div className="max-w-lg">
+                <div className="max-w-xl">
                     <KlassifiseringInfo />
                     {renderAlert(
                         'success',
@@ -97,12 +105,19 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                         isSuccess && !fagsak?.fagsakId,
                     )}
                     {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !isSuccess && !error)}
-                    {/* Vise feilen fra serveren */}
+                    {/* Vise feilen fra serveren etter journalføring */}
                     {renderAlert('error', 'fordeling.klassifiserModal.alert.error', !!error, (error as Error)?.message)}
+                    {/* Vise feilen fra serveren etter sett på vent */}
+                    {renderAlert(
+                        'error',
+                        'fordeling.klassifiserModal.settPåVent.alert.error',
+                        !!settPåVentMutation.error,
+                        (settPåVentMutation.error as Error)?.message,
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                {!fortsett && isSuccess ? (
+                {!fortsett && isSuccess && settPåVentMutation.isSuccess ? (
                     <Button
                         size="small"
                         onClick={() => {
@@ -115,7 +130,9 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                     <>
                         <Button type="button" disabled={disabled} onClick={() => mutate()} size="small">
                             {status !== 'loading' ? (
-                                <FormattedMessage id="fordeling.klassifiserModal.btn.JournalførJournalposten" />
+                                <FormattedMessage
+                                    id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
+                                />
                             ) : (
                                 <span>
                                     <FormattedMessage id="fordeling.klassifiserModal.lagrer" />{' '}

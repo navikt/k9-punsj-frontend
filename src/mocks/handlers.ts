@@ -225,7 +225,7 @@ let handlers = [
         ),
     ),
 
-    http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
+    http.post('http://localhost:8080/api/k9-punsj/journalpost/mottak', () =>
         HttpResponse.json(
             {
                 saksnummer: '1DQAW94',
@@ -233,15 +233,6 @@ let handlers = [
             { status: 200 },
         ),
     ),
-
-    /* http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
-        HttpResponse.json(
-            {
-                feil: 'Kunne ikke reservere saksnummer. Fagsak (1DQAU8W) finnes allerede for pleietrengende.',
-            },
-            { status: 500 },
-        ),
-    ), */
 
     http.get('http://localhost:8101/api/k9-punsj/journalpost/203', () =>
         HttpResponse.json(
@@ -421,24 +412,6 @@ let handlers = [
             { status: 200 },
         ),
     ),
-
-    http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
-        HttpResponse.json(
-            {
-                saksnummer: '1DQAW94',
-            },
-            { status: 200 },
-        ),
-    ),
-
-    /* http.post('http://localhost:8101/api/k9-punsj/journalpost/mottak', () =>
-        HttpResponse.json(
-            {
-                feil: 'Kunne ikke reservere saksnummer. Fagsak (1DQAU8W) finnes allerede for pleietrengende.',
-            },
-            { status: 500 },
-        ),
-    ), */
 
     http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
     http.get(ApiPath.PERSON, () =>
