@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
 import { IEksisterendeSoknaderState } from 'app/models/types';
@@ -18,7 +18,6 @@ import {
     resetSoknadidAction,
 } from 'app/state/actions';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
@@ -41,6 +40,7 @@ export interface IEksisterendeSoknaderDispatchProps {
 
 export interface IEksisterendeSoknaderComponentProps {
     pleietrengendeId: string | null;
+    kanStarteNyRegistrering: boolean;
 }
 
 type IEksisterendeSoknaderProps = WrappedComponentProps &
@@ -58,7 +58,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil i henting av mapper.
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
             </Alert>
         );
     }
@@ -78,7 +78,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }
@@ -129,7 +129,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     size="small"
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
-                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                    <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
             ];
             rows.push(
@@ -139,7 +139,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </tr>,
@@ -168,16 +168,34 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${props.kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
-                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.mottakelsesdato" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.barnetsfnrellerfdato" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.dokumenter" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.journalpostid" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <FormattedMessage id="skjema.periode" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell aria-label="mappe.lesemodus.knapp.velg" />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
@@ -200,9 +218,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         <>
             {technicalError}
             <Alert size="small" variant="info">
-                {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
-                })}
+                <FormattedMessage
+                    id="mapper.infoboks.ingensoknader"
+                    values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
+                />
             </Alert>
         </>
     );
