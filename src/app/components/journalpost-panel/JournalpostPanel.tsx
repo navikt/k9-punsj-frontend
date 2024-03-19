@@ -39,6 +39,8 @@ export const JournalpostPanelComponent: React.FunctionComponent<
     const modiaPath = getModiaPath(ident);
     const intl = useIntl();
 
+    const dokumenttyperOmpUt = [FordelingDokumenttype.OMSORGSPENGER_UT, FordelingDokumenttype.KORRIGERING_IM];
+
     return (
         <Panel border className="journalpostpanel">
             <div>
@@ -111,7 +113,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                     />
                 </div>
             )}
-            {journalpost?.sak?.behandlingsÅr && (
+            {journalpost?.sak?.behandlingsÅr && dokumenttyperOmpUt.includes(fordelingState.dokumenttype!) && (
                 <div>
                     <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsÅr} />
                 </div>

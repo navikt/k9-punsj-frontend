@@ -702,7 +702,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {!journalpost.erFerdigstilt &&
                                 !valgtFagsak &&
                                 !disableJournalførKnapper() &&
-                                identState.pleietrengendeId && (
+                                (identState.pleietrengendeId ||
+                                    dokumenttyperOmpUt.includes(dokumenttype!) ||
+                                    dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
                                     <Alert size="small" variant="info" className="mb-4">
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
                                     </Alert>
