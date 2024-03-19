@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -37,7 +37,6 @@ import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import Behandlingsknapp from './Behandlingsknapp';
 import AnnenPart from './AnnenPart';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
-import SettPåVentFordelingModal from './settPåVentFordelingModal/SettPåVentFordelingModal';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -67,8 +66,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
     const intl = useIntl();
     const navigate = useNavigate();
-
-    const [visSettPåVentFordelingModal, setVisSettPåVentFordelingModal] = useState(false);
 
     const { sakstype, dokumenttype, fagsak } = fordelingState;
 
@@ -223,32 +220,14 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                 )}
             </div>
 
-            <div className="flex">
-                <Behandlingsknapp
-                    norskIdent={identState.søkerId}
-                    omfordel={omfordel}
-                    lukkJournalpostOppgave={lukkJournalpostOppgave}
-                    journalpost={journalpost}
-                    sakstypeConfig={konfigForValgtSakstype as any}
-                    gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
-                />
-                <div className="ml-3">
-                    <Button
-                        size="small"
-                        variant="secondary"
-                        onClick={() => setVisSettPåVentFordelingModal(true)}
-                        disabled={!journalpost.journalpostId}
-                    >
-                        <FormattedMessage id="fordeling.knapp.settPåVent" />
-                    </Button>
-                </div>
-            </div>
-            {visSettPåVentFordelingModal && (
-                <SettPåVentFordelingModal
-                    journalpostId={journalpost.journalpostId}
-                    lukkModal={() => setVisSettPåVentFordelingModal(false)}
-                />
-            )}
+            <Behandlingsknapp
+                norskIdent={identState.søkerId}
+                omfordel={omfordel}
+                lukkJournalpostOppgave={lukkJournalpostOppgave}
+                journalpost={journalpost}
+                sakstypeConfig={konfigForValgtSakstype as any}
+                gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
+            />
         </FormPanel>
     );
 };
