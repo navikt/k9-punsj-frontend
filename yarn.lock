@@ -2303,7 +2303,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.4.2, @grafana/faro-web-sdk@npm:^1.4.2":
+"@grafana/faro-core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@grafana/faro-core@npm:1.5.0"
+  dependencies:
+    "@opentelemetry/api": ^1.7.0
+    "@opentelemetry/otlp-transformer": ^0.48.0
+  checksum: a4761f2ce887662e71ec785f961ad765925ee5deda7aa25ed9d9c92456d9da354fbdc0a2e2a6a6a03b27d27d144bf59409c291959d176684da5df74ef72d80b8
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:1.4.2":
   version: 1.4.2
   resolution: "@grafana/faro-web-sdk@npm:1.4.2"
   dependencies:
@@ -2314,11 +2324,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@grafana/faro-web-tracing@npm:1.4.2"
+"@grafana/faro-web-sdk@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@grafana/faro-web-sdk@npm:1.5.0"
   dependencies:
-    "@grafana/faro-web-sdk": ^1.4.2
+    "@grafana/faro-core": ^1.5.0
+    ua-parser-js: ^1.0.32
+    web-vitals: ^3.1.1
+  checksum: 21d7aaf0828a2f9adf640ee17dfb832e70d8bcfdd8c229602669f31dede39fa996902128124d093cde55955b33435025e2c95c6d78a075654892f91b3a760ffe
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-tracing@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@grafana/faro-web-tracing@npm:1.5.0"
+  dependencies:
+    "@grafana/faro-web-sdk": ^1.5.0
     "@opentelemetry/api": ^1.7.0
     "@opentelemetry/context-zone": ^1.18.1
     "@opentelemetry/core": ^1.18.1
@@ -2331,7 +2352,7 @@ __metadata:
     "@opentelemetry/resources": ^1.18.1
     "@opentelemetry/sdk-trace-web": ^1.18.1
     "@opentelemetry/semantic-conventions": ^1.18.1
-  checksum: 3c2b7f9c91442c967178260ff2d7e8e6808bad7141e041da04f6a064dcc14ee6467e244b9e4032496ac76fb67f8cce6cf1748abe0753160be3ec3002016f3750
+  checksum: f87bfd718ffb6ad15a8b6e3af302e90c9d775456843b2a9f28354c76bed13148f30fcd11940aa555884df1e68ff3866471a57d10bacbacd4d47f8ade0f6b272c
   languageName: node
   linkType: hard
 
@@ -13537,7 +13558,7 @@ __metadata:
     "@babel/preset-typescript": 7.23.3
     "@babel/runtime": 7.24.0
     "@grafana/faro-web-sdk": 1.4.2
-    "@grafana/faro-web-tracing": 1.4.2
+    "@grafana/faro-web-tracing": 1.5.0
     "@k9-punsj-frontend/server": "workspace:^"
     "@navikt/aksel-icons": ^6.2.0
     "@navikt/ds-css": 6.2.0
