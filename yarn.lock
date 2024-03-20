@@ -2303,7 +2303,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.4.2, @grafana/faro-web-sdk@npm:^1.4.2":
+"@grafana/faro-core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@grafana/faro-core@npm:1.5.0"
+  dependencies:
+    "@opentelemetry/api": ^1.7.0
+    "@opentelemetry/otlp-transformer": ^0.48.0
+  checksum: a4761f2ce887662e71ec785f961ad765925ee5deda7aa25ed9d9c92456d9da354fbdc0a2e2a6a6a03b27d27d144bf59409c291959d176684da5df74ef72d80b8
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@grafana/faro-web-sdk@npm:1.5.0"
+  dependencies:
+    "@grafana/faro-core": ^1.5.0
+    ua-parser-js: ^1.0.32
+    web-vitals: ^3.1.1
+  checksum: 21d7aaf0828a2f9adf640ee17dfb832e70d8bcfdd8c229602669f31dede39fa996902128124d093cde55955b33435025e2c95c6d78a075654892f91b3a760ffe
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:^1.4.2":
   version: 1.4.2
   resolution: "@grafana/faro-web-sdk@npm:1.4.2"
   dependencies:
@@ -13536,7 +13557,7 @@ __metadata:
     "@babel/preset-react": 7.23.3
     "@babel/preset-typescript": 7.23.3
     "@babel/runtime": 7.24.0
-    "@grafana/faro-web-sdk": 1.4.2
+    "@grafana/faro-web-sdk": 1.5.0
     "@grafana/faro-web-tracing": 1.4.2
     "@k9-punsj-frontend/server": "workspace:^"
     "@navikt/aksel-icons": ^6.2.0
