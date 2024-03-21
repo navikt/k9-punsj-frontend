@@ -157,7 +157,7 @@
     "ident.identifikasjon.pleietrengende": "Pleietrengendes fødselsnummer",
     "ident.identifikasjon.velgBarn": "Velg hvilket barn det gjelder",
     "ident.identifikasjon.annetBarn": "Det gjelder et annet barn",
-    "ident.identifikasjon.pleietrengendeHarIkkeFnr": "Dokument inneholder ikke informasjon om pleietrengende",
+    "ident.identifikasjon.pleietrengendeHarIkkeFnr": "Pleietrengende har ikke fødselsnummer",
     "ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon": "Dokumentet kan ikke sendes til K9 uten pleietrengendes fødselsnummer. Registrer opplysningene fra dokumentet og sett Punsj-oppgaven på vent.",
     "ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt": "Du kan ikke registrere opplysninger til K9 før du har fødselsnummer eller D-nummer til barnet.",
     "ident.identifikasjon.dobbelsjekkident": "Det er viktig at fødselsnummer er riktig. Dobbeltsjekk at fødselsnummer er korrekt.",

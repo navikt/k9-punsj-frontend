@@ -9,7 +9,12 @@ import { klassifiserDokument, settJournalpostPaaVentUtenSøknadId } from 'app/ap
 import Fagsak from 'app/types/Fagsak';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, getEnvironmentVariable, getPathFraDokumenttype } from 'app/utils';
+import {
+    finnForkortelseForDokumenttype,
+    getEnvironmentVariable,
+    getPathFraDokumenttype,
+    initializeDate,
+} from 'app/utils';
 import KlassifiseringInfo from './KlassifiseringInfo';
 
 interface OwnProps {
@@ -27,6 +32,8 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
     const dokumenttype = useSelector(
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
+
+    const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
     const { mutate, status, error, isSuccess, data } = useMutation({
         mutationFn: () =>
@@ -94,6 +101,15 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
             <Modal.Body>
                 <div className="max-w-xl">
                     <KlassifiseringInfo />
+                    {settPåVentMutation.isSuccess && (
+                        <div className="mt-4">
+                            <FormattedMessage
+                                id="fordeling.settJpPåVent.modal.info"
+                                values={{ dato: get3WeeksDate() }}
+                            />
+                        </div>
+                    )}
+
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success',
