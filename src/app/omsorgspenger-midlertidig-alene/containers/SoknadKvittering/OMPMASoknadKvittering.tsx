@@ -75,7 +75,6 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                         <LabelValue
                             text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
                             value={barn.norskIdentitetsnummer}
-                            retning="horisontal"
                         />
                     </p>
                 ))}
@@ -87,7 +86,6 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <LabelValue
                         text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
                         value={ytelse.annenForelder.norskIdentitetsnummer}
-                        retning="horisontal"
                     />
                 </p>
                 <p>
@@ -97,21 +95,18 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                             intl,
                             `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
                         )}
-                        retning="horisontal"
                     />
                 </p>
                 <p>
                     <LabelValue
                         text={`${intlHelper(intl, 'skjema.annenForelder.situasjonsbeskrivelse')}:`}
                         value={ytelse.annenForelder.situasjonBeskrivelse}
-                        retning="horisontal"
                     />
                 </p>
                 <p>
                     <LabelValue
                         text={`${intlHelper(intl, 'skjema.annenForelder.periode')}:`}
                         value={periodToFormattedString(ytelse.annenForelder.periode)}
-                        retning="horisontal"
                     />
                 </p>
             </div>

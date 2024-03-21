@@ -87,11 +87,11 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
 
-function withHooks<P>(Component: ComponentType<P>) {
+function withHooks<P>(Component: ComponentType<IPunchOMPKSFormComponentProps>) {
     return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
-        return <Component {...props} id={id} journalpostid={journalpostid} navigate={navigate} />;
+        return <Component {...props} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
     };
 }
 
@@ -449,12 +449,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
-                        <Button
-                            variant="secondary"
-                            className="send-knapp"
-                            onClick={() => this.handleSubmit()}
-                            disabled={false}
-                        >
+                        <Button className="send-knapp" onClick={() => this.handleSubmit()} disabled={false}>
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Button>
 

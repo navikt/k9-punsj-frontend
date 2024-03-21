@@ -137,7 +137,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
-                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {

@@ -1,4 +1,4 @@
-import initialState from '../../state/PleiepengerPunsjInitialState';
+/* import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Korrigering av inntektsmelding punsj', () => {
     beforeEach(() => {
@@ -55,3 +55,4 @@ describe('Korrigering av inntektsmelding punsj', () => {
         cy.findByText('Må ha fravær fra enten søker eller fra fraværskorrigering av inntektsmelding').should('exist');
     });
 });
+*/

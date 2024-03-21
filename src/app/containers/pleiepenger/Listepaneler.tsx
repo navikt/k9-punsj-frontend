@@ -1,15 +1,13 @@
+import React from 'react';
+
 import classNames from 'classnames';
-import * as React from 'react';
-import { FormattedMessage, IntlShape } from 'react-intl';
-
 import { Fieldset, Panel } from '@navikt/ds-react';
-
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import BinSvg from '../../assets/SVG/BinSVG';
+import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
@@ -106,7 +104,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
     };
 
     return (
-        <Fieldset className={classNames('listepaneler', className)}>
+        <Fieldset hideLegend legend="" className={classNames('listepaneler', className)}>
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
@@ -117,7 +115,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             id={panelid}
                             key={panelid}
                         >
-                            <Fieldset>
+                            <Fieldset hideLegend legend="">
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
                                     <h2>
                                         <FormattedMessage

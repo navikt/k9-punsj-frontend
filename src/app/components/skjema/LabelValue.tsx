@@ -1,39 +1,34 @@
+import React from 'react';
+
 import classNames from 'classnames';
 import { Label } from 'nav-frontend-skjema';
-import React from 'react';
 import { useIntl } from 'react-intl';
-
+import { CopyButton, HStack } from '@navikt/ds-react';
 import intlHelper from '../../utils/intlUtils';
-import Kopier from '../kopier/Kopier';
-import './labelValue.less';
 
 type ILabelValueProps = {
     value: string | undefined;
-    retning?: 'vertikal' | 'horisontal';
     visKopier?: boolean;
 } & ({ text: string; labelTextId?: string } | { labelTextId: string; text?: string });
 
-const LabelValue: React.FunctionComponent<ILabelValueProps> = ({
-    labelTextId,
-    text,
-    value,
-    retning = 'vertikal',
-    visKopier,
-}) => {
+const LabelValue: React.FC<ILabelValueProps> = ({ labelTextId, text, value, visKopier }) => {
     const intl = useIntl();
 
     return (
-        <div
-            className={classNames({
-                'horisontal-label': retning === 'horisontal',
-            })}
-        >
-            <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`}>
+        <HStack gap="10">
+            <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`} className="mb-0">
                 {text || intlHelper(intl, labelTextId || '')}
             </Label>
-            <div id={`journalpostpanel.${text || labelTextId}.value`}>{value}</div>
-            {visKopier && <Kopier verdi={value} />}
-        </div>
+
+            <div id={`journalpostpanel.${text || labelTextId}.value`} className="flex">
+                <span>{value}</span>
+                {visKopier && value && (
+                    <span>
+                        <CopyButton size="xsmall" copyText={value} className={classNames('copyBtn')} />
+                    </span>
+                )}
+            </div>
+        </HStack>
     );
 };
 

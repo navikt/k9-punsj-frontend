@@ -60,6 +60,7 @@ interface ISubmitSoknadSuccessAction {
 
 interface ISubmitSoknadConflictAction {
     type: PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT;
+    error: IError;
 }
 
 interface ISubmitSoknadUncompleteAction {
@@ -314,8 +315,9 @@ export const submitSoknadErrorAction = (error: IError): ISubmitSoknadErrorAction
     error,
 });
 
-export const submitSoknadConflictAction = (): ISubmitSoknadConflictAction => ({
+export const submitSoknadConflictAction = (error: IError): ISubmitSoknadConflictAction => ({
     type: PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT,
+    error,
 });
 
 export const validerSoknadRequestAction = (): IValiderSoknadRequestAction => ({
@@ -363,7 +365,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
                     case 400:
                         return dispatch(submitSoknadUncompleteAction(responseData.feil));
                     case 409:
-                        return dispatch(submitSoknadConflictAction());
+                        return dispatch(submitSoknadConflictAction(responseData));
                     default:
                         return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
                 }

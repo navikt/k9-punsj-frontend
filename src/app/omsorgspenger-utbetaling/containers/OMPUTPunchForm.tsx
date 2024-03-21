@@ -216,7 +216,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
-                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {

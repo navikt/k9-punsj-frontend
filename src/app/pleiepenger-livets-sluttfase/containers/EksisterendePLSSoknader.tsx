@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { TimeFormat } from 'app/models/enums';
@@ -15,6 +15,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import {
@@ -31,6 +32,8 @@ import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 export interface IEksisterendePLSSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    journalpost?: IJournalpost;
+    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendePLSSoknaderDispatchProps {
@@ -45,16 +48,25 @@ export interface IEksisterendePLSSoknaderDispatchProps {
 export interface IEksisterendePLSSoknaderComponentProps {
     søkerId: string;
     pleietrengendeId: string;
+    kanStarteNyRegistrering?: boolean;
 }
 
 type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
     IEksisterendePLSSoknaderStateProps &
     IEksisterendePLSSoknaderDispatchProps;
 
-export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
+export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknaderProps> = (
     props: IEksisterendePLSSoknaderProps,
 ) => {
-    const { eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
+    const {
+        eksisterendeSoknaderState,
+        journalposterState,
+        søkerId,
+        pleietrengendeId,
+        journalpost,
+        fordelingState,
+        kanStarteNyRegistrering,
+    } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
@@ -118,6 +130,8 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         }
     };
 
+    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -142,6 +156,12 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                     variant="secondary"
                     key={soknadId}
                     size="small"
+                    disabled={
+                        (pleietrengendeId !== søknad.pleietrengende.norskIdent &&
+                            !!pleietrengendeId &&
+                            pleietrengendeId !== null) ||
+                        (!!søknad.fagsakId && fagsakId !== søknad.fagsakId)
+                    }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
@@ -178,7 +198,15 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
@@ -221,6 +249,8 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
     journalposterState: state.journalposterPerIdentState,
+    journalpost: state.felles.journalpost,
+    fordelingState: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

@@ -6,8 +6,28 @@ interface EnvVariable {
 }
 
 interface EnvVariables {
+    OIDC_AUTH_PROXY: string;
+    K9_LOS_URL: string;
+    APP_K9SAK_FAGSAK_FRONTEND_URL: string;
+    OMP_KS_ENABLED: string;
+    PLS_ENABLED: string;
+    OMP_MA_FEATURE_TOGGLE: string;
+    OMP_UT_FEATURE_TOGGLE: string;
+    SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
+    OLP_ENABLED: string;
+    OMP_AO_ENABLED: string;
+    POSTMOTTAK_TOGGLE: string;
+}
+
+interface EnvVariable {
+    key: string;
+    value: string;
+}
+
+interface EnvVariables {
     IS_LOCAL: string;
     K9_LOS_URL: string;
+    APP_K9SAK_FAGSAK_FRONTEND_URL: string;
     OMP_KS_ENABLED: string;
     PLS_ENABLED: string;
     OMP_MA_FEATURE_TOGGLE: string;
@@ -25,6 +45,7 @@ export default async function setEnvVariables(): Promise<void> {
     const appSettings = {
         IS_LOCAL: envVariables.IS_LOCAL,
         K9_LOS_URL: envVariables.K9_LOS_URL,
+        APP_K9SAK_FAGSAK_FRONTEND_URL: envVariables.APP_K9SAK_FAGSAK_FRONTEND_URL,
         OMP_KS_ENABLED: envVariables.OMP_KS_ENABLED,
         PLS_ENABLED: envVariables.PLS_ENABLED,
         OMP_MA_FEATURE_TOGGLE: envVariables.OMP_MA_FEATURE_TOGGLE,

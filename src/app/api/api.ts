@@ -4,6 +4,7 @@ import { IPeriode } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import sakstyper from 'app/constants/sakstyper';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -31,6 +32,7 @@ export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string)
             }
         },
     );
+
 export const postBehandlingsAar = (
     journalpostid: string,
     søkerId: string,
@@ -54,8 +56,7 @@ export const finnFagsaker = (søkersFødselsnummer: string, callback: (response:
 
 export const klassifiserDokument = (body: {
     brukerIdent: string;
-    barnIdent?: string;
-    annenPart?: string;
+    pleietrengendeIdent?: string;
     journalpostId: string;
     fagsakYtelseTypeKode?: DokumenttypeForkortelse;
     periode?: IPeriode;
@@ -64,7 +65,40 @@ export const klassifiserDokument = (body: {
     post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
         async (response) => {
             if (!response.ok) {
-                throw Error('Det oppstod en feil.');
+                const responseBody = await response.json();
+                const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+                throw Error(feil);
+            }
+            const responseBody = await response.json();
+            return responseBody;
+        },
+    );
+
+export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) =>
+    post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, {
+        norskIdent: soekersIdent,
+        sak: fagsak?.fagsakId
+            ? { fagsakId: fagsak.fagsakId, sakstype: sakstyper.FAGSAK }
+            : { sakstype: sakstyper.GENERELL_SAK },
+    }).then(async (response) => {
+        if (!response.ok) {
+            const responseBody = await response.json();
+            const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+            throw Error(feil);
+        }
+    });
+
+export const settJournalpostPaaVentUtenSøknadId = (journalpostid: string) =>
+    post(ApiPath.JOURNALPOST_SETT_PAA_VENT, { journalpostId: journalpostid }, undefined, undefined).then(
+        async (response) => {
+            if (!response.ok) {
+                const responseBody = await response.json();
+                const feil =
+                    responseBody.detail ||
+                    responseBody.feil ||
+                    responseBody.message ||
+                    'Det oppstod en feil når journalpost skulle settes på vent.';
+                throw Error(feil);
             }
         },
     );

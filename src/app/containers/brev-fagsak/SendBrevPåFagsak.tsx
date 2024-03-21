@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Button, Heading } from '@navikt/ds-react';
 
@@ -10,7 +10,7 @@ import { RootStateType } from 'app/state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
 import Fagsak from 'app/types/Fagsak';
 import { finnForkortelseForDokumenttype } from 'app/utils';
-
+import { ROUTES } from 'app/constants/routes';
 import BrevComponent from '../../components/brev/BrevComponent';
 import './sendBrevPåFagsak.less';
 
@@ -33,8 +33,16 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     dokumenttype,
 }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!søkerId || !journalpost) {
+            navigate(location.pathname.replace(ROUTES.SEND_BREV_FAGSAK, ''));
+        }
+    }, []);
+
     if (!søkerId || !journalpost) {
-        navigate(-1);
         return null;
     }
 
@@ -62,13 +70,14 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     );
 };
 
+// TODO: Kanskje bruke fagsak fra journalposten også?
 const mapStateToProps = (state: RootStateType) => ({
     journalpost: state.felles.journalpost,
     fagsak: state.fordelingState.fagsak,
     dokumenttype: state.fordelingState.dokumenttype,
     søkerId: state.identState.søkerId,
 });
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });

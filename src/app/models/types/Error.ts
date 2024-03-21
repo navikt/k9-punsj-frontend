@@ -4,6 +4,7 @@ export interface IError {
     url?: string;
     message?: string;
     exceptionId?: string;
+    feil?: string;
 }
 
 export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];
