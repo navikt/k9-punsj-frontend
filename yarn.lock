@@ -2846,6 +2846,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aksel-icons@npm:^6.3.6":
+  version: 6.3.6
+  resolution: "@navikt/aksel-icons@npm:6.3.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.3.6%2F23f7a3d1b5f319812c079d8ea5faeb1f2af80f45"
+  checksum: 792b85deedba7cfc87d1b565e85163af46ec0dfe312773e00e5f7fa580046e8b05892c2f376892ca85473a74852098813ff56eb6e01c7dfec2cbe5afeab4be3b
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:5.13.0":
   version: 5.13.0
   resolution: "@navikt/ds-css@npm:5.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F5.13.0%2F0af3ec887655728dd6f8bc45c31034783675982c"
@@ -2889,13 +2896,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@navikt/ds-react@npm:6.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.2.0%2F1197cd28bbb0fad38d5590cd80f021e26ff4b344"
+"@navikt/ds-react@npm:6.3.6":
+  version: 6.3.6
+  resolution: "@navikt/ds-react@npm:6.3.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.3.6%2Fc42674f814c64813e0745a7d2326b3d9ddf3f569"
   dependencies:
     "@floating-ui/react": 0.25.4
-    "@navikt/aksel-icons": ^6.2.0
-    "@navikt/ds-tokens": ^6.2.0
+    "@navikt/aksel-icons": ^6.3.6
+    "@navikt/ds-tokens": ^6.3.6
     "@radix-ui/react-tabs": 1.0.0
     "@radix-ui/react-toggle-group": 1.0.0
     clsx: ^2.1.0
@@ -2904,7 +2911,7 @@ __metadata:
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 2db6724002979af95c3e0a3f679900842864bac96566836de44e95c64c10e2b9a395c316247c4a383b37e1cc468d26679f083aabfdc783d94cf03ddaea08243e
+  checksum: f257230cf5d820fd48f6106b50431ab0c9608011acb4e861e731dd19c16fceda7e2e5d13d0ad2f5d6252041dabfa1e3e18fa077cba8369750a42065d7a850a59
   languageName: node
   linkType: hard
 
@@ -2915,10 +2922,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@navikt/ds-tokens@npm:6.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.2.0%2F0283ef29deb154cb801d39624a02be1cff90d206"
-  checksum: 75e9103d40e4d78aae8620103aa8da572cb2287a2a1a4ee10743d44ead185dfc674601cc2bbd177327c7a274f31538721f068bd79182e9bcbafed680985a49ce
+"@navikt/ds-tokens@npm:^6.3.6":
+  version: 6.3.6
+  resolution: "@navikt/ds-tokens@npm:6.3.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.3.6%2F430e65e45042b866fdfe8873280d88ffd1ad5d4d"
+  checksum: f57af281f67349f7256e2f4286ac2c3edb0916a0741ccdc2eab1f0551e96b6b4c91e9004e2c14fdab1e797566573c9103a1ae428a42afbb0cf0a41180ca9afe6
   languageName: node
   linkType: hard
 
@@ -13542,7 +13549,7 @@ __metadata:
     "@navikt/aksel-icons": ^6.2.0
     "@navikt/ds-css": 6.2.0
     "@navikt/ds-icons": 3.4.3
-    "@navikt/ds-react": 6.2.0
+    "@navikt/ds-react": 6.3.6
     "@navikt/fnrvalidator": 1.3.3
     "@navikt/ft-plattform-komponenter": 2.3.18
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
