@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nais-ingress
   rules:
-    - host: k9-punsj-frontend.adeo.no
+    - host: k9-punsj-frontend.nais.adeo.no
       http:
         paths:
           - path: "/(.*)"
