@@ -6,5 +6,5 @@ export type SoeknadType = {
     klokkeslett?: string;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-    fagsakId?: string;
+    k9saksnummer?: string;
 };

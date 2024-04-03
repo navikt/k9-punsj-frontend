@@ -160,7 +160,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                         (pleietrengendeId !== søknad.pleietrengende.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.fagsakId && fagsakId !== søknad.fagsakId)
+                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >

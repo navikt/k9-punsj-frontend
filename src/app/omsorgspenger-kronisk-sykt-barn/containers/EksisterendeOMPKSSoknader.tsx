@@ -155,7 +155,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                         (pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.fagsakId && fagsakId !== søknad.fagsakId)
+                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >

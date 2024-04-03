@@ -35,7 +35,7 @@ export interface IPSBSoknad {
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
     begrunnelseForInnsending?: BegrunnelseForInnsending;
-    fagsakId?: string;
+    k9saksnummer?: string;
 }
 
 export interface ITilsynsordning {
@@ -136,7 +136,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
-    fagsakId?: string;
+    k9saksnummer?: string;
 
     constructor(soknad: IPSBSoknad) {
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
@@ -167,6 +167,6 @@ export class PSBSoknad implements IPSBSoknad {
             (u) => new UtenlandsOpphold(u),
         );
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
-        this.fagsakId = soknad.fagsakId || undefined;
+        this.k9saksnummer = soknad.k9saksnummer || undefined;
     }
 }

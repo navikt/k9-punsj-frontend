@@ -33,7 +33,7 @@ export interface IPLSSoknad {
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
     begrunnelseForInnsending?: BegrunnelseForInnsending;
-    fagsakId?: string;
+    k9saksnummer?: string;
 }
 
 export interface ISelvstendigNaeringsdrivendeOpptjening {
@@ -280,7 +280,7 @@ export class PLSSoknad implements IPLSSoknad {
 
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
-    fagsakId?: string;
+    k9saksnummer?: string;
 
     constructor(soknad: IPLSSoknad) {
         this.soeknadId = soknad.soeknadId || '';
@@ -300,6 +300,6 @@ export class PLSSoknad implements IPLSSoknad {
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
-        this.fagsakId = soknad.fagsakId || '';
+        this.k9saksnummer = soknad.k9saksnummer || undefined;
     }
 }

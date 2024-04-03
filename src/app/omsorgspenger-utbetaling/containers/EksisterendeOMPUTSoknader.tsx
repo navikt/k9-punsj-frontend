@@ -101,7 +101,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
                 Array.from(søknad.journalposter).join(', '),
                 <Button
                     variant="secondary"
-                    disabled={!!søknad.fagsakId && fagsakId !== søknad.fagsakId}
+                    disabled={!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer}
                     key={soknadId}
                     size="small"
                     onClick={() => setValgtSoeknad(søknad)}

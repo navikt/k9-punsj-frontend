@@ -9,7 +9,7 @@ export interface IOMPKSSoknad {
     barn: IBarn;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
-    fagsakId?: string;
+    k9saksnummer?: string;
 }
 
 export interface IBarn {
@@ -50,7 +50,7 @@ export class OMPKSSoknad implements IOMPKSSoknad {
 
     harMedisinskeOpplysninger?: boolean;
 
-    fagsakId?: string;
+    k9saksnummer?: string;
 
     constructor(soknad: IOMPKSSoknad) {
         this.soeknadId = soknad.soeknadId || '';
@@ -61,6 +61,6 @@ export class OMPKSSoknad implements IOMPKSSoknad {
         this.barn = new Barn(soknad.barn || {});
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
-        this.fagsakId = soknad.fagsakId || undefined;
+        this.k9saksnummer = soknad.k9saksnummer || undefined;
     }
 }
