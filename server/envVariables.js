@@ -35,8 +35,4 @@ export const envVariables = () => [
         key: 'OMP_AO_ENABLED',
         value: process.env.OMP_AO_ENABLED,
     },
-    {
-        key: 'POSTMOTTAK_TOGGLE',
-        value: process.env.POSTMOTTAK_TOGGLE,
-    },
 ];

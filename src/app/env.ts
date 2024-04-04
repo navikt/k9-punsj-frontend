@@ -16,7 +16,6 @@ interface EnvVariables {
     SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
     OLP_ENABLED: string;
     OMP_AO_ENABLED: string;
-    POSTMOTTAK_TOGGLE: string;
 }
 
 interface EnvVariable {
@@ -35,7 +34,6 @@ interface EnvVariables {
     SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
     OLP_ENABLED: string;
     OMP_AO_ENABLED: string;
-    POSTMOTTAK_TOGGLE: string;
 }
 
 export default async function setEnvVariables(): Promise<void> {
@@ -53,7 +51,6 @@ export default async function setEnvVariables(): Promise<void> {
         SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: envVariables.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE,
         OLP_ENABLED: envVariables.OLP_ENABLED,
         OMP_AO_ENABLED: envVariables.OMP_AO_ENABLED,
-        POSTMOTTAK_TOGGLE: envVariables.POSTMOTTAK_TOGGLE,
     };
     (window as any).appSettings = JSON.parse(JSON.stringify(appSettings));
 }
