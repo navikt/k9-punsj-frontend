@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
-import { faro } from '@grafana/faro-web-sdk';
 
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -91,10 +90,6 @@ export const SearchForm = () => {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
-
-    useEffect(() => {
-        faro.api.pushError({ name: 'Test Error', message: 'test error' });
-    }, []);
 
     if (lukkOppgaveDone) {
         return (
