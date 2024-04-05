@@ -3,11 +3,15 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to (dev or prod)' 
+        description: 'Environment to deploy to (dev or prod)'
         required: true
+        type: choice
+        options:
+          - dev
+          - prod
 jobs:
   deploy-redirect-gcp:
-    name: Deploye redirect fra dev-fss til dev-gcp
+    name: Deploye redirect fra ${{github.event.inputs.environment}}-fss til ${{github.event.inputs.environment}}-gcp
     runs-on: ubuntu-latest
     permissions:
       id-token: write
