@@ -37,6 +37,7 @@ export const SearchForm = () => {
     const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
     const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
     const [ingenJp, setIngenJp] = useState(false);
+    console.error('test error')
 
     const handleLukkDebugg = () => {
         if (journalpostid) {
