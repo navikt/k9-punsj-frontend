@@ -19,6 +19,7 @@ import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
 
 import './sok.less';
+import { faro } from '@grafana/faro-web-sdk';
 
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
@@ -37,7 +38,6 @@ export const SearchForm = () => {
     const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
     const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
     const [ingenJp, setIngenJp] = useState(false);
-    console.error('test error')
 
     const handleLukkDebugg = () => {
         if (journalpostid) {
@@ -91,6 +91,10 @@ export const SearchForm = () => {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
+
+    useEffect(() => {
+        faro.api.pushError({ name: 'Test Error', message: 'test error' });
+    }, []);
 
     if (lukkOppgaveDone) {
         return (
