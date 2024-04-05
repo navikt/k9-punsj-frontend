@@ -73,7 +73,6 @@ export const App: React.FunctionComponent = () => {
         initializeFaro({
             url: window.nais?.telemetryCollectorURL,
             app: window.nais?.app,
-            instrumentations: [...getWebInstrumentations({ captureConsole: true })],
         });
     }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
 

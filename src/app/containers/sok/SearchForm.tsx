@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
+import { faro } from '@grafana/faro-web-sdk';
 
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -19,7 +20,6 @@ import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
 
 import './sok.less';
-import { faro } from '@grafana/faro-web-sdk';
 
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
