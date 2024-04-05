@@ -12,7 +12,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { initializeFaro } from '@grafana/faro-web-sdk';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
