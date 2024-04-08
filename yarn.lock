@@ -3772,9 +3772,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ft-plattform-komponenter@npm:2.5.1":
-  version: 2.5.1
-  resolution: "@navikt/ft-plattform-komponenter@npm:2.5.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fft-plattform-komponenter%2F2.5.1%2F730bf499992992fc7f501db0f018de7f5ae899d5"
+"@navikt/ft-plattform-komponenter@npm:2.5.2":
+  version: 2.5.2
+  resolution: "@navikt/ft-plattform-komponenter@npm:2.5.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fft-plattform-komponenter%2F2.5.2%2Fe6f155dab3e5da468c83bc13dc4b1e4504ad470b"
   dependencies:
     "@navikt/aksel-icons": 6.1.1
     "@navikt/ds-css": 6.1.1
@@ -3791,7 +3791,7 @@ __metadata:
     react-collapse: 5.1.1
     react-dom: 18.2.0
     react-popper: 2.3.0
-  checksum: 70dcc71df8d69172c4c3a8a7f85186f3a3cc508a6a7e781a8f662f36c25ade7ed1516e8dd59e692d79ada44e698e0c5577ccad8cd4fcfba0556e8989a6d3c0d3
+  checksum: f521185495fc28c92cdf2b5fa521fe4aef825f216776e8a3a129470dbe32ff85d56c402c0eb49bd44205755984e0bd67d9366590894dbf1d72400fcc9c5270ec
   languageName: node
   linkType: hard
 
@@ -14181,7 +14181,7 @@ __metadata:
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 6.3.6
     "@navikt/fnrvalidator": 2.0.7
-    "@navikt/ft-plattform-komponenter": 2.5.1
+    "@navikt/ft-plattform-komponenter": 2.5.2
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.11
     "@popperjs/core": 2.11.8
     "@redux-devtools/extension": 3.3.0
