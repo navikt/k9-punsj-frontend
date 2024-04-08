@@ -1,7 +1,7 @@
 {
     "name": "k9-punsj-frontend",
     "version": "1.0.0",
-    "main": "dist/index.html",
+    "type": "module",
     "repository": "https://github.com/navikt/k9-punsj-frontend",
     "license": "MIT",
     "dependencies": {
@@ -14,7 +14,7 @@
         "@navikt/ds-icons": "3.4.3",
         "@navikt/ds-react": "6.3.6",
         "@navikt/fnrvalidator": "2.0.7",
-        "@navikt/ft-plattform-komponenter": "2.3.19",
+        "@navikt/ft-plattform-komponenter": "2.5.1",
         "@popperjs/core": "2.11.8",
         "@redux-devtools/extension": "3.3.0",
         "@sentry/react": "7.109.0",
