@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, Modal, TextField } from '@navikt/ds-react';
-import { faro } from '@grafana/faro-core';
 import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -88,10 +87,6 @@ export const SearchForm = () => {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
-    console.error('Error: 500 for URL: undefined');
-    if (faro.api) {
-        faro.api.pushError(new Error('Error: 500 for URL: undefined'));
-    }
     if (lukkOppgaveDone) {
         return (
             <Modal key="lukkoppgaveokmodal" onClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
