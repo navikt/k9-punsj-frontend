@@ -20,7 +20,6 @@ const configureDevServer = () => ({
         app.engine('html', mustacheExpress());
         app.set('views', `${__dirname}/../../../dist`);
         app.set('view engine', 'mustache');
-
         app.get('/health/isAlive', (req, res) => {
             res.send('alive');
         });
