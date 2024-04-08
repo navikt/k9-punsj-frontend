@@ -61,6 +61,7 @@ export const klassifiserDokument = (body: {
     fagsakYtelseTypeKode?: DokumenttypeForkortelse;
     periode?: IPeriode;
     saksnummer?: string;
+    relatertPersonIdent?: string;
 }) =>
     post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
         async (response) => {

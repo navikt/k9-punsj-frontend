@@ -33,9 +33,7 @@ import {
 import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
-import { setAnnenPartAction } from 'app/state/actions/IdentActions';
 import Behandlingsknapp from './Behandlingsknapp';
-import AnnenPart from './AnnenPart';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
 
 interface IJournalførOgFortsettStateProps {
@@ -47,7 +45,6 @@ interface IJournalførOgFortsettStateProps {
 interface IJournalførOgFortsettDispatchProps {
     setSakstypeAction: typeof setSakstype;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-    setAnnenPart: typeof setAnnenPartAction;
     omfordel: typeof omfordelAction;
 }
 
@@ -60,7 +57,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         fordelingState,
         setSakstypeAction: sakstypeAction,
         lukkJournalpostOppgave,
-        setAnnenPart,
         omfordel,
     } = props;
 
@@ -171,17 +167,6 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                     </Alert>
                 )}
 
-                <div className="mb-5">
-                    <AnnenPart
-                        annenPart={identState.annenPart}
-                        showComponent={
-                            (!journalpost.sak?.annenPart || !fagsak?.annenPart) &&
-                            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA
-                        }
-                        setAnnenPart={setAnnenPart}
-                    />
-                </div>
-
                 {visPleietrengendeVarsel && (
                     <div className="mb-5">
                         <Alert size="small" variant="info" className="max-w-2xl mb-5">
@@ -240,7 +225,6 @@ const mapStateToProps = (state: RootStateType) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     setSakstypeAction: (sakstype: Sakstype) => dispatch(setSakstype(sakstype)),
-    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>

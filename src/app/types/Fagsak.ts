@@ -6,7 +6,7 @@ interface Fagsak {
     pleietrengendeIdent?: string;
     gyldigPeriode: { fom: string; tom: string };
     reservertSaksnummer?: boolean;
-    annenPart?: string; // TODO: Kanskje ikke nødvendig
+    relatertPersonIdent?: string;
     behandlingsÅr?: string; // For OMS
     reservert?: boolean;
 }

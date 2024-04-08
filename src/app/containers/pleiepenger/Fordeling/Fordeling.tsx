@@ -29,7 +29,7 @@ import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
-import { resetIdentState, setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
@@ -52,6 +52,7 @@ import { Pleietrengende } from './Komponenter/Pleietrengende';
 
 import './fordeling.less';
 import { KopiereJournalpostUtenBarn } from './Komponenter/KopiereJournalpostUtenBarn/KopiereJournalpostUtenBarn';
+import AnnenPart from './Komponenter/AnnenPart';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -73,6 +74,7 @@ export interface IFordelingDispatchProps {
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
     setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
+    setAnnenPart: typeof setAnnenPartAction;
     resetBarn: typeof resetBarnAction;
 }
 
@@ -98,6 +100,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setDokumenttype,
         omfordel,
         resetBarn,
+        setAnnenPart,
     } = props;
 
     const { fagsak: valgtFagsak, dokumenttype } = fordelingState;
@@ -190,7 +193,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
             setErSøkerIdBekreftet(true);
             setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengendeIdent);
-
+            setAnnenPart(journalpost.sak?.relatertPersonIdent || '');
             setFagsak(journalpost.sak);
 
             // Redirect to ferdigstilt side
@@ -321,6 +324,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [identState.søkerId, dokumenttype, gjelderPsbOmsOlp]);
 
+    const disableVidereMidlertidigAlene =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+        (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
+
     const disableJournalførKnapper = () => {
         if (
             dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -356,7 +363,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             return true;
         }
 
-        return IdentRules.erUgyldigIdent(identState.søkerId);
+        return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
     };
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -613,6 +620,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
 
+                            <div className="mb-5">
+                                <AnnenPart
+                                    annenPart={identState.annenPart}
+                                    showComponent={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
+                                    setAnnenPart={setAnnenPart}
+                                />
+                            </div>
+
                             <ToSoekere
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
@@ -820,6 +835,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
     resetIdentStateAction: () => dispatch(resetIdentState()),
     resetBarn: () => dispatch(resetBarnAction()),
+    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     resetAllState: () => dispatch(resetAllStateAction()),
 });
 

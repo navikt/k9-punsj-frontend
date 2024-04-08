@@ -40,6 +40,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
             klassifiserDokument({
                 brukerIdent: identState.søkerId,
                 pleietrengendeIdent: identState.pleietrengendeId,
+                relatertPersonIdent: identState.annenPart,
                 journalpostId,
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,

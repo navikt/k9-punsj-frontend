@@ -127,6 +127,7 @@
     "fordeling.klassifiserModal.klassifiseringInfo.sakstype": "Sakstype:",
     "fordeling.klassifiserModal.klassifiseringInfo.søkersID": "Søkers ID:",
     "fordeling.klassifiserModal.klassifiseringInfo.pleietrengendeID": "Pleietrengendes ID:",
+    "fordeling.klassifiserModal.klassifiseringInfo.annenPartID": "Annen part ID:",
     "fordeling.klassifiserModal.klassifiseringInfo.saksnummer": "Saksnummer:",
     "fordeling.klassifiserModal.klassifiseringInfo.periode": "Periode:",
     "fordeling.klassifiserModal.alert.warning": "Informasjonen kan ikke endres etter journalposten er journalført.",
