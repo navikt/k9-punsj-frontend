@@ -1,4 +1,4 @@
-const glob = require('glob');
+import glob from 'glob';
 
 if (!process.env.CI_TOTAL) {
     console.error('No envrionment variable CI_TOTAL defined');
