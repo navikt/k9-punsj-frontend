@@ -43,7 +43,6 @@ const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
             error={visFeil && getValidationErrors(validators, annenPart)}
             className="bold-label"
             maxLength={11}
-            size="small"
         />
     );
 };

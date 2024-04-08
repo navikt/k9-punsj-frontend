@@ -620,7 +620,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
 
-                            <div className="mb-5">
+                            <div className="mt-5 mb-5">
                                 <AnnenPart
                                     annenPart={identState.annenPart}
                                     showComponent={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
