@@ -30,6 +30,7 @@ import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import JournalpostLoader from './containers/JournalpostLoader';
 import { ROUTES } from './constants/routes';
+import { logError } from './utils/logUtils';
 
 const environment = window.location.hostname;
 
@@ -49,7 +50,6 @@ async function prepare() {
     });
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
-        
     }
     return Promise.resolve();
 }
@@ -75,7 +75,7 @@ export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
-        <Sentry.ErrorBoundary>
+        <Sentry.ErrorBoundary onError={logError}>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ReactQueryDevtools initialIsOpen={false} />
