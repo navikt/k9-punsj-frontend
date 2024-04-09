@@ -157,13 +157,6 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             }
                             disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {pleietrengendeIdent.length === 11 &&
-                            !IdentRules.erUgyldigIdent(identState.pleietrengendeId) &&
-                            !isPleitrengendeFnrErSammeSomSøker && (
-                                <Alert size="small" variant="warning">
-                                    {intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}
-                                </Alert>
-                            )}
                     </div>
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
