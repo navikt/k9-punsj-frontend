@@ -45,7 +45,7 @@ jobs:
                   wait-on: 'http://localhost:8080'
                   wait-on-timeout: 60
                   runTests: false
-            - run: node split.js | xargs yarn cypress run --spec
+            - run: node split.mjs | xargs yarn cypress run --spec
               env:
                 CI_TOTAL: ${{ matrix.ci_total }}
                 CI_INDEX: ${{ matrix.ci_index }}
