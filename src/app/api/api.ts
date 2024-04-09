@@ -45,7 +45,6 @@ export const postBehandlingsAar = (
         if (!response.ok) {
             throw Error('Det oppstod en feil.');
         }
-        return response.json();
     });
 
 export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
@@ -67,7 +66,6 @@ export const klassifiserDokument = (body: {
             if (!response.ok) {
                 throw Error('Det oppstod en feil.');
             }
-            return response.json();
         },
     );
 
