@@ -1,10 +1,10 @@
-import { idnr } from '@navikt/fnrvalidator';
+import validator from '@navikt/fnrvalidator';
 
 import intlHelper from '../../../utils/intlUtils';
 
 export const erUgyldigIdent = (ident: string | null): boolean => {
     if (!ident || !ident.length) return true;
-    const { status } = idnr(ident);
+    const { status } = validator.idnr(ident);
 
     return status === 'invalid';
 };

@@ -1,14 +1,8 @@
-/* eslint-disable no-underscore-dangle */
-import webpack from 'webpack';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import CopyPlugin from 'copy-webpack-plugin';
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
-
-// Since __dirname is not available in ESM, we need to construct paths differently
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -34,7 +28,7 @@ const webpackConfig = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            plugins: [isDevelopment && 'react-refresh/babel'].filter(Boolean),
+                            plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
                         },
                     },
                 ],
@@ -45,8 +39,12 @@ const webpackConfig = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                     },
-                    'css-loader',
-                    'postcss-loader',
+                    {
+                        loader: 'css-loader',
+                    },
+                    {
+                        loader: 'postcss-loader',
+                    },
                     {
                         loader: 'less-loader',
                         options: {
@@ -71,13 +69,13 @@ const webpackConfig = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].css?[fullhash]-[chunkhash]-[name]',
         }),
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /nb|nn|en/),
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb|nn|en/),
         new CopyPlugin({
             patterns: [{ from: 'src/app/favicon.png' }],
         }),
         new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
     ],
-    externals: { '../build/webpack/faroConfig': 'false' },
+    externals: {'../build/webpack/faroConfig': 'false'},
 };
 
-export default webpackConfig;
+module.exports = webpackConfig;

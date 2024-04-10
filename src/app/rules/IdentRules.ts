@@ -1,11 +1,11 @@
-import { idnr } from '@navikt/fnrvalidator';
+import validator from '@navikt/fnrvalidator';
 
 // eslint-disable-next-line import/prefer-default-export
 export class IdentRules {
     public static erUgyldigIdent = (ident: string | null): boolean => {
         if (!ident || !ident.length) return true;
 
-        const { status } = idnr(ident);
+        const { status } = validator.idnr(ident);
 
         return status === 'invalid';
     };

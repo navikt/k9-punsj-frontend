@@ -1,4 +1,4 @@
-import glob from 'glob';
+const glob = require('glob');
 
 if (!process.env.CI_TOTAL) {
     console.error('No envrionment variable CI_TOTAL defined');
@@ -34,7 +34,7 @@ const files = glob.sync('cypress/e2e/**/*.@(js|ts)');
 const chunks = splitChunks(files, process.env.CI_TOTAL);
 
 if (chunks[process.env.CI_INDEX]) {
-    for (const file of chunks[process.env.CI_INDEX]) {
+    for (file of chunks[process.env.CI_INDEX]) {
         process.stdout.write(file + '\n');
     }
 }
