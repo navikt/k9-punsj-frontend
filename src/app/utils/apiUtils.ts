@@ -4,7 +4,12 @@ import { IError } from 'app/models/types';
 
 import { canStringBeParsedToJSON } from './formatUtils';
 import { getEnvironmentVariable } from './envUtils';
-import { logApiError } from './logUtils';
+
+async function logError(response: Response) {
+    if (!response.ok && response.status !== 401) {
+        console.error(`Error: ${response.status} for URL: ${response.url}`);
+    }
+}
 
 export const apiUrl = (path: string, parameters?: any) => (parameters ? String.Format(path, parameters) : path);
 // eslint-disable-next-line no-return-assign
@@ -24,7 +29,7 @@ export async function get(
         credentials: 'include',
         headers: new Headers(headers),
     });
-    await logApiError(response);
+    await logError(response);
     if (response.status === 401) {
         login();
     } else if (callbackIfAuth) {
@@ -50,7 +55,7 @@ export async function post<BodyType>(
             headers: { 'Content-Type': 'application/json', ...headers },
         });
 
-        await logApiError(response);
+        await logError(response);
 
         if (response.status === 401) {
             login();
@@ -77,7 +82,7 @@ export async function put(
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
     });
-    await logApiError(response);
+    await logError(response);
     if (response.status === 401) {
         login();
     } else if (callbackIfAuth) {
