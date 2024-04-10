@@ -41,16 +41,11 @@ Sentry.init({
     beforeSend: (event) => event,
 });
 
-async function prepare() {
-    initializeFaro({
-        url: window.nais?.telemetryCollectorURL,
-        app: window.nais?.app,
-        instrumentations: [...getWebInstrumentations({ captureConsole: true })],
-    });
+function prepare() {
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
-        
     }
+
     return Promise.resolve();
 }
 
@@ -73,6 +68,14 @@ queryClient.setDefaultOptions({
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
+
+    React.useEffect(() => {
+        initializeFaro({
+            url: window.nais?.telemetryCollectorURL,
+            app: window.nais?.app,
+            instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+        });
+    }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
 
     return (
         <Sentry.ErrorBoundary>

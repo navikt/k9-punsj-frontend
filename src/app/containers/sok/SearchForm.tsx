@@ -87,6 +87,7 @@ export const SearchForm = () => {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
+
     if (lukkOppgaveDone) {
         return (
             <Modal key="lukkoppgaveokmodal" onClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
