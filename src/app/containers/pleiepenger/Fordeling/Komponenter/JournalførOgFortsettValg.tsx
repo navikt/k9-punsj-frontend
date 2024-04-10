@@ -154,14 +154,14 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
             <div className="max-w-md">
                 {!erSaksnummerReservert && (
                     <Alert variant="success" size="small" className="mb-5">
-                        <FormattedMessage id="fordeling.klassifiserModal.alert.success" />
+                        <FormattedMessage id="fordeling.journalført.alert.success" />
                     </Alert>
                 )}
 
                 {erSaksnummerReservert && (
                     <Alert variant="success" size="small" className="mb-5">
                         <FormattedMessage
-                            id="fordeling.klassifiserModal.alert.success.reservert"
+                            id="fordeling.journalført.alert.success.reservert"
                             values={{ saksnummer: fagsak?.fagsakId || '' }}
                         />
                     </Alert>
