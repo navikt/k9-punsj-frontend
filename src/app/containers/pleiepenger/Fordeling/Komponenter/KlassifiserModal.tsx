@@ -79,6 +79,8 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
     const disabled =
         ['loading', 'success'].includes(status) && ['loading', 'success'].includes(settPåVentMutation.status);
 
+    const disabledButtonsLoading = ['loading'].includes(status) && ['loading'].includes(settPåVentMutation.status);
+
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
         const reservertFagsakId = isSuccess && (data.saksnummer as string) ? (data.saksnummer as string) : '';
@@ -140,6 +142,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
+                        disabled={disabledButtonsLoading}
                     >
                         <FormattedMessage id="fordeling.klassifiserModal.btn.gåTilLos" />
                     </Button>
