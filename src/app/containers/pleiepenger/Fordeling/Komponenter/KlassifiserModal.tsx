@@ -84,8 +84,9 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
         const reservertFagsakId = isSuccess && (data.saksnummer as string) ? (data.saksnummer as string) : '';
+        const threeWeeksDate = get3WeeksDate();
         const messageContent = message || (
-            <FormattedMessage id={messageId} values={{ saksnummer: reservertFagsakId }} />
+            <FormattedMessage id={messageId} values={{ saksnummer: reservertFagsakId, dato: threeWeeksDate }} />
         );
         return (
             <Alert variant={variant} size="small">
@@ -104,14 +105,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
             <Modal.Body>
                 <div className="max-w-xl">
                     <KlassifiseringInfo />
-                    {settPåVentMutation.isSuccess && (
-                        <div className="mt-4">
-                            <FormattedMessage
-                                id="fordeling.settJpPåVent.modal.info"
-                                values={{ dato: get3WeeksDate() }}
-                            />
-                        </div>
-                    )}
 
                     {renderAlert(
                         'success',
