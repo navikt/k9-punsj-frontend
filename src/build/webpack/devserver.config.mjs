@@ -1,8 +1,17 @@
-require('dotenv').config();
-const mustacheExpress = require('mustache-express');
-const path = require('path');
+/* eslint-disable no-underscore-dangle */
+import dotenv from 'dotenv';
+import mustacheExpress from 'mustache-express';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+// eslint-disable-next-line import/extensions
+import { envVariables } from '@k9-punsj-frontend/server/envVariables.js';
 
-// Lokal utvikling med msw trenger ikke proxy.
+dotenv.config();
+
+// __dirname is not defined in ES module scope, so we need to derive it
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const proxyConfig =
     process.env.MSW_MODE === 'test'
         ? {}
@@ -27,8 +36,6 @@ const configureDevServer = () => ({
             res.send('ready');
         });
         app.get(`/envVariables`, async (req, res) => {
-            // eslint-disable-next-line import/extensions
-            const { envVariables } = await import('@k9-punsj-frontend/server/envVariables.js');
             res.set('content-type', 'application/javascript');
             res.json([
                 {
@@ -57,4 +64,4 @@ const configureDevServer = () => ({
     },
 });
 
-module.exports = configureDevServer;
+export default configureDevServer;
