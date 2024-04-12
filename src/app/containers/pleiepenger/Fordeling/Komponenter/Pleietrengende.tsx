@@ -169,7 +169,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                                     {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
                                 </Alert>
                             )}
-                            {jpErFerdigstiltOgUtenPleietrengende && !pleietrengendeIdent && (
+                            {pleietrengendeHarIkkeFnr && jpErFerdigstiltOgUtenPleietrengende && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
                                     {intlHelper(
                                         intl,
