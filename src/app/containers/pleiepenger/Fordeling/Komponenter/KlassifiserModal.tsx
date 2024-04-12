@@ -77,9 +77,9 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
     }, [isSuccess]);
 
     const disabled =
-        ['loading', 'success'].includes(status) && ['loading', 'success'].includes(settPåVentMutation.status);
+        ['loading', 'success'].includes(status) || ['loading', 'success'].includes(settPåVentMutation.status);
 
-    const disabledButtonsLoading = ['loading'].includes(status) && ['loading'].includes(settPåVentMutation.status);
+    const disabledButtonsLoading = ['loading'].includes(status) || ['loading'].includes(settPåVentMutation.status);
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
