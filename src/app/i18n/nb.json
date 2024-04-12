@@ -79,6 +79,7 @@
     "fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn": "Barn: {navn} ({pleietrengendeIdent})",
     "fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnKunMedFnr": "Barn Id: {pleietrengendeIdent}",
     "fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt": "Barn: ikke satt",
+    "fordeling.fagsakSelect.fagsakSelectedInfo.behandlingsÅr": "Behandlings år: {behandlingsÅr}",
     "fordeling.fagsakSelect.lenke.seFagsak": "Se fagsak i K9",
     "fordeling.fagsakSelect.fagsakSelectedInfo.periode": "Periode: {periode}",
     "fordeling.fagsakSelect.checkbox.reserverSaksnummer": "Reserver saksnummer til ny fagsak",

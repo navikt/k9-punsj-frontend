@@ -25,7 +25,7 @@ interface Props {
 }
 
 const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
-    const { sakstype, pleietrengendeIdent } = valgtFagsak;
+    const { sakstype, pleietrengendeIdent, behandlingsÅr } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
         if (pleietrengendeIdent) {
@@ -40,6 +40,19 @@ const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
         return (
             <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.utenPleietrengende" />
         );
+    }
+
+    if (sakstype === DokumenttypeForkortelse.OMP || sakstype === DokumenttypeForkortelse.OMP_UT) {
+        if (behandlingsÅr) {
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.behandlingsÅr"
+                    values={{ behandlingsÅr }}
+                />
+            );
+        }
+
+        return null;
     }
 
     if (pleietrengendeIdent) {

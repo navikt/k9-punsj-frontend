@@ -198,9 +198,10 @@ let handlers = [
                 },
                 {
                     fagsakId: '1DMU93M',
-                    sakstype: 'PSB',
+                    sakstype: 'OMP',
                     pleietrengendeIdent: null,
                     gyldigPeriode: null,
+                    behandlingsAar: '2022',
                 },
             ],
             { status: 200 },
