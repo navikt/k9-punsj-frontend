@@ -107,7 +107,8 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                     key={soknadId}
                     size="small"
                     disabled={
-                        (pleietrengendeId !== søknad.barn.norskIdent &&
+                        (søknad.barn.norskIdent &&
+                            pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
                         (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)

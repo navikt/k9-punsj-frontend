@@ -157,7 +157,8 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                     key={soknadId}
                     size="small"
                     disabled={
-                        (pleietrengendeId !== søknad.pleietrengende.norskIdent &&
+                        (søknad.pleietrengende.norskIdent &&
+                            pleietrengendeId !== søknad.pleietrengende.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
                         (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)

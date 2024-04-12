@@ -153,7 +153,10 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                     key={soknadId}
                     size="small"
                     disabled={
-                        (annenPart !== søknad.annenForelder.norskIdent && !!annenPart && annenPart !== null) ||
+                        (søknad.annenForelder.norskIdent &&
+                            annenPart !== søknad.annenForelder.norskIdent &&
+                            !!annenPart &&
+                            annenPart !== null) ||
                         (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
