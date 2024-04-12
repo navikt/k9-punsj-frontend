@@ -731,7 +731,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             variant="primary"
                                             size="small"
                                             onClick={() => handleJournalfør(true)}
-                                            disabled={disableJournalførKnapper()}
+                                            disabled={disableJournalførKnapper() || disableRedirectVidere()}
                                             loading={settBehandlingsÅrMutation.isLoading}
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
