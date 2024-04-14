@@ -16,7 +16,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Deploye til dev
         uses: nais/deploy/actions/deploy@v2
         env:
