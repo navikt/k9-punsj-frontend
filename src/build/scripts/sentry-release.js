@@ -1,4 +1,4 @@
-const SentryCli = require('@sentry/cli');
+import SentryCli from '@sentry/cli';
 
 async function opprettReleaseTilSentry() {
     const release = process.env.SENTRY_RELEASE;

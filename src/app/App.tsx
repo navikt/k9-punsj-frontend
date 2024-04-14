@@ -30,6 +30,7 @@ import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import JournalpostLoader from './containers/JournalpostLoader';
 import { ROUTES } from './constants/routes';
+import { logError } from './utils/logUtils';
 
 const environment = window.location.hostname;
 
@@ -41,11 +42,15 @@ Sentry.init({
     beforeSend: (event) => event,
 });
 
-function prepare() {
+async function prepare() {
+    initializeFaro({
+        url: window.nais?.telemetryCollectorURL,
+        app: window.nais?.app,
+        instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+    });
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
     }
-
     return Promise.resolve();
 }
 
@@ -69,16 +74,8 @@ queryClient.setDefaultOptions({
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
-    React.useEffect(() => {
-        initializeFaro({
-            url: window.nais?.telemetryCollectorURL,
-            app: window.nais?.app,
-            instrumentations: [...getWebInstrumentations({ captureConsole: true })],
-        });
-    }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
-
     return (
-        <Sentry.ErrorBoundary>
+        <Sentry.ErrorBoundary onError={logError}>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ReactQueryDevtools initialIsOpen={false} />

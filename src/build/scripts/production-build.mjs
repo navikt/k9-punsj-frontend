@@ -1,5 +1,5 @@
-const webpack = require('webpack');
-const webpackConfig = require('../webpack/webpack.config.production');
+import webpack from 'webpack';
+import webpackConfig from '../webpack/webpack.config.production.mjs';
 
 webpack(webpackConfig, (err, stats) => {
     if (err || (stats.compilation.errors && stats.compilation.errors.length > 0)) {

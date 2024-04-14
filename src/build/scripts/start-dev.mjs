@@ -1,9 +1,10 @@
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const path = require('path');
-const webpackConfig = require('../webpack/webpack.config.dev');
-const configureDevServer = require('../webpack/devserver.config');
-require('dotenv').config();
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import { config } from 'dotenv';
+import webpackConfig from '../webpack/webpack.config.dev.mjs';
+import configureDevServer from '../webpack/devserver.config.mjs';
+
+config();
 
 const compiler = webpack(webpackConfig);
 const server = new WebpackDevServer(configureDevServer({}), compiler);
