@@ -1,7 +1,7 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const webpackConfig = require('./webpack.config.global.js');
-const TerserPlugin = require('terser-webpack-plugin');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import webpackConfig from './webpack.config.global.mjs';
 
 webpackConfig.mode = 'production';
 
@@ -17,6 +17,6 @@ webpackConfig.optimization = {
     minimizer: [new CssMinimizerPlugin(), new TerserPlugin({ extractComments: false })],
 };
 
-module.exports = Object.assign(webpackConfig, {
+export default Object.assign(webpackConfig, {
     devtool: 'source-map',
 });
