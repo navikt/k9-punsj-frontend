@@ -401,8 +401,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             // Kopier journalpost hvis det er en annen søker i PSB
             props.kopierJournalpost(
                 identState.søkerId,
-                identState.pleietrengendeId,
                 identState.annenSokerIdent,
+                identState.pleietrengendeId,
                 journalpost.journalpostId,
                 props.dedupkey,
             );
@@ -824,10 +824,10 @@ const mapDispatchToProps = (dispatch: any) => ({
     setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
     kopierJournalpost: (
         søkerId: string,
-        pleietrengendeId: string,
         annenIdent: string,
-        dedupkey: string,
+        pleietrengendeId: string,
         journalpostId: string,
+        dedupkey: string,
     ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),

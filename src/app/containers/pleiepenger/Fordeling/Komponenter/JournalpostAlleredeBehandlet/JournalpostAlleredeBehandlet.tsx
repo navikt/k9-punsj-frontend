@@ -125,10 +125,10 @@ const mapStateToProps = (state: RootStateType) => ({
 const mapDispatchToProps = (dispatch: any) => ({
     kopiereJournalpost: (
         søkerId: string,
-        pleietrengendeId: string,
         annenIdent: string,
-        dedupkey: string,
+        pleietrengendeId: string,
         journalpostId: string,
+        dedupkey: string,
     ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
 });
 
