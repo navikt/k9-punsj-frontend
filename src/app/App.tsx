@@ -8,11 +8,24 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {
+    Navigate,
+    Route,
+    Routes,
+    createRoutesFromChildren,
+    matchRoutes,
+    useLocation,
+    useNavigationType,
+} from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import {
+    withSentryReactRouterV6Routing,
+    breadcrumbsIntegration,
+    reactRouterV6BrowserTracingIntegration,
+} from '@sentry/react';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
@@ -38,7 +51,17 @@ Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
     release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
-    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+    tracesSampleRate: 1.0,
+    integrations: [
+        breadcrumbsIntegration({ console: false }),
+        reactRouterV6BrowserTracingIntegration({
+            useEffect: React.useEffect,
+            useLocation,
+            useNavigationType,
+            createRoutesFromChildren,
+            matchRoutes,
+        }),
+    ],
     beforeSend: (event) => event,
 });
 
@@ -69,7 +92,7 @@ queryClient.setDefaultOptions({
         refetchOnWindowFocus: false,
     },
 });
-
+const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
@@ -86,7 +109,7 @@ export const App: React.FunctionComponent = () => {
                             setLocale(activeLocale);
                         }}
                     >
-                        <Routes>
+                        <SentryRoutes>
                             <Route
                                 path={ROUTES.JOURNALPOST_ROOT}
                                 element={<JournalpostLoader renderOnLoadComplete={() => <JournalpostRouter />} />}
@@ -95,7 +118,7 @@ export const App: React.FunctionComponent = () => {
                             <Route path={ROUTES.BREV_AVSLUTTET_SAK} element={<SendBrevIAvsluttetSak />} />
                             <Route path={ROUTES.HOME} element={<SokIndex />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
-                        </Routes>
+                        </SentryRoutes>
                     </ApplicationWrapper>
                 </QueryClientProvider>
             </Provider>
