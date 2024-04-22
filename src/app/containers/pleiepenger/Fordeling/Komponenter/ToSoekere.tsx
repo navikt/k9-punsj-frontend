@@ -8,29 +8,19 @@ import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import { IFellesState } from 'app/state/reducers/FellesReducer';
 import intlHelper from 'app/utils/intlUtils';
 
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
-import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 
 interface IToSoekereProps {
     dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
     identState: IIdentState;
     setIdentAction: typeof setIdentFellesAction;
-    fellesState: IFellesState;
     disabled?: boolean;
 }
 
-const ToSoekere: React.FC<IToSoekereProps> = ({
-    dokumenttype,
-    journalpost,
-    identState,
-    fellesState,
-    disabled,
-    setIdentAction,
-}) => {
+const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, identState, disabled, setIdentAction }) => {
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
@@ -76,7 +66,6 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                             intl,
                         )}
                     />
-                    <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
                 </div>
             )}
         </>

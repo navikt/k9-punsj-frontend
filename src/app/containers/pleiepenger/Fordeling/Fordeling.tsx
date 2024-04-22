@@ -30,7 +30,7 @@ import {
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState, kopierJournalpost, resetBarnAction } from '../../../state/reducers/FellesReducer';
+import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -68,7 +68,6 @@ export interface IFordelingDispatchProps {
     setFagsakAction: typeof setFagsakAction;
     omfordel: typeof omfordelAction;
     setIdentAction: typeof setIdentFellesAction;
-    kopierJournalpost: typeof kopierJournalpost;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
     lukkOppgaveReset: typeof lukkOppgaveResetAction;
@@ -390,24 +389,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     const handleJournalfør = (fortsett: boolean) => {
-        if (
-            identState.søkerId &&
-            identState.pleietrengendeId &&
-            identState.annenSokerIdent &&
-            journalpost?.journalpostId &&
-            journalpost?.kanKopieres &&
-            !erInntektsmeldingUtenKrav
-        ) {
-            // Kopier journalpost hvis det er en annen søker i PSB
-            props.kopierJournalpost(
-                identState.søkerId,
-                identState.annenSokerIdent,
-                identState.pleietrengendeId,
-                journalpost.journalpostId,
-                props.dedupkey,
-            );
-        }
-
         // Trenges det å lagre behandlingsår ikke i OMS?
         settBehandlingsÅrMutation.mutate({
             journalpostId: journalpost.journalpostId,
@@ -632,7 +613,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 dokumenttype={dokumenttype}
                                 journalpost={journalpost}
                                 identState={identState}
-                                fellesState={fellesState}
                                 setIdentAction={setIdentAction}
                                 disabled={disableRadios}
                             />
@@ -781,6 +761,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <KlassifiserModal
                                     lukkModal={() => setVisKlassifiserModal(false)}
                                     setFagsak={(sak: Fagsak) => setFagsak(sak)}
+                                    dedupkey={props.dedupkey}
                                     fortsett={fortsettEtterKlassifiseringModal}
                                 />
                             )}
@@ -822,13 +803,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
-    kopierJournalpost: (
-        søkerId: string,
-        annenIdent: string,
-        pleietrengendeId: string,
-        journalpostId: string,
-        dedupkey: string,
-    ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),

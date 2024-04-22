@@ -1,10 +1,11 @@
 import { ApiPath } from 'app/apiConfig';
 import { DokumenttypeForkortelse } from 'app/models/enums';
-import { IPeriode } from 'app/models/types';
+import { IJournalpost, IPeriode } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import sakstyper from 'app/constants/sakstyper';
+import { IKopierJournalpost } from 'app/models/types/RequestBodies';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -110,4 +111,47 @@ export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlle
             throw Error('Det oppstod en feil under hent av alle journalposter per ident.');
         }
         return response.json();
+    });
+
+export const kopierJournalpostToSøkere = (
+    kopierFraIdent: string,
+    kopierTilIdent: string,
+    barnIdent: string,
+    journalPostID: string,
+    dedupKey: string,
+): Promise<void> => {
+    const requestBody: IKopierJournalpost = {
+        dedupKey,
+        fra: kopierFraIdent,
+        til: kopierTilIdent,
+        barn: barnIdent,
+    };
+
+    return post(
+        ApiPath.JOURNALPOST_KOPIERE,
+        { journalpostId: journalPostID },
+        { 'X-Nav-NorskIdent': kopierFraIdent },
+        requestBody,
+    ).then(async (response) => {
+        if (!response.ok) {
+            const responseBodyText = await response.text();
+            throw Error(responseBodyText);
+        }
+    });
+};
+
+export const getJournalpostEtterKopiering = (journalpostid: string): Promise<IJournalpost> =>
+    new Promise((resolve, reject) => {
+        get(
+            ApiPath.JOURNALPOST_GET,
+            { journalpostId: journalpostid },
+            undefined,
+            (response: Response, data: IJournalpost) => {
+                if (response.ok) {
+                    resolve(data);
+                } else {
+                    reject(new Error('Error fetching journalpost'));
+                }
+            },
+        );
     });

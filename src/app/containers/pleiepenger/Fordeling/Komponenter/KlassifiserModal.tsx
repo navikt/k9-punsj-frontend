@@ -1,11 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
 
-import { klassifiserDokument, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
+import {
+    getJournalpostEtterKopiering,
+    klassifiserDokument,
+    kopierJournalpostToSøkere,
+    settJournalpostPaaVentUtenSøknadId,
+} from 'app/api/api';
 import Fagsak from 'app/types/Fagsak';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
@@ -15,23 +20,39 @@ import {
     getPathFraDokumenttype,
     initializeDate,
 } from 'app/utils';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
+import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 
 interface OwnProps {
     lukkModal: () => void;
     setFagsak: (sak: Fagsak) => void;
+    dedupkey: string;
     fortsett?: boolean;
 }
 
-const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
+const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps) => {
     const navigate = useNavigate();
+    const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
+    const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
-    const journalpostId = useSelector((state: RootStateType) => state.felles.journalpost?.journalpostId as string);
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost as IJournalpost);
     const dokumenttype = useSelector(
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
+
+    const erInntektsmeldingUtenKrav =
+        journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
+
+    const toSøkere =
+        identState.søkerId &&
+        identState.pleietrengendeId &&
+        identState.annenSokerIdent &&
+        journalpost?.journalpostId &&
+        journalpost?.kanKopieres &&
+        !erInntektsmeldingUtenKrav;
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
@@ -41,7 +62,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                 brukerIdent: identState.søkerId,
                 pleietrengendeIdent: identState.pleietrengendeId,
                 relatertPersonIdent: identState.annenPart,
-                journalpostId,
+                journalpostId: journalpost.journalpostId,
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
                 saksnummer: fagsak?.fagsakId,
@@ -49,7 +70,22 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
     });
 
     const settPåVentMutation = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpostId),
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
+
+    const kopierJournalpostMutation = useMutation({
+        mutationFn: () =>
+            kopierJournalpostToSøkere(
+                identState.søkerId,
+                identState.annenSokerIdent || '',
+                identState.pleietrengendeId,
+                journalpost.journalpostId,
+                dedupkey,
+            ),
+    });
+
+    const getJp = useMutation({
+        mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
     });
 
     // Sette fagsak i fordeling state og navigere til journalfør og fortsett
@@ -76,10 +112,39 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
         }
     }, [isSuccess]);
 
-    const disabled =
-        ['loading', 'success'].includes(status) || ['loading', 'success'].includes(settPåVentMutation.status);
+    useEffect(() => {
+        if (kopierJournalpostMutation.isSuccess) {
+            setGetJpAntallForsøk(getJpAntallForsøk + 1);
+            getJp.mutate();
+        }
+    }, [kopierJournalpostMutation.isSuccess]);
 
-    const disabledButtonsLoading = ['loading'].includes(status) || ['loading'].includes(settPåVentMutation.status);
+    useEffect(() => {
+        if (getJp.isSuccess) {
+            const journalpostEtterKopiering = getJp.data;
+            if (journalpostEtterKopiering?.erFerdigstilt && journalpostEtterKopiering?.sak) {
+                if (fortsett) {
+                    window.location.reload();
+                } else {
+                    settPåVentMutation.mutate();
+                }
+            } else if (getJpAntallForsøk < 3) {
+                setTimeout(() => getJp.mutate(), 1000);
+            } else {
+                setJpIkkeJournalførtFeil(true);
+            }
+        }
+    }, [getJp.isSuccess]);
+
+    const disabled =
+        ['loading', 'success'].includes(status) ||
+        ['loading', 'success'].includes(settPåVentMutation.status) ||
+        getJp.isLoading ||
+        kopierJournalpostMutation.isLoading ||
+        jpIkkejournalførtFeil;
+
+    const disabledButtonsLoading =
+        ['loading'].includes(status) || ['loading'].includes(settPåVentMutation.status) || jpIkkejournalførtFeil;
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
@@ -93,6 +158,12 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                 {messageContent}
             </Alert>
         );
+    };
+
+    const handleJournalfør = () => {
+        if (toSøkere) {
+            kopierJournalpostMutation.mutate();
+        } else mutate();
     };
 
     return (
@@ -126,10 +197,26 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                         !!settPåVentMutation.error,
                         (settPåVentMutation.error as Error)?.message,
                     )}
+                    {renderAlert(
+                        'success',
+                        'fordeling.klassifiserModal.kopierJournalpost.alert.success',
+                        kopierJournalpostMutation.isSuccess,
+                    )}
+                    {renderAlert(
+                        'error',
+                        'fordeling.klassifiserModal.kopierJournalpost.alert.error',
+                        !!kopierJournalpostMutation.error,
+                        (kopierJournalpostMutation.error as Error)?.message,
+                    )}
+                    {renderAlert(
+                        'error',
+                        'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
+                        jpIkkejournalførtFeil,
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                {!fortsett && isSuccess && settPåVentMutation.isSuccess ? (
+                {!fortsett && (isSuccess || getJp.isSuccess) && settPåVentMutation.isSuccess ? (
                     <Button
                         size="small"
                         onClick={() => {
@@ -141,7 +228,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, fortsett }: OwnProps) => {
                     </Button>
                 ) : (
                     <>
-                        <Button type="button" disabled={disabled} onClick={() => mutate()} size="small">
+                        <Button type="button" disabled={disabled} onClick={() => handleJournalfør()} size="small">
                             {status !== 'loading' ? (
                                 <FormattedMessage
                                     id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
