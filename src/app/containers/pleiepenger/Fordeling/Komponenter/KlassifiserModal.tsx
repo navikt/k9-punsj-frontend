@@ -222,6 +222,12 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                         'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
                         jpIkkejournalførtFeil,
                     )}
+                    {ventJournalpost && (
+                        <span>
+                            <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />{' '}
+                            <Loader size="xsmall" title="Lagrer..." />
+                        </span>
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>
