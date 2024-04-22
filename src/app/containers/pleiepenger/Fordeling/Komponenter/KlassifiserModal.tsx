@@ -117,7 +117,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
         if (kopierJournalpostMutation.isSuccess) {
             setGetJpAntallForsøk(getJpAntallForsøk + 1);
             setVentJournalpost(true);
-            setTimeout(() => getJp.mutate(), 3000);
+            setTimeout(() => getJp.mutate(), 4000);
         }
     }, [kopierJournalpostMutation.isSuccess]);
 
