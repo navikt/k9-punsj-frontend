@@ -135,6 +135,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
             } else if (getJpAntallForsøk < 3) {
                 setTimeout(() => getJp.mutate(), 1000);
             } else {
+                setVentJournalpost(false);
                 setJpIkkeJournalførtFeil(true);
             }
         }
@@ -237,7 +238,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                 ) : (
                     <>
                         <Button type="button" disabled={disabled} onClick={() => handleJournalfør()} size="small">
-                            {status !== 'loading' ? (
+                            {status !== 'loading' || ventJournalpost ? (
                                 <FormattedMessage
                                     id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
                                 />
