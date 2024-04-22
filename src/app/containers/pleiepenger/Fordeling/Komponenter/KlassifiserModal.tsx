@@ -34,7 +34,7 @@ interface OwnProps {
 const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps) => {
     const navigate = useNavigate();
     const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
-    const [ventJournalpost, setVentJournalpost] = useState(false);
+    const [ventGetJournalpost, setVentGetJournalpost] = useState(false);
     const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
@@ -70,22 +70,23 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
             }),
     });
 
-    const settPåVentMutation = useMutation({
+    const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
 
-    const kopierJournalpostMutation = useMutation({
+    // Forsøk hvis pleietrengende har ikke fødselsnummer ????
+    const kopierJournalpost = useMutation({
         mutationFn: () =>
             kopierJournalpostToSøkere(
                 identState.søkerId,
-                identState.annenSokerIdent || '',
+                identState.annenSokerIdent!,
                 identState.pleietrengendeId,
                 journalpost.journalpostId,
                 dedupkey,
             ),
     });
 
-    const getJp = useMutation({
+    const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
     });
 
@@ -109,53 +110,57 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
             navigate(getPathFraDokumenttype(dokumenttype) || '/');
         }
         if (!fortsett && isSuccess) {
-            settPåVentMutation.mutate();
+            settPåVent.mutate();
         }
     }, [isSuccess]);
 
+    // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
     useEffect(() => {
-        if (kopierJournalpostMutation.isSuccess) {
+        if (kopierJournalpost.isSuccess) {
             setGetJpAntallForsøk(getJpAntallForsøk + 1);
-            setVentJournalpost(true);
-            setTimeout(() => getJp.mutate(), 4000);
+            setVentGetJournalpost(true);
+            setTimeout(() => getJournalpost.mutate(), 4000);
         }
-    }, [kopierJournalpostMutation.isSuccess]);
+    }, [kopierJournalpost.isSuccess]);
 
+    // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
+    // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
+    // Hvis journalposten ikke er ferdigstilt etter 3 forsøk, vis feilmelding
     useEffect(() => {
-        if (getJp.isSuccess) {
-            const journalpostEtterKopiering = getJp.data;
-            if (journalpostEtterKopiering?.erFerdigstilt && journalpostEtterKopiering?.sak) {
+        if (getJournalpost.isSuccess) {
+            const journalpostEtterKopiering = getJournalpost.data;
+            if (journalpostEtterKopiering?.erFerdigstilt) {
                 if (fortsett) {
-                    setVentJournalpost(false);
+                    setVentGetJournalpost(false);
                     window.location.reload();
                 } else {
-                    setVentJournalpost(false);
-                    settPåVentMutation.mutate();
+                    setVentGetJournalpost(false);
+                    settPåVent.mutate();
                 }
             } else if (getJpAntallForsøk < 3) {
-                setTimeout(() => getJp.mutate(), 1000);
+                setTimeout(() => getJournalpost.mutate(), 1000);
             } else {
-                setVentJournalpost(false);
+                setVentGetJournalpost(false);
                 setJpIkkeJournalførtFeil(true);
             }
         }
-    }, [getJp.isSuccess]);
+    }, [getJournalpost.isSuccess]);
 
     const disabled =
         ['loading', 'success'].includes(status) ||
-        ['loading', 'success'].includes(settPåVentMutation.status) ||
-        ['loading', 'success'].includes(kopierJournalpostMutation.status) ||
-        ['loading', 'success'].includes(getJp.status) ||
+        ['loading', 'success'].includes(settPåVent.status) ||
+        ['loading', 'success'].includes(kopierJournalpost.status) ||
+        ['loading', 'success'].includes(getJournalpost.status) ||
         jpIkkejournalførtFeil ||
-        ventJournalpost;
+        ventGetJournalpost;
 
     const disabledButtonsLoading =
         ['loading'].includes(status) ||
-        ['loading'].includes(settPåVentMutation.status) ||
-        ['loading'].includes(kopierJournalpostMutation.status) ||
-        ['loading'].includes(getJp.status) ||
+        ['loading'].includes(settPåVent.status) ||
+        ['loading'].includes(kopierJournalpost.status) ||
+        ['loading'].includes(getJournalpost.status) ||
         jpIkkejournalførtFeil ||
-        ventJournalpost;
+        ventGetJournalpost;
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
@@ -173,7 +178,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
 
     const handleJournalfør = () => {
         if (toSøkere) {
-            kopierJournalpostMutation.mutate();
+            kopierJournalpost.mutate();
         } else mutate();
     };
 
@@ -205,26 +210,26 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                     {renderAlert(
                         'error',
                         'fordeling.klassifiserModal.settPåVent.alert.error',
-                        !!settPåVentMutation.error,
-                        (settPåVentMutation.error as Error)?.message,
+                        !!settPåVent.error,
+                        (settPåVent.error as Error)?.message,
                     )}
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.kopierJournalpost.alert.success',
-                        kopierJournalpostMutation.isSuccess,
+                        kopierJournalpost.isSuccess,
                     )}
                     {renderAlert(
                         'error',
                         'fordeling.klassifiserModal.kopierJournalpost.alert.error',
-                        !!kopierJournalpostMutation.error,
-                        (kopierJournalpostMutation.error as Error)?.message,
+                        !!kopierJournalpost.error,
+                        (kopierJournalpost.error as Error)?.message,
                     )}
                     {renderAlert(
                         'error',
                         'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
                         jpIkkejournalførtFeil,
                     )}
-                    {kopierJournalpostMutation.isLoading && (
+                    {kopierJournalpost.isLoading && (
                         <div className="mt-5">
                             <span>
                                 <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
@@ -233,7 +238,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                             </span>
                         </div>
                     )}
-                    {(ventJournalpost || getJp.isLoading) && (
+                    {(ventGetJournalpost || getJournalpost.isLoading) && (
                         <div className="mt-5">
                             <span>
                                 <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />
@@ -245,7 +250,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                {!fortsett && (isSuccess || getJp.isSuccess) && settPåVentMutation.isSuccess ? (
+                {!fortsett && (isSuccess || getJournalpost.isSuccess) && settPåVent.isSuccess ? (
                     <Button
                         size="small"
                         onClick={() => {
@@ -258,7 +263,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                 ) : (
                     <>
                         <Button type="button" disabled={disabled} onClick={() => handleJournalfør()} size="small">
-                            {status !== 'loading' || ventJournalpost ? (
+                            {status !== 'loading' || ventGetJournalpost ? (
                                 <FormattedMessage
                                     id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
                                 />
