@@ -34,6 +34,7 @@ interface OwnProps {
 const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps) => {
     const navigate = useNavigate();
     const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
+    const [ventJournalpost, setVentJournalpost] = useState(false);
     const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
@@ -115,7 +116,8 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
     useEffect(() => {
         if (kopierJournalpostMutation.isSuccess) {
             setGetJpAntallForsøk(getJpAntallForsøk + 1);
-            getJp.mutate();
+            setVentJournalpost(true);
+            setTimeout(() => getJp.mutate(), 3000);
         }
     }, [kopierJournalpostMutation.isSuccess]);
 
@@ -124,8 +126,10 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
             const journalpostEtterKopiering = getJp.data;
             if (journalpostEtterKopiering?.erFerdigstilt && journalpostEtterKopiering?.sak) {
                 if (fortsett) {
+                    setVentJournalpost(false);
                     window.location.reload();
                 } else {
+                    setVentJournalpost(false);
                     settPåVentMutation.mutate();
                 }
             } else if (getJpAntallForsøk < 3) {
@@ -141,10 +145,14 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
         ['loading', 'success'].includes(settPåVentMutation.status) ||
         getJp.isLoading ||
         kopierJournalpostMutation.isLoading ||
-        jpIkkejournalførtFeil;
+        jpIkkejournalførtFeil ||
+        ventJournalpost;
 
     const disabledButtonsLoading =
-        ['loading'].includes(status) || ['loading'].includes(settPåVentMutation.status) || jpIkkejournalførtFeil;
+        ['loading'].includes(status) ||
+        ['loading'].includes(settPåVentMutation.status) ||
+        jpIkkejournalførtFeil ||
+        ventJournalpost;
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
