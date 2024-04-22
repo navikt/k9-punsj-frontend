@@ -202,7 +202,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
 
     const doNotShowWarnigAlert = journalførJournalpost.isSuccess || settPåVent.isSuccess || kopierJournalpost.isSuccess;
 
-    const showGåToLosBtn =
+    const visGåTilLosBtn =
         !fortsett &&
         (settBehandlingsÅr.isSuccess || !isDokumenttypeMedBehandlingsår) &&
         (journalførJournalpost.isSuccess || getJournalpost.isSuccess) &&
@@ -292,7 +292,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                {showGåToLosBtn ? (
+                {visGåTilLosBtn ? (
                     <Button
                         size="small"
                         onClick={() => {
