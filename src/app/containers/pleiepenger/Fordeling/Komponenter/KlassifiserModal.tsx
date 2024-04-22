@@ -144,14 +144,16 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
     const disabled =
         ['loading', 'success'].includes(status) ||
         ['loading', 'success'].includes(settPåVentMutation.status) ||
-        getJp.isLoading ||
-        kopierJournalpostMutation.isLoading ||
+        ['loading', 'success'].includes(kopierJournalpostMutation.status) ||
+        ['loading', 'success'].includes(getJp.status) ||
         jpIkkejournalførtFeil ||
         ventJournalpost;
 
     const disabledButtonsLoading =
         ['loading'].includes(status) ||
         ['loading'].includes(settPåVentMutation.status) ||
+        ['loading'].includes(kopierJournalpostMutation.status) ||
+        ['loading'].includes(getJp.status) ||
         jpIkkejournalførtFeil ||
         ventJournalpost;
 
@@ -222,11 +224,23 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett }: OwnProps
                         'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
                         jpIkkejournalførtFeil,
                     )}
-                    {ventJournalpost && (
-                        <span>
-                            <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />{' '}
-                            <Loader size="xsmall" title="Lagrer..." />
-                        </span>
+                    {kopierJournalpostMutation.isLoading && (
+                        <div className="mt-5">
+                            <span>
+                                <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
+                                {'  '}
+                                <Loader size="xsmall" title="Lagrer..." />
+                            </span>
+                        </div>
+                    )}
+                    {(ventJournalpost || getJp.isLoading) && (
+                        <div className="mt-5">
+                            <span>
+                                <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />
+                                {'  '}
+                                <Loader size="xsmall" title="Lagrer..." />
+                            </span>
+                        </div>
                     )}
                 </div>
             </Modal.Body>
