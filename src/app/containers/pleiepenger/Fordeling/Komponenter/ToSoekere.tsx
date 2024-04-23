@@ -21,12 +21,13 @@ interface IToSoekereProps {
 }
 
 const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, identState, disabled, setIdentAction }) => {
+    const intl = useIntl();
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
         !!journalpost?.kanKopieres;
-    const intl = useIntl();
+
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
@@ -35,12 +36,17 @@ const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, ident
     if (!skalVises) {
         return null;
     }
+
     return (
         <>
             <VerticalSpacer eightPx />
             <Checkbox
                 onChange={(e) => {
                     setToSokereIJournalpost(e.target.checked);
+                    if (!e.target.checked) {
+                        setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
+                        setAnnenSokerIdent('');
+                    }
                 }}
                 disabled={disabled}
             >

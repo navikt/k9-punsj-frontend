@@ -137,9 +137,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         DokumenttypeForkortelse.OMP_AO,
     ];
 
-    const isDokumenttypeMedBehandlingsår =
+    const visBehandlingsårValg =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+
+    const isDokumenttypeMedBehandlingsår =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
     const isSakstypeMedPleietrengende =
         journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
@@ -264,8 +271,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const visValgAvBehandlingsaar =
-        dokumenttype &&
-        isDokumenttypeMedBehandlingsår &&
+        visBehandlingsårValg &&
         identState.søkerId.length === 11 &&
         !brukEksisterendeFagsak &&
         !journalpost.erFerdigstilt;
@@ -344,7 +350,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
         }
-        if (isDokumenttypeMedBehandlingsår && !behandlingsAar) {
+        if (visBehandlingsårValg && !behandlingsAar) {
             return true;
         }
 
@@ -668,7 +674,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 !valgtFagsak &&
                                 !disableJournalførKnapper() &&
                                 (identState.pleietrengendeId ||
-                                    isDokumenttypeMedBehandlingsår ||
+                                    visBehandlingsårValg ||
                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
                                     <Alert size="small" variant="info" className="mb-4">
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />

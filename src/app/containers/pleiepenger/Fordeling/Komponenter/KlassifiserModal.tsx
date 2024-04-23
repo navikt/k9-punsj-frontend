@@ -51,11 +51,14 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
 
     const isDokumenttypeMedBehandlingsår =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
     const toSøkere =
         !!identState.søkerId &&
-        !!identState.pleietrengendeId &&
+        identState.pleietrengendeId &&
         !!identState.annenSokerIdent &&
         !!journalpost?.journalpostId &&
         !!journalpost?.kanKopieres &&
@@ -106,7 +109,9 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         () => postBehandlingsAar(journalpost.journalpostId, identState.søkerId, behandlingsAar),
         {
             onSuccess: () => {
-                journalførJournalpost.mutate();
+                if (toSøkere) {
+                    kopierJournalpost.mutate();
+                } else journalførJournalpost.mutate();
             },
         },
     );
@@ -193,10 +198,10 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
     };
 
     const handleJournalfør = () => {
-        if (toSøkere) {
-            kopierJournalpost.mutate();
-        } else if (isDokumenttypeMedBehandlingsår && behandlingsAar) {
+        if (isDokumenttypeMedBehandlingsår) {
             settBehandlingsÅr.mutate();
+        } else if (toSøkere) {
+            kopierJournalpost.mutate();
         } else journalførJournalpost.mutate();
     };
 
