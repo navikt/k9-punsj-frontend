@@ -13,6 +13,9 @@ spec:
       enabled: true
       allowAllUsers: true
       tenant: {{ azureTenant }}
+      claims:
+        extra:
+          - "NAVident"
     sidecar:
       enabled: true
       autoLogin: true
