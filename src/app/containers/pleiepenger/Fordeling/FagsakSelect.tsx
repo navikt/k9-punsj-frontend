@@ -13,13 +13,13 @@ import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
     fagsaker: Fagsak[];
-    brukEksisterendeFagsak: boolean;
+    reserverSaksnummerTilNyFagsak: boolean;
     identState: IIdentState;
     ingenInfoOmBarnIDokument?: boolean;
     valgtFagsak?: Fagsak;
     barn?: IBarn[];
     setValgtFagsak: (fagsak: string) => void;
-    setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
+    setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
 }
@@ -84,13 +84,13 @@ const getLenkeTilK9Sak = (fagsakId: string) => {
 
 const FagsakSelect = ({
     fagsaker,
-    brukEksisterendeFagsak,
+    reserverSaksnummerTilNyFagsak,
     identState,
     ingenInfoOmBarnIDokument,
     valgtFagsak,
     barn,
     setValgtFagsak,
-    setBrukEksisterendeFagsak,
+    setReserverSaksnummerTilNyFagsak,
     setIdentAction,
     setBehandlingsAar,
 }: Props) => (
@@ -99,12 +99,12 @@ const FagsakSelect = ({
             <Select
                 className="fagsakSelect"
                 label="Velg fagsak"
-                disabled={fagsaker.length === 0 || !brukEksisterendeFagsak || ingenInfoOmBarnIDokument}
+                disabled={fagsaker.length === 0 || reserverSaksnummerTilNyFagsak || ingenInfoOmBarnIDokument}
                 onChange={(event) => setValgtFagsak(event.target.value)}
             >
                 <option value="">Velg</option>
                 {!ingenInfoOmBarnIDokument &&
-                    brukEksisterendeFagsak &&
+                    !reserverSaksnummerTilNyFagsak &&
                     fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                         <option key={fagsakId} value={fagsakId}>
                             {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
@@ -127,13 +127,13 @@ const FagsakSelect = ({
         </div>
         <Checkbox
             onChange={() => {
-                setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
+                setReserverSaksnummerTilNyFagsak(!reserverSaksnummerTilNyFagsak);
                 setValgtFagsak('');
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                 setBehandlingsAar(undefined);
             }}
             disabled={ingenInfoOmBarnIDokument}
-            checked={brukEksisterendeFagsak}
+            checked={reserverSaksnummerTilNyFagsak}
         >
             <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>

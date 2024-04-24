@@ -29,7 +29,7 @@ import {
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState } from '../../../state/reducers/FellesReducer';
+import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -72,6 +72,7 @@ export interface IFordelingDispatchProps {
     setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
     setAnnenPart: typeof setAnnenPartAction;
+    resetBarn: typeof resetBarnAction;
 }
 
 export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
@@ -96,6 +97,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setDokumenttype,
         omfordel,
         setAnnenPart,
+        resetBarn,
     } = props;
 
     const { fagsak: valgtFagsak, dokumenttype } = fordelingState;
@@ -112,7 +114,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
-    const [brukEksisterendeFagsak, setBrukEksisterendeFagsak] = useState(false);
+    const [reserverSaksnummerTilNyFagsak, setReserverSaksnummerTilNyFagsak] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const [disableRadios, setDisableRadios] = useState<boolean | undefined>(undefined);
     const [barnMedFagsak, setBarnMedFagsak] = useState<Fagsak | undefined>(undefined);
@@ -241,16 +243,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (valgtFagsak && !journalpost.erFerdigstilt) {
             setFagsak(undefined);
-            setBrukEksisterendeFagsak(false);
+            setReserverSaksnummerTilNyFagsak(false);
             setIngenInfoOmPleitrengende(false);
         }
     }, [dokumenttype, identState.søkerId]);
 
     useEffect(() => {
-        if (!brukEksisterendeFagsak && fagsaker) {
+        if (!reserverSaksnummerTilNyFagsak && fagsaker) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengendeIdent === identState.pleietrengendeId));
         }
-        if (brukEksisterendeFagsak) {
+        if (reserverSaksnummerTilNyFagsak) {
             setBarnMedFagsak(undefined);
         }
     }, [identState.pleietrengendeId]);
@@ -264,7 +266,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
 
     const visPleietrengendeComponent =
-        gjelderPsbOmsOlp && !isFetchingFagsaker && !brukEksisterendeFagsak && !ingenInfoOmPleitrengende;
+        gjelderPsbOmsOlp && !isFetchingFagsaker && reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende;
 
     const visPleietrengende =
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
@@ -272,7 +274,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visValgAvBehandlingsaar =
         visBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        !brukEksisterendeFagsak &&
+        !reserverSaksnummerTilNyFagsak &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
@@ -305,7 +307,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     );
                     setFagsaker(filtrerteFagsaker);
                     if (filtrerteFagsaker.length > 0 && !jpErFerdigstiltOgUtenPleietrengende) {
-                        setBrukEksisterendeFagsak(true);
+                        setReserverSaksnummerTilNyFagsak(false);
                     }
                 } else {
                     setHenteFagsakFeilet(true);
@@ -329,7 +331,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
                 return true;
             }
-            if (harFagsaker && brukEksisterendeFagsak && !ingenInfoOmPleitrengende) {
+            if (harFagsaker && reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende) {
                 return !valgtFagsak;
             }
 
@@ -438,8 +440,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         setRiktigIdentIJournalposten(undefined); // lokal useState
-        setBrukEksisterendeFagsak(false); // lokal useState
+        setReserverSaksnummerTilNyFagsak(false); // lokal useState
         setToSokereIJournalpost(false); // lokal useState
+        resetBarn(); // Redux felles state liste med barn
         resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
         setDokumenttype(type); // Redux state
     };
@@ -610,11 +613,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                             {visFagsakSelect && (
                                 <FagsakSelect
-                                    brukEksisterendeFagsak={brukEksisterendeFagsak}
+                                    reserverSaksnummerTilNyFagsak={reserverSaksnummerTilNyFagsak}
                                     fagsaker={fagsaker}
                                     identState={identState}
                                     ingenInfoOmBarnIDokument={ingenInfoOmPleitrengende}
-                                    setBrukEksisterendeFagsak={setBrukEksisterendeFagsak}
+                                    setReserverSaksnummerTilNyFagsak={setReserverSaksnummerTilNyFagsak}
                                     setIdentAction={setIdentAction}
                                     setValgtFagsak={setValgtFagsak}
                                     valgtFagsak={valgtFagsak}
@@ -789,6 +792,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetIdentStateAction: () => dispatch(resetIdentState()),
     setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     resetAllState: () => dispatch(resetAllStateAction()),
+    resetBarn: () => dispatch(resetBarnAction()),
 });
 
 const Fordeling = connect(mapStateToProps, mapDispatchToProps)(FordelingComponent);
