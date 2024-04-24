@@ -29,7 +29,7 @@ import {
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
+import { IFellesState } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -72,7 +72,6 @@ export interface IFordelingDispatchProps {
     setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
     resetIdentStateAction: typeof resetIdentState;
     setAnnenPart: typeof setAnnenPartAction;
-    resetBarn: typeof resetBarnAction;
 }
 
 export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
@@ -96,7 +95,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetIdentStateAction,
         setDokumenttype,
         omfordel,
-        resetBarn,
         setAnnenPart,
     } = props;
 
@@ -119,6 +117,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [disableRadios, setDisableRadios] = useState<boolean | undefined>(undefined);
     const [barnMedFagsak, setBarnMedFagsak] = useState<Fagsak | undefined>(undefined);
     const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
+    const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
 
     const harFagsaker = fagsaker?.length > 0;
 
@@ -342,6 +341,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
 
+            if (!!journalpost?.kanKopieres && toSokereIJournalpost) {
+                return IdentRules.erUgyldigIdent(identState.annenSokerIdent) || !identState.pleietrengendeId;
+            }
+
             if (
                 !barnetHarIkkeFnr &&
                 !ingenInfoOmPleitrengende &&
@@ -425,17 +428,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
             if (!identState.søkerId && !!journalpost?.norskIdent) {
-                setSokersIdent(journalpost?.norskIdent);
-                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
+                setSokersIdent(journalpost?.norskIdent); // lokal useState
+                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId); // Redux
             } else {
-                setSokersIdent(identState.søkerId);
+                setSokersIdent(identState.søkerId); // lokal useState
             }
         } else {
-            setSokersIdent('');
-            setIdentAction('', identState.pleietrengendeId);
+            setSokersIdent(''); // lokal useState
         }
-        setRiktigIdentIJournalposten(undefined);
-        setDokumenttype(type);
+
+        setRiktigIdentIJournalposten(undefined); // lokal useState
+        setBrukEksisterendeFagsak(false); // lokal useState
+        setToSokereIJournalpost(false); // lokal useState
+        resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
+        setDokumenttype(type); // Redux state
     };
 
     const setValgtFagsak = (fagsakId: string) => {
@@ -539,8 +545,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 <DokumentTypeVelger
                                     handleDokumenttype={(type: FordelingDokumenttype) => {
                                         handleDokumenttype(type);
-                                        resetIdentStateAction();
-                                        resetBarn();
                                     }}
                                     valgtDokumentType={dokumenttype as string}
                                     disableRadios={disableRadios}
@@ -586,10 +590,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             </div>
 
                             <ToSoekere
-                                dokumenttype={dokumenttype}
                                 journalpost={journalpost}
                                 identState={identState}
+                                toSokereIJournalpost={toSokereIJournalpost}
                                 setIdentAction={setIdentAction}
+                                setToSokereIJournalpost={setToSokereIJournalpost}
+                                dokumenttype={dokumenttype}
                                 disabled={disableRadios}
                             />
 
@@ -781,7 +787,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
     lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
     resetIdentStateAction: () => dispatch(resetIdentState()),
-    resetBarn: () => dispatch(resetBarnAction()),
     setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     resetAllState: () => dispatch(resetAllStateAction()),
 });

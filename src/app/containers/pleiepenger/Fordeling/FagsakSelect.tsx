@@ -133,6 +133,7 @@ const FagsakSelect = ({
                 setBehandlingsAar(undefined);
             }}
             disabled={ingenInfoOmBarnIDokument}
+            checked={brukEksisterendeFagsak}
         >
             <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>

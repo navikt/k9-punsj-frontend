@@ -13,14 +13,24 @@ import intlHelper from 'app/utils/intlUtils';
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
 
 interface IToSoekereProps {
-    dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
     identState: IIdentState;
+    toSokereIJournalpost: boolean;
     setIdentAction: typeof setIdentFellesAction;
+    setToSokereIJournalpost: (toSokereIJournalpost: boolean) => void;
+    dokumenttype?: FordelingDokumenttype;
     disabled?: boolean;
 }
 
-const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, identState, disabled, setIdentAction }) => {
+const ToSoekere: React.FC<IToSoekereProps> = ({
+    journalpost,
+    identState,
+    toSokereIJournalpost,
+    setIdentAction,
+    setToSokereIJournalpost,
+    dokumenttype,
+    disabled,
+}) => {
     const intl = useIntl();
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
@@ -28,11 +38,11 @@ const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, ident
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
         !!journalpost?.kanKopieres;
 
-    const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
     const handleIdentAnnenSokerBlur = (event: any) =>
         setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
+
     if (!skalVises) {
         return null;
     }
@@ -48,6 +58,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({ dokumenttype, journalpost, ident
                         setAnnenSokerIdent('');
                     }
                 }}
+                checked={toSokereIJournalpost}
                 disabled={disabled}
             >
                 {intlHelper(intl, 'ident.identifikasjon.tosokere')}
