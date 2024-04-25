@@ -266,7 +266,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
 
     const visPleietrengendeComponent =
-        gjelderPsbOmsOlp && !isFetchingFagsaker && reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende;
+        gjelderPsbOmsOlp &&
+        !isFetchingFagsaker &&
+        (reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende) &&
+        !ingenInfoOmPleitrengende;
 
     const visPleietrengende =
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
@@ -351,7 +354,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             }
 
             if (!!journalpost?.kanKopieres && toSokereIJournalpost) {
-                return IdentRules.erUgyldigIdent(identState.annenSokerIdent) || !identState.pleietrengendeId;
+                return (
+                    IdentRules.erUgyldigIdent(identState.søkerId) ||
+                    IdentRules.erUgyldigIdent(identState.annenSokerIdent) ||
+                    !identState.pleietrengendeId
+                );
             }
 
             if (
@@ -373,13 +380,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         const ident = event.target.value.replace(/\D+/, '');
 
         if (identState.søkerId.length > 0 && ident.length < sokersIdent.length) {
-            setIdentAction('', identState.pleietrengendeId);
+            setIdentAction('', identState.pleietrengendeId, identState.annenSokerIdent);
             setErSøkerIdBekreftet(false);
             setVisSokersBarn(false);
         }
 
         if (ident.length === 11) {
-            setIdentAction(ident, identState.pleietrengendeId);
+            setIdentAction(ident, identState.pleietrengendeId, identState.annenSokerIdent);
             setErSøkerIdBekreftet(true);
             setVisSokersBarn(true);
         }
@@ -653,6 +660,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     }
                                     visPleietrengende={visPleietrengende}
                                     jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
+                                    toSokereIJournalpost={toSokereIJournalpost}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
@@ -666,6 +674,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     />
                                 </Alert>
                             )}
+
+                            {!journalpost.erFerdigstilt &&
+                                toSokereIJournalpost &&
+                                identState.søkerId &&
+                                identState.annenSokerIdent &&
+                                !identState.pleietrengendeId && (
+                                    <Alert size="small" variant="warning" className="mb-4">
+                                        <FormattedMessage id="fordeling.info.toSøkere.ingenPleietrengende" />
+                                    </Alert>
+                                )}
+                            {!journalpost.erFerdigstilt &&
+                                identState.søkerId &&
+                                toSokereIJournalpost &&
+                                !identState.annenSokerIdent && (
+                                    <Alert size="small" variant="warning" className="mb-4">
+                                        <FormattedMessage id="fordeling.info.toSøkere" />
+                                    </Alert>
+                                )}
 
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>

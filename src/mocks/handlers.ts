@@ -46,7 +46,7 @@ let handlers = [
         ),
     ),
 
-    http.get('http://localhost:8101/api/k9-punsj/journalpost/203', () =>
+    http.get('http://localhost:8080/api/k9-punsj/journalpost/203', () =>
         HttpResponse.json(
             {
                 journalpostId: '203',

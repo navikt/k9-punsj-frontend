@@ -105,6 +105,8 @@
     "fordeling.error.pleietrengendeHarFagsak": "Pleietrengendende med fødselsnummer {pleietrengendeId} har allerede en fagsak {fagsakId}. Gå tilbake og velg fagsak {fagsakId}.",
     "fordeling.error.pleietrengendeHarFerdistiltFagsak": "Det finnes allerede en fagsak knyttet til dette barnet (ID: {pleietrengendeId}). Hvis barnet er riktig må du kopiere journalposten og koble ny journalpost til eksisterende fagsak {fagsakId}. Denne journalposten vil bli lukket etter du kopierer.",
     "fordeling.error.henteFagsakFeilet": "Henting av fagsak feilet",
+    "fordeling.info.toSøkere.ingenPleietrengende": "Du må velge pleietrengende eller fagsak for å gå videre, når journalposten gjelder to søkere.",
+    "fordeling.info.toSøkere": "Du må fylle ut fødselsnummer til annen søker for å gå videre, når journalposten gjelder to søkere.",
     "fordeling.infotrygd.journalpoststottesikke": "Opplysningene stemmer ikke overens med det som er registrert. Se over pleietrengendes fødselsnummer. Journalposten kan ikke behandles videre i Punsj.",
     "fordeling.opprettigosys.utfort": "Journalføringsoppgave i Gosys opprettet",
     "fordeling.lukkoppgave.utfort": "Oppgaven er lukket",

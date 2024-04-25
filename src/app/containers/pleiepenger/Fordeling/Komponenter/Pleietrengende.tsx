@@ -28,6 +28,7 @@ export interface IPleietrengendeDispatchProps {
 
 export interface IPleietrengende {
     sokersIdent: string;
+    toSokereIJournalpost: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
@@ -41,6 +42,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         pleietrengendeHarIkkeFnrFn,
         identState,
         sokersIdent,
+        toSokereIJournalpost,
         fellesState,
         setIdentAction,
         henteBarn,
@@ -91,7 +93,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setIdentAction(identState.søkerId, null);
+            setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
         }
     };
 
@@ -164,11 +166,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
                                 {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
-                            {pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende && (
-                                <Alert size="small" variant="info" className="infotrygd_info">
-                                    {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
-                                </Alert>
-                            )}
+                            {!toSokereIJournalpost &&
+                                pleietrengendeHarIkkeFnr &&
+                                !jpErFerdigstiltOgUtenPleietrengende && (
+                                    <Alert size="small" variant="info" className="infotrygd_info">
+                                        {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
+                                    </Alert>
+                                )}
                             {pleietrengendeHarIkkeFnr && jpErFerdigstiltOgUtenPleietrengende && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
                                     {intlHelper(
