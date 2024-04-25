@@ -331,7 +331,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
                 return true;
             }
-            if (harFagsaker && reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende) {
+            if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende) {
                 return !valgtFagsak;
             }
 
@@ -340,6 +340,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             }
 
             if (identState.søkerId === identState.pleietrengendeId) {
+                return true;
+            }
+
+            if (identState.søkerId === identState.annenSokerIdent) {
+                return true;
+            }
+            if (identState.pleietrengendeId === identState.annenSokerIdent) {
                 return true;
             }
 

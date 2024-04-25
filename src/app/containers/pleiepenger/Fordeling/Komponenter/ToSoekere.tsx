@@ -36,12 +36,23 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        !!journalpost?.kanKopieres;
+        !!journalpost?.kanKopieres &&
+        !journalpost.erFerdigstilt;
 
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
-    const handleIdentAnnenSokerBlur = (event: any) =>
-        setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
+    const handleIdentAnnenSoker = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const ident = event.target.value.replace(/\D+/, '');
+
+        if (annenSokerIdent.length > 0 && ident.length < annenSokerIdent.length) {
+            setIdentAction(identState.søkerId, identState.pleietrengendeId);
+        }
+
+        if (ident.length === 11) {
+            setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
+        }
+        setAnnenSokerIdent(ident);
+    };
 
     if (!skalVises) {
         return null;
@@ -71,11 +82,10 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                     </Alert>
                     <TextField
                         label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
-                        onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
-                        onBlur={handleIdentAnnenSokerBlur}
-                        value={annenSokerIdent}
+                        onChange={handleIdentAnnenSoker}
                         className="bold-label"
                         maxLength={11}
+                        autoComplete="off"
                         error={visFeilmeldingForAnnenIdentVidJournalKopi(
                             identState.annenSokerIdent,
                             identState.søkerId,

@@ -74,7 +74,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
             setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
         }
 
-        setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
+        setPleietrengendeIdent(identFromInput);
     };
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
