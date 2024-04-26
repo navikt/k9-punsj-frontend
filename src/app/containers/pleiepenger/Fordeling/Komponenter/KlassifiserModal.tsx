@@ -188,7 +188,15 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 : '';
         const threeWeeksDate = get3WeeksDate();
         const messageContent = message || (
-            <FormattedMessage id={messageId} values={{ saksnummer: reservertFagsakId, dato: threeWeeksDate }} />
+            <FormattedMessage
+                id={messageId}
+                values={{
+                    saksnummer: reservertFagsakId,
+                    dato: threeWeeksDate,
+                    annenSøkerFnr: identState.annenSokerIdent,
+                    pleietrengendeFnr: identState.pleietrengendeId,
+                }}
+            />
         );
         return (
             <Alert variant={variant} size="small">
