@@ -14305,11 +14305,11 @@ __metadata:
     promise: 8.3.0
     prop-types: 15.8.1
     re-resizable: 6.9.11
-    react: 18.2.0
+    react: 18.3.0
     react-aria-menubutton: 7.0.3
     react-collapse: 5.1.1
     react-day-picker: 7.4.10
-    react-dom: 18.2.0
+    react-dom: 18.3.0
     react-hook-form: 7.51.3
     react-intl: 6.6.5
     react-modal: 3.16.1
@@ -17508,7 +17508,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:18.2.0, react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0":
+"react-dom@npm:18.3.0":
+  version: 18.3.0
+  resolution: "react-dom@npm:18.3.0"
+  dependencies:
+    loose-envify: ^1.1.0
+    scheduler: ^0.23.1
+  peerDependencies:
+    react: ^18.3.0
+  checksum: 04dc715fdedee89754c9c2cd627cf8bc5914dbb678d053ceecaf6feb11566fc653763781aefd82c240f264c87b1643ab1328ca6565b8b449ce79fbb2912fd1c7
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:^16.8.0 || ^17.0.0 || ^18.0.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -17766,7 +17778,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0, react@npm:^16.8.0 || ^17.0.0 || ^18.0.0":
+"react@npm:18.3.0":
+  version: 18.3.0
+  resolution: "react@npm:18.3.0"
+  dependencies:
+    loose-envify: ^1.1.0
+  checksum: f1389bf7f9cc9295fded895635e54c4bf73626a8ea51afaa2da4988f89e71b68f249c1782f832d5912ba7d437da9292fc44ecf7c3dff072879253df93d703a10
+  languageName: node
+  linkType: hard
+
+"react@npm:^16.8.0 || ^17.0.0 || ^18.0.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -18370,6 +18391,15 @@ __metadata:
   dependencies:
     loose-envify: ^1.1.0
   checksum: d79192eeaa12abef860c195ea45d37cbf2bbf5f66e3c4dcd16f54a7da53b17788a70d109ee3d3dde1a0fd50e6a8fc171f4300356c5aee4fc0171de526bf35f8a
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.23.1":
+  version: 0.23.1
+  resolution: "scheduler@npm:0.23.1"
+  dependencies:
+    loose-envify: ^1.1.0
+  checksum: 8a5d140ee7e1f0927b64883544794043ebcaf57fe3f3541040535d1cb841640c389674838d3a25050227c20f8606cdeb1172c83e711523c689d428146ed8efcb
   languageName: node
   linkType: hard
 
