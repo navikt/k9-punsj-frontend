@@ -186,7 +186,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
             journalførJournalpost.isSuccess && (journalførJournalpost.data.saksnummer as string)
                 ? (journalførJournalpost.data.saksnummer as string)
                 : undefined;
-        const reservertFagsakIdEtterKopier =
+        const fagsakIdEtterKopier =
             getJournalpost.isSuccess && getJournalpost.data.sak?.fagsakId
                 ? getJournalpost.data.sak?.fagsakId
                 : undefined;
@@ -195,7 +195,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
             <FormattedMessage
                 id={messageId}
                 values={{
-                    saksnummer: reservertFagsakId || reservertFagsakIdEtterKopier || '',
+                    saksnummer: reservertFagsakId || fagsakIdEtterKopier || '',
                     dato: threeWeeksDate,
                     annenSøkerFnr: identState.annenSokerIdent,
                     pleietrengendeFnr: identState.pleietrengendeId,
