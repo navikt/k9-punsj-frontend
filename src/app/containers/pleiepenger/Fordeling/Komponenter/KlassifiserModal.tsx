@@ -142,7 +142,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
 
     // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
     // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
-    // Hvis journalposten ikke er ferdigstilt etter 3 forsøk, vis feilmelding
+    // Hvis journalposten ikke er ferdigstilt etter 5 forsøk, vis feilmelding
     useEffect(() => {
         if (getJournalpost.isSuccess) {
             const journalpostEtterKopiering = getJournalpost.data;
@@ -154,7 +154,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     setVentGetJournalpost(false);
                     settPåVent.mutate();
                 }
-            } else if (getJpAntallForsøk < 3) {
+            } else if (getJpAntallForsøk < 5) {
                 setTimeout(() => getJournalpost.mutate(), 1000);
             } else {
                 setVentGetJournalpost(false);
@@ -239,12 +239,12 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success',
-                        journalførJournalpost.isSuccess && !!fagsak?.fagsakId,
+                        !fortsett && journalførJournalpost.isSuccess && !!fagsak?.fagsakId,
                     )}
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success.reservert',
-                        journalførJournalpost.isSuccess && !fagsak?.fagsakId,
+                        !fortsett && journalførJournalpost.isSuccess && !fagsak?.fagsakId,
                     )}
                     {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !doNotShowWarnigAlert)}
                     {/* Vise feilen fra serveren etter journalføring */}
@@ -269,14 +269,16 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success',
-                        getJournalpost.isSuccess &&
+                        !fortsett &&
+                            getJournalpost.isSuccess &&
                             getJournalpost.data.erFerdigstilt &&
                             !getJournalpost.data.sak?.reservert,
                     )}
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success.reservert',
-                        getJournalpost.isSuccess &&
+                        !fortsett &&
+                            getJournalpost.isSuccess &&
                             getJournalpost.data.erFerdigstilt &&
                             getJournalpost.data.sak?.reservert,
                     )}
