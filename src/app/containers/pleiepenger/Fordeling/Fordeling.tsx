@@ -138,7 +138,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         DokumenttypeForkortelse.OMP_AO,
     ];
 
-    const visBehandlingsårValg =
+    const ytelserMedBehandlingsårValg =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
 
@@ -275,7 +275,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const visValgAvBehandlingsaar =
-        visBehandlingsårValg &&
+        ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
         reserverSaksnummerTilNyFagsak &&
         !journalpost.erFerdigstilt;
@@ -369,7 +369,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
         }
-        if (visBehandlingsårValg && !behandlingsAar) {
+        if (ytelserMedBehandlingsårValg && !behandlingsAar) {
             return true;
         }
 
@@ -717,7 +717,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 !valgtFagsak &&
                                 !disableJournalførKnapper() &&
                                 (identState.pleietrengendeId ||
-                                    visBehandlingsårValg ||
+                                    ytelserMedBehandlingsårValg ||
                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
                                     <Alert size="small" variant="info" className="mb-4">
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
