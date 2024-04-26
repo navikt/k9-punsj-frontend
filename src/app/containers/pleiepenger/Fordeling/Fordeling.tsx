@@ -277,7 +277,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visValgAvBehandlingsaar =
         visBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        !reserverSaksnummerTilNyFagsak &&
+        reserverSaksnummerTilNyFagsak &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
@@ -309,8 +309,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         (fsak) => !dokumenttypeForkortelse || fsak.sakstype === dokumenttypeForkortelse,
                     );
                     setFagsaker(filtrerteFagsaker);
-                    if (filtrerteFagsaker.length > 0 && !jpErFerdigstiltOgUtenPleietrengende) {
-                        setReserverSaksnummerTilNyFagsak(false);
+                    if (filtrerteFagsaker.length === 0 && !jpErFerdigstiltOgUtenPleietrengende) {
+                        setReserverSaksnummerTilNyFagsak(true);
                     }
                 } else {
                     setHenteFagsakFeilet(true);
@@ -455,6 +455,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
         setRiktigIdentIJournalposten(undefined); // lokal useState
         setReserverSaksnummerTilNyFagsak(false); // lokal useState
+        setBehandlingsAar(undefined); // lokal useState
         setToSokereIJournalpost(false); // lokal useState
         resetBarn(); // Redux felles state liste med barn
         resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
