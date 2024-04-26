@@ -185,15 +185,17 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         const reservertFagsakId =
             journalførJournalpost.isSuccess && (journalførJournalpost.data.saksnummer as string)
                 ? (journalførJournalpost.data.saksnummer as string)
-                : '';
+                : undefined;
         const reservertFagsakIdEtterKopier =
-            getJournalpost.isSuccess && getJournalpost.data.sak?.fagsakId ? getJournalpost.data.sak?.fagsakId : '';
+            getJournalpost.isSuccess && getJournalpost.data.sak?.fagsakId
+                ? getJournalpost.data.sak?.fagsakId
+                : undefined;
         const threeWeeksDate = get3WeeksDate();
         const messageContent = message || (
             <FormattedMessage
                 id={messageId}
                 values={{
-                    saksnummer: reservertFagsakId || reservertFagsakIdEtterKopier,
+                    saksnummer: reservertFagsakId || reservertFagsakIdEtterKopier || '',
                     dato: threeWeeksDate,
                     annenSøkerFnr: identState.annenSokerIdent,
                     pleietrengendeFnr: identState.pleietrengendeId,
