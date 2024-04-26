@@ -269,12 +269,16 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success',
-                        getJournalpost.isSuccess && getJournalpost.data.erFerdigstilt && !!fagsak?.fagsakId,
+                        getJournalpost.isSuccess &&
+                            getJournalpost.data.erFerdigstilt &&
+                            !getJournalpost.data.sak?.reservert,
                     )}
                     {renderAlert(
                         'success',
                         'fordeling.klassifiserModal.alert.success.reservert',
-                        getJournalpost.isSuccess && getJournalpost.data.erFerdigstilt && !fagsak?.fagsakId,
+                        getJournalpost.isSuccess &&
+                            getJournalpost.data.erFerdigstilt &&
+                            getJournalpost.data.sak?.reservert,
                     )}
                     {renderAlert(
                         'error',
