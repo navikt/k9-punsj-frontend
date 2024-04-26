@@ -263,6 +263,16 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                         kopierJournalpost.isSuccess,
                     )}
                     {renderAlert(
+                        'success',
+                        'fordeling.klassifiserModal.alert.success',
+                        getJournalpost.isSuccess && getJournalpost.data.erFerdigstilt && !!fagsak?.fagsakId,
+                    )}
+                    {renderAlert(
+                        'success',
+                        'fordeling.klassifiserModal.alert.success.reservert',
+                        getJournalpost.isSuccess && getJournalpost.data.erFerdigstilt && !fagsak?.fagsakId,
+                    )}
+                    {renderAlert(
                         'error',
                         'fordeling.klassifiserModal.kopierJournalpost.alert.error',
                         !!kopierJournalpost.error,
