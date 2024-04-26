@@ -14,11 +14,11 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/stat
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../../../models/types/IdentState';
-import { IFellesState, kopierJournalpostUtenBarn } from '../../../../../state/reducers/FellesReducer';
+import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../../../state/reducers/FellesReducer';
 import KopierModal from '../KopierModal';
-import './kopiereJournalpostUtenBarn.less';
+import './kopiereJournalpostTilSammeSøker.less';
 
-export interface IKopiereJournalpostUtenBarnStateProps {
+export interface IKopiereJournalpostTilSammeSøkerStateProps {
     barnMedFagsak: Fagsak;
     intl: IntlShape;
     journalpost?: IJournalpost;
@@ -27,17 +27,18 @@ export interface IKopiereJournalpostUtenBarnStateProps {
     dedupkey: string;
 }
 
-export interface IKopiereJournalpostUtenBarnStatePropsDispatchProps {
-    kopiereJournalpostUtenBarn: typeof kopierJournalpostUtenBarn;
+export interface IKopiereJournalpostTilSammeSøkerDispatchProps {
+    kopiereJournalpostTilSammeSøker: typeof kopierJournalpostTilSammeSøker;
 }
 
-type IKopiereJournalpostUtenBarnStatePropsProps = IKopiereJournalpostUtenBarnStateProps &
-    IKopiereJournalpostUtenBarnStatePropsDispatchProps;
+type IKopiereJournalpostTilSammeSøkerProps = IKopiereJournalpostTilSammeSøkerStateProps &
+    IKopiereJournalpostTilSammeSøkerDispatchProps;
 
-const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnStatePropsProps> = (
-    props: IKopiereJournalpostUtenBarnStatePropsProps,
+const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTilSammeSøkerProps> = (
+    props: IKopiereJournalpostTilSammeSøkerProps,
 ) => {
-    const { barnMedFagsak, intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostUtenBarn } = props;
+    const { barnMedFagsak, intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostTilSammeSøker } =
+        props;
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [visModal, setVisModal] = useState(false);
 
@@ -98,7 +99,7 @@ const KopiereJournalpostUtenBarnComponent: React.FC<IKopiereJournalpostUtenBarnS
                     journalpostId={journalpost?.journalpostId}
                     fellesState={fellesState}
                     dedupkey={dedupkey}
-                    kopiereJournalpostUtenBarn={kopiereJournalpostUtenBarn}
+                    kopiereJournalpostTilSammeSøker={kopiereJournalpostTilSammeSøker}
                     lukkModal={() => setVisModal(false)}
                     intl={intl}
                     fagsakId={barnMedFagsak.fagsakId}
@@ -116,14 +117,18 @@ const mapStateToProps = (state: RootStateType) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpostUtenBarn: (søkerId: string, pleietrengendeId: string, journalpostId: string, dedupkey: string) =>
-        dispatch(kopierJournalpostUtenBarn(søkerId, pleietrengendeId, journalpostId, dedupkey)),
+    kopiereJournalpostTilSammeSøker: (
+        søkerId: string,
+        pleietrengendeId: string,
+        journalpostId: string,
+        dedupkey: string,
+    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });
 
-const KopiereJournalpostUtenBarn = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(KopiereJournalpostUtenBarnComponent),
+const KopiereJournalpostTilSammeSøker = injectIntl(
+    connect(mapStateToProps, mapDispatchToProps)(KopiereJournalpostTilSammeSøkerComponent),
 );
 
-export { KopiereJournalpostUtenBarn, KopiereJournalpostUtenBarnComponent };
+export { KopiereJournalpostTilSammeSøker, KopiereJournalpostTilSammeSøkerComponent };

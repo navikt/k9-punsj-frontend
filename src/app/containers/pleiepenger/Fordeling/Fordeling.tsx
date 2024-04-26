@@ -48,7 +48,7 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
 import { Pleietrengende } from './Komponenter/Pleietrengende';
-import { KopiereJournalpostUtenBarn } from './Komponenter/KopiereJournalpostUtenBarn/KopiereJournalpostUtenBarn';
+import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import './fordeling.less';
 
@@ -709,7 +709,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     )}
 
                                     <div className="md-5">
-                                        <KopiereJournalpostUtenBarn barnMedFagsak={barnMedFagsak} />
+                                        <KopiereJournalpostTilSammeSøker barnMedFagsak={barnMedFagsak} />
                                     </div>
                                 </>
                             )}

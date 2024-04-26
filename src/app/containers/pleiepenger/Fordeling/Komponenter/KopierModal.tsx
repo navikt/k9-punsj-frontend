@@ -18,7 +18,7 @@ interface OwnProps {
     intl: IntlShape;
     fellesState: IFellesState;
     fagsakId: string;
-    kopiereJournalpostUtenBarn: (
+    kopiereJournalpostTilSammeSøker: (
         søkerId: string,
         pleietrengendeId: string,
         journalpostId: string,
@@ -35,12 +35,12 @@ const KopierModal = ({
     intl,
     fellesState,
     fagsakId,
-    kopiereJournalpostUtenBarn,
+    kopiereJournalpostTilSammeSøker,
     lukkModal,
 }: OwnProps) => {
     const [kopierLoading, setKopierLoading] = useState(false);
 
-    const { mutate, status, error, isSuccess, data } = useMutation({
+    const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
 
@@ -52,21 +52,14 @@ const KopierModal = ({
 
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostUtenBarn(søkerId, pleietrengendeId, journalpostId, dedupkey);
-        // TODO
+        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey);
         setKopierLoading(false);
     };
 
-    // TODO
     const disabled = ['loading'].includes(status);
 
-    // eslint-disable-next-line no-console
-    console.log(error);
-    // eslint-disable-next-line no-console
-    console.log(data);
-
     return (
-        <Modal open onBeforeClose={lukkModal} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading">
                     Vil du kopiere og lukke journalposten?

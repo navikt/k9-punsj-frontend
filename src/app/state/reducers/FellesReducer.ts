@@ -254,7 +254,7 @@ export function kopierJournalpost(
 }
 
 // TODO: Rename funk
-export function kopierJournalpostUtenBarn(
+export function kopierJournalpostTilSammeSøker(
     søkerId: string,
     pleietrengendeId: string,
     journalpostId: string,
