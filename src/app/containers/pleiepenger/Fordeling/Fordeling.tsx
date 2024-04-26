@@ -248,11 +248,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [dokumenttype, identState.søkerId]);
 
+    // TODO TESTE DETTTE - det ser ut er bug her
     useEffect(() => {
-        if (!reserverSaksnummerTilNyFagsak && fagsaker) {
+        if (reserverSaksnummerTilNyFagsak && fagsaker) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengendeIdent === identState.pleietrengendeId));
         }
-        if (reserverSaksnummerTilNyFagsak) {
+        if (!reserverSaksnummerTilNyFagsak) {
             setBarnMedFagsak(undefined);
         }
     }, [identState.pleietrengendeId]);
