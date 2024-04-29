@@ -185,9 +185,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return;
             }
 
-            // Får samme sakstype på korrigering og omp_ut
+            // Sakstype på korrigering og omp_ut er samme i ferdistilt journalpost, derfor bruker trenger å velge dokumenttype igjen
             if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
+                setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
                 setFagsak(journalpost.sak);
+                setIdentAction(journalpost.norskIdent!);
+                setErSøkerIdBekreftet(true);
+                setRiktigIdentIJournalposten(JaNei.JA);
+                setDisableRadios(true);
+                setBehandlingsAar(journalpost.sak.behandlingsÅr);
                 return;
             }
 
@@ -245,6 +251,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setFagsak(undefined);
             setReserverSaksnummerTilNyFagsak(false);
             setIngenInfoOmPleitrengende(false);
+            if (valgtFagsak.sakstype === DokumenttypeForkortelse.OMP_MA) {
+                setAnnenPart('');
+            }
         }
     }, [dokumenttype, identState.søkerId]);
 
@@ -458,12 +467,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setSokersIdent(''); // lokal useState
         }
 
-        setRiktigIdentIJournalposten(undefined); // lokal useState
-        setReserverSaksnummerTilNyFagsak(false); // lokal useState
-        setBehandlingsAar(undefined); // lokal useState
-        setToSokereIJournalpost(false); // lokal useState
-        resetBarn(); // Redux felles state liste med barn
-        resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
+        if (!journalpost.erFerdigstilt) {
+            setRiktigIdentIJournalposten(undefined); // lokal useState
+            setReserverSaksnummerTilNyFagsak(false); // lokal useState
+            setBehandlingsAar(undefined); // lokal useState
+            setToSokereIJournalpost(false); // lokal useState
+            resetBarn(); // Redux felles state liste med barn
+            resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
+        }
+
         setDokumenttype(type); // Redux state
     };
 

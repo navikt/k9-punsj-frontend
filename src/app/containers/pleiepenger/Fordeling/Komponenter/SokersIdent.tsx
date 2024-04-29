@@ -60,7 +60,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
             }
         } else {
             setSokersIdent('');
-            setIdentAction('', identState.pleietrengendeId, identState.annenSokerIdent);
+            setIdentAction('', '', identState.annenSokerIdent);
         }
     };
 

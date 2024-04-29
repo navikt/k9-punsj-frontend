@@ -59,6 +59,24 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
+    const disableOMPVedReservertJp = (value: FordelingOmsorgspengerSubMenyValg) => {
+        if (disableRadios) {
+            if (
+                valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER ||
+                valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
+                valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM
+            ) {
+                return (
+                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_AO ||
+                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_MA ||
+                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS
+                );
+            }
+            return valgtDokumentType !== value;
+        }
+        return disableRadios;
+    };
+
     return (
         <div className="dokumentTypeVelgerContainer">
             <legend>
@@ -88,7 +106,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                             value={a.value}
                             checked={valgtDokumentType === a.value}
                             onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                            disabled={valgtDokumentType !== a.value && disableRadios}
+                            disabled={disableOMPVedReservertJp(a.value)}
                         />
                     </div>
                 ))}
