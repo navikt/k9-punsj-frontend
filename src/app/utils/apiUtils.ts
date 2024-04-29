@@ -64,7 +64,7 @@ export function get(
             headers: new Headers(headers),
         });
 
-        if (response.ok && callbackIfAuth) {
+        if (callbackIfAuth) {
             const data = await response.text();
             const jsonData = data ? JSON.parse(data) : undefined;
             await callbackIfAuth(response, jsonData);
@@ -88,7 +88,7 @@ export function post<BodyType>(
             headers: { 'Content-Type': 'application/json', ...headers },
         });
 
-        if (response.ok && callbackIfAuth) {
+        if (callbackIfAuth) {
             const data = await response.text();
             const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
             await callbackIfAuth(response, jsonData);
@@ -111,7 +111,7 @@ export function put(
             headers: { 'Content-Type': 'application/json' },
         });
 
-        if (response.ok && callbackIfAuth) {
+        if (callbackIfAuth) {
             await callbackIfAuth(response);
         }
         return response;
