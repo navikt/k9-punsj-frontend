@@ -88,20 +88,20 @@ async function startApp() {
 
                 if (!token) {
                     logger.debug('User token missing. Redirecting to login.');
-                    res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+                    res.status(401).send();
                 }
                 const validation = await validateToken(token);
 
                 if (!validation.ok) {
                     logger.debug('User token not valid. Redirecting to login.');
-                    res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+                    res.status(401).send();
                 } else {
                     logger.debug('User token is valid. Continue.');
                     next();
                 }
             } catch (error) {
                 logger.error('Error getting session:', error);
-                res.redirect(`/oauth2/login?redirect=${req.originalUrl}`);
+                res.status(401).send();
             }
         };
 
