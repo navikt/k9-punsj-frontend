@@ -174,7 +174,7 @@ let handlers = [
         ),
     ),
 
-    http.get('http://localhost:8080/api/k9-punsj/saker/hent', async () => {
+    http.get('http://localhost:8101/api/k9-punsj/saker/hent', async () => {
         await delay(500);
         return HttpResponse.json(
             [
@@ -198,8 +198,7 @@ let handlers = [
                 },
                 {
                     fagsakId: '1DMU93M',
-                    sakstype: 'OMP_MA',
-                    relatertPersonIdent: '09418531220',
+                    sakstype: 'OMP',
                     pleietrengendeIdent: null,
                     gyldigPeriode: null,
                     behandlingsAar: '2022',
