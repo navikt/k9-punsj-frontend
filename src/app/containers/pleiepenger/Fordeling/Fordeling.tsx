@@ -275,10 +275,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visPleietrengende =
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
+    // Sjekk ang valgtFagsak?.reservert && !valgtFagsak?.gyldigPeriode
     const visValgAvBehandlingsaar =
         ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        reserverSaksnummerTilNyFagsak &&
+        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.gyldigPeriode)) &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
