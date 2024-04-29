@@ -46,9 +46,6 @@ async function retryOnAuthFailure(operation: () => Promise<Response>): Promise<R
         await login();
         return operation(); // Retry the operation
     }
-    if (!response.ok) {
-        logApiError(response);
-    }
     return response;
 }
 
@@ -63,6 +60,13 @@ export function get(
             credentials: 'include',
             headers: new Headers(headers),
         });
+        if (!response.ok && response.status === 401) {
+            return response;
+        }
+
+        if (!response.ok) {
+            logApiError(response);
+        }
 
         if (callbackIfAuth) {
             const data = await response.text();
@@ -87,7 +91,13 @@ export function post<BodyType>(
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json', ...headers },
         });
+        if (!response.ok && response.status === 401) {
+            return response;
+        }
 
+        if (!response.ok) {
+            logApiError(response);
+        }
         if (callbackIfAuth) {
             const data = await response.text();
             const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
@@ -110,6 +120,14 @@ export function put(
             body: JSON.stringify(body),
             headers: { 'Content-Type': 'application/json' },
         });
+
+        if (!response.ok && response.status === 401) {
+            return response;
+        }
+
+        if (!response.ok) {
+            logApiError(response);
+        }
 
         if (callbackIfAuth) {
             await callbackIfAuth(response);
