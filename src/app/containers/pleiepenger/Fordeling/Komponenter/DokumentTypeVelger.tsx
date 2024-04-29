@@ -59,7 +59,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
-    const disableOMPVedReservertJp = (value: FordelingOmsorgspengerSubMenyValg) => {
+    const disableOMPVedFerdistiltJp = (value: FordelingOmsorgspengerSubMenyValg) => {
         if (disableRadios) {
             if (
                 valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER ||
@@ -106,7 +106,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                             value={a.value}
                             checked={valgtDokumentType === a.value}
                             onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                            disabled={disableOMPVedReservertJp(a.value)}
+                            disabled={disableOMPVedFerdistiltJp(a.value)}
                         />
                     </div>
                 ))}

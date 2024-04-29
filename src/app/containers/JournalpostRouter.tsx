@@ -128,6 +128,7 @@ const JournalpostRouter: React.FC = () => {
 
                     <Route path={ROUTES.KORRIGERING_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.KORRIGERING_ROOT}>
+                        <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                         <Route
                             path={ROUTES.KORRIGERING_INNTEKTSMELDING}
                             element={<KorrigeringAvInntektsmeldingContainer />}
