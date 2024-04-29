@@ -55,11 +55,11 @@ const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
 
         return null;
     }
-    if (sakstype === DokumenttypeForkortelse.OMP_MA && relatertPersonIdent) {
+    if (sakstype === DokumenttypeForkortelse.OMP_MA) {
         return (
             <FormattedMessage
                 id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa"
-                values={{ relatertPersonIdent }}
+                values={{ relatertPersonIdent: relatertPersonIdent || 'ikke satt' }}
             />
         );
     }
