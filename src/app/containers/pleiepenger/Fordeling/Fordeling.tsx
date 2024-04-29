@@ -314,6 +314,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     if (filtrerteFagsaker.length === 0 && !jpErFerdigstiltOgUtenPleietrengende) {
                         setReserverSaksnummerTilNyFagsak(true);
                     }
+                    if (filtrerteFagsaker.length === 0 && dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) {
+                        setReserverSaksnummerTilNyFagsak(true);
+                    }
                 } else {
                     setHenteFagsakFeilet(true);
                 }
@@ -470,6 +473,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setIdentAction(identState.søkerId, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
         setFagsak(nyValgtFagsak);
 
+        if (nyValgtFagsak?.sakstype === DokumenttypeForkortelse.OMP_MA && nyValgtFagsak.relatertPersonIdent) {
+            setAnnenPart(nyValgtFagsak.relatertPersonIdent);
+        }
+
         if (isDokumenttypeMedBehandlingsår && nyValgtFagsak && nyValgtFagsak.gyldigPeriode) {
             setBehandlingsAar(String(dayjs(nyValgtFagsak.gyldigPeriode.fom).year()));
         }
@@ -601,14 +608,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
 
-                            <div className="mt-5 mb-5">
-                                <AnnenPart
-                                    annenPart={identState.annenPart}
-                                    showComponent={dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
-                                    setAnnenPart={setAnnenPart}
-                                />
-                            </div>
-
                             <ToSoekere
                                 journalpost={journalpost}
                                 identState={identState}
@@ -639,10 +638,21 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     setValgtFagsak={setValgtFagsak}
                                     valgtFagsak={valgtFagsak}
                                     setBehandlingsAar={setBehandlingsAar}
+                                    setAnnenPart={setAnnenPart}
                                     barn={fellesState.barn}
                                 />
                             )}
 
+                            <div className="mt-5 mb-5">
+                                <AnnenPart
+                                    annenPart={identState.annenPart}
+                                    showComponent={
+                                        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+                                        reserverSaksnummerTilNyFagsak
+                                    }
+                                    setAnnenPart={setAnnenPart}
+                                />
+                            </div>
                             {visValgAvBehandlingsaar && (
                                 <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
                             )}

@@ -22,10 +22,11 @@ interface Props {
     setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
+    setAnnenPart: (annenPart: string) => void;
 }
 
 const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
-    const { sakstype, pleietrengendeIdent, behandlingsÅr } = valgtFagsak;
+    const { sakstype, pleietrengendeIdent, behandlingsÅr, relatertPersonIdent } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
         if (pleietrengendeIdent) {
@@ -54,7 +55,14 @@ const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
 
         return null;
     }
-
+    if (sakstype === DokumenttypeForkortelse.OMP_MA && relatertPersonIdent) {
+        return (
+            <FormattedMessage
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa"
+                values={{ relatertPersonIdent }}
+            />
+        );
+    }
     if (pleietrengendeIdent) {
         const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
         if (barnet) {
@@ -93,6 +101,7 @@ const FagsakSelect = ({
     setReserverSaksnummerTilNyFagsak,
     setIdentAction,
     setBehandlingsAar,
+    setAnnenPart,
 }: Props) => (
     <>
         <div className="fagsakSelectContainer">
@@ -131,6 +140,7 @@ const FagsakSelect = ({
                 setValgtFagsak('');
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                 setBehandlingsAar(undefined);
+                setAnnenPart('');
             }}
             disabled={ingenInfoOmBarnIDokument}
             checked={reserverSaksnummerTilNyFagsak}
