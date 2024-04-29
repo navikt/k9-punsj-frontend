@@ -789,15 +789,17 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
                                     </div>
-                                    <Button
-                                        size="small"
-                                        variant="secondary"
-                                        onClick={() => {
-                                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                        }}
-                                    >
-                                        Avbryt og legg i kø
-                                    </Button>
+                                    {isSakstypeMedPleietrengende && (
+                                        <Button
+                                            size="small"
+                                            variant="secondary"
+                                            onClick={() => {
+                                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                            }}
+                                        >
+                                            Avbryt og legg i kø
+                                        </Button>
+                                    )}
                                 </div>
                             )}
                         </div>
