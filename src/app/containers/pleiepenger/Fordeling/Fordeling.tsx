@@ -648,7 +648,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     annenPart={identState.annenPart}
                                     showComponent={
                                         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-                                        reserverSaksnummerTilNyFagsak
+                                        (reserverSaksnummerTilNyFagsak ||
+                                            (!!valgtFagsak && !valgtFagsak.relatertPersonIdent))
                                     }
                                     setAnnenPart={setAnnenPart}
                                 />
