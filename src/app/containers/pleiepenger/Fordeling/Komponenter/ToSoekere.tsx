@@ -57,7 +57,12 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     if (!skalVises) {
         return null;
     }
-
+    const disableCheckbox = () => {
+        if (!journalpost.erFerdigstilt && journalpost.sak?.fagsakId) {
+            return false;
+        }
+        return disabled;
+    };
     return (
         <>
             <VerticalSpacer eightPx />
@@ -70,7 +75,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                     }
                 }}
                 checked={toSokereIJournalpost}
-                disabled={disabled}
+                disabled={disableCheckbox()}
             >
                 {intlHelper(intl, 'ident.identifikasjon.tosokere')}
             </Checkbox>

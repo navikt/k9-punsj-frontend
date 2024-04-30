@@ -174,6 +174,32 @@ let handlers = [
         ),
     ),
 
+    http.get('http://localhost:8080/api/k9-punsj/journalpost/216', () =>
+        HttpResponse.json(
+            {
+                journalpostId: '216',
+                erFerdigstilt: false,
+                norskIdent: '29099000129',
+                dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
+                venter: null,
+                kanSendeInn: true,
+                erSaksbehandler: true,
+                journalpostStatus: 'MOTTATT',
+                kanOpprettesJournalføringsoppgave: true,
+                kanKopieres: true,
+                sak: {
+                    fagsakId: '1DQBHH0',
+                    sakstype: 'PPN',
+                    gyldigPeriode: null,
+                    pleietrengendeIdent: null,
+                    reservertSaksnummer: true,
+                    relatertPersonIdent: null,
+                },
+            },
+            { status: 200 },
+        ),
+    ),
+
     http.get('http://localhost:8101/api/k9-punsj/saker/hent', async () => {
         await delay(500);
         return HttpResponse.json(

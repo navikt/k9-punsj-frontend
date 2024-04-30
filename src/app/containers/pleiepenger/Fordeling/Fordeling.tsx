@@ -152,6 +152,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const isSakstypeMedPleietrengende =
         journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
 
+    const jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende =
+        !journalpost.erFerdigstilt &&
+        !!journalpost.sak?.fagsakId &&
+        !!journalpost?.norskIdent &&
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
      */
@@ -176,11 +182,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setBehandlingsAar(journalpost.sak.behandlingsÅr);
             }
             if (journalpost.sak?.fagsakId) {
-                setIdentAction(journalpost.norskIdent!);
+                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
+                if (
+                    journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
+                    journalpost.sak.relatertPersonIdent
+                ) {
+                    setAnnenPart(journalpost.sak.relatertPersonIdent);
+                }
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
                 setFagsak(journalpost.sak);
                 setDisableRadios(true);
+                if (jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende) {
+                    setVisSokersBarn(true);
+                }
             }
         }
     }, []);
@@ -299,7 +314,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visPleietrengendeComponent =
         gjelderPsbOmsOlp &&
         !isFetchingFagsaker &&
-        (reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende) &&
+        (reserverSaksnummerTilNyFagsak ||
+            jpErFerdigstiltOgUtenPleietrengende ||
+            jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende) &&
         !ingenInfoOmPleitrengende;
 
     const visPleietrengende =
@@ -554,6 +571,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             </Modal>
         );
     }
+
+    console.log('visPleietrengende: ', visPleietrengende);
 
     return (
         <div className="fordeling-container">
