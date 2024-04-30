@@ -153,13 +153,34 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
 
     /**
-     * Sette fordelingState.dokumenttype når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
+     * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
      */
     useEffect(() => {
-        if (!journalpost.erFerdigstilt && journalpost.sak?.sakstype) {
-            const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
-            if (dokumenttypeFraForkortelse) {
-                setDokumenttype(dokumenttypeFraForkortelse);
+        if (!journalpost.erFerdigstilt) {
+            if (journalpost.sak?.sakstype) {
+                if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
+                    setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
+                } else {
+                    const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
+                    if (dokumenttypeFraForkortelse) {
+                        setDokumenttype(dokumenttypeFraForkortelse);
+                    }
+                }
+            }
+
+            /**
+             * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
+             * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
+             */
+            if (journalpost.sak?.behandlingsÅr) {
+                setBehandlingsAar(journalpost.sak.behandlingsÅr);
+            }
+            if (journalpost.sak?.fagsakId) {
+                setIdentAction(journalpost.norskIdent!);
+                setErSøkerIdBekreftet(true);
+                setRiktigIdentIJournalposten(JaNei.JA);
+                setFagsak(journalpost.sak);
+                setDisableRadios(true);
             }
         }
     }, []);
@@ -247,7 +268,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
      * Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
      */
     useEffect(() => {
-        if (valgtFagsak && !journalpost.erFerdigstilt) {
+        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId && valgtFagsak) {
             setFagsak(undefined);
             setReserverSaksnummerTilNyFagsak(false);
             setIngenInfoOmPleitrengende(false);
@@ -305,6 +326,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     useEffect(() => {
         if (
             (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
+            !journalpost.sak?.fagsakId &&
             identState.søkerId &&
             dokumenttype &&
             gjelderPsbOmsOlp
@@ -467,7 +489,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setSokersIdent(''); // lokal useState
         }
 
-        if (!journalpost.erFerdigstilt) {
+        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId) {
             setRiktigIdentIJournalposten(undefined); // lokal useState
             setReserverSaksnummerTilNyFagsak(false); // lokal useState
             setBehandlingsAar(undefined); // lokal useState

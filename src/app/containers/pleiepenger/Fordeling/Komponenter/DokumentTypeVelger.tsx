@@ -72,8 +72,10 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                     value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS
                 );
             }
+
             return valgtDokumentType !== value;
         }
+
         return disableRadios;
     };
 
