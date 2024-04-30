@@ -572,8 +572,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         );
     }
 
-    console.log('visPleietrengende: ', visPleietrengende);
-
     return (
         <div className="fordeling-container">
             {journalpost?.kanSendeInn && journalpost?.erSaksbehandler && (
