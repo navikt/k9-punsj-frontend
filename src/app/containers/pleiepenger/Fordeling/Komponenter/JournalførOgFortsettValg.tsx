@@ -169,7 +169,12 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
                 {visPleietrengendeVarsel && (
                     <div className="mb-5">
-                        <Alert size="small" variant="info" className="max-w-2xl mb-5">
+                        <Alert
+                            size="small"
+                            variant="info"
+                            className="max-w-2xl mb-5"
+                            data-test-id="pleietrengendeHarIkkeFnrInformasjon"
+                        >
                             <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon" />
                         </Alert>
                     </div>

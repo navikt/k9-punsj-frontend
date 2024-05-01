@@ -745,7 +745,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 identState.søkerId &&
                                 identState.annenSokerIdent &&
                                 !identState.pleietrengendeId && (
-                                    <Alert size="small" variant="warning" className="mb-4">
+                                    <Alert
+                                        size="small"
+                                        variant="warning"
+                                        className="mb-4"
+                                        data-test-id="toSøkereIngenPleietrengende"
+                                    >
                                         <FormattedMessage id="fordeling.info.toSøkere.ingenPleietrengende" />
                                     </Alert>
                                 )}
@@ -753,7 +758,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 identState.søkerId &&
                                 toSokereIJournalpost &&
                                 !identState.annenSokerIdent && (
-                                    <Alert size="small" variant="warning" className="mb-4">
+                                    <Alert
+                                        size="small"
+                                        variant="warning"
+                                        className="mb-4"
+                                        data-test-id="toSøkereIngenAndreSøker"
+                                    >
                                         <FormattedMessage id="fordeling.info.toSøkere" />
                                     </Alert>
                                 )}
@@ -783,7 +793,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 (identState.pleietrengendeId ||
                                     ytelserMedBehandlingsårValg ||
                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
-                                    <Alert size="small" variant="info" className="mb-4">
+                                    <Alert
+                                        size="small"
+                                        variant="info"
+                                        className="mb-4"
+                                        data-test-id="jornalførUtenFagsak"
+                                    >
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
                                     </Alert>
                                 )}
@@ -798,6 +813,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 setVisKlassifiserModal(true);
                                             }}
                                             disabled={disableJournalførKnapper() || disableRedirectVidere()}
+                                            data-test-id="journalførOgFortsett"
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
                                         </Button>
@@ -810,6 +826,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             setVisKlassifiserModal(true);
                                         }}
                                         disabled={disableJournalførKnapper()}
+                                        data-test-id="journalførOgVent"
                                     >
                                         <FormattedMessage id="fordeling.knapp.journalfør.vent" />
                                     </Button>

@@ -11,12 +11,16 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
+import journalpost300 from '../../cypress/fixtures/journalpost300.json';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) =>
-        HttpResponse.json({ ...journalpost, journalpostId: params.id }),
-    ),
+    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
+        if (params.id === '300') {
+            return HttpResponse.json(journalpost300);
+        }
+        return HttpResponse.json({ ...journalpost, journalpostId: params.id });
+    }),
     opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
         HttpResponse.json(pleiepengerSoknad, { status: 201 }),
     ),

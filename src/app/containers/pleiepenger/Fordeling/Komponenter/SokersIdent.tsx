@@ -54,7 +54,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         setVisSokersBarn(false);
 
         if (jn === JaNei.JA) {
-            setIdentAction(journalpostident || '', identState.pleietrengendeId, identState.annenSokerIdent);
+            setIdentAction(journalpostident || '', '', identState.annenSokerIdent);
             if (journalpost?.norskIdent) {
                 setVisSokersBarn(true);
             }

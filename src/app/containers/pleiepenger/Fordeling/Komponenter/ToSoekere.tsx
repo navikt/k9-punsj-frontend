@@ -82,7 +82,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             <VerticalSpacer sixteenPx />
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
-                    <Alert size="small" variant="info">
+                    <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
                         {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
                     </Alert>
                     <TextField
