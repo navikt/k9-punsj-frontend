@@ -30,7 +30,7 @@ const KlassifiseringInfo = () => {
     };
 
     return (
-        <div className="fagsakContainer">
+        <div className="fagsakContainer" data-test-id="klassifiseringInfo">
             {renderLabelValue(
                 'fordeling.klassifiserModal.klassifiseringInfo.sakstype',
                 fagsak?.sakstype

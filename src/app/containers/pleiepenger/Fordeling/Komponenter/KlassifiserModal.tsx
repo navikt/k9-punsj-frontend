@@ -226,102 +226,103 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         settPåVent.isSuccess;
 
     return (
-        <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
+        <Modal open onClose={lukkModal} aria-labelledby="modal-heading" data-test-id="klassifiserModal">
             <Modal.Header closeButton={false}>
-                <Heading level="1" size="small" id="modal-heading">
+                <Heading level="1" size="small" id="modal-heading" data-test-id="klassifiserModalHeader">
                     <FormattedMessage id={`fordeling.klassifiserModal.tittel${fortsett ? '' : '.settPåVent'}`} />
                 </Heading>
             </Modal.Header>
             <Modal.Body>
                 <div className="max-w-xl">
                     <KlassifiseringInfo />
+                    <div data-test-id="klassifiserModalAlertBlokk">
+                        {renderAlert(
+                            'success',
+                            'fordeling.klassifiserModal.alert.success',
+                            !fortsett && journalførJournalpost.isSuccess && !!fagsak?.fagsakId,
+                        )}
+                        {renderAlert(
+                            'success',
+                            'fordeling.klassifiserModal.alert.success.reservert',
+                            !fortsett && journalførJournalpost.isSuccess && !fagsak?.fagsakId,
+                        )}
+                        {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !doNotShowWarnigAlert)}
+                        {/* Vise feilen fra serveren etter journalføring */}
+                        {renderAlert(
+                            'error',
+                            'fordeling.klassifiserModal.alert.error',
+                            !!journalførJournalpost.error,
+                            (journalførJournalpost.error as Error)?.message,
+                        )}
+                        {/* Vise feilen fra serveren etter sett på vent */}
+                        {renderAlert(
+                            'error',
+                            'fordeling.klassifiserModal.settPåVent.alert.error',
+                            !!settPåVent.error,
+                            (settPåVent.error as Error)?.message,
+                        )}
+                        {renderAlert(
+                            'success',
+                            'fordeling.klassifiserModal.kopierJournalpost.alert.success',
+                            kopierJournalpost.isSuccess,
+                        )}
+                        {renderAlert(
+                            'success',
+                            'fordeling.klassifiserModal.alert.success',
+                            !fortsett &&
+                                getJournalpost.isSuccess &&
+                                getJournalpost.data.erFerdigstilt &&
+                                !getJournalpost.data.sak?.reservert,
+                        )}
+                        {renderAlert(
+                            'success',
+                            'fordeling.klassifiserModal.alert.success.reservert',
+                            !fortsett &&
+                                getJournalpost.isSuccess &&
+                                getJournalpost.data.erFerdigstilt &&
+                                getJournalpost.data.sak?.reservert,
+                        )}
+                        {renderAlert(
+                            'error',
+                            'fordeling.klassifiserModal.kopierJournalpost.alert.error',
+                            !!kopierJournalpost.error,
+                            (kopierJournalpost.error as Error)?.message,
+                        )}
+                        {renderAlert(
+                            'error',
+                            'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
+                            jpIkkejournalførtFeil,
+                        )}
+                        {renderAlert('error', 'fordeling.error.settBehandlingsÅrMutation', !!settBehandlingsÅr.error)}
 
-                    {renderAlert(
-                        'success',
-                        'fordeling.klassifiserModal.alert.success',
-                        !fortsett && journalførJournalpost.isSuccess && !!fagsak?.fagsakId,
-                    )}
-                    {renderAlert(
-                        'success',
-                        'fordeling.klassifiserModal.alert.success.reservert',
-                        !fortsett && journalførJournalpost.isSuccess && !fagsak?.fagsakId,
-                    )}
-                    {renderAlert('warning', 'fordeling.klassifiserModal.alert.warning', !doNotShowWarnigAlert)}
-                    {/* Vise feilen fra serveren etter journalføring */}
-                    {renderAlert(
-                        'error',
-                        'fordeling.klassifiserModal.alert.error',
-                        !!journalførJournalpost.error,
-                        (journalførJournalpost.error as Error)?.message,
-                    )}
-                    {/* Vise feilen fra serveren etter sett på vent */}
-                    {renderAlert(
-                        'error',
-                        'fordeling.klassifiserModal.settPåVent.alert.error',
-                        !!settPåVent.error,
-                        (settPåVent.error as Error)?.message,
-                    )}
-                    {renderAlert(
-                        'success',
-                        'fordeling.klassifiserModal.kopierJournalpost.alert.success',
-                        kopierJournalpost.isSuccess,
-                    )}
-                    {renderAlert(
-                        'success',
-                        'fordeling.klassifiserModal.alert.success',
-                        !fortsett &&
-                            getJournalpost.isSuccess &&
-                            getJournalpost.data.erFerdigstilt &&
-                            !getJournalpost.data.sak?.reservert,
-                    )}
-                    {renderAlert(
-                        'success',
-                        'fordeling.klassifiserModal.alert.success.reservert',
-                        !fortsett &&
-                            getJournalpost.isSuccess &&
-                            getJournalpost.data.erFerdigstilt &&
-                            getJournalpost.data.sak?.reservert,
-                    )}
-                    {renderAlert(
-                        'error',
-                        'fordeling.klassifiserModal.kopierJournalpost.alert.error',
-                        !!kopierJournalpost.error,
-                        (kopierJournalpost.error as Error)?.message,
-                    )}
-                    {renderAlert(
-                        'error',
-                        'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
-                        jpIkkejournalførtFeil,
-                    )}
-                    {renderAlert('error', 'fordeling.error.settBehandlingsÅrMutation', !!settBehandlingsÅr.error)}
-
-                    {settBehandlingsÅr.isLoading && (
-                        <div className="mt-5">
-                            <span>
-                                <FormattedMessage id="fordeling.klassifiserModal.settBehandlingsÅrLoading" />
-                                {'  '}
-                                <Loader size="xsmall" title="Lagrer..." />
-                            </span>
-                        </div>
-                    )}
-                    {kopierJournalpost.isLoading && (
-                        <div className="mt-5">
-                            <span>
-                                <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
-                                {'  '}
-                                <Loader size="xsmall" title="Lagrer..." />
-                            </span>
-                        </div>
-                    )}
-                    {(ventGetJournalpost || getJournalpost.isLoading) && (
-                        <div className="mt-5">
-                            <span>
-                                <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />
-                                {'  '}
-                                <Loader size="xsmall" title="Lagrer..." />
-                            </span>
-                        </div>
-                    )}
+                        {settBehandlingsÅr.isLoading && (
+                            <div className="mt-5">
+                                <span>
+                                    <FormattedMessage id="fordeling.klassifiserModal.settBehandlingsÅrLoading" />
+                                    {'  '}
+                                    <Loader size="xsmall" title="Lagrer..." />
+                                </span>
+                            </div>
+                        )}
+                        {kopierJournalpost.isLoading && (
+                            <div className="mt-5">
+                                <span>
+                                    <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
+                                    {'  '}
+                                    <Loader size="xsmall" title="Lagrer..." />
+                                </span>
+                            </div>
+                        )}
+                        {(ventGetJournalpost || getJournalpost.isLoading) && (
+                            <div className="mt-5">
+                                <span>
+                                    <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />
+                                    {'  '}
+                                    <Loader size="xsmall" title="Lagrer..." />
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
@@ -332,12 +333,19 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                         disabled={disabledButtonsLoading}
+                        data-test-id="klassifiserModalGåTilLos"
                     >
                         <FormattedMessage id="fordeling.klassifiserModal.btn.gåTilLos" />
                     </Button>
                 ) : (
                     <>
-                        <Button type="button" disabled={disabled} onClick={() => handleJournalfør()} size="small">
+                        <Button
+                            type="button"
+                            disabled={disabled}
+                            onClick={() => handleJournalfør()}
+                            size="small"
+                            data-test-id="klassifiserModalJournalfør"
+                        >
                             {!journalførJournalpost.isLoading ? (
                                 <FormattedMessage
                                     id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
@@ -349,7 +357,14 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                                 </span>
                             )}
                         </Button>
-                        <Button type="button" onClick={lukkModal} disabled={disabled} size="small" variant="secondary">
+                        <Button
+                            type="button"
+                            onClick={lukkModal}
+                            disabled={disabled}
+                            size="small"
+                            variant="secondary"
+                            data-test-id="klassifiserModalAvbryt"
+                        >
                             <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
                         </Button>
                     </>

@@ -25,7 +25,7 @@ interface Props {
     setAnnenPart: (annenPart: string) => void;
 }
 
-const getPleietrengendeInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
+const getFagsakInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
     const { sakstype, pleietrengendeIdent, behandlingsÅr, relatertPersonIdent } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
@@ -122,7 +122,7 @@ const FagsakSelect = ({
             </Select>
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">{getPleietrengendeInfo(valgtFagsak, barn)}</BodyShort>
+                    <BodyShort as="p">{getFagsakInfo(valgtFagsak, barn)}</BodyShort>
                     {!valgtFagsak.reservert && (
                         <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
                             <BodyShort as="p">

@@ -12,6 +12,8 @@ import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
 import journalpost300 from '../../cypress/fixtures/journalpost300.json';
+import fagsaker from '../../cypress/fixtures/fagsaker.json';
+import barn from '../../cypress/fixtures/barn.json';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
@@ -103,18 +105,7 @@ export const testHandlers = {
         Omsorgspenger - utbetaling
     */
 
-    barn: http.get(ApiPath.BARN_GET, () =>
-        HttpResponse.json(
-            {
-                barn: [
-                    { fornavn: 'Geir-Paco', etternavn: 'Gundersen', identitetsnummer: '02021477330' },
-                    { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
-                    { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
-                ],
-            },
-            { status: 200 },
-        ),
-    ),
+    barn: http.get(ApiPath.BARN_GET, () => HttpResponse.json(barn, { status: 200 })),
 
     gosysKategorier: http.get(ApiPath.GOSYS_GJELDER, () =>
         HttpResponse.json({
@@ -130,19 +121,7 @@ export const testHandlers = {
 
     hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
         await delay(500);
-        return HttpResponse.json(
-            [
-                {
-                    fagsakId: '1DMU93M',
-                    sakstype: 'PSB',
-                },
-                {
-                    fagsakId: '1DMUDF6',
-                    sakstype: 'OMP',
-                },
-            ],
-            { status: 200 },
-        );
+        return HttpResponse.json(fagsaker, { status: 200 });
     }),
 
     settBehandlingsaar: http.post(
