@@ -67,8 +67,14 @@ export const klassifiserDokument = (body: {
     post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
         async (response) => {
             if (!response.ok) {
-                const responseBody = await response.json();
-                const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+                let feil = '';
+                try {
+                    const responseBody = await response.json();
+                    feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+                } catch (error) {
+                    feil = 'Det oppstod en feil.';
+                }
+
                 throw Error(feil);
             }
             const responseBody = await response.json();
@@ -84,8 +90,13 @@ export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIden
             : { sakstype: sakstyper.GENERELL_SAK },
     }).then(async (response) => {
         if (!response.ok) {
-            const responseBody = await response.json();
-            const feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+            let feil = '';
+            try {
+                const responseBody = await response.json();
+                feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+            } catch (error) {
+                feil = 'Det oppstod en feil.';
+            }
             throw Error(feil);
         }
     });
@@ -94,12 +105,17 @@ export const settJournalpostPaaVentUtenSøknadId = (journalpostid: string) =>
     post(ApiPath.JOURNALPOST_SETT_PAA_VENT, { journalpostId: journalpostid }, undefined, undefined).then(
         async (response) => {
             if (!response.ok) {
-                const responseBody = await response.json();
-                const feil =
-                    responseBody.detail ||
-                    responseBody.feil ||
-                    responseBody.message ||
-                    'Det oppstod en feil når journalpost skulle settes på vent.';
+                let feil = '';
+                try {
+                    const responseBody = await response.json();
+                    feil =
+                        responseBody.detail ||
+                        responseBody.feil ||
+                        responseBody.message ||
+                        'Det oppstod en feil når journalpost skulle settes på vent.';
+                } catch (error) {
+                    feil = 'Det oppstod en feil når journalpost skulle settes på vent.';
+                }
                 throw Error(feil);
             }
         },
@@ -134,8 +150,14 @@ export const kopierJournalpostToSøkere = (
         requestBody,
     ).then(async (response) => {
         if (!response.ok) {
-            const responseBodyText = await response.text();
-            throw Error(responseBodyText);
+            let feil = '';
+            try {
+                const responseBody = await response.text();
+                feil = responseBody;
+            } catch (error) {
+                feil = 'Det oppstod en feil ved kopiering av journalpost.';
+            }
+            throw Error(feil);
         }
     });
 };

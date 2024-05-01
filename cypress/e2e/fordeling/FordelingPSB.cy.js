@@ -760,163 +760,168 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
+});
+describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
+    it('PSB intercept hent fagsaker', () => {
+        cy.visit('/journalpost/300');
+        Cypress.config('viewportWidth', 1280);
+        Cypress.config('viewportHeight', 1450);
 
-    describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
-        it('PSB intercept hent fagsaker', () => {
-            cy.visit('/journalpost/300');
-            Cypress.config('viewportWidth', 1280);
-            Cypress.config('viewportHeight', 1450);
+        cy.findByText(/Skjul/i).should('exist').click();
 
-            cy.window().then((window) => {
-                const { worker } = window.msw;
-                worker.use(http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json([], { status: 200 })));
-            });
-
-            cy.findByText(/Ja/i).should('exist').click();
-
-            cy.findByLabelText('Velg fagsak').should('not.exist');
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json([], { status: 200 })));
         });
 
-        it('PSB Test uten fagsaker med barn fra liste', () => {
-            cy.findByLabelText('Velg hvilket barn det gjelder')
-                .select(getBarnInfoForSelect(barn.barn[0]))
-                .should('have.value', barn.barn[0].identitetsnummer);
+        cy.findByText(/Ja/i).should('exist').click();
 
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
-            });
-
-            cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
-
-        it('PSB Test uten fagsaker med annet barn', () => {
-            cy.findByLabelText('Det gjelder et annet barn').check();
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('not.exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('not.exist');
-            });
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-            cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('exist');
-                cy.findByText(fnrBarnIkkeFraList).should('exist');
-            });
-
-            cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
-
-        it('PSB Test uten fagsaker og Pleietrengende har ikke fødselsnummer', () => {
-            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('not.exist');
-                cy.findByText(fnrBarnIkkeFraList).should('not.exist');
-            });
-
-            cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
-
-        it('PSB intercept hent barn', () => {
-            cy.window().then((window) => {
-                const { worker } = window.msw;
-                worker.use(http.get(ApiPath.BARN_GET, () => HttpResponse.json({ barn: [] }, { status: 200 })));
-            });
-
-            // Clear hent barn på nytt
-            cy.findByText(/Nei/i).should('exist').click();
-            cy.findByText(/Ja/i).should('exist').click();
-        });
-
-        it('PSB Test uten fagsaker, uten barn liste med annet barn', () => {
-            cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
-            cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('exist');
-                cy.findByText(fnrBarnIkkeFraList).should('exist');
-            });
-
-            cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
-
-        it('PSB Test uten fagsaker, uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
-            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('not.exist');
-                cy.findByText(fnrBarnIkkeFraList).should('not.exist');
-            });
-
-            cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
+        cy.findByLabelText('Velg fagsak').should('not.exist');
     });
 
-    describe('Fordeling PSB søker uten liste med barn', { testIsolation: false }, () => {
-        it('PSB intercept hent barn', () => {
-            cy.visit('/journalpost/300');
-            cy.window().then((window) => {
-                const { worker } = window.msw;
-                worker.use(http.get(ApiPath.BARN_GET, () => HttpResponse.json({ barn: [] }, { status: 200 })));
-            });
+    it('PSB Test uten fagsaker med barn fra liste', () => {
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn.barn[0]))
+            .should('have.value', barn.barn[0].identitetsnummer);
 
-            cy.findByText(/Ja/i).should('exist').click();
-
-            cy.findByLabelText('Velg fagsak').should('exist');
-
-            cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
-
-            cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(barn.barn[0].identitetsnummer).should('exist');
         });
 
-        it('PSB Test søker uten barn liste med annet barn', () => {
-            cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
 
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('exist');
-                cy.findByText(fnrBarnIkkeFraList).should('exist');
-            });
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
-
-        it('PSB Test søker uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
-            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
-
-            cy.get('.journalpostpanel').within(() => {
-                cy.findByText(/Barnets ID/i).should('not.exist');
-                cy.findByText(fnrBarnIkkeFraList).should('not.exist');
-            });
-
-            cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
-
-            cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-        });
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    /*
+    it('PSB Test uten fagsaker med annet barn', () => {
+        cy.findByLabelText('Det gjelder et annet barn').check();
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('not.exist');
+            cy.findByText(barn.barn[0].identitetsnummer).should('not.exist');
+        });
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
+
+        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(fnrBarnIkkeFraList).should('exist');
+        });
+
+        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+
+    it('PSB Test uten fagsaker og Pleietrengende har ikke fødselsnummer', () => {
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('not.exist');
+            cy.findByText(fnrBarnIkkeFraList).should('not.exist');
+        });
+
+        cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+
+    it('PSB intercept hent barn', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(http.get(ApiPath.BARN_GET, () => HttpResponse.json({ barn: [] }, { status: 200 })));
+        });
+
+        // Clear hent barn på nytt
+        cy.findByText(/Nei/i).should('exist').click();
+        cy.findByText(/Ja/i).should('exist').click();
+    });
+
+    it('PSB Test uten fagsaker, uten barn liste med annet barn', () => {
+        cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
+        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(fnrBarnIkkeFraList).should('exist');
+        });
+
+        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+
+    it('PSB Test uten fagsaker, uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('not.exist');
+            cy.findByText(fnrBarnIkkeFraList).should('not.exist');
+        });
+
+        cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+});
+
+describe('Fordeling PSB søker uten liste med barn', { testIsolation: false }, () => {
+    it('PSB intercept hent barn', () => {
+        cy.visit('/journalpost/300');
+
+        cy.findByText(/Skjul/i).should('exist').click();
+
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(http.get(ApiPath.BARN_GET, () => HttpResponse.json({ barn: [] }, { status: 200 })));
+        });
+
+        cy.findByText(/Ja/i).should('exist').click();
+
+        cy.findByLabelText('Velg fagsak').should('exist');
+
+        cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
+
+        cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
+    });
+
+    it('PSB Test søker uten barn liste med annet barn', () => {
+        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(fnrBarnIkkeFraList).should('exist');
+        });
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+
+    it('PSB Test søker uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('not.exist');
+            cy.findByText(fnrBarnIkkeFraList).should('not.exist');
+        });
+
+        cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+});
+
+/*
     
     
 
@@ -929,7 +934,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.findByLabelText(/Velg hva journalposten gjelder/i).should('exist');
     });
     */
-    /*
+/*
     it('må sette behandlingsår for omsorgspenger', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Korrigering av inntektsmelding omsorgspenger AG/i).click();
@@ -1041,4 +1046,3 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
 
         cy.findByText(/Dette er ikke et gyldig fødsels- eller D-nummer./i).should('exist');
     }); */
-});
