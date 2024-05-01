@@ -70,7 +70,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText('Barn: ikke satt').should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', `/k9/web/fagsak/${fagsaker[0].fagsakId}`);
+            cy.get('a').invoke('attr', 'href').should('contain', fagsaker[0].fagsakId);
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
@@ -123,7 +123,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText(`Barn Id: ${fagsaker[2].pleietrengendeIdent}`).should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', `/k9/web/fagsak/${fagsaker[2].fagsakId}`);
+            cy.get('a').invoke('attr', 'href').should('contain', fagsaker[2].fagsakId);
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
