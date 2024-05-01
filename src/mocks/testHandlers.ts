@@ -19,7 +19,7 @@ import barn from '../../cypress/fixtures/barn.json';
 export const testHandlers = {
     hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
         if (params.id === '300') {
-            return HttpResponse.json(journalpost300);
+            return HttpResponse.json(journalpost300, { status: 201 });
         }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),

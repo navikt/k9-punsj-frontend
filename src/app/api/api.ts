@@ -70,9 +70,13 @@ export const klassifiserDokument = (body: {
                 let feil = '';
                 try {
                     const responseBody = await response.json();
-                    feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
+                    feil =
+                        responseBody.detail ||
+                        responseBody.feil ||
+                        responseBody.message ||
+                        'Det oppstod en feil ved klassifisering.';
                 } catch (error) {
-                    feil = 'Det oppstod en feil.';
+                    feil = 'Det oppstod en feil ved klassifisering.';
                 }
 
                 throw Error(feil);
@@ -150,13 +154,7 @@ export const kopierJournalpostToSøkere = (
         requestBody,
     ).then(async (response) => {
         if (!response.ok) {
-            let feil = '';
-            try {
-                const responseBody = await response.text();
-                feil = responseBody;
-            } catch (error) {
-                feil = 'Det oppstod en feil ved kopiering av journalpost.';
-            }
+            const feil = 'Det oppstod en feil ved kopiering av journalpost.';
             throw Error(feil);
         }
     });

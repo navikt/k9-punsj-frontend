@@ -154,7 +154,8 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     setVentGetJournalpost(false);
                     settPåVent.mutate();
                 }
-            } else if (getJpAntallForsøk < 5) {
+            } else if (getJpAntallForsøk < 4) {
+                setGetJpAntallForsøk(getJpAntallForsøk + 1);
                 setTimeout(() => getJournalpost.mutate(), 1000);
             } else {
                 setVentGetJournalpost(false);
@@ -162,6 +163,14 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
             }
         }
     }, [getJournalpost.isSuccess]);
+
+    // Hvis getJournalpost feiler, vis feilmelding
+    useEffect(() => {
+        if (getJournalpost.isError) {
+            setVentGetJournalpost(false);
+            setJpIkkeJournalførtFeil(true);
+        }
+    }, [getJournalpost.isError]);
 
     const disabled =
         ['loading'].includes(settBehandlingsÅr.status) ||
@@ -360,7 +369,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                         <Button
                             type="button"
                             onClick={lukkModal}
-                            disabled={disabled}
+                            disabled={disabled && !jpIkkejournalførtFeil}
                             size="small"
                             variant="secondary"
                             data-test-id="klassifiserModalAvbryt"
@@ -368,6 +377,17 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
                         </Button>
                     </>
+                )}
+                {settPåVent.isError && (
+                    <Button
+                        type="button"
+                        onClick={() => settPåVent.mutate()}
+                        size="small"
+                        variant="secondary"
+                        data-test-id="klassifiserModalPrøvIgjen"
+                    >
+                        Sett på vent
+                    </Button>
                 )}
             </Modal.Footer>
         </Modal>

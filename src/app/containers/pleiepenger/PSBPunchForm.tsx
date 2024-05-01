@@ -804,7 +804,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         );
 
         return (
-            <>
+            <div data-test-id="PSBPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
@@ -1181,7 +1181,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <Modal
                         key="settpaaventmodal"
                         className="settpaaventmodal"
-                        onBeforeClose={() => this.setState({ showSettPaaVentModal: false })}
+                        onClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label="settpaaventmodal"
                         open={this.state.showSettPaaVentModal}
                     >
@@ -1273,7 +1273,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         />
                     </Modal>
                 )}
-            </>
+            </div>
         );
     }
 }
