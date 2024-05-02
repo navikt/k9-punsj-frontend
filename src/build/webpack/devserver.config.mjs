@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import mustacheExpress from 'mustache-express';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
-// eslint-disable-next-line import/extensions
 import { envVariables } from '@k9-punsj-frontend/server/envVariables.js';
 
 dotenv.config();
