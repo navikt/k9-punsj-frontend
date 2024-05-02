@@ -2,6 +2,7 @@ import tsParser from '@typescript-eslint/parser';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-config-prettier';
+import eslintPluginReact from 'eslint-plugin-react';
 import eslintImport from 'eslint-plugin-import';
 
 export default [
