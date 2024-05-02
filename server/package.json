@@ -9,7 +9,7 @@
         "start-express": "node ./server.js"
     },
     "dependencies": {
-        "@navikt/oasis": "3.2.3",
+        "@navikt/oasis": "3.2.4",
         "axios": "1.6.8",
         "connect-timeout": "1.9.0",
         "cors": "2.8.5",

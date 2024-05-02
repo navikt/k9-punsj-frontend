@@ -12,28 +12,35 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Define the proxy configuration using the new array format.
 const proxyConfig =
     process.env.MSW_MODE === 'test'
-        ? {}
-        : {
-              '/api/k9-punsj': {
+        ? []
+        : [
+              {
+                  context: ['/api/k9-punsj'],
                   target: 'http://localhost:8101',
                   changeOrigin: true,
               },
-          };
+          ];
 
 const configureDevServer = () => ({
     proxy: proxyConfig,
     setupMiddlewares: (middlewares, devServer) => {
         const { app } = devServer;
         app.engine('html', mustacheExpress());
-        app.set('views', `${__dirname}/../../../dist`);
+        app.set('views', path.resolve(__dirname, '../../../dist'));
         app.set('view engine', 'mustache');
         app.get('/health/isAlive', (req, res) => {
             res.send('alive');
         });
         app.get('/health/isReady', (req, res) => {
             res.send('ready');
+        });
+        app.get('/me', async (req, res) => {
+            res.json({
+                name: 'Gizmo The Cat',
+            });
         });
         app.get(`/envVariables`, async (req, res) => {
             res.set('content-type', 'application/javascript');
@@ -47,7 +54,7 @@ const configureDevServer = () => ({
         });
         app.get('/mockServiceWorker.js', (req, res) => {
             res.set('content-type', 'application/javascript');
-            res.sendFile(path.resolve(`${__dirname}/../../mocks/mockServiceWorker.js`));
+            res.sendFile(path.resolve(__dirname, '../../mocks/mockServiceWorker.js'));
         });
         app.get(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
             res.render('index.html');
@@ -55,7 +62,11 @@ const configureDevServer = () => ({
 
         return middlewares;
     },
-    static: ['app'],
+    static: {
+        directory: path.resolve(__dirname, '../../../dist'),
+        publicPath: '/',
+        watch: true,
+    },
     client: {
         overlay: {
             errors: true,
