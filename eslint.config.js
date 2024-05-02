@@ -2,13 +2,14 @@ import tsParser from '@typescript-eslint/parser';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-config-prettier';
+import eslintPluginReact from 'eslint-plugin-react';
 import eslintImport from 'eslint-plugin-import';
 
 export default [
     {
         name: 'base-config',
         files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'], // specifying which files this configuration applies to
-        ignores: ['node_modules', 'dist'], // specify ignored files
+        ignores: ['node_modules/**/*', 'dist/**/*'], // specify ignored files
         languageOptions: {
             parser: tsParser,
             sourceType: 'module',
@@ -16,6 +17,7 @@ export default [
         plugins: {
             '@typescript-eslint': typescriptPlugin,
             'react-hooks': reactHooksPlugin,
+            react: eslintPluginReact,
             import: eslintImport,
         },
         settings: {
@@ -27,6 +29,8 @@ export default [
             },
         },
         rules: {
+            'react/no-unused-prop-types': 'warn',
+            'react/forbid-prop-types': 0,
             '@typescript-eslint/no-use-before-define': ['error'],
             '@typescript-eslint/no-shadow': 'error',
             'import/no-extraneous-dependencies': [
