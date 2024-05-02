@@ -3,6 +3,7 @@
         "browser": true
     },
     "parser": "@typescript-eslint/parser",
+    "ignore": ["node_modules", "dist"],
     "parserOptions": {
         "sourceType": "module",
         "ecmaFeatures": {
