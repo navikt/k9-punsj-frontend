@@ -10,7 +10,7 @@
         "@grafana/faro-web-tracing": "1.5.1",
         "@k9-punsj-frontend/server": "workspace:",
         "@navikt/aksel-icons": "6.5.0",
-        "@navikt/ds-css": "6.5.0",
+        "@navikt/ds-css": "6.7.0",
         "@navikt/ds-icons": "3.4.3",
         "@navikt/ds-react": "6.5.0",
         "@navikt/fnrvalidator": "2.0.7",
