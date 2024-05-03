@@ -37,6 +37,7 @@ Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
     release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
+    enabled: process.env.NODE_ENV === 'production',
     integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
     beforeSend: (event) => event,
 });
@@ -75,7 +76,7 @@ export const App: React.FunctionComponent = () => {
             app: window.nais?.app,
         });
     }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
-
+    console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     return (
         <Sentry.ErrorBoundary>
             <Provider store={store}>
