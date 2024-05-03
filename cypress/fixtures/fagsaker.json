@@ -53,5 +53,49 @@
             "tom": "2024-04-15"
         },
         "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBBHQ",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": "10511993291",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBFJK",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1DQB7o8",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": "10511993291",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "2DQB7o8",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
     }
 ]
