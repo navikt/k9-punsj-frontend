@@ -17,6 +17,10 @@ import { finnArbeidsgivereHistorikk } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
+import {
+    getMaxDatoFraSøknadsperioder,
+    getMinDatoFraSøknadsperioder,
+} from 'app/utils/date-utils/src/minMaxDatesInPerioder';
 
 type ItemInfo = any;
 
@@ -43,11 +47,19 @@ const Arbeidstakerperioder = ({
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
     const { arbeidstid, soekerId, soeknadsperiode } = soknad;
 
+    const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
+    const tom = getMaxDatoFraSøknadsperioder(soeknadsperiode);
+
     useEffect(() => {
         if (soekerId) {
-            finnArbeidsgivereHistorikk(soekerId, (response, data: ArbeidsgivereResponse) => {
-                setArbeidsgivere(data?.organisasjoner || []);
-            });
+            finnArbeidsgivereHistorikk(
+                soekerId,
+                (response, data: ArbeidsgivereResponse) => {
+                    setArbeidsgivere(data?.organisasjoner || []);
+                },
+                fom,
+                tom,
+            );
         }
     }, []);
 
