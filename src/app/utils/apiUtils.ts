@@ -7,6 +7,7 @@ import { getEnvironmentVariable } from './envUtils';
 
 async function logError(response: Response) {
     if (!response.ok && response.status !== 401) {
+        // eslint-disable-next-line no-console
         console.error(`Error: ${response.status} for URL: ${response.url}`);
     }
 }
@@ -33,8 +34,10 @@ export async function get(
     if (response.status === 401) {
         login();
     } else if (callbackIfAuth) {
-        const data = await response.text();
-        const jsonData = data ? JSON.parse(data) : undefined;
+        let jsonData;
+        if (response.ok) {
+            jsonData = await response.json();
+        }
         await callbackIfAuth(response, jsonData);
     }
     return response;
