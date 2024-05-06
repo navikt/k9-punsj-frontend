@@ -24,6 +24,27 @@ export const finnArbeidsgivere = (
     }
     return get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
 };
+export const finnArbeidsgivereHistorikk = (
+    søkerId: string,
+    callback?: (response: Response, data: ArbeidsgivereResponse) => void,
+    fom?: string,
+    tom?: string,
+): Promise<Response> => {
+    if (fom && tom) {
+        return get(
+            `${ApiPath.FINN_ARBEIDSGIVERE_HISTORIKK}?fom=${fom}&tom=${tom}`,
+            { norskIdent: søkerId },
+            { 'X-Nav-NorskIdent': søkerId },
+            callback,
+        );
+    }
+    return get(
+        ApiPath.FINN_ARBEIDSGIVERE_HISTORIKK,
+        { norskIdent: søkerId },
+        { 'X-Nav-NorskIdent': søkerId },
+        callback,
+    );
+};
 
 export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string): Promise<Error | void> =>
     post(ApiPath.JOURNALPOST_SETT_PAA_VENT, { journalpostId: journalpostid }, undefined, { soeknadId }).then(

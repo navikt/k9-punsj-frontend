@@ -13,7 +13,7 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
 
-import { finnArbeidsgivere } from '../../../../api/api';
+import { finnArbeidsgivereHistorikk } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
@@ -45,7 +45,7 @@ const Arbeidstakerperioder = ({
 
     useEffect(() => {
         if (soekerId) {
-            finnArbeidsgivere(soekerId, (response, data: ArbeidsgivereResponse) => {
+            finnArbeidsgivereHistorikk(soekerId, (response, data: ArbeidsgivereResponse) => {
                 setArbeidsgivere(data?.organisasjoner || []);
             });
         }
