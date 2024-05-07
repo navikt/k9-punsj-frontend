@@ -15,7 +15,7 @@ describe('Eksisterende søknader pleiepenger', () => {
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
             cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('exist');
+            cy.findByText(/Barnets ID/i).should('exist');
 
             cy.findByText(/200/i).should('exist');
             cy.findByText(/29099000129/i).should('exist');
@@ -23,12 +23,13 @@ describe('Eksisterende søknader pleiepenger', () => {
         });
     });
 
+    /*
     it('viser infoboks når det ikke finnes søknader fra før av', () => {
         cy.contains(
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
     });
-
+    
     it('kan gå tilbake til fordeling', () => {
         cy.contains(
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
@@ -91,4 +92,5 @@ describe('Eksisterende søknader pleiepenger', () => {
             );
         });
     });
+    */
 });

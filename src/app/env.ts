@@ -8,6 +8,7 @@ interface EnvVariable {
 export interface EnvVariables {
     IS_LOCAL: string;
     K9_LOS_URL: string;
+    APP_K9SAK_FAGSAK_FRONTEND_URL: string;
     OMP_KS_ENABLED: string;
     PLS_ENABLED: string;
     OMP_MA_FEATURE_TOGGLE: string;
@@ -15,7 +16,6 @@ export interface EnvVariables {
     SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
     OLP_ENABLED: string;
     OMP_AO_ENABLED: string;
-    POSTMOTTAK_TOGGLE: string;
 }
 
 export default async function setEnvVariables(): Promise<void> {
@@ -25,6 +25,7 @@ export default async function setEnvVariables(): Promise<void> {
     const appSettings = {
         IS_LOCAL: envVariables.IS_LOCAL,
         K9_LOS_URL: envVariables.K9_LOS_URL,
+        APP_K9SAK_FAGSAK_FRONTEND_URL: envVariables.APP_K9SAK_FAGSAK_FRONTEND_URL,
         OMP_KS_ENABLED: envVariables.OMP_KS_ENABLED,
         PLS_ENABLED: envVariables.PLS_ENABLED,
         OMP_MA_FEATURE_TOGGLE: envVariables.OMP_MA_FEATURE_TOGGLE,
@@ -32,7 +33,6 @@ export default async function setEnvVariables(): Promise<void> {
         SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: envVariables.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE,
         OLP_ENABLED: envVariables.OLP_ENABLED,
         OMP_AO_ENABLED: envVariables.OMP_AO_ENABLED,
-        POSTMOTTAK_TOGGLE: envVariables.POSTMOTTAK_TOGGLE,
     };
     (window as any).appSettings = JSON.parse(JSON.stringify(appSettings));
 }

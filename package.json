@@ -86,7 +86,7 @@
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.mjs",
-        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
+        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node src/build/scripts/start-dev.mjs",
         "start-express": "node ./server.js",
         "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.mjs",
@@ -95,7 +95,9 @@
         "eject": "react-scripts eject",
         "prepare": "husky install",
         "cypress:headless": "cypress run",
+        "cypress:open": "cypress open",
         "test:e2e": "start-server-and-test start:e2e http://localhost:8080 cypress:headless",
+        "test:e2eBrowser": "start-server-and-test start:e2e http://localhost:8080 cypress:open",
         "sentry-release": "(SENTRY_RELEASE=$(git rev-parse --short HEAD); node ./src/build/scripts/sentry-release)",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",

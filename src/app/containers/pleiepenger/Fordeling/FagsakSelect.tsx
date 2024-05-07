@@ -1,77 +1,152 @@
 import React from 'react';
 
-import { BodyShort, Checkbox, Select } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Link, Select } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
-import Period from 'app/utils/Period';
+
+import { DokumenttypeForkortelse } from 'app/models/enums';
+import { IBarn } from 'app/models/types/Barn';
+import { FormattedMessage } from 'react-intl';
+import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
+import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
     fagsaker: Fagsak[];
-    brukEksisterendeFagsak: boolean;
-    setValgtFagsak: (fagsak: string) => void;
-    finnVisningsnavnForSakstype: (sakstype: string) => string;
-    valgtFagsak: Fagsak | undefined;
-    setBrukEksisterendeFagsak: (brukEksisterendeFagsak: boolean) => void;
-    setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
+    reserverSaksnummerTilNyFagsak: boolean;
     identState: IIdentState;
+    ingenInfoOmBarnIDokument?: boolean;
+    valgtFagsak?: Fagsak;
+    barn?: IBarn[];
+    setValgtFagsak: (fagsak: string) => void;
+    setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
+    setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
+    setAnnenPart: (annenPart: string) => void;
 }
+
+const getFagsakInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
+    const { sakstype, pleietrengendeIdent, behandlingsÅr, relatertPersonIdent } = valgtFagsak;
+
+    if (sakstype === DokumenttypeForkortelse.PPN) {
+        if (pleietrengendeIdent) {
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
+                    values={{ pleietrengendeIdent }}
+                />
+            );
+        }
+
+        return (
+            <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.utenPleietrengende" />
+        );
+    }
+
+    if (sakstype === DokumenttypeForkortelse.OMP || sakstype === DokumenttypeForkortelse.OMP_UT) {
+        if (behandlingsÅr) {
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.behandlingsÅr"
+                    values={{ behandlingsÅr }}
+                />
+            );
+        }
+
+        return null;
+    }
+    if (sakstype === DokumenttypeForkortelse.OMP_MA) {
+        return (
+            <FormattedMessage
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa"
+                values={{ relatertPersonIdent: relatertPersonIdent || 'ikke satt' }}
+            />
+        );
+    }
+    if (pleietrengendeIdent) {
+        const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
+        if (barnet) {
+            const navn = `${barnet.fornavn} ${barnet.etternavn}`;
+            return (
+                <FormattedMessage
+                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn"
+                    values={{ navn, pleietrengendeIdent }}
+                />
+            );
+        }
+        return (
+            <FormattedMessage
+                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnKunMedFnr"
+                values={{ pleietrengendeIdent }}
+            />
+        );
+    }
+
+    return <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt" />;
+};
+
+const getLenkeTilK9Sak = (fagsakId: string) => {
+    const k9sakUrl = getEnvironmentVariable('APP_K9SAK_FAGSAK_FRONTEND_URL');
+    return `${k9sakUrl}${fagsakId}`;
+};
 
 const FagsakSelect = ({
     fagsaker,
-    brukEksisterendeFagsak,
-    setValgtFagsak,
-    finnVisningsnavnForSakstype,
-    valgtFagsak,
-    setBrukEksisterendeFagsak,
-    setIdentAction,
+    reserverSaksnummerTilNyFagsak,
     identState,
+    ingenInfoOmBarnIDokument,
+    valgtFagsak,
+    barn,
+    setValgtFagsak,
+    setReserverSaksnummerTilNyFagsak,
+    setIdentAction,
     setBehandlingsAar,
+    setAnnenPart,
 }: Props) => (
     <>
         <div className="fagsakSelectContainer">
             <Select
                 className="fagsakSelect"
                 label="Velg fagsak"
-                disabled={fagsaker.length === 0 || !brukEksisterendeFagsak}
+                disabled={fagsaker.length === 0 || reserverSaksnummerTilNyFagsak || ingenInfoOmBarnIDokument}
                 onChange={(event) => setValgtFagsak(event.target.value)}
             >
                 <option value="">Velg</option>
-                {brukEksisterendeFagsak &&
-                    fagsaker.map(({ fagsakId, sakstype: stype }) => (
+                {!ingenInfoOmBarnIDokument &&
+                    !reserverSaksnummerTilNyFagsak &&
+                    fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                         <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(stype)})`}
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
                         </option>
                     ))}
             </Select>
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">Fødselsnummer: {valgtFagsak.pleietrengendeIdent}</BodyShort>
-                    {valgtFagsak.gyldigPeriode?.fom && (
-                        <BodyShort as="p">
-                            Periode:{' '}
-                            {new Period(
-                                valgtFagsak.gyldigPeriode.fom,
-                                valgtFagsak.gyldigPeriode.tom,
-                            ).prettifyPeriodYears()}
-                        </BodyShort>
+                    <BodyShort as="p">{getFagsakInfo(valgtFagsak, barn)}</BodyShort>
+                    {!valgtFagsak.reservert && (
+                        <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
+                            <BodyShort as="p">
+                                <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
+                            </BodyShort>
+                            <ExternalLink />
+                        </Link>
                     )}
                 </div>
             )}
         </div>
         <Checkbox
             onChange={() => {
-                setBrukEksisterendeFagsak(!brukEksisterendeFagsak);
+                setReserverSaksnummerTilNyFagsak(!reserverSaksnummerTilNyFagsak);
                 setValgtFagsak('');
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                 setBehandlingsAar(undefined);
+                setAnnenPart('');
             }}
+            disabled={ingenInfoOmBarnIDokument}
+            checked={reserverSaksnummerTilNyFagsak}
         >
-            Har ikke tilhørende fagsak
+            <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
         </Checkbox>
-        <VerticalSpacer twentyPx />
     </>
 );
 

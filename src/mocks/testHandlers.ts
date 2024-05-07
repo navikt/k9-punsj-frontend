@@ -11,12 +11,22 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
+import journalpost300 from '../../cypress/fixtures/journalpost300.json';
+import journalpostPILS from '../../cypress/fixtures/journalpostPILS.json';
+import fagsaker from '../../cypress/fixtures/fagsaker.json';
+import barn from '../../cypress/fixtures/barn.json';
 
 // eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
-    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) =>
-        HttpResponse.json({ ...journalpost, journalpostId: params.id }),
-    ),
+    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
+        if (params.id === '300') {
+            return HttpResponse.json(journalpost300, { status: 201 });
+        }
+        if (params.id === '301') {
+            return HttpResponse.json(journalpostPILS, { status: 201 });
+        }
+        return HttpResponse.json({ ...journalpost, journalpostId: params.id });
+    }),
     opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
         HttpResponse.json(pleiepengerSoknad, { status: 201 }),
     ),
@@ -99,18 +109,7 @@ export const testHandlers = {
         Omsorgspenger - utbetaling
     */
 
-    barn: http.get(ApiPath.BARN_GET, () =>
-        HttpResponse.json(
-            {
-                barn: [
-                    { fornavn: 'Geir-Paco', etternavn: 'Gundersen', identitetsnummer: '02021477330' },
-                    { fornavn: 'Hallo', etternavn: 'Hansen', identitetsnummer: '03091477490' },
-                    { fornavn: 'Tom', etternavn: 'Tanks', identitetsnummer: '09081478047' },
-                ],
-            },
-            { status: 200 },
-        ),
-    ),
+    barn: http.get(ApiPath.BARN_GET, () => HttpResponse.json(barn, { status: 200 })),
 
     gosysKategorier: http.get(ApiPath.GOSYS_GJELDER, () =>
         HttpResponse.json({
@@ -126,19 +125,7 @@ export const testHandlers = {
 
     hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
         await delay(500);
-        return HttpResponse.json(
-            [
-                {
-                    fagsakId: '1DMU93M',
-                    sakstype: 'PSB',
-                },
-                {
-                    fagsakId: '1DMUDF6',
-                    sakstype: 'OMP',
-                },
-            ],
-            { status: 200 },
-        );
+        return HttpResponse.json(fagsaker, { status: 200 });
     }),
 
     settBehandlingsaar: http.post(

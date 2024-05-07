@@ -1,24 +1,23 @@
-import * as React from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import React from 'react';
+
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState } from 'app/models/types';
-import { IdentRules } from 'app/rules';
+import { IEksisterendeSoknaderState, IFordelingState, IJournalpost } from 'app/models/types';
+
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import {
     chooseEksisterendeSoknadAction,
     closeEksisterendeSoknadAction,
-    findEksisterendeSoknader,
     openEksisterendeSoknadAction,
     resetSoknadidAction,
 } from 'app/state/actions';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
@@ -30,20 +29,20 @@ import ErDuSikkerModal from './ErDuSikkerModal';
 export interface IEksisterendeSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    journalpost?: IJournalpost;
+    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
-    findEksisterendeSoknader: typeof findEksisterendeSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
     chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
     resetSoknadidAction: typeof resetSoknadidAction;
-    resetAllAction: typeof resetAllStateAction;
 }
 
 export interface IEksisterendeSoknaderComponentProps {
-    søkerId: string;
     pleietrengendeId: string | null;
+    kanStarteNyRegistrering: boolean;
 }
 
 type IEksisterendeSoknaderProps = WrappedComponentProps &
@@ -54,24 +53,15 @@ type IEksisterendeSoknaderProps = WrappedComponentProps &
 export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
     props: IEksisterendeSoknaderProps,
 ) => {
-    const { intl, eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
     const navigate = useNavigate();
-
+    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState, journalpost, fordelingState } =
+        props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-
-    React.useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.findEksisterendeSoknader(søkerId, null);
-        } else {
-            props.resetAllAction();
-            navigate(ROUTES.HOME);
-        }
-    }, [søkerId, pleietrengendeId]);
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil i henting av mapper.
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
             </Alert>
         );
     }
@@ -91,7 +81,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }
@@ -113,7 +103,9 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         }
     };
 
-    function showSoknader() {
+    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+
+    const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
@@ -140,9 +132,16 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     variant="secondary"
                     key={soknadId}
                     size="small"
+                    disabled={
+                        (søknad.barn.norskIdent &&
+                            pleietrengendeId !== søknad.barn.norskIdent &&
+                            !!pleietrengendeId &&
+                            pleietrengendeId !== null) ||
+                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                    }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
-                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                    <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
             ];
             rows.push(
@@ -152,7 +151,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </tr>,
@@ -181,15 +180,34 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 
         return (
             <>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${props.kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
-                            <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="tabell.mottakelsesdato" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="tabell.barnetsfnrellerfdato" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="tabell.dokumenter" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="tabell.journalpostid" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="skjema.periode" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col" aria-label="mappe.lesemodus.knapp.velg" />
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{rows}</Table.Body>
@@ -197,7 +215,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                 {modaler}
             </>
         );
-    }
+    };
 
     if (soknader && soknader.length) {
         return (
@@ -212,9 +230,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         <>
             {technicalError}
             <Alert size="small" variant="info">
-                {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
-                })}
+                <FormattedMessage
+                    id="mapper.infoboks.ingensoknader"
+                    values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
+                />
             </Alert>
         </>
     );
@@ -223,11 +242,11 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
+    journalpost: state.felles.journalpost,
+    fordelingState: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
     closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
     chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),

@@ -69,8 +69,10 @@ export function get(
         }
 
         if (callbackIfAuth) {
-            const data = await response.text();
-            const jsonData = data ? JSON.parse(data) : undefined;
+            let jsonData;
+            if (response.ok) {
+                jsonData = await response.json();
+            }
             await callbackIfAuth(response, jsonData);
         }
         return response;

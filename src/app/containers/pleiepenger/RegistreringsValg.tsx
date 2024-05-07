@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { connect, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+import { IdentRules } from 'app/rules';
 import { IEksisterendeSoknaderState } from '../../models/types';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
-import { createSoknad, resetSoknadidAction } from '../../state/actions';
+import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from '../../state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
 import { EksisterendeSoknader } from './EksisterendeSoknader';
 import './registreringsValg.less';
@@ -19,9 +20,10 @@ export interface IRegistreringsValgComponentProps {
 }
 
 export interface IRegistreringsValgDispatchProps {
-    createSoknad: typeof createSoknad;
-    resetSoknadidAction: typeof resetSoknadidAction;
+    createNewSoknad: typeof createSoknad;
+    resetSoknadId: typeof resetSoknadidAction;
     getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
+    getEksisterendeSoknader: typeof findEksisterendeSoknader;
 }
 
 export interface IEksisterendeSoknaderStateProps {
@@ -33,31 +35,70 @@ type IRegistreringsValgProps = IRegistreringsValgComponentProps &
     IEksisterendeSoknaderStateProps &
     IRegistreringsValgDispatchProps;
 
-export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsValgProps> = (
-    props: IRegistreringsValgProps,
-) => {
-    const { journalpostid, identState, eksisterendeSoknaderState } = props;
-
-    const { søkerId, pleietrengendeId } = identState;
-
+export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
     const navigate = useNavigate();
+    const location = useLocation();
 
-    React.useEffect(() => {
-        if (
-            !!eksisterendeSoknaderState.eksisterendeSoknaderSvar &&
-            eksisterendeSoknaderState.isSoknadCreated &&
-            eksisterendeSoknaderState.soknadid
-        ) {
-            props.resetSoknadidAction();
-            navigate(`../${ROUTES.PUNCH.replace(':id', eksisterendeSoknaderState.soknadid)}`);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+
+    const {
+        journalpostid,
+        identState,
+        eksisterendeSoknaderState,
+        getEksisterendeSoknader,
+        getAlleJournalposter,
+        createNewSoknad,
+        resetSoknadId,
+    } = props;
+    const { søkerId, pleietrengendeId } = identState;
+    const {
+        eksisterendeSoknaderSvar,
+        soknadid,
+        isSoknadCreated,
+        createSoknadRequestError,
+        isEksisterendeSoknaderLoading,
+    } = eksisterendeSoknaderState;
+    const { søknader } = eksisterendeSoknaderSvar;
+
+    // Redirect tilbake ved side reload
+    useEffect(() => {
+        if (!fordelingState.dokumenttype) {
+            navigate(location.pathname.replace('soknader/', ''));
         }
-    }, [eksisterendeSoknaderState.soknadid]);
+    }, [fordelingState.dokumenttype, location.pathname, navigate]);
 
-    React.useEffect(() => {
-        props.getAlleJournalposter(søkerId);
-    }, [søkerId]);
+    useEffect(() => {
+        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
+            getEksisterendeSoknader(søkerId, null);
+        }
 
-    if (eksisterendeSoknaderState.createSoknadRequestError) {
+        getAlleJournalposter(søkerId);
+    }, [søkerId, pleietrengendeId, getEksisterendeSoknader, getAlleJournalposter]);
+
+    // Starte søknad automatisk hvis ingen søknader finnes
+    useEffect(() => {
+        if (søknader?.length === 0) {
+            createNewSoknad(journalpostid, søkerId, pleietrengendeId);
+        }
+    }, [søknader, journalpostid, pleietrengendeId, søkerId, createNewSoknad]);
+
+    useEffect(() => {
+        if (isSoknadCreated && soknadid) {
+            resetSoknadId();
+            navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
+        }
+    }, [isSoknadCreated, soknadid, navigate, resetSoknadId]);
+
+    const kanStarteNyRegistrering = () => {
+        if (søknader?.length) {
+            return !eksisterendeSoknaderSvar.søknader?.some((es) =>
+                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
+            );
+        }
+        return true;
+    };
+
+    if (createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
                 Det oppsto en feil under opprettelse av søknad.
@@ -65,32 +106,29 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
         );
     }
 
-    const newSoknad = () => props.createSoknad(journalpostid, søkerId, pleietrengendeId);
-
-    const kanStarteNyRegistrering = () => {
-        const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-        if (soknader?.length) {
-            return !eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader?.some((es) =>
-                Array.from(es.journalposter!).some((jp) => jp === journalpostid),
-            );
-        }
-        return true;
-    };
-
     return (
         <div className="registrering-page">
-            <EksisterendeSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            <EksisterendeSoknader
+                pleietrengendeId={pleietrengendeId}
+                kanStarteNyRegistrering={kanStarteNyRegistrering()}
+            />
             <div className="knapperad">
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
+                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
                     size="small"
+                    disabled={isEksisterendeSoknaderLoading}
                 >
-                    Tilbake
+                    <FormattedMessage id="fordeling.registreringsValg.tilbake" />
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button onClick={newSoknad} className="knapp2" size="small">
+                    <Button
+                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId)}
+                        className="knapp2"
+                        size="small"
+                        disabled={isEksisterendeSoknaderLoading}
+                    >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>
                 )}
@@ -99,9 +137,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IRegistreringsV
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
+    createNewSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
         dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
-    resetSoknadidAction: () => dispatch(resetSoknadidAction()),
+    resetSoknadId: () => dispatch(resetSoknadidAction()),
+    getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
 });
 

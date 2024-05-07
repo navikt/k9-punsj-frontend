@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
@@ -17,6 +17,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
+import { RootStateType } from 'app/state/RootState';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
@@ -24,14 +25,18 @@ import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 export interface Props {
     søkerId: string;
     pleietrengendeId: string | null;
+    kanStarteNyRegistrering?: boolean;
 }
 
-const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
-    const { søkerId, pleietrengendeId } = props;
+const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
+    const { søkerId, pleietrengendeId, kanStarteNyRegistrering } = props;
 
     const intl = useIntl();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPAOSoknad | undefined>(undefined);
 
@@ -77,6 +82,7 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
     const gaaVidereMedSoeknad = (soknad: IOMPAOSoknad) => {
         navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
+    const fagsakId = fellesState.journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
@@ -96,7 +102,19 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 søknad.periode && søknad.periode.fom ? dayjs(søknad.periode.fom).format('DD.MM.YYYY') : '',
-                <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
+                <Button
+                    variant="secondary"
+                    key={soknadId}
+                    size="small"
+                    disabled={
+                        (søknad.barn.norskIdent &&
+                            pleietrengendeId !== søknad.barn.norskIdent &&
+                            !!pleietrengendeId &&
+                            pleietrengendeId !== null) ||
+                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                    }
+                    onClick={() => setValgtSoeknad(søknad)}
+                >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Button>,
             ];
@@ -131,7 +149,15 @@ const EksisterendeOMPAOSoknader: React.FunctionComponent<Props> = (props) => {
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>

@@ -1,0 +1,101 @@
+[
+    {
+        "fagsakId": "1DMU93M",
+        "sakstype": "PSB",
+        "reservert": false,
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "fagsakId": "1DMUDF6",
+        "sakstype": "OMP",
+        "reservert": false,
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBDDS",
+        "sakstype": "PSB",
+        "pleietrengendeIdent": "28452069786",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1DQBB6M",
+        "sakstype": "PSB",
+        "pleietrengendeIdent": "01432082586",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1DQB57C",
+        "sakstype": "PSB",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBBHQ",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": "10511993291",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBFJK",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1DQB7o8",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": "10511993291",
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "2DQB7o8",
+        "sakstype": "PPN",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        },
+        "relatertPersonIdent": null
+    }
+]
