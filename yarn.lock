@@ -3144,7 +3144,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.5.1, @grafana/faro-web-sdk@npm:^1.5.1":
+"@grafana/faro-core@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@grafana/faro-core@npm:1.7.2"
+  dependencies:
+    "@opentelemetry/api": ^1.7.0
+    "@opentelemetry/otlp-transformer": ^0.48.0
+  checksum: 08ff7f94af9ae68816e8afc7c1d6e0cd8a95ad008f4be60e6c3cd628f37207643c6004a46c44ed4eb0e2fb17c41dcec433c69deda4f22802dd99bbada4142119
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:1.5.1":
   version: 1.5.1
   resolution: "@grafana/faro-web-sdk@npm:1.5.1"
   dependencies:
@@ -3155,24 +3165,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:1.5.1":
-  version: 1.5.1
-  resolution: "@grafana/faro-web-tracing@npm:1.5.1"
+"@grafana/faro-web-sdk@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@grafana/faro-web-sdk@npm:1.7.2"
   dependencies:
-    "@grafana/faro-web-sdk": ^1.5.1
+    "@grafana/faro-core": ^1.7.2
+    ua-parser-js: ^1.0.32
+    web-vitals: ^3.1.1
+  checksum: 49455208d9f7bbc93869204270d8cd2c371232c29fc16903da4ed5e02711c3049d3d8c061ab7c7f040f6092e5d70222f33fd6750d1a6b94d540897dd1d90ae6c
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-tracing@npm:1.7.2":
+  version: 1.7.2
+  resolution: "@grafana/faro-web-tracing@npm:1.7.2"
+  dependencies:
+    "@grafana/faro-web-sdk": ^1.7.2
     "@opentelemetry/api": ^1.7.0
     "@opentelemetry/context-zone": ^1.18.1
     "@opentelemetry/core": ^1.18.1
     "@opentelemetry/exporter-trace-otlp-http": ^0.48.0
     "@opentelemetry/instrumentation": ^0.48.0
-    "@opentelemetry/instrumentation-document-load": ^0.35.0
     "@opentelemetry/instrumentation-fetch": ^0.48.0
     "@opentelemetry/instrumentation-xml-http-request": ^0.48.0
     "@opentelemetry/otlp-transformer": ^0.48.0
     "@opentelemetry/resources": ^1.18.1
     "@opentelemetry/sdk-trace-web": ^1.18.1
     "@opentelemetry/semantic-conventions": ^1.18.1
-  checksum: abe8629f4f96d1136767ad5bba6ac8bc5083881151acd2e7545de51aa73a27a40d1438fedc3bd904327a95d50243023b02de1381437d3e1365df4126ddc9d0be
+  checksum: 904bfcb353c9dde3661e9894f875a5fe95eb4c7f19057e97020deded3b7eb66b70fbe3ea21ce1ea3e7b8f0f766ee4a1603ca29695f56b61ce3475298169cb3bd
   languageName: node
   linkType: hard
 
@@ -3984,7 +4004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/core@npm:1.22.0, @opentelemetry/core@npm:^1.18.1, @opentelemetry/core@npm:^1.8.0":
+"@opentelemetry/core@npm:1.22.0, @opentelemetry/core@npm:^1.18.1":
   version: 1.22.0
   resolution: "@opentelemetry/core@npm:1.22.0"
   dependencies:
@@ -4007,21 +4027,6 @@ __metadata:
   peerDependencies:
     "@opentelemetry/api": ^1.0.0
   checksum: de8f9c3080ed9575aa4bc575c11fe3d2a1836933dbe13d38f737ccc826127f8edc481dc0b5091fcf8d530d1bff87be6706216bf9684204aeb6399e54416218eb
-  languageName: node
-  linkType: hard
-
-"@opentelemetry/instrumentation-document-load@npm:^0.35.0":
-  version: 0.35.0
-  resolution: "@opentelemetry/instrumentation-document-load@npm:0.35.0"
-  dependencies:
-    "@opentelemetry/core": ^1.8.0
-    "@opentelemetry/instrumentation": ^0.48.0
-    "@opentelemetry/sdk-trace-base": ^1.0.0
-    "@opentelemetry/sdk-trace-web": ^1.15.0
-    "@opentelemetry/semantic-conventions": ^1.0.0
-  peerDependencies:
-    "@opentelemetry/api": ^1.3.0
-  checksum: 2ebcf4310141c2de5d7c9f5f6fea623c59ddcd9b5a0cd1e00764c415576219b7af7fbd8278227571ae84363fe4693f5254b2b1bfa86b648c3ef6240aac429fa2
   languageName: node
   linkType: hard
 
@@ -4158,7 +4163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-trace-base@npm:1.22.0, @opentelemetry/sdk-trace-base@npm:^1.0.0":
+"@opentelemetry/sdk-trace-base@npm:1.22.0":
   version: 1.22.0
   resolution: "@opentelemetry/sdk-trace-base@npm:1.22.0"
   dependencies:
@@ -4184,7 +4189,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/sdk-trace-web@npm:^1.15.0, @opentelemetry/sdk-trace-web@npm:^1.18.1":
+"@opentelemetry/sdk-trace-web@npm:^1.18.1":
   version: 1.22.0
   resolution: "@opentelemetry/sdk-trace-web@npm:1.22.0"
   dependencies:
@@ -4204,7 +4209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/semantic-conventions@npm:1.22.0, @opentelemetry/semantic-conventions@npm:^1.0.0, @opentelemetry/semantic-conventions@npm:^1.18.1":
+"@opentelemetry/semantic-conventions@npm:1.22.0, @opentelemetry/semantic-conventions@npm:^1.18.1":
   version: 1.22.0
   resolution: "@opentelemetry/semantic-conventions@npm:1.22.0"
   checksum: cb3bdca1a29d3c32c44599bdf5ee5143b84e81aaa61edcd3f750133bfaffd7c1b36755c877921e4993e2468284a0564388844a7dda388122bee486d3f67fa4c8
@@ -14186,7 +14191,7 @@ __metadata:
     "@babel/preset-typescript": 7.24.1
     "@babel/runtime": 7.24.4
     "@grafana/faro-web-sdk": 1.5.1
-    "@grafana/faro-web-tracing": 1.5.1
+    "@grafana/faro-web-tracing": 1.7.2
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": 6.5.0
     "@navikt/ds-css": 6.5.0

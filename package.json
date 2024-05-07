@@ -7,7 +7,7 @@
     "dependencies": {
         "@babel/runtime": "7.24.4",
         "@grafana/faro-web-sdk": "1.5.1",
-        "@grafana/faro-web-tracing": "1.5.1",
+        "@grafana/faro-web-tracing": "1.7.2",
         "@k9-punsj-frontend/server": "workspace:",
         "@navikt/aksel-icons": "6.5.0",
         "@navikt/ds-css": "6.5.0",
