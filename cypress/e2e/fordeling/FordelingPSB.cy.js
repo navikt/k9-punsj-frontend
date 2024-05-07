@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
 import journalpost300 from '../../fixtures/journalpost300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
-import barn from '../../fixtures/barn.json';
+import barnFraApi from '../../fixtures/barn.json';
 
 const dokumenttypePSB = 'Pleiepenger sykt barn';
 const fnrBarnIkkeFraList = '02021477330';
@@ -350,13 +350,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
 
     it('PSB Test velg barn fra liste', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barn.barn[0]))
-            .should('have.value', barn.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
+            .should('have.value', barnFraApi.barn[0].identitetsnummer);
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
@@ -377,7 +377,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -408,7 +408,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -430,7 +430,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -573,12 +573,12 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             cy.findByText(fnrNySøker).should('exist');
         });
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barn.barn[0]))
-            .should('have.value', barn.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
+            .should('have.value', barnFraApi.barn[0].identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
@@ -601,7 +601,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -632,7 +632,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -659,7 +659,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -684,12 +684,12 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barn.barn[0]))
-            .should('have.value', barn.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
+            .should('have.value', barnFraApi.barn[0].identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
         });
         cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('not.exist');
 
@@ -713,7 +713,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -744,7 +744,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -781,12 +781,12 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
 
     it('PSB Test uten fagsaker med barn fra liste', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barn.barn[0]))
-            .should('have.value', barn.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
+            .should('have.value', barnFraApi.barn[0].identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
@@ -800,7 +800,7 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barn.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
