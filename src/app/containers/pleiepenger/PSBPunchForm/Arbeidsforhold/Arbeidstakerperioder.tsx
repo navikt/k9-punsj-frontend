@@ -13,14 +13,14 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
 
-import { finnArbeidsgivereHistorikk } from '../../../../api/api';
-import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
-import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
-import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 import {
     getMaxDatoFraSøknadsperioder,
     getMinDatoFraSøknadsperioder,
 } from 'app/utils/date-utils/src/minMaxDatesInPerioder';
+import { finnArbeidsgivereHistorikk } from '../../../../api/api';
+import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
+import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
+import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
 type ItemInfo = any;
 
