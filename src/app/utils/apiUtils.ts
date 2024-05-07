@@ -70,8 +70,10 @@ export function get(
 
         if (callbackIfAuth) {
             let jsonData;
-            if (response.ok) {
+            try {
                 jsonData = await response.json();
+            } catch (error) {
+                jsonData = { message: response.statusText };
             }
 
             await callbackIfAuth(response, jsonData);
