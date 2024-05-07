@@ -32,7 +32,7 @@ export const finnArbeidsgivereHistorikk = (
 ): Promise<Response> => {
     if (fom && tom) {
         return get(
-            `${ApiPath.FINN_ARBEIDSGIVERE_HISTORIKK}?fom=${fom}&tom=${tom}`,
+            `${ApiPath.FINN_ARBEIDSGIVERE_HISTORIKK}?historikk=true&fom=${fom}&tom=${tom}`,
             { norskIdent: søkerId },
             { 'X-Nav-NorskIdent': søkerId },
             callback,
