@@ -138,7 +138,7 @@ export const SearchForm = () => {
                     />
                 )}
 
-                {journalpostRequestError?.message && (
+                {(journalpostRequestError?.statusText || journalpostRequestError?.message) && (
                     <Alert size="small" variant="error">
                         <FormattedMessage id="søk.jp.internalServerError" />
                     </Alert>

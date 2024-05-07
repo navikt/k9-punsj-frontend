@@ -73,6 +73,7 @@ export function get(
             if (response.ok) {
                 jsonData = await response.json();
             }
+
             await callbackIfAuth(response, jsonData);
         }
         return response;
