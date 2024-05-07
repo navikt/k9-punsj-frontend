@@ -5,7 +5,7 @@ interface EnvVariable {
     value: string;
 }
 
-interface EnvVariables {
+export interface EnvVariables {
     IS_LOCAL: string;
     K9_LOS_URL: string;
     OMP_KS_ENABLED: string;
