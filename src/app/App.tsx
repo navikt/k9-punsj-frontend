@@ -8,11 +8,24 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {
+    Navigate,
+    Route,
+    Routes,
+    createRoutesFromChildren,
+    matchRoutes,
+    useLocation,
+    useNavigationType,
+} from 'react-router-dom';
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
-import { initializeFaro } from '@grafana/faro-web-sdk';
+import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import {
+    withSentryReactRouterV6Routing,
+    breadcrumbsIntegration,
+    reactRouterV6BrowserTracingIntegration,
+} from '@sentry/react';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
@@ -30,6 +43,7 @@ import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
 import JournalpostLoader from './containers/JournalpostLoader';
 import { ROUTES } from './constants/routes';
+import { logError } from './utils/logUtils';
 
 const environment = window.location.hostname;
 
@@ -37,16 +51,29 @@ Sentry.init({
     dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
     release: process.env.SENTRY_RELEASE || 'unknown',
     environment,
-    enabled: process.env.NODE_ENV === 'production',
-    integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
+    tracesSampleRate: 1.0,
+    integrations: [
+        breadcrumbsIntegration({ console: false }),
+        reactRouterV6BrowserTracingIntegration({
+            useEffect: React.useEffect,
+            useLocation,
+            useNavigationType,
+            createRoutesFromChildren,
+            matchRoutes,
+        }),
+    ],
     beforeSend: (event) => event,
 });
 
-function prepare() {
+async function prepare() {
+    initializeFaro({
+        url: window.nais?.telemetryCollectorURL,
+        app: window.nais?.app,
+        instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+    });
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
     }
-
     return Promise.resolve();
 }
 
@@ -65,20 +92,13 @@ queryClient.setDefaultOptions({
         refetchOnWindowFocus: false,
     },
 });
-
+const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 // eslint-disable-next-line import/prefer-default-export
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
-    React.useEffect(() => {
-        initializeFaro({
-            url: window.nais?.telemetryCollectorURL,
-            app: window.nais?.app,
-        });
-    }, [window.nais?.telemetryCollectorURL, window.nais?.app]);
-    console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     return (
-        <Sentry.ErrorBoundary>
+        <Sentry.ErrorBoundary onError={logError}>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ReactQueryDevtools initialIsOpen={false} />
@@ -89,8 +109,7 @@ export const App: React.FunctionComponent = () => {
                             setLocale(activeLocale);
                         }}
                     >
-                        <Routes>
-                            <Route path="/journalpost/undefined/*" element={<Navigate to={ROUTES.HOME} />} />
+                        <SentryRoutes>
                             <Route
                                 path={ROUTES.JOURNALPOST_ROOT}
                                 element={<JournalpostLoader renderOnLoadComplete={() => <JournalpostRouter />} />}
@@ -99,7 +118,7 @@ export const App: React.FunctionComponent = () => {
                             <Route path={ROUTES.BREV_AVSLUTTET_SAK} element={<SendBrevIAvsluttetSak />} />
                             <Route path={ROUTES.HOME} element={<SokIndex />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
-                        </Routes>
+                        </SentryRoutes>
                     </ApplicationWrapper>
                 </QueryClientProvider>
             </Provider>

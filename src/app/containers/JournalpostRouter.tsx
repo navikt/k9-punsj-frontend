@@ -18,6 +18,7 @@ import { OMPAORegistreringsValg } from 'app/omsorgspenger-alene-om-omsorgen/cont
 import OMPAOPunchFormContainer from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
 import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
+import { logError } from 'app/utils/logUtils';
 import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
 import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
 import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
@@ -38,7 +39,7 @@ const JournalpostRouter: React.FC = () => {
         <JournalpostOgPdfVisning
             journalposter={journalposterIAapenSoknad?.length ? journalposterIAapenSoknad : [journalpostid]}
         >
-            <ErrorBoundary fallback={<ErrorFallback />}>
+            <ErrorBoundary fallback={<ErrorFallback />} onError={logError}>
                 <Routes>
                     <Route path={ROUTES.PSB_ROOT} element={<JournalførOgFortsettValg />} />
                     <Route path={ROUTES.PSB_ROOT}>
