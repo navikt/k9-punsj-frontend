@@ -29,8 +29,10 @@ export async function get(
         login();
     } else if (callbackIfAuth) {
         let jsonData;
-        if (response.ok) {
+        try {
             jsonData = await response.json();
+        } catch (error) {
+            jsonData = { message: response.statusText };
         }
         await callbackIfAuth(response, jsonData);
     }
