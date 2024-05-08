@@ -7,6 +7,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+
+import { IFordelingState } from '../../models/types/FordelingState';
 import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import api, { hentEksisterendeSoeknader } from '../api';
@@ -17,6 +19,7 @@ export interface IOMPUTRegistreringsValgComponentProps {
 }
 export interface IEksisterendeOMPUTSoknaderStateProps {
     identState: IIdentState;
+    fordelingState: IFordelingState;
 }
 
 type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEksisterendeOMPUTSoknaderStateProps;
@@ -27,8 +30,10 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { journalpostid, identState } = props;
+    const { journalpostid, identState, fordelingState } = props;
     const { søkerId, pleietrengendeId } = identState;
+    const { fagsak } = fordelingState;
+    const søknadId = fagsak?.fagsakId;
 
     // Redirect tilbake ved side reload
     useEffect(() => {
@@ -41,7 +46,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, søknadId), {
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad.soeknadId)}`);
         },
@@ -116,6 +121,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
 };
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPUTSoknaderStateProps => ({
     identState: state.identState,
+    fordelingState: state.fordelingState,
 });
 
 export const OMPUTRegistreringsValg = connect(mapStateToProps)(RegistreringsValgComponent);
