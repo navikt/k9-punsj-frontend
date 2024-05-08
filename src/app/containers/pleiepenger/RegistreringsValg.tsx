@@ -40,6 +40,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
     const location = useLocation();
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
     const {
         journalpostid,
@@ -78,7 +79,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         if (søknader?.length === 0) {
-            createNewSoknad(journalpostid, søkerId, pleietrengendeId);
+            createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
     }, [søknader, journalpostid, pleietrengendeId, søkerId, createNewSoknad]);
 
@@ -124,7 +125,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
                 </Button>
                 {kanStarteNyRegistrering() && (
                     <Button
-                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId)}
+                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp2"
                         size="small"
                         disabled={isEksisterendeSoknaderLoading}
@@ -137,8 +138,8 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createNewSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId)),
+    createNewSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null, k9saksnummer?: string) =>
+        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)),
     resetSoknadId: () => dispatch(resetSoknadidAction()),
     getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
         dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
