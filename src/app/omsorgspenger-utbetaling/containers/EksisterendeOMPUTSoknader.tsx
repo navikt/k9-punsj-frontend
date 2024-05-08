@@ -174,7 +174,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
     return (
         <Alert size="small" variant="info">
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: pleietrengendeId ? '2' : '1',
+                antallSokere: pleietrengendeId ? '2' : '1', // TODO hvorfor pleietrengende
             })}
         </Alert>
     );
