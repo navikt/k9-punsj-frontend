@@ -17,7 +17,7 @@ import {
     getMaxDatoFraSøknadsperioder,
     getMinDatoFraSøknadsperioder,
 } from 'app/utils/date-utils/src/minMaxDatesInPerioder';
-import { finnArbeidsgivereHistorikk } from '../../../../api/api';
+import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
@@ -52,7 +52,7 @@ const Arbeidstakerperioder = ({
 
     useEffect(() => {
         if (soekerId) {
-            finnArbeidsgivereHistorikk(
+            finnArbeidsgivere(
                 soekerId,
                 (response, data: ArbeidsgivereResponse) => {
                     setArbeidsgivere(data?.organisasjoner || []);
@@ -120,7 +120,7 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <Fieldset className="listepaneler">
+        <Fieldset className="listepaneler" legend="">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                 const getHarDuplikatOrgnr = () =>
@@ -135,7 +135,7 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <Fieldset>
+                        <Fieldset legend="">
                             {itemsWithInitialItem.length > 1 && (
                                 <h2>
                                     <FormattedMessage
