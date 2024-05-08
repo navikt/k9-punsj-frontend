@@ -88,6 +88,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
 
         eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad) => {
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad.k9saksnummer || søknad.metadata.eksisterendeFagsak?.fagsakId;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -101,7 +102,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
                 Array.from(søknad.journalposter).join(', '),
                 <Button
                     variant="secondary"
-                    disabled={!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer}
+                    disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
                     key={soknadId}
                     size="small"
                     onClick={() => setValgtSoeknad(søknad)}
