@@ -9438,9 +9438,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:13.7.3":
-  version: 13.7.3
-  resolution: "cypress@npm:13.7.3"
+"cypress@npm:13.9.0":
+  version: 13.9.0
+  resolution: "cypress@npm:13.9.0"
   dependencies:
     "@cypress/request": ^3.0.0
     "@cypress/xvfb": ^1.2.4
@@ -9486,7 +9486,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 618db0839893d7633771437a0109225251fc4d3c1fcf54f35e727acc1422ec811907edab2721fa3d8bbc3017df5eb974e2b96cf78d70e40eb92465b3772fa5ca
+  checksum: ec2e0237d2a38d53d4e5c05fe1c37f7fe0bb13de798045ba091b6a5cf0edd7b3a282f4d8f4c063e3988ee048d06dcf4fef91d83d63a56cee9f9ff68685f3946d
   languageName: node
   linkType: hard
 
@@ -14245,7 +14245,7 @@ __metadata:
     cross-env: 7.0.3
     css-loader: 6.11.0
     css-minimizer-webpack-plugin: 6.0.0
-    cypress: 13.7.3
+    cypress: 13.9.0
     cypress-wait-until: 3.0.1
     dayjs: 1.11.10
     dotenv: 16.4.5
