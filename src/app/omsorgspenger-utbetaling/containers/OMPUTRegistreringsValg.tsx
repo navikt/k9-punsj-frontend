@@ -33,7 +33,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
     const { journalpostid, identState, fordelingState } = props;
     const { søkerId, pleietrengendeId } = identState;
     const { fagsak } = fordelingState;
-    const søknadId = fagsak?.fagsakId;
+    const k9saksnummer = fagsak?.fagsakId;
 
     // Redirect tilbake ved side reload
     useEffect(() => {
@@ -46,7 +46,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, søknadId), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, k9saksnummer), {
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad.soeknadId)}`);
         },

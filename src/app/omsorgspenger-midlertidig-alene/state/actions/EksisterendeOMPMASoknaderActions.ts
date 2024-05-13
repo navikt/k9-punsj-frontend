@@ -62,6 +62,7 @@ interface IOpprettMASoknad {
     norskIdent: string;
     annenPart: string;
     barn: string[];
+    k9saksnummer?: string;
 }
 
 type IMapperOMPMAActionTypes =
@@ -169,7 +170,7 @@ export function resetOMPMASoknadidAction(): IResetOMPMASoknadidAction {
     return { type: EksisterendeOMPMASoknaderActionKeys.OMP_MA_SOKNADID_RESET };
 }
 
-export function createOMPMASoknad(journalpostid: string, søkerId: string, annenPart: string) {
+export function createOMPMASoknad(journalpostid: string, søkerId: string, annenPart: string, k9saksnummer?: string) {
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 
@@ -179,6 +180,7 @@ export function createOMPMASoknad(journalpostid: string, søkerId: string, annen
             annenPart,
             // 07.05.2022 barn kan fjernes etter backend tillater opprettelse av søknad uten
             barn: [],
+            k9saksnummer,
         };
 
         post(ApiPath.OMP_MA_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
