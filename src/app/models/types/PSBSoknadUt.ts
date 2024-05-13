@@ -40,6 +40,7 @@ export interface IPSBSoknadUt {
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
     begrunnelseForInnsending?: BegrunnelseForInnsending;
+    k9saksnummer?: string;
 }
 
 export class ArbeidstidUt implements Required<IArbeidstid> {
@@ -130,6 +131,8 @@ export class PSBSoknadUt implements IPSBSoknadUt {
 
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
+    k9saksnummer?: string;
+
     constructor(soknad: IPSBSoknadUt) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -157,5 +160,6 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
+        this.k9saksnummer = soknad.k9saksnummer;
     }
 }
