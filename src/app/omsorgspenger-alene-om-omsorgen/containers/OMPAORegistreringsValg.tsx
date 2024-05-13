@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
@@ -30,6 +30,9 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
 
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+
     const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery(
         'hentSoeknaderOMPAO',
         () => hentEksisterendeSoeknader(søkerId),
@@ -39,7 +42,7 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer), {
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad?.soeknadId)}`);
         },

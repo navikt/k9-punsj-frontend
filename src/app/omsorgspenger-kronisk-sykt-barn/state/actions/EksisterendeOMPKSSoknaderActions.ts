@@ -163,7 +163,12 @@ export function resetOMPKSSoknadidAction(): IResetOMPKSSoknadidAction {
     return { type: EksisterendeOMPKSSoknaderActionKeys.OMP_KS_SOKNADID_RESET };
 }
 
-export function createOMPKSSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
+export function createOMPKSSoknad(
+    journalpostid: string,
+    søkerId: string,
+    barnIdent: string | null,
+    k9saksnummer?: string,
+) {
     return (dispatch: any) => {
         dispatch(createOMPKSSoknadRequestAction());
 
@@ -171,6 +176,7 @@ export function createOMPKSSoknad(journalpostid: string, søkerId: string, barnI
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
+            k9saksnummer,
         };
 
         post(ApiPath.OMP_KS_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
