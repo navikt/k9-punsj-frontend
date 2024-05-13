@@ -46,6 +46,9 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
+    console.log('TEST fordelingState', fordelingState);
+    console.log('TEST k9saksnummer', k9saksnummer);
+
     const {
         journalpostid,
         identState,
@@ -141,8 +144,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     );
 };
 const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
+    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null, k9saksnummer?: string) =>
+        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)),
     resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
     getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
     getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
