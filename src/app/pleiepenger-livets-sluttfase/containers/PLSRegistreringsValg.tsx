@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
@@ -43,6 +43,9 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     const navigate = useNavigate();
     const location = useLocation();
 
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+
     const {
         journalpostid,
         identState,
@@ -80,7 +83,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         if (søknader?.length === 0) {
-            createSoknad(journalpostid, søkerId, pleietrengendeId);
+            createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
     }, [createSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
 
@@ -125,7 +128,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                 </Button>
                 {kanStarteNyRegistrering() && (
                     <Button
-                        onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId)}
+                        onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp knapp2"
                         size="small"
                         disabled={isEksisterendeSoknaderLoading}
