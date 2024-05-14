@@ -425,6 +425,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (ytelserMedBehandlingsårValg && !behandlingsAar) {
             return true;
         }
+        console.log('TEST ytelserMedBehandlingsårValg', ytelserMedBehandlingsårValg);
+        console.log('TEST behandlingsAar', behandlingsAar);
 
         return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
     };
@@ -529,8 +531,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         if (isDokumenttypeMedBehandlingsår && nyValgtFagsak) {
-            const behandlingsårFraPeriode = dayjs(nyValgtFagsak.gyldigPeriode.fom).year();
-            setBehandlingsAar(nyValgtFagsak.behandlingsår || behandlingsårFraPeriode.toString());
+            setBehandlingsAar(nyValgtFagsak.behandlingsår);
         }
     };
 
