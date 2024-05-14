@@ -528,7 +528,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setAnnenPart(nyValgtFagsak.relatertPersonIdent);
         }
 
-        if (isDokumenttypeMedBehandlingsår && nyValgtFagsak && nyValgtFagsak.gyldigPeriode) {
+        if (isDokumenttypeMedBehandlingsår && nyValgtFagsak) {
             const behandlingsårFraPeriode = dayjs(nyValgtFagsak.gyldigPeriode.fom).year();
             setBehandlingsAar(nyValgtFagsak.behandlingsår || behandlingsårFraPeriode.toString());
         }
