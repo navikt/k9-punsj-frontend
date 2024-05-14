@@ -90,6 +90,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
 
         eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPAOSoknad) => {
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -98,9 +99,13 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
 
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                søknad.soekerId,
+                (søknad.barn.norskIdent
+                    ? søknad.barn.norskIdent
+                    : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
+                    '',
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 søknad.periode && søknad.periode.fom ? dayjs(søknad.periode.fom).format('DD.MM.YYYY') : '',
                 <Button
                     variant="secondary"
@@ -111,7 +116,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                             pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
                     onClick={() => setValgtSoeknad(søknad)}
                 >
@@ -162,9 +167,10 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>

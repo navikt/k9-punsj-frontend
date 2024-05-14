@@ -134,6 +134,8 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
+
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,
@@ -144,6 +146,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                 søknad.annenForelder.norskIdent,
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
                     : '',
@@ -157,7 +160,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                             annenPart !== søknad.annenForelder.norskIdent &&
                             !!annenPart &&
                             annenPart !== null) ||
-                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
@@ -213,6 +216,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.annenForelder')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>

@@ -139,6 +139,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
         soknader?.forEach((soknadInfo) => {
             const søknad = new PLSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -151,6 +152,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 generateDateString(søknad.soeknadsperiode),
                 <Button
                     variant="secondary"
@@ -161,7 +163,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                             pleietrengendeId !== søknad.pleietrengende.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
@@ -212,9 +214,12 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>
+                                {intlHelper(intl, 'tabell.pleietrengendesfnrellerfdato')}
+                            </Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>

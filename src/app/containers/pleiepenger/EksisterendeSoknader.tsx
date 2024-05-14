@@ -112,6 +112,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         soknader?.forEach((soknadInfo) => {
             const søknad = new PSBSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -127,6 +128,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     '',
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 generateDateString(søknad.soeknadsperiode),
                 <Button
                     variant="secondary"
@@ -137,7 +139,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                             pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
@@ -203,6 +205,9 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                             </Table.HeaderCell>
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.journalpostid" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell scope="col">
+                                <FormattedMessage id="tabell.fagsakId" />
                             </Table.HeaderCell>
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="skjema.periode" />
