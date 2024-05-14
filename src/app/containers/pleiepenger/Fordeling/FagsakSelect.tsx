@@ -26,7 +26,7 @@ interface Props {
 }
 
 const getFagsakInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
-    const { sakstype, pleietrengendeIdent, behandlingsÅr, relatertPersonIdent } = valgtFagsak;
+    const { sakstype, pleietrengendeIdent, behandlingsår: behandlingsÅr, relatertPersonIdent } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
         if (pleietrengendeIdent) {

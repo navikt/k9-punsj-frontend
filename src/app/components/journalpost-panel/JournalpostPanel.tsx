@@ -113,9 +113,9 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                     />
                 </div>
             )}
-            {journalpost?.sak?.behandlingsÅr && dokumenttyperOmpUt.includes(fordelingState.dokumenttype!) && (
+            {journalpost?.sak?.behandlingsår && dokumenttyperOmpUt.includes(fordelingState.dokumenttype!) && (
                 <div>
-                    <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsÅr} />
+                    <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsår} />
                 </div>
             )}
         </Panel>
