@@ -23,7 +23,7 @@
         "@types/redux-logger": "3.0.13",
         "@types/uuid": "9.0.8",
         "classnames": "2.5.1",
-        "css-minimizer-webpack-plugin": "6.0.0",
+        "css-minimizer-webpack-plugin": "7.0.0",
         "cypress": "13.9.0",
         "cypress-wait-until": "3.0.1",
         "dayjs": "1.11.11",
