@@ -7,7 +7,7 @@ interface Fagsak {
     gyldigPeriode: { fom: string; tom: string };
     reservertSaksnummer?: boolean;
     relatertPersonIdent?: string;
-    behandlingsÅr?: string; // For OMS
+    behandlingsår?: string; // For OMS
     reservert?: boolean;
 }
 

@@ -129,7 +129,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     pleietrengendeIdent: identState.pleietrengendeId,
                     gyldigPeriode: { fom: '', tom: '' },
                     reservertSaksnummer: true,
-                    behandlingsÅr: behandlingsAar,
+                    behandlingsår: behandlingsAar,
                 };
                 setFagsak(reservertSak);
             }

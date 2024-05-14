@@ -178,8 +178,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
              * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
              * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
              */
-            if (journalpost.sak?.behandlingsÅr) {
-                setBehandlingsAar(journalpost.sak.behandlingsÅr);
+            if (journalpost.sak?.behandlingsår) {
+                setBehandlingsAar(journalpost.sak.behandlingsår);
             }
             if (journalpost.sak?.fagsakId) {
                 setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
@@ -229,7 +229,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
                 setDisableRadios(true);
-                setBehandlingsAar(journalpost.sak.behandlingsÅr);
+                setBehandlingsAar(journalpost.sak.behandlingsår);
                 return;
             }
 
@@ -326,7 +326,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visValgAvBehandlingsaar =
         ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.behandlingsÅr)) &&
+        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.behandlingsår)) &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
@@ -530,7 +530,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
         if (isDokumenttypeMedBehandlingsår && nyValgtFagsak && nyValgtFagsak.gyldigPeriode) {
             const behandlingsårFraPeriode = dayjs(nyValgtFagsak.gyldigPeriode.fom).year();
-            setBehandlingsAar(nyValgtFagsak.behandlingsÅr || behandlingsårFraPeriode.toString());
+            setBehandlingsAar(nyValgtFagsak.behandlingsår || behandlingsårFraPeriode.toString());
         }
     };
 
