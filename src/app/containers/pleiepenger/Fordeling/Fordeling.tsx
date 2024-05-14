@@ -326,7 +326,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visValgAvBehandlingsaar =
         ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.gyldigPeriode)) &&
+        (reserverSaksnummerTilNyFagsak ||
+            (valgtFagsak?.reservert && !(valgtFagsak?.gyldigPeriode || valgtFagsak?.behandlingsÅr))) &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
@@ -529,7 +530,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         if (isDokumenttypeMedBehandlingsår && nyValgtFagsak && nyValgtFagsak.gyldigPeriode) {
-            setBehandlingsAar(String(dayjs(nyValgtFagsak.gyldigPeriode.fom).year()));
+            const behandlingsårFraPeriode = dayjs(nyValgtFagsak.gyldigPeriode.fom).year();
+            setBehandlingsAar(nyValgtFagsak.behandlingsÅr || behandlingsårFraPeriode.toString());
         }
     };
 
