@@ -326,8 +326,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visValgAvBehandlingsaar =
         ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        (reserverSaksnummerTilNyFagsak ||
-            (valgtFagsak?.reservert && !(valgtFagsak?.gyldigPeriode || valgtFagsak?.behandlingsÅr))) &&
+        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.behandlingsÅr)) &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
