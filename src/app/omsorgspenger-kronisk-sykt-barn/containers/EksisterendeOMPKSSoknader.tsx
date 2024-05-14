@@ -132,6 +132,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPKSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -146,6 +147,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                     '',
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
 
                 <Button
                     variant="secondary"
@@ -156,7 +158,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                             pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
-                        (!!søknad.k9saksnummer && fagsakId !== søknad.k9saksnummer)
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
@@ -212,6 +214,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
