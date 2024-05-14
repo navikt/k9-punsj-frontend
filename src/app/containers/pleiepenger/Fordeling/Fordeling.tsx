@@ -530,8 +530,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setAnnenPart(nyValgtFagsak.relatertPersonIdent);
         }
 
-        if (isDokumenttypeMedBehandlingsår && nyValgtFagsak) {
-            setBehandlingsAar(nyValgtFagsak.behandlingsår);
+        if (isDokumenttypeMedBehandlingsår) {
+            setBehandlingsAar(nyValgtFagsak ? nyValgtFagsak.behandlingsår : undefined);
         }
     };
 
