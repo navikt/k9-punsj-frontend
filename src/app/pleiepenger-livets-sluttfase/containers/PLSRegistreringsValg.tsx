@@ -46,9 +46,6 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
-    console.log('TEST fordelingState', fordelingState);
-    console.log('TEST k9saksnummer', k9saksnummer);
-
     const {
         journalpostid,
         identState,

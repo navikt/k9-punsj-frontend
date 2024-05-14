@@ -425,8 +425,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         if (ytelserMedBehandlingsårValg && !behandlingsAar) {
             return true;
         }
-        console.log('TEST ytelserMedBehandlingsårValg', ytelserMedBehandlingsårValg);
-        console.log('TEST behandlingsAar', behandlingsAar);
 
         return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
     };
