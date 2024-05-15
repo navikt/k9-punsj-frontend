@@ -4,30 +4,34 @@ import journalpost300 from '../../fixtures/journalpost300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
 
-const dokumenttypePSB = 'Pleiepenger sykt barn';
+const dokumenttype = 'Pleiepenger sykt barn';
+const valgteDokumentType = 'Pleiepenger sykt barn';
+const valgteDokumentTypeKode = 'PLEIEPENGER';
+const journalpostId = journalpost300.journalpostId;
+const norskIdent = journalpost300.norskIdent;
+const barn1FraApi = barnFraApi.barn[0];
+const barn3FraApi = barnFraApi.barn[2];
 const fnrBarnIkkeFraList = '02021477330';
 const fnrNySøker = '12448325820';
 const annenSøkerFnr = '02918496664';
+const fagsakUtenBarn = fagsaker[0];
+const fagsakMedBarn = fagsaker[2];
+const fagsakMedBarnReservert = fagsaker[3];
+const fagsakUtenBarnReservert = fagsaker[4];
 
 const klassifiserModalHeaderVent = 'Vil du lagre følgende informasjon til journalposten og sett på vent?';
 const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til journalposten?';
 
 const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
 
-const getFagsakNavnForSelect = (fagsakId, reservert) => {
-    if (reservert) {
-        return `${fagsakId} (K9 Pleiepenger sykt barn) (reservert)`;
-    }
-    return `${fagsakId} (K9 Pleiepenger sykt barn)`;
-};
+const getFagsakNavnForSelect = (fagsakId, reservert) =>
+    `${fagsakId} (K9 ${dokumenttype})${reservert ? ' (reservert)' : ''}`;
 
-const getBarnInfoForSelect = (barn) => {
-    return `${barn.fornavn} ${barn.etternavn} - ${barn.identitetsnummer}`;
-};
+const getBarnInfoForSelect = (barn) => `${barn.fornavn} ${barn.etternavn} - ${barn.identitetsnummer}`;
 
-describe('Fordeling PSB', { testIsolation: false }, () => {
-    it('PSB Åpen journalpost 300 fra LOS', () => {
-        cy.visit('/journalpost/300');
+describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
+    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+        cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
     });
@@ -36,18 +40,18 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.findByText(/Skjul/i).should('exist').click();
     });
 
-    it('PSB Journalpost pannel med riktig data', () => {
+    it('Journalpost pannel med riktig data', () => {
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
-            cy.findByText(journalpost300.journalpostId).should('exist');
+            cy.findByText(journalpostId).should('exist');
             cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(journalpost300.norskIdent).should('exist');
+            cy.findByText(norskIdent).should('exist');
             cy.findByText(/Sakstype/i).should('exist');
-            cy.findByText(dokumenttypePSB).should('exist');
+            cy.findByText(dokumenttype).should('exist');
         });
     });
 
-    it('PSB Viser dokumentvalg', () => {
+    it('Viser dokumentvalg', () => {
         cy.contains(/Dette gjelder:?/i).should('exist');
         cy.contains('Pleiepenger').should('exist');
         cy.contains('Omsorgspenger/omsorgsdager').should('exist');
@@ -55,26 +59,31 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.contains('Annet').should('exist');
     });
 
-    it('PSB Test journalfør buttons disabled ved start', () => {
+    it('Test checked riktig dokumenttype', () => {
+        cy.contains(valgteDokumentType).should('exist');
+        cy.get(`input[value="${valgteDokumentTypeKode}"]`).should('exist').should('be.checked');
+    });
+
+    it('Test journalfør buttons disabled ved start', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('PSB Test bekreft søker og velg fagsak uten barn', () => {
+    it('Test bekreft søker og velg fagsak uten barn', () => {
         cy.findByText(/Ja/i).should('exist').click();
 
         cy.findByLabelText('Velg fagsak')
             .should('exist')
-            .select(getFagsakNavnForSelect(fagsaker[0].fagsakId))
-            .should('have.value', fagsaker[0].fagsakId);
+            .select(getFagsakNavnForSelect(fagsakUtenBarn.fagsakId))
+            .should('have.value', fagsakUtenBarn.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText('Barn: ikke satt').should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', fagsaker[0].fagsakId);
+            cy.get('a').invoke('attr', 'href').should('contain', fagsakUtenBarn.fagsakId);
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsaker[0].fagsakId).should('exist');
+            cy.findByText(fagsakUtenBarn.fagsakId).should('exist');
             cy.findByText(/Barnets ID/i).should('not.exist');
         });
 
@@ -82,7 +91,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal med fagsak uten barn - sett på vent', () => {
+    it('Åpen klassifiser modal med fagsak uten barn - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -90,11 +99,11 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[0].fagsakId).should('exist');
+                cy.findByText(fagsakUtenBarn.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('not.exist');
             });
@@ -114,29 +123,29 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test velg fagsak med barn', () => {
+    it('Test velg fagsak med barn', () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId))
-            .should('have.value', fagsaker[2].fagsakId);
+            .select(getFagsakNavnForSelect(fagsakMedBarn.fagsakId))
+            .should('have.value', fagsakMedBarn.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Barn Id: ${fagsaker[2].pleietrengendeIdent}`).should('exist');
+            cy.findByText(`Barn Id: ${fagsakMedBarn.pleietrengendeIdent}`).should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', fagsaker[2].fagsakId);
+            cy.get('a').invoke('attr', 'href').should('contain', fagsakMedBarn.fagsakId);
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsaker[2].fagsakId).should('exist');
+            cy.findByText(fagsakMedBarn.fagsakId).should('exist');
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(fagsaker[2].pleietrengendeIdent).should('exist');
+            cy.findByText(fagsakMedBarn.pleietrengendeIdent).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal med fagsak og barn fortsett', () => {
+    it('Åpen klassifiser modal med fagsak og barn fortsett', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -144,14 +153,14 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[2].fagsakId).should('exist');
+                cy.findByText(fagsakMedBarn.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsaker[2].pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedBarn.pleietrengendeIdent).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -168,7 +177,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal med fagsak og barn - sett på vent', () => {
+    it('Åpen klassifiser modal med fagsak og barn - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -176,14 +185,14 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[2].fagsakId).should('exist');
+                cy.findByText(fagsakMedBarn.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsaker[2].pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedBarn.pleietrengendeIdent).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -200,28 +209,28 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test velg reservert fagsak med barn', () => {
+    it('Test velg reservert fagsak med barn', () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsaker[3].fagsakId, true))
-            .should('have.value', fagsaker[3].fagsakId);
+            .select(getFagsakNavnForSelect(fagsakMedBarnReservert.fagsakId, true))
+            .should('have.value', fagsakMedBarnReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Barn Id: ${fagsaker[3].pleietrengendeIdent}`).should('exist');
+            cy.findByText(`Barn Id: ${fagsakMedBarnReservert.pleietrengendeIdent}`).should('exist');
             cy.findByText('Se fagsak i K9').should('not.exist');
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsaker[3].fagsakId).should('exist');
+            cy.findByText(fagsakMedBarnReservert.fagsakId).should('exist');
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(fagsaker[3].pleietrengendeIdent).should('exist');
+            cy.findByText(fagsakMedBarnReservert.pleietrengendeIdent).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal med reservert fagsak og barn fortsett', () => {
+    it('Åpen klassifiser modal med reservert fagsak og barn fortsett', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -229,14 +238,14 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[3].fagsakId).should('exist');
+                cy.findByText(fagsakMedBarnReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsaker[3].pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedBarnReservert.pleietrengendeIdent).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -253,7 +262,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal med reservert fagsak og barn - sett på vent', () => {
+    it('Åpen klassifiser modal med reservert fagsak og barn - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -261,14 +270,14 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[3].fagsakId).should('exist');
+                cy.findByText(fagsakMedBarnReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsaker[3].pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedBarnReservert.pleietrengendeIdent).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -285,19 +294,19 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test velg reservert fagsak uten barn', () => {
+    it('Test velg reservert fagsak uten barn', () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsaker[4].fagsakId, true))
-            .should('have.value', fagsaker[4].fagsakId);
+            .select(getFagsakNavnForSelect(fagsakUtenBarnReservert.fagsakId, true))
+            .should('have.value', fagsakUtenBarnReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText('Barn: ikke satt').should('exist');
             cy.findByText('Se fagsak i K9').should('not.exist');
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsaker[4].fagsakId).should('exist');
+            cy.findByText(fagsakUtenBarnReservert.fagsakId).should('exist');
             cy.findByText(/Barnets ID/i).should('not.exist');
         });
 
@@ -305,7 +314,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal med reservert fagsak uten barn - sett på vent', () => {
+    it('Åpen klassifiser modal med reservert fagsak uten barn - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -313,11 +322,11 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
-                cy.findByText(fagsaker[4].fagsakId).should('exist');
+                cy.findByText(fagsakUtenBarnReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('not.exist');
             });
@@ -336,34 +345,52 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test Reserver saksnummer til ny fagsak', () => {
+    it('Test Reserver saksnummer til ny fagsak', () => {
         cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('not.exist');
-            cy.findByText(fagsaker[0].fagsakId).should('not.exist');
+            cy.findByText(fagsakUtenBarn.fagsakId).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('PSB Test velg barn fra liste', () => {
+    it('Test velg barn fra liste som finnes i en fagsak', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
-            .should('have.value', barnFraApi.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barn3FraApi))
+            .should('have.value', barn3FraApi.identitetsnummer);
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(barn3FraApi.identitetsnummer).should('exist');
+        });
+        cy.get('[data-test-id="pleietrengendeHarFagsak"]')
+            .should('exist')
+            .should('contain', fagsakMedBarn.fagsakId)
+            .should('contain', barn3FraApi.identitetsnummer);
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
+    });
+
+    it('Test velg barn fra liste', () => {
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal fortsett med reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal fortsett med reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -371,13 +398,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -394,7 +421,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal sett på vent med reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal sett på vent med reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -402,13 +429,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -425,12 +452,12 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test Det gjelder et annet barn', () => {
+    it('Test Det gjelder et annet barn', () => {
         cy.findByLabelText('Det gjelder et annet barn').check();
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -449,7 +476,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal fortsett med reserver fagsak og annet barn', () => {
+    it('Åpen klassifiser modal fortsett med reserver fagsak og annet barn', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -457,9 +484,9 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
@@ -480,7 +507,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal sett på vent med reserver fagsak og og annet barn', () => {
+    it('Åpen klassifiser modal sett på vent med reserver fagsak og og annet barn', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -488,9 +515,9 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
@@ -511,7 +538,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test Pleietrengende har ikke fødselsnummer', () => {
+    it('Test Pleietrengende har ikke fødselsnummer', () => {
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
 
         cy.get('.journalpostpanel').within(() => {
@@ -525,7 +552,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal sett på vent med reserver fagsak og Pleietrengende har ikke fødselsnummer ', () => {
+    it('Åpen klassifiser modal sett på vent med reserver fagsak og Pleietrengende har ikke fødselsnummer ', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -533,9 +560,9 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('not.exist');
@@ -555,7 +582,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test at state fjernet etter avbekreft søker', () => {
+    it('Test at state fjernet etter avbekreft søker', () => {
         cy.findByText(/Nei/i).should('exist').click();
         cy.findByLabelText('Velg fagsak').should('not.exist');
         cy.findByLabelText('Reserver saksnummer til ny fagsak').should('not.exist');
@@ -566,19 +593,19 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('PSB Test ny søker og barn', () => {
+    it('Test ny søker og barn', () => {
         cy.findByLabelText('Søkers fødselsnummer eller D-nummer:').should('exist').type(fnrNySøker);
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Søkers ID/i).should('exist');
             cy.findByText(fnrNySøker).should('exist');
         });
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
-            .should('have.value', barnFraApi.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
@@ -587,7 +614,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal fortsett med ny søker, reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal fortsett med ny søker, reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -595,13 +622,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(fnrNySøker).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -618,7 +645,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal sett på vent med ny søker, reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal sett på vent med ny søker, reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -626,13 +653,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(fnrNySøker).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -649,7 +676,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Test bekreft søker på nytt og pleietrengende fjernet fra state', () => {
+    it('Test bekreft søker på nytt og pleietrengende fjernet fra state', () => {
         cy.findByText(/Ja/i).should('exist').click();
 
         cy.get('.journalpostpanel').within(() => {
@@ -659,7 +686,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -667,7 +694,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         // cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('PSB Test to søkere i journalposten', () => {
+    it('Test to søkere i journalposten', () => {
         cy.findByLabelText('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)')
             .should('exist')
             .check();
@@ -684,12 +711,12 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
-            .should('have.value', barnFraApi.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('exist');
         });
         cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('not.exist');
 
@@ -699,7 +726,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal fortsett med med 2 søkere, reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal fortsett med med 2 søkere, reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -707,13 +734,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -730,7 +757,7 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('PSB Åpen klassifiser modal sett på vent med 2 søkere, reserver fagsak og barn fra liste', () => {
+    it('Åpen klassifiser modal sett på vent med 2 søkere, reserver fagsak og barn fra liste', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -738,13 +765,13 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
             .should('exist')
             .within(() => {
                 cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttypePSB).should('exist');
+                cy.findByText(dokumenttype).should('exist');
                 cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(journalpost300.norskIdent).should('exist');
+                cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Saksnummer/i).should('not.exist');
                 cy.findByText(/Periode/i).should('not.exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -761,9 +788,9 @@ describe('Fordeling PSB', { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 });
-describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
-    it('PSB intercept hent fagsaker', () => {
-        cy.visit('/journalpost/300');
+describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: false }, () => {
+    it('Intercept hent fagsaker', () => {
+        cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
 
@@ -779,14 +806,14 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.findByLabelText('Velg fagsak').should('not.exist');
     });
 
-    it('PSB Test uten fagsaker med barn fra liste', () => {
+    it('Test uten fagsaker med barn fra liste', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barnFraApi.barn[0]))
-            .should('have.value', barnFraApi.barn[0].identitetsnummer);
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
@@ -795,12 +822,12 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Test uten fagsaker med annet barn', () => {
+    it('Test uten fagsaker med annet barn', () => {
         cy.findByLabelText('Det gjelder et annet barn').check();
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('not.exist');
-            cy.findByText(barnFraApi.barn[0].identitetsnummer).should('not.exist');
+            cy.findByText(barn1FraApi.identitetsnummer).should('not.exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -819,7 +846,7 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Test uten fagsaker og Pleietrengende har ikke fødselsnummer', () => {
+    it('Test uten fagsaker og Pleietrengende har ikke fødselsnummer', () => {
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
 
         cy.get('.journalpostpanel').within(() => {
@@ -833,7 +860,7 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB intercept hent barn', () => {
+    it('Intercept hent barn', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(http.get(ApiPath.BARN_GET, () => HttpResponse.json({ barn: [] }, { status: 200 })));
@@ -844,7 +871,7 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.findByText(/Ja/i).should('exist').click();
     });
 
-    it('PSB Test uten fagsaker, uten barn liste med annet barn', () => {
+    it('Test uten fagsaker, uten barn liste med annet barn', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
         cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
 
@@ -859,7 +886,7 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Test uten fagsaker, uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
+    it('Test uten fagsaker, uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
 
         cy.get('.journalpostpanel').within(() => {
@@ -874,9 +901,9 @@ describe('Fordeling PSB søker uten fagsaker', { testIsolation: false }, () => {
     });
 });
 
-describe('Fordeling PSB søker uten liste med barn', { testIsolation: false }, () => {
-    it('PSB intercept hent barn', () => {
-        cy.visit('/journalpost/300');
+describe(`Fordeling ${dokumenttype} søker uten liste med barn`, { testIsolation: false }, () => {
+    it('Intercept hent barn', () => {
+        cy.visit(`/journalpost/${journalpostId}`);
 
         cy.findByText(/Skjul/i).should('exist').click();
 
@@ -894,7 +921,7 @@ describe('Fordeling PSB søker uten liste med barn', { testIsolation: false }, (
         cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
     });
 
-    it('PSB Test søker uten barn liste med annet barn', () => {
+    it('Test søker uten barn liste med annet barn', () => {
         cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
 
         cy.get('.journalpostpanel').within(() => {
@@ -906,7 +933,7 @@ describe('Fordeling PSB søker uten liste med barn', { testIsolation: false }, (
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Test søker uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
+    it('Test søker uten barn liste og Pleietrengende har ikke fødselsnummer', () => {
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
 
         cy.get('.journalpostpanel').within(() => {

@@ -25,7 +25,7 @@
         "reservert": false,
         "fagsakId": "1DQBDDS",
         "sakstype": "PSB",
-        "pleietrengendeIdent": "28452069786",
+        "pleietrengendeIdent": "09081478047",
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
@@ -105,6 +105,54 @@
         "pleietrengendeIdent": null,
         "gyldigPeriode": null,
         "behandlingsår": 2024,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1WTBMY6",
+        "sakstype": "OMP_KS",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBMY8",
+        "sakstype": "OMP_KS",
+        "pleietrengendeIdent": "09081478047",
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "2TQBHY3",
+        "sakstype": "OMP_KS",
+        "pleietrengendeIdent": "09081478047",
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1TQFHE3",
+        "sakstype": "OMP_KS",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
         "relatertPersonIdent": null
     }
 ]

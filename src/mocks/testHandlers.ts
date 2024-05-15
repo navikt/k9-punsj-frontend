@@ -13,6 +13,7 @@ import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepenger
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
 import journalpost300 from '../../cypress/fixtures/journalpost300.json';
 import journalpostPILS from '../../cypress/fixtures/journalpostPILS.json';
+import jpOMPKS302 from '../../cypress/fixtures/jpOMPKS302.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import barn from '../../cypress/fixtures/barn.json';
 
@@ -24,6 +25,9 @@ export const testHandlers = {
         }
         if (params.id === '301') {
             return HttpResponse.json(journalpostPILS, { status: 201 });
+        }
+        if (params.id === '302') {
+            return HttpResponse.json(jpOMPKS302, { status: 201 });
         }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),

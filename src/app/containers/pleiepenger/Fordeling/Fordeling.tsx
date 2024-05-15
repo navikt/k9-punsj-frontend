@@ -729,7 +729,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
-                                <Alert size="small" variant="warning" className="mb-4">
+                                <Alert
+                                    size="small"
+                                    variant="warning"
+                                    className="mb-4"
+                                    data-test-id="pleietrengendeHarFagsak"
+                                >
                                     <FormattedMessage
                                         id="fordeling.error.pleietrengendeHarFagsak"
                                         values={{
