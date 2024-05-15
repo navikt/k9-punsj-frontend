@@ -154,5 +154,53 @@
         },
         "behandlingsår": null,
         "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1WTBMY6",
+        "sakstype": "OMP_AO",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": false,
+        "fagsakId": "1DQBMY8",
+        "sakstype": "OMP_AO",
+        "pleietrengendeIdent": "09081478047",
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "2TQBHY3",
+        "sakstype": "OMP_AO",
+        "pleietrengendeIdent": "09081478047",
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
+    },
+    {
+        "reservert": true,
+        "fagsakId": "1TQFHE3",
+        "sakstype": "OMP_AO",
+        "pleietrengendeIdent": null,
+        "gyldigPeriode": {
+            "fom": "2021-12-31",
+            "tom": "2039-12-31"
+        },
+        "behandlingsår": null,
+        "relatertPersonIdent": null
     }
 ]
