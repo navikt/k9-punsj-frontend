@@ -44,33 +44,35 @@ import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils'
 import JournalpostLoader from './containers/JournalpostLoader';
 import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
+import AuthCallback from './auth/AuthCallback';
 
 const environment = window.location.hostname;
 
-Sentry.init({
-    dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
-    release: process.env.SENTRY_RELEASE || 'unknown',
-    environment,
-    tracesSampleRate: 1.0,
-    integrations: [
-        breadcrumbsIntegration({ console: false }),
-        reactRouterV6BrowserTracingIntegration({
-            useEffect: React.useEffect,
-            useLocation,
-            useNavigationType,
-            createRoutesFromChildren,
-            matchRoutes,
-        }),
-    ],
-    beforeSend: (event) => event,
-});
-
 async function prepare() {
-    initializeFaro({
-        url: window.nais?.telemetryCollectorURL,
-        app: window.nais?.app,
-        instrumentations: [...getWebInstrumentations({ captureConsole: true })],
-    });
+    if (window.location.hostname.includes('nav.no')) {
+        initializeFaro({
+            url: window.nais?.telemetryCollectorURL,
+            app: window.nais?.app,
+            instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+        });
+        Sentry.init({
+            dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
+            release: process.env.SENTRY_RELEASE || 'unknown',
+            environment,
+            tracesSampleRate: 1.0,
+            integrations: [
+                breadcrumbsIntegration({ console: false }),
+                reactRouterV6BrowserTracingIntegration({
+                    useEffect: React.useEffect,
+                    useLocation,
+                    useNavigationType,
+                    createRoutesFromChildren,
+                    matchRoutes,
+                }),
+            ],
+            beforeSend: (event) => event,
+        });
+    }
     if (process.env.NODE_ENV !== 'production') {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
     }
@@ -117,6 +119,7 @@ export const App: React.FunctionComponent = () => {
                             <Route path={ROUTES.OPPRETT_JOURNALPOST} element={<OpprettJournalpost />} />
                             <Route path={ROUTES.BREV_AVSLUTTET_SAK} element={<SendBrevIAvsluttetSak />} />
                             <Route path={ROUTES.HOME} element={<SokIndex />} />
+                            <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
                         </SentryRoutes>
                     </ApplicationWrapper>

@@ -26,5 +26,6 @@
     "tsLoaderOptions": {
         "useCache": false
     },
+    "include": ["src/**/*", "./globals.d.ts"],
     "exclude": ["node_modules", "src/build", "**.js", "dist"]
 }
