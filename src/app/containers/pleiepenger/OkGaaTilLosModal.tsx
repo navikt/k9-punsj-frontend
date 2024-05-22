@@ -31,7 +31,7 @@ export const OkGaaTilLosModal = (props: IOkGaaTilLOsModalProps) => {
             <div className="ok-gaa-til-los">
                 <CheckCircleSvg title="check" />
                 <div className="vl" />
-                <div className="info">
+                <div className="info" data-test-id="opprettIGosysOkModalInfo">
                     <div className="flex flex-wrap">{utledMelding(melding)}</div>
                     <div className="flex flex-wrap">
                         <FormattedMessage id="modal.okgaatillos.tillos" />
@@ -43,6 +43,7 @@ export const OkGaaTilLosModal = (props: IOkGaaTilLOsModalProps) => {
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
                     }}
+                    data-test-id="opprettIGosysOkModalOKBtn"
                 >
                     {intlHelper(intl, 'modal.okgaatillos.ok')}
                 </Button>

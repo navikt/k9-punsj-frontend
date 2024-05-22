@@ -80,6 +80,7 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.søkerId, fordelingState.valgtGosysKategori)
                 }
+                data-test-id="oppretteGosysOppgaveBtn"
             >
                 <FormattedMessage id="fordeling.sakstype.ANNET" />
             </Button>

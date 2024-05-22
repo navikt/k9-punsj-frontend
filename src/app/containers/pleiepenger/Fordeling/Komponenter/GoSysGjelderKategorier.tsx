@@ -45,6 +45,7 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
                 className="w-64"
                 label={intlHelper(intl, 'fordeling.kategoriGosys')}
                 onChange={(e) => setValgtGosysKategori(e.target.value)}
+                data-test-id="gosysKategoriSelect"
             >
                 <option disabled value="" label=" " aria-label="Tomt valg" />
 

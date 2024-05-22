@@ -547,6 +547,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 }}
                 aria-label="settpaaventokmodal"
                 open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
+                data-test-id="opprettIGosysOkModal"
             >
                 <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
             </Modal>
@@ -593,7 +594,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             </Alert>
                         )}
                         {!!opprettIGosysState.gosysOppgaveRequestError && (
-                            <Alert size="small" variant="error">
+                            <Alert size="small" variant="error" className="mb-5" data-test-id="opprettIGosysFeil">
                                 <FormattedMessage id="fordeling.omfordeling.feil" />
                             </Alert>
                         )}
