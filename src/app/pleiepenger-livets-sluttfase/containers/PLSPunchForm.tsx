@@ -780,7 +780,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
 
         return (
-            <>
+            <div data-test-id="PILSPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
@@ -1157,7 +1157,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         />
                     </Modal>
                 )}
-            </>
+            </div>
         );
     }
 }
