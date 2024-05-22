@@ -1,15 +1,15 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils';
-import journalpost300 from '../../fixtures/journalpost300.json';
+import journalpost from '../../fixtures/jpPSB300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
 
 const dokumenttype = 'Pleiepenger sykt barn';
 const valgteDokumentType = 'Pleiepenger sykt barn';
 const valgteDokumentTypeKode = 'PLEIEPENGER';
-const journalpostId = journalpost300.journalpostId;
-const norskIdent = journalpost300.norskIdent;
+const journalpostId = journalpost.journalpostId;
+const norskIdent = journalpost.norskIdent;
 const barn1FraApi = barnFraApi.barn[0];
 const barn3FraApi = barnFraApi.barn[2];
 const fnrBarnIkkeFraList = '02021477330';

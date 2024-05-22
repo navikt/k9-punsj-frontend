@@ -11,8 +11,8 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
-import journalpost300 from '../../cypress/fixtures/journalpost300.json';
-import journalpostPILS from '../../cypress/fixtures/journalpostPILS.json';
+import journalpost300 from '../../cypress/fixtures/jpPSB300.json';
+import journalpostPILS from '../../cypress/fixtures/jpPILS301.json';
 import jpOMPKS302 from '../../cypress/fixtures/jpOMPKS302.json';
 import jpOMPAO303 from '../../cypress/fixtures/jpOMPAO303.json';
 import jpOMPMA304 from '../../cypress/fixtures/jpOMPMA304.json';

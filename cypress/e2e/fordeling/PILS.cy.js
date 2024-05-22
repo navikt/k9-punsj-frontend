@@ -1,14 +1,14 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect } from '../../utils/utils';
-import journalpostPILS from '../../fixtures/journalpostPILS.json';
+import journalpost from '../../fixtures/jpPILS301.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 
 const dokumenttype = 'Pleiepenger i livets sluttfase';
 const valgteDokumentType = 'Pleiepenger i livets sluttfase';
 const valgteDokumentTypeKode = 'PLEIEPENGER_I_LIVETS_SLUTTFASE';
-const journalpostId = journalpostPILS.journalpostId;
-const norskIdent = journalpostPILS.norskIdent;
+const journalpostId = journalpost.journalpostId;
+const norskIdent = journalpost.norskIdent;
 const pleietrengende = '02021477330';
 const fnrNySøker = '12448325820';
 const annenSøkerFnr = '02918496664';
