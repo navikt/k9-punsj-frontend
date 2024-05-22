@@ -5,24 +5,6 @@ interface EnvVariable {
     value: string;
 }
 
-interface EnvVariables {
-    OIDC_AUTH_PROXY: string;
-    K9_LOS_URL: string;
-    APP_K9SAK_FAGSAK_FRONTEND_URL: string;
-    OMP_KS_ENABLED: string;
-    PLS_ENABLED: string;
-    OMP_MA_FEATURE_TOGGLE: string;
-    OMP_UT_FEATURE_TOGGLE: string;
-    SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
-    OLP_ENABLED: string;
-    OMP_AO_ENABLED: string;
-}
-
-interface EnvVariable {
-    key: string;
-    value: string;
-}
-
 export interface EnvVariables {
     IS_LOCAL: string;
     K9_LOS_URL: string;
@@ -34,6 +16,7 @@ export interface EnvVariables {
     SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: string;
     OLP_ENABLED: string;
     OMP_AO_ENABLED: string;
+    POSTMOTTAK_TOGGLE: string;
 }
 
 export default async function setEnvVariables(): Promise<void> {
@@ -51,6 +34,7 @@ export default async function setEnvVariables(): Promise<void> {
         SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: envVariables.SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE,
         OLP_ENABLED: envVariables.OLP_ENABLED,
         OMP_AO_ENABLED: envVariables.OMP_AO_ENABLED,
+        POSTMOTTAK_TOGGLE: envVariables.POSTMOTTAK_TOGGLE,
     };
     (window as any).appSettings = JSON.parse(JSON.stringify(appSettings));
 }
