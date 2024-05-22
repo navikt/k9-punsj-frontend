@@ -16,6 +16,7 @@ const ValgAvBehandlingsÅr = ({ behandlingsAar, onChange }: Props) => {
             size="small"
             onChange={(e) => onChange(e.target.value)}
             className="my-8"
+            data-test-id="valgAvbehandlingsÅr"
         >
             <option value="">Velg</option>
             <option value={String(thisYear)}>{thisYear}</option>

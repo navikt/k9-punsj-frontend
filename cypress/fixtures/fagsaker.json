@@ -19,7 +19,8 @@
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPersonIdent": null,
+        "behandlingsår": 2024
     },
     {
         "reservert": false,
@@ -103,9 +104,12 @@
         "fagsakId": "1DQBM7U",
         "sakstype": "OMP",
         "pleietrengendeIdent": null,
-        "gyldigPeriode": null,
         "behandlingsår": 2024,
-        "relatertPersonIdent": null
+        "relatertPersonIdent": null,
+        "gyldigPeriode": {
+            "fom": "2024-04-15",
+            "tom": "2024-04-15"
+        }
     },
     {
         "reservert": false,

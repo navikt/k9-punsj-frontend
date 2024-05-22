@@ -1,9 +1,10 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
+import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost300 from '../../fixtures/journalpost300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 
-const dokumenttypePSB = 'Pleiepenger sykt barn';
+const dokumenttype = 'Pleiepenger sykt barn';
 const annenSøkerFnr = '02918496664';
 
 const klassifiserModalAlertFeilKlassifisering = 'Det oppstod en feil ved klassifisering.';
@@ -12,13 +13,6 @@ const klassifiserModalAlertFeilJfEtterKopiering =
     'Det oppsto en feil under journalføring av journalposten etter kopiering. Trykk Avbryt og prøv journalføre uten annen søker siden journalposten ble kopiert.';
 const klassifiserModalAlertFeilSetPåVent = 'Det oppstod en feil når journalpost skulle settes på vent.';
 const alertJournalført = 'Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.';
-
-const getFagsakNavnForSelect = (fagsakId, reservert) => {
-    if (reservert) {
-        return `${fagsakId} (K9 Pleiepenger sykt barn) (reservert)`;
-    }
-    return `${fagsakId} (K9 Pleiepenger sykt barn)`;
-};
 
 describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: false }, () => {
     it('PSB Åpen journalpost 300 fra LOS', () => {
@@ -34,7 +28,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId))
+            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId, dokumenttype))
             .should('have.value', fagsaker[2].fagsakId);
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
@@ -188,7 +182,7 @@ describe('Test klassifisering PSB', { testIsolation: false }, () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId))
+            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId, dokumenttype))
             .should('have.value', fagsaker[2].fagsakId);
         cy.get('[data-test-id="journalførOgFortsett"]').click();
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
@@ -203,7 +197,7 @@ describe('Test klassifisering PSB', { testIsolation: false }, () => {
             cy.findByText(/Søkers ID/i).should('exist');
             cy.findByText(journalpost300.norskIdent).should('exist');
             cy.findByText(/Sakstype/i).should('exist');
-            cy.findByText(dokumenttypePSB).should('exist');
+            cy.findByText(dokumenttype).should('exist');
             cy.findByText(/Barnets ID/i).should('exist');
             cy.findByText(fagsaker[2].pleietrengendeIdent).should('exist');
             cy.findByText(/Saksnummer/i).should('exist');

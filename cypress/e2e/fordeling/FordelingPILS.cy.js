@@ -1,5 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
+import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpostPILS from '../../fixtures/journalpostPILS.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 
@@ -20,9 +21,6 @@ const klassifiserModalHeaderVent = 'Vil du lagre følgende informasjon til journ
 const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til journalposten?';
 
 const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
-
-const getFagsakNavnForSelect = (fagsakId, reservert) =>
-    `${fagsakId} (K9 ${dokumenttype})${reservert ? ' (reservert)' : ''}`;
 
 describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
     it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
@@ -69,7 +67,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.findByLabelText('Velg fagsak')
             .should('exist')
-            .select(getFagsakNavnForSelect(fagsakUtenPleietrengende.fagsakId))
+            .select(getFagsakNavnForSelect(fagsakUtenPleietrengende.fagsakId, dokumenttype))
             .should('have.value', fagsakUtenPleietrengende.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText('Fødselsnummer: ikke satt').should('exist');
@@ -122,7 +120,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId))
+            .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId, dokumenttype))
             .should('have.value', fagsakMedPleietrengende.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText(`Fødselsnummer: ${fagsakMedPleietrengende.pleietrengendeIdent}`).should('exist');
@@ -208,7 +206,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakMedPleietrengendeReservert.fagsakId, true))
+            .select(getFagsakNavnForSelect(fagsakMedPleietrengendeReservert.fagsakId, dokumenttype, true))
             .should('have.value', fagsakMedPleietrengendeReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText(`Fødselsnummer: ${fagsakMedPleietrengendeReservert.pleietrengendeIdent}`).should('exist');
@@ -293,7 +291,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.contains('Velg fagsak').should('exist');
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakUtenPleietrengendeReservert.fagsakId, true))
+            .select(getFagsakNavnForSelect(fagsakUtenPleietrengendeReservert.fagsakId, dokumenttype, true))
             .should('have.value', fagsakUtenPleietrengendeReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText('Fødselsnummer: ikke satt').should('exist');
@@ -499,7 +497,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         });
 
         cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId))
+            .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId, dokumenttype))
             .should('have.value', fagsakMedPleietrengende.fagsakId);
 
         cy.get('.journalpostpanel').within(() => {

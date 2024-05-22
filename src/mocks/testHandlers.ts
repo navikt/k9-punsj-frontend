@@ -16,6 +16,7 @@ import journalpostPILS from '../../cypress/fixtures/journalpostPILS.json';
 import jpOMPKS302 from '../../cypress/fixtures/jpOMPKS302.json';
 import jpOMPAO303 from '../../cypress/fixtures/jpOMPAO303.json';
 import jpOMPMA304 from '../../cypress/fixtures/jpOMPMA304.json';
+import jpOMPUT305 from '../../cypress/fixtures/jpOMPUT305.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import barn from '../../cypress/fixtures/barn.json';
 
@@ -36,6 +37,9 @@ export const testHandlers = {
         }
         if (params.id === '304') {
             return HttpResponse.json(jpOMPMA304, { status: 201 });
+        }
+        if (params.id === '305') {
+            return HttpResponse.json(jpOMPUT305, { status: 201 });
         }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
