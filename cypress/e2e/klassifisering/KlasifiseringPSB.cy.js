@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect } from '../../utils/utils';
-import journalpost300 from '../../fixtures/journalpost300.json';
+import journalpost from '../../fixtures/jpPSB300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 
 const dokumenttype = 'Pleiepenger sykt barn';
@@ -61,7 +61,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost300.journalpostId), () =>
+                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Det oppstod en feil ved kopiering av journalpost.' }, { status: 500 }),
                 ),
             );
@@ -82,7 +82,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost300.journalpostId), () =>
+                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Kopiert' }, { status: 200 }),
                 ),
             );
@@ -97,7 +97,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost300.journalpostId), () =>
+                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Det oppstod en feil ved sjekke av journalpost.' }, { status: 500 }),
                 ),
             );
@@ -121,7 +121,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost300.journalpostId), () =>
+                http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Kopiert' }, { status: 200 }),
                 ),
             );
@@ -130,8 +130,8 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost300.journalpostId), () =>
-                    HttpResponse.json({ ...journalpost300, erFerdigstilt: true }, { status: 200 }),
+                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId), () =>
+                    HttpResponse.json({ ...journalpost, erFerdigstilt: true }, { status: 200 }),
                 ),
             );
         });
@@ -152,9 +152,8 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.post(
-                    ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', journalpost300.journalpostId),
-                    () => HttpResponse.json({ sattPåVent: true }, { status: 200 }),
+                http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', journalpost.journalpostId), () =>
+                    HttpResponse.json({ sattPåVent: true }, { status: 200 }),
                 ),
             );
         });
@@ -193,9 +192,9 @@ describe('Test klassifisering PSB', { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Journalpostnummer/i).should('exist');
-            cy.findByText(journalpost300.journalpostId).should('exist');
+            cy.findByText(journalpost.journalpostId).should('exist');
             cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(journalpost300.norskIdent).should('exist');
+            cy.findByText(journalpost.norskIdent).should('exist');
             cy.findByText(/Sakstype/i).should('exist');
             cy.findByText(dokumenttype).should('exist');
             cy.findByText(/Barnets ID/i).should('exist');
