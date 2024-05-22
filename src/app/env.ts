@@ -23,7 +23,7 @@ interface EnvVariable {
     value: string;
 }
 
-interface EnvVariables {
+export interface EnvVariables {
     IS_LOCAL: string;
     K9_LOS_URL: string;
     APP_K9SAK_FAGSAK_FRONTEND_URL: string;

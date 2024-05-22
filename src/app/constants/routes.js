@@ -1,5 +1,6 @@
 export const ROUTES = {
     HOME: '/',
+    AUTH_CALLBACK: '/auth/callback',
     SEND_BREV_FAGSAK: 'send-brev-fagsak/',
     OPPRETT_JOURNALPOST: '/opprett-journalpost',
     BREV_AVSLUTTET_SAK: 'brev-avsluttet-sak/',

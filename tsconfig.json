@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "paths": {
-            "app/*": ["app/*"],
+            "app/*": ["app/*"]
         },
         "outDir": "build/dist",
         "module": "esnext",
@@ -21,10 +21,11 @@
         "noUnusedLocals": false,
         "baseUrl": "./src",
         "typeRoots": ["./node_modules/@types", "./src/@types"],
-        "resolveJsonModule": true,
+        "resolveJsonModule": true
     },
     "tsLoaderOptions": {
-        "useCache": false,
+        "useCache": false
     },
-    "exclude": ["node_modules", "src/build", "**.js", "dist"],
+    "include": ["src/**/*", "./globals.d.ts"],
+    "exclude": ["node_modules", "src/build", "**.js", "dist"]
 }
