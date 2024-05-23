@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
-import { connect, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router';
+import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
 
@@ -24,43 +24,21 @@ type IOLPRegistreringsValgProps = IOLPRegistreringsValgComponentProps & IEksiste
 export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistreringsValgProps> = (
     props: IOLPRegistreringsValgProps,
 ) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
-
-    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
-
-    // Redirect tilbake ved side reload
-    useEffect(() => {
-        if (!søkerId) {
-            navigate(location.pathname.replace('soknader/', ''));
-        }
-    }, [søkerId, location.pathname, navigate]);
+    const navigate = useNavigate();
 
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId), {
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad?.soeknadId)}`);
         },
     });
 
-    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery('hentSoeknaderOLP', () =>
-        hentEksisterendeSoeknader(søkerId),
-    );
-
-    // Starte søknad automatisk hvis ingen søknader finnes
-    useEffect(() => {
-        const soknader = eksisterendeSoeknader?.søknader;
-        if (soknader?.length === 0) {
-            opprettSoknad();
-        }
-    }, [eksisterendeSoeknader?.søknader, opprettSoknad]);
+    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -88,9 +66,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
+                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
                     size="small"
-                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>

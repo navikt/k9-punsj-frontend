@@ -106,7 +106,7 @@ export function PunchFormReducer(
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
-                submitSoknadConflict: action.error,
+                submitSoknadConflict: true,
             };
 
         case PunchFormActionKeys.HENT_PERIODER_REQUEST:

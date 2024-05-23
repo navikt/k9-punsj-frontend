@@ -12,7 +12,6 @@ proxyRedirects:
     scope: "api://dev-fss.k9saksbehandling.k9-formidling/.default"
     url: "https://k9-formidling.dev-fss-pub.nais.io"
 env:
-  APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.dev.intern.nav.no/k9/web/fagsak/
   K9_LOS_URL: https://k9-los-web.dev.adeo.no/
   OMP_KS_ENABLED: "true"
   PLS_ENABLED: "true"
@@ -20,4 +19,5 @@ env:
   OMP_UT_FEATURE_TOGGLE: "true"
   OMP_AO_ENABLED: "true"
   SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: "true"
+  POSTMOTTAK_TOGGLE: "true"
   OLP_ENABLED: "true"

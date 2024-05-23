@@ -1,14 +1,16 @@
-import React from 'react';
-
+/* eslint-disable react/jsx-props-no-spreading */
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import React from 'react';
 import { IntlShape } from 'react-intl';
+
 import { Alert, Panel, TextField } from '@navikt/ds-react';
+
 import DateInput from 'app/components/skjema/DateInput';
+
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
-
 import './opplysningerOmOMPKSSoknad.less';
 
 interface IOwnProps {
@@ -49,12 +51,12 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
                 value={soknad.klokkeslett || ''}
                 type="time"
                 className="klokkeslett"
+                size="small"
                 label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                 {...changeAndBlurUpdatesSoknad((event: any) => ({
                     klokkeslett: event.target.value,
                 }))}
                 error={getErrorMessage('klokkeslett')}
-                size="small"
             />
         </div>
         <RadioPanelGruppe

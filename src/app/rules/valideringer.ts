@@ -50,6 +50,10 @@ export function fødselsnummervalidator(verdi: string) {
     return IdentRules.harFnr11Siffrer(verdi) ? undefined : 'skjema.validering.11siffer';
 }
 
+export function minstEn<VerdiType>(verdi: VerdiType) {
+    return Object.values(verdi).some((subVerdi) => subVerdi) ? undefined : 'skjema.validering.minstEn';
+}
+
 export function positivtHeltall(verdi: number) {
     const positivtHeltallPattern = /^[1-9]\d*$/;
     return positivtHeltallPattern.test(`${verdi}`) ? undefined : 'skjema.validering.positivtheltall';

@@ -19,7 +19,6 @@ import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import JournalposterSync from 'app/components/JournalposterSync';
 
-import { IFellesState } from 'app/state/reducers/FellesReducer';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import { IIdentState } from '../../models/types/IdentState';
@@ -51,7 +50,6 @@ export interface IPunchOMPUTFormComponentProps {
 
 export interface IPunchOMPUTFormStateProps {
     identState: IIdentState;
-    fellesState: IFellesState;
 }
 
 type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & IPunchOMPUTFormStateProps;
@@ -59,7 +57,6 @@ type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & IPunchOMPUTFormState
 export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
     const {
         identState,
-        fellesState,
         visForhaandsvisModal,
         setVisForhaandsvisModal,
         k9FormatErrors,
@@ -77,7 +74,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     const intl = useIntl();
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
-    const søknadsperiodeFraSak = fellesState.journalpost?.sak?.gyldigPeriode;
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
@@ -191,7 +187,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
             <VerticalSpacer fourtyPx />
-            <ArbeidsforholdVelger søknadsperiodeFraSak={søknadsperiodeFraSak} />
+            <ArbeidsforholdVelger />
             <VerticalSpacer fourtyPx />
             {!values.erKorrigering && (
                 <>
@@ -220,6 +216,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
+                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
@@ -303,7 +300,6 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
 const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
     identState: state.identState,
-    fellesState: state.felles,
 });
 
 export const OMPUTPunchForm = connect(mapStateToProps)(PunchOMPUTFormComponent);

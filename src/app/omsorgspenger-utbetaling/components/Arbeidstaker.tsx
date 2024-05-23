@@ -21,24 +21,16 @@ interface OwnProps {
     index: number;
     slettArbeidsforhold: () => void;
     antallArbeidsforhold: number;
-    søknadsperiodeFraSak?: { fom: string; tom: string };
 }
 
-const Arbeidstaker = ({
-    index: arbeidstakerIndex,
-    slettArbeidsforhold,
-    antallArbeidsforhold,
-    søknadsperiodeFraSak,
-}: OwnProps) => {
+const Arbeidstaker = ({ index: arbeidstakerIndex, slettArbeidsforhold, antallArbeidsforhold }: OwnProps) => {
     const [gjelderAnnenOrganisasjon, setGjelderAnnenOrganisasjon] = useState(false);
     const { values } = useFormikContext<IOMPUTSoknad>();
-    const fom = søknadsperiodeFraSak?.fom;
-    const tom = søknadsperiodeFraSak?.tom;
 
     const { data: organisasjoner } = useQuery<Organisasjon[]>(
         ['organisasjoner'],
         () =>
-            finnArbeidsgivere(values.soekerId, undefined, fom, tom).then((response) => {
+            finnArbeidsgivere(values.soekerId).then((response) => {
                 if (response.ok) {
                     return response.json().then((json) => json.organisasjoner);
                 }

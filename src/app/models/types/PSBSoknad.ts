@@ -35,7 +35,6 @@ export interface IPSBSoknad {
     harMedisinskeOpplysninger?: boolean;
     trekkKravPerioder?: IPeriode[];
     begrunnelseForInnsending?: BegrunnelseForInnsending;
-    k9saksnummer?: string;
 }
 
 export interface ITilsynsordning {
@@ -114,7 +113,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     uttak: Uttak[];
 
-    utenlandsopphold?: UtenlandsOpphold[];
+    utenlandsopphold: UtenlandsOpphold[];
 
     utenlandsoppholdV2: UtenlandsOpphold[];
 
@@ -124,7 +123,7 @@ export class PSBSoknad implements IPSBSoknad {
 
     omsorg: Omsorg;
 
-    bosteder?: UtenlandsOpphold[];
+    bosteder: UtenlandsOpphold[];
 
     soknadsinfo: SoknadsInfo;
 
@@ -136,14 +135,12 @@ export class PSBSoknad implements IPSBSoknad {
 
     begrunnelseForInnsending?: BegrunnelseForInnsending;
 
-    k9saksnummer?: string;
-
     constructor(soknad: IPSBSoknad) {
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));
-        this.bosteder = soknad.bosteder ? soknad.bosteder.map((m) => new UtenlandsOpphold(m)) : undefined;
+        this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.journalposter = new Set(soknad.journalposter || []);
@@ -160,13 +157,10 @@ export class PSBSoknad implements IPSBSoknad {
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.utenlandsopphold = soknad.utenlandsopphold
-            ? soknad.utenlandsopphold.map((u) => new UtenlandsOpphold(u))
-            : undefined;
+        this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
         this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
             (u) => new UtenlandsOpphold(u),
         );
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
-        this.k9saksnummer = soknad.k9saksnummer || undefined;
     }
 }

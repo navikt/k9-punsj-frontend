@@ -179,20 +179,14 @@ export function resetPLSSoknadidAction(): IResetPLSSoknadidAction {
     return { type: EksisterendePLSSoknaderActionKeys.PLS_SOKNADID_RESET };
 }
 
-export function createPLSSoknad(
-    journalpostid: string,
-    søkerId: string,
-    pleietrengendeIdent: string | null,
-    k9saksnummer?: string,
-) {
+export function createPLSSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
     return (dispatch: any) => {
         dispatch(createPLSSoknadRequestAction());
 
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: søkerId,
-            pleietrengendeIdent,
-            k9saksnummer,
+            pleietrengendeIdent: barnIdent,
         };
 
         post(ApiPath.PLS_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

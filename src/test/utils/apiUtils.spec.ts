@@ -35,7 +35,7 @@ describe('get', () => {
         const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
         const url = apiUrl(path, { id });
-        const response = { status: 200, json: () => Promise.resolve({ key: 'value' }) };
+        const response = { status: 200 };
         const callback = jest.fn((r: Response) => Promise.resolve(r));
 
         fetchMock.get(url, response);

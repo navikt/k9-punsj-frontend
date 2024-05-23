@@ -21,7 +21,7 @@ export interface IPunchPSBFormState {
     updateSoknadError?: IError;
     submitSoknadError?: IError;
     validateSoknadError?: IError;
-    submitSoknadConflict?: IError;
+    submitSoknadConflict?: boolean;
     inputErrors?: IInputError[];
     isComplete?: boolean;
     isValid?: boolean;

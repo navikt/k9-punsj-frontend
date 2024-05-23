@@ -35,7 +35,6 @@ interface BrevProps {
     brevSendtCallback?: () => void;
 }
 
-// TODO: Fix rendering feil ved send brev hvis valideringsfeil
 const BrevComponent: React.FC<BrevProps> = ({
     søkerId,
     journalpostId,

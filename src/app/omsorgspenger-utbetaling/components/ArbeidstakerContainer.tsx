@@ -8,11 +8,7 @@ import { arbeidstakerInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Arbeidstaker from './Arbeidstaker';
 
-interface Props {
-    søknadsperiodeFraSak?: { fom: string; tom: string };
-}
-
-const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
+const ArbeidstakerContainer = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
     const {
         opptjeningAktivitet: { arbeidstaker },
@@ -33,7 +29,6 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
                             index={index}
                             antallArbeidsforhold={arbeidstaker.length}
                             slettArbeidsforhold={() => arrayHelpers.remove(index)}
-                            søknadsperiodeFraSak={søknadsperiodeFraSak}
                         />
                     ))}
                     <Button

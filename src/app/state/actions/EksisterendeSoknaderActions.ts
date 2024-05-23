@@ -155,7 +155,7 @@ export function createSoknadErrorAction(error: IError): ICreateSoknadErrorAction
 export function resetSoknadidAction(): IResetSoknadidAction {
     return { type: EksisterendeSoknaderActionKeys.SOKNADID_RESET };
 }
-export function createSoknad(journalpostid: string, søkerId: string, barnIdent: string | null, k9saksnummer?: string) {
+export function createSoknad(journalpostid: string, søkerId: string, barnIdent: string | null) {
     return (dispatch: any) => {
         dispatch(createSoknadRequestAction());
 
@@ -163,7 +163,6 @@ export function createSoknad(journalpostid: string, søkerId: string, barnIdent:
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
-            k9saksnummer,
         };
 
         post(ApiPath.PSB_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

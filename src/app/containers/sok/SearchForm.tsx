@@ -3,21 +3,19 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
-
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
+import VerticalSpacer from '../../components/VerticalSpacer';
+import SokKnapp from '../../components/knapp/SokKnapp';
 import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
 import { RootStateType } from '../../state/RootState';
 import { lukkOppgaveResetAction } from '../../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import SokKnapp from '../../components/knapp/SokKnapp';
 import { OkGaaTilLosModal } from '../pleiepenger/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
-
 import './sok.less';
 
 export const SearchForm = () => {
@@ -86,7 +84,6 @@ export const SearchForm = () => {
             // så hvis man ikke resetter state først skjer det rare ting.
             // TODO: fiks dette så vi slipper å kjøre kall for å hente ut journalpost to ganger
             dispatch(resetAllStateAction());
-
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);

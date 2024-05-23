@@ -10,14 +10,9 @@ import './DokumentTypeVelger.less';
 interface OwnProps {
     handleDokumenttype: (type: FordelingDokumenttype) => void;
     valgtDokumentType: string;
-    disableRadios?: boolean;
 }
 
-const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
-    handleDokumenttype,
-    valgtDokumentType,
-    disableRadios,
-}) => {
+const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({ handleDokumenttype, valgtDokumentType }) => {
     const intl = useIntl();
     const toggleFordelingDokumentType = (type: string): boolean => {
         switch (type) {
@@ -59,26 +54,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
         valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM;
 
-    const disableOMPVedFerdistiltJp = (value: FordelingOmsorgspengerSubMenyValg) => {
-        if (disableRadios) {
-            if (
-                valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER ||
-                valgtDokumentType === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_UT ||
-                valgtDokumentType === FordelingOmsorgspengerSubMenyValg.KORRIGERING_IM
-            ) {
-                return (
-                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_AO ||
-                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_MA ||
-                    value === FordelingOmsorgspengerSubMenyValg.OMSORGSPENGER_KS
-                );
-            }
-
-            return valgtDokumentType !== value;
-        }
-
-        return disableRadios;
-    };
-
     return (
         <div className="dokumentTypeVelgerContainer">
             <legend>
@@ -89,7 +64,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 value={FordelingDokumenttype.PLEIEPENGER}
                 checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                disabled={valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER && disableRadios}
             />
 
             <RadioPanel
@@ -97,7 +71,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 value={FordelingDokumenttype.OMSORGSPENGER}
                 checked={valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                disabled={disableRadios}
             />
 
             {erDokumenttypeOmsorgspenger &&
@@ -108,7 +81,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                             value={a.value}
                             checked={valgtDokumentType === a.value}
                             onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                            disabled={disableOMPVedFerdistiltJp(a.value)}
                         />
                     </div>
                 ))}
@@ -119,9 +91,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                     value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    disabled={
-                        valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && disableRadios
-                    }
                 />
             )}
             {toggleFordelingDokumentType(FordelingDokumenttype.OPPLAERINGSPENGER) && (
@@ -130,7 +99,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                     value={FordelingDokumenttype.OPPLAERINGSPENGER}
                     checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    disabled={valgtDokumentType !== FordelingDokumenttype.OPPLAERINGSPENGER && disableRadios}
                 />
             )}
 
@@ -139,7 +107,6 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 value={FordelingDokumenttype.ANNET}
                 checked={valgtDokumentType === FordelingDokumenttype.ANNET}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
             />
         </div>
     );

@@ -35,7 +35,6 @@ export const ApiPath = {
     PSB_K9SAK_PERIODER: `${BASE_PATHS.K9_PUNSJ}/pleiepenger-sykt-barn-soknad/k9sak/info`,
     GOSYS_GJELDER: `${BASE_PATHS.K9_PUNSJ}/gosys/gjelder`,
     FINN_ARBEIDSGIVERE: `${BASE_PATHS.K9_PUNSJ}/arbeidsgivere`,
-    FINN_ARBEIDSGIVERE_HISTORIKK: `${BASE_PATHS.K9_PUNSJ}/arbeidsgivere-historikk`,
     OMS_FINN_ARBEIDSFORHOLD: `${BASE_PATHS.K9_PUNSJ}/omsorgspenger-soknad/k9sak/arbeidsforholdIder`,
     SØK_ORGNUMMER: `${BASE_PATHS.K9_PUNSJ}/arbeidsgiver`,
     OMS_EKSISTERENDE_SOKNADER_FIND: `${BASE_PATHS.K9_PUNSJ}/omsorgspenger-soknad/mappe`,

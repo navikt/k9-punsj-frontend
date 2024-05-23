@@ -138,6 +138,5 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
             : [],
         harInfoSomIkkeKanPunsjes: soknad?.harInfoSomIkkeKanPunsjes || false,
         harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
-        k9saksnummer: soknad.k9saksnummer,
     };
 };

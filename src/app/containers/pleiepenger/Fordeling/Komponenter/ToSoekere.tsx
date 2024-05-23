@@ -8,89 +8,64 @@ import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { IFellesState } from 'app/state/reducers/FellesReducer';
 import intlHelper from 'app/utils/intlUtils';
 
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
+import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 
 interface IToSoekereProps {
+    dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
     identState: IIdentState;
-    toSokereIJournalpost: boolean;
     setIdentAction: typeof setIdentFellesAction;
-    setToSokereIJournalpost: (toSokereIJournalpost: boolean) => void;
-    dokumenttype?: FordelingDokumenttype;
-    disabled?: boolean;
+    fellesState: IFellesState;
 }
 
 const ToSoekere: React.FC<IToSoekereProps> = ({
+    dokumenttype,
     journalpost,
     identState,
-    toSokereIJournalpost,
+    fellesState,
     setIdentAction,
-    setToSokereIJournalpost,
-    dokumenttype,
-    disabled,
 }) => {
-    const intl = useIntl();
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
             dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
-        !!journalpost?.kanKopieres &&
-        !journalpost.erFerdigstilt;
-
+        !!journalpost?.kanKopieres;
+    const intl = useIntl();
+    const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
 
-    const handleIdentAnnenSoker = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ident = event.target.value.replace(/\D+/, '');
-
-        if (annenSokerIdent.length > 0 && ident.length < annenSokerIdent.length) {
-            setIdentAction(identState.søkerId, identState.pleietrengendeId);
-        }
-
-        if (ident.length === 11) {
-            setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
-        }
-        setAnnenSokerIdent(ident);
-    };
-
+    const handleIdentAnnenSokerBlur = (event: any) =>
+        setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
     if (!skalVises) {
         return null;
     }
-    const disableCheckbox = () => {
-        if (!journalpost.erFerdigstilt && journalpost.sak?.fagsakId) {
-            return false;
-        }
-        return disabled;
-    };
     return (
         <>
             <VerticalSpacer eightPx />
             <Checkbox
                 onChange={(e) => {
                     setToSokereIJournalpost(e.target.checked);
-                    if (!e.target.checked) {
-                        setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
-                        setAnnenSokerIdent('');
-                    }
                 }}
-                checked={toSokereIJournalpost}
-                disabled={disableCheckbox()}
             >
                 {intlHelper(intl, 'ident.identifikasjon.tosokere')}
             </Checkbox>
             <VerticalSpacer sixteenPx />
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
-                    <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
+                    <Alert size="small" variant="info">
                         {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
                     </Alert>
                     <TextField
                         label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
-                        onChange={handleIdentAnnenSoker}
+                        onChange={(e) => setAnnenSokerIdent(e.target.value.replace(/\D+/, ''))}
+                        onBlur={handleIdentAnnenSokerBlur}
+                        value={annenSokerIdent}
                         className="bold-label"
                         maxLength={11}
-                        autoComplete="off"
                         error={visFeilmeldingForAnnenIdentVidJournalKopi(
                             identState.annenSokerIdent,
                             identState.søkerId,
@@ -98,6 +73,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                             intl,
                         )}
                     />
+                    <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
                 </div>
             )}
         </>

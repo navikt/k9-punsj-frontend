@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Alert, Button, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
@@ -16,6 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
 
 interface IInnholdForDokumenttypeAnnetProps {
+    dokumenttype?: FordelingDokumenttype;
     journalpost: IJournalpost;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
@@ -80,7 +82,6 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.søkerId, fordelingState.valgtGosysKategori)
                 }
-                data-test-id="oppretteGosysOppgaveBtn"
             >
                 <FormattedMessage id="fordeling.sakstype.ANNET" />
             </Button>

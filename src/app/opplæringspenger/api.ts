@@ -66,13 +66,11 @@ export const opprettSoeknad = (
     journalpostId: string,
     ident: string,
     pleietrengendeId: string,
-    k9saksnummer?: string,
 ): Promise<IOLPSoknadBackend> =>
     post(ApiPath.OLP_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
         pleietrengendeId,
-        k9saksnummer,
     }).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under opprettelse av søknad.');

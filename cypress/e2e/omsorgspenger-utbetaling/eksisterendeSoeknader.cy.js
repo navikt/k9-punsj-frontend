@@ -24,14 +24,12 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
         });
     });
 
-    /*
     it('viser infoboks når det ikke finnes søknader fra før av', () => {
         cy.contains(
             'Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.',
         );
     });
 
-    
     it('kan fortsette på eksisterende soknader', () => {
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -94,5 +92,4 @@ describe('Eksisterende søknader omsorgspengeutbetaling', () => {
 
         cy.findByRole('button', { name: /start ny registrering/i }).should('not.exist');
     });
-    */
 });

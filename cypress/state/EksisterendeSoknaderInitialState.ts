@@ -28,7 +28,6 @@ const EksisterendeSoknaderInitialState = {
         },
     },
     fordelingState: {
-        dokumenttype: 'PLEIEPENGER',
         sakstype: 'PLEIEPENGER_SYKT_BARN',
         omfordelingDone: false,
         isAwaitingOmfordelingResponse: false,

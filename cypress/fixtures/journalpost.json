@@ -9,27 +9,11 @@
             "dokumentId": "470164681"
         }
     ],
-
-    "erFerdigstilt": false,
     "venter": null,
+    "punsjInnsendingType": null,
     "kanSendeInn": true,
     "erSaksbehandler": true,
     "journalpostStatus": "MOTTATT",
     "kanOpprettesJournalføringsoppgave": true,
-    "kanKopieres": true,
-    "punsjInnsendingType": {
-        "kode": "PAPIRSØKNAD",
-        "navn": "Papirsøknad",
-        "erScanning": true
-    },
-    "gosysoppgaveId": null,
-    "sak": {
-        "reservertSaksnummer": false,
-        "fagsakId": null,
-        "gyldigPeriode": null,
-        "pleietrengendeIdent": null,
-        "relatertPersonIdent": null,
-        "sakstype": "PSB",
-        "behandlingsÅr": null
-    }
+    "kanKopieres": true
 }

@@ -3,21 +3,17 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Alert, Loader, Modal } from '@navikt/ds-react';
-
 import Fagsak from 'app/types/Fagsak';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
-
+import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { IError, IJournalpost } from '../models/types';
 import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
 import { RootStateType } from '../state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-
-import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { OkGaaTilLosModal } from './pleiepenger/OkGaaTilLosModal';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
-
 import './journalpostLoader.less';
 
 interface IJournaPostStateProps {
@@ -134,7 +130,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    return renderOnLoadComplete();
+    return <>{renderOnLoadComplete()}</>;
 };
 
 const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPostStateProps => ({

@@ -253,43 +253,6 @@ export function kopierJournalpost(
     };
 }
 
-// TODO: Rename funk
-export function kopierJournalpostTilSammeSøker(
-    søkerId: string,
-    pleietrengendeId: string,
-    journalpostId: string,
-    dedupKey: string,
-) {
-    return (dispatch: any) => {
-        const requestBody: IKopierJournalpost = {
-            dedupKey,
-            fra: søkerId,
-            til: søkerId,
-            barn: pleietrengendeId,
-        };
-
-        dispatch(getJournalpostKopiereRequestAction());
-        post(
-            ApiPath.JOURNALPOST_KOPIERE,
-            { journalpostId },
-            { 'X-Nav-NorskIdent': søkerId },
-            requestBody,
-            (response) => {
-                switch (response.status) {
-                    case 202:
-                        return dispatch(getJournalpostKopiereSuccessAction());
-                    case 403:
-                        return dispatch(getJournalpostKopiereForbiddenAction());
-                    case 409:
-                        return dispatch(getJournalpostKopiereConflictAction());
-                    default:
-                        return dispatch(getJournalpostKopiereErrorAction());
-                }
-            },
-        );
-    };
-}
-
 const initialState: IFellesState = {
     dedupKey: ulid(),
     journalpost: undefined,

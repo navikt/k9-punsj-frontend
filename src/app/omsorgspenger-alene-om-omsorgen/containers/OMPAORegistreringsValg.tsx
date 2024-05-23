@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
-import { connect, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router';
+import { connect } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
@@ -21,47 +21,32 @@ export interface IEksisterendeOMPAOSoknaderStateProps {
 
 type IOMPAORegistreringsValgProps = IOMPAORegistreringsValgComponentProps & IEksisterendeOMPAOSoknaderStateProps;
 
-export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> = (
+export const RegistreringsValgComponent: React.FunctionComponent<IOMPAORegistreringsValgProps> = (
     props: IOMPAORegistreringsValgProps,
 ) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-
     const { journalpostid, identState } = props;
     const { søkerId, pleietrengendeId } = identState;
-
-    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
-
-    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery(
-        'hentSoeknaderOMPAO',
-        () => hentEksisterendeSoeknader(søkerId),
-    );
+    const navigate = useNavigate();
 
     const {
         isLoading: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer), {
+    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId), {
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad?.soeknadId)}`);
         },
     });
 
-    // Redirect tilbake ved side reload
-    useEffect(() => {
-        if (!søkerId) {
-            navigate(location.pathname.replace('soknader/', ''));
-        }
-    }, [location.pathname, navigate, søkerId]);
+    const { data: eksisterendeSoeknader } = useQuery('hentSoeknaderOMPAO', () => hentEksisterendeSoeknader(søkerId));
 
-    // Starte søknad automatisk hvis ingen søknader finnes
-    useEffect(() => {
-        const soknader = eksisterendeSoeknader?.søknader;
-        if (soknader?.length === 0) {
-            opprettSoknad();
-        }
-    }, [eksisterendeSoeknader?.søknader, opprettSoknad]);
+    if (opprettSoknadError instanceof Error) {
+        return (
+            <Alert size="small" variant="error">
+                {opprettSoknadError.message}
+            </Alert>
+        );
+    }
 
     const kanStarteNyRegistrering = () => {
         const soknader = eksisterendeSoeknader?.søknader;
@@ -73,14 +58,6 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
         return true;
     };
 
-    if (opprettSoknadError instanceof Error) {
-        return (
-            <Alert size="small" variant="error">
-                {opprettSoknadError.message}
-            </Alert>
-        );
-    }
-
     return (
         <div className="registrering-page">
             <EksisterendeOMPAOSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
@@ -89,19 +66,13 @@ export const RegistreringsValgComponent: React.FC<IOMPAORegistreringsValgProps> 
                 <Button
                     variant="secondary"
                     className="knapp knapp1"
-                    onClick={() => navigate(location.pathname.replace('soknader/', ''))}
+                    onClick={() => navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostid))}
                     size="small"
-                    disabled={isEksisterendeSoknaderLoading}
                 >
                     Tilbake
                 </Button>
                 {kanStarteNyRegistrering() && (
-                    <Button
-                        onClick={() => opprettSoknad()}
-                        className="knapp knapp2"
-                        size="small"
-                        disabled={isEksisterendeSoknaderLoading}
-                    >
+                    <Button onClick={() => opprettSoknad()} className="knapp knapp2" size="small">
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
                     </Button>
                 )}
