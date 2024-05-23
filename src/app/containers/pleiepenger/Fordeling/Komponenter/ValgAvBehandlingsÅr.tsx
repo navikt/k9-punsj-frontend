@@ -3,17 +3,20 @@ import React from 'react';
 import { Select } from '@navikt/ds-react';
 
 interface Props {
+    behandlingsAar?: string;
     onChange: (behandlingsAar: string) => void;
 }
 
-const ValgAvBehandlingsÅr = ({ onChange }: Props) => {
+const ValgAvBehandlingsÅr = ({ behandlingsAar, onChange }: Props) => {
     const thisYear = new Date().getFullYear();
     return (
         <Select
+            value={behandlingsAar}
             label="Hvilket år gjelder dokumentet?"
             size="small"
             onChange={(e) => onChange(e.target.value)}
             className="my-8"
+            data-test-id="valgAvbehandlingsÅr"
         >
             <option value="">Velg</option>
             <option value={String(thisYear)}>{thisYear}</option>

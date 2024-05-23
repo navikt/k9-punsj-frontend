@@ -4,6 +4,10 @@ export const envVariables = () => [
         value: process.env.K9_LOS_URL,
     },
     {
+        key: 'APP_K9SAK_FAGSAK_FRONTEND_URL',
+        value: process.env.APP_K9SAK_FAGSAK_FRONTEND_URL,
+    },
+    {
         key: 'OMP_KS_ENABLED',
         value: process.env.OMP_KS_ENABLED,
     },
@@ -30,9 +34,5 @@ export const envVariables = () => [
     {
         key: 'OMP_AO_ENABLED',
         value: process.env.OMP_AO_ENABLED,
-    },
-    {
-        key: 'POSTMOTTAK_TOGGLE',
-        value: process.env.POSTMOTTAK_TOGGLE,
     },
 ];

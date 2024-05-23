@@ -14,6 +14,7 @@ export const ROUTES = {
     OMPUT_ROOT: 'omsorgspenger-utbetaling/',
     ALENE_OMSORG_ROOT: 'omsorgspenger-alene-om-omsorgen/',
     KORRIGERING_INNTEKTSMELDING: 'korrigering-av-inntektsmelding/',
+    KORRIGERING_ROOT: 'korrigering/',
     VELG_SOKNAD: 'soknader/',
     PUNCH: `skjema/:id/`,
 };

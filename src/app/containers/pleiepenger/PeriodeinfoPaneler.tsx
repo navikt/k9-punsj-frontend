@@ -51,7 +51,6 @@ export interface IPeriodeinfopanelerProps {
     getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     periodeFeilkode?: string;
-    minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
@@ -75,7 +74,6 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
         getErrorMessage: errorMessageFunc,
         getUhaandterteFeil,
         className,
-        minstEn,
         feilkodeprefiks,
         periodeFeilkode,
         onAdd,
@@ -182,7 +180,6 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
             getErrorMessage={errorMessageFunc}
             getUhaandterteFeil={getUhaandterteFeil}
             className={className}
-            minstEn={minstEn}
             feilkodeprefiks={feilkodeprefiks}
             component={periodComponent}
             onAdd={onAdd}

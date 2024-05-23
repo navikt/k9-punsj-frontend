@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { TimeFormat } from 'app/models/enums';
@@ -15,6 +15,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
 import {
@@ -31,6 +32,8 @@ import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 export interface IEksisterendePLSSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    journalpost?: IJournalpost;
+    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendePLSSoknaderDispatchProps {
@@ -45,16 +48,25 @@ export interface IEksisterendePLSSoknaderDispatchProps {
 export interface IEksisterendePLSSoknaderComponentProps {
     søkerId: string;
     pleietrengendeId: string;
+    kanStarteNyRegistrering?: boolean;
 }
 
 type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
     IEksisterendePLSSoknaderStateProps &
     IEksisterendePLSSoknaderDispatchProps;
 
-export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksisterendePLSSoknaderProps> = (
+export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknaderProps> = (
     props: IEksisterendePLSSoknaderProps,
 ) => {
-    const { eksisterendeSoknaderState, journalposterState, søkerId, pleietrengendeId } = props;
+    const {
+        eksisterendeSoknaderState,
+        journalposterState,
+        søkerId,
+        pleietrengendeId,
+        journalpost,
+        fordelingState,
+        kanStarteNyRegistrering,
+    } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
@@ -118,6 +130,8 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         }
     };
 
+    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -125,6 +139,7 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
         soknader?.forEach((soknadInfo) => {
             const søknad = new PLSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -137,11 +152,19 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 generateDateString(søknad.soeknadsperiode),
                 <Button
                     variant="secondary"
                     key={soknadId}
                     size="small"
+                    disabled={
+                        (søknad.pleietrengende.norskIdent &&
+                            pleietrengendeId !== søknad.pleietrengende.norskIdent &&
+                            !!pleietrengendeId &&
+                            pleietrengendeId !== null) ||
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
+                    }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
@@ -178,14 +201,25 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.barnetsfnrellerfdato')}</Table.HeaderCell>
+                            <Table.HeaderCell>
+                                {intlHelper(intl, 'tabell.pleietrengendesfnrellerfdato')}
+                            </Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
@@ -221,6 +255,8 @@ export const EksisterendePLSSoknaderComponent: React.FunctionComponent<IEksister
 const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
     journalposterState: state.journalposterPerIdentState,
+    journalpost: state.felles.journalpost,
+    fordelingState: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

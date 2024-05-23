@@ -8,12 +8,12 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import WarningCircle from '../../../../assets/SVG/WarningCircle';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
+
 import './pleietrengende.less';
 
 export interface IPleietrengendeStateProps {
@@ -28,8 +28,10 @@ export interface IPleietrengendeDispatchProps {
 
 export interface IPleietrengende {
     sokersIdent: string;
+    toSokereIJournalpost: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
+    jpErFerdigstiltOgUtenPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
 
@@ -40,11 +42,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         pleietrengendeHarIkkeFnrFn,
         identState,
         sokersIdent,
+        toSokereIJournalpost,
         fellesState,
         setIdentAction,
         henteBarn,
         visPleietrengende,
         skalHenteBarn,
+        jpErFerdigstiltOgUtenPleietrengende,
     } = props;
     const intl = useIntl();
 
@@ -61,8 +65,18 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     if (!visPleietrengende) {
         return null;
     }
+
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
-        setPleietrengendeIdent(event.target.value.replace(/\D+/, ''));
+        const identFromInput = event.target.value.replace(/\D+/, '');
+        if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
+            setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+        }
+
+        if (identFromInput.length === 11) {
+            setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
+        }
+
+        setPleietrengendeIdent(identFromInput);
     };
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
@@ -79,9 +93,12 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setIdentAction(identState.søkerId, null);
+            setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
         }
     };
+
+    const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
+
     if (!visPleietrengende) {
         return null;
     }
@@ -89,6 +106,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
                 <>
+                    <VerticalSpacer eightPx />
                     <Select
                         className="pleietrengendeSelect"
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
@@ -98,12 +116,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         }}
                         disabled={gjelderAnnenPleietrengende}
                     >
-                        <option key="default" value="" label=" " aria-label="Tomt valg" />
-                        {fellesState.barn.map((b) => (
-                            <option key={b.identitetsnummer} value={b.identitetsnummer}>
-                                {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
-                            </option>
-                        ))}
+                        <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
+                        {!gjelderAnnenPleietrengende &&
+                            fellesState.barn.map((b) => (
+                                <option key={b.identitetsnummer} value={b.identitetsnummer}>
+                                    {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
+                                </option>
+                            ))}
                     </Select>
                     <VerticalSpacer eightPx />
                     <Checkbox
@@ -117,7 +136,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                     </Checkbox>
                 </>
             )}
-            <VerticalSpacer sixteenPx />
+
             {(gjelderAnnenPleietrengende ||
                 !skalHenteBarn ||
                 !!fellesState.hentBarnError ||
@@ -128,28 +147,18 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         <TextField
                             label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
                             onChange={pleietrengendeIdentInputFieldOnChange}
-                            onBlur={oppdaterStateMedPleietrengendeFnr}
-                            value={pleietrengendeIdent}
                             className="bold-label ident-soker-2"
+                            autoComplete="off"
                             maxLength={11}
+                            size="medium"
                             error={
-                                identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId)
+                                isPleitrengendeFnrErSammeSomSøker ||
+                                (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }
                             disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {pleietrengendeIdent.length === 11 &&
-                            !IdentRules.erUgyldigIdent(identState.pleietrengendeId) && (
-                                <div className="dobbelSjekkIdent">
-                                    <div>
-                                        <WarningCircle />
-                                    </div>
-                                    <p>
-                                        <b>{intlHelper(intl, 'ident.identifikasjon.dobbelsjekkident')}</b>
-                                    </p>
-                                </div>
-                            )}
                     </div>
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
@@ -157,10 +166,24 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
                                 {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
                             </Checkbox>
-                            {pleietrengendeHarIkkeFnr && (
+                            {!toSokereIJournalpost &&
+                                pleietrengendeHarIkkeFnr &&
+                                !jpErFerdigstiltOgUtenPleietrengende && (
+                                    <Alert
+                                        size="small"
+                                        variant="info"
+                                        className="infotrygd_info"
+                                        data-test-id="pleietrengendeHarIkkeFnrInformasjon"
+                                    >
+                                        {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
+                                    </Alert>
+                                )}
+                            {pleietrengendeHarIkkeFnr && jpErFerdigstiltOgUtenPleietrengende && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
-                                    {' '}
-                                    {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
+                                    {intlHelper(
+                                        intl,
+                                        'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt',
+                                    )}
                                 </Alert>
                             )}
                         </>

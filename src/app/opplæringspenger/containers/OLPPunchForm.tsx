@@ -396,7 +396,6 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
-                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {

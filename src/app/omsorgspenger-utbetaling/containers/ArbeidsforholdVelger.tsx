@@ -11,7 +11,11 @@ import Frilanser from '../components/Frilanser';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
-const ArbeidsforholdVelger = () => {
+interface Props {
+    søknadsperiodeFraSak?: { fom: string; tom: string };
+}
+
+const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
     const [field, meta] = useField('metadata.arbeidsforhold');
     const { values } = useFormikContext<IOMPUTSoknad>();
     return (
@@ -20,7 +24,7 @@ const ArbeidsforholdVelger = () => {
             <VerticalSpacer eightPx />
             <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
             <VerticalSpacer eightPx />
-            {field.value.arbeidstaker && <ArbeidstakerContainer />}
+            {field.value.arbeidstaker && <ArbeidstakerContainer søknadsperiodeFraSak={søknadsperiodeFraSak} />}
             <CheckboksPanelFormik
                 name="metadata.arbeidsforhold.selvstendigNaeringsdrivende"
                 label="Selvstendig næringsdrivende"

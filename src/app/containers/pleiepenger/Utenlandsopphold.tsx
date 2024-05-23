@@ -56,7 +56,6 @@ export interface IUtenlandsoppholdProps {
     getUhaandterteFeil?: GetUhaandterteFeil;
     feilkodeprefiks?: string;
     periodeFeilkode?: string;
-    minstEn?: boolean;
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;

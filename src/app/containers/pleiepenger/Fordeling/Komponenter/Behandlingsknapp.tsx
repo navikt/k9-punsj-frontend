@@ -1,56 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+import { Button } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-
-import { Button } from '@navikt/ds-react';
-
 import { RootStateType } from 'app/state/RootState';
-
+import { IFordelingProps } from '../Fordeling';
 import { ISakstypePunch } from '../../../../models/Sakstype';
 import { Sakstype } from '../../../../models/enums';
-import { IFordelingProps } from '../Fordeling';
-import KlassifiserModal from './KlassifiserModal';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;
-    sakstypeConfig?: ISakstypePunch;
     gosysKategoriJournalforing: string;
+    sakstypeConfig?: ISakstypePunch;
 };
 
-const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
-    norskIdent,
-    omfordel,
-    lukkJournalpostOppgave,
+const Behandlingsknapp: React.FC<BehandlingsknappProps> = ({
     journalpost,
+    norskIdent,
     sakstypeConfig,
     gosysKategoriJournalforing,
+    omfordel,
+    lukkJournalpostOppgave,
 }) => {
-    const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const navigate = useNavigate();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
-    if (!sakstypeConfig || !journalpost) {
-        return null;
-    }
 
-    if (sakstypeConfig?.punchPath) {
+    if (!sakstypeConfig || !journalpost) {
         return (
-            <Button onClick={() => navigate(sakstypeConfig.punchPath)}>
+            <Button disabled size="small" onClick={() => null} data-test-id="bekreftKnapp">
                 <FormattedMessage id="fordeling.knapp.punsj" />
             </Button>
         );
     }
 
-    if (sakstypeConfig.navn === Sakstype.KLASSIFISER_OG_GAA_TIL_LOS) {
+    if (sakstypeConfig?.punchPath) {
         return (
-            <>
-                {visKlassifiserModal && <KlassifiserModal lukkModal={() => setVisKlassifiserModal(false)} />}
-                <Button variant="primary" onClick={() => setVisKlassifiserModal(true)}>
-                    <FormattedMessage id="fordeling.knapp.bekreft" />
-                </Button>
-            </>
+            <Button size="small" onClick={() => navigate(sakstypeConfig?.punchPath)} data-test-id="bekreftKnapp">
+                <FormattedMessage id="fordeling.knapp.punsj" />
+            </Button>
         );
     }
+
     if (sakstypeConfig.navn === Sakstype.SKAL_IKKE_PUNSJES) {
         return (
             <Button onClick={() => lukkJournalpostOppgave(journalpost.journalpostId, norskIdent, fagsak)}>
@@ -59,6 +50,7 @@ const Behandlingsknapp: React.FunctionComponent<BehandlingsknappProps> = ({
         );
     }
 
+    // TODO: Kanskje fjerne det?
     return (
         <Button
             disabled={!gosysKategoriJournalforing}
