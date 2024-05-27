@@ -10,6 +10,7 @@ export interface IOMPMASoknad {
     annenForelder: AnnenForelderType;
     harInfoSomIkkeKanPunsjes?: boolean;
     harMedisinskeOpplysninger?: boolean;
+    k9saksnummer?: string;
 }
 
 export type AnnenForelderType = {
@@ -38,6 +39,8 @@ export class OMPMASoknad implements IOMPMASoknad {
 
     harMedisinskeOpplysninger?: boolean;
 
+    k9saksnummer?: string;
+
     constructor(soknad: IOMPMASoknad) {
         this.soeknadId = soknad.soeknadId || '';
         this.soekerId = soknad.soekerId || '';
@@ -48,5 +51,6 @@ export class OMPMASoknad implements IOMPMASoknad {
         this.annenForelder = soknad.annenForelder || {};
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
+        this.k9saksnummer = soknad.k9saksnummer || undefined;
     }
 }

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { areBothDatesDefined, generateDateString } from 'app/components/skjema/skjemaUtils';
@@ -16,6 +16,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
+import { IFordelingState, IJournalpost } from 'app/models/types';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
@@ -31,6 +32,8 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 export interface IEksisterendeOMPMASoknaderStateProps {
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
     journalposterState: IJournalposterPerIdentState;
+    journalpost?: IJournalpost;
+    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
@@ -44,6 +47,7 @@ export interface IEksisterendeOMPMASoknaderDispatchProps {
 export interface IEksisterendeOMPMASoknaderComponentProps {
     søkerId: string;
     annenPart: string;
+    kanStarteNyRegistrering?: boolean;
 }
 
 type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
@@ -54,7 +58,15 @@ type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
 export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASoknaderProps> = (
     props: IEksisterendeOMPMASoknaderProps,
 ) => {
-    const { eksisterendeOMPMASoknaderState, journalposterState, søkerId, annenPart } = props;
+    const {
+        eksisterendeOMPMASoknaderState,
+        journalposterState,
+        søkerId,
+        annenPart,
+        journalpost,
+        fordelingState,
+        kanStarteNyRegistrering,
+    } = props;
     const intl = useIntl();
     const navigate = useNavigate();
 
@@ -113,6 +125,8 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         }
     };
 
+    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -120,6 +134,8 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad?.k9saksnummer;
+
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,
@@ -130,6 +146,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                 søknad.annenForelder.norskIdent,
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
+                k9saksnummer,
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
                     : '',
@@ -138,6 +155,13 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                     variant="secondary"
                     key={soknadId}
                     size="small"
+                    disabled={
+                        (søknad.annenForelder.norskIdent &&
+                            annenPart !== søknad.annenForelder.norskIdent &&
+                            !!annenPart &&
+                            annenPart !== null) ||
+                        (!!k9saksnummer && fagsakId !== k9saksnummer)
+                    }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
@@ -158,7 +182,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             modaler.push(
                 <Modal
                     key={soknadId}
-                    onBeforeClose={() => {
+                    onClose={() => {
                         props.closeEksisterendeSoknadAction();
                     }}
                     aria-label={soknadId}
@@ -176,7 +200,15 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${kanStarteNyRegistrering ? '.OMS_MA' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
@@ -184,6 +216,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.annenForelder')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>

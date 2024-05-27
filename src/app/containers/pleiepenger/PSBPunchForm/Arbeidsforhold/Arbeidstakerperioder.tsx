@@ -13,6 +13,10 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
 
+import {
+    getMaxDatoFraSøknadsperioder,
+    getMinDatoFraSøknadsperioder,
+} from 'app/utils/date-utils/src/minMaxDatesInPerioder';
 import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
@@ -43,11 +47,19 @@ const Arbeidstakerperioder = ({
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
     const { arbeidstid, soekerId, soeknadsperiode } = soknad;
 
+    const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
+    const tom = getMaxDatoFraSøknadsperioder(soeknadsperiode);
+
     useEffect(() => {
         if (soekerId) {
-            finnArbeidsgivere(soekerId, (response, data: ArbeidsgivereResponse) => {
-                setArbeidsgivere(data?.organisasjoner || []);
-            });
+            finnArbeidsgivere(
+                soekerId,
+                (response, data: ArbeidsgivereResponse) => {
+                    setArbeidsgivere(data?.organisasjoner || []);
+                },
+                fom,
+                tom,
+            );
         }
     }, []);
 
@@ -108,7 +120,7 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <Fieldset className="listepaneler">
+        <Fieldset className="listepaneler" legend="">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                 const getHarDuplikatOrgnr = () =>
@@ -123,7 +135,7 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <Fieldset>
+                        <Fieldset legend="">
                             {itemsWithInitialItem.length > 1 && (
                                 <h2>
                                     <FormattedMessage

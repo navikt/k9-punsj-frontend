@@ -39,7 +39,6 @@ interface ArbeidsforholdPanelProps {
     isOpen: boolean;
     onPanelClick: () => void;
     handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
-    getCheckedValueArbeid: (af: Arbeidsforhold) => boolean;
     soknad: PSBSoknad;
     eksisterendePerioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
@@ -55,7 +54,6 @@ const ArbeidsforholdPanel = ({
     isOpen,
     onPanelClick,
     handleArbeidsforholdChange,
-    getCheckedValueArbeid,
     soknad,
     updateSoknad,
     updateSoknadState,
@@ -212,6 +210,7 @@ const ArbeidsforholdPanel = ({
     const selvstendigperioder = () => {
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
+
         return (
             <div className="infoContainer">
                 <CheckboksPanelGruppe
@@ -791,7 +790,7 @@ const ArbeidsforholdPanel = ({
                 label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
                 value={Arbeidsforhold.ARBEIDSTAKER}
                 onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.ARBEIDSTAKER)}
+                checked={!!soknad.arbeidstid?.arbeidstakerList?.length}
             />
             <VerticalSpacer eightPx />
             {!!soknad.arbeidstid?.arbeidstakerList?.length && (
@@ -809,7 +808,7 @@ const ArbeidsforholdPanel = ({
                 label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                 value={Arbeidsforhold.FRILANSER}
                 onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.FRILANSER)}
+                checked={!!soknad.opptjeningAktivitet.frilanser}
             />
             <VerticalSpacer eightPx />
             {!!soknad.opptjeningAktivitet.frilanser && <Panel className="frilanserpanel">{frilanserperioder()}</Panel>}
@@ -817,7 +816,7 @@ const ArbeidsforholdPanel = ({
                 label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                 value={Arbeidsforhold.SELVSTENDIG}
                 onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
-                checked={getCheckedValueArbeid(Arbeidsforhold.SELVSTENDIG)}
+                checked={!!soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende}
             />
             {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                 <>

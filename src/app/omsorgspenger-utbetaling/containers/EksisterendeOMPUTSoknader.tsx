@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
@@ -16,6 +16,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
+import { RootStateType } from 'app/state/RootState';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -23,15 +24,19 @@ import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     søkerId: string;
     pleietrengendeId: string | null;
+    kanStarteNyRegistrering?: boolean;
 }
 
 export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderComponentProps> = (props) => {
-    const { søkerId, pleietrengendeId } = props;
+    const { søkerId, pleietrengendeId, kanStarteNyRegistrering } = props;
     const intl = useIntl();
 
     const [valgtSoeknad, setValgtSoeknad] = useState<IOMPUTSoknad | undefined>(undefined);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
 
     useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
@@ -75,6 +80,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
     const gaaVidereMedSoeknad = (soknad: IOMPUTSoknad) => {
         navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
+    const fagsakId = fellesState.journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
@@ -82,6 +88,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
 
         eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad) => {
             const soknadId = søknad.soeknadId;
+            const k9saksnummer = søknad.k9saksnummer || søknad.metadata.eksisterendeFagsak?.fagsakId;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -90,10 +97,17 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
 
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                søknad.soekerId,
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
-                <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
+                k9saksnummer,
+                søknad.metadata?.eksisterendeFagsak?.behandlingsår,
+                <Button
+                    variant="secondary"
+                    disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
+                    key={soknadId}
+                    size="small"
+                    onClick={() => setValgtSoeknad(søknad)}
+                >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
                 </Button>,
             ];
@@ -128,15 +142,23 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
+                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                    <FormattedMessage
+                        id={`tabell.info${kanStarteNyRegistrering ? '.OMP_UT' : '.kanIkkeStarteNyRegistrering'}`}
+                    />
+                </Alert>
                 <Table className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
                             <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
+                            <Table.HeaderCell>{intlHelper(intl, 'tabell.behandlingsÅr')}</Table.HeaderCell>
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
@@ -154,7 +176,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
     return (
         <Alert size="small" variant="info">
             {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: pleietrengendeId ? '2' : '1',
+                antallSokere: pleietrengendeId ? '2' : '1', // TODO hvorfor pleietrengende
             })}
         </Alert>
     );

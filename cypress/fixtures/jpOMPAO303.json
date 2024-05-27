@@ -1,0 +1,31 @@
+{
+    "journalpostId": "303",
+    "norskIdent": "29099000129",
+    "dokumenter": [
+        {
+            "dokumentId": "668084478"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": {
+        "kode": "PAPIRSØKNAD",
+        "navn": "Papirsøknad",
+        "erScanning": true
+    },
+    "kanSendeInn": true,
+    "erSaksbehandler": true,
+    "journalpostStatus": "MOTTATT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "erFerdigstilt": false,
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": false,
+        "fagsakId": null,
+        "gyldigPeriode": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
+        "sakstype": "OMP_AO",
+        "behandlingsÅr": null
+    }
+}
