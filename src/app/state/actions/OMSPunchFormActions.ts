@@ -39,10 +39,12 @@ export function createOMSKorrigering(
     søkerId: string,
     journalpostid: string,
     callback: (response: Response, data: any) => void,
+    k9saksnummer?: string,
 ): void {
     const requestBody = {
         journalpostId: journalpostid,
         norskIdent: søkerId,
+        k9saksnummer,
     };
 
     post(ApiPath.OMS_SOKNAD_CREATE, undefined, undefined, requestBody, callback);
