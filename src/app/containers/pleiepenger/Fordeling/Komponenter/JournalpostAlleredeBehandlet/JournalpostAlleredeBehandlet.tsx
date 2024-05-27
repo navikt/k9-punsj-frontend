@@ -82,10 +82,10 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
                     if (!!sokersIdent && !!identState.pleietrengendeId)
                         kopiereJournalpost(
                             sokersIdent,
-                            identState.pleietrengendeId,
                             sokersIdent,
-                            dedupkey,
+                            identState.pleietrengendeId,
                             journalpost?.journalpostId,
+                            dedupkey,
                         );
                 }}
             >
