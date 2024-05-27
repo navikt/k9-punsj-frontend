@@ -159,7 +159,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
     const getYearFromStringDate = (date?: string) => {
-        console.log('TEST date: ', date);
         if (!date) {
             return undefined;
         }
