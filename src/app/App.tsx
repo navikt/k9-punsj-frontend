@@ -20,7 +20,7 @@ import {
 // eslint-disable-next-line camelcase
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+// import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import {
     withSentryReactRouterV6Routing,
     breadcrumbsIntegration,
@@ -50,11 +50,12 @@ const environment = window.location.hostname;
 
 async function prepare() {
     if (window.location.hostname.includes('nav.no')) {
+        /*
         initializeFaro({
             url: window.nais?.telemetryCollectorURL,
             app: window.nais?.app,
             instrumentations: [...getWebInstrumentations({ captureConsole: true })],
-        });
+        });*/
         Sentry.init({
             dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
             release: process.env.SENTRY_RELEASE || 'unknown',
