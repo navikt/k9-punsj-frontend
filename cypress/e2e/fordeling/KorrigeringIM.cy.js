@@ -228,6 +228,14 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2024').should('have.value', '2024');
 
+        cy.get('[data-test-id="alertFagsakMedValgtBehandlingsår"]').should('exist');
+        cy.get('[data-test-id="jornalførUtenFagsak"]').should('not.exist');
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
+
+        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2023').should('have.value', '2023');
+
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
@@ -400,7 +408,7 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
-        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2024').should('have.value', '2024');
+        cy.get('[data-test-id="valgAvbehandlingsÅr"]').select('2023').should('have.value', '2023');
 
         cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
 

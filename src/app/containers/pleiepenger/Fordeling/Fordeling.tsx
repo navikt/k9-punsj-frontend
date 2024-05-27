@@ -165,6 +165,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         return dayjs(date).year().toString();
     };
 
+    const isFagsakMedValgtBehandlingsår = (): boolean => {
+        if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
+            return fagsaker.some((f) => {
+                return (
+                    f.behandlingsår?.toString() === behandlingsAar ||
+                    getYearFromStringDate(f.gyldigPeriode.fom) === behandlingsAar
+                );
+            });
+        }
+        return false;
+    };
+
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
      */
@@ -434,6 +446,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             }
         }
         if (ytelserMedBehandlingsårValg && !behandlingsAar) {
+            return true;
+        }
+
+        if (isFagsakMedValgtBehandlingsår()) {
             return true;
         }
 
@@ -823,6 +839,16 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
                                     </Alert>
                                 )}
+                            {isFagsakMedValgtBehandlingsår() && (
+                                <Alert
+                                    size="small"
+                                    variant="info"
+                                    className="mb-4"
+                                    data-test-id="alertFagsakMedValgtBehandlingsår"
+                                >
+                                    <FormattedMessage id="fordeling.infobox.alertFagsakMedValgtBehandlingsår" />
+                                </Alert>
+                            )}
                             {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
                                 <div className="flex">
                                     <div className="mr-4">

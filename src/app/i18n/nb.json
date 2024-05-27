@@ -101,6 +101,7 @@
     "fordeling.infobox.jornalførUtenFagsak": "Ved journalføring vil det bli reservert ett saksnummer i K9. Det reserverte saksnummeret kan ikke søkes opp i K9 før det er registrert en søknad.",
     "fordeling.infobox.lukkoppgave": "Er du sikker på at du vil lukke oppgaven? Dette alternativet skal kun brukes når et samtalereferat er journalført på saken, men det ikke finnes opplysninger som skal registreres i saken",
     "fordeling.infobox.opprettigosys": "Er du sikker på at du vil opprette journalføringsoppgave i Gosys. Dette alternativet skal kun brukes når dokumentet skal håndteres videre i Gosys og/eller Infotrygd, og dokumentet ikke skal inngå i saksbehandling i K9sak.",
+    "fordeling.infobox.alertFagsakMedValgtBehandlingsår": "Det finnes eksisterende Fagsak med valgt behandlingsår. Velg eksisterende Fagsak.",
     "fordeling.infotrygd": "Det finnes et vedtak tilknyttet søker og/eller pleietrengende i Infotrygd, dokumentet må derfor behandles videre der.",
     "fordeling.error.settBehandlingsÅrMutation": "Kunne ikke sjekke opplysninger. Prøv igjen senere.",
     "fordeling.error.pleietrengendeHarFagsak": "Pleietrengendende med fødselsnummer {pleietrengendeId} har allerede en fagsak {fagsakId}. Gå tilbake og velg fagsak {fagsakId}.",
