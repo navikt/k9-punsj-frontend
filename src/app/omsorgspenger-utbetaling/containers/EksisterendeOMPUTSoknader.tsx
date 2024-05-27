@@ -100,7 +100,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
-                søknad.metadata.eksisterendeFagsak?.behandlingsår,
+                søknad.metadata?.eksisterendeFagsak?.behandlingsår,
                 <Button
                     variant="secondary"
                     disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
