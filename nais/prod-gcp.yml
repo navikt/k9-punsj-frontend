@@ -1,23 +1,23 @@
 ingresses:
-  - https://k9-punsj-frontend.intern.nav.no
+    - https://k9-punsj-frontend.intern.nav.no
 outboundExternalHosts:
-  - k9-punsj.prod-fss-pub.nais.io
-  - k9-formidling.prod-fss-pub.nais.io
+    - k9-punsj.prod-fss-pub.nais.io
+    - k9-formidling.prod-fss-pub.nais.io
 azureTenant: nav.no
 proxyRedirects:
-  - path: "/api/k9-punsj"
-    scope: "api://prod-fss.k9saksbehandling.k9-punsj/.default"
-    url: "https://k9-punsj.prod-fss-pub.nais.io"
-  - path: "/api/k9-formidling"
-    scope: "api://prod-fss.k9saksbehandling.k9-formidling/.default"
-    url: "https://k9-formidling.prod-fss-pub.nais.io"
+    - path: '/api/k9-punsj'
+      scope: 'api://prod-fss.k9saksbehandling.k9-punsj/.default'
+      url: 'https://k9-punsj.prod-fss-pub.nais.io'
+    - path: '/api/k9-formidling'
+      scope: 'api://prod-fss.k9saksbehandling.k9-formidling/.default'
+      url: 'https://k9-formidling.prod-fss-pub.nais.io'
 env:
-  APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.intern.nav.no/k9/web/fagsak/
-  K9_LOS_URL: https://k9-los-web.nais.adeo.no/
-  OMP_KS_ENABLED: "true"
-  PLS_ENABLED: "true"
-  OMP_MA_FEATURE_TOGGLE: "true"
-  OMP_UT_FEATURE_TOGGLE: "true"
-  OMP_AO_ENABLED: "true"
-  SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: "true"
-  OLP_ENABLED: "false"
+    APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.intern.nav.no/k9/web/fagsak/
+    K9_LOS_URL: https://k9-los-web.intern.nav.no/
+    OMP_KS_ENABLED: 'true'
+    PLS_ENABLED: 'true'
+    OMP_MA_FEATURE_TOGGLE: 'true'
+    OMP_UT_FEATURE_TOGGLE: 'true'
+    OMP_AO_ENABLED: 'true'
+    SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: 'true'
+    OLP_ENABLED: 'false'
