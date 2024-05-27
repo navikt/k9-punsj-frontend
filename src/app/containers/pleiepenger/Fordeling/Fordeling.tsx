@@ -158,7 +158,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
-    const getYearFromStringDate = (date: string) => {
+    const getYearFromStringDate = (date?: string) => {
+        console.log('TEST date: ', date);
+        if (!date) {
+            return undefined;
+        }
         return dayjs(date).year().toString();
     };
 
@@ -182,9 +186,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
              * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
              * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
              */
-            if (journalpost.sak?.behandlingsår || journalpost.sak?.gyldigPeriode.fom) {
+            if (journalpost.sak?.behandlingsår || journalpost.sak?.gyldigPeriode?.fom) {
                 setBehandlingsAar(
-                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak.gyldigPeriode.fom),
+                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak?.gyldigPeriode?.fom),
                 );
             }
             if (journalpost.sak?.fagsakId) {
