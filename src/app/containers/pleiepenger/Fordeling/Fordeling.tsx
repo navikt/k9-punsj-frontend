@@ -158,6 +158,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
+    const getYearFromStringDate = (date: string) => {
+        return dayjs(date).year().toString();
+    };
+
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
      */
@@ -178,8 +182,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
              * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
              * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
              */
-            if (journalpost.sak?.behandlingsår) {
-                setBehandlingsAar(journalpost.sak.behandlingsår);
+            if (journalpost.sak?.behandlingsår || journalpost.sak?.gyldigPeriode.fom) {
+                setBehandlingsAar(
+                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak.gyldigPeriode.fom),
+                );
             }
             if (journalpost.sak?.fagsakId) {
                 setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
@@ -229,7 +235,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
                 setDisableRadios(true);
-                setBehandlingsAar(journalpost.sak.behandlingsår);
+                setBehandlingsAar(
+                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak.gyldigPeriode.fom),
+                );
                 return;
             }
 
@@ -529,7 +537,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         if (isDokumenttypeMedBehandlingsår) {
-            setBehandlingsAar(nyValgtFagsak ? nyValgtFagsak.behandlingsår : undefined);
+            setBehandlingsAar(
+                nyValgtFagsak
+                    ? nyValgtFagsak.behandlingsår || getYearFromStringDate(nyValgtFagsak.gyldigPeriode.fom)
+                    : undefined,
+            );
         }
     };
 
