@@ -134,6 +134,10 @@ const JournalpostRouter: React.FC = () => {
                             path={ROUTES.KORRIGERING_INNTEKTSMELDING}
                             element={<KorrigeringAvInntektsmeldingContainer />}
                         />
+                        <Route
+                            path={ROUTES.KORRIGERING_INNTEKTSMELDING_ID}
+                            element={<KorrigeringAvInntektsmeldingContainer />}
+                        />
                     </Route>
                     <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                     <Route path="/" element={<Fordeling />} />

@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
+import { IPSBSoknad } from 'app/models/types';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
-import { apiUrl, initializeDate, post, put } from 'app/utils';
+import { apiUrl, get, initializeDate, post, put } from 'app/utils';
 
 async function postPromise<BodyType>(
     path: string,
@@ -82,3 +83,12 @@ export function hentArbeidsgivereMedId(søkerId: string, årstallForKorrigering:
         headers: { 'Content-Type': 'application/json', 'X-Nav-NorskIdent': søkerId },
     });
 }
+
+export const hentOMSSøknad = (ident: string, soeknadId: string): Promise<IPSBSoknad> =>
+    get(ApiPath.OMS_SOKNAD_GET, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
+        if (!response.ok) {
+            throw Error('Kunne ikke hente søknad.');
+        }
+
+        return response.json();
+    });
