@@ -4264,13 +4264,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:6.7.1":
-  version: 6.7.1
-  resolution: "@navikt/ds-css@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.7.1%2F339abde646df6131551b6e960df6e03faf152967"
-  checksum: abb71e31a5ddf1ac5d9905361e330b16f66224e4409af2cea36915fd9a030b29fb1ac677e68b1ad2a254ac6f78ecd894a6beb3d7f5048b93a571df8c2c19f7ae
-  languageName: node
-  linkType: hard
-
 "@navikt/ds-css@npm:6.8.0":
   version: 6.8.0
   resolution: "@navikt/ds-css@npm:6.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.8.0%2F017d4c13ef3140df2509b0c4a6b1e25ad40ee20d"
@@ -15147,7 +15140,7 @@ __metadata:
     "@grafana/faro-web-tracing": 1.7.3
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": 6.8.0
-    "@navikt/ds-css": 6.7.1
+    "@navikt/ds-css": 6.8.0
     "@navikt/ds-icons": 3.4.3
     "@navikt/ds-react": 6.8.0
     "@navikt/fnrvalidator": 2.0.7
