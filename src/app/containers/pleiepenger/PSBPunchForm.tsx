@@ -402,11 +402,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private updateUtenlandsopphold = (jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) => {
-        if (
-            jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA &&
-            this.state.soknad.utenlandsopphold!.length === 0 &&
-            this.state.soknad.utenlandsoppholdV2!.length === 0
-        ) {
+        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA) {
             const utenlandsopphold = [{ land: undefined, periode: {} }];
             this.updateSoknadState({ utenlandsopphold, utenlandsoppholdV2: [] });
             this.updateSoknad({ utenlandsopphold, utenlandsoppholdV2: [] });
