@@ -158,20 +158,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
-    const getYearFromStringDate = (date?: string) => {
-        if (!date) {
-            return undefined;
-        }
-        return dayjs(date).year().toString();
-    };
-
     const isFagsakMedValgtBehandlingsår = (): boolean => {
         if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
             return fagsaker.some((f) => {
-                return (
-                    f.behandlingsår?.toString() === behandlingsAar ||
-                    getYearFromStringDate(f.gyldigPeriode.fom) === behandlingsAar
-                );
+                return f.behandlingsår?.toString() === behandlingsAar;
             });
         }
         return false;
@@ -197,10 +187,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
              * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
              * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
              */
-            if (journalpost.sak?.behandlingsår || journalpost.sak?.gyldigPeriode?.fom) {
-                setBehandlingsAar(
-                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak?.gyldigPeriode?.fom),
-                );
+            if (journalpost.sak?.behandlingsår) {
+                setBehandlingsAar(journalpost.sak.behandlingsår);
             }
             if (journalpost.sak?.fagsakId) {
                 setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
@@ -250,9 +238,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
                 setDisableRadios(true);
-                setBehandlingsAar(
-                    journalpost.sak.behandlingsår || getYearFromStringDate(journalpost.sak.gyldigPeriode.fom),
-                );
+                setBehandlingsAar(journalpost.sak.behandlingsår);
                 return;
             }
 
@@ -556,11 +542,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         if (isDokumenttypeMedBehandlingsår) {
-            setBehandlingsAar(
-                nyValgtFagsak
-                    ? nyValgtFagsak.behandlingsår || getYearFromStringDate(nyValgtFagsak.gyldigPeriode.fom)
-                    : undefined,
-            );
+            setBehandlingsAar(nyValgtFagsak ? nyValgtFagsak.behandlingsår : undefined);
         }
     };
 
