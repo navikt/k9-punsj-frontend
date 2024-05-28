@@ -1,6 +1,3 @@
- 
-
- 
 import { composeWithDevTools } from '@redux-devtools/extension';
 import * as Sentry from '@sentry/react';
 import * as React from 'react';
@@ -17,7 +14,7 @@ import {
     useLocation,
     useNavigationType,
 } from 'react-router-dom';
- 
+
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
@@ -50,11 +47,13 @@ const environment = window.location.hostname;
 
 async function prepare() {
     if (window.location.hostname.includes('nav.no')) {
-        initializeFaro({
-            url: window.nais?.telemetryCollectorURL,
-            app: window.nais?.app,
-            instrumentations: [...getWebInstrumentations({ captureConsole: true })],
-        });
+        if (window.nais?.app && window.nais?.telemetryCollectorURL) {
+            initializeFaro({
+                url: window.nais?.telemetryCollectorURL,
+                app: window.nais?.app,
+                instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+            });
+        }
         Sentry.init({
             dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
             release: process.env.SENTRY_RELEASE || 'unknown',
@@ -95,7 +94,7 @@ queryClient.setDefaultOptions({
     },
 });
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
- 
+
 export const App: React.FunctionComponent = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
