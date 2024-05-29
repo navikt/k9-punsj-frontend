@@ -670,7 +670,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             iUtlandet: jaNeiIkkeOpplyst,
         });
 
-        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && this.state.soknad.utenlandsopphold!.length === 0) {
+        if (
+            jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA &&
+            this.state.soknad.utenlandsopphold &&
+            this.state.soknad.utenlandsopphold?.length === 0
+        ) {
             this.addOpphold();
         }
 
