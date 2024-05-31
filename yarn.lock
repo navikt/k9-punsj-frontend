@@ -2681,6 +2681,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/aksel-icons@npm:^6.9.0":
+  version: 6.9.0
+  resolution: "@navikt/aksel-icons@npm:6.9.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.9.0%2Fcab52e959cf0ee323fd4d9c041f49ece419f049e"
+  checksum: d2e1a6cc98d42fb2dd5cb2ba8614f1238fa175b6fb97ce96aa55c59e937ba591aaef021627684b50aba132161b03e1610cfd5cc75e990a05822cd6b18403954c
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:6.7.1":
   version: 6.7.1
   resolution: "@navikt/ds-css@npm:6.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.7.1%2F339abde646df6131551b6e960df6e03faf152967"
@@ -2723,10 +2730,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/ds-react@npm:6.9.0":
+  version: 6.9.0
+  resolution: "@navikt/ds-react@npm:6.9.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.9.0%2F455bcf74df7957dc3ece5c7017615cd034dba3b8"
+  dependencies:
+    "@floating-ui/react": 0.25.4
+    "@floating-ui/react-dom": ^2.0.9
+    "@navikt/aksel-icons": ^6.9.0
+    "@navikt/ds-tokens": ^6.9.0
+    clsx: ^2.1.0
+    date-fns: ^3.0.0
+    react-day-picker: 8.10.0
+  peerDependencies:
+    "@types/react": ^17.0.30 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+  checksum: d8abab1788494fc9af98bb6386072a7eeb0e8d0c2c7753fe0509b7216f026b253c0b87fe5f6203cd6142ebbe661a457700d58c7cf96b94254470c108a89f0328
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-tokens@npm:^6.8.0":
   version: 6.8.0
   resolution: "@navikt/ds-tokens@npm:6.8.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.8.0%2F01e24b0e8ed89349aeb5d4482dec14b5fb1a5df9"
   checksum: a56c7e31111d2402e20bd5167eceb1de43b3b7f3f03e5b1ca1df96c098ca4f5369fd14cc608843eb1f1d25bd6717fdd102e731b8112b5249d43c6598534c2119
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-tokens@npm:^6.9.0":
+  version: 6.9.0
+  resolution: "@navikt/ds-tokens@npm:6.9.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.9.0%2Fc08bb9c5a1fe610485e336aa84c3c3a501fbabaa"
+  checksum: 370b1cf31b86225fd4c0606e2551a90f95dd41735699e30865aabf40d8f11ba3488cb372aa42ffa2d2eed4f0a4abf8eb8df2ca4bfd38a2b569252bfcf7d7a97e
   languageName: node
   linkType: hard
 
@@ -13022,7 +13054,7 @@ __metadata:
     "@navikt/aksel-icons": 6.8.0
     "@navikt/ds-css": 6.7.1
     "@navikt/ds-icons": 3.4.3
-    "@navikt/ds-react": 6.8.0
+    "@navikt/ds-react": 6.9.0
     "@navikt/fnrvalidator": 2.0.7
     "@navikt/ft-plattform-komponenter": 2.5.10
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.13
