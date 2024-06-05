@@ -7,20 +7,20 @@ import { useNavigate } from 'react-router';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
-import { JournalpostConflictTyper } from '../../models/enums/Journalpost/JournalpostConflictTyper';
-import { RootStateType } from '../../state/RootState';
-import { lukkOppgaveResetAction } from '../../state/actions';
-import { getJournalpost as fellesReducerGetJournalpost } from '../../state/reducers/FellesReducer';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import SokKnapp from '../../components/knapp/SokKnapp';
-import { OkGaaTilLosModal } from '../pleiepenger/OkGaaTilLosModal';
-import OpprettJournalpostInngang from './OpprettJournalpostInngang';
-import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
-import { ConflictErrorComponent } from '../../components/ConflictErrorComponent';
+import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
+import { RootStateType } from '../state/RootState';
+import { lukkOppgaveResetAction } from '../state/actions';
+import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
+import VerticalSpacer from '../components/VerticalSpacer';
+import SokKnapp from '../components/knapp/SokKnapp';
+import { OkGaaTilLosModal } from '../containers/pleiepenger/OkGaaTilLosModal';
+import OpprettJournalpostInngang from './components/opprettJournalpostInngang/OpprettJournalpostInngang';
+import SendBrevIAvsluttetSakInngang from './components/sendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
+import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 
-import './sok.less';
+import './home.less';
 
-export const SearchForm = () => {
+export const Home = () => {
     const [journalpostid, setJournalpostid] = useState('');
 
     const dispatch = useDispatch();
