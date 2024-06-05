@@ -7,10 +7,11 @@ import { TextField } from '@navikt/ds-react';
 import { getValidationErrors, identifikator } from 'app/rules/yup';
 
 interface Props {
-    annenPart: string;
     showComponent: boolean;
+    annenPart: string;
     setAnnenPart: (annenPart: string) => void;
 }
+
 const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
     const intl = useIntl();
     const [visFeil, setVisFeil] = useState(false);
@@ -34,16 +35,19 @@ const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
     if (!showComponent) {
         return null;
     }
+
     return (
-        <TextField
-            label={intlHelper(intl, 'ident.identifikasjon.annenPart')}
-            onChange={onChangeHandler}
-            onBlur={onBlurHandler}
-            value={annenPart}
-            error={visFeil && getValidationErrors(validators, annenPart)}
-            className="bold-label"
-            maxLength={11}
-        />
+        <div className="mt-5 mb-5">
+            <TextField
+                label={intlHelper(intl, 'ident.identifikasjon.annenPart')}
+                onChange={onChangeHandler}
+                onBlur={onBlurHandler}
+                value={annenPart}
+                error={visFeil && getValidationErrors(validators, annenPart)}
+                className="bold-label"
+                maxLength={11}
+            />
+        </div>
     );
 };
 

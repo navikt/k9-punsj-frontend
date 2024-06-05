@@ -23,7 +23,7 @@ import {
 } from 'app/utils';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
-import KlassifiseringInfo from './KlassifiseringInfo';
+import KlassifiseringInfo from './klassifiseringInfo/KlassifiseringInfo';
 
 interface OwnProps {
     lukkModal: () => void;

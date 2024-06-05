@@ -1,10 +1,9 @@
 import React from 'react';
-
 import { TextField } from '@navikt/ds-react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
+import { JaNei } from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
@@ -12,29 +11,27 @@ import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 
 interface ISokersIdentProps {
+    showComponent: boolean;
     journalpost: IJournalpost;
     identState: IIdentState;
     sokersIdent: string;
-    dokumenttype?: FordelingDokumenttype;
     riktigIdentIJournalposten?: JaNei;
-    erInntektsmeldingUtenKrav?: boolean;
     disableRadios?: boolean;
 
     handleSøkerIdChange: (event: any) => void;
-
     setVisSokersBarn: (event: any) => void;
     setSokersIdent: (event: any) => void;
     setIdentAction: typeof setIdentFellesAction;
     setErSøkerIdBekreftet: (event: any) => void;
     setRiktigIdentIJournalposten: (event: any) => void;
 }
+
 const SokersIdent: React.FC<ISokersIdentProps> = ({
+    showComponent,
     journalpost,
     identState,
     sokersIdent,
-    dokumenttype,
     riktigIdentIJournalposten,
-    erInntektsmeldingUtenKrav,
     disableRadios,
 
     handleSøkerIdChange,
@@ -45,8 +42,6 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     setRiktigIdentIJournalposten,
 }) => {
     const intl = useIntl();
-
-    const skalVises = erInntektsmeldingUtenKrav || (!!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype));
     const journalpostident = journalpost?.norskIdent;
 
     const handleIdentRadioChange = (jn: JaNei) => {
@@ -64,7 +59,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         }
     };
 
-    if (!skalVises) {
+    if (!showComponent) {
         return null;
     }
 

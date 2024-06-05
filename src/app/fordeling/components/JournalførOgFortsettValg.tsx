@@ -34,7 +34,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
 import Behandlingsknapp from './Behandlingsknapp';
-import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
+import { opprettGosysOppgave as omfordelAction } from '../../state/actions/GosysOppgaveActions';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;

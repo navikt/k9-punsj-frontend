@@ -10,13 +10,13 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../../../components/VerticalSpacer';
-import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
-import { IIdentState } from '../../../../../models/types/IdentState';
-import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
-import { getEnvironmentVariable } from '../../../../../utils';
-import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
-import { Pleietrengende } from '../Pleietrengende';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import PunsjInnsendingType from '../../../models/enums/PunsjInnsendingType';
+import { IIdentState } from '../../../models/types/IdentState';
+import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';
+import { getEnvironmentVariable } from '../../../utils';
+import JournalPostKopiFelmeldinger from '../JournalpostKopiFelmeldinger';
+import { Pleietrengende } from '../pleietrengende/Pleietrengende';
 import './journalpostAlleredeBehandlet.less';
 
 export interface IJournalpostAlleredeBehandletStateProps {
@@ -50,7 +50,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
     } else {
         return <Alert variant="warning">{intlHelper(intl, 'ident.usignert.feil.melding')}</Alert>;
     }
-
+    //TODO Sjekke og teste <Pleietrengende showComponent toSokereIJournalpost skalHenteBarn /> ang parametere
     return (
         <div className="journalpostAlleredeBehandlet__container">
             <Alert variant="info">{intlHelper(intl, 'fordeling.kanikkesendeinn')}</Alert>
@@ -63,7 +63,7 @@ const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpos
             </div>
             <VerticalSpacer eightPx />
             {!fellesState.kopierJournalpostSuccess && (
-                <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />
+                <Pleietrengende showComponent toSokereIJournalpost skalHenteBarn />
             )}
             <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
 

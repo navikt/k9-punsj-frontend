@@ -9,7 +9,7 @@ import { RootStateType } from 'app/state/RootState';
 import { hentGjelderKategorierFraGosys, setValgtGosysKategoriAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../../components/VerticalSpacer';
+import VerticalSpacer from '../../components/VerticalSpacer';
 
 export interface IOwnProps {
     fordelingState: IFordelingState;

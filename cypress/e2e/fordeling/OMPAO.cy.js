@@ -578,6 +578,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
     });
 
     it('Test at state fjernet etter avbekreft søker', () => {
+        cy.findByLabelText('Det gjelder et annet barn').click();
         cy.findByText(/Nei/i).should('exist').click();
         cy.findByLabelText('Velg fagsak').should('not.exist');
         cy.findByLabelText('Reserver saksnummer til ny fagsak').should('not.exist');
@@ -594,6 +595,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             cy.findByText(/Søkers ID/i).should('exist');
             cy.findByText(fnrNySøker).should('exist');
         });
+
         cy.findByLabelText('Velg hvilket barn det gjelder')
             .select(getBarnInfoForSelect(barn1FraApi))
             .should('have.value', barn1FraApi.identitetsnummer);
@@ -765,6 +767,8 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').click();
     });
 
     it('Intercept hent barn', () => {

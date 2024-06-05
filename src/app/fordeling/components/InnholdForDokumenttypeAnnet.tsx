@@ -16,6 +16,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
 
 interface IInnholdForDokumenttypeAnnetProps {
+    showComponent: boolean;
     journalpost: IJournalpost;
     kanJournalforingsoppgaveOpprettesiGosys: boolean;
     lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
@@ -28,6 +29,7 @@ interface IInnholdForDokumenttypeAnnetProps {
 }
 
 const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> = ({
+    showComponent,
     journalpost,
     kanJournalforingsoppgaveOpprettesiGosys,
     lukkJournalpostOppgave,
@@ -40,6 +42,10 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
 }): JSX.Element | null => {
     const intl = useIntl();
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
+
+    if (!showComponent) {
+        return null;
+    }
 
     if (!kanJournalforingsoppgaveOpprettesiGosys) {
         return (

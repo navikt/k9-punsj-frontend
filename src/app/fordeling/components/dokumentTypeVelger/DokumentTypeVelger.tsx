@@ -1,19 +1,21 @@
-import { RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
+import { RadioPanel } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
+import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../models/enums';
+import { getEnvironmentVariable } from '../../../utils';
+import intlHelper from '../../../utils/intlUtils';
 
-import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
-import { getEnvironmentVariable } from '../../../../utils';
-import intlHelper from '../../../../utils/intlUtils';
-import './DokumentTypeVelger.less';
+import './dokumentTypeVelger.less';
 
 interface OwnProps {
+    showComponent: boolean;
     handleDokumenttype: (type: FordelingDokumenttype) => void;
     valgtDokumentType: string;
     disableRadios?: boolean;
 }
 
-const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
+const DokumentTypeVelger: React.FC<OwnProps> = ({
+    showComponent,
     handleDokumenttype,
     valgtDokumentType,
     disableRadios,
@@ -78,6 +80,10 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
 
         return disableRadios;
     };
+
+    if (!showComponent) {
+        return null;
+    }
 
     return (
         <div className="dokumentTypeVelgerContainer">

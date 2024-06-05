@@ -8,11 +8,11 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState } from '../../../../models/types/IdentState';
-import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import { IFellesState } from '../../../../state/reducers/FellesReducer';
-import { hentBarn } from '../../../../state/reducers/HentBarn';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { IIdentState } from '../../../models/types/IdentState';
+import { setIdentFellesAction } from '../../../state/actions/IdentActions';
+import { IFellesState } from '../../../state/reducers/FellesReducer';
+import { hentBarn } from '../../../state/reducers/HentBarn';
 
 import './pleietrengende.less';
 
@@ -27,28 +27,26 @@ export interface IPleietrengendeDispatchProps {
 }
 
 export interface IPleietrengende {
-    sokersIdent: string;
+    showComponent: boolean;
     toSokereIJournalpost: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
-    visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
 
 type IPleietrengendeProps = IPleietrengendeStateProps & IPleietrengendeDispatchProps & IPleietrengende;
 
-const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (props) => {
+const PleietrengendeComponent: React.FC<IPleietrengendeProps> = (props) => {
     const {
-        pleietrengendeHarIkkeFnrFn,
-        identState,
-        sokersIdent,
+        showComponent,
         toSokereIJournalpost,
+        pleietrengendeHarIkkeFnrFn,
+        jpErFerdigstiltOgUtenPleietrengende,
+        skalHenteBarn,
+        identState,
         fellesState,
         setIdentAction,
         henteBarn,
-        visPleietrengende,
-        skalHenteBarn,
-        jpErFerdigstiltOgUtenPleietrengende,
     } = props;
     const intl = useIntl();
 
@@ -56,36 +54,34 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
-            henteBarn(sokersIdent);
-        }
-    }, [sokersIdent, visPleietrengende, skalHenteBarn]);
+    const { søkerId, pleietrengendeId, annenSokerIdent } = identState;
 
-    if (!visPleietrengende) {
-        return null;
-    }
+    useEffect(() => {
+        if (søkerId.length > 0 && skalHenteBarn && showComponent) {
+            henteBarn(søkerId);
+        }
+    }, [søkerId, showComponent, skalHenteBarn]);
 
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
-        if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
-            setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+        if (pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
+            setIdentAction(søkerId, '', annenSokerIdent);
         }
 
         if (identFromInput.length === 11) {
-            setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
+            setIdentAction(søkerId, identFromInput, annenSokerIdent);
         }
 
         setPleietrengendeIdent(identFromInput);
     };
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
-        setIdentAction(identState.søkerId, event.target.value, identState.annenSokerIdent);
+        setIdentAction(søkerId, event.target.value, annenSokerIdent);
     };
 
     const nullUtPleietrengendeIdent = () => {
         setPleietrengendeIdent('');
-        setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+        setIdentAction(søkerId, '', annenSokerIdent);
     };
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
@@ -93,15 +89,16 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
+            setIdentAction(søkerId, null, annenSokerIdent);
         }
     };
 
-    const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
+    const isPleietrengendeFnrErSammeSomSøker = søkerId === pleietrengendeId;
 
-    if (!visPleietrengende) {
+    if (!showComponent) {
         return null;
     }
+
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
@@ -152,8 +149,8 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             maxLength={11}
                             size="medium"
                             error={
-                                isPleitrengendeFnrErSammeSomSøker ||
-                                (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
+                                isPleietrengendeFnrErSammeSomSøker ||
+                                (pleietrengendeId && IdentRules.erUgyldigIdent(pleietrengendeId))
                                     ? intlHelper(intl, 'ident.feil.ugyldigident')
                                     : undefined
                             }

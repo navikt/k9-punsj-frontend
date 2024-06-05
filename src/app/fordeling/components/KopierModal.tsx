@@ -8,7 +8,7 @@ import { IFellesState } from 'app/state/reducers/FellesReducer';
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
 import { getEnvironmentVariable } from 'app/utils';
-import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
+import JournalPostKopiFelmeldinger from './JournalpostKopiFelmeldinger';
 
 interface OwnProps {
     søkerId: string;

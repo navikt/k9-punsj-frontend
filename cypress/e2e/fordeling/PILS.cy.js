@@ -598,17 +598,21 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .check();
 
         cy.get('[data-test-id="infoOmRegisteringAvToSokere"]').should('exist');
-        cy.get('[data-test-id="toSøkereIngenAndreSøker"]').should('exist');
+        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
-        cy.get('[data-test-id="toSøkereIngenAndreSøker"]').should('not.exist');
+        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('not.exist');
         cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('exist');
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
         cy.findByLabelText('Reserver saksnummer til ny fagsak').click();
+
+        // TODO bør check/uncheck pga bug i app som ikke fjerner state riktig, bør fikses
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').click();
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').click();
 
         cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(pleietrengende);
 

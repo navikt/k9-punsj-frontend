@@ -1,7 +1,7 @@
 import { idnr } from '@navikt/fnrvalidator';
 
 import { IdentRules } from 'app/rules';
-import intlHelper from '../../../utils/intlUtils';
+import intlHelper from '../../utils/intlUtils';
 
 export const erUgyldigIdent = (ident: string | null): boolean => {
     if (!ident || !ident.length) return true;

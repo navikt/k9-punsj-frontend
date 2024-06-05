@@ -1,10 +1,7 @@
 import React from 'react';
-
 import { BodyShort, Checkbox, Link, Select } from '@navikt/ds-react';
-
 import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
-
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IBarn } from 'app/models/types/Barn';
 import { FormattedMessage } from 'react-intl';
@@ -12,6 +9,7 @@ import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
+    showComponent: boolean;
     fagsaker: Fagsak[];
     reserverSaksnummerTilNyFagsak: boolean;
     identState: IIdentState;
@@ -90,7 +88,8 @@ const getLenkeTilK9Sak = (fagsakId: string) => {
     return `${k9sakUrl}${fagsakId}`;
 };
 
-const FagsakSelect = ({
+const FagsakSelect: React.FC<Props> = ({
+    showComponent,
     fagsaker,
     reserverSaksnummerTilNyFagsak,
     identState,
@@ -102,52 +101,58 @@ const FagsakSelect = ({
     setIdentAction,
     setBehandlingsAar,
     setAnnenPart,
-}: Props) => (
-    <>
-        <div className="fagsakSelectContainer">
-            <Select
-                className="fagsakSelect"
-                label="Velg fagsak"
-                disabled={fagsaker.length === 0 || reserverSaksnummerTilNyFagsak || ingenInfoOmBarnIDokument}
-                onChange={(event) => setValgtFagsak(event.target.value)}
+}: Props) => {
+    if (!showComponent) {
+        return null;
+    }
+
+    return (
+        <>
+            <div className="fagsakSelectContainer">
+                <Select
+                    className="fagsakSelect"
+                    label="Velg fagsak"
+                    disabled={fagsaker.length === 0 || reserverSaksnummerTilNyFagsak || ingenInfoOmBarnIDokument}
+                    onChange={(event) => setValgtFagsak(event.target.value)}
+                >
+                    <option value="">Velg</option>
+                    {!ingenInfoOmBarnIDokument &&
+                        !reserverSaksnummerTilNyFagsak &&
+                        fagsaker.map(({ fagsakId, sakstype, reservert }) => (
+                            <option key={fagsakId} value={fagsakId}>
+                                {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
+                            </option>
+                        ))}
+                </Select>
+                {valgtFagsak && (
+                    <div className="fagsakSelectedInfo">
+                        <BodyShort as="p">{getFagsakInfo(valgtFagsak, barn)}</BodyShort>
+                        {!valgtFagsak.reservert && (
+                            <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
+                                <BodyShort as="p">
+                                    <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
+                                </BodyShort>
+                                <ExternalLink />
+                            </Link>
+                        )}
+                    </div>
+                )}
+            </div>
+            <Checkbox
+                onChange={() => {
+                    setReserverSaksnummerTilNyFagsak(!reserverSaksnummerTilNyFagsak);
+                    setValgtFagsak('');
+                    setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+                    setBehandlingsAar(undefined);
+                    setAnnenPart('');
+                }}
+                disabled={ingenInfoOmBarnIDokument}
+                checked={reserverSaksnummerTilNyFagsak}
             >
-                <option value="">Velg</option>
-                {!ingenInfoOmBarnIDokument &&
-                    !reserverSaksnummerTilNyFagsak &&
-                    fagsaker.map(({ fagsakId, sakstype, reservert }) => (
-                        <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
-                        </option>
-                    ))}
-            </Select>
-            {valgtFagsak && (
-                <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">{getFagsakInfo(valgtFagsak, barn)}</BodyShort>
-                    {!valgtFagsak.reservert && (
-                        <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
-                            <BodyShort as="p">
-                                <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
-                            </BodyShort>
-                            <ExternalLink />
-                        </Link>
-                    )}
-                </div>
-            )}
-        </div>
-        <Checkbox
-            onChange={() => {
-                setReserverSaksnummerTilNyFagsak(!reserverSaksnummerTilNyFagsak);
-                setValgtFagsak('');
-                setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
-                setBehandlingsAar(undefined);
-                setAnnenPart('');
-            }}
-            disabled={ingenInfoOmBarnIDokument}
-            checked={reserverSaksnummerTilNyFagsak}
-        >
-            <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
-        </Checkbox>
-    </>
-);
+                <FormattedMessage id="fordeling.fagsakSelect.checkbox.reserverSaksnummer" />
+            </Checkbox>
+        </>
+    );
+};
 
 export default FagsakSelect;

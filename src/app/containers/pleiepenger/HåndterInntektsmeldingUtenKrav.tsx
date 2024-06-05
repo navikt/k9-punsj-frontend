@@ -26,20 +26,24 @@ import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';
 
 interface Props {
-    journalpost?: IJournalpost;
+    showComponent: boolean;
     søkerId: string;
+    journalpost?: IJournalpost;
 }
 
 const opprettJournalføringsoppgaveValue = 'opprettJournalføringsoppgave';
 const ferdigstillJournalpostValue = 'ferdigstillJournalpost';
 const settPåVentValue = 'settPåVent';
-const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerId }) => {
+
+const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ showComponent, søkerId, journalpost }) => {
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
     const [showOpprettOppgaveIGosysModal, setShowOpprettOppgaveIGosysModal] = useState(false);
     const [visBrevIkkeSendtInfoboks, setVisBrevIkkeSendtInfoboks] = useState(false);
     const [håndterInntektsmeldingUtenKravValg, setHåndterInntektsmeldingUtenKravValg] = useState<string>('');
+
     const dispatch = useDispatch();
+
     const showSettPaaVentSuccessModal = useSelector(
         (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentSuccess,
     );
@@ -110,6 +114,10 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
         }
         return null;
     };
+
+    if (!showComponent) {
+        return null;
+    }
 
     return (
         <>
