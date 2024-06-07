@@ -5,8 +5,8 @@ import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-
 import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
 import { EksisterendeOMPMASoknaderReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
 import { PunchOMPMAFormReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
-import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
-import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
+import { EksisterendePLSSoknaderReducer } from 'app/ytelser/pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
+import { PunchPLSFormReducer } from 'app/ytelser/pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import {
     AuthReducer,
     EksisterendeSoknaderReducer,

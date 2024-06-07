@@ -10,10 +10,10 @@ import {
     Periode,
     PeriodeMedTimerMinutter,
     Periodeinfo,
-} from '../../models/types';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
-import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+} from 'app/models/types';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
+import { FrilanserOpptjening, IFrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
 
 export interface IPLSSoknad {
     soeknadId: string;

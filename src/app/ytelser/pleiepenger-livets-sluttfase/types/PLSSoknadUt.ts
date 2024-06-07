@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
-import { Arbeidstaker, IPeriode, Periode, Periodeinfo } from '../../models/types';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
-import { FrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+import { Arbeidstaker, IPeriode, Periode, Periodeinfo } from 'app/models/types';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
+import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
 import {
     IArbeidstid,
     IOpptjeningAktivitet,

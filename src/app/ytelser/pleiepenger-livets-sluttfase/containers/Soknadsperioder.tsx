@@ -6,14 +6,14 @@ import { Alert, Panel } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
 
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import CalendarSvg from '../../assets/SVG/CalendarSVG';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
-import { Periodepaneler } from '../../containers/pleiepenger/Periodepaneler';
-import { GetUhaandterteFeil, IPeriode } from '../../models/types';
-import { RootStateType } from '../../state/RootState';
-import intlHelper from '../../utils/intlUtils';
+import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
+import CalendarSvg from 'app/assets/SVG/CalendarSVG';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { generateDateString } from 'app/components/skjema/skjemaUtils';
+import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { GetUhaandterteFeil, IPeriode } from 'app/models/types';
+import { RootStateType } from 'app/state/RootState';
+import intlHelper from 'app/utils/intlUtils';
 import { IPLSSoknad } from '../types/PLSSoknad';
 import './soknadsperioder.less';
 
@@ -48,13 +48,12 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some(
-            (ep) =>
-                nyePerioder?.some(
-                    (nyPeriode) =>
-                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-                ),
+        return eksisterendePerioder.some((ep) =>
+            nyePerioder?.some(
+                (nyPeriode) =>
+                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 

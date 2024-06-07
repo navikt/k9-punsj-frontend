@@ -7,9 +7,9 @@ import { Alert, Panel, TextField } from '@navikt/ds-react';
 
 import DateInput from 'app/components/skjema/DateInput';
 
-import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import intlHelper from '../../../utils/intlUtils';
+import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import intlHelper from 'app/utils/intlUtils';
 import { PLSSoknad } from '../../types/PLSSoknad';
 import './opplysningerOmPLSSoknad.less';
 

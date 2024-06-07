@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import intlHelper from 'app/utils/intlUtils';
 
-import { periodToFormattedString } from '../../../../utils';
+import { periodToFormattedString } from 'app/utils';
 import {
     IPLSSoknadKvitteringBeredskapNattevak,
     IPLSSoknadKvitteringBosteder,

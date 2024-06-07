@@ -3,13 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import intlHelper from 'app/utils/intlUtils';
 
-import { Virksomhetstyper } from '../../../../models/enums/Virksomhetstyper';
-import {
-    formatDato,
-    landkodeTilNavn,
-    periodToFormattedString,
-    sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../../utils';
+import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
+import { formatDato, landkodeTilNavn, periodToFormattedString, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils';
 import { IPLSSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../types/PLSSoknadKvittering';
 import './visningAvPerioderPLSSoknadKvittering.less';
 
