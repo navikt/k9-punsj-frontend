@@ -26,7 +26,7 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import ArbeidsforholdPanel from 'app/arbeidsforhold/containers/ArbeidsforholdPanel';
+import ArbeidsforholdPanel from 'app/components/arbeidsforhold/containers/ArbeidsforholdPanel';
 import Feilmelding from 'app/components/Feilmelding';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';

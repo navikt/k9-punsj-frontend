@@ -1,7 +1,8 @@
+import React from 'react';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
-import * as React from 'react';
+
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';
@@ -15,10 +16,10 @@ import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import { CountrySelect } from '../../components/country-select/CountrySelect';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { arbeidstidInformasjon } from 'app/ytelser/pleiepenger/ArbeidstidInfo';
-import { Arbeidstaker, IPeriode } from '../../models/types';
+import { Arbeidstaker, IPeriode } from 'app/models/types';
 import { IPLSSoknad } from 'app/ytelser/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 

@@ -5,13 +5,16 @@ import { IntlShape, createIntl } from 'react-intl';
 
 import { Textarea } from '@navikt/ds-react';
 
-import { UpdatePeriodeinfoInSoknad, UpdatePeriodeinfoInSoknadState } from 'app/ytelser/pleiepenger/PeriodeinfoPaneler';
-import { pfTilleggsinformasjon } from 'app/ytelser/pleiepenger/pfTilleggsinformasjon';
-import { GetErrorMessage } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
+import {
+    UpdatePeriodeinfoInSoknad,
+    UpdatePeriodeinfoInSoknadState,
+} from '../../../app/ytelser/pleiepenger/PeriodeinfoPaneler';
+import { pfTilleggsinformasjon } from '../../../app/ytelser/pleiepenger/pfTilleggsinformasjon';
+import intlHelper from '../../../app/utils/intlUtils';
 
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+import { GetErrorMessage } from '../../../app/models/types/Error';
 
 jest.mock('app/utils/intlUtils');
 

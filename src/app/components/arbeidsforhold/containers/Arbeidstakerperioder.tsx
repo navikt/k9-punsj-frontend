@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
-
 import { Fieldset, Panel } from '@navikt/ds-react';
-
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
-
-import { finnArbeidsgivere } from '../../api/api';
-import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { finnArbeidsgivere } from 'app/api/api';
+import { Arbeidstaker, IPeriode } from 'app/models/types';
+import { IPLSSoknad } from 'app/ytelser/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import ArbeidstakerComponent from './ArbeidstakerComponent';
 
 type ItemInfo = any;
@@ -107,7 +104,7 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <Fieldset className="listepaneler">
+        <Fieldset className="listepaneler" legend>
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                 const getHarDuplikatOrgnr = () =>

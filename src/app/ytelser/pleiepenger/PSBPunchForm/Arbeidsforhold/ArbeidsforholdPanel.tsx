@@ -1,7 +1,8 @@
+import React from 'react';
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
-import * as React from 'react';
+
 import { useIntl } from 'react-intl';
 
 import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';

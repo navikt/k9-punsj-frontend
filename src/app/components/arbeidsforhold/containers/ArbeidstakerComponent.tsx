@@ -10,13 +10,14 @@ import { Arbeidstaker, GetErrorMessage, IArbeidstaker, IPeriode, OrgOrPers } fro
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { ApiPath } from '../../apiConfig';
-import { arbeidstidInformasjon } from '../../ytelser/pleiepenger/ArbeidstidInfo';
-import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
-import ActionType from 'app/components/arbeidsforhold/types/actionTypes';
-import pfArbeidstakerReducer from 'app/components/arbeidsforhold/state/reducers/pfArbeidstakerReducer';
+import { ApiPath } from 'app/apiConfig';
+import { arbeidstidInformasjon } from 'app/ytelser/pleiepenger/ArbeidstidInfo';
+import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
+import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
+import ActionType from '../types/actionTypes';
 
 import './arbeidstakerComponent.less';
+
 interface ArbeidstakerComponentProps {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
