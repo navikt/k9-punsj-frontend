@@ -20,11 +20,11 @@ import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
 import { Fordeling } from '../fordeling/Fordeling';
-import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
-import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
+import { RegistreringsValg as PSBRegistreringsValg } from '../containers/pleiepenger/RegistreringsValg';
+import { PSBPunchForm } from '../containers/pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/ytelser/omsorgspenger-korrigering-av-inntektsmelding/KorrigeringAvInntektsmeldingContainer';
-import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
+import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
 import JournalførOgFortsettValg from '../fordeling/components/JournalførOgFortsettValg';
 
 const JournalpostRouter: React.FC = () => {

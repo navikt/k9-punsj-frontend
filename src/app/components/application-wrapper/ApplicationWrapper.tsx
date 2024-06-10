@@ -11,7 +11,7 @@ import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
 import { checkAuth } from 'app/state/actions';
 
-import AppContainer from '../../containers/appContainer/AppContainer';
+import AppContainer from '../app-container/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
 

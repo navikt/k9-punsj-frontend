@@ -27,17 +27,17 @@ import {
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
+import SendBrevIAvsluttetSak from './brev-i-avsluttet-sak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
-import JournalpostRouter from './containers/JournalpostRouter';
+import JournalpostRouter from './journalpost-router/JournalpostRouter';
 import { Home } from './home/Home';
-import withEnvVariables from './containers/withAppSettings';
+import withEnvVariables from './withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
 import { thunk } from './state/middleware';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import JournalpostLoader from './containers/journalpostLoader/JournalpostLoader';
+import JournalpostLoader from './journalpost-loader/JournalpostLoader';
 import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
 import AuthCallback from './auth/AuthCallback';

@@ -24,7 +24,7 @@ import Fagsak from 'app/types/Fagsak';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { ISakstypeDefault } from 'app/models/Sakstype';
-import { Sakstyper } from 'app/containers/SakstypeImpls';
+import { Sakstyper } from 'app/types/SakstypeImpls';
 import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,

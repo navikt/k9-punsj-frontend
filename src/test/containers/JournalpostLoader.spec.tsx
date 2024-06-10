@@ -3,7 +3,7 @@ import { expect } from '@jest/globals';
 import { RenderResult, render } from '@testing-library/react';
 import { shallow } from 'enzyme';
 
-import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/journalpostLoader/JournalpostLoader';
+import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/journalpost-loader/JournalpostLoader';
 import { IJournalpost } from '../../app/models/types/Journalpost/Journalpost';
 
 // Mock useParams
