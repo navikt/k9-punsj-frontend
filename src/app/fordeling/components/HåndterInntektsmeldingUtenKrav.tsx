@@ -1,11 +1,11 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert, Button, Modal } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import { IJournalpost } from 'app/models/types';
@@ -18,12 +18,12 @@ import {
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
-import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
-import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
+import FerdigstillJournalpostErrorModal from 'app/components/ferdigstill-journalpost-modal/FerdigstillJournalpostErrorModal';
+import FerdigstillJournalpostModal from 'app/components/ferdigstill-journalpost-modal/FerdigstillJournalpostModal';
 import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
-import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
-import SettPaaVentErrorModal from './SettPaaVentErrorModal';
-import SettPaaVentModal from './SettPaaVentModal';
+import OpprettOppgaveIGosysModal from 'app/components/opprett-oppgave-i-gosys-modal/OpprettOppgaveIGosysModal';
+import SettPaaVentErrorModal from 'app/components/sett-på-vent-modal/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/components/sett-på-vent-modal/SettPaaVentModal';
 
 interface Props {
     showComponent: boolean;

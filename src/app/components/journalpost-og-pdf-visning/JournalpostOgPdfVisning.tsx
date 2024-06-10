@@ -14,7 +14,8 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import 'app/ytelser/pleiepenger/punchPage.less';
+import './journalpostOgPdfVisning.less';
+
 export interface Props {
     journalposter: string[];
     children: React.ReactNode;

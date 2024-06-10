@@ -20,7 +20,7 @@ import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import { get } from 'app/utils/apiUtils';
 import { ApiPath } from 'app/apiConfig';
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 
 export interface OrgInfo {
     organisasjonsnummer: string;

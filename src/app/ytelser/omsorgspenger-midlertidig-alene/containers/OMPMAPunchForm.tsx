@@ -16,11 +16,11 @@ import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/ytelser/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/ytelser/pleiepenger/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/sett-på-vent-modal/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/components/sett-på-vent-modal/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';

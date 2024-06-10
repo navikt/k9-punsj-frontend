@@ -8,7 +8,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
 
 const schema = yup.object({

@@ -7,12 +7,13 @@ import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { IdentRules } from 'app/rules';
-import { IEksisterendeSoknaderState } from '../../models/types';
-import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
-import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from '../../state/actions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { EksisterendeSoknader } from './EksisterendeSoknader';
+import { IEksisterendeSoknaderState } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
+import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from 'app/state/actions';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from 'app/state/actions/JournalposterPerIdentActions';
+import { EksisterendeSoknader } from '../EksisterendeSoknader';
+
 import './registreringsValg.less';
 
 export interface IRegistreringsValgComponentProps {

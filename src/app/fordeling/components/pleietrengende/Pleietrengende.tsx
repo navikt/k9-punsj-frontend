@@ -8,7 +8,7 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { IIdentState } from '../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { IFellesState } from '../../../state/reducers/FellesReducer';

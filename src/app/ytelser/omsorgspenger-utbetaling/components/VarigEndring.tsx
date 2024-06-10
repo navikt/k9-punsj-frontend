@@ -3,7 +3,7 @@ import { capitalize } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';

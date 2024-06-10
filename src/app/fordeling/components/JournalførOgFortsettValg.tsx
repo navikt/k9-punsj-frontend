@@ -6,8 +6,8 @@ import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
-import FormPanel from 'app/components/FormPanel';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import FormPanel from 'app/components/formpanel/FormPanel';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import {
     FordelingDokumenttype,
     Sakstype,

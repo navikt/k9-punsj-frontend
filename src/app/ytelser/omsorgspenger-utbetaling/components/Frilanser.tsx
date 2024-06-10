@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';

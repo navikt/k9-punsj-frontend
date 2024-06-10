@@ -1,7 +1,7 @@
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 
 interface EkspanderbartPanelProps {
     children: React.ReactNode;

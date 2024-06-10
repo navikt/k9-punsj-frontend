@@ -8,12 +8,12 @@ import { initializeDate } from 'app/utils';
 
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import VerticalSpacer from '../../../components/vertical-spacer/VerticalSpacer';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
 import intlHelper from '../../../utils/intlUtils';
-import { Periodepaneler } from '../Periodepaneler';
+import { Periodepaneler } from '../../../components/periodepaneler/Periodepaneler';
 import './soknadsperioder.less';
 
 interface IOwnProps {
@@ -47,13 +47,12 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
         if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
             return false;
         }
-        return eksisterendePerioder.some(
-            (ep) =>
-                nyePerioder?.some(
-                    (nyPeriode) =>
-                        initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
-                        initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
-                ),
+        return eksisterendePerioder.some((ep) =>
+            nyePerioder?.some(
+                (nyPeriode) =>
+                    initializeDate(ep.fom).isSameOrBefore(initializeDate(nyPeriode.tom)) &&
+                    initializeDate(nyPeriode.fom).isSameOrBefore(initializeDate(ep.tom)),
+            ),
         );
     };
 

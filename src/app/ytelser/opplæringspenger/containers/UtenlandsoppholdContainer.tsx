@@ -4,7 +4,7 @@ import React from 'react';
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 import Utenlandsopphold from './Utenlandsopphold';

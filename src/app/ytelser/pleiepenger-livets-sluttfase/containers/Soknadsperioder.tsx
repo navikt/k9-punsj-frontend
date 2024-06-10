@@ -8,9 +8,9 @@ import { initializeDate } from 'app/utils';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
-import { Periodepaneler } from 'app/ytelser/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/components/periodepaneler/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';

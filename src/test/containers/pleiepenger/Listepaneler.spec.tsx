@@ -5,7 +5,7 @@ import { mocked } from 'jest-mock';
 import { TextField } from '@navikt/ds-react';
 
 import { IntlShape, createIntl } from 'react-intl';
-import { IListepanelerProps, ListeComponent, Listepaneler } from '../../../app/ytelser/pleiepenger/Listepaneler';
+import { IListepanelerProps, ListeComponent, Listepaneler } from '../../../app/components/listepaneler/Listepaneler';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');

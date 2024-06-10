@@ -5,7 +5,7 @@ import { IntlShape } from 'react-intl';
 
 import { BodyShort, Heading, Label, Panel, Select, Textarea } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import intlHelper from 'app/utils/intlUtils';

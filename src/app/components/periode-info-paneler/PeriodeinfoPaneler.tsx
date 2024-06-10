@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IntlShape, useIntl } from 'react-intl';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
@@ -9,7 +9,7 @@ import {
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
-} from 'app/ytelser/pleiepenger/Listepaneler';
+} from 'app/components/listepaneler/Listepaneler';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
@@ -18,9 +18,10 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
+import BinSvg from 'app/assets/SVG/BinSVG';
+import { IPeriode } from 'app/models/types/Periode';
+import intlHelper from 'app/utils/intlUtils';
+
 import './periodeinfoPaneler.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
@@ -61,9 +62,7 @@ export interface IPeriodeinfopanelerProps {
     };
 }
 
-export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (
-    props: IPeriodeinfopanelerProps,
-) => {
+export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = (props: IPeriodeinfopanelerProps) => {
     const {
         periods,
         medSlettKnapp,

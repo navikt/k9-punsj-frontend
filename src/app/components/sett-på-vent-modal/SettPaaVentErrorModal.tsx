@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
-
 import { Button } from '@navikt/ds-react';
+import FeilCircleSvg from 'app/assets/SVG/FeilCircleSVG';
+import intlHelper from 'app/utils/intlUtils';
 
-import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
-import intlHelper from '../../utils/intlUtils';
 import './settPaaVentModal.less';
 
 export interface ISettPaaVentErrorModalProps {

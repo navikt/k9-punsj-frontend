@@ -3,7 +3,7 @@ import { Route, Routes, useParams, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ErrorBoundary } from '@sentry/react';
 
-import { JournalpostOgPdfVisning } from 'app/components/JournalpostOgPdfVisning';
+import { JournalpostOgPdfVisning } from 'app/components/journalpost-og-pdf-visning/JournalpostOgPdfVisning';
 import { PLSRegistreringsValg } from 'app/ytelser/pleiepenger-livets-sluttfase/containers/PLSRegistreringsValg';
 import { PLSPunchForm } from 'app/ytelser/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
 import { OMPKSRegistreringsValg } from 'app/ytelser/omsorgspenger-kronisk-sykt-barn/containers/OMPKSRegistreringsValg';
@@ -20,7 +20,7 @@ import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
 import { Fordeling } from '../fordeling/Fordeling';
-import { RegistreringsValg as PSBRegistreringsValg } from 'app/ytelser/pleiepenger/RegistreringsValg';
+import { RegistreringsValg as PSBRegistreringsValg } from 'app/ytelser/pleiepenger/registrerings-valg/RegistreringsValg';
 import { PSBPunchForm } from 'app/ytelser/pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/ytelser/omsorgspenger-korrigering-av-inntektsmelding/KorrigeringAvInntektsmeldingContainer';

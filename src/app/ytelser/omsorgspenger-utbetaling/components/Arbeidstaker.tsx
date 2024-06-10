@@ -6,7 +6,7 @@ import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import Organisasjon from 'app/models/types/Organisasjon';

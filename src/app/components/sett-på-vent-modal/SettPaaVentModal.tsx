@@ -1,13 +1,12 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
-
 import { Alert, Button, Table } from '@navikt/ds-react';
+import { ApiPath } from 'app/apiConfig';
+import VisSvg from 'app/assets/SVG/VisSVG';
+import { IJournalpostInfo } from 'app/models/types';
+import { apiUrl } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
 
-import { ApiPath } from '../../apiConfig';
-import VisSvg from '../../assets/SVG/VisSVG';
-import { IJournalpostInfo } from '../../models/types';
-import { apiUrl } from '../../utils';
-import intlHelper from '../../utils/intlUtils';
 import './settPaaVentModal.less';
 
 interface ISettPaaVentModalProps {

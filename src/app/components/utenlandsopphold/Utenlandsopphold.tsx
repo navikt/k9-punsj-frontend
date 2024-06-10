@@ -11,7 +11,7 @@ import {
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
-} from 'app/ytelser/pleiepenger/Listepaneler';
+} from 'app/components/listepaneler/Listepaneler';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
@@ -21,10 +21,10 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
-import { Periodepaneler } from './Periodepaneler';
+import BinSvg from 'app/assets/SVG/BinSVG';
+import { IPeriode } from 'app/models/types/Periode';
+import intlHelper from 'app/utils/intlUtils';
+import { Periodepaneler } from '../periodepaneler/Periodepaneler';
 import './utenlandsopphold.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;

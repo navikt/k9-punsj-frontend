@@ -11,7 +11,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import Fagsak from 'app/types/Fagsak';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import VerticalSpacer from '../../../components/vertical-spacer/VerticalSpacer';
 import PunsjInnsendingType from '../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../state/reducers/FellesReducer';

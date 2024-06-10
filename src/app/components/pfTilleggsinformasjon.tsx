@@ -10,8 +10,8 @@ import {
 } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 
-import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import { GetErrorMessage, ITilleggsinformasjon } from '../models/types';
+import { Periodeinfo } from '../models/types/Periodeinfo';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {

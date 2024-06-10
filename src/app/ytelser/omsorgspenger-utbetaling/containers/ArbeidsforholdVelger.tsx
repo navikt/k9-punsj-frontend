@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
 
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';

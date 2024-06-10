@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, Heading, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';

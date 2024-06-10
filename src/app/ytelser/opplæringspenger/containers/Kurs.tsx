@@ -4,7 +4,7 @@ import React from 'react';
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, Checkbox, Heading, Label, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';

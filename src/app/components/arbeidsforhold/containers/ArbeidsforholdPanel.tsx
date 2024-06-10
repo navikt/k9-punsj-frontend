@@ -16,7 +16,7 @@ import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { arbeidstidInformasjon } from 'app/ytelser/pleiepenger/ArbeidstidInfo';
 import { Arbeidstaker, IPeriode } from 'app/models/types';

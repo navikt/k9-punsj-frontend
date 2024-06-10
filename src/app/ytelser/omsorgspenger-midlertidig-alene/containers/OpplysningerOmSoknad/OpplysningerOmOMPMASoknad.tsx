@@ -6,7 +6,7 @@ import { IntlShape } from 'react-intl';
 
 import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import DateInput from 'app/components/skjema/DateInput';
 
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';

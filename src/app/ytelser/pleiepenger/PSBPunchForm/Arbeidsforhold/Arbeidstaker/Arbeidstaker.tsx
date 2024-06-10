@@ -4,7 +4,7 @@ import { IntlShape } from 'react-intl';
 
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';

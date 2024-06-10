@@ -16,7 +16,7 @@ import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../../components/VerticalSpacer';
+import VerticalSpacer from '../../../../components/vertical-spacer/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';

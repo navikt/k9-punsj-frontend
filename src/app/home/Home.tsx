@@ -11,7 +11,7 @@ import { JournalpostConflictTyper } from '../models/enums/Journalpost/Journalpos
 import { RootStateType } from '../state/RootState';
 import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
-import VerticalSpacer from '../components/VerticalSpacer';
+import VerticalSpacer from '../components/vertical-spacer/VerticalSpacer';
 import SokKnapp from '../components/knapp/SokKnapp';
 import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './components/opprettJournalpostInngang/OpprettJournalpostInngang';

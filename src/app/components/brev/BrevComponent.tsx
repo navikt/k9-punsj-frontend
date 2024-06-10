@@ -13,7 +13,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { finnArbeidsgivere } from '../../api/api';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import { Brev } from './Brev';
 import Brevmal from './Brevmal';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';

@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 
 import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import DateInput from 'app/components/skjema/DateInput';
 import { IOMPUTSoknad } from 'app/ytelser/omsorgspenger-utbetaling/types/OMPUTSoknad';

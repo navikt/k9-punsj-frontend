@@ -5,8 +5,8 @@ import { Modal } from '@navikt/ds-react';
 
 import { settJournalpostPaaVent } from 'app/api/api';
 
-import SettPaaVentErrorModal from 'app/ytelser/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/ytelser/pleiepenger/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/sett-på-vent-modal/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/components/sett-på-vent-modal/SettPaaVentModal';
 import { OkGaaTilLosModal } from '../gå-til-los-modal/OkGaaTilLosModal';
 
 type OwnProps = {

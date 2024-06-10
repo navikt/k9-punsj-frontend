@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { Delete } from '@navikt/ds-icons';
 import { Button, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';

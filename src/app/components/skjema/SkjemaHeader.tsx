@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import KryssSVG from '../../assets/SVG/KryssSVG';
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import FlexRow from '../flexgrid/FlexRow';
 import './skjemaHeader.less';
 

@@ -8,7 +8,7 @@ import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
-} from '../../../app/ytelser/pleiepenger/PeriodeinfoPaneler';
+} from '../../../app/components/periode-info-paneler/PeriodeinfoPaneler';
 import intlHelper from '../../../app/utils/intlUtils';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 

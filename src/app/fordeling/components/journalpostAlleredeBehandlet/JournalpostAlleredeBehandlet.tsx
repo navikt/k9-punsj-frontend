@@ -10,7 +10,7 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../components/VerticalSpacer';
+import VerticalSpacer from '../../../components/vertical-spacer/VerticalSpacer';
 import PunsjInnsendingType from '../../../models/enums/PunsjInnsendingType';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IFellesState, kopierJournalpost } from '../../../state/reducers/FellesReducer';

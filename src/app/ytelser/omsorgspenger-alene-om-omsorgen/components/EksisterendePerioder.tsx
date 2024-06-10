@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Heading, Panel } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import Periodevisning from 'app/components/periodevisning/Periodevisning';
 import { Periode } from 'app/models/types';
 

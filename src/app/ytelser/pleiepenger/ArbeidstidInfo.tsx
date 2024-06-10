@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IntlShape } from 'react-intl';
 
 import { Alert } from '@navikt/ds-react';

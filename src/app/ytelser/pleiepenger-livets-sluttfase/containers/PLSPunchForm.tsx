@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
-import { Periodepaneler } from 'app/ytelser/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/components/periodepaneler/Periodepaneler';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
@@ -28,13 +28,13 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import ArbeidsforholdPanel from 'app/components/arbeidsforhold/containers/ArbeidsforholdPanel';
 import Feilmelding from 'app/components/Feilmelding';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from 'app/ytelser/pleiepenger/PeriodeinfoPaneler';
-import SettPaaVentErrorModal from 'app/ytelser/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/ytelser/pleiepenger/SettPaaVentModal';
-import { pfLand } from 'app/ytelser/pleiepenger/pfLand';
+import { PeriodeinfoPaneler } from 'app/components/periode-info-paneler/PeriodeinfoPaneler';
+import SettPaaVentErrorModal from 'app/components/sett-på-vent-modal/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/components/sett-på-vent-modal/SettPaaVentModal';
+import { pfLand } from 'app/components/pfLand';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';

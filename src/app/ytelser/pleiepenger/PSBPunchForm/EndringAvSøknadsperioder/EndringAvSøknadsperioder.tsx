@@ -10,7 +10,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { Periodepaneler } from '../../Periodepaneler';
+import { Periodepaneler } from '../../../../components/periodepaneler/Periodepaneler';
 import './endringAvSøknadsperioder.less';
 
 interface EndringAvSøknadsperioderProps {

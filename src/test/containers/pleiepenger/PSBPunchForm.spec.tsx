@@ -21,6 +21,7 @@ import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvitter
 import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
 import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState';
 import { ISignaturState } from '../../../app/models/types/SignaturState';
+import { useNavigate } from 'react-router';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -32,6 +33,8 @@ jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
     useSelector: jest.fn(),
 }));
+
+const navigate = useNavigate();
 
 const soknadId = 'abc';
 const søkerId = '01015012345';
@@ -65,7 +68,7 @@ const initialSoknad: IPSBSoknad = {
     },
     soekerId: søkerId,
     soeknadId: '123',
-    soeknadsperiode: null,
+    soeknadsperiode: [],
     soknadsinfo: {
         harMedsøker: null,
         samtidigHjemme: null,
@@ -110,7 +113,7 @@ const validertSoknad: IPSBSoknadKvittering = {
         opptjeningAktivitet: {},
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: 'test' },
 };
 
 const setupPunchForm = (
@@ -127,7 +130,6 @@ const setupPunchForm = (
         resetSoknadAction: jest.fn(),
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
-        undoChoiceOfEksisterendeSoknadAction: jest.fn(),
         updateSoknad: jest.fn(),
         setSignaturAction: jest.fn(),
         settJournalpostPaaVent: jest.fn(),
@@ -185,7 +187,7 @@ const setupPunchForm = (
     const punchFormComponentProps: IPunchFormComponentProps = {
         journalpostid,
         id: soknadId,
-        navigate: undefined,
+        navigate: navigate,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);

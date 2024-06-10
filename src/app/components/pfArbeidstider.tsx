@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { HelpText, TextField } from '@navikt/ds-react';
@@ -8,13 +8,13 @@ import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
+} from 'app/components/periode-info-paneler/PeriodeinfoPaneler';
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
-import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
-import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import UtregningArbeidstid from './timefoering/UtregningArbeidstidDesimaler';
+import { IArbeidstidPeriodeMedTimer } from '../models/types/Periode';
+import { Periodeinfo } from '../models/types/Periodeinfo';
 
 // eslint-disable-next-line import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {

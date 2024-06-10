@@ -4,7 +4,7 @@ import React from 'react';
 import { Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';

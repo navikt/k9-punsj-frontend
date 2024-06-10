@@ -7,7 +7,7 @@ import { HelpText } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 
 type OwnProps = {
     intl: IntlShape;

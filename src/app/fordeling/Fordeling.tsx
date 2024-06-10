@@ -17,8 +17,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import FormPanel from '../components/FormPanel';
-import VerticalSpacer from '../components/VerticalSpacer';
+import FormPanel from '../components/formpanel/FormPanel';
+import VerticalSpacer from '../components/vertical-spacer/VerticalSpacer';
 import { IGosysOppgaveState } from '../models/types/GosysOppgaveState';
 import { IIdentState } from '../models/types/IdentState';
 import { setDokumenttypeAction, setFagsakAction } from '../state/actions/FordelingActions';
@@ -34,7 +34,7 @@ import {
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from '../utils';
-import HåndterInntektsmeldingUtenKrav from 'app/ytelser/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import HåndterInntektsmeldingUtenKrav from './components/HåndterInntektsmeldingUtenKrav';
 import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import FagsakSelect from './components/FagsakSelect';
 import DokumentTypeVelger from './components/dokumentTypeVelger/DokumentTypeVelger';

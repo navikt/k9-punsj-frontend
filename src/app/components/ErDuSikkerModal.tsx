@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 
 import { Button } from '@navikt/ds-react';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import intlHelper from 'app/utils/intlUtils';
 
 interface IErDuSikkerModalProps {
