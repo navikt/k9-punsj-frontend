@@ -12,7 +12,7 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
-import VentModal from 'app/components/ventModal/VentModal';
+import VentModal from 'app/components/vent-modal/VentModal';
 import { Periode } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';

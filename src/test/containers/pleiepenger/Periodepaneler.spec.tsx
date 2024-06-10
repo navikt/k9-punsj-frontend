@@ -1,17 +1,15 @@
+import React from 'react';
 import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
 import { TextField } from '@navikt/ds-react';
 import { IntlShape } from 'react-intl';
-
 import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
-
+} from '../../../app/ytelser/pleiepenger/PeriodeinfoPaneler';
+import intlHelper from '../../../app/utils/intlUtils';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 
 jest.mock('react-intl');

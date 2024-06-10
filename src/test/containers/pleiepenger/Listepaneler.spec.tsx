@@ -1,12 +1,12 @@
+import React from 'react';
 import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { TextField } from '@navikt/ds-react';
-import * as React from 'react';
-import { IntlShape, createIntl } from 'react-intl';
 
-import { IListepanelerProps, ListeComponent, Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
-import intlHelper from 'app/utils/intlUtils';
+import { IntlShape, createIntl } from 'react-intl';
+import { IListepanelerProps, ListeComponent, Listepaneler } from '../../../app/ytelser/pleiepenger/Listepaneler';
+import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');

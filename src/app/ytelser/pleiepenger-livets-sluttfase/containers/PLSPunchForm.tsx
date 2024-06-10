@@ -1,13 +1,14 @@
+import React, { ComponentType } from 'react';
 import classNames from 'classnames';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { ComponentType } from 'react';
+
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/ytelser/pleiepenger/Periodepaneler';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
@@ -29,11 +30,11 @@ import ArbeidsforholdPanel from 'app/arbeidsforhold/containers/ArbeidsforholdPan
 import Feilmelding from 'app/components/Feilmelding';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/containers/pleiepenger/SettPaaVentModal';
-import { pfLand } from 'app/containers/pleiepenger/pfLand';
+import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
+import { PeriodeinfoPaneler } from 'app/ytelser/pleiepenger/PeriodeinfoPaneler';
+import SettPaaVentErrorModal from 'app/ytelser/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/ytelser/pleiepenger/SettPaaVentModal';
+import { pfLand } from 'app/ytelser/pleiepenger/pfLand';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';

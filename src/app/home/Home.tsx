@@ -13,7 +13,7 @@ import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
 import VerticalSpacer from '../components/VerticalSpacer';
 import SokKnapp from '../components/knapp/SokKnapp';
-import { OkGaaTilLosModal } from '../containers/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import OpprettJournalpostInngang from './components/opprettJournalpostInngang/OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './components/sendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';

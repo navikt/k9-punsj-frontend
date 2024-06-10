@@ -5,7 +5,7 @@ import { Button } from '@navikt/ds-react';
 
 import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
 import intlHelper from '../../utils/intlUtils';
-import './okGaaTilLosModal.less';
+import './settPaaVentModal.less';
 
 export interface ISettPaaVentErrorModalProps {
     close: () => void;

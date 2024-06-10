@@ -20,7 +20,7 @@ import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
-import { OkGaaTilLosModal } from './OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
 import SettPaaVentErrorModal from './SettPaaVentErrorModal';
 import SettPaaVentModal from './SettPaaVentModal';

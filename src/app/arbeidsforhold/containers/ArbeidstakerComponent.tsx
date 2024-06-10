@@ -1,23 +1,21 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { IntlShape } from 'react-intl';
-
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
-
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
+import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/ytelser/pleiepenger/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import { Arbeidstaker, GetErrorMessage, IArbeidstaker, IPeriode, OrgOrPers } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
 import { ApiPath } from '../../apiConfig';
-import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
+import { arbeidstidInformasjon } from '../../ytelser/pleiepenger/ArbeidstidInfo';
 import ArbeidsgiverResponse from '../../models/types/ArbeidsgiverResponse';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
 import ActionType from '../types/actionTypes';
+
 import './arbeidstakerComponent.less';
 
 interface ArbeidstakerComponentProps {

@@ -11,7 +11,7 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import VentModal from 'app/components/ventModal/VentModal';
+import VentModal from 'app/components/vent-modal/VentModal';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';

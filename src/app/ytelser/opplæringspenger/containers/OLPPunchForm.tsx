@@ -15,7 +15,7 @@ import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormi
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
-import VentModal from 'app/components/ventModal/VentModal';
+import VentModal from 'app/components/vent-modal/VentModal';
 import { FordelingActionKeys } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';

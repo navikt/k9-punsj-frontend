@@ -56,7 +56,7 @@ import { IUtenlandsOpphold } from '../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../state/RootState';
 import { initializeDate } from '../../utils/timeUtils';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from './OkGaaTilLosModal';
+import { OkGaaTilLosModal } from '../../components/gå-til-los-modal/OkGaaTilLosModal';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';

@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/ytelser/pleiepenger/Periodepaneler';
 import { IPeriode, Periode } from 'app/models/types';
 import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
 import CustomAlertstripeAdvarsel from './CustomAlertstripeAdvarsel';

@@ -34,8 +34,8 @@ import {
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from '../utils';
-import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
+import HåndterInntektsmeldingUtenKrav from 'app/ytelser/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import FagsakSelect from './components/FagsakSelect';
 import DokumentTypeVelger from './components/dokumentTypeVelger/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './components/InnholdForDokumenttypeAnnet';

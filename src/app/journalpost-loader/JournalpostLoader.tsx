@@ -15,7 +15,7 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveRese
 import { getJournalpost as getJournalpostAction } from 'app/state/reducers/FellesReducer';
 
 import FeilmeldingPanel from 'app/components/FeilmeldingPanel';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/components/gå-til-los-modal/OkGaaTilLosModal';
 import { ConflictErrorComponent } from 'app/components/ConflictErrorComponent';
 
 import './journalpostLoader.less';
