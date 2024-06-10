@@ -1,9 +1,7 @@
-import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { useIntl } from 'react-intl';
-
 import { Button, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
-
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
@@ -161,41 +159,42 @@ const OpprettJournalpost: React.FC = () => {
                                     {intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}
                                 </Button>
                             )}
-                            <div className="statusContainer">
-                                {opprettJournalpostFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.opprettingAvJournalpostFeilet',
-                                            })}
-                                        </Label>
-                                    </>
-                                )}
-                                {henteFagsakFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.hentingAvFagsakFeilet',
-                                            })}
-                                        </Label>
-                                    </>
-                                )}
-                                {submitSuccessful && (
-                                    <>
-                                        <SuccessIcon />
-                                        <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.journalpostOpprettet',
-                                            })}
-                                        </Label>
-                                    </>
-                                )}
-                            </div>
                         </Form>
                     )}
                 </Formik>
+
+                <div className="statusContainer">
+                    {opprettJournalpostFeilet && (
+                        <>
+                            <ErrorIcon />
+                            <Label size="small" className="statusText">
+                                {intl.formatMessage({
+                                    id: 'OpprettJournalpost.opprettingAvJournalpostFeilet',
+                                })}
+                            </Label>
+                        </>
+                    )}
+                    {henteFagsakFeilet && (
+                        <>
+                            <ErrorIcon />
+                            <Label size="small" className="statusText">
+                                {intl.formatMessage({
+                                    id: 'OpprettJournalpost.hentingAvFagsakFeilet',
+                                })}
+                            </Label>
+                        </>
+                    )}
+                    {submitSuccessful && (
+                        <>
+                            <SuccessIcon />
+                            <Label size="small" className="statusText">
+                                {intl.formatMessage({
+                                    id: 'OpprettJournalpost.journalpostOpprettet',
+                                })}
+                            </Label>
+                        </>
+                    )}
+                </div>
                 {submitSuccessful && (
                     <Button
                         onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
