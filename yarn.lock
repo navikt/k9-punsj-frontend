@@ -9361,7 +9361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:*, cypress@npm:13.10.0":
+"cypress@npm:*":
   version: 13.10.0
   resolution: "cypress@npm:13.10.0"
   dependencies:
@@ -9410,6 +9410,58 @@ __metadata:
   bin:
     cypress: bin/cypress
   checksum: fcb359bedb6f0c691a8fe8172a95873eaf43a42471896efff0d205c083b056de2631f7436142b7eb4f307b77f2ed9de0fe88c7905064a39fd2cd0e0352eb8148
+  languageName: node
+  linkType: hard
+
+"cypress@npm:13.11.0":
+  version: 13.11.0
+  resolution: "cypress@npm:13.11.0"
+  dependencies:
+    "@cypress/request": ^3.0.0
+    "@cypress/xvfb": ^1.2.4
+    "@types/sinonjs__fake-timers": 8.1.1
+    "@types/sizzle": ^2.3.2
+    arch: ^2.2.0
+    blob-util: ^2.0.2
+    bluebird: ^3.7.2
+    buffer: ^5.7.1
+    cachedir: ^2.3.0
+    chalk: ^4.1.0
+    check-more-types: ^2.24.0
+    cli-cursor: ^3.1.0
+    cli-table3: ~0.6.1
+    commander: ^6.2.1
+    common-tags: ^1.8.0
+    dayjs: ^1.10.4
+    debug: ^4.3.4
+    enquirer: ^2.3.6
+    eventemitter2: 6.4.7
+    execa: 4.1.0
+    executable: ^4.1.1
+    extract-zip: 2.0.1
+    figures: ^3.2.0
+    fs-extra: ^9.1.0
+    getos: ^3.2.1
+    is-ci: ^3.0.1
+    is-installed-globally: ~0.4.0
+    lazy-ass: ^1.6.0
+    listr2: ^3.8.3
+    lodash: ^4.17.21
+    log-symbols: ^4.0.0
+    minimist: ^1.2.8
+    ospath: ^1.2.2
+    pretty-bytes: ^5.6.0
+    process: ^0.11.10
+    proxy-from-env: 1.0.0
+    request-progress: ^3.0.0
+    semver: ^7.5.3
+    supports-color: ^8.1.1
+    tmp: ~0.2.1
+    untildify: ^4.0.0
+    yauzl: ^2.10.0
+  bin:
+    cypress: bin/cypress
+  checksum: 67f61152b03955a3649d1ddcfb940271614e47d02c2e9f6f08e85158199c2d22a805ab8fcbccb985f8e1ef628b099b24487e8aebde181ed82abf039890abc6fc
   languageName: node
   linkType: hard
 
@@ -14211,7 +14263,7 @@ __metadata:
     cross-env: 7.0.3
     css-loader: 7.1.2
     css-minimizer-webpack-plugin: 7.0.0
-    cypress: 13.10.0
+    cypress: 13.11.0
     cypress-wait-until: 3.0.1
     dayjs: 1.11.11
     dotenv: 16.4.5
