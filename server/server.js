@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
