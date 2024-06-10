@@ -17,7 +17,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
     closeEksisterendeOMPMASoknadAction,

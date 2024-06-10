@@ -8,8 +8,8 @@ import { PLSRegistreringsValg } from 'app/ytelser/pleiepenger-livets-sluttfase/c
 import { PLSPunchForm } from 'app/ytelser/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
 import { OMPKSRegistreringsValg } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSRegistreringsValg';
 import { OMPKSPunchForm } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSPunchForm';
-import { OMPMARegistreringsValg } from 'app/omsorgspenger-midlertidig-alene/containers/OMPMARegistreringsValg';
-import OMPMAPunchFormContainer from 'app/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer';
+import { OMPMARegistreringsValg } from 'app/ytelser/omsorgspenger-midlertidig-alene/containers/OMPMARegistreringsValg';
+import OMPMAPunchFormContainer from 'app/ytelser/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer';
 import { OMPUTRegistreringsValg } from 'app/ytelser/omsorgspenger-utbetaling/containers/OMPUTRegistreringsValg';
 import OMPUTPunchFormContainer from 'app/ytelser/omsorgspenger-utbetaling/containers/OMPUTPunchFormContainer';
 import { OLPRegistreringsValg } from 'app/ytelser/opplæringspenger/containers/OLPRegistreringsValg';

@@ -16,15 +16,15 @@ import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../containers/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
-import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { RootStateType } from '../../state/RootState';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
+import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/containers/pleiepenger/SettPaaVentModal';
+import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
+import { IIdentState } from 'app/models/types/IdentState';
+import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import { RootStateType } from 'app/state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import {
