@@ -11,12 +11,12 @@ import Kopier from 'app/components/kopier/Kopier';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../utils';
+} from 'app/utils';
 import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
 import './ompKSSoknadKvittering.less';
 

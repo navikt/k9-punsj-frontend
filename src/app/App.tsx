@@ -37,7 +37,7 @@ import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
 import { thunk } from './state/middleware';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import JournalpostLoader from './containers/JournalpostLoader';
+import JournalpostLoader from './containers/journalpostLoader/JournalpostLoader';
 import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
 import AuthCallback from './auth/AuthCallback';

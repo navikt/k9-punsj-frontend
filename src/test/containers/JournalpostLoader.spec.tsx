@@ -1,9 +1,9 @@
+import React from 'react';
 import { expect } from '@jest/globals';
 import { RenderResult, render } from '@testing-library/react';
 import { shallow } from 'enzyme';
-import React from 'react';
 
-import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/JournalpostLoader';
+import { JournalpostLoaderImpl, JournapostLoaderProps } from '../../app/containers/journalpostLoader/JournalpostLoader';
 import { IJournalpost } from '../../app/models/types/Journalpost/Journalpost';
 
 // Mock useParams
