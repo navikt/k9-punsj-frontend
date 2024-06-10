@@ -16,14 +16,14 @@ import {
     IOLPSoknadKvitteringArbeidstidInfo,
     IOLPSoknadKvitteringLovbestemtFerie,
     IOLPSoknadKvitteringUtenlandsoppholdInfo,
-} from 'app/opplæringspenger/OLPSoknadKvittering';
+} from 'app/ytelser/opplæringspenger/OLPSoknadKvittering';
 import { RootStateType } from 'app/state/RootState';
 import { formattereTidspunktFraUTCTilGMT, getCountryList, periodToFormattedString } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { formatereTekstMedTimerOgMinutter, formattereDatoFraUTCTilGMT } from 'app/utils/timeUtils';
 import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils';
 
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
 import './soknadKvittering.less';
 

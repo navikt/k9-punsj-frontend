@@ -14,8 +14,8 @@ import { IdentRules } from 'app/rules';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
-import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
+import ErDuSikkerModal from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 import { hentEksisterendeSoeknader } from '../api';
 
 export interface IEksisterendeOLPSoknaderComponentProps {

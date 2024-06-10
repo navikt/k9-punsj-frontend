@@ -1,5 +1,6 @@
+import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
-import * as React from 'react';
+
 import { useIntl } from 'react-intl';
 
 import { Panel } from '@navikt/ds-react';
@@ -7,10 +8,10 @@ import { Panel } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
+import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
+import BinSvg from 'app/assets/SVG/BinSVG';
+import { IPeriode } from 'app/models/types/Periode';
+import intlHelper from 'app/utils/intlUtils';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -24,7 +25,7 @@ export interface IPeriodepanelerProps {
     fieldName: string;
 }
 
-export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
+export const Periodepaneler: React.FC<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const intl = useIntl();
     const { periods, kanHaFlere, textLeggTil, fieldName } = props;
     const { setFieldValue, setFieldTouched, getFieldMeta } = useFormikContext<OLPSoknad>();
