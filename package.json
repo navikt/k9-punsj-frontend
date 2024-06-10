@@ -24,7 +24,7 @@
         "@types/uuid": "9.0.8",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
-        "cypress": "13.11.0",
+        "cypress": "13.10.0",
         "cypress-wait-until": "3.0.1",
         "dayjs": "1.11.11",
         "dotenv": "16.4.5",
