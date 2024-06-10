@@ -28,7 +28,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import ArbeidsforholdPanel from 'app/arbeidsforhold/containers/ArbeidsforholdPanel';
 import Feilmelding from 'app/components/Feilmelding';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from 'app/containers/pleiepenger/PeriodeinfoPaneler';
 import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';

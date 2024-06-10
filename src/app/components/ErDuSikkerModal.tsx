@@ -3,8 +3,8 @@ import { useIntl } from 'react-intl';
 
 import { Button } from '@navikt/ds-react';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import intlHelper from '../../utils/intlUtils';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import intlHelper from 'app/utils/intlUtils';
 
 interface IErDuSikkerModalProps {
     melding: string;

@@ -21,7 +21,7 @@ import JournalposterSync from 'app/components/JournalposterSync';
 
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { IIdentState } from 'app/models/types/IdentState';
 import { RootStateType } from 'app/state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';

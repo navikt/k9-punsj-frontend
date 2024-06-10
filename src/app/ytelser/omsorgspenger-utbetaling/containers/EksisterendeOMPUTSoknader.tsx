@@ -17,9 +17,10 @@ import intlHelper from 'app/utils/intlUtils';
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { RootStateType } from 'app/state/RootState';
-import ErDuSikkerModal from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 export interface IEksisterendeOMPUTSoknaderComponentProps {
     søkerId: string;

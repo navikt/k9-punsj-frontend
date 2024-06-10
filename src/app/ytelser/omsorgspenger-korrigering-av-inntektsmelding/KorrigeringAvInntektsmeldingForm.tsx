@@ -14,9 +14,9 @@ import {
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import { OMSKorrigering } from '../../../models/types/OMSKorrigering';
+import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
-import ErDuSikkerModal from './ErDuSikkerModal';
+import ErDuSikkerModal from '../../components/ErDuSikkerModal';
 import './KorrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,

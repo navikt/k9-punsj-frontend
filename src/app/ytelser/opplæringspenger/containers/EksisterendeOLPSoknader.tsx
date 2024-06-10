@@ -1,5 +1,5 @@
+import React from 'react';
 import { useState } from 'react';
-import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
@@ -14,9 +14,9 @@ import { IdentRules } from 'app/rules';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import ErDuSikkerModal from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 import { hentEksisterendeSoeknader } from '../api';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 export interface IEksisterendeOLPSoknaderComponentProps {
     søkerId: string;
@@ -25,7 +25,7 @@ export interface IEksisterendeOLPSoknaderComponentProps {
 
 type IEksisterendeOLPSoknaderProps = IEksisterendeOLPSoknaderComponentProps;
 
-export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSoknaderProps> = (
+export const EksisterendeOLPSoknader: React.FC<IEksisterendeOLPSoknaderProps> = (
     props: IEksisterendeOLPSoknaderProps,
 ) => {
     const { søkerId, pleietrengendeId } = props;

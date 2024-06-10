@@ -17,7 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import { fieldNames } from '../initialValues';
 import schema from '../schema';

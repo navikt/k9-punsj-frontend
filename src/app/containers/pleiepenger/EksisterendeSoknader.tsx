@@ -24,7 +24,7 @@ import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/Journa
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { generateDateString } from '../../components/skjema/skjemaUtils';
 import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
-import ErDuSikkerModal from './ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 export interface IEksisterendeSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendeSoknaderState;

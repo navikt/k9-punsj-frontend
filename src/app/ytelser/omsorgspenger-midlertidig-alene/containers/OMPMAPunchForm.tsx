@@ -17,7 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import SettPaaVentErrorModal from 'app/containers/pleiepenger/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/containers/pleiepenger/SettPaaVentModal';

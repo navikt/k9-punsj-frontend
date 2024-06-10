@@ -1,7 +1,6 @@
-import { Formik, Form } from 'formik';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import hash from 'object-hash';
 import React, { useEffect, useState } from 'react';
+import { Formik, Form } from 'formik';
+import hash from 'object-hash';
 import { useIntl } from 'react-intl';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
@@ -12,9 +11,8 @@ import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
-
 import { finnArbeidsgivere } from '../../api/api';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
 import Brevmal from './Brevmal';
@@ -22,10 +20,10 @@ import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
 import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
-import './brev.less';
 import dokumentMalType from './dokumentMalType';
 import { previewMessage } from './PreviewMessage';
 
+import './brev.less';
 interface BrevProps {
     søkerId: string;
     journalpostId?: string;
