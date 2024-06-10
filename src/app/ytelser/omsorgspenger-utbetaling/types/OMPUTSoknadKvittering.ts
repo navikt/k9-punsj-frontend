@@ -5,7 +5,7 @@ import {
     SelvstendigNaeringsdrivendeAktivitet,
 } from 'app/models/types/KvitteringTyper';
 
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
 
 export interface IOMPUTSoknadKvittering extends Kvittering {
     ytelse: {

@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 
 import { Alert } from '@navikt/ds-react';
 
-import { aktivitetsFravær } from 'app/omsorgspenger-utbetaling/konstanter';
+import { aktivitetsFravær } from 'app/ytelser/omsorgspenger-utbetaling/konstanter';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from 'app/utils';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';
 import './ompUtSoknadKvittering.less';

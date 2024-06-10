@@ -5,7 +5,7 @@ import { IPeriode } from 'app/models/types';
 import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
 
-import nb from '../i18n/nb.json';
+import nb from 'app/i18n/nb.json';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
 
 export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPeriode[]) => ({
@@ -13,7 +13,9 @@ export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPe
     registrertIUtlandet: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
     medlemskap: soknad?.metadata?.medlemskap,
     utenlandsopphold: soknad?.metadata?.utenlandsopphold,
-    erNyoppstartet: !!erYngreEnn4år(get(soknad, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')),
+    erNyoppstartet: !!erYngreEnn4år(
+        get(soknad, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom' as string),
+    ),
     erKorrigering: soknad?.erKorrigering,
     eksisterendePerioder,
 });

@@ -8,10 +8,10 @@ import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import DateInput from 'app/components/skjema/DateInput';
-import { IOMPUTSoknad } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknad';
+import { IOMPUTSoknad } from 'app/ytelser/omsorgspenger-utbetaling/types/OMPUTSoknad';
 
-import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
-import intlHelper from '../../../utils/intlUtils';
+import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
+import intlHelper from 'app/utils/intlUtils';
 import './opplysningerOmOMPUTSoknad.less';
 
 const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {

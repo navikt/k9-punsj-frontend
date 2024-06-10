@@ -1,6 +1,5 @@
 import { PersonEnkel } from 'app/models/types';
-
-import { SoeknadType } from '../../models/forms/soeknader/SoeknadType';
+import { SoeknadType } from 'app/models/forms/soeknader/SoeknadType';
 
 export interface IOMPAOSoknad extends SoeknadType {
     metadata: {

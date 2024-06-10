@@ -1,6 +1,6 @@
+import React from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
@@ -20,10 +20,10 @@ import { feilFraYup } from 'app/utils/validationHelpers';
 import JournalposterSync from 'app/components/JournalposterSync';
 
 import { IFellesState } from 'app/state/reducers/FellesReducer';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import ErDuSikkerModal from 'app/containers/pleiepenger/ErDuSikkerModal';
+import { IIdentState } from 'app/models/types/IdentState';
+import { RootStateType } from 'app/state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';
 import Medlemskap from '../components/Medlemskap';

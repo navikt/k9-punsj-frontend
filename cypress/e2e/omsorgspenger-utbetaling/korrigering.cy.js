@@ -1,4 +1,4 @@
-import { fraværÅrsak, søknadÅrsak } from 'app/omsorgspenger-utbetaling/konstanter';
+import { fraværÅrsak, søknadÅrsak } from 'app/ytelser/omsorgspenger-utbetaling/konstanter';
 import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandlers';
 
 describe('Omsorgspengeutbetaling - ny søknad', () => {
