@@ -13,8 +13,8 @@ import { Alert } from '@navikt/ds-react';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
-import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
+import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from 'app/utils';
 import { IOMPAOSoknadKvittering } from '../../types/OMPAOSoknadKvittering';
 import './OMPAOSoknadKvittering.less';
 

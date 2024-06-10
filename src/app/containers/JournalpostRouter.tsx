@@ -14,8 +14,8 @@ import { OMPUTRegistreringsValg } from 'app/ytelser/omsorgspenger-utbetaling/con
 import OMPUTPunchFormContainer from 'app/ytelser/omsorgspenger-utbetaling/containers/OMPUTPunchFormContainer';
 import { OLPRegistreringsValg } from 'app/ytelser/opplæringspenger/containers/OLPRegistreringsValg';
 import OLPPunchFormContainer from 'app/ytelser/opplæringspenger/containers/OLPPunchFormContainer';
-import { OMPAORegistreringsValg } from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';
-import OMPAOPunchFormContainer from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
+import { OMPAORegistreringsValg } from 'app/ytelser/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';
+import OMPAOPunchFormContainer from 'app/ytelser/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
 import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
