@@ -1,4 +1,4 @@
-import { KorrigeringAvInntektsmeldingFormValues } from 'app/ytelser/omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { KorrigeringAvInntektsmeldingFormValues } from 'app/ytelser/omsorgspenger-korrigering-av-inntektsmelding/KorrigeringAvInntektsmeldingFormFieldsValues';
 
 import { IPeriode } from './Periode';
 

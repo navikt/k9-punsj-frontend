@@ -4,7 +4,7 @@ import { IntlShape } from 'react-intl';
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/ytelser/pleiepenger/Listepaneler';
+import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/components/listepaneler/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import { Arbeidstaker, GetErrorMessage, IArbeidstaker, IPeriode, OrgOrPers } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -26,7 +26,6 @@ interface ArbeidstakerComponentProps {
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>;
     feilkodeprefiks: string;
     getErrorMessage: GetErrorMessage;
-    getUhaandterteFeil: (kode: string) => (string | undefined)[];
     intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;

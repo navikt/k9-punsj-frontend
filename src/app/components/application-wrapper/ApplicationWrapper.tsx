@@ -17,7 +17,6 @@ import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {
     locale: Locale;
-    onChangeLocale: (locale: Locale) => void;
 }
 
 interface IApplicationWrapperStateProps {
