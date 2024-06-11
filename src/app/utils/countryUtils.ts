@@ -12,12 +12,12 @@ countries.registerLocale(nb);
 //  Kosovo = XXK i kodeverk
 const alpha3Codes = () =>
     Object.keys(countries.getAlpha3Codes()).map((alpha3) => {
-        const isKosovo = alpha3 === 'XKX';
+        const isKosovo = alpha3 === 'XKK'; // Kosovo var tidligere XKX i i18n-iso-countries, de endret det til XKK
         return isKosovo ? 'XXK' : alpha3;
     });
 const getCountryNameFromAlpha3 = (code: string) => {
     const isKosovo = code === 'XXK';
-    const newCode = isKosovo ? 'XKX' : code;
+    const newCode = isKosovo ? 'XKK' : code;
     return countries.getName(newCode, getLocaleFromSessionStorage());
 };
 

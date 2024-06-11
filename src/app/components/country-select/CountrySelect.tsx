@@ -11,6 +11,7 @@ interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
 // eslint-disable-next-line import/prefer-default-export
 export const CountrySelect = (props: ICountrySelectProps) => {
     const countryList = getCountryList();
+    console.log('countryList: ', countryList);
     const { unselectedoption, selectedcountry } = props;
     if (unselectedoption) {
         countryList.unshift({ code: '', name: unselectedoption });
