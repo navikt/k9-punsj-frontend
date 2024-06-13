@@ -454,7 +454,7 @@ let handlers = [
             { status: 200 },
         ),
     ),
-    http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '123456789'), async () =>
+    http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '409'), async () =>
         HttpResponse.json({ type: 'punsj://ikke-støttet-journalpost' }, { status: 409 }),
     ),
 
