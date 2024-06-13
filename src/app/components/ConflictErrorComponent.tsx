@@ -53,7 +53,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                     <Button
                         variant="primary"
                         size="small"
-                        icon={pendingLukkDebuggJp ? <Loader size="medium" /> : <WrenchIcon aria-hidden />}
+                        icon={pendingLukkDebuggJp ? <Loader size="medium" /> : undefined}
                         onClick={() => {
                             if (goToLos) {
                                 window.location.href = getEnvironmentVariable('K9_LOS_URL');
