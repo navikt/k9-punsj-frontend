@@ -1,11 +1,9 @@
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage } from 'react-intl';
 import { Select } from '@navikt/ds-react';
-
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { requiredValue } from 'app/utils/validationHelpers';
-
 import Brevmal from './Brevmal';
 
 interface MalVelgerProps {
@@ -14,8 +12,8 @@ interface MalVelgerProps {
 }
 
 const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => {
-    const intl = useIntl();
     const { setFieldValue } = useFormikContext();
+
     const brevmalkoder = Object.keys(brevmaler);
 
     return (
@@ -24,8 +22,7 @@ const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => 
                 <Select
                     {...field}
                     size="small"
-                    label={intl.formatMessage({ id: 'Messages.Template' })}
-                    placeholder={intl.formatMessage({ id: 'Messages.ChooseTemplate' })}
+                    label={<FormattedMessage id={`malVelger.brevmalkodeSelect.title`} />}
                     className="w-[400px]"
                     error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                     onChange={(event) => {
@@ -34,8 +31,9 @@ const MalVelger: React.FC<MalVelgerProps> = ({ resetBrevStatus, brevmaler }) => 
                     }}
                 >
                     <option disabled key="default" value="" label="">
-                        Velg
+                        <FormattedMessage id={`malVelger.brevmalkodeSelect.velg`} />
                     </option>
+
                     {brevmalkoder.map((brevmalkode) => (
                         <option key={brevmalkode} value={brevmalkode}>
                             {brevmaler[brevmalkode].navn}
