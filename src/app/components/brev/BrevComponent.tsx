@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import hash from 'object-hash';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { ApiPath } from 'app/apiConfig';
