@@ -1,4 +1,3 @@
-import { WrenchIcon } from '@navikt/aksel-icons';
 import { Alert, AlertProps, Button, Loader } from '@navikt/ds-react';
 import { getEnvironmentVariable } from 'app/utils';
 import React from 'react';
