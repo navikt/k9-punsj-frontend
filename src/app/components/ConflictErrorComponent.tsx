@@ -1,4 +1,3 @@
-import { WrenchIcon } from '@navikt/aksel-icons';
 import { Alert, AlertProps, Button, Loader } from '@navikt/ds-react';
 import { getEnvironmentVariable } from 'app/utils';
 import React from 'react';
@@ -41,7 +40,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
     handleLukkDebugg,
 }: Props) => {
     const { variant, textId, goToLos } = getAlertInfo(lukkDebuggJpStatus || 409);
-    const disabledKnapp = true;
+
     return (
         <div className="flex justify-center py-4">
             <Alert size="small" variant={variant} className="text-left w-[376px]">
@@ -53,7 +52,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                     <Button
                         variant="primary"
                         size="small"
-                        icon={pendingLukkDebuggJp ? <Loader size="medium" /> : <WrenchIcon aria-hidden />}
+                        icon={pendingLukkDebuggJp ? <Loader size="medium" /> : undefined}
                         onClick={() => {
                             if (goToLos) {
                                 window.location.href = getEnvironmentVariable('K9_LOS_URL');
@@ -61,7 +60,6 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                                 handleLukkDebugg();
                             }
                         }}
-                        disabled={disabledKnapp}
                     >
                         <FormattedMessage
                             id={`startPage.feil.ikkeStøttet.${goToLos ? 'gåTilLos' : 'lukkDebugg'}.btn`}
