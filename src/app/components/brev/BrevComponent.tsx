@@ -20,7 +20,7 @@ import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import dokumentMalType from './dokumentMalType';
-import { previewMessage } from './pPreviewMessage';
+import { previewMessage } from './previewMessage';
 
 import './brev.less';
 
