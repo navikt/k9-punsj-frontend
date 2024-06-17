@@ -309,6 +309,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                         variant="secondary"
                                         size="small"
                                         onClick={() => lukkJournalpostOppgave()}
+                                        type="button"
                                     >
                                         <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
                                     </Button>
