@@ -17,7 +17,7 @@
         "@navikt/ft-plattform-komponenter": "2.5.10",
         "@popperjs/core": "2.11.8",
         "@redux-devtools/extension": "3.3.0",
-        "@sentry/react": "8.8.0",
+        "@sentry/react": "8.9.2",
         "@storybook/testing-react": "2.0.1",
         "@types/classnames": "2.3.1",
         "@types/redux-logger": "3.0.13",
@@ -153,7 +153,7 @@
         "cross-env": "7.0.3",
         "css-loader": "7.1.2",
         "enzyme": "3.11.0",
-        "eslint": "9.4.0",
+        "eslint": "9.5.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-import": "2.29.1",
         "eslint-plugin-jsx-a11y": "6.8.0",
@@ -189,7 +189,7 @@
         "terser-webpack-plugin": "5.3.10",
         "ts-jest": "29.1.5",
         "typescript": "5.4.5",
-        "webpack": "5.91.0",
+        "webpack": "5.92.0",
         "webpack-dev-server": "5.0.4"
     },
     "browserslist": [
