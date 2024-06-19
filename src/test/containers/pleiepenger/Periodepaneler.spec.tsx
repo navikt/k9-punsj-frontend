@@ -76,7 +76,6 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };
 
