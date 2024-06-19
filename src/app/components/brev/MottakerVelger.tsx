@@ -18,10 +18,8 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { ApiPath } from 'app/apiConfig';
 import { get } from 'app/utils/apiUtils';
 import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
-import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
-import { get } from 'app/utils/apiUtils';
-import { ApiPath } from 'app/apiConfig';
+import { requiredValue } from 'app/utils/validationHelpers';
+
 import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 
 export interface OrgInfo {

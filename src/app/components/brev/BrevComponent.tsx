@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import hash from 'object-hash';
 import { FormattedMessage } from 'react-intl';
@@ -25,7 +24,6 @@ import { previewMessage } from './previewMessage';
 
 import './brev.less';
 
-import './brev.less';
 interface BrevProps {
     søkerId: string;
     sakstype: string;

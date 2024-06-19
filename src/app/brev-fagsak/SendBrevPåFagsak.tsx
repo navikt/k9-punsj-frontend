@@ -10,11 +10,7 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/stat
 import Fagsak from 'app/types/Fagsak';
 import { finnForkortelseForDokumenttype } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
-<<<<<<< HEAD:src/app/brev-fagsak/SendBrevPåFagsak.tsx
 import BrevComponent from 'app/components/brev/BrevComponent';
-=======
-import BrevComponent from '../../components/brev/BrevComponent';
->>>>>>> master:src/app/containers/brev-fagsak/SendBrevPåFagsak.tsx
 
 import './sendBrevPåFagsak.less';
 
