@@ -1,9 +1,7 @@
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
-
+import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage } from 'react-intl';
 import { Tag, TextField, Textarea } from '@navikt/ds-react';
-
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
 
@@ -18,11 +16,12 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
     setVisBrevIkkeSendtInfoboks,
     setPreviewMessageFeil,
 }) => {
-    const intl = useIntl();
     const { setFieldValue } = useFormikContext();
+
     return (
         <>
             <VerticalSpacer sixteenPx />
+
             <Field
                 name={`${BrevFormKeys.fritekstbrev}.overskrift`}
                 validate={(value: string) => validateText(value, 200)}
@@ -36,7 +35,7 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
                             setVisBrevIkkeSendtInfoboks();
                         }}
                         size="small"
-                        label={intl.formatMessage({ id: 'Messages.FritekstTittel' })}
+                        label={<FormattedMessage id={`genereltFritekstbrevMal.fritekstTittel`} />}
                         maxLength={200}
                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                     />
@@ -44,6 +43,7 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
             </Field>
 
             <VerticalSpacer sixteenPx />
+
             <Field
                 name={`${BrevFormKeys.fritekstbrev}.brødtekst`}
                 validate={(value: string) => validateText(value, 100000)}
@@ -58,12 +58,13 @@ const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
                                 setPreviewMessageFeil();
                                 setVisBrevIkkeSendtInfoboks();
                             }}
-                            label={intl.formatMessage({ id: 'Messages.InnholdIBrev' })}
+                            label={<FormattedMessage id={`genereltFritekstbrevMal.innholdIBrev`} />}
                             maxLength={100000}
                             error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                         />
+
                         <Tag variant="warning" size="small" className="språkEtikett">
-                            Bokmål
+                            <FormattedMessage id={`genereltFritekstbrevMal.språkEtikett.bokmål`} />
                         </Tag>
                     </div>
                 )}

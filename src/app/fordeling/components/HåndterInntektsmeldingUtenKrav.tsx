@@ -145,9 +145,9 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ showComponent, søke
             <BrevContainer>
                 <BrevComponent
                     søkerId={søkerId}
+                    sakstype="OMP"
                     journalpostId={journalpost?.journalpostId || ''}
                     setVisBrevIkkeSendtInfoboks={setVisBrevIkkeSendtInfoboks}
-                    sakstype="OMP"
                 />
             </BrevContainer>
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import hash from 'object-hash';
-import { useIntl } from 'react-intl';
-import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+import { FormattedMessage } from 'react-intl';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
-
+import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { ApiPath } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { Person } from 'app/models/types';
@@ -21,28 +21,33 @@ import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
 import MalVelger from './MalVelger';
 import MottakerVelger from './MottakerVelger';
 import dokumentMalType from './dokumentMalType';
-import { previewMessage } from './PreviewMessage';
+import { previewMessage } from './previewMessage';
+
+import './brev.less';
 
 import './brev.less';
 interface BrevProps {
     søkerId: string;
-    journalpostId?: string;
-    fagsakId?: string;
-    setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     sakstype: string;
+    fagsakId?: string;
+    journalpostId?: string;
+
+    setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
+    lukkJournalpostOppgave?: () => void;
 }
 
 // TODO: Fix rendering feil ved send brev hvis valideringsfeil
 const BrevComponent: React.FC<BrevProps> = ({
     søkerId,
-    journalpostId,
-    fagsakId,
-    setVisBrevIkkeSendtInfoboks,
     sakstype,
+    fagsakId,
+    journalpostId,
+
+    setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
+    lukkJournalpostOppgave,
 }) => {
-    const intl = useIntl();
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
     const [hentBrevmalerError, setHentBrevmalerError] = useState(false);
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
@@ -57,6 +62,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [submitet, setSubmitet] = useState(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
+
     useEffect(() => {
         fetch(`${ApiPath.BREV_MALER}?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
@@ -93,7 +99,11 @@ const BrevComponent: React.FC<BrevProps> = ({
     }, [søkerId]);
 
     if (hentBrevmalerError) {
-        return <ErrorMessage size="small">Henting av brevmaler feilet</ErrorMessage>;
+        return (
+            <ErrorMessage size="small">
+                <FormattedMessage id={`brevComponent.error.hentBrevmalerError`} />
+            </ErrorMessage>
+        );
     }
 
     if (!brevmaler) {
@@ -173,6 +183,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 onClose={() => setVisErDuSikkerModal(false)}
                             />
                         </Modal>
+
                         <Form>
                             <div className="brev">
                                 <MalVelger
@@ -182,7 +193,13 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     }}
                                     brevmaler={brevmaler}
                                 />
+
                                 <MottakerVelger
+                                    aktørId={aktørId}
+                                    arbeidsgivereMedNavn={arbeidsgivereMedNavn}
+                                    orgInfoPending={orgInfoPending}
+                                    formSubmitted={submitet}
+                                    person={person}
                                     resetBrevStatus={() => {
                                         setPreviewMessageFeil(undefined);
                                         setBrevErSendt(false);
@@ -191,12 +208,8 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     setOrgInfoPending={(value: boolean) => {
                                         setOrgInfoPending(value);
                                     }}
-                                    orgInfoPending={orgInfoPending}
-                                    aktørId={aktørId}
-                                    person={person}
-                                    arbeidsgivereMedNavn={arbeidsgivereMedNavn}
-                                    formSubmitted={submitet}
                                 />
+
                                 {values.brevmalkode === dokumentMalType.INNHENT_DOK && (
                                     <InnhentDokumentasjonMal
                                         setVisBrevIkkeSendtInfoboks={() =>
@@ -206,6 +219,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                         setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
                                     />
                                 )}
+
                                 {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV && (
                                     <GenereltFritekstbrevMal
                                         setVisBrevIkkeSendtInfoboks={() =>
@@ -215,7 +229,9 @@ const BrevComponent: React.FC<BrevProps> = ({
                                         setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
                                     />
                                 )}
+
                                 <VerticalSpacer sixteenPx />
+
                                 {values.brevmalkode && (
                                     <>
                                         <Button
@@ -244,7 +260,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                                 }
                                             }}
                                         >
-                                            {intl.formatMessage({ id: 'Messages.Preview' })}
+                                            <FormattedMessage id={`brevComponent.btn.forhåndsvisBrev`} />
                                         </Button>
 
                                         {isValid && previewMessageFeil && (
@@ -257,22 +273,25 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 <div className="brevStatusContainer">
                                     {brevErSendt && (
                                         <Alert variant="success" size="medium" fullWidth inline>
-                                            Brev sendt! Du kan nå sende nytt brev til annen mottaker.
+                                            <FormattedMessage id={`brevComponent.alert.brevErSendt`} />
                                         </Alert>
                                     )}
+
                                     {sendBrevFeilet && (
                                         <Alert variant="error" size="medium" fullWidth inline>
-                                            Sending av brev feilet.
+                                            <FormattedMessage id={`brevComponent.alert.sendBrevFeilet`} />
                                         </Alert>
                                     )}
+
                                     {visSammeBrevError && (
                                         <Alert variant="error" size="medium" fullWidth inline>
-                                            Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.
+                                            <FormattedMessage id={`brevComponent.alert.visSammeBrevError`} />
                                         </Alert>
                                     )}
                                 </div>
                             </div>
-                            <div className="mt-7 pb-20">
+
+                            <div className="mt-7 pb-20 flex gap-x-4">
                                 <Button
                                     variant="primary"
                                     className="sendBrevButton"
@@ -283,8 +302,20 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     type="button"
                                     icon={<PaperplaneIcon />}
                                 >
-                                    {intl.formatMessage({ id: 'Messages.Submit' })}
+                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
                                 </Button>
+
+                                {lukkJournalpostOppgave !== undefined && (
+                                    <Button
+                                        className="sendBrevButton"
+                                        variant="secondary"
+                                        size="small"
+                                        onClick={() => lukkJournalpostOppgave()}
+                                        type="button"
+                                    >
+                                        <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                    </Button>
+                                )}
                             </div>
                         </Form>
                     </>
