@@ -1,5 +1,4 @@
 import React from 'react';
-import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape } from 'react-intl';

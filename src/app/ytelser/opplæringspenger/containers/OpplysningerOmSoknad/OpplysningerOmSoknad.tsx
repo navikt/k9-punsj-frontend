@@ -1,6 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
 
 import { Alert, Fieldset, Panel } from '@navikt/ds-react';
@@ -22,7 +21,7 @@ const OpplysningerOmSoknad = () => {
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
             </Alert>
-            <Fieldset>
+            <Fieldset legend>
                 <div className="input-row">
                     <DatoInputFormik label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
                     <TextFieldFormik

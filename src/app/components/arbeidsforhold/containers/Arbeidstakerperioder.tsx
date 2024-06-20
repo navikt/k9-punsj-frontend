@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -119,7 +118,7 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <Fieldset>
+                        <Fieldset legend>
                             {itemsWithInitialItem.length > 1 && (
                                 <h2>
                                     <FormattedMessage

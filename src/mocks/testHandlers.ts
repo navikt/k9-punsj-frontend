@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse, delay } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';
@@ -22,7 +21,6 @@ import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import barn from '../../cypress/fixtures/barn.json';
 import pilsSoknad from '../../cypress/fixtures/pilsSoknad.json';
 
-// eslint-disable-next-line import/prefer-default-export
 export const testHandlers = {
     hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
         if (params.id === '300') {

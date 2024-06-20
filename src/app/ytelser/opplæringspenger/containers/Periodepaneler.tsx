@@ -39,7 +39,6 @@ export const Periodepaneler: React.FC<IPeriodepanelerProps> = (props: IPeriodepa
                         {periods.map((period, index) => {
                             const fieldMeta = getFieldMeta(fieldName);
                             return (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <PeriodInput

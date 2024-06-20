@@ -1,5 +1,4 @@
 import React from 'react';
-import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { TextField } from '@navikt/ds-react';
@@ -59,7 +58,6 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<Listepaneler {...listepanelerProps} />);
 };
 

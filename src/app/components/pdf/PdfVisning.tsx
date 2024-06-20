@@ -1,6 +1,7 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { Resizable } from 're-resizable';
-import React, { useEffect, useMemo, useState } from 'react';
+
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
@@ -11,6 +12,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { ApiPath } from '../../apiConfig';
 import { IDokument } from '../../models/types';
 import { apiUrl, setDokQuery } from '../../utils';
+
 import './pdfVisning.less';
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
@@ -54,7 +56,6 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter?.reduce(
         (prev, current) => [
             ...prev,
-            // eslint-disable-next-line no-unsafe-optional-chaining
             ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
         ],
         [],
@@ -113,7 +114,6 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                             size="small"
                         >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <ToggleGroup.Item key={i} value={String(i + 1)} data-testid={`dok-${i + 1}`}>
                                     {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>

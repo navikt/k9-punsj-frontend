@@ -1,6 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import React from 'react';
+import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
+
 import { useIntl } from 'react-intl';
 
 import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';

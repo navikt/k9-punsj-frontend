@@ -1,12 +1,10 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { IntlShape } from 'react-intl';
-
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
-
 import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/containers/pleiepenger/Listepaneler';
+import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/components/listepaneler/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import { GetErrorMessage, IPeriode } from 'app/models/types';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
@@ -14,11 +12,11 @@ import { Arbeidstaker, IArbeidstaker, OrgOrPers } from 'app/models/types/Arbeids
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
+import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import { ApiPath } from '../../../../../apiConfig';
 import ActionType from './actionTypes';
+
 import './arbeidstaker.less';
-import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 
 interface ArbeidstakerComponentProps {
     søkerId: string;
@@ -52,7 +50,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-        // eslint-disable-next-line react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',

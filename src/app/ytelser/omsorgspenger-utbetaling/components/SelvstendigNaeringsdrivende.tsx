@@ -1,6 +1,7 @@
+import React from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize, get } from 'lodash';
-import React from 'react';
+
 import { useIntl } from 'react-intl';
 
 import { AddCircle } from '@navikt/ds-icons';
@@ -21,6 +22,7 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
+
 import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
@@ -216,7 +218,6 @@ const SelvstendigNaeringsdrivende = () => {
                             {selvstendigNaeringsdrivende.fravaersperioder?.map(
                                 (fravaersperiode, fravaersperiodeIndex) => (
                                     <Fravaersperiode
-                                        // eslint-disable-next-line react/no-array-index-key
                                         key={fravaersperiodeIndex}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                                         antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}

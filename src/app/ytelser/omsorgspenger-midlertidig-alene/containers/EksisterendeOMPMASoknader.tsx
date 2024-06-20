@@ -171,7 +171,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             rows.push(
                 <Table.Row key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export enum PunchFormPaneler {
     OPPLYSINGER_OM_SOKER = 'skjema.opplysningeromsoker',
     OPPLYSNINGER_OM_BARN = 'skjema.opplysningerombarnet',

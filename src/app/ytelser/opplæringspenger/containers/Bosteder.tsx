@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
@@ -49,7 +49,6 @@ const Bosteder = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.bosteder?.map((_, index, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">

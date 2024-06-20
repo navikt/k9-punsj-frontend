@@ -11,7 +11,6 @@ const initialState: IEksisterendeSoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function EksisterendeSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeSoknaderState = initialState,
     action: IEksisterendeSoknaderActionTypes,

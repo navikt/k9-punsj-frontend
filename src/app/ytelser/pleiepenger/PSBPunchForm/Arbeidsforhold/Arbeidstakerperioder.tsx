@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Fieldset, Panel } from '@navikt/ds-react';

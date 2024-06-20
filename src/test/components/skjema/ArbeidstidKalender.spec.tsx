@@ -1,8 +1,7 @@
-import { expect } from '@jest/globals';
+import React from 'react';
 import { StoryFn, composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 
 import ArbeidstidKalender from '../../../app/components/arbeidstid/ArbeidstidKalender';
 import * as stories from '../../../app/components/arbeidstid/ArbeidstidKalender.stories';

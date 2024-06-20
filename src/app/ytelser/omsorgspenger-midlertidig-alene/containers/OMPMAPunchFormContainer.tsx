@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-
-/* eslint-disable no-template-curly-in-string */
-import { Formik, FormikValues } from 'formik';
 import React, { useEffect } from 'react';
+import { Formik, FormikValues } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect, useDispatch } from 'react-redux';
 
@@ -96,9 +93,9 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         }
     }, [soknad?.soekerId]);
 
-    const handleSubmit = async (soknad: FormikValues) => {
+    const handleSubmit = async (values: Partial<IOMPMASoknad>) => {
         props.validateSoknad({
-            ...soknad,
+            ...values,
         });
     };
 

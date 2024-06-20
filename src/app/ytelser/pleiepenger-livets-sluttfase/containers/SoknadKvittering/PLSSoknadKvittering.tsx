@@ -1,8 +1,5 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 
 import Kopier from 'app/components/kopier/Kopier';

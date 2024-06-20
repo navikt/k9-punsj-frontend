@@ -1,8 +1,7 @@
+import React, { useState } from 'react';
 import countries from 'i18n-iso-countries';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
 import { IntlShape } from 'react-intl';
-
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -20,11 +19,11 @@ import {
     IUtenlandsOpphold,
     Periodeinfo,
 } from 'app/models/types';
-
 import BinSvg from 'app/assets/SVG/BinSVG';
 import { IPeriode } from 'app/models/types/Periode';
 import intlHelper from 'app/utils/intlUtils';
 import { Periodepaneler } from '../periodepaneler/Periodepaneler';
+
 import './utenlandsopphold.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
@@ -328,6 +327,5 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
 };
 
 Utenlandsopphold.defaultProps = {
-    // eslint-disable-next-line react/default-props-match-prop-types
     periods: [],
 };

@@ -1,8 +1,5 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
@@ -25,6 +22,7 @@ import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils
 
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
+
 import './soknadKvittering.less';
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>

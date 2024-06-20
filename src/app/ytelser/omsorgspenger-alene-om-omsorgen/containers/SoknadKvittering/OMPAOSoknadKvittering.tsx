@@ -1,10 +1,7 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
+import React from 'react';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import countries from 'i18n-iso-countries';
-import React from 'react';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
@@ -16,6 +13,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from 'app/utils';
 import { IOMPAOSoknadKvittering } from '../../types/OMPAOSoknadKvittering';
+
 import './OMPAOSoknadKvittering.less';
 
 interface IOwnProps {

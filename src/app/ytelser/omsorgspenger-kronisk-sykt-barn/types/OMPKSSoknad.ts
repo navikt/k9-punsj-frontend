@@ -1,5 +1,3 @@
-/* eslint-disable max-classes-per-file */
-
 export interface IOMPKSSoknad {
     soeknadId?: string;
     soekerId: string;

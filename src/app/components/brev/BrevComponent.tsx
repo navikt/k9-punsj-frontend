@@ -72,7 +72,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                 return setHentBrevmalerError(true);
             })
             .catch((error) => {
-                // eslint-disable-next-line no-console
                 console.log(error);
                 setHentBrevmalerError(true);
             });

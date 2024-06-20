@@ -1,6 +1,5 @@
-/* eslint-disable no-template-curly-in-string */
-import { Formik, yupToFormErrors } from 'formik';
 import React, { useState } from 'react';
+import { Formik, yupToFormErrors } from 'formik';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
 import { connect, useDispatch, useSelector } from 'react-redux';

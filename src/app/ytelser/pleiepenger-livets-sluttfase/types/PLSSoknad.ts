@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 
 import {

@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import yup, { identifikator, passertKlokkeslettPaaMottattDato } from 'app/rules/yup';
 
 function erIkkeFremITid(dato: string) {

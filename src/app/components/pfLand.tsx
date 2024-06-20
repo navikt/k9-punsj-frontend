@@ -13,7 +13,6 @@ import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { IOppholdsLand } from 'app/models/types/PSBSoknad';
 import { Periodeinfo } from 'app/models/types/Periodeinfo';
 
-// eslint-disable-next-line import/prefer-default-export
 export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
     return (
         periodeinfo: Periodeinfo<IOppholdsLand>,

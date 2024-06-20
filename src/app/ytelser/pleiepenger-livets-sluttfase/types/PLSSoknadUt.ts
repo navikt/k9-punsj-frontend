@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Arbeidstaker, IPeriode, Periode, Periodeinfo } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';

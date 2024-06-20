@@ -1,9 +1,8 @@
-/* eslint-disable global-require */
+import React from 'react';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
-import React from 'react';
+
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 

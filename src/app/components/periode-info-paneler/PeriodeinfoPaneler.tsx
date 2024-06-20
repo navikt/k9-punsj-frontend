@@ -193,6 +193,5 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = (props: IP
 };
 
 PeriodeinfoPaneler.defaultProps = {
-    // eslint-disable-next-line react/default-props-match-prop-types
     periods: [],
 };

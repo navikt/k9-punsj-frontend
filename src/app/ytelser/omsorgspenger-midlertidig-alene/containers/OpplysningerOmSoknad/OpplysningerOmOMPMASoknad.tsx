@@ -1,7 +1,7 @@
-/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
 import { Field, FieldProps, FormikValues } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React from 'react';
+
 import { IntlShape } from 'react-intl';
 
 import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';

@@ -1,5 +1,6 @@
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+
 import { useIntl } from 'react-intl';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
@@ -49,7 +50,6 @@ const Utenlandsopphold = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.utenlandsopphold?.map((_, index, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">

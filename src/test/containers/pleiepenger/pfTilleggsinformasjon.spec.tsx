@@ -1,14 +1,11 @@
-import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
-
 import { Textarea } from '@navikt/ds-react';
-
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from '../../../app/ytelser/pleiepenger/periode-info-paneler/PeriodeinfoPaneler';
+} from '../../../app/components/periode-info-paneler/PeriodeinfoPaneler';
 import { pfTilleggsinformasjon } from '../../../app/components/pfTilleggsinformasjon';
 import intlHelper from '../../../app/utils/intlUtils';
 

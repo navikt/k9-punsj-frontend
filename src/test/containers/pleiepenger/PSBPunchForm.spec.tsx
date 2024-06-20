@@ -1,5 +1,4 @@
 import React from 'react';
-import { expect } from '@jest/globals';
 import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 
@@ -193,13 +192,11 @@ const setupPunchForm = (
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
-        /* eslint-disable react/jsx-props-no-spreading */
         <PunchFormComponent
             {...punchFormComponentProps}
             {...wrappedComponentProps}
             {...punchFormStateProps}
             {...punchFormDispatchProps}
-            /* eslint-enable react/jsx-props-no-spreading */
         />,
     );
 };

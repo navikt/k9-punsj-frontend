@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { IPeriode } from 'app/models/types';
 import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 

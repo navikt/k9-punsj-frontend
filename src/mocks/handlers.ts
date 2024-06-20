@@ -1,8 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
-
-/* eslint-disable import/no-extraneous-dependencies */
-
-/* eslint-disable import/prefer-default-export */
 import { HttpResponse, delay, http } from 'msw';
 
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';

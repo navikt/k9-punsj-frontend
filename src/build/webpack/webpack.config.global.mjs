@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';

@@ -1,9 +1,7 @@
-import { expect } from '@jest/globals';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
-
 import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';

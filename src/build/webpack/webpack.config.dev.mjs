@@ -17,8 +17,6 @@ webpackConfig.devServer = {
     hot: true,
 };
 
-/* eslint-disable no-underscore-dangle */
-
 // __dirname is not defined in ES module scope, so we need to derive it
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

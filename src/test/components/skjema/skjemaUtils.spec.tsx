@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals';
 import { fjernIndexFraLabel } from '../../../app/components/skjema/skjemaUtils';
 
 describe('skjemaUtils', () => {
