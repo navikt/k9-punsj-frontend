@@ -18,6 +18,7 @@ import {
 import { applyMiddleware, legacy_createStore } from 'redux';
 import logger from 'redux-logger';
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import {
     withSentryReactRouterV6Routing,
     breadcrumbsIntegration,
@@ -51,7 +52,7 @@ async function prepare() {
             initializeFaro({
                 url: window.nais?.telemetryCollectorURL,
                 app: window.nais?.app,
-                instrumentations: [...getWebInstrumentations({ captureConsole: true })],
+                instrumentations: [...getWebInstrumentations({ captureConsole: true }), new TracingInstrumentation()],
             });
         }
         Sentry.init({
