@@ -52,6 +52,8 @@ export default [
                         '**/test/*.tsx',
                         '**/*.stories.tsx',
                         'cypress/**/*.js',
+                        '**/build/**/*.js',
+                        'eslint.config.js',
                     ],
                 },
             ],
