@@ -33,6 +33,7 @@ export default [
             'react/forbid-prop-types': 0,
             '@typescript-eslint/no-use-before-define': ['error'],
             '@typescript-eslint/no-shadow': 'error',
+            'import/no-unresolved': 'error',
             'import/no-extraneous-dependencies': [
                 'warn',
                 {
