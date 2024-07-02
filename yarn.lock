@@ -6815,9 +6815,9 @@ __metadata:
   linkType: hard
 
 "axobject-query@npm:^3.2.1":
-  version: 3.2.3
-  resolution: "axobject-query@npm:3.2.3"
-  checksum: 94b78d4a236f78228248fe2296a2f1eeb7b3321fb78f8354a6996904c17135b6de18d77c1402c18f65dcae9361b0db3153107019ae9f5ab9ebff3f66019378f2
+  version: 3.2.4
+  resolution: "axobject-query@npm:3.2.4"
+  checksum: a481d82a5dcd32d8bee17f1480ba3087b34ca9a2f7be30710c31f589fd518968a92d2f224a147e15bc93954fad1ea47f1fbf9f761d6b6b41dbb43fcdffd0bce9
   languageName: node
   linkType: hard
 
@@ -7508,15 +7508,6 @@ __metadata:
   version: 3.9.0
   resolution: "ci-info@npm:3.9.0"
   checksum: 6b19dc9b2966d1f8c2041a838217299718f15d6c4b63ae36e4674edd2bee48f780e94761286a56aa59eb305a85fbea4ddffb7630ec063e7ec7e7e5ad42549a87
-  languageName: node
-  linkType: hard
-
-"circular-dependency-plugin@npm:5.2.2":
-  version: 5.2.2
-  resolution: "circular-dependency-plugin@npm:5.2.2"
-  peerDependencies:
-    webpack: ">=4.0.1"
-  checksum: d1a51e7f86e72d9e7a08c47234511cc7a5c3050781c2d6dcc77c0b22214f94f272702488c952e59b2af589c67944160ad1c9c0b7b3e0d4f89222f2a27ebf085e
   languageName: node
   linkType: hard
 
@@ -13256,7 +13247,6 @@ __metadata:
     babel-jest: 29.7.0
     babel-loader: 9.1.3
     case-sensitive-paths-webpack-plugin: 2.4.0
-    circular-dependency-plugin: 5.2.2
     classnames: 2.5.1
     copy-webpack-plugin: 12.0.2
     cross-env: 7.0.3
