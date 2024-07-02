@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 
-import { IOpprettSoknad } from '../../../models/types/RequestBodies';
+import { IOpprettSoknad } from 'app/models/types/RequestBodies';
 import { EksisterendeOMPKSSoknaderActionKeys } from '../../types/EksisterendeOMPKSSoknaderActionKeys';
 import { IOMPKSSoknad } from '../../types/OMPKSSoknad';
 import { IOMPKSSoknadSvar } from '../../types/OMPKSSoknadSvar';

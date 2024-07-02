@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
-import { IOMPUTSoknadKvittering } from 'app/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
+import { IOMPUTSoknadKvittering } from 'app/ytelser/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
