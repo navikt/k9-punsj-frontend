@@ -156,7 +156,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer);
 
     const isFagsakMedValgtBehandlingsår = (): boolean => {
         if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
@@ -191,12 +191,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setBehandlingsAar(journalpost.sak.behandlingsår);
             }
             if (journalpost.sak?.fagsakId) {
-                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
+                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengende?.identitetsnummer);
                 if (
                     journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
-                    journalpost.sak.relatertPersonIdent
+                    journalpost.sak.relatertPerson?.identitetsnummer
                 ) {
-                    setAnnenPart(journalpost.sak.relatertPersonIdent);
+                    setAnnenPart(journalpost.sak.relatertPerson.identitetsnummer);
                 }
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
@@ -217,7 +217,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             !!journalpost?.norskIdent &&
-            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
+            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer)
         ) {
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
@@ -245,8 +245,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             // Set fordeling state ved ferdistilt (journalført) sak
             setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
             setErSøkerIdBekreftet(true);
-            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengendeIdent);
-            setAnnenPart(journalpost.sak?.relatertPersonIdent || '');
+            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengende?.identitetsnummer);
+            setAnnenPart(journalpost.sak?.relatertPerson?.identitetsnummer || '');
             setFagsak(journalpost.sak);
 
             // Redirect to ferdigstilt side
@@ -267,7 +267,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer);
 
     useEffect(() => {
         if (jpErFerdigstiltOgUtenPleietrengende) {
@@ -305,7 +305,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     // TODO TESTE DETTTE - det ser ut er bug her
     useEffect(() => {
         if (reserverSaksnummerTilNyFagsak && fagsaker) {
-            setBarnMedFagsak(fagsaker.find((f) => f.pleietrengendeIdent === identState.pleietrengendeId));
+            setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
         }
         if (!reserverSaksnummerTilNyFagsak) {
             setBarnMedFagsak(undefined);
@@ -534,11 +534,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const setValgtFagsak = (fagsakId: string) => {
         const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
 
-        setIdentAction(identState.søkerId, nyValgtFagsak?.pleietrengendeIdent || '', identState.annenSokerIdent);
+        setIdentAction(
+            identState.søkerId,
+            nyValgtFagsak?.pleietrengende?.identitetsnummer || '',
+            identState.annenSokerIdent,
+        );
         setFagsak(nyValgtFagsak);
 
-        if (nyValgtFagsak?.sakstype === DokumenttypeForkortelse.OMP_MA && nyValgtFagsak.relatertPersonIdent) {
-            setAnnenPart(nyValgtFagsak.relatertPersonIdent);
+        if (
+            nyValgtFagsak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
+            nyValgtFagsak.relatertPerson?.identitetsnummer
+        ) {
+            setAnnenPart(nyValgtFagsak.relatertPerson.identitetsnummer);
         }
 
         if (isDokumenttypeMedBehandlingsår) {
@@ -704,7 +711,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     valgtFagsak={valgtFagsak}
                                     setBehandlingsAar={setBehandlingsAar}
                                     setAnnenPart={setAnnenPart}
-                                    barn={fellesState.barn}
                                 />
                             )}
 
@@ -714,7 +720,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     showComponent={
                                         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
                                         (reserverSaksnummerTilNyFagsak ||
-                                            (!!valgtFagsak && !valgtFagsak.relatertPersonIdent))
+                                            (!!valgtFagsak && !valgtFagsak.relatertPerson?.identitetsnummer))
                                     }
                                     setAnnenPart={setAnnenPart}
                                 />
@@ -752,7 +758,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     <FormattedMessage
                                         id="fordeling.error.pleietrengendeHarFagsak"
                                         values={{
-                                            pleietrengendeId: barnMedFagsak.pleietrengendeIdent,
+                                            pleietrengendeId: barnMedFagsak.pleietrengende?.identitetsnummer,
                                             fagsakId: barnMedFagsak.fagsakId,
                                         }}
                                     />
@@ -794,7 +800,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             <FormattedMessage
                                                 id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
                                                 values={{
-                                                    pleietrengendeId: barnMedFagsak.pleietrengendeIdent,
+                                                    pleietrengendeId: barnMedFagsak.pleietrengende?.identitetsnummer,
                                                     fagsakId: barnMedFagsak.fagsakId,
                                                 }}
                                             />

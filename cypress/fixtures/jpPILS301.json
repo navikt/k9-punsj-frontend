@@ -27,8 +27,8 @@
         "reservertSaksnummer": false,
         "fagsakId": null,
         "gyldigPeriode": null,
-        "pleietrengendeIdent": null,
-        "relatertPersonIdent": null,
+        "pleietrengende": null,
+        "relatertPerson": null,
         "sakstype": "PPN",
         "behandlingsÅr": null
     }

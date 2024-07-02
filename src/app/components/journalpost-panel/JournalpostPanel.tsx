@@ -77,7 +77,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 </div>
             )}
 
-            {(pleietrengendeId || journalpost?.sak?.pleietrengendeIdent) && (
+            {(pleietrengendeId || journalpost?.sak?.pleietrengende?.identitetsnummer) && (
                 <div>
                     <LabelValue
                         labelTextId={
@@ -88,7 +88,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                         }
                         value={
                             pleietrengendeId ||
-                            journalpost?.sak?.pleietrengendeIdent ||
+                            journalpost?.sak?.pleietrengende?.identitetsnummer ||
                             intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')
                         }
                     />

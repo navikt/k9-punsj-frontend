@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpPILS301.json';
@@ -70,7 +71,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsakUtenPleietrengende.fagsakId, dokumenttype))
             .should('have.value', fagsakUtenPleietrengende.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Fødselsnummer: ikke satt').should('exist');
+            cy.findByText('Pleietrengende:').should('exist');
+            cy.findByText('ikke satt').should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
             cy.get('a').invoke('attr', 'href').should('contain', fagsakUtenPleietrengende.fagsakId);
         });
@@ -123,7 +125,9 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId, dokumenttype))
             .should('have.value', fagsakMedPleietrengende.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Fødselsnummer: ${fagsakMedPleietrengende.pleietrengendeIdent}`).should('exist');
+            cy.findByText('Pleietrengende:').should('exist');
+            cy.findByText(`Navn: ${fagsakMedPleietrengende.pleietrengende.navn}`).should('exist');
+            cy.findByText(`Id: ${fagsakMedPleietrengende.pleietrengende.identitetsnummer}`).should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
             cy.get('a').invoke('attr', 'href').should('contain', fagsakMedPleietrengende.fagsakId);
         });
@@ -131,7 +135,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
             cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+            cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
@@ -153,7 +157,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -185,7 +189,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -209,14 +213,16 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsakMedPleietrengendeReservert.fagsakId, dokumenttype, true))
             .should('have.value', fagsakMedPleietrengendeReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Fødselsnummer: ${fagsakMedPleietrengendeReservert.pleietrengendeIdent}`).should('exist');
+            cy.findByText('Pleietrengende:').should('exist');
+            cy.findByText(`Navn: ${fagsakMedPleietrengendeReservert.pleietrengende.navn}`).should('exist');
+            cy.findByText(`Id: ${fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer}`).should('exist');
             cy.findByText('Se fagsak i K9').should('not.exist');
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsakMedPleietrengendeReservert.fagsakId).should('exist');
             cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsakMedPleietrengendeReservert.pleietrengendeIdent).should('exist');
+            cy.findByText(fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
@@ -238,7 +244,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengendeReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengendeReservert.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -270,7 +276,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengendeReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengendeReservert.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -294,7 +300,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsakUtenPleietrengendeReservert.fagsakId, dokumenttype, true))
             .should('have.value', fagsakUtenPleietrengendeReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Fødselsnummer: ikke satt').should('exist');
+            cy.findByText('Pleietrengende:').should('exist');
+            cy.findByText('ikke satt').should('exist');
             cy.findByText('Se fagsak i K9').should('not.exist');
         });
         cy.get('.journalpostpanel').within(() => {
@@ -502,7 +509,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+            cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
         });
@@ -525,7 +532,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -557,7 +564,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
                 cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('exist');
+                cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
             });
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
@@ -584,7 +591,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Pleietrengendes ID/i).should('not.exist');
-            cy.findByText(fagsakMedPleietrengende.pleietrengendeIdent).should('not.exist');
+            cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('not.exist');
         });
 
         cy.wait(30);

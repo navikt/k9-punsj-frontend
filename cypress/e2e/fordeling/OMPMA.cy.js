@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpOMPMA304.json';
@@ -67,7 +68,9 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsak.fagsakId, dokumenttype))
             .should('have.value', fagsak.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Annen part: ${fagsak.relatertPersonIdent}`).should('exist');
+            cy.findByText('Annen part:').should('exist');
+            cy.findByText(`Navn: ${fagsak.relatertPerson.navn}`).should('exist');
+            cy.findByText(`Id: ${fagsak.relatertPerson.identitetsnummer}`).should('exist');
             cy.findByText('Se fagsak i K9').should('exist');
             cy.get('a').invoke('attr', 'href').should('contain', fagsak.fagsakId);
         });
@@ -75,7 +78,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsak.fagsakId).should('exist');
             cy.findByText(/Annen part ID:/i).should('exist');
-            cy.findByText(fagsak.relatertPersonIdent).should('exist');
+            cy.findByText(fagsak.relatertPerson.identitetsnummer).should('exist');
         });
 
         cy.findByLabelText('Fødselsnummer annen part:').should('not.exist');
@@ -96,7 +99,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Annen part ID:/i).should('exist');
-                cy.findByText(fagsak.relatertPersonIdent).should('exist');
+                cy.findByText(fagsak.relatertPerson.identitetsnummer).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
                 cy.findByText(fagsak.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
@@ -128,7 +131,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Annen part ID:/i).should('exist');
-                cy.findByText(fagsak.relatertPersonIdent).should('exist');
+                cy.findByText(fagsak.relatertPerson.identitetsnummer).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
                 cy.findByText(fagsak.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
@@ -155,14 +158,16 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .select(getFagsakNavnForSelect(fagsakReservert.fagsakId, dokumenttype, true))
             .should('have.value', fagsakReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText(`Annen part: ${fagsakReservert.relatertPersonIdent}`).should('exist');
+            cy.findByText('Annen part:').should('exist');
+            cy.findByText(`Navn: ${fagsakReservert.relatertPerson.navn}`).should('exist');
+            cy.findByText(`Id: ${fagsakReservert.relatertPerson.identitetsnummer}`).should('exist');
             cy.findByText('Se fagsak i K9').should('not.exist');
         });
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsakReservert.fagsakId).should('exist');
             cy.findByText(/Annen part ID:/i).should('exist');
-            cy.findByText(fagsakReservert.relatertPersonIdent).should('exist');
+            cy.findByText(fagsakReservert.relatertPerson.identitetsnummer).should('exist');
         });
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
@@ -181,7 +186,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Annen part ID:/i).should('exist');
-                cy.findByText(fagsakReservert.relatertPersonIdent).should('exist');
+                cy.findByText(fagsakReservert.relatertPerson.identitetsnummer).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
                 cy.findByText(fagsakReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');
@@ -213,7 +218,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
                 cy.findByText(/Søkers ID/i).should('exist');
                 cy.findByText(norskIdent).should('exist');
                 cy.findByText(/Annen part ID:/i).should('exist');
-                cy.findByText(fagsakReservert.relatertPersonIdent).should('exist');
+                cy.findByText(fagsakReservert.relatertPerson.identitetsnummer).should('exist');
                 cy.findByText(/Saksnummer/i).should('exist');
                 cy.findByText(fagsakReservert.fagsakId).should('exist');
                 cy.findByText(/Periode/i).should('exist');

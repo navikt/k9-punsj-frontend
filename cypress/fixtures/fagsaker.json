@@ -3,109 +3,125 @@
         "fagsakId": "1DMU93M",
         "sakstype": "PSB",
         "reservert": false,
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "fagsakId": "1DMUDF6",
         "sakstype": "OMP",
         "reservert": false,
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null,
+        "relatertPerson": null,
         "behandlingsår": 2024
     },
     {
         "reservert": false,
         "fagsakId": "1DQBDDS",
         "sakstype": "PSB",
-        "pleietrengendeIdent": "09081478047",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1DQBB6M",
         "sakstype": "PSB",
-        "pleietrengendeIdent": "01432082586",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "01432082586",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1DQB57C",
         "sakstype": "PSB",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1DQBBHQ",
         "sakstype": "PPN",
-        "pleietrengendeIdent": "10511993291",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "10511993291",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1DQBFJK",
         "sakstype": "PPN",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1DQB7o8",
         "sakstype": "PPN",
-        "pleietrengendeIdent": "10511993291",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "10511993291",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "2DQB7o8",
         "sakstype": "PPN",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
         },
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1DQBM7U",
         "sakstype": "OMP",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "behandlingsår": 2024,
-        "relatertPersonIdent": null,
+        "relatertPerson": null,
         "gyldigPeriode": {
             "fom": "2024-04-15",
             "tom": "2024-04-15"
@@ -115,120 +131,144 @@
         "reservert": false,
         "fagsakId": "1WTBMY6",
         "sakstype": "OMP_KS",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1DQBMY8",
         "sakstype": "OMP_KS",
-        "pleietrengendeIdent": "09081478047",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "2TQBHY3",
         "sakstype": "OMP_KS",
-        "pleietrengendeIdent": "09081478047",
+        "pleietrengende": {
+            "navn": "JUSTERBAR HALS",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "2017-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1TQFHE3",
         "sakstype": "OMP_KS",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1WTBMY6",
         "sakstype": "OMP_AO",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1DQBMY8",
         "sakstype": "OMP_AO",
-        "pleietrengendeIdent": "09081478047",
+        "pleietrengende": {
+            "navn": "Alex Smith",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "2018-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "2TQBHY3",
         "sakstype": "OMP_AO",
-        "pleietrengendeIdent": "09081478047",
+        "pleietrengende": {
+            "navn": "Alex Smith",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "2018-09-11"
+        },
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": true,
         "fagsakId": "1TQFHE3",
         "sakstype": "OMP_AO",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": null
+        "relatertPerson": null
     },
     {
         "reservert": false,
         "fagsakId": "1DQBMY8",
         "sakstype": "OMP_MA",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": "09081478047"
+        "relatertPerson": {
+            "navn": "Alex Smith",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "1980-09-11"
+        }
     },
     {
         "reservert": true,
         "fagsakId": "2TQBHY3",
         "sakstype": "OMP_MA",
-        "pleietrengendeIdent": null,
+        "pleietrengende": null,
         "gyldigPeriode": {
             "fom": "2021-12-31",
             "tom": "2039-12-31"
         },
         "behandlingsår": null,
-        "relatertPersonIdent": "09081478047"
+        "relatertPerson": {
+            "navn": "Alex Smith",
+            "identitetsnummer": "09081478047",
+            "fødselsdato": "1980-09-11"
+        }
     }
 ]

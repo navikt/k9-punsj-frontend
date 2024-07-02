@@ -1,8 +1,4 @@
-/* eslint-disable import/no-mutable-exports */
-
 /* eslint-disable import/no-extraneous-dependencies */
-
-/* eslint-disable import/prefer-default-export */
 import { HttpResponse, delay, http } from 'msw';
 
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
@@ -63,7 +59,7 @@ let handlers = [
                     fagsakId: '1DQAW94',
                     sakstype: 'PSB',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: true,
                 },
             },
@@ -89,7 +85,7 @@ let handlers = [
                     fagsakId: null,
                     sakstype: null,
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: false,
                 },
             },
@@ -115,7 +111,7 @@ let handlers = [
                     fagsakId: '1DQAW97',
                     sakstype: 'PPN',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: '15447308840',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '15447308840', fødselsdato: '1970-08-15' },
                     reservertSaksnummer: true,
                 },
             },
@@ -140,7 +136,7 @@ let handlers = [
                     fagsakId: '1DQAW94',
                     sakstype: 'OMP_KS',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: true,
                 },
             },
@@ -166,7 +162,7 @@ let handlers = [
                     fagsakId: null,
                     sakstype: null,
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: false,
                 },
             },
@@ -191,9 +187,9 @@ let handlers = [
                     fagsakId: '1DQBHH0',
                     sakstype: 'PPN',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: true,
-                    relatertPersonIdent: null,
+                    relatertPerson: null,
                 },
             },
             { status: 200 },
@@ -207,7 +203,7 @@ let handlers = [
                 {
                     fagsakId: 'ABC123',
                     sakstype: 'PSB',
-                    pleietrengendeIdent: '03091477490',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '15447308840', fødselsdato: '2020-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -216,7 +212,7 @@ let handlers = [
                 {
                     fagsakId: 'DEF456',
                     sakstype: 'PPN',
-                    pleietrengendeIdent: '03091477490',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -225,7 +221,7 @@ let handlers = [
                 {
                     fagsakId: '1DMU93M',
                     sakstype: 'OMP',
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     gyldigPeriode: null,
                     behandlingsAar: '2022',
                 },
@@ -278,7 +274,7 @@ let handlers = [
                     fagsakId: '1DQAW94',
                     sakstype: 'PSB',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: true,
                 },
             },
@@ -304,7 +300,7 @@ let handlers = [
                     fagsakId: null,
                     sakstype: null,
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: false,
                 },
             },
@@ -330,7 +326,7 @@ let handlers = [
                     fagsakId: '1DQAW97',
                     sakstype: 'PPN',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: '15447308840',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '15447308840', fødselsdato: '1970-08-15' },
                     reservertSaksnummer: true,
                 },
             },
@@ -355,7 +351,7 @@ let handlers = [
                     fagsakId: '1DQAW94',
                     sakstype: 'OMP_KS',
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: true,
                 },
             },
@@ -381,7 +377,7 @@ let handlers = [
                     fagsakId: null,
                     sakstype: null,
                     gyldigPeriode: null,
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     reservertSaksnummer: false,
                 },
             },
@@ -396,7 +392,7 @@ let handlers = [
                 {
                     fagsakId: 'ABC123',
                     sakstype: 'PSB',
-                    pleietrengendeIdent: '03091477490',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -405,7 +401,7 @@ let handlers = [
                 {
                     fagsakId: 'DEF456',
                     sakstype: 'PPN',
-                    pleietrengendeIdent: '03091477490',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -414,7 +410,7 @@ let handlers = [
                 {
                     fagsakId: '1DMU93M',
                     sakstype: 'PSB',
-                    pleietrengendeIdent: null,
+                    pleietrengende: null,
                     gyldigPeriode: null,
                 },
             ],

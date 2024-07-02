@@ -1,12 +1,13 @@
 import { DokumenttypeForkortelse } from 'app/models/enums';
+import { PersonFagsak } from 'app/models/types';
 
 interface Fagsak {
     fagsakId: string;
     sakstype: DokumenttypeForkortelse;
-    pleietrengendeIdent?: string;
+    pleietrengende?: PersonFagsak;
     gyldigPeriode: { fom: string; tom: string };
     reservertSaksnummer?: boolean;
-    relatertPersonIdent?: string;
+    relatertPerson?: PersonFagsak;
     behandlingsår?: string; // For OMS
     reservert?: boolean;
 }

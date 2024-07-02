@@ -1,4 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpPILS301.json';
@@ -97,7 +98,7 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
 
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Kopi av journalposten er opprettet.');
         cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', annenSøkerFnr);
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', fagsak.pleietrengendeIdent);
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', fagsak.pleietrengende.identitetsnummer);
 
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -203,7 +204,7 @@ describe(`Test klassifisering ${dokumenttype}`, { testIsolation: false }, () => 
             cy.findByText(/Sakstype/i).should('exist');
             cy.findByText(dokumenttype).should('exist');
             cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsak.pleietrengendeIdent).should('exist');
+            cy.findByText(fagsak.pleietrengende.identitetsnummer).should('exist');
             cy.findByText(/Saksnummer/i).should('exist');
             cy.findByText(fagsak.fagsakId).should('exist');
         });
