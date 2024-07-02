@@ -1,11 +1,11 @@
-import tsParser from '@typescript-eslint/parser';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import typescriptPlugin from '@typescript-eslint/eslint-plugin';
-import prettier from 'eslint-config-prettier';
-import eslintPluginReact from 'eslint-plugin-react';
-import eslintImport from 'eslint-plugin-import';
+const tsParser = require('@typescript-eslint/parser');
+const reactHooksPlugin = require('eslint-plugin-react-hooks');
+const typescriptPlugin = require('@typescript-eslint/eslint-plugin');
+const prettier = require('eslint-config-prettier');
+const eslintPluginReact = require('eslint-plugin-react');
+const eslintImport = require('eslint-plugin-import');
 
-export default [
+module.exports = [
     {
         name: 'base-config',
         files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'], // specifying which files this configuration applies to
@@ -27,6 +27,9 @@ export default [
                     moduleDirectory: ['node_modules', 'src/'],
                 },
             },
+            react: {
+                version: 'detect',
+            },
         },
         rules: {
             'react/no-unused-prop-types': 'warn',
@@ -38,23 +41,10 @@ export default [
                 'warn',
                 {
                     devDependencies: [
-                        '**/*.test.ts',
-                        '**/*.test.tsx',
-                        '**/*.spec.ts',
-                        '**/*.spec.tsx',
-                        'tests/**/*.ts',
-                        '**/mocks/*.ts',
-                        '**/mocks/**/*.ts',
-                        '**/test/**/*.js',
-                        '**/test/*.js',
-                        '**/test/**/*.ts',
-                        '**/test/*.ts',
-                        '**/test/**/*.tsx',
-                        '**/test/*.tsx',
+                        '**/*.{test,spec}.{ts,tsx,js}',
+                        '**/{tests,mocks,test}/**/*.{ts,tsx,js}',
                         '**/*.stories.tsx',
                         'cypress/**/*.js',
-                        '**/build/**/*.js',
-                        'eslint.config.js',
                     ],
                 },
             ],

@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CircularDependencyPlugin from 'circular-dependency-plugin';
 import { config as dotenvConfig } from 'dotenv';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
@@ -32,10 +31,6 @@ webpackConfig.plugins.push(
     }),
     new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, '../../../dist'),
-    }),
-    new CircularDependencyPlugin({
-        exclude: /node_modules/,
-        failOnError: false,
     }),
     new ReactRefreshWebpackPlugin(),
     new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }),
