@@ -1,10 +1,8 @@
-import { expect } from '@jest/globals';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
 import { IntlShape } from 'react-intl';
-
-import { PSBSoknadKvittering } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { PSBSoknadKvittering } from '../../../app/ytelser/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 

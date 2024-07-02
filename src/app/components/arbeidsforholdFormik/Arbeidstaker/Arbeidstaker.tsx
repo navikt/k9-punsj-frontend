@@ -6,7 +6,7 @@ import { IntlShape } from 'react-intl';
 import { Checkbox, Fieldset } from '@navikt/ds-react';
 
 import { ApiPath } from 'app/apiConfig';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import VerticalSpacer from 'app/components/vertical-spacer/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import usePrevious from 'app/hooks/usePrevious';
@@ -51,7 +51,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const { setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-        // eslint-disable-next-line react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',
@@ -126,7 +125,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType = organisasjonsnummer === null ? 'p' : 'o';
 
     return (
-        <Fieldset className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel" legend>
             <div className="flex flex-wrap">
                 {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (

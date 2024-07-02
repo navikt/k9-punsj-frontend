@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Arbeidstaker } from './Arbeidstaker';
 import { IArbeidstid } from './Arbeidstid';
 import { ArbeidstidInfo } from './ArbeidstidInfo';

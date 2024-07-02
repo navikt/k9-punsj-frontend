@@ -17,7 +17,7 @@ import { formats, removeDatesFromPeriods } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
 import ArbeidstidPeriodeListe from '../timefoering/ArbeidstidPeriodeListe';

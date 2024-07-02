@@ -11,7 +11,6 @@ import {
     removeDatesFromDateRange,
 } from './timeUtils';
 
-/* eslint-disable import/prefer-default-export */
 const sortPeriodsByFomDate = (period1: Periode, period2: Periode): number => {
     if (period1.startsBefore(period2)) {
         return -1;

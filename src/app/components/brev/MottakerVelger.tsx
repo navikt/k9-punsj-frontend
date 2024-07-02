@@ -19,7 +19,8 @@ import { ApiPath } from 'app/apiConfig';
 import { get } from 'app/utils/apiUtils';
 import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
 import { requiredValue } from 'app/utils/validationHelpers';
-import VerticalSpacer from '../VerticalSpacer';
+
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 
 export interface OrgInfo {
     organisasjonsnummer: string;

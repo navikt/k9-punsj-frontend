@@ -1,7 +1,5 @@
 import aleneOmOmsorgenHandlers from 'mocks/aleneOmOmsorgenHandlers';
 
-import { fraværÅrsak, søknadÅrsak } from 'app/omsorgspenger-utbetaling/konstanter';
-
 describe('Alene om omsorgen - ny søknad', () => {
     beforeEach(() => {
         cy.visit(

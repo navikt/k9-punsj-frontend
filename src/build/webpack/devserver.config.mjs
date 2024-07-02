@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import dotenv from 'dotenv';
 import mustacheExpress from 'mustache-express';
 import { fileURLToPath } from 'url';

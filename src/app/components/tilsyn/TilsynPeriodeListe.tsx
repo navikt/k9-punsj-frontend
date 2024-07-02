@@ -8,7 +8,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
 
 const schema = yup.object({
@@ -46,7 +46,6 @@ export default function TilsynPeriodeListe({
                             <div>
                                 {values.perioder.map((periode, index) => (
                                     <TilsynPeriode
-                                        // eslint-disable-next-line react/no-array-index-key
                                         key={index}
                                         name={`perioder.${index}`}
                                         soknadsperioder={soknadsperioder}

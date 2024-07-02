@@ -4,7 +4,8 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Tag, Textarea } from '@navikt/ds-react';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import { validateText } from 'app/utils/validationHelpers';
-import VerticalSpacer from '../VerticalSpacer';
+
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 
 interface InnhentDokumentasjonMalProps {
     setVisBrevIkkeSendtInfoboks: () => void;

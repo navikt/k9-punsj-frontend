@@ -11,8 +11,8 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { finnArbeidsgivere } from '../../api/api';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import VerticalSpacer from '../VerticalSpacer';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import { Brev } from './Brev';
 import Brevmal from './Brevmal';
 import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
@@ -72,7 +72,6 @@ const BrevComponent: React.FC<BrevProps> = ({
                 return setHentBrevmalerError(true);
             })
             .catch((error) => {
-                // eslint-disable-next-line no-console
                 console.log(error);
                 setHentBrevmalerError(true);
             });

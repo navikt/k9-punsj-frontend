@@ -55,6 +55,14 @@ Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnum
 yarn test
 ```
 
+```
+yarn test:e2e
+```
+
+```
+yarn test:e2eBrowser
+```
+
 Testene kjører automatisk når ny kode dyttes til [master](https://github.com/navikt/k9-punsj-frontend).
 
 ## Enhetstester

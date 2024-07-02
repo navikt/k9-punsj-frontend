@@ -51,7 +51,6 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
                     <>
                         {field.value.map((_, index) => (
                             <PersonLinje
-                                // eslint-disable-next-line react/no-array-index-key
                                 key={index}
                                 index={index}
                                 handleBlur={handleBlur}

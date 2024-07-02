@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Arbeidstid, IArbeidstid } from './Arbeidstid';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 import { Barn, IBarn } from './IBarn';

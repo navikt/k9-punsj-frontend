@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 

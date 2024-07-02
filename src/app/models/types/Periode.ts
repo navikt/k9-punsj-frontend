@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { IntlShape } from 'react-intl';
 
 import { TimeFormat } from 'app/models/enums';

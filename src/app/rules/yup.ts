@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 
 import { IdentRules } from './IdentRules';

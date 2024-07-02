@@ -1,17 +1,14 @@
-import { expect } from '@jest/globals';
+import React from 'react';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
 import { TextField } from '@navikt/ds-react';
 import { IntlShape } from 'react-intl';
-
 import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
-
+} from '../../../app/components/periode-info-paneler/PeriodeinfoPaneler';
+import intlHelper from '../../../app/utils/intlUtils';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 
 jest.mock('react-intl');
@@ -78,7 +75,6 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };
 

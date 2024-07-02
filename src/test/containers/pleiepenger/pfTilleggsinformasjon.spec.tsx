@@ -1,20 +1,17 @@
-import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
-
 import { Textarea } from '@navikt/ds-react';
-
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import { pfTilleggsinformasjon } from 'app/containers/pleiepenger/pfTilleggsinformasjon';
-import { GetErrorMessage } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
+} from '../../../app/components/periode-info-paneler/PeriodeinfoPaneler';
+import { pfTilleggsinformasjon } from '../../../app/components/pfTilleggsinformasjon';
+import intlHelper from '../../../app/utils/intlUtils';
 
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+import { GetErrorMessage } from '../../../app/models/types/Error';
 
 jest.mock('app/utils/intlUtils');
 

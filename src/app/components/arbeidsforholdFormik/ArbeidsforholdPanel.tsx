@@ -22,7 +22,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from '../../models/types/OLPSoknad';
 import { capitalize } from '../../utils/utils';
-import VerticalSpacer from '../VerticalSpacer';
+import VerticalSpacer from '../vertical-spacer/VerticalSpacer';
 import { CountrySelect } from '../country-select/CountrySelect';
 import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../formikInput/TextAreaFormik';

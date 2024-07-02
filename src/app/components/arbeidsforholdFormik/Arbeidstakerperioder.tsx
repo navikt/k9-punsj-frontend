@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Fieldset, Panel } from '@navikt/ds-react';
@@ -51,7 +51,7 @@ const Arbeidstakerperioder = ({
         <FieldArray
             name="arbeidstid.arbeidstakerList"
             render={(arrayHelpers) => (
-                <Fieldset className="listepaneler">
+                <Fieldset legend className="listepaneler">
                     {items?.map((currentItem, currentItemIndex) => {
                         const panelid = `arbeidstakerpanel_${currentItemIndex}`;
                         const getHarDuplikatOrgnr = () =>
@@ -67,7 +67,7 @@ const Arbeidstakerperioder = ({
                                 id={panelid}
                                 key={panelid}
                             >
-                                <Fieldset>
+                                <Fieldset legend>
                                     {itemsWithInitialItem.length > 1 && (
                                         <h2>
                                             <FormattedMessage

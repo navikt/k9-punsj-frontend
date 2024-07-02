@@ -9,7 +9,6 @@ const initialState: IJournalposterPerIdentState = {
     journalposterRequestError: undefined,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function JournalposterPerIdentReducer(
     journalposterPerIdentState: IJournalposterPerIdentState = initialState,
     action: IJournalposterPerIdentActions,

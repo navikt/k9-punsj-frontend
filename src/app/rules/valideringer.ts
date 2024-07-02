@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { FormikErrors, getIn, setIn } from 'formik';
 import { IntlShape } from 'react-intl';
 

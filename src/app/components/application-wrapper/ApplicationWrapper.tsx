@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -11,13 +11,12 @@ import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
 import { checkAuth } from 'app/state/actions';
 
-import AppContainer from '../../containers/AppContainer';
+import AppContainer from '../app-container/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
 import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {
     locale: Locale;
-    onChangeLocale: (locale: Locale) => void;
 }
 
 interface IApplicationWrapperStateProps {

@@ -1,7 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw';
 import journalpost from '../../fixtures/jpOMPUT305.json';
-import { should } from 'chai';
 
 const dokumenttype = 'Omsorgspenger';
 const valgteDokumentType = 'Annet';

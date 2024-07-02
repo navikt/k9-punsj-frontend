@@ -1,6 +1,6 @@
-import { composeWithDevTools } from '@redux-devtools/extension';
+import React from 'react';
 import * as Sentry from '@sentry/react';
-import * as React from 'react';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -28,21 +28,22 @@ import {
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
+import SendBrevIAvsluttetSak from './brev-i-avsluttet-sak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
-import JournalpostRouter from './containers/JournalpostRouter';
-import SokIndex from './containers/sok/SokIndex';
-import withEnvVariables from './containers/withAppSettings';
+import JournalpostRouter from './journalpost-router/JournalpostRouter';
+import { Home } from './home/Home';
+import withEnvVariables from './withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import { rootReducer } from './state/RootState';
 import { thunk } from './state/middleware';
-import './styles/globalStyles.less';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import JournalpostLoader from './containers/JournalpostLoader';
+import JournalpostLoader from './journalpost-loader/JournalpostLoader';
 import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
 import AuthCallback from './auth/AuthCallback';
+
+import './styles/globalStyles.less';
 
 const environment = window.location.hostname;
 
@@ -96,7 +97,7 @@ queryClient.setDefaultOptions({
 });
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
-export const App: React.FunctionComponent = () => {
+export const App: React.FC = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
@@ -118,7 +119,7 @@ export const App: React.FunctionComponent = () => {
                             />
                             <Route path={ROUTES.OPPRETT_JOURNALPOST} element={<OpprettJournalpost />} />
                             <Route path={ROUTES.BREV_AVSLUTTET_SAK} element={<SendBrevIAvsluttetSak />} />
-                            <Route path={ROUTES.HOME} element={<SokIndex />} />
+                            <Route path={ROUTES.HOME} element={<Home />} />
                             <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
                         </SentryRoutes>

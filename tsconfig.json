@@ -23,9 +23,6 @@
         "typeRoots": ["./node_modules/@types", "./src/@types"],
         "resolveJsonModule": true
     },
-    "tsLoaderOptions": {
-        "useCache": false
-    },
     "include": ["src/**/*", "./globals.d.ts"],
-    "exclude": ["node_modules", "src/build", "**.js", "dist"]
+    "exclude": ["node_modules", "build", "dist", "**/*.js"]
 }

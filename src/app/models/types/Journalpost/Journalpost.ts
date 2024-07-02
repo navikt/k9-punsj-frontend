@@ -25,7 +25,6 @@ export interface IDokument {
 }
 
 export interface IDokumentInfo {
-    // eslint-disable-next-line camelcase
     dokument_id: string;
 }
 

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 
 import { Sakstype } from '../models/enums';
-import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
-import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
-import { EksisterendeOMPMASoknaderReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
-import { PunchOMPMAFormReducer } from '../omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
-import { EksisterendePLSSoknaderReducer } from '../pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
-import { PunchPLSFormReducer } from '../pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
+import { EksisterendeOMPKSSoknaderReducer } from 'app/ytelser/omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
+import { PunchOMPKSFormReducer } from 'app/ytelser/omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
+import { EksisterendeOMPMASoknaderReducer } from 'app/ytelser/omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
+import { PunchOMPMAFormReducer } from 'app/ytelser/omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
+import { EksisterendePLSSoknaderReducer } from 'app/ytelser/pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
+import { PunchPLSFormReducer } from 'app/ytelser/pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import {
     AuthReducer,
     EksisterendeSoknaderReducer,

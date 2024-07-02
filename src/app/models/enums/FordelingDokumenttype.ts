@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+// Dokumenttyper som brukes i applikasjonen
 export enum FordelingDokumenttype {
     PLEIEPENGER = 'PLEIEPENGER',
     PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',
@@ -12,6 +12,7 @@ export enum FordelingDokumenttype {
     ANNET = 'ANNET',
 }
 
+// Dokumenttyper (sakstyper) som brukes i backend
 export enum DokumenttypeForkortelse {
     PSB = 'PSB',
     PPN = 'PPN',
@@ -20,7 +21,7 @@ export enum DokumenttypeForkortelse {
     OMP_MA = 'OMP_MA',
     OMP_AO = 'OMP_AO',
     OMP_UT = 'OMP_UT',
-    OLP = 'OLP',
+    OLP = 'OLP', // PILS
 }
 
 export enum FordelingOmsorgspengerSubMenyValg {
@@ -40,4 +41,28 @@ export const dokumenttyperForPsbOmsOlp = [
     FordelingDokumenttype.OMSORGSPENGER_UT,
     FordelingDokumenttype.KORRIGERING_IM,
     FordelingDokumenttype.OPPLAERINGSPENGER,
+];
+
+export const sakstyperMedPleietrengende = [
+    DokumenttypeForkortelse.PSB,
+    DokumenttypeForkortelse.OMP_KS,
+    DokumenttypeForkortelse.PPN,
+    DokumenttypeForkortelse.OLP,
+    DokumenttypeForkortelse.OMP_AO,
+];
+
+export const dokumenttyperOMS = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
+    FordelingDokumenttype.OMSORGSPENGER_MA,
+];
+
+export const dokumenttyperMedPleietrengende = [
+    FordelingDokumenttype.PLEIEPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+    FordelingDokumenttype.OPPLAERINGSPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
 ];

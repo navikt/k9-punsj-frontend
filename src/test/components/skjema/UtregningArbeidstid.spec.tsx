@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { expect } from '@jest/globals';
 import { screen } from '@testing-library/react';
 
 import { renderWithIntl } from '../../testUtils';

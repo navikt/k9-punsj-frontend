@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import FordelingSettPaaVentKeys from 'app/models/enums/FordelingSettPaaVentKeys';
 import FordelingSettPaaVentState from 'app/models/types/FordelingSettPaaVentState';
 
