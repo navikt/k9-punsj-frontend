@@ -3,7 +3,7 @@ import React from 'react';
 import { BodyShort, Checkbox, Label, Link, Select, VStack } from '@navikt/ds-react';
 
 import { IIdentState } from 'app/models/types/IdentState';
-import Fagsak from 'app/types/Fagsak';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { FormattedMessage } from 'react-intl';
@@ -11,11 +11,11 @@ import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
-    fagsaker: Fagsak[];
+    fagsaker: FagsakForSelect[];
     reserverSaksnummerTilNyFagsak: boolean;
     identState: IIdentState;
     ingenInfoOmBarnIDokument?: boolean;
-    valgtFagsak?: Fagsak;
+    valgtFagsak?: FagsakForSelect;
     setValgtFagsak: (fagsak: string) => void;
     setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
@@ -23,7 +23,7 @@ interface Props {
     setAnnenPart: (annenPart: string) => void;
 }
 
-const getFagsakInfo = (valgtFagsak: Fagsak) => {
+const getFagsakInfo = (valgtFagsak: FagsakForSelect) => {
     const { sakstype, behandlingsår, pleietrengende, relatertPerson } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {

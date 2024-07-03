@@ -24,7 +24,7 @@
         "fagsakId": null,
         "gyldigPeriode": null,
         "pleietrengende": null,
-        "relatertPerson": null,
+        "relatertPersonIdent": null,
         "sakstype": "OMP_AO",
         "behandlingsÅr": null
     }

@@ -23,8 +23,8 @@
         "reservertSaksnummer": false,
         "fagsakId": null,
         "gyldigPeriode": null,
-        "pleietrengende": null,
-        "relatertPerson": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
         "sakstype": "OMP",
         "behandlingsÅr": null
     }

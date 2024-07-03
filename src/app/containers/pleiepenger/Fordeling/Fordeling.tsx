@@ -12,7 +12,7 @@ import {
     lukkOppgaveResetAction,
     setErSøkerIdBekreftetAction,
 } from 'app/state/actions';
-import Fagsak from 'app/types/Fagsak';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { ROUTES } from 'app/constants/routes';
 import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
@@ -100,7 +100,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetBarn,
     } = props;
 
-    const { fagsak: valgtFagsak, dokumenttype } = fordelingState;
+    const { fagsak, dokumenttype } = fordelingState;
 
     const navigate = useNavigate();
 
@@ -113,11 +113,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const [valgtFagsakLokal, setValgtFagsakLokal] = useState<FagsakForSelect | undefined>(undefined);
+    const [fagsaker, setFagsaker] = useState<FagsakForSelect[]>([]);
     const [reserverSaksnummerTilNyFagsak, setReserverSaksnummerTilNyFagsak] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const [disableRadios, setDisableRadios] = useState<boolean | undefined>(undefined);
-    const [barnMedFagsak, setBarnMedFagsak] = useState<Fagsak | undefined>(undefined);
+    const [barnMedFagsak, setBarnMedFagsak] = useState<FagsakForSelect | undefined>(undefined);
     const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
 
@@ -156,7 +157,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer);
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
     const isFagsakMedValgtBehandlingsår = (): boolean => {
         if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
@@ -191,12 +192,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 setBehandlingsAar(journalpost.sak.behandlingsår);
             }
             if (journalpost.sak?.fagsakId) {
-                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengende?.identitetsnummer);
+                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
                 if (
                     journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
-                    journalpost.sak.relatertPerson?.identitetsnummer
+                    journalpost.sak.relatertPersonIdent
                 ) {
-                    setAnnenPart(journalpost.sak.relatertPerson.identitetsnummer);
+                    setAnnenPart(journalpost.sak.relatertPersonIdent);
                 }
                 setErSøkerIdBekreftet(true);
                 setRiktigIdentIJournalposten(JaNei.JA);
@@ -217,7 +218,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             !!journalpost?.norskIdent &&
-            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer)
+            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
         ) {
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
@@ -245,8 +246,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             // Set fordeling state ved ferdistilt (journalført) sak
             setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
             setErSøkerIdBekreftet(true);
-            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengende?.identitetsnummer);
-            setAnnenPart(journalpost.sak?.relatertPerson?.identitetsnummer || '');
+            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengendeIdent);
+            setAnnenPart(journalpost.sak?.relatertPersonIdent || '');
             setFagsak(journalpost.sak);
 
             // Redirect to ferdigstilt side
@@ -267,7 +268,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengende?.identitetsnummer);
+        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
     useEffect(() => {
         if (jpErFerdigstiltOgUtenPleietrengende) {
@@ -284,6 +285,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setErSøkerIdBekreftet(true);
             setIdentAction(journalpost.norskIdent!);
             setVisSokersBarn(true);
+            // TODO
             setFagsak(journalpost.sak);
         }
     }, []);
@@ -292,11 +294,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
      * Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
      */
     useEffect(() => {
-        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId && valgtFagsak) {
+        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId && fagsak) {
             setFagsak(undefined);
             setReserverSaksnummerTilNyFagsak(false);
             setIngenInfoOmPleitrengende(false);
-            if (valgtFagsak.sakstype === DokumenttypeForkortelse.OMP_MA) {
+            if (fagsak.sakstype === DokumenttypeForkortelse.OMP_MA) {
                 setAnnenPart('');
             }
         }
@@ -331,11 +333,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const visPleietrengende =
         visSokersBarn && isDokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
-    // Sjekk ang valgtFagsak?.reservert && !valgtFagsak?.gyldigPeriode
+    // Sjekk ang fagsak?.reservert && !fagsak?.gyldigPeriode
     const visValgAvBehandlingsaar =
         ytelserMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
-        (reserverSaksnummerTilNyFagsak || (valgtFagsak?.reservert && !valgtFagsak?.behandlingsår)) &&
+        (reserverSaksnummerTilNyFagsak || (fagsak?.reservert && !fagsak?.behandlingsår)) &&
         !journalpost.erFerdigstilt;
 
     const erInntektsmeldingUtenKrav =
@@ -360,7 +362,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setHenteFagsakFeilet(false);
             setIsFetchingFagsaker(true);
             setFagsak(undefined);
-            finnFagsaker(identState.søkerId, (response, data: Fagsak[]) => {
+            finnFagsaker(identState.søkerId, (response, data: FagsakForSelect[]) => {
                 setIsFetchingFagsaker(false);
                 if (response.status === 200) {
                     const dokumenttypeForkortelse = finnForkortelseForDokumenttype(dokumenttype);
@@ -397,7 +399,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
             if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende) {
-                return !valgtFagsak;
+                return !fagsak;
             }
 
             if (barnMedFagsak) {
@@ -470,7 +472,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
     const handleRedirectVidere = () => {
         if (fordelingState.dokumenttype) {
-            if (!valgtFagsak) {
+            if (!fagsak) {
                 setFagsak(journalpost.sak);
             }
             const pathFraDokumenttype = getPathFraDokumenttype(fordelingState.dokumenttype);
@@ -532,24 +534,41 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     };
 
     const setValgtFagsak = (fagsakId: string) => {
-        const nyValgtFagsak = fagsaker.find((fagsak) => fagsak.fagsakId === fagsakId);
+        const selectedFagsak = fagsaker.find((f) => f.fagsakId === fagsakId);
 
         setIdentAction(
             identState.søkerId,
-            nyValgtFagsak?.pleietrengende?.identitetsnummer || '',
+            selectedFagsak?.pleietrengende?.identitetsnummer || '',
             identState.annenSokerIdent,
         );
-        setFagsak(nyValgtFagsak);
+
+        // Set fagsak for å vise fagsak info
+        setValgtFagsakLokal(selectedFagsak);
+
+        // Dette brukes for å sette pleietrengende ident og relatertPerson i fagsak state fordi data struktur er forskjellig i fagsak og journalpost.sak
+        // Kanskje det trenges å endre data struktur i journalpost.sak i backend
+        const nyValgtFagsakMedPleietrengendeIdent = selectedFagsak
+            ? ({
+                  ...selectedFagsak,
+                  pleietrengendeIdent: selectedFagsak?.pleietrengende?.identitetsnummer,
+                  relatertPersonIdent: selectedFagsak?.relatertPerson?.identitetsnummer,
+                  relatertPerson: undefined,
+                  pleietrengende: undefined,
+              } as Fagsak)
+            : undefined;
+
+        // Brukes i felles state
+        setFagsak(nyValgtFagsakMedPleietrengendeIdent);
 
         if (
-            nyValgtFagsak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
-            nyValgtFagsak.relatertPerson?.identitetsnummer
+            selectedFagsak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
+            selectedFagsak.relatertPerson?.identitetsnummer
         ) {
-            setAnnenPart(nyValgtFagsak.relatertPerson.identitetsnummer);
+            setAnnenPart(selectedFagsak.relatertPerson.identitetsnummer);
         }
 
         if (isDokumenttypeMedBehandlingsår) {
-            setBehandlingsAar(nyValgtFagsak ? nyValgtFagsak.behandlingsår : undefined);
+            setBehandlingsAar(selectedFagsak ? selectedFagsak.behandlingsår : undefined);
         }
     };
 
@@ -708,7 +727,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     setReserverSaksnummerTilNyFagsak={setReserverSaksnummerTilNyFagsak}
                                     setIdentAction={setIdentAction}
                                     setValgtFagsak={setValgtFagsak}
-                                    valgtFagsak={valgtFagsak}
+                                    valgtFagsak={valgtFagsakLokal}
                                     setBehandlingsAar={setBehandlingsAar}
                                     setAnnenPart={setAnnenPart}
                                 />
@@ -719,8 +738,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     annenPart={identState.annenPart}
                                     showComponent={
                                         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-                                        (reserverSaksnummerTilNyFagsak ||
-                                            (!!valgtFagsak && !valgtFagsak.relatertPerson?.identitetsnummer))
+                                        (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent))
                                     }
                                     setAnnenPart={setAnnenPart}
                                 />
@@ -813,7 +831,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </>
                             )}
                             {!journalpost.erFerdigstilt &&
-                                !valgtFagsak &&
+                                !fagsak &&
                                 !disableJournalførKnapper() &&
                                 (identState.pleietrengendeId ||
                                     ytelserMedBehandlingsårValg ||

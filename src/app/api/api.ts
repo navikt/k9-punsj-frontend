@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IJournalpost, IPeriode } from 'app/models/types';
-import Fagsak from 'app/types/Fagsak';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import sakstyper from 'app/constants/sakstyper';
@@ -52,8 +52,11 @@ export const postBehandlingsAar = (
 
 export const hentBarn = (norskIdent: string): Promise<Error | Response> =>
     get(ApiPath.BARN_GET, { norskIdent }, { 'X-Nav-NorskIdent': norskIdent });
-export const finnFagsaker = (søkersFødselsnummer: string, callback: (response: Response, data: Fagsak[]) => void) =>
-    get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
+
+export const finnFagsaker = (
+    søkersFødselsnummer: string,
+    callback: (response: Response, data: FagsakForSelect[]) => void,
+) => get(ApiPath.HENT_FAGSAK_PÅ_IDENT, undefined, { 'X-Nav-NorskIdent': søkersFødselsnummer }, callback);
 
 export const klassifiserDokument = (body: {
     brukerIdent: string;
