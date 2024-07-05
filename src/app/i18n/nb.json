@@ -54,7 +54,7 @@
     "startPage.feil.ingendokumenter": "Journalposten har ingen tilhørende dokumenter",
     "startPage.feil.ikketilgang": "Du har ikke tilgang til journalposten",
     "startPage.feil.internalServerError": "Noe gikk galt",
-    "startPage.feil.ikkeStøttet": "Journalposten har blitt feilregistrert, avbrutt eller er utgått via Gosys/annet system. Lukk oppgaven i Punsj og søk opp journalposten i Gosys for å vurdere eventuell videre håndtering derfra.",
+    "startPage.feil.ikkeStøttet": "Journalposten har blitt feilregistrert, avbrutt, utgått eller har endret tema via Gosys/annet system. Lukk oppgaven i Punsj og søk opp journalposten i Gosys for å vurdere eventuell videre håndtering derfra.",
     "startPage.feil.ikkeStøttet.lukkDebugg.info": "Lukk journalpost i k9-punsj og k9-los",
     "startPage.feil.ikkeStøttet.lukkDebugg.btn": "Lukk oppgaven i punsj",
     "startPage.feil.ikkeStøttet.gåTilLos.btn": "Gå til LOS",
