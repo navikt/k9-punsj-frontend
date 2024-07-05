@@ -6,7 +6,7 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "7.24.7",
-        "@grafana/faro-web-sdk": "1.7.3",
+        "@grafana/faro-web-sdk": "1.8.1",
         "@grafana/faro-web-tracing": "1.7.3",
         "@k9-punsj-frontend/server": "workspace:",
         "@navikt/aksel-icons": "6.10.1",
