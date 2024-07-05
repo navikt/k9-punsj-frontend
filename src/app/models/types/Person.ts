@@ -10,3 +10,9 @@ export interface Person {
     mellomnavn: string;
     sammensattNavn: string;
 }
+
+export interface PersonFagsak {
+    navn: string;
+    identitetsnummer: string;
+    fødselsdato: string;
+}

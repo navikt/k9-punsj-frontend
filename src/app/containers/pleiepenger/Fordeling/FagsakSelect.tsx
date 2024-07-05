@@ -1,23 +1,21 @@
 import React from 'react';
 
-import { BodyShort, Checkbox, Link, Select } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Label, Link, Select, VStack } from '@navikt/ds-react';
 
 import { IIdentState } from 'app/models/types/IdentState';
-import Fagsak from 'app/types/Fagsak';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 
 import { DokumenttypeForkortelse } from 'app/models/enums';
-import { IBarn } from 'app/models/types/Barn';
 import { FormattedMessage } from 'react-intl';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 import { ExternalLink } from '@navikt/ds-icons';
 
 interface Props {
-    fagsaker: Fagsak[];
+    fagsaker: FagsakForSelect[];
     reserverSaksnummerTilNyFagsak: boolean;
     identState: IIdentState;
     ingenInfoOmBarnIDokument?: boolean;
-    valgtFagsak?: Fagsak;
-    barn?: IBarn[];
+    valgtFagsak?: FagsakForSelect;
     setValgtFagsak: (fagsak: string) => void;
     setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
@@ -25,64 +23,117 @@ interface Props {
     setAnnenPart: (annenPart: string) => void;
 }
 
-const getFagsakInfo = (valgtFagsak: Fagsak, barn?: IBarn[]) => {
-    const { sakstype, pleietrengendeIdent, behandlingsår: behandlingsÅr, relatertPersonIdent } = valgtFagsak;
+const getFagsakInfo = (valgtFagsak: FagsakForSelect) => {
+    const { sakstype, behandlingsår, pleietrengende, relatertPerson } = valgtFagsak;
 
     if (sakstype === DokumenttypeForkortelse.PPN) {
-        if (pleietrengendeIdent) {
-            return (
-                <FormattedMessage
-                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils"
-                    values={{ pleietrengendeIdent }}
-                />
-            );
-        }
-
         return (
-            <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.utenPleietrengende" />
+            <>
+                <Label>
+                    <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.tittel" />
+                </Label>
+
+                {pleietrengende ? (
+                    <>
+                        <span className="block mt-1">
+                            <FormattedMessage
+                                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.navn"
+                                values={{ navn: pleietrengende?.navn || 'ikke satt' }}
+                            />
+                        </span>
+
+                        <span className="block">
+                            <FormattedMessage
+                                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.fnr"
+                                values={{ pleietrengendeIdent: pleietrengende?.identitetsnummer || 'ikke satt' }}
+                            />
+                        </span>
+                    </>
+                ) : (
+                    <span className="block mt-1">
+                        <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.pils.utenPleietrengende" />
+                    </span>
+                )}
+            </>
         );
     }
 
     if (sakstype === DokumenttypeForkortelse.OMP || sakstype === DokumenttypeForkortelse.OMP_UT) {
-        if (behandlingsÅr) {
+        if (behandlingsår) {
             return (
-                <FormattedMessage
-                    id="fordeling.fagsakSelect.fagsakSelectedInfo.behandlingsÅr"
-                    values={{ behandlingsÅr }}
-                />
+                <div className="mt-8">
+                    <FormattedMessage
+                        id="fordeling.fagsakSelect.fagsakSelectedInfo.behandlingsÅr"
+                        values={{ behandlingsår }}
+                    />
+                </div>
             );
         }
 
         return null;
     }
+
     if (sakstype === DokumenttypeForkortelse.OMP_MA) {
         return (
-            <FormattedMessage
-                id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa"
-                values={{ relatertPersonIdent: relatertPersonIdent || 'ikke satt' }}
-            />
-        );
-    }
-    if (pleietrengendeIdent) {
-        const barnet = barn?.find((b) => b.identitetsnummer === pleietrengendeIdent);
-        if (barnet) {
-            const navn = `${barnet.fornavn} ${barnet.etternavn}`;
-            return (
-                <FormattedMessage
-                    id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnMedFnrOgNavn"
-                    values={{ navn, pleietrengendeIdent }}
-                />
-            );
-        }
-        return (
-            <FormattedMessage
-                id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnKunMedFnr"
-                values={{ pleietrengendeIdent }}
-            />
+            <>
+                <Label>
+                    <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa.tittel" />
+                </Label>
+
+                {relatertPerson ? (
+                    <>
+                        <span className="block mt-1">
+                            <FormattedMessage
+                                id={`fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa.navn`}
+                                values={{ navn: relatertPerson.navn || 'ikke satt' }}
+                            />
+                        </span>
+
+                        <span className="block">
+                            <FormattedMessage
+                                id={`fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa.fnr`}
+                                values={{ relatertPersonIdent: relatertPerson.identitetsnummer || 'ikke satt' }}
+                            />
+                        </span>
+                    </>
+                ) : (
+                    <span className="block mt-1">
+                        <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.relatertPerson.ompMa.ikkeSatt" />
+                    </span>
+                )}
+            </>
         );
     }
 
-    return <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barnTomt" />;
+    return (
+        <>
+            <Label>
+                <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barn.tittel" />
+            </Label>
+
+            {pleietrengende ? (
+                <>
+                    <span className="block mt-1">
+                        <FormattedMessage
+                            id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barn.navn"
+                            values={{ navn: pleietrengende.navn || 'ikke satt' }}
+                        />
+                    </span>
+
+                    <span className="block">
+                        <FormattedMessage
+                            id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barn.fnr"
+                            values={{ pleietrengendeIdent: pleietrengende?.identitetsnummer || 'ikke satt' }}
+                        />
+                    </span>
+                </>
+            ) : (
+                <span className="block mt-1">
+                    <FormattedMessage id="fordeling.fagsakSelect.fagsakSelectedInfo.pleietrengendeInfo.barn.ikkeSatt" />
+                </span>
+            )}
+        </>
+    );
 };
 
 const getLenkeTilK9Sak = (fagsakId: string) => {
@@ -96,7 +147,6 @@ const FagsakSelect = ({
     identState,
     ingenInfoOmBarnIDokument,
     valgtFagsak,
-    barn,
     setValgtFagsak,
     setReserverSaksnummerTilNyFagsak,
     setIdentAction,
@@ -122,7 +172,7 @@ const FagsakSelect = ({
             </Select>
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">{getFagsakInfo(valgtFagsak, barn)}</BodyShort>
+                    <BodyShort as="p">{getFagsakInfo(valgtFagsak)}</BodyShort>
                     {!valgtFagsak.reservert && (
                         <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
                             <BodyShort as="p">
@@ -134,6 +184,7 @@ const FagsakSelect = ({
                 </div>
             )}
         </div>
+
         <Checkbox
             onChange={() => {
                 setReserverSaksnummerTilNyFagsak(!reserverSaksnummerTilNyFagsak);

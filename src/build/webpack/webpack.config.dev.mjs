@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CircularDependencyPlugin from 'circular-dependency-plugin';
 import { config as dotenvConfig } from 'dotenv';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
@@ -16,8 +15,6 @@ webpackConfig.mode = 'development';
 webpackConfig.devServer = {
     hot: true,
 };
-
-/* eslint-disable no-underscore-dangle */
 
 // __dirname is not defined in ES module scope, so we need to derive it
 const __filename = fileURLToPath(import.meta.url);
@@ -34,10 +31,6 @@ webpackConfig.plugins.push(
     }),
     new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, '../../../dist'),
-    }),
-    new CircularDependencyPlugin({
-        exclude: /node_modules/,
-        failOnError: false,
     }),
     new ReactRefreshWebpackPlugin(),
     new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }),

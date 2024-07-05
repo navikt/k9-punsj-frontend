@@ -28,7 +28,7 @@
         "fagsakId": null,
         "gyldigPeriode": null,
         "pleietrengendeIdent": null,
-        "relatertPersonIdent": null,
+        "relatertPerson": null,
         "sakstype": "PPN",
         "behandlingsÅr": null
     }

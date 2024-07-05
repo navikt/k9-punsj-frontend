@@ -126,7 +126,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 const reservertSak: Fagsak = {
                     fagsakId,
                     sakstype,
-                    pleietrengendeIdent: identState.pleietrengendeId,
+                    pleietrengende: { navn: '', identitetsnummer: identState.pleietrengendeId, fødselsdato: '' },
                     gyldigPeriode: { fom: '', tom: '' },
                     reservertSaksnummer: true,
                     behandlingsår: behandlingsAar,

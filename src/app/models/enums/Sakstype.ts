@@ -69,8 +69,4 @@ export const omsorgspengerAleneOmOmsorgenSakstyper = [
 
 export const opplæringspengerSakstyper = [TilgjengeligSakstype.OPPLAERINGSPENGER, ...fellesSakstyper];
 
-export const omsorgspengerUtbetalingSakstyper = [
-    TilgjengeligSakstype.OMSORGSPENGER_UTBETALING,
-    TilgjengeligSakstype.ANNET,
-    TilgjengeligSakstype.SKAL_IKKE_PUNSJES,
-];
+export const omsorgspengerUtbetalingSakstyper = [TilgjengeligSakstype.OMSORGSPENGER_UTBETALING, ...fellesSakstyper];
