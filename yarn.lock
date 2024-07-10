@@ -3817,10 +3817,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:6.10.1, @navikt/aksel-icons@npm:^6.10.1":
-  version: 6.10.1
-  resolution: "@navikt/aksel-icons@npm:6.10.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.10.1%2F9ed7d24b6ecdea45f30e98fb86ca64cb91caaab5"
-  checksum: a73b0f620e7841e3e05702ee5ae0f58102b00815977219efe726635df128d4e40bd2b50136aa69452bfed2e0528ef123ae94950042b752f5404132ad2720ec83
+"@navikt/aksel-icons@npm:6.13.0, @navikt/aksel-icons@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "@navikt/aksel-icons@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.13.0%2F7378bad8c8230187b30a9e0b15675f7740dc96cf"
+  checksum: d3617d1c1166ebc4896f020ff163d4faf3cdd868306acc0d0dce69db920c358af80703abf6a38b6a71daf5c95f98d78b753a00d6aba3ae8f2bd7e55c95c222c8
   languageName: node
   linkType: hard
 
@@ -3831,10 +3831,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:6.10.1":
-  version: 6.10.1
-  resolution: "@navikt/ds-css@npm:6.10.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.10.1%2F4d4c458f7de7e8836f96b06119e44b4a3c2b23a2"
-  checksum: 779cbc777625d4e8a4325685e32566a5dce65e23f8d29e8ad586b47474dfb3004668e78ed74bcbe7eef39e80c0a330dcb364dd43a445736df44bb315a95afdef
+"@navikt/ds-css@npm:6.13.0":
+  version: 6.13.0
+  resolution: "@navikt/ds-css@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.13.0%2F9882c3009d59c19da414477877ab27aad65f7b13"
+  checksum: b96a73bf8cbb8c24fbf059914c097bdf28100c0393e6345c325ea2a82ef454877b041021227d53b68c7e2431aeda20919e95e301b7765b01616ce365d87268e7
   languageName: node
   linkType: hard
 
@@ -3855,21 +3855,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:6.10.1":
-  version: 6.10.1
-  resolution: "@navikt/ds-react@npm:6.10.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.10.1%2F0bbb741134b2a1233ba54f9f494b294eeab8991c"
+"@navikt/ds-react@npm:6.13.0":
+  version: 6.13.0
+  resolution: "@navikt/ds-react@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.13.0%2F2e522bc611fbaf96128c08e6d678d622a67d39e2"
   dependencies:
     "@floating-ui/react": 0.25.4
     "@floating-ui/react-dom": ^2.0.9
-    "@navikt/aksel-icons": ^6.10.1
-    "@navikt/ds-tokens": ^6.10.1
+    "@navikt/aksel-icons": ^6.13.0
+    "@navikt/ds-tokens": ^6.13.0
     clsx: ^2.1.0
     date-fns: ^3.0.0
     react-day-picker: 8.10.0
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 571036439e863e325bd7f50ad33ba18e30a4921e7e2902d6fa2e81ea87762e27e9702af958a65aa0fa2efe0ab8b97de7deafe206f4b4555e1808915f6c8ae9c1
+  checksum: 905a897db042f3a9ffadbd6b0cadae996889ee6b496bee836d70cae3d4ab058cd75c3c28576ab0b351ee5fea3cf9902fd1fbb7ab55b1a11a7e0172786dcf8809
   languageName: node
   linkType: hard
 
@@ -3891,10 +3891,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^6.10.1":
-  version: 6.10.1
-  resolution: "@navikt/ds-tokens@npm:6.10.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.10.1%2Fedde2f97afeb90b5d2912d8c98ff6f56457b9e3b"
-  checksum: 6cc29544f8bce86cd7f9dfcdcdcda6d0376b731843287a85611ef52c46d41e9160f7a8d557cc288c252176f2ac45064a0459713b4c989abc7869186c07afa3f7
+"@navikt/ds-tokens@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "@navikt/ds-tokens@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.13.0%2F6704caca2fffee89abdce0207e5dfe00b875482f"
+  checksum: a5bb9b0d8b4867912ecac8f04d21119a649c7fe6d3d74ca18782c5b5bf749d0dab6a3de6fb261d63d00620fcbd40c2f26e8aedab27c50d6fa7acc4fb1d45200c
   languageName: node
   linkType: hard
 
@@ -14267,10 +14267,10 @@ __metadata:
     "@grafana/faro-web-sdk": 1.7.3
     "@grafana/faro-web-tracing": 1.7.3
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": 6.10.1
-    "@navikt/ds-css": 6.10.1
+    "@navikt/aksel-icons": 6.13.0
+    "@navikt/ds-css": 6.13.0
     "@navikt/ds-icons": 3.4.3
-    "@navikt/ds-react": 6.10.1
+    "@navikt/ds-react": 6.13.0
     "@navikt/fnrvalidator": 2.1.0
     "@navikt/ft-plattform-komponenter": 2.5.10
     "@pmmmwh/react-refresh-webpack-plugin": 0.5.15
