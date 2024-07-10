@@ -9362,7 +9362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-wait-until@npm:3.0.1":
+"cypress-wait-until@npm:^3.0.1":
   version: 3.0.1
   resolution: "cypress-wait-until@npm:3.0.1"
   checksum: 487626011bf260b2e6cda68f1ced6cb4bb09013e479cd12681eeb577f788d5fd46c95040add9849d4ee1109c8e553330aadb42f2a252e8656bb8c3dbf776a087
@@ -14287,7 +14287,7 @@ __metadata:
     css-loader: 7.1.2
     css-minimizer-webpack-plugin: 7.0.0
     cypress: ^13.13.0
-    cypress-wait-until: 3.0.1
+    cypress-wait-until: ^3.0.1
     dayjs: 1.11.11
     dotenv: 16.4.5
     enzyme: 3.11.0
