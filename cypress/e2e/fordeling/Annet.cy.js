@@ -1,18 +1,13 @@
-import { ApiPath } from 'app/apiConfig';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse } from 'msw';
+import { ApiPath } from 'app/apiConfig';
 import journalpost from '../../fixtures/jpOMPUT305.json';
-import { should } from 'chai';
 
 const dokumenttype = 'Omsorgspenger';
 const valgteDokumentType = 'Annet';
 
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
-
-const klassifiserModalHeaderVent = 'Vil du lagre følgende informasjon til journalposten og sett på vent?';
-const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til journalposten?';
-
-const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
 
 describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
     it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
