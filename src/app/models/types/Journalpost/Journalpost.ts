@@ -1,6 +1,11 @@
 import journalpostStatus from 'app/models/enums/JournalpostStatus';
 import Fagsak from 'app/types/Fagsak';
 
+export interface IJournalpostVent {
+    venterTil: string;
+    venteÅrsak: string;
+}
+
 export interface IJournalpost {
     journalpostId: string;
     norskIdent?: string;
@@ -18,6 +23,7 @@ export interface IJournalpost {
     erSaksbehandler: boolean;
     erFerdigstilt?: boolean;
     sak?: Fagsak;
+    venter?: IJournalpostVent;
 }
 
 export interface IDokument {
