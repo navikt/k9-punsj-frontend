@@ -8,6 +8,7 @@ import nynorsktekster from '../../i18n/nn.json';
 
 export interface IIntlProviderProps {
     locale: Locale;
+    children: React.ReactNode;
 }
 
 const IntlProvider: React.FunctionComponent<IIntlProviderProps> = ({ locale, children }) => {

@@ -1,11 +1,11 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "esModuleInterop": true,
         "jsx": "react",
-        "baseUrl": ".",
-        "types": ["jest", "@testing-library/jest-dom"]
+        "baseUrl": "."
+        // "types": ["jest", "@testing-library/jest-dom"]
     },
     "exclude": ["../../cypress.config.ts"],
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+    "include": ["./testConfig.js, **/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
 }
