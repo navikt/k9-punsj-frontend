@@ -15,6 +15,11 @@ import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
 
 import './pleietrengende.less';
+import { get } from 'app/utils/apiUtils';
+import { ApiPath } from 'app/apiConfig';
+import { Person } from 'app/models/types/Person';
+
+interface PersonResponse {}
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -62,6 +67,14 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         }
     }, [sokersIdent, visPleietrengende, skalHenteBarn]);
 
+    const hentPleitrengendeInfo = (fnr: string) => {
+        get(ApiPath.PERSON, undefined, { 'X-Nav-NorskIdent': fnr }, (response, data: Person) => {
+            if (response.status === 200) {
+                console.log('Person', data);
+            }
+        });
+    };
+
     if (!visPleietrengende) {
         return null;
     }
@@ -73,6 +86,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         }
 
         if (identFromInput.length === 11) {
+            hentPleitrengendeInfo(identFromInput);
             setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
         }
 
