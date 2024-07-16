@@ -19,8 +19,6 @@ import { get } from 'app/utils/apiUtils';
 import { ApiPath } from 'app/apiConfig';
 import { Person } from 'app/models/types/Person';
 
-interface PersonResponse {}
-
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
     fellesState: IFellesState;
@@ -60,6 +58,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
+    const [pleietrengendeInfo, setPleietrengendeInfo] = useState<Person | undefined>(undefined);
 
     useEffect(() => {
         if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
@@ -70,7 +69,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const hentPleitrengendeInfo = (fnr: string) => {
         get(ApiPath.PERSON, undefined, { 'X-Nav-NorskIdent': fnr }, (response, data: Person) => {
             if (response.status === 200) {
-                console.log('Person', data);
+                setPleietrengendeInfo(data);
             }
         });
     };
@@ -82,6 +81,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
         if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
+            setPleietrengendeInfo(undefined);
             setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
         }
 
@@ -92,6 +92,8 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
         setPleietrengendeIdent(identFromInput);
     };
+
+    console.log('pleietrengendeInfo', pleietrengendeInfo);
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
         setIdentAction(identState.søkerId, event.target.value, identState.annenSokerIdent);
@@ -112,6 +114,17 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     };
 
     const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
+
+    const pleietrengendeInfoVisning = () => {
+        return (
+            <div className="ml-4">
+                <p>
+                    {pleietrengendeInfo?.fornavn} {pleietrengendeInfo?.etternavn}
+                </p>
+                <p>{pleietrengendeInfo?.fødselsdato}</p>
+            </div>
+        );
+    };
 
     if (!visPleietrengende) {
         return null;
@@ -157,7 +170,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 !!fellesState.hentBarnForbidden ||
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
-                    <div className="fyllUtIdentAnnetBarnContainer">
+                    <div className="flex">
                         <TextField
                             label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
                             onChange={pleietrengendeIdentInputFieldOnChange}
@@ -173,6 +186,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             }
                             disabled={pleietrengendeHarIkkeFnr}
                         />
+                        {pleietrengendeInfo && pleietrengendeInfoVisning()}
                     </div>
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
