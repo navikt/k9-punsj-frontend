@@ -1,8 +1,9 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { render } from '@testing-library/react';
 import React, { ReactNode } from 'react';
 import { IntlShape } from 'react-intl';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { legacy_createStore as createStore } from 'redux';
 
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { RootStateType, rootReducer } from '../app/state/RootState';
@@ -19,6 +20,7 @@ export const renderWithIntl = (component: ReactNode) => render(<IntlProvider loc
 
 interface IReduxTestProvider {
     initialState?: RootStateType;
+    children: React.ReactNode;
 }
 
 export const ReduxTestProvider: React.FunctionComponent<IReduxTestProvider> = ({ initialState, children }) => {
