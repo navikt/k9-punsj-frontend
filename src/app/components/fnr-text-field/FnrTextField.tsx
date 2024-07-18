@@ -46,7 +46,7 @@ const FnrTextField: React.FC<Props> = ({
                     disabled={disabled}
                 />
 
-                <PersonInfo loading={loadingPersonsInfo} error={errorPersonsInfo} person={person} />
+                {!disabled && <PersonInfo loading={loadingPersonsInfo} error={errorPersonsInfo} person={person} />}
             </div>
 
             {errorValidationMessage !== undefined && (

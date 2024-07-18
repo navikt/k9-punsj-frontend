@@ -72,6 +72,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
         setPleietrengendeInfoLoading(true);
+
         getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
             setPleietrengendeInfoLoading(false);
             if (response.status === 200) {
@@ -112,10 +113,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
         setPleietrengendeHarIkkeFnr(checked);
+        setPleietrengendeInfo(undefined);
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setPleietrengendeInfo(undefined);
             setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
         }
     };
