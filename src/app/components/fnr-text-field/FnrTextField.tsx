@@ -29,12 +29,13 @@ const FnrTextField: React.FC<Props> = ({
 }) => {
     return (
         <div className="mt-6">
-            <Label>
+            <Label htmlFor="fnr-textfield">
                 <FormattedMessage id={labelId} />
             </Label>
 
             <div className="flex mt-3">
                 <TextField
+                    id="fnr-textfield"
                     label={<FormattedMessage id={labelId} />}
                     hideLabel
                     value={value}
