@@ -465,7 +465,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(fnrBarnIkkeFraList);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
@@ -588,7 +588,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.findByText(/Nei/i).should('exist').click();
         cy.findByLabelText('Velg fagsak').should('not.exist');
         cy.findByLabelText('Reserver saksnummer til ny fagsak').should('not.exist');
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('not.exist');
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('not.exist');
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('not.exist');
         cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('not.exist');
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -747,7 +747,7 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(fnrBarnIkkeFraList);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
@@ -787,7 +787,7 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
 
     it('Test uten fagsaker, uten barn liste med annet barn', () => {
         cy.findByLabelText('Velg hvilket barn det gjelder').should('not.exist');
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(fnrBarnIkkeFraList);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');
@@ -836,7 +836,7 @@ describe(`Fordeling ${dokumenttype} søker uten liste med barn`, { testIsolation
     });
 
     it('Test søker uten barn liste med annet barn', () => {
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(fnrBarnIkkeFraList);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(fnrBarnIkkeFraList);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Barnets ID/i).should('exist');

@@ -365,7 +365,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(pleietrengende);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(pleietrengende);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Pleietrengendes ID/i).should('exist');
@@ -488,7 +488,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.findByText(/Nei/i).should('exist').click();
         cy.findByLabelText('Velg fagsak').should('not.exist');
         cy.findByLabelText('Reserver saksnummer til ny fagsak').should('not.exist');
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('not.exist');
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('not.exist');
         cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('not.exist');
         cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('not.exist');
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
@@ -617,7 +617,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.findByLabelText('Reserver saksnummer til ny fagsak').click();
 
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(pleietrengende);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(pleietrengende);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Pleietrengendes ID/i).should('exist');
@@ -714,7 +714,7 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
     });
 
     it('Test uten fagsaker med pleitrengende', () => {
-        cy.findByLabelText('Pleietrengendes fødselsnummer').should('exist').type(pleietrengende);
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(pleietrengende);
 
         cy.get('.journalpostpanel').within(() => {
             cy.findByText(/Pleietrengendes ID/i).should('exist');
