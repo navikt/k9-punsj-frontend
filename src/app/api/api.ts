@@ -1,6 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { DokumenttypeForkortelse } from 'app/models/enums';
-import { IJournalpost, IPeriode } from 'app/models/types';
+import { IJournalpost, IPeriode, Person } from 'app/models/types';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
 import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
@@ -178,3 +178,6 @@ export const getJournalpostEtterKopiering = (journalpostid: string): Promise<IJo
             },
         );
     });
+
+export const getPersonInfo = (norskIdent: string, callback: (response: Response, data: Person) => void) =>
+    get(ApiPath.PERSON, undefined, { 'X-Nav-NorskIdent': norskIdent }, callback);

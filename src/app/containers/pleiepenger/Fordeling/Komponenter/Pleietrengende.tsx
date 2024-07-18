@@ -13,11 +13,11 @@ import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
+import { Person } from 'app/models/types/Person';
+import PersonInfo from 'app/components/person-info/PersonInfo';
+import { getPersonInfo } from 'app/api/api';
 
 import './pleietrengende.less';
-import { get } from 'app/utils/apiUtils';
-import { ApiPath } from 'app/apiConfig';
-import { Person } from 'app/models/types/Person';
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -59,6 +59,8 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
     const [pleietrengendeInfo, setPleietrengendeInfo] = useState<Person | undefined>(undefined);
+    const [pleietrengendeInfoLoading, setPleietrengendeInfoLoading] = useState<boolean>(false);
+    const [pleietrengendeInfoError, setPleietrengendeInfoError] = useState<boolean>(false);
 
     useEffect(() => {
         if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
@@ -66,10 +68,15 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         }
     }, [sokersIdent, visPleietrengende, skalHenteBarn]);
 
-    const hentPleitrengendeInfo = (fnr: string) => {
-        get(ApiPath.PERSON, undefined, { 'X-Nav-NorskIdent': fnr }, (response, data: Person) => {
+    const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
+        setPleietrengendeInfoError(false);
+        setPleietrengendeInfoLoading(true);
+        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+            setPleietrengendeInfoLoading(false);
             if (response.status === 200) {
                 setPleietrengendeInfo(data);
+            } else {
+                setPleietrengendeInfoError(true);
             }
         });
     };
@@ -86,14 +93,15 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         }
 
         if (identFromInput.length === 11) {
-            hentPleitrengendeInfo(identFromInput);
+            if (!IdentRules.erUgyldigIdent(identFromInput)) {
+                hentPleietrengendeInfo(pleietrengendeIdent);
+            }
+
             setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
         }
 
         setPleietrengendeIdent(identFromInput);
     };
-
-    console.log('pleietrengendeInfo', pleietrengendeInfo);
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
         setIdentAction(identState.søkerId, event.target.value, identState.annenSokerIdent);
@@ -115,20 +123,10 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
     const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
 
-    const pleietrengendeInfoVisning = () => {
-        return (
-            <div className="ml-4">
-                <p>
-                    {pleietrengendeInfo?.fornavn} {pleietrengendeInfo?.etternavn}
-                </p>
-                <p>{pleietrengendeInfo?.fødselsdato}</p>
-            </div>
-        );
-    };
-
     if (!visPleietrengende) {
         return null;
     }
+
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
@@ -186,7 +184,12 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                             }
                             disabled={pleietrengendeHarIkkeFnr}
                         />
-                        {pleietrengendeInfo && pleietrengendeInfoVisning()}
+
+                        <PersonInfo
+                            loading={pleietrengendeInfoLoading}
+                            error={pleietrengendeInfoError}
+                            person={pleietrengendeInfo}
+                        />
                     </div>
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
