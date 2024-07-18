@@ -14,7 +14,6 @@ import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
 import { Person } from 'app/models/types/Person';
-import PersonInfo from 'app/components/person-info/PersonInfo';
 import { getPersonInfo } from 'app/api/api';
 
 import './pleietrengende.less';

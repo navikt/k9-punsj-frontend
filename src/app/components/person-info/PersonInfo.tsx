@@ -22,8 +22,10 @@ const PersonInfo: React.FC<Props> = ({ person, loading, error }) => {
 
     if (error) {
         return (
-            <div className="ml-10 mt-10 flex justify-center items-center">
-                <FormattedMessage id="personInfo.error" />
+            <div className="ml-5 flex justify-center items-center">
+                <BodyShort as="p">
+                    <FormattedMessage id="personInfo.error" />
+                </BodyShort>
             </div>
         );
     }
