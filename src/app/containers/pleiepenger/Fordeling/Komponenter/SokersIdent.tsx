@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { TextField } from '@navikt/ds-react';
+import { Label, TextField } from '@navikt/ds-react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
-import { IJournalpost } from 'app/models/types';
+import { IJournalpost, Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
+import { getPersonInfo } from 'app/api/api';
+import PersonInfo from 'app/components/person-info/PersonInfo';
 
 interface ISokersIdentProps {
     journalpost: IJournalpost;
@@ -46,6 +48,10 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
 }) => {
     const intl = useIntl();
 
+    const [søkersInfo, setSøkersInfo] = useState<Person | undefined>(undefined);
+    const [søkersInfoLoading, setSøkersInfoLoading] = useState<boolean>(false);
+    const [søkersInfoError, setSøkersInfoError] = useState<boolean>(false);
+
     const skalVises = erInntektsmeldingUtenKrav || (!!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype));
     const journalpostident = journalpost?.norskIdent;
 
@@ -61,6 +67,31 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         } else {
             setSokersIdent('');
             setIdentAction('', '', identState.annenSokerIdent);
+        }
+    };
+
+    const hentSøkersInfo = (søkersFødselsnummer: string) => {
+        setSøkersInfoError(false);
+        setSøkersInfoLoading(true);
+        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+            setSøkersInfoLoading(false);
+            if (response.status === 200) {
+                setSøkersInfo(data);
+            } else {
+                setSøkersInfoError(true);
+            }
+        });
+    };
+
+    const handleSøkersIdentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleSøkerIdChange(event);
+
+        const identFromInput = event.target.value.replace(/\D+/, '');
+
+        if (identFromInput.length === 11 && !IdentRules.erUgyldigIdent(identFromInput)) {
+            hentSøkersInfo(identFromInput);
+        } else {
+            setSøkersInfo(undefined);
         }
     };
 
@@ -93,22 +124,29 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
             />
 
             {riktigIdentIJournalposten === JaNei.NEI && (
-                <>
-                    <VerticalSpacer sixteenPx />
-                    <TextField
-                        label={intlHelper(intl, 'ident.identifikasjon.felt')}
-                        onChange={handleSøkerIdChange}
-                        autoComplete="off"
-                        value={sokersIdent}
-                        className="bold-label ident-soker-1"
-                        maxLength={11}
-                        error={
-                            identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
-                                ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                : undefined
-                        }
-                    />
-                </>
+                <div className="mt-6">
+                    <Label>
+                        <FormattedMessage id="ident.identifikasjon.felt" />
+                    </Label>
+                    <div className="flex mt-3">
+                        <VerticalSpacer sixteenPx />
+                        <TextField
+                            label={<FormattedMessage id="ident.identifikasjon.felt" />}
+                            hideLabel
+                            onChange={(event) => handleSøkersIdentChange(event)}
+                            autoComplete="off"
+                            value={sokersIdent}
+                            htmlSize={27}
+                            maxLength={11}
+                            error={
+                                identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
+                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                    : undefined
+                            }
+                        />
+                        <PersonInfo loading={søkersInfoLoading} error={søkersInfoError} person={søkersInfo} />
+                    </div>
+                </div>
             )}
         </>
     );

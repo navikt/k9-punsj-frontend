@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Alert, Checkbox, Select, TextField } from '@navikt/ds-react';
+import { Alert, Checkbox, Label, Select, TextField } from '@navikt/ds-react';
 
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
@@ -117,6 +117,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
+            setPleietrengendeInfo(undefined);
             setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
         }
     };
@@ -168,29 +169,37 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 !!fellesState.hentBarnForbidden ||
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
-                    <div className="flex">
-                        <TextField
-                            label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
-                            onChange={pleietrengendeIdentInputFieldOnChange}
-                            className="bold-label ident-soker-2"
-                            autoComplete="off"
-                            maxLength={11}
-                            size="medium"
-                            error={
-                                isPleitrengendeFnrErSammeSomSøker ||
-                                (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
-                            }
-                            disabled={pleietrengendeHarIkkeFnr}
-                        />
+                    <div className="mt-6">
+                        <Label>
+                            <FormattedMessage id="ident.identifikasjon.pleietrengende" />
+                        </Label>
+                        <div className="flex mt-3">
+                            <TextField
+                                label={<FormattedMessage id="ident.identifikasjon.pleietrengende" />}
+                                hideLabel
+                                value={pleietrengendeIdent}
+                                onChange={pleietrengendeIdentInputFieldOnChange}
+                                autoComplete="off"
+                                htmlSize={27}
+                                maxLength={11}
+                                error={
+                                    isPleitrengendeFnrErSammeSomSøker ||
+                                    (identState.pleietrengendeId &&
+                                        IdentRules.erUgyldigIdent(identState.pleietrengendeId))
+                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                        : undefined
+                                }
+                                disabled={pleietrengendeHarIkkeFnr}
+                            />
 
-                        <PersonInfo
-                            loading={pleietrengendeInfoLoading}
-                            error={pleietrengendeInfoError}
-                            person={pleietrengendeInfo}
-                        />
+                            <PersonInfo
+                                loading={pleietrengendeInfoLoading}
+                                error={pleietrengendeInfoError}
+                                person={pleietrengendeInfo}
+                            />
+                        </div>
                     </div>
+
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
                         <>
