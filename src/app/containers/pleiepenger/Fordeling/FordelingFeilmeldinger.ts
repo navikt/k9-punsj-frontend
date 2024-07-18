@@ -1,7 +1,7 @@
 import { idnr } from '@navikt/fnrvalidator';
-
 import { IdentRules } from 'app/rules';
 import intlHelper from '../../../utils/intlUtils';
+import { useIntl } from 'react-intl';
 
 export const erUgyldigIdent = (ident: string | null): boolean => {
     if (!ident || !ident.length) return true;
@@ -14,8 +14,8 @@ export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     annenIdent: string | null,
     sokerIdent: string | null,
     barnIdent: string | null,
-    intl: any,
 ) => {
+    const intl = useIntl();
     if (annenIdent && IdentRules.erUgyldigIdent(annenIdent)) return intlHelper(intl, 'ident.feil.ugyldigident');
     if (annenIdent && sokerIdent && annenIdent.length > 0 && annenIdent === sokerIdent)
         return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiSoker');

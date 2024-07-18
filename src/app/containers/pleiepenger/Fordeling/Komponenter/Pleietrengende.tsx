@@ -18,6 +18,7 @@ import PersonInfo from 'app/components/person-info/PersonInfo';
 import { getPersonInfo } from 'app/api/api';
 
 import './pleietrengende.less';
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
 export interface IPleietrengendeStateProps {
     identState: IIdentState;
@@ -81,12 +82,9 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
         });
     };
 
-    if (!visPleietrengende) {
-        return null;
-    }
-
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
+
         if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
             setPleietrengendeInfo(undefined);
             setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
@@ -169,36 +167,21 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 !!fellesState.hentBarnForbidden ||
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
-                    <div className="mt-6">
-                        <Label>
-                            <FormattedMessage id="ident.identifikasjon.pleietrengende" />
-                        </Label>
-                        <div className="flex mt-3">
-                            <TextField
-                                label={<FormattedMessage id="ident.identifikasjon.pleietrengende" />}
-                                hideLabel
-                                value={pleietrengendeIdent}
-                                onChange={pleietrengendeIdentInputFieldOnChange}
-                                autoComplete="off"
-                                htmlSize={27}
-                                maxLength={11}
-                                error={
-                                    isPleitrengendeFnrErSammeSomSøker ||
-                                    (identState.pleietrengendeId &&
-                                        IdentRules.erUgyldigIdent(identState.pleietrengendeId))
-                                        ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                        : undefined
-                                }
-                                disabled={pleietrengendeHarIkkeFnr}
-                            />
-
-                            <PersonInfo
-                                loading={pleietrengendeInfoLoading}
-                                error={pleietrengendeInfoError}
-                                person={pleietrengendeInfo}
-                            />
-                        </div>
-                    </div>
+                    <FnrTextField
+                        labelId="ident.identifikasjon.pleietrengende"
+                        value={pleietrengendeIdent}
+                        loadingPersonsInfo={pleietrengendeInfoLoading}
+                        errorPersonsInfo={pleietrengendeInfoError}
+                        person={pleietrengendeInfo}
+                        errorValidationMessage={
+                            isPleitrengendeFnrErSammeSomSøker ||
+                            (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
+                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                : undefined
+                        }
+                        disabled={pleietrengendeHarIkkeFnr}
+                        onChange={pleietrengendeIdentInputFieldOnChange}
+                    />
 
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (

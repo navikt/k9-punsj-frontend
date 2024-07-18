@@ -4,14 +4,14 @@ import { BodyShort, Label, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { prettifyDateString } from 'app/utils/date-utils/src/format';
 
-interface PersonInfoProps {
+interface Props {
     loading: boolean;
     error: boolean;
     person?: Person;
 }
 
-const PersonInfo: React.FC<PersonInfoProps> = ({ person, loading, error }) => {
-    // TODO: add person not found error message'
+const PersonInfo: React.FC<Props> = ({ person, loading, error }) => {
+    // TODO: add person not found error message
     if (loading) {
         return (
             <div className="ml-10 flex justify-center items-center">

@@ -12,6 +12,7 @@ import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { getPersonInfo } from 'app/api/api';
 import PersonInfo from 'app/components/person-info/PersonInfo';
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
 interface ISokersIdentProps {
     journalpost: IJournalpost;
@@ -124,29 +125,21 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
             />
 
             {riktigIdentIJournalposten === JaNei.NEI && (
-                <div className="mt-6">
-                    <Label>
-                        <FormattedMessage id="ident.identifikasjon.felt" />
-                    </Label>
-                    <div className="flex mt-3">
-                        <VerticalSpacer sixteenPx />
-                        <TextField
-                            label={<FormattedMessage id="ident.identifikasjon.felt" />}
-                            hideLabel
-                            onChange={(event) => handleSøkersIdentChange(event)}
-                            autoComplete="off"
-                            value={sokersIdent}
-                            htmlSize={27}
-                            maxLength={11}
-                            error={
-                                identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
-                            }
-                        />
-                        <PersonInfo loading={søkersInfoLoading} error={søkersInfoError} person={søkersInfo} />
-                    </div>
-                </div>
+                <>
+                    <FnrTextField
+                        labelId="ident.identifikasjon.felt"
+                        value={sokersIdent}
+                        loadingPersonsInfo={søkersInfoLoading}
+                        errorPersonsInfo={søkersInfoError}
+                        person={søkersInfo}
+                        errorValidationMessage={
+                            identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
+                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                : undefined
+                        }
+                        onChange={(event) => handleSøkersIdentChange(event)}
+                    />
+                </>
             )}
         </>
     );
