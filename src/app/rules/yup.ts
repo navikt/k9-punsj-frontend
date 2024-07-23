@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 
 import { IdentRules } from './IdentRules';
@@ -85,8 +84,7 @@ export const periodeMedTimerOgMinutter = yup.object({
         fom: yup.string().required().label('Fra og med'),
         tom: yup.string().required().label('Til og med'),
     }),
-    timer,
-    minutter,
+    perDag: timerOgMinutter,
 });
 export const arbeidstimerPeriode = yup.object().shape({
     periode: yup.object({

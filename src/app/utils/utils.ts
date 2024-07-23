@@ -1,5 +1,10 @@
 import { DokumenttypeForkortelse, FordelingDokumenttype, Sakstype } from 'app/models/enums';
-import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
+import {
+    ArbeidstidPeriodeMedTimer,
+    IArbeidstidPeriodeMedTimer,
+    ITimerOgMinutterString,
+    Periodeinfo,
+} from 'app/models/types';
 import { ROUTES } from 'app/constants/routes';
 import { Tidsformat } from './timeUtils';
 
@@ -139,7 +144,7 @@ export const getModiaPath = (fødselsnummer?: string) => {
     return null;
 };
 
-export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: { timer: string; minutter: string }): string {
+export function timerOgMinutterTilTimerMedDesimaler({ timer, minutter }: ITimerOgMinutterString): string {
     const totalMinutes = parseInt(timer || '0', 10) * 60 + parseInt(minutter || '0', 10);
     const timerOgDesimaler = totalMinutes / 60;
     if (Number.isNaN(timerOgDesimaler)) {
