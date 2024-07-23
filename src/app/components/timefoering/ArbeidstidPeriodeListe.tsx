@@ -1,5 +1,5 @@
 import { FieldArray, Formik } from 'formik';
-import React from 'react';
+import React, { Fragment } from 'react';
 import * as yup from 'yup';
 
 import { AddCircle } from '@navikt/ds-icons';
@@ -44,19 +44,19 @@ export default function ArbeidstidPeriodeListe({
         >
             {({ handleSubmit, values }) => (
                 <>
-                    {heading && <Heading size="small">{heading}</Heading>}
+                    <Heading size="small">{heading}</Heading>
                     <FieldArray
                         name="perioder"
                         render={(arrayHelpers) => (
                             <div>
                                 {values.perioder.map((periode, index) => (
-                                    <ArbeidstidPeriode
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        key={index}
-                                        name={`perioder.${index}`}
-                                        soknadsperioder={soknadsperioder}
-                                        remove={() => arrayHelpers.remove(index)}
-                                    />
+                                    <Fragment key={index}>
+                                        <ArbeidstidPeriode
+                                            name={`perioder.${index}`}
+                                            soknadsperioder={soknadsperioder}
+                                            remove={() => arrayHelpers.remove(index)}
+                                        />
+                                    </Fragment>
                                 ))}
                                 <div className="mb-8 mt-4">
                                     <Button

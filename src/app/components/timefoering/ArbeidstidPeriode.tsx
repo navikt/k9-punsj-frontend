@@ -113,7 +113,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     </div>
 
                     {tidsformatField.value === Tidsformat.TimerOgMin && (
-                        <ArbeidstidPeriodeTimerOgMinutter name={`${name}`} />
+                        <ArbeidstidPeriodeTimerOgMinutter name={name} />
                     )}
                     {tidsformatField.value === Tidsformat.Desimaler && <ArbeidstidPeriodeDesimaler name={`${name}`} />}
                 </div>
