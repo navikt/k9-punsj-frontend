@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 
 import { Checkbox, ToggleGroup } from '@navikt/ds-react';
 
-import { IOmsorgstid, IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
+import { IOmsorgstid, IPeriode, ITimerOgMinutter, ITimerOgMinutterString, Periodeinfo } from 'app/models/types';
 
 import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
@@ -44,7 +44,7 @@ const TilsynPeriodeDesimaler = ({ name }: { name: string }) => {
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
-    const [, timerOgMinutterMeta] = useField<ITimerOgMinutter>(`${name}.perDag`);
+    const [, timerOgMinutterMeta] = useField<ITimerOgMinutterString>(`${name}.perDag`);
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
@@ -95,11 +95,9 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                                 onChange={(v: Tidsformat) => {
                                     formik.setFieldValue(`${name}.tidsformat`, v);
                                     if (v === Tidsformat.Desimaler) {
-                                        console.log(timerOgMinutterMeta.value);
                                         const desimaler = timerOgMinutterTilTimerMedDesimaler(
                                             timerOgMinutterMeta.value,
                                         );
-                                        console.log(desimaler);
                                         formik.setFieldValue(`${name}.perDagString`, desimaler);
                                     } else if (v === Tidsformat.TimerOgMin) {
                                         const timerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
