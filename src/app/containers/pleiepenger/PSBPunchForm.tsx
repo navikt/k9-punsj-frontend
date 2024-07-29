@@ -221,11 +221,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
             return { feilmeldingStier: updatedFeilmeldingStier }; // Update state with the modified Set
         });
-        // TODO: Sett ident Søker og Pleietrengende etter sideoppdatering
-        // eller fra jp eller fra info eller fra søknad
-        // for å vise right info i JournalpostPanel
 
-        const { søkerId, pleietrengendeId } = this.props.identState;
+        // henter Søker og Pleietrengende identer fra søknad etter sideoppdatering, fordi identState kan være tom
+        const søkerId = this.props.identState.søkerId || this.props.punchFormState.soknad?.soekerId;
+        const pleietrengendeId =
+            this.props.identState.pleietrengendeId || this.props.punchFormState.soknad?.barn?.norskIdent;
+
         if (søkerId && pleietrengendeId) {
             this.props.hentPerioder(søkerId, pleietrengendeId);
         }
