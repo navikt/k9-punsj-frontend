@@ -15,7 +15,8 @@ const lagDokumentdata = (values: BrevFormValues) => {
                     felterSomSkalMed[key] = values[key];
                 }
             } else if (key === BrevFormKeys.fritekstbrev) {
-                if (values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV) {
+                if (values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV ||
+                    values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK) {
                     felterSomSkalMed[key] = values[key];
                 }
             } else {

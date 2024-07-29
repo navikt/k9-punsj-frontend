@@ -228,6 +228,16 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     />
                                 )}
 
+                                {values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK && (
+                                    <GenereltFritekstbrevMal
+                                        setVisBrevIkkeSendtInfoboks={() =>
+                                            setVisBrevIkkeSendtInfoboks &&
+                                            setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
+                                        }
+                                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
+                                    />
+                                )}
+
                                 <VerticalSpacer sixteenPx />
 
                                 {values.brevmalkode && (
