@@ -70,6 +70,7 @@ import { Utenlandsopphold } from './Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
 import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
+import { IFellesState } from 'app/state/reducers/FellesReducer';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -82,6 +83,7 @@ export interface IPunchFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
+    fellesState: IFellesState;
 }
 
 function withHooks<P>(Component: ComponentType<IPunchFormComponentProps>) {
@@ -222,10 +224,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return { feilmeldingStier: updatedFeilmeldingStier }; // Update state with the modified Set
         });
 
-        // henter Søker og Pleietrengende identer fra søknad etter sideoppdatering, fordi identState kan være tom
-        const søkerId = this.props.identState.søkerId || this.props.punchFormState.soknad?.soekerId;
+        // henter Søker og Pleietrengende identer fra jp etter sideoppdatering, fordi identState kan være tom
+        const søkerId = this.props.identState.søkerId || this.props.fellesState.journalpost?.norskIdent;
         const pleietrengendeId =
-            this.props.identState.pleietrengendeId || this.props.punchFormState.soknad?.barn?.norskIdent;
+            this.props.identState.pleietrengendeId || this.props.fellesState.journalpost?.sak?.pleietrengendeIdent;
 
         if (søkerId && pleietrengendeId) {
             this.props.hentPerioder(søkerId, pleietrengendeId);
@@ -1280,6 +1282,7 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
     signaturState: state.PLEIEPENGER_SYKT_BARN.signaturState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
+    fellesState: state.felles,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
