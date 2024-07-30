@@ -5,7 +5,7 @@
     "repository": "https://github.com/navikt/k9-punsj-frontend",
     "license": "MIT",
     "dependencies": {
-        "@babel/runtime": "7.24.8",
+        "@babel/runtime": "7.25.0",
         "@grafana/faro-web-sdk": "1.8.2",
         "@grafana/faro-web-tracing": "1.8.2",
         "@k9-punsj-frontend/server": "workspace:",
@@ -98,9 +98,9 @@
     },
     "devDependencies": {
         "@babel/cli": "7.24.8",
-        "@babel/core": "7.24.9",
+        "@babel/core": "7.25.2",
         "@babel/plugin-transform-runtime": "7.24.7",
-        "@babel/preset-env": "7.24.8",
+        "@babel/preset-env": "7.25.2",
         "@babel/preset-react": "7.24.7",
         "@babel/preset-typescript": "7.24.7",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.15",
