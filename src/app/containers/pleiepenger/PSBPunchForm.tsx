@@ -232,6 +232,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (søkerId && pleietrengendeId) {
             this.props.hentPerioder(søkerId, pleietrengendeId);
         }
+
+        // Update barn norskIdent if it's different from pleietrengendeId in identState
+        // Midlertidig løsning
+        const { soknad } = this.props.punchFormState;
+        if (
+            soknad?.barn?.norskIdent &&
+            this.props.identState.pleietrengendeId &&
+            soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
+        ) {
+            this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
+        }
     }
 
     componentDidUpdate() {
@@ -244,15 +255,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
-                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
-            }
-            // Update barn norskIdent if it's different from pleietrengendeId in identState
-            // Midlertidig løsning
-            if (
-                soknad.barn?.norskIdent &&
-                this.props.identState.pleietrengendeId &&
-                soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
-            ) {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
