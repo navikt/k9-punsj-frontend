@@ -134,13 +134,14 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     variant="secondary"
                     key={soknadId}
                     size="small"
-                    disabled={
+                    /*disabled={
                         (søknad.barn.norskIdent &&
                             pleietrengendeId !== søknad.barn.norskIdent &&
                             !!pleietrengendeId &&
                             pleietrengendeId !== null) ||
                         (!!k9saksnummer && fagsakId !== k9saksnummer)
-                    }
+                    }*/
+                    disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     <FormattedMessage id="mappe.lesemodus.knapp.velg" />
@@ -149,7 +150,6 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
             rows.push(
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

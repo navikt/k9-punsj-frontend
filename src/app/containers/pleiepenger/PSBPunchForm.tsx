@@ -246,6 +246,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
+            // Update barn norskIdent if it's different from pleietrengendeId in identState
+            // Midlertidig løsning
+            if (
+                soknad.barn?.norskIdent &&
+                this.props.identState.pleietrengendeId &&
+                soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
+            ) {
+                this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
+            }
         }
     }
 
