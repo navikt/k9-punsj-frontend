@@ -24,8 +24,8 @@ export const periodeMedTimerTilKalenderdag = (periodeMedTimerOgMinutter: Periode
     return getDatesInDateRange(dateRange).map((date) => ({
         date,
         tid: {
-            timer: String(periodeMedTimerOgMinutter.perDag.timer),
-            minutter: String(periodeMedTimerOgMinutter.perDag.minutter),
+            timer: String(periodeMedTimerOgMinutter.timer),
+            minutter: String(periodeMedTimerOgMinutter.minutter),
         },
     }));
 };
