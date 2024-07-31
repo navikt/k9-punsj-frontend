@@ -178,7 +178,8 @@ export interface ITimerOgMinutterString {
 }
 
 export interface IOmsorgstid {
-    perDag: ITimerOgMinutterString;
+    timer?: string;
+    minutter?: string;
     perDagString: string;
     tidsformat: Tidsformat;
 }
@@ -186,15 +187,14 @@ export interface IOmsorgstid {
 export class PeriodeMedTimerMinutter implements DeepRequired<Periodeinfo<IOmsorgstid>> {
     periode: Periode;
     tidsformat: Tidsformat;
-    perDag: Required<ITimerOgMinutterString>;
+    timer: string;
+    minutter: string;
     perDagString: string;
 
     constructor(pmf: Periodeinfo<IOmsorgstid>) {
         this.periode = new Periode(pmf.periode || {});
-        this.perDag = {
-            timer: pmf.perDag?.timer ?? '0',
-            minutter: pmf.perDag?.minutter ?? '0',
-        };
+        this.timer = pmf.timer ?? '0';
+        this.minutter = pmf.minutter ?? '0';
         this.perDagString = pmf.perDagString ?? '';
         this.tidsformat = pmf.tidsformat ?? Tidsformat.TimerOgMin;
     }
@@ -202,7 +202,8 @@ export class PeriodeMedTimerMinutter implements DeepRequired<Periodeinfo<IOmsorg
     values(): DeepRequired<Periodeinfo<IOmsorgstid>> {
         return {
             periode: this.periode.values(),
-            perDag: this.perDag,
+            timer: this.timer,
+            minutter: this.minutter,
             perDagString: this.perDagString,
             tidsformat: this.tidsformat,
         };
