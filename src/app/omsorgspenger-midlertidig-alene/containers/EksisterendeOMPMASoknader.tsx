@@ -135,7 +135,10 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
-
+            console.log('k9saksnummer', k9saksnummer);
+            console.log('fagsakId', fagsakId);
+            console.log('søknad.annenForelder.norskIdent', søknad.annenForelder.norskIdent);
+            console.log('annenPart', annenPart);
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,
@@ -162,6 +165,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                             annenPart !== null) ||
                         (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
+                    // disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
@@ -170,7 +174,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             rows.push(
                 <Table.Row key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
