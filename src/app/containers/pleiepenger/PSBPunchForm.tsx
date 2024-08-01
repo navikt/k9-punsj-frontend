@@ -243,7 +243,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 isFetched: true,
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
-            if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
+            if (
+                !soknad.barn ||
+                !soknad.barn.norskIdent ||
+                soknad.barn.norskIdent === '' ||
+                (this.props.identState.pleietrengendeId &&
+                    soknad.barn.norskIdent !== this.props.identState.pleietrengendeId)
+            ) {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
