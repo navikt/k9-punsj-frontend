@@ -126,7 +126,8 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
     };
 
     const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
-
+    console.log('journalpost?.sak?: ', journalpost?.sak);
+    console.log('fordelingState?.fagsak: ', fordelingState?.fagsak);
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
