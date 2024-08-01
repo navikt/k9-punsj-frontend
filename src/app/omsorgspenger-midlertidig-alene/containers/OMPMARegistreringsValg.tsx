@@ -116,6 +116,7 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
             <EksisterendeOMPMASoknader
                 søkerId={søkerId}
                 annenPart={annenPart}
+                fagsakId={k9saksnummer || ''}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
 

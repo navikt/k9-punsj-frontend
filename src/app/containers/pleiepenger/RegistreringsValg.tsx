@@ -111,6 +111,7 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
         <div className="registrering-page">
             <EksisterendeSoknader
                 pleietrengendeId={pleietrengendeId}
+                fagsakId={k9saksnummer || ''}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
             <div className="knapperad">
