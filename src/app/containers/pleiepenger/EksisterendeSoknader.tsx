@@ -118,6 +118,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,
             );
+            const meldingOpenSøknad =
+                søknad.barn.norskIdent === pleietrengendeId
+                    ? 'modal.erdusikker.info'
+                    : 'modal.erdusikker.info.nyBarnFnr';
 
             const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
@@ -171,7 +175,8 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                 >
                     <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
+                        melding={meldingOpenSøknad}
+                        extraInfo={søknad.barn.norskIdent === pleietrengendeId ? undefined : 'modal.erdusikker.info'}
                         onSubmit={() => chooseSoknad(soknadInfo)}
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"

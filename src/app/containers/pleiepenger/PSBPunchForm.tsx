@@ -243,7 +243,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 isFetched: true,
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
-            if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
+            console.log('soknad.barn.norskIdent:', soknad.barn?.norskIdent);
+            console.log('identState.pleietrengendeId:', this.props.identState.pleietrengendeId);
+            if (
+                !soknad.barn ||
+                !soknad.barn.norskIdent ||
+                soknad.barn.norskIdent === '' ||
+                (this.props.identState.pleietrengendeId &&
+                    soknad.barn.norskIdent !== this.props.identState.pleietrengendeId)
+            ) {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
@@ -254,21 +262,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.props.resetPunchFormAction();
         this.props.validerSoknadReset();
     }
-
-    private handleUpdateBarnFnr = () => {
-        // Update barn norskIdent if it's different from pleietrengendeId in identState
-        // Midlertidig løsning
-        const { soknad } = this.props.punchFormState;
-
-        this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId } });
-        /*if (
-            soknad?.barn?.norskIdent &&
-            this.props.identState.pleietrengendeId &&
-            soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
-        ) {
-            this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
-        }*/
-    };
 
     private handleSubmit = () => {
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
@@ -822,34 +815,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
-
-                {this.props.identState.pleietrengendeId &&
-                    soknad.barn.norskIdent !== this.props.identState.pleietrengendeId && (
-                        <Alert size="small" variant="info" className="mb-4" data-test-id="test-upd-barn">
-                            <div className="flex">
-                                <div>
-                                    <div className="mb-4">
-                                        Barnets fødselsnummer/D-nummer i søknaden er ikke det samme som det du skal
-                                        legge til.
-                                    </div>
-                                    <div>Fnr/D-nummer i søknad: {soknad.barn.norskIdent}</div>
-                                    <div>
-                                        Fnr/D-nummer i som skal oppdateres: {this.props.identState.pleietrengendeId}
-                                    </div>
-                                </div>
-                                <div className="ml-8">
-                                    <Button
-                                        type="button"
-                                        onClick={() => this.handleUpdateBarnFnr()}
-                                        size="small"
-                                        variant="secondary"
-                                    >
-                                        Oppdatere barnets fnr
-                                    </Button>
-                                </div>
-                            </div>
-                        </Alert>
-                    )}
 
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}

@@ -592,6 +592,7 @@
     "modal.settpaavent.visjournalpost": "Vis journalpost",
     "modal.settpaavent.registrer": "Registrer informasjon",
     "modal.erdusikker.info": "Er du sikker på at du vil fortsette på denne søknaden?",
+    "modal.erdusikker.info.nyBarnFnr": "Barnets fødselsnummer/D-nummer i søknaden er ikke det samme som det du la til i journalpost. Søknaden oppdateres med ny fødselsnummer/D-nummer.",
     "modal.erdusikker.sendinn": "Er du sikker på at du vil sende inn?",
     "modal.erdusikker.sendebrev": "Er du sikker på at du vil sende brevet?",
     "modal.erdusikker.fortsett": "Fortsett",
