@@ -17,7 +17,7 @@
         "@navikt/ft-plattform-komponenter": "3.0.1",
         "@popperjs/core": "2.11.8",
         "@redux-devtools/extension": "3.3.0",
-        "@sentry/react": "8.20.0",
+        "@sentry/react": "8.22.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
         "dayjs": "1.11.12",
