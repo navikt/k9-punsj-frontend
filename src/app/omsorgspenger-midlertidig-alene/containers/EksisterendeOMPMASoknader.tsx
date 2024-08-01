@@ -63,7 +63,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         søkerId,
         annenPart,
         fagsakId,
-        journalpost,
         kanStarteNyRegistrering,
     } = props;
     const intl = useIntl();
