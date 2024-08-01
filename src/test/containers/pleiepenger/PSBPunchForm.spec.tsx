@@ -65,7 +65,7 @@ const initialSoknad: IPSBSoknad = {
     },
     soekerId: søkerId,
     soeknadId: '123',
-    soeknadsperiode: null,
+    soeknadsperiode: [],
     soknadsinfo: {
         harMedsøker: null,
         samtidigHjemme: null,

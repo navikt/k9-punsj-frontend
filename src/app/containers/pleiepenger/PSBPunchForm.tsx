@@ -232,17 +232,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (søkerId && pleietrengendeId) {
             this.props.hentPerioder(søkerId, pleietrengendeId);
         }
-
-        // Update barn norskIdent if it's different from pleietrengendeId in identState
-        // Midlertidig løsning
-        const { soknad } = this.props.punchFormState;
-        if (
-            soknad?.barn?.norskIdent &&
-            this.props.identState.pleietrengendeId &&
-            soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
-        ) {
-            this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
-        }
     }
 
     componentDidUpdate() {
@@ -265,6 +254,21 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.props.resetPunchFormAction();
         this.props.validerSoknadReset();
     }
+
+    private handleUpdateBarnFnr = () => {
+        // Update barn norskIdent if it's different from pleietrengendeId in identState
+        // Midlertidig løsning
+        const { soknad } = this.props.punchFormState;
+
+        this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId } });
+        /*if (
+            soknad?.barn?.norskIdent &&
+            this.props.identState.pleietrengendeId &&
+            soknad.barn?.norskIdent !== this.props.identState.pleietrengendeId
+        ) {
+            this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
+        }*/
+    };
 
     private handleSubmit = () => {
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
@@ -818,6 +822,29 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
+
+                {soknad.barn.norskIdent !== this.props.identState.pleietrengendeId && (
+                    <Alert size="small" variant="info" className="mb-4" data-test-id="test-upd-barn">
+                        <div className="flex">
+                            <div>
+                                <div>Barn fnr/D-nummer i søknad er ikke samme som du skal legge til.</div>
+                                <div>Fnr/D-nummer i søknad: {soknad.barn.norskIdent}</div>
+                                <div>Fnr/D-nummer i som skal oppdateres: {this.props.identState.pleietrengendeId}</div>
+                            </div>
+                            <div className="ml-8">
+                                <Button
+                                    type="button"
+                                    onClick={() => this.handleUpdateBarnFnr()}
+                                    size="small"
+                                    variant="secondary"
+                                >
+                                    Oppdatere barn fnr
+                                </Button>
+                            </div>
+                        </div>
+                    </Alert>
+                )}
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
