@@ -827,7 +827,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <Alert size="small" variant="info" className="mb-4" data-test-id="test-upd-barn">
                         <div className="flex">
                             <div>
-                                <div>Barn fnr/D-nummer i søknad er ikke samme som du skal legge til.</div>
+                                <div className="mb-4">
+                                    Barnets fødselsnummer/D-nummer i søknaden er ikke det samme som det du skal legge
+                                    til.
+                                </div>
                                 <div>Fnr/D-nummer i søknad: {soknad.barn.norskIdent}</div>
                                 <div>Fnr/D-nummer i som skal oppdateres: {this.props.identState.pleietrengendeId}</div>
                             </div>
@@ -838,7 +841,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     size="small"
                                     variant="secondary"
                                 >
-                                    Oppdatere barn fnr
+                                    Oppdatere barnets fnr
                                 </Button>
                             </div>
                         </div>
