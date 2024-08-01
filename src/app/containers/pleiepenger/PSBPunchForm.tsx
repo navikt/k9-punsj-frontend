@@ -107,6 +107,7 @@ export interface IPunchFormDispatchProps {
     settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
     validateSoknad: typeof validerSoknad;
     validerSoknadReset: typeof validerSoknadResetAction;
+    setIdentAction: typeof setIdentFellesAction;
 }
 
 export interface IPunchFormComponentState {
@@ -243,6 +244,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 isFetched: true,
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
             });
+
+            // Set ident state etter sideoppdatering
+            if (!this.props.identState.søkerId && !this.props.identState.pleietrengendeId) {
+                this.props.setIdentAction(soknad.soekerId!, soknad.barn?.norskIdent, null);
+            }
+
             if (
                 !soknad.barn ||
                 !soknad.barn.norskIdent ||
