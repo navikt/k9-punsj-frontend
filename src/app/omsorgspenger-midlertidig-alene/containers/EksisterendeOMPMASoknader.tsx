@@ -32,8 +32,6 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 export interface IEksisterendeOMPMASoknaderStateProps {
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
     journalposterState: IJournalposterPerIdentState;
-    journalpost?: IJournalpost;
-    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
@@ -66,7 +64,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         annenPart,
         fagsakId,
         journalpost,
-        fordelingState,
         kanStarteNyRegistrering,
     } = props;
     const intl = useIntl();
