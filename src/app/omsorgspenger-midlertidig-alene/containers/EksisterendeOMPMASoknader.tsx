@@ -135,9 +135,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummerSøknad = søknad?.k9saksnummer;
-            console.log('k9saksnummerSøknad', k9saksnummerSøknad);
-            console.log('søknad.annenForelder.norskIdent', søknad.annenForelder.norskIdent);
-            console.log('annenpart', annenPart);
+
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,

@@ -110,7 +110,7 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
             </Alert>
         );
     }
-    console.log('k9saksnummer', k9saksnummer);
+
     return (
         <div className="registrering-page">
             <EksisterendeOMPMASoknader
