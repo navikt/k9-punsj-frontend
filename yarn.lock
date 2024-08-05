@@ -3412,32 +3412,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.8.2":
-  version: 1.8.2
-  resolution: "@grafana/faro-core@npm:1.8.2"
+"@grafana/faro-core@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@grafana/faro-core@npm:1.9.0"
   dependencies:
     "@opentelemetry/api": ^1.9.0
     "@opentelemetry/otlp-transformer": ^0.52.0
-  checksum: e42c11e7faf933f79b41430387469d17b601e85e6857dbd25519f336dc6ec34bb118d0c7f90d6353c931a9a045411d8f505708349e2e469a53a0dc4ffde50fb0
+  checksum: 4b061ec3998fc59d19d3509dcf7995f297b5a19a822f7fc04dc7f12ccb0294fe6a662961f4e8e605672c314a63bf8d9f3b0db078eeb4fbe29dc46c81b85ffd85
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.8.2, @grafana/faro-web-sdk@npm:^1.8.2":
-  version: 1.8.2
-  resolution: "@grafana/faro-web-sdk@npm:1.8.2"
+"@grafana/faro-web-sdk@npm:1.9.0, @grafana/faro-web-sdk@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@grafana/faro-web-sdk@npm:1.9.0"
   dependencies:
-    "@grafana/faro-core": ^1.8.2
+    "@grafana/faro-core": ^1.9.0
     ua-parser-js: ^1.0.32
     web-vitals: ^4.0.1
-  checksum: b36660a8ba93dd19ccf1eea7995f11add06713ebb82278313c73076b4f78fbe4c1360a2ddcb1c0b3fc65f336ff1465c29efa62d4fc1f25c3e67c41c66e49c3c7
+  checksum: b2a6352cfbd28fd72380e7ef9f249014b321e3686256f95e662c45e705c77762eecb530204d51a6573d1c6a48344ff53500f137582a192894f043633171d366b
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:1.8.2":
-  version: 1.8.2
-  resolution: "@grafana/faro-web-tracing@npm:1.8.2"
+"@grafana/faro-web-tracing@npm:1.9.0":
+  version: 1.9.0
+  resolution: "@grafana/faro-web-tracing@npm:1.9.0"
   dependencies:
-    "@grafana/faro-web-sdk": ^1.8.2
+    "@grafana/faro-web-sdk": ^1.9.0
     "@opentelemetry/api": ^1.9.0
     "@opentelemetry/context-zone": 1.21.0
     "@opentelemetry/core": ^1.25.0
@@ -3449,7 +3449,7 @@ __metadata:
     "@opentelemetry/resources": ^1.25.0
     "@opentelemetry/sdk-trace-web": ^1.25.0
     "@opentelemetry/semantic-conventions": ^1.25.0
-  checksum: 213c2fea29e435e0d10015e8d5e97f40559faad319687d71d8f86dc19da399946e35d2749351d021484df07c3b28920cd57f23e13f5425b0245f40b62c83d7db
+  checksum: dd5a344ba8bbb1d2029b8cb91339fe6b2fc9f0f0e98381903ce73505c9753ef60f6bf7cd148bb9d9f7968393340d4e96639922510bbca88e868a0a2d7b6972df
   languageName: node
   linkType: hard
 
@@ -4541,64 +4541,64 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/browser-utils@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry-internal/browser-utils@npm:8.20.0"
+"@sentry-internal/browser-utils@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry-internal/browser-utils@npm:8.22.0"
   dependencies:
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: ec2a25bd2a13c63c20b5da7e3fac805b03b4f97b2b9a2841319bed0cf7fe57c39ea136c11f098bbe116297bd81f3e9645cac5e46d6efc36ad90f6284ed47a28d
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: 3176fe52af88aa7ab0525ac266e084daab7c5b643ebadb711f83edc569e66e7e59ac19695d6b7692994e48c702fb27a342b5c92d0641720710a2c69c2618d8a1
   languageName: node
   linkType: hard
 
-"@sentry-internal/feedback@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry-internal/feedback@npm:8.20.0"
+"@sentry-internal/feedback@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry-internal/feedback@npm:8.22.0"
   dependencies:
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: db8d1c2baa5c9831c0de056efd2755ec825489d1a44962f06f91d168d35b869d50e964a252c5ef68130dc29b52273b647379352435aa2bbab091d5575663969c
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: fe12804a69350079049b3690fad2319847bdbab451430808f25da93b073a648c9d98c1a713f30d2a43584466630aa7e6a27107a929d86b47c480d0c39869dc23
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay-canvas@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry-internal/replay-canvas@npm:8.20.0"
+"@sentry-internal/replay-canvas@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry-internal/replay-canvas@npm:8.22.0"
   dependencies:
-    "@sentry-internal/replay": 8.20.0
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: f723f38b47c51cf196ebc6257c8dd2909165ac399fcfe2eb67bdf18da18ec320aee1ac060d1fd9047f560093f5436b040dfa1743b779df85f69cf0eb1f6b5268
+    "@sentry-internal/replay": 8.22.0
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: c9766145185b35b2252fef1755c2da329f0d0d34b67b7cc6ee02eb8931ec67f9955034fc7360cea3f40de701db27373f9ee036806b7eaa109dfd963a3ce77e10
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry-internal/replay@npm:8.20.0"
+"@sentry-internal/replay@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry-internal/replay@npm:8.22.0"
   dependencies:
-    "@sentry-internal/browser-utils": 8.20.0
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: 4ff8c773779e4d0370f84da84d33c4963c5fec72eae3b5d2dd333f2a45a9defe8bc47d7d46af62569108980c0932e04db8db3c6c4648ddc3712f53fe180b05c0
+    "@sentry-internal/browser-utils": 8.22.0
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: d248c053df6bf8f83de2478413c95db7483594ba1bc74ae34581b37e887b384463e0b21e2a52d633c6200b99415c59d15f40028cbb8510e8f54f2fb969f645e4
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry/browser@npm:8.20.0"
+"@sentry/browser@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry/browser@npm:8.22.0"
   dependencies:
-    "@sentry-internal/browser-utils": 8.20.0
-    "@sentry-internal/feedback": 8.20.0
-    "@sentry-internal/replay": 8.20.0
-    "@sentry-internal/replay-canvas": 8.20.0
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: 970aa1ddf538fda3313fce08fc4e3725c2019a2fec5dd846af0bfd915930b7560951efc1e7433fd4df329446664681cba03dc1120aeb77499b3ad9457fbbed1a
+    "@sentry-internal/browser-utils": 8.22.0
+    "@sentry-internal/feedback": 8.22.0
+    "@sentry-internal/replay": 8.22.0
+    "@sentry-internal/replay-canvas": 8.22.0
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: d520911cfe32f2de51786271826d71baf2abefb2b71ff8c029b1b53dca85ff36bcf5faefb672f1aeec738abc0a9fd86376123952c504b5e1f703763c42dc673b
   languageName: node
   linkType: hard
 
@@ -4688,44 +4688,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry/core@npm:8.20.0"
+"@sentry/core@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry/core@npm:8.22.0"
   dependencies:
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
-  checksum: 44ad3e40b6a6f61493f548d0debf7fcc6b416e5d212f74833d72d1f53f59da50cbcf5a7cae48ad7052be1bb1c79bd62237ea109fca5494cffe41712d9bc6dbc0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
+  checksum: 4947c09af8451915dbf845b6eb76841df6d5c956a5be7041c7c64fb618e68dde41780959e4cce5d34e9ffa42b6ddf07e4a15d705878490dedca57a929c6ae7da
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry/react@npm:8.20.0"
+"@sentry/react@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry/react@npm:8.22.0"
   dependencies:
-    "@sentry/browser": 8.20.0
-    "@sentry/core": 8.20.0
-    "@sentry/types": 8.20.0
-    "@sentry/utils": 8.20.0
+    "@sentry/browser": 8.22.0
+    "@sentry/core": 8.22.0
+    "@sentry/types": 8.22.0
+    "@sentry/utils": 8.22.0
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ^16.14.0 || 17.x || 18.x || 19.x
-  checksum: ebeeb9b7624964a3249fa9446c89b8f5f2319b8f4f8411e2aa7ef6f6f0fdc132e33f99ea23007941c7e01383d7ac823385ecc7a634bc0866cf7750d69b665f98
+  checksum: 539eaf8c805d316838c42a09690b97b2de1c7a8684b8ec13e669ae184e5a1a0749f094775f5959aefb1720dbba61708191356bdd420264804a7e7f0fce984027
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry/types@npm:8.20.0"
-  checksum: d421176be54dd01d096d6ddd39652c44d8f4dcac27bf5acd5d3f5e4664bd0a40a2f38c02007c885f34849d254bb69d79fa7990ef661af5884d9d267cad838bb3
+"@sentry/types@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry/types@npm:8.22.0"
+  checksum: b946f53d0c8c3b3e76fe47794579e205800a5527724728afb6f86cfc7014c4869c9351c8a4cce741fd289b85e0e27c4be2b454635299d5357f2e71f53d73aea5
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:8.20.0":
-  version: 8.20.0
-  resolution: "@sentry/utils@npm:8.20.0"
+"@sentry/utils@npm:8.22.0":
+  version: 8.22.0
+  resolution: "@sentry/utils@npm:8.22.0"
   dependencies:
-    "@sentry/types": 8.20.0
-  checksum: 153827ad1b67b90cbf392fea7f8dc1cfdf9d6430e74e30a4c265da08211b8eeba9355d8bf37f12142fb15ff30b8728c52eb2495e5f6dba8406294e8a77bb0bf9
+    "@sentry/types": 8.22.0
+  checksum: 3b9cb5a628958e0072f95faf50f3bd262dd65158d8ffde689edd0a9457861e4a992d705611b6ca1ab5ccb6f4464e2125bd7ab4669d419b95bf12109ea7909bcc
   languageName: node
   linkType: hard
 
@@ -9010,7 +9010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4.3.6, debug@npm:~4.3.6":
+"debug@npm:4.3.6, debug@npm:^4.3.6, debug@npm:~4.3.6":
   version: 4.3.6
   resolution: "debug@npm:4.3.6"
   dependencies:
@@ -9028,18 +9028,6 @@ __metadata:
   dependencies:
     ms: ^2.1.1
   checksum: b3d8c5940799914d30314b7c3304a43305fd0715581a919dacb8b3176d024a782062368405b47491516d2091d6462d4d11f2f4974a405048094f8bfebfa3071c
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.3.5":
-  version: 4.3.5
-  resolution: "debug@npm:4.3.5"
-  dependencies:
-    ms: 2.1.2
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 7c002b51e256257f936dda09eb37167df952758c57badf6bf44bdc40b89a4bcb8e5a0a2e4c7b53f97c69e2970dd5272d33a757378a12c8f8e64ea7bf99e8e86e
   languageName: node
   linkType: hard
 
@@ -13503,8 +13491,8 @@ __metadata:
     "@babel/preset-react": 7.24.7
     "@babel/preset-typescript": 7.24.7
     "@babel/runtime": 7.24.8
-    "@grafana/faro-web-sdk": 1.8.2
-    "@grafana/faro-web-tracing": 1.8.2
+    "@grafana/faro-web-sdk": 1.9.0
+    "@grafana/faro-web-tracing": 1.9.0
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": 6.13.0
     "@navikt/ds-css": 6.13.0
@@ -13516,7 +13504,7 @@ __metadata:
     "@popperjs/core": 2.11.8
     "@redux-devtools/extension": 3.3.0
     "@sentry/cli": 2.33.1
-    "@sentry/react": 8.20.0
+    "@sentry/react": 8.22.0
     "@storybook/addon-actions": 8.2.7
     "@storybook/addon-essentials": 8.2.7
     "@storybook/addon-interactions": 8.2.7
@@ -13641,7 +13629,7 @@ __metadata:
     start-server-and-test: 2.0.5
     storybook: 8.2.7
     style-loader: 4.0.0
-    stylelint: 16.7.0
+    stylelint: 16.8.1
     stylelint-config-prettier: 9.0.5
     stylelint-config-standard: 36.0.1
     tailwindcss: 3.4.7
@@ -16223,10 +16211,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-resolve-nested-selector@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "postcss-resolve-nested-selector@npm:0.1.1"
-  checksum: b08fb76ab092a09ee01328bad620a01dcb445ac5eb02dd0ed9ed75217c2f779ecb3bf99a361c46e695689309c08c09f1a1ad7354c8d58c2c2c40d364657fcb08
+"postcss-resolve-nested-selector@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "postcss-resolve-nested-selector@npm:0.1.4"
+  checksum: 8de7abd1ae129233480ac123be243e2a722a4bb73fa54fb09cbbe6f10074fac960b9caadad8bc658982b96934080bd7b7f01b622ca7d5d78a25dc9c0532b17cb
   languageName: node
   linkType: hard
 
@@ -16239,13 +16227,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.16, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.1.0":
+"postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.16, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4":
   version: 6.1.0
   resolution: "postcss-selector-parser@npm:6.1.0"
   dependencies:
     cssesc: ^3.0.0
     util-deprecate: ^1.0.2
   checksum: 449f614e6706421be307d8638183c61ba45bc3b460fe3815df8971dbb4d59c4087181940d879daee4a7a2daf3d86e915db1cce0c006dd68ca75b4087079273bd
+  languageName: node
+  linkType: hard
+
+"postcss-selector-parser@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "postcss-selector-parser@npm:6.1.1"
+  dependencies:
+    cssesc: ^3.0.0
+    util-deprecate: ^1.0.2
+  checksum: 1c6a5adfc3c19c6e1e7d94f8addb89a5166fcca72c41f11713043d381ecbe82ce66360c5524e904e17b54f7fc9e6a077994ff31238a456bc7320c3e02e88d92e
   languageName: node
   linkType: hard
 
@@ -18461,9 +18459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:16.7.0":
-  version: 16.7.0
-  resolution: "stylelint@npm:16.7.0"
+"stylelint@npm:16.8.1":
+  version: 16.8.1
+  resolution: "stylelint@npm:16.8.1"
   dependencies:
     "@csstools/css-parser-algorithms": ^2.7.1
     "@csstools/css-tokenizer": ^2.4.1
@@ -18475,7 +18473,7 @@ __metadata:
     cosmiconfig: ^9.0.0
     css-functions-list: ^3.2.2
     css-tree: ^2.3.1
-    debug: ^4.3.5
+    debug: ^4.3.6
     fast-glob: ^3.3.2
     fastest-levenshtein: ^1.0.16
     file-entry-cache: ^9.0.0
@@ -18492,10 +18490,10 @@ __metadata:
     micromatch: ^4.0.7
     normalize-path: ^3.0.0
     picocolors: ^1.0.1
-    postcss: ^8.4.39
-    postcss-resolve-nested-selector: ^0.1.1
+    postcss: ^8.4.40
+    postcss-resolve-nested-selector: ^0.1.4
     postcss-safe-parser: ^7.0.0
-    postcss-selector-parser: ^6.1.0
+    postcss-selector-parser: ^6.1.1
     postcss-value-parser: ^4.2.0
     resolve-from: ^5.0.0
     string-width: ^4.2.3
@@ -18506,7 +18504,7 @@ __metadata:
     write-file-atomic: ^5.0.1
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: b6b3b2772abbdbff02ed9357eb355c6b3056c806301fba0aa62a45eebb93d3e87ea969f03cc8f802de3a50b3b3b008de70536cff91edc09287e640960dd8b5d9
+  checksum: 4fe1695901b15b04b25b038835901803e2b0af5cd79c516f99c69c7bb2904807c1a6d4824a677c2a89b75a7a318e82348aa29bd2ddd855696f5ea35acb77c3c1
   languageName: node
   linkType: hard
 

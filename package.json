@@ -6,8 +6,8 @@
     "license": "MIT",
     "dependencies": {
         "@babel/runtime": "7.24.8",
-        "@grafana/faro-web-sdk": "1.8.2",
-        "@grafana/faro-web-tracing": "1.8.2",
+        "@grafana/faro-web-sdk": "1.9.0",
+        "@grafana/faro-web-tracing": "1.9.0",
         "@k9-punsj-frontend/server": "workspace:",
         "@navikt/aksel-icons": "6.13.0",
         "@navikt/ds-css": "6.13.0",
@@ -17,7 +17,7 @@
         "@navikt/ft-plattform-komponenter": "3.0.1",
         "@popperjs/core": "2.11.8",
         "@redux-devtools/extension": "3.3.0",
-        "@sentry/react": "8.20.0",
+        "@sentry/react": "8.22.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
         "dayjs": "1.11.12",
@@ -77,7 +77,7 @@
         "postcss": "8.4.31"
     },
     "scripts": {
-        "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.mjs",
+        "dev": "yarn run dev-env-variables node --trace-deprecation src/build/scripts/start-dev.mjs",
         "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node src/build/scripts/start-dev.mjs",
         "start-express": "node ./server.js",
@@ -182,7 +182,7 @@
         "regenerator-runtime": "0.14.1",
         "storybook": "8.2.7",
         "style-loader": "4.0.0",
-        "stylelint": "16.7.0",
+        "stylelint": "16.8.1",
         "stylelint-config-prettier": "9.0.5",
         "stylelint-config-standard": "36.0.1",
         "terser-webpack-plugin": "5.3.10",
