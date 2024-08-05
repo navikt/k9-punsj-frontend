@@ -107,6 +107,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
     const nullUtPleietrengendeIdent = () => {
         setPleietrengendeIdent('');
+        setPleietrengendeInfo(undefined);
         setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
     };
 
@@ -135,7 +136,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         className="pleietrengendeSelect"
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
-                            pleietrengendeIdentInputFieldOnChange(e);
+                            setPleietrengendeIdent(e.target.value);
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         disabled={gjelderAnnenPleietrengende}

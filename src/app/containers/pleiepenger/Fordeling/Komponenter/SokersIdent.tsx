@@ -59,6 +59,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     const handleIdentRadioChange = (jn: JaNei) => {
         setRiktigIdentIJournalposten(jn);
         setVisSokersBarn(false);
+        setSøkersInfo(undefined);
 
         if (jn === JaNei.JA) {
             setIdentAction(journalpostident || '', '', identState.annenSokerIdent);

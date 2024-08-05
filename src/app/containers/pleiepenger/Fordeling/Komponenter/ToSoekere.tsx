@@ -59,9 +59,8 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 
     const handleIdentAnnenSoker = (event: React.ChangeEvent<HTMLInputElement>) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
-
+        setAnnenSøkersInfo(undefined);
         if (annenSokerIdent.length > 0 && identFromInput.length < annenSokerIdent.length) {
-            setAnnenSøkersInfo(undefined);
             setIdentAction(identState.søkerId, identState.pleietrengendeId);
         }
 
@@ -93,6 +92,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             <Checkbox
                 onChange={(e) => {
                     setToSokereIJournalpost(e.target.checked);
+                    setAnnenSøkersInfo(undefined);
                     if (!e.target.checked) {
                         setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
                         setAnnenSokerIdent('');

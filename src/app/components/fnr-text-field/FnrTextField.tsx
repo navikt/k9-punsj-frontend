@@ -10,10 +10,11 @@ interface Props {
     loadingPersonsInfo: boolean;
     errorPersonsInfo: boolean;
     person?: Person;
-    errorValidationMessage?: string;
+    errorValidationMessage?: string | boolean;
     disabled?: boolean;
 
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: () => void;
 }
 
 const FnrTextField: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const FnrTextField: React.FC<Props> = ({
     disabled,
 
     onChange,
+    onBlur,
 }) => {
     return (
         <div className="mt-6">
@@ -40,6 +42,7 @@ const FnrTextField: React.FC<Props> = ({
                     hideLabel
                     value={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                     autoComplete="off"
                     htmlSize={27}
                     maxLength={11}
@@ -49,7 +52,7 @@ const FnrTextField: React.FC<Props> = ({
                 {!disabled && <PersonInfo loading={loadingPersonsInfo} error={errorPersonsInfo} person={person} />}
             </div>
 
-            {errorValidationMessage !== undefined && (
+            {errorValidationMessage && (
                 <div className="mt-2">
                     <ErrorMessage size="medium">
                         <li>{errorValidationMessage}</li>
