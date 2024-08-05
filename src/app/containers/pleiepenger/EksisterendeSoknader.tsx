@@ -29,8 +29,6 @@ import ErDuSikkerModal from './ErDuSikkerModal';
 export interface IEksisterendeSoknaderStateProps {
     eksisterendeSoknaderState: IEksisterendeSoknaderState;
     journalposterState: IJournalposterPerIdentState;
-    journalpost?: IJournalpost;
-    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeSoknaderDispatchProps {
@@ -42,6 +40,7 @@ export interface IEksisterendeSoknaderDispatchProps {
 
 export interface IEksisterendeSoknaderComponentProps {
     pleietrengendeId: string | null;
+    fagsakId: string;
     kanStarteNyRegistrering: boolean;
 }
 
@@ -54,8 +53,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     props: IEksisterendeSoknaderProps,
 ) => {
     const navigate = useNavigate();
-    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState, journalpost, fordelingState } =
-        props;
+    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState, fagsakId } = props;
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
@@ -103,8 +101,6 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         }
     };
 
-    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
-
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -149,7 +145,6 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
             rows.push(
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
@@ -247,8 +242,6 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
     eksisterendeSoknaderState: state.eksisterendeSoknaderState,
     journalposterState: state.journalposterPerIdentState,
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

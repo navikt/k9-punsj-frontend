@@ -32,8 +32,6 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 export interface IEksisterendeOMPMASoknaderStateProps {
     eksisterendeOMPMASoknaderState: IEksisterendeOMPMASoknaderState;
     journalposterState: IJournalposterPerIdentState;
-    journalpost?: IJournalpost;
-    fordelingState?: IFordelingState;
 }
 
 export interface IEksisterendeOMPMASoknaderDispatchProps {
@@ -47,6 +45,7 @@ export interface IEksisterendeOMPMASoknaderDispatchProps {
 export interface IEksisterendeOMPMASoknaderComponentProps {
     søkerId: string;
     annenPart: string;
+    fagsakId: string;
     kanStarteNyRegistrering?: boolean;
 }
 
@@ -63,8 +62,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         journalposterState,
         søkerId,
         annenPart,
-        journalpost,
-        fordelingState,
+        fagsakId,
         kanStarteNyRegistrering,
     } = props;
     const intl = useIntl();
@@ -125,8 +123,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         }
     };
 
-    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
-
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
@@ -134,7 +130,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         soknader?.forEach((soknadInfo) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
-            const k9saksnummer = søknad?.k9saksnummer;
+            const k9saksnummerSøknad = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
@@ -146,7 +142,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                 søknad.annenForelder.norskIdent,
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
-                k9saksnummer,
+                k9saksnummerSøknad,
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)
                     ? generateDateString(søknad.annenForelder.periode)
                     : '',
@@ -160,7 +156,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
                             annenPart !== søknad.annenForelder.norskIdent &&
                             !!annenPart &&
                             annenPart !== null) ||
-                        (!!k9saksnummer && fagsakId !== k9saksnummer)
+                        (!!k9saksnummerSøknad && fagsakId !== k9saksnummerSøknad)
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
@@ -170,7 +166,6 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             rows.push(
                 <Table.Row key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

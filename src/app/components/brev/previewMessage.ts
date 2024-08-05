@@ -40,7 +40,9 @@ export const previewMessage = async (
     const mottakerType = values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR';
     const mottakerId = values.velgAnnenMottaker ? values.orgNummer : values.mottaker;
 
-    const isGenereltFritekstbrev = values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV;
+    const isGenereltFritekstbrev =
+        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV ||
+        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK;
 
     try {
         const response = await fetch(ApiPath.BREV_FORHAANDSVIS, {

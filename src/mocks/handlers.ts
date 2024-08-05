@@ -15,6 +15,7 @@ let handlers = [
             {
                 INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
                 GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
+                GENERELT_FRITEKSTBREV_NYNORSK: { navn: 'Fritekst generelt brev på nynorsk', mottakere: [] },
             },
             { status: 200 },
         ),
