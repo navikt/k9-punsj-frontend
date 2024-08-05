@@ -92,7 +92,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
         if (identFromInput.length === 11) {
             if (!IdentRules.erUgyldigIdent(identFromInput)) {
-                hentPleietrengendeInfo(pleietrengendeIdent);
+                hentPleietrengendeInfo(identFromInput);
             }
 
             setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
