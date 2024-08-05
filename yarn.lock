@@ -2779,12 +2779,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.24.8":
-  version: 7.24.8
-  resolution: "@babel/runtime@npm:7.24.8"
+"@babel/runtime@npm:7.25.0":
+  version: 7.25.0
+  resolution: "@babel/runtime@npm:7.25.0"
   dependencies:
     regenerator-runtime: ^0.14.0
-  checksum: 6b1e4230580f67a807ad054720812bbefbb024cc2adc1159d050acbb764c4c81c7ac5f7a042c48f578987c5edc2453c71039268df059058e9501fa6023d764b0
+  checksum: 4a2a374a58eb01aaa65c5762606e90b3a1f448e0c637d42278b6cc0b42a9f5399b5f381ba9f237ee087da2860d14dd2d1de7bddcbe18be6a3cafba97e44bed64
   languageName: node
   linkType: hard
 
@@ -13490,7 +13490,7 @@ __metadata:
     "@babel/preset-env": 7.24.8
     "@babel/preset-react": 7.24.7
     "@babel/preset-typescript": 7.24.7
-    "@babel/runtime": 7.24.8
+    "@babel/runtime": 7.25.0
     "@grafana/faro-web-sdk": 1.9.0
     "@grafana/faro-web-tracing": 1.9.0
     "@k9-punsj-frontend/server": "workspace:"
