@@ -5099,7 +5099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/csf@npm:0.1.11, @storybook/csf@npm:^0.1.0":
+"@storybook/csf@npm:0.1.11":
   version: 0.1.11
   resolution: "@storybook/csf@npm:0.1.11"
   dependencies:
@@ -5296,21 +5296,6 @@ __metadata:
     "@testing-library/user-event": "npm:^14.4.0"
     ts-dedent: "npm:^2.2.0"
   checksum: 10/85a8c39b432009c5ebac40569deef48b54f3b65f91bd1902bc86d4f130433bff2866c8bece9acdbd3f5cc92da5a1401f7405d11457570c96d3a30ba21c976b7b
-  languageName: node
-  linkType: hard
-
-"@storybook/testing-react@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@storybook/testing-react@npm:2.0.1"
-  dependencies:
-    "@storybook/csf": "npm:^0.1.0"
-  peerDependencies:
-    "@storybook/client-logger": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    "@storybook/preview-api": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    "@storybook/react": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    "@storybook/types": ^7.0.0-beta.0 || ^7.0.0-rc.0 || ^7.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/6a482d401b92984dfa32aae93f9f27d139b0cc56b4477281ba226073661a59e9151868d3f67c42070c6ae3ffdf72f29d80b4247c6cad0ef25a601e2bd158ac37
   languageName: node
   linkType: hard
 
@@ -13521,7 +13506,6 @@ __metadata:
     "@storybook/react": "npm:8.2.7"
     "@storybook/react-webpack5": "npm:8.2.7"
     "@storybook/testing-library": "npm:0.2.2"
-    "@storybook/testing-react": "npm:^2.0.1"
     "@testing-library/cypress": "npm:10.0.2"
     "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:16.0.0"

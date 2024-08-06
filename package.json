@@ -111,7 +111,6 @@
         "@storybook/react": "8.2.7",
         "@storybook/react-webpack5": "8.2.7",
         "@storybook/testing-library": "0.2.2",
-        "@storybook/testing-react": "^2.0.1",
         "@testing-library/cypress": "10.0.2",
         "@testing-library/jest-dom": "6.4.8",
         "@testing-library/react": "16.0.0",
