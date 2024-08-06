@@ -3894,6 +3894,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.3.0"
+    "@sentry/cli": "npm:2.33.1"
     axios: "npm:1.7.3"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -13512,7 +13513,6 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
     "@redux-devtools/extension": "npm:3.3.0"
-    "@sentry/cli": "npm:2.33.1"
     "@sentry/react": "npm:8.22.0"
     "@storybook/addon-actions": "npm:8.2.7"
     "@storybook/addon-essentials": "npm:8.2.7"
