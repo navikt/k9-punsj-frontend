@@ -1,4 +1,3 @@
- import/prefer-default-export
 export const skjematyperOmsorgspengeutbetaling = {
     // Arbeidstaker
     AT: 'AT',

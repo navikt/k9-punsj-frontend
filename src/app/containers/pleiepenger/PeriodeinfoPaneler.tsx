@@ -194,6 +194,5 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
 };
 
 PeriodeinfoPaneler.defaultProps = {
-     react/default-props-match-prop-types
     periods: [],
 };

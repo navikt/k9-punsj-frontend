@@ -81,7 +81,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
-         @typescript-eslint/no-unused-vars
+        // @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             values.erKorrigering
                 ? validerSoeknad(
@@ -307,4 +307,3 @@ const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
 });
 
 export const OMPUTPunchForm = connect(mapStateToProps)(PunchOMPUTFormComponent);
-/* eslint-enable */

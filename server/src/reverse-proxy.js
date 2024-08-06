@@ -65,7 +65,7 @@ const proxyOptions = (api) => ({
         }
         return headers;
     },
-     consistent-return
+
     proxyErrorHandler(err, res, next) {
         switch (err && err.code) {
             case 'ENOTFOUND': {
@@ -86,7 +86,7 @@ const proxyOptions = (api) => ({
     },
 });
 
- func-names
+func - names;
 const timedOut = function (req, res, next) {
     if (!req.timedout) {
         next();

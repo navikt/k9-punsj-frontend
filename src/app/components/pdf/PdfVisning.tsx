@@ -54,7 +54,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter?.reduce(
         (prev, current) => [
             ...prev,
-             no-unsafe-optional-chaining
+            //  no-unsafe-optional-chaining
             ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
         ],
         [],
@@ -113,7 +113,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                             size="small"
                         >
                             {dokumenter.map((_: unknown, i: number, array: unknown[]) => (
-                                 react/no-array-index-key
+                                // react/no-array-index-key
                                 <ToggleGroup.Item key={i} value={String(i + 1)} data-testid={`dok-${i + 1}`}>
                                     {`Dokument ${i + 1} / ${array.length}`}
                                 </ToggleGroup.Item>

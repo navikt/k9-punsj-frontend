@@ -11,7 +11,6 @@ const initialState: IEksisterendeSoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
- import/prefer-default-export
 export function EksisterendeSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeSoknaderState = initialState,
     action: IEksisterendeSoknaderActionTypes,

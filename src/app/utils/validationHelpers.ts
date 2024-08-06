@@ -3,7 +3,7 @@ import yup from 'yup';
 
 import { capitalize } from './utils';
 
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable  */
 const invalidTextMessage = (text: string) => `Feltet inneholder ugyldige tegn: ${text}`;
 
 const textRegex =

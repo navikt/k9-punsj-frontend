@@ -11,7 +11,6 @@ const initialState: IEksisterendeOMPMASoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
- import/prefer-default-export
 export function EksisterendeOMPMASoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeOMPMASoknaderState,
     action: IEksisterendeOMPMASoknaderActionTypes,

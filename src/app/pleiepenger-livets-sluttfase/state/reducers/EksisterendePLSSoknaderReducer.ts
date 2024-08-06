@@ -11,7 +11,6 @@ const initialState: IEksisterendePLSSoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
- import/prefer-default-export
 export function EksisterendePLSSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState,
     action: IEksisterendePLSSoknaderActionTypes,

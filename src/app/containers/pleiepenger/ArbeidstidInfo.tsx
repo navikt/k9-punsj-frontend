@@ -5,7 +5,6 @@ import { Alert } from '@navikt/ds-react';
 
 import intlHelper from '../../utils/intlUtils';
 
- import/prefer-default-export
 export function arbeidstidInformasjon(intl: IntlShape) {
     return (
         <div className="arbeidstidInfo">

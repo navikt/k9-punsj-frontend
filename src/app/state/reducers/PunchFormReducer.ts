@@ -12,7 +12,6 @@ const initialState: IPunchPSBFormState = {
     inputErrors: undefined,
 };
 
- import/prefer-default-export
 export function PunchFormReducer(
     punchFormState: IPunchPSBFormState = initialState,
     action: IPunchFormActionTypes,

@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum FordelingActionKeys {
     SAKSTYPE_SET = 'FORDELING_SAKSTYPE_SET',
     DOKUMENTTYPE_SET = 'FORDELING_DOKUMENTTYPE_SET',

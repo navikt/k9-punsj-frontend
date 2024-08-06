@@ -48,7 +48,7 @@ const Medlemskap = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.bosteder?.map((_, bostedIndex, array) => (
-                                 react/no-array-index-key
+                                //  react/no-array-index-key
                                 <div key={bostedIndex}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">

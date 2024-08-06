@@ -100,7 +100,7 @@ export default function Frilanser() {
                         <>
                             {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                 <Fravaersperiode
-                                     react/no-array-index-key
+                                    //  react/no-array-index-key
                                     key={fravaersperiodeIndex}
                                     name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
                                     antallFravaersperioder={frilanser.fravaersperioder?.length}

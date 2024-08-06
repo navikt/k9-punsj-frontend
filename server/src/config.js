@@ -43,7 +43,6 @@ const cors = {
         }) || '',
 };
 
- consistent-return
 const configValueAsJson = ({ name, required = true }) => {
     const value = envVar({ name, required });
     if (!value) {

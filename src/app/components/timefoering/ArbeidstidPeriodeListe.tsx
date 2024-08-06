@@ -51,7 +51,7 @@ export default function ArbeidstidPeriodeListe({
                             <div>
                                 {values.perioder.map((periode, index) => (
                                     <ArbeidstidPeriode
-                                         react/no-array-index-key
+                                        // react/no-array-index-key
                                         key={index}
                                         name={`perioder.${index}`}
                                         soknadsperioder={soknadsperioder}

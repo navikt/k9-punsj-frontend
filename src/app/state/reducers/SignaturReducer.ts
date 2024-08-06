@@ -8,7 +8,6 @@ const initialState: ISignaturState = {
     isAwaitingUsignertRequestResponse: false,
 };
 
- import/prefer-default-export
 export function SignaturReducer(
     signaturState: ISignaturState = initialState,
     action: SignaturActionTypes,

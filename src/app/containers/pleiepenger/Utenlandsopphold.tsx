@@ -328,6 +328,5 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
 };
 
 Utenlandsopphold.defaultProps = {
-     react/default-props-match-prop-types
     periods: [],
 };

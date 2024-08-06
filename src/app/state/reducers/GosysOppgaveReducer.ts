@@ -7,7 +7,6 @@ const initialState: IGosysOppgaveState = {
     isAwaitingGosysOppgaveRequestResponse: false,
 };
 
- import/prefer-default-export
 export function GosysOppgaveReducer(
     gosysOppgaveState: IGosysOppgaveState = initialState,
     action: IOpprettGosysOppgaveActionTypes,

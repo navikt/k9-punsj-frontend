@@ -16,7 +16,6 @@ import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidsti
 import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
- import/prefer-default-export
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
     return (
         periodeinfo: Periodeinfo<IArbeidstidPeriodeMedTimer>,

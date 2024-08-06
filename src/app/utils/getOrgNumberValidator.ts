@@ -14,7 +14,8 @@ const getMod11 = (strValue: string): number => {
 
     for (let i = strValue.length - 2; i >= 0; --i) {
         mod += parseInt(strValue.charAt(i), 10) * checkNbr;
-        no - plusplus;
+
+        // eslint-disable-next-line no-plusplus
         if (++checkNbr > 7) {
             checkNbr = 2;
         }

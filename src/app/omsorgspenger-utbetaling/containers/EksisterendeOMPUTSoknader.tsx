@@ -114,7 +114,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
             rows.push(
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                         react/no-array-index-key
+                        //  react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

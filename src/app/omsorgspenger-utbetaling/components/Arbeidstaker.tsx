@@ -114,7 +114,7 @@ const Arbeidstaker = ({
                                 <>
                                     {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                         <Fravaersperiode
-                                             react/no-array-index-key
+                                            //  react/no-array-index-key
                                             key={fravaersperiodeIndex}
                                             name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
                                             antallFravaersperioder={value.fravaersperioder?.length}

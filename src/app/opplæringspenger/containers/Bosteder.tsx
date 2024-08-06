@@ -49,7 +49,6 @@ const Bosteder = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.bosteder?.map((_, index, array) => (
-                                 react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">

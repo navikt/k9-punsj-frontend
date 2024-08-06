@@ -53,7 +53,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-         react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',
@@ -121,7 +120,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <Fieldset className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel" legend>
             <div className="flex flex-wrap">
                 <RadioPanelGruppe
                     className="horizontalRadios"

@@ -14,7 +14,6 @@ import { ITimerOgMinutter } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { stringToNumber } from '../../utils';
 
- import/prefer-default-export
 export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
     return (
         periodeinfo: Periodeinfo<ITimerOgMinutter>,

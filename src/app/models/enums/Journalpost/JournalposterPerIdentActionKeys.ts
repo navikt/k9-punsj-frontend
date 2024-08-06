@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum JournalposterPerIdentActionKeys {
     JOURNALPOSTER_PER_IDENT_SET = 'JOURNALPOSTER_PER_IDENT_SET',
     JOURNALPOSTER_PER_IDENT_LOAD = 'JOURNALPOSTER_PER_IDENT_LOAD',

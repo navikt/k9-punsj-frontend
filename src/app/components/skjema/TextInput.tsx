@@ -21,7 +21,6 @@ const TextInput: React.FunctionComponent<ITextInputProps & TextFieldProps> = ({
 
     return (
         <TextField
-             react/jsx-props-no-spreading
             {...inputProps}
             label={label || <FormattedMessage id={`skjema.felt.${fjernIndexFraLabel(feltnavn)}.label`} />}
             error={touched && error}

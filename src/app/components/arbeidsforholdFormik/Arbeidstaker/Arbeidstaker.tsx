@@ -51,7 +51,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const { setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-         react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',
@@ -126,7 +125,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType = organisasjonsnummer === null ? 'p' : 'o';
 
     return (
-        <Fieldset className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel" legend>
             <div className="flex flex-wrap">
                 {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (

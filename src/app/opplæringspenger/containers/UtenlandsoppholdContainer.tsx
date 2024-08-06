@@ -28,12 +28,7 @@ const UtenlandsoppholdContainer = () => {
                 render={(arrayHelpers) => (
                     <>
                         {values.utenlandsopphold?.map((_, index) => (
-                            <Utenlandsopphold
-                                 react/no-array-index-key
-                                key={index}
-                                arrayHelpers={arrayHelpers}
-                                fieldArrayIndex={index}
-                            />
+                            <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
                         ))}
                         <VerticalSpacer sixteenPx />
                         <Button

@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+// react/jsx-props-no-spreading
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -165,7 +165,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
                                 if (arbeidsforholdId === null) {
                                     return (
-                                         react/no-array-index-key
+                                        // react/no-array-index-key
                                         <option key={`null-${index}`} value="null">
                                             uten arbeidsforholdsID
                                         </option>

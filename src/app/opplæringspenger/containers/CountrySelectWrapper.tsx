@@ -10,7 +10,6 @@ interface Props {
     periodeinfo: IPeriodeinfo;
 }
 
- import/prefer-default-export
 const CountrySelectWrapper = ({ periodeinfo }: Props) => {
     const { land } = periodeinfo;
     const intl = useIntl();

@@ -39,7 +39,7 @@ const KursComponent = () => {
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                 react/no-array-index-key
+                                // react/no-array-index-key
                                 <React.Fragment key={index}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />

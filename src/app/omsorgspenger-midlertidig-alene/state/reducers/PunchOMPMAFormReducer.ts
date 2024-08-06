@@ -13,7 +13,6 @@ const initialState: IPunchOMPMAFormState = {
     inputErrors: undefined,
 };
 
- import/prefer-default-export
 export function PunchOMPMAFormReducer(
     punchFormState: IPunchOMPMAFormState,
     action: IPunchOMPMAFormActionTypes,

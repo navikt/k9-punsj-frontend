@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum FordelingDokumenttype {
     PLEIEPENGER = 'PLEIEPENGER',
     PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',

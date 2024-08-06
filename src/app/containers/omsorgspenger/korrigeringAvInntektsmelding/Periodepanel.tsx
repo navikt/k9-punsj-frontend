@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+// react/jsx-props-no-spreading
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import * as React from 'react';
 import { useIntl } from 'react-intl';
@@ -41,7 +41,7 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                             const isLastElement =
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
-                                 react/no-array-index-key
+                                // react/no-array-index-key
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>

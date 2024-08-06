@@ -1,6 +1,5 @@
 import { idnr } from '@navikt/fnrvalidator';
 
- import/prefer-default-export
 export class IdentRules {
     public static erUgyldigIdent = (ident: string | null): boolean => {
         if (!ident || !ident.length) return true;

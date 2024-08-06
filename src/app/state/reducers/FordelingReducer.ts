@@ -15,7 +15,6 @@ const initialState: IFordelingState = {
     dokumenttype: undefined,
 };
 
- import/prefer-default-export
 export function FordelingReducer(
     fordelingState: IFordelingState = initialState,
     action: IFordelingActionTypes,

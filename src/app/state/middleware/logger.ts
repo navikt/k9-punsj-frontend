@@ -1,5 +1,5 @@
 // tslint:disable:no-console
- import/prefer-default-export
+
 export const logger = () => (next: any) => (action: any) => {
     if (action.type) {
         console.log(action.type);

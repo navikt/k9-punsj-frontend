@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum Virksomhetstyper {
     FISKE = 'Fiske',
     JORDBRUK = 'Jordbruk',

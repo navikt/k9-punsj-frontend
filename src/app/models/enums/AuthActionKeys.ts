@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum AuthActionKeys {
     LOAD = 'AUTH_LOAD',
     REDIRECT = 'AUTH_REDIRECT',

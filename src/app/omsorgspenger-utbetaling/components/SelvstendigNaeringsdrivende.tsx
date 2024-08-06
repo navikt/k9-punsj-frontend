@@ -216,7 +216,7 @@ const SelvstendigNaeringsdrivende = () => {
                             {selvstendigNaeringsdrivende.fravaersperioder?.map(
                                 (fravaersperiode, fravaersperiodeIndex) => (
                                     <Fravaersperiode
-                                         react/no-array-index-key
+                                        //  react/no-array-index-key
                                         key={fravaersperiodeIndex}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                                         antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}

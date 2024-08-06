@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum Ukedag {
     MANDAG,
     TIRSDAG,

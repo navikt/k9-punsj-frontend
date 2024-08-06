@@ -1,4 +1,3 @@
- import/prefer-default-export
 export enum JaNeiVetikke {
     JA = 'ja',
     NEI = 'nei',

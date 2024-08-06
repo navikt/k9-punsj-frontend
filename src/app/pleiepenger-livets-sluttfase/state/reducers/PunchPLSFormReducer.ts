@@ -13,7 +13,6 @@ const initialState: IPunchPLSFormState = {
     inputErrors: undefined,
 };
 
- import/prefer-default-export
 export function PunchPLSFormReducer(
     punchFormState: IPunchPLSFormState,
     action: IPunchPLSFormActionTypes,
