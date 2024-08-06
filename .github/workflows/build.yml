@@ -27,7 +27,7 @@ jobs:
                   scope: '@navikt'
 
             - name: Installere moduler
-              run: yarn workspaces focus k9-punsj-frontend --production
+              run: yarn install
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
