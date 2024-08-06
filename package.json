@@ -210,5 +210,5 @@
             "dist"
         ]
     },
-    "packageManager": "yarn@3.4.1"
+    "packageManager": "yarn@4.4.0"
 }
