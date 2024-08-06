@@ -169,4 +169,9 @@ export const testHandlers = {
                 status: 200,
             }),
     ),
+
+    settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT, async () => {
+        await delay(500);
+        return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
+    }),
 };
