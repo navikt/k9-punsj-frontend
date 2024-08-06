@@ -48,7 +48,7 @@ export function periodToFormattedString(periode: string) {
 export const canStringBeParsedToJSON = (stringToBeParsed: string) => {
     try {
         JSON.parse(stringToBeParsed);
-    } catch (error) {
+    } catch {
         return false;
     }
     return true;

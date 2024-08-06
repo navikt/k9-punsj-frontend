@@ -54,7 +54,8 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
     const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter?.reduce(
         (prev, current) => [
             ...prev,
-            //  no-unsafe-optional-chaining
+
+            // eslint-disable-next-line no-unsafe-optional-chaining
             ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
         ],
         [],

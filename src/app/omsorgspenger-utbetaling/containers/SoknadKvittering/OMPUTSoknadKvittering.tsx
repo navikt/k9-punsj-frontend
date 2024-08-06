@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
@@ -17,6 +14,10 @@ import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../utils';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';
+
+// Import the JSON locale file
+import nbLocale from 'i18n-iso-countries/langs/nb.json';
+
 import './ompUtSoknadKvittering.less';
 
 interface IOwnProps {
@@ -24,7 +25,7 @@ interface IOwnProps {
 }
 
 export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvittering }) => {
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    countries.registerLocale(nbLocale);
     const intl = useIntl();
 
     const { journalposter, mottattDato } = kvittering || {};

@@ -23,6 +23,7 @@ interface OwnProps {
     tittelRenderer?: () => string | React.FunctionComponent;
 }
 
+// eslint-disable-next-line react/display-name
 export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
     (
         {

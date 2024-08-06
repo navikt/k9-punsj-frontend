@@ -14,7 +14,7 @@ import { IOppholdsLand } from '../../models/types/PSBSoknad';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
 export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
-    return (
+    const component = (
         periodeinfo: Periodeinfo<IOppholdsLand>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IOppholdsLand>,
@@ -35,9 +35,11 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                         updatePeriodeinfoInSoknad({ land: event.target.value });
                     }}
                     onBlur={(event) => updatePeriodeinfoInSoknad({ land: event.target.value })}
-                    feil={getErrorMessage(`${feilprefiks}.land`)}
+                    // feil={getErrorMessage(`${feilprefiks}.land`)}
                 />
             </div>
         );
     };
+    component.displayName = 'pfLand';
+    return component;
 }

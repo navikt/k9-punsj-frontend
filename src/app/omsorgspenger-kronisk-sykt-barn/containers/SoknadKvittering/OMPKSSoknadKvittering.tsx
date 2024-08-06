@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
@@ -18,6 +15,10 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../utils';
 import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
+
+// Import the JSON locale file
+import nbLocale from 'i18n-iso-countries/langs/nb.json';
+
 import './ompKSSoknadKvittering.less';
 
 interface IOwnProps {
@@ -31,7 +32,7 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    countries.registerLocale(nbLocale);
 
     const { journalposter } = response;
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);

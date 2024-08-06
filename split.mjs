@@ -21,6 +21,7 @@ function splitChunks(items, total) {
 
         chunks[currentChunk].push(items[currentItem]);
 
+        // eslint-disable-next-line no-plusplus
         currentChunk++;
         if (currentChunk >= total) {
             currentChunk = 0;

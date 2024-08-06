@@ -17,7 +17,7 @@ import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
-    return (
+    const component = (
         periodeinfo: Periodeinfo<IArbeidstidPeriodeMedTimer>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
@@ -74,11 +74,11 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                 </div>
                 <div className="utregnetArbeidstid__container">
                     <div>
-                        <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag} />
+                        <UtregningArbeidstid arbeidstid={jobberNormaltTimerPerDag!} />
                     </div>
                     <div>
                         <UtregningArbeidstid
-                            arbeidstid={faktiskArbeidTimerPerDag}
+                            arbeidstid={faktiskArbeidTimerPerDag!}
                             normalArbeidstid={jobberNormaltTimerPerDag}
                         />
                     </div>
@@ -86,4 +86,6 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
             </div>
         );
     };
+    component.displayName = 'pfArbeidstider';
+    return component;
 }

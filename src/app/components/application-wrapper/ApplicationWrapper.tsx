@@ -3,6 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
+
 import '@navikt/ft-plattform-komponenter/dist/style.css';
 
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
@@ -13,6 +14,7 @@ import { checkAuth } from 'app/state/actions';
 
 import AppContainer from '../../containers/AppContainer';
 import { getEnvironmentVariable } from '../../utils';
+
 import './applicationWrapper.less';
 
 interface IApplicationWrapperComponentProps {

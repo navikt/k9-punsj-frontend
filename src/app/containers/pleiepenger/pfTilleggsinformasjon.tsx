@@ -14,7 +14,7 @@ import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
-    return (
+    const component = (
         periodeinfo: Periodeinfo<ITilleggsinformasjon>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
@@ -43,4 +43,6 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
             </div>
         );
     };
+    component.displayName = 'pfTilleggsinformasjon';
+    return component;
 }

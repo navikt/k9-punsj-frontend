@@ -103,6 +103,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
+                // eslint-disable-next-line react/jsx-key
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,

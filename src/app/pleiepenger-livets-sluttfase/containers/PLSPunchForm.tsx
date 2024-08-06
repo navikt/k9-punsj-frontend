@@ -17,6 +17,7 @@ import {
     SelvstendigNaerinsdrivende,
 } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -121,6 +122,7 @@ type IPunchPLSFormProps = IPunchPLSFormComponentProps &
     IPunchPLSFormDispatchProps;
 
 function withHooks<P>(Component: ComponentType<IPunchPLSFormComponentProps>) {
+    // eslint-disable-next-line react/display-name
     return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
@@ -129,6 +131,7 @@ function withHooks<P>(Component: ComponentType<IPunchPLSFormComponentProps>) {
 }
 
 export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPunchPLSFormComponentState> {
+    static displayName = 'PunchFormComponent';
     private initialPeriode: IPeriode = { fom: '', tom: '' };
 
     private initialArbeidstaker = new Arbeidstaker({

@@ -21,7 +21,6 @@ export default function UhaanderteFeilmeldinger({
                 if (!feilmelding) {
                     return null;
                 }
-                react / no - array - index - key;
                 return <Feilmelding key={feilmelding + index} feil={feilmelding} />;
             })}
         </>

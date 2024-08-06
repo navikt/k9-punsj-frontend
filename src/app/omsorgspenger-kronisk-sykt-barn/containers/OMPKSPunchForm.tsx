@@ -5,6 +5,7 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import { Alert, Button, HelpText, Modal, Tag, Loader } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
@@ -88,6 +89,7 @@ type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
     IPunchOMPKSFormDispatchProps;
 
 function withHooks<P>(Component: ComponentType<IPunchOMPKSFormComponentProps>) {
+    // eslint-disable-next-line react/display-name
     return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();

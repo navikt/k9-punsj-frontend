@@ -100,7 +100,6 @@ export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks:
                 hooks.setK9FormatErrors([]);
             }
         } catch (error) {
-            no - console;
             console.error(error);
         }
     };

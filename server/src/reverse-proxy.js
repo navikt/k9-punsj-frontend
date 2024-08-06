@@ -86,7 +86,6 @@ const proxyOptions = (api) => ({
     },
 });
 
-func - names;
 const timedOut = function (req, res, next) {
     if (!req.timedout) {
         next();

@@ -78,7 +78,7 @@ export const klassifiserDokument = (body: {
                         responseBody.feil ||
                         responseBody.message ||
                         'Det oppstod en feil ved klassifisering.';
-                } catch (error) {
+                } catch {
                     feil = 'Det oppstod en feil ved klassifisering.';
                 }
 
@@ -101,7 +101,7 @@ export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIden
             try {
                 const responseBody = await response.json();
                 feil = responseBody.detail || responseBody.feil || responseBody.message || 'Det oppstod en feil.';
-            } catch (error) {
+            } catch {
                 feil = 'Det oppstod en feil.';
             }
             throw Error(feil);
@@ -120,7 +120,7 @@ export const settJournalpostPaaVentUtenSøknadId = (journalpostid: string) =>
                         responseBody.feil ||
                         responseBody.message ||
                         'Det oppstod en feil når journalpost skulle settes på vent.';
-                } catch (error) {
+                } catch {
                     feil = 'Det oppstod en feil når journalpost skulle settes på vent.';
                 }
                 throw Error(feil);

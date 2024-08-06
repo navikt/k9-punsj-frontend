@@ -5,7 +5,6 @@ import { Tidsformat } from './timeUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
-    no - plusplus;
     for (let i = dato.length - 1; i >= 0; i--) {
         formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
     }
@@ -42,7 +41,6 @@ export const erEldreEnn4år = (dato: string) => {
 };
 
 export const printAndReturnValue = (value: any) => {
-    no - console;
     console.log(value);
     return value;
 };

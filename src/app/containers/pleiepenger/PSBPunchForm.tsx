@@ -87,6 +87,7 @@ export interface IPunchFormStateProps {
 }
 
 function withHooks<P>(Component: ComponentType<IPunchFormComponentProps>) {
+    // eslint-disable-next-line react/display-name
     return (props: P) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();

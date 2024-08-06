@@ -7,7 +7,6 @@ import fagsaker from '../../fixtures/fagsaker.json';
 
 const dokumenttype = 'Omsorgspenger';
 const valgteDokumentType = 'Omsorgspenger: direkte utbetaling av omsorgspenger';
-const valgteDokumentTypeKode = 'OMSORGSPENGER_UT';
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
 const fnrNySøker = '12448325820';

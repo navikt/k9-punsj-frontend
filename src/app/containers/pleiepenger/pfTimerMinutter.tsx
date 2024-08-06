@@ -15,7 +15,7 @@ import { Periodeinfo } from '../../models/types/Periodeinfo';
 import { stringToNumber } from '../../utils';
 
 export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
-    return (
+    const component = (
         periodeinfo: Periodeinfo<ITimerOgMinutter>,
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITimerOgMinutter>,
@@ -75,4 +75,7 @@ export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
             </div>
         );
     };
+
+    component.displayName = 'pfTimerMinutter';
+    return component;
 }

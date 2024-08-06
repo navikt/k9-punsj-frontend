@@ -14,7 +14,6 @@ import {
 } from 'app/state/actions';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { ROUTES } from 'app/constants/routes';
-import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';

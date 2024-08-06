@@ -16,7 +16,7 @@ const getErrorString = (errorText: string): string => {
             if (errorObject && errorObject.melding) {
                 return errorObject.melding;
             }
-        } catch (error) {
+        } catch {
             return errorText;
         }
     }

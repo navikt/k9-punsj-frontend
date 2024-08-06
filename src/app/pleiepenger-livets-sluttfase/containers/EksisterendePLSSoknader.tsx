@@ -150,6 +150,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
+                // eslint-disable-next-line react/jsx-key
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,

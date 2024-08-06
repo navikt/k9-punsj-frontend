@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState, IFordelingState, IJournalpost } from 'app/models/types';
+import { IEksisterendeSoknaderState } from 'app/models/types';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
@@ -122,6 +122,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
+                // eslint-disable-next-line react/jsx-key
                 <DokumentIdList dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
