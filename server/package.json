@@ -4,12 +4,13 @@
     "license": "MIT",
     "private": true,
     "type": "module",
-    "packageManager": "yarn@3.4.1",
+    "packageManager": "yarn@4.4.0",
     "scripts": {
         "start-express": "node ./server.js"
     },
     "dependencies": {
         "@navikt/oasis": "3.3.0",
+        "@sentry/cli": "2.33.1",
         "axios": "1.7.3",
         "connect-timeout": "1.9.0",
         "cors": "2.8.5",

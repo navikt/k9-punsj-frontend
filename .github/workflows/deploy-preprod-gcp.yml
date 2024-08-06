@@ -49,9 +49,7 @@ jobs:
                   path: ./dist
 
             - name: Installere moduler
-              run: |
-                  cd server
-                  yarn install --immutable
+              run: yarn workspaces focus @k9-punsj-frontend/server --production
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
