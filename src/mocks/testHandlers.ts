@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import { http, HttpResponse, delay } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';

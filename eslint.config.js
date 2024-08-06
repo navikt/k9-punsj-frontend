@@ -1,15 +1,18 @@
 import tsParser from '@typescript-eslint/parser';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
-import prettier from 'eslint-config-prettier';
+import prettierConfig from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
-import eslintImport from 'eslint-plugin-import';
+
+const OFF = 0;
+const WARNING = 1;
+const ERROR = 2;
 
 export default [
     {
         name: 'base-config',
-        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'], // specifying which files this configuration applies to
-        ignores: ['node_modules/**/*', 'dist/**/*'], // specify ignored files
+        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+        ignores: ['node_modules/**/*', 'dist/**/*'],
         languageOptions: {
             parser: tsParser,
             sourceType: 'module',
@@ -18,14 +21,10 @@ export default [
             '@typescript-eslint': typescriptPlugin,
             'react-hooks': reactHooksPlugin,
             react: eslintPluginReact,
-            import: eslintImport,
         },
         settings: {
-            'import/resolver': {
-                node: {
-                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.scss'],
-                    moduleDirectory: ['node_modules', 'src/'],
-                },
+            react: {
+                version: 'detect',
             },
         },
         rules: {
@@ -33,10 +32,6 @@ export default [
             'react/forbid-prop-types': 0,
             '@typescript-eslint/no-use-before-define': ['error'],
             '@typescript-eslint/no-shadow': 'error',
-            'import/no-extraneous-dependencies': [
-                'warn',
-                { devDependencies: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'] },
-            ],
             'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
             'no-use-before-define': 'off',
             'no-shadow': 'off',
@@ -53,5 +48,5 @@ export default [
             '@typescript-eslint/ban-ts-comment': 0,
         },
     },
-    prettier,
+    prettierConfig,
 ];

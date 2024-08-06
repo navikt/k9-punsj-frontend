@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import { HttpResponse, http } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 

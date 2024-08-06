@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line
 import { render } from '@testing-library/react';
 import React, { ReactNode } from 'react';
 import { IntlShape } from 'react-intl';

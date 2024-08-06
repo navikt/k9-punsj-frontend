@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable  */
 /** Brukes i jest.config.json */
 import { setProjectAnnotations } from '@storybook/react';
 import '@testing-library/jest-dom';
