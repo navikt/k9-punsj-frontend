@@ -27,7 +27,7 @@ jobs:
                   scope: '@navikt'
 
             - name: Installere moduler
-              run: yarn install
+              run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
