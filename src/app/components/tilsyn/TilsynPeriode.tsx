@@ -2,13 +2,15 @@ import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Checkbox } from '@navikt/ds-react';
+import { Checkbox, ToggleGroup } from '@navikt/ds-react';
 
-import { IPeriode, ITimerOgMinutter, Periodeinfo } from 'app/models/types';
+import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
 
 import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
+import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
+import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 
 interface OwnProps {
     name: string;
@@ -18,8 +20,11 @@ interface OwnProps {
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const formik = useFormikContext();
-    const [, tidMeta] = useField(`${name}.timer`);
+    const [timerField] = useField(`${name}.timer`);
+    const [minutterField] = useField(`${name}.minutter`);
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
+    const [tidsformatField] = useField(`${name}.tidsformat`);
+    const [desimalerField] = useField(`${name}.perDagString`);
 
     const intl = useIntl();
 
@@ -30,11 +35,11 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
     return (
         <Field name={name}>
-            {({ field, meta }: FieldProps<Periodeinfo<ITimerOgMinutter>>) => (
+            {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => (
                 <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
                     <div style={{ display: 'flex' }}>
                         <PeriodInput
-                            periode={field.value.periode || {}}
+                            periode={field.value.periode ?? {}}
                             intl={intl}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.periode`, v);
@@ -51,7 +56,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     {soknadsperioder.length === 1 && (
                         <Checkbox
                             onClick={(event) =>
-                                (event.target as HTMLInputElement).checked
+                                event.currentTarget.checked
                                     ? velgSoknadsperiode(soknadsperioder[0])
                                     : nullstillPeriode()
                             }
@@ -59,20 +64,52 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             Velg hele søknadsperioden
                         </Checkbox>
                     )}
-                    <div style={{ display: 'flex', marginTop: '1.5625rem' }}>
+                    <div style={{ marginTop: '1.5625rem' }}>
                         <div>
-                            <TimerOgMinutter
-                                label="Tid i omsorgstilbud"
-                                onChangeTimer={(v) => formik.setFieldValue(`${name}.timer`, v)}
-                                onChangeMinutter={(v) => formik.setFieldValue(`${name}.minutter`, v)}
-                                timer={String(field.value.timer)}
-                                minutter={String(field.value.minutter)}
-                                error={tidMeta.touched && (meta.error?.timer || meta.error?.minutter)}
-                                onBlur={() => {
-                                    formik.setFieldTouched(`${name}.timer`);
-                                    formik.setFieldTouched(`${name}.minutter`);
+                            <ToggleGroup
+                                label="Hvordan vil du oppgi tid i omsorgstilbud?"
+                                size="small"
+                                onChange={(v: Tidsformat) => {
+                                    formik.setFieldValue(`${name}.tidsformat`, v);
+                                    switch (v) {
+                                        case Tidsformat.Desimaler:
+                                            const desimaler = timerOgMinutterTilTimerMedDesimaler({
+                                                timer: timerField.value,
+                                                minutter: minutterField.value,
+                                            });
+                                            formik.setFieldValue(`${name}.perDagString`, desimaler);
+                                            break;
+                                        case Tidsformat.TimerOgMin:
+                                            const [timer, minutter] = timerMedDesimalerTilTimerOgMinutter(
+                                                Number(desimalerField.value),
+                                            );
+                                            formik.setFieldValue(`${name}.timer`, timer);
+                                            formik.setFieldValue(`${name}.minutter`, minutter);
+                                            break;
+                                    }
                                 }}
-                            />
+                                value={tidsformatField.value}
+                            >
+                                <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                                <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
+                            </ToggleGroup>
+                        </div>
+                        <div className="mt-6">
+                            {tidsformatField.value === Tidsformat.TimerOgMin && (
+                                <TimerOgMinutter
+                                    label="Tid i omsorgstilbud"
+                                    onChangeTimer={(v) => formik.setFieldValue(`${name}.timer`, v)}
+                                    onChangeMinutter={(v) => formik.setFieldValue(`${name}.minutter`, v)}
+                                    timer={field.value.timer ?? ''}
+                                    minutter={field.value.minutter ?? ''}
+                                    error={meta.touched && (meta.error?.timer || meta.error?.minutter)}
+                                    onBlur={() => {
+                                        formik.setFieldTouched(`${name}.timer`);
+                                        formik.setFieldTouched(`${name}.minutter`);
+                                    }}
+                                />
+                            )}
+                            {tidsformatField.value === Tidsformat.Desimaler && <TilsynPeriodeDesimaler name={name} />}
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
-/* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 
 import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
+import { Tidsformat } from 'app/utils';
 
 const yupLocale = {
     mixed: {
@@ -87,6 +87,8 @@ export const periodeMedTimerOgMinutter = yup.object({
     }),
     timer,
     minutter,
+    perDagString: yup.string().label('Desimal'),
+    tidsformat: yup.string().required().oneOf(Object.values(Tidsformat)),
 });
 export const arbeidstimerPeriode = yup.object().shape({
     periode: yup.object({

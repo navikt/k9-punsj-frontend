@@ -1,14 +1,14 @@
-/* eslint-disable max-classes-per-file */
 import { Arbeidstid, IArbeidstid } from './Arbeidstid';
 import BegrunnelseForInnsending from './BegrunnelseForInnsending';
 import { Barn, IBarn } from './IBarn';
 import { IOmsorg, Omsorg } from './Omsorg';
 import { IOpptjeningAktivitet, OpptjeningAktivitet } from './OpptjeningAktivitet';
-import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter } from './Periode';
+import { IOmsorgstid, IPeriode, Periode, PeriodeMedTimerMinutter } from './Periode';
 import { Periodeinfo } from './Periodeinfo';
 import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
 import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
 import { IUttak, Uttak } from './Uttak';
+import { DeepRequired } from 'app/utils/deep-required';
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -39,17 +39,17 @@ export interface IPSBSoknad {
 }
 
 export interface ITilsynsordning {
-    perioder?: Periodeinfo<ITimerOgMinutter>[];
+    perioder?: Periodeinfo<IOmsorgstid>[];
 }
 
-export class Tilsynsordning implements Required<ITilsynsordning> {
+export class Tilsynsordning implements DeepRequired<ITilsynsordning> {
     perioder: PeriodeMedTimerMinutter[];
 
     constructor(t: ITilsynsordning) {
         this.perioder = (t.perioder || []).map((p) => new PeriodeMedTimerMinutter(p));
     }
 
-    values(): Required<ITimerOgMinutter>[] {
+    values(): DeepRequired<IOmsorgstid>[] {
         return this.perioder.map((p) => p.values());
     }
 }
