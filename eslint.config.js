@@ -1,5 +1,4 @@
 import globals from 'globals';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -20,9 +19,6 @@ export default [
             },
         },
         languageOptions: { globals: globals.browser },
-        plugins: {
-            'react-hooks': reactHooksPlugin,
-        },
     },
 
     eslint.configs.recommended,

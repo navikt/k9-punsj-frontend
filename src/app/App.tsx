@@ -26,7 +26,6 @@ import {
 } from '@sentry/react';
 
 import '@navikt/ds-css';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
 
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';

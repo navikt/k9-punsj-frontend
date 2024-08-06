@@ -1,11 +1,7 @@
-import * as React from 'react';
+import  React, {useEffect} from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-
-import { Header, UserPanel } from '@navikt/ft-plattform-komponenter';
-
-import '@navikt/ft-plattform-komponenter/dist/style.css';
-
+import { InternalHeader, Spacer } from "@navikt/ds-react";
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { IAuthState } from 'app/models/types';
 import { Locale } from 'app/models/types/Locale';
@@ -33,13 +29,16 @@ type IApplicationWrapperProps = React.PropsWithChildren<IApplicationWrapperCompo
 
 const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (props: IApplicationWrapperProps) => {
     const { authState, locale, children } = props;
+    
     const [k9LosUrl, setK9LosUrl] = React.useState<string>('http://localhost:8080');
+    
     const dispatch = useDispatch();
-    React.useEffect(() => {
+
+    useEffect(() => {
         setK9LosUrl(getEnvironmentVariable('K9_LOS_URL') || 'http://localhost:8080');
     }, [window.appSettings]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!authState.loggedIn) {
             dispatch(checkAuth());
         }
@@ -49,9 +48,11 @@ const ApplicationWrapper: React.FunctionComponent<IApplicationWrapperProps> = (p
         <IntlProvider {...{ locale }}>
             <div className="app fit-window-height">
                 <div className={isDev ? 'headercontainer' : ''}>
-                    <Header title="K9-punsj" titleHref={k9LosUrl}>
-                        <UserPanel name={authState.userName} />
-                    </Header>
+                    <InternalHeader>
+                    <InternalHeader.Title as="a" href={k9LosUrl}>K9-punsj</InternalHeader.Title>
+                    <Spacer />
+                    <InternalHeader.User name={authState.userName|| ''} />
+                    </InternalHeader>
                 </div>
                 <AppContainer>
                     <Router>{children}</Router>

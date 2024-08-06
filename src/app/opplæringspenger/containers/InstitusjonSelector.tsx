@@ -1,8 +1,7 @@
-import { useField } from 'formik';
+// import { useField } from 'formik';
 import * as React from 'react';
 
 import { Label } from '@navikt/ds-react';
-import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
 
 import './institusjonSelector.css';
 
@@ -15,7 +14,7 @@ interface DiagnosekodeSelectorProps {
 // const fetchDiagnosekoderByQuery = (queryString: string) =>
 //     fetch(`/k9/diagnosekoder/?query=${queryString}&max=8`).then((response) => response.json());
 
-const institusjoner = [
+export const institusjoner = [
     { value: 'Sykehus Asker/Bærum', key: 'e381480a-a0e8-4199-b963-82ef5ebbb9f3' },
     { value: 'Sykehuset Buskerud (Drammen sykehus)', key: '503c6d3d-6c97-4de6-9ce8-5d3fbc45488c' },
     { value: 'Sykehuset i Vestfold', key: 'b2c5b913-40ed-4557-93cc-08f525bee5a9' },
@@ -36,7 +35,7 @@ const institusjoner = [
     { value: 'Sunnaas sykehus', key: '053a0d6d-37bc-4618-8dff-b6321e927534' },
 ];
 
-interface Institusjon {
+/*interface Institusjon {
     key: string;
     value: string;
 }
@@ -45,10 +44,11 @@ const findInstitusjonValue = (institusjonKey: string) =>
     institusjoner.find((intstitusjon) => intstitusjon.key === institusjonKey)?.value || '';
 const findInstitusjonKey = (institusjonValue: string) =>
     institusjoner.find((intstitusjon) => intstitusjon.value === institusjonValue)?.key;
+*/
 
 const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorProps): JSX.Element => {
-    const [field, meta, helpers] = useField(name);
-    const [suggestions, setSuggestions] = React.useState<Institusjon[]>(institusjoner);
+    // const [field, meta, helpers] = useField(name);
+    /*const [suggestions, setSuggestions] = React.useState<Institusjon[]>(institusjoner);
     const [inputValue, setInputValue] = React.useState(findInstitusjonValue(field.value));
     const [isLoading, setIsLoading] = React.useState(false);
     console.error('isLoading skal vel settes???', setIsLoading);
@@ -60,13 +60,15 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
         );
         setSuggestions(newSuggestionList);
     };
-
+*/
     return (
         <div className="institusjonContainer">
             <div className={hideLabel ? 'institusjonContainer__hideLabel' : ''}>
                 <Label htmlFor={name}>{label}</Label>
             </div>
             <div className="institusjonContainer__autocompleteContainer">
+                {/*
+                
                 <Autocomplete
                     id={name}
                     suggestions={suggestions}
@@ -91,8 +93,10 @@ const InstitusjonSelector = ({ label, name, hideLabel }: DiagnosekodeSelectorPro
                     placeholder={label}
                     isLoading={isLoading}
                 />
+                */}
+                
             </div>
-            {meta.touched && meta.error && <FieldError message={meta.error} />}
+            {/*meta.touched && meta.error && <FieldError message={meta.error} />*/}
         </div>
     );
 };
