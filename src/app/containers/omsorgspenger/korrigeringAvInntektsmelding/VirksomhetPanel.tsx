@@ -165,7 +165,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
                                 if (arbeidsforholdId === null) {
                                     return (
-                                        // eslint-disable-next-line react/no-array-index-key
+                                         react/no-array-index-key
                                         <option key={`null-${index}`} value="null">
                                             uten arbeidsforholdsID
                                         </option>

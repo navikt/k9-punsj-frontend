@@ -65,7 +65,7 @@ const proxyOptions = (api) => ({
         }
         return headers;
     },
-    // eslint-disable-next-line consistent-return
+     consistent-return
     proxyErrorHandler(err, res, next) {
         switch (err && err.code) {
             case 'ENOTFOUND': {
@@ -86,7 +86,7 @@ const proxyOptions = (api) => ({
     },
 });
 
-// eslint-disable-next-line func-names
+ func-names
 const timedOut = function (req, res, next) {
     if (!req.timedout) {
         next();

@@ -100,7 +100,7 @@ export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks:
                 hooks.setK9FormatErrors([]);
             }
         } catch (error) {
-            // eslint-disable-next-line no-console
+            no - console;
             console.error(error);
         }
     };

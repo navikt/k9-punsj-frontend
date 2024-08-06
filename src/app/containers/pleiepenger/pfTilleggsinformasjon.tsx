@@ -13,7 +13,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
 import { Periodeinfo } from '../../models/types/Periodeinfo';
 
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
     return (
         periodeinfo: Periodeinfo<ITilleggsinformasjon>,

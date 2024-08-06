@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
 

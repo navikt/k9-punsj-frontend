@@ -68,7 +68,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     return (
         <Panel className="periodepanel">
             {periods.map((p, i) => (
-                // eslint-disable-next-line react/no-array-index-key
+                 react/no-array-index-key
                 <div className="flex flex-wrap" key={i}>
                     <div className="periodepanel-input">
                         <PeriodInput

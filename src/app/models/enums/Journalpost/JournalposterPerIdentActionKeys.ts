@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export enum JournalposterPerIdentActionKeys {
     JOURNALPOSTER_PER_IDENT_SET = 'JOURNALPOSTER_PER_IDENT_SET',
     JOURNALPOSTER_PER_IDENT_LOAD = 'JOURNALPOSTER_PER_IDENT_LOAD',

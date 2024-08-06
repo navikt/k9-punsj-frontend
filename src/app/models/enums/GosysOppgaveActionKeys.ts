@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export enum GosysOppgaveActionKeys {
     OPPRETT_OPPGAVE_REQUEST = 'OPPRETT_GOSYS_OPPGAVE_REQUEST',
     OPPRETT_OPPGAVE_SUCCESS = 'OPPRETT_GOSYS_OPPGAVE_SUCCESS',

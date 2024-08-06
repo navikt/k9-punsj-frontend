@@ -110,16 +110,16 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
     const perioderUtenInnleggelse = Object.keys(perioder)
         .filter((key) => !perioder[key].årsak)
         .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
+            no - param - reassign;
             obj[key] = perioder[key];
             return obj;
         }, {});
     const perioderMedInnleggelse = Object.keys(perioder)
         .filter((key) => !!perioder[key].årsak)
         .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
+            no - param - reassign;
             obj[key] = perioder[key];
-            // eslint-disable-next-line no-param-reassign
+            no - param - reassign;
             obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
             return obj;
         }, {} as IPSBSoknadKvitteringUtenlandsopphold);

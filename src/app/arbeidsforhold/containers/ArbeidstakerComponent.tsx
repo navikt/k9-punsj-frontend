@@ -53,7 +53,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-        // eslint-disable-next-line react/destructuring-assignment
+         react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',

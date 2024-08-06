@@ -46,7 +46,7 @@ export default function TilsynPeriodeListe({
                             <div>
                                 {values.perioder.map((periode, index) => (
                                     <TilsynPeriode
-                                        // eslint-disable-next-line react/no-array-index-key
+                                         react/no-array-index-key
                                         key={index}
                                         name={`perioder.${index}`}
                                         soknadsperioder={soknadsperioder}

@@ -129,7 +129,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+         @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             validerSoeknad(values, identState.søkerId),
         {

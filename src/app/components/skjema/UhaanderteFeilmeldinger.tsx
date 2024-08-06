@@ -21,7 +21,7 @@ export default function UhaanderteFeilmeldinger({
                 if (!feilmelding) {
                     return null;
                 }
-                // eslint-disable-next-line react/no-array-index-key
+                react / no - array - index - key;
                 return <Feilmelding key={feilmelding + index} feil={feilmelding} />;
             })}
         </>

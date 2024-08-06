@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-// eslint-disable-next-line
+
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useQueries } from 'react-query';

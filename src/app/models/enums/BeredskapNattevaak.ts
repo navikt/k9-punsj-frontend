@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export enum BeredskapNattevaak {
     BEREDSKAP = 'skjema.beredskapognattevaak.beredskap',
     NATTEVAAK = 'skjema.beredskapognattevaak.nattevaak',

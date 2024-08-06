@@ -59,7 +59,7 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    react / jsx - props - no - spreading;
     return shallow(<Listepaneler {...listepanelerProps} />);
 };
 

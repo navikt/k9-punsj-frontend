@@ -11,7 +11,7 @@ const initialState: IEksisterendeOMPKSSoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export function EksisterendeOMPKSSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendeOMPKSSoknaderState,
     action: IEksisterendeOMPKSSoknaderActionTypes,

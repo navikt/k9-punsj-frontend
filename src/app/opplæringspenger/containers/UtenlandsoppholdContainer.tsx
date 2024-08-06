@@ -29,7 +29,7 @@ const UtenlandsoppholdContainer = () => {
                     <>
                         {values.utenlandsopphold?.map((_, index) => (
                             <Utenlandsopphold
-                                // eslint-disable-next-line react/no-array-index-key
+                                 react/no-array-index-key
                                 key={index}
                                 arrayHelpers={arrayHelpers}
                                 fieldArrayIndex={index}

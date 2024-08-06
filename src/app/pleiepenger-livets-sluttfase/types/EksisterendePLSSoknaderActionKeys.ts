@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export enum EksisterendePLSSoknaderActionKeys {
     EKSISTERENDE_PLS_SOKNADER_SET = 'PUNCH_EKSISTERENDE_PLS_SOKNADER_SET',
     EKSISTERENDE_PLS_SOKNADER_LOAD = 'PUNCH_EKSISTERENDE_PLS_SOKNADER_LOAD',

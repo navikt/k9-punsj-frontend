@@ -7,7 +7,7 @@ const initialState: IAuthState = {
     loggedIn: false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export function AuthReducer(authState: IAuthState = initialState, action: IAuthActionTypes): IAuthState {
     switch (action.type) {
         case AuthActionKeys.LOAD:

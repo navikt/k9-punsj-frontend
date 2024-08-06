@@ -7,7 +7,7 @@ const initialState: IGosysOppgaveState = {
     isAwaitingGosysOppgaveRequestResponse: false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
+ import/prefer-default-export
 export function GosysOppgaveReducer(
     gosysOppgaveState: IGosysOppgaveState = initialState,
     action: IOpprettGosysOppgaveActionTypes,

@@ -43,7 +43,7 @@ const cors = {
         }) || '',
 };
 
-// eslint-disable-next-line consistent-return
+ consistent-return
 const configValueAsJson = ({ name, required = true }) => {
     const value = envVar({ name, required });
     if (!value) {
