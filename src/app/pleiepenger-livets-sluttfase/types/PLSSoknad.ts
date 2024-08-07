@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { ISelvstendigNaerinsdrivende, SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 
 import {
@@ -10,10 +9,12 @@ import {
     Periode,
     PeriodeMedTimerMinutter,
     Periodeinfo,
-} from '../../models/types';
-import { ArbeidstidInfo } from '../../models/types/ArbeidstidInfo';
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
-import { FrilanserOpptjening, IFrilanserOpptjening } from '../../models/types/FrilanserOpptjening';
+    IOmsorgstid,
+} from 'app/models/types';
+import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
+import { FrilanserOpptjening, IFrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
+import { DeepRequired } from 'app/utils/deep-required';
 
 export interface IPLSSoknad {
     soeknadId: string;
@@ -121,17 +122,17 @@ export class SoknadsInfo implements ISoknadsInfo {
 }
 
 export interface ITilsynsordning {
-    perioder?: Periodeinfo<ITimerOgMinutter>[];
+    perioder?: Periodeinfo<IOmsorgstid>[];
 }
 
-export class Tilsynsordning implements Required<ITilsynsordning> {
+export class Tilsynsordning implements DeepRequired<ITilsynsordning> {
     perioder: PeriodeMedTimerMinutter[];
 
     constructor(t: ITilsynsordning) {
         this.perioder = (t.perioder || []).map((p) => new PeriodeMedTimerMinutter(p));
     }
 
-    values(): Required<ITimerOgMinutter>[] {
+    values(): DeepRequired<IOmsorgstid>[] {
         return this.perioder.map((p) => p.values());
     }
 }

@@ -1,6 +1,7 @@
 import backendSoknad from '../../../cypress/fixtures/omp_ut/backendSoknad';
 import frontendSoknad from '../../../cypress/fixtures/omp_ut/frontendSoknad';
 import { backendTilFrontendMapping, frontendTilBackendMapping } from './utils';
+import { timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 
 describe('Mapping av omsorgspengeutbetaling', () => {
     test('mapper fra backend til frontend ', () => {
@@ -25,5 +26,12 @@ describe('Mapping av omsorgspengeutbetaling', () => {
         const backendMapping = frontendTilBackendMapping(frontendSoknad);
 
         expect(backendMapping).toEqual(backendSoknad);
+    });
+});
+
+describe('konverter', () => {
+    test('regner riktig', () => {
+        const desimaler = timerOgMinutterTilTimerMedDesimaler({ timer: '10', minutter: '3' });
+        expect(desimaler).toEqual('10.05');
     });
 });

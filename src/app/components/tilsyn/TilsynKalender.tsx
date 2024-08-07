@@ -4,8 +4,15 @@ import { useIntl } from 'react-intl';
 
 import { Button, Modal } from '@navikt/ds-react';
 
-import { IPeriode, ITimerOgMinutter, Periode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
-import { formats, removeDatesFromPeriods } from 'app/utils';
+import {
+    IPeriode,
+    ITimerOgMinutter,
+    Periode,
+    PeriodeMedTimerMinutter,
+    Periodeinfo,
+    IOmsorgstid,
+} from 'app/models/types';
+import { formats, removeDatesFromPeriods, Tidsformat } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { periodeMedTimerTilKalenderdag } from 'app/utils/mappingUtils';
 
@@ -16,9 +23,9 @@ import TilsynPeriodeListe from './TilsynPeriodeListe';
 import TilsynTid from './TilsynTid';
 
 interface OwnProps {
-    perioderMedTimer: Periodeinfo<ITimerOgMinutter>[];
-    updateSoknad: (v: Periodeinfo<ITimerOgMinutter>[]) => void;
-    updateSoknadState: (v: Periodeinfo<ITimerOgMinutter>[]) => void;
+    perioderMedTimer: Periodeinfo<IOmsorgstid>[];
+    updateSoknad: (v: Periodeinfo<IOmsorgstid>[]) => void;
+    updateSoknadState: (v: Periodeinfo<IOmsorgstid>[]) => void;
     nyeSoknadsperioder: IPeriode[];
     eksisterendeSoknadsperioder: IPeriode[];
 }
@@ -39,10 +46,14 @@ export default function TilsynKalender({
         timer,
         minutter,
         selectedDates,
+        perDagString,
+        tidsformat,
     }: {
         timer: number;
         minutter: number;
         selectedDates: Date[];
+        perDagString: string;
+        tidsformat: Tidsformat;
     }) => {
         const utenDagerSomAlleredeFinnes = selectedDates.filter(
             (day) => !perioderMedTimer.some((periode) => periode.periode.includesDate(day)),
@@ -54,6 +65,8 @@ export default function TilsynKalender({
             }),
             timer,
             minutter,
+            perDagString,
+            tidsformat,
         }));
         updateSoknad([...perioderMedTimer, ...payload]);
         updateSoknadState([...perioderMedTimer, ...payload]);

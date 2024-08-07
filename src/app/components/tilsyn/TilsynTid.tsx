@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button, Heading } from '@navikt/ds-react';
+import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import { timerOgMinutter } from 'app/rules/yup';
 
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
+import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
+import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
+import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
+import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 
 interface OwnProps {
     lagre: (params: any) => void;
     toggleModal: () => void;
     selectedDates?: Date[];
-    heading?: string;
+    heading: string;
     clearSelectedDates?: () => void;
 }
 
@@ -19,11 +23,26 @@ const TilsynTid = ({ lagre, heading, selectedDates, toggleModal, clearSelectedDa
     const [minutter, setMinutter] = useState('');
     const [error, setError] = useState('');
     const [visError, setVisError] = useState(false);
+    const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
+    const [perDagString, setPerDagString] = useState('');
+
+    const setPerDagStringFraTimerOgMinutter = () => {
+        const desimal = timerOgMinutterTilTimerMedDesimaler({ timer, minutter });
+        setPerDagString(desimal);
+    };
+
+    const setTimerOgMinutterFraPerDagString = (_perDagString: string = perDagString) => {
+        const timerOgMinutterKonvertert = timerMedDesimalerTilTimerOgMinutter(Number(_perDagString));
+        setTimer(timerOgMinutterKonvertert[0]);
+        setMinutter(timerOgMinutterKonvertert[1]);
+    };
 
     const payload = {
         timer,
         minutter,
         selectedDates,
+        perDagString,
+        tidsformat,
     };
 
     useEffect(() => {
@@ -37,18 +56,61 @@ const TilsynTid = ({ lagre, heading, selectedDates, toggleModal, clearSelectedDa
     }, [timer, minutter]);
 
     return (
-        <div className="mt-4">
-            {heading && <Heading size="small">{heading}</Heading>}
-            <div className="flex mt-6">
-                <TimerOgMinutter
-                    label="Tid i omsorgstilbud"
-                    onChangeTimer={setTimer}
-                    onChangeMinutter={setMinutter}
-                    onBlur={() => setVisError(true)}
-                    timer={timer}
-                    minutter={minutter}
-                    error={visError ? error : undefined}
-                />
+        <div className="ml-4 mt-4">
+            <Heading size="small">{heading}</Heading>
+            <div className="mt-6">
+                <ToggleGroup
+                    label="Hvordan vil du oppgi tid i omsorgstilbud?"
+                    size="small"
+                    onChange={(v: Tidsformat) => {
+                        setTidsformat(v);
+                        switch (v) {
+                            case Tidsformat.Desimaler:
+                                setPerDagStringFraTimerOgMinutter();
+                                break;
+                            case Tidsformat.TimerOgMin:
+                                setTimerOgMinutterFraPerDagString();
+                                break;
+                        }
+                    }}
+                    value={tidsformat}
+                >
+                    <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                    <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
+                </ToggleGroup>
+                {tidsformat === Tidsformat.TimerOgMin && (
+                    <div className="mt-7 mb-4">
+                        <TimerOgMinutter
+                            label="Tid i omsorgstilbud"
+                            onChangeTimer={setTimer}
+                            onChangeMinutter={setMinutter}
+                            onBlur={() => setVisError(true)}
+                            timer={timer}
+                            minutter={minutter}
+                            error={visError ? error : undefined}
+                        />
+                        <div className="">
+                            <UtregningArbeidstid arbeidstid={{ timer, minutter }} />
+                        </div>
+                    </div>
+                )}
+                {tidsformat === Tidsformat.Desimaler && (
+                    <div className="mt-7 mb-4">
+                        <div>
+                            <TimerMedDesimaler
+                                value={perDagString}
+                                onChange={(nyString) => {
+                                    setPerDagString(nyString);
+                                    setTimerOgMinutterFraPerDagString(nyString);
+                                }}
+                                label="Tid i omsorgstilbud"
+                            />
+                            <div className="mt-1">
+                                <UtregningArbeidstidDesimaler arbeidstid={perDagString} />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             {lagre && (
                 <div className="flex">
