@@ -232,15 +232,15 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                     sakstypeConfig={konfigForValgtSakstype as any}
                     gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
                 />
-                {journalpost.venter && (
+                
                     <div className="ml-4">
                         <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent">
                             <FormattedMessage id="fordeling.journalført.settPåVent" />
                         </Button>
                     </div>
-                )}
+               
             </div>
-            {journalpost.venter && settPåVent.isSuccess && (
+            {settPåVent.isSuccess && (
                 <Modal
                     key="settpaaventokmodal"
                     onClose={() => null}
