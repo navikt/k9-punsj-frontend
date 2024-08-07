@@ -11,6 +11,8 @@ import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
+import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
+import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 
 interface OwnProps {
     name: string;
@@ -36,7 +38,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => (
-                <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
+                <div className="mt-4">
                     <div style={{ display: 'flex' }}>
                         <PeriodInput
                             periode={field.value.periode ?? {}}
@@ -64,38 +66,38 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             Velg hele søknadsperioden
                         </Checkbox>
                     )}
-                    <div style={{ marginTop: '1.5625rem' }}>
-                        <div>
-                            <ToggleGroup
-                                label="Hvordan vil du oppgi tid i omsorgstilbud?"
-                                size="small"
-                                onChange={(v: Tidsformat) => {
-                                    formik.setFieldValue(`${name}.tidsformat`, v);
-                                    switch (v) {
-                                        case Tidsformat.Desimaler:
-                                            const desimaler = timerOgMinutterTilTimerMedDesimaler({
-                                                timer: timerField.value,
-                                                minutter: minutterField.value,
-                                            });
-                                            formik.setFieldValue(`${name}.perDagString`, desimaler);
-                                            break;
-                                        case Tidsformat.TimerOgMin:
-                                            const [timer, minutter] = timerMedDesimalerTilTimerOgMinutter(
-                                                Number(desimalerField.value),
-                                            );
-                                            formik.setFieldValue(`${name}.timer`, timer);
-                                            formik.setFieldValue(`${name}.minutter`, minutter);
-                                            break;
-                                    }
-                                }}
-                                value={tidsformatField.value}
-                            >
-                                <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
-                                <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
-                            </ToggleGroup>
-                        </div>
-                        <div className="mt-6">
-                            {tidsformatField.value === Tidsformat.TimerOgMin && (
+                    <div className="mt-4">
+                        <ToggleGroup
+                            label="Hvordan vil du oppgi tid i omsorgstilbud?"
+                            size="small"
+                            onChange={(v: Tidsformat) => {
+                                formik.setFieldValue(`${name}.tidsformat`, v);
+                                switch (v) {
+                                    case Tidsformat.Desimaler:
+                                        const desimaler = timerOgMinutterTilTimerMedDesimaler({
+                                            timer: timerField.value,
+                                            minutter: minutterField.value,
+                                        });
+                                        formik.setFieldValue(`${name}.perDagString`, desimaler);
+                                        break;
+                                    case Tidsformat.TimerOgMin:
+                                        const [timer, minutter] = timerMedDesimalerTilTimerOgMinutter(
+                                            Number(desimalerField.value),
+                                        );
+                                        formik.setFieldValue(`${name}.timer`, timer);
+                                        formik.setFieldValue(`${name}.minutter`, minutter);
+                                        break;
+                                }
+                            }}
+                            value={tidsformatField.value}
+                        >
+                            <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                            <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
+                        </ToggleGroup>
+                    </div>
+                    <div className="mt-6">
+                        {tidsformatField.value === Tidsformat.TimerOgMin && (
+                            <>
                                 <TimerOgMinutter
                                     label="Tid i omsorgstilbud"
                                     onChangeTimer={(v) => formik.setFieldValue(`${name}.timer`, v)}
@@ -108,9 +110,14 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                                         formik.setFieldTouched(`${name}.minutter`);
                                     }}
                                 />
-                            )}
-                            {tidsformatField.value === Tidsformat.Desimaler && <TilsynPeriodeDesimaler name={name} />}
-                        </div>
+                                <div className="mt-1">
+                                    <UtregningArbeidstid
+                                        arbeidstid={{ timer: timerField.value, minutter: minutterField.value }}
+                                    />
+                                </div>
+                            </>
+                        )}
+                        {tidsformatField.value === Tidsformat.Desimaler && <TilsynPeriodeDesimaler name={name} />}
                     </div>
                 </div>
             )}

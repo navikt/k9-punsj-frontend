@@ -45,13 +45,13 @@ export default function TilsynPeriodeListe({
                         render={(arrayHelpers) => (
                             <div>
                                 {values.perioder.map((periode, index) => (
-                                    <Fragment key={index}>
+                                    <div className="mb-8" key={index}>
                                         <TilsynPeriode
                                             name={`perioder.${index}`}
                                             soknadsperioder={soknadsperioder}
                                             remove={() => arrayHelpers.remove(index)}
                                         />
-                                    </Fragment>
+                                    </div>
                                 ))}
                                 <Button
                                     variant="tertiary"
