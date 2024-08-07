@@ -13,7 +13,6 @@ import {
     useLocation,
     useNavigationType,
 } from 'react-router-dom';
-
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import {
@@ -21,25 +20,22 @@ import {
     breadcrumbsIntegration,
     reactRouterV6BrowserTracingIntegration,
 } from '@sentry/react';
-
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { configureStore } from '@reduxjs/toolkit';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
+import AuthCallback from './auth/AuthCallback';
+import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
 import SokIndex from './containers/sok/SokIndex';
 import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
+import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import logger from 'redux-logger';
-
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import JournalpostLoader from './containers/JournalpostLoader';
-import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
-import AuthCallback from './auth/AuthCallback';
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { configureStore } from '@reduxjs/toolkit';
+import { ROUTES } from './constants/routes';
 
 import '@navikt/ds-css';
 import '@navikt/ft-plattform-komponenter/dist/style.css';
@@ -47,7 +43,7 @@ import './styles/globalStyles.less';
 
 const environment = window.location.hostname;
 
-async function prepare() {
+const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
         if (window.nais?.app && window.nais?.telemetryCollectorURL) {
             initializeFaro({
@@ -78,7 +74,8 @@ async function prepare() {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
     }
     return Promise.resolve();
-}
+};
+
 const middleware = [logger];
 
 const store = configureStore({
@@ -100,7 +97,7 @@ queryClient.setDefaultOptions({
 });
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
-export const App: React.FunctionComponent = () => {
+export const App: React.FC = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
