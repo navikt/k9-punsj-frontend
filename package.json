@@ -17,7 +17,7 @@
         "@navikt/ft-plattform-komponenter": "3.0.1",
         "@popperjs/core": "2.11.8",
         "@redux-devtools/extension": "3.3.0",
-        "@sentry/react": "8.22.0",
+        "@sentry/react": "8.24.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
         "dayjs": "1.11.12",
@@ -73,7 +73,6 @@
         "yup": "1.4.0"
     },
     "resolutions": {
-        "@babel/traverse": "7.23.2",
         "postcss": "8.4.31"
     },
     "scripts": {
@@ -98,9 +97,9 @@
     },
     "devDependencies": {
         "@babel/cli": "7.24.8",
-        "@babel/core": "7.24.9",
+        "@babel/core": "7.25.2",
         "@babel/plugin-transform-runtime": "7.24.7",
-        "@babel/preset-env": "7.24.8",
+        "@babel/preset-env": "7.25.3",
         "@babel/preset-react": "7.24.7",
         "@babel/preset-typescript": "7.24.7",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.15",
@@ -137,8 +136,8 @@
         "@types/regenerator-runtime": "^0.13.6",
         "@types/testing-library__cypress": "5.0.13",
         "@types/uuid": "^10.0.0",
-        "@typescript-eslint/eslint-plugin": "8.0.0",
-        "@typescript-eslint/parser": "8.0.0",
+        "@typescript-eslint/eslint-plugin": "8.0.1",
+        "@typescript-eslint/parser": "8.0.1",
         "@wojtekmaj/enzyme-adapter-react-17": "0.8.0",
         "autoprefixer": "10.4.20",
         "babel-jest": "29.7.0",
@@ -173,7 +172,7 @@
         "msw": "2.3.5",
         "nav-frontend-ekspanderbartpanel-style": "2.0.2",
         "nav-frontend-skjema-style": "3.0.3",
-        "postcss": "8.4.40",
+        "postcss": "8.4.41",
         "postcss-less": "6.0.0",
         "postcss-loader": "8.1.1",
         "prettier": "3.3.3",
