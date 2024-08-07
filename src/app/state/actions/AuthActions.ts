@@ -21,29 +21,19 @@ interface IAuthErrorAction {
 
 export type IAuthActionTypes = IAuthLoadAction | IAuthRedirectAction | IAuthOkAction | IAuthErrorAction;
 
-const loadingAction = (): IAuthLoadAction => ({ type: AuthActionKeys.LOAD });
-const authOkAction = (name: string): IAuthOkAction => ({
-    type: AuthActionKeys.OK,
-    name,
-});
-const authErrorAction = (error: IError): IAuthErrorAction => ({
-    type: AuthActionKeys.ERROR,
-    error,
-});
+export const checkAuth = () => async (dispatch: any) => {
+    try {
+        dispatch({ type: AuthActionKeys.LOAD });
+        const response = await get(ApiPath.ME, { credentials: 'include' });
 
-export function checkAuth() {
-    return (dispatch: any) => {
-        dispatch(loadingAction());
-        get(ApiPath.ME, { credentials: 'include' }).then((response) => {
-            switch (response.status) {
-                case 200:
-                    return response.json().then((user) => {
-                        const username = user.name;
-                        dispatch(authOkAction(username));
-                    });
-                default:
-                    return dispatch(authErrorAction(convertResponseToError(response)));
-            }
-        });
-    };
-}
+        if (response.status === 200) {
+            const { name } = await response.json();
+            dispatch({ type: AuthActionKeys.OK, name });
+        } else {
+            const error = convertResponseToError(response);
+            dispatch({ type: AuthActionKeys.ERROR, error });
+        }
+    } catch (error) {
+        dispatch({ type: AuthActionKeys.ERROR, error });
+    }
+};
