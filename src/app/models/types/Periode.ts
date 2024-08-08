@@ -1,12 +1,12 @@
-/* eslint-disable max-classes-per-file */
 import { IntlShape } from 'react-intl';
 
 import { TimeFormat } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 
-import { Tidsformat, datetime, initializeDate } from '../../utils/timeUtils';
+import { datetime, initializeDate, Tidsformat } from 'app/utils';
 import DateRange from './DateRange';
 import { Periodeinfo } from './Periodeinfo';
+import { DeepRequired } from 'app/utils/deep-required';
 
 export interface IPeriode {
     fom?: string | null;
@@ -171,29 +171,41 @@ export interface ITimerOgMinutter {
     timer?: number;
     minutter?: number;
 }
+
 export interface ITimerOgMinutterString {
     timer?: string;
     minutter?: string;
 }
 
-export class PeriodeMedTimerMinutter implements Required<Periodeinfo<ITimerOgMinutter>> {
+export interface IOmsorgstid {
+    timer?: string;
+    minutter?: string;
+    perDagString: string;
+    tidsformat: Tidsformat;
+}
+
+export class PeriodeMedTimerMinutter implements DeepRequired<Periodeinfo<IOmsorgstid>> {
     periode: Periode;
+    tidsformat: Tidsformat;
+    timer: string;
+    minutter: string;
+    perDagString: string;
 
-    timer: number;
-
-    minutter: number;
-
-    constructor(pmf: Periodeinfo<ITimerOgMinutter>) {
+    constructor(pmf: Periodeinfo<IOmsorgstid>) {
         this.periode = new Periode(pmf.periode || {});
-        this.timer = pmf.timer || 0;
-        this.minutter = pmf.minutter || 0;
+        this.timer = pmf.timer ?? '0';
+        this.minutter = pmf.minutter ?? '0';
+        this.perDagString = pmf.perDagString ?? '';
+        this.tidsformat = pmf.tidsformat ?? Tidsformat.TimerOgMin;
     }
 
-    values(): Required<Periodeinfo<ITimerOgMinutter>> {
+    values(): DeepRequired<Periodeinfo<IOmsorgstid>> {
         return {
             periode: this.periode.values(),
             timer: this.timer,
             minutter: this.minutter,
+            perDagString: this.perDagString,
+            tidsformat: this.tidsformat,
         };
     }
 

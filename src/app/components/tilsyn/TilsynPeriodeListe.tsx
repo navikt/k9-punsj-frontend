@@ -1,5 +1,5 @@
 import { FieldArray, Formik } from 'formik';
-import React from 'react';
+import React, { Fragment } from 'react';
 import * as yup from 'yup';
 
 import { AddCircle } from '@navikt/ds-icons';
@@ -17,15 +17,15 @@ const schema = yup.object({
 
 export default function TilsynPeriodeListe({
     perioder,
-    lagre,
     heading,
+    lagre,
     avbryt,
     soknadsperioder,
     nyeSoknadsperioder,
 }: {
     perioder: Periodeinfo<ITimerOgMinutter>[];
     heading: string;
-    lagre: (arbeidstidInfo: Periodeinfo<ITimerOgMinutter>[]) => void;
+    lagre: (tilsynstidInfo: Periodeinfo<ITimerOgMinutter>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];
     nyeSoknadsperioder: IPeriode[];
@@ -39,19 +39,19 @@ export default function TilsynPeriodeListe({
         <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
             {({ handleSubmit, values }) => (
                 <>
-                    {heading && <Heading size="small">{heading}</Heading>}
+                    <Heading size="small">{heading}</Heading>
                     <FieldArray
                         name="perioder"
                         render={(arrayHelpers) => (
                             <div>
                                 {values.perioder.map((periode, index) => (
-                                    <TilsynPeriode
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        key={index}
-                                        name={`perioder.${index}`}
-                                        soknadsperioder={soknadsperioder}
-                                        remove={() => arrayHelpers.remove(index)}
-                                    />
+                                    <div className="mb-8" key={index}>
+                                        <TilsynPeriode
+                                            name={`perioder.${index}`}
+                                            soknadsperioder={soknadsperioder}
+                                            remove={() => arrayHelpers.remove(index)}
+                                        />
+                                    </div>
                                 ))}
                                 <Button
                                     variant="tertiary"

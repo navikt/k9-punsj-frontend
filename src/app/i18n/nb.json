@@ -40,6 +40,9 @@
     "november": "november",
     "desember": "desember",
 
+    "applicationWrapper.header.tittel.punsj": "NAV K9-punsj",
+    "applicationWrapper.header.tittel.los": "Gå til LOS",
+
     "dokument.flere": "Dokument {doknr}/{totalnr}",
     "dokument.skjul": "Skjul",
     "dokument.nyttvindu": "Åpne i nytt vindu",
@@ -152,6 +155,8 @@
     "fordeling.klassifiserModal.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert. Oppgaven settes på vent til {dato}.",
     "fordeling.journalført.alert.success": "Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.",
     "fordeling.journalført.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert.",
+    "fordeling.journalført.alert.settPåvent.error": "Noe gikk galt under sett på vent.",
+    "fordeling.journalført.settPåVent": "Sett på vent",
     "fordeling.klassifiserModal.alert.error": "Noe gikk galt under lagring.",
     "fordeling.klassifiserModal.kopierJournalpost.alert.error": "Noe gikk galt under kopiering av journalpost.",
     "fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error": "Det oppsto en feil under journalføring av journalposten etter kopiering. Trykk Avbryt og prøv journalføre uten annen søker siden journalposten ble kopiert.",

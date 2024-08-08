@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, Button, Modal } from '@navikt/ds-react';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -35,6 +35,9 @@ import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
 import Behandlingsknapp from './Behandlingsknapp';
 import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
+import { useMutation } from 'react-query';
+import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
+import { OkGaaTilLosModal } from '../../OkGaaTilLosModal';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -71,6 +74,10 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, []);
+
+    const settPåVent = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
 
     const sakstyper: ISakstypeDefault[] = useMemo(
         () => [...Sakstyper.punchSakstyper, ...Sakstyper.omfordelingssakstyper],
@@ -203,21 +210,45 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                 {fordelingState.sakstype && fordelingState.sakstype === Sakstype.SKAL_IKKE_PUNSJES && (
                     <>
                         <Alert size="small" variant="info">
-                            {intlHelper(intl, 'fordeling.infobox.lukkoppgave')}
+                            <FormattedMessage id="fordeling.infobox.lukkoppgave" />
                         </Alert>
                         <VerticalSpacer eightPx />
                     </>
                 )}
+                {settPåVent.isError && (
+                    <div className="mb-4">
+                        <Alert size="small" variant="error">
+                            <FormattedMessage id="fordeling.journalført.alert.settPåvent.error" />
+                        </Alert>
+                    </div>
+                )}
             </div>
 
-            <Behandlingsknapp
-                norskIdent={identState.søkerId}
-                omfordel={omfordel}
-                lukkJournalpostOppgave={lukkJournalpostOppgave}
-                journalpost={journalpost}
-                sakstypeConfig={konfigForValgtSakstype as any}
-                gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
-            />
+            <div className="flex space-x-4">
+                <Behandlingsknapp
+                    norskIdent={identState.søkerId}
+                    omfordel={omfordel}
+                    lukkJournalpostOppgave={lukkJournalpostOppgave}
+                    journalpost={journalpost}
+                    sakstypeConfig={konfigForValgtSakstype as any}
+                    gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
+                />
+
+                <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent">
+                    <FormattedMessage id="fordeling.journalført.settPåVent" />
+                </Button>
+            </div>
+
+            {settPåVent.isSuccess && (
+                <Modal
+                    key="settpaaventokmodal"
+                    onClose={() => null}
+                    aria-label="settpaaventokmodal"
+                    open={settPåVent.isSuccess}
+                >
+                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
+                </Modal>
+            )}
         </FormPanel>
     );
 };

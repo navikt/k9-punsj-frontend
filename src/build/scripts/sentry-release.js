@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import SentryCli from '@sentry/cli';
 
 async function opprettReleaseTilSentry() {
