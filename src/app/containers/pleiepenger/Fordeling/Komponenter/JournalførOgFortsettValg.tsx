@@ -223,7 +223,8 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                     </div>
                 )}
             </div>
-            <div className="flex">
+
+            <div className="flex space-x-4">
                 <Behandlingsknapp
                     norskIdent={identState.søkerId}
                     omfordel={omfordel}
@@ -232,14 +233,12 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                     sakstypeConfig={konfigForValgtSakstype as any}
                     gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
                 />
-                
-                    <div className="ml-4">
-                        <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent">
-                            <FormattedMessage id="fordeling.journalført.settPåVent" />
-                        </Button>
-                    </div>
-               
+
+                <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent">
+                    <FormattedMessage id="fordeling.journalført.settPåVent" />
+                </Button>
             </div>
+
             {settPåVent.isSuccess && (
                 <Modal
                     key="settpaaventokmodal"
