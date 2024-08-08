@@ -71,7 +71,7 @@ const KopierModal = ({
                         Den nye Journalposten vil bli kopiert og journalført mot eksisterende fagsak {fagsakId} for
                         pleietrengende med id: {pleietrengendeId}. Denne journalposten vil bli lukket.
                     </div>
-                    <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
+                    <JournalPostKopiFelmeldinger fellesState={fellesState} />
                     {isSuccess && (
                         <div>
                             <Alert size="small" variant="success">

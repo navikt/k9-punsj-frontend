@@ -1,36 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Alert, Checkbox, Label, Select, TextField } from '@navikt/ds-react';
+import { Alert, Checkbox, Select } from '@navikt/ds-react';
 
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
 import { Person } from 'app/models/types/Person';
 import { getPersonInfo } from 'app/api/api';
 
-import './pleietrengende.less';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
+import { Dispatch } from 'redux';
 
-export interface IPleietrengendeStateProps {
-    identState: IIdentState;
-    fellesState: IFellesState;
-}
-
-export interface IPleietrengendeDispatchProps {
-    setIdentAction: typeof setIdentFellesAction;
-    henteBarn: typeof hentBarn;
-}
-
-export interface IPleietrengende {
-    sokersIdent: string;
+import './pleietrengende.less';
+export interface Props {
     toSokereIJournalpost: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
@@ -38,21 +26,13 @@ export interface IPleietrengende {
     skalHenteBarn?: boolean;
 }
 
-type IPleietrengendeProps = IPleietrengendeStateProps & IPleietrengendeDispatchProps & IPleietrengende;
-
-const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (props) => {
-    const {
-        pleietrengendeHarIkkeFnrFn,
-        identState,
-        sokersIdent,
-        toSokereIJournalpost,
-        fellesState,
-        setIdentAction,
-        henteBarn,
-        visPleietrengende,
-        skalHenteBarn,
-        jpErFerdigstiltOgUtenPleietrengende,
-    } = props;
+const Pleietrengende: React.FC<Props> = ({
+    toSokereIJournalpost,
+    pleietrengendeHarIkkeFnrFn,
+    jpErFerdigstiltOgUtenPleietrengende,
+    visPleietrengende,
+    skalHenteBarn,
+}: Props) => {
     const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
@@ -62,11 +42,21 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     const [pleietrengendeInfoLoading, setPleietrengendeInfoLoading] = useState<boolean>(false);
     const [pleietrengendeInfoError, setPleietrengendeInfoError] = useState<boolean>(false);
 
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const setIdentAction = (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
+
+    const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+
     useEffect(() => {
-        if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
-            henteBarn(sokersIdent);
+        if (identState.søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
+            henteBarn(identState.søkerId);
         }
-    }, [sokersIdent, visPleietrengende, skalHenteBarn]);
+    }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
 
     const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
@@ -219,18 +209,4 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    identState: state.identState,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    henteBarn: (søkerId: string) => dispatch(hentBarn(søkerId)),
-});
-
-const Pleietrengende = connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent);
-
-export { Pleietrengende, PleietrengendeComponent };
+export default Pleietrengende;

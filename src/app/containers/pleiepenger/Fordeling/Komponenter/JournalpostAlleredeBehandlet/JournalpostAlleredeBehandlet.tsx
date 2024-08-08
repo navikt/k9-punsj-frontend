@@ -1,139 +1,121 @@
-import React, { useState } from 'react';
-import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-
+import React, { useEffect, useState } from 'react';
+import { Dispatch } from 'redux';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button } from '@navikt/ds-react';
 
-import Kopier from 'app/components/kopier/Kopier';
-import { IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 
-import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
-import { IIdentState } from '../../../../../models/types/IdentState';
-import { IFellesState, kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
+import { kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
 import { getEnvironmentVariable } from '../../../../../utils';
+
+import LabelValue from 'app/components/skjema/LabelValue';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
-import { Pleietrengende } from '../Pleietrengende';
-import './journalpostAlleredeBehandlet.less';
+import Pleietrengende from '../Pleietrengende';
 
-export interface IJournalpostAlleredeBehandletStateProps {
-    intl: IntlShape;
-    journalpost?: IJournalpost;
-    identState: IIdentState;
-    fellesState: IFellesState;
-    dedupkey: string;
-}
-
-export interface IJournalpostAlleredeBehandletDispatchProps {
-    kopiereJournalpost: typeof kopierJournalpost;
-}
-
-type IJournalpostAlleredeBehandletProps = IJournalpostAlleredeBehandletStateProps &
-    IJournalpostAlleredeBehandletDispatchProps;
-
-const JournalpostAlleredeBehandletComponent: React.FunctionComponent<IJournalpostAlleredeBehandletProps> = (
-    props: IJournalpostAlleredeBehandletProps,
-) => {
-    const { intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpost } = props;
+const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
+
+    const dispatch = useDispatch<Dispatch<any>>();
+    const setIdentAction = (søkerId: string) => dispatch(setIdentFellesAction(søkerId, null, null));
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+
+    const { dedupKey, journalpost, kopierJournalpostSuccess } = fellesState;
+    const { søkerId, pleietrengendeId } = identState;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
-    let sokersIdent: string;
+    const isKopierButtonDisabled = IdentRules.erUgyldigIdent(identState.pleietrengendeId) || kopierJournalpostSuccess;
 
-    if (journalpost?.norskIdent) {
-        sokersIdent = journalpost?.norskIdent;
-    } else {
-        return <Alert variant="warning">{intlHelper(intl, 'ident.usignert.feil.melding')}</Alert>;
+    useEffect(() => {
+        if (!identState.søkerId && journalpost?.norskIdent) {
+            setIdentAction(journalpost?.norskIdent);
+        }
+    }, [journalpost?.norskIdent]);
+
+    if (!journalpost?.norskIdent) {
+        return (
+            <Alert variant="warning">
+                <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.tomtIdentIJp.feil" />
+            </Alert>
+        );
     }
 
-    return (
-        <div className="journalpostAlleredeBehandlet__container">
-            <Alert variant="info">{intlHelper(intl, 'fordeling.kanikkesendeinn')}</Alert>
-            <VerticalSpacer thirtyTwoPx />
-            <div>
-                <b>
-                    <FormattedMessage id="journalpost.norskIdent" />
-                </b>
-                {sokersIdent} <Kopier verdi={sokersIdent} />
-            </div>
-            <VerticalSpacer eightPx />
-            {!fellesState.kopierJournalpostSuccess && (
-                <Pleietrengende visPleietrengende skalHenteBarn sokersIdent={sokersIdent} />
-            )}
-            <JournalPostKopiFelmeldinger fellesState={fellesState} intl={intl} />
+    const handleKopierJournalpost = () => {
+        if (kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
+            setVisKanIkkeKopiere(true);
+            return;
+        }
+        if (!!identState.søkerId && !!identState.pleietrengendeId) {
+            dispatch(kopierJournalpost(søkerId, søkerId, pleietrengendeId, journalpost?.journalpostId, dedupKey));
+        }
+    };
 
-            <Button
-                variant="secondary"
-                className="kopier__button"
-                size="small"
-                disabled={
-                    IdentRules.erUgyldigIdent(identState.pleietrengendeId) || fellesState.kopierJournalpostSuccess
-                }
-                onClick={() => {
-                    if (fellesState.kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
-                        setVisKanIkkeKopiere(true);
-                        return;
-                    }
-                    if (!!sokersIdent && !!identState.pleietrengendeId)
-                        kopiereJournalpost(
-                            sokersIdent,
-                            sokersIdent,
-                            identState.pleietrengendeId,
-                            journalpost?.journalpostId,
-                            dedupkey,
-                        );
-                }}
-            >
-                <FormattedMessage id="fordeling.kopiereJournal" />
-            </Button>
-            {!!fellesState.kopierJournalpostSuccess && (
-                <Button
-                    onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                    }}
-                >
-                    {intlHelper(intl, 'tilbaketilLOS')}
-                </Button>
-            )}
-            {visKanIkkeKopiere && (
-                <Alert variant="warning">
-                    Journalposten kan ikke kopieres. En journalpost kan kun kopieres dersom den oppfyller alle de
-                    følgende kriteriene.
-                    <ul>
-                        <li>Må være inngående journalpost</li>
-                        <li>Kan ikke være kopi av en annen journalpost</li>
-                        <li>Kan ikke være inntektsmelding uten søknad</li>
-                    </ul>
+    const handleGåToLOS = () => {
+        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+    };
+
+    return (
+        <>
+            <div className="p-4">
+                <Alert variant="info">
+                    <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                 </Alert>
-            )}
-        </div>
+
+                <div className="mt-6">
+                    <LabelValue labelTextId="journalpost.norskIdent" value={identState.søkerId} visKopier />
+                </div>
+
+                {!kopierJournalpostSuccess && (
+                    <div className="mt-6">
+                        <Pleietrengende visPleietrengende skalHenteBarn toSokereIJournalpost={false} />
+                    </div>
+                )}
+
+                <JournalPostKopiFelmeldinger fellesState={fellesState} />
+
+                {visKanIkkeKopiere && (
+                    <Alert variant="warning">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.tittel" />
+                        <ul>
+                            <li>
+                                <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.1" />
+                            </li>
+                            <li>
+                                <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.2" />
+                            </li>
+                            <li>
+                                <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.3" />
+                            </li>
+                        </ul>
+                    </Alert>
+                )}
+            </div>
+
+            <div className="mt-8 flex space-x-6">
+                <Button
+                    variant="secondary"
+                    size="small"
+                    disabled={isKopierButtonDisabled}
+                    onClick={handleKopierJournalpost}
+                >
+                    <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kopierJournalpost.btn" />
+                </Button>
+
+                {!!kopierJournalpostSuccess && (
+                    <Button onClick={handleGåToLOS} size="small">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.tilbakeTilLOS.btn" />
+                    </Button>
+                )}
+            </div>
+        </>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    identState: state.identState,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpost: (
-        søkerId: string,
-        annenIdent: string,
-        pleietrengendeId: string,
-        journalpostId: string,
-        dedupkey: string,
-    ) => dispatch(kopierJournalpost(søkerId, annenIdent, pleietrengendeId, journalpostId, dedupkey)),
-});
-
-const JournalpostAlleredeBehandlet = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(JournalpostAlleredeBehandletComponent),
-);
-
-export { JournalpostAlleredeBehandlet, JournalpostAlleredeBehandletComponent };
+export default JournalpostAlleredeBehandlet;

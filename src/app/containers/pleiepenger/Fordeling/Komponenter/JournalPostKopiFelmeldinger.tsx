@@ -1,41 +1,43 @@
 import React from 'react';
-
+import { FormattedMessage } from 'react-intl';
 import { Alert } from '@navikt/ds-react';
-
 import { IFellesState } from '../../../../state/reducers/FellesReducer';
-import intlHelper from '../../../../utils/intlUtils';
 
-interface IOwnProps {
+interface Props {
     fellesState: IFellesState;
-    intl: any;
 }
 
-const JournalPostKopiFelmeldinger: React.FunctionComponent<IOwnProps> = ({ fellesState, intl }) => (
-    <>
-        {fellesState.kopierJournalpostConflict && (
-            <Alert size="small" variant="info">
-                {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostEksisterer')}
-            </Alert>
-        )}
+const JournalPostKopiFelmeldinger: React.FC<Props> = ({ fellesState }) => {
+    const { kopierJournalpostSuccess, kopierJournalpostConflict, kopierJournalpostForbidden, kopierJournalpostError } =
+        fellesState;
 
-        {fellesState.kopierJournalpostSuccess && (
-            <Alert size="small" variant="success">
-                {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalpostOpprettet')}
-            </Alert>
-        )}
+    return (
+        <>
+            {kopierJournalpostConflict && (
+                <Alert size="small" variant="info">
+                    <FormattedMessage id="ident.identifikasjon.kopiAvJournalpostEksisterer" />
+                </Alert>
+            )}
 
-        {fellesState.kopierJournalpostForbidden && (
-            <Alert size="small" variant="error">
-                {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalManglerRettigheter')}
-            </Alert>
-        )}
+            {kopierJournalpostSuccess && (
+                <Alert size="small" variant="success">
+                    <FormattedMessage id="ident.identifikasjon.kopiAvJournalpostOpprettet" />
+                </Alert>
+            )}
 
-        {fellesState.kopierJournalpostError && (
-            <Alert size="small" variant="error">
-                {intlHelper(intl, 'ident.identifikasjon.kopiAvJournalFeil')}
-            </Alert>
-        )}
-    </>
-);
+            {kopierJournalpostForbidden && (
+                <Alert size="small" variant="error">
+                    <FormattedMessage id="ident.identifikasjon.kopiAvJournalManglerRettigheter" />
+                </Alert>
+            )}
+
+            {kopierJournalpostError && (
+                <Alert size="small" variant="error">
+                    <FormattedMessage id="ident.identifikasjon.kopiAvJournalFeil" />
+                </Alert>
+            )}
+        </>
+    );
+};
 
 export default JournalPostKopiFelmeldinger;
