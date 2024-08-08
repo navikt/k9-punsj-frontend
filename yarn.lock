@@ -2654,7 +2654,7 @@ __metadata:
     morgan: "npm:1.10.0"
     node-cache: "npm:5.1.2"
     openid-client: "npm:5.6.5"
-    winston: "npm:3.13.1"
+    winston: "npm:3.14.0"
   languageName: unknown
   linkType: soft
 
@@ -18556,9 +18556,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:3.13.1":
-  version: 3.13.1
-  resolution: "winston@npm:3.13.1"
+"winston@npm:3.14.0":
+  version: 3.14.0
+  resolution: "winston@npm:3.14.0"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.2"
@@ -18571,7 +18571,7 @@ __metadata:
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.7.0"
-  checksum: 10/bc78202708800f74b94a2cc4fbdd46569dea90f939ad2149a936b2deee612d63a512f9e5725251349090bc12ba35351dd67336b3c92bf094892f9ea03d34fdc4
+  checksum: 10/adcb2535482756a166ed75004d6b824d43151b22ce0779c6287e9c6354b00488acd55b96180aa27ab567531ff1de6ffdc6aaf980a807dc9cc6bb6cca59158a6e
   languageName: node
   linkType: hard
 
