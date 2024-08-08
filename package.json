@@ -16,7 +16,7 @@
         "@navikt/fnrvalidator": "2.1.0",
         "@navikt/ft-plattform-komponenter": "3.0.1",
         "@popperjs/core": "2.11.8",
-        "@redux-devtools/extension": "3.3.0",
+        "@reduxjs/toolkit": "^2.2.7",
         "@sentry/react": "8.24.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",

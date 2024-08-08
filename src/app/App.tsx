@@ -1,6 +1,5 @@
-import { composeWithDevTools } from '@redux-devtools/extension';
-import * as Sentry from '@sentry/react';
 import * as React from 'react';
+import * as Sentry from '@sentry/react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
@@ -14,9 +13,6 @@ import {
     useLocation,
     useNavigationType,
 } from 'react-router-dom';
-
-import { applyMiddleware, legacy_createStore } from 'redux';
-import logger from 'redux-logger';
 import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import {
@@ -24,29 +20,30 @@ import {
     breadcrumbsIntegration,
     reactRouterV6BrowserTracingIntegration,
 } from '@sentry/react';
-
-import '@navikt/ds-css';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
-
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { configureStore } from '@reduxjs/toolkit';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
+import AuthCallback from './auth/AuthCallback';
+import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
 import SokIndex from './containers/sok/SokIndex';
 import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
+import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
-import { thunk } from './state/middleware';
-import './styles/globalStyles.less';
+import logger from 'redux-logger';
 import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
-import JournalpostLoader from './containers/JournalpostLoader';
-import { ROUTES } from './constants/routes';
 import { logError } from './utils/logUtils';
-import AuthCallback from './auth/AuthCallback';
+import { ROUTES } from './constants/routes';
+
+import '@navikt/ds-css';
+import '@navikt/ft-plattform-komponenter/dist/style.css';
+import './styles/globalStyles.less';
 
 const environment = window.location.hostname;
 
-async function prepare() {
+const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
         if (window.nais?.app && window.nais?.telemetryCollectorURL) {
             initializeFaro({
@@ -77,13 +74,17 @@ async function prepare() {
         return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
     }
     return Promise.resolve();
-}
+};
 
-// @ts-ignore
-const store = window.Cypress
-    ? // @ts-ignore
-      legacy_createStore(rootReducer, window.__initialState__, composeWithDevTools(applyMiddleware(logger, thunk)))
-    : legacy_createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)));
+const middleware = [logger];
+
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
+    // @ts-ignore
+    preloadedState: window.Cypress ? window.__initialState__ : undefined,
+    devTools: process.env.NODE_ENV !== 'production',
+});
 
 const localeFromSessionStorage = getLocaleFromSessionStorage();
 
@@ -96,7 +97,7 @@ queryClient.setDefaultOptions({
 });
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
-export const App: React.FunctionComponent = () => {
+export const App: React.FC = () => {
     const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
