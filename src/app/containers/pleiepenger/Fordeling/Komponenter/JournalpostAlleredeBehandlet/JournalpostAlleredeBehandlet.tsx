@@ -31,10 +31,10 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
-    const isKopierButtonDisabled = IdentRules.erUgyldigIdent(identState.pleietrengendeId) || kopierJournalpostSuccess;
+    const isKopierButtonDisabled = IdentRules.erUgyldigIdent(pleietrengendeId) || kopierJournalpostSuccess;
 
     useEffect(() => {
-        if (!identState.søkerId && journalpost?.norskIdent) {
+        if (!søkerId && journalpost?.norskIdent) {
             setIdentAction(journalpost?.norskIdent);
         }
     }, [journalpost?.norskIdent]);
@@ -52,7 +52,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
             setVisKanIkkeKopiere(true);
             return;
         }
-        if (!!identState.søkerId && !!identState.pleietrengendeId) {
+        if (!!søkerId && !!pleietrengendeId) {
             dispatch(kopierJournalpost(søkerId, søkerId, pleietrengendeId, journalpost?.journalpostId, dedupKey));
         }
     };
@@ -69,7 +69,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 </Alert>
 
                 <div className="mt-6">
-                    <LabelValue labelTextId="journalpost.norskIdent" value={identState.søkerId} visKopier />
+                    <LabelValue labelTextId="journalpost.norskIdent" value={søkerId} visKopier />
                 </div>
 
                 {!kopierJournalpostSuccess && (
