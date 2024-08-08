@@ -72,6 +72,18 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         setAnnenSokerIdent(identFromInput);
     };
 
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+
+        setToSokereIJournalpost(checked);
+        setAnnenSøkersInfo(undefined);
+
+        if (!checked) {
+            setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
+            setAnnenSokerIdent('');
+        }
+    };
+
     const disableCheckbox = () => {
         if (!journalpost.erFerdigstilt && journalpost.sak?.fagsakId) {
             return false;
@@ -87,18 +99,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         <>
             <VerticalSpacer eightPx />
 
-            <Checkbox
-                onChange={(e) => {
-                    setToSokereIJournalpost(e.target.checked);
-                    setAnnenSøkersInfo(undefined);
-                    if (!e.target.checked) {
-                        setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
-                        setAnnenSokerIdent('');
-                    }
-                }}
-                checked={toSokereIJournalpost}
-                disabled={disableCheckbox()}
-            >
+            <Checkbox onChange={handleCheckboxChange} checked={toSokereIJournalpost} disabled={disableCheckbox()}>
                 <FormattedMessage id="ident.identifikasjon.tosokere" />
             </Checkbox>
 
@@ -109,6 +110,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                     <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
                         <FormattedMessage id="ident.identifikasjon.infoOmRegisteringAvToSokere" />
                     </Alert>
+
                     <FnrTextField
                         labelId="ident.identifikasjon.annenSoker"
                         value={annenSokerIdent}
