@@ -40,6 +40,9 @@
     "november": "november",
     "desember": "desember",
 
+    "applicationWrapper.header.tittel.punsj": "NAV K9-punsj",
+    "applicationWrapper.header.tittel.los": "Gå til LOS",
+
     "dokument.flere": "Dokument {doknr}/{totalnr}",
     "dokument.skjul": "Skjul",
     "dokument.nyttvindu": "Åpne i nytt vindu",

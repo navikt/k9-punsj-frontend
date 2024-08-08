@@ -76,7 +76,7 @@
         "postcss": "8.4.31"
     },
     "scripts": {
-        "dev": "yarn run dev-env-variables node src/build/scripts/start-dev.mjs",
+        "dev": "yarn run dev-env-variables node --trace-deprecation src/build/scripts/start-dev.mjs",
         "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node src/build/scripts/start-dev.mjs",
         "start-express": "node ./server.js",
