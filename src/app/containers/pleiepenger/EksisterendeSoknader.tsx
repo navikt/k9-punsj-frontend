@@ -109,7 +109,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
             const søknad = new PSBSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
-
+            const meldingErDusikkerModal =
+                søknad.barn.norskIdent === pleietrengendeId
+                    ? 'modal.erdusikker.info'
+                    : 'modal.erdusikker.info.nyBarnFnr';
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
                 journalposterState.journalposter,
@@ -130,13 +133,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     variant="secondary"
                     key={soknadId}
                     size="small"
-                    disabled={
-                        (søknad.barn.norskIdent &&
-                            pleietrengendeId !== søknad.barn.norskIdent &&
-                            !!pleietrengendeId &&
-                            pleietrengendeId !== null) ||
-                        (!!k9saksnummer && fagsakId !== k9saksnummer)
-                    }
+                    disabled={!!k9saksnummer && fagsakId !== k9saksnummer}
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
                     <FormattedMessage id="mappe.lesemodus.knapp.velg" />
@@ -166,7 +163,8 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                 >
                     <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
+                        melding={meldingErDusikkerModal}
+                        extraInfo={søknad.barn.norskIdent === pleietrengendeId ? undefined : 'modal.erdusikker.info'}
                         onSubmit={() => chooseSoknad(soknadInfo)}
                         onClose={() => props.closeEksisterendeSoknadAction()}
                         submitKnappText="mappe.lesemodus.knapp.velg"

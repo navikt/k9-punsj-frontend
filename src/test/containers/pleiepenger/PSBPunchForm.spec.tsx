@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from '@jest/globals';
 import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
@@ -65,7 +66,7 @@ const initialSoknad: IPSBSoknad = {
     },
     soekerId: søkerId,
     soeknadId: '123',
-    soeknadsperiode: null,
+    soeknadsperiode: [],
     soknadsinfo: {
         harMedsøker: null,
         samtidigHjemme: null,
@@ -110,7 +111,7 @@ const validertSoknad: IPSBSoknadKvittering = {
         opptjeningAktivitet: {},
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: '' },
 };
 
 const setupPunchForm = (
@@ -127,7 +128,6 @@ const setupPunchForm = (
         resetSoknadAction: jest.fn(),
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
-        undoChoiceOfEksisterendeSoknadAction: jest.fn(),
         updateSoknad: jest.fn(),
         setSignaturAction: jest.fn(),
         settJournalpostPaaVent: jest.fn(),
@@ -144,8 +144,8 @@ const setupPunchForm = (
     };
 
     const identState: IIdentState = {
-        søkerId: '122345',
-        pleietrengendeId: '678908',
+        søkerId: søkerId,
+        pleietrengendeId: pleietrengendeId,
         annenSokerIdent: null,
         annenPart: '',
     };
@@ -180,24 +180,23 @@ const setupPunchForm = (
         identState,
         signaturState,
         journalposterState,
+        fellesState: {},
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
         journalpostid,
         id: soknadId,
-        navigate: undefined,
+        navigate: () => {},
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
-        /* eslint-disable react/jsx-props-no-spreading */
         <PunchFormComponent
             {...punchFormComponentProps}
             {...wrappedComponentProps}
             {...punchFormStateProps}
             {...punchFormDispatchProps}
-            /* eslint-enable react/jsx-props-no-spreading */
         />,
     );
 };
