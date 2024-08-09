@@ -2648,13 +2648,13 @@ __metadata:
     cors: "npm:2.8.5"
     dotenv: "npm:16.4.5"
     express: "npm:4.19.2"
-    express-http-proxy: "npm:2.0.0"
+    express-http-proxy: "npm:2.1.1"
     helmet: "npm:7.1.0"
     jose: "npm:5.6.3"
     morgan: "npm:1.10.0"
     node-cache: "npm:5.1.2"
     openid-client: "npm:5.6.5"
-    winston: "npm:3.13.1"
+    winston: "npm:3.14.1"
   languageName: unknown
   linkType: soft
 
@@ -2698,10 +2698,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:6.14.0, @navikt/aksel-icons@npm:^6.14.0":
-  version: 6.14.0
-  resolution: "@navikt/aksel-icons@npm:6.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.14.0%2F3197aec65aa29e81caad6cb2c4030d1aa3cfca92"
-  checksum: 10/1715d43b101de813c75def886a3928b0de2b35cad889acdadb60f565d6e792c7a9050d789e6dd815b710fbd731586edff52912f05e566f047696ed1101589212
+"@navikt/aksel-icons@npm:6.15.0, @navikt/aksel-icons@npm:^6.15.0":
+  version: 6.15.0
+  resolution: "@navikt/aksel-icons@npm:6.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.15.0%2Fea7d1c03de89f35bd57e31aa3f996317f0c67cc0"
+  checksum: 10/db1068c758bfffa57efbd74328ccd6f89117bd778c8f6ca9930d9ee988bc5ffa0e9dc1a3ab832014c37060de5d0290781c239e229b51b6f5d0e0b2193f50edae
   languageName: node
   linkType: hard
 
@@ -2719,10 +2719,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:6.14.0":
-  version: 6.14.0
-  resolution: "@navikt/ds-css@npm:6.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.14.0%2Fc39c1cea64eaa5a57049baf2f837bf8c1fd91b39"
-  checksum: 10/e7b4bd0c186087d0e5ed50ef7ecaf74ee6c13952012a1ebb10abb47831ba9e2fb2ae27ecdc9123d2431e9490f90284028c6060d25eb7a0716cf351cf66588607
+"@navikt/ds-css@npm:6.15.0":
+  version: 6.15.0
+  resolution: "@navikt/ds-css@npm:6.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F6.15.0%2Fb0a8d1f0a9a1404808921acdcbfa3f523985a234"
+  checksum: 10/4d3e5d74bedd15f5695c85cf2ed14bde7416c344446cca2852a6a68e6777617321fe967938468276bc9f082e0b35cd9188c1a6dc455eae4ab62adc48f365eea6
   languageName: node
   linkType: hard
 
@@ -2754,21 +2754,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:6.14.0":
-  version: 6.14.0
-  resolution: "@navikt/ds-react@npm:6.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.14.0%2F0127b723f19f6fdcc1ec7a75b47b03f46938e04d"
+"@navikt/ds-react@npm:6.15.0":
+  version: 6.15.0
+  resolution: "@navikt/ds-react@npm:6.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F6.15.0%2F63e70c5371c5f9a83cb53bd97d31c4085b10e986"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^6.14.0"
-    "@navikt/ds-tokens": "npm:^6.14.0"
+    "@navikt/aksel-icons": "npm:^6.15.0"
+    "@navikt/ds-tokens": "npm:^6.15.0"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^3.0.0"
     react-day-picker: "npm:8.10.0"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 10/8a5f5ce3d7e48a34d0602d3570f1bd24832b250be16f3cdeca83a995f56bad1ac5682969d39cacbdb00d86a9420047d485cc1a8db7b896694440950d0edd3e8c
+  checksum: 10/24f0e78e5316bc9c4b5663298e56a338a7a98d0f28c257f1e9e0eca51e0480fadfb7a89a510de1abeee3aba9345935bc49610881beaff4b601a732e84aff6598
   languageName: node
   linkType: hard
 
@@ -2779,10 +2779,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^6.14.0":
-  version: 6.14.0
-  resolution: "@navikt/ds-tokens@npm:6.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.14.0%2F4c63a82666b9af2a594571435b09c05c184f8627"
-  checksum: 10/536bc8665886adf0d9365fdebd82db457a80929d683f78bed5db7db24f16fcce8b4ec244361d3d03cd882af04a37232a28e12eba83820b8a35e4a929c5ef5840
+"@navikt/ds-tokens@npm:^6.15.0":
+  version: 6.15.0
+  resolution: "@navikt/ds-tokens@npm:6.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F6.15.0%2F65fc5949515eb8b82699636f873e32f1b42a2573"
+  checksum: 10/2798f0df3ab774823ff8b8276f3cb480651527c5c71f9649c666dc2f1f8e469f519fbc30f7e8e3f173df120ec8feeabd2c18840a508a4a896b9d5d4809b345ef
   languageName: node
   linkType: hard
 
@@ -3305,64 +3305,64 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/browser-utils@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry-internal/browser-utils@npm:8.24.0"
+"@sentry-internal/browser-utils@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry-internal/browser-utils@npm:8.25.0"
   dependencies:
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/4fe69916e3fdf0f49e8209fc0b32d44b6a5a51c438629c82f1ee1a0c5a581d9b65ec75c5c51a43aa3bf2cac3988f5d633be1a437845544af1ac444bf5b8d2b84
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/b3838bd301314426697809c8f8758bf892cf184d01731a64910d22e66fb1a0c32a536c2211ca8b12abd13c8a85bec5052ffc3e9df0ced6ac94f69f17eb1702be
   languageName: node
   linkType: hard
 
-"@sentry-internal/feedback@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry-internal/feedback@npm:8.24.0"
+"@sentry-internal/feedback@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry-internal/feedback@npm:8.25.0"
   dependencies:
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/2ba6353fd6c1c66479834e341d76caa79fc56c9e917986b4f49a280823f157cc13cbf4b9efecf303a0ee226e63fb5247cb4ea42f70a2be071b94b20d6ac09616
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/99127c95c2a14a40740a3dc16c2ad0769e90edceeed6c19ba299de97a95163797af771febb00e9bb6b08a70f1b3d74f2edb2744ff581e2db8cc090edb45d0371
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay-canvas@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry-internal/replay-canvas@npm:8.24.0"
+"@sentry-internal/replay-canvas@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry-internal/replay-canvas@npm:8.25.0"
   dependencies:
-    "@sentry-internal/replay": "npm:8.24.0"
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/5ba36041c2881948ff503381fd1bd4ed2baf146bb627671c376f2f7dc49fa5c2cd4c37b1a765e0ab18dcf91858584d606b177b84fde3268bf29735e10c0d5042
+    "@sentry-internal/replay": "npm:8.25.0"
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/2c3ae02a975fce67edcaf7b3d9036a56a5695a38ee9938e0a7f2b13cace677415c46f4dc6265ad87d34f4fc64bf4a1c75f738980aecb904a93b4a1862e66fe1e
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry-internal/replay@npm:8.24.0"
+"@sentry-internal/replay@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry-internal/replay@npm:8.25.0"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:8.24.0"
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/c363adf09db51e85e07e6b55a5e09007596f21606e0970bfcb70bfbba7598b6d16af1a66ff1294c7e606cae1bacef5e0923704fd2e9678c0bf3d2f80d17ccbb5
+    "@sentry-internal/browser-utils": "npm:8.25.0"
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/e26ce9e43c732ca372ff1cd2c64a6c06ed808c38a5451122e47ed821a1db2fc9f31e85ef79910e7c4a9288740d18888f6a7bf5b568b71c4124b5c221bc3497fa
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry/browser@npm:8.24.0"
+"@sentry/browser@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry/browser@npm:8.25.0"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:8.24.0"
-    "@sentry-internal/feedback": "npm:8.24.0"
-    "@sentry-internal/replay": "npm:8.24.0"
-    "@sentry-internal/replay-canvas": "npm:8.24.0"
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/070ea92aa5b6776bce26a04b9da27da40c89e33f4345a67164a02fb1ad9260ab0ababbb0baf24334c96d266960743d28a260aa4dd6c968bb98237a0896c592d2
+    "@sentry-internal/browser-utils": "npm:8.25.0"
+    "@sentry-internal/feedback": "npm:8.25.0"
+    "@sentry-internal/replay": "npm:8.25.0"
+    "@sentry-internal/replay-canvas": "npm:8.25.0"
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/6bf7d2776cd21170632c10395e177ff4b2e8c72e5963ae48f5dc37576f7928b82c582ec900292aae808f73e0f7ce0b5175ff5bebe7bf7801b9176877c9eccebe
   languageName: node
   linkType: hard
 
@@ -3452,44 +3452,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry/core@npm:8.24.0"
+"@sentry/core@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry/core@npm:8.25.0"
   dependencies:
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
-  checksum: 10/5e58fce660183a3cb5bde597f4990707419f9c1d68e18fe4d695536215bb11ca10cdaaa3227390c757e5fc17729edacab1de1a091136751bc92e8de96502e549
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
+  checksum: 10/ef33b4d241cd6fb52dfc5d48c14a3607e2521b685a4b0b58aa4d1c6a7fd9493ba0375e26aa317f4adcb8ca7c838c8168aa968066f5d4981c994f9df2a1e00550
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry/react@npm:8.24.0"
+"@sentry/react@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry/react@npm:8.25.0"
   dependencies:
-    "@sentry/browser": "npm:8.24.0"
-    "@sentry/core": "npm:8.24.0"
-    "@sentry/types": "npm:8.24.0"
-    "@sentry/utils": "npm:8.24.0"
+    "@sentry/browser": "npm:8.25.0"
+    "@sentry/core": "npm:8.25.0"
+    "@sentry/types": "npm:8.25.0"
+    "@sentry/utils": "npm:8.25.0"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ^16.14.0 || 17.x || 18.x || 19.x
-  checksum: 10/64c38f0717ba54cbe5f85644b1c3a91f8ad862d9f954e5ea3f2268dc77920b14f7c89e37015d1240ae2026f247335cdc0a0b5dc5632e97141328d184d27bf6c0
+  checksum: 10/38c225945f833a85a921b0bfd794ebbc1a687d0b60ab41a13a012424984cd3ae5f5c473c1889eb54ff07a5763829b50de366df0231170fbddfff394f37bfee7b
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry/types@npm:8.24.0"
-  checksum: 10/7a79f4018d9f03323d21496251dd6923a037de7e61f99068e8fd805e7e558023457d768f75391003647aaeb127cea612e5c4b98f9df9d98303a2c0f4ef220ebd
+"@sentry/types@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry/types@npm:8.25.0"
+  checksum: 10/9b91f62c39dfaaff4cb163e5848244ca070e84accd2da06208f97f6ccb4f8086f70024d8883bd947828fa7ab4662e925bbf4a722e2fe038182e994a5ce494550
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:8.24.0":
-  version: 8.24.0
-  resolution: "@sentry/utils@npm:8.24.0"
+"@sentry/utils@npm:8.25.0":
+  version: 8.25.0
+  resolution: "@sentry/utils@npm:8.25.0"
   dependencies:
-    "@sentry/types": "npm:8.24.0"
-  checksum: 10/31d6df5bca1465e298f4382b64f807a48529f0a204557527a1f766c43165aa15706eea9aeec0a0051a4aa8d0ba627db31ed23ef9122fd5a02240eb76b6497df1
+    "@sentry/types": "npm:8.25.0"
+  checksum: 10/0773d6839ddf269a747615e196e347a4fe197541206a9dd8f6dc4e7b6ae5102047c785138e6b4fe795aa1e1646ef7ab985594ebf193df9ff97ce28d8589278d0
   languageName: node
   linkType: hard
 
@@ -9092,14 +9092,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-http-proxy@npm:2.0.0":
-  version: 2.0.0
-  resolution: "express-http-proxy@npm:2.0.0"
+"express-http-proxy@npm:2.1.1":
+  version: 2.1.1
+  resolution: "express-http-proxy@npm:2.1.1"
   dependencies:
     debug: "npm:^3.0.1"
     es6-promise: "npm:^4.1.1"
     raw-body: "npm:^2.3.0"
-  checksum: 10/61b204ece1c78795e7d160893d9d0bad97aed12de7d1f6b6301be4c0f152a0cc2243f2d659a623a7bb1af14321b19d342506028eaf818ad5854a4211735196c3
+  checksum: 10/d0670a06109f6d3bd56be81c0c35e7a5c221eb70a4624ff746481ac402cad9dca836cf544d9c9a1294bf30209f83d76988d9c80a463cdeda2737e8bb4cfdc0aa
   languageName: node
   linkType: hard
 
@@ -12107,16 +12107,16 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:1.9.0"
     "@grafana/faro-web-tracing": "npm:1.9.0"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:6.14.0"
-    "@navikt/ds-css": "npm:6.14.0"
+    "@navikt/aksel-icons": "npm:6.15.0"
+    "@navikt/ds-css": "npm:6.15.0"
     "@navikt/ds-icons": "npm:3.4.3"
-    "@navikt/ds-react": "npm:6.14.0"
+    "@navikt/ds-react": "npm:6.15.0"
     "@navikt/fnrvalidator": "npm:2.1.0"
     "@navikt/ft-plattform-komponenter": "npm:3.0.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
     "@reduxjs/toolkit": "npm:^2.2.7"
-    "@sentry/react": "npm:8.24.0"
+    "@sentry/react": "npm:8.25.0"
     "@storybook/addon-actions": "npm:8.2.8"
     "@storybook/addon-essentials": "npm:8.2.8"
     "@storybook/addon-interactions": "npm:8.2.8"
@@ -18594,9 +18594,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston@npm:3.13.1":
-  version: 3.13.1
-  resolution: "winston@npm:3.13.1"
+"winston@npm:3.14.1":
+  version: 3.14.1
+  resolution: "winston@npm:3.14.1"
   dependencies:
     "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.2"
@@ -18609,7 +18609,7 @@ __metadata:
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
     winston-transport: "npm:^4.7.0"
-  checksum: 10/bc78202708800f74b94a2cc4fbdd46569dea90f939ad2149a936b2deee612d63a512f9e5725251349090bc12ba35351dd67336b3c92bf094892f9ea03d34fdc4
+  checksum: 10/b9158dc0600a095b5326ec95a3918f63e5f1eb9fdc8f70b858d43ab4e2c3fca61e69aca4444ce918f86d8ded1d82f6e8e7504dfd4d4fa4d7974b5452c55f54c1
   languageName: node
   linkType: hard
 
