@@ -1,0 +1,34 @@
+{
+    "journalpostId": "320",
+    "norskIdent": "04447119736",
+    "dokumenter": [
+        {
+            "dokumentId": "667151002"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": {
+        "kode": "PAPIRSØKNAD",
+        "navn": "Papirsøknad",
+        "erScanning": true
+    },
+    "kanSendeInn": false,
+    "erSaksbehandler": true,
+    "journalpostStatus": "JOURNALFOERT",
+    "kanOpprettesJournalføringsoppgave": false,
+    "kanKopieres": true,
+    "erFerdigstilt": true,
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": false,
+        "fagsakId": "1DQB9Y6",
+        "gyldigPeriode": {
+            "fom": "2024-04-01",
+            "tom": "2024-04-15"
+        },
+        "pleietrengendeIdent": "11460753998",
+        "relatertPersonIdent": null,
+        "sakstype": "PSB",
+        "behandlingsÅr": 2024
+    }
+}

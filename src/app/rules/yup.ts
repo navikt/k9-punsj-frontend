@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
 import { Tidsformat } from 'app/utils';
+import { IIdentState } from 'app/models/types/IdentState';
 
 const yupLocale = {
     mixed: {
@@ -48,6 +49,27 @@ export const identifikator = yup
         message: 'Ugyldig identifikasjonsnummer',
     })
     .label('Identifikasjonsnummer');
+
+export const identifikatorAnnenPart = yup.object().shape({
+    annenPart: yup
+        .string()
+        .required()
+        .length(11)
+        .label('Identifikasjonsnummer')
+        .test({
+            test: (value: string) => !IdentRules.erUgyldigIdent(value),
+            message: 'Dette er ikke et gyldig fødsels- eller D-nummer.',
+        })
+        .test(function (value) {
+            const identState = this.parent as IIdentState;
+            if (value === identState.søkerId) {
+                return this.createError({
+                    message: 'Fødselsnummeret kan ikke være søkers fødselsnummer.',
+                });
+            }
+            return true;
+        }),
+});
 
 export const dato = () =>
     yup.string().test({

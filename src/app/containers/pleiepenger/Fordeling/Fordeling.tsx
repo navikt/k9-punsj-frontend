@@ -42,12 +42,12 @@ import { OkGaaTilLosModal } from '../OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
-import { JournalpostAlleredeBehandlet } from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import JournalpostAlleredeBehandlet from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
-import { Pleietrengende } from './Komponenter/Pleietrengende';
+import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import './fordeling.less';
@@ -385,7 +385,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
+        (!identState.annenPart ||
+            !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
+            identState.annenPart === identState.søkerId);
 
     const disableJournalførKnapper = () => {
         if (
@@ -735,7 +737,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                             <div className="mt-5 mb-5">
                                 <AnnenPart
-                                    annenPart={identState.annenPart}
+                                    identState={identState}
                                     showComponent={
                                         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
                                         (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent))
@@ -754,16 +756,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {isFetchingFagsaker && <Loader />}
                             {visPleietrengendeComponent && (
                                 <Pleietrengende
+                                    toSokereIJournalpost={toSokereIJournalpost}
                                     pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
                                         setBarnetHarIkkeFnr(harBarnetFnr)
                                     }
-                                    sokersIdent={identState.søkerId}
+                                    visPleietrengende={visPleietrengende}
+                                    jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
                                     skalHenteBarn={
                                         dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                     }
-                                    visPleietrengende={visPleietrengende}
-                                    jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
-                                    toSokereIJournalpost={toSokereIJournalpost}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (

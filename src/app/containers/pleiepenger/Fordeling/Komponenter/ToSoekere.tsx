@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
-
-import { Alert, Checkbox, TextField } from '@navikt/ds-react';
-
+import { FormattedMessage } from 'react-intl';
+import { Alert, Checkbox } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
-import { IJournalpost } from 'app/models/types';
+import { IJournalpost, Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import intlHelper from 'app/utils/intlUtils';
-
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from '../FordelingFeilmeldinger';
+import { getPersonInfo } from 'app/api/api';
+import { IdentRules } from 'app/rules';
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
 interface IToSoekereProps {
     journalpost: IJournalpost;
@@ -31,7 +30,11 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     dokumenttype,
     disabled,
 }) => {
-    const intl = useIntl();
+    const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
+    const [annenSøkersInfo, setAnnenSøkersInfo] = useState<Person | undefined>(undefined);
+    const [annenSøkersInfoLoading, setAnnenSøkersInfoLoading] = useState<boolean>(false);
+    const [annenSøkersInfoError, setAnnenSøkersInfoError] = useState<boolean>(false);
+
     const skalVises =
         (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
             dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
@@ -39,64 +42,87 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         !!journalpost?.kanKopieres &&
         !journalpost.erFerdigstilt;
 
-    const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
+    const hentAnnenSøkersInfo = (søkersFødselsnummer: string) => {
+        setAnnenSøkersInfoError(false);
+        setAnnenSøkersInfoLoading(true);
+        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+            setAnnenSøkersInfoLoading(false);
+            if (response.status === 200) {
+                setAnnenSøkersInfo(data);
+            } else {
+                setAnnenSøkersInfoError(true);
+            }
+        });
+    };
 
     const handleIdentAnnenSoker = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const ident = event.target.value.replace(/\D+/, '');
-
-        if (annenSokerIdent.length > 0 && ident.length < annenSokerIdent.length) {
+        const identFromInput = event.target.value.replace(/\D+/, '');
+        setAnnenSøkersInfo(undefined);
+        if (annenSokerIdent.length > 0 && identFromInput.length < annenSokerIdent.length) {
             setIdentAction(identState.søkerId, identState.pleietrengendeId);
         }
 
-        if (ident.length === 11) {
-            setIdentAction(identState.søkerId, identState.pleietrengendeId, event.target.value);
+        if (identFromInput.length === 11) {
+            if (!IdentRules.erUgyldigIdent(identFromInput)) {
+                hentAnnenSøkersInfo(identFromInput);
+            }
+            setIdentAction(identState.søkerId, identState.pleietrengendeId, identFromInput);
         }
-        setAnnenSokerIdent(ident);
+
+        setAnnenSokerIdent(identFromInput);
     };
 
-    if (!skalVises) {
-        return null;
-    }
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+
+        setToSokereIJournalpost(checked);
+        setAnnenSøkersInfo(undefined);
+
+        if (!checked) {
+            setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
+            setAnnenSokerIdent('');
+        }
+    };
+
     const disableCheckbox = () => {
         if (!journalpost.erFerdigstilt && journalpost.sak?.fagsakId) {
             return false;
         }
         return disabled;
     };
+
+    if (!skalVises) {
+        return null;
+    }
+
     return (
         <>
             <VerticalSpacer eightPx />
-            <Checkbox
-                onChange={(e) => {
-                    setToSokereIJournalpost(e.target.checked);
-                    if (!e.target.checked) {
-                        setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
-                        setAnnenSokerIdent('');
-                    }
-                }}
-                checked={toSokereIJournalpost}
-                disabled={disableCheckbox()}
-            >
-                {intlHelper(intl, 'ident.identifikasjon.tosokere')}
+
+            <Checkbox onChange={handleCheckboxChange} checked={toSokereIJournalpost} disabled={disableCheckbox()}>
+                <FormattedMessage id="ident.identifikasjon.tosokere" />
             </Checkbox>
+
             <VerticalSpacer sixteenPx />
+
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
                     <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
-                        {intlHelper(intl, 'ident.identifikasjon.infoOmRegisteringAvToSokere')}
+                        <FormattedMessage id="ident.identifikasjon.infoOmRegisteringAvToSokere" />
                     </Alert>
-                    <TextField
-                        label={intlHelper(intl, 'ident.identifikasjon.annenSoker')}
-                        onChange={handleIdentAnnenSoker}
-                        className="bold-label"
-                        maxLength={11}
-                        autoComplete="off"
-                        error={visFeilmeldingForAnnenIdentVidJournalKopi(
+
+                    <FnrTextField
+                        labelId="ident.identifikasjon.annenSoker"
+                        value={annenSokerIdent}
+                        loadingPersonsInfo={annenSøkersInfoLoading}
+                        errorPersonsInfo={annenSøkersInfoError}
+                        person={annenSøkersInfo}
+                        errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(
                             identState.annenSokerIdent,
                             identState.søkerId,
                             identState.pleietrengendeId,
-                            intl,
                         )}
+                        onChange={handleIdentAnnenSoker}
                     />
                 </div>
             )}

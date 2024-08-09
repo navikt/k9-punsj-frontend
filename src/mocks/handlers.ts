@@ -438,8 +438,9 @@ let handlers = [
     ),
 
     http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
-    http.get(ApiPath.PERSON, () =>
-        HttpResponse.json(
+    http.get(ApiPath.PERSON, async () => {
+        await delay(2000);
+        return HttpResponse.json(
             {
                 etternavn: 'KAKE',
                 fornavn: 'TUNGSINDIG',
@@ -449,8 +450,9 @@ let handlers = [
                 sammensattNavn: 'TUNGSINDIG KAKE',
             },
             { status: 200 },
-        ),
-    ),
+        );
+    }),
+
     http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', '409'), async () =>
         HttpResponse.json({ type: 'punsj://ikke-støttet-journalpost' }, { status: 409 }),
     ),

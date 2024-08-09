@@ -1,33 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Alert, Checkbox, Select, TextField } from '@navikt/ds-react';
+import { Alert, Checkbox, Select } from '@navikt/ds-react';
 
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { IIdentState } from '../../../../models/types/IdentState';
 import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import { IFellesState } from '../../../../state/reducers/FellesReducer';
 import { hentBarn } from '../../../../state/reducers/HentBarn';
+import { Person } from 'app/models/types/Person';
+import { getPersonInfo } from 'app/api/api';
+
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
+import { Dispatch } from 'redux';
 
 import './pleietrengende.less';
-
-export interface IPleietrengendeStateProps {
-    identState: IIdentState;
-    fellesState: IFellesState;
-}
-
-export interface IPleietrengendeDispatchProps {
-    setIdentAction: typeof setIdentFellesAction;
-    henteBarn: typeof hentBarn;
-}
-
-export interface IPleietrengende {
-    sokersIdent: string;
+export interface Props {
     toSokereIJournalpost: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
     visPleietrengende?: boolean;
@@ -35,44 +26,65 @@ export interface IPleietrengende {
     skalHenteBarn?: boolean;
 }
 
-type IPleietrengendeProps = IPleietrengendeStateProps & IPleietrengendeDispatchProps & IPleietrengende;
-
-const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (props) => {
-    const {
-        pleietrengendeHarIkkeFnrFn,
-        identState,
-        sokersIdent,
-        toSokereIJournalpost,
-        fellesState,
-        setIdentAction,
-        henteBarn,
-        visPleietrengende,
-        skalHenteBarn,
-        jpErFerdigstiltOgUtenPleietrengende,
-    } = props;
+const Pleietrengende: React.FC<Props> = ({
+    toSokereIJournalpost,
+    pleietrengendeHarIkkeFnrFn,
+    jpErFerdigstiltOgUtenPleietrengende,
+    visPleietrengende,
+    skalHenteBarn,
+}: Props) => {
     const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
     const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
+    const [pleietrengendeInfo, setPleietrengendeInfo] = useState<Person | undefined>(undefined);
+    const [pleietrengendeInfoLoading, setPleietrengendeInfoLoading] = useState<boolean>(false);
+    const [pleietrengendeInfoError, setPleietrengendeInfoError] = useState<boolean>(false);
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const setIdentAction = (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
+
+    const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
 
     useEffect(() => {
-        if (sokersIdent.length > 0 && skalHenteBarn && visPleietrengende) {
-            henteBarn(sokersIdent);
+        if (identState.søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
+            henteBarn(identState.søkerId);
         }
-    }, [sokersIdent, visPleietrengende, skalHenteBarn]);
+    }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
 
-    if (!visPleietrengende) {
-        return null;
-    }
+    const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
+        setPleietrengendeInfoError(false);
+        setPleietrengendeInfoLoading(true);
+
+        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+            setPleietrengendeInfoLoading(false);
+            if (response.status === 200) {
+                setPleietrengendeInfo(data);
+            } else {
+                setPleietrengendeInfoError(true);
+            }
+        });
+    };
 
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
+
         if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
+            setPleietrengendeInfo(undefined);
             setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
         }
 
         if (identFromInput.length === 11) {
+            if (!IdentRules.erUgyldigIdent(identFromInput)) {
+                hentPleietrengendeInfo(identFromInput);
+            }
+
             setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
         }
 
@@ -85,11 +97,13 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
 
     const nullUtPleietrengendeIdent = () => {
         setPleietrengendeIdent('');
+        setPleietrengendeInfo(undefined);
         setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
     };
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
         setPleietrengendeHarIkkeFnr(checked);
+        setPleietrengendeInfo(undefined);
         if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
         if (checked) {
             setPleietrengendeIdent('');
@@ -102,6 +116,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     if (!visPleietrengende) {
         return null;
     }
+
     return (
         <div>
             {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
@@ -111,7 +126,7 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                         className="pleietrengendeSelect"
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
-                            pleietrengendeIdentInputFieldOnChange(e);
+                            setPleietrengendeIdent(e.target.value);
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         disabled={gjelderAnnenPleietrengende}
@@ -143,23 +158,22 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
                 !!fellesState.hentBarnForbidden ||
                 (!!fellesState.barn && fellesState.barn.length === 0)) && (
                 <>
-                    <div className="fyllUtIdentAnnetBarnContainer">
-                        <TextField
-                            label={intlHelper(intl, 'ident.identifikasjon.pleietrengende')}
-                            onChange={pleietrengendeIdentInputFieldOnChange}
-                            className="bold-label ident-soker-2"
-                            autoComplete="off"
-                            maxLength={11}
-                            size="medium"
-                            error={
-                                isPleitrengendeFnrErSammeSomSøker ||
-                                (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
-                                    ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                    : undefined
-                            }
-                            disabled={pleietrengendeHarIkkeFnr}
-                        />
-                    </div>
+                    <FnrTextField
+                        labelId="ident.identifikasjon.pleietrengende"
+                        value={pleietrengendeIdent}
+                        loadingPersonsInfo={pleietrengendeInfoLoading}
+                        errorPersonsInfo={pleietrengendeInfoError}
+                        person={pleietrengendeInfo}
+                        errorValidationMessage={
+                            isPleitrengendeFnrErSammeSomSøker ||
+                            (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
+                                ? intlHelper(intl, 'ident.feil.ugyldigident')
+                                : undefined
+                        }
+                        disabled={pleietrengendeHarIkkeFnr}
+                        onChange={pleietrengendeIdentInputFieldOnChange}
+                    />
+
                     <VerticalSpacer eightPx />
                     {pleietrengendeHarIkkeFnrFn && (
                         <>
@@ -195,18 +209,4 @@ const PleietrengendeComponent: React.FunctionComponent<IPleietrengendeProps> = (
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    identState: state.identState,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    henteBarn: (søkerId: string) => dispatch(hentBarn(søkerId)),
-});
-
-const Pleietrengende = connect(mapStateToProps, mapDispatchToProps)(PleietrengendeComponent);
-
-export { Pleietrengende, PleietrengendeComponent };
+export default Pleietrengende;

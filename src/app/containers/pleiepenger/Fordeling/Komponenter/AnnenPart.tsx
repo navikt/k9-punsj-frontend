@@ -1,30 +1,53 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
-import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
-import { TextField } from '@navikt/ds-react';
-
-import { getValidationErrors, identifikator } from 'app/rules/yup';
+import { getValidationErrors, identifikatorAnnenPart } from 'app/rules/yup';
+import { Person } from 'app/models/types';
+import { getPersonInfo } from 'app/api/api';
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
+import { IdentRules } from 'app/rules';
+import { IIdentState } from 'app/models/types/IdentState';
 
 interface Props {
-    annenPart: string;
+    identState: IIdentState;
     showComponent: boolean;
     setAnnenPart: (annenPart: string) => void;
 }
-const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
-    const intl = useIntl();
+const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
     const [visFeil, setVisFeil] = useState(false);
 
-    const validators = [identifikator];
+    const [annenPartInfo, setAnnenPartInfo] = useState<Person | undefined>(undefined);
+    const [annenPartInfoLoading, setAnnenPartInfoLoading] = useState<boolean>(false);
+    const [annenPartInfoError, setAnnenPartInfoError] = useState<boolean>(false);
+
+    const validators = [identifikatorAnnenPart];
 
     // Trenges dette her?
     useEffect(() => {
         setAnnenPart('');
     }, []);
 
+    const hentAnnenPartInfo = (annenPartFødselsnummer: string) => {
+        setAnnenPartInfoError(false);
+        setAnnenPartInfoLoading(true);
+
+        getPersonInfo(annenPartFødselsnummer, (response, data: Person) => {
+            setAnnenPartInfoLoading(false);
+            if (response.status === 200) {
+                setAnnenPartInfo(data);
+            } else {
+                setAnnenPartInfoError(true);
+            }
+        });
+    };
+
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const identifikatorUtenWhitespace = e.target.value.replace(/\D+/, '');
+
+        setAnnenPartInfo(undefined);
+
         if (identifikatorUtenWhitespace.length < 12) {
+            if (!IdentRules.erUgyldigIdent(identifikatorUtenWhitespace)) {
+                hentAnnenPartInfo(identifikatorUtenWhitespace);
+            }
             setAnnenPart(identifikatorUtenWhitespace);
         }
     };
@@ -35,15 +58,18 @@ const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
         return null;
     }
     return (
-        <TextField
-            label={intlHelper(intl, 'ident.identifikasjon.annenPart')}
-            onChange={onChangeHandler}
-            onBlur={onBlurHandler}
-            value={annenPart}
-            error={visFeil && getValidationErrors(validators, annenPart)}
-            className="bold-label"
-            maxLength={11}
-        />
+        <>
+            <FnrTextField
+                labelId="ident.identifikasjon.annenPart"
+                value={identState.annenPart}
+                loadingPersonsInfo={annenPartInfoLoading}
+                errorPersonsInfo={annenPartInfoError}
+                person={annenPartInfo}
+                errorValidationMessage={visFeil && getValidationErrors(validators, identState)}
+                onChange={onChangeHandler}
+                onBlur={onBlurHandler}
+            />
+        </>
     );
 };
 
