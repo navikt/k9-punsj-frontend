@@ -1,29 +1,24 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-
-import { useIntl } from 'react-intl';
-import intlHelper from 'app/utils/intlUtils';
-import { TextField } from '@navikt/ds-react';
-
-import { getValidationErrors, identifikator } from 'app/rules/yup';
+import { getValidationErrors, identifikatorAnnenPart } from 'app/rules/yup';
 import { Person } from 'app/models/types';
 import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { IdentRules } from 'app/rules';
+import { IIdentState } from 'app/models/types/IdentState';
 
 interface Props {
-    annenPart: string;
+    identState: IIdentState;
     showComponent: boolean;
     setAnnenPart: (annenPart: string) => void;
 }
-const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
-    const intl = useIntl();
+const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
     const [visFeil, setVisFeil] = useState(false);
 
     const [annenPartInfo, setAnnenPartInfo] = useState<Person | undefined>(undefined);
     const [annenPartInfoLoading, setAnnenPartInfoLoading] = useState<boolean>(false);
     const [annenPartInfoError, setAnnenPartInfoError] = useState<boolean>(false);
 
-    const validators = [identifikator];
+    const validators = [identifikatorAnnenPart];
 
     // Trenges dette her?
     useEffect(() => {
@@ -66,11 +61,11 @@ const AnnenPart = ({ showComponent, annenPart, setAnnenPart }: Props) => {
         <>
             <FnrTextField
                 labelId="ident.identifikasjon.annenPart"
-                value={annenPart}
+                value={identState.annenPart}
                 loadingPersonsInfo={annenPartInfoLoading}
                 errorPersonsInfo={annenPartInfoError}
                 person={annenPartInfo}
-                errorValidationMessage={visFeil && getValidationErrors(validators, annenPart)}
+                errorValidationMessage={visFeil && getValidationErrors(validators, identState)}
                 onChange={onChangeHandler}
                 onBlur={onBlurHandler}
             />

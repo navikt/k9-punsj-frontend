@@ -385,7 +385,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const disableVidereMidlertidigAlene =
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart || !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)));
+        (!identState.annenPart ||
+            !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
+            identState.annenPart === identState.søkerId);
 
     const disableJournalførKnapper = () => {
         if (
@@ -735,7 +737,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                             <div className="mt-5 mb-5">
                                 <AnnenPart
-                                    annenPart={identState.annenPart}
+                                    identState={identState}
                                     showComponent={
                                         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
                                         (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent))
