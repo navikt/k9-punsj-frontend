@@ -2650,7 +2650,7 @@ __metadata:
     express: "npm:4.19.2"
     express-http-proxy: "npm:2.1.1"
     helmet: "npm:7.1.0"
-    jose: "npm:5.6.3"
+    jose: "npm:5.7.0"
     morgan: "npm:1.10.0"
     node-cache: "npm:5.1.2"
     openid-client: "npm:5.6.5"
@@ -11830,10 +11830,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:5.6.3, jose@npm:^5.2.3":
-  version: 5.6.3
-  resolution: "jose@npm:5.6.3"
-  checksum: 10/829f07b8857221ada1cd112a5ebd084e34748f6e3247f5cb03aca0a1f25dd6a07283c9a4f5b854935bda505e3243405640550f8e9eb46c45b172dc4cb336ac89
+"jose@npm:5.7.0":
+  version: 5.7.0
+  resolution: "jose@npm:5.7.0"
+  checksum: 10/8eeca706ef50e2fd2e5b97563b6cbc0a8a91038c3bb34186c1761a4737b942e314d453cff8bf28aab790e53433d33ffa296a748908f9c095bcf73b1b17c21544
   languageName: node
   linkType: hard
 
@@ -11841,6 +11841,13 @@ __metadata:
   version: 4.15.9
   resolution: "jose@npm:4.15.9"
   checksum: 10/256234b6f85cdc080b1331f2d475bd58c8ccf459cb20f70ac5e4200b271bce10002b1c2f8e5b96dd975d83065ae5a586d52cdf89d28471d56de5d297992f9905
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.2.3":
+  version: 5.6.3
+  resolution: "jose@npm:5.6.3"
+  checksum: 10/829f07b8857221ada1cd112a5ebd084e34748f6e3247f5cb03aca0a1f25dd6a07283c9a4f5b854935bda505e3243405640550f8e9eb46c45b172dc4cb336ac89
   languageName: node
   linkType: hard
 
