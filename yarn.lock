@@ -1252,19 +1252,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:7.24.7":
-  version: 7.24.7
-  resolution: "@babel/plugin-transform-runtime@npm:7.24.7"
+"@babel/plugin-transform-runtime@npm:7.25.4":
+  version: 7.25.4
+  resolution: "@babel/plugin-transform-runtime@npm:7.25.4"
   dependencies:
     "@babel/helper-module-imports": "npm:^7.24.7"
-    "@babel/helper-plugin-utils": "npm:^7.24.7"
+    "@babel/helper-plugin-utils": "npm:^7.24.8"
     babel-plugin-polyfill-corejs2: "npm:^0.4.10"
-    babel-plugin-polyfill-corejs3: "npm:^0.10.1"
+    babel-plugin-polyfill-corejs3: "npm:^0.10.6"
     babel-plugin-polyfill-regenerator: "npm:^0.6.1"
     semver: "npm:^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10/6f82f2104394d6efef3ba5b38474018f1072d524087eb223776dd55cf8ec8885e813a73004c95218f37de7c0dbaa1a136d2e359cee8cf9ffb3f2e130a3aeb99a
+  checksum: 10/081dcc4fb8ae86d80b6b261e7fe55d4876995aa28011813331a14de5b9ecd845c938b6bd688d95febacd72b3f446e1439582e81cee67447c73b78c514849ddde
   languageName: node
   linkType: hard
 
@@ -6099,7 +6099,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:^0.10.1, babel-plugin-polyfill-corejs3@npm:^0.10.4":
+"babel-plugin-polyfill-corejs3@npm:^0.10.4, babel-plugin-polyfill-corejs3@npm:^0.10.6":
   version: 0.10.6
   resolution: "babel-plugin-polyfill-corejs3@npm:0.10.6"
   dependencies:
@@ -12099,7 +12099,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:7.25.2"
-    "@babel/plugin-transform-runtime": "npm:7.24.7"
+    "@babel/plugin-transform-runtime": "npm:7.25.4"
     "@babel/preset-env": "npm:7.25.3"
     "@babel/preset-react": "npm:7.24.7"
     "@babel/preset-typescript": "npm:7.24.7"
