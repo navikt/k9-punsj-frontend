@@ -20,6 +20,7 @@
         "@sentry/react": "8.26.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
+        "date-fns": "^3.6.0",
         "dayjs": "1.11.13",
         "dotenv": "16.4.5",
         "formik": "2.4.6",

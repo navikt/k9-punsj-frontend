@@ -10,6 +10,7 @@ import intlHelper from '../../../utils/intlUtils';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
 
 import './opplysningerOmOMPKSSoknad.less';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
 interface IOwnProps {
     intl: IntlShape;
@@ -35,7 +36,7 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
         </Alert>
 
         <div className="input-row">
-            <DateInput
+            <DateInputNew
                 value={soknad.mottattDato}
                 id="soknad-dato"
                 errorMessage={getErrorMessage('mottattDato')}
