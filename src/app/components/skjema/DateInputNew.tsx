@@ -5,41 +5,53 @@ import {
     InputDateStringToISODateString,
     INVALID_DATE_VALUE,
     isISODateString,
-    ISODateString,
+    // ISODateString,
     ISODateStringToUTCDate,
 } from 'app/utils/date-utils/src/format';
 
-type Props = Omit<DatePickerProps, 'onChange' | 'fromDate' | 'toDate'> & {
+import dayjs from 'dayjs';
+
+const isValidDate = (dateString: string) => dayjs(dateString, 'YYYY-MM-DD').isValid();
+
+type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'> & {
     label: string;
     errorMessage?: React.ReactNode | string;
     inputDisabled?: boolean;
     description?: React.ReactNode;
     value?: string;
     inputId?: string;
-    onChange: (date: ISODateString | string) => void;
+    inputRef?: React.Ref<HTMLInputElement>;
+    onChange: (value: string) => void;
+    onBlur?: (value: string) => void;
 };
 
 export const DateInputNew: React.FC<Props> = ({
     value,
     onChange,
+    onBlur,
     id,
     label,
     className,
     locale,
     inputDisabled,
     errorMessage,
+    inputRef,
 }) => {
     const [inputHasFocus, setInputHasFocus] = React.useState(false);
     const [hasError, setHasError] = useState(false);
 
     const onSelect = (date?: Date) => {
+        console.log('Test onSelect date:', date);
+        console.log('Test onSelect value:', value);
         const isoDateString = date ? dateToISODateString(date) : '';
+        console.log('Test isoDateString:', isoDateString);
         if (isoDateString !== value) {
             onChange(isoDateString);
         }
     };
 
     const onDateChange = (date?: Date) => {
+        console.log('Test onChange data:', date);
         if (inputHasFocus) {
             return;
         }
@@ -102,6 +114,9 @@ export const DateInputNew: React.FC<Props> = ({
                     disabled={inputDisabled}
                     onFocus={onInputFocus}
                     onBlur={onInputBlur}
+                    // onChange={onChange}
+                    // onBlur={onBlur}
+                    ref={inputRef}
                 />
             </DatePicker>
         </div>
