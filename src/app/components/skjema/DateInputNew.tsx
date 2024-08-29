@@ -11,7 +11,7 @@ import {
 
 import './dateInputNew.less';
 
-type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'> & {
+type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate' | 'disabled'> & {
     label: string;
     onChange: (value: string) => void;
 
@@ -20,6 +20,7 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     errorMessage?: React.ReactNode | string;
     id?: string;
     inputDisabled?: boolean;
+    disabled?: boolean;
     inputRef?: React.Ref<HTMLInputElement>;
     onBlur?: (value: string) => void;
     value?: string;
@@ -33,6 +34,7 @@ export const DateInputNew: React.FC<Props> = ({
     errorMessage,
     id,
     inputDisabled,
+    disabled,
     inputRef,
     locale,
     onBlur,
@@ -99,14 +101,14 @@ export const DateInputNew: React.FC<Props> = ({
                 showWeekNumber={true}
                 onSelect={onSelect}
                 mode="single"
-                inputDisabled={inputDisabled}
+                inputDisabled={inputDisabled || disabled}
             >
                 <DatePicker.Input
                     {...inputProps}
                     id={id}
                     label={label}
                     error={error}
-                    disabled={inputDisabled}
+                    disabled={inputDisabled || disabled}
                     onBlur={onInputBlur}
                     ref={inputRef}
                 />

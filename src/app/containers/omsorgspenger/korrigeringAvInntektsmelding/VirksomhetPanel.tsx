@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Fieldset, Link, Panel, Select, TextField } from '@navikt/ds-react';
+import { Box, Fieldset, Link, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -94,7 +94,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                 </h3>
             }
         >
-            <Panel className="listepanel virksomhetPanel">
+            <Box className="listepanel virksomhetPanel">
                 <TextField
                     className="w-12"
                     label="Årstallet korrigeringen gjelder for"
@@ -180,7 +180,7 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                         </Select>
                     )}
                 </Field>
-            </Panel>
+            </Box>
         </Fieldset>
     );
 }

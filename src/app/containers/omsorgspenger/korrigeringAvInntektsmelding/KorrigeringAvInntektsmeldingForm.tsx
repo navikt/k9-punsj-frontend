@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import React, { useReducer } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Alert, Button, Modal, Panel } from '@navikt/ds-react';
+import { Alert, Box, Button, Modal } from '@navikt/ds-react';
 
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -160,7 +160,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             {({ setFieldValue, values }) => (
                 <>
                     <Form className="korrigering">
-                        <Panel border>
+                        <Box padding="4" borderWidth="1" borderRadius="small">
                             <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
                             <Alert size="small" variant="info" className="korrigering__headerInfo">
                                 Korrigering av inntektsmelding skal benyttes til å:
@@ -220,7 +220,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     <Feilmelding feil={formError} />
                                 </div>
                             )}
-                        </Panel>
+                        </Box>
                         <div className="korrigering__buttonContainer">
                             <Button>Send inn</Button>
                         </div>

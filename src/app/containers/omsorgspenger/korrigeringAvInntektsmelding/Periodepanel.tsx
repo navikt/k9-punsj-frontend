@@ -41,18 +41,16 @@ export const Periodepanel: React.FunctionComponent<IPeriodepanelerProps> = (prop
                             const isLastElement =
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
-                                            {({ field }: FieldProps) => (
+                                            {() => (
                                                 <PeriodInput
                                                     onChange={(period) => {
                                                         setFieldValue(fieldName, period);
                                                     }}
-                                                    periode={field.value}
+                                                    periode={value}
                                                     intl={intl}
-                                                    errorMessage={<ErrorMessage name={fieldName} />}
                                                     fomInputRef={isLastElement ? fomInputRef : undefined}
                                                 />
                                             )}

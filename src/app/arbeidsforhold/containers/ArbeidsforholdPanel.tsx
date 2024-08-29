@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl';
 import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';
 
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import DateInput from 'app/components/skjema/DateInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -21,6 +20,7 @@ import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidIn
 import { Arbeidstaker, IPeriode } from '../../models/types';
 import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -75,7 +75,7 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <DateInput
+                <DateInputNew
                     id="frilanser-startdato"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
@@ -122,7 +122,7 @@ const ArbeidsforholdPanel = ({
                 />
                 <VerticalSpacer eightPx />
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <DateInput
+                    <DateInputNew
                         id="frilanser-sluttdato"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
@@ -473,7 +473,7 @@ const ArbeidsforholdPanel = ({
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                 <div className="sn-startdatocontainer">
-                    <DateInput
+                    <DateInputNew
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
@@ -516,7 +516,7 @@ const ArbeidsforholdPanel = ({
                             });
                         }}
                     />
-                    <DateInput
+                    <DateInputNew
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
@@ -640,7 +640,7 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <DateInput
+                            <DateInputNew
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}

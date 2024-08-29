@@ -1,12 +1,12 @@
 import { FormikValues, useField, useFormikContext } from 'formik';
 import { set } from 'lodash';
 import React from 'react';
+import { DateInputNew } from '../skjema/DateInputNew';
 
-import DateInput, { DateInputProps } from '../skjema/DateInput';
-
-interface OwnProps extends Omit<DateInputProps, 'value' | 'onChange'> {
+interface OwnProps {
     label: string;
     name: string;
+    className?: string;
     handleBlur?: (callback: () => void, values: any) => void;
 }
 
@@ -14,7 +14,7 @@ const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
     return (
-        <DateInput
+        <DateInputNew
             label={label}
             {...field}
             {...props}

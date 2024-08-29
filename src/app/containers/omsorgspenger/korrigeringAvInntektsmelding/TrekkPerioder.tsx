@@ -1,7 +1,7 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Fieldset, Panel } from '@navikt/ds-react';
+import { Alert, Box, Fieldset } from '@navikt/ds-react';
 
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -18,7 +18,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Panel className="listepanel">
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Fieldset
                     legend={
                         <h4 className="korrigering-legend">
@@ -34,7 +34,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                         <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.Trekkperioder} />
                     </div>
                 </Fieldset>
-            </Panel>
+            </Box>
         </EkspanderbartPanel>
     );
 };
