@@ -159,6 +159,8 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
+    const jpFerdistiltIGosys = !!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId;
+
     const isFagsakMedValgtBehandlingsår = (): boolean => {
         if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
             return fagsaker.some((f) => {
@@ -616,7 +618,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     return (
         <div className="fordeling-container">
-            {journalpost?.kanSendeInn && journalpost?.erSaksbehandler && (
+            {journalpost?.kanSendeInn && !jpFerdistiltIGosys && journalpost?.erSaksbehandler && (
                 <FormPanel>
                     {erInntektsmeldingUtenKrav && (
                         <>
@@ -927,7 +929,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     </div>
                 </FormPanel>
             )}
-            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <JournalpostAlleredeBehandlet />}
+            {(!journalpost?.kanSendeInn || jpFerdistiltIGosys) && !!journalpost?.erSaksbehandler && (
+                <JournalpostAlleredeBehandlet />
+            )}
             {!journalpost?.erSaksbehandler && (
                 <div>
                     <Alert size="small" variant="warning">

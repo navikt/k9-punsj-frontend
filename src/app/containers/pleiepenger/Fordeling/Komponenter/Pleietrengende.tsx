@@ -130,6 +130,7 @@ const Pleietrengende: React.FC<Props> = ({
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         disabled={gjelderAnnenPleietrengende}
+                        defaultValue={identState.pleietrengendeId}
                     >
                         <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
                         {!gjelderAnnenPleietrengende &&

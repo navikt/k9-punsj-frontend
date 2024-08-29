@@ -15,15 +15,20 @@ import { getEnvironmentVariable } from '../../../../../utils';
 import LabelValue from 'app/components/skjema/LabelValue';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
+import DokumentTypeVelger from '../DokumentTypeVelger';
+import { FordelingDokumenttype } from 'app/models/enums';
+import { setDokumenttypeAction } from 'app/state/actions';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
 
     const dispatch = useDispatch<Dispatch<any>>();
     const setIdentAction = (søkerId: string) => dispatch(setIdentFellesAction(søkerId, null, null));
+    const setDokumenttype = (dokumenttype: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
 
     const identState = useSelector((state: RootStateType) => state.identState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
     const { dedupKey, journalpost, kopierJournalpostSuccess } = fellesState;
     const { søkerId, pleietrengendeId } = identState;
@@ -71,6 +76,15 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 <div className="mt-6">
                     <LabelValue labelTextId="journalpost.norskIdent" value={søkerId} visKopier />
                 </div>
+
+                <DokumentTypeVelger
+                    handleDokumenttype={(type: FordelingDokumenttype) => {
+                        setDokumenttype(type);
+                        setIdentAction(søkerId);
+                    }}
+                    valgtDokumentType={fordelingState.dokumenttype as string}
+                    kopierValg={true}
+                />
 
                 {!kopierJournalpostSuccess && (
                     <div className="mt-6">

@@ -1,0 +1,31 @@
+{
+    "journalpostId": "311",
+    "norskIdent": "29099000129",
+    "dokumenter": [
+        {
+            "dokumentId": "668084478"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": {
+        "kode": "UKJENT",
+        "navn": "ukjent",
+        "erScanning": true
+    },
+    "kanSendeInn": true,
+    "erSaksbehandler": true,
+    "journalpostStatus": "JOURNALFOERT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "erFerdigstilt": true,
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": false,
+        "fagsakId": null,
+        "gyldigPeriode": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
+        "sakstype": null,
+        "behandlingsÅr": null
+    }
+}

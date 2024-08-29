@@ -11,12 +11,14 @@ interface OwnProps {
     handleDokumenttype: (type: FordelingDokumenttype) => void;
     valgtDokumentType: string;
     disableRadios?: boolean;
+    kopierValg?: boolean;
 }
 
 const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
     handleDokumenttype,
     valgtDokumentType,
     disableRadios,
+    kopierValg,
 }) => {
     const intl = useIntl();
     const toggleFordelingDokumentType = (type: string): boolean => {
@@ -134,13 +136,15 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 />
             )}
 
-            <RadioPanel
-                label={intlHelper(intl, FordelingDokumenttype.ANNET)}
-                value={FordelingDokumenttype.ANNET}
-                checked={valgtDokumentType === FordelingDokumenttype.ANNET}
-                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
-            />
+            {!kopierValg && (
+                <RadioPanel
+                    label={intlHelper(intl, FordelingDokumenttype.ANNET)}
+                    value={FordelingDokumenttype.ANNET}
+                    checked={valgtDokumentType === FordelingDokumenttype.ANNET}
+                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                    disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
+                />
+            )}
         </div>
     );
 };
