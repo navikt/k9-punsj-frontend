@@ -4,15 +4,16 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
@@ -22,7 +23,7 @@ const Bosteder = () => {
     const [harBoddIUtlandet, setHarBoddIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
 
     return (
-        <Panel border>
+        <Box padding="4" borderRadius="small">
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
@@ -32,7 +33,9 @@ const Bosteder = () => {
                 name="medlemskapjanei"
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
                 onChange={(event) => {
-                    const { value } = event.target;
+                    const target = event.target as HTMLInputElement;
+                    const value = target.value as JaNeiIkkeOpplyst;
+
                     setHarBoddIUtlandet(value);
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
                         setFieldValue('bosteder', [initialUtenlandsopphold]);
@@ -49,12 +52,17 @@ const Bosteder = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.bosteder?.map((_, index, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik label="Fra og med" name={`bosteder[${index}].periode.fom`} />
-                                        <DatoInputFormik label="Til og med" name={`bosteder[${index}].periode.tom`} />
+                                        <DatoInputFormikNew
+                                            label="Fra og med"
+                                            name={`bosteder[${index}].periode.fom`}
+                                        />
+                                        <DatoInputFormikNew
+                                            label="Til og med"
+                                            name={`bosteder[${index}].periode.tom`}
+                                        />
                                         {array.length > 1 && (
                                             <Button
                                                 variant="tertiary"
@@ -70,11 +78,11 @@ const Bosteder = () => {
                                     <VerticalSpacer sixteenPx />
                                     <div style={{ maxWidth: '25%' }}>
                                         <Field name={`bosteder[${index}].land`}>
-                                            {({ field, meta }: FieldProps<string>) => (
+                                            {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
+                                                    label={''}
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
-                                                    feil={meta.touched && meta.error}
                                                     {...field}
                                                 />
                                             )}
@@ -95,7 +103,7 @@ const Bosteder = () => {
                     )}
                 />
             )}
-        </Panel>
+        </Box>
     );
 };
 

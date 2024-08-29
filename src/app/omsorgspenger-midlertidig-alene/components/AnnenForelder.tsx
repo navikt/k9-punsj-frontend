@@ -2,15 +2,13 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import set from 'lodash/set';
 import React, { useEffect } from 'react';
 import { IntlShape } from 'react-intl';
-
-import { BodyShort, Heading, Label, Panel, Select, Textarea } from '@navikt/ds-react';
-
+import { BodyShort, Heading, Label, Select, Textarea, Box } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import intlHelper from 'app/utils/intlUtils';
-
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { OMPMASoknad } from '../types/OMPMASoknad';
+
 import './annenForelder.less';
 
 const situasjonstyper = {
@@ -54,7 +52,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
             <Heading size="xsmall" spacing>
                 Annen forelder
             </Heading>
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <div className="annen-forelder-container">
                     <Label size="small">Identifikasjonsnummer</Label>
                     <BodyShort>{values.annenForelder.norskIdent}</BodyShort>
@@ -91,12 +89,11 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                     </Field>
                     <VerticalSpacer twentyPx />
                     <div className="fom-tom">
-                        <DatoInputFormik label="Fra og med" name="annenForelder.periode.fom" handleBlur={handleBlur} />
-                        <DatoInputFormik
+                        <DatoInputFormikNew label="Fra og med" name="annenForelder.periode.fom" />
+                        <DatoInputFormikNew
                             label="Til og med"
                             name="annenForelder.periode.tom"
                             disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
-                            handleBlur={handleBlur}
                         />
                     </div>
                     {!situasjonstypeErFengselEllerVerneplikt && (
@@ -105,7 +102,7 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                         </CheckboxFormik>
                     )}
                 </div>
-            </Panel>
+            </Box>
         </>
     );
 };

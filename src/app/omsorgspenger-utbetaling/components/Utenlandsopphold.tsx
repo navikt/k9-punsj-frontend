@@ -3,16 +3,16 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import intlHelper from 'app/utils/intlUtils';
 
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const options = [
     { value: 'ja', label: 'Ja' },
@@ -34,7 +34,7 @@ const Utenlandsopphold = () => {
     }, [values.metadata.utenlandsopphold]);
 
     return (
-        <Panel border>
+        <Box padding="4" borderRadius="small">
             <Heading size="small" level="5">
                 Utenlandsopphold
             </Heading>
@@ -49,15 +49,14 @@ const Utenlandsopphold = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.utenlandsopphold?.map((_, index, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik
+                                        <DatoInputFormikNew
                                             label="Fra og med"
                                             name={`utenlandsopphold[${index}].periode.fom`}
                                         />
-                                        <DatoInputFormik
+                                        <DatoInputFormikNew
                                             label="Til og med"
                                             name={`utenlandsopphold[${index}].periode.tom`}
                                         />
@@ -78,9 +77,9 @@ const Utenlandsopphold = () => {
                                         <Field name={`utenlandsopphold[${index}].land`}>
                                             {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
+                                                    label={''}
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
-                                                    feil={meta.touched && meta.error}
                                                     {...field}
                                                 />
                                             )}
@@ -101,7 +100,7 @@ const Utenlandsopphold = () => {
                     )}
                 />
             )}
-        </Panel>
+        </Box>
     );
 };
 

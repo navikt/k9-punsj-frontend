@@ -6,7 +6,8 @@ import { Button } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 interface UtenlandsoppholdProps {
@@ -21,8 +22,8 @@ const Utenlandsopphold = ({ arrayHelpers, fieldArrayIndex }: UtenlandsoppholdPro
         <div>
             <VerticalSpacer thirtyTwoPx />
             <div className="fom-tom-rad">
-                <DatoInputFormik label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
-                <DatoInputFormik label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
+                <DatoInputFormikNew label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
+                <DatoInputFormikNew label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
                 {values.utenlandsopphold.length > 1 && (
                     <Button
                         variant="tertiary"
@@ -38,12 +39,12 @@ const Utenlandsopphold = ({ arrayHelpers, fieldArrayIndex }: UtenlandsoppholdPro
             <VerticalSpacer sixteenPx />
             <div style={{ maxWidth: '25%' }}>
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
-                    {({ field, meta }: FieldProps<string>) => (
+                    {({ field }: FieldProps<string>) => (
                         <CountrySelect
+                            label={''}
                             {...field}
                             selectedcountry={field.value}
                             unselectedoption="Velg land"
-                            feil={meta.touched && meta.error}
                         />
                     )}
                 </Field>

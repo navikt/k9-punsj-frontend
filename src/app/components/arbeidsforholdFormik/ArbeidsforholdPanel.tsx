@@ -28,6 +28,7 @@ import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../formikInput/TextAreaFormik';
 import TextFieldFormik from '../formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
+import DatoInputFormikNew from '../formikInput/DatoInputFormikNew';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -93,7 +94,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
     const frilanserperioder = () => (
         <>
-            <DatoInputFormik
+            <DatoInputFormikNew
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
@@ -111,7 +112,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
             </Field>
             <VerticalSpacer eightPx />
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
-                <DatoInputFormik
+                <DatoInputFormikNew
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
@@ -134,7 +135,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 updateSoknad={(perioder) => {
                                     form.setFieldValue(field.name, [...perioder]);
                                 }}
-                                arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo}
+                                arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo!}
                             />
                         )}
                     </Field>
@@ -248,7 +249,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                 <div className="sn-startdatocontainer">
-                    <DatoInputFormik
+                    <DatoInputFormikNew
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
@@ -256,7 +257,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     {/* errorMessage={getErrorMessage(
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
                         )} */}
-                    <DatoInputFormik
+                    <DatoInputFormikNew
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
@@ -287,7 +288,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <DatoInputFormik
+                            <DatoInputFormikNew
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
@@ -325,7 +326,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             updateSoknad={(perioder) => {
                                 form.setFieldValue(field.name, [...perioder]);
                             }}
-                            arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
+                            arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo!}
                         />
                     )}
                 </Field>
@@ -364,6 +365,9 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 <Arbeidstakerperioder
                     eksisterendePerioder={eksisterendePerioder}
                     initialArbeidstaker={initialArbeidstaker()}
+                    getUhaandterteFeil={function (kode: string): (string | undefined)[] {
+                        throw new Error('Function not implemented.');
+                    }}
                 />
             )}
             <CheckboksPanel

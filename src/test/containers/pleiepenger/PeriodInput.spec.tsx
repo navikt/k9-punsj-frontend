@@ -30,8 +30,6 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 describe('PeriodInput', () => {
     it('should render both date inputs', () => {
         const wrapper = setupPeriodInput();
-        const dateInputs = wrapper.find('DateInputNew');
-        console.log(dateInputs.debug());
         expect(wrapper.find('DateInputNew').length).toBe(2);
     });
 

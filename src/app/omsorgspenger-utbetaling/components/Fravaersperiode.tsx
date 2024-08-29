@@ -2,15 +2,15 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { Delete } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import intlHelper from 'app/utils/intlUtils';
-
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+
 import './fravaersperiode.less';
 
 interface OwnProps {
@@ -63,7 +63,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
         },
     ];
     return (
-        <Panel className="fravaersperiode-container ">
+        <Box padding="4" borderWidth="1" borderRadius="small" className="fravaersperiode-container ">
             <div className="aarsak-rad">
                 <SelectFormik
                     label="Fraværsårsak"
@@ -88,8 +88,8 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
             <VerticalSpacer twentyPx />
             <VerticalSpacer twentyPx />
             <div className="fom-tom-rad">
-                <DatoInputFormik label="Fra og med" name={`${name}.periode.fom`} />
-                <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
+                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} />
+                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} />
             </div>
             <VerticalSpacer twentyPx />
             <div className="timer-container">
@@ -107,7 +107,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                 />
             </div>
             <VerticalSpacer twentyPx />
-        </Panel>
+        </Box>
     );
 };
 

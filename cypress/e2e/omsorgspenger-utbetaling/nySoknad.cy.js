@@ -78,6 +78,8 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText(/Navn på regnskapsfører/i).type('Geir-Per Enoksen');
         cy.findByLabelText(/Telefonnummer til regnskapsfører/i).type('97476107');
         cy.findByLabelText(/Startdato/i).type('01.10.2015');
+        cy.findByLabelText(/Næringsresultat før skatt de siste 12 månedene/i).type(10);
+
         cy.findAllByRole('combobox').eq(0).select(fraværÅrsak.ORDINÆRT_FRAVÆR);
         cy.findByLabelText('Fra og med').type('01.10.2022');
         cy.findByLabelText('Til og med').type('10.10.2022');

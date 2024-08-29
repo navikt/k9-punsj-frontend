@@ -3,16 +3,16 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading, Panel } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import intlHelper from 'app/utils/intlUtils';
 
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const options = [
     { value: 'ja', label: 'Ja' },
@@ -33,10 +33,11 @@ const Medlemskap = () => {
     }, [values.metadata.medlemskap]);
 
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
                 Medlemskap
             </Heading>
+
             <RadioPanelGruppeFormik
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
                 name="metadata.medlemskap"
@@ -48,15 +49,14 @@ const Medlemskap = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.bosteder?.map((_, bostedIndex, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={bostedIndex}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik
+                                        <DatoInputFormikNew
                                             label="Fra og med"
                                             name={`bosteder[${bostedIndex}].periode.fom`}
                                         />
-                                        <DatoInputFormik
+                                        <DatoInputFormikNew
                                             label="Til og med"
                                             name={`bosteder[${bostedIndex}].periode.tom`}
                                         />
@@ -77,9 +77,9 @@ const Medlemskap = () => {
                                         <Field name={`bosteder[${bostedIndex}].land`}>
                                             {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
+                                                    label={undefined}
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
-                                                    feil={meta.touched && meta.error}
                                                     {...field}
                                                 />
                                             )}
@@ -100,7 +100,7 @@ const Medlemskap = () => {
                     )}
                 />
             )}
-        </Panel>
+        </Box>
     );
 };
 

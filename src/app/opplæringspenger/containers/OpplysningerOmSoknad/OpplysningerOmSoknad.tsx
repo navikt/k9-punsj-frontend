@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Alert, Fieldset, Panel } from '@navikt/ds-react';
+import { Alert, Box, Fieldset } from '@navikt/ds-react';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
@@ -17,14 +16,14 @@ const OpplysningerOmSoknad = () => {
     const intl = useIntl();
     const [signert, setSignert] = useState<JaNeiIkkeRelevant | undefined>(undefined);
     return (
-        <Panel className="opplysningerOmSoknad">
+        <Box padding="4" borderRadius="small" className="opplysningerOmSoknad">
             <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
             <Alert size="small" variant="info">
                 {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
             </Alert>
-            <Fieldset>
+            <Fieldset legend={undefined}>
                 <div className="input-row">
-                    <DatoInputFormik label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
+                    <DatoInputFormikNew label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
                     <TextFieldFormik
                         label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                         name="klokkeslett"
@@ -52,7 +51,7 @@ const OpplysningerOmSoknad = () => {
                     </Alert>
                 )}
             </Fieldset>
-        </Panel>
+        </Box>
     );
 };
 export default OpplysningerOmSoknad;

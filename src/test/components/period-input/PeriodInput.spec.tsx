@@ -68,7 +68,7 @@ describe('PerodInput', () => {
         const inputField = periodInput.findWhere((n) => n.name() === 'DateInputNew' && n.prop('id') === inputIdFom);
 
         inputField.simulate('change', newFraOgMed);
-        console.log('inputField', inputField.debug());
+
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
     });

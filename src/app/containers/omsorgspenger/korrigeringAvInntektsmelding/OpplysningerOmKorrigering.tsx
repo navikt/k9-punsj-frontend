@@ -1,16 +1,12 @@
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
+import { Field, FieldProps } from 'formik';
 import { useIntl } from 'react-intl';
-
 import { Box, Fieldset, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-// import { DateInputNew } from 'app/components/skjema/DateInputNew';
-import {
-    KorrigeringAvInntektsmeldingFormFields,
-    KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+
 import './opplysningerOmKorrigering.less';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
@@ -25,7 +21,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                 <div className="opplysningerOmKorrigering__fields">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
-                            <DatoInputFormik
+                            <DatoInputFormikNew
                                 {...field}
                                 className="opplysningerOmKorrigering__dateInput"
                                 label={intlHelper(intl, 'skjema.dato')}
