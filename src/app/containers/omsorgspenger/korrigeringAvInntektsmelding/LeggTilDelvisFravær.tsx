@@ -11,15 +11,17 @@ import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 
-import DateInput from '../../../components/skjema/DateInput';
 import EkspanderbartPanel from './EkspanderbartPanel';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import './LeggTilDelvisFravær.less';
+
 import useFocus from './useFocus';
+
 import { DateInputNew } from 'app/components/skjema/DateInputNew';
+
+import './LeggTilDelvisFravær.less';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();

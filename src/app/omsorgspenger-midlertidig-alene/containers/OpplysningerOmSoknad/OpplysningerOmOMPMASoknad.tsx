@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { Field, FieldProps, FormikValues } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
@@ -7,10 +6,11 @@ import { IntlShape } from 'react-intl';
 import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DateInput from 'app/components/skjema/DateInput';
 
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
+
 import './opplysningerOmOMPMASoknad.less';
 
 interface IOwnProps {
@@ -36,7 +36,7 @@ const OpplysningerOmOMPMASoknad: React.FunctionComponent<IOwnProps> = ({
             <div className="input-row">
                 <Field name="mottattDato">
                     {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                        <DateInput
+                        <DateInputNew
                             id="soknad-dato"
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
                             errorMessage={meta.touched && meta.error}

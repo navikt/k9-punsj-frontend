@@ -3,7 +3,6 @@ import React from 'react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { IntlShape } from 'react-intl';
 import { Alert, Panel, TextField } from '@navikt/ds-react';
-import DateInput from 'app/components/skjema/DateInput';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';

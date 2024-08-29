@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -7,11 +6,12 @@ import { Alert, Panel, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import DateInput from 'app/components/skjema/DateInput';
-import { IOMPAOSoknad } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 
+import { IOMPAOSoknad } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
+
 import './opplysningerOmOMPAOSoknad.less';
 
 const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
@@ -28,7 +28,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                 <div className="input-row">
                     <Field name="mottattDato">
                         {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <DateInput
+                            <DateInputNew
                                 id="soknad-dato"
                                 label={intlHelper(intl, 'skjema.mottakelsesdato')}
                                 errorMessage={meta.touched && meta.error}

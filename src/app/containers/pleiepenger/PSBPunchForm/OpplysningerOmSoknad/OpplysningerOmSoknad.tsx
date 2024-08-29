@@ -1,17 +1,15 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
 import { Alert, Fieldset, Panel, TextField } from '@navikt/ds-react';
 
-import DateInput from 'app/components/skjema/DateInput';
-
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PSBSoknad } from '../../../../models/types';
 import intlHelper from '../../../../utils/intlUtils';
 import './opplysningerOmSoknad.less';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
 interface IOwnProps {
     intl: IntlShape;
@@ -37,7 +35,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
         </Alert>
         <Fieldset legend="">
             <div className="input-row">
-                <DateInput
+                <DateInputNew
                     value={soknad.mottattDato}
                     id="soknad-dato"
                     errorMessage={getErrorMessage('mottattDato')}
