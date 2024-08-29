@@ -9828,28 +9828,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"focus-trap-react@npm:^8.6.0":
-  version: 8.11.3
-  resolution: "focus-trap-react@npm:8.11.3"
-  dependencies:
-    focus-trap: "npm:^6.9.4"
-  peerDependencies:
-    prop-types: ^15.8.1
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: 10/937a8b1eb59b54e64ea5daa7d349039c8bfac48e181614ec28cf032a5189125cd934bb0d0c7eb88d946c711d963b549b0f735faf561d3c4a6561fc2247f87cfd
-  languageName: node
-  linkType: hard
-
-"focus-trap@npm:^6.9.4":
-  version: 6.9.4
-  resolution: "focus-trap@npm:6.9.4"
-  dependencies:
-    tabbable: "npm:^5.3.3"
-  checksum: 10/dd64b4522a72836f617a26208cf1f558e0887689f9547b188015079e0f983ca69c29aea70b3ae2a596bc8485643b4c0b35adc653998b8e74af0d0ec6aa004727
-  languageName: node
-  linkType: hard
-
 "follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.6":
   version: 1.15.6
   resolution: "follow-redirects@npm:1.15.6"
@@ -12531,7 +12509,6 @@ __metadata:
     mini-css-extract-plugin: "npm:2.9.1"
     msw: "npm:2.3.5"
     mustache-express: "npm:1.3.2"
-    nav-datovelger: "npm:12.6.0"
     nav-frontend-chevron-style: "npm:1.0.4"
     nav-frontend-core: "npm:6.0.1"
     nav-frontend-ekspanderbartpanel: "npm:4.0.4"
@@ -13659,24 +13636,6 @@ __metadata:
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
   checksum: 10/23ad088b08f898fc9b53011d7bb78ec48e79de7627e01ab5518e806033861bef68d5b0cd0e2205c2f36690ac9571ff6bcb05eb777ced2eeda8d4ac5b44592c3d
-  languageName: node
-  linkType: hard
-
-"nav-datovelger@npm:12.6.0":
-  version: 12.6.0
-  resolution: "nav-datovelger@npm:12.6.0"
-  dependencies:
-    focus-trap-react: "npm:^8.6.0"
-  peerDependencies:
-    classnames: ^2.3.x
-    dayjs: ^1.10.x
-    nav-frontend-core: ^6.0.x
-    nav-frontend-js-utils: ^1.0.x
-    nav-frontend-skjema: ^4.0.x
-    nav-frontend-typografi: ^4.0.x
-    react: 17
-    react-day-picker: ^7.4.x
-  checksum: 10/13bc32691b39d6edfb95b0b4655676239c7cd9a5c52721d250e18254e0a88343b6f7e8071eb9f92a6f802a5db498c946a86eabf6692369ef43aa2015db0f49f4
   languageName: node
   linkType: hard
 
@@ -17551,13 +17510,6 @@ __metadata:
     "@pkgr/core": "npm:^0.1.0"
     tslib: "npm:^2.6.2"
   checksum: 10/bff3903976baf8b699b5483228116d70223781a93b17c70e685c277ee960cdfd1a09cb5a741e6a9ec35e2428f14f4664baec41ccc99a598f267608b2a54f529b
-  languageName: node
-  linkType: hard
-
-"tabbable@npm:^5.3.2, tabbable@npm:^5.3.3":
-  version: 5.3.3
-  resolution: "tabbable@npm:5.3.3"
-  checksum: 10/5da150c9ac7aaed95f901623214794ffac9472a86009a1762c7b436249d33b157b7d86d93610986090d0fb1ef152f5dec2c201552e0b67ca895ba00c145a51c5
   languageName: node
   linkType: hard
 
