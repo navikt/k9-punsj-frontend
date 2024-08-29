@@ -1,5 +1,4 @@
 import dayjs, { Dayjs } from 'dayjs';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { format, isValid } from 'date-fns';
 import initializeDate from './initialize';
 import utc from 'dayjs/plugin/utc';
@@ -52,14 +51,14 @@ export const ISODateStringToUTCDate = (isoDateString?: ISODateString): Date | un
     return stringToUTCDate(isoDateString, ISO_DATE_STRING_FORMAT);
 };
 
-export function prettifyDate(date: Dayjs) {
+export const prettifyDate = (date: Dayjs) => {
     return date.format(prettyDateFormat);
-}
+};
 
-export function prettifyDateString(dateString: string) {
+export const prettifyDateString = (dateString: string) => {
     const dateObject = initializeDate(dateString);
     return prettifyDate(dateObject);
-}
+};
 
 export const isISODateString = (value: any): value is ISODateString => {
     if (value && typeof value === 'string') {

@@ -1,121 +1,113 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
+import usePrevious from 'app/hooks/usePrevious';
 import {
     dateToISODateString,
     InputDateStringToISODateString,
     INVALID_DATE_VALUE,
     isISODateString,
-    // ISODateString,
     ISODateStringToUTCDate,
 } from 'app/utils/date-utils/src/format';
 
-import dayjs from 'dayjs';
-
-const isValidDate = (dateString: string) => dayjs(dateString, 'YYYY-MM-DD').isValid();
+import './dateInputNew.less';
 
 type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'> & {
     label: string;
-    errorMessage?: React.ReactNode | string;
-    inputDisabled?: boolean;
-    description?: React.ReactNode;
-    value?: string;
-    inputId?: string;
-    inputRef?: React.Ref<HTMLInputElement>;
     onChange: (value: string) => void;
+
+    className?: string;
+    description?: React.ReactNode;
+    errorMessage?: React.ReactNode | string;
+    id?: string;
+    inputDisabled?: boolean;
+    inputRef?: React.Ref<HTMLInputElement>;
     onBlur?: (value: string) => void;
+    value?: string;
 };
 
 export const DateInputNew: React.FC<Props> = ({
-    value,
-    onChange,
-    onBlur,
-    id,
     label,
-    className,
-    locale,
-    inputDisabled,
-    errorMessage,
-    inputRef,
-}) => {
-    const [inputHasFocus, setInputHasFocus] = React.useState(false);
-    const [hasError, setHasError] = useState(false);
+    onChange,
 
-    const onSelect = (date?: Date) => {
-        console.log('Test onSelect date:', date);
-        console.log('Test onSelect value:', value);
-        const isoDateString = date ? dateToISODateString(date) : '';
-        console.log('Test isoDateString:', isoDateString);
-        if (isoDateString !== value) {
-            onChange(isoDateString);
-        }
-    };
+    className,
+    errorMessage,
+    id,
+    inputDisabled,
+    inputRef,
+    locale,
+    onBlur,
+    value,
+}) => {
+    const [firstOpen, setFirstOpen] = React.useState(true);
+    const [isInvalidDate, setIsInvalidDate] = useState(false);
+
+    const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
     const onDateChange = (date?: Date) => {
-        console.log('Test onChange data:', date);
-        if (inputHasFocus) {
-            return;
-        }
-        const isoDateString = date ? dateToISODateString(date) : '';
-        if (isoDateString !== value) {
+        const isoDateString = date ? dateToISODateString(date) : undefined;
+        if (isoDateString && isoDateString !== value) {
             onChange(isoDateString);
         }
     };
 
-    const { datepickerProps, inputProps, selectedDay, setSelected } = useDatepicker({
+    const { datepickerProps, inputProps, setSelected } = useDatepicker({
         locale,
-        defaultSelected: ISODateStringToUTCDate(value),
         onDateChange: onDateChange,
         onValidate: (val) => {
-            setHasError(!val.isValidDate);
-            console.info(val);
+            setIsInvalidDate(!val.isValidDate);
         },
     });
 
-    const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
-        setInputHasFocus(false);
-        if (inputProps.onBlur) {
-            inputProps.onBlur(evt);
-        }
-        if (selectedDay === undefined && typeof inputProps.value === 'string') {
-            if (isISODateString(inputProps.value)) {
-                onChange(inputProps.value);
-                return;
+    const previous = usePrevious(value);
+
+    useEffect(() => {
+        if (previous !== value && firstOpen) {
+            setFirstOpen(false);
+            if (isISODateString(value)) {
+                setSelected(ISODateStringToUTCDate(value));
+            } else {
+                setSelected(undefined);
             }
-            const isoDateString = InputDateStringToISODateString(inputProps.value);
-            onChange(isoDateString !== INVALID_DATE_VALUE ? isoDateString : inputProps.value);
-            return;
         }
-        if (selectedDay) {
-            onChange(dateToISODateString(selectedDay));
+    }, [firstOpen, value, previous, setSelected]);
+
+    const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
+        const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : undefined;
+
+        if (
+            isoDateString &&
+            isoDateString !== INVALID_DATE_VALUE &&
+            isISODateString(value) &&
+            previous !== isoDateString
+        ) {
+            onBlur && onBlur(isoDateString);
         }
     };
 
-    const onInputFocus = (evt: React.FocusEvent<HTMLInputElement>) => {
-        if (inputProps.onFocus) {
-            inputProps.onFocus(evt);
+    const onSelect = (date?: Date) => {
+        const isoDateString = date ? dateToISODateString(date) : '';
+
+        if (isoDateString !== value) {
+            onBlur && onBlur(isoDateString);
         }
-        setInputHasFocus(true);
     };
 
     return (
         <div className={className || ''}>
             <DatePicker
                 {...(datepickerProps as any)}
+                showWeekNumber={true}
                 onSelect={onSelect}
                 mode="single"
-                showWeekNumber={true}
                 inputDisabled={inputDisabled}
             >
                 <DatePicker.Input
                     {...inputProps}
                     id={id}
                     label={label}
-                    error={errorMessage}
+                    error={error}
                     disabled={inputDisabled}
-                    onFocus={onInputFocus}
                     onBlur={onInputBlur}
-                    // onChange={onChange}
-                    // onBlur={onBlur}
                     ref={inputRef}
                 />
             </DatePicker>

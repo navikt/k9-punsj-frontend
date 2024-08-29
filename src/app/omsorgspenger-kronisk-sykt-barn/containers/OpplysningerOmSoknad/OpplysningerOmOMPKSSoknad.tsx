@@ -8,9 +8,9 @@ import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
 import './opplysningerOmOMPKSSoknad.less';
-import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
 interface IOwnProps {
     intl: IntlShape;
