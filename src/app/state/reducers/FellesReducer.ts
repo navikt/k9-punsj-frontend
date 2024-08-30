@@ -14,6 +14,8 @@ import {
     IHentBarnSuccessAction,
 } from './HentBarn';
 import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
+import { D } from 'msw/lib/core/HttpResponse-B58aIqZM';
+import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
 
 export interface IFellesState {
     dedupKey: string;
@@ -259,6 +261,7 @@ export function kopierJournalpostTilSammeSøker(
     pleietrengendeId: string,
     journalpostId: string,
     dedupKey: string,
+    ytelse?: DokumenttypeForkortelse,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -266,6 +269,7 @@ export function kopierJournalpostTilSammeSøker(
             fra: søkerId,
             til: søkerId,
             barn: pleietrengendeId,
+            ytelse,
         };
 
         dispatch(getJournalpostKopiereRequestAction());

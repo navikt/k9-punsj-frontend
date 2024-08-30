@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Checkbox } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
@@ -30,6 +30,8 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     dokumenttype,
     disabled,
 }) => {
+    const intl = useIntl();
+
     const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
     const [annenSøkersInfo, setAnnenSøkersInfo] = useState<Person | undefined>(undefined);
     const [annenSøkersInfoLoading, setAnnenSøkersInfoLoading] = useState<boolean>(false);
@@ -77,10 +79,9 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 
         setToSokereIJournalpost(checked);
         setAnnenSøkersInfo(undefined);
-
+        setAnnenSokerIdent('');
         if (!checked) {
             setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
-            setAnnenSokerIdent('');
         }
     };
 
@@ -118,6 +119,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                         errorPersonsInfo={annenSøkersInfoError}
                         person={annenSøkersInfo}
                         errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(
+                            intl,
                             identState.annenSokerIdent,
                             identState.søkerId,
                             identState.pleietrengendeId,

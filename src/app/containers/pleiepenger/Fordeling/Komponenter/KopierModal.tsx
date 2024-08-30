@@ -9,6 +9,7 @@ import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
 import { getEnvironmentVariable } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 interface OwnProps {
     søkerId: string;
@@ -18,11 +19,13 @@ interface OwnProps {
     intl: IntlShape;
     fellesState: IFellesState;
     fagsakId: string;
+    ytelseForKopiering?: DokumenttypeForkortelse;
     kopiereJournalpostTilSammeSøker: (
         søkerId: string,
         pleietrengendeId: string,
         journalpostId: string,
         dedupkey: string,
+        ytelse?: DokumenttypeForkortelse,
     ) => void;
     lukkModal: () => void;
 }
@@ -35,6 +38,7 @@ const KopierModal = ({
     intl,
     fellesState,
     fagsakId,
+    ytelseForKopiering,
     kopiereJournalpostTilSammeSøker,
     lukkModal,
 }: OwnProps) => {
@@ -52,7 +56,7 @@ const KopierModal = ({
 
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey);
+        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering);
         setKopierLoading(false);
     };
 
