@@ -14,8 +14,6 @@ import {
     IHentBarnSuccessAction,
 } from './HentBarn';
 import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
-import { D } from 'msw/lib/core/HttpResponse-B58aIqZM';
-import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
 
 export interface IFellesState {
     dedupKey: string;
