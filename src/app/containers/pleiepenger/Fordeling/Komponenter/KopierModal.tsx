@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
-import { FormattedMessage, IntlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 
@@ -9,23 +9,19 @@ import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
 import { getEnvironmentVariable } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
-import { DokumenttypeForkortelse } from 'app/models/enums';
 
 interface OwnProps {
     søkerId: string;
     pleietrengendeId: string;
     journalpostId: string;
     dedupkey: string;
-    intl: IntlShape;
     fellesState: IFellesState;
     fagsakId: string;
-    ytelseForKopiering?: DokumenttypeForkortelse;
     kopiereJournalpostTilSammeSøker: (
         søkerId: string,
         pleietrengendeId: string,
         journalpostId: string,
         dedupkey: string,
-        ytelse?: DokumenttypeForkortelse,
     ) => void;
     lukkModal: () => void;
 }
@@ -35,10 +31,8 @@ const KopierModal = ({
     pleietrengendeId,
     journalpostId,
     dedupkey,
-    intl,
     fellesState,
     fagsakId,
-    ytelseForKopiering,
     kopiereJournalpostTilSammeSøker,
     lukkModal,
 }: OwnProps) => {
@@ -56,7 +50,7 @@ const KopierModal = ({
 
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering);
+        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey);
         setKopierLoading(false);
     };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
 
@@ -16,9 +16,8 @@ import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../../../state/reducers/FellesReducer';
 import KopierModal from '../KopierModal';
+
 import './kopiereJournalpostTilSammeSøker.less';
-import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
-import { getForkortelseFraFordelingDokumenttype } from 'app/utils';
 
 export interface IKopiereJournalpostTilSammeSøkerStateProps {
     barnMedFagsak: Fagsak;
@@ -44,12 +43,6 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
 
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [visModal, setVisModal] = useState(false);
-
-    const dokumenttype = useSelector(
-        (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
-    );
-
-    const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -110,9 +103,7 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
                     dedupkey={dedupkey}
                     kopiereJournalpostTilSammeSøker={kopiereJournalpostTilSammeSøker}
                     lukkModal={() => setVisModal(false)}
-                    intl={intl}
                     fagsakId={barnMedFagsak.fagsakId}
-                    ytelseForKopiering={ytelseForKopiering}
                 />
             )}
         </div>
@@ -132,8 +123,7 @@ const mapDispatchToProps = (dispatch: any) => ({
         pleietrengendeId: string,
         journalpostId: string,
         dedupkey: string,
-        ytelse?: DokumenttypeForkortelse,
-    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelse)),
+    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });
