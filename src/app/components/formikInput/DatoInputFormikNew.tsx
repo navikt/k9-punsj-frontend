@@ -1,11 +1,8 @@
 import { useField } from 'formik';
 import React, { useState } from 'react';
 
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
-
+import { DateInputProps, DatePicker, useDatepicker } from '@navikt/ds-react';
 import { dateToISODate, initializeDate } from 'app/utils';
-
-import { DateInputProps } from '../skjema/DateInput';
 
 const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 export const DDMMYYYY_DATE_FORMAT = 'DD.MM.YYYY';
