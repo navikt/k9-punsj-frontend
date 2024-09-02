@@ -2,7 +2,7 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
 
@@ -114,16 +114,25 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
+
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <Heading size="medium">Alene om omsorgen</Heading>
-            <VerticalSpacer sixteenPx />
+
+            <Heading size="medium">
+                <FormattedMessage id={`skjema.ompao.tittel`} />
+            </Heading>
+
             <OpplysningerOmOMPAOSoknad />
+
             <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
                 <DatoInputFormikNew label="Søker er alene om omsorgen fra og med" name={`${fieldNames.periode}.fom`} />
             </Box>
+
             <VerticalSpacer fourtyPx />
-            <IkkeRegistrerteOpplysninger intl={intl} />
+
+            <IkkeRegistrerteOpplysninger />
+
             <VerticalSpacer twentyPx />
+
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {k9FormatErrors.map((feil) => (
@@ -135,6 +144,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                     ))}
                 </ErrorSummary>
             )}
+
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button

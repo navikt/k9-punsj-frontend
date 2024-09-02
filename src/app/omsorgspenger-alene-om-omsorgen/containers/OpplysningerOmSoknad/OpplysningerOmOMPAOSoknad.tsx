@@ -1,12 +1,8 @@
-import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
-
-import { Alert, Panel, TextField } from '@navikt/ds-react';
-
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Box, TextField } from '@navikt/ds-react';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-
 import { IOMPAOSoknad } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 import { DateInputNew } from 'app/components/skjema/DateInputNew';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
@@ -14,16 +10,15 @@ import intlHelper from '../../../utils/intlUtils';
 
 import './opplysningerOmOMPAOSoknad.less';
 
-const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
-    const { values } = useFormikContext<IOMPAOSoknad>();
+const OpplysningerOmOMPAOSoknad: React.FC = () => {
     const intl = useIntl();
+    const { values } = useFormikContext<IOMPAOSoknad>();
 
     return (
-        <div className="mt-12">
-            <VerticalSpacer sixteenPx />
-            <Panel border>
+        <div className="mt-4">
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Alert variant="info" className="alert">
-                    {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+                    <FormattedMessage id={`skjema.mottakelsesdato.informasjon`} />
                 </Alert>
                 <div className="input-row">
                     <Field name="mottattDato">
@@ -37,8 +32,9 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                             />
                         )}
                     </Field>
+
                     <Field name="klokkeslett">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
+                        {({ field, meta }: FieldProps<string, FormikValues>) => (
                             <div>
                                 <TextField
                                     id="klokkeslett"
@@ -52,6 +48,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                         )}
                     </Field>
                 </div>
+
                 <RadioPanelGruppeFormik
                     legend={intlHelper(intl, 'ident.signatur.etikett')}
                     name="metadata.signatur"
@@ -60,12 +57,13 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                         value: jn,
                     }))}
                 />
+
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
                     <Alert size="small" variant="warning">
-                        {intlHelper(intl, 'skjema.usignert.info')}
+                        <FormattedMessage id={`skjema.usignert.info`} />
                     </Alert>
                 )}
-            </Panel>
+            </Box>
         </div>
     );
 };
