@@ -89,11 +89,16 @@ const AnnenForelder = ({ intl, handleBlur }: OwnProps) => {
                     </Field>
                     <VerticalSpacer twentyPx />
                     <div className="fom-tom">
-                        <DatoInputFormikNew label="Fra og med" name="annenForelder.periode.fom" />
+                        <DatoInputFormikNew
+                            label="Fra og med"
+                            name="annenForelder.periode.fom"
+                            handleBlur={handleBlur}
+                        />
                         <DatoInputFormikNew
                             label="Til og med"
                             name="annenForelder.periode.tom"
                             disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
+                            handleBlur={handleBlur}
                         />
                     </div>
                     {!situasjonstypeErFengselEllerVerneplikt && (

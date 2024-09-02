@@ -8,6 +8,7 @@ import { DatePickerProps } from '@navikt/ds-react';
 interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disabled'> {
     label: string;
     name: string;
+    disabled?: boolean;
     handleBlur?: (callback: () => void, values: any) => void;
 }
 

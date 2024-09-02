@@ -28,7 +28,6 @@ import { RootStateType } from '../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import {
-    getOMPMASoknad,
     resetOMPMASoknadAction,
     resetPunchOMPMAFormAction,
     setJournalpostPaaVentResetAction,
@@ -59,7 +58,6 @@ export interface IPunchOMPMAFormStateProps {
 }
 
 export interface IPunchOMPMAFormDispatchProps {
-    getSoknad: typeof getOMPMASoknad;
     resetSoknadAction: typeof resetOMPMASoknadAction;
     updateSoknad: typeof updateOMPMASoknad;
     submitSoknad: typeof submitOMPMASoknad;
@@ -203,7 +201,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             {statusetikett()}
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPMASoknad
-                intl={intl}
                 setSignaturAction={props.setSignaturAction}
                 signert={signert}
                 handleBlur={handleBlur}
