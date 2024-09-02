@@ -14,7 +14,7 @@ interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disable
 const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
-    console.log('values', values);
+
     return (
         <DateInputNew
             label={label}
