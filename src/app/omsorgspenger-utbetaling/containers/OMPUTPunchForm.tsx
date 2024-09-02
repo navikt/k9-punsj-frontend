@@ -1,12 +1,13 @@
+import React from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useMutation } from 'react-query';
-import { connect } from 'react-redux';
 
-import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
+import { useCallback, useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useMutation } from 'react-query';
+import { useSelector } from 'react-redux';
+
+import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -18,16 +19,13 @@ import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import JournalposterSync from 'app/components/JournalposterSync';
-
-import { IFellesState } from 'app/state/reducers/FellesReducer';
 import VerticalSpacer from '../../components/VerticalSpacer';
 import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';
 import Medlemskap from '../components/Medlemskap';
-import NySoeknadEllerKorrigering from '../components/NySoeknadEllerKorrigering';
+import NySøknadEllerKorrigering from '../components/NySøknadEllerKorrigering';
 import Utenlandsopphold from '../components/Utenlandsopphold';
 import schema, { getSchemaContext } from '../schema';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -37,7 +35,7 @@ import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
 
-export interface IPunchOMPUTFormComponentProps {
+export interface Props {
     journalpostid: string;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
@@ -49,39 +47,33 @@ export interface IPunchOMPUTFormComponentProps {
     kvittering?: IOMPUTSoknadKvittering;
 }
 
-export interface IPunchOMPUTFormStateProps {
-    identState: IIdentState;
-    fellesState: IFellesState;
-}
+export const OMPUTPunchForm: React.FC<Props> = ({
+    journalpostid,
+    visForhaandsvisModal,
+    setVisForhaandsvisModal,
+    k9FormatErrors,
+    setK9FormatErrors,
+    submitError,
+    eksisterendePerioder,
+    kvittering,
+    setKvittering,
+}: Props) => {
+    const intl = useIntl();
 
-type IPunchOMPUTFormProps = IPunchOMPUTFormComponentProps & IPunchOMPUTFormStateProps;
-
-export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) => {
-    const {
-        identState,
-        fellesState,
-        visForhaandsvisModal,
-        setVisForhaandsvisModal,
-        k9FormatErrors,
-        setK9FormatErrors,
-        journalpostid,
-        submitError,
-        eksisterendePerioder,
-        kvittering,
-        setKvittering,
-    } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
-    const intl = useIntl();
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
         useFormikContext<IOMPUTSoknad>();
     const søknadsperiodeFraSak = fellesState.journalpost?.sak?.gyldigPeriode;
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             values.erKorrigering
                 ? validerSoeknad(
@@ -160,8 +152,8 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     }, [values]);
 
     useEffect(() => {
-        if (!values.journalposter.includes(props.journalpostid)) {
-            setFieldValue('journalposter', [...values.journalposter, props.journalpostid], false);
+        if (!values.journalposter.includes(journalpostid)) {
+            setFieldValue('journalposter', [...values.journalposter, journalpostid], false);
         }
     }, []);
 
@@ -181,15 +173,15 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
             <VerticalSpacer sixteenPx />
             <OpplysningerOmOMPUTSoknad />
             <VerticalSpacer sixteenPx />
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" spacing>
-                    Fosterbarn
+                    <FormattedMessage id="skjema.fosterbarn" />
                 </Heading>
                 <Personvelger name="barn" />
-            </Panel>
+            </Box>
             <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
             <VerticalSpacer sixteenPx />
-            <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
+            <NySøknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} intl={intl} />
             <VerticalSpacer fourtyPx />
             <ArbeidsforholdVelger søknadsperiodeFraSak={søknadsperiodeFraSak} />
             <VerticalSpacer fourtyPx />
@@ -236,7 +228,7 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                             });
                         }}
                     >
-                        {intlHelper(intl, 'skjema.knapp.send')}
+                        <FormattedMessage id="skjema.knapp.send" />
                     </Button>
 
                     <Button
@@ -245,14 +237,14 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
                         onClick={() => setVisVentModal(true)}
                         disabled={false}
                     >
-                        {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                        <FormattedMessage id="skjema.knapp.settpaavent" />
                     </Button>
                 </p>
             </div>
             <VerticalSpacer sixteenPx />
             {mellomlagringError instanceof Error && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                    <FormattedMessage id="skjema.feil.ikke_lagret" />
                 </Alert>
             )}
             {submitError instanceof Error && (
@@ -301,10 +293,4 @@ export const PunchOMPUTFormComponent: React.FC<IPunchOMPUTFormProps> = (props) =
     );
 };
 
-const mapStateToProps = (state: RootStateType): IPunchOMPUTFormStateProps => ({
-    identState: state.identState,
-    fellesState: state.felles,
-});
-
-export const OMPUTPunchForm = connect(mapStateToProps)(PunchOMPUTFormComponent);
-/* eslint-enable */
+export default OMPUTPunchForm;

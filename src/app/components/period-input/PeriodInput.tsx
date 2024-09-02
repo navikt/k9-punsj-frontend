@@ -1,16 +1,15 @@
-import classNames from 'classnames';
 import React from 'react';
-import { IntlShape } from 'react-intl';
 
-import { Fieldset } from '@navikt/ds-react';
-
+import { Fieldset, HStack } from '@navikt/ds-react';
+import classNames from 'classnames';
 import intlHelper from 'app/utils/intlUtils';
-
+import { IntlShape } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
-import DateInput, { DateInputProps } from '../skjema/DateInput';
+import { DateInputNew } from '../skjema/DateInputNew';
+
 import './periodInput.less';
 
-export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChange' | 'onBlur'>> {
+export interface IPeriodInputProps {
     intl: IntlShape;
     periode: IPeriode;
     onChange: (periode: IPeriode) => void;
@@ -29,6 +28,7 @@ export interface IPeriodInputProps extends Partial<Omit<DateInputProps, 'onChang
         tom: string | undefined;
     };
     fomInputRef?: React.Ref<HTMLInputElement>;
+    tomInputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
@@ -48,7 +48,9 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         errorMessageTom,
         onBlur,
         fomInputRef,
-        limitations,
+        tomInputRef,
+
+        // limitations,
     } = props;
 
     const handleOnChange = (selectedDate: string, isFom: boolean) => {
@@ -69,32 +71,31 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
 
     return (
         <Fieldset error={errorMessage} className={classNames('periodInput', className)} legend={undefined}>
-            <div className="flex flex-wrap">
-                <DateInput
-                    className="periodInput__fom-container"
+            <HStack wrap gap="4" justify="center">
+                <DateInputNew
                     value={periode.fom || initialValues?.fom || ''}
                     onChange={(selectedDate) => handleOnChange(selectedDate, true)}
                     onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
                     id={inputIdFom}
-                    disabled={disabled || disabledFom}
+                    inputDisabled={disabled || disabledFom}
                     errorMessage={errorMessageFom}
                     label={intlHelper(intl, 'skjema.perioder.fom')}
                     inputRef={fomInputRef}
-                    limitations={limitations}
+                    // limitations={limitations}
                 />
-                <div className="periodInput__tom-container">
-                    <DateInput
-                        value={periode.tom || initialValues?.tom || ''}
-                        onChange={(selectedDate) => handleOnChange(selectedDate, false)}
-                        onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
-                        id={inputIdTom}
-                        disabled={disabled || disabledTom}
-                        errorMessage={errorMessageTom}
-                        limitations={limitations}
-                        label={intlHelper(intl, 'skjema.perioder.tom')}
-                    />
-                </div>
-            </div>
+
+                <DateInputNew
+                    value={periode.tom || initialValues?.tom || ''}
+                    onChange={(selectedDate) => handleOnChange(selectedDate, false)}
+                    onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
+                    id={inputIdTom}
+                    inputDisabled={disabled || disabledTom}
+                    errorMessage={errorMessageTom}
+                    inputRef={tomInputRef}
+                    // limitations={limitations}
+                    label={intlHelper(intl, 'skjema.perioder.tom')}
+                />
+            </HStack>
         </Fieldset>
     );
 };

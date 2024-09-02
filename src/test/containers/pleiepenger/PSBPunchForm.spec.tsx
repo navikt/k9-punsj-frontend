@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { expect } from '@jest/globals';
 import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
@@ -65,7 +66,7 @@ const initialSoknad: IPSBSoknad = {
     },
     soekerId: søkerId,
     soeknadId: '123',
-    soeknadsperiode: null,
+    soeknadsperiode: [],
     soknadsinfo: {
         harMedsøker: null,
         samtidigHjemme: null,
@@ -110,7 +111,7 @@ const validertSoknad: IPSBSoknadKvittering = {
         opptjeningAktivitet: {},
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: '' },
 };
 
 const setupPunchForm = (
@@ -127,7 +128,6 @@ const setupPunchForm = (
         resetSoknadAction: jest.fn(),
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
-        undoChoiceOfEksisterendeSoknadAction: jest.fn(),
         updateSoknad: jest.fn(),
         setSignaturAction: jest.fn(),
         settJournalpostPaaVent: jest.fn(),
@@ -180,24 +180,23 @@ const setupPunchForm = (
         identState,
         signaturState,
         journalposterState,
+        fellesState: undefined,
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
         journalpostid,
         id: soknadId,
-        navigate: undefined,
+        navigate: jest.fn(),
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
-        /* eslint-disable react/jsx-props-no-spreading */
         <PunchFormComponent
             {...punchFormComponentProps}
             {...wrappedComponentProps}
             {...punchFormStateProps}
             {...punchFormDispatchProps}
-            /* eslint-enable react/jsx-props-no-spreading */
         />,
     );
 };
@@ -206,13 +205,13 @@ const getDateInputField = (punchFormComponent: ShallowWrapper, containerComponen
     punchFormComponent
         .find(containerComponent)
         .shallow()
-        .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === fieldId)
-        .at(0)
+        .findWhere((n) => n.name() === 'DateInputNew' && n.prop('id') === fieldId);
+/*.at(0)
         .shallow()
-        .find('Datepicker')
+        .find('DatePicker')
         .dive()
         .find(`#${fieldId}`)
-        .dive();
+        .dive();*/
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -263,7 +262,8 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
         const inputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
-        inputField.simulate('blur', { target: { value: newDato } });
+
+        inputField.simulate('blur', newDato);
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             mottattDato: newDato,
@@ -275,8 +275,12 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad });
         const inputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
-        inputField.simulate('change', { target: { value: newDato } });
-        expect(inputField.prop('value')).toEqual(newDato);
+
+        inputField.simulate('change', newDato);
+        punchForm.update();
+
+        const updatedInputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
+        expect(updatedInputField.prop('value')).toEqual(newDato);
     });
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
@@ -312,8 +316,10 @@ describe('PunchForm', () => {
                             fom: '2020-12-06',
                             tom: '2021-01-15',
                         },
-                        timer: 5,
-                        minutter: 0,
+                        timer: '5',
+                        minutter: '0',
+                        perDagString: '5',
+                        tidsformat: 'TimerOgMin',
                     },
                 ],
             },
@@ -374,8 +380,10 @@ describe('PunchForm', () => {
                                     fom: '2020-12-06',
                                     tom: '2021-01-15',
                                 },
-                                timer: 5,
-                                minutter: 0,
+                                timer: '5',
+                                minutter: '0',
+                                perDagString: '5',
+                                tidsformat: 'TimerOgMin',
                             },
                         ],
                     },

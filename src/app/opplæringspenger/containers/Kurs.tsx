@@ -2,7 +2,7 @@ import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Checkbox, Heading, Label, Panel } from '@navikt/ds-react';
+import { Box, Button, Checkbox, Heading, Label } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -18,7 +18,7 @@ const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '
 const KursComponent = () => {
     const { values } = useFormikContext<OLPSoknad>();
     return (
-        <Panel border>
+        <Box padding="4" borderRadius="small">
             <Heading size="small" level="5">
                 Opplæring
             </Heading>
@@ -39,7 +39,6 @@ const KursComponent = () => {
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <React.Fragment key={index}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
@@ -103,7 +102,7 @@ const KursComponent = () => {
                     )}
                 />
             </div>
-        </Panel>
+        </Box>
     );
 };
 

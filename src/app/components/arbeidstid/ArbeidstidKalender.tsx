@@ -102,8 +102,9 @@ export default function ArbeidstidKalender({
                 open={visArbeidstidLengrePerioder}
                 onClose={() => setVisArbeidstidLengrePerioder(false)}
                 className="venstrestilt lengre-periode-modal"
+                aria-label="Periode med jobb modal"
             >
-                <Modal.Body>
+                <Modal.Body data-test-id="arbeidstid-periode-liste">
                     <ArbeidstidPeriodeListe
                         heading="Periode med jobb"
                         arbeidstidPerioder={arbeidstidInfo.perioder}

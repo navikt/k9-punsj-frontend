@@ -1,11 +1,8 @@
-import { useField, useFormikContext } from 'formik';
 import React from 'react';
-
-import { ErrorMessage, Heading, Panel } from '@navikt/ds-react';
-
+import { useField, useFormikContext } from 'formik';
+import { Box, ErrorMessage, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
-
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import Frilanser from '../components/Frilanser';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
@@ -19,7 +16,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
     const [field, meta] = useField('metadata.arbeidsforhold');
     const { values } = useFormikContext<IOMPUTSoknad>();
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small">{!values.erKorrigering ? 'Arbeidsforhold' : 'Arbeidsforhold - korrigering'}</Heading>
             <VerticalSpacer eightPx />
             <CheckboksPanelFormik name="metadata.arbeidsforhold.arbeidstaker" label="Arbeidstaker" valueIsBoolean />
@@ -38,7 +35,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
             {meta.touched && !values.erKorrigering && Object.values(field.value).every((v) => !v) && (
                 <ErrorMessage>Må velge minst ett arbeidsforhold</ErrorMessage>
             )}
-        </Panel>
+        </Box>
     );
 };
 

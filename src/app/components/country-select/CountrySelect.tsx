@@ -8,7 +8,6 @@ interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
     unselectedoption?: string;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const CountrySelect = (props: ICountrySelectProps) => {
     const countryList = getCountryList();
     const { unselectedoption, selectedcountry } = props;
@@ -17,7 +16,6 @@ export const CountrySelect = (props: ICountrySelectProps) => {
     }
 
     return (
-        // eslint-disable-next-line react/jsx-props-no-spreading
         <Select {...props} value={selectedcountry}>
             {countryList.map((country) => (
                 <option key={country.code} value={country.code}>

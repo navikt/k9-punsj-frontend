@@ -1,19 +1,16 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
-import { IntlShape } from 'react-intl';
-
-import { Alert, Panel, TextField } from '@navikt/ds-react';
-
-import DateInput from 'app/components/skjema/DateInput';
-
+import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import { DateInputNew } from 'app/components/skjema/DateInputNew';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import { PLSSoknad } from '../../types/PLSSoknad';
+
 import './opplysningerOmPLSSoknad.less';
 
-interface IOwnProps {
+interface Props {
     intl: IntlShape;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     getErrorMessage: (attribute: string, indeks?: number) => any;
@@ -22,7 +19,7 @@ interface IOwnProps {
     soknad: PLSSoknad;
 }
 
-const OpplysningerOmPLSSoknad: React.FunctionComponent<IOwnProps> = ({
+const OpplysningerOmPLSSoknad: React.FC<Props> = ({
     intl,
     changeAndBlurUpdatesSoknad,
     getErrorMessage,
@@ -30,34 +27,41 @@ const OpplysningerOmPLSSoknad: React.FunctionComponent<IOwnProps> = ({
     signert,
     soknad,
 }) => (
-    <Panel className="opplysningerOmSoknad">
-        <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
+    <Box padding="4" borderWidth="1" borderRadius="medium">
+        <Heading size="small" level="3">
+            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+        </Heading>
+
         <Alert size="small" variant="info">
-            {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+            <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
         </Alert>
 
-        <div className="input-row">
-            <DateInput
+        <div className="input-row ">
+            <DateInputNew
                 value={soknad.mottattDato}
                 id="soknad-dato"
-                errorMessage={getErrorMessage('mottattDato')}
                 label={intlHelper(intl, 'skjema.mottakelsesdato')}
                 {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                     mottattDato: selectedDate,
                 }))}
+                errorMessage={getErrorMessage('mottattDato')}
+                className="inline-block w-max"
             />
-            <TextField
-                value={soknad.klokkeslett || ''}
-                type="time"
-                className="klokkeslett"
-                size="small"
-                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                    klokkeslett: event.target.value,
-                }))}
-                error={getErrorMessage('klokkeslett')}
-            />
+
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                    className="klokkeslett"
+                />
+            </div>
         </div>
+
         <RadioPanelGruppe
             className="horizontalRadios"
             radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
@@ -71,11 +75,12 @@ const OpplysningerOmPLSSoknad: React.FunctionComponent<IOwnProps> = ({
                 setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
             }
         />
+
         {signert === JaNeiIkkeRelevant.NEI && (
             <Alert size="small" variant="warning">
-                {intlHelper(intl, 'skjema.usignert.info')}
+                <FormattedMessage id={'skjema.usignert.info'} />
             </Alert>
         )}
-    </Panel>
+    </Box>
 );
 export default OpplysningerOmPLSSoknad;

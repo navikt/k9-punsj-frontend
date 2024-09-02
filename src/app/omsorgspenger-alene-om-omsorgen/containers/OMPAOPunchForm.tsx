@@ -2,13 +2,13 @@ import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
 
 import JournalposterSync from 'app/components/JournalposterSync';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
@@ -25,6 +25,7 @@ import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import OpplysningerOmOMPAOSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPAOSoknad';
 import { OMPAOSoknadKvittering } from './SoknadKvittering/OMPAOSoknadKvittering';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 export interface IPunchOMPAOFormComponentProps {
     journalpostid: string;
@@ -113,16 +114,25 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
+
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <Heading size="medium">Alene om omsorgen</Heading>
-            <VerticalSpacer sixteenPx />
+
+            <Heading size="medium">
+                <FormattedMessage id={`skjema.ompao.tittel`} />
+            </Heading>
+
             <OpplysningerOmOMPAOSoknad />
-            <Panel border className="my-12">
-                <DatoInputFormik label="Søker er alene om omsorgen fra og med" name={`${fieldNames.periode}.fom`} />
-            </Panel>
+
+            <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
+                <DatoInputFormikNew label="Søker er alene om omsorgen fra og med" name={`${fieldNames.periode}.fom`} />
+            </Box>
+
             <VerticalSpacer fourtyPx />
-            <IkkeRegistrerteOpplysninger intl={intl} />
+
+            <IkkeRegistrerteOpplysninger />
+
             <VerticalSpacer twentyPx />
+
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {k9FormatErrors.map((feil) => (
@@ -134,6 +144,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                     ))}
                 </ErrorSummary>
             )}
+
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -219,4 +230,3 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
 };
 
 export default OMPAOPunchForm;
-/* eslint-enable */

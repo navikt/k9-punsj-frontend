@@ -1,14 +1,13 @@
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize, get } from 'lodash';
+import { capitalize } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Label, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading, Label } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
@@ -21,6 +20,8 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+
 import './arbeidsforhold.less';
 
 const SelvstendigNaeringsdrivende = () => {
@@ -32,15 +33,19 @@ const SelvstendigNaeringsdrivende = () => {
     } = values;
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
-    const yngreEnn4År = erYngreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
-    const eldreEnn4År = erEldreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
+    values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom;
+
+    const yngreEnn4År = erYngreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
+    const eldreEnn4År = erEldreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
     return (
         <div className="arbeidsforhold-container">
-            <Panel>
+            <Box padding="4" borderRadius="small">
                 <Heading size="small" level="5">
                     Selvstendig næringsdrivende
                 </Heading>
+
                 <VerticalSpacer twentyPx />
+
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
@@ -57,6 +62,7 @@ const SelvstendigNaeringsdrivende = () => {
                         <VerticalSpacer sixteenPx />
                     </>
                 )}
+
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
@@ -128,8 +134,8 @@ const SelvstendigNaeringsdrivende = () => {
                         {({ field, meta }: FieldProps<string>) => (
                             <div style={{ maxWidth: '25%' }}>
                                 <CountrySelect
+                                    label={'Land'}
                                     selectedcountry={field.value}
-                                    feil={meta.touched && meta.error}
                                     unselectedoption="Velg land"
                                     {...field}
                                 />
@@ -182,11 +188,11 @@ const SelvstendigNaeringsdrivende = () => {
 
                 <Label size="small">Når startet virksomheten?</Label>
                 <div className="fom-tom-rad">
-                    <DatoInputFormik
+                    <DatoInputFormikNew
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                     />
-                    <DatoInputFormik
+                    <DatoInputFormikNew
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     />
@@ -216,7 +222,6 @@ const SelvstendigNaeringsdrivende = () => {
                             {selvstendigNaeringsdrivende.fravaersperioder?.map(
                                 (fravaersperiode, fravaersperiodeIndex) => (
                                     <Fravaersperiode
-                                        // eslint-disable-next-line react/no-array-index-key
                                         key={fravaersperiodeIndex}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                                         antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
@@ -240,7 +245,7 @@ const SelvstendigNaeringsdrivende = () => {
                         </>
                     )}
                 />
-            </Panel>
+            </Box>
         </div>
     );
 };

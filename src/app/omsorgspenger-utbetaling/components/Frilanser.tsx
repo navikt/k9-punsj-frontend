@@ -4,10 +4,9 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
@@ -18,7 +17,9 @@ import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
+
 import './arbeidsforhold.less';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 export default function Frilanser() {
     const { values } = useFormikContext<IOMPUTSoknad>();
@@ -29,7 +30,7 @@ export default function Frilanser() {
 
     return (
         <div className="arbeidsforhold-container">
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" level="5">
                     Frilanser
                 </Heading>
@@ -50,7 +51,7 @@ export default function Frilanser() {
                         <VerticalSpacer sixteenPx />
                     </>
                 )}
-                <DatoInputFormik
+                <DatoInputFormikNew
                     label="Når startet søker som frilanser?"
                     name="opptjeningAktivitet.frilanser.startdato"
                 />
@@ -85,7 +86,7 @@ export default function Frilanser() {
 
                 {!frilanser.jobberFortsattSomFrilans && (
                     <>
-                        <DatoInputFormik
+                        <DatoInputFormikNew
                             label="Når sluttet søker som frilanser?"
                             name="opptjeningAktivitet.frilanser.sluttdato"
                         />
@@ -100,7 +101,6 @@ export default function Frilanser() {
                         <>
                             {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                 <Fravaersperiode
-                                    // eslint-disable-next-line react/no-array-index-key
                                     key={fravaersperiodeIndex}
                                     name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
                                     antallFravaersperioder={frilanser.fravaersperioder?.length}
@@ -123,7 +123,7 @@ export default function Frilanser() {
                         </>
                     )}
                 />
-            </Panel>
+            </Box>
         </div>
     );
 }
