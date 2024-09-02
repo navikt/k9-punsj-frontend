@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl';
 import { Alert, Panel } from '@navikt/ds-react';
 
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';

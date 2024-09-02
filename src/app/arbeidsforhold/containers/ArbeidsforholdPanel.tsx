@@ -520,6 +520,7 @@ const ArbeidsforholdPanel = ({
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                        noValidateTomtFelt={true}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {

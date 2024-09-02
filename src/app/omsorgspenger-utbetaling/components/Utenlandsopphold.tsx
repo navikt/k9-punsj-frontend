@@ -34,7 +34,7 @@ const Utenlandsopphold = () => {
     }, [values.metadata.utenlandsopphold]);
 
     return (
-        <Box padding="4" borderRadius="small">
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
                 Utenlandsopphold
             </Heading>
@@ -77,7 +77,7 @@ const Utenlandsopphold = () => {
                                         <Field name={`utenlandsopphold[${index}].land`}>
                                             {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
-                                                    label={''}
+                                                    label={'Land'}
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
                                                     {...field}

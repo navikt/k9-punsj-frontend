@@ -77,7 +77,7 @@ const Medlemskap = () => {
                                         <Field name={`bosteder[${bostedIndex}].land`}>
                                             {({ field, meta }: FieldProps<string>) => (
                                                 <CountrySelect
-                                                    label={undefined}
+                                                    label="Land"
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
                                                     {...field}

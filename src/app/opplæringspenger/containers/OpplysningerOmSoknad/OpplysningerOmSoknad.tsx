@@ -24,13 +24,14 @@ const OpplysningerOmSoknad = () => {
             <Fieldset legend={undefined}>
                 <div className="input-row">
                     <DatoInputFormikNew label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
-                    <TextFieldFormik
-                        label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                        name="klokkeslett"
-                        className="klokkeslett"
-                        size="small"
-                        type="time"
-                    />
+                    <div>
+                        <TextFieldFormik
+                            label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                            name="klokkeslett"
+                            className="klokkeslett"
+                            type="time"
+                        />
+                    </div>
                 </div>
                 <RadioPanelGruppe
                     className="horizontalRadios"

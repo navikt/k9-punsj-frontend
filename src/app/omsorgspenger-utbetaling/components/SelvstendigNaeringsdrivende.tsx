@@ -1,5 +1,5 @@
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize, get } from 'lodash';
+import { capitalize } from 'lodash';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -33,8 +33,10 @@ const SelvstendigNaeringsdrivende = () => {
     } = values;
     const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
-    const yngreEnn4År = erYngreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
-    const eldreEnn4År = erEldreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
+    values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom;
+
+    const yngreEnn4År = erYngreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
+    const eldreEnn4År = erEldreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
     return (
         <div className="arbeidsforhold-container">
             <Box padding="4" borderRadius="small">
@@ -132,7 +134,7 @@ const SelvstendigNaeringsdrivende = () => {
                         {({ field, meta }: FieldProps<string>) => (
                             <div style={{ maxWidth: '25%' }}>
                                 <CountrySelect
-                                    label={'undefined'}
+                                    label={'Land'}
                                     selectedcountry={field.value}
                                     unselectedoption="Velg land"
                                     {...field}

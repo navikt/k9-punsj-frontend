@@ -44,18 +44,18 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
                     mottattDato: selectedDate,
                 }))}
             />
-
-            <TextField
-                value={soknad.klokkeslett || ''}
-                type="time"
-                className="klokkeslett"
-                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                    klokkeslett: event.target.value,
-                }))}
-                error={getErrorMessage('klokkeslett')}
-                size="small"
-            />
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    className="klokkeslett"
+                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                />
+            </div>
         </div>
         <RadioPanelGruppe
             className="horizontalRadios"

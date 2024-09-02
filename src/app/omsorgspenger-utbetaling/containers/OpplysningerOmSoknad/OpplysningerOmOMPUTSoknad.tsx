@@ -18,7 +18,7 @@ import { DateInputNew } from 'app/components/skjema/DateInputNew';
 const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
     const intl = useIntl();
-
+    console.log('Root values: ', values);
     return (
         <>
             <Heading size="small">Omsorgspengeutbetaling</Heading>
@@ -39,20 +39,20 @@ const OpplysningerOmOMPUTSoknad: React.FunctionComponent = () => {
                             />
                         )}
                     </Field>
-                    <Field name="klokkeslett">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <TextField
-                                id="klokkeslett"
-                                type="time"
-                                className="klokkeslett"
-                                size="small"
-                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                                error={meta.touched && meta.error}
-                                {...field}
-                                onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
-                            />
-                        )}
-                    </Field>
+                    <div>
+                        <Field name="klokkeslett">
+                            {({ field, meta, form }: FieldProps<string, FormikValues>) => (
+                                <TextField
+                                    id="klokkeslett"
+                                    type="time"
+                                    className="klokkeslett"
+                                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                    error={meta.touched && meta.error}
+                                    {...field}
+                                />
+                            )}
+                        </Field>
+                    </div>
                 </div>
                 {!values.erKorrigering && (
                     <RadioPanelGruppeFormik

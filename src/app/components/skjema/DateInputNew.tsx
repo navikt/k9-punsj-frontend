@@ -21,6 +21,7 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     id?: string;
     inputDisabled?: boolean;
     disabled?: boolean;
+    noValidateTomtFelt?: boolean;
     inputRef?: React.Ref<HTMLInputElement>;
     onBlur?: (value: string) => void;
     value?: string;
@@ -35,6 +36,7 @@ export const DateInputNew: React.FC<Props> = ({
     id,
     inputDisabled,
     disabled,
+    noValidateTomtFelt,
     inputRef,
     locale,
     onBlur,
@@ -46,8 +48,11 @@ export const DateInputNew: React.FC<Props> = ({
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
     const onDateChange = (date?: Date) => {
-        const isoDateString = date ? dateToISODateString(date) : undefined;
+        const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
+            onChange(isoDateString);
+        }
+        if (noValidateTomtFelt && isoDateString !== value) {
             onChange(isoDateString);
         }
     };
@@ -56,7 +61,7 @@ export const DateInputNew: React.FC<Props> = ({
         locale,
         onDateChange: onDateChange,
         onValidate: (val) => {
-            setIsInvalidDate(!val.isValidDate);
+            setIsInvalidDate(!val.isValidDate && (!noValidateTomtFelt || !val.isEmpty));
         },
     });
 
@@ -74,10 +79,10 @@ export const DateInputNew: React.FC<Props> = ({
     }, [firstOpen, value, previous, setSelected]);
 
     const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
-        const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : undefined;
+        const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
 
         if (
-            isoDateString &&
+            (isoDateString || noValidateTomtFelt) &&
             isoDateString !== INVALID_DATE_VALUE &&
             isISODateString(value) &&
             previous !== isoDateString

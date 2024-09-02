@@ -80,7 +80,7 @@ const Bosteder = () => {
                                         <Field name={`bosteder[${index}].land`}>
                                             {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
-                                                    label={''}
+                                                    label={'Land'}
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
                                                     {...field}

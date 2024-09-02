@@ -41,7 +41,7 @@ const Utenlandsopphold = ({ arrayHelpers, fieldArrayIndex }: UtenlandsoppholdPro
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
                     {({ field }: FieldProps<string>) => (
                         <CountrySelect
-                            label={''}
+                            label={'Land'}
                             {...field}
                             selectedcountry={field.value}
                             unselectedoption="Velg land"
