@@ -1,17 +1,15 @@
 import React from 'react';
 
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { IntlShape } from 'react-intl';
-import { Alert, Panel, TextField } from '@navikt/ds-react';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../utils/intlUtils';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
 import { DateInputNew } from 'app/components/skjema/DateInputNew';
 
-import './opplysningerOmOMPKSSoknad.less';
-
-interface IOwnProps {
+interface Props {
     intl: IntlShape;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     getErrorMessage: (attribute: string, indeks?: number) => any;
@@ -20,18 +18,21 @@ interface IOwnProps {
     soknad: OMPKSSoknad;
 }
 
-const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
+const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
     intl,
     changeAndBlurUpdatesSoknad,
     getErrorMessage,
     setSignaturAction,
     signert,
     soknad,
-}) => (
-    <Panel className="opplysningerOmOMPKSSoknad">
-        <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-        <Alert size="small" variant="info">
-            {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+}: Props) => (
+    <Box padding="4" borderWidth="1" borderRadius="small">
+        <Heading level="3" size="small">
+            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+        </Heading>
+
+        <Alert size="small" variant="info" className="ml-0">
+            <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
         </Alert>
 
         <div className="input-row">
@@ -72,9 +73,9 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
         />
         {signert === JaNeiIkkeRelevant.NEI && (
             <Alert size="small" variant="warning">
-                {intlHelper(intl, 'skjema.usignert.info')}
+                <FormattedMessage id="skjema.usignert.info" />
             </Alert>
         )}
-    </Panel>
+    </Box>
 );
 export default OpplysningerOmOMPKSSoknad;
