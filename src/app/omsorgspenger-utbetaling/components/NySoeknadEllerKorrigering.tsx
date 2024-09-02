@@ -1,23 +1,24 @@
-import { Field, FieldProps } from 'formik';
 import React from 'react';
-
-import { Panel } from '@navikt/ds-react';
-
+import { Field, FieldProps } from 'formik';
+import { Box } from '@navikt/ds-react';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Periode } from 'app/models/types';
+import { IntlShape } from 'react-intl';
+import intlHelper from 'app/utils/intlUtils';
 
-interface OwnProps {
+interface Props {
     eksisterendePerioder: Periode[];
+    intl: IntlShape;
 }
 
-export default function NySoeknadEllerKorrigering({ eksisterendePerioder }: OwnProps) {
+const NySøknadEllerKorrigering = ({ eksisterendePerioder, intl }: Props) => {
     if (eksisterendePerioder.length) {
         return (
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Field name="erKorrigering">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
-                            legend="Er dette en ny søknad eller en korrigering?"
+                            legend={intlHelper(intl, 'skjema.NySoeknadEllerKorrigering.spm')}
                             name={field.name}
                             options={[
                                 { value: 'nySoeknad', label: 'Ny søknad' },
@@ -28,8 +29,10 @@ export default function NySoeknadEllerKorrigering({ eksisterendePerioder }: OwnP
                         />
                     )}
                 </Field>
-            </Panel>
+            </Box>
         );
     }
     return null;
-}
+};
+
+export default NySøknadEllerKorrigering;
