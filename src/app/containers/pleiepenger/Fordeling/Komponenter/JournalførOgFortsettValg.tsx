@@ -234,7 +234,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
                     gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
                 />
 
-                <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent">
+                <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent" variant="secondary">
                     <FormattedMessage id="fordeling.journalført.settPåVent" />
                 </Button>
             </div>
