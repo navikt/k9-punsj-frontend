@@ -17,6 +17,7 @@ import jpOMPKS302 from '../../cypress/fixtures/jpOMPKS302.json';
 import jpOMPAO303 from '../../cypress/fixtures/jpOMPAO303.json';
 import jpOMPMA304 from '../../cypress/fixtures/jpOMPMA304.json';
 import jpOMPUT305 from '../../cypress/fixtures/jpOMPUT305.json';
+import jpPSB312 from '../../cypress/fixtures/jpPSB312.json';
 import jpUkjent310 from '../../cypress/fixtures/jpUkjent310.json';
 import jpKanIkkeSendes from '../../cypress/fixtures/jpKanIkkeSendes.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
@@ -48,6 +49,9 @@ export const testHandlers = {
         }
         if (params.id === '320') {
             return HttpResponse.json(jpKanIkkeSendes, { status: 201 });
+        }
+        if (params.id === '312') {
+            return HttpResponse.json(jpPSB312, { status: 201 });
         }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
