@@ -170,6 +170,7 @@
     "fordeling.klassifiserModal.settBehandlingsÅrLoading": "Oppdaterer behandlingsår...",
     "fordeling.klassifiserModal.kopierLoading": "Journalpost kopieres....",
     "fordeling.klassifiserModal.ventJpJournalføres": "Journalpost journalføres....",
+    "fordeling.klassifiserModal.sendBrev.checkbox": "Send brev til søker, arbeidsgiver eller tredjepart",
     "fordeling.registreringsValg.tilbake": "Tilbake",
     "fordeling.settJpPåVent.modal.tittel": "Sett på vent",
     "fordeling.settJpPåVent.modal.info": "Oppgaven settes på vent til {dato}",
@@ -658,6 +659,7 @@
     "brevComponent.alert.visSammeBrevError": " Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.",
     "brevComponent.alert.sendBrevFeilet": "Sending av brev feilet.",
     "brevComponent.alert.brevErSendt": "Brev sendt! Du kan nå sende nytt brev til annen mottaker.",
+    "brevComponent.alert.brevErSendt.etterKlassifisering": "Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.",
     "brevComponent.error.hentBrevmalerError": "Henting av brevmaler feilet.",
 
     "malVelger.brevmalkodeSelect.title": "Velg mal",
