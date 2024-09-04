@@ -1,0 +1,35 @@
+{
+    "journalpostId": "312",
+    "norskIdent": "29099000129",
+    "dokumenter": [
+        {
+            "dokumentId": "470164680"
+        },
+        {
+            "dokumentId": "470164681"
+        }
+    ],
+
+    "erFerdigstilt": true,
+    "venter": null,
+    "kanSendeInn": true,
+    "erSaksbehandler": true,
+    "journalpostStatus": "JOURNALFOERT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "punsjInnsendingType": {
+        "kode": "PAPIRSØKNAD",
+        "navn": "Papirsøknad",
+        "erScanning": true
+    },
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": true,
+        "fagsakId": "1DQB9Y6",
+        "gyldigPeriode": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
+        "sakstype": "PSB",
+        "behandlingsÅr": null
+    }
+}

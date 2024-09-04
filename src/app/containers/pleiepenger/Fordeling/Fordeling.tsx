@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
-import { finnFagsaker } from 'app/api/api';
+import { finnFagsaker, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -50,6 +50,7 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import './fordeling.less';
+import { useMutation } from 'react-query';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -166,6 +167,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
         return false;
     };
+
+    const settPåVent = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
 
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
@@ -845,6 +850,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
                                     </Alert>
                                 )}
+
                             {isFagsakMedValgtBehandlingsår() && (
                                 <Alert
                                     size="small"
@@ -855,6 +861,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     <FormattedMessage id="fordeling.infobox.alertFagsakMedValgtBehandlingsår" />
                                 </Alert>
                             )}
+
+                            {settPåVent.isError && (
+                                <div className="mb-4">
+                                    <Alert size="small" variant="error">
+                                        <FormattedMessage id="fordeling.journalført.alert.settPåvent.error" />
+                                    </Alert>
+                                </div>
+                            )}
+
                             {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
                                 <div className="flex">
                                     <div className="mr-4">
@@ -899,19 +914,41 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                         </Button>
                                     </div>
                                     {isSakstypeMedPleietrengende && (
-                                        <Button
-                                            size="small"
-                                            variant="secondary"
-                                            onClick={() => {
-                                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                            }}
-                                        >
-                                            Avbryt og legg i kø
-                                        </Button>
+                                        <>
+                                            <Button
+                                                size="small"
+                                                variant="secondary"
+                                                onClick={() => {
+                                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                                }}
+                                            >
+                                                Avbryt og legg i kø
+                                            </Button>
+                                            <div className="ml-4">
+                                                <Button
+                                                    size="small"
+                                                    variant="secondary"
+                                                    onClick={() => settPåVent.mutate()}
+                                                >
+                                                    <FormattedMessage id="fordeling.journalført.settPåVent" />
+                                                </Button>
+                                            </div>
+                                        </>
                                     )}
                                 </div>
                             )}
                         </div>
+
+                        {settPåVent.isSuccess && (
+                            <Modal
+                                key="settpaaventokmodal"
+                                onClose={() => null}
+                                aria-label="settpaaventokmodal"
+                                open={settPåVent.isSuccess}
+                            >
+                                <OkGaaTilLosModal melding="modal.settpaavent.til" />
+                            </Modal>
+                        )}
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
