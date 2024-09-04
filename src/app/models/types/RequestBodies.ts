@@ -1,3 +1,5 @@
+import { DokumenttypeForkortelse } from '../enums/FordelingDokumenttype';
+
 /* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export interface IHentSoknad {
     norskIdent: string;
@@ -57,4 +59,5 @@ export interface IKopierJournalpost {
     fra: string;
     til: string;
     barn: string;
+    ytelse?: DokumenttypeForkortelse;
 }

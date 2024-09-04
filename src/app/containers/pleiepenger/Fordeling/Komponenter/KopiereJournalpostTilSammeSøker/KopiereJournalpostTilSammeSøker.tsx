@@ -16,6 +16,7 @@ import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../../../state/reducers/FellesReducer';
 import KopierModal from '../KopierModal';
+
 import './kopiereJournalpostTilSammeSøker.less';
 
 export interface IKopiereJournalpostTilSammeSøkerStateProps {
@@ -39,6 +40,7 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
 ) => {
     const { barnMedFagsak, intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostTilSammeSøker } =
         props;
+
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [visModal, setVisModal] = useState(false);
 
@@ -101,7 +103,6 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
                     dedupkey={dedupkey}
                     kopiereJournalpostTilSammeSøker={kopiereJournalpostTilSammeSøker}
                     lukkModal={() => setVisModal(false)}
-                    intl={intl}
                     fagsakId={barnMedFagsak.fagsakId}
                 />
             )}

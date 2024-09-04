@@ -142,12 +142,14 @@ export const kopierJournalpostToSøkere = (
     barnIdent: string,
     journalPostID: string,
     dedupKey: string,
+    ytelse?: DokumenttypeForkortelse,
 ): Promise<void> => {
     const requestBody: IKopierJournalpost = {
         dedupKey,
         fra: kopierFraIdent,
         til: kopierTilIdent,
         barn: barnIdent,
+        ytelse: ytelse,
     };
 
     return post(

@@ -18,6 +18,7 @@ import { RootStateType } from 'app/state/RootState';
 import {
     finnForkortelseForDokumenttype,
     getEnvironmentVariable,
+    getForkortelseFraFordelingDokumenttype,
     getPathFraDokumenttype,
     initializeDate,
 } from 'app/utils';
@@ -45,6 +46,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
     const dokumenttype = useSelector(
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
+    const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -96,6 +98,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 identState.pleietrengendeId,
                 journalpost.journalpostId,
                 dedupkey,
+                ytelseForKopiering,
             ),
         onSuccess: () => {
             // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
