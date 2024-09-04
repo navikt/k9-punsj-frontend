@@ -49,8 +49,9 @@ import KlassifiserModal from './Komponenter/KlassifiserModal';
 import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
-import './fordeling.less';
 import { useMutation } from 'react-query';
+
+import './fordeling.less';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -918,21 +919,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             <Button
                                                 size="small"
                                                 variant="secondary"
-                                                onClick={() => {
-                                                    window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                                                }}
+                                                onClick={() => settPåVent.mutate()}
                                             >
-                                                Avbryt og legg i kø
+                                                <FormattedMessage id="fordeling.journalført.settPåVent" />
                                             </Button>
-                                            <div className="ml-4">
-                                                <Button
-                                                    size="small"
-                                                    variant="secondary"
-                                                    onClick={() => settPåVent.mutate()}
-                                                >
-                                                    <FormattedMessage id="fordeling.journalført.settPåVent" />
-                                                </Button>
-                                            </div>
                                         </>
                                     )}
                                 </div>
