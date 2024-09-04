@@ -32,7 +32,6 @@ import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesRed
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
-    getEnvironmentVariable,
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from '../../../utils';
