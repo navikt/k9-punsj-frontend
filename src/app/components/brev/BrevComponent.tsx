@@ -310,7 +310,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 </div>
                             </div>
 
-                            <div className="mt-7 pb-20 flex gap-x-4">
+                            <div className={`mt-7 ${sendBrevUtenModal ? '' : 'pb-20'} flex gap-x-4`}>
                                 <Button
                                     variant="primary"
                                     className="sendBrevButton"
