@@ -157,6 +157,7 @@
     "fordeling.journalført.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert.",
     "fordeling.journalført.alert.settPåvent.error": "Noe gikk galt under sett på vent.",
     "fordeling.journalført.settPåVent": "Sett på vent",
+
     "fordeling.klassifiserModal.alert.error": "Noe gikk galt under lagring.",
     "fordeling.klassifiserModal.kopierJournalpost.alert.error": "Noe gikk galt under kopiering av journalpost.",
     "fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error": "Det oppsto en feil under journalføring av journalposten etter kopiering. Trykk Avbryt og prøv journalføre uten annen søker siden journalposten ble kopiert.",
@@ -180,6 +181,10 @@
     "fordeling.settJpPåVent.modal.btn.gåTilLos": "Gå til LOS",
     "fordeling.settJpPåVent.modal.btn.success": "Journalposten satt på vent.",
     "fordeling.settJpPåVent.modal.btn.error": "Noe gikk galt...",
+
+    "fordeling.journalført.åpenBrevModal.btn": "Send brev",
+    "fordeling.journalført.brevModal.avbryt.btn": "Avbryt",
+    "fordeling.brevModal.tittel": "Brev",
 
     "fordeling.journalpostAlleredeBehandlet.tomtIdentIJp.feil": "Det oppsto en feil.",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info": "Denne journalposten kan ikke håndteres flere ganger. Ved behov for korrigering, kopier journalposten. Det vil da opprettes en ny oppgave i Los.",

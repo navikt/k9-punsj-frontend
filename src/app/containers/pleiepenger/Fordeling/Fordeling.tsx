@@ -51,6 +51,7 @@ import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
 
 import './fordeling.less';
+import BrevModal from './Komponenter/BrevModal';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -121,6 +122,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [barnMedFagsak, setBarnMedFagsak] = useState<FagsakForSelect | undefined>(undefined);
     const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
+    const [åpenBrevModal, setÅpenBrevModal] = useState(false);
 
     const harFagsaker = fagsaker?.length > 0;
 
@@ -922,6 +924,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             >
                                                 <FormattedMessage id="fordeling.journalført.settPåVent" />
                                             </Button>
+                                            <div className="ml-4">
+                                                <Button
+                                                    size="small"
+                                                    variant="secondary"
+                                                    onClick={() => setÅpenBrevModal(true)}
+                                                >
+                                                    <FormattedMessage id="fordeling.journalført.åpenBrevModal.btn" />
+                                                </Button>
+                                            </div>
                                         </>
                                     )}
                                 </div>
@@ -948,6 +959,18 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 behandlingsAar={behandlingsAar}
                             />
                         )}
+
+                        {!!journalpost.sak?.fagsakId && (
+                            <BrevModal
+                                open={åpenBrevModal}
+                                søkerId={identState.søkerId}
+                                journalpostId={journalpost.journalpostId}
+                                fagsakId={journalpost.sak?.fagsakId}
+                                onClose={() => setÅpenBrevModal(false)}
+                                sakstype={finnForkortelseForDokumenttype(dokumenttype)!}
+                            />
+                        )}
+
                         <VerticalSpacer sixteenPx />
                     </div>
                 </FormPanel>

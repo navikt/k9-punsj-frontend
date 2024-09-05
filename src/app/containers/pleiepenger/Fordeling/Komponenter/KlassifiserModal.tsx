@@ -353,7 +353,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             {visBrev && (
                                 <BrevComponent
                                     søkerId={identState.søkerId}
-                                    sakstype={fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype) || ''}
+                                    sakstype={finnForkortelseForDokumenttype(dokumenttype) || ''}
                                     fagsakId={reservertFagsakIdForBrev}
                                     journalpostId={journalpost.journalpostId}
                                     brevSendtCallback={() => null}

@@ -30,10 +30,12 @@ interface BrevProps {
     fagsakId?: string;
     journalpostId?: string;
     sendBrevUtenModal?: boolean;
+    brevFraModal?: boolean;
 
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
     lukkJournalpostOppgave?: () => void;
+    onResetBrev?: () => void;
 }
 
 // TODO: Fix rendering feil ved send brev hvis valideringsfeil
@@ -43,7 +45,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     fagsakId,
     journalpostId,
     sendBrevUtenModal,
-
+    brevFraModal: brewFraModal,
     setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
     lukkJournalpostOppgave,
@@ -298,12 +300,12 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     </>
                                 )}
                                 <div className="brevStatusContainer">
-                                    {brevErSendt && !sendBrevUtenModal && (
+                                    {brevErSendt && (!sendBrevUtenModal || brewFraModal) && (
                                         <Alert variant="success" size="medium" fullWidth inline>
                                             <FormattedMessage id={`brevComponent.alert.brevErSendt`} />
                                         </Alert>
                                     )}
-                                    {brevErSendt && sendBrevUtenModal && (
+                                    {brevErSendt && sendBrevUtenModal && !brewFraModal && (
                                         <Alert variant="success" size="medium" fullWidth inline>
                                             <FormattedMessage
                                                 id={'brevComponent.alert.brevErSendt.etterKlassifisering'}
