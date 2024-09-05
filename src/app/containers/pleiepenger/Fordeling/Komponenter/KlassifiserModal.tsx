@@ -416,7 +416,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                         variant="secondary"
                         data-test-id="klassifiserModalPrøvIgjen"
                     >
-                        Sett på vent
+                        <FormattedMessage id="fordeling.klassifiserModal.btn.settPåVent" />
                     </Button>
                 )}
             </Modal.Footer>

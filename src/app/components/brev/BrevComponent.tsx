@@ -280,6 +280,21 @@ const BrevComponent: React.FC<BrevProps> = ({
                                                 {previewMessageFeil}
                                             </Alert>
                                         )}
+                                        {sendBrevUtenModal && (
+                                            <div className="mt-4">
+                                                <Button
+                                                    variant="primary"
+                                                    className="sendBrevButton"
+                                                    size="small"
+                                                    loading={isSubmitting || orgInfoPending}
+                                                    disabled={isSubmitting || orgInfoPending}
+                                                    type="submit"
+                                                    icon={<PaperplaneIcon />}
+                                                >
+                                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
+                                                </Button>
+                                            </div>
+                                        )}
                                     </>
                                 )}
                                 <div className="brevStatusContainer">
@@ -310,32 +325,34 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 </div>
                             </div>
 
-                            <div className={`mt-7 ${sendBrevUtenModal ? '' : 'pb-20'} flex gap-x-4`}>
-                                <Button
-                                    variant="primary"
-                                    className="sendBrevButton"
-                                    onClick={() => (sendBrevUtenModal ? null : setVisErDuSikkerModal(true))}
-                                    size="small"
-                                    loading={isSubmitting || orgInfoPending}
-                                    disabled={isSubmitting || orgInfoPending}
-                                    type={sendBrevUtenModal ? 'submit' : 'button'}
-                                    icon={<PaperplaneIcon />}
-                                >
-                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
-                                </Button>
-
-                                {lukkJournalpostOppgave !== undefined && (
+                            {!sendBrevUtenModal && (
+                                <div className="mt-7 pb-20 flex gap-x-4">
                                     <Button
+                                        variant="primary"
                                         className="sendBrevButton"
-                                        variant="secondary"
+                                        onClick={() => (sendBrevUtenModal ? null : setVisErDuSikkerModal(true))}
                                         size="small"
-                                        onClick={() => lukkJournalpostOppgave()}
-                                        type={'button'}
+                                        loading={isSubmitting || orgInfoPending}
+                                        disabled={isSubmitting || orgInfoPending}
+                                        type={sendBrevUtenModal ? 'submit' : 'button'}
+                                        icon={<PaperplaneIcon />}
                                     >
-                                        <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                        <FormattedMessage id={`brevComponent.btn.sendBrev`} />
                                     </Button>
-                                )}
-                            </div>
+
+                                    {lukkJournalpostOppgave !== undefined && (
+                                        <Button
+                                            className="sendBrevButton"
+                                            variant="secondary"
+                                            size="small"
+                                            onClick={() => lukkJournalpostOppgave()}
+                                            type={'button'}
+                                        >
+                                            <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                        </Button>
+                                    )}
+                                </div>
+                            )}
                         </Form>
                     </>
                 );
