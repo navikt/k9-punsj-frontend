@@ -124,6 +124,10 @@ export const finnForkortelseForDokumenttype = (
             navn: FordelingDokumenttype.OMSORGSPENGER_AO,
             forkortelse: DokumenttypeForkortelse.OMP_AO,
         },
+        {
+            navn: FordelingDokumenttype.OPPLAERINGSPENGER,
+            forkortelse: DokumenttypeForkortelse.OLP,
+        },
     ];
     return dokumenttyper.find((dt) => dt.navn === dokumenttype)?.forkortelse;
 };
