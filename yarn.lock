@@ -7952,7 +7952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns@npm:^3.0.0":
+"date-fns@npm:^3.0.0, date-fns@npm:^3.6.0":
   version: 3.6.0
   resolution: "date-fns@npm:3.6.0"
   checksum: 10/cac35c58926a3b5d577082ff2b253612ec1c79eb6754fddef46b6a8e826501ea2cb346ecbd211205f1ba382ddd1f9d8c3f00bf433ad63cc3063454d294e3a6b8
@@ -12569,7 +12569,7 @@ __metadata:
     react: "npm:18.3.1"
     react-aria-menubutton: "npm:7.0.3"
     react-collapse: "npm:5.1.1"
-    react-day-picker: "npm:7.4.10"
+    react-day-picker: "npm:9.0.8"
     react-dom: "npm:18.3.1"
     react-intl: "npm:6.6.8"
     react-modal: "npm:3.16.1"
@@ -15411,7 +15411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -15673,17 +15673,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:7.4.10":
-  version: 7.4.10
-  resolution: "react-day-picker@npm:7.4.10"
-  dependencies:
-    prop-types: "npm:^15.6.2"
-  peerDependencies:
-    react: ~0.13.x || ~0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10/6a63aced75dbab630cb0f0317f4f843c5930f768a52922bea0eda09c3856c9a211321d30ccac74fd8891a5285671a8da3a541a04a3056dc66b656d8f8415ce0f
-  languageName: node
-  linkType: hard
-
 "react-day-picker@npm:8.10.0":
   version: 8.10.0
   resolution: "react-day-picker@npm:8.10.0"
@@ -15691,6 +15680,17 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/974496ce004762d521923fc533f6ad6ff8d1f24368220753106617eb199aeb9658b4b7734e12a3fe8a5057840464a3d2d08b4b7f9a84ec77a59c50cc647f6dbc
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:9.0.8":
+  version: 9.0.8
+  resolution: "react-day-picker@npm:9.0.8"
+  dependencies:
+    date-fns: "npm:^3.6.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/8a941b71e29a07a6ef40e35e5f6f46a332537184b4d67d90093415c4ade6c66dc787c0f26ca0841b4ee8bca40b05fa881cd73d69a263720c4c3da1e3c0a7bb37
   languageName: node
   linkType: hard
 
