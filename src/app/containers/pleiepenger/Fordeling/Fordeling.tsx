@@ -102,7 +102,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     } = props;
 
     const { fagsak, dokumenttype } = fordelingState;
-    console.log('Test fordelingState: ', fordelingState);
+
     const navigate = useNavigate();
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
