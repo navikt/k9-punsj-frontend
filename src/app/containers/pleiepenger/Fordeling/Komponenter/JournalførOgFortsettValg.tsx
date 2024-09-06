@@ -19,6 +19,7 @@ import {
     pleiepengerILivetsSluttfaseSakstyper,
     pleiepengerSakstyper,
     korrigeringAvInntektsmeldingSakstyper,
+    opplæringspengerSakstyper,
 } from 'app/models/enums';
 import Fagsak from 'app/types/Fagsak';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -106,6 +107,8 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     const korrigeringIM = () =>
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
 
+    const opplaeringspenger = () => dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER && opplæringspengerSakstyper;
+
     const sakstypekeys =
         pleiepengerSyktBarn() ||
         pleiepengerILivetsSluttfase() ||
@@ -114,6 +117,7 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
         omsorgspengerAleneOmOmsorgen() ||
         omsorgspengerUtbetaling() ||
         korrigeringIM() ||
+        opplaeringspenger() ||
         [];
 
     const keys = sakstypekeys.filter((key) => {
