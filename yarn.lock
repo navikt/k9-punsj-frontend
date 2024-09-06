@@ -2399,16 +2399,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-core@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@grafana/faro-core@npm:1.9.0"
-  dependencies:
-    "@opentelemetry/api": "npm:^1.9.0"
-    "@opentelemetry/otlp-transformer": "npm:^0.52.0"
-  checksum: 10/87437e1053af2c76bb9010d9dd7a4951d6b6f339326a4871ca9f513d0b3193ff4358845b24f4f20090f180f9168bc42a6f2949d9e764f4c672f1e202556b6de6
-  languageName: node
-  linkType: hard
-
 "@grafana/faro-core@npm:^1.9.1":
   version: 1.9.1
   resolution: "@grafana/faro-core@npm:1.9.1"
@@ -2419,7 +2409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.9.1":
+"@grafana/faro-web-sdk@npm:1.9.1, @grafana/faro-web-sdk@npm:^1.9.1":
   version: 1.9.1
   resolution: "@grafana/faro-web-sdk@npm:1.9.1"
   dependencies:
@@ -2430,22 +2420,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@grafana/faro-web-sdk@npm:1.9.0"
+"@grafana/faro-web-tracing@npm:1.9.1":
+  version: 1.9.1
+  resolution: "@grafana/faro-web-tracing@npm:1.9.1"
   dependencies:
-    "@grafana/faro-core": "npm:^1.9.0"
-    ua-parser-js: "npm:^1.0.32"
-    web-vitals: "npm:^4.0.1"
-  checksum: 10/1b5f0b84c7d96bc5099328b35423de8ad3ccd7d51d14e49e7df050c69d57ee6e80b35dd441e6d5eca2de9babc4845eb425ffcc39b6ca05587e9ce453350c61b1
-  languageName: node
-  linkType: hard
-
-"@grafana/faro-web-tracing@npm:1.9.0":
-  version: 1.9.0
-  resolution: "@grafana/faro-web-tracing@npm:1.9.0"
-  dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.9.0"
+    "@grafana/faro-web-sdk": "npm:^1.9.1"
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/context-zone": "npm:1.21.0"
     "@opentelemetry/core": "npm:^1.25.0"
@@ -2457,7 +2436,7 @@ __metadata:
     "@opentelemetry/resources": "npm:^1.25.0"
     "@opentelemetry/sdk-trace-web": "npm:^1.25.0"
     "@opentelemetry/semantic-conventions": "npm:^1.25.0"
-  checksum: 10/53aa9105c5bff80025c4d0aca0f4be90338b03143615a11207237a543bbfe14e9573d3617b52ef777dd32826bcdf80ba9dd96db0742caf9d30b0764c6d5781ca
+  checksum: 10/cd62af5b0cb177b33b80eb99c2c1c995485497bd383124dd4dcd45c2de8cfd2e081cff42b95fe326872cfaa433d460273de5b4a1dfe6f1147620591b337b46e9
   languageName: node
   linkType: hard
 
@@ -12471,7 +12450,7 @@ __metadata:
     "@babel/preset-typescript": "npm:7.24.7"
     "@babel/runtime": "npm:7.25.6"
     "@grafana/faro-web-sdk": "npm:1.9.1"
-    "@grafana/faro-web-tracing": "npm:1.9.0"
+    "@grafana/faro-web-tracing": "npm:1.9.1"
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": "npm:6.16.3"
     "@navikt/ds-css": "npm:6.16.3"
