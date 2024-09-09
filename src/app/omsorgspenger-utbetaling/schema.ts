@@ -165,14 +165,7 @@ const OMPUTSchema = yup.object({
             .when(['$selvstendigNaeringsdrivende', '$frilanser', '$erKorrigering'], {
                 is: (sn: boolean, fl: boolean, erKorrigering: boolean) =>
                     (sn || fl) === true && erKorrigering === false,
-                then: () =>
-                    yup
-                        .string()
-                        .test(
-                            'maa-velge-ja',
-                            '${path} - fordi bruker ikke har dekket 10 omsorgsdager selv, kan ikke søknaden sendes inn til K9. Søknaden må behandles etter rutinen.',
-                            (v) => v === 'ja',
-                        ),
+                then: () => yup.string().required('${path} - er et påkrevd felt.'),
             })
             .label('Har dekket omsorgsdager'),
     }),
