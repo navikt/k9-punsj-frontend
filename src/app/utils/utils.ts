@@ -10,7 +10,6 @@ import { Tidsformat } from './timeUtils';
 
 export const formattereDatoIArray = (dato: number[]) => {
     const formatertDato: string[] = [];
-    // eslint-disable-next-line no-plusplus
     for (let i = dato.length - 1; i >= 0; i--) {
         formatertDato.push(i > 0 ? `${dato[i]}.` : `${dato[i]}`);
     }
@@ -47,7 +46,6 @@ export const erEldreEnn4år = (dato: string) => {
 };
 
 export const printAndReturnValue = (value: any) => {
-    // eslint-disable-next-line no-console
     console.log(value);
     return value;
 };
@@ -125,6 +123,10 @@ export const finnForkortelseForDokumenttype = (
         {
             navn: FordelingDokumenttype.OMSORGSPENGER_AO,
             forkortelse: DokumenttypeForkortelse.OMP_AO,
+        },
+        {
+            navn: FordelingDokumenttype.OPPLAERINGSPENGER,
+            forkortelse: DokumenttypeForkortelse.OLP,
         },
     ];
     return dokumenttyper.find((dt) => dt.navn === dokumenttype)?.forkortelse;
@@ -280,6 +282,33 @@ export const getDokumenttypeFraForkortelse = (
             return FordelingDokumenttype.OMSORGSPENGER_UT;
         case DokumenttypeForkortelse.OLP:
             return FordelingDokumenttype.OPPLAERINGSPENGER;
+        default:
+            return undefined;
+    }
+};
+
+export const getForkortelseFraFordelingDokumenttype = (
+    fordelingDokumenttype: FordelingDokumenttype,
+): DokumenttypeForkortelse | undefined => {
+    switch (fordelingDokumenttype) {
+        case FordelingDokumenttype.PLEIEPENGER:
+            return DokumenttypeForkortelse.PSB;
+        case FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE:
+            return DokumenttypeForkortelse.PPN;
+        case FordelingDokumenttype.KORRIGERING_IM:
+            return DokumenttypeForkortelse.OMP;
+        case FordelingDokumenttype.OMSORGSPENGER:
+            return DokumenttypeForkortelse.OMP;
+        case FordelingDokumenttype.OMSORGSPENGER_UT:
+            return DokumenttypeForkortelse.OMP_UT;
+        case FordelingDokumenttype.OMSORGSPENGER_KS:
+            return DokumenttypeForkortelse.OMP_KS;
+        case FordelingDokumenttype.OMSORGSPENGER_MA:
+            return DokumenttypeForkortelse.OMP_MA;
+        case FordelingDokumenttype.OMSORGSPENGER_AO:
+            return DokumenttypeForkortelse.OMP_AO;
+        case FordelingDokumenttype.OPPLAERINGSPENGER:
+            return DokumenttypeForkortelse.OLP;
         default:
             return undefined;
     }

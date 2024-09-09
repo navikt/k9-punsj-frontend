@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
-import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, AlertProps, Button, Checkbox, Heading, Loader, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
 
@@ -18,12 +18,14 @@ import { RootStateType } from 'app/state/RootState';
 import {
     finnForkortelseForDokumenttype,
     getEnvironmentVariable,
+    getForkortelseFraFordelingDokumenttype,
     getPathFraDokumenttype,
     initializeDate,
 } from 'app/utils';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
+import BrevComponent from 'app/components/brev/BrevComponent';
 
 interface OwnProps {
     lukkModal: () => void;
@@ -38,6 +40,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
     const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
     const [ventGetJournalpost, setVentGetJournalpost] = useState(false);
     const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
+    const [visBrev, setVisBrev] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -45,6 +48,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
     const dokumenttype = useSelector(
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
+    const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -96,6 +100,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 identState.pleietrengendeId,
                 journalpost.journalpostId,
                 dedupkey,
+                ytelseForKopiering,
             ),
         onSuccess: () => {
             // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
@@ -235,6 +240,8 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         (journalførJournalpost.isSuccess || getJournalpost.isSuccess) &&
         settPåVent.isSuccess;
 
+    const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
+
     return (
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading" data-test-id="klassifiserModal">
             <Modal.Header closeButton={false}>
@@ -333,6 +340,28 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             </div>
                         )}
                     </div>
+                    {visGåTilLosBtn && reservertFagsakIdForBrev && (
+                        <div className="mt-2">
+                            <Checkbox
+                                onChange={() => {
+                                    setVisBrev(!visBrev);
+                                }}
+                                checked={visBrev}
+                            >
+                                <FormattedMessage id="fordeling.klassifiserModal.sendBrev.checkbox" />
+                            </Checkbox>
+                            {visBrev && (
+                                <BrevComponent
+                                    søkerId={identState.søkerId}
+                                    sakstype={finnForkortelseForDokumenttype(dokumenttype) || ''}
+                                    fagsakId={reservertFagsakIdForBrev}
+                                    journalpostId={journalpost.journalpostId}
+                                    brevSendtCallback={() => null}
+                                    sendBrevUtenModal={true}
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>
@@ -387,7 +416,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                         variant="secondary"
                         data-test-id="klassifiserModalPrøvIgjen"
                     >
-                        Sett på vent
+                        <FormattedMessage id="fordeling.klassifiserModal.btn.settPåVent" />
                     </Button>
                 )}
             </Modal.Footer>

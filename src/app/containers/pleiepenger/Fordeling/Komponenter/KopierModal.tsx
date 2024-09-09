@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
-import { FormattedMessage, IntlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 
@@ -15,7 +15,6 @@ interface OwnProps {
     pleietrengendeId: string;
     journalpostId: string;
     dedupkey: string;
-    intl: IntlShape;
     fellesState: IFellesState;
     fagsakId: string;
     kopiereJournalpostTilSammeSøker: (
@@ -32,7 +31,6 @@ const KopierModal = ({
     pleietrengendeId,
     journalpostId,
     dedupkey,
-    intl,
     fellesState,
     fagsakId,
     kopiereJournalpostTilSammeSøker,

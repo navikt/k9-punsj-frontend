@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import countries from 'i18n-iso-countries';

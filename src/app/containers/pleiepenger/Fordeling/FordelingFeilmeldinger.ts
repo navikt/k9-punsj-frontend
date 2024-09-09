@@ -1,14 +1,13 @@
 import { IdentRules } from 'app/rules';
 import intlHelper from '../../../utils/intlUtils';
-import { useIntl } from 'react-intl';
+import { IntlShape } from 'react-intl';
 
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (
+    intl: IntlShape,
     annenIdent: string | null,
     sokerIdent?: string,
     barnIdent?: string,
 ): string | undefined => {
-    const intl = useIntl();
-
     if (annenIdent && IdentRules.erUgyldigIdent(annenIdent)) {
         return intlHelper(intl, 'ident.feil.ugyldigident');
     }

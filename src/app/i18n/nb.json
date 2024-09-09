@@ -157,6 +157,7 @@
     "fordeling.journalført.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert.",
     "fordeling.journalført.alert.settPåvent.error": "Noe gikk galt under sett på vent.",
     "fordeling.journalført.settPåVent": "Sett på vent",
+
     "fordeling.klassifiserModal.alert.error": "Noe gikk galt under lagring.",
     "fordeling.klassifiserModal.kopierJournalpost.alert.error": "Noe gikk galt under kopiering av journalpost.",
     "fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error": "Det oppsto en feil under journalføring av journalposten etter kopiering. Trykk Avbryt og prøv journalføre uten annen søker siden journalposten ble kopiert.",
@@ -165,11 +166,13 @@
     "fordeling.klassifiserModal.btn.JournalførJournalposten": "Journalfør journalposten",
     "fordeling.klassifiserModal.btn.JournalførOgSettPåvent": "Journalfør og sett på vent",
     "fordeling.klassifiserModal.btn.avbryt": "Avbryt",
+    "fordeling.klassifiserModal.btn.settPåVent": "Sett på vent",
     "fordeling.klassifiserModal.btn.gåTilLos": "Gå til LOS",
     "fordeling.klassifiserModal.lagrer": "Lagrer...",
     "fordeling.klassifiserModal.settBehandlingsÅrLoading": "Oppdaterer behandlingsår...",
     "fordeling.klassifiserModal.kopierLoading": "Journalpost kopieres....",
     "fordeling.klassifiserModal.ventJpJournalføres": "Journalpost journalføres....",
+    "fordeling.klassifiserModal.sendBrev.checkbox": "Send brev til søker, arbeidsgiver eller tredjepart",
     "fordeling.registreringsValg.tilbake": "Tilbake",
     "fordeling.settJpPåVent.modal.tittel": "Sett på vent",
     "fordeling.settJpPåVent.modal.info": "Oppgaven settes på vent til {dato}",
@@ -178,6 +181,10 @@
     "fordeling.settJpPåVent.modal.btn.gåTilLos": "Gå til LOS",
     "fordeling.settJpPåVent.modal.btn.success": "Journalposten satt på vent.",
     "fordeling.settJpPåVent.modal.btn.error": "Noe gikk galt...",
+
+    "fordeling.journalført.åpenBrevModal.btn": "Send brev",
+    "fordeling.journalført.brevModal.avbryt.btn": "Avbryt",
+    "fordeling.brevModal.tittel": "Brev",
 
     "fordeling.journalpostAlleredeBehandlet.tomtIdentIJp.feil": "Det oppsto en feil.",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info": "Denne journalposten kan ikke håndteres flere ganger. Ved behov for korrigering, kopier journalposten. Det vil da opprettes en ny oppgave i Los.",
@@ -658,6 +665,7 @@
     "brevComponent.alert.visSammeBrevError": " Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.",
     "brevComponent.alert.sendBrevFeilet": "Sending av brev feilet.",
     "brevComponent.alert.brevErSendt": "Brev sendt! Du kan nå sende nytt brev til annen mottaker.",
+    "brevComponent.alert.brevErSendt.etterKlassifisering": "Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.",
     "brevComponent.error.hentBrevmalerError": "Henting av brevmaler feilet.",
 
     "malVelger.brevmalkodeSelect.title": "Velg mal",

@@ -29,10 +29,13 @@ interface BrevProps {
     sakstype: string;
     fagsakId?: string;
     journalpostId?: string;
+    sendBrevUtenModal?: boolean;
+    brevFraModal?: boolean;
 
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
     lukkJournalpostOppgave?: () => void;
+    onResetBrev?: () => void;
 }
 
 // TODO: Fix rendering feil ved send brev hvis valideringsfeil
@@ -41,7 +44,8 @@ const BrevComponent: React.FC<BrevProps> = ({
     sakstype,
     fagsakId,
     journalpostId,
-
+    sendBrevUtenModal,
+    brevFraModal: brewFraModal,
     setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
     lukkJournalpostOppgave,
@@ -164,23 +168,25 @@ const BrevComponent: React.FC<BrevProps> = ({
 
                 return (
                     <>
-                        <Modal
-                            className="modalContainer"
-                            key="erdusikkerpåatsendebrevmodal"
-                            onClose={() => setVisErDuSikkerModal(false)}
-                            aria-label="erdusikkerpåatsendebrevmodal"
-                            open={visErDuSikkerModal}
-                        >
-                            <ErDuSikkerModal
-                                submitKnappText="modal.erdusikker.fortsett"
-                                melding="modal.erdusikker.sendebrev"
-                                onSubmit={() => {
-                                    setVisErDuSikkerModal(false);
-                                    handleSubmit();
-                                }}
+                        {!sendBrevUtenModal && (
+                            <Modal
+                                className="modalContainer"
+                                key="erdusikkerpåatsendebrevmodal"
                                 onClose={() => setVisErDuSikkerModal(false)}
-                            />
-                        </Modal>
+                                aria-label="erdusikkerpåatsendebrevmodal"
+                                open={visErDuSikkerModal}
+                            >
+                                <ErDuSikkerModal
+                                    submitKnappText="modal.erdusikker.fortsett"
+                                    melding="modal.erdusikker.sendebrev"
+                                    onSubmit={() => {
+                                        setVisErDuSikkerModal(false);
+                                        handleSubmit();
+                                    }}
+                                    onClose={() => setVisErDuSikkerModal(false)}
+                                />
+                            </Modal>
+                        )}
 
                         <Form>
                             <div className="brev">
@@ -276,12 +282,34 @@ const BrevComponent: React.FC<BrevProps> = ({
                                                 {previewMessageFeil}
                                             </Alert>
                                         )}
+                                        {sendBrevUtenModal && (
+                                            <div className="mt-4">
+                                                <Button
+                                                    variant="primary"
+                                                    className="sendBrevButton"
+                                                    size="small"
+                                                    loading={isSubmitting || orgInfoPending}
+                                                    disabled={isSubmitting || orgInfoPending}
+                                                    type="submit"
+                                                    icon={<PaperplaneIcon />}
+                                                >
+                                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
+                                                </Button>
+                                            </div>
+                                        )}
                                     </>
                                 )}
                                 <div className="brevStatusContainer">
-                                    {brevErSendt && (
+                                    {brevErSendt && (!sendBrevUtenModal || brewFraModal) && (
                                         <Alert variant="success" size="medium" fullWidth inline>
                                             <FormattedMessage id={`brevComponent.alert.brevErSendt`} />
+                                        </Alert>
+                                    )}
+                                    {brevErSendt && sendBrevUtenModal && !brewFraModal && (
+                                        <Alert variant="success" size="medium" fullWidth inline>
+                                            <FormattedMessage
+                                                id={'brevComponent.alert.brevErSendt.etterKlassifisering'}
+                                            />
                                         </Alert>
                                     )}
 
@@ -299,32 +327,34 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 </div>
                             </div>
 
-                            <div className="mt-7 pb-20 flex gap-x-4">
-                                <Button
-                                    variant="primary"
-                                    className="sendBrevButton"
-                                    onClick={() => setVisErDuSikkerModal(true)}
-                                    size="small"
-                                    loading={isSubmitting || orgInfoPending}
-                                    disabled={isSubmitting || orgInfoPending}
-                                    type="button"
-                                    icon={<PaperplaneIcon />}
-                                >
-                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
-                                </Button>
-
-                                {lukkJournalpostOppgave !== undefined && (
+                            {!sendBrevUtenModal && (
+                                <div className="mt-7 pb-20 flex gap-x-4">
                                     <Button
+                                        variant="primary"
                                         className="sendBrevButton"
-                                        variant="secondary"
+                                        onClick={() => (sendBrevUtenModal ? null : setVisErDuSikkerModal(true))}
                                         size="small"
-                                        onClick={() => lukkJournalpostOppgave()}
-                                        type="button"
+                                        loading={isSubmitting || orgInfoPending}
+                                        disabled={isSubmitting || orgInfoPending}
+                                        type={sendBrevUtenModal ? 'submit' : 'button'}
+                                        icon={<PaperplaneIcon />}
                                     >
-                                        <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                        <FormattedMessage id={`brevComponent.btn.sendBrev`} />
                                     </Button>
-                                )}
-                            </div>
+
+                                    {lukkJournalpostOppgave !== undefined && (
+                                        <Button
+                                            className="sendBrevButton"
+                                            variant="secondary"
+                                            size="small"
+                                            onClick={() => lukkJournalpostOppgave()}
+                                            type={'button'}
+                                        >
+                                            <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                        </Button>
+                                    )}
+                                </div>
+                            )}
                         </Form>
                     </>
                 );
