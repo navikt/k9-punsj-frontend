@@ -53,6 +53,9 @@ const Pleietrengende: React.FC<Props> = ({
     const fellesState = useSelector((state: RootStateType) => state.felles);
 
     useEffect(() => {
+        setPleietrengendeIdent('');
+        setPleietrengendeInfo(undefined);
+
         if (identState.søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
             henteBarn(identState.søkerId);
         }

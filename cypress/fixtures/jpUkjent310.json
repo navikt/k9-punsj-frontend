@@ -10,9 +10,9 @@
         }
     ],
 
-    "erFerdigstilt": false,
+    "erFerdigstilt": true,
     "venter": null,
-    "kanSendeInn": true,
+    "kanSendeInn": false,
     "erSaksbehandler": true,
     "journalpostStatus": "MOTTATT",
     "kanOpprettesJournalføringsoppgave": true,

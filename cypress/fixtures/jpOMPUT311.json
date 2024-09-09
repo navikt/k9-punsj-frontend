@@ -12,7 +12,7 @@
         "navn": "ukjent",
         "erScanning": true
     },
-    "kanSendeInn": true,
+    "kanSendeInn": false,
     "erSaksbehandler": true,
     "journalpostStatus": "JOURNALFOERT",
     "kanOpprettesJournalføringsoppgave": true,
@@ -25,7 +25,7 @@
         "gyldigPeriode": null,
         "pleietrengendeIdent": null,
         "relatertPersonIdent": null,
-        "sakstype": null,
+        "sakstype": "PPN",
         "behandlingsÅr": null
     }
 }
