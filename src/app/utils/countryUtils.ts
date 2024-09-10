@@ -27,7 +27,12 @@ const mapLand = (code: string) => ({
 });
 const countryList = alpha3Codes()
     .map(mapLand)
-    .sort((a, b) => (a.name > b.name ? 1 : -1));
+    .sort((a, b) => {
+        if (!a.name || !b.name) {
+            return 0;
+        }
+        return a.name > b.name ? 1 : -1;
+    });
 
 export const getCountryList = () => [...countryList];
 
