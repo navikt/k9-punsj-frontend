@@ -1,5 +1,5 @@
 {
-    "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+    "extends": [],
     "customSyntax": "postcss-less",
     "rules": {
         "selector-class-pattern": null,
