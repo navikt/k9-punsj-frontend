@@ -82,9 +82,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             onBlur={(periode) => {
                                 editSoknad(editPeriode(i, periode));
                             }}
-                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`)}
-                            errorMessageFom={getErrorMessage!(`[${i}].periode.fom`)}
-                            errorMessageTom={getErrorMessage!(`[${i}].periode.tom`)}
+                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
+                            errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
+                            errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
                         />
                         <span className="mr-3" />
                         <button
