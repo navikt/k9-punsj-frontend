@@ -12,11 +12,19 @@ import { Periode } from 'app/models/types/Periode';
 
 import InstitusjonSelector from './InstitusjonSelector';
 import './kurs.less';
+import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
+import { Suggestion } from '@navikt/ft-plattform-komponenter/dist/packages/plattform-komponenter/src/autocomplete/types/Suggestion';
+
+interface KursComponentProps {
+    godkjentOpplæringsinstitusjoner: GodkjentOpplæringsinstitusjon[];
+    hentInstitusjonerError: boolean;
+}
 
 const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '' };
 
-const KursComponent = () => {
+const KursComponent = ({ godkjentOpplæringsinstitusjoner, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
+
     return (
         <Panel border>
             <Heading size="small" level="5">
@@ -24,7 +32,13 @@ const KursComponent = () => {
             </Heading>
             <VerticalSpacer sixteenPx />
             <div className="kurs">
-                <InstitusjonSelector label="Velg institusjon" name="kurs.kursHolder.institusjonsUuid" />
+                {!hentInstitusjonerError && godkjentOpplæringsinstitusjoner.length > 0 && (
+                    <InstitusjonSelector
+                        label="Velg institusjon"
+                        name="kurs.kursHolder.institusjonsUuid"
+                        godkjentOpplæringsinstitusjoner={godkjentOpplæringsinstitusjoner}
+                    />
+                )}
                 <VerticalSpacer eightPx />
 
                 <Checkbox value="anneninstitusjon">Annen institusjon (ikke i listen)</Checkbox>
