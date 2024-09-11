@@ -204,6 +204,7 @@
     "ident.identifikasjon.felt": "Søkers fødselsnummer eller D-nummer:",
     "ident.identifikasjon.felt1": "Første søkers fødselsnummer eller D-nummer:",
     "ident.identifikasjon.pleietrengende": "Pleietrengendes fødselsnummer:",
+    "ident.identifikasjon.fosterbarn": "Barnets fødselsnummer:",
     "ident.identifikasjon.velgBarn": "Velg hvilket barn det gjelder",
     "ident.identifikasjon.annetBarn": "Det gjelder et annet barn",
     "ident.identifikasjon.pleietrengendeHarIkkeFnr": "Pleietrengende har ikke fødselsnummer",

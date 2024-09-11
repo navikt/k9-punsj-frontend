@@ -52,6 +52,7 @@ import { useMutation } from 'react-query';
 
 import './fordeling.less';
 import BrevModal from './Komponenter/BrevModal';
+import Fosterbarn from './Komponenter/Fosterbarn';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -760,6 +761,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </ErrorMessage>
                             )}
                             {isFetchingFagsaker && <Loader />}
+
+                            <Fosterbarn />
+
                             {visPleietrengendeComponent && (
                                 <Pleietrengende
                                     toSokereIJournalpost={toSokereIJournalpost}

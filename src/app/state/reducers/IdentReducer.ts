@@ -7,6 +7,7 @@ export const initialState: IIdentState = {
     pleietrengendeId: '',
     annenPart: '',
     annenSokerIdent: null,
+    fosterbarn: undefined,
 };
 
 export function IdentReducer(identState: IIdentState = initialState, action: IIdentActions): IIdentState {
@@ -24,7 +25,11 @@ export function IdentReducer(identState: IIdentState = initialState, action: IId
                 ...identState,
                 annenPart: action.annenPart,
             };
-
+        case IdentActionKeys.IDENT_SET_FOSTERBARN:
+            return {
+                ...identState,
+                fosterbarn: action.fosterbarn,
+            };
         case IdentActionKeys.IDENT_RESET:
             return {
                 ...identState,
