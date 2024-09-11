@@ -39,9 +39,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
-    const [godkjentOpplæringsinstitusjoner, setGodkjentOpplæringsinstitusjoner] = useState<
-        GodkjentOpplæringsinstitusjon[]
-    >([]);
+    const [institusjoner, setInstitusjoner] = useState<GodkjentOpplæringsinstitusjon[]>([]);
     const [kvittering, setKvittering] = useState<IOLPSoknadKvittering | undefined>(undefined);
     const [erSendtInn, setErSendtInn] = useState(false);
     const navigate = useNavigate();
@@ -56,7 +54,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     );
 
     const { mutate: hentInstitusjonerK9, error: hentInstitusjonerError } = useMutation(() => hentInstitusjoner(), {
-        onSuccess: (data) => setGodkjentOpplæringsinstitusjoner(data),
+        onSuccess: (data) => setInstitusjoner(data),
     });
 
     if (!id) {
@@ -134,7 +132,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                 hentEksisterendePerioderError={!!hentEksisterendePerioderError}
                 setKvittering={setKvittering}
                 kvittering={kvittering}
-                godkjentOpplæringsinstitusjoner={godkjentOpplæringsinstitusjoner}
+                institusjoner={institusjoner}
                 hentInstitusjonerError={!!hentInstitusjonerError}
                 {...props}
             />

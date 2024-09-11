@@ -15,7 +15,7 @@ interface InstitusjonSelectorProps {
     hideLabel?: boolean;
 }
 
-const mapTilInstitusjoner = (institusjoner: GodkjentOpplæringsinstitusjon[]): Suggestion[] =>
+const mapTilInstitusjonSuggestions = (institusjoner: GodkjentOpplæringsinstitusjon[]): Suggestion[] =>
     institusjoner.map((institusjon) => ({
         key: institusjon.uuid,
         value: institusjon.navn,
@@ -29,7 +29,7 @@ const InstitusjonSelector = ({
 }: InstitusjonSelectorProps): JSX.Element => {
     const [field, meta, helpers] = useField(name);
     const [institusjoner, setInstitusjoner] = React.useState<Suggestion[]>(
-        mapTilInstitusjoner(godkjentOpplæringsinstitusjoner),
+        mapTilInstitusjonSuggestions(godkjentOpplæringsinstitusjoner),
     );
 
     const findInstitusjonValue = (institusjonKey: string) =>

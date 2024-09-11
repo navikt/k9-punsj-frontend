@@ -16,13 +16,13 @@ import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplær
 import { Suggestion } from '@navikt/ft-plattform-komponenter/dist/packages/plattform-komponenter/src/autocomplete/types/Suggestion';
 
 interface KursComponentProps {
-    godkjentOpplæringsinstitusjoner: GodkjentOpplæringsinstitusjon[];
+    institusjoner: GodkjentOpplæringsinstitusjon[];
     hentInstitusjonerError: boolean;
 }
 
 const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '' };
 
-const KursComponent = ({ godkjentOpplæringsinstitusjoner, hentInstitusjonerError }: KursComponentProps) => {
+const KursComponent = ({ institusjoner, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
@@ -32,11 +32,11 @@ const KursComponent = ({ godkjentOpplæringsinstitusjoner, hentInstitusjonerErro
             </Heading>
             <VerticalSpacer sixteenPx />
             <div className="kurs">
-                {!hentInstitusjonerError && godkjentOpplæringsinstitusjoner.length > 0 && (
+                {!hentInstitusjonerError && institusjoner.length > 0 && (
                     <InstitusjonSelector
                         label="Velg institusjon"
                         name="kurs.kursHolder.institusjonsUuid"
-                        godkjentOpplæringsinstitusjoner={godkjentOpplæringsinstitusjoner}
+                        godkjentOpplæringsinstitusjoner={institusjoner}
                     />
                 )}
                 <VerticalSpacer eightPx />

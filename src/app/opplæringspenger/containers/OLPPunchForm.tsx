@@ -55,7 +55,7 @@ export interface OwnProps {
     hentEksisterendePerioderError: boolean;
     setKvittering?: (kvittering?: IOLPSoknadKvittering) => void;
     kvittering: IOLPSoknadKvittering | undefined;
-    godkjentOpplæringsinstitusjoner: GodkjentOpplæringsinstitusjon[];
+    institusjoner: GodkjentOpplæringsinstitusjon[];
     hentInstitusjonerError: boolean;
 }
 
@@ -71,7 +71,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         hentEksisterendePerioderError,
         setKvittering,
         kvittering,
-        godkjentOpplæringsinstitusjoner,
+        institusjoner,
         hentInstitusjonerError,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
@@ -280,10 +280,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <VerticalSpacer sixteenPx />
             <OpplysningerOmSoknad />
             <VerticalSpacer sixteenPx />
-            <KursComponent
-                godkjentOpplæringsinstitusjoner={godkjentOpplæringsinstitusjoner}
-                hentInstitusjonerError={hentInstitusjonerError}
-            />
+            <KursComponent institusjoner={institusjoner} hentInstitusjonerError={hentInstitusjonerError} />
             <VerticalSpacer sixteenPx />
             <Checkbox
                 onChange={(e) => {
