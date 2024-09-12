@@ -35,17 +35,17 @@ const InstitusjonSelector = ({
     );
 
     const findInstitusjonValue = (institusjonKey: string) =>
-        institusjoner.find((intstitusjon) => intstitusjon.key === institusjonKey)?.value || '';
+        institusjoner.find((institusjon) => institusjon.key === institusjonKey)?.value || '';
 
     const findInstitusjonKey = (institusjonValue: string) =>
-        institusjoner.find((intstitusjon) => intstitusjon.value === institusjonValue)?.key;
+        institusjoner.find((institusjon) => institusjon.value === institusjonValue)?.key;
 
     const [valgtInstitusjon, setValgtInstitusjon] = useState(findInstitusjonValue(field.value));
 
     const onInputValueChange = async (v: string) => {
         const nyInstitusjonsListe = institusjoner.filter(
-            (intstitusjon) =>
-                intstitusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || intstitusjon.key.indexOf(v) > -1,
+            (institusjon) =>
+                institusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || institusjon.key.indexOf(v) > -1,
         );
         setInstitusjoner(nyInstitusjonsListe);
     };
