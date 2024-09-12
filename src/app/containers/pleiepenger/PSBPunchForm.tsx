@@ -630,22 +630,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
         }
 
-        console.log('Test attribute: ', attribute);
         if (attribute.includes('endringAvSøknadsperioder.perioder') && indeks !== undefined) {
             const newAttr = `ytelse.trekkKravPerioder[${indeks}]`;
-            console.log('Test newAttr: ', newAttr);
+
             const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
                 ?.feilmelding;
-            console.log('Test feilmelding: ', feilmelding);
             return feilmelding;
         }
 
         if (attribute === 'alleTrekkKravPerioderFeilmelding') {
             const newAttr = `ytelse.trekkKravPerioder.perioder`;
-            console.log('Test alleTrekkKravPerioderFeilmelding newAttr: ', newAttr);
             const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
                 ?.feilmelding;
-            console.log('Test feilmelding: ', feilmelding);
             return feilmelding;
         }
 

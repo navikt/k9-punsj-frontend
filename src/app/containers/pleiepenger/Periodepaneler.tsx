@@ -82,9 +82,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                     editSoknadState(editPeriode(i, periode));
                                 }
                             }}
-                            onBlur={(periode) => {
-                                editSoknad(editPeriode(i, periode));
-                            }}
+                            onBlur={(periode) => editSoknad(editPeriode(i, periode))}
                             errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
