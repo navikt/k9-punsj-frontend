@@ -1,7 +1,7 @@
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { Panel } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -12,41 +12,45 @@ import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 
-export interface IPeriodepanelerProps {
+interface Props {
     intl: IntlShape;
     periods: IPeriode[]; // Liste over periodisert informasjon
-    initialPeriode: IPeriode; // Objektet som legges til når man legger til en ny periode i lista
-    editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
-    editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
+    initialPeriode: IPeriode;
+    kanHaFlere: boolean; // Objektet som legges til når man legger til en ny periode i lista
     textLeggTil?: string;
     textFjern?: string;
+    feilkodeprefiks?: string;
+
+    editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
+    editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
     getErrorMessage?: GetErrorMessage;
     getUhaandterteFeil?: GetUhaandterteFeil;
-    feilkodeprefiks?: string;
     onAdd?: () => any;
     onRemove?: () => any;
-    kanHaFlere: boolean;
 }
 
-export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const {
-        periods,
-        intl,
-        editSoknad,
-        editSoknadState,
-        kanHaFlere,
-        getErrorMessage,
-        feilkodeprefiks,
-        textLeggTil,
-        getUhaandterteFeil,
-    } = props;
+export const Periodepaneler: React.FC<Props> = ({
+    intl,
+    periods,
+    initialPeriode,
+    kanHaFlere,
+    textLeggTil,
+    textFjern,
+    feilkodeprefiks,
 
+    editSoknad,
+    editSoknadState,
+    getErrorMessage,
+    getUhaandterteFeil,
+    onAdd,
+    onRemove,
+}: Props) => {
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
         periodeinfo: Partial<IPeriode>,
     ) => {
-        const newInfo: IPeriode = { ...props.periods[index], ...periodeinfo };
-        const newArray = periods || [];
+        const newInfo: IPeriode = { ...periods[index], ...periodeinfo };
+        const newArray = [...(periods || [])];
         newArray[index] = newInfo;
         return newArray;
     };
@@ -54,19 +58,19 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
-        const newArray = periods || [];
-        newArray.push(props.initialPeriode);
+        const newArray = [...(periods || [])];
+        newArray.push(initialPeriode);
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = periods || [];
+        const newArray = [...(periods || [])];
         newArray.splice(index, 1);
         return newArray;
     };
 
     return (
-        <Panel className="periodepanel">
+        <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
             {periods.map((p, i) => (
                 <div className="flex flex-wrap" key={i}>
                     <div className="periodepanel-input">
@@ -96,15 +100,15 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                     editSoknadState(newArray);
                                 }
                                 editSoknad(newArray);
-                                if (props.onRemove) {
-                                    props.onRemove();
+                                if (onRemove) {
+                                    onRemove();
                                 }
                             }}
                         >
                             <div className="slettIcon">
                                 <BinSvg title="fjern" />
                             </div>
-                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
+                            {intlHelper(intl, textFjern || 'skjema.liste.fjern')}
                         </button>
                     </div>
                 </div>
@@ -127,8 +131,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                 editSoknadState(newArray);
                             }
                             editSoknad(newArray);
-                            if (props.onAdd) {
-                                props.onAdd();
+                            if (onAdd) {
+                                onAdd();
                             }
                         }}
                     >
@@ -139,6 +143,6 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     </button>
                 </div>
             )}
-        </Panel>
+        </Box>
     );
 };
