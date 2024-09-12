@@ -1,5 +1,5 @@
 import { useField } from 'formik';
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import { Label } from '@navikt/ds-react';
 import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
@@ -30,7 +30,7 @@ const InstitusjonSelector = ({
     hentInstitusjonerError,
 }: InstitusjonSelectorProps): JSX.Element => {
     const [field, meta, helpers] = useField(name);
-    const [institusjoner, setInstitusjoner] = React.useState<Suggestion[]>(
+    const [institusjoner, setInstitusjoner] = useState<Suggestion[]>(
         mapTilInstitusjonSuggestions(godkjentOpplæringsinstitusjoner),
     );
 
@@ -40,7 +40,7 @@ const InstitusjonSelector = ({
     const findInstitusjonKey = (institusjonValue: string) =>
         institusjoner.find((intstitusjon) => intstitusjon.value === institusjonValue)?.key;
 
-    const [valgtInstitusjon, setValgtInstitusjon] = React.useState(findInstitusjonValue(field.value));
+    const [valgtInstitusjon, setValgtInstitusjon] = useState(findInstitusjonValue(field.value));
 
     const onInputValueChange = async (v: string) => {
         const nyInstitusjonsListe = institusjoner.filter(
