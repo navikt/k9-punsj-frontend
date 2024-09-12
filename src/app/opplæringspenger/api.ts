@@ -6,6 +6,7 @@ import { get, post, put } from 'app/utils';
 import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
 import { IOLPSoknadKvittering } from './OLPSoknadKvittering';
 import { IOLPSoknadMappe } from './types/OLPSoknadMappe';
+import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 
 export const hentSoeknad = (ident: string, soeknadId: string): Promise<IOLPSoknadBackend> =>
     get(ApiPath.OLP_SOKNAD_GET, { id: soeknadId }, { 'X-Nav-NorskIdent': ident }).then((response) => {
@@ -35,6 +36,14 @@ export const hentEksisterendePerioder = async (ident: string): Promise<Periode[]
     const response = await post(ApiPath.OLP_K9_PERIODER, {}, { 'X-Nav-NorskIdent': ident }, { brukerIdent: ident });
     if (!response.ok) {
         throw Error('Kunne ikke hente eksisterende perioder');
+    }
+    return response.json();
+};
+
+export const hentInstitusjoner = async (): Promise<GodkjentOpplæringsinstitusjon[]> => {
+    const response = await get(ApiPath.OLP_INSTITUSJONER, {});
+    if (!response.ok) {
+        throw Error('Kunne ikke hente institusjoner');
     }
     return response.json();
 };
