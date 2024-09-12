@@ -17,12 +17,13 @@ import { Suggestion } from '@navikt/ft-plattform-komponenter/dist/packages/platt
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
+    hentInstitusjonerLoading: boolean;
     hentInstitusjonerError: boolean;
 }
 
 const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '' };
 
-const KursComponent = ({ institusjoner, hentInstitusjonerError }: KursComponentProps) => {
+const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
@@ -32,11 +33,12 @@ const KursComponent = ({ institusjoner, hentInstitusjonerError }: KursComponentP
             </Heading>
             <VerticalSpacer sixteenPx />
             <div className="kurs">
-                {!hentInstitusjonerError && institusjoner.length > 0 && (
+                {!hentInstitusjonerLoading && (
                     <InstitusjonSelector
                         label="Velg institusjon"
                         name="kurs.kursHolder.institusjonsUuid"
                         godkjentOpplæringsinstitusjoner={institusjoner}
+                        hentInstitusjonerError={hentInstitusjonerError}
                     />
                 )}
                 <VerticalSpacer eightPx />

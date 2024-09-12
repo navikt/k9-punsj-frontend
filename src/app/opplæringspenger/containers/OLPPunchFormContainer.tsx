@@ -53,7 +53,11 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         },
     );
 
-    const { mutate: hentInstitusjonerK9, error: hentInstitusjonerError } = useMutation(() => hentInstitusjoner(), {
+    const {
+        mutate: hentInstitusjonerK9,
+        error: hentInstitusjonerError,
+        isLoading: hentInstitusjonerLoading,
+    } = useMutation(() => hentInstitusjoner(), {
         onSuccess: (data) => setInstitusjoner(data),
     });
 
@@ -133,6 +137,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                 setKvittering={setKvittering}
                 kvittering={kvittering}
                 institusjoner={institusjoner}
+                hentInstitusjonerLoading={!!hentInstitusjonerLoading}
                 hentInstitusjonerError={!!hentInstitusjonerError}
                 {...props}
             />

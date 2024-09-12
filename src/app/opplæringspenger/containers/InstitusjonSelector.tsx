@@ -12,6 +12,7 @@ interface InstitusjonSelectorProps {
     label: string;
     name: string;
     godkjentOpplæringsinstitusjoner: GodkjentOpplæringsinstitusjon[];
+    hentInstitusjonerError: boolean;
     hideLabel?: boolean;
 }
 
@@ -26,6 +27,7 @@ const InstitusjonSelector = ({
     name,
     hideLabel,
     godkjentOpplæringsinstitusjoner,
+    hentInstitusjonerError,
 }: InstitusjonSelectorProps): JSX.Element => {
     const [field, meta, helpers] = useField(name);
     const [institusjoner, setInstitusjoner] = React.useState<Suggestion[]>(
@@ -79,6 +81,7 @@ const InstitusjonSelector = ({
                 />
             </div>
             {meta.touched && meta.error && <FieldError message={meta.error} />}
+            {hentInstitusjonerError && <FieldError message={'Henting av institusjoner feilet'} />}
         </div>
     );
 };
