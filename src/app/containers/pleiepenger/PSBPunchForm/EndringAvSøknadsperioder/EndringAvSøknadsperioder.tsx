@@ -62,7 +62,7 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
 
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some((eksisterendePeriode) =>
-                initializeDate(periode.fom).isSameOrBefore(initializeDate(eksisterendePeriode.fom),
+                initializeDate(periode.fom).isSameOrBefore(initializeDate(eksisterendePeriode.fom)),
             ),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
