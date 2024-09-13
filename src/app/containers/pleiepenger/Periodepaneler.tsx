@@ -87,27 +87,29 @@ export const Periodepaneler: React.FC<Props> = ({
                             errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
                         />
-                        <span className="mr-3" />
-                        <button
-                            id="slett"
-                            className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
-                            type="button"
-                            onClick={() => {
-                                const newArray: IPeriode[] = removeItem(i);
-                                if (editSoknadState) {
-                                    editSoknadState(newArray);
-                                }
-                                editSoknad(newArray);
-                                if (onRemove) {
-                                    onRemove();
-                                }
-                            }}
-                        >
-                            <div className="slettIcon">
-                                <BinSvg title="fjern" />
-                            </div>
-                            {intlHelper(intl, textFjern || 'skjema.liste.fjern')}
-                        </button>
+
+                        <div className="ml-4">
+                            <button
+                                id="slett"
+                                className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
+                                type="button"
+                                onClick={() => {
+                                    const newArray: IPeriode[] = removeItem(i);
+                                    if (editSoknadState) {
+                                        editSoknadState(newArray);
+                                    }
+                                    editSoknad(newArray);
+                                    if (onRemove) {
+                                        onRemove();
+                                    }
+                                }}
+                            >
+                                <div className="slettIcon">
+                                    <BinSvg title="fjern" />
+                                </div>
+                                {intlHelper(intl, textFjern || 'skjema.liste.fjern')}
+                            </button>
+                        </div>
                     </div>
                 </div>
             ))}

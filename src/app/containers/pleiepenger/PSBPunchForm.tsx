@@ -645,6 +645,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return feilmelding;
         }
 
+        const regex = /\[\d+\]/;
+        if (attribute.includes('ytelse.søknadsperiode') && regex.test(attribute) && indeks !== undefined) {
+            const newAttr = `ytelse.søknadsperiode[${indeks}]`;
+
+            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
+                ?.feilmelding;
+            return feilmelding;
+        }
+
+        if (attribute === 'ytelse.uttak.perioder') {
+            const newAttr = `ytelse.søknadsperiode.perioder`;
+            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
+                ?.feilmelding;
+            return feilmelding;
+        }
+
         const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
             ?.feilmelding;
 
