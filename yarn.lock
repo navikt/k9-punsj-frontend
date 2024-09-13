@@ -2856,10 +2856,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:6.16.3, @navikt/aksel-icons@npm:^6.16.3":
-  version: 6.16.3
-  resolution: "@navikt/aksel-icons@npm:6.16.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.16.3%2Fe0a4e5abf2a0b9ae9b7be68d0f72080832fd8457"
-  checksum: 10/5db54bf61971945d7e7d83605b15da0128dfb84a629731498298703d535d9aa50b3ade4cd891e1bfce2cecbae617b854644e5e698835a00622316f675a5e6b3b
+"@navikt/aksel-icons@npm:6.17.0":
+  version: 6.17.0
+  resolution: "@navikt/aksel-icons@npm:6.17.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.17.0%2F92f12f06c26db3c2221908da599a113654942044"
+  checksum: 10/5a70f0705f71413f2ee397dd184c4b9bc3fc67d1206558885313727120aed52de592fe73f8e6333b76c81800bed60cc9a54af979aa8159d1de12d2e60c44cd2b
   languageName: node
   linkType: hard
 
@@ -2867,6 +2867,13 @@ __metadata:
   version: 6.13.0
   resolution: "@navikt/aksel-icons@npm:6.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.13.0%2F7378bad8c8230187b30a9e0b15675f7740dc96cf"
   checksum: 10/cb1f90e08f546fbe1e8003ad6f2e1accfd8e655c669bf0c59fc75ecc5b23bf55a96978ebe3a0f92ee72f8349f84eb294c5c023bb0c415ba817ce02a8f594476b
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^6.16.3":
+  version: 6.16.3
+  resolution: "@navikt/aksel-icons@npm:6.16.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F6.16.3%2Fe0a4e5abf2a0b9ae9b7be68d0f72080832fd8457"
+  checksum: 10/5db54bf61971945d7e7d83605b15da0128dfb84a629731498298703d535d9aa50b3ade4cd891e1bfce2cecbae617b854644e5e698835a00622316f675a5e6b3b
   languageName: node
   linkType: hard
 
@@ -12071,7 +12078,7 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:1.9.1"
     "@grafana/faro-web-tracing": "npm:1.9.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:6.16.3"
+    "@navikt/aksel-icons": "npm:6.17.0"
     "@navikt/ds-css": "npm:6.16.3"
     "@navikt/ds-icons": "npm:3.4.3"
     "@navikt/ds-react": "npm:6.16.3"
