@@ -35,7 +35,9 @@ const Soknadsperioder: React.FC<Props> = ({
 }) => {
     const intl = useIntl();
 
-    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
+    const harLagretPerioder = soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0;
+
+    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(!harLagretPerioder);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
 
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
@@ -61,7 +63,7 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     const getPerioder = () => {
-        if (soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0) {
+        if (harLagretPerioder) {
             return soknad.soeknadsperiode;
         }
 
