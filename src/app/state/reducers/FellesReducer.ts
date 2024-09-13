@@ -239,6 +239,7 @@ export function kopierJournalpost(
             requestBody,
             (response) => {
                 switch (response.status) {
+                    case 201:
                     case 202:
                         return dispatch(getJournalpostKopiereSuccessAction());
                     case 403:
@@ -276,6 +277,7 @@ export function kopierJournalpostTilSammeSøker(
             requestBody,
             (response) => {
                 switch (response.status) {
+                    case 201:
                     case 202:
                         return dispatch(getJournalpostKopiereSuccessAction());
                     case 403:
