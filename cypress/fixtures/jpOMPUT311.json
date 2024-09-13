@@ -1,27 +1,23 @@
 {
-    "journalpostId": "310",
+    "journalpostId": "311",
     "norskIdent": "29099000129",
     "dokumenter": [
         {
-            "dokumentId": "470164680"
-        },
-        {
-            "dokumentId": "470164681"
+            "dokumentId": "668084478"
         }
     ],
-
-    "erFerdigstilt": true,
     "venter": null,
-    "kanSendeInn": false,
-    "erSaksbehandler": true,
-    "journalpostStatus": "MOTTATT",
-    "kanOpprettesJournalføringsoppgave": true,
-    "kanKopieres": true,
     "punsjInnsendingType": {
-        "kode": "PAPIRSØKNAD",
-        "navn": "Papirsøknad",
+        "kode": "UKJENT",
+        "navn": "ukjent",
         "erScanning": true
     },
+    "kanSendeInn": false,
+    "erSaksbehandler": true,
+    "journalpostStatus": "JOURNALFOERT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "erFerdigstilt": true,
     "gosysoppgaveId": null,
     "sak": {
         "reservertSaksnummer": false,
@@ -29,7 +25,7 @@
         "gyldigPeriode": null,
         "pleietrengendeIdent": null,
         "relatertPersonIdent": null,
-        "sakstype": null,
+        "sakstype": "PPN",
         "behandlingsÅr": null
     }
 }

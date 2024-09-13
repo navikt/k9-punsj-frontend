@@ -14,6 +14,7 @@ import {
     IHentBarnSuccessAction,
 } from './HentBarn';
 import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 export interface IFellesState {
     dedupKey: string;
@@ -51,6 +52,8 @@ enum Actiontypes {
     JOURNALPOST_KOPIERE_SUCCESS = 'FELLES/JOURNALPOST_KOPIERE_SUCCESS',
     JOURNALPOST_KOPIERE_REQUEST = 'FELLES/JOURNALPOST_KOPIERE_REQUEST',
     JOURNALPOST_KOPIERE_ERROR = 'FELLES/JOURNALPOST_KOPIERE_ERROR',
+    JOURNALPOST_KOPIERE_ERROR_RESET = 'FELLES/JOURNALPOST_KOPIERE_ERROR_RESET',
+
     RESET_BARN = 'FELLES/RESET_BARN',
     RESET_FELLES = 'FELLES/RESET_FELLES',
     SET_JOURNALPOSTER_AAPEN_SOKNAD = 'FELLES/SET_JOURNALPOSTER_AAPEN_SOKNAD',
@@ -105,6 +108,9 @@ interface IJournalpostKopiereRequestAction {
 
 interface IJournalpostKopiereErrorAction {
     type: Actiontypes.JOURNALPOST_KOPIERE_ERROR;
+}
+interface IJournalpostKopiereErrorResetAction {
+    type: Actiontypes.JOURNALPOST_KOPIERE_ERROR_RESET;
 }
 interface ISetJournalposterIAapenSoknad {
     type: Actiontypes.SET_JOURNALPOSTER_AAPEN_SOKNAD;
@@ -192,6 +198,10 @@ export function getJournalpostKopiereSuccessAction(): IJournalpostKopiereSuccess
 export function getJournalpostKopiereErrorAction(): IJournalpostKopiereErrorAction {
     return { type: Actiontypes.JOURNALPOST_KOPIERE_ERROR };
 }
+
+export function getJournalpostKopiereErrorResetAction(): IJournalpostKopiereErrorResetAction {
+    return { type: Actiontypes.JOURNALPOST_KOPIERE_ERROR_RESET };
+}
 export function setJournalposterFraAapenSoknad(journalposter: string[]): ISetJournalposterIAapenSoknad {
     return { type: Actiontypes.SET_JOURNALPOSTER_AAPEN_SOKNAD, journalposter };
 }
@@ -208,6 +218,7 @@ type IJournalpostActionTypes =
     | IJournalpostKopiereRequestAction
     | IJournalpostKopiereSuccessAction
     | IJournalpostKopiereErrorAction
+    | IJournalpostKopiereErrorResetAction
     | IHentBarnForbiddenAction
     | IHentBarnRequestAction
     | IHentBarnSuccessAction
@@ -222,6 +233,7 @@ export function kopierJournalpost(
     barnIdent: string,
     journalPostID: string,
     dedupKey: string,
+    ytelse?: DokumenttypeForkortelse,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -229,6 +241,7 @@ export function kopierJournalpost(
             fra: kopierFraIdent,
             til: kopierTilIdent,
             barn: barnIdent,
+            ytelse: ytelse,
         };
 
         dispatch(getJournalpostKopiereRequestAction());
@@ -390,6 +403,13 @@ export default function FellesReducer(
                 ...state,
                 isAwaitingKopierJournalPostResponse: false,
                 kopierJournalpostError: true,
+            };
+
+        case Actiontypes.JOURNALPOST_KOPIERE_ERROR_RESET:
+            return {
+                ...state,
+                isAwaitingKopierJournalPostResponse: false,
+                kopierJournalpostError: false,
             };
 
         case ActiontypesHentBarn.HENTBARN_REQUEST:

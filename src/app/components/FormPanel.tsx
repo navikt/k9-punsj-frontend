@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Panel } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 
 import './formPanel.less';
 
@@ -9,9 +8,9 @@ interface Props {
 }
 
 const FormPanel: React.FunctionComponent<Props> = ({ children }) => (
-    <Panel className="sakstype_punch_form" border>
+    <Box padding="4" borderWidth="1" borderRadius="small" className="sakstype_punch_form">
         {children}
-    </Panel>
+    </Box>
 );
 
 export default FormPanel;
