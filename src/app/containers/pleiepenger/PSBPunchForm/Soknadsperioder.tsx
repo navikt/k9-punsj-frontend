@@ -63,14 +63,19 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     const getPerioder = () => {
+        console.log('TEST soknad', soknad);
+        console.log('TEST soknad.soeknadsperiode', soknad.soeknadsperiode);
+        console.log('TEST punchFormState.soknad?.soeknadsperiode', punchFormState.soknad?.soeknadsperiode);
         if (harLagretPerioder) {
+            console.log('TEST harLagretPerioder: ', harLagretPerioder);
             return soknad.soeknadsperiode;
         }
 
         if (harSlettetPerioder) {
+            console.log('TEST harSlettetPerioder: ', harSlettetPerioder);
             return [];
         }
-
+        console.log('TEST initialPeriode: ', initialPeriode);
         return [initialPeriode];
     };
 
