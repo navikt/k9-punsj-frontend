@@ -90,7 +90,7 @@ const Soknadsperioder: React.FC<Props> = ({
                         <FormattedMessage id={'skjema.generellinfo'} />
                     </Alert>
 
-                    <div className="mb-2">
+                    <div className="mb-2 mt-4">
                         <Heading size="xsmall" level="4">
                             <FormattedMessage id={'skjema.eksisterende'} />
                         </Heading>
