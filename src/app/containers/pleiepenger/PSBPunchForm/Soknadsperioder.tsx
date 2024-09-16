@@ -63,22 +63,23 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     const getPerioder = () => {
-        console.log('TEST soknad', soknad);
-        console.log('TEST soknad.soeknadsperiode', soknad.soeknadsperiode);
-        console.log('TEST punchFormState.soknad?.soeknadsperiode', punchFormState.soknad?.soeknadsperiode);
+        console.log('TEST getPerioder soknad', soknad);
+        console.log('TEST getPerioder soknad.soeknadsperiode', soknad.soeknadsperiode);
+
         if (harLagretPerioder) {
-            console.log('TEST harLagretPerioder: ', harLagretPerioder);
+            console.log('TEST getPerioder harLagretPerioder: ', harLagretPerioder);
             return soknad.soeknadsperiode;
         }
 
         if (harSlettetPerioder) {
-            console.log('TEST harSlettetPerioder: ', harSlettetPerioder);
+            console.log('TEST getPerioder harSlettetPerioder: ', harSlettetPerioder);
             return [];
         }
-        console.log('TEST initialPeriode: ', initialPeriode);
+        console.log('TEST getPerioder initialPeriode: ', initialPeriode);
         return [initialPeriode];
     };
-
+    console.log('TEST harLagretPerioder: ', harLagretPerioder);
+    console.log('TEST visLeggTilPerioder: ', visLeggTilPerioder);
     return (
         <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
             <Heading size="small" level="3">
