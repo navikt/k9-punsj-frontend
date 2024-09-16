@@ -10,15 +10,16 @@ import intlHelper from '../../../../utils/intlUtils';
 import './DokumentTypeVelger.less';
 
 interface Props {
-    handleDokumenttype: (type: FordelingDokumenttype) => void;
     valgtDokumentType: string;
     visComponent: boolean;
+
+    handleDokumenttype: (type: FordelingDokumenttype) => void;
 }
 
 const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
-    handleDokumenttype,
     valgtDokumentType,
     visComponent,
+    handleDokumenttype,
 }: Props) => {
     const intl = useIntl();
 
@@ -31,13 +32,13 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
             <Heading size="xsmall" level="3">
                 <FormattedMessage id="fordeling.detteGjelder" />
             </Heading>
+
             <div className="mt-4">
                 <RadioPanel
                     label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER)}
                     value={FordelingDokumenttype.PLEIEPENGER}
                     checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    // disabled={valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER}
                 />
 
                 <RadioPanel
@@ -45,7 +46,6 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
                     value={FordelingDokumenttype.OMSORGSPENGER_KS}
                     checked={valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER_KS}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    // disabled={disableRadios}
                 />
 
                 <RadioPanel
@@ -53,7 +53,6 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
                     value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    // disabled={valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && disableRadios}
                 />
             </div>
         </div>
