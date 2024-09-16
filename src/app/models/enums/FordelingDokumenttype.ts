@@ -20,6 +20,8 @@ export enum DokumenttypeForkortelse {
     OMP_AO = 'OMP_AO',
     OMP_UT = 'OMP_UT',
     OLP = 'OLP',
+    UKJENT = 'UKJENT',
+    IKKE_DEFINERT = '-',
 }
 
 export enum FordelingOmsorgspengerSubMenyValg {
