@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { RadioPanel } from 'nav-frontend-skjema';
+import { Heading } from '@navikt/ds-react';
 
 import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
 import { getEnvironmentVariable } from '../../../../utils';
 import intlHelper from '../../../../utils/intlUtils';
 
 import './DokumentTypeVelger.less';
-import { Heading } from '@navikt/ds-react';
 
 interface Props {
     valgtDokumentType: string;
