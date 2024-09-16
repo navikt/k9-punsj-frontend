@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -37,10 +37,17 @@ const Soknadsperioder: React.FC<Props> = ({
 
     const harLagretPerioder = soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0;
 
-    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(!harLagretPerioder);
+    const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
 
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
+
+    useEffect(() => {
+        if (harLagretPerioder && visLeggTilPerioder) {
+            console.log('TEST TEST harLagretPerioder && visLeggTilPerioder');
+            setVisLeggTilPerioder(false);
+        }
+    }, [soknad.soeknadsperiode]);
 
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
