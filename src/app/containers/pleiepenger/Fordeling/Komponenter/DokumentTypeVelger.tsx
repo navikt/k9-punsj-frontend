@@ -1,26 +1,24 @@
-import { RadioPanel } from 'nav-frontend-skjema';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { RadioPanel } from 'nav-frontend-skjema';
 
 import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
 import { getEnvironmentVariable } from '../../../../utils';
 import intlHelper from '../../../../utils/intlUtils';
-import './DokumentTypeVelger.less';
 
-interface OwnProps {
-    handleDokumenttype: (type: FordelingDokumenttype) => void;
+import './DokumentTypeVelger.less';
+import { Heading } from '@navikt/ds-react';
+
+interface Props {
     valgtDokumentType: string;
     disableRadios?: boolean;
-    kopierValg?: boolean;
+
+    handleDokumenttype: (type: FordelingDokumenttype) => void;
 }
 
-const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
-    handleDokumenttype,
-    valgtDokumentType,
-    disableRadios,
-    kopierValg,
-}) => {
+const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios, handleDokumenttype }: Props) => {
     const intl = useIntl();
+
     const toggleFordelingDokumentType = (type: string): boolean => {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
@@ -83,9 +81,12 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
 
     return (
         <div className="dokumentTypeVelgerContainer">
-            <legend>
-                <b>{intlHelper(intl, 'fordeling.detteGjelder')}</b>
-            </legend>
+            <div className="mb-4">
+                <Heading size="xsmall" level="3">
+                    <FormattedMessage id="fordeling.detteGjelder" />
+                </Heading>
+            </div>
+
             <RadioPanel
                 label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER)}
                 value={FordelingDokumenttype.PLEIEPENGER}
@@ -126,6 +127,7 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                     }
                 />
             )}
+
             {toggleFordelingDokumentType(FordelingDokumenttype.OPPLAERINGSPENGER) && (
                 <RadioPanel
                     label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
@@ -136,15 +138,13 @@ const DokumentTypeVelger: React.FunctionComponent<OwnProps> = ({
                 />
             )}
 
-            {!kopierValg && (
-                <RadioPanel
-                    label={intlHelper(intl, FordelingDokumenttype.ANNET)}
-                    value={FordelingDokumenttype.ANNET}
-                    checked={valgtDokumentType === FordelingDokumenttype.ANNET}
-                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
-                />
-            )}
+            <RadioPanel
+                label={intlHelper(intl, FordelingDokumenttype.ANNET)}
+                value={FordelingDokumenttype.ANNET}
+                checked={valgtDokumentType === FordelingDokumenttype.ANNET}
+                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
+            />
         </div>
     );
 };
