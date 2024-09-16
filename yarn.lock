@@ -2835,9 +2835,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mswjs/interceptors@npm:^0.35.0":
-  version: 0.35.0
-  resolution: "@mswjs/interceptors@npm:0.35.0"
+"@mswjs/interceptors@npm:^0.35.6":
+  version: 0.35.6
+  resolution: "@mswjs/interceptors@npm:0.35.6"
   dependencies:
     "@open-draft/deferred-promise": "npm:^2.2.0"
     "@open-draft/logger": "npm:^0.3.0"
@@ -2845,7 +2845,7 @@ __metadata:
     is-node-process: "npm:^1.2.0"
     outvariant: "npm:^1.4.3"
     strict-event-emitter: "npm:^0.5.1"
-  checksum: 10/731c18fd07f62df0e55d2ba4fa5199a9bd26563e9c6092913629813acb052b7765f35b6c2167fba2260e1632a1c4aa758f6175cfe3ba4115a6a0efb6c6a6ac27
+  checksum: 10/da0c50c924301fd8d6a57b102bae65721f1253b5bbf1a64c4d9108cc70f91f89552d67efe01effe37413eb0b93ca268f63a899f0578dc1f7be7621658b4b292d
   languageName: node
   linkType: hard
 
@@ -4544,13 +4544,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:29.5.12":
-  version: 29.5.12
-  resolution: "@types/jest@npm:29.5.12"
+"@types/jest@npm:29.5.13":
+  version: 29.5.13
+  resolution: "@types/jest@npm:29.5.13"
   dependencies:
     expect: "npm:^29.0.0"
     pretty-format: "npm:^29.0.0"
-  checksum: 10/312e8dcf92cdd5a5847d6426f0940829bca6fe6b5a917248f3d7f7ef5d85c9ce78ef05e47d2bbabc40d41a930e0e36db2d443d2610a9e3db9062da2d5c904211
+  checksum: 10/7d6e3e4ef4b1cab0f61270d55764709512fdfbcb1bd47c0ef44117d48490529c1f264dacf3440b9188363e99e290b80b79c529eadc3af2184116a90f6856b192
   languageName: node
   linkType: hard
 
@@ -5955,7 +5955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.7.7, axios@npm:^1.7.4":
+"axios@npm:1.7.7, axios@npm:^1.7.7":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
   dependencies:
@@ -10434,12 +10434,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:9.1.5":
-  version: 9.1.5
-  resolution: "husky@npm:9.1.5"
+"husky@npm:9.1.6":
+  version: 9.1.6
+  resolution: "husky@npm:9.1.6"
   bin:
     husky: bin.js
-  checksum: 10/21a3036dd03141c41347693bde301c62502b4e3bffb87310e7e42b3011c2e55691af2e4a9a5f39bd94e6b1d69e3cfc26ec636d8e164e19737b26f11c556caf10
+  checksum: 10/421ccd8850378231aaefd70dbe9e4f1549b84ffe3a6897f93a202242bbc04e48bd498169aef43849411105d9fcf7c192b757d42661e28d06b934a609a4eb8771
   languageName: node
   linkType: hard
 
@@ -12094,7 +12094,7 @@ __metadata:
     "@types/enzyme-adapter-react-16": "npm:1.0.9"
     "@types/fetch-headers": "npm:2.0.2"
     "@types/intl": "npm:1.2.2"
-    "@types/jest": "npm:29.5.12"
+    "@types/jest": "npm:29.5.13"
     "@types/object-hash": "npm:3.0.6"
     "@types/react": "npm:18.3.5"
     "@types/react-aria-menubutton": "npm:6.2.14"
@@ -12138,7 +12138,7 @@ __metadata:
     formik: "npm:2.4.6"
     html-webpack-harddisk-plugin: "npm:2.0.0"
     html-webpack-plugin: "npm:5.6.0"
-    husky: "npm:9.1.5"
+    husky: "npm:9.1.6"
     i18n-iso-countries: "npm:7.12.0"
     intl: "npm:1.2.5"
     jest: "npm:29.7.0"
@@ -12153,7 +12153,7 @@ __metadata:
     lodash: "npm:4.17.21"
     lodash.throttle: "npm:4.1.1"
     mini-css-extract-plugin: "npm:2.9.1"
-    msw: "npm:2.4.4"
+    msw: "npm:2.4.7"
     mustache-express: "npm:1.3.2"
     nav-datovelger: "npm:12.6.0"
     nav-frontend-chevron-style: "npm:1.0.4"
@@ -12174,7 +12174,7 @@ __metadata:
     nav-frontend-typografi-style: "npm:2.0.2"
     object-hash: "npm:3.0.0"
     popper.js: "npm:1.16.1"
-    postcss: "npm:8.4.45"
+    postcss: "npm:8.4.47"
     postcss-less: "npm:6.0.0"
     postcss-loader: "npm:8.1.1"
     prettier: "npm:3.3.3"
@@ -12198,11 +12198,11 @@ __metadata:
     redux-logger: "npm:3.0.6"
     regenerator-runtime: "npm:0.14.1"
     source-map-loader: "npm:5.0.0"
-    start-server-and-test: "npm:2.0.7"
+    start-server-and-test: "npm:2.0.8"
     storybook: "npm:8.2.9"
     style-loader: "npm:4.0.0"
     stylelint: "npm:16.9.0"
-    tailwindcss: "npm:3.4.10"
+    tailwindcss: "npm:3.4.11"
     terser-webpack-plugin: "npm:5.3.10"
     ts-jest: "npm:29.2.5"
     tsconfig-paths-webpack-plugin: "npm:4.1.0"
@@ -13167,15 +13167,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:2.4.4":
-  version: 2.4.4
-  resolution: "msw@npm:2.4.4"
+"msw@npm:2.4.7":
+  version: 2.4.7
+  resolution: "msw@npm:2.4.7"
   dependencies:
     "@bundled-es-modules/cookie": "npm:^2.0.0"
     "@bundled-es-modules/statuses": "npm:^1.0.1"
     "@bundled-es-modules/tough-cookie": "npm:^0.1.6"
     "@inquirer/confirm": "npm:^3.0.0"
-    "@mswjs/interceptors": "npm:^0.35.0"
+    "@mswjs/interceptors": "npm:^0.35.6"
     "@open-draft/until": "npm:^2.1.0"
     "@types/cookie": "npm:^0.6.0"
     "@types/statuses": "npm:^2.0.4"
@@ -13195,7 +13195,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10/d03945d65eb6afc7e73464c478ef3069bb7bb812b670e64274e2f3104ec19ae1da047e6ed0bcf189a3a0ce7a46ffc6ff22b195cda0f25fd379bd9a3092ef0ff9
+  checksum: 10/8042924d462a3dee74812ea40e8fec9031e6bfc8621479e1e69b74c6c0f16c9ea5a6817c19e684cfe9918a58208b01c02b61e1606e7dc4ee8389f9a8c841afe5
   languageName: node
   linkType: hard
 
@@ -16619,9 +16619,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"start-server-and-test@npm:2.0.7":
-  version: 2.0.7
-  resolution: "start-server-and-test@npm:2.0.7"
+"start-server-and-test@npm:2.0.8":
+  version: 2.0.8
+  resolution: "start-server-and-test@npm:2.0.8"
   dependencies:
     arg: "npm:^5.0.2"
     bluebird: "npm:3.7.2"
@@ -16630,12 +16630,12 @@ __metadata:
     execa: "npm:5.1.1"
     lazy-ass: "npm:1.6.0"
     ps-tree: "npm:1.2.0"
-    wait-on: "npm:8.0.0"
+    wait-on: "npm:8.0.1"
   bin:
     server-test: src/bin/start.js
     start-server-and-test: src/bin/start.js
     start-test: src/bin/start.js
-  checksum: 10/cd7068451cd0ac5c888b4046fa0ee98f37490d6f49f7342346650c56b5b0e3c29952b6d8739c58efdee97ae31196e990f9c907e4db6e9966eeb85f204a94d662
+  checksum: 10/4067c3dd120e1e515e4d087f2a60faebaae512517374dc30d14b29492a6761e2ab72f82c8bcb72f0eefc060fd7345674821e1255bb58a6ceaa5a1fac4257790a
   languageName: node
   linkType: hard
 
@@ -17122,9 +17122,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:3.4.10":
-  version: 3.4.10
-  resolution: "tailwindcss@npm:3.4.10"
+"tailwindcss@npm:3.4.11":
+  version: 3.4.11
+  resolution: "tailwindcss@npm:3.4.11"
   dependencies:
     "@alloc/quick-lru": "npm:^5.2.0"
     arg: "npm:^5.0.2"
@@ -17151,7 +17151,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: 10/5296111e7b0c3e638f3a136a0eb13ab4048c5c5ef5e72b055ae6a0f811502e99478218958bfbbf49b3ed8cf07f395fc893589033a893087e299c084fec8efcac
+  checksum: 10/94da4265d8815eb5e365465534e3400049ca4e80ecf70d820ecd6fd6a29b664e0d173077b30a82fd4282653cafdbf370bd4a28aeaa15ff4be52095e6a51a5289
   languageName: node
   linkType: hard
 
@@ -18069,18 +18069,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wait-on@npm:8.0.0":
-  version: 8.0.0
-  resolution: "wait-on@npm:8.0.0"
+"wait-on@npm:8.0.1":
+  version: 8.0.1
+  resolution: "wait-on@npm:8.0.1"
   dependencies:
-    axios: "npm:^1.7.4"
+    axios: "npm:^1.7.7"
     joi: "npm:^17.13.3"
     lodash: "npm:^4.17.21"
     minimist: "npm:^1.2.8"
     rxjs: "npm:^7.8.1"
   bin:
     wait-on: bin/wait-on
-  checksum: 10/8c1ac31b74c27020678dd6ce52b4e50113fdeb188f398495255cdb3b1ac3e71cdb7a12657d4805c38a6c06ce8bc0f4fdd971347723d3d523a6891efa37b0d6da
+  checksum: 10/41f933031b994718dfb50af35bb843f7f7017d601ef22927e92c211736fadd21808fdbf7ae367e998bcaf995cb9c05cf6160552dc655db9082aeecc346bc926d
   languageName: node
   linkType: hard
 
