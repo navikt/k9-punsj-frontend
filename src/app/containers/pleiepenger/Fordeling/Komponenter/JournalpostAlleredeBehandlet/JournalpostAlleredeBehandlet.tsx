@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dispatch } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,23 +9,37 @@ import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
-import { kopierJournalpost } from '../../../../../state/reducers/FellesReducer';
-import { getEnvironmentVariable } from '../../../../../utils';
+import {
+    getJournalpostKopiereErrorResetAction,
+    kopierJournalpost,
+    resetBarnAction,
+} from '../../../../../state/reducers/FellesReducer';
+import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from '../../../../../utils';
 
-import LabelValue from 'app/components/skjema/LabelValue';
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
+
+import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import { setDokumenttypeAction } from 'app/state/actions';
+import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
 
     const dispatch = useDispatch<Dispatch<any>>();
+
     const setIdentAction = (søkerId: string) => dispatch(setIdentFellesAction(søkerId, null, null));
+    const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
+    const resetBarn = () => dispatch(resetBarnAction());
+    const kopiereErrorReset = () => dispatch(getJournalpostKopiereErrorResetAction());
 
     const identState = useSelector((state: RootStateType) => state.identState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
-    const { dedupKey, journalpost, kopierJournalpostSuccess } = fellesState;
+    const prevPleietrengendeIdRef = useRef<string | null>(null);
+
+    const { dedupKey, journalpost, kopierJournalpostSuccess, kopierJournalpostError } = fellesState;
     const { søkerId, pleietrengendeId } = identState;
 
     const erInntektsmeldingUtenKrav =
@@ -33,11 +47,30 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const isKopierButtonDisabled = IdentRules.erUgyldigIdent(pleietrengendeId) || kopierJournalpostSuccess;
 
+    const ukjentYtelse =
+        fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.UKJENT ||
+        fellesState.journalpost?.sak?.sakstype === null ||
+        fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.IKKE_DEFINERT;
+
+    const ytelseForKopiering = fordelingState.dokumenttype
+        ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
+        : undefined;
+
     useEffect(() => {
         if (!søkerId && journalpost?.norskIdent) {
             setIdentAction(journalpost?.norskIdent);
         }
     }, [journalpost?.norskIdent]);
+
+    useEffect(() => {
+        if (kopierJournalpostError && identState.pleietrengendeId !== prevPleietrengendeIdRef.current) {
+            kopiereErrorReset();
+        }
+    }, [identState.pleietrengendeId, kopierJournalpostError]);
+
+    useEffect(() => {
+        prevPleietrengendeIdRef.current = identState.pleietrengendeId;
+    }, [identState.pleietrengendeId]);
 
     if (!journalpost?.norskIdent) {
         return (
@@ -48,18 +81,37 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     }
 
     const handleKopierJournalpost = () => {
+        if (kopierJournalpostError) {
+            kopiereErrorReset();
+        }
+
         if (kopierJournalpostSuccess || erInntektsmeldingUtenKrav) {
             setVisKanIkkeKopiere(true);
             return;
         }
+
         if (!!søkerId && !!pleietrengendeId) {
-            dispatch(kopierJournalpost(søkerId, søkerId, pleietrengendeId, journalpost?.journalpostId, dedupKey));
+            dispatch(
+                kopierJournalpost(
+                    søkerId,
+                    søkerId,
+                    pleietrengendeId,
+                    journalpost?.journalpostId,
+                    dedupKey,
+                    ytelseForKopiering,
+                ),
+            );
         }
     };
 
     const handleGåToLOS = () => {
         window.location.href = getEnvironmentVariable('K9_LOS_URL');
     };
+
+    const visPleietrengende = (!kopierJournalpostSuccess && !!fordelingState.dokumenttype) || !ukjentYtelse;
+    const skalHenteBarn =
+        (ukjentYtelse && fordelingState.dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) ||
+        (!ukjentYtelse && fellesState.journalpost?.sak?.sakstype !== DokumenttypeForkortelse.PPN);
 
     return (
         <>
@@ -68,15 +120,30 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                 </Alert>
 
-                <div className="mt-6">
-                    <LabelValue labelTextId="journalpost.norskIdent" value={søkerId} visKopier />
-                </div>
+                <DokumentTypeVelgerForKopiering
+                    handleDokumenttype={(type: FordelingDokumenttype) => {
+                        setDokumenttype(type);
 
-                {!kopierJournalpostSuccess && (
-                    <div className="mt-6">
-                        <Pleietrengende visPleietrengende skalHenteBarn toSokereIJournalpost={false} />
-                    </div>
-                )}
+                        if (kopierJournalpostError) {
+                            kopiereErrorReset();
+                        }
+
+                        if (type === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) {
+                            setIdentAction(søkerId);
+                            resetBarn();
+                        }
+                    }}
+                    visComponent={ukjentYtelse}
+                    valgtDokumentType={fordelingState.dokumenttype as string}
+                />
+
+                <div className="mt-4">
+                    <Pleietrengende
+                        visPleietrengende={visPleietrengende}
+                        skalHenteBarn={skalHenteBarn}
+                        toSokereIJournalpost={false}
+                    />
+                </div>
 
                 <JournalPostKopiFelmeldinger fellesState={fellesState} />
 

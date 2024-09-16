@@ -49,9 +49,9 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
+import BrevModal from './Komponenter/BrevModal';
 
 import './fordeling.less';
-import BrevModal from './Komponenter/BrevModal';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -975,7 +975,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     </div>
                 </FormPanel>
             )}
-            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && <JournalpostAlleredeBehandlet />}
+            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
+                <FormPanel>
+                    <div className="fordeling-page">
+                        <JournalpostAlleredeBehandlet />
+                    </div>
+                </FormPanel>
+            )}
             {!journalpost?.erSaksbehandler && (
                 <div>
                     <Alert size="small" variant="warning">
