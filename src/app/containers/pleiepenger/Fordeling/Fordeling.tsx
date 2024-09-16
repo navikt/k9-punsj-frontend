@@ -49,9 +49,9 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
+import BrevModal from './Komponenter/BrevModal';
 
 import './fordeling.less';
-import BrevModal from './Komponenter/BrevModal';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -160,8 +160,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
         !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
-
-    // const jpFerdistiltIGosys = !!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId;
 
     const isFagsakMedValgtBehandlingsår = (): boolean => {
         if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
