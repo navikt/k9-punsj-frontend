@@ -41,7 +41,7 @@ const Soknadsperioder: React.FC<Props> = ({
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
 
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
-    console.log('TEST RENDER');
+
     useEffect(() => {
         if (harLagretPerioder && visLeggTilPerioder) {
             setVisLeggTilPerioder(false);
