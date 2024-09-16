@@ -41,13 +41,12 @@ const Soknadsperioder: React.FC<Props> = ({
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
 
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
-
+    console.log('TEST RENDER');
     useEffect(() => {
         if (harLagretPerioder && visLeggTilPerioder) {
-            console.log('TEST TEST harLagretPerioder && visLeggTilPerioder');
             setVisLeggTilPerioder(false);
         }
-    }, [soknad.soeknadsperiode]);
+    }, [harLagretPerioder, visLeggTilPerioder, setVisLeggTilPerioder]);
 
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
@@ -70,23 +69,17 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     const getPerioder = () => {
-        console.log('TEST getPerioder soknad', soknad);
-        console.log('TEST getPerioder soknad.soeknadsperiode', soknad.soeknadsperiode);
-
         if (harLagretPerioder) {
-            console.log('TEST getPerioder harLagretPerioder: ', harLagretPerioder);
             return soknad.soeknadsperiode;
         }
 
         if (harSlettetPerioder) {
-            console.log('TEST getPerioder harSlettetPerioder: ', harSlettetPerioder);
             return [];
         }
-        console.log('TEST getPerioder initialPeriode: ', initialPeriode);
+
         return [initialPeriode];
     };
-    console.log('TEST harLagretPerioder: ', harLagretPerioder);
-    console.log('TEST visLeggTilPerioder: ', visLeggTilPerioder);
+
     return (
         <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
             <Heading size="small" level="3">
