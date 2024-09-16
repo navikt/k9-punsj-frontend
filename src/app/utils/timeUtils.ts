@@ -3,6 +3,7 @@ import 'dayjs/locale/nb';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import utc from 'dayjs/plugin/utc';
 import { capitalize } from 'lodash';
@@ -19,6 +20,7 @@ dayjs.extend(duration);
 dayjs.extend(isoWeek);
 dayjs.extend(customParseFormat);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 dayjs.locale('nb');
 
 export enum Tidsformat {

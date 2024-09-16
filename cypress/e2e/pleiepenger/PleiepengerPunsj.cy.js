@@ -7,7 +7,10 @@ describe('Pleiepenger punsj', () => {
                 window.__initialState__ = initialState;
             },
         });
+        Cypress.config('viewportWidth', 1280);
+        Cypress.config('viewportHeight', 1450);
     });
+
     it('kan sende inn søknad om pleiepenger', () => {
         cy.soknadperioderInput('08.11.2021', '11.11.2021');
 
@@ -28,6 +31,12 @@ describe('Pleiepenger punsj', () => {
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
                 .type('11.11.2021');
+        });
+
+        // Det trenges for å oppdatere state (trykke noe annet sted)
+        cy.findByRole('button', { name: /Ferie/i }).click();
+
+        cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByRole('button', { name: /Legg til ny periode/i }).click();
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)

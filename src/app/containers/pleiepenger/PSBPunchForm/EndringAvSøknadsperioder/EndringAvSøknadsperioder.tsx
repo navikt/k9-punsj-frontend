@@ -43,6 +43,8 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
             : null;
 
+    const alleTrekkKravPerioderFeilmelding = () => getErrorMessage('alleTrekkKravPerioderFeilmelding') || null;
+
     const getAlertstriper = () => {
         const komplettePerioder = selectedPeriods.filter((periode) => periode.fom && periode.tom);
         if (komplettePerioder.length === 0) {
@@ -53,8 +55,15 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
+        /*
+         * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
+         * Fra k9 format validator
+         */
+
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
+                initializeDate(periode.fom).isSameOrBefore(initializeDate(eksisterendePeriode.fom)),
+            ),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some(
@@ -64,7 +73,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             ),
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
+                initializeDate(periode.tom).isSameOrAfter(initializeDate(eksisterendePeriode.tom)),
+            ),
         );
 
         const begrunnelsesfelt = (
@@ -144,7 +155,9 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                 feilkodeprefiks="endringAvSøknadsperioder"
                 kanHaFlere
             />
-
+            <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                {alleTrekkKravPerioderFeilmelding()}
+            </ErrorMessage>
             {getAlertstriper()}
             <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
                 {begrunnelseForInnsendingFeilmelding()}
