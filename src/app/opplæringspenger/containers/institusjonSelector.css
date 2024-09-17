@@ -1,60 +1,8 @@
 .institusjonContainer {
-    max-width: 314px;
+    max-width: 100%;
     width: 100%;
 }
 
-.institusjonContainer .autocomplete ul {
-    position: absolute;
-}
-
-.institusjonContainer__hideLabel {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-}
-
-.institusjonContainer__autocompleteContainer {
-    display: flex;
-    align-items: center;
-}
-
-.institusjonContainer__spinnerContainer {
-    margin-left: 1rem;
-    width: 2rem;
-}
-
-.institusjonContainer__institusjonList {
-    margin: 1rem 0 0;
-    padding: 0;
-}
-
-.institusjonContainer__institusjonList li {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    list-style-type: none;
-    padding: 0.75rem 0;
-}
-
-.institusjonContainer__institusjonList li:not(:first-of-type) {
-    border-top: 1px solid #c6c2bf;
-}
-
-.institusjonContainer__institusjonList li:last-of-type {
-    padding-bottom: 0;
-}
-
-.institusjonContainer__institusjonList li > div {
-    margin: 0;
-}
-
-.institusjonContainer__institusjonList .navds-body-short {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 500px;
-    overflow: hidden;
+.navds-text-field__input {
+    max-width: 100%;
 }

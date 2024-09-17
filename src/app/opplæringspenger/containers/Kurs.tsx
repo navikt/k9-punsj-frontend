@@ -1,8 +1,8 @@
-import { FieldArray, useFormikContext } from 'formik';
-import React from 'react';
+import { FieldArray, useField, useFormikContext } from 'formik';
+import React, { useState } from 'react';
 
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Checkbox, Heading, Label, Panel } from '@navikt/ds-react';
+import { Button, Checkbox, CheckboxGroup, Heading, Label, Panel } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -10,10 +10,9 @@ import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Periode } from 'app/models/types/Periode';
 
+import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import InstitusjonSelector from './InstitusjonSelector';
 import './kurs.less';
-import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
-import { Suggestion } from '@navikt/ft-plattform-komponenter/dist/packages/plattform-komponenter/src/autocomplete/types/Suggestion';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -21,10 +20,21 @@ interface KursComponentProps {
     hentInstitusjonerError: boolean;
 }
 
+const institusjonUuidFelt = 'kurs.kursHolder.institusjonsUuid';
+
 const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '' };
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
+    const [field, meta, helpers] = useField(institusjonUuidFelt);
+    const [isAnnetSelected, setIsAnnetSelected] = useState(false);
+
+    const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
+        setIsAnnetSelected(valgteCheckBokser.includes('Annen'));
+        if (valgteCheckBokser.includes('Annen')) {
+            helpers.setValue(null);
+        }
+    };
 
     return (
         <Panel border>
@@ -36,19 +46,16 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                 {!hentInstitusjonerLoading && (
                     <InstitusjonSelector
                         label="Velg institusjon"
-                        name="kurs.kursHolder.institusjonsUuid"
+                        name={institusjonUuidFelt}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
+                        isAnnetSelected={isAnnetSelected}
                     />
                 )}
                 <VerticalSpacer eightPx />
-
-                <Checkbox value="anneninstitusjon">Annen institusjon (ikke i listen)</Checkbox>
-                {/* <div>
-                <TextFieldFormik label="Kursholder" name="kurs.kursholder.holder" />
-                <VerticalSpacer sixteenPx />
-                <TextFieldFormik label="Institusjonsidentifikator" name="kurs.kursholder.institusjonsidentifikator" />
-            </div> */}
+                <CheckboxGroup legend="Transportmidler" hideLegend={true} onChange={handleCheckBoxChange}>
+                    <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
+                </CheckboxGroup>
                 <VerticalSpacer twentyPx />
                 <FieldArray
                     name="kurs.kursperioder"
