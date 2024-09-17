@@ -1,10 +1,9 @@
 import { useField } from 'formik';
 import React, { useState } from 'react';
 
-import { Label } from '@navikt/ds-react';
-import { Autocomplete, FieldError } from '@navikt/ft-plattform-komponenter';
+import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { Suggestion } from '@navikt/ft-plattform-komponenter/dist/packages/plattform-komponenter/src/autocomplete/types/Suggestion';
+import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import './institusjonSelector.css';
 
@@ -13,75 +12,50 @@ interface InstitusjonSelectorProps {
     name: string;
     godkjentOpplæringsinstitusjoner: GodkjentOpplæringsinstitusjon[];
     hentInstitusjonerError: boolean;
-    hideLabel?: boolean;
+    isAnnetSelected: boolean;
 }
 
-const mapTilInstitusjonSuggestions = (institusjoner: GodkjentOpplæringsinstitusjon[]): Suggestion[] =>
+const mapTilComboboxOptions = (institusjoner: GodkjentOpplæringsinstitusjon[]): ComboboxOption[] =>
     institusjoner.map((institusjon) => ({
-        key: institusjon.uuid,
-        value: institusjon.navn,
+        label: institusjon.navn,
+        value: institusjon.uuid,
     }));
 
 const InstitusjonSelector = ({
     label,
     name,
-    hideLabel,
     godkjentOpplæringsinstitusjoner,
     hentInstitusjonerError,
+    isAnnetSelected,
 }: InstitusjonSelectorProps): JSX.Element => {
     const [field, meta, helpers] = useField(name);
-    const [institusjoner, setInstitusjoner] = useState<Suggestion[]>(
-        mapTilInstitusjonSuggestions(godkjentOpplæringsinstitusjoner),
-    );
+    const [institusjoner] = useState<ComboboxOption[]>(mapTilComboboxOptions(godkjentOpplæringsinstitusjoner));
 
-    const findInstitusjonValue = (institusjonKey: string) =>
-        institusjoner.find((institusjon) => institusjon.key === institusjonKey)?.value || '';
+    const findInstitusjonsNavn = (institusjonUuid: string) =>
+        institusjoner.find((institusjon) => institusjon.value === institusjonUuid)?.label || '';
 
-    const findInstitusjonKey = (institusjonValue: string) =>
-        institusjoner.find((institusjon) => institusjon.value === institusjonValue)?.key;
-
-    const [valgtInstitusjon, setValgtInstitusjon] = useState(findInstitusjonValue(field.value));
-
-    const onInputValueChange = async (v: string) => {
-        const nyInstitusjonsListe = institusjoner.filter(
-            (institusjon) =>
-                institusjon.value.toLowerCase().indexOf(v.toLowerCase()) > -1 || institusjon.key.indexOf(v) > -1,
-        );
-        setInstitusjoner(nyInstitusjonsListe);
-    };
+    const error =
+        meta.touched && meta.error
+            ? 'Institusjon er et påkrevd felt'
+            : hentInstitusjonerError
+              ? 'Henting av institusjoner feilet'
+              : undefined;
 
     return (
         <div className="institusjonContainer">
-            <div className={hideLabel ? 'institusjonContainer__hideLabel' : ''}>
-                <Label htmlFor={name}>{label}</Label>
-            </div>
-            <div className="institusjonContainer__autocompleteContainer">
-                <Autocomplete
-                    id={name}
-                    suggestions={institusjoner}
-                    value={valgtInstitusjon}
-                    onChange={(e) => {
-                        onInputValueChange(e);
-                        setValgtInstitusjon(e);
-                        helpers.setTouched(true);
-                    }}
-                    onSelect={(e) => {
-                        setValgtInstitusjon(e.value);
-                        helpers.setValue(findInstitusjonKey(e.value));
-                    }}
-                    onBlur={() => {
-                        if (!findInstitusjonKey(valgtInstitusjon)) {
-                            helpers.setError('Du må velge en institusjon fra listen');
-                        } else {
-                            helpers.setError(undefined);
-                        }
-                    }}
-                    ariaLabel={label}
-                    placeholder={label}
-                />
-            </div>
-            {meta.touched && meta.error && <FieldError message={meta.error} />}
-            {hentInstitusjonerError && <FieldError message={'Henting av institusjoner feilet'} />}
+            <UNSAFE_Combobox
+                label={label}
+                size="medium"
+                options={institusjoner}
+                selectedOptions={[findInstitusjonsNavn(field.value)]}
+                disabled={isAnnetSelected}
+                toggleListButton={!isAnnetSelected}
+                shouldAutocomplete={true}
+                error={error}
+                onToggleSelected={(option) => {
+                    helpers.setValue(option);
+                }}
+            />
         </div>
     );
 };
