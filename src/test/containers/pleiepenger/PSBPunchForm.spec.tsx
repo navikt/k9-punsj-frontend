@@ -468,14 +468,14 @@ describe('PunchForm', () => {
                 .find('.eksiterendesoknaderpanel')
                 .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning'),
         ).toHaveLength(1);
+
         expect(
             punchForm
                 .find('Soknadsperioder')
                 .dive()
                 .find('.eksiterendesoknaderpanel')
-                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'warning')
-                .childAt(0)
-                .text(),
+                .findWhere((n) => n.prop('id') === 'skjema.soknadsperiode.overlapper')
+                .prop('id'),
         ).toEqual('skjema.soknadsperiode.overlapper');
     });
 
