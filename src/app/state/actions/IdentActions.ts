@@ -40,7 +40,7 @@ export const resetIdentState = () => ({
 
 export const setAnnenPartAction = (annenPart: string) => ({ type: IdentActionKeys.IDENT_SET_ANNEN_PART, annenPart });
 
-export const setFosterbarnAction = (fosterbarn: string[]) => ({
+export const setFosterbarnAction = (fosterbarn?: string[]) => ({
     type: IdentActionKeys.IDENT_SET_FOSTERBARN,
     fosterbarn,
 });

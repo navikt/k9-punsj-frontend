@@ -58,11 +58,11 @@ const Pleietrengende: React.FC<Props> = ({
         }
     }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
 
-    const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
+    const hentPleietrengendeInfo = (pleietrengendesFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
         setPleietrengendeInfoLoading(true);
 
-        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+        getPersonInfo(pleietrengendesFødselsnummer, (response, data: Person) => {
             setPleietrengendeInfoLoading(false);
             if (response.status === 200) {
                 setPleietrengendeInfo(data);
