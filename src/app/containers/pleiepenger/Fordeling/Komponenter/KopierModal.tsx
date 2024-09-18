@@ -3,50 +3,38 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
-import { IFellesState } from 'app/state/reducers/FellesReducer';
+import { kopierJournalpostTilSammeSøker } from 'app/state/reducers/FellesReducer';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
 import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
 import { DokumenttypeForkortelse } from 'app/models/enums';
+import { Dispatch } from 'redux';
 
-interface OwnProps {
+interface Props {
     søkerId: string;
     pleietrengendeId: string;
     journalpostId: string;
     dedupkey: string;
-    fellesState: IFellesState;
     fagsakId: string;
-    kopiereJournalpostTilSammeSøker: (
-        søkerId: string,
-        pleietrengendeId: string,
-        journalpostId: string,
-        dedupkey: string,
-        ytelse?: DokumenttypeForkortelse,
-    ) => void;
+
     lukkModal: () => void;
 }
 
-const KopierModal = ({
-    søkerId,
-    pleietrengendeId,
-    journalpostId,
-    dedupkey,
-    fellesState,
-    fagsakId,
-    kopiereJournalpostTilSammeSøker,
-    lukkModal,
-}: OwnProps) => {
+const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fagsakId, lukkModal }: Props) => {
     const [kopierLoading, setKopierLoading] = useState(false);
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
 
     const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
-
-    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
     const ytelseForKopiering =
         fordelingState.dokumenttype && getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype);
@@ -57,9 +45,14 @@ const KopierModal = ({
         }
     }, [fellesState.kopierJournalpostSuccess]);
 
+    const kopier = () =>
+        dispatch(
+            kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering),
+        );
+
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering);
+        kopier();
         setKopierLoading(false);
     };
 

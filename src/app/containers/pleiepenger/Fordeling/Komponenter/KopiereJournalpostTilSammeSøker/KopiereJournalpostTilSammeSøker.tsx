@@ -1,49 +1,30 @@
 import React, { useState } from 'react';
-import { FormattedMessage, IntlShape, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
-
-import { IJournalpost } from 'app/models/types';
-import { IdentRules } from 'app/rules';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
-
-import Fagsak from 'app/types/Fagsak';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import VerticalSpacer from '../../../../../components/VerticalSpacer';
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
-import { IIdentState } from '../../../../../models/types/IdentState';
-import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../../../state/reducers/FellesReducer';
+import { IdentRules } from 'app/rules';
+import { RootStateType } from 'app/state/RootState';
+import Fagsak from 'app/types/Fagsak';
 import KopierModal from '../KopierModal';
-import { DokumenttypeForkortelse } from 'app/models/enums';
 
 import './kopiereJournalpostTilSammeSøker.less';
 
-export interface IKopiereJournalpostTilSammeSøkerStateProps {
+interface Props {
     barnMedFagsak: Fagsak;
-    intl: IntlShape;
-    journalpost?: IJournalpost;
-    identState: IIdentState;
-    fellesState: IFellesState;
-    dedupkey: string;
 }
 
-export interface IKopiereJournalpostTilSammeSøkerDispatchProps {
-    kopiereJournalpostTilSammeSøker: typeof kopierJournalpostTilSammeSøker;
-}
-
-type IKopiereJournalpostTilSammeSøkerProps = IKopiereJournalpostTilSammeSøkerStateProps &
-    IKopiereJournalpostTilSammeSøkerDispatchProps;
-
-const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTilSammeSøkerProps> = (
-    props: IKopiereJournalpostTilSammeSøkerProps,
-) => {
-    const { barnMedFagsak, intl, journalpost, identState, fellesState, dedupkey, kopiereJournalpostTilSammeSøker } =
-        props;
-
+const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Props) => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [visModal, setVisModal] = useState(false);
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+
+    const journalpost = fellesState.journalpost;
+    const dedupkey = fellesState.dedupKey;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -53,7 +34,11 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
     if (journalpost?.norskIdent) {
         søkerId = journalpost?.norskIdent;
     } else {
-        return <Alert variant="warning">{intlHelper(intl, 'ident.usignert.feil.melding')}</Alert>;
+        return (
+            <Alert variant="warning">
+                <FormattedMessage id="ident.usignert.feil.melding" />
+            </Alert>
+        );
     }
 
     return (
@@ -86,12 +71,18 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
 
             {visKanIkkeKopiere && (
                 <Alert variant="warning">
-                    Journalposten kan ikke kopieres. En journalpost kan kun kopieres dersom den oppfyller alle de
-                    følgende kriteriene.
+                    <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info" />
+
                     <ul>
-                        <li>Må være inngående journalpost</li>
-                        <li>Kan ikke være kopi av en annen journalpost</li>
-                        <li>Kan ikke være inntektsmelding uten søknad</li>
+                        <li>
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.1" />
+                        </li>
+                        <li>
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.2" />
+                        </li>
+                        <li>
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.3" />
+                        </li>
                     </ul>
                 </Alert>
             )}
@@ -100,38 +91,13 @@ const KopiereJournalpostTilSammeSøkerComponent: React.FC<IKopiereJournalpostTil
                     søkerId={søkerId}
                     pleietrengendeId={identState.pleietrengendeId}
                     journalpostId={journalpost?.journalpostId}
-                    fellesState={fellesState}
                     dedupkey={dedupkey}
-                    kopiereJournalpostTilSammeSøker={kopiereJournalpostTilSammeSøker}
-                    lukkModal={() => setVisModal(false)}
                     fagsakId={barnMedFagsak.fagsakId}
+                    lukkModal={() => setVisModal(false)}
                 />
             )}
         </div>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    identState: state.identState,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    kopiereJournalpostTilSammeSøker: (
-        søkerId: string,
-        pleietrengendeId: string,
-        journalpostId: string,
-        dedupkey: string,
-        ytelse?: DokumenttypeForkortelse,
-    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelse)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-});
-
-const KopiereJournalpostTilSammeSøker = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(KopiereJournalpostTilSammeSøkerComponent),
-);
-
-export { KopiereJournalpostTilSammeSøker, KopiereJournalpostTilSammeSøkerComponent };
+export default KopiereJournalpostTilSammeSøker;
