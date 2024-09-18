@@ -7255,6 +7255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10/d5f6e9de5bbc52310f786099e18609289ed5e30af60a71e0646784c8185ddd1d0eebcf7c96b7faaaefc4a8366f3a3a4244d099b6d0866ee2bec80d1361e64342
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:1.11.12, dayjs@npm:^1.10.4":
   version: 1.11.12
   resolution: "dayjs@npm:1.11.12"
@@ -11691,7 +11698,7 @@ __metadata:
     react: "npm:18.3.1"
     react-aria-menubutton: "npm:7.0.3"
     react-collapse: "npm:5.1.1"
-    react-day-picker: "npm:7.4.10"
+    react-day-picker: "npm:9.1.0"
     react-dom: "npm:18.3.1"
     react-intl: "npm:6.6.8"
     react-modal: "npm:3.16.1"
@@ -14388,7 +14395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -14643,17 +14650,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:7.4.10":
-  version: 7.4.10
-  resolution: "react-day-picker@npm:7.4.10"
-  dependencies:
-    prop-types: "npm:^15.6.2"
-  peerDependencies:
-    react: ~0.13.x || ~0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10/6a63aced75dbab630cb0f0317f4f843c5930f768a52922bea0eda09c3856c9a211321d30ccac74fd8891a5285671a8da3a541a04a3056dc66b656d8f8415ce0f
-  languageName: node
-  linkType: hard
-
 "react-day-picker@npm:8.10.0":
   version: 8.10.0
   resolution: "react-day-picker@npm:8.10.0"
@@ -14661,6 +14657,17 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/974496ce004762d521923fc533f6ad6ff8d1f24368220753106617eb199aeb9658b4b7734e12a3fe8a5057840464a3d2d08b4b7f9a84ec77a59c50cc647f6dbc
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:9.1.0":
+  version: 9.1.0
+  resolution: "react-day-picker@npm:9.1.0"
+  dependencies:
+    date-fns: "npm:^4.1.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/9c225e84343a394560fa469dfb982102b79f4035f5fbbe441d2efdb79079c36af0ccc176fbd3616271b2f1584dab3c609f661fddfd40c912935e6b600a074355
   languageName: node
   linkType: hard
 
