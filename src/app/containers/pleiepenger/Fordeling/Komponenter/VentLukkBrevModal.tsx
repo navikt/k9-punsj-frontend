@@ -23,7 +23,9 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
     const søkerId = useSelector((state: RootStateType) => state.identState.søkerId);
     const fellesState = useSelector((state: RootStateType) => state.felles);
     const dokumenttype = useSelector((state: RootStateType) => state.fordelingState.dokumenttype);
+
     const sakstype = finnForkortelseForDokumenttype(dokumenttype)!;
+
     const journalpost = fellesState.journalpost!;
     const fagsak = journalpost?.sak;
     const fagsakId = fagsak?.fagsakId;
