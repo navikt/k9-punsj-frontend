@@ -46,7 +46,7 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
 import Pleietrengende from './Komponenter/Pleietrengende';
-import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
+import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
 import BrevModal from './Komponenter/BrevModal';

@@ -11,7 +11,7 @@ import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from '
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
-import { DokumenttypeForkortelse } from 'app/models/enums';
+
 import { Dispatch } from 'redux';
 
 interface Props {
@@ -45,14 +45,13 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
         }
     }, [fellesState.kopierJournalpostSuccess]);
 
-    const kopier = () =>
+    const handleKopier = () => {
+        setKopierLoading(true);
+
         dispatch(
             kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering),
         );
 
-    const handleKopier = () => {
-        setKopierLoading(true);
-        kopier();
         setKopierLoading(false);
     };
 
@@ -62,32 +61,39 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading">
-                    Vil du kopiere og lukke journalposten?
+                    <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.tittel" />
                 </Heading>
             </Modal.Header>
+
             <Modal.Body>
                 <>
                     <div>
-                        Den nye Journalposten vil bli kopiert og journalført mot eksisterende fagsak {fagsakId} for
-                        pleietrengende med id: {pleietrengendeId}. Denne journalposten vil bli lukket.
+                        <FormattedMessage
+                            id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.info"
+                            values={{ fagsakId: fagsakId, pleietrengendeId: pleietrengendeId }}
+                        />
                     </div>
+
                     <JournalPostKopiFelmeldinger fellesState={fellesState} />
+
                     {isSuccess && (
                         <div>
                             <Alert size="small" variant="success">
-                                Journalposten ble lukket
+                                <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.success" />
                             </Alert>
                         </div>
                     )}
+
                     {!!error && (
                         <div>
                             <Alert size="small" variant="warning">
-                                Error ved lukking av journalpost
+                                <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.error" />
                             </Alert>
                         </div>
                     )}
                 </>
             </Modal.Body>
+
             <Modal.Footer>
                 {fellesState.kopierJournalpostSuccess ? (
                     <Button
@@ -97,13 +103,14 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                     >
-                        <FormattedMessage id="tilbaketilLOS" />
+                        <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.tilbaketilLOS.btn" />
                     </Button>
                 ) : (
                     <>
                         <Button type="button" disabled={kopierLoading} onClick={handleKopier} size="small">
-                            Kopier
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.btn" />
                         </Button>
+
                         <Button
                             type="button"
                             onClick={lukkModal}
@@ -111,7 +118,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
                             size="small"
                             variant="secondary"
                         >
-                            <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.avbryt.btn" />
                         </Button>
                     </>
                 )}
