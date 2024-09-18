@@ -35,7 +35,6 @@ interface BrevProps {
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
     lukkJournalpostOppgave?: () => void;
-    onResetBrev?: () => void;
 }
 
 // TODO: Fix rendering feil ved send brev hvis valideringsfeil
@@ -247,43 +246,9 @@ const BrevComponent: React.FC<BrevProps> = ({
                                 <VerticalSpacer sixteenPx />
 
                                 {values.brevmalkode && (
-                                    <>
-                                        <Button
-                                            size="small"
-                                            type="button"
-                                            variant="tertiary"
-                                            icon={<FileSearchIcon aria-hidden />}
-                                            onClick={() => {
-                                                setSubmitet(true);
-                                                validateForm(values);
-                                                setPreviewMessageFeil(undefined);
-                                                setFieldTouched('mottaker');
-                                                setFieldTouched('orgNummer');
-                                                setFieldTouched('fritekst');
-                                                setFieldTouched('fritekstbrev.overskrift');
-                                                setFieldTouched('fritekstbrev.brødtekst');
-
-                                                if (Object.keys(errors).length === 0) {
-                                                    previewMessage(
-                                                        values,
-                                                        aktørId,
-                                                        sakstype,
-                                                        journalpostId,
-                                                        fagsakId,
-                                                    ).then((feil) => setPreviewMessageFeil(feil));
-                                                }
-                                            }}
-                                        >
-                                            <FormattedMessage id={`brevComponent.btn.forhåndsvisBrev`} />
-                                        </Button>
-
-                                        {isValid && previewMessageFeil && (
-                                            <Alert variant="error" size="medium" fullWidth inline>
-                                                {previewMessageFeil}
-                                            </Alert>
-                                        )}
-                                        {sendBrevUtenModal && (
-                                            <div className="mt-4">
+                                    <div>
+                                        <div className="flex justify-between">
+                                            {sendBrevUtenModal && (
                                                 <Button
                                                     variant="primary"
                                                     className="sendBrevButton"
@@ -295,9 +260,43 @@ const BrevComponent: React.FC<BrevProps> = ({
                                                 >
                                                     <FormattedMessage id={`brevComponent.btn.sendBrev`} />
                                                 </Button>
-                                            </div>
+                                            )}
+                                            <Button
+                                                size="small"
+                                                type="button"
+                                                variant="tertiary"
+                                                icon={<FileSearchIcon aria-hidden />}
+                                                onClick={() => {
+                                                    setSubmitet(true);
+                                                    validateForm(values);
+                                                    setPreviewMessageFeil(undefined);
+                                                    setFieldTouched('mottaker');
+                                                    setFieldTouched('orgNummer');
+                                                    setFieldTouched('fritekst');
+                                                    setFieldTouched('fritekstbrev.overskrift');
+                                                    setFieldTouched('fritekstbrev.brødtekst');
+
+                                                    if (Object.keys(errors).length === 0) {
+                                                        previewMessage(
+                                                            values,
+                                                            aktørId,
+                                                            sakstype,
+                                                            journalpostId,
+                                                            fagsakId,
+                                                        ).then((feil) => setPreviewMessageFeil(feil));
+                                                    }
+                                                }}
+                                            >
+                                                <FormattedMessage id={`brevComponent.btn.forhåndsvisBrev`} />
+                                            </Button>
+                                        </div>
+
+                                        {isValid && previewMessageFeil && (
+                                            <Alert variant="error" size="medium" fullWidth inline>
+                                                {previewMessageFeil}
+                                            </Alert>
                                         )}
-                                    </>
+                                    </div>
                                 )}
                                 <div className="brevStatusContainer">
                                     {brevErSendt && (!sendBrevUtenModal || brewFraModal) && (
