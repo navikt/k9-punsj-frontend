@@ -930,7 +930,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                     variant="secondary"
                                                     onClick={() => setÅpenBrevModal(true)}
                                                 >
-                                                    <FormattedMessage id="fordeling.journalført.åpenBrevModal.btn" />
+                                                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.btn" />
                                                 </Button>
                                             </div>
                                         </>
