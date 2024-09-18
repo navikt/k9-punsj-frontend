@@ -227,6 +227,10 @@ type IJournalpostActionTypes =
     | IResetStateAction
     | ISetJournalposterIAapenSoknad;
 
+// TODO: use same function for both cases
+/*
+ * Brukes ved JournalpostAlleredeBehandlet
+ */
 export function kopierJournalpost(
     kopierFraIdent: string,
     kopierTilIdent: string,
@@ -266,7 +270,9 @@ export function kopierJournalpost(
         );
     };
 }
-
+/*
+ *  Brukes når barn finnes i Fagsak
+ */
 // TODO: Rename funk
 export function kopierJournalpostTilSammeSøker(
     søkerId: string,
