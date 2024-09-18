@@ -192,10 +192,12 @@
     "fordeling.journalført.åpenVentLukkBrevModal.settPåVentError": "Noe gikk galt.",
     "fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.tittel": "Oppgave satt på vent",
     "fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.info": "Oppgaven er satt på vent til {datoString}. Du blir nå tatt tilbake til oppgavekøen i LOS.",
-    "fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.gåTilLosBtn": "Gå til LOS.",
+    "fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.gåTilLosBtn": "Gå til LOS",
     "fordeling.journalført.åpenVentLukkBrevModal.lukk.btn": "Lukk oppgave",
+    "fordeling.journalført.åpenVentLukkBrevModal.lukk.bekreft.btn": "Ja, lukk oppgave",
     "fordeling.journalført.åpenVentLukkBrevModal.lukk.tittel": "Lukk oppgave",
     "fordeling.journalført.åpenVentLukkBrevModal.lukk.info": "Er du sikker du vil lukke oppgaven?",
+    "fordeling.journalført.åpenVentLukkBrevModal.lukk.error": "Noe gikk galt.",
     "fordeling.journalført.åpenVentLukkBrevModal.lukket.info": "Oppgaven er lukket. Du blir nå tatt tilbake til oppgavekøen i LOS.",
     "fordeling.journalført.åpenVentLukkBrevModal.lukket.gåTilLosBtn": "Gå til LOS.",
 

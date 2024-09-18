@@ -182,7 +182,11 @@ export const testHandlers = {
             }),
     ),
 
-    settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', ':id'), () =>
+    settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', '200'), () =>
         HttpResponse.json({ sattPåVent: true }, { status: 200 }),
     ),
+
+    /* settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', ':id'), () =>
+        HttpResponse.json({ sattPåVent: true }, { status: 200 }),
+    ), */
 };

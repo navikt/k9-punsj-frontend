@@ -1,48 +1,52 @@
 import React, { useState } from 'react';
 
-import { Alert, Button, Checkbox, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
+import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import BrevComponent from 'app/components/brev/BrevComponent';
-import { DokumenttypeForkortelse } from 'app/models/enums';
-import { FormattedMessage } from 'react-intl';
-import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import { useMutation } from 'react-query';
-import { getEnvironmentVariable } from 'app/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { lukkJournalpostOppgave } from 'app/state/actions';
-import { Dispatch } from 'redux';
 import { RootStateType } from 'app/state/RootState';
-import Fagsak from 'app/types/Fagsak';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
+import { Alert, Button, Checkbox, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { useMutation } from 'react-query';
+import { useSelector } from 'react-redux';
 
 interface Props {
     open: boolean;
-    journalpostId: string;
-    fagsakId: string;
-    søkerId: string;
-    sakstype: DokumenttypeForkortelse; //TODO sjekk type
-
     onClose: () => void;
 }
 
-const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, sakstype, onClose }: Props) => {
+const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
     const [visBrev, setVisBrev] = useState(false);
     const [sattPåVent, setSattPåVent] = useState(false);
     const [visLukkOppgave, setVisLukkOppgave] = useState(false);
-    // const [jpLukket, setJpLukket] = useState(false);
+    const [jpLukket, setJpLukket] = useState(false);
 
-    const dispatch = useDispatch<Dispatch<any>>();
-
-    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const lukkJournalpost = () => dispatch(lukkJournalpostOppgave(journalpostId, søkerId)); //TODO FAGSAKID
+    const søkerId = useSelector((state: RootStateType) => state.identState.søkerId);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+    const dokumenttype = useSelector((state: RootStateType) => state.fordelingState.dokumenttype);
+    const sakstype = finnForkortelseForDokumenttype(dokumenttype)!;
+    const journalpost = fellesState.journalpost!;
+    const fagsak = journalpost?.sak;
+    const fagsakId = fagsak?.fagsakId;
+    const journalpostId = journalpost?.journalpostId;
 
     const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpostId),
         onSuccess: () => {
-            // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
             setSattPåVent(true);
         },
     });
 
-    if (fordelingState.lukkOppgaveDone) {
+    const lukkJournalpost = useMutation({
+        mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fagsak),
+        onSuccess: () => {
+            setVisLukkOppgave(false);
+            setJpLukket(true);
+        },
+    });
+
+    const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
+
+    if (jpLukket) {
         return (
             <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
                 <Modal.Header closeButton={false}>
@@ -50,6 +54,7 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.tittel" />
                     </Heading>
                 </Modal.Header>
+
                 <Modal.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
@@ -57,6 +62,7 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                         </Alert>
                     </div>
                 </Modal.Body>
+
                 <Modal.Footer>
                     <Button
                         type="button"
@@ -73,8 +79,7 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
         );
     }
 
-    // TODO: bli ferdige med denne
-    if (visLukkOppgave && !fordelingState.lukkOppgaveDone) {
+    if (visLukkOppgave) {
         return (
             <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
                 <Modal.Header closeButton={false}>
@@ -82,12 +87,31 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.tittel" />
                     </Heading>
                 </Modal.Header>
+
                 <Modal.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.info" />
+
+                        {lukkJournalpost.isError && (
+                            <div className="mt-4">
+                                <ErrorMessage>
+                                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.error" />
+                                </ErrorMessage>
+                            </div>
+                        )}
                     </div>
                 </Modal.Body>
+
                 <Modal.Footer>
+                    <Button
+                        type="button"
+                        onClick={() => lukkJournalpost.mutate()}
+                        size="small"
+                        data-test-id="brevModalSettPåvent"
+                    >
+                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.bekreft.btn" />
+                    </Button>
+
                     <Button
                         type="button"
                         onClick={() => setVisLukkOppgave(false)}
@@ -96,14 +120,6 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                         data-test-id="brevModalAvbryt"
                     >
                         <FormattedMessage id="fordeling.journalført.brevModal.avbryt.btn" />
-                    </Button>
-                    <Button
-                        type="button"
-                        onClick={() => lukkJournalpost()}
-                        size="small"
-                        data-test-id="brevModalSettPåvent"
-                    >
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.btn" />
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -118,13 +134,18 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.tittel" />
                     </Heading>
                 </Modal.Header>
+
                 <Modal.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
-                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.info" />
+                            <FormattedMessage
+                                id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.info"
+                                values={{ datoString: get3WeeksDate() }}
+                            />
                         </Alert>
                     </div>
                 </Modal.Body>
+
                 <Modal.Footer>
                     <Button
                         type="button"
@@ -143,16 +164,18 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
 
     return (
         <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
-            <Modal.Header closeButton={false}>
+            <Modal.Header closeButton={true}>
                 <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
                     <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.tittel" />
                 </Heading>
             </Modal.Header>
+
             <Modal.Body>
                 <div className="min-w-[500px] max-w-[500px]">
                     <Alert variant="info" size="small" data-test-id="brevModalInfo">
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.alert" />
                     </Alert>
+
                     <div className="mb-4 mt-4">
                         <Checkbox
                             onChange={() => {
@@ -163,6 +186,7 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                             <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sendBrev.checkbox" />
                         </Checkbox>
                     </div>
+
                     {visBrev && (
                         <BrevComponent
                             søkerId={søkerId}
@@ -174,6 +198,7 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                             brevFraModal={true}
                         />
                     )}
+
                     {settPåVent.isError && (
                         <div className="mt-4">
                             <ErrorMessage>
@@ -183,7 +208,17 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                     )}
                 </div>
             </Modal.Body>
+
             <Modal.Footer>
+                <Button
+                    type="button"
+                    onClick={() => settPåVent.mutate()}
+                    size="small"
+                    data-test-id="brevModalSettPåvent"
+                >
+                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.settPåVent.btn" />
+                </Button>
+
                 <Button
                     type="button"
                     onClick={() => setVisLukkOppgave(true)}
@@ -193,17 +228,9 @@ const BrevModal: React.FC<Props> = ({ open, journalpostId, fagsakId, søkerId, s
                 >
                     <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.btn" />
                 </Button>
-                <Button
-                    type="button"
-                    onClick={() => settPåVent.mutate()}
-                    size="small"
-                    data-test-id="brevModalSettPåvent"
-                >
-                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.settPåVent.btn" />
-                </Button>
             </Modal.Footer>
         </Modal>
     );
 };
 
-export default BrevModal;
+export default VentLukkBrevModal;

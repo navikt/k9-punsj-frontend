@@ -88,7 +88,7 @@ export const klassifiserDokument = (body: {
             return responseBody;
         },
     );
-
+// TODO: Check if this is the correct
 export const lukkJournalpostEtterKopiering = (journalpostid: string, soekersIdent: string, fagsak?: Fagsak) =>
     post(ApiPath.JOURNALPOST_LUKK_OPPGAVE, { journalpostId: journalpostid }, undefined, {
         norskIdent: soekersIdent,
