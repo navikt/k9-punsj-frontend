@@ -7,8 +7,11 @@ import { IFellesState } from 'app/state/reducers/FellesReducer';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
-import { getEnvironmentVariable } from 'app/utils';
+import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
+import { useSelector } from 'react-redux';
+import { RootStateType } from 'app/state/RootState';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 interface OwnProps {
     søkerId: string;
@@ -22,6 +25,7 @@ interface OwnProps {
         pleietrengendeId: string,
         journalpostId: string,
         dedupkey: string,
+        ytelse?: DokumenttypeForkortelse,
     ) => void;
     lukkModal: () => void;
 }
@@ -42,6 +46,11 @@ const KopierModal = ({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
 
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+
+    const ytelseForKopiering =
+        fordelingState.dokumenttype && getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype);
+
     useEffect(() => {
         if (fellesState.kopierJournalpostSuccess) {
             mutate();
@@ -50,7 +59,7 @@ const KopierModal = ({
 
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey);
+        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering);
         setKopierLoading(false);
     };
 

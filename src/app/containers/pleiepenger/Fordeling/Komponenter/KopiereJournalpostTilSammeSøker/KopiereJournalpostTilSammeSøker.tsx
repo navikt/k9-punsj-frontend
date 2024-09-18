@@ -16,6 +16,7 @@ import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType
 import { IIdentState } from '../../../../../models/types/IdentState';
 import { IFellesState, kopierJournalpostTilSammeSøker } from '../../../../../state/reducers/FellesReducer';
 import KopierModal from '../KopierModal';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 import './kopiereJournalpostTilSammeSøker.less';
 
@@ -123,7 +124,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         pleietrengendeId: string,
         journalpostId: string,
         dedupkey: string,
-    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey)),
+        ytelse?: DokumenttypeForkortelse,
+    ) => dispatch(kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelse)),
     lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
         dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
 });

@@ -273,6 +273,7 @@ export function kopierJournalpostTilSammeSøker(
     pleietrengendeId: string,
     journalpostId: string,
     dedupKey: string,
+    ytelse?: DokumenttypeForkortelse,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -280,6 +281,7 @@ export function kopierJournalpostTilSammeSøker(
             fra: søkerId,
             til: søkerId,
             barn: pleietrengendeId,
+            ytelse,
         };
 
         dispatch(getJournalpostKopiereRequestAction());

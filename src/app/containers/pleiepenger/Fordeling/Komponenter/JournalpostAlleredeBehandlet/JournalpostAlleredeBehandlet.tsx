@@ -51,10 +51,15 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.UKJENT ||
         fellesState.journalpost?.sak?.sakstype === null ||
         fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.IKKE_DEFINERT;
-
-    const ytelseForKopiering = fordelingState.dokumenttype
-        ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
-        : undefined;
+    /*
+     * Hvis ukjent ytelse, vises valg for dokumenttype og ytelse brukes av dette valget.
+     * Hvis ytelse er kjent, brukes sakstype fra journalposten.
+     * Kan væere problemmet med OMS ytelser, frodi de har flere sakstyper - må ses på.
+     * */
+    const ytelseForKopiering =
+        ukjentYtelse && fordelingState.dokumenttype
+            ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
+            : fellesState.journalpost?.sak?.sakstype;
 
     useEffect(() => {
         if (!søkerId && journalpost?.norskIdent) {
@@ -89,7 +94,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
             setVisKanIkkeKopiere(true);
             return;
         }
-
+        /*
+         *
+         * TODO: Trenges støtte for annet part/behandligsår ???
+         * Hvis ytelse i jp er ukjent da bør velges dokumenttype, pleitrengende (som nå), behandlinsår og annen part - samme som i fordeling.
+         * Hvis ytelse i jp er kjent, da det finnes alt i fellesState.journalpost?.sak ???? eller nei???
+         *
+         * */
         if (!!søkerId && !!pleietrengendeId) {
             dispatch(
                 kopierJournalpost(
