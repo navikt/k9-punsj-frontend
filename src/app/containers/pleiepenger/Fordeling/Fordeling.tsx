@@ -952,11 +952,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                lukkModal={() => setVisKlassifiserModal(false)}
-                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                                 dedupkey={props.dedupkey}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
+                                lukkModal={() => setVisKlassifiserModal(false)}
+                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                             />
                         )}
 

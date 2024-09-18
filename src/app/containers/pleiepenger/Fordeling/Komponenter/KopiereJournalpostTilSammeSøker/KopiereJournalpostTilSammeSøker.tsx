@@ -86,6 +86,7 @@ const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Pr
                     </ul>
                 </Alert>
             )}
+
             {visModal && (
                 <KopierModal
                     søkerId={søkerId}

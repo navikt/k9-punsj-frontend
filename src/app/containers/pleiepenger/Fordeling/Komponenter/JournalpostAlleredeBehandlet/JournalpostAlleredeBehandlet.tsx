@@ -52,6 +52,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fellesState.journalpost?.sak?.sakstype === null ||
         fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.IKKE_DEFINERT;
     /*
+     * TODO:
      * Hvis ukjent ytelse, vises valg for dokumenttype og ytelse brukes av dette valget.
      * Hvis ytelse er kjent, brukes sakstype fra journalposten.
      * Kan væere problemmet med OMS ytelser, frodi de har flere sakstyper - må ses på.
