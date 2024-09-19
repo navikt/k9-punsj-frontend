@@ -11,14 +11,14 @@ import './DokumentTypeVelger.less';
 
 interface Props {
     valgtDokumentType: string;
-    visComponent: boolean;
+    visComponent?: boolean;
 
     handleDokumenttype: (type: FordelingDokumenttype) => void;
 }
 
 const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
     valgtDokumentType,
-    visComponent,
+    visComponent = true,
     handleDokumenttype,
 }: Props) => {
     const intl = useIntl();

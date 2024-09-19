@@ -62,14 +62,9 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const isDokumenttypeMedAnnenPart = fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
-    const ukjentYtelse =
-        fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.UKJENT ||
-        fellesState.journalpost?.sak?.sakstype === null ||
-        fellesState.journalpost?.sak?.sakstype === DokumenttypeForkortelse.IKKE_DEFINERT;
-
     const isKopierButtonDisabled =
-        (ukjentYtelse &&
-            (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER)) ||
+        !fordelingState.dokumenttype ||
+        fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER ||
         (isDokumenttypeMedPleietrengende && IdentRules.erUgyldigIdent(pleietrengendeId)) ||
         (isDokumenttypeMedBehandlingsår && !behandlingsAar) ||
         (isDokumenttypeMedAnnenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
@@ -80,10 +75,9 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
      * Hvis ytelse er kjent, brukes sakstype fra journalposten.
      * Kan væere problemmet med OMS ytelser, frodi de har flere sakstyper - må ses på.
      * */
-    const ytelseForKopiering =
-        ukjentYtelse && fordelingState.dokumenttype
-            ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
-            : fellesState.journalpost?.sak?.sakstype;
+    const ytelseForKopiering = fordelingState.dokumenttype
+        ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
+        : undefined;
 
     useEffect(() => {
         if (!søkerId && journalpost?.norskIdent) {
@@ -125,7 +119,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
          * Hvis ytelse i jp er kjent, da det finnes alt i fellesState.journalpost?.sak ???? eller nei???
          *
          * */
-        if (!!søkerId && !isKopierButtonDisabled) {
+        if (!!søkerId && ytelseForKopiering && !isKopierButtonDisabled) {
             dispatch(
                 kopierJournalpost(
                     søkerId,
@@ -145,10 +139,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         window.location.href = getEnvironmentVariable('K9_LOS_URL');
     };
 
-    const visPleietrengende = (!kopierJournalpostSuccess && isDokumenttypeMedPleietrengende) || !ukjentYtelse;
+    const visPleietrengende = !kopierJournalpostSuccess && isDokumenttypeMedPleietrengende;
+
     const skalHenteBarn =
-        (ukjentYtelse && fordelingState.dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) ||
-        (!ukjentYtelse && fellesState.journalpost?.sak?.sakstype !== DokumenttypeForkortelse.PPN);
+        fordelingState.dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE &&
+        fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_MA &&
+        fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_UT &&
+        fordelingState.dokumenttype !== FordelingDokumenttype.KORRIGERING_IM;
 
     return (
         <>
@@ -193,7 +190,6 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                             resetBarn();
                         }
                     }}
-                    visComponent={ukjentYtelse}
                     valgtDokumentType={fordelingState.dokumenttype as string}
                 />
 
