@@ -238,6 +238,8 @@ export function kopierJournalpost(
     journalPostID: string,
     dedupKey: string,
     ytelse?: DokumenttypeForkortelse,
+    behandlingsÅr?: number,
+    annenPart?: string,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -246,6 +248,8 @@ export function kopierJournalpost(
             til: kopierTilIdent,
             barn: barnIdent,
             ytelse: ytelse,
+            behandlingsÅr: behandlingsÅr,
+            annenPart: annenPart,
         };
 
         dispatch(getJournalpostKopiereRequestAction());
