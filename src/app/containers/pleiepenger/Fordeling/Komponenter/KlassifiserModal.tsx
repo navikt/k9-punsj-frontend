@@ -417,6 +417,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                                 <Button
                                     type="button"
                                     onClick={() => kopierJournalpost.mutate()}
+                                    disabled={kopierJournalpost.isSuccess}
                                     size="small"
                                     data-test-id="klassifiserModalKopierPåNyttBtn"
                                 >
