@@ -431,14 +431,17 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                                 >
                                     <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
                                 </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => kopierJournalpost.mutate()}
-                                    size="small"
-                                    data-test-id="klassifiserModalKopierPåNyttBtn"
-                                >
-                                    <FormattedMessage id="fordeling.klassifiserModal.btn.kopier" />
-                                </Button>
+                                {!!kopierJournalpost.error && (
+                                    <Button
+                                        type="button"
+                                        onClick={() => kopierJournalpost.mutate()}
+                                        disabled={kopierJournalpost.isSuccess}
+                                        size="small"
+                                        data-test-id="klassifiserModalKopierPåNyttBtn"
+                                    >
+                                        <FormattedMessage id="fordeling.klassifiserModal.btn.kopier" />
+                                    </Button>
+                                )}
                             </>
                         )}
                     </>
