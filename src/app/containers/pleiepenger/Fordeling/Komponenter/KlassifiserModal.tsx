@@ -37,10 +37,11 @@ interface OwnProps {
 
 const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandlingsAar }: OwnProps) => {
     const navigate = useNavigate();
-    const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
-    const [ventGetJournalpost, setVentGetJournalpost] = useState(false);
-    const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
+    // const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
+    // const [ventGetJournalpost, setVentGetJournalpost] = useState(false);
+    // const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
     const [visBrev, setVisBrev] = useState(false);
+    const [visGåVidere, setVisGåVidere] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -70,23 +71,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
-    const journalførJournalpost = useMutation({
-        mutationFn: () =>
-            klassifiserDokument({
-                brukerIdent: identState.søkerId,
-                pleietrengendeIdent: identState.pleietrengendeId,
-                relatertPersonIdent: identState.annenPart,
-                journalpostId: journalpost.journalpostId,
-                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
-                periode: fagsak?.gyldigPeriode,
-                saksnummer: fagsak?.fagsakId,
-            }),
-    });
-
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
-
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
     });
@@ -104,22 +88,45 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
             ),
         onSuccess: () => {
             // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
-            setGetJpAntallForsøk(getJpAntallForsøk + 1);
-            setVentGetJournalpost(true);
+            // setGetJpAntallForsøk(getJpAntallForsøk + 1);
+            // setVentGetJournalpost(true);
             setTimeout(() => getJournalpost.mutate(), 4000);
         },
     });
 
-    const settBehandlingsÅr = useMutation(
-        () => postBehandlingsAar(journalpost.journalpostId, identState.søkerId, behandlingsAar),
-        {
-            onSuccess: () => {
-                if (toSøkere) {
-                    kopierJournalpost.mutate();
-                } else journalførJournalpost.mutate();
-            },
+    const settPåVent = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
+
+    const journalførJournalpost = useMutation({
+        mutationFn: () =>
+            klassifiserDokument({
+                brukerIdent: identState.søkerId,
+                pleietrengendeIdent: identState.pleietrengendeId,
+                relatertPersonIdent: identState.annenPart,
+                journalpostId: journalpost.journalpostId,
+                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
+                periode: fagsak?.gyldigPeriode,
+                saksnummer: fagsak?.fagsakId,
+            }),
+        onSuccess: () => {
+            if (toSøkere) {
+                kopierJournalpost.mutate();
+            }
+            if (!fortsett) {
+                settPåVent.mutate();
+            }
         },
-    );
+    });
+
+    const settBehandlingsÅr = useMutation({
+        mutationFn: () => postBehandlingsAar(journalpost.journalpostId, identState.søkerId, behandlingsAar),
+        onSuccess: () => journalførJournalpost.mutate(),
+    });
+
+    const handleGåVidere = () => {
+        navigate(getPathFraDokumenttype(dokumenttype) || '/');
+    };
 
     // Sette fagsak i fordeling state og navigere til journalfør og fortsett
     useEffect(() => {
@@ -138,24 +145,24 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 };
                 setFagsak(reservertSak);
             }
+            if (!toSøkere) {
+                navigate(getPathFraDokumenttype(dokumenttype) || '/');
+            }
 
-            navigate(getPathFraDokumenttype(dokumenttype) || '/');
-        }
-        if (!fortsett && journalførJournalpost.isSuccess) {
-            settPåVent.mutate();
+            setVisGåVidere(true);
         }
     }, [journalførJournalpost.isSuccess]);
 
     // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
     // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
     // Hvis journalposten ikke er ferdigstilt etter 5 forsøk, vis feilmelding
-    useEffect(() => {
+    /* useEffect(() => {
         if (getJournalpost.isSuccess) {
             const journalpostEtterKopiering = getJournalpost.data;
             if (journalpostEtterKopiering?.erFerdigstilt) {
                 if (fortsett) {
                     setVentGetJournalpost(false);
-                    window.location.reload();
+                    // window.location.reload();
                 } else {
                     setVentGetJournalpost(false);
                     settPåVent.mutate();
@@ -168,32 +175,28 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 setJpIkkeJournalførtFeil(true);
             }
         }
-    }, [getJournalpost.isSuccess]);
+    }, [getJournalpost.isSuccess]);*/
 
     // Hvis getJournalpost feiler, vis feilmelding
-    useEffect(() => {
+    /* useEffect(() => {
         if (getJournalpost.isError) {
             setVentGetJournalpost(false);
             setJpIkkeJournalførtFeil(true);
         }
-    }, [getJournalpost.isError]);
+    }, [getJournalpost.isError]);*/
 
     const disabled =
         ['loading'].includes(settBehandlingsÅr.status) ||
         ['loading', 'success'].includes(journalførJournalpost.status) ||
         ['loading', 'success'].includes(settPåVent.status) ||
         ['loading', 'success'].includes(kopierJournalpost.status) ||
-        ['loading', 'success'].includes(getJournalpost.status) ||
-        jpIkkejournalførtFeil ||
-        ventGetJournalpost;
+        ['loading', 'success'].includes(getJournalpost.status);
 
     const disabledButtonsLoading =
         ['loading'].includes(journalførJournalpost.status) ||
         ['loading'].includes(settPåVent.status) ||
         ['loading'].includes(kopierJournalpost.status) ||
-        ['loading'].includes(getJournalpost.status) ||
-        jpIkkejournalførtFeil ||
-        ventGetJournalpost;
+        ['loading'].includes(getJournalpost.status);
 
     const renderAlert = (variant: AlertProps['variant'], messageId: string, condition?: boolean, message?: string) => {
         if (!condition) return null;
@@ -227,8 +230,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
     const handleJournalfør = () => {
         if (isDokumenttypeMedBehandlingsår) {
             settBehandlingsÅr.mutate();
-        } else if (toSøkere) {
-            kopierJournalpost.mutate();
         } else journalførJournalpost.mutate();
     };
 
@@ -305,11 +306,11 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             !!kopierJournalpost.error,
                             (kopierJournalpost.error as Error)?.message,
                         )}
-                        {renderAlert(
+                        {/*renderAlert(
                             'error',
                             'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
                             jpIkkejournalførtFeil,
-                        )}
+                        )*/}
                         {renderAlert('error', 'fordeling.error.settBehandlingsÅrMutation', !!settBehandlingsÅr.error)}
 
                         {settBehandlingsÅr.isLoading && (
@@ -325,15 +326,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                             <div className="mt-5">
                                 <span>
                                     <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
-                                    {'  '}
-                                    <Loader size="xsmall" title="Lagrer..." />
-                                </span>
-                            </div>
-                        )}
-                        {(ventGetJournalpost || getJournalpost.isLoading) && (
-                            <div className="mt-5">
-                                <span>
-                                    <FormattedMessage id="fordeling.klassifiserModal.ventJpJournalføres" />
                                     {'  '}
                                     <Loader size="xsmall" title="Lagrer..." />
                                 </span>
@@ -378,34 +370,60 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                     </Button>
                 ) : (
                     <>
-                        <Button
-                            type="button"
-                            disabled={disabled}
-                            onClick={() => handleJournalfør()}
-                            size="small"
-                            data-test-id="klassifiserModalJournalfør"
-                        >
-                            {!journalførJournalpost.isLoading ? (
-                                <FormattedMessage
-                                    id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
-                                />
-                            ) : (
-                                <span>
-                                    <FormattedMessage id="fordeling.klassifiserModal.lagrer" />{' '}
-                                    <Loader size="xsmall" title="Lagrer..." />
-                                </span>
-                            )}
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={lukkModal}
-                            disabled={disabled && !jpIkkejournalførtFeil}
-                            size="small"
-                            variant="secondary"
-                            data-test-id="klassifiserModalAvbryt"
-                        >
-                            <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
-                        </Button>
+                        {!visGåVidere && (
+                            <>
+                                <Button
+                                    type="button"
+                                    disabled={disabled}
+                                    onClick={() => handleJournalfør()}
+                                    size="small"
+                                    data-test-id="klassifiserModalJournalfør"
+                                >
+                                    {!journalførJournalpost.isLoading ? (
+                                        <FormattedMessage
+                                            id={`fordeling.klassifiserModal.btn.${fortsett ? 'JournalførJournalposten' : 'JournalførOgSettPåvent'}`}
+                                        />
+                                    ) : (
+                                        <span>
+                                            <FormattedMessage id="fordeling.klassifiserModal.lagrer" />{' '}
+                                            <Loader size="xsmall" title="Lagrer..." />
+                                        </span>
+                                    )}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={lukkModal}
+                                    // disabled={disabled && !jpIkkejournalførtFeil}
+                                    disabled={disabled}
+                                    size="small"
+                                    variant="secondary"
+                                    data-test-id="klassifiserModalAvbryt"
+                                >
+                                    <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
+                                </Button>
+                            </>
+                        )}
+
+                        {visGåVidere && (
+                            <>
+                                <Button
+                                    type="button"
+                                    onClick={() => handleGåVidere()}
+                                    size="small"
+                                    data-test-id="klassifiserModalGåVidereetterKopiering"
+                                >
+                                    <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
+                                </Button>
+                                <Button
+                                    type="button"
+                                    onClick={() => kopierJournalpost.mutate()}
+                                    size="small"
+                                    data-test-id="klassifiserModalKopierPåNyttBtn"
+                                >
+                                    <FormattedMessage id="fordeling.klassifiserModal.btn.kopier" />
+                                </Button>
+                            </>
+                        )}
                     </>
                 )}
                 {settPåVent.isError && (
