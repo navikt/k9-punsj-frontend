@@ -414,7 +414,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                                 >
                                     <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
                                 </Button>
-                                {!!kopierJournalpost.error && (
+                                {!kopierJournalpost.isSuccess && (
                                     <Button
                                         type="button"
                                         onClick={() => kopierJournalpost.mutate()}
