@@ -149,6 +149,7 @@
     "fordeling.klassifiserModal.klassifiseringInfo.pleietrengendeID": "Pleietrengendes ID:",
     "fordeling.klassifiserModal.klassifiseringInfo.annenPartID": "Annen part ID:",
     "fordeling.klassifiserModal.klassifiseringInfo.saksnummer": "Saksnummer:",
+    "fordeling.klassifiserModal.klassifiseringInfo.fosterbarn": "Fosterbarn ID:",
     "fordeling.klassifiserModal.klassifiseringInfo.periode": "Periode:",
     "fordeling.klassifiserModal.alert.warning": "Informasjonen kan ikke endres etter journalposten er journalført.",
     "fordeling.klassifiserModal.alert.success": "Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost. Oppgaven settes på vent til {dato}.",

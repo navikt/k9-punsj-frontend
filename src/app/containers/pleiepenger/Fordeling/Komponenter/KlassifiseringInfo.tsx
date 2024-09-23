@@ -53,6 +53,12 @@ const KlassifiseringInfo = () => {
                     ? new Period(fagsak?.gyldigPeriode.fom, fagsak?.gyldigPeriode.tom).prettifyPeriod()
                     : undefined,
             )}
+
+            {identState.fosterbarn?.map((fosterbarn, index) => (
+                <div key={index}>
+                    {renderLabelValue('fordeling.klassifiserModal.klassifiseringInfo.fosterbarn', fosterbarn)}
+                </div>
+            ))}
         </div>
     );
 };

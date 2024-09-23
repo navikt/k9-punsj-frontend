@@ -6,48 +6,76 @@ import { Person } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { setFosterbarnAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
-interface Props {
-    // Define props here
-}
+const Fosterbarn: React.FC = () => {
+    const dispatch = useDispatch<Dispatch<any>>();
+    const identState = useSelector((state: RootStateType) => state.identState);
 
-const Fosterbarn: React.FC<Props> = (props) => {
-    const [fosterbarnArray, setFosterbarnArray] = useState<string[]>([]);
+    const fosterbarnFromState = identState.fosterbarn || [];
+
+    const [fosterbarnArray, setFosterbarnArray] = useState<string[]>(fosterbarnFromState);
     const [fosterbarnInfo, setFosterbarnInfo] = useState<Array<Person | null>>([]);
     const [fosterbarnInfoLoadingIndex, setFosterbarnInfoLoadingIndex] = useState<number | undefined>();
     const [fosterbarnInfoErrors, setFosterbarnInfoErrors] = useState<boolean[]>([]);
 
-    const dispatch = useDispatch<Dispatch<any>>();
-    const identState = useSelector((state: RootStateType) => state.identState);
+    const [updateFosterbarnInfo, setUpdateFosterbarnInfo] = useState<boolean>(true);
 
     const updateIdentState = (updatedBarn: string[]) => {
         dispatch(setFosterbarnAction(updatedBarn));
     };
 
-    const hentFosterbarnInfo = (fosterbarnsFødselsnummer: string, index: number) => {
-        const updatedErrors = fosterbarnInfoErrors.slice();
-        updatedErrors[index] = false;
-        setFosterbarnInfoErrors(updatedErrors);
-        setFosterbarnInfoLoadingIndex(index);
+    const hentFosterbarnInfo = (fosterbarnsFødselsnummer: string, index: number): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            const updatedErrors = [...fosterbarnInfoErrors];
+            updatedErrors[index] = false;
 
-        getPersonInfo(fosterbarnsFødselsnummer, (response, data: Person) => {
-            setFosterbarnInfoLoadingIndex(undefined);
-            if (response.status === 200) {
-                const updatedArray = (fosterbarnInfo || []).slice(); // Create a copy of the array
-                updatedArray.splice(index, 1, data); // Insert the new item at the specified index
+            setFosterbarnInfoErrors(updatedErrors);
+            setFosterbarnInfoLoadingIndex(index);
 
-                setFosterbarnInfo(updatedArray);
-            } else {
-                updatedErrors[index] = true;
-                setFosterbarnInfoErrors(updatedErrors);
-            }
+            getPersonInfo(fosterbarnsFødselsnummer, (response, data: Person) => {
+                setFosterbarnInfoLoadingIndex(undefined);
+                if (response.status === 200) {
+                    setFosterbarnInfo((prevFosterbarnInfo) => {
+                        const updatedArray = [...(prevFosterbarnInfo || [])];
+                        updatedArray.splice(index, 1, data); // Insert the new item at the specified index
+                        return updatedArray;
+                    });
+
+                    resolve();
+                } else {
+                    updatedErrors[index] = true;
+                    setFosterbarnInfoErrors(updatedErrors);
+                    reject(new Error('Failed to fetch person info'));
+                }
+            });
         });
     };
 
+    useEffect(() => {
+        const fetchFosterbarnInfo = async () => {
+            if (updateFosterbarnInfo && fosterbarnArray.length > 0 && fosterbarnInfo && fosterbarnInfo.length === 0) {
+                for (const [index, item] of fosterbarnArray.entries()) {
+                    try {
+                        if (item) {
+                            await hentFosterbarnInfo(item, index);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching fosterbarn info:', error);
+                    }
+                }
+            }
+        };
+
+        fetchFosterbarnInfo();
+    }, [fosterbarnArray, fosterbarnInfo]);
+
     const onChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        if (updateFosterbarnInfo) {
+            setUpdateFosterbarnInfo(false);
+        }
         const identFromInput = event.target.value.replace(/\D+/, '');
 
         const updatedArray = fosterbarnArray.map((item, i) => (i === index ? identFromInput : item));
@@ -109,10 +137,10 @@ const Fosterbarn: React.FC<Props> = (props) => {
         if (hasDuplicate) {
             return 'Du kan ikke legge til samme fosterbarn flere ganger';
         }
-        console.log('TEST: ', IdentRules.erUgyldigIdent(identFromState));
+
         return IdentRules.erUgyldigIdent(identFromState) ? 'Ugyldig fødselsnummer' : undefined;
     };
-    console.log('TEST ERROS', fosterbarnInfoErrors);
+
     return (
         <div className="mt-4 mb-4">
             {fosterbarnArray.map((barn, index) => {

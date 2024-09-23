@@ -359,6 +359,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (reserverSaksnummerTilNyFagsak || (fagsak?.reservert && !fagsak?.behandlingsår)) &&
         !journalpost.erFerdigstilt;
 
+    const visFosterbarnComponent =
+        isDokumenttypeMedFosterbarn &&
+        identState.søkerId.length === 11 &&
+        !journalpost.erFerdigstilt &&
+        reserverSaksnummerTilNyFagsak;
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -456,6 +462,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
         if (ytelserMedBehandlingsårValg && !behandlingsAar) {
             return true;
+        }
+
+        if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
+            return identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn));
         }
 
         if (isFagsakMedValgtBehandlingsår()) {
@@ -752,6 +762,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     valgtFagsak={valgtFagsakLokal}
                                     setBehandlingsAar={setBehandlingsAar}
                                     setAnnenPart={setAnnenPart}
+                                    setFosterbarn={setFosterbarn}
                                 />
                             )}
 
@@ -775,7 +786,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {isFetchingFagsaker && <Loader />}
 
-                            {isDokumenttypeMedFosterbarn && !fagsak && <Fosterbarn />}
+                            {visFosterbarnComponent && <Fosterbarn />}
 
                             {visPleietrengendeComponent && (
                                 <Pleietrengende

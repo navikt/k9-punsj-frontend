@@ -60,6 +60,11 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
+    const isDokumenttypeMedFosterbarn =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
+
     const toSøkere =
         !!identState.søkerId &&
         identState.pleietrengendeId &&
@@ -80,6 +85,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
                 saksnummer: fagsak?.fagsakId,
+                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
             }),
     });
 

@@ -21,6 +21,7 @@ interface Props {
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
     setBehandlingsAar: (behandlingsAar: string | undefined) => void;
     setAnnenPart: (annenPart: string) => void;
+    setFosterbarn: (fosterbarn?: string[]) => void;
 }
 
 const getFagsakInfo = (valgtFagsak: FagsakForSelect) => {
@@ -152,6 +153,7 @@ const FagsakSelect = ({
     setIdentAction,
     setBehandlingsAar,
     setAnnenPart,
+    setFosterbarn,
 }: Props) => (
     <>
         <div className="fagsakSelectContainer">
@@ -192,6 +194,7 @@ const FagsakSelect = ({
                 setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
                 setBehandlingsAar(undefined);
                 setAnnenPart('');
+                setFosterbarn(undefined);
             }}
             disabled={ingenInfoOmBarnIDokument}
             checked={reserverSaksnummerTilNyFagsak}
