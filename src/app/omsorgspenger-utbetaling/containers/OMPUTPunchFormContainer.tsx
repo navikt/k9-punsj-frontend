@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { IPeriode, Periode } from 'app/models/types';
+import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
 
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
@@ -39,6 +39,10 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
     const identState = useSelector((state: RootStateType) => state.identState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
 
+    const fosterbarn = identState.fosterbarn;
+
+    const fosterbarnMapped: PersonEnkel[] = fosterbarn?.map((fnr) => ({ norskIdent: fnr })) || [];
+    console.log('TEST fosterbarnMapped: fosterbarnMapped', fosterbarnMapped);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
 
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
@@ -134,6 +138,7 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
                 journalpostid={journalpostid}
                 søkerId={identState.søkerId}
                 søknadsperiodeFraSak={fellesState.journalpost?.sak?.gyldigPeriode}
+                fosterbarnFraIdentState={fosterbarnMapped}
             />
         </Formik>
     );

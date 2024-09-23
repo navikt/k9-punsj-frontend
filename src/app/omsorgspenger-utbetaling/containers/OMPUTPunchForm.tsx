@@ -13,7 +13,7 @@ import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysning
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import VentModal from 'app/components/ventModal/VentModal';
-import { Periode } from 'app/models/types';
+import { Periode, PersonEnkel } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
@@ -50,6 +50,7 @@ interface Props {
         fom: string;
         tom: string;
     };
+    fosterbarnFraIdentState?: PersonEnkel[];
 }
 
 const PunchOMPUTForm: React.FC<Props> = ({
@@ -63,6 +64,7 @@ const PunchOMPUTForm: React.FC<Props> = ({
     eksisterendePerioder,
     kvittering,
     søknadsperiodeFraSak,
+    fosterbarnFraIdentState,
     setKvittering,
 }: Props) => {
     const intl = useIntl();
@@ -167,6 +169,22 @@ const PunchOMPUTForm: React.FC<Props> = ({
         }
     }, [harMellomlagret]);
 
+    useEffect(() => {
+        console.log('TEST useEffect');
+        console.log('TEST fosterbarnFraIdentState: ', fosterbarnFraIdentState);
+        if (fosterbarnFraIdentState) {
+            console.log('TEST updatefosterbarn');
+            const prevBarn = values.barn;
+            const updatedBarn = Array.isArray(prevBarn) ? [...prevBarn] : [];
+            fosterbarnFraIdentState.forEach((newItem) => {
+                if (!updatedBarn.some((item) => item.norskIdent === newItem.norskIdent)) {
+                    updatedBarn.push(newItem);
+                }
+            });
+            setFieldValue('barn', updatedBarn, false);
+        }
+    }, [fosterbarnFraIdentState]);
+
     const harFeilISkjema = (errorList: FormikErrors<IOMPUTSoknad>) =>
         !![...k9FormatErrors, ...Object.keys(errorList)].length;
 
@@ -182,14 +200,12 @@ const PunchOMPUTForm: React.FC<Props> = ({
 
             <VerticalSpacer sixteenPx />
 
-            <Box padding="4" borderWidth="1" borderRadius="small" />
-            <>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" spacing>
                     Fosterbarn
                 </Heading>
                 <Personvelger name="barn" />
-            </>
-            <Box />
+            </Box>
 
             <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
 
