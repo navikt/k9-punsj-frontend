@@ -42,7 +42,7 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
     const fosterbarn = identState.fosterbarn;
 
     const fosterbarnMapped: PersonEnkel[] = fosterbarn?.map((fnr) => ({ norskIdent: fnr })) || [];
-    console.log('TEST fosterbarnMapped: fosterbarnMapped', fosterbarnMapped);
+
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
 
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);

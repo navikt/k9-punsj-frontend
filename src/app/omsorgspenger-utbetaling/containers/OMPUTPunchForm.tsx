@@ -170,10 +170,7 @@ const PunchOMPUTForm: React.FC<Props> = ({
     }, [harMellomlagret]);
 
     useEffect(() => {
-        console.log('TEST useEffect');
-        console.log('TEST fosterbarnFraIdentState: ', fosterbarnFraIdentState);
         if (fosterbarnFraIdentState) {
-            console.log('TEST updatefosterbarn');
             const prevBarn = values.barn;
             const updatedBarn = Array.isArray(prevBarn) ? [...prevBarn] : [];
             fosterbarnFraIdentState.forEach((newItem) => {
