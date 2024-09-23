@@ -1,0 +1,38 @@
+{
+    "journalpostId": "314",
+    "norskIdent": "29099000129",
+    "dokumenter": [
+        {
+            "dokumentId": "668084478"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": {
+        "kode": "PAPIRSØKNAD",
+        "navn": "Papirsøknad",
+        "erScanning": true
+    },
+    "kanSendeInn": true,
+    "erSaksbehandler": true,
+    "journalpostStatus": "MOTTATT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "erFerdigstilt": true,
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": true,
+        "fagsakId": null,
+        "gyldigPeriode": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
+        "sakstype": "OMP",
+        "behandlingsÅr": 2022,
+        "barnIdenter": [
+            {
+                "personId": "0014b79f-eb3d-4841-a45c-6ef0c778fbc5",
+                "norskIdent": "17497445612",
+                "aktørId": "2966115731368"
+            }
+        ]
+    }
+}

@@ -246,6 +246,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return;
             }
 
+            const fosterbarnFraSak = journalpost.sak?.barnIdenter;
+            const fosterbarn = fosterbarnFraSak ? fosterbarnFraSak.map((fb) => fb.norskIdent) : undefined;
+
+            if (fosterbarn && fosterbarn.length > 0) {
+                setFosterbarn(fosterbarn);
+            }
+
             // Sakstype på korrigering og omp_ut er samme i ferdistilt journalpost, derfor bruker trenger å velge dokumenttype igjen
             if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
                 setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);

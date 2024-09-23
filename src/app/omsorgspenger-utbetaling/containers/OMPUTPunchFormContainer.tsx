@@ -1,19 +1,18 @@
-/* eslint-disable no-template-curly-in-string */
-import { Formik, yupToFormErrors } from 'formik';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+
+import { Formik, yupToFormErrors } from 'formik';
+import { FormattedMessage } from 'react-intl';
 import { useMutation, useQuery } from 'react-query';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { IPeriode, Periode } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
+import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
+
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 
@@ -21,26 +20,29 @@ import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
-import { OMPUTPunchForm } from './OMPUTPunchForm';
+import PunchOMPUTForm from './OMPUTPunchForm';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
+import { Dispatch } from 'redux';
 
-interface OwnProps {
+interface Props {
     journalpostid: string;
 }
-export interface IPunchOMPUTFormStateProps {
-    identState: IIdentState;
-}
 
-type IPunchOMPUTFormProps = OwnProps & IPunchOMPUTFormStateProps;
-
-const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
-    const { identState } = props;
+const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
     const { id } = useParams<{ id: string }>();
-    const intl = useIntl();
+
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch<any>>();
+
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+
+    const fosterbarn = identState.fosterbarn;
+
+    const fosterbarnMapped: PersonEnkel[] = fosterbarn?.map((fnr) => ({ norskIdent: fnr })) || [];
+    console.log('TEST fosterbarnMapped: fosterbarnMapped', fosterbarnMapped);
     const [kvittering, setKvittering] = useState<IOMPUTSoknadKvittering | undefined>(undefined);
 
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
@@ -97,11 +99,11 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
         return (
             <>
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}
+                    <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: id }} />
                 </Alert>
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>
-                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                        <FormattedMessage id="skjema.knapp.tilstart" />
                     </Button>
                 </p>
             </>
@@ -124,7 +126,7 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
             }
             onSubmit={() => submit()}
         >
-            <OMPUTPunchForm
+            <PunchOMPUTForm
                 visForhaandsvisModal={visForhaandsvisModal}
                 setVisForhaandsvisModal={setVisForhaandsvisModal}
                 k9FormatErrors={k9FormatErrors}
@@ -133,14 +135,13 @@ const OMPUTPunchFormContainer = (props: IPunchOMPUTFormProps) => {
                 submitError={submitError}
                 setKvittering={setKvittering}
                 kvittering={kvittering}
-                {...props}
+                journalpostid={journalpostid}
+                søkerId={identState.søkerId}
+                søknadsperiodeFraSak={fellesState.journalpost?.sak?.gyldigPeriode}
+                fosterbarnFraIdentState={fosterbarnMapped}
             />
         </Formik>
     );
 };
 
-const mapStateToProps = (state: RootStateType): Partial<IPunchOMPUTFormStateProps> => ({
-    identState: state.identState,
-});
-
-export default connect(mapStateToProps)(OMPUTPunchFormContainer);
+export default OMPUTPunchFormContainer;
