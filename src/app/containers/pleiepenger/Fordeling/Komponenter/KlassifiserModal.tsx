@@ -79,24 +79,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
-    const journalførJournalpost = useMutation({
-        mutationFn: () =>
-            klassifiserDokument({
-                brukerIdent: identState.søkerId,
-                pleietrengendeIdent: identState.pleietrengendeId,
-                relatertPersonIdent: identState.annenPart,
-                journalpostId: journalpost.journalpostId,
-                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
-                periode: fagsak?.gyldigPeriode,
-                saksnummer: fagsak?.fagsakId,
-                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
-            }),
-    });
-
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
-
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
     });
@@ -119,7 +101,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
             setTimeout(() => getJournalpost.mutate(), 4000);
         },
     });
-
     const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
@@ -134,6 +115,7 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
                 saksnummer: fagsak?.fagsakId,
+                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
             }),
         onSuccess: () => {
             if (toSøkere) {
