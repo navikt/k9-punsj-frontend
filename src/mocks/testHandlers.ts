@@ -24,6 +24,7 @@ import jpKanIkkeSendes from '../../cypress/fixtures/jpKanIkkeSendes.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import barn from '../../cypress/fixtures/barn.json';
 import pilsSoknad from '../../cypress/fixtures/pilsSoknad.json';
+import jpOMPUT314 from '../../cypress/fixtures/jpOMPUT314.json';
 
 export const testHandlers = {
     hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
@@ -56,6 +57,9 @@ export const testHandlers = {
         }
         if (params.id === '312') {
             return HttpResponse.json(jpPSB312, { status: 201 });
+        }
+        if (params.id === '314') {
+            return HttpResponse.json(jpOMPUT314, { status: 201 });
         }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
