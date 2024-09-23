@@ -36,18 +36,20 @@ const FnrTextField: React.FC<Props> = ({
             </Label>
 
             <div className="flex mt-3">
-                <TextField
-                    id={labelId}
-                    label={<FormattedMessage id={labelId} />}
-                    hideLabel
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    autoComplete="off"
-                    htmlSize={27}
-                    maxLength={11}
-                    disabled={disabled}
-                />
+                <div className="items-end">
+                    <TextField
+                        id={labelId}
+                        label={<FormattedMessage id={labelId} />}
+                        hideLabel
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        autoComplete="off"
+                        htmlSize={27}
+                        maxLength={11}
+                        disabled={disabled}
+                    />
+                </div>
 
                 {!disabled && <PersonInfo loading={loadingPersonsInfo} error={errorPersonsInfo} person={person} />}
             </div>

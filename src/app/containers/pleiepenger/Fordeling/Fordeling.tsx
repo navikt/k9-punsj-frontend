@@ -27,7 +27,12 @@ import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
-import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
+import {
+    resetIdentState,
+    setAnnenPartAction,
+    setFosterbarnAction,
+    setIdentFellesAction,
+} from '../../../state/actions/IdentActions';
 import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
@@ -52,6 +57,7 @@ import { useMutation } from 'react-query';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
 import './fordeling.less';
+import Fosterbarn from './Komponenter/Fosterbarn';
 
 export interface IFordelingStateProps {
     journalpost: IJournalpost;
@@ -74,6 +80,7 @@ export interface IFordelingDispatchProps {
     resetIdentStateAction: typeof resetIdentState;
     setAnnenPart: typeof setAnnenPartAction;
     resetBarn: typeof resetBarnAction;
+    setFosterbarn: typeof setFosterbarnAction;
 }
 
 export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
@@ -99,6 +106,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         omfordel,
         setAnnenPart,
         resetBarn,
+        setFosterbarn,
     } = props;
 
     const { fagsak, dokumenttype } = fordelingState;
@@ -150,6 +158,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
+
+    const isDokumenttypeMedFosterbarn =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
     const isSakstypeMedPleietrengende =
@@ -342,6 +355,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         (reserverSaksnummerTilNyFagsak || (fagsak?.reservert && !fagsak?.behandlingsår)) &&
         !journalpost.erFerdigstilt;
 
+    const visFosterbarnComponent =
+        isDokumenttypeMedFosterbarn &&
+        identState.søkerId.length === 11 &&
+        !journalpost.erFerdigstilt &&
+        reserverSaksnummerTilNyFagsak;
+
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
@@ -441,6 +460,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             return true;
         }
 
+        if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
+            return identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn));
+        }
+
         if (isFagsakMedValgtBehandlingsår()) {
             return true;
         }
@@ -531,6 +554,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setBehandlingsAar(undefined); // lokal useState
             setToSokereIJournalpost(false); // lokal useState
             resetBarn(); // Redux felles state liste med barn
+            setFosterbarn(); // Redux felles state liste med fosterbarn
             resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
         }
 
@@ -734,6 +758,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     valgtFagsak={valgtFagsakLokal}
                                     setBehandlingsAar={setBehandlingsAar}
                                     setAnnenPart={setAnnenPart}
+                                    setFosterbarn={setFosterbarn}
                                 />
                             )}
 
@@ -756,6 +781,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </ErrorMessage>
                             )}
                             {isFetchingFagsaker && <Loader />}
+
+                            {visFosterbarnComponent && <Fosterbarn />}
+
                             {visPleietrengendeComponent && (
                                 <Pleietrengende
                                     toSokereIJournalpost={toSokereIJournalpost}
@@ -976,6 +1004,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
     resetAllState: () => dispatch(resetAllStateAction()),
     resetBarn: () => dispatch(resetBarnAction()),
+    setFosterbarn: (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn)),
 });
 
 const Fordeling = connect(mapStateToProps, mapDispatchToProps)(FordelingComponent);

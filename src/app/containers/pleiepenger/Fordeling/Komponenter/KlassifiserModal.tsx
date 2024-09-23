@@ -64,6 +64,11 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
+    const isDokumenttypeMedFosterbarn =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
+
     const toSøkere =
         !!identState.søkerId &&
         identState.pleietrengendeId &&
@@ -73,6 +78,24 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         !erInntektsmeldingUtenKrav;
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
+
+    const journalførJournalpost = useMutation({
+        mutationFn: () =>
+            klassifiserDokument({
+                brukerIdent: identState.søkerId,
+                pleietrengendeIdent: identState.pleietrengendeId,
+                relatertPersonIdent: identState.annenPart,
+                journalpostId: journalpost.journalpostId,
+                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
+                periode: fagsak?.gyldigPeriode,
+                saksnummer: fagsak?.fagsakId,
+                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
+            }),
+    });
+
+    const settPåVent = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
 
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),

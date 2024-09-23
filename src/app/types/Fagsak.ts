@@ -1,6 +1,12 @@
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { PersonFagsak } from 'app/models/types';
 
+export interface Fosterbarn {
+    personId: string;
+    norskIdent: string;
+    aktørId: string;
+}
+
 interface FagsakBase {
     fagsakId: string;
     sakstype: DokumenttypeForkortelse;
@@ -12,6 +18,7 @@ interface FagsakBase {
     relatertPerson?: PersonFagsak; // Kun for saker fra api i select for å vise navn
     behandlingsår?: string; // For OMS
     reservert?: boolean;
+    barnIdenter?: Fosterbarn[]; // For OMS
 }
 
 // Brukes kun i Fagsak select for å vise navner
