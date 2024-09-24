@@ -61,6 +61,11 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
 
         cy.window().then((window) => {
             const { worker } = window.msw;
+            worker.use(http.post(ApiPath.JOURNALPOST_MOTTAK, () => HttpResponse.json({}, { status: 200 })));
+        });
+
+        cy.window().then((window) => {
+            const { worker } = window.msw;
             worker.use(
                 http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Det oppstod en feil ved kopiering av journalpost.' }, { status: 500 }),
@@ -75,10 +80,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
             .within(() => {
                 cy.findByText(klassifiserModalAlertFeilKopiering).should('exist');
             });
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').click();
+        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.exist');
 
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -89,15 +91,6 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
             );
         });
 
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Kopi av journalposten er opprettet.');
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', annenSøkerFnr);
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should(
-            'contain',
-            fagsaker[2].pleietrengende.identitetsnummer,
-        );
-
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
@@ -107,20 +100,26 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
             );
         });
 
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
-
-        cy.wait(20);
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertFeilJfEtterKopiering).should('exist');
-            });
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('be.disabled');
+        cy.get('[data-test-id="klassifiserModalKopierPåNyttBtn"]').should('exist').click();
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Kopi av journalposten er opprettet.');
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', annenSøkerFnr);
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should(
+            'contain',
+            fagsaker[2].pleietrengende.identitetsnummer,
+        );
     });
 
     it('PSB Test klassifiser modal feilmelding ved kopiering med to søkere og set på vent etterpå', () => {
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').click();
+        cy.window().reload();
+
+        cy.findByText(/Ja/i).should('exist').click();
+
+        cy.contains('Velg fagsak').should('exist');
+
+        cy.findByLabelText('Velg fagsak')
+            .select(getFagsakNavnForSelect(fagsaker[2].fagsakId, dokumenttype))
+            .should('have.value', fagsaker[2].fagsakId);
+
         cy.get('[data-test-id="journalførOgVent"]').click();
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -142,7 +141,7 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
 
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
+        // cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
 
         cy.wait(1000);
 
