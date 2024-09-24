@@ -38,7 +38,6 @@ import { logError } from './utils/logUtils';
 import { ROUTES } from './constants/routes';
 
 import '@navikt/ds-css';
-import '@navikt/ft-plattform-komponenter/dist/style.css';
 import './styles/globalStyles.less';
 
 const environment = window.location.hostname;
