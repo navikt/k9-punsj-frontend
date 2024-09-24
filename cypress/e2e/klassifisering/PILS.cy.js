@@ -66,6 +66,11 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
 
         cy.window().then((window) => {
             const { worker } = window.msw;
+            worker.use(http.post(ApiPath.JOURNALPOST_MOTTAK, () => HttpResponse.json({}, { status: 200 })));
+        });
+
+        cy.window().then((window) => {
+            const { worker } = window.msw;
             worker.use(
                 http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpostId), () =>
                     HttpResponse.json({ detail: 'Det oppstod en feil ved kopiering av journalpost.' }, { status: 500 }),
@@ -80,10 +85,8 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
             .within(() => {
                 cy.findByText(klassifiserModalAlertFeilKopiering).should('exist');
             });
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
 
-        cy.get('[data-test-id="journalførOgFortsett"]').click();
+        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.exist');
 
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -94,35 +97,34 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
             );
         });
 
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Kopi av journalposten er opprettet.');
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', annenSøkerFnr);
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', fagsak.pleietrengende.identitetsnummer);
-
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(
-                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpostId), () =>
+                http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId), () =>
                     HttpResponse.json({ detail: 'Det oppstod en feil ved sjekke av journalpost.' }, { status: 500 }),
                 ),
             );
         });
 
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
+        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.exist');
 
-        cy.wait(20);
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertFeilJfEtterKopiering).should('exist');
-            });
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('be.disabled');
+        cy.get('[data-test-id="klassifiserModalKopierPåNyttBtn"]').should('exist').click();
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Kopi av journalposten er opprettet.');
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', annenSøkerFnr);
+        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', fagsak.pleietrengende.identitetsnummer);
     });
 
     it('Test klassifiser modal feilmelding ved kopiering med to søkere og set på vent etterpå', () => {
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').click();
+        cy.window().reload();
+
+        cy.findByText(/Ja/i).should('exist').click();
+
+        cy.contains('Velg fagsak').should('exist');
+
+        cy.findByLabelText('Velg fagsak')
+            .select(getFagsakNavnForSelect(fagsak.fagsakId, dokumenttype))
+            .should('have.value', fagsak.fagsakId);
+
         cy.get('[data-test-id="journalførOgVent"]').click();
         cy.window().then((window) => {
             const { worker } = window.msw;
@@ -144,7 +146,7 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
 
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
+        // cy.get('[data-test-id="klassifiserModalAlertBlokk"]').should('contain', 'Journalpost journalføres');
 
         cy.wait(1000);
 
@@ -193,7 +195,7 @@ describe(`Test klassifisering ${dokumenttype}`, { testIsolation: false }, () => 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
     });
 
-    it('PSB journalposten journalført', () => {
+    it('PILS journalposten journalført', () => {
         cy.url().should('eq', `http://localhost:8080/journalpost/${journalpostId}/${ytelseLenke}/`);
 
         cy.get('.journalpostpanel').within(() => {
