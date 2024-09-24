@@ -402,7 +402,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
                 return true;
             }
-            if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende) {
+            if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende && !toSokereIJournalpost) {
                 return !fagsak;
             }
 

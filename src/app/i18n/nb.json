@@ -168,6 +168,8 @@
     "fordeling.klassifiserModal.btn.avbryt": "Avbryt",
     "fordeling.klassifiserModal.btn.settPåVent": "Sett på vent",
     "fordeling.klassifiserModal.btn.gåTilLos": "Gå til LOS",
+    "fordeling.klassifiserModal.btn.gåVidere": "Videre",
+    "fordeling.klassifiserModal.btn.kopier": "Kopier journalpost",
     "fordeling.klassifiserModal.lagrer": "Lagrer...",
     "fordeling.klassifiserModal.settBehandlingsÅrLoading": "Oppdaterer behandlingsår...",
     "fordeling.klassifiserModal.kopierLoading": "Journalpost kopieres....",
