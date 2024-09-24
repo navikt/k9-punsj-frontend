@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
-import { kopierJournalpostTilSammeSøker } from 'app/state/reducers/FellesReducer';
+import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
@@ -48,9 +48,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
     const handleKopier = () => {
         setKopierLoading(true);
 
-        dispatch(
-            kopierJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering),
-        );
+        dispatch(kopierJournalpostRedux(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering));
 
         setKopierLoading(false);
     };

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 import {
     getJournalpostEtterKopiering,
     klassifiserDokument,
-    kopierJournalpostToSøkere,
+    kopierJournalpostNotRedux,
     postBehandlingsAar,
     settJournalpostPaaVentUtenSøknadId,
 } from 'app/api/api';
@@ -39,9 +39,7 @@ interface Props {
 
 const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
     const navigate = useNavigate();
-    // const [getJpAntallForsøk, setGetJpAntallForsøk] = useState(0);
-    // const [ventGetJournalpost, setVentGetJournalpost] = useState(false);
-    // const [jpIkkejournalførtFeil, setJpIkkeJournalførtFeil] = useState(false);
+
     const [visBrev, setVisBrev] = useState(false);
     const [visGåVidere, setVisGåVidere] = useState(false);
 
@@ -83,15 +81,22 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
 
+    const settPåVent = useMutation({
+        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
+    });
+
+    //TODO: Vise ny jp som er kopiert
+
+    // TODO: Sjekk trenger vi dette???
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
     });
 
+    // TODO: Legge til støtte for å kopiere til for alle andre ytelser
     // Forsøk hvis pleietrengende har ikke fødselsnummer ????
     const kopierJournalpost = useMutation({
         mutationFn: () =>
-            kopierJournalpostToSøkere(
-                identState.søkerId,
+            kopierJournalpostNotRedux(
                 identState.annenSokerIdent!,
                 identState.pleietrengendeId,
                 journalpost.journalpostId,
@@ -99,9 +104,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                 ytelseForKopiering,
             ),
         onSuccess: () => {
-            // Vent 4 sek og get journalpost etter kopiering for å sjekke om den er ferdigstilt
-            // setGetJpAntallForsøk(getJpAntallForsøk + 1);
-            // setVentGetJournalpost(true);
             setTimeout(() => getJournalpost.mutate(), 4000);
         },
     });
@@ -162,7 +164,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         }
     }, [journalførJournalpost.isSuccess]);
 
-    // TODO: Fjern DETTE
     // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
     // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
     // Hvis journalposten ikke er ferdigstilt etter 5 forsøk, vis feilmelding
