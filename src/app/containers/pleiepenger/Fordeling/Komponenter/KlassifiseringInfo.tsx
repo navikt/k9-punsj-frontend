@@ -49,7 +49,7 @@ const KlassifiseringInfo = () => {
 
             {renderLabelValue(
                 'fordeling.klassifiserModal.klassifiseringInfo.periode',
-                fagsak?.gyldigPeriode
+                fagsak?.gyldigPeriode && fagsak?.gyldigPeriode.fom && fagsak?.gyldigPeriode.tom
                     ? new Period(fagsak?.gyldigPeriode.fom, fagsak?.gyldigPeriode.tom).prettifyPeriod()
                     : undefined,
             )}
