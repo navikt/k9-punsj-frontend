@@ -81,10 +81,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
 
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
-
     //TODO: Vise ny jp som er kopiert
 
     // TODO: Sjekk trenger vi dette???
@@ -163,38 +159,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
             setVisGåVidere(true);
         }
     }, [journalførJournalpost.isSuccess]);
-
-    // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
-    // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
-    // Hvis journalposten ikke er ferdigstilt etter 5 forsøk, vis feilmelding
-    /* useEffect(() => {
-        if (getJournalpost.isSuccess) {
-            const journalpostEtterKopiering = getJournalpost.data;
-            if (journalpostEtterKopiering?.erFerdigstilt) {
-                if (fortsett) {
-                    setVentGetJournalpost(false);
-                    // window.location.reload();
-                } else {
-                    setVentGetJournalpost(false);
-                    settPåVent.mutate();
-                }
-            } else if (getJpAntallForsøk < 4) {
-                setGetJpAntallForsøk(getJpAntallForsøk + 1);
-                setTimeout(() => getJournalpost.mutate(), 1000);
-            } else {
-                setVentGetJournalpost(false);
-                setJpIkkeJournalførtFeil(true);
-            }
-        }
-    }, [getJournalpost.isSuccess]);*/
-
-    // Hvis getJournalpost feiler, vis feilmelding
-    /* useEffect(() => {
-        if (getJournalpost.isError) {
-            setVentGetJournalpost(false);
-            setJpIkkeJournalførtFeil(true);
-        }
-    }, [getJournalpost.isError]);*/
 
     const disabled =
         ['loading'].includes(settBehandlingsÅr.status) ||
@@ -327,18 +291,14 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                             !!kopierJournalpost.error,
                             (kopierJournalpost.error as Error)?.message,
                         )}
-                        {/*renderAlert(
-                            'error',
-                            'fordeling.klassifiserModal.jpIkkejournalførtFeil.alert.error',
-                            jpIkkejournalførtFeil,
-                        )*/}
+
                         {renderAlert('error', 'fordeling.error.settBehandlingsÅrMutation', !!settBehandlingsÅr.error)}
 
                         {settBehandlingsÅr.isLoading && (
                             <div className="mt-5">
                                 <span>
                                     <FormattedMessage id="fordeling.klassifiserModal.settBehandlingsÅrLoading" />
-                                    {'  '}
+
                                     <Loader size="xsmall" title="Lagrer..." />
                                 </span>
                             </div>
@@ -348,7 +308,7 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                             <div className="mt-5">
                                 <span>
                                     <FormattedMessage id="fordeling.klassifiserModal.kopierLoading" />
-                                    {'  '}
+
                                     <Loader size="xsmall" title="Lagrer..." />
                                 </span>
                             </div>
@@ -418,7 +378,6 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                                 <Button
                                     type="button"
                                     onClick={lukkModal}
-                                    // disabled={disabled && !jpIkkejournalførtFeil}
                                     disabled={disabled}
                                     size="small"
                                     variant="secondary"
