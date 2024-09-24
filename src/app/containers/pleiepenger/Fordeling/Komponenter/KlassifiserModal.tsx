@@ -76,20 +76,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
-    const journalførJournalpost = useMutation({
-        mutationFn: () =>
-            klassifiserDokument({
-                brukerIdent: identState.søkerId,
-                pleietrengendeIdent: identState.pleietrengendeId,
-                relatertPersonIdent: identState.annenPart,
-                journalpostId: journalpost.journalpostId,
-                fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
-                periode: fagsak?.gyldigPeriode,
-                saksnummer: fagsak?.fagsakId,
-                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
-            }),
-    });
-
     const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
@@ -117,10 +103,6 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         },
     });
 
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
-
     const journalførJournalpost = useMutation({
         mutationFn: () =>
             klassifiserDokument({
@@ -131,6 +113,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
                 fagsakYtelseTypeKode: fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype),
                 periode: fagsak?.gyldigPeriode,
                 saksnummer: fagsak?.fagsakId,
+                barnAktørIder: isDokumenttypeMedFosterbarn ? identState.fosterbarn : undefined,
             }),
         onSuccess: () => {
             if (toSøkere) {
@@ -176,6 +159,7 @@ const KlassifiserModal = ({ lukkModal, setFagsak, dedupkey, fortsett, behandling
         }
     }, [journalførJournalpost.isSuccess]);
 
+    // TODO: Fjern DETTE
     // Hvis getJournalpost isSuccess, sjekk om journalposten er ferdigstilt. Hvis journalposten er ferdigstilt reload siden for å gå videre
     // Hvis journalposten ikke er ferdigstilt, vent 1 sek og prøv igjen
     // Hvis journalposten ikke er ferdigstilt etter 5 forsøk, vis feilmelding
