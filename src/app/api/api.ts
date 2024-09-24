@@ -137,6 +137,9 @@ export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlle
         return response.json();
     });
 
+/* Kun for ytelser som har 2 søkere og pleietrengende
+ * derfor brukes ikke annen part
+ */
 export const kopierJournalpostToSøkere = (
     kopierFraIdent: string,
     kopierTilIdent: string,

@@ -227,6 +227,10 @@ type IJournalpostActionTypes =
     | IResetStateAction
     | ISetJournalposterIAapenSoknad;
 
+// TODO: use same function for both cases
+/*
+ * Brukes ved JournalpostAlleredeBehandlet
+ */
 export function kopierJournalpost(
     kopierFraIdent: string,
     kopierTilIdent: string,
@@ -234,6 +238,8 @@ export function kopierJournalpost(
     journalPostID: string,
     dedupKey: string,
     ytelse?: DokumenttypeForkortelse,
+    behandlingsÅr?: number,
+    annenPart?: string,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -242,6 +248,8 @@ export function kopierJournalpost(
             til: kopierTilIdent,
             barn: barnIdent,
             ytelse: ytelse,
+            behandlingsÅr: behandlingsÅr,
+            annenPart: annenPart,
         };
 
         dispatch(getJournalpostKopiereRequestAction());
@@ -266,13 +274,16 @@ export function kopierJournalpost(
         );
     };
 }
-
+/*
+ *  Brukes når barn finnes i Fagsak
+ */
 // TODO: Rename funk
 export function kopierJournalpostTilSammeSøker(
     søkerId: string,
     pleietrengendeId: string,
     journalpostId: string,
     dedupKey: string,
+    ytelse?: DokumenttypeForkortelse,
 ) {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
@@ -280,6 +291,7 @@ export function kopierJournalpostTilSammeSøker(
             fra: søkerId,
             til: søkerId,
             barn: pleietrengendeId,
+            ytelse,
         };
 
         dispatch(getJournalpostKopiereRequestAction());

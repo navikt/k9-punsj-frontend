@@ -51,7 +51,7 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
 import Pleietrengende from './Komponenter/Pleietrengende';
-import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
+import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
@@ -950,11 +950,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                lukkModal={() => setVisKlassifiserModal(false)}
-                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                                 dedupkey={props.dedupkey}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
+                                lukkModal={() => setVisKlassifiserModal(false)}
+                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                             />
                         )}
 

@@ -60,4 +60,6 @@ export interface IKopierJournalpost {
     til: string;
     barn: string;
     ytelse?: DokumenttypeForkortelse;
+    behandlingsÅr?: number;
+    annenPart?: string;
 }
