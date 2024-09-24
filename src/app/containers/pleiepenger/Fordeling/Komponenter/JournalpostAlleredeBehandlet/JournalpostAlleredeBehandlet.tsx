@@ -24,14 +24,17 @@ import { setDokumenttypeAction } from 'app/state/actions';
 import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 import AnnenPart from '../AnnenPart';
+import ToSoekere from '../ToSoekere';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
+    const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
 
     const dispatch = useDispatch<Dispatch<any>>();
 
-    const setIdentAction = (søkerId: string) => dispatch(setIdentFellesAction(søkerId, null, null));
+    const setIdentAction = (søkerId: string, pleietrengendeId?: string, annenSokerIdent?: string) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
     const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
     const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
     const resetBarn = () => dispatch(resetBarnAction());
@@ -44,7 +47,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     const prevPleietrengendeIdRef = useRef<string | null>(null);
 
     const { dedupKey, journalpost, kopierJournalpostSuccess, kopierJournalpostError } = fellesState;
-    const { søkerId, pleietrengendeId } = identState;
+    const { søkerId, pleietrengendeId, annenSokerIdent } = identState;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -62,6 +65,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const isDokumenttypeMedAnnenPart = fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
+    // TODO: Legg til validering for Annen søker
     const isKopierButtonDisabled =
         !fordelingState.dokumenttype ||
         fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER ||
@@ -118,11 +122,16 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
          * Hvis ytelse i jp er ukjent da bør velges dokumenttype, pleitrengende (som nå), behandlinsår og annen part - samme som i fordeling.
          * Hvis ytelse i jp er kjent, da det finnes alt i fellesState.journalpost?.sak ???? eller nei???
          *
+         * TODO: Fix If statement
          * */
-        if (!!søkerId && ytelseForKopiering && !isKopierButtonDisabled) {
+        if (
+            ((!!søkerId && !toSokereIJournalpost) || (toSokereIJournalpost && annenSokerIdent)) &&
+            ytelseForKopiering &&
+            !isKopierButtonDisabled
+        ) {
             dispatch(
                 kopierJournalpostRedux(
-                    søkerId,
+                    toSokereIJournalpost ? annenSokerIdent! : søkerId,
                     pleietrengendeId,
                     journalpost?.journalpostId,
                     dedupKey,
@@ -190,6 +199,16 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                         }
                     }}
                     valgtDokumentType={fordelingState.dokumenttype as string}
+                />
+
+                <ToSoekere
+                    journalpost={journalpost}
+                    identState={identState}
+                    toSokereIJournalpost={toSokereIJournalpost}
+                    setIdentAction={setIdentAction}
+                    setToSokereIJournalpost={setToSokereIJournalpost}
+                    dokumenttype={fordelingState.dokumenttype}
+                    // disabled={disableRadios}
                 />
 
                 <div className="mt-4">

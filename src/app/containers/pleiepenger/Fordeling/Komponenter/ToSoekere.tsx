@@ -38,11 +38,9 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     const [annenSøkersInfoError, setAnnenSøkersInfoError] = useState<boolean>(false);
 
     const skalVises =
-        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+        dokumenttype !== FordelingDokumenttype.ANNET &&
         !!journalpost?.kanKopieres &&
-        !journalpost.erFerdigstilt;
+        (!journalpost.erFerdigstilt || !journalpost.kanSendeInn);
 
     const hentAnnenSøkersInfo = (søkersFødselsnummer: string) => {
         setAnnenSøkersInfoError(false);
@@ -101,7 +99,13 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             <VerticalSpacer eightPx />
 
             <Checkbox onChange={handleCheckboxChange} checked={toSokereIJournalpost} disabled={disableCheckbox()}>
-                <FormattedMessage id="ident.identifikasjon.tosokere" />
+                <FormattedMessage
+                    id={
+                        journalpost.erFerdigstilt
+                            ? 'ident.identifikasjon.tosokere.behandlet'
+                            : 'ident.identifikasjon.tosokere'
+                    }
+                />
             </Checkbox>
 
             <VerticalSpacer sixteenPx />
@@ -109,7 +113,13 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
                     <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
-                        <FormattedMessage id="ident.identifikasjon.infoOmRegisteringAvToSokere" />
+                        <FormattedMessage
+                            id={
+                                journalpost.erFerdigstilt
+                                    ? 'ident.identifikasjon.infoOmRegisteringAvToSokere.behandlet'
+                                    : 'ident.identifikasjon.infoOmRegisteringAvToSokere'
+                            }
+                        />
                     </Alert>
 
                     <FnrTextField
