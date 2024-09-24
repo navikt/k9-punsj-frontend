@@ -227,12 +227,11 @@ type IJournalpostActionTypes =
     | IResetStateAction
     | ISetJournalposterIAapenSoknad;
 
-// TODO: use same function for both cases
 /*
  * Brukes ved JournalpostAlleredeBehandlet
+ * Og i KopierModal for å kopiere journalpost ti samme søker og barn
  */
-export function kopierJournalpost(
-    kopierFraIdent: string,
+export const kopierJournalpostRedux = (
     kopierTilIdent: string,
     barnIdent: string,
     journalPostID: string,
@@ -240,11 +239,10 @@ export function kopierJournalpost(
     ytelse?: DokumenttypeForkortelse,
     behandlingsÅr?: number,
     annenPart?: string,
-) {
+) => {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
             dedupKey,
-            fra: kopierFraIdent,
             til: kopierTilIdent,
             barn: barnIdent,
             ytelse: ytelse,
@@ -253,69 +251,21 @@ export function kopierJournalpost(
         };
 
         dispatch(getJournalpostKopiereRequestAction());
-        post(
-            ApiPath.JOURNALPOST_KOPIERE,
-            { journalpostId: journalPostID },
-            { 'X-Nav-NorskIdent': kopierFraIdent },
-            requestBody,
-            (response) => {
-                switch (response.status) {
-                    case 201:
-                    case 202:
-                        return dispatch(getJournalpostKopiereSuccessAction());
-                    case 403:
-                        return dispatch(getJournalpostKopiereForbiddenAction());
-                    case 409:
-                        return dispatch(getJournalpostKopiereConflictAction());
-                    default:
-                        return dispatch(getJournalpostKopiereErrorAction());
-                }
-            },
-        );
+        post(ApiPath.JOURNALPOST_KOPIERE, { journalpostId: journalPostID }, undefined, requestBody, (response) => {
+            switch (response.status) {
+                case 201:
+                case 202:
+                    return dispatch(getJournalpostKopiereSuccessAction());
+                case 403:
+                    return dispatch(getJournalpostKopiereForbiddenAction());
+                case 409:
+                    return dispatch(getJournalpostKopiereConflictAction());
+                default:
+                    return dispatch(getJournalpostKopiereErrorAction());
+            }
+        });
     };
-}
-/*
- *  Brukes når barn finnes i Fagsak
- */
-// TODO: Rename funk
-export function kopierJournalpostTilSammeSøker(
-    søkerId: string,
-    pleietrengendeId: string,
-    journalpostId: string,
-    dedupKey: string,
-    ytelse?: DokumenttypeForkortelse,
-) {
-    return (dispatch: any) => {
-        const requestBody: IKopierJournalpost = {
-            dedupKey,
-            fra: søkerId,
-            til: søkerId,
-            barn: pleietrengendeId,
-            ytelse,
-        };
-
-        dispatch(getJournalpostKopiereRequestAction());
-        post(
-            ApiPath.JOURNALPOST_KOPIERE,
-            { journalpostId },
-            { 'X-Nav-NorskIdent': søkerId },
-            requestBody,
-            (response) => {
-                switch (response.status) {
-                    case 201:
-                    case 202:
-                        return dispatch(getJournalpostKopiereSuccessAction());
-                    case 403:
-                        return dispatch(getJournalpostKopiereForbiddenAction());
-                    case 409:
-                        return dispatch(getJournalpostKopiereConflictAction());
-                    default:
-                        return dispatch(getJournalpostKopiereErrorAction());
-                }
-            },
-        );
-    };
-}
+};
 
 const initialState: IFellesState = {
     dedupKey: ulid(),

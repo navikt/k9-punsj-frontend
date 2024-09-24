@@ -11,7 +11,7 @@ import { setAnnenPartAction, setIdentFellesAction } from 'app/state/actions/Iden
 import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
 import {
     getJournalpostKopiereErrorResetAction,
-    kopierJournalpost,
+    kopierJournalpostRedux,
     resetBarnAction,
 } from '../../../../../state/reducers/FellesReducer';
 import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from '../../../../../utils';
@@ -19,7 +19,7 @@ import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from '
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
 
-import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { setDokumenttypeAction } from 'app/state/actions';
 import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
@@ -121,8 +121,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
          * */
         if (!!søkerId && ytelseForKopiering && !isKopierButtonDisabled) {
             dispatch(
-                kopierJournalpost(
-                    søkerId,
+                kopierJournalpostRedux(
                     søkerId,
                     pleietrengendeId,
                     journalpost?.journalpostId,
