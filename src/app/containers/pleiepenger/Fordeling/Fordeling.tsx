@@ -49,7 +49,7 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import { useMutation } from 'react-query';
-import BrevModal from './Komponenter/BrevModal';
+import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
 import './fordeling.less';
 
@@ -169,10 +169,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
         return false;
     };
-
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
 
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
@@ -864,14 +860,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </Alert>
                             )}
 
-                            {settPåVent.isError && (
-                                <div className="mb-4">
-                                    <Alert size="small" variant="error">
-                                        <FormattedMessage id="fordeling.journalført.alert.settPåvent.error" />
-                                    </Alert>
-                                </div>
-                            )}
-
                             {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
                                 <div className="flex">
                                     <div className="mr-4">
@@ -915,40 +903,15 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
                                     </div>
+
                                     {isSakstypeMedPleietrengende && (
-                                        <>
-                                            <Button
-                                                size="small"
-                                                variant="secondary"
-                                                onClick={() => settPåVent.mutate()}
-                                            >
-                                                <FormattedMessage id="fordeling.journalført.settPåVent" />
-                                            </Button>
-                                            <div className="ml-4">
-                                                <Button
-                                                    size="small"
-                                                    variant="secondary"
-                                                    onClick={() => setÅpenBrevModal(true)}
-                                                >
-                                                    <FormattedMessage id="fordeling.journalført.åpenBrevModal.btn" />
-                                                </Button>
-                                            </div>
-                                        </>
+                                        <Button size="small" variant="secondary" onClick={() => setÅpenBrevModal(true)}>
+                                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.btn" />
+                                        </Button>
                                     )}
                                 </div>
                             )}
                         </div>
-
-                        {settPåVent.isSuccess && (
-                            <Modal
-                                key="settpaaventokmodal"
-                                onClose={() => null}
-                                aria-label="settpaaventokmodal"
-                                open={settPåVent.isSuccess}
-                            >
-                                <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                            </Modal>
-                        )}
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
@@ -961,20 +924,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         )}
 
                         {!!journalpost.sak?.fagsakId && !!dokumenttype && (
-                            <BrevModal
-                                open={åpenBrevModal}
-                                søkerId={identState.søkerId}
-                                journalpostId={journalpost.journalpostId}
-                                fagsakId={journalpost.sak?.fagsakId}
-                                onClose={() => setÅpenBrevModal(false)}
-                                sakstype={finnForkortelseForDokumenttype(dokumenttype)!}
-                            />
+                            <VentLukkBrevModal open={åpenBrevModal} onClose={() => setÅpenBrevModal(false)} />
                         )}
 
                         <VerticalSpacer sixteenPx />
                     </div>
                 </FormPanel>
             )}
+
             {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
                 <FormPanel>
                     <div className="fordeling-page">
@@ -982,6 +939,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                     </div>
                 </FormPanel>
             )}
+
             {!journalpost?.erSaksbehandler && (
                 <div>
                     <Alert size="small" variant="warning">
