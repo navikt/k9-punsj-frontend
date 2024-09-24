@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Alert, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
@@ -23,7 +24,8 @@ import './sok.less';
 export const SearchForm = () => {
     const [journalpostid, setJournalpostid] = useState('');
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch<any>>();
+
     const navigate = useNavigate();
 
     const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
@@ -112,7 +114,10 @@ export const SearchForm = () => {
                         label={<FormattedMessage id="søk.label.jpid" />}
                         onKeyDown={handleKeydown}
                     />
-                    <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                    <div className="ml-4">
+                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                    </div>
+
                     <VerticalSpacer sixteenPx />
                 </div>
 
