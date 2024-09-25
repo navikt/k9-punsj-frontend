@@ -229,14 +229,14 @@ type IJournalpostActionTypes =
 
 /*
  * Brukes ved JournalpostAlleredeBehandlet
- * Og i KopierModal for å kopiere journalpost ti samme søker og barn
+ * Og i KopierModal for å kopiere journalpost til samme søker og barn
  */
 export const kopierJournalpostRedux = (
-    kopierTilIdent: string,
-    barnIdent: string,
-    journalPostID: string,
     dedupKey: string,
+    kopierTilIdent: string,
+    journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
+    barnIdent?: string,
     behandlingsÅr?: number,
     annenPart?: string,
 ) => {

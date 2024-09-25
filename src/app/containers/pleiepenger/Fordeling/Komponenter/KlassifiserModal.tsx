@@ -93,11 +93,11 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
     const kopierJournalpost = useMutation({
         mutationFn: () =>
             kopierJournalpostNotRedux(
-                identState.annenSokerIdent!,
-                identState.pleietrengendeId,
-                journalpost.journalpostId,
                 dedupkey,
+                identState.annenSokerIdent!,
+                journalpost.journalpostId,
                 ytelseForKopiering,
+                identState.pleietrengendeId,
             ),
         onSuccess: () => {
             setTimeout(() => getJournalpost.mutate(), 4000);

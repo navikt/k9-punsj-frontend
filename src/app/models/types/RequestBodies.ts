@@ -57,7 +57,7 @@ export interface IOpprettSoknad {
 export interface IKopierJournalpost {
     dedupKey: string;
     til: string;
-    barn: string;
+    barn?: string;
     ytelse?: DokumenttypeForkortelse;
     behandlingsÅr?: number;
     annenPart?: string;
