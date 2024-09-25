@@ -131,11 +131,11 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         ) {
             dispatch(
                 kopierJournalpostRedux(
-                    toSokereIJournalpost ? annenSokerIdent! : søkerId,
-                    pleietrengendeId,
-                    journalpost?.journalpostId,
                     dedupKey,
+                    toSokereIJournalpost ? annenSokerIdent! : søkerId,
+                    journalpost?.journalpostId,
                     ytelseForKopiering,
+                    pleietrengendeId && pleietrengendeId.length > 0 ? pleietrengendeId : undefined,
                     isDokumenttypeMedBehandlingsår && behandlingsAar ? Number(behandlingsAar) : undefined,
                     isDokumenttypeMedAnnenPart ? identState.annenPart : undefined,
                 ),

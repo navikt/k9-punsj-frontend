@@ -698,7 +698,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
     it('Test to søkere i journalposten', () => {
         cy.findByLabelText('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)').should(
-            'not.exist',
+            'exist',
         );
     });
 });

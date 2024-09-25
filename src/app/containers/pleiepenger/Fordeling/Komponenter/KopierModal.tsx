@@ -48,7 +48,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
     const handleKopier = () => {
         setKopierLoading(true);
 
-        dispatch(kopierJournalpostRedux(søkerId, pleietrengendeId, journalpostId, dedupkey, ytelseForKopiering));
+        dispatch(kopierJournalpostRedux(dedupkey, søkerId, journalpostId, ytelseForKopiering, pleietrengendeId));
 
         setKopierLoading(false);
     };

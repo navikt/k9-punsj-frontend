@@ -142,11 +142,11 @@ export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlle
  * TODO: Endre navn, legge til andre parametere for andre ytelser
  */
 export const kopierJournalpostNotRedux = (
-    kopierTilIdent: string,
-    barnIdent: string,
-    journalPostID: string,
     dedupKey: string,
+    kopierTilIdent: string,
+    journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
+    barnIdent?: string,
     behandlingsÅr?: number,
     annenPart?: string,
 ): Promise<void> => {
