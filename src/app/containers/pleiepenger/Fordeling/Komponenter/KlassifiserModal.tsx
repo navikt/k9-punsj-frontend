@@ -30,6 +30,7 @@ import BrevComponent from 'app/components/brev/BrevComponent';
 
 interface Props {
     dedupkey: string;
+    toSøkere: boolean;
     fortsett?: boolean;
     behandlingsAar?: string;
 
@@ -37,7 +38,7 @@ interface Props {
     setFagsak: (sak: Fagsak) => void;
 }
 
-const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
+const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
     const navigate = useNavigate();
 
     const [visBrev, setVisBrev] = useState(false);
@@ -62,13 +63,18 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
-    const toSøkere =
-        !!identState.søkerId &&
-        identState.pleietrengendeId &&
-        !!identState.annenSokerIdent &&
-        !!journalpost?.journalpostId &&
-        !!journalpost?.kanKopieres &&
-        !erInntektsmeldingUtenKrav;
+    const ytelserMedBehandlingsårValg =
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
+        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
+
+    const isDokumenttypeMedPleietrengende =
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
+
+    const kopiere = toSøkere && !!journalpost?.kanKopieres && !erInntektsmeldingUtenKrav;
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
@@ -88,7 +94,9 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                 identState.annenSokerIdent!,
                 journalpost.journalpostId,
                 ytelseForKopiering,
-                identState.pleietrengendeId,
+                isDokumenttypeMedPleietrengende ? identState.pleietrengendeId : undefined,
+                ytelserMedBehandlingsårValg ? Number(behandlingsAar) : undefined,
+                dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ? identState.annenPart : undefined,
             ),
         onSuccess: () => {
             setTimeout(() => getJournalpost.mutate(), 4000);
@@ -111,7 +119,7 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                 saksnummer: fagsak?.fagsakId,
             }),
         onSuccess: () => {
-            if (toSøkere) {
+            if (kopiere) {
                 kopierJournalpost.mutate();
             }
             if (!fortsett) {
@@ -146,7 +154,7 @@ const KlassifiserModal = ({ dedupkey, fortsett, behandlingsAar, lukkModal, setFa
                 };
                 setFagsak(reservertSak);
             }
-            if (!toSøkere) {
+            if (!kopiere) {
                 navigate(getPathFraDokumenttype(dokumenttype) || '/');
             }
 

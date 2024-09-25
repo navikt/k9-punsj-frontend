@@ -48,7 +48,6 @@ import KlassifiserModal from './Komponenter/KlassifiserModal';
 import Pleietrengende from './Komponenter/Pleietrengende';
 import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
-import { useMutation } from 'react-query';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
 import './fordeling.less';
@@ -959,6 +958,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                         {visKlassifiserModal && (
                             <KlassifiserModal
                                 dedupkey={props.dedupkey}
+                                toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
                                 lukkModal={() => setVisKlassifiserModal(false)}
