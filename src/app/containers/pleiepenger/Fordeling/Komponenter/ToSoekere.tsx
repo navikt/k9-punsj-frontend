@@ -128,12 +128,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                         loadingPersonsInfo={annenSøkersInfoLoading}
                         errorPersonsInfo={annenSøkersInfoError}
                         person={annenSøkersInfo}
-                        errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(
-                            intl,
-                            identState.annenSokerIdent,
-                            identState.søkerId,
-                            identState.pleietrengendeId,
-                        )}
+                        errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(intl, identState)}
                         onChange={handleIdentAnnenSoker}
                     />
                 </div>
