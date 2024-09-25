@@ -67,6 +67,11 @@ export const identifikatorAnnenPart = yup.object().shape({
                     message: 'Fødselsnummeret kan ikke være søkers fødselsnummer.',
                 });
             }
+            if (value === identState.annenSokerIdent) {
+                return this.createError({
+                    message: 'Fødselsnummeret kan ikke være annen søkers fødselsnummer.',
+                });
+            }
             return true;
         }),
 });
