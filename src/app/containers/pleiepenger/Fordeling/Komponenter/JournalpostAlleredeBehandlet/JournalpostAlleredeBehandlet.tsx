@@ -65,20 +65,23 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const isDokumenttypeMedAnnenPart = fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
-    // TODO: Legg til validering for Annen søker
+    const isSammeIdenter =
+        (søkerId && søkerId === pleietrengendeId) ||
+        (søkerId && søkerId === annenSokerIdent) ||
+        (søkerId && søkerId === identState.annenPart) ||
+        (pleietrengendeId && pleietrengendeId === annenSokerIdent) ||
+        (pleietrengendeId && pleietrengendeId === identState.annenPart) ||
+        (annenSokerIdent && annenSokerIdent === identState.annenPart);
+
     const isKopierButtonDisabled =
         !fordelingState.dokumenttype ||
         fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER ||
         (isDokumenttypeMedPleietrengende && IdentRules.erUgyldigIdent(pleietrengendeId)) ||
         (isDokumenttypeMedBehandlingsår && !behandlingsAar) ||
         (isDokumenttypeMedAnnenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
+        isSammeIdenter ||
         kopierJournalpostSuccess;
-    /*
-     * TODO:
-     * Hvis ukjent ytelse, vises valg for dokumenttype og ytelse brukes av dette valget.
-     * Hvis ytelse er kjent, brukes sakstype fra journalposten.
-     * Kan væere problemmet med OMS ytelser, frodi de har flere sakstyper - må ses på.
-     * */
+
     const ytelseForKopiering = fordelingState.dokumenttype
         ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
         : undefined;
@@ -158,7 +161,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     return (
         <>
             <div className="p-4">
-                <Alert variant="info">
+                <Alert variant="info" data-test-id="infoJournalpostAlleredeBehandlet">
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                 </Alert>
 
@@ -194,7 +197,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                             type === FordelingDokumenttype.KORRIGERING_IM ||
                             type === FordelingDokumenttype.OMSORGSPENGER_MA
                         ) {
-                            setIdentAction(søkerId);
+                            setIdentAction(søkerId, undefined, annenSokerIdent || '');
                             resetBarn();
                         }
                     }}
@@ -257,6 +260,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     size="small"
                     disabled={isKopierButtonDisabled}
                     onClick={handleKopierJournalpost}
+                    data-test-id="kopierJournalpostBtn"
                 >
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kopierJournalpost.btn" />
                 </Button>

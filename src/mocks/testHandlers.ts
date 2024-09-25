@@ -19,7 +19,7 @@ import jpOMPMA304 from '../../cypress/fixtures/jpOMPMA304.json';
 import jpOMPUT305 from '../../cypress/fixtures/jpOMPUT305.json';
 import jpPSB312 from '../../cypress/fixtures/jpPSB312.json';
 import jpUkjent310 from '../../cypress/fixtures/jpUkjent310.json';
-import jpOMPUT311 from '../../cypress/fixtures/jpOMPUT311.json';
+import jpOMPUT311 from '../../cypress/fixtures/jp311.json';
 import jpKanIkkeSendes from '../../cypress/fixtures/jpKanIkkeSendes.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import barn from '../../cypress/fixtures/barn.json';
