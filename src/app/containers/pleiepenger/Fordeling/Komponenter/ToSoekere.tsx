@@ -39,6 +39,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 
     const skalVises =
         dokumenttype !== FordelingDokumenttype.ANNET &&
+        dokumenttype !== FordelingDokumenttype.OMSORGSPENGER &&
         !!journalpost?.kanKopieres &&
         (!journalpost.erFerdigstilt || !journalpost.kanSendeInn);
 
@@ -98,7 +99,12 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         <>
             <VerticalSpacer eightPx />
 
-            <Checkbox onChange={handleCheckboxChange} checked={toSokereIJournalpost} disabled={disableCheckbox()}>
+            <Checkbox
+                onChange={handleCheckboxChange}
+                checked={toSokereIJournalpost}
+                disabled={disableCheckbox()}
+                data-test-id="toSokereCheckbox"
+            >
                 <FormattedMessage
                     id={
                         journalpost.erFerdigstilt

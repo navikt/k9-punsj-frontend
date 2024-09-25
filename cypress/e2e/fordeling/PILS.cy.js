@@ -58,6 +58,10 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get(`input[value="${valgteDokumentTypeKode}"]`).should('exist').should('be.checked');
     });
 
+    it('Test ytelse har checkboks for 2 søkere', () => {
+        cy.get('[data-test-id="toSokereCheckbox"]').should('exist');
+    });
+
     it('Test journalfør buttons disabled ved start', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
