@@ -87,10 +87,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
     });
 
-    const settPåVent = useMutation({
-        mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
-    });
-
     //TODO: Vise ny jp som er kopiert
 
     // TODO: Sjekk trenger vi dette???
