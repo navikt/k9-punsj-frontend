@@ -3,44 +3,41 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
-import { IFellesState } from 'app/state/reducers/FellesReducer';
+import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import { useMutation } from 'react-query';
-import { getEnvironmentVariable } from 'app/utils';
+import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootStateType } from 'app/state/RootState';
 
-interface OwnProps {
+import { Dispatch } from 'redux';
+
+interface Props {
     søkerId: string;
     pleietrengendeId: string;
     journalpostId: string;
     dedupkey: string;
-    fellesState: IFellesState;
     fagsakId: string;
-    kopiereJournalpostTilSammeSøker: (
-        søkerId: string,
-        pleietrengendeId: string,
-        journalpostId: string,
-        dedupkey: string,
-    ) => void;
+
     lukkModal: () => void;
 }
 
-const KopierModal = ({
-    søkerId,
-    pleietrengendeId,
-    journalpostId,
-    dedupkey,
-    fellesState,
-    fagsakId,
-    kopiereJournalpostTilSammeSøker,
-    lukkModal,
-}: OwnProps) => {
+const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fagsakId, lukkModal }: Props) => {
     const [kopierLoading, setKopierLoading] = useState(false);
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
 
     const { mutate, status, error, isSuccess } = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
+
+    const ytelseForKopiering =
+        fordelingState.dokumenttype && getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype);
 
     useEffect(() => {
         if (fellesState.kopierJournalpostSuccess) {
@@ -50,7 +47,9 @@ const KopierModal = ({
 
     const handleKopier = () => {
         setKopierLoading(true);
-        kopiereJournalpostTilSammeSøker(søkerId, pleietrengendeId, journalpostId, dedupkey);
+
+        dispatch(kopierJournalpostRedux(dedupkey, søkerId, journalpostId, ytelseForKopiering, pleietrengendeId));
+
         setKopierLoading(false);
     };
 
@@ -60,32 +59,39 @@ const KopierModal = ({
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading">
-                    Vil du kopiere og lukke journalposten?
+                    <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.tittel" />
                 </Heading>
             </Modal.Header>
+
             <Modal.Body>
                 <>
                     <div>
-                        Den nye Journalposten vil bli kopiert og journalført mot eksisterende fagsak {fagsakId} for
-                        pleietrengende med id: {pleietrengendeId}. Denne journalposten vil bli lukket.
+                        <FormattedMessage
+                            id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.info"
+                            values={{ fagsakId: fagsakId, pleietrengendeId: pleietrengendeId }}
+                        />
                     </div>
+
                     <JournalPostKopiFelmeldinger fellesState={fellesState} />
+
                     {isSuccess && (
                         <div>
                             <Alert size="small" variant="success">
-                                Journalposten ble lukket
+                                <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.success" />
                             </Alert>
                         </div>
                     )}
+
                     {!!error && (
                         <div>
                             <Alert size="small" variant="warning">
-                                Error ved lukking av journalpost
+                                <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.error" />
                             </Alert>
                         </div>
                     )}
                 </>
             </Modal.Body>
+
             <Modal.Footer>
                 {fellesState.kopierJournalpostSuccess ? (
                     <Button
@@ -95,13 +101,14 @@ const KopierModal = ({
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                     >
-                        <FormattedMessage id="tilbaketilLOS" />
+                        <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.tilbaketilLOS.btn" />
                     </Button>
                 ) : (
                     <>
                         <Button type="button" disabled={kopierLoading} onClick={handleKopier} size="small">
-                            Kopier
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.btn" />
                         </Button>
+
                         <Button
                             type="button"
                             onClick={lukkModal}
@@ -109,7 +116,7 @@ const KopierModal = ({
                             size="small"
                             variant="secondary"
                         >
-                            <FormattedMessage id="fordeling.klassifiserModal.btn.avbryt" />
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.avbryt.btn" />
                         </Button>
                     </>
                 )}

@@ -136,33 +136,37 @@ export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlle
         return response.json();
     });
 
-export const kopierJournalpostToSøkere = (
-    kopierFraIdent: string,
-    kopierTilIdent: string,
-    barnIdent: string,
-    journalPostID: string,
+/* Kun for ytelser som har 2 søkere og pleietrengende
+ * derfor brukes ikke annen part
+ *
+ * TODO: Endre navn, legge til andre parametere for andre ytelser
+ */
+export const kopierJournalpostNotRedux = (
     dedupKey: string,
+    kopierTilIdent: string,
+    journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
+    barnIdent?: string,
+    behandlingsÅr?: number,
+    annenPart?: string,
 ): Promise<void> => {
     const requestBody: IKopierJournalpost = {
         dedupKey,
-        fra: kopierFraIdent,
         til: kopierTilIdent,
         barn: barnIdent,
         ytelse: ytelse,
+        behandlingsÅr: behandlingsÅr,
+        annenPart: annenPart,
     };
 
-    return post(
-        ApiPath.JOURNALPOST_KOPIERE,
-        { journalpostId: journalPostID },
-        { 'X-Nav-NorskIdent': kopierFraIdent },
-        requestBody,
-    ).then(async (response) => {
-        if (!response.ok) {
-            const feil = 'Det oppstod en feil ved kopiering av journalpost.';
-            throw Error(feil);
-        }
-    });
+    return post(ApiPath.JOURNALPOST_KOPIERE, { journalpostId: journalPostID }, undefined, requestBody).then(
+        async (response) => {
+            if (!response.ok) {
+                const feil = 'Det oppstod en feil ved kopiering av journalpost.';
+                throw Error(feil);
+            }
+        },
+    );
 };
 
 export const getJournalpostEtterKopiering = (journalpostid: string): Promise<IJournalpost> =>

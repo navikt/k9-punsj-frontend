@@ -1,23 +1,26 @@
 import { IdentRules } from 'app/rules';
 import intlHelper from '../../../utils/intlUtils';
 import { IntlShape } from 'react-intl';
+import { IIdentState } from 'app/models/types/IdentState';
 
 export const visFeilmeldingForAnnenIdentVidJournalKopi = (
     intl: IntlShape,
-    annenIdent: string | null,
-    sokerIdent?: string,
-    barnIdent?: string,
+    identState: IIdentState,
 ): string | undefined => {
-    if (annenIdent && IdentRules.erUgyldigIdent(annenIdent)) {
+    const { søkerId, pleietrengendeId, annenSokerIdent, annenPart } = identState;
+    if (annenSokerIdent && IdentRules.erUgyldigIdent(annenSokerIdent)) {
         return intlHelper(intl, 'ident.feil.ugyldigident');
     }
 
-    if (annenIdent && annenIdent === sokerIdent) {
+    if (annenSokerIdent && annenSokerIdent === søkerId) {
         return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiSoker');
     }
 
-    if (annenIdent && annenIdent === barnIdent) {
+    if (annenSokerIdent && annenSokerIdent === pleietrengendeId) {
         return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiBarn');
+    }
+    if (annenSokerIdent && annenSokerIdent === annenPart) {
+        return intlHelper(intl, 'ident.feil.annenSøkerJournalkopiAnnenPart');
     }
 
     return undefined;

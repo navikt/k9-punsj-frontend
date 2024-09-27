@@ -38,11 +38,10 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     const [annenSøkersInfoError, setAnnenSøkersInfoError] = useState<boolean>(false);
 
     const skalVises =
-        (dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE) &&
+        dokumenttype !== FordelingDokumenttype.ANNET &&
+        dokumenttype !== FordelingDokumenttype.OMSORGSPENGER &&
         !!journalpost?.kanKopieres &&
-        !journalpost.erFerdigstilt;
+        (!journalpost.erFerdigstilt || !journalpost.kanSendeInn);
 
     const hentAnnenSøkersInfo = (søkersFødselsnummer: string) => {
         setAnnenSøkersInfoError(false);
@@ -100,8 +99,19 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         <>
             <VerticalSpacer eightPx />
 
-            <Checkbox onChange={handleCheckboxChange} checked={toSokereIJournalpost} disabled={disableCheckbox()}>
-                <FormattedMessage id="ident.identifikasjon.tosokere" />
+            <Checkbox
+                onChange={handleCheckboxChange}
+                checked={toSokereIJournalpost}
+                disabled={disableCheckbox()}
+                data-test-id="toSokereCheckbox"
+            >
+                <FormattedMessage
+                    id={
+                        journalpost.erFerdigstilt
+                            ? 'ident.identifikasjon.tosokere.behandlet'
+                            : 'ident.identifikasjon.tosokere'
+                    }
+                />
             </Checkbox>
 
             <VerticalSpacer sixteenPx />
@@ -109,7 +119,13 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
             {toSokereIJournalpost && (
                 <div className="fordeling-page__to-sokere-i-journalpost">
                     <Alert size="small" variant="info" data-test-id="infoOmRegisteringAvToSokere">
-                        <FormattedMessage id="ident.identifikasjon.infoOmRegisteringAvToSokere" />
+                        <FormattedMessage
+                            id={
+                                journalpost.erFerdigstilt
+                                    ? 'ident.identifikasjon.infoOmRegisteringAvToSokere.behandlet'
+                                    : 'ident.identifikasjon.infoOmRegisteringAvToSokere'
+                            }
+                        />
                     </Alert>
 
                     <FnrTextField
@@ -118,12 +134,7 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
                         loadingPersonsInfo={annenSøkersInfoLoading}
                         errorPersonsInfo={annenSøkersInfoError}
                         person={annenSøkersInfo}
-                        errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(
-                            intl,
-                            identState.annenSokerIdent,
-                            identState.søkerId,
-                            identState.pleietrengendeId,
-                        )}
+                        errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(intl, identState)}
                         onChange={handleIdentAnnenSoker}
                     />
                 </div>
