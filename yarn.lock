@@ -1714,6 +1714,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cypress/request@npm:^3.0.4":
+  version: 3.0.5
+  resolution: "@cypress/request@npm:3.0.5"
+  dependencies:
+    aws-sign2: "npm:~0.7.0"
+    aws4: "npm:^1.8.0"
+    caseless: "npm:~0.12.0"
+    combined-stream: "npm:~1.0.6"
+    extend: "npm:~3.0.2"
+    forever-agent: "npm:~0.6.1"
+    form-data: "npm:~4.0.0"
+    http-signature: "npm:~1.4.0"
+    is-typedarray: "npm:~1.0.0"
+    isstream: "npm:~0.1.2"
+    json-stringify-safe: "npm:~5.0.1"
+    mime-types: "npm:~2.1.19"
+    performance-now: "npm:^2.1.0"
+    qs: "npm:6.13.0"
+    safe-buffer: "npm:^5.1.2"
+    tough-cookie: "npm:^4.1.3"
+    tunnel-agent: "npm:^0.6.0"
+    uuid: "npm:^8.3.2"
+  checksum: 10/41ea0de43c8be1f22b82ad8728505c8a155b8ac38be34fe404fbf1872aa631e7a990c913a5ceb4ef0e7c0d3ddd1b59f1637400379f1a50f6f79c7e70cb551574
+  languageName: node
+  linkType: hard
+
 "@cypress/xvfb@npm:^1.2.4":
   version: 1.2.4
   resolution: "@cypress/xvfb@npm:1.2.4"
@@ -2666,17 +2692,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.0.1, @navikt/aksel-icons@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "@navikt/aksel-icons@npm:7.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.0.1%2Fe577737bb8025322cbe3a147cd33ad0e1ce35732"
-  checksum: 10/ed409e9f3c952bf1284f8791c0c15f96cc7e7a02348304f435b360ef711d3fb6f37ce30133d73645cf4e26a1191935d0c1b8b84f52c2cbb718dc6be0594dc2fb
+"@navikt/aksel-icons@npm:7.1.0, @navikt/aksel-icons@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "@navikt/aksel-icons@npm:7.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.1.0%2F01f80ff249d8a5ea0158c737026860fd4b59c08b"
+  checksum: 10/ba4aaec28929b07a6fa8c1a4bfc1ea6089b1a5aee03ef5bda963e2bcab6ac20003672cef1e65047fb51108d22eb30415337e7c49ad085e6618c9da67bc3d299e
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@navikt/ds-css@npm:7.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.0.1%2Faa975b0014976ba552205e4fbd5ff68b886d6b93"
-  checksum: 10/e49411429fb0bd729ead474633c3393ba226ba1f76432815f88c19b732b097de583e0bb9b7a8551a3a7f6fc291bb81609044c26d96a3d80679bbd1bc5132dd8a
+"@navikt/ds-css@npm:7.1.0":
+  version: 7.1.0
+  resolution: "@navikt/ds-css@npm:7.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.1.0%2Fa4f5f25784152646f450c5518563f1e89f667a6a"
+  checksum: 10/2bc6c2156651a9122fffcc55a9bc020a51795642486acdbc6f0fd9eeb0632cef37af4dd780338984b595dd4f9e9b60d39eaa771dd0fe68af401cecc3de3434a1
   languageName: node
   linkType: hard
 
@@ -2690,28 +2716,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.0.1":
-  version: 7.0.1
-  resolution: "@navikt/ds-react@npm:7.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.0.1%2Ffe247ebc8a957b2b677e25a019ba9a9831f4e704"
+"@navikt/ds-react@npm:7.1.0":
+  version: 7.1.0
+  resolution: "@navikt/ds-react@npm:7.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.1.0%2Fb1bb093a8a5fc78f57b4e1bc671bf40de85eae4c"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^7.0.1"
-    "@navikt/ds-tokens": "npm:^7.0.1"
+    "@navikt/aksel-icons": "npm:^7.1.0"
+    "@navikt/ds-tokens": "npm:^7.1.0"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^3.0.0"
     react-day-picker: "npm:8.10.0"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 10/d20a026fb4dc884dc63d823c3ad4a80285a22ad2bcb122637b2a18484b6da9786d4183c37f7a5d562cfca138e82cbf5a7d8502a9c2627570ff067877819fc2de
+  checksum: 10/6a076c6e721c01729c74873e79f8ce184977b907e7a59970e83e6b91c13267434e96269fb5314f030d8b448a3423e977bdde8ca6040ea6d25efdabe0eda4df6e
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "@navikt/ds-tokens@npm:7.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.0.1%2F476acfd2558df6284de7915317e227afbe3176c0"
-  checksum: 10/e4cf92a059eb53b9206e4c2decc4cba512de5758ea24c31c9f92e4b300057ad93cee5ef4ec81607811dff46e23d4e41b6b6672d23f5eb20b318f3f5b1249e2af
+"@navikt/ds-tokens@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "@navikt/ds-tokens@npm:7.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.1.0%2Fc03dd5e1c9656faf78474c65c9d2c9ee76143695"
+  checksum: 10/7e477e6048e75ecffbe071e04fb480c846e552d91af760c7a4429cf6b7a52f6693644c4c4a7f546cdbe7baeecdd2108f17020f23e976de86a1c6a514e4ff25ad
   languageName: node
   linkType: hard
 
@@ -3183,64 +3209,64 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/browser-utils@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry-internal/browser-utils@npm:8.31.0"
+"@sentry-internal/browser-utils@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry-internal/browser-utils@npm:8.32.0"
   dependencies:
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/b934a0d18b10dfa96504684b35c9699ad47acaf91d463a51062faa07e5a227647ec093553df4604c2c98e9f1998e919f480b2257df4da317667b8d08e90cb546
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/ca08b2d75eb50bec70666363c2725d99db5b2a4dcfa85909e32c7962953c05d9057af414ee88c791349c6a74dc348b3f938e584b83153947333e8aa77d73414d
   languageName: node
   linkType: hard
 
-"@sentry-internal/feedback@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry-internal/feedback@npm:8.31.0"
+"@sentry-internal/feedback@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry-internal/feedback@npm:8.32.0"
   dependencies:
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/df56d9894711a54ad10fc1c68f9bd50e88be4ed9a613ced21010c2f6b9bc35075c75497a8512d077fdf1b36ec53f005104d9a64c4f8ecdd7fc9f831f98af1424
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/752bbf824581d7dcef4253f6ad4761cd30bc000dac7e25b7851aeb0f62f4f843ca3a503b4cd67114a061bd856cae6a0de13c860a8f7d28038ebc71fa8b2880d5
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay-canvas@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry-internal/replay-canvas@npm:8.31.0"
+"@sentry-internal/replay-canvas@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry-internal/replay-canvas@npm:8.32.0"
   dependencies:
-    "@sentry-internal/replay": "npm:8.31.0"
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/e4822401e67594703485dfbda7b8193725234d49a2e7767212eae1202c9a468ac07559b8c9a88e459ce4475ac4f7dfab900964f60f833a10fbbd599a56f7f995
+    "@sentry-internal/replay": "npm:8.32.0"
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/34d0eaf2feb96cfdae030f6b2df929bcdc52cba9240bfcfb28811b221b64010d8542ab5241c55fafe0ddff79f9d123299b633f2877c7695a13c83d02f01a5da8
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry-internal/replay@npm:8.31.0"
+"@sentry-internal/replay@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry-internal/replay@npm:8.32.0"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:8.31.0"
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/02239bc041fd2caa57eac5d8660eb2755424febb18b0716e41ec4a6c8544b598b020be29756deee9a4cc53dc54e1669f08e273597f79293bdcdc3a7801406a43
+    "@sentry-internal/browser-utils": "npm:8.32.0"
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/1b581717c56175a2c434f50a7902a3d8d5a49ae916af59e6b5aa6df9acaf04941c7cd89626c68b2a472f12e6a57a92396c7f2aec32e7b857ea53a1a338f1f213
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry/browser@npm:8.31.0"
+"@sentry/browser@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry/browser@npm:8.32.0"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:8.31.0"
-    "@sentry-internal/feedback": "npm:8.31.0"
-    "@sentry-internal/replay": "npm:8.31.0"
-    "@sentry-internal/replay-canvas": "npm:8.31.0"
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/4e883f1a58ef09e20e8c52060535f72368f2e5c7366f69a970527e74dadbc83c3c895ff0d86da8055d45c877e341f84a12f159d798979a455174d8e4c81868cc
+    "@sentry-internal/browser-utils": "npm:8.32.0"
+    "@sentry-internal/feedback": "npm:8.32.0"
+    "@sentry-internal/replay": "npm:8.32.0"
+    "@sentry-internal/replay-canvas": "npm:8.32.0"
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/eb745e1a864703c947ddf0b412259fff04e660a226efca7af6e5c27c5e1ea037a90143f47661bb85db5ac4bf3b3f6fde5bc16e15ca920f69eb7362e112a923e3
   languageName: node
   linkType: hard
 
@@ -3330,44 +3356,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry/core@npm:8.31.0"
+"@sentry/core@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry/core@npm:8.32.0"
   dependencies:
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
-  checksum: 10/78c66a431c75579b040d44fe3701d8da8dd00ca74cdeb36923c723560ed20c1ee3baa82f1764e10e21524c2a2ed38d7b7a9ed2f7e11d52a964c9bb14ab662f4b
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
+  checksum: 10/bec99d723ffa7eeb6ad99e7ebd5d3a38f8a6c3f46feb1af3961793bf1c2f93db37922ca0996cbcb7866e1fc9ca8be2eeffaf033378e815dce4ae6ac5b6936149
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry/react@npm:8.31.0"
+"@sentry/react@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry/react@npm:8.32.0"
   dependencies:
-    "@sentry/browser": "npm:8.31.0"
-    "@sentry/core": "npm:8.31.0"
-    "@sentry/types": "npm:8.31.0"
-    "@sentry/utils": "npm:8.31.0"
+    "@sentry/browser": "npm:8.32.0"
+    "@sentry/core": "npm:8.32.0"
+    "@sentry/types": "npm:8.32.0"
+    "@sentry/utils": "npm:8.32.0"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ^16.14.0 || 17.x || 18.x || 19.x
-  checksum: 10/2cc514fc896a0b178745ecd7f25101fbc22b7b7019a60845e60805214e0d966ddf124c47f5933d2b4379831f9ba4359a5da85379d719da9bfdacf6ad3aed3563
+  checksum: 10/76e01920344cd4aa44de2b8e91ee3d5117f34fbc750de87d36a861941501a48e28825238e52079e139c8acd6e7f6386474657778ac083f801cf819071fc5f0c0
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry/types@npm:8.31.0"
-  checksum: 10/577f6bbba65782a84d00f92d8d437f7ea2f4dc91a2acb91926d289ff24f54e1db1a5fe272b3dfc873870161cb3168ab72df23e33b08a8eecf0d4715c4a5409d5
+"@sentry/types@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry/types@npm:8.32.0"
+  checksum: 10/71ab7273f01d2545f80c36076bd9db9e060a2e41a8abaefd92354583d994f5b5fd8f224b8048be8162769e4a2f3a0ec43a1750130b72583adf88608d1e2c9a96
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:8.31.0":
-  version: 8.31.0
-  resolution: "@sentry/utils@npm:8.31.0"
+"@sentry/utils@npm:8.32.0":
+  version: 8.32.0
+  resolution: "@sentry/utils@npm:8.32.0"
   dependencies:
-    "@sentry/types": "npm:8.31.0"
-  checksum: 10/924c18b4a23021dd3fb40d715987cb1e3f63c3d981450bd920d103f48f139610d0aff665310f997bc5eadd343e38a202dd3fe5c38f5c0c1a89f796f8bb53b3ae
+    "@sentry/types": "npm:8.32.0"
+  checksum: 10/a8110e19ec54b922e5320e4d8b0b788defa532b39cc09a6743862c4f696034e78487c45fe634f0dcc372ae66cc5bc20e21f00a1d2c1917860bbaf5e933446c33
   languageName: node
   linkType: hard
 
@@ -7064,11 +7090,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.14.2":
-  version: 13.14.2
-  resolution: "cypress@npm:13.14.2"
+"cypress@npm:^13.15.0":
+  version: 13.15.0
+  resolution: "cypress@npm:13.15.0"
   dependencies:
-    "@cypress/request": "npm:^3.0.1"
+    "@cypress/request": "npm:^3.0.4"
     "@cypress/xvfb": "npm:^1.2.4"
     "@types/sinonjs__fake-timers": "npm:8.1.1"
     "@types/sizzle": "npm:^2.3.2"
@@ -7112,7 +7138,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10/e1366579f1361e95f78b54df7ccd2576301496b7a55351ea350af71d45f284a4422aa8e5bbebeaa420e403d33f575d7d6a9413b7e3b1a5ad72f7072eaeff7d8f
+  checksum: 10/eb1012234716ae912ad579839dee63f4abcfcfcfd1e5f9281d3d4d69f164d6ba98fac9ecee6432924c72344f5e3c58e694f4a0066ae9ba4b9b81e7fd0aa64f9f
   languageName: node
   linkType: hard
 
@@ -8291,9 +8317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.36.1":
-  version: 7.36.1
-  resolution: "eslint-plugin-react@npm:7.36.1"
+"eslint-plugin-react@npm:^7.37.0":
+  version: 7.37.0
+  resolution: "eslint-plugin-react@npm:7.37.0"
   dependencies:
     array-includes: "npm:^3.1.8"
     array.prototype.findlast: "npm:^1.2.5"
@@ -8315,7 +8341,7 @@ __metadata:
     string.prototype.repeat: "npm:^1.0.0"
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
-  checksum: 10/bca154b446c35af4859a92fd043dcfe5c74851eb27652234020548570bb81d37cc9f1eb1795b3c9e7514de6c9b48f42fcc00153062eca879dab45ab84e49d0b1
+  checksum: 10/ae005a5e4bdcbf43cda0e5297f5ee8badbbcc18ce6c3f83ac4141173242b27c8a067372061af745ae490c18eef2c3257985bcd240cee85dec262ca875347e8fc
   languageName: node
   linkType: hard
 
@@ -9070,7 +9096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0":
+"form-data@npm:^4.0.0, form-data@npm:~4.0.0":
   version: 4.0.0
   resolution: "form-data@npm:4.0.0"
   dependencies:
@@ -9890,6 +9916,17 @@ __metadata:
     jsprim: "npm:^2.0.2"
     sshpk: "npm:^1.14.1"
   checksum: 10/5f08e0c82174999da97114facb0d0d47e268d60b6fc10f92cb87b99d5ccccd36f79b9508c29dda0b4f4e3a1b2f7bcaf847e68ecd5da2f1fc465fcd1d054b7884
+  languageName: node
+  linkType: hard
+
+"http-signature@npm:~1.4.0":
+  version: 1.4.0
+  resolution: "http-signature@npm:1.4.0"
+  dependencies:
+    assert-plus: "npm:^1.0.0"
+    jsprim: "npm:^2.0.2"
+    sshpk: "npm:^1.18.0"
+  checksum: 10/f9f5eed4ac5db5e1ec6d00652680c7d8b76d553560017e34505c0c22c37abb2e6d22b9268ed4a8542aa9746852a2d64850531091e443393c9c8e0f4fd4174455
   languageName: node
   linkType: hard
 
@@ -11538,15 +11575,15 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:1.10.1"
     "@grafana/faro-web-tracing": "npm:1.10.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:7.0.1"
-    "@navikt/ds-css": "npm:7.0.1"
+    "@navikt/aksel-icons": "npm:7.1.0"
+    "@navikt/ds-css": "npm:7.1.0"
     "@navikt/ds-icons": "npm:3.4.3"
-    "@navikt/ds-react": "npm:7.0.1"
+    "@navikt/ds-react": "npm:7.1.0"
     "@navikt/fnrvalidator": "npm:2.1.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
     "@reduxjs/toolkit": "npm:^2.2.7"
-    "@sentry/react": "npm:8.31.0"
+    "@sentry/react": "npm:8.32.0"
     "@storybook/addon-essentials": "npm:8.3.3"
     "@storybook/addon-interactions": "npm:8.3.3"
     "@storybook/addon-links": "npm:8.3.3"
@@ -11588,7 +11625,7 @@ __metadata:
     cross-env: "npm:^7.0.3"
     css-loader: "npm:7.1.2"
     css-minimizer-webpack-plugin: "npm:7.0.0"
-    cypress: "npm:^13.14.2"
+    cypress: "npm:^13.15.0"
     cypress-wait-until: "npm:^3.0.2"
     dayjs: "npm:1.11.13"
     dotenv: "npm:16.4.5"
@@ -11598,7 +11635,7 @@ __metadata:
     eslint-plugin-import: "npm:2.30.0"
     eslint-plugin-jsx-a11y: "npm:6.10.0"
     eslint-plugin-prettier: "npm:5.2.1"
-    eslint-plugin-react: "npm:^7.36.1"
+    eslint-plugin-react: "npm:^7.37.0"
     eslint-plugin-react-hooks: "npm:4.6.2"
     fetch-mock: "npm:9.11.0"
     formik: "npm:2.4.6"
@@ -11676,7 +11713,7 @@ __metadata:
     typescript-string-operations: "npm:1.5.1"
     ulid: "npm:2.3.0"
     uuid: "npm:10.0.0"
-    webpack: "npm:5.94.0"
+    webpack: "npm:5.95.0"
     webpack-dev-server: "npm:5.1.0"
     yup: "npm:1.4.0"
   languageName: unknown
@@ -15926,7 +15963,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sshpk@npm:^1.14.1":
+"sshpk@npm:^1.14.1, sshpk@npm:^1.18.0":
   version: 1.18.0
   resolution: "sshpk@npm:1.18.0"
   dependencies:
@@ -17502,9 +17539,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.94.0":
-  version: 5.94.0
-  resolution: "webpack@npm:5.94.0"
+"webpack@npm:5.95.0":
+  version: 5.95.0
+  resolution: "webpack@npm:5.95.0"
   dependencies:
     "@types/estree": "npm:^1.0.5"
     "@webassemblyjs/ast": "npm:^1.12.1"
@@ -17534,7 +17571,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10/648449c5fbbb0839814116e3b2b044ac6c75a7ba272435155ddeb1e64dfaa2f8079be3adfbb691f648b69900756ce0f6fb73beab0ced3cf5e0fd46868b4593a6
+  checksum: 10/0377ad3a550b041f26237c96fb55754625b0ce6bae83c1c2447e3262ad056b0b0ad770dcbb92b59f188e9a2bd56155ce910add17dcf023cfbe78bdec774380c1
   languageName: node
   linkType: hard
 
