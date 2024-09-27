@@ -29,6 +29,10 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         });
     });
 
+    it('Test ytelse har checkboks for 2 søkere', () => {
+        cy.get('[data-test-id="toSokereCheckbox"]').should('not.exist');
+    });
+
     it('Viser dokumentvalg', () => {
         cy.contains(/Dette gjelder:?/i).should('exist');
         cy.contains('Pleiepenger').should('exist');

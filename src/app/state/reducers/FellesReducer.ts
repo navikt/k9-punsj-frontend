@@ -227,83 +227,45 @@ type IJournalpostActionTypes =
     | IResetStateAction
     | ISetJournalposterIAapenSoknad;
 
-export function kopierJournalpost(
-    kopierFraIdent: string,
-    kopierTilIdent: string,
-    barnIdent: string,
-    journalPostID: string,
+/*
+ * Brukes ved JournalpostAlleredeBehandlet
+ * Og i KopierModal for å kopiere journalpost til samme søker og barn
+ */
+export const kopierJournalpostRedux = (
     dedupKey: string,
+    kopierTilIdent: string,
+    journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
-) {
+    barnIdent?: string,
+    behandlingsÅr?: number,
+    annenPart?: string,
+) => {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
             dedupKey,
-            fra: kopierFraIdent,
             til: kopierTilIdent,
             barn: barnIdent,
             ytelse: ytelse,
+            behandlingsÅr: behandlingsÅr,
+            annenPart: annenPart,
         };
 
         dispatch(getJournalpostKopiereRequestAction());
-        post(
-            ApiPath.JOURNALPOST_KOPIERE,
-            { journalpostId: journalPostID },
-            { 'X-Nav-NorskIdent': kopierFraIdent },
-            requestBody,
-            (response) => {
-                switch (response.status) {
-                    case 201:
-                    case 202:
-                        return dispatch(getJournalpostKopiereSuccessAction());
-                    case 403:
-                        return dispatch(getJournalpostKopiereForbiddenAction());
-                    case 409:
-                        return dispatch(getJournalpostKopiereConflictAction());
-                    default:
-                        return dispatch(getJournalpostKopiereErrorAction());
-                }
-            },
-        );
+        post(ApiPath.JOURNALPOST_KOPIERE, { journalpostId: journalPostID }, undefined, requestBody, (response) => {
+            switch (response.status) {
+                case 201:
+                case 202:
+                    return dispatch(getJournalpostKopiereSuccessAction());
+                case 403:
+                    return dispatch(getJournalpostKopiereForbiddenAction());
+                case 409:
+                    return dispatch(getJournalpostKopiereConflictAction());
+                default:
+                    return dispatch(getJournalpostKopiereErrorAction());
+            }
+        });
     };
-}
-
-// TODO: Rename funk
-export function kopierJournalpostTilSammeSøker(
-    søkerId: string,
-    pleietrengendeId: string,
-    journalpostId: string,
-    dedupKey: string,
-) {
-    return (dispatch: any) => {
-        const requestBody: IKopierJournalpost = {
-            dedupKey,
-            fra: søkerId,
-            til: søkerId,
-            barn: pleietrengendeId,
-        };
-
-        dispatch(getJournalpostKopiereRequestAction());
-        post(
-            ApiPath.JOURNALPOST_KOPIERE,
-            { journalpostId },
-            { 'X-Nav-NorskIdent': søkerId },
-            requestBody,
-            (response) => {
-                switch (response.status) {
-                    case 201:
-                    case 202:
-                        return dispatch(getJournalpostKopiereSuccessAction());
-                    case 403:
-                        return dispatch(getJournalpostKopiereForbiddenAction());
-                    case 409:
-                        return dispatch(getJournalpostKopiereConflictAction());
-                    default:
-                        return dispatch(getJournalpostKopiereErrorAction());
-                }
-            },
-        );
-    };
-}
+};
 
 const initialState: IFellesState = {
     dedupKey: ulid(),

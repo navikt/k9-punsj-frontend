@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
-import { finnFagsaker, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
+import { finnFagsaker } from 'app/api/api';
 import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -51,9 +51,8 @@ import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
 import Pleietrengende from './Komponenter/Pleietrengende';
-import { KopiereJournalpostTilSammeSøker } from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
+import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
-import { useMutation } from 'react-query';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
 import './fordeling.less';
@@ -370,6 +369,33 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
+
+    const toSøkereIngenAnnenSøker =
+        !journalpost.erFerdigstilt && toSokereIJournalpost && identState.søkerId && !identState.annenSokerIdent;
+
+    const toSøkereIngenPleietrengende =
+        !journalpost.erFerdigstilt &&
+        toSokereIJournalpost &&
+        identState.søkerId &&
+        identState.annenSokerIdent &&
+        isDokumenttypeMedPleietrengende &&
+        !identState.pleietrengendeId;
+
+    const toSøkereIngenBehandlingÅr =
+        !journalpost.erFerdigstilt &&
+        toSokereIJournalpost &&
+        identState.søkerId &&
+        identState.annenSokerIdent &&
+        ytelserMedBehandlingsårValg &&
+        !behandlingsAar;
+
+    const toSøkereIngenAnnenPartMA =
+        !journalpost.erFerdigstilt &&
+        toSokereIJournalpost &&
+        identState.søkerId &&
+        identState.annenSokerIdent &&
+        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+        !identState.annenPart;
 
     useEffect(() => {
         if (opprettIGosysState.gosysOppgaveRequestSuccess) {
@@ -821,33 +847,49 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                 </Alert>
                             )}
 
-                            {!journalpost.erFerdigstilt &&
-                                toSokereIJournalpost &&
-                                identState.søkerId &&
-                                identState.annenSokerIdent &&
-                                !identState.pleietrengendeId && (
-                                    <Alert
-                                        size="small"
-                                        variant="warning"
-                                        className="mb-4"
-                                        data-test-id="toSøkereIngenPleietrengende"
-                                    >
-                                        <FormattedMessage id="fordeling.info.toSøkere.ingenPleietrengende" />
-                                    </Alert>
-                                )}
-                            {!journalpost.erFerdigstilt &&
-                                identState.søkerId &&
-                                toSokereIJournalpost &&
-                                !identState.annenSokerIdent && (
-                                    <Alert
-                                        size="small"
-                                        variant="warning"
-                                        className="mb-4"
-                                        data-test-id="toSøkereIngenAndreSøker"
-                                    >
-                                        <FormattedMessage id="fordeling.info.toSøkere" />
-                                    </Alert>
-                                )}
+                            {toSøkereIngenAnnenSøker && (
+                                <Alert
+                                    size="small"
+                                    variant="warning"
+                                    className="mb-4"
+                                    data-test-id="toSøkereIngenAnnenSøker"
+                                >
+                                    <FormattedMessage id="fordeling.alert.toSøkere.ingenAnnenSøker" />
+                                </Alert>
+                            )}
+
+                            {toSøkereIngenPleietrengende && (
+                                <Alert
+                                    size="small"
+                                    variant="warning"
+                                    className="mb-4"
+                                    data-test-id="toSøkereIngenPleietrengende"
+                                >
+                                    <FormattedMessage id="fordeling.alert.toSøkere.ingenPleietrengende" />
+                                </Alert>
+                            )}
+
+                            {toSøkereIngenBehandlingÅr && (
+                                <Alert
+                                    size="small"
+                                    variant="warning"
+                                    className="mb-4"
+                                    data-test-id="toSøkereIngenBehandlingÅr"
+                                >
+                                    <FormattedMessage id="fordeling.alert.toSøkere.ingenBehandlingÅr" />
+                                </Alert>
+                            )}
+
+                            {toSøkereIngenAnnenPartMA && (
+                                <Alert
+                                    size="small"
+                                    variant="warning"
+                                    className="mb-4"
+                                    data-test-id="toSøkereIngenAnnenPartMA"
+                                >
+                                    <FormattedMessage id="fordeling.alert.toSøkere.ingenAnnenPartMA" />
+                                </Alert>
+                            )}
 
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>
@@ -950,11 +992,12 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                lukkModal={() => setVisKlassifiserModal(false)}
-                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                                 dedupkey={props.dedupkey}
+                                toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
+                                lukkModal={() => setVisKlassifiserModal(false)}
+                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
                             />
                         )}
 

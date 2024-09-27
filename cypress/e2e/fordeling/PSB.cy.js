@@ -61,6 +61,10 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get(`input[value="${valgteDokumentTypeKode}"]`).should('exist').should('be.checked');
     });
 
+    it('Test ytelse har checkboks for 2 søkere', () => {
+        cy.get('[data-test-id="toSokereCheckbox"]').should('exist');
+    });
+
     it('Test journalfør buttons disabled ved start', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
@@ -704,11 +708,11 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
             .check();
 
         cy.get('[data-test-id="infoOmRegisteringAvToSokere"]').should('exist');
-        cy.get('[data-test-id="toSøkereIngenAndreSøker"]').should('exist');
+        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
-        cy.get('[data-test-id="toSøkereIngenAndreSøker"]').should('not.exist');
+        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('not.exist');
         cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('exist');
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
