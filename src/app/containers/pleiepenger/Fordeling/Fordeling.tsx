@@ -161,15 +161,14 @@ const Fordeling: React.FC = () => {
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
 
     const visPleietrengendeComponent =
-        gjelderPsbOmsOlp &&
+        dokumenttypeMedPleietrengende &&
+        !IdentRules.erUgyldigIdent(identState.søkerId) &&
+        visSokersBarn &&
         !isFetchingFagsaker &&
         (reserverSaksnummerTilNyFagsak ||
             jpErFerdigstiltOgUtenPleietrengende ||
             jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende) &&
         !ingenInfoOmPleitrengende;
-
-    const visPleietrengende =
-        visSokersBarn && dokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
     const visAnnenPart =
         dokumenttypeMedAnnenPart && (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent));
@@ -228,6 +227,17 @@ const Fordeling: React.FC = () => {
     );
 
     const redirectVidereDisabled = isRedirectVidereDisabled(identState, dokumenttypeMedPleietrengende, barnMedFagsak);
+
+    const visAlertJornalførUtenFagsak =
+        !erFerdigstilt &&
+        !fagsak &&
+        !journalførKnapperDisabled &&
+        (identState.pleietrengendeId || dokumenttypeMedBehandlingsårValg || dokumenttypeMedAnnenPart);
+
+    const visJournalførKnapper = !erFerdigstilt && gjelderPsbOmsOlp && !isFetchingFagsaker;
+
+    // Når journalposter er ferdigstilt
+    const visVidereKnapper = erFerdigstilt && gjelderPsbOmsOlp && !isFetchingFagsaker && !barnMedFagsak;
 
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
@@ -689,9 +699,11 @@ const Fordeling: React.FC = () => {
                                 setAnnenPart={setAnnenPart}
                             />
 
-                            {visValgAvBehandlingsaar && (
-                                <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
-                            )}
+                            <ValgAvBehandlingsÅr
+                                showComponent={visValgAvBehandlingsaar}
+                                behandlingsAar={behandlingsAar}
+                                onChange={setBehandlingsAar}
+                            />
 
                             {henteFagsakFeilet && (
                                 <ErrorMessage>
@@ -704,10 +716,10 @@ const Fordeling: React.FC = () => {
                             {visPleietrengendeComponent && (
                                 <Pleietrengende
                                     toSokereIJournalpost={toSokereIJournalpost}
+                                    showComponent={visPleietrengendeComponent}
                                     pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
                                         setBarnetHarIkkeFnr(harBarnetFnr)
                                     }
-                                    visPleietrengende={visPleietrengende}
                                     jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
                                     skalHenteBarn={
                                         dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
@@ -796,21 +808,11 @@ const Fordeling: React.FC = () => {
                                 </>
                             )}
 
-                            {!erFerdigstilt &&
-                                !fagsak &&
-                                !journalførKnapperDisabled &&
-                                (identState.pleietrengendeId ||
-                                    dokumenttypeMedBehandlingsårValg ||
-                                    dokumenttypeMedAnnenPart) && (
-                                    <Alert
-                                        size="small"
-                                        variant="info"
-                                        className="mb-4"
-                                        data-test-id="jornalførUtenFagsak"
-                                    >
-                                        <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
-                                    </Alert>
-                                )}
+                            {visAlertJornalførUtenFagsak && (
+                                <Alert size="small" variant="info" className="mb-4" data-test-id="jornalførUtenFagsak">
+                                    <FormattedMessage id="fordeling.infobox.jornalførUtenFagsak" />
+                                </Alert>
+                            )}
 
                             {fagsakMedValgtBehandlingsår && (
                                 <Alert
@@ -823,7 +825,7 @@ const Fordeling: React.FC = () => {
                                 </Alert>
                             )}
 
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !erFerdigstilt && (
+                            {visJournalførKnapper && (
                                 <div className="flex">
                                     <div className="mr-4">
                                         <Button
@@ -854,7 +856,7 @@ const Fordeling: React.FC = () => {
                                 </div>
                             )}
 
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && erFerdigstilt && !barnMedFagsak && (
+                            {visVidereKnapper && (
                                 <div className="flex">
                                     <div className="mr-4">
                                         <Button
@@ -876,16 +878,15 @@ const Fordeling: React.FC = () => {
                             )}
                         </div>
 
-                        {visKlassifiserModal && (
-                            <KlassifiserModal
-                                dedupkey={dedupKey}
-                                toSøkere={toSokereIJournalpost}
-                                fortsett={fortsettEtterKlassifiseringModal}
-                                behandlingsAar={behandlingsAar}
-                                lukkModal={() => setVisKlassifiserModal(false)}
-                                setFagsak={(s: Fagsak) => setFagsak(s)}
-                            />
-                        )}
+                        <KlassifiserModal
+                            dedupkey={dedupKey}
+                            toSøkere={toSokereIJournalpost}
+                            open={visKlassifiserModal}
+                            fortsett={fortsettEtterKlassifiseringModal}
+                            behandlingsAar={behandlingsAar}
+                            lukkModal={() => setVisKlassifiserModal(false)}
+                            setFagsak={(s: Fagsak) => setFagsak(s)}
+                        />
 
                         {!!sakFraJournalpost?.fagsakId && !!dokumenttype && (
                             <VentLukkBrevModal open={åpenBrevModal} onClose={() => setÅpenBrevModal(false)} />

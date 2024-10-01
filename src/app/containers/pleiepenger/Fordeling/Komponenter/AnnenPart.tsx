@@ -12,6 +12,10 @@ interface Props {
     setAnnenPart: (annenPart: string) => void;
 }
 const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
+    if (!showComponent) {
+        return null;
+    }
+
     const [visFeil, setVisFeil] = useState(false);
 
     const [annenPartInfo, setAnnenPartInfo] = useState<Person | undefined>(undefined);
@@ -54,9 +58,6 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
 
     const onBlurHandler = () => setVisFeil(true);
 
-    if (!showComponent) {
-        return null;
-    }
     return (
         <div className="mt-5 mb-5">
             <FnrTextField

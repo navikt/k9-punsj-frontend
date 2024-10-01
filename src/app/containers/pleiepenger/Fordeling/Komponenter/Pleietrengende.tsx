@@ -20,19 +20,23 @@ import { Dispatch } from 'redux';
 import './pleietrengende.less';
 export interface Props {
     toSokereIJournalpost: boolean;
+    showComponent: boolean;
     pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
-    visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
     skalHenteBarn?: boolean;
 }
 
 const Pleietrengende: React.FC<Props> = ({
     toSokereIJournalpost,
+    showComponent,
     pleietrengendeHarIkkeFnrFn,
     jpErFerdigstiltOgUtenPleietrengende,
-    visPleietrengende,
     skalHenteBarn,
 }: Props) => {
+    if (!showComponent) {
+        return null;
+    }
+
     const intl = useIntl();
 
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
@@ -56,10 +60,10 @@ const Pleietrengende: React.FC<Props> = ({
         setPleietrengendeIdent('');
         setPleietrengendeInfo(undefined);
 
-        if (identState.søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
+        if (identState.søkerId.length > 0 && skalHenteBarn && showComponent) {
             henteBarn(identState.søkerId);
         }
-    }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
+    }, [identState.søkerId, showComponent, skalHenteBarn]);
 
     const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
@@ -115,10 +119,6 @@ const Pleietrengende: React.FC<Props> = ({
     };
 
     const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
-
-    if (!visPleietrengende) {
-        return null;
-    }
 
     return (
         <div>

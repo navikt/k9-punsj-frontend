@@ -86,6 +86,11 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
         : undefined;
 
+    const kanKopieres =
+        ((!!søkerId && !toSokereIJournalpost) || (toSokereIJournalpost && annenSokerIdent)) &&
+        ytelseForKopiering &&
+        !isKopierButtonDisabled;
+
     useEffect(() => {
         if (!søkerId && journalpost?.norskIdent) {
             setIdentAction(journalpost?.norskIdent);
@@ -110,6 +115,42 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         );
     }
 
+    const handleDokumenttypeChange = (type: FordelingDokumenttype) => {
+        const prevDokumentType = fordelingState.dokumenttype;
+
+        if (
+            prevDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+            prevDokumentType === FordelingDokumenttype.OMSORGSPENGER_MA
+        ) {
+            setIdentAction(søkerId);
+        }
+
+        setDokumenttype(type);
+        setAnnenPart('');
+
+        if (
+            type !== FordelingDokumenttype.OMSORGSPENGER_UT &&
+            type !== FordelingDokumenttype.KORRIGERING_IM &&
+            behandlingsAar
+        ) {
+            setBehandlingsAar(undefined);
+        }
+
+        if (kopierJournalpostError) {
+            kopiereErrorReset();
+        }
+
+        if (
+            type === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
+            type === FordelingDokumenttype.OMSORGSPENGER_UT ||
+            type === FordelingDokumenttype.KORRIGERING_IM ||
+            type === FordelingDokumenttype.OMSORGSPENGER_MA
+        ) {
+            setIdentAction(søkerId, undefined, annenSokerIdent || '');
+            resetBarn();
+        }
+    };
+
     const handleKopierJournalpost = () => {
         if (kopierJournalpostError) {
             kopiereErrorReset();
@@ -119,19 +160,8 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
             setVisKanIkkeKopiere(true);
             return;
         }
-        /*
-         *
-         * TODO: Trenges støtte for annet part/behandligsår ???
-         * Hvis ytelse i jp er ukjent da bør velges dokumenttype, pleitrengende (som nå), behandlinsår og annen part - samme som i fordeling.
-         * Hvis ytelse i jp er kjent, da det finnes alt i fellesState.journalpost?.sak ???? eller nei???
-         *
-         * TODO: Fix If statement
-         * */
-        if (
-            ((!!søkerId && !toSokereIJournalpost) || (toSokereIJournalpost && annenSokerIdent)) &&
-            ytelseForKopiering &&
-            !isKopierButtonDisabled
-        ) {
+
+        if (kanKopieres) {
             dispatch(
                 kopierJournalpostRedux(
                     dedupKey,
@@ -166,41 +196,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 </Alert>
 
                 <DokumentTypeVelgerForKopiering
-                    handleDokumenttype={(type: FordelingDokumenttype) => {
-                        const prevDokumentType = fordelingState.dokumenttype;
-
-                        if (
-                            prevDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-                            prevDokumentType === FordelingDokumenttype.OMSORGSPENGER_MA
-                        ) {
-                            setIdentAction(søkerId);
-                        }
-
-                        setDokumenttype(type);
-                        setAnnenPart('');
-
-                        if (
-                            type !== FordelingDokumenttype.OMSORGSPENGER_UT &&
-                            type !== FordelingDokumenttype.KORRIGERING_IM &&
-                            behandlingsAar
-                        ) {
-                            setBehandlingsAar(undefined);
-                        }
-
-                        if (kopierJournalpostError) {
-                            kopiereErrorReset();
-                        }
-
-                        if (
-                            type === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-                            type === FordelingDokumenttype.OMSORGSPENGER_UT ||
-                            type === FordelingDokumenttype.KORRIGERING_IM ||
-                            type === FordelingDokumenttype.OMSORGSPENGER_MA
-                        ) {
-                            setIdentAction(søkerId, undefined, annenSokerIdent || '');
-                            resetBarn();
-                        }
-                    }}
+                    handleDokumenttype={(type: FordelingDokumenttype) => handleDokumenttypeChange(type)}
                     valgtDokumentType={fordelingState.dokumenttype as string}
                 />
 
@@ -211,20 +207,21 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     setIdentAction={setIdentAction}
                     setToSokereIJournalpost={setToSokereIJournalpost}
                     dokumenttype={fordelingState.dokumenttype}
-                    // disabled={disableRadios}
                 />
 
                 <div className="mt-4">
                     <Pleietrengende
-                        visPleietrengende={visPleietrengende}
-                        skalHenteBarn={skalHenteBarn}
                         toSokereIJournalpost={false}
+                        showComponent={visPleietrengende}
+                        skalHenteBarn={skalHenteBarn}
                     />
                 </div>
 
-                {isDokumenttypeMedBehandlingsår && (
-                    <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
-                )}
+                <ValgAvBehandlingsÅr
+                    showComponent={isDokumenttypeMedBehandlingsår}
+                    behandlingsAar={behandlingsAar}
+                    onChange={setBehandlingsAar}
+                />
 
                 <AnnenPart
                     identState={identState}

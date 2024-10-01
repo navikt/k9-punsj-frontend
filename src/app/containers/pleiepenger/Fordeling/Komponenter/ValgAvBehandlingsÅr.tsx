@@ -3,12 +3,18 @@ import React from 'react';
 import { Select } from '@navikt/ds-react';
 
 interface Props {
+    showComponent?: boolean;
     behandlingsAar?: string;
     onChange: (behandlingsAar: string) => void;
 }
 
-const ValgAvBehandlingsÅr = ({ behandlingsAar, onChange }: Props) => {
+const ValgAvBehandlingsÅr = ({ showComponent, behandlingsAar, onChange }: Props) => {
+    if (!showComponent) {
+        return null;
+    }
+
     const thisYear = new Date().getFullYear();
+
     return (
         <Select
             value={behandlingsAar}
