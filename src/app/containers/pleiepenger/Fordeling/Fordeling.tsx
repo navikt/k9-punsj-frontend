@@ -114,7 +114,8 @@ const Fordeling: React.FC = () => {
 
     const { fagsak, dokumenttype, isAwaitingLukkOppgaveResponse, lukkOppgaveDone } = fordelingState;
     const { dedupKey, isAwaitingKopierJournalPostResponse, kopierJournalpostSuccess } = fellesState;
-
+    const { gosysOppgaveRequestSuccess, isAwaitingGosysOppgaveRequestResponse, gosysOppgaveRequestError } =
+        opprettIGosysState;
     const {
         journalpostId,
         erFerdigstilt,
@@ -359,10 +360,10 @@ const Fordeling: React.FC = () => {
     }, [identState.pleietrengendeId]);
 
     useEffect(() => {
-        if (opprettIGosysState.gosysOppgaveRequestSuccess) {
+        if (gosysOppgaveRequestSuccess) {
             setVisGaaTilLos(true);
         }
-    }, [isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
+    }, [isAwaitingKopierJournalPostResponse, gosysOppgaveRequestSuccess]);
 
     // Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
     // Hvis det er ingen fagsaker, viser vi pleietrengende component
@@ -502,11 +503,11 @@ const Fordeling: React.FC = () => {
         }
     };
 
-    if (opprettIGosysState.isAwaitingGosysOppgaveRequestResponse) {
+    if (isAwaitingGosysOppgaveRequestResponse) {
         return <Loader size="large" />;
     }
 
-    if (opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
+    if (gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
             <Modal
                 key="opprettigosysokmodal"
@@ -515,7 +516,7 @@ const Fordeling: React.FC = () => {
                     setVisGaaTilLos(false);
                 }}
                 aria-label="settpaaventokmodal"
-                open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
+                open={!!gosysOppgaveRequestSuccess}
                 data-test-id="opprettIGosysOkModal"
             >
                 <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
@@ -562,11 +563,13 @@ const Fordeling: React.FC = () => {
                                 <FormattedMessage id="fordeling.infobox.jpErFerdigstiltOgUtenPleietrengende" />
                             </Alert>
                         )}
-                        {!!opprettIGosysState.gosysOppgaveRequestError && (
+
+                        {!!gosysOppgaveRequestError && (
                             <Alert size="small" variant="error" className="mb-5" data-test-id="opprettIGosysFeil">
                                 <FormattedMessage id="fordeling.omfordeling.feil" />
                             </Alert>
                         )}
+
                         {erInntektsmeldingUtenKrav && (
                             <>
                                 <Alert size="small" variant="warning" className="fordeling-alertstripeFeil">
@@ -588,6 +591,7 @@ const Fordeling: React.FC = () => {
                                 <VerticalSpacer thirtyTwoPx />
                             </>
                         )}
+
                         <div>
                             {!erInntektsmeldingUtenKrav && (
                                 <DokumentTypeVelger
@@ -598,6 +602,7 @@ const Fordeling: React.FC = () => {
                                     disableRadios={disableRadios}
                                 />
                             )}
+
                             {dokumenttype === FordelingDokumenttype.ANNET && (
                                 <InnholdForDokumenttypeAnnet
                                     journalpost={journalpost}
@@ -611,6 +616,7 @@ const Fordeling: React.FC = () => {
                                     omfordel={omfordel}
                                 />
                             )}
+
                             {(erInntektsmeldingUtenKrav || dokumenttype !== FordelingDokumenttype.OMSORGSPENGER) && (
                                 <SokersIdent
                                     dokumenttype={dokumenttype}
