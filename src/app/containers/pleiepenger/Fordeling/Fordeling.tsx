@@ -4,7 +4,7 @@ import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-
 import { finnFagsaker } from 'app/api/api';
 import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import {
@@ -15,20 +15,19 @@ import {
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { ROUTES } from 'app/constants/routes';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import FormPanel from '../../../components/FormPanel';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
-import { IIdentState } from '../../../models/types/IdentState';
+
 import { setDokumenttypeAction, setFagsakAction } from '../../../state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
 } from '../../../state/actions/GosysOppgaveActions';
 import { resetIdentState, setAnnenPartAction, setIdentFellesAction } from '../../../state/actions/IdentActions';
-import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
+import { resetBarnAction } from '../../../state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -49,8 +48,6 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
-
-import './fordeling.less';
 import {
     isDokumenttypeMedBehandlingsår,
     isDokumenttypeMedBehandlingsårValg,
@@ -61,14 +58,7 @@ import {
     isSakstypeMedPleietrengende,
 } from './fordelingUtils';
 
-export interface IFordelingStateProps {
-    journalpost: IJournalpost;
-    fordelingState: IFordelingState;
-    identState: IIdentState;
-    opprettIGosysState: IGosysOppgaveState;
-    fellesState: IFellesState;
-    dedupkey: string;
-}
+import './fordeling.less';
 
 export interface IFordelingDispatchProps {
     setDokumenttype: typeof setDokumenttypeAction;
@@ -84,18 +74,13 @@ export interface IFordelingDispatchProps {
     resetBarn: typeof resetBarnAction;
 }
 
-export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
+export type IFordelingProps = IFordelingDispatchProps;
 
 // TODO Flytte til felles sted?
 // TODO Sjekke alle useEffect
 
 const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
     const {
-        fordelingState,
-        fellesState,
-        identState,
-        journalpost,
-        opprettIGosysState,
         lukkJournalpostOppgave,
         resetOmfordelAction,
         lukkOppgaveReset,
@@ -109,9 +94,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         resetBarn,
     } = props;
 
-    const { fagsak, dokumenttype } = fordelingState;
-
     const navigate = useNavigate();
+
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost as IJournalpost);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+    const opprettIGosysState = useSelector((state: RootStateType) => state.opprettIGosys);
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -133,6 +122,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [åpenBrevModal, setÅpenBrevModal] = useState(false);
 
     const harFagsaker = fagsaker?.length > 0;
+
+    const { fagsak, dokumenttype } = fordelingState;
+    const dedupkey = fellesState.dedupKey;
 
     const dokumenttypeMedPleietrengende = isDokumenttypeMedPleietrengende(dokumenttype);
     const dokumenttypeMedBehandlingsårValg = isDokumenttypeMedBehandlingsårValg(dokumenttype);
@@ -874,7 +866,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                dedupkey={props.dedupkey}
+                                dedupkey={dedupkey}
                                 toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
@@ -912,10 +904,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 };
 
 const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
-    identState: state.identState,
-    opprettIGosysState: state.opprettIGosys,
     fellesState: state.felles,
     dedupkey: state.felles.dedupKey,
 });
