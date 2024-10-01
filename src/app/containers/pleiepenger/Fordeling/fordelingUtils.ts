@@ -97,6 +97,7 @@ export const isJournalførKnapperDisabled = (
         if (identState.søkerId === identState.annenSokerIdent) {
             return true;
         }
+
         if (identState.pleietrengendeId === identState.annenSokerIdent) {
             return true;
         }
@@ -137,22 +138,19 @@ export const isRedirectVidereDisabled = (
     dokumenttypeMedPleietrengende: boolean,
     barnMedFagsak?: FagsakForSelect,
 ) => {
-    console.log('Test dokumenttypeMedPleietrengende:', dokumenttypeMedPleietrengende);
-
     if (dokumenttypeMedPleietrengende) {
-        console.log('Test 1');
         if (barnMedFagsak) {
             return true;
         }
-        console.log('Test 2');
+
         if (identState.søkerId === identState.pleietrengendeId) {
             return true;
         }
-        console.log('Test 3');
+
         if (IdentRules.erUgyldigIdent(identState.pleietrengendeId)) {
             return true;
         }
     }
-    console.log('Last');
+
     return IdentRules.erUgyldigIdent(identState.søkerId);
 };
