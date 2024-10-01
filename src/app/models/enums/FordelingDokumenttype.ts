@@ -1,3 +1,4 @@
+// Dokumenttype (Ytelse) som velger saksbehandler
 export enum FordelingDokumenttype {
     PLEIEPENGER = 'PLEIEPENGER',
     PLEIEPENGER_I_LIVETS_SLUTTFASE = 'PLEIEPENGER_I_LIVETS_SLUTTFASE',
@@ -11,6 +12,7 @@ export enum FordelingDokumenttype {
     ANNET = 'ANNET',
 }
 
+// Sakstype (Ytelse) fra systemene
 export enum DokumenttypeForkortelse {
     PSB = 'PSB',
     PPN = 'PPN',
