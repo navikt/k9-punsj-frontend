@@ -226,13 +226,11 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
                 )}
 
-                <div className="mt-5 mb-5">
-                    <AnnenPart
-                        identState={identState}
-                        showComponent={fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
-                        setAnnenPart={setAnnenPart}
-                    />
-                </div>
+                <AnnenPart
+                    identState={identState}
+                    showComponent={fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA}
+                    setAnnenPart={setAnnenPart}
+                />
 
                 <JournalPostKopiFelmeldinger fellesState={fellesState} />
 

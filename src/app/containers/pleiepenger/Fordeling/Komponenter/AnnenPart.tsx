@@ -58,7 +58,7 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
         return null;
     }
     return (
-        <>
+        <div className="mt-5 mb-5">
             <FnrTextField
                 labelId="ident.identifikasjon.annenPart"
                 value={identState.annenPart}
@@ -69,7 +69,7 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
                 onChange={onChangeHandler}
                 onBlur={onBlurHandler}
             />
-        </>
+        </div>
     );
 };
 

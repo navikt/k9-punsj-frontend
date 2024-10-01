@@ -171,6 +171,9 @@ const Fordeling: React.FC = () => {
     const visPleietrengende =
         visSokersBarn && dokumenttypeMedPleietrengende && !IdentRules.erUgyldigIdent(identState.søkerId);
 
+    const visAnnenPart =
+        dokumenttypeMedAnnenPart && (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent));
+
     // Sjekk ang fagsak?.reservert && !fagsak?.gyldigPeriode
     const visValgAvBehandlingsaar =
         dokumenttypeMedBehandlingsårValg &&
@@ -360,7 +363,7 @@ const Fordeling: React.FC = () => {
         }
     }, [dokumenttype, identState.søkerId]);
 
-    // TODO TESTE DETTTE - det ser ut er bug her
+    // TODO: kanskje create function for this and use it in handle pleietrengende change
     useEffect(() => {
         if (reserverSaksnummerTilNyFagsak && fagsaker) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
@@ -680,16 +683,11 @@ const Fordeling: React.FC = () => {
                                 />
                             )}
 
-                            <div className="mt-5 mb-5">
-                                <AnnenPart
-                                    identState={identState}
-                                    showComponent={
-                                        dokumenttypeMedAnnenPart &&
-                                        (reserverSaksnummerTilNyFagsak || (!!fagsak && !fagsak.relatertPersonIdent))
-                                    }
-                                    setAnnenPart={setAnnenPart}
-                                />
-                            </div>
+                            <AnnenPart
+                                identState={identState}
+                                showComponent={visAnnenPart}
+                                setAnnenPart={setAnnenPart}
+                            />
 
                             {visValgAvBehandlingsaar && (
                                 <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
