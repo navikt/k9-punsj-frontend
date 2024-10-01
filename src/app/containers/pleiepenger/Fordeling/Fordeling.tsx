@@ -113,7 +113,7 @@ const Fordeling: React.FC = () => {
     const harFagsaker = fagsaker?.length > 0;
 
     const { fagsak, dokumenttype, isAwaitingLukkOppgaveResponse, lukkOppgaveDone } = fordelingState;
-    const { dedupKey } = fellesState;
+    const { dedupKey, isAwaitingKopierJournalPostResponse, kopierJournalpostSuccess } = fellesState;
 
     const {
         journalpostId,
@@ -362,7 +362,7 @@ const Fordeling: React.FC = () => {
         if (opprettIGosysState.gosysOppgaveRequestSuccess) {
             setVisGaaTilLos(true);
         }
-    }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
+    }, [isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
     // Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
     // Hvis det er ingen fagsaker, viser vi pleietrengende component
@@ -758,7 +758,7 @@ const Fordeling: React.FC = () => {
 
                             {!!barnMedFagsak && erFerdigstilt && (
                                 <>
-                                    {!fellesState.kopierJournalpostSuccess && (
+                                    {!kopierJournalpostSuccess && (
                                         <Alert size="small" variant="warning">
                                             <FormattedMessage
                                                 id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
