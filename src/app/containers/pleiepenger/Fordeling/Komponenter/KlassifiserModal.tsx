@@ -31,6 +31,7 @@ import BrevComponent from 'app/components/brev/BrevComponent';
 interface Props {
     dedupkey: string;
     toSøkere: boolean;
+    open: boolean;
     fortsett?: boolean;
     behandlingsAar?: string;
 
@@ -38,7 +39,11 @@ interface Props {
     setFagsak: (sak: Fagsak) => void;
 }
 
-const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
+const KlassifiserModal = ({ dedupkey, toSøkere, open, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
+    if (!open) {
+        return null;
+    }
+
     const navigate = useNavigate();
 
     const [visBrev, setVisBrev] = useState(false);
@@ -221,7 +226,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
 
     return (
-        <Modal open onClose={lukkModal} aria-labelledby="modal-heading" data-test-id="klassifiserModal">
+        <Modal open={open} onClose={lukkModal} aria-labelledby="modal-heading" data-test-id="klassifiserModal">
             <Modal.Header closeButton={false}>
                 <Heading level="1" size="small" id="modal-heading" data-test-id="klassifiserModalHeader">
                     <FormattedMessage id={`fordeling.klassifiserModal.tittel${fortsett ? '' : '.settPåVent'}`} />
