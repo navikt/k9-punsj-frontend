@@ -44,3 +44,34 @@ export const dokumenttyperForPsbOmsOlp = [
     FordelingDokumenttype.KORRIGERING_IM,
     FordelingDokumenttype.OPPLAERINGSPENGER,
 ];
+
+export const dokumenttyperMedPleietrengende = [
+    FordelingDokumenttype.PLEIEPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+    FordelingDokumenttype.OPPLAERINGSPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
+];
+
+export const sakstyperMedPleietrengende = [
+    DokumenttypeForkortelse.PSB,
+    DokumenttypeForkortelse.OMP_KS,
+    DokumenttypeForkortelse.PPN,
+    DokumenttypeForkortelse.OLP,
+    DokumenttypeForkortelse.OMP_AO,
+];
+
+// Dokumentyper som har valg for behandlingsår
+export const dokumenttyperMedBehandlingsårValg = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+];
+
+// Dokumenttyper (ytelser) som bruker behandlingsår
+export const dokumenttyperMedBehandlingsår = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
+    FordelingDokumenttype.OMSORGSPENGER_MA,
+];

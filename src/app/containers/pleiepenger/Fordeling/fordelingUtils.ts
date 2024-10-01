@@ -1,51 +1,27 @@
-import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import {
+    DokumenttypeForkortelse,
+    dokumenttyperMedBehandlingsår,
+    dokumenttyperMedBehandlingsårValg,
+    dokumenttyperMedPleietrengende,
+    FordelingDokumenttype,
+    sakstyperMedPleietrengende,
+} from 'app/models/enums';
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 
-const dokumenttyperMedPleietrengende = [
-    FordelingDokumenttype.PLEIEPENGER,
-    FordelingDokumenttype.OMSORGSPENGER_KS,
-    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
-    FordelingDokumenttype.OPPLAERINGSPENGER,
-    FordelingDokumenttype.OMSORGSPENGER_AO,
-];
-
-const sakstyperMedPleietrengende = [
-    DokumenttypeForkortelse.PSB,
-    DokumenttypeForkortelse.OMP_KS,
-    DokumenttypeForkortelse.PPN,
-    DokumenttypeForkortelse.OLP,
-    DokumenttypeForkortelse.OMP_AO,
-];
-
-// Dokumentyper som har valg for behandlingsår
-const dokumenttyperMedBehandlingsårValg = [
-    FordelingDokumenttype.OMSORGSPENGER_UT,
-    FordelingDokumenttype.KORRIGERING_IM,
-];
-
-// Dokumenttyper (ytelser) som bruker behandlingsår
-const dokumenttyperMedBehandlingsår = [
-    FordelingDokumenttype.OMSORGSPENGER_UT,
-    FordelingDokumenttype.KORRIGERING_IM,
-    FordelingDokumenttype.OMSORGSPENGER_KS,
-    FordelingDokumenttype.OMSORGSPENGER_AO,
-    FordelingDokumenttype.OMSORGSPENGER_MA,
-];
-
 export const isDokumenttypeMedPleietrengende = (dokumenttype?: FordelingDokumenttype) =>
     dokumenttype !== undefined && dokumenttyperMedPleietrengende.includes(dokumenttype);
 
 export const isSakstypeMedPleietrengende = (sakstype?: DokumenttypeForkortelse) =>
-    sakstype && sakstyperMedPleietrengende.includes(sakstype);
+    sakstype !== undefined && sakstyperMedPleietrengende.includes(sakstype);
 
 export const isDokumenttypeMedBehandlingsårValg = (dokumenttype?: FordelingDokumenttype) =>
     dokumenttype !== undefined && dokumenttyperMedBehandlingsårValg.includes(dokumenttype);
 
 export const isDokumenttypeMedBehandlingsår = (dokumenttype?: FordelingDokumenttype) =>
-    dokumenttype && dokumenttyperMedBehandlingsår.includes(dokumenttype);
+    dokumenttype !== undefined && dokumenttyperMedBehandlingsår.includes(dokumenttype);
 
 export const isFagsakMedValgtBehandlingsår = (
     fagsaker: FagsakForSelect[],
