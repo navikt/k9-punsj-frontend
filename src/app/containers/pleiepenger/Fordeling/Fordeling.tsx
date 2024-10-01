@@ -112,21 +112,26 @@ const Fordeling: React.FC = () => {
 
     const harFagsaker = fagsaker?.length > 0;
 
-    const { fagsak, dokumenttype } = fordelingState;
-    const dedupkey = fellesState.dedupKey;
+    const { fagsak, dokumenttype, isAwaitingLukkOppgaveResponse, lukkOppgaveDone } = fordelingState;
+    const { dedupKey } = fellesState;
+
+    const {
+        journalpostId,
+        erFerdigstilt,
+        norskIdent,
+        sak,
+        kanOpprettesJournalføringsoppgave,
+        punsjInnsendingType,
+        kanSendeInn,
+        erSaksbehandler,
+    } = journalpost;
 
     const dokumenttypeMedPleietrengende = isDokumenttypeMedPleietrengende(dokumenttype);
     const dokumenttypeMedBehandlingsårValg = isDokumenttypeMedBehandlingsårValg(dokumenttype);
     const dokumenttypeMedBehandlingsår = isDokumenttypeMedBehandlingsår(dokumenttype);
     const dokumenttypeMedAnnenPart = dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
-    const sakstypeMedPleietrengende = isSakstypeMedPleietrengende(journalpost.sak?.sakstype);
-
-    const jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende =
-        !journalpost.erFerdigstilt &&
-        !!journalpost.sak?.fagsakId &&
-        !!journalpost?.norskIdent &&
-        !(!sakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+    const sakstypeMedPleietrengende = isSakstypeMedPleietrengende(sak?.sakstype);
 
     const fagsakMedValgtBehandlingsår = isFagsakMedValgtBehandlingsår(
         fagsaker,
@@ -135,155 +140,11 @@ const Fordeling: React.FC = () => {
         behandlingsAar,
     );
 
-    /**
-     * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
-     */
-    useEffect(() => {
-        if (!journalpost.erFerdigstilt) {
-            if (journalpost.sak?.sakstype) {
-                if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
-                    setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
-                } else {
-                    const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
-                    if (dokumenttypeFraForkortelse) {
-                        setDokumenttype(dokumenttypeFraForkortelse);
-                    }
-                }
-            }
-
-            /**
-             * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
-             * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
-             */
-            if (journalpost.sak?.behandlingsår) {
-                setBehandlingsAar(journalpost.sak.behandlingsår);
-            }
-            if (journalpost.sak?.fagsakId) {
-                setIdentAction(journalpost.norskIdent!, journalpost.sak.pleietrengendeIdent);
-                if (
-                    journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP_MA &&
-                    journalpost.sak.relatertPersonIdent
-                ) {
-                    setAnnenPart(journalpost.sak.relatertPersonIdent);
-                }
-                setErSøkerIdBekreftet(true);
-                setRiktigIdentIJournalposten(JaNei.JA);
-                setFagsak(journalpost.sak);
-                setDisableRadios(true);
-                if (jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende) {
-                    setVisSokersBarn(true);
-                }
-            }
-        }
-    }, []);
-
-    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
-    useEffect(() => {
-        if (
-            journalpost.erFerdigstilt &&
-            !!journalpost.sak?.sakstype &&
-            journalpost?.kanSendeInn &&
-            journalpost?.erSaksbehandler &&
-            !!journalpost?.norskIdent &&
-            (!sakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
-        ) {
-            const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
-
-            // Ved feil. kanskje det trenges ikke fordi det kan ikke være ferdigstilt journalpost med reservert saksnummer med Annet sakstype
-            if (!fagsakYtelsePath && journalpost.sak?.sakstype !== DokumenttypeForkortelse.OMP) {
-                setDokumenttype(FordelingDokumenttype.ANNET);
-                setDisableRadios(true);
-                setSokersIdent(journalpost?.norskIdent);
-                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId);
-                return;
-            }
-
-            // Sakstype på korrigering og omp_ut er samme i ferdistilt journalpost, derfor bruker trenger å velge dokumenttype igjen
-            if (journalpost.sak?.sakstype === DokumenttypeForkortelse.OMP) {
-                setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
-                setFagsak(journalpost.sak);
-                setIdentAction(journalpost.norskIdent!);
-                setErSøkerIdBekreftet(true);
-                setRiktigIdentIJournalposten(JaNei.JA);
-                setDisableRadios(true);
-                setBehandlingsAar(journalpost.sak.behandlingsår);
-                return;
-            }
-
-            // Set fordeling state ved ferdistilt (journalført) sak
-            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
-            setErSøkerIdBekreftet(true);
-            setIdentAction(journalpost.norskIdent!, journalpost.sak?.pleietrengendeIdent);
-            setAnnenPart(journalpost.sak?.relatertPersonIdent || '');
-            setFagsak(journalpost.sak);
-
-            // Redirect to ferdigstilt side
-            navigate(
-                `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${fagsakYtelsePath}`,
-            );
-        }
-    }, []);
-
-    /**
-     * Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer.
-     *
-     * Brukes kun for å velge barn/pleietrengende ident. Barn/pleietrengende indent oppdateres ikke i journalposten.
-     * Den kun legges til i fordeling state og til ny søknad. Pleitrengende ident oppdateres i journalposten etter innsending av søknad.
-     */
+    const jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende =
+        !erFerdigstilt && !!sak?.fagsakId && !!norskIdent && !(!sakstypeMedPleietrengende || !!sak.pleietrengendeIdent);
 
     const jpErFerdigstiltOgUtenPleietrengende =
-        journalpost.erFerdigstilt &&
-        !!journalpost.sak?.fagsakId &&
-        !!journalpost?.norskIdent &&
-        !(!sakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
-
-    useEffect(() => {
-        if (jpErFerdigstiltOgUtenPleietrengende) {
-            const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(journalpost.sak?.sakstype);
-
-            // Ved feil
-            if (!dokumenttypeFraForkortelse) {
-                return;
-            }
-
-            setDisableRadios(true);
-            setDokumenttype(getDokumenttypeFraForkortelse(journalpost.sak?.sakstype));
-            setRiktigIdentIJournalposten(JaNei.JA);
-            setErSøkerIdBekreftet(true);
-            setIdentAction(journalpost.norskIdent!);
-            setVisSokersBarn(true);
-            // TODO
-            setFagsak(journalpost.sak);
-        }
-    }, []);
-
-    /**
-     * Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
-     * TODO: create function for this and use it in handleDokumenttype and handleSøkerIdChange
-     */
-    useEffect(() => {
-        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId && fagsak) {
-            setFagsak(undefined);
-            setReserverSaksnummerTilNyFagsak(false);
-            setIngenInfoOmPleitrengende(false);
-            if (fagsak.sakstype === DokumenttypeForkortelse.OMP_MA) {
-                setAnnenPart('');
-            }
-        }
-    }, [dokumenttype, identState.søkerId]);
-
-    // TODO TESTE DETTTE - det ser ut er bug her
-    useEffect(() => {
-        if (reserverSaksnummerTilNyFagsak && fagsaker) {
-            setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
-        }
-        if (!reserverSaksnummerTilNyFagsak) {
-            setBarnMedFagsak(undefined);
-        }
-    }, [identState.pleietrengendeId]);
-
-    const kanJournalforingsoppgaveOpprettesiGosys =
-        !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
+        erFerdigstilt && !!sak?.fagsakId && !!norskIdent && !(!sakstypeMedPleietrengende || !!sak.pleietrengendeIdent);
 
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
@@ -306,16 +167,15 @@ const Fordeling: React.FC = () => {
         dokumenttypeMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
         (reserverSaksnummerTilNyFagsak || (fagsak?.reservert && !fagsak?.behandlingsår)) &&
-        !journalpost.erFerdigstilt;
+        !erFerdigstilt;
 
-    const erInntektsmeldingUtenKrav =
-        journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
+    const erInntektsmeldingUtenKrav = punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
     const toSøkereIngenAnnenSøker =
-        !journalpost.erFerdigstilt && toSokereIJournalpost && identState.søkerId && !identState.annenSokerIdent;
+        !erFerdigstilt && toSokereIJournalpost && identState.søkerId && !identState.annenSokerIdent;
 
     const toSøkereIngenPleietrengende =
-        !journalpost.erFerdigstilt &&
+        !erFerdigstilt &&
         toSokereIJournalpost &&
         identState.søkerId &&
         identState.annenSokerIdent &&
@@ -323,7 +183,7 @@ const Fordeling: React.FC = () => {
         !identState.pleietrengendeId;
 
     const toSøkereIngenBehandlingÅr =
-        !journalpost.erFerdigstilt &&
+        !erFerdigstilt &&
         toSokereIJournalpost &&
         identState.søkerId &&
         identState.annenSokerIdent &&
@@ -331,12 +191,172 @@ const Fordeling: React.FC = () => {
         !behandlingsAar;
 
     const toSøkereIngenAnnenPartMA =
-        !journalpost.erFerdigstilt &&
+        !erFerdigstilt &&
         toSokereIJournalpost &&
         identState.søkerId &&
         identState.annenSokerIdent &&
         dokumenttypeMedAnnenPart &&
         !identState.annenPart;
+
+    const journalførKnapperDisabled = isJournalførKnapperDisabled(
+        journalpost,
+        identState,
+        ingenInfoOmPleitrengende,
+        barnetHarIkkeFnr,
+        toSokereIJournalpost,
+        harFagsaker,
+        reserverSaksnummerTilNyFagsak,
+        dokumenttypeMedPleietrengende,
+        dokumenttypeMedBehandlingsårValg,
+        dokumenttypeMedAnnenPart,
+        fagsakMedValgtBehandlingsår,
+        fagsak,
+        behandlingsAar,
+        barnMedFagsak,
+    );
+
+    const redirectVidereDisabled = isRedirectVidereDisabled(identState, dokumenttypeMedPleietrengende, barnMedFagsak);
+
+    /**
+     * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
+     */
+    useEffect(() => {
+        if (!erFerdigstilt) {
+            if (sak?.sakstype) {
+                if (sak?.sakstype === DokumenttypeForkortelse.OMP) {
+                    setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
+                } else {
+                    const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(sak?.sakstype);
+
+                    if (dokumenttypeFraForkortelse) {
+                        setDokumenttype(dokumenttypeFraForkortelse);
+                    }
+                }
+            }
+
+            /**
+             * Dette håndterer feil tilfeller når saksbehandler prøvde å journalføre journalposten. Reservert saksnummer opprettet, men det sjedde feil under journalføring.
+             * Men ikke sikker at dette er riktig løsning. Kanskje det trenges å vise en annen feilmelding.
+             */
+            if (sak?.behandlingsår) {
+                setBehandlingsAar(sak.behandlingsår);
+            }
+
+            if (sak?.fagsakId) {
+                setIdentAction(norskIdent!, sak.pleietrengendeIdent);
+
+                if (sak?.sakstype === DokumenttypeForkortelse.OMP_MA && sak.relatertPersonIdent) {
+                    setAnnenPart(sak.relatertPersonIdent);
+                }
+
+                setErSøkerIdBekreftet(true);
+                setRiktigIdentIJournalposten(JaNei.JA);
+                setFagsak(sak);
+                setDisableRadios(true);
+
+                if (jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende) {
+                    setVisSokersBarn(true);
+                }
+            }
+        }
+    }, []);
+
+    // Redirect til ferdigstilt side hvis journalpost er ferdigstilt eller/og reservert sak og fagsak ytelse type er satt og pleietrengende ident er satt (hvis det trenges)
+    useEffect(() => {
+        if (
+            erFerdigstilt &&
+            !!sak?.sakstype &&
+            kanSendeInn &&
+            erSaksbehandler &&
+            !!norskIdent &&
+            (!sakstypeMedPleietrengende || !!sak.pleietrengendeIdent)
+        ) {
+            const fagsakYtelsePath = getPathFraForkortelse(sak?.sakstype);
+
+            // Ved feil. kanskje det trenges ikke fordi det kan ikke være ferdigstilt journalpost med reservert saksnummer med Annet sakstype
+            if (!fagsakYtelsePath && sak?.sakstype !== DokumenttypeForkortelse.OMP) {
+                setDokumenttype(FordelingDokumenttype.ANNET);
+                setDisableRadios(true);
+                setSokersIdent(norskIdent);
+                setIdentAction(norskIdent, identState.pleietrengendeId);
+                return;
+            }
+
+            // Sakstype på korrigering og omp_ut er samme i ferdistilt journalpost, derfor bruker trenger å velge dokumenttype igjen
+            if (sak?.sakstype === DokumenttypeForkortelse.OMP) {
+                setDokumenttype(FordelingDokumenttype.OMSORGSPENGER);
+                setFagsak(sak);
+                setIdentAction(norskIdent);
+                setErSøkerIdBekreftet(true);
+                setRiktigIdentIJournalposten(JaNei.JA);
+                setDisableRadios(true);
+                setBehandlingsAar(sak.behandlingsår);
+                return;
+            }
+
+            // Set fordeling state ved ferdistilt (journalført) sak
+            setDokumenttype(getDokumenttypeFraForkortelse(sak?.sakstype));
+            setErSøkerIdBekreftet(true);
+            setIdentAction(norskIdent, sak?.pleietrengendeIdent);
+            setAnnenPart(sak?.relatertPersonIdent || '');
+            setFagsak(sak);
+
+            // Redirect to ferdigstilt side
+            navigate(`${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostId)}/${fagsakYtelsePath}`);
+        }
+    }, []);
+
+    /**
+     * Fylle opp fordeling state ved ferdigstilt journalpost med reservert saksnummer.
+     *
+     * Brukes kun for å velge barn/pleietrengende ident. Barn/pleietrengende indent oppdateres ikke i journalposten.
+     * Den kun legges til i fordeling state og til ny søknad. Pleitrengende ident oppdateres i journalposten etter innsending av søknad.
+     */
+
+    useEffect(() => {
+        if (jpErFerdigstiltOgUtenPleietrengende) {
+            const dokumenttypeFraForkortelse = getDokumenttypeFraForkortelse(sak?.sakstype);
+
+            // Ved feil
+            if (!dokumenttypeFraForkortelse) {
+                return;
+            }
+
+            setDisableRadios(true);
+            setDokumenttype(getDokumenttypeFraForkortelse(sak?.sakstype));
+            setRiktigIdentIJournalposten(JaNei.JA);
+            setErSøkerIdBekreftet(true);
+            setIdentAction(norskIdent);
+            setVisSokersBarn(true);
+            // TODO
+            setFagsak(sak);
+        }
+    }, []);
+
+    /**
+     * Reset fagsak ved endring av dokumenttype eller søkerId når journalpost ikke er ferdigstilt
+     * TODO: create function for this and use it in handleDokumenttype and handleSøkerIdChange
+     */
+    useEffect(() => {
+        if (!erFerdigstilt && !sak?.fagsakId && fagsak) {
+            setFagsak(undefined);
+            setReserverSaksnummerTilNyFagsak(false);
+            setIngenInfoOmPleitrengende(false);
+            if (fagsak.sakstype === DokumenttypeForkortelse.OMP_MA) {
+                setAnnenPart('');
+            }
+        }
+    }, [dokumenttype, identState.søkerId]);
+
+    // TODO TESTE DETTTE - det ser ut er bug her
+    useEffect(() => {
+        if (reserverSaksnummerTilNyFagsak && fagsaker) {
+            setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
+        }
+        if (!reserverSaksnummerTilNyFagsak) {
+            setBarnMedFagsak(undefined);
+        }
+    }, [identState.pleietrengendeId]);
 
     useEffect(() => {
         if (opprettIGosysState.gosysOppgaveRequestSuccess) {
@@ -348,8 +368,8 @@ const Fordeling: React.FC = () => {
     // Hvis det er ingen fagsaker, viser vi pleietrengende component
     useEffect(() => {
         if (
-            (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
-            !journalpost.sak?.fagsakId &&
+            (!erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
+            !sak?.fagsakId &&
             identState.søkerId &&
             dokumenttype &&
             gjelderPsbOmsOlp
@@ -378,25 +398,6 @@ const Fordeling: React.FC = () => {
         }
     }, [identState.søkerId, dokumenttype, gjelderPsbOmsOlp]);
 
-    const journalførKnapperDisabled = isJournalførKnapperDisabled(
-        journalpost,
-        identState,
-        ingenInfoOmPleitrengende,
-        barnetHarIkkeFnr,
-        toSokereIJournalpost,
-        harFagsaker,
-        reserverSaksnummerTilNyFagsak,
-        dokumenttypeMedPleietrengende,
-        dokumenttypeMedBehandlingsårValg,
-        dokumenttypeMedAnnenPart,
-        fagsakMedValgtBehandlingsår,
-        fagsak,
-        behandlingsAar,
-        barnMedFagsak,
-    );
-
-    const redirectVidereDisabled = isRedirectVidereDisabled(identState, dokumenttypeMedPleietrengende, barnMedFagsak);
-
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
 
@@ -424,15 +425,15 @@ const Fordeling: React.FC = () => {
     // Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
     // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
     const handleRedirectVidere = () => {
-        if (fordelingState.dokumenttype) {
+        if (dokumenttype) {
             if (!fagsak) {
-                setFagsak(journalpost.sak);
+                setFagsak(sak);
             }
-            const pathFraDokumenttype = getPathFraDokumenttype(fordelingState.dokumenttype);
+            const pathFraDokumenttype = getPathFraDokumenttype(dokumenttype);
 
             if (pathFraDokumenttype) {
                 navigate(
-                    `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${pathFraDokumenttype}`,
+                    `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpostId)}/${pathFraDokumenttype}`,
                 );
             }
         }
@@ -440,9 +441,9 @@ const Fordeling: React.FC = () => {
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
-            if (!identState.søkerId && !!journalpost?.norskIdent) {
-                setSokersIdent(journalpost?.norskIdent); // lokal useState
-                setIdentAction(journalpost?.norskIdent, identState.pleietrengendeId); // Redux
+            if (!identState.søkerId && !!norskIdent) {
+                setSokersIdent(norskIdent); // lokal useState
+                setIdentAction(norskIdent, identState.pleietrengendeId); // Redux
             } else {
                 setSokersIdent(identState.søkerId); // lokal useState
             }
@@ -450,7 +451,7 @@ const Fordeling: React.FC = () => {
             setSokersIdent(''); // lokal useState
         }
 
-        if (!journalpost.erFerdigstilt && !journalpost.sak?.fagsakId) {
+        if (!erFerdigstilt && !sak?.fagsakId) {
             setRiktigIdentIJournalposten(undefined); // lokal useState
             setReserverSaksnummerTilNyFagsak(false); // lokal useState
             setBehandlingsAar(undefined); // lokal useState
@@ -522,11 +523,11 @@ const Fordeling: React.FC = () => {
         );
     }
 
-    if (fordelingState.isAwaitingLukkOppgaveResponse) {
+    if (isAwaitingLukkOppgaveResponse) {
         return <Loader size="large" />;
     }
 
-    if (fordelingState.lukkOppgaveDone) {
+    if (lukkOppgaveDone) {
         return (
             <Modal
                 key="lukkoppgaveokmodal"
@@ -534,7 +535,7 @@ const Fordeling: React.FC = () => {
                     lukkOppgaveReset();
                 }}
                 aria-label="settpaaventokmodal"
-                open={!!fordelingState.lukkOppgaveDone}
+                open={lukkOppgaveDone}
             >
                 <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
             </Modal>
@@ -543,7 +544,7 @@ const Fordeling: React.FC = () => {
 
     return (
         <div className="fordeling-container">
-            {journalpost?.kanSendeInn && journalpost?.erSaksbehandler && (
+            {kanSendeInn && erSaksbehandler && (
                 <FormPanel>
                     {erInntektsmeldingUtenKrav && (
                         <>
@@ -601,7 +602,7 @@ const Fordeling: React.FC = () => {
                                 <InnholdForDokumenttypeAnnet
                                     journalpost={journalpost}
                                     lukkJournalpostOppgave={lukkJournalpostOppgave}
-                                    kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
+                                    kanJournalforingsoppgaveOpprettesiGosys={!!kanOpprettesJournalføringsoppgave}
                                     handleSøkerIdBlur={handleSøkerIdBlur}
                                     handleSøkerIdChange={handleSøkerIdChange}
                                     sokersIdent={sokersIdent}
@@ -694,7 +695,7 @@ const Fordeling: React.FC = () => {
                                     }
                                 />
                             )}
-                            {!!barnMedFagsak && !journalpost.erFerdigstilt && (
+                            {!!barnMedFagsak && !erFerdigstilt && (
                                 <Alert
                                     size="small"
                                     variant="warning"
@@ -755,7 +756,7 @@ const Fordeling: React.FC = () => {
                                 </Alert>
                             )}
 
-                            {!!barnMedFagsak && journalpost.erFerdigstilt && (
+                            {!!barnMedFagsak && erFerdigstilt && (
                                 <>
                                     {!fellesState.kopierJournalpostSuccess && (
                                         <Alert size="small" variant="warning">
@@ -774,7 +775,7 @@ const Fordeling: React.FC = () => {
                                     </div>
                                 </>
                             )}
-                            {!journalpost.erFerdigstilt &&
+                            {!erFerdigstilt &&
                                 !fagsak &&
                                 !journalførKnapperDisabled &&
                                 (identState.pleietrengendeId ||
@@ -801,7 +802,7 @@ const Fordeling: React.FC = () => {
                                 </Alert>
                             )}
 
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !journalpost.erFerdigstilt && (
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && !erFerdigstilt && (
                                 <div className="flex">
                                     <div className="mr-4">
                                         <Button
@@ -832,7 +833,7 @@ const Fordeling: React.FC = () => {
                                 </div>
                             )}
 
-                            {gjelderPsbOmsOlp && !isFetchingFagsaker && journalpost.erFerdigstilt && !barnMedFagsak && (
+                            {gjelderPsbOmsOlp && !isFetchingFagsaker && erFerdigstilt && !barnMedFagsak && (
                                 <div className="flex">
                                     <div className="mr-4">
                                         <Button
@@ -856,16 +857,16 @@ const Fordeling: React.FC = () => {
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                dedupkey={dedupkey}
+                                dedupkey={dedupKey}
                                 toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
                                 lukkModal={() => setVisKlassifiserModal(false)}
-                                setFagsak={(sak: Fagsak) => setFagsak(sak)}
+                                setFagsak={(s: Fagsak) => setFagsak(s)}
                             />
                         )}
 
-                        {!!journalpost.sak?.fagsakId && !!dokumenttype && (
+                        {!!sak?.fagsakId && !!dokumenttype && (
                             <VentLukkBrevModal open={åpenBrevModal} onClose={() => setÅpenBrevModal(false)} />
                         )}
 
@@ -874,7 +875,7 @@ const Fordeling: React.FC = () => {
                 </FormPanel>
             )}
 
-            {!journalpost?.kanSendeInn && !!journalpost?.erSaksbehandler && (
+            {!kanSendeInn && !!erSaksbehandler && (
                 <FormPanel>
                     <div className="fordeling-page">
                         <JournalpostAlleredeBehandlet />
@@ -882,7 +883,7 @@ const Fordeling: React.FC = () => {
                 </FormPanel>
             )}
 
-            {!journalpost?.erSaksbehandler && (
+            {!erSaksbehandler && (
                 <div>
                     <Alert size="small" variant="warning">
                         <FormattedMessage id="fordeling.ikkesaksbehandler" />
