@@ -489,16 +489,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                 return true;
             }
         }
-        if (ytelserMedBehandlingsårValg && !behandlingsAar) {
+
+        if ((ytelserMedBehandlingsårValg && !behandlingsAar) || isFagsakMedValgtBehandlingsår()) {
             return true;
         }
 
         if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
             return identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn));
-        }
-
-        if (isFagsakMedValgtBehandlingsår()) {
-            return true;
         }
 
         return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;

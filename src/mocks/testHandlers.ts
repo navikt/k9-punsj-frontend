@@ -61,6 +61,9 @@ export const testHandlers = {
         if (params.id === '314') {
             return HttpResponse.json(jpOMPUT314, { status: 201 });
         }
+        if (params.id === '206') {
+            return HttpResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
     opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
@@ -190,7 +193,16 @@ export const testHandlers = {
         HttpResponse.json({ sattPåVent: true }, { status: 200 }),
     ),
 
-    /* settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', ':id'), () =>
+    kopier: http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', '205'), () =>
+        HttpResponse.json(
+            {
+                saksnummer: '1DQAW94',
+            },
+            { status: 200 },
+        ),
+    ),
+
+    /*settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', ':id'), () =>
         HttpResponse.json({ sattPåVent: true }, { status: 200 }),
-    ), */
+    ),*/
 };
