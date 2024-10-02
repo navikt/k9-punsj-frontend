@@ -44,7 +44,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
     const [visBrev, setVisBrev] = useState(false);
     const [visGåVidere, setVisGåVidere] = useState(false);
-    const [errorHentJp, setErrorHentJp] = useState(false);
     const [jpLoading, setJpLoading] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
@@ -95,24 +94,18 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
     //TODO: Vise ny jp som er kopiert
 
-    // TODO: Sjekk trenger vi dette???
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
-        // mutationFn: () => getJournalpostEtterKopiering('206'),
+        // mutationFn: () => getJournalpostEtterKopiering('206'), // For testing 403 svar
         onSuccess: () => {
             setJpLoading(false);
             console.log('Test onSuccess getJournalpost');
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
             setJpLoading(false);
-            setErrorHentJp(true);
         },
     });
 
-    // TODO: Legge til støtte for å kopiere til for alle andre ytelser
-    // Forsøk hvis pleietrengende har ikke fødselsnummer ????
-    // Do we need to kopiere fosterbarn???
     const kopierJournalpost = useMutation({
         mutationFn: () =>
             kopierJournalpostNotRedux(
@@ -126,7 +119,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             ),
         onSuccess: () => {
             if (sjekkTilgangTilJp) {
-                console.log('Test getJournalpost etter kopiering');
                 setJpLoading(true);
                 setTimeout(() => getJournalpost.mutate(), 4000);
             }
@@ -147,9 +139,9 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             }),
         onSuccess: () => {
             if (kopiere) {
-                console.log('Test kopiere');
                 kopierJournalpost.mutate();
             }
+
             if (!fortsett) {
                 settPåVent.mutate();
             }
@@ -159,7 +151,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                 setJpLoading(true);
                 setTimeout(() => getJournalpost.mutate(), 4000);
             }
-            console.log('Test onSuccess end');
         },
     });
 
