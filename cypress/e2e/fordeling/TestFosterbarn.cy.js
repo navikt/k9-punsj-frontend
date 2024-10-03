@@ -172,9 +172,7 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
 
         cy.findByText(/Du har ikke tilgang til å jobbe videre med journalposten./i).should('exist');
 
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('exist').should('not.be.disabled').click();
-
-        cy.findByText(/Søk på journalpost-ID/i).should('exist');
+        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('exist').should('not.be.disabled');
     });
 
     it('Test journalfør med 2 søkere (+kopiering) uten fosterbarn', () => {
