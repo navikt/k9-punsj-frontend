@@ -441,7 +441,10 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
         (!identState.annenPart ||
             !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
-            identState.annenPart === identState.søkerId);
+            identState.annenPart === identState.søkerId ||
+            (toSokereIJournalpost &&
+                (identState.annenPart === identState.annenSokerIdent ||
+                    identState.søkerId === identState.annenSokerIdent)));
 
     const disableJournalførKnapper = () => {
         if (
@@ -495,7 +498,14 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
 
         if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
-            return identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn));
+            return (
+                identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn)) ||
+                identState.fosterbarn.some((barn) => barn === identState.søkerId) ||
+                (toSokereIJournalpost && identState.fosterbarn.some((barn) => barn === identState.annenSokerIdent)) ||
+                (dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
+                    !!identState.annenPart &&
+                    identState.fosterbarn.some((barn) => barn === identState.annenPart))
+            );
         }
 
         return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
@@ -812,7 +822,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {isFetchingFagsaker && <Loader />}
 
-                            {visFosterbarnComponent && <Fosterbarn />}
+                            <Fosterbarn showComponent={visFosterbarnComponent} />
 
                             {visPleietrengendeComponent && (
                                 <Pleietrengende

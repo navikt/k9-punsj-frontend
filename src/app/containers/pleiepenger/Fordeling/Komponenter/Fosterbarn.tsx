@@ -10,7 +10,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
-const Fosterbarn: React.FC = () => {
+interface Props {
+    showComponent: boolean;
+}
+
+const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
+    if (!showComponent) {
+        return null;
+    }
+
     const dispatch = useDispatch<Dispatch<any>>();
     const identState = useSelector((state: RootStateType) => state.identState);
 
@@ -170,7 +178,14 @@ const Fosterbarn: React.FC = () => {
                     </div>
                 );
             })}
-            <Button variant="tertiary" size="small" icon={<AddPerson />} iconPosition="left" onClick={addBarn}>
+            <Button
+                variant="tertiary"
+                size="small"
+                icon={<AddPerson />}
+                iconPosition="left"
+                onClick={addBarn}
+                data-test-id={'leggTillFosterbarnBtn'}
+            >
                 Legg til fosterbarn
             </Button>
         </div>

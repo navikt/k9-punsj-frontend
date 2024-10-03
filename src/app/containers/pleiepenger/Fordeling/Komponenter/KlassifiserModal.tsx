@@ -27,7 +27,6 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/BrevComponent';
-import { get } from 'lodash';
 
 interface Props {
     dedupkey: string;
@@ -53,6 +52,8 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
 
+    const serverFørespølselDelay = process.env.NODE_ENV === 'production' ? 4000 : 40;
+    console.log('Test serverFørespølselDelay: ', serverFørespølselDelay);
     const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
@@ -120,7 +121,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         onSuccess: () => {
             if (sjekkTilgangTilJp) {
                 setJpLoading(true);
-                setTimeout(() => getJournalpost.mutate(), 4000);
+                setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
             }
         },
     });
@@ -147,9 +148,8 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             }
 
             if (fortsett && sjekkTilgangTilJp && !kopiere) {
-                console.log('Test getJournalpost uten kopiering');
                 setJpLoading(true);
-                setTimeout(() => getJournalpost.mutate(), 4000);
+                setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
             }
         },
     });
@@ -241,7 +241,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const visGåTilLosBtn =
         !fortsett &&
         (settBehandlingsÅr.isSuccess || !isDokumenttypeMedBehandlingsår) &&
-        (journalførJournalpost.isSuccess || getJournalpost.isSuccess) &&
+        (journalførJournalpost.isSuccess || (getJournalpost.isSuccess && sjekkTilgangTilJp)) &&
         settPåVent.isSuccess;
 
     const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
@@ -453,7 +453,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                                     type="button"
                                     onClick={() => handleGåVidere()}
                                     size="small"
-                                    data-test-id="klassifiserModalGåVidereetterKopiering"
+                                    data-test-id="klassifiserModalGåVidereEtterKopiering"
                                 >
                                     <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
                                 </Button>
