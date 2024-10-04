@@ -336,7 +336,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
                         {/* Vise feilen fra serveren etter sjekk tilgang til jp */}
                         {renderAlert(
-                            'error',
+                            'warning',
                             'fordeling.klassifiserModal.alert.getJournalpost.error',
                             !!getJournalpost.error,
                             (getJournalpost.error as Error)?.message,

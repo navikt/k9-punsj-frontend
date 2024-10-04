@@ -7,20 +7,16 @@ import fagsaker from '../../fixtures/fagsaker.json';
 
 const dokumenttype = 'Omsorgspenger';
 const valgteDokumentType = 'Omsorgspenger: direkte utbetaling av omsorgspenger';
-const valgteDokumentTypeKode = 'OMSORGSPENGER_UT';
 const journalpostId = journalpost.journalpostId;
-const norskIdent = journalpost.norskIdent;
-const fnrNySøker = '12448325820';
 const annenSøkerFnr = '02918496664';
-const fagsak = fagsaker[1];
-const fagsakReservert = fagsaker[9];
 const fosterBarnFnr = '09418531220';
 
 describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false }, () => {
+    Cypress.config('viewportWidth', 1280);
+    Cypress.config('viewportHeight', 1450);
     beforeEach(() => {
         cy.visit(`/journalpost/${journalpostId}`);
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
+
         cy.findByText(/Skjul/i).should('exist').click();
         cy.findByText(valgteDokumentType).should('exist').click();
         cy.findByText(/Ja/i).should('exist').click();
