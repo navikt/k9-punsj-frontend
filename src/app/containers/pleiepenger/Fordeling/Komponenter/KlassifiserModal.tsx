@@ -27,6 +27,7 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/BrevComponent';
+import { get } from 'lodash';
 
 interface Props {
     dedupkey: string;
@@ -84,9 +85,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
     const kopiere = toSøkere && !!journalpost?.kanKopieres && !erInntektsmeldingUtenKrav;
 
-    const sjekkTilgangTilJp =
-        isDokumenttypeMedFosterbarn && !!identState.fosterbarn && identState.fosterbarn.length > 0;
-
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
     const settPåVent = useMutation({
@@ -119,10 +117,8 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ? identState.annenPart : undefined,
             ),
         onSuccess: () => {
-            if (sjekkTilgangTilJp) {
-                setJpLoading(true);
-                setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
-            }
+            setJpLoading(true);
+            setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
         },
     });
 
@@ -147,7 +143,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                 settPåVent.mutate();
             }
 
-            if (fortsett && sjekkTilgangTilJp && !kopiere) {
+            if (fortsett && !kopiere) {
                 setJpLoading(true);
                 setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
             }
@@ -165,7 +161,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
     // Sette fagsak i fordeling state og navigere til journalfør og fortsett
     useEffect(() => {
-        if (fortsett && journalførJournalpost.isSuccess && (getJournalpost.isSuccess || !sjekkTilgangTilJp)) {
+        if (fortsett && journalførJournalpost.isSuccess && getJournalpost.isSuccess) {
             const sakstype = finnForkortelseForDokumenttype(dokumenttype);
             const fagsakId = journalførJournalpost.data.saksnummer as string;
 
@@ -241,7 +237,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const visGåTilLosBtn =
         !fortsett &&
         (settBehandlingsÅr.isSuccess || !isDokumenttypeMedBehandlingsår) &&
-        (journalførJournalpost.isSuccess || (getJournalpost.isSuccess && sjekkTilgangTilJp)) &&
+        (journalførJournalpost.isSuccess || getJournalpost.isSuccess) &&
         settPåVent.isSuccess;
 
     const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
@@ -413,7 +409,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                     </Button>
                 ) : (
                     <>
-                        {!visGåVidere && (
+                        {!journalførJournalpost.isSuccess && (
                             <>
                                 <Button
                                     type="button"
@@ -447,21 +443,26 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                             </>
                         )}
 
-                        {visGåVidere && (
+                        {journalførJournalpost.isSuccess && (
                             <>
                                 <Button
                                     type="button"
                                     onClick={() => handleGåVidere()}
                                     size="small"
+                                    disabled={
+                                        getJournalpost.isLoading ||
+                                        kopierJournalpost.isLoading ||
+                                        !getJournalpost.isSuccess
+                                    }
                                     data-test-id="klassifiserModalGåVidereEtterKopiering"
                                 >
                                     <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
                                 </Button>
-                                {!kopierJournalpost.isSuccess && (
+                                {kopierJournalpost.isError && (
                                     <Button
                                         type="button"
                                         onClick={() => kopierJournalpost.mutate()}
-                                        disabled={kopierJournalpost.isSuccess}
+                                        disabled={kopierJournalpost.isSuccess || kopierJournalpost.isLoading}
                                         size="small"
                                         data-test-id="klassifiserModalKopierPåNyttBtn"
                                     >

@@ -193,7 +193,7 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
                     ),
                 ),
                 http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId), () =>
-                    HttpResponse.json({ message: 'Error' }, { status: 403 }),
+                    HttpResponse.json({ message: 'no error' }, { status: 200 }),
                 ),
             );
         });
@@ -235,7 +235,7 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
                     ),
                 ),
                 http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpost.journalpostId), () =>
-                    HttpResponse.json({ message: 'Error' }, { status: 403 }),
+                    HttpResponse.json({ message: 'no errors' }, { status: 200 }),
                 ),
             );
         });
