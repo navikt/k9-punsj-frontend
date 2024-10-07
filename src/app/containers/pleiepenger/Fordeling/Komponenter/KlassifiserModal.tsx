@@ -54,7 +54,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     );
 
     const serverFørespølselDelay = process.env.NODE_ENV === 'production' ? 4000 : 40;
-    console.log('Test serverFørespølselDelay: ', serverFørespølselDelay);
+
     const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
@@ -98,7 +98,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         // mutationFn: () => getJournalpostEtterKopiering('206'), // For testing 403 svar
         onSuccess: () => {
             setJpLoading(false);
-            console.log('Test onSuccess getJournalpost');
         },
         onError: () => {
             setJpLoading(false);
