@@ -33,6 +33,7 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/BrevComponent';
+import { get } from 'lodash';
 
 interface Props {
     dedupkey: string;
@@ -151,7 +152,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
     // Navigere videre
     useEffect(() => {
-        if (fortsett && !kopiere && getJournalpost.isSuccess) {
+        if (fortsett && (!kopiere || kopierJournalpost.isError) && getJournalpost.isSuccess) {
             navigate(getPathFraDokumenttype(dokumenttype) || '/');
         }
     }, [getJournalpost.isSuccess]);
@@ -205,7 +206,11 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     };
 
     const handleGåVidere = () => {
-        navigate(getPathFraDokumenttype(dokumenttype) || '/');
+        if (!getJournalpost.isSuccess) {
+            getJournalpost.mutate();
+        } else {
+            navigate(getPathFraDokumenttype(dokumenttype) || '/');
+        }
     };
 
     const doNotShowWarnigAlert = journalførJournalpost.isSuccess || settPåVent.isSuccess || kopierJournalpost.isSuccess;
@@ -423,11 +428,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                                     type="button"
                                     onClick={() => handleGåVidere()}
                                     size="small"
-                                    disabled={
-                                        getJournalpost.isLoading ||
-                                        kopierJournalpost.isLoading ||
-                                        !getJournalpost.isSuccess
-                                    }
+                                    disabled={getJournalpost.isLoading || kopierJournalpost.isLoading}
                                     data-test-id="klassifiserModalGåVidereEtterKopiering"
                                 >
                                     <FormattedMessage id="fordeling.klassifiserModal.btn.gåVidere" />
