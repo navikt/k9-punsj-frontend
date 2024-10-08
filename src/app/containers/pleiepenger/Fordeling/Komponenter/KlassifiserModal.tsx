@@ -43,7 +43,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const navigate = useNavigate();
 
     const [visBrev, setVisBrev] = useState(false);
-    const [visGåVidere, setVisGåVidere] = useState(false);
     const [jpLoading, setJpLoading] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
@@ -178,8 +177,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             if (!kopiere) {
                 navigate(getPathFraDokumenttype(dokumenttype) || '/');
             }
-
-            setVisGåVidere(true);
         }
     }, [journalførJournalpost.isSuccess, getJournalpost.isSuccess]);
 
