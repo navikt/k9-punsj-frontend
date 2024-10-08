@@ -42,3 +42,30 @@ export const dokumenttyperForPsbOmsOlp = [
     FordelingDokumenttype.KORRIGERING_IM,
     FordelingDokumenttype.OPPLAERINGSPENGER,
 ];
+
+export const dokumenttyperMedBehandlingsår = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
+    FordelingDokumenttype.OMSORGSPENGER_MA,
+];
+
+export const dokumenttyperMedBehandlingsårValg = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+];
+
+export const dokumentyperMedFosterbarn = [
+    FordelingDokumenttype.OMSORGSPENGER_UT,
+    FordelingDokumenttype.KORRIGERING_IM,
+    FordelingDokumenttype.OMSORGSPENGER_MA,
+];
+
+export const dokumenttyperMedPleietrengende = [
+    FordelingDokumenttype.PLEIEPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_KS,
+    FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE,
+    FordelingDokumenttype.OPPLAERINGSPENGER,
+    FordelingDokumenttype.OMSORGSPENGER_AO,
+];

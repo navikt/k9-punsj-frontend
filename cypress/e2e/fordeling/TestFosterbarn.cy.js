@@ -41,9 +41,6 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
             });
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-        cy.findByText(/Journalposten er journalført. Sakstype, søker er lagret til journalpost./i).should('exist');
-        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('exist');
-
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).should('exist');
     });
 
@@ -72,8 +69,10 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
         });
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-        cy.findByText(/Journalposten er journalført. Sakstype, søker er lagret til journalpost./i).should('exist');
-        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('exist');
+        cy.findByText(/Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost./i).should(
+            'exist',
+        );
+        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('not.exist');
 
         cy.findByText(/Du har ikke tilgang til å jobbe videre med journalposten./i).should('exist');
         cy.findByText(/Registrer søknad - direkte utbetaling omsorgspenger/i).should('not.exist');
@@ -114,10 +113,12 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
             });
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-        cy.findByText(/Journalposten er journalført. Sakstype, søker er lagret til journalpost./i).should('exist');
+        cy.findByText(/Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost./i).should(
+            'exist',
+        );
         cy.findByText(/Kopi av journalposten er opprettet. Journalposten er kopiert til annen søker:/i).should('exist');
 
-        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('exist');
+        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('not.exist');
 
         cy.get('[data-test-id="klassifiserModalGåVidereEtterKopiering"]').should('exist').click();
 
@@ -161,10 +162,12 @@ describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false
             });
 
         cy.get('[data-test-id="klassifiserModalJournalfør"]').click();
-        cy.findByText(/Journalposten er journalført. Sakstype, søker er lagret til journalpost./i).should('exist');
+        cy.findByText(/Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost./i).should(
+            'exist',
+        );
         cy.findByText(/Kopi av journalposten er opprettet. Journalposten er kopiert til annen søker:/i).should('exist');
 
-        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('exist');
+        cy.findByText(/Sjekker journalposten for tilgangsrettigheter ..../i).should('not.exist');
 
         cy.findByText(/Du har ikke tilgang til å jobbe videre med journalposten./i).should('exist');
 

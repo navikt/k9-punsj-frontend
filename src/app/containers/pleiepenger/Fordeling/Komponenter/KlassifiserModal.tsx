@@ -14,7 +14,13 @@ import {
     settJournalpostPaaVentUtenSøknadId,
 } from 'app/api/api';
 import Fagsak from 'app/types/Fagsak';
-import { FordelingDokumenttype } from 'app/models/enums';
+import {
+    dokumenttyperMedBehandlingsår,
+    dokumenttyperMedBehandlingsårValg,
+    dokumenttyperMedPleietrengende,
+    dokumentyperMedFosterbarn,
+    FordelingDokumenttype,
+} from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
 import {
     finnForkortelseForDokumenttype,
@@ -27,7 +33,6 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/BrevComponent';
-import { get } from 'lodash';
 
 interface Props {
     dedupkey: string;
@@ -43,7 +48,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const navigate = useNavigate();
 
     const [visBrev, setVisBrev] = useState(false);
-    const [jpLoading, setJpLoading] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -52,39 +56,17 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         (state: RootStateType) => state.fordelingState.dokumenttype as FordelingDokumenttype,
     );
 
-    const serverFørespølselDelay = process.env.NODE_ENV === 'production' ? 4000 : 40;
-
     const ytelseForKopiering = getForkortelseFraFordelingDokumenttype(dokumenttype);
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
 
-    const isDokumenttypeMedBehandlingsår =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
-
-    const isDokumenttypeMedFosterbarn =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
-
-    const ytelserMedBehandlingsårValg =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
-
-    const isDokumenttypeMedPleietrengende =
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
+    const isDokumenttypeMedBehandlingsår = dokumenttyperMedBehandlingsår.includes(dokumenttype);
+    const isDokumenttypeMedBehandlingsårValg = dokumenttyperMedBehandlingsårValg.includes(dokumenttype);
+    const isDokumenttypeMedFosterbarn = dokumentyperMedFosterbarn.includes(dokumenttype);
+    const isDokumenttypeMedPleietrengende = dokumenttyperMedPleietrengende.includes(dokumenttype);
 
     const kopiere = toSøkere && !!journalpost?.kanKopieres && !erInntektsmeldingUtenKrav;
-
-    const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 
     const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpost.journalpostId),
@@ -95,12 +77,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
         // mutationFn: () => getJournalpostEtterKopiering('206'), // For testing 403 svar
-        onSuccess: () => {
-            setJpLoading(false);
-        },
-        onError: () => {
-            setJpLoading(false);
-        },
     });
 
     const kopierJournalpost = useMutation({
@@ -111,12 +87,13 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                 journalpost.journalpostId,
                 ytelseForKopiering,
                 isDokumenttypeMedPleietrengende ? identState.pleietrengendeId : undefined,
-                ytelserMedBehandlingsårValg ? Number(behandlingsAar) : undefined,
+                isDokumenttypeMedBehandlingsårValg ? Number(behandlingsAar) : undefined,
                 dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA ? identState.annenPart : undefined,
             ),
         onSuccess: () => {
-            setJpLoading(true);
-            setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
+            if (fortsett) {
+                getJournalpost.mutate();
+            }
         },
     });
 
@@ -142,8 +119,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             }
 
             if (fortsett && !kopiere) {
-                setJpLoading(true);
-                setTimeout(() => getJournalpost.mutate(), serverFørespølselDelay);
+                getJournalpost.mutate();
             }
         },
     });
@@ -153,13 +129,9 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         onSuccess: () => journalførJournalpost.mutate(),
     });
 
-    const handleGåVidere = () => {
-        navigate(getPathFraDokumenttype(dokumenttype) || '/');
-    };
-
-    // Sette fagsak i fordeling state og navigere til journalfør og fortsett
+    // Sette fagsak i fordeling state
     useEffect(() => {
-        if (fortsett && journalførJournalpost.isSuccess && getJournalpost.isSuccess) {
+        if (fortsett && journalførJournalpost.isSuccess) {
             const sakstype = finnForkortelseForDokumenttype(dokumenttype);
             const fagsakId = journalførJournalpost.data.saksnummer as string;
 
@@ -174,11 +146,15 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                 };
                 setFagsak(reservertSak);
             }
-            if (!kopiere) {
-                navigate(getPathFraDokumenttype(dokumenttype) || '/');
-            }
         }
-    }, [journalførJournalpost.isSuccess, getJournalpost.isSuccess]);
+    }, [journalførJournalpost.isSuccess]);
+
+    // Navigere videre
+    useEffect(() => {
+        if (fortsett && !kopiere && getJournalpost.isSuccess) {
+            navigate(getPathFraDokumenttype(dokumenttype) || '/');
+        }
+    }, [getJournalpost.isSuccess]);
 
     const disabled =
         ['loading'].includes(settBehandlingsÅr.status) ||
@@ -203,7 +179,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             getJournalpost.isSuccess && getJournalpost.data.sak?.fagsakId
                 ? getJournalpost.data.sak?.fagsakId
                 : undefined;
-        const threeWeeksDate = get3WeeksDate();
+        const threeWeeksDate = initializeDate().add(21, 'days').format('DD.MM.YYYY');
         const messageContent = message || (
             <FormattedMessage
                 id={messageId}
@@ -228,12 +204,16 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
         } else journalførJournalpost.mutate();
     };
 
+    const handleGåVidere = () => {
+        navigate(getPathFraDokumenttype(dokumenttype) || '/');
+    };
+
     const doNotShowWarnigAlert = journalførJournalpost.isSuccess || settPåVent.isSuccess || kopierJournalpost.isSuccess;
 
     const visGåTilLosBtn =
         !fortsett &&
         (settBehandlingsÅr.isSuccess || !isDokumenttypeMedBehandlingsår) &&
-        (journalførJournalpost.isSuccess || getJournalpost.isSuccess) &&
+        journalførJournalpost.isSuccess &&
         settPåVent.isSuccess;
 
     const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
@@ -354,11 +334,10 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                             </div>
                         )}
 
-                        {jpLoading && (
+                        {getJournalpost.isLoading && (
                             <div className="mt-5">
                                 <span>
                                     <FormattedMessage id="fordeling.klassifiserModal.getJournalpostLoading" />
-                                    {'  '}
                                     <Loader size="xsmall" title="Sjekker journalposten for tilgangsrettigheter..." />
                                 </span>
                             </div>
@@ -428,7 +407,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                                 <Button
                                     type="button"
                                     onClick={lukkModal}
-                                    // disabled={disabled && !jpIkkejournalførtFeil}
                                     disabled={disabled}
                                     size="small"
                                     variant="secondary"
