@@ -35,10 +35,10 @@ import intlHelper from 'app/utils/intlUtils';
 import { IdentRules } from 'app/rules';
 import { ROUTES } from 'app/constants/routes';
 import Behandlingsknapp from './Behandlingsknapp';
-import { opprettGosysOppgave as omfordelAction } from '../../../../state/actions/GosysOppgaveActions';
+import { opprettGosysOppgave as omfordelAction } from 'app/state/actions/GosysOppgaveActions';
 import { useMutation } from 'react-query';
 import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import { OkGaaTilLosModal } from '../../OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;
@@ -107,7 +107,8 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
     const korrigeringIM = () =>
         dokumenttype === FordelingDokumenttype.KORRIGERING_IM && korrigeringAvInntektsmeldingSakstyper;
 
-    const opplaeringspenger = () => dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER && opplæringspengerSakstyper;
+    const opplaeringspenger = () =>
+        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER && opplæringspengerSakstyper;
 
     const sakstypekeys =
         pleiepengerSyktBarn() ||

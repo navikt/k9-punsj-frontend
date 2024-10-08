@@ -1,5 +1,5 @@
 import { IdentRules } from 'app/rules';
-import intlHelper from '../../../utils/intlUtils';
+import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 import { IIdentState } from 'app/models/types/IdentState';
 

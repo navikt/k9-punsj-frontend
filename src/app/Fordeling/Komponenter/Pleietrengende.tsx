@@ -8,9 +8,9 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../../../components/VerticalSpacer';
-import { setIdentFellesAction } from '../../../../state/actions/IdentActions';
-import { hentBarn } from '../../../../state/reducers/HentBarn';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { hentBarn } from 'app/state/reducers/HentBarn';
 import { Person } from 'app/models/types/Person';
 import { getPersonInfo } from 'app/api/api';
 
@@ -61,11 +61,11 @@ const Pleietrengende: React.FC<Props> = ({
         }
     }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
 
-    const hentPleietrengendeInfo = (søkersFødselsnummer: string) => {
+    const hentPleietrengendeInfo = (pleietrengendesFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
         setPleietrengendeInfoLoading(true);
 
-        getPersonInfo(søkersFødselsnummer, (response, data: Person) => {
+        getPersonInfo(pleietrengendesFødselsnummer, (response, data: Person) => {
             setPleietrengendeInfoLoading(false);
             if (response.status === 200) {
                 setPleietrengendeInfo(data);

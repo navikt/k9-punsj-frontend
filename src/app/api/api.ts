@@ -66,6 +66,7 @@ export const klassifiserDokument = (body: {
     periode?: IPeriode;
     saksnummer?: string;
     relatertPersonIdent?: string;
+    barnAktørIder?: string[];
 }) =>
     post(ApiPath.JOURNALPOST_MOTTAK, undefined, { 'X-Nav-NorskIdent': body.brukerIdent }, body).then(
         async (response) => {
@@ -178,8 +179,10 @@ export const getJournalpostEtterKopiering = (journalpostid: string): Promise<IJo
             (response: Response, data: IJournalpost) => {
                 if (response.ok) {
                     resolve(data);
+                } else if (response.status === 403) {
+                    reject(new Error('Du har ikke tilgang til å jobbe videre med journalposten.'));
                 } else {
-                    reject(new Error('Error fetching journalpost'));
+                    reject(new Error(`Error fetching journalpost, status: ${response.status}. Oppdater siden.`));
                 }
             },
         );
