@@ -18,30 +18,30 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import FormPanel from '../../../components/FormPanel';
-import VerticalSpacer from '../../../components/VerticalSpacer';
-import { IGosysOppgaveState } from '../../../models/types/GosysOppgaveState';
-import { IIdentState } from '../../../models/types/IdentState';
-import { setDokumenttypeAction, setFagsakAction } from '../../../state/actions/FordelingActions';
+import FormPanel from 'app/components/FormPanel';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { IGosysOppgaveState } from 'app/models/types/GosysOppgaveState';
+import { IIdentState } from 'app/models/types/IdentState';
+import { setDokumenttypeAction, setFagsakAction } from 'app/state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
-} from '../../../state/actions/GosysOppgaveActions';
+} from 'app/state/actions/GosysOppgaveActions';
 import {
     resetIdentState,
     setAnnenPartAction,
     setFosterbarnAction,
     setIdentFellesAction,
-} from '../../../state/actions/IdentActions';
-import { IFellesState, resetBarnAction } from '../../../state/reducers/FellesReducer';
+} from 'app/state/actions/IdentActions';
+import { IFellesState, resetBarnAction } from 'app/state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
     getPathFraDokumenttype,
     getPathFraForkortelse,
-} from '../../../utils';
-import HåndterInntektsmeldingUtenKrav from '../HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from '../OkGaaTilLosModal';
+} from 'app/utils';
+import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import FagsakSelect from './FagsakSelect';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';

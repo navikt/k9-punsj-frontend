@@ -19,13 +19,13 @@ import OMPAOPunchFormContainer from 'app/omsorgspenger-alene-om-omsorgen/contain
 import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
-import { Fordeling } from './pleiepenger/Fordeling/Fordeling';
+import { Fordeling } from '../Fordeling/Fordeling';
 import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
 import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
-import JournalførOgFortsettValg from './pleiepenger/Fordeling/Komponenter/JournalførOgFortsettValg';
+import JournalførOgFortsettValg from '../Fordeling/Komponenter/JournalførOgFortsettValg';
 
 const JournalpostRouter: React.FC = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();

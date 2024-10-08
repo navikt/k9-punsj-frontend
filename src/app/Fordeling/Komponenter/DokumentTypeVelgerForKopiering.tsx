@@ -2,10 +2,10 @@ import React from 'react';
 
 import { RadioPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
+import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from 'app/models/enums';
 import { Heading } from '@navikt/ds-react';
 
-import intlHelper from '../../../../utils/intlUtils';
+import intlHelper from 'app/utils/intlUtils';
 
 import './DokumentTypeVelger.less';
 

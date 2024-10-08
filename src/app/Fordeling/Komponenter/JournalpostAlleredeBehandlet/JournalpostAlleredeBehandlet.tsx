@@ -8,13 +8,13 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { setAnnenPartAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
 
-import PunsjInnsendingType from '../../../../../models/enums/PunsjInnsendingType';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import {
     getJournalpostKopiereErrorResetAction,
     kopierJournalpostRedux,
     resetBarnAction,
-} from '../../../../../state/reducers/FellesReducer';
-import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from '../../../../../utils';
+} from 'app/state/reducers/FellesReducer';
+import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';

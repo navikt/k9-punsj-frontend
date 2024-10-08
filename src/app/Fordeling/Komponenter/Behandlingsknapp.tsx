@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { RootStateType } from 'app/state/RootState';
 import { IFordelingProps } from '../Fordeling';
-import { ISakstypePunch } from '../../../../models/Sakstype';
-import { Sakstype } from '../../../../models/enums';
+import { ISakstypePunch } from 'app/models/Sakstype';
+import { Sakstype } from 'app/models/enums';
 
 type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
     norskIdent: string;

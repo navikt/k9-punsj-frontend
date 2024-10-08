@@ -3,9 +3,9 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { RadioPanel } from 'nav-frontend-skjema';
 import { Heading } from '@navikt/ds-react';
 
-import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from '../../../../models/enums';
-import { getEnvironmentVariable } from '../../../../utils';
-import intlHelper from '../../../../utils/intlUtils';
+import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from 'app/models/enums';
+import { getEnvironmentVariable } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
 
 import './DokumentTypeVelger.less';
 
