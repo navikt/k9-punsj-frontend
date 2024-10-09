@@ -63,6 +63,11 @@ import AnnenPart from './Komponenter/AnnenPart';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 import Fosterbarn from './Komponenter/Fosterbarn';
 import { Dispatch } from 'redux';
+import {
+    checkIfFagsakMedValgtBehandlingsår,
+    isJournalførKnapperDisabled,
+    isRedirectVidereDisabled,
+} from './fordelingUtils';
 
 import './fordeling.less';
 
@@ -126,6 +131,7 @@ const Fordeling: React.FC = () => {
         !!dokumenttype && dokumenttyperMedBehandlingsårValg.includes(dokumenttype);
     const isDokumenttypeMedBehandlingsår = !!dokumenttype && dokumenttyperMedBehandlingsår.includes(dokumenttype);
     const isDokumenttypeMedFosterbarn = !!dokumenttype && dokumentyperMedFosterbarn.includes(dokumenttype);
+    const isDokumenttypeMedAnnenPart = dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
     const jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende =
         !journalpost.erFerdigstilt &&
@@ -133,14 +139,12 @@ const Fordeling: React.FC = () => {
         !!journalpost?.norskIdent &&
         !(!isSakstyperFraJpSakMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
-    const isFagsakMedValgtBehandlingsår = (): boolean => {
-        if (isDokumenttypeMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
-            return fagsaker.some((f) => {
-                return f.behandlingsår?.toString() === behandlingsAar;
-            });
-        }
-        return false;
-    };
+    const isFagsakMedValgtBehandlingsår = checkIfFagsakMedValgtBehandlingsår(
+        fagsaker,
+        isDokumenttypeMedBehandlingsårValg,
+        reserverSaksnummerTilNyFagsak,
+        behandlingsAar,
+    );
 
     /**
      * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
@@ -266,7 +270,6 @@ const Fordeling: React.FC = () => {
             setErSøkerIdBekreftet(true);
             setIdentAction(journalpost.norskIdent!);
             setVisSokersBarn(true);
-            // TODO
             setFagsak(journalpost.sak);
         }
     }, []);
@@ -397,73 +400,23 @@ const Fordeling: React.FC = () => {
         }
     }, [identState.søkerId, dokumenttype, gjelderPsbOmsOlp]);
 
-    const disableVidereMidlertidigAlene =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart ||
-            !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
-            identState.annenPart === identState.søkerId ||
-            (toSokereIJournalpost &&
-                (identState.annenPart === identState.annenSokerIdent ||
-                    identState.søkerId === identState.annenSokerIdent)));
-
-    const disableJournalførKnapper = () => {
-        if (isDokumenttypeMedPleietrengende) {
-            if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
-                return true;
-            }
-            if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende && !toSokereIJournalpost) {
-                return !fagsak;
-            }
-
-            if (barnMedFagsak) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.pleietrengendeId) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.annenSokerIdent) {
-                return true;
-            }
-            if (identState.pleietrengendeId === identState.annenSokerIdent) {
-                return true;
-            }
-
-            if (!!journalpost?.kanKopieres && toSokereIJournalpost) {
-                return (
-                    IdentRules.erUgyldigIdent(identState.søkerId) ||
-                    IdentRules.erUgyldigIdent(identState.annenSokerIdent) ||
-                    !identState.pleietrengendeId
-                );
-            }
-
-            if (
-                !barnetHarIkkeFnr &&
-                !ingenInfoOmPleitrengende &&
-                IdentRules.erUgyldigIdent(identState.pleietrengendeId)
-            ) {
-                return true;
-            }
-        }
-
-        if ((isDokumenttypeMedBehandlingsårValg && !behandlingsAar) || isFagsakMedValgtBehandlingsår()) {
-            return true;
-        }
-
-        if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
-            return (
-                identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn)) ||
-                identState.fosterbarn.some((barn) => barn === identState.søkerId) ||
-                (toSokereIJournalpost && identState.fosterbarn.some((barn) => barn === identState.annenSokerIdent)) ||
-                (dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-                    !!identState.annenPart &&
-                    identState.fosterbarn.some((barn) => barn === identState.annenPart))
-            );
-        }
-
-        return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
-    };
+    const journalførKnapperDisabled = isJournalførKnapperDisabled(
+        journalpost,
+        identState,
+        ingenInfoOmPleitrengende,
+        barnetHarIkkeFnr,
+        toSokereIJournalpost,
+        harFagsaker,
+        reserverSaksnummerTilNyFagsak,
+        isDokumenttypeMedPleietrengende,
+        isDokumenttypeMedBehandlingsårValg,
+        isDokumenttypeMedAnnenPart,
+        isDokumenttypeMedFosterbarn,
+        isFagsakMedValgtBehandlingsår,
+        fagsak,
+        behandlingsAar,
+        barnMedFagsak,
+    );
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -506,23 +459,7 @@ const Fordeling: React.FC = () => {
         }
     };
 
-    const disableRedirectVidere = () => {
-        if (isDokumenttypeMedPleietrengende) {
-            if (barnMedFagsak) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.pleietrengendeId) {
-                return true;
-            }
-
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId)) {
-                return true;
-            }
-        }
-
-        return IdentRules.erUgyldigIdent(identState.søkerId);
-    };
+    const redirectVidereDisabled = isRedirectVidereDisabled(identState, isDokumenttypeMedPleietrengende, barnMedFagsak);
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
@@ -867,7 +804,7 @@ const Fordeling: React.FC = () => {
                             )}
                             {!journalpost.erFerdigstilt &&
                                 !fagsak &&
-                                !disableJournalførKnapper() &&
+                                !journalførKnapperDisabled &&
                                 (identState.pleietrengendeId ||
                                     isDokumenttypeMedBehandlingsårValg ||
                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
@@ -881,7 +818,7 @@ const Fordeling: React.FC = () => {
                                     </Alert>
                                 )}
 
-                            {isFagsakMedValgtBehandlingsår() && (
+                            {isFagsakMedValgtBehandlingsår && (
                                 <Alert
                                     size="small"
                                     variant="info"
@@ -902,7 +839,7 @@ const Fordeling: React.FC = () => {
                                                 setFortsettEtterKlassifiseringModal(true);
                                                 setVisKlassifiserModal(true);
                                             }}
-                                            disabled={disableJournalførKnapper() || disableRedirectVidere()}
+                                            disabled={journalførKnapperDisabled || redirectVidereDisabled}
                                             data-test-id="journalførOgFortsett"
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
@@ -915,7 +852,7 @@ const Fordeling: React.FC = () => {
                                             setFortsettEtterKlassifiseringModal(false);
                                             setVisKlassifiserModal(true);
                                         }}
-                                        disabled={disableJournalførKnapper()}
+                                        disabled={journalførKnapperDisabled}
                                         data-test-id="journalførOgVent"
                                     >
                                         <FormattedMessage id="fordeling.knapp.journalfør.vent" />
@@ -930,7 +867,7 @@ const Fordeling: React.FC = () => {
                                             variant="primary"
                                             size="small"
                                             onClick={handleRedirectVidere}
-                                            disabled={disableRedirectVidere()}
+                                            disabled={redirectVidereDisabled}
                                         >
                                             <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
