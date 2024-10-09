@@ -14,7 +14,7 @@ import {
     sakstyperMedPleietrengende,
 } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import {
@@ -25,13 +25,10 @@ import {
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { ROUTES } from 'app/constants/routes';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { IGosysOppgaveState } from 'app/models/types/GosysOppgaveState';
-import { IIdentState } from 'app/models/types/IdentState';
 import { setDokumenttypeAction, setFagsakAction } from 'app/state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
@@ -43,7 +40,7 @@ import {
     setFosterbarnAction,
     setIdentFellesAction,
 } from 'app/state/actions/IdentActions';
-import { IFellesState, resetBarnAction } from 'app/state/reducers/FellesReducer';
+import { resetBarnAction } from 'app/state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -64,63 +61,39 @@ import Pleietrengende from './Komponenter/Pleietrengende';
 import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import AnnenPart from './Komponenter/AnnenPart';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
+import Fosterbarn from './Komponenter/Fosterbarn';
+import { Dispatch } from 'redux';
 
 import './fordeling.less';
-import Fosterbarn from './Komponenter/Fosterbarn';
 
-export interface IFordelingStateProps {
-    journalpost: IJournalpost;
-    fordelingState: IFordelingState;
-    identState: IIdentState;
-    opprettIGosysState: IGosysOppgaveState;
-    fellesState: IFellesState;
-    dedupkey: string;
-}
-
-export interface IFordelingDispatchProps {
-    setDokumenttype: typeof setDokumenttypeAction;
-    setFagsakAction: typeof setFagsakAction;
-    omfordel: typeof omfordelAction;
-    setIdentAction: typeof setIdentFellesAction;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-    resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
-    lukkOppgaveReset: typeof lukkOppgaveResetAction;
-    setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
-    resetIdentStateAction: typeof resetIdentState;
-    setAnnenPart: typeof setAnnenPartAction;
-    resetBarn: typeof resetBarnAction;
-    setFosterbarn: typeof setFosterbarnAction;
-}
-
-export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
-
-// TODO Flytte til felles sted?
 // TODO Sjekke alle useEffect
 
-const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
-    const {
-        fordelingState,
-        fellesState,
-        identState,
-        journalpost,
-        opprettIGosysState,
-        lukkJournalpostOppgave,
-        resetOmfordelAction,
-        lukkOppgaveReset,
-        setIdentAction,
-        setErSøkerIdBekreftet,
-        setFagsakAction: setFagsak,
-        resetIdentStateAction,
-        setDokumenttype,
-        omfordel,
-        setAnnenPart,
-        resetBarn,
-        setFosterbarn,
-    } = props;
-
-    const { fagsak, dokumenttype } = fordelingState;
-
+const Fordeling: React.FC = () => {
     const navigate = useNavigate();
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost as IJournalpost);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+    const opprettIGosysState = useSelector((state: RootStateType) => state.opprettIGosys);
+
+    const omfordel = (journalpostid: string, norskIdent: string, gosysKategori: string) =>
+        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori));
+    const resetBarn = () => dispatch(resetBarnAction());
+    const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
+    const setFagsak = (fagsak?: Fagsak) => dispatch(setFagsakAction(fagsak));
+    const setIdentAction = (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
+    const lukkJournalpostOppgave = (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak));
+    const resetOmfordelAction = () => dispatch(opprettGosysOppgaveResetAction());
+    const lukkOppgaveReset = () => dispatch(lukkOppgaveResetAction());
+    const resetIdentStateAction = () => dispatch(resetIdentState());
+    const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
+    const setErSøkerIdBekreftet = (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet));
+    const setFosterbarn = (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn));
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -142,6 +115,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     const [åpenBrevModal, setÅpenBrevModal] = useState(false);
 
     const harFagsaker = fagsaker?.length > 0;
+
+    const { dedupKey } = fellesState;
+    const { fagsak, dokumenttype } = fordelingState;
 
     const isDokumenttypeMedPleietrengende = !!dokumenttype && dokumenttyperMedPleietrengende.includes(dokumenttype);
     const isSakstyperFraJpSakMedPleietrengende =
@@ -971,7 +947,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                dedupkey={props.dedupkey}
+                                dedupkey={dedupKey}
                                 toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
@@ -1008,34 +984,4 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
-    identState: state.identState,
-    opprettIGosysState: state.opprettIGosys,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setDokumenttype: (dokumenttype: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype)),
-    setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
-    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
-        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-    resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
-    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
-    resetIdentStateAction: () => dispatch(resetIdentState()),
-    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
-    resetAllState: () => dispatch(resetAllStateAction()),
-    resetBarn: () => dispatch(resetBarnAction()),
-    setFosterbarn: (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn)),
-});
-
-const Fordeling = connect(mapStateToProps, mapDispatchToProps)(FordelingComponent);
-
-export { Fordeling, FordelingComponent };
+export default Fordeling;
