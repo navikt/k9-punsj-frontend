@@ -69,3 +69,11 @@ export const dokumenttyperMedPleietrengende = [
     FordelingDokumenttype.OPPLAERINGSPENGER,
     FordelingDokumenttype.OMSORGSPENGER_AO,
 ];
+
+export const sakstyperMedPleietrengende = [
+    DokumenttypeForkortelse.PSB,
+    DokumenttypeForkortelse.OMP_KS,
+    DokumenttypeForkortelse.PPN,
+    DokumenttypeForkortelse.OLP,
+    DokumenttypeForkortelse.OMP_AO,
+];
