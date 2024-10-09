@@ -49,7 +49,7 @@ import {
 } from 'app/utils';
 import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
 import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
-import FagsakSelect from './FagsakSelect';
+import FagsakSelect from './Komponenter/FagsakSelect';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import JournalpostAlleredeBehandlet from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
