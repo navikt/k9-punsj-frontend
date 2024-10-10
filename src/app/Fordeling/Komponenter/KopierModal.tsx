@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
-
-import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useMutation } from 'react-query';
+import { Dispatch } from 'redux';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
-import { useMutation } from 'react-query';
-import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
-import { useDispatch, useSelector } from 'react-redux';
+import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 import { RootStateType } from 'app/state/RootState';
-
-import { Dispatch } from 'redux';
+import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 
 interface Props {
     søkerId: string;
