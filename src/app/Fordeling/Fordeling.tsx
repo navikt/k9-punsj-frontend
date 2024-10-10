@@ -492,6 +492,7 @@ const Fordeling: React.FC = () => {
             resetBarn(); // Redux felles state liste med barn
             setFosterbarn(); // Redux felles state liste med fosterbarn
             resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
+            setValgtFagsakLokal(undefined);
         }
 
         setDokumenttype(type); // Redux state
