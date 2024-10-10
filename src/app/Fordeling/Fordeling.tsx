@@ -376,7 +376,6 @@ const Fordeling: React.FC = () => {
     useEffect(() => {
         if (
             (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
-            // !journalpost.sak?.fagsakId &&
             identState.søkerId &&
             dokumenttype &&
             gjelderPsbOmsOlp
