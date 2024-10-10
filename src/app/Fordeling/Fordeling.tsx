@@ -289,15 +289,21 @@ const Fordeling: React.FC = () => {
         }
     }, [dokumenttype, identState.søkerId]);
 
-    // TODO TESTE DETTTE - det ser ut er bug her
+    /**
+     * Sjekk om pleietrengende er i eksisterende fagsak, og sett barnMedFagsak.
+     * Saksbehandler kan ikke velge pleietrengende hvis den er i eksisterende fagsak før journalføring.
+     * Hvis journalposten er ferdigstilt, kan saksbehandler velge pleietrengende som er ikke i eksisterende fagsak.
+     * Hvis journalposten er ferdigstilt og det er nødvendig å legge til pleietrengende som er i eksisterende fagsak,
+     * kan saksbehandler velge pleietrengende og kopiere journalposten mot fagsak med pleietrengende og lukke journalposten.
+     * Det vises en knapp som åpner en modal for å kopiere journalposten mot fagsak med pleietrengende og lukke journalposten.
+     */
     useEffect(() => {
-        if ((reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende) && fagsaker) {
+        if (fagsaker && (reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende)) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
-        }
-        if (!reserverSaksnummerTilNyFagsak && !jpErFerdigstiltOgUtenPleietrengende) {
+        } else {
             setBarnMedFagsak(undefined);
         }
-    }, [identState.pleietrengendeId]);
+    }, [identState.pleietrengendeId, fagsaker, reserverSaksnummerTilNyFagsak, jpErFerdigstiltOgUtenPleietrengende]);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
@@ -785,7 +791,11 @@ const Fordeling: React.FC = () => {
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>
                                     {!fellesState.kopierJournalpostSuccess && (
-                                        <Alert size="small" variant="warning">
+                                        <Alert
+                                            size="small"
+                                            variant="warning"
+                                            data-test-id="pleietrengendeHarFagsakFerdistiltJpWarning"
+                                        >
                                             <FormattedMessage
                                                 id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
                                                 values={{
@@ -867,13 +877,19 @@ const Fordeling: React.FC = () => {
                                             size="small"
                                             onClick={handleRedirectVidere}
                                             disabled={redirectVidereDisabled}
+                                            data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"
                                         >
                                             <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
                                     </div>
 
                                     {isSakstyperFraJpSakMedPleietrengende && (
-                                        <Button size="small" variant="secondary" onClick={() => setÅpenBrevModal(true)}>
+                                        <Button
+                                            size="small"
+                                            variant="secondary"
+                                            onClick={() => setÅpenBrevModal(true)}
+                                            data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"
+                                        >
                                             <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.btn" />
                                         </Button>
                                     )}

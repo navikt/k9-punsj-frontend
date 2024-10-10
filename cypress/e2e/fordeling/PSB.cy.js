@@ -5,6 +5,7 @@ import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils'
 import journalpost from '../../fixtures/jpPSB300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
+import ferdistiltJournalpostUtenBarn from '../../fixtures/jpPSB312.json';
 
 const dokumenttype = 'Pleiepenger sykt barn';
 const valgteDokumentType = 'Pleiepenger sykt barn';
@@ -953,5 +954,143 @@ describe(`Fordeling ${dokumenttype} søker uten liste med barn`, { testIsolation
 
         cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+});
+
+describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { testIsolation: false }, () => {
+    it(`Åpen journalpost ${ferdistiltJournalpostUtenBarn.journalpostId} fra LOS`, () => {
+        cy.visit(`/journalpost/${ferdistiltJournalpostUtenBarn.journalpostId}`);
+        Cypress.config('viewportWidth', 1280);
+        Cypress.config('viewportHeight', 1450);
+    });
+
+    it('Skjul dokument vindu', () => {
+        cy.findByText(/Skjul/i).should('exist').click();
+    });
+
+    it('Test vises info om at journalpost ferdistilt uten pleietrengende', () => {
+        cy.findByText(/Journalposten er journalført, men mangler opplysninger om pleietrengende./i).should('exist');
+    });
+
+    it('Test at det valgte riktig dokumenttype', () => {
+        cy.get('[data-test-id="dokumenttypeRadioPanelPleiepenger"]').should('not.be.disabled').should('be.checked');
+    });
+
+    it('Test at andre dokumenttyper er disabled', () => {
+        cy.get('[data-test-id="dokumenttypeRadioPanelOmsorgspenger"]').should('be.disabled');
+        cy.get('[data-test-id="dokumenttypeRadioPanelPleiepengerILivetsSluttfase"]').should('be.disabled');
+        cy.get('[data-test-id="dokumenttypeRadioPanelAnnet"]').should('be.disabled');
+        // cy.get('[data-test-id="dokumenttypeRadioPanelOpplæringspenger"]').should('be.disabled');
+    });
+
+    it('Test at søker bekrefted', () => {
+        cy.get('[data-test-id="bekreftSøker-ja"]').should('not.be.disabled').should('be.checked');
+        cy.get('[data-test-id="bekreftSøker-nei"]').should('be.disabled').should('not.be.checked');
+    });
+
+    it('Test at det vises ikke knapper jornalfør', () => {
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.exist');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.exist');
+    });
+
+    it('Test at det ikke er mulig å gå videre uten pleietrengende', () => {
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('exist').should('be.disabled');
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]')
+            .should('exist')
+            .should('not.be.disabled');
+    });
+
+    it('Test at det er mulig å gå videre med pleietrengende', () => {
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('exist').should('not.be.disabled');
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]')
+            .should('exist')
+            .should('not.be.disabled');
+    });
+
+    it('Test at det er ikke mulig å gå videre med pleietrengende som er i eksisterende fagsak', () => {
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn3FraApi))
+            .should('have.value', barn3FraApi.identitetsnummer);
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('not.exist');
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]').should('not.exist');
+    });
+
+    it('Test at det vises alert ved valg av pleietrengende som er i eksisterende fagsak', () => {
+        cy.get('[data-test-id="pleietrengendeHarFagsakFerdistiltJpWarning"]').should('exist');
+    });
+
+    it('Test at det vises kopier/lukk knapp ved valg av pleietrengende som er i eksisterende fagsak', () => {
+        cy.get('[data-test-id="kopierOgLukkJournalpostBtn"]').should('exist').should('not.be.disabled').click();
+    });
+
+    it('Test kopier/lukk jp med kopier feil', () => {
+        cy.findByText(/Vil du kopiere og lukke journalposten?/i).should('exist');
+        cy.findByText(/Den nye Journalposten vil bli kopiert og journalført mot eksisterende fagsak/i).should('exist');
+        cy.findByText(barn3FraApi.identitetsnummer).should('exist');
+        cy.get('[data-test-id="kopierModalAvbrytBtn"]').should('exist').should('not.be.disabled');
+        cy.get('[data-test-id="kopierModalKopierBtn"]').should('exist').should('not.be.disabled').click();
+
+        cy.get('[data-test-id="kopierJournalpostError"]').should('exist');
+    });
+
+    it('Test kopier/lukk jp uten kopier feil med lukk feil', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(
+                http.post(
+                    ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', ferdistiltJournalpostUtenBarn.journalpostId),
+                    () =>
+                        HttpResponse.json(
+                            {
+                                saksnummer: '1DQAW94',
+                            },
+                            { status: 202 },
+                        ),
+                ),
+            );
+        });
+
+        cy.get('[data-test-id="kopierModalKopierBtn"]').should('exist').should('not.be.disabled').click();
+
+        cy.get('[data-test-id="kopierJournalpostError"]').should('not.exist');
+
+        cy.get('[data-test-id="kopiAvJournalpostOpprettet"]').should('exist');
+        cy.get('[data-test-id="kopierModalLukkError"]').should('exist');
+
+        cy.get('[data-test-id="kopierLukkBtn"]').should('exist').should('not.be.disabled');
+        cy.get('[data-test-id="kopierTilbakeTilLosBtn"]').should('exist').should('not.be.disabled');
+    });
+
+    it('Test kopier/lukk jp', () => {
+        cy.window().then((window) => {
+            const { worker } = window.msw;
+            worker.use(
+                http.post(
+                    ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace(
+                        '{journalpostId}',
+                        ferdistiltJournalpostUtenBarn.journalpostId,
+                    ),
+                    () =>
+                        HttpResponse.json(
+                            {
+                                saksnummer: '1DQAW94',
+                            },
+                            { status: 200 },
+                        ),
+                ),
+            );
+        });
+        cy.get('[data-test-id="kopierLukkBtn"]').click();
+
+        cy.get('[data-test-id="kopierModalLukkError"]').should('not.exist');
+        cy.get('[data-test-id="kopierLukkBtn"]').should('not.exist');
+        cy.get('[data-test-id="kopierModalLukkSuccess"]').should('exist');
+
+        cy.get('[data-test-id="kopierTilbakeTilLosBtn"]').should('exist').should('not.be.disabled').click();
+
+        cy.findByText(/Vil du kopiere og lukke journalposten?/i).should('not.exist');
     });
 });

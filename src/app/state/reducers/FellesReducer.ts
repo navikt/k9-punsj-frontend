@@ -249,7 +249,7 @@ export const kopierJournalpostRedux = (
             behandlingsÅr: behandlingsÅr,
             annenPart: annenPart,
         };
-
+        dispatch(getJournalpostKopiereErrorResetAction());
         dispatch(getJournalpostKopiereRequestAction());
         post(ApiPath.JOURNALPOST_KOPIERE, { journalpostId: journalPostID }, undefined, requestBody, (response) => {
             switch (response.status) {

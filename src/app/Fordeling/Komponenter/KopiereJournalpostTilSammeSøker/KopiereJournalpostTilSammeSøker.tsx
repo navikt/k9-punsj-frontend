@@ -8,7 +8,7 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
-import KopierModal from '../KopierModal';
+import KopierLukkJpModal from '../KopierModal';
 
 import './kopiereJournalpostTilSammeSøker.less';
 
@@ -63,6 +63,7 @@ const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Pr
                                 setVisModal(true);
                             }
                         }}
+                        data-test-id="kopierOgLukkJournalpostBtn"
                     >
                         <FormattedMessage id="fordeling.kopiereOgLukkJournalpost" />
                     </Button>
@@ -88,7 +89,7 @@ const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Pr
             )}
 
             {visModal && (
-                <KopierModal
+                <KopierLukkJpModal
                     søkerId={søkerId}
                     pleietrengendeId={identState.pleietrengendeId}
                     journalpostId={journalpost?.journalpostId}

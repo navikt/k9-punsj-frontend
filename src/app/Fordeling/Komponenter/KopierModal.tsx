@@ -24,7 +24,7 @@ interface Props {
     lukkModal: () => void;
 }
 
-const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fagsakId, lukkModal }: Props) => {
+const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fagsakId, lukkModal }: Props) => {
     const [kopierLoading, setKopierLoading] = useState(false);
 
     const dispatch = useDispatch<Dispatch<any>>();
@@ -32,7 +32,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
 
-    const { mutate, status, error, isSuccess } = useMutation({
+    const lukkkJournalpost = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
 
@@ -41,7 +41,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
 
     useEffect(() => {
         if (fellesState.kopierJournalpostSuccess) {
-            mutate();
+            lukkkJournalpost.mutate();
         }
     }, [fellesState.kopierJournalpostSuccess]);
 
@@ -51,6 +51,10 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
         dispatch(kopierJournalpostRedux(dedupkey, søkerId, journalpostId, ytelseForKopiering, pleietrengendeId));
 
         setKopierLoading(false);
+    };
+
+    const handleLukkJournalpost = () => {
+        lukkkJournalpost.mutate();
     };
 
     const disabled = ['loading'].includes(status);
@@ -74,17 +78,17 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
 
                     <JournalPostKopiFelmeldinger fellesState={fellesState} />
 
-                    {isSuccess && (
+                    {lukkkJournalpost.isSuccess && (
                         <div>
-                            <Alert size="small" variant="success">
+                            <Alert size="small" variant="success" data-test-id="kopierModalLukkSuccess">
                                 <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.success" />
                             </Alert>
                         </div>
                     )}
 
-                    {!!error && (
+                    {lukkkJournalpost.isError && (
                         <div>
-                            <Alert size="small" variant="warning">
+                            <Alert size="small" variant="warning" data-test-id="kopierModalLukkError">
                                 <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.error" />
                             </Alert>
                         </div>
@@ -94,18 +98,38 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
 
             <Modal.Footer>
                 {fellesState.kopierJournalpostSuccess ? (
-                    <Button
-                        size="small"
-                        disabled={disabled}
-                        onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
-                        }}
-                    >
-                        <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.tilbaketilLOS.btn" />
-                    </Button>
+                    <>
+                        <Button
+                            size="small"
+                            disabled={disabled}
+                            onClick={() => {
+                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            }}
+                            data-test-id="kopierTilbakeTilLosBtn"
+                        >
+                            <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.tilbaketilLOS.btn" />
+                        </Button>
+                        {lukkkJournalpost.isError && (
+                            <Button
+                                size="small"
+                                disabled={disabled}
+                                onClick={handleLukkJournalpost}
+                                data-test-id="kopierLukkBtn"
+                                variant="secondary"
+                            >
+                                <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.lukk.btn" />
+                            </Button>
+                        )}
+                    </>
                 ) : (
                     <>
-                        <Button type="button" disabled={kopierLoading} onClick={handleKopier} size="small">
+                        <Button
+                            type="button"
+                            disabled={kopierLoading}
+                            onClick={handleKopier}
+                            size="small"
+                            data-test-id="kopierModalKopierBtn"
+                        >
                             <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.btn" />
                         </Button>
 
@@ -115,6 +139,7 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
                             disabled={kopierLoading}
                             size="small"
                             variant="secondary"
+                            data-test-id="kopierModalAvbrytBtn"
                         >
                             <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.avbryt.btn" />
                         </Button>
@@ -125,4 +150,4 @@ const KopierModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fags
     );
 };
 
-export default KopierModal;
+export default KopierLukkJpModal;
