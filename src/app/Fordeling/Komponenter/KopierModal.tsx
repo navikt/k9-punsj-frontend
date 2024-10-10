@@ -32,7 +32,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
 
-    const lukkkJournalpost = useMutation({
+    const lukkJournalpost = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fellesState.journalpost?.sak),
     });
 
@@ -41,7 +41,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
 
     useEffect(() => {
         if (fellesState.kopierJournalpostSuccess) {
-            lukkkJournalpost.mutate();
+            lukkJournalpost.mutate();
         }
     }, [fellesState.kopierJournalpostSuccess]);
 
@@ -54,10 +54,10 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
     };
 
     const handleLukkJournalpost = () => {
-        lukkkJournalpost.mutate();
+        lukkJournalpost.mutate();
     };
 
-    const disabled = ['loading'].includes(status);
+    const disabled = ['loading'].includes(lukkJournalpost.status);
 
     return (
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
@@ -78,7 +78,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
 
                     <JournalPostKopiFelmeldinger fellesState={fellesState} />
 
-                    {lukkkJournalpost.isSuccess && (
+                    {lukkJournalpost.isSuccess && (
                         <div>
                             <Alert size="small" variant="success" data-test-id="kopierModalLukkSuccess">
                                 <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.success" />
@@ -86,7 +86,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
                         </div>
                     )}
 
-                    {lukkkJournalpost.isError && (
+                    {lukkJournalpost.isError && (
                         <div>
                             <Alert size="small" variant="warning" data-test-id="kopierModalLukkError">
                                 <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.error" />
@@ -109,7 +109,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
                         >
                             <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.tilbaketilLOS.btn" />
                         </Button>
-                        {lukkkJournalpost.isError && (
+                        {lukkJournalpost.isError && (
                             <Button
                                 size="small"
                                 disabled={disabled}
