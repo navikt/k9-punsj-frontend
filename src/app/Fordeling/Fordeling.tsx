@@ -1,10 +1,30 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { Dispatch } from 'redux';
+
 import { finnFagsaker } from 'app/api/api';
-import { DokumenttypeForkortelse, FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
+import FormPanel from 'app/components/FormPanel';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { ROUTES } from 'app/constants/routes';
+import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
+import {
+    DokumenttypeForkortelse,
+    FordelingDokumenttype,
+    JaNei,
+    dokumenttyperForPsbOmsOlp,
+    dokumenttyperMedBehandlingsår,
+    dokumenttyperMedBehandlingsårValg,
+    dokumenttyperMedPleietrengende,
+    dokumentyperMedFosterbarn,
+    sakstyperMedPleietrengende,
+} from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IJournalpost } from 'app/models/types';
 import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import {
@@ -12,16 +32,6 @@ import {
     lukkOppgaveResetAction,
     setErSøkerIdBekreftetAction,
 } from 'app/state/actions';
-import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
-import { ROUTES } from 'app/constants/routes';
-import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import FormPanel from 'app/components/FormPanel';
-import VerticalSpacer from 'app/components/VerticalSpacer';
-import { IGosysOppgaveState } from 'app/models/types/GosysOppgaveState';
-import { IIdentState } from 'app/models/types/IdentState';
 import { setDokumenttypeAction, setFagsakAction } from 'app/state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
@@ -33,84 +43,65 @@ import {
     setFosterbarnAction,
     setIdentFellesAction,
 } from 'app/state/actions/IdentActions';
-import { IFellesState, resetBarnAction } from 'app/state/reducers/FellesReducer';
+import { resetBarnAction } from 'app/state/reducers/FellesReducer';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from 'app/utils';
-import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
-import FagsakSelect from './FagsakSelect';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
+
+import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
+import Fosterbarn from './Komponenter/Fosterbarn';
+import FagsakSelect from './Komponenter/FagsakSelect';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import JournalpostAlleredeBehandlet from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import KlassifiserModal from './Komponenter/KlassifiserModal';
+import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
+import Pleietrengende from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
-import KlassifiserModal from './Komponenter/KlassifiserModal';
-import Pleietrengende from './Komponenter/Pleietrengende';
-import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
-import AnnenPart from './Komponenter/AnnenPart';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
+import {
+    checkIfFagsakMedValgtBehandlingsår,
+    isJournalførKnapperDisabled,
+    isRedirectVidereDisabled,
+} from './fordelingUtils';
+
 import './fordeling.less';
-import Fosterbarn from './Komponenter/Fosterbarn';
 
-export interface IFordelingStateProps {
-    journalpost: IJournalpost;
-    fordelingState: IFordelingState;
-    identState: IIdentState;
-    opprettIGosysState: IGosysOppgaveState;
-    fellesState: IFellesState;
-    dedupkey: string;
-}
-
-export interface IFordelingDispatchProps {
-    setDokumenttype: typeof setDokumenttypeAction;
-    setFagsakAction: typeof setFagsakAction;
-    omfordel: typeof omfordelAction;
-    setIdentAction: typeof setIdentFellesAction;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-    resetOmfordelAction: typeof opprettGosysOppgaveResetAction;
-    lukkOppgaveReset: typeof lukkOppgaveResetAction;
-    setErSøkerIdBekreftet: typeof setErSøkerIdBekreftetAction;
-    resetIdentStateAction: typeof resetIdentState;
-    setAnnenPart: typeof setAnnenPartAction;
-    resetBarn: typeof resetBarnAction;
-    setFosterbarn: typeof setFosterbarnAction;
-}
-
-export type IFordelingProps = IFordelingStateProps & IFordelingDispatchProps;
-
-// TODO Flytte til felles sted?
 // TODO Sjekke alle useEffect
 
-const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFordelingProps) => {
-    const {
-        fordelingState,
-        fellesState,
-        identState,
-        journalpost,
-        opprettIGosysState,
-        lukkJournalpostOppgave,
-        resetOmfordelAction,
-        lukkOppgaveReset,
-        setIdentAction,
-        setErSøkerIdBekreftet,
-        setFagsakAction: setFagsak,
-        resetIdentStateAction,
-        setDokumenttype,
-        omfordel,
-        setAnnenPart,
-        resetBarn,
-        setFosterbarn,
-    } = props;
-
-    const { fagsak, dokumenttype } = fordelingState;
-
+const Fordeling: React.FC = () => {
     const navigate = useNavigate();
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost as IJournalpost);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const fellesState = useSelector((state: RootStateType) => state.felles);
+    const opprettIGosysState = useSelector((state: RootStateType) => state.opprettIGosys);
+
+    const omfordel = (journalpostid: string, norskIdent: string, gosysKategori: string) =>
+        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori));
+    const resetBarn = () => dispatch(resetBarnAction());
+    const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
+    const setFagsak = (fagsak?: Fagsak) => dispatch(setFagsakAction(fagsak));
+    const setIdentAction = (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
+    const lukkJournalpostOppgave = (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
+        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak));
+    const resetOmfordelAction = () => dispatch(opprettGosysOppgaveResetAction());
+    const lukkOppgaveReset = () => dispatch(lukkOppgaveResetAction());
+    const resetIdentStateAction = () => dispatch(resetIdentState());
+    const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
+    const setErSøkerIdBekreftet = (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet));
+    const setFosterbarn = (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn));
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -133,57 +124,34 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     const harFagsaker = fagsaker?.length > 0;
 
-    const isDokumenttypeMedPleietrengende =
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-        dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO;
+    const { dedupKey } = fellesState;
+    const { fagsak, dokumenttype } = fordelingState;
 
-    const sakstyperMedPleietrengende = [
-        DokumenttypeForkortelse.PSB,
-        DokumenttypeForkortelse.OMP_KS,
-        DokumenttypeForkortelse.PPN,
-        DokumenttypeForkortelse.OLP,
-        DokumenttypeForkortelse.OMP_AO,
-    ];
-
-    const ytelserMedBehandlingsårValg =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM;
-
-    const isDokumenttypeMedBehandlingsår =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
-
-    const isDokumenttypeMedFosterbarn =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_UT ||
-        dokumenttype === FordelingDokumenttype.KORRIGERING_IM ||
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
-
-    const isSakstypeMedPleietrengende =
-        journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
+    const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
+    const isDokumenttypeMedPleietrengende = !!dokumenttype && dokumenttyperMedPleietrengende.includes(dokumenttype);
+    const isSakstyperFraJpSakMedPleietrengende =
+        !!journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
+    const isDokumenttypeMedBehandlingsårValg =
+        !!dokumenttype && dokumenttyperMedBehandlingsårValg.includes(dokumenttype);
+    const isDokumenttypeMedBehandlingsår = !!dokumenttype && dokumenttyperMedBehandlingsår.includes(dokumenttype);
+    const isDokumenttypeMedFosterbarn = !!dokumenttype && dokumentyperMedFosterbarn.includes(dokumenttype);
+    const isDokumenttypeMedAnnenPart = dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA;
 
     const jpMedFagsakIdErIkkeFerdigstiltOgUtenPleietrengende =
         !journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+        !(!isSakstyperFraJpSakMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
-    const isFagsakMedValgtBehandlingsår = (): boolean => {
-        if (ytelserMedBehandlingsårValg && reserverSaksnummerTilNyFagsak) {
-            return fagsaker.some((f) => {
-                return f.behandlingsår?.toString() === behandlingsAar;
-            });
-        }
-        return false;
-    };
+    const isFagsakMedValgtBehandlingsår = checkIfFagsakMedValgtBehandlingsår(
+        fagsaker,
+        isDokumenttypeMedBehandlingsårValg,
+        reserverSaksnummerTilNyFagsak,
+        behandlingsAar,
+    );
 
     /**
-     * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
+     * Sette fordelingState når siden åpnes hvis journalposten ikke er ferdigstilt, men har en sakstype som støttes
      */
     useEffect(() => {
         if (!journalpost.erFerdigstilt) {
@@ -232,7 +200,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             journalpost?.kanSendeInn &&
             journalpost?.erSaksbehandler &&
             !!journalpost?.norskIdent &&
-            (!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
+            (!isSakstyperFraJpSakMedPleietrengende || !!journalpost.sak.pleietrengendeIdent)
         ) {
             const fagsakYtelsePath = getPathFraForkortelse(journalpost.sak?.sakstype);
 
@@ -289,7 +257,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         journalpost.erFerdigstilt &&
         !!journalpost.sak?.fagsakId &&
         !!journalpost?.norskIdent &&
-        !(!isSakstypeMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
+        !(!isSakstyperFraJpSakMedPleietrengende || !!journalpost.sak.pleietrengendeIdent);
 
     useEffect(() => {
         if (jpErFerdigstiltOgUtenPleietrengende) {
@@ -306,7 +274,6 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             setErSøkerIdBekreftet(true);
             setIdentAction(journalpost.norskIdent!);
             setVisSokersBarn(true);
-            // TODO
             setFagsak(journalpost.sak);
         }
     }, []);
@@ -325,20 +292,24 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [dokumenttype, identState.søkerId]);
 
-    // TODO TESTE DETTTE - det ser ut er bug her
+    /**
+     * Sjekk om pleietrengende er i eksisterende fagsak, og sett barnMedFagsak.
+     * Saksbehandler kan ikke velge pleietrengende hvis den er i eksisterende fagsak før journalføring.
+     * Hvis journalposten er ferdigstilt, kan saksbehandler velge pleietrengende som er ikke i eksisterende fagsak.
+     * Hvis journalposten er ferdigstilt og det er nødvendig å legge til pleietrengende som er i eksisterende fagsak,
+     * kan saksbehandler velge pleietrengende og kopiere journalposten mot fagsak med pleietrengende og lukke journalposten.
+     * Det vises en knapp som åpner en modal for å kopiere journalposten mot fagsak med pleietrengende og lukke journalposten.
+     */
     useEffect(() => {
-        if (reserverSaksnummerTilNyFagsak && fagsaker) {
+        if (fagsaker && (reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende)) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
-        }
-        if (!reserverSaksnummerTilNyFagsak) {
+        } else {
             setBarnMedFagsak(undefined);
         }
-    }, [identState.pleietrengendeId]);
+    }, [identState.pleietrengendeId, fagsaker, reserverSaksnummerTilNyFagsak, jpErFerdigstiltOgUtenPleietrengende]);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
-
-    const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
     const visFagsakSelect =
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
@@ -356,7 +327,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
     // Sjekk ang fagsak?.reservert && !fagsak?.gyldigPeriode
     const visValgAvBehandlingsaar =
-        ytelserMedBehandlingsårValg &&
+        isDokumenttypeMedBehandlingsårValg &&
         identState.søkerId.length === 11 &&
         (reserverSaksnummerTilNyFagsak || (fagsak?.reservert && !fagsak?.behandlingsår)) &&
         !journalpost.erFerdigstilt;
@@ -386,7 +357,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         toSokereIJournalpost &&
         identState.søkerId &&
         identState.annenSokerIdent &&
-        ytelserMedBehandlingsårValg &&
+        isDokumenttypeMedBehandlingsårValg &&
         !behandlingsAar;
 
     const toSøkereIngenAnnenPartMA =
@@ -403,12 +374,13 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
-    // Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
-    // Hvis det er ingen fagsaker, viser vi pleietrengende component
+    /**
+     *  Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
+     *  Hvis det er ingen fagsaker, viser vi pleietrengende component
+     */
     useEffect(() => {
         if (
             (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
-            !journalpost.sak?.fagsakId &&
             identState.søkerId &&
             dokumenttype &&
             gjelderPsbOmsOlp
@@ -437,79 +409,23 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     }, [identState.søkerId, dokumenttype, gjelderPsbOmsOlp]);
 
-    const disableVidereMidlertidigAlene =
-        dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-        (!identState.annenPart ||
-            !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
-            identState.annenPart === identState.søkerId ||
-            (toSokereIJournalpost &&
-                (identState.annenPart === identState.annenSokerIdent ||
-                    identState.søkerId === identState.annenSokerIdent)));
-
-    const disableJournalførKnapper = () => {
-        if (
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
-        ) {
-            if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
-                return true;
-            }
-            if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende && !toSokereIJournalpost) {
-                return !fagsak;
-            }
-
-            if (barnMedFagsak) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.pleietrengendeId) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.annenSokerIdent) {
-                return true;
-            }
-            if (identState.pleietrengendeId === identState.annenSokerIdent) {
-                return true;
-            }
-
-            if (!!journalpost?.kanKopieres && toSokereIJournalpost) {
-                return (
-                    IdentRules.erUgyldigIdent(identState.søkerId) ||
-                    IdentRules.erUgyldigIdent(identState.annenSokerIdent) ||
-                    !identState.pleietrengendeId
-                );
-            }
-
-            if (
-                !barnetHarIkkeFnr &&
-                !ingenInfoOmPleitrengende &&
-                IdentRules.erUgyldigIdent(identState.pleietrengendeId)
-            ) {
-                return true;
-            }
-        }
-
-        if ((ytelserMedBehandlingsårValg && !behandlingsAar) || isFagsakMedValgtBehandlingsår()) {
-            return true;
-        }
-
-        if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
-            return (
-                identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn)) ||
-                identState.fosterbarn.some((barn) => barn === identState.søkerId) ||
-                (toSokereIJournalpost && identState.fosterbarn.some((barn) => barn === identState.annenSokerIdent)) ||
-                (dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA &&
-                    !!identState.annenPart &&
-                    identState.fosterbarn.some((barn) => barn === identState.annenPart))
-            );
-        }
-
-        return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
-    };
+    const journalførKnapperDisabled = isJournalførKnapperDisabled(
+        journalpost,
+        identState,
+        ingenInfoOmPleitrengende,
+        barnetHarIkkeFnr,
+        toSokereIJournalpost,
+        harFagsaker,
+        reserverSaksnummerTilNyFagsak,
+        isDokumenttypeMedPleietrengende,
+        isDokumenttypeMedBehandlingsårValg,
+        isDokumenttypeMedAnnenPart,
+        isDokumenttypeMedFosterbarn,
+        isFagsakMedValgtBehandlingsår,
+        fagsak,
+        behandlingsAar,
+        barnMedFagsak,
+    );
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
@@ -534,9 +450,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         setVisSokersBarn(true);
     };
 
-    // Redirect bruker til fortsett side hvis journalpost er klassifisert, med reservert saksnummer uten fagsak ytelse type
-    // Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
-    // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
+    /**
+     * Redirect bruker til fortsett side hvis journalpost er klassifisert, med reservert saksnummer uten fagsak ytelse type
+     * Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
+     * i dette tilfellet må bruker velge pleietrengende igjen
+     */
     const handleRedirectVidere = () => {
         if (fordelingState.dokumenttype) {
             if (!fagsak) {
@@ -552,29 +470,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
         }
     };
 
-    const disableRedirectVidere = () => {
-        if (
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_KS ||
-            dokumenttype === FordelingDokumenttype.OMSORGSPENGER_AO ||
-            dokumenttype === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE ||
-            dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER
-        ) {
-            if (barnMedFagsak) {
-                return true;
-            }
-
-            if (identState.søkerId === identState.pleietrengendeId) {
-                return true;
-            }
-
-            if (IdentRules.erUgyldigIdent(identState.pleietrengendeId)) {
-                return true;
-            }
-        }
-
-        return IdentRules.erUgyldigIdent(identState.søkerId);
-    };
+    const redirectVidereDisabled = isRedirectVidereDisabled(identState, isDokumenttypeMedPleietrengende, barnMedFagsak);
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
@@ -596,6 +492,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
             resetBarn(); // Redux felles state liste med barn
             setFosterbarn(); // Redux felles state liste med fosterbarn
             resetIdentStateAction(); // Reset kun annenSøkerIdent, pleitrengendeId og annenPart
+            setValgtFagsakLokal(undefined);
         }
 
         setDokumenttype(type); // Redux state
@@ -901,7 +798,11 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             {!!barnMedFagsak && journalpost.erFerdigstilt && (
                                 <>
                                     {!fellesState.kopierJournalpostSuccess && (
-                                        <Alert size="small" variant="warning">
+                                        <Alert
+                                            size="small"
+                                            variant="warning"
+                                            data-test-id="pleietrengendeHarFagsakFerdistiltJpWarning"
+                                        >
                                             <FormattedMessage
                                                 id="fordeling.error.pleietrengendeHarFerdistiltFagsak"
                                                 values={{
@@ -919,9 +820,9 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                             )}
                             {!journalpost.erFerdigstilt &&
                                 !fagsak &&
-                                !disableJournalførKnapper() &&
+                                !journalførKnapperDisabled &&
                                 (identState.pleietrengendeId ||
-                                    ytelserMedBehandlingsårValg ||
+                                    isDokumenttypeMedBehandlingsårValg ||
                                     dokumenttype === FordelingDokumenttype.OMSORGSPENGER_MA) && (
                                     <Alert
                                         size="small"
@@ -933,7 +834,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                     </Alert>
                                 )}
 
-                            {isFagsakMedValgtBehandlingsår() && (
+                            {isFagsakMedValgtBehandlingsår && (
                                 <Alert
                                     size="small"
                                     variant="info"
@@ -954,7 +855,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                                 setFortsettEtterKlassifiseringModal(true);
                                                 setVisKlassifiserModal(true);
                                             }}
-                                            disabled={disableJournalførKnapper() || disableRedirectVidere()}
+                                            disabled={journalførKnapperDisabled || redirectVidereDisabled}
                                             data-test-id="journalførOgFortsett"
                                         >
                                             <FormattedMessage id="fordeling.knapp.journalfør.fortsett" />
@@ -967,7 +868,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             setFortsettEtterKlassifiseringModal(false);
                                             setVisKlassifiserModal(true);
                                         }}
-                                        disabled={disableJournalførKnapper()}
+                                        disabled={journalførKnapperDisabled}
                                         data-test-id="journalførOgVent"
                                     >
                                         <FormattedMessage id="fordeling.knapp.journalfør.vent" />
@@ -982,14 +883,20 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
                                             variant="primary"
                                             size="small"
                                             onClick={handleRedirectVidere}
-                                            disabled={disableRedirectVidere()}
+                                            disabled={redirectVidereDisabled}
+                                            data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"
                                         >
                                             <FormattedMessage id="fordeling.knapp.ferdistiltJpReservertSaksnummer.fortsett" />
                                         </Button>
                                     </div>
 
-                                    {isSakstypeMedPleietrengende && (
-                                        <Button size="small" variant="secondary" onClick={() => setÅpenBrevModal(true)}>
+                                    {isSakstyperFraJpSakMedPleietrengende && (
+                                        <Button
+                                            size="small"
+                                            variant="secondary"
+                                            onClick={() => setÅpenBrevModal(true)}
+                                            data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"
+                                        >
                                             <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.btn" />
                                         </Button>
                                     )}
@@ -999,7 +906,7 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                dedupkey={props.dedupkey}
+                                dedupkey={dedupKey}
                                 toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}
@@ -1036,34 +943,4 @@ const FordelingComponent: React.FunctionComponent<IFordelingProps> = (props: IFo
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
-    identState: state.identState,
-    opprettIGosysState: state.opprettIGosys,
-    fellesState: state.felles,
-    dedupkey: state.felles.dedupKey,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    setDokumenttype: (dokumenttype: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype)),
-    setFagsakAction: (fagsak: Fagsak) => dispatch(setFagsakAction(fagsak)),
-    omfordel: (journalpostid: string, norskIdent: string, gosysKategori: string) =>
-        dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori)),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    setErSøkerIdBekreftet: (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-    resetOmfordelAction: () => dispatch(opprettGosysOppgaveResetAction()),
-    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
-    resetIdentStateAction: () => dispatch(resetIdentState()),
-    setAnnenPart: (annenPart: string) => dispatch(setAnnenPartAction(annenPart)),
-    resetAllState: () => dispatch(resetAllStateAction()),
-    resetBarn: () => dispatch(resetBarnAction()),
-    setFosterbarn: (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn)),
-});
-
-const Fordeling = connect(mapStateToProps, mapDispatchToProps)(FordelingComponent);
-
-export { Fordeling, FordelingComponent };
+export default Fordeling;

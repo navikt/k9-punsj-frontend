@@ -93,6 +93,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
                 checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 disabled={valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER && disableRadios}
+                data-test-id="dokumenttypeRadioPanelPleiepenger"
             />
 
             <RadioPanel
@@ -101,6 +102,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
                 checked={valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 disabled={disableRadios}
+                data-test-id="dokumenttypeRadioPanelOmsorgspenger"
             />
 
             {erDokumenttypeOmsorgspenger &&
@@ -125,6 +127,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
                     disabled={
                         valgtDokumentType !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE && disableRadios
                     }
+                    data-test-id="dokumenttypeRadioPanelPleiepengerILivetsSluttfase"
                 />
             )}
 
@@ -135,6 +138,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
                     checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                     disabled={valgtDokumentType !== FordelingDokumenttype.OPPLAERINGSPENGER && disableRadios}
+                    data-test-id="dokumenttypeRadioPanelOpplæringspenger"
                 />
             )}
 
@@ -144,6 +148,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
                 checked={valgtDokumentType === FordelingDokumenttype.ANNET}
                 onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 disabled={valgtDokumentType !== FordelingDokumenttype.ANNET && disableRadios}
+                data-test-id="dokumenttypeRadioPanelAnnet"
             />
         </div>
     );

@@ -111,6 +111,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                     label: intlHelper(intl, jn),
                     value: jn,
                     disabled: jn === JaNei.NEI && disableRadios,
+                    'data-test-id': `bekreftSøker-${jn}`,
                 }))}
                 legend={
                     <FormattedMessage
