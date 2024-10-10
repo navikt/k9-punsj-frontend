@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { Dispatch } from 'redux';
+
 import { finnFagsaker } from 'app/api/api';
+import FormPanel from 'app/components/FormPanel';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { ROUTES } from 'app/constants/routes';
+import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
 import {
     DokumenttypeForkortelse,
     FordelingDokumenttype,
@@ -22,13 +32,6 @@ import {
     lukkOppgaveResetAction,
     setErSøkerIdBekreftetAction,
 } from 'app/state/actions';
-import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
-import { ROUTES } from 'app/constants/routes';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
-import FormPanel from 'app/components/FormPanel';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { setDokumenttypeAction, setFagsakAction } from 'app/state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
@@ -47,22 +50,22 @@ import {
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from 'app/utils';
-import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
-import FagsakSelect from './Komponenter/FagsakSelect';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
+
+import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
+import Fosterbarn from './Komponenter/Fosterbarn';
+import FagsakSelect from './Komponenter/FagsakSelect';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import JournalpostAlleredeBehandlet from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
+import KlassifiserModal from './Komponenter/KlassifiserModal';
+import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
+import Pleietrengende from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
 import ToSoekere from './Komponenter/ToSoekere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
-import KlassifiserModal from './Komponenter/KlassifiserModal';
-import Pleietrengende from './Komponenter/Pleietrengende';
-import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
-import AnnenPart from './Komponenter/AnnenPart';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
-import Fosterbarn from './Komponenter/Fosterbarn';
-import { Dispatch } from 'redux';
+
 import {
     checkIfFagsakMedValgtBehandlingsår,
     isJournalførKnapperDisabled,
@@ -148,7 +151,7 @@ const Fordeling: React.FC = () => {
     );
 
     /**
-     * Sette fordelingState når side åpnes hvis journalpost er ikke ferdistilt men har sakstype som støttes
+     * Sette fordelingState når siden åpnes hvis journalposten ikke er ferdigstilt, men har en sakstype som støttes
      */
     useEffect(() => {
         if (!journalpost.erFerdigstilt) {
@@ -371,8 +374,10 @@ const Fordeling: React.FC = () => {
         }
     }, [fellesState.isAwaitingKopierJournalPostResponse, opprettIGosysState.gosysOppgaveRequestSuccess]);
 
-    // Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
-    // Hvis det er ingen fagsaker, viser vi pleietrengende component
+    /**
+     *  Henter fagsaker ved endring av søkerId, dokumenttype eller gjelderPsbOmsOlp
+     *  Hvis det er ingen fagsaker, viser vi pleietrengende component
+     */
     useEffect(() => {
         if (
             (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
@@ -445,9 +450,11 @@ const Fordeling: React.FC = () => {
         setVisSokersBarn(true);
     };
 
-    // Redirect bruker til fortsett side hvis journalpost er klassifisert, med reservert saksnummer uten fagsak ytelse type
-    // Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
-    // i dette tilfellet må bruker velge pleietrengende igjen!!! Men hva hvis bruker har valgt pleietrengende og har reservert saksnummer?
+    /**
+     * Redirect bruker til fortsett side hvis journalpost er klassifisert, med reservert saksnummer uten fagsak ytelse type
+     * Dette er ikke nødvendig hvis vi henter fagsak ytelse type fra api ved reservert saksnummer
+     * i dette tilfellet må bruker velge pleietrengende igjen
+     */
     const handleRedirectVidere = () => {
         if (fordelingState.dokumenttype) {
             if (!fagsak) {
