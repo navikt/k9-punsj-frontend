@@ -124,6 +124,7 @@ const Fordeling: React.FC = () => {
     const { dedupKey } = fellesState;
     const { fagsak, dokumenttype } = fordelingState;
 
+    const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
     const isDokumenttypeMedPleietrengende = !!dokumenttype && dokumenttyperMedPleietrengende.includes(dokumenttype);
     const isSakstyperFraJpSakMedPleietrengende =
         !!journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
@@ -290,18 +291,16 @@ const Fordeling: React.FC = () => {
 
     // TODO TESTE DETTTE - det ser ut er bug her
     useEffect(() => {
-        if (reserverSaksnummerTilNyFagsak && fagsaker) {
+        if ((reserverSaksnummerTilNyFagsak || jpErFerdigstiltOgUtenPleietrengende) && fagsaker) {
             setBarnMedFagsak(fagsaker.find((f) => f.pleietrengende?.identitetsnummer === identState.pleietrengendeId));
         }
-        if (!reserverSaksnummerTilNyFagsak) {
+        if (!reserverSaksnummerTilNyFagsak && !jpErFerdigstiltOgUtenPleietrengende) {
             setBarnMedFagsak(undefined);
         }
     }, [identState.pleietrengendeId]);
 
     const kanJournalforingsoppgaveOpprettesiGosys =
         !!journalpost?.kanOpprettesJournalføringsoppgave && journalpost?.kanOpprettesJournalføringsoppgave;
-
-    const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
 
     const visFagsakSelect =
         gjelderPsbOmsOlp && harFagsaker && identState.søkerId.length === 11 && !jpErFerdigstiltOgUtenPleietrengende;
@@ -371,7 +370,7 @@ const Fordeling: React.FC = () => {
     useEffect(() => {
         if (
             (!journalpost.erFerdigstilt || jpErFerdigstiltOgUtenPleietrengende) &&
-            !journalpost.sak?.fagsakId &&
+            // !journalpost.sak?.fagsakId &&
             identState.søkerId &&
             dokumenttype &&
             gjelderPsbOmsOlp
