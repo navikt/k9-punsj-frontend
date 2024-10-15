@@ -30,7 +30,7 @@ import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from 'app/søknader/pleiepenger/PeriodeinfoPaneler';
+import { PeriodeinfoPaneler } from 'app/søknader/pleiepenger/PSBPunchForm/PeriodeinfoPaneler/PeriodeinfoPaneler';
 import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
 import { pfLand } from 'app/søknader/pleiepenger/pfLand';

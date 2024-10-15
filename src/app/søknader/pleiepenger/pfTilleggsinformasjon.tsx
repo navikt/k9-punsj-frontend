@@ -7,7 +7,7 @@ import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from 'app/søknader/pleiepenger/PeriodeinfoPaneler';
+} from 'app/søknader/pleiepenger/PSBPunchForm/PeriodeinfoPaneler/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 
 import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
