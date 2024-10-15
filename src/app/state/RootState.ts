@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 
 import { Sakstype } from '../models/enums';
-import { EksisterendeOMPKSSoknaderReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
-import { PunchOMPKSFormReducer } from '../omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
+import { EksisterendeOMPKSSoknaderReducer } from '../søknader/omsorgspenger-kronisk-sykt-barn/state/reducers/EksisterendeOMPKSSoknaderReducer';
+import { PunchOMPKSFormReducer } from '../søknader/omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
 import { EksisterendeOMPMASoknaderReducer } from '../søknader/omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
 import { PunchOMPMAFormReducer } from '../søknader/omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
 import { EksisterendePLSSoknaderReducer } from '../søknader/pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';

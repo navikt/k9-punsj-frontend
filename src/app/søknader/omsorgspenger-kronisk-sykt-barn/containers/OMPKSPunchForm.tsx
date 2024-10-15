@@ -15,17 +15,17 @@ import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import Feilmelding from '../../components/Feilmelding';
-import VerticalSpacer from '../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../containers/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from '../../containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../containers/pleiepenger/SettPaaVentModal';
-import { JaNeiIkkeRelevant } from '../../models/enums/JaNeiIkkeRelevant';
-import { IIdentState } from '../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../models/types/Journalpost/JournalposterPerIdentState';
-import { RootStateType } from '../../state/RootState';
-import { initializeDate } from '../../utils/timeUtils';
+import Feilmelding from '../../../components/Feilmelding';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
+import { OkGaaTilLosModal } from '../../../containers/pleiepenger/OkGaaTilLosModal';
+import SettPaaVentErrorModal from '../../../containers/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from '../../../containers/pleiepenger/SettPaaVentModal';
+import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
+import { IIdentState } from '../../../models/types/IdentState';
+import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
+import { RootStateType } from '../../../state/RootState';
+import { initializeDate } from '../../../utils/timeUtils';
 import { undoChoiceOfEksisterendeOMPKSSoknadAction } from '../state/actions/EksisterendeOMPKSSoknaderActions';
 import {
     getOMPKSSoknad,

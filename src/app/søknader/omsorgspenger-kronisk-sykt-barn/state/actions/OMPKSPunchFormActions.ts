@@ -4,7 +4,7 @@ import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
 
-import { ISendSoknad } from '../../../models/types/SendSoknad';
+import { ISendSoknad } from '../../../../models/types/SendSoknad';
 import { IOMPKSSoknad } from '../../types/OMPKSSoknad';
 import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
 import { IOMPKSSoknadUt } from '../../types/OMPKSSoknadUt';
