@@ -9,7 +9,7 @@ import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from '../../../app/components/PperiodeinfoPaneler/PeriodeinfoPaneler';
+} from '../../../app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { GetErrorMessage } from '../../../app/models/types/Error';
 import intlHelper from '../../../app/utils/intlUtils';
 

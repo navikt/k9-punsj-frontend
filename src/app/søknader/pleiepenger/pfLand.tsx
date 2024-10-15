@@ -5,7 +5,7 @@ import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from 'app/components/PperiodeinfoPaneler/PeriodeinfoPaneler';
+} from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 

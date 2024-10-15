@@ -7,7 +7,7 @@ import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from 'app/components/PperiodeinfoPaneler/PeriodeinfoPaneler';
+} from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
 
 import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
