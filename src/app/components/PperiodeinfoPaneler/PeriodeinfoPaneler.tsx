@@ -18,9 +18,9 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import BinSvg from '../../../../assets/SVG/BinSVG';
-import { IPeriode } from '../../../../models/types/Periode';
-import intlHelper from '../../../../utils/intlUtils';
+import BinSvg from '../../assets/SVG/BinSVG';
+import { IPeriode } from '../../models/types/Periode';
+import intlHelper from '../../utils/intlUtils';
 import './periodeinfoPaneler.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;

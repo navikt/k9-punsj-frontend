@@ -9,7 +9,7 @@ import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import {
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
-} from '../../../app/søknader/pleiepenger/PSBPunchForm/PeriodeinfoPaneler/PeriodeinfoPaneler';
+} from '../../../app/components/PperiodeinfoPaneler/PeriodeinfoPaneler';
 import { GetErrorMessage } from '../../../app/models/types/Error';
 import intlHelper from '../../../app/utils/intlUtils';
 

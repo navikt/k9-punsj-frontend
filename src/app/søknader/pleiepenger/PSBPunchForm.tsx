@@ -61,7 +61,7 @@ import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPan
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './PSBPunchForm/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './PSBPunchForm/Soknadsperioder';
-import { PeriodeinfoPaneler } from './PSBPunchForm/PeriodeinfoPaneler/PeriodeinfoPaneler';
+import { PeriodeinfoPaneler } from '../../components/PperiodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';

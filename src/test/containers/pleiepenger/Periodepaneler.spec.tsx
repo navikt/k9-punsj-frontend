@@ -10,7 +10,7 @@ import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
-} from '../../../app/søknader/pleiepenger/PSBPunchForm/PeriodeinfoPaneler/PeriodeinfoPaneler';
+} from '../../../app/components/PperiodeinfoPaneler/PeriodeinfoPaneler';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
