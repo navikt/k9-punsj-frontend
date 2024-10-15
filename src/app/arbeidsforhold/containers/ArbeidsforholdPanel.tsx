@@ -19,7 +19,7 @@ import VerticalSpacer from '../../components/VerticalSpacer';
 import { CountrySelect } from '../../components/country-select/CountrySelect';
 import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
 import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { IPLSSoknad } from '../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {

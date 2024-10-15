@@ -16,8 +16,8 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import { generateDateString } from '../../../components/skjema/skjemaUtils';
+import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
 import {
     chooseEksisterendePLSSoknadAction,
     closeEksisterendePLSSoknadAction,

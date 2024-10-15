@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { ErrorBoundary } from '@sentry/react';
 
 import { JournalpostOgPdfVisning } from 'app/components/JournalpostOgPdfVisning';
-import { PLSRegistreringsValg } from 'app/pleiepenger-livets-sluttfase/containers/PLSRegistreringsValg';
-import { PLSPunchForm } from 'app/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
+import { PLSRegistreringsValg } from 'app/søknader/pleiepenger-livets-sluttfase/containers/PLSRegistreringsValg';
+import { PLSPunchForm } from 'app/søknader/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
 import { OMPKSRegistreringsValg } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSRegistreringsValg';
 import { OMPKSPunchForm } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSPunchForm';
 import { OMPMARegistreringsValg } from 'app/omsorgspenger-midlertidig-alene/containers/OMPMARegistreringsValg';

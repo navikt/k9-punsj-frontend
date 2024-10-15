@@ -1,7 +1,7 @@
 import { IError } from 'app/models/types/Error';
 import { IInputError } from 'app/models/types/InputError';
 
-import { IPeriode } from '../../models/types';
+import { IPeriode } from '../../../models/types';
 import { IPLSSoknad } from './PLSSoknad';
 import { IPLSSoknadKvittering } from './PLSSoknadKvittering';
 

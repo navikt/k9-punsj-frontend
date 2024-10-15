@@ -13,7 +13,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { finnArbeidsgivere } from '../../api/api';
 import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { IPLSSoknad } from '../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import ArbeidstakerComponent from './ArbeidstakerComponent';
 
 type ItemInfo = any;

@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
 
-import { IOpprettSoknad } from '../../../models/types/RequestBodies';
+import { IOpprettSoknad } from '../../../../models/types/RequestBodies';
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
 import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadSvar } from '../../types/PLSSoknadSvar';

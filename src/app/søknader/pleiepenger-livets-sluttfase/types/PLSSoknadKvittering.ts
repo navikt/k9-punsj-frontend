@@ -1,4 +1,4 @@
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import BegrunnelseForInnsending from '../../../models/types/BegrunnelseForInnsending';
 
 export interface IPLSSoknadKvitteringBosteder {
     [key: string]: { land: string };

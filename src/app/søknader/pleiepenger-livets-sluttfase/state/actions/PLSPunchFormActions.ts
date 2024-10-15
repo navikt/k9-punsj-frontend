@@ -4,8 +4,8 @@ import { IError, Periode } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
 
-import { IHentPerioder } from '../../../models/types/RequestBodies';
-import { ISendSoknad } from '../../../models/types/SendSoknad';
+import { IHentPerioder } from '../../../../models/types/RequestBodies';
+import { ISendSoknad } from '../../../../models/types/SendSoknad';
 import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadKvittering } from '../../types/PLSSoknadKvittering';
 import { IPLSSoknadUt } from '../../types/PLSSoknadUt';
