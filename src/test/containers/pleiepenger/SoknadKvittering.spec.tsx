@@ -139,7 +139,7 @@ const fullResponse: IPSBSoknadKvittering = {
         },
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: '' },
 };
 
 const minimalResponse: IPSBSoknadKvittering = {
@@ -185,7 +185,7 @@ const minimalResponse: IPSBSoknadKvittering = {
         },
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: '' },
 };
 
 const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
