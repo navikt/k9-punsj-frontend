@@ -7,10 +7,10 @@ import { Panel } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
+import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
+import BinSvg from '../../../assets/SVG/BinSVG';
+import { IPeriode } from '../../../models/types/Periode';
+import intlHelper from '../../../utils/intlUtils';
 
 const initialPeriode = { fom: '', tom: '' };
 

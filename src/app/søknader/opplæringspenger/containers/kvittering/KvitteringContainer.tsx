@@ -9,7 +9,7 @@ import { getEnvironmentVariable } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { IOLPSoknadKvittering } from 'app/opplæringspenger/OLPSoknadKvittering';
+import { IOLPSoknadKvittering } from 'app/søknader/opplæringspenger/OLPSoknadKvittering';
 
 import OLPSoknadKvittering from './OLPSoknadKvittering';
 

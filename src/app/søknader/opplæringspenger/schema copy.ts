@@ -4,8 +4,8 @@ import { IPeriode } from 'app/models/types';
 import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
 
-import nb from '../i18n/nb.json';
-import { IOLPSoknadBackend } from '../models/types/OLPSoknad';
+import nb from '../../i18n/nb.json';
+import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
 
 export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder: IPeriode[]) => ({
     ...soknad.metadata.arbeidsforhold,

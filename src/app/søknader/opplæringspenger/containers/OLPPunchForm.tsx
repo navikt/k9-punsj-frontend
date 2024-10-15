@@ -28,9 +28,9 @@ import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 import JournalposterSync from 'app/components/JournalposterSync';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
-import { RootStateType } from '../../state/RootState';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
+import { RootStateType } from '../../../state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import schema, { getSchemaContext } from '../schema';
 import Bosteder from './Bosteder';
