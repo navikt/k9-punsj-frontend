@@ -15,11 +15,11 @@ import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import { CountrySelect } from '../../components/country-select/CountrySelect';
+import VerticalSpacer from '../../VerticalSpacer';
+import { CountrySelect } from '../../country-select/CountrySelect';
 import { arbeidstidInformasjon } from 'app/søknader/pleiepenger/ArbeidstidInfo';
-import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { Arbeidstaker, IPeriode } from '../../../models/types';
+import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {

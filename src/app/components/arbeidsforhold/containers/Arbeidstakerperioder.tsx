@@ -11,9 +11,9 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import intlHelper from 'app/utils/intlUtils';
 
-import { finnArbeidsgivere } from '../../api/api';
-import { Arbeidstaker, IPeriode } from '../../models/types';
-import { IPLSSoknad } from '../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
+import { finnArbeidsgivere } from '../../../api/api';
+import { Arbeidstaker, IPeriode } from '../../../models/types';
+import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import ArbeidstakerComponent from './ArbeidstakerComponent';
 
 type ItemInfo = any;
