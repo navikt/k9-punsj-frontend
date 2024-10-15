@@ -1,4 +1,3 @@
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
 import importPlugin from 'eslint-plugin-import';
@@ -35,10 +34,7 @@ export default [
         languageOptions: {
             parser: tsParser,
             sourceType: 'module',
-            ecmaVersion: 'latest', // Ensure that ES2023 or latest is supported
-        },
-        plugins: {
-            'react-hooks': reactHooksPlugin,
+            ecmaVersion: 'latest',
         },
     },
     pluginJs.configs.recommended,
@@ -48,26 +44,25 @@ export default [
     importPlugin.flatConfigs.recommended,
     {
         rules: {
-            'react/no-unused-prop-types': WARNING,
             'no-console': WARNING,
             'no-debugger': WARNING,
-            'import/no-unresolved': ERROR,
             'no-duplicate-imports': ERROR,
+            'no-use-before-define': OFF,
+            'no-shadow': OFF,
+            'no-unused-vars': OFF,
+            'no-undef': OFF,
+            'react/no-unused-prop-types': WARNING,
             'react/prop-types': OFF,
             'react/forbid-prop-types': OFF,
             'react/react-in-jsx-scope': OFF,
             'react/display-name': OFF,
             '@typescript-eslint/no-use-before-define': [ERROR],
             '@typescript-eslint/no-shadow': ERROR,
-            'no-use-before-define': OFF,
-            'no-shadow': OFF,
-            'no-unused-vars': OFF,
-            'default-param-last': OFF,
+            '@typescript-eslint/ban-ts-comment': OFF,
             '@typescript-eslint/no-explicit-any': OFF,
             'import/prefer-default-export': OFF,
-            '@typescript-eslint/ban-ts-comment': OFF,
+            'import/no-unresolved': ERROR,
             'import/named': OFF,
-            'no-undef': OFF,
         },
     },
     {
