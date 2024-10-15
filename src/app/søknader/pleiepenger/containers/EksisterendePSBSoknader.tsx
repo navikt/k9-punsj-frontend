@@ -1,14 +1,10 @@
 import React from 'react';
 
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-
 import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
-
 import { TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState } from 'app/models/types';
-
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import {
@@ -18,43 +14,37 @@ import {
     resetSoknadidAction,
 } from 'app/state/actions';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-
-import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
-import { generateDateString } from '../../components/skjema/skjemaUtils';
-import { IPSBSoknad, PSBSoknad } from '../../models/types/PSBSoknad';
-import ErDuSikkerModal from '../../components/ErDuSikkerModal';
+import { generateDateString } from '../../../components/skjema/skjemaUtils';
+import { IPSBSoknad, PSBSoknad } from '../../../models/types/PSBSoknad';
+import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
+import { Dispatch } from 'redux';
 
-export interface IEksisterendeSoknaderStateProps {
-    eksisterendeSoknaderState: IEksisterendeSoknaderState;
-    journalposterState: IJournalposterPerIdentState;
-}
-
-export interface IEksisterendeSoknaderDispatchProps {
-    openEksisterendeSoknadAction: typeof openEksisterendeSoknadAction;
-    closeEksisterendeSoknadAction: typeof closeEksisterendeSoknadAction;
-    chooseEksisterendeSoknadAction: typeof chooseEksisterendeSoknadAction;
-    resetSoknadidAction: typeof resetSoknadidAction;
-}
-
-export interface IEksisterendeSoknaderComponentProps {
+export interface Props {
     pleietrengendeId: string | null;
     fagsakId: string;
     kanStarteNyRegistrering: boolean;
 }
 
-type IEksisterendeSoknaderProps = WrappedComponentProps &
-    IEksisterendeSoknaderComponentProps &
-    IEksisterendeSoknaderStateProps &
-    IEksisterendeSoknaderDispatchProps;
+export const EksisterendeSoknader: React.FC<Props> = ({
+    pleietrengendeId,
+    fagsakId,
+    kanStarteNyRegistrering,
+}: Props) => {
+    const intl = useIntl();
 
-export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps> = (
-    props: IEksisterendeSoknaderProps,
-) => {
     const navigate = useNavigate();
-    const { intl, eksisterendeSoknaderState, pleietrengendeId, journalposterState, fagsakId } = props;
-    const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const openEksisterendeSoknad = (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info));
+    const closeEksisterendeSoknad = () => dispatch(closeEksisterendeSoknadAction());
+    const chooseEksisterendeSoknad = (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info));
+    const resetSoknadid = () => dispatch(resetSoknadidAction());
+
+    const eksisterendeSoknaderState = useSelector((state: RootStateType) => state.eksisterendeSoknaderState);
+    const journalposterState = useSelector((state: RootStateType) => state.journalposterPerIdentState);
+
+    const søknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
@@ -87,14 +77,14 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
             <Alert size="small" variant="error">
-                Teknisk feil.
+                <FormattedMessage id="eksisterendeSoknader.tekniskFeil" />
             </Alert>
         ) : null;
 
     const chooseSoknad = (soknad: IPSBSoknad) => {
         if (soknad.soeknadId) {
-            props.chooseEksisterendeSoknadAction(soknad);
-            props.resetSoknadidAction();
+            chooseEksisterendeSoknad(soknad);
+            resetSoknadid();
             navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
         } else {
             throw new Error('Søknad mangler søknadid');
@@ -105,7 +95,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        soknader?.forEach((soknadInfo, index) => {
+        søknader?.forEach((soknadInfo, index) => {
             const søknad = new PSBSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
@@ -115,7 +105,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                 journalposterState.journalposter,
             );
 
-            const { chosenSoknad } = props.eksisterendeSoknaderState;
+            const { chosenSoknad } = eksisterendeSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 (søknad.barn.norskIdent
@@ -137,7 +127,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                             pleietrengendeId !== null) ||
                         (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
-                    onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
+                    onClick={() => openEksisterendeSoknad(soknadInfo)}
                 >
                     <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
@@ -157,10 +147,10 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                 <Modal
                     key={soknadId}
                     onCancel={() => {
-                        props.closeEksisterendeSoknadAction();
+                        closeEksisterendeSoknad();
                     }}
                     onClose={() => {
-                        props.closeEksisterendeSoknadAction();
+                        closeEksisterendeSoknad();
                     }}
                     aria-label={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
@@ -168,7 +158,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
                     <ErDuSikkerModal
                         melding="modal.erdusikker.info"
                         onSubmit={() => chooseSoknad(soknadInfo)}
-                        onClose={() => props.closeEksisterendeSoknadAction()}
+                        onClose={() => closeEksisterendeSoknad()}
                         submitKnappText="mappe.lesemodus.knapp.velg"
                     />
                 </Modal>,
@@ -183,7 +173,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
 
                 <Alert size="small" variant="info" className="mb-10 max-w-max">
                     <FormattedMessage
-                        id={`tabell.info${props.kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
+                        id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
                     />
                 </Alert>
                 <Table zebraStripes className="punch_mappetabell">
@@ -217,7 +207,7 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         );
     };
 
-    if (soknader && soknader.length) {
+    if (søknader && søknader.length) {
         return (
             <>
                 {technicalError}
@@ -238,20 +228,3 @@ export const EksisterendeSoknaderComponent: React.FC<IEksisterendeSoknaderProps>
         </>
     );
 };
-
-const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
-    journalposterState: state.journalposterPerIdentState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    openEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(openEksisterendeSoknadAction(info)),
-    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendeSoknadAction()),
-    chooseEksisterendeSoknadAction: (info: IPSBSoknad) => dispatch(chooseEksisterendeSoknadAction(info)),
-    resetSoknadidAction: () => dispatch(resetSoknadidAction()),
-    resetAllAction: () => dispatch(resetAllStateAction()),
-});
-
-export const EksisterendeSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeSoknaderComponent),
-);

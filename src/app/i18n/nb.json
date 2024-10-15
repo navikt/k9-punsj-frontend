@@ -298,6 +298,7 @@
     "tabell.info.kanIkkeStarteNyRegistrering": "Det er allerede startet en registrering på denne journalposten. Trykk fortsett for å fullføre innsendingen til K9",
     "eksisterendeSoknader.requestError": "Det oppsto en feil i henting av mapper.",
     "eksisterendeSoknader.createSoknadRequestError": "Det oppsto en feil under opprettelse av søknad.",
+    "eksisterendeSoknader.tekniskFeil": "Teknisk feil.",
     "mapper.visning.infoboks": "Det finnes påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}. Velg søknaden som hører til dokumentet.",
     "mappe.lesemodus.mottakelsesdato": "Mottakelsesdato:",
     "mappe.lesemodus.perioder": "Perioder:",

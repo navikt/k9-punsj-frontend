@@ -9,7 +9,7 @@ import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from 'app/state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from 'app/state/actions/JournalposterPerIdentActions';
-import { EksisterendeSoknader } from '../../EksisterendeSoknader';
+import { EksisterendeSoknader } from '../EksisterendePSBSoknader';
 import { Dispatch } from 'redux';
 
 import './pSBRegistreringsValg.less';
