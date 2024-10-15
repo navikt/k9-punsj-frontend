@@ -10,7 +10,7 @@ import { finnFagsaker } from 'app/api/api';
 import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { ROUTES } from 'app/constants/routes';
-import HåndterInntektsmeldingUtenKrav from 'app/søknader/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import HåndterInntektsmeldingUtenKrav from 'app/fordeling/Komponenter/HåndterInntektsmeldingUtenKrav';
 import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
 import {
     DokumenttypeForkortelse,

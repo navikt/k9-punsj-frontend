@@ -20,10 +20,11 @@ import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
-import { OkGaaTilLosModal } from './OkGaaTilLosModal';
-import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
-import SettPaaVentErrorModal from './SettPaaVentErrorModal';
-import SettPaaVentModal from './SettPaaVentModal';
+import { OkGaaTilLosModal } from '../../søknader/pleiepenger/OkGaaTilLosModal';
+import OpprettOppgaveIGosysModal from '../../søknader/pleiepenger/OpprettOppgaveIGosysModal';
+import SettPaaVentErrorModal from '../../søknader/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from '../../søknader/pleiepenger/SettPaaVentModal';
+import { Dispatch } from 'redux';
 
 interface Props {
     journalpost?: IJournalpost;
@@ -39,16 +40,21 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     const [showOpprettOppgaveIGosysModal, setShowOpprettOppgaveIGosysModal] = useState(false);
     const [visBrevIkkeSendtInfoboks, setVisBrevIkkeSendtInfoboks] = useState(false);
     const [håndterInntektsmeldingUtenKravValg, setHåndterInntektsmeldingUtenKravValg] = useState<string>('');
-    const dispatch = useDispatch();
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
     const showSettPaaVentSuccessModal = useSelector(
         (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentSuccess,
     );
+
     const showSettPaaVentErrorModal = useSelector(
         (state: RootStateType) => state.fordelingSettPåVentState.settPaaVentError,
     );
+
     const showFerdigstillJournalpostSuccessModal = useSelector(
         (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostSuccess,
     );
+
     const showFerdigstillJournalpostErrorModal = useSelector(
         (state: RootStateType) => state.fordelingFerdigstillJournalpostState.ferdigstillJournalpostError,
     );
