@@ -1,28 +1,29 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
 
+import { FormattedMessage } from 'react-intl';
 import { Button } from '@navikt/ds-react';
+import VerticalSpacer from './VerticalSpacer';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import intlHelper from '../../utils/intlUtils';
-
-interface IErDuSikkerModalProps {
+interface Props {
     melding: string;
-    extraInfo?: string;
+    submitKnappText: string;
+
     onSubmit: () => void;
     onClose: () => void;
-    submitKnappText: string;
+
+    extraInfo?: string;
 }
 
-const ErDuSikkerModal = (props: IErDuSikkerModalProps) => {
-    const intl = useIntl();
-    const { melding, onSubmit, onClose, submitKnappText, extraInfo } = props;
-
+const ErDuSikkerModal: React.FC<Props> = ({ melding, submitKnappText, onSubmit, onClose, extraInfo }: Props) => {
     return (
         <div className="modal_content">
-            {intlHelper(intl, melding)}
+            <FormattedMessage id={melding} />
             <VerticalSpacer sixteenPx />
-            {extraInfo && <div>{intlHelper(intl, extraInfo)}</div>}
+            {extraInfo && (
+                <div>
+                    <FormattedMessage id={extraInfo} />
+                </div>
+            )}
             <div className="punch_mappemodal_knapperad">
                 <Button
                     size="small"
@@ -33,10 +34,11 @@ const ErDuSikkerModal = (props: IErDuSikkerModalProps) => {
                     }}
                     type="button"
                 >
-                    {intlHelper(intl, submitKnappText)}
+                    <FormattedMessage id={submitKnappText} />
                 </Button>
+
                 <Button variant="secondary" size="small" className="knapp2" onClick={() => onClose()}>
-                    {intlHelper(intl, 'skjema.knapp.avbryt')}
+                    <FormattedMessage id={'skjema.knapp.avbryt'} />
                 </Button>
             </div>
         </div>

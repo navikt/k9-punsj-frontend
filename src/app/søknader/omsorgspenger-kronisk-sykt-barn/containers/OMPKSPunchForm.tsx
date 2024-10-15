@@ -17,7 +17,7 @@ import { WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';

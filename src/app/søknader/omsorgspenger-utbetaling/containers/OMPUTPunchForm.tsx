@@ -20,7 +20,7 @@ import { feilFraYup } from 'app/utils/validationHelpers';
 import JournalposterSync from 'app/components/JournalposterSync';
 
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';

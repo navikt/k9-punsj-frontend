@@ -55,7 +55,7 @@ import { SelvstendigNaeringsdrivendeOpptjening } from '../../models/types/Selvst
 import { IUtenlandsOpphold } from '../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../state/RootState';
 import { initializeDate } from '../../utils/timeUtils';
-import ErDuSikkerModal from './ErDuSikkerModal';
+import ErDuSikkerModal from '../../components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from '../../components/okGaaTilLosModal/OkGaaTilLosModal';
 import ArbeidsforholdPanel from './PSBPunchForm/Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './PSBPunchForm/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
