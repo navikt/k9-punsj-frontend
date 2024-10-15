@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import FordelingFerdigstillJournalpostKeys from 'app/models/enums/FordelingFerdigstillJournalpostKeys';
 import FordelingFerdigstillJournalpostState from 'app/models/types/FordelingFerdigstillJournalpostState';
 

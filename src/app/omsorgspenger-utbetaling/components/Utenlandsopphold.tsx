@@ -49,7 +49,6 @@ const Utenlandsopphold = () => {
                     render={(arrayHelpers) => (
                         <>
                             {values.utenlandsopphold?.map((_, index, array) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="fom-tom-rad">

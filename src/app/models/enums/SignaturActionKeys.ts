@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/prefer-default-export
 export enum SignaturActionKeys {
     SET = 'SIGNATUR_SET',
-
     USIGNERT_REQUEST = 'SIGNATUR_USIGNERT_REQUEST',
     USIGNERT_SUCCESS = 'SIGNATUR_USIGNERT_SUCCESS',
     USIGNERT_ERROR = 'SIGNATUR_USIGNERT_ERROR',

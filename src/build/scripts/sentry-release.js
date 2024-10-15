@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import SentryCli from '@sentry/cli';
 
 async function opprettReleaseTilSentry() {
@@ -16,9 +15,11 @@ async function opprettReleaseTilSentry() {
     const cli = new SentryCli();
 
     try {
+        // eslint-disable-next-line no-console
         console.log(`Oppretter Sentry-release ${release}`);
         await cli.releases.new(release);
 
+        // eslint-disable-next-line no-console
         console.log('Laster opp source maps');
         await cli.releases.uploadSourceMaps(release, {
             include: ['dist/js'],
@@ -26,9 +27,11 @@ async function opprettReleaseTilSentry() {
             rewrite: false,
         });
 
+        // eslint-disable-next-line no-console
         console.log('Releaser');
         await cli.releases.finalize(release);
     } catch (e) {
+        // eslint-disable-next-line no-console
         console.error('Noe gikk galt under source map-opplasting:', e);
     }
 }

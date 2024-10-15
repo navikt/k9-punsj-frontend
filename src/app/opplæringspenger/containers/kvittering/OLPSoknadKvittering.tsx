@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'react-intl';

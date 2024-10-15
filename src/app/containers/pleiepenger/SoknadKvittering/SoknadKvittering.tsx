@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import React from 'react';
 import { IntlShape, useIntl } from 'react-intl';
@@ -110,16 +107,13 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
     const perioderUtenInnleggelse = Object.keys(perioder)
         .filter((key) => !perioder[key].årsak)
         .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
             obj[key] = perioder[key];
             return obj;
         }, {});
     const perioderMedInnleggelse = Object.keys(perioder)
         .filter((key) => !!perioder[key].årsak)
         .reduce((obj, key) => {
-            // eslint-disable-next-line no-param-reassign
             obj[key] = perioder[key];
-            // eslint-disable-next-line no-param-reassign
             obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
             return obj;
         }, {} as IPSBSoknadKvitteringUtenlandsopphold);

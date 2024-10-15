@@ -5,14 +5,19 @@ import prettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
 import eslintImport from 'eslint-plugin-import';
 
+const OFF = 0;
+const WARNING = 1;
+const ERROR = 2;
+
 export default [
     {
         name: 'base-config',
-        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'], // specifying which files this configuration applies to
-        ignores: ['node_modules/**/*', 'dist/**/*'], // specify ignored files
+        files: ['**/*.{js,mjs,ts,jsx,tsx}'],
+        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*'], // specify ignored files
         languageOptions: {
             parser: tsParser,
             sourceType: 'module',
+            ecmaVersion: 'latest', // Ensure that ES2023 or latest is supported
         },
         plugins: {
             '@typescript-eslint': typescriptPlugin,
@@ -21,6 +26,9 @@ export default [
             import: eslintImport,
         },
         settings: {
+            react: {
+                version: 'detect',
+            },
             'import/resolver': {
                 node: {
                     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.scss'],
@@ -29,28 +37,27 @@ export default [
             },
         },
         rules: {
-            'react/no-unused-prop-types': 'warn',
-            'react/forbid-prop-types': 0,
-            '@typescript-eslint/no-use-before-define': ['error'],
-            '@typescript-eslint/no-shadow': 'error',
-            'import/no-extraneous-dependencies': [
-                'warn',
-                { devDependencies: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'] },
-            ],
-            'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
-            'no-use-before-define': 'off',
-            'no-shadow': 'off',
-            'default-param-last': 'off',
-            '@typescript-eslint/no-explicit-any': 'off',
-            'import/prefer-default-export': 'off',
+            'react/no-unused-prop-types': WARNING,
+            'no-console': WARNING,
+            'no-debugger': WARNING,
+            'react/prop-types': OFF,
+            'react/forbid-prop-types': OFF,
+            '@typescript-eslint/no-use-before-define': [ERROR],
+            '@typescript-eslint/no-shadow': ERROR,
+            'no-use-before-define': OFF,
+            'no-shadow': OFF,
+            'no-unused-vars': WARNING,
+            'default-param-last': OFF,
+            '@typescript-eslint/no-explicit-any': OFF,
+            'import/prefer-default-export': OFF,
         },
     },
     {
         name: 'test-specific',
         files: ['*.spec.ts', '*.spec.tsx'],
         rules: {
-            '@typescript-eslint/no-explicit-any': 'off',
-            '@typescript-eslint/ban-ts-comment': 0,
+            '@typescript-eslint/no-explicit-any': OFF,
+            '@typescript-eslint/ban-ts-comment': OFF,
         },
     },
     prettier,

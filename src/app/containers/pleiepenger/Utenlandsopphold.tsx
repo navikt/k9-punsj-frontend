@@ -328,6 +328,5 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
 };
 
 Utenlandsopphold.defaultProps = {
-    // eslint-disable-next-line react/default-props-match-prop-types
     periods: [],
 };

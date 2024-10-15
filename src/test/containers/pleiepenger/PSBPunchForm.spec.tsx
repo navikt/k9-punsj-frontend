@@ -65,7 +65,7 @@ const initialSoknad: IPSBSoknad = {
     },
     soekerId: søkerId,
     soeknadId: '123',
-    soeknadsperiode: null,
+    soeknadsperiode: [],
     soknadsinfo: {
         harMedsøker: null,
         samtidigHjemme: null,
@@ -191,13 +191,11 @@ const setupPunchForm = (
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return shallow(
-        /* eslint-disable react/jsx-props-no-spreading */
         <PunchFormComponent
             {...punchFormComponentProps}
             {...wrappedComponentProps}
             {...punchFormStateProps}
             {...punchFormDispatchProps}
-            /* eslint-enable react/jsx-props-no-spreading */
         />,
     );
 };

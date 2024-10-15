@@ -12,8 +12,10 @@ const port = 8080;
 
 server.start(port, '127.0.0.1', (error) => {
     if (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
         return;
     }
+    // eslint-disable-next-line no-console
     console.log(`Started server on http://localhost:${port}/`);
 });

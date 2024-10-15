@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-
-/* eslint-disable no-template-curly-in-string */
 import { Formik, FormikValues } from 'formik';
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';

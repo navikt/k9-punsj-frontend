@@ -1,5 +1,4 @@
 import { ApiPath } from 'app/apiConfig';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { http, HttpResponse } from 'msw';
 import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpPSB300.json';

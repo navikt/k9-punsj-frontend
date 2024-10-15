@@ -79,7 +79,6 @@ const PunchOMPUTForm: React.FC<Props> = ({
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
     const { mutate: valider } = useMutation(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             values.erKorrigering
                 ? validerSoeknad(

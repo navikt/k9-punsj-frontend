@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory } from '@storybook/react';
 import React from 'react';
 
@@ -15,5 +14,6 @@ export const enMåned = Template.bind({});
 enMåned.args = {
     month: { fom: new Date('2022-08-01'), tom: new Date('2022-08-30') },
     dateContentRenderer: () => 'test',
+    // eslint-disable-next-line no-console
     onDateClick: () => console.error('gi meg en modal'),
 };

@@ -1,6 +1,5 @@
 import { DokumenttypeForkortelse } from '../enums/FordelingDokumenttype';
 
-/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export interface IHentSoknad {
     norskIdent: string;
     periode?: ISoknadPeriode;

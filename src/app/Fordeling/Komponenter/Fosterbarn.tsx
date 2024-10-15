@@ -71,6 +71,7 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                             await hentFosterbarnInfo(item, index);
                         }
                     } catch (error) {
+                        // eslint-disable-next-line no-console
                         console.error('Error fetching fosterbarn info:', error);
                     }
                 }

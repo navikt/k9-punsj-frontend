@@ -4,9 +4,9 @@ import { mocked } from 'jest-mock';
 import { TextField } from '@navikt/ds-react';
 import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
-
-import { IListepanelerProps, ListeComponent, Listepaneler } from 'app/containers/pleiepenger/Listepaneler';
-import intlHelper from 'app/utils/intlUtils';
+import intlHelper from '../../../app/utils/intlUtils';
+import { IListepanelerProps, ListeComponent, Listepaneler } from '../../../app/containers/pleiepenger/Listepaneler';
+// import intlHelper from 'app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -59,7 +59,6 @@ const setupListepaneler = (listepanelerPropsPartial?: Partial<IListepanelerProps
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<Listepaneler {...listepanelerProps} />);
 };
 

@@ -4,7 +4,6 @@ import { Periode } from 'app/models/types/Periode';
 
 import { getDatesInDateRange } from './timeUtils';
 
-// eslint-disable-next-line import/prefer-default-export
 export const arbeidstidPeriodeTilKalenderdag = (arbeidstid: ArbeidstidPeriodeMedTimer): KalenderDag[] => {
     const dateRange = new Periode(arbeidstid.periode).tilDateRange();
     return getDatesInDateRange(dateRange).map((date) => ({

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { IPeriode } from 'app/models/types';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';

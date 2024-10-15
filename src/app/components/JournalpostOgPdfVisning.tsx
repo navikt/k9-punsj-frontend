@@ -1,20 +1,16 @@
-/* eslint-disable react/jsx-props-no-spreading */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useQueries } from 'react-query';
-
 import { Panel } from '@navikt/ds-react';
-
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
-import 'app/containers/pleiepenger/punchPage.less';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
+import 'app/containers/pleiepenger/punchPage.less';
 export interface Props {
     journalposter: string[];
     children: React.ReactNode;

@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { Formik, yupToFormErrors } from 'formik';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';

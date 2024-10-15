@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { get } from 'lodash';
 
 import { IPeriode } from 'app/models/types';

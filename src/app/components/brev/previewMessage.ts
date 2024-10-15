@@ -83,7 +83,6 @@ export const previewMessage = async (
 
         throw new Error(response.statusText);
     } catch (error) {
-        console.error('Error i forhåndsvisning av brev', error);
         return error.message as string;
     }
 };

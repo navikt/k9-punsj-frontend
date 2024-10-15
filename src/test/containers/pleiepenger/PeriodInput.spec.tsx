@@ -1,10 +1,8 @@
 import { expect } from '@jest/globals';
-/* eslint-disable react/jsx-props-no-spreading */
 import { ShallowWrapper, shallow } from 'enzyme';
 import React from 'react';
 import { WrappedComponentProps, createIntl } from 'react-intl';
-
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodInput } from '../../../app/components/period-input/PeriodInput';
 
 jest.mock('app/utils/intlUtils');
 

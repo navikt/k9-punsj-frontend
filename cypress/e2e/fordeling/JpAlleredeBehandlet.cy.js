@@ -1,26 +1,13 @@
-import { ApiPath } from 'app/apiConfig';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { http, HttpResponse } from 'msw';
-import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils';
+import { getBarnInfoForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpUkjent310.json';
-import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
 
-const dokumenttype = 'Pleiepenger sykt barn';
-const valgteDokumentType = 'Pleiepenger sykt barn';
-const valgteDokumentTypeKode = 'PLEIEPENGER';
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
-const barn1FraApi = barnFraApi.barn[0];
 const barn3FraApi = barnFraApi.barn[2];
 const fnrBarnIkkeFraList = '02021477330';
-const fnrNySøker = '12448325820';
 const annenSøkerFnr = '02918496664';
 const fnrAnnenPart = '02021477330';
-const fagsakUtenBarn = fagsaker[0];
-const fagsakMedBarn = fagsaker[2];
-const fagsakMedBarnReservert = fagsaker[3];
-const fagsakUtenBarnReservert = fagsaker[4];
 
 describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, () => {
     it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
