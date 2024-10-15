@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
 
-import { IOMPAOSoknadKvittering } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
+import { IOMPAOSoknadKvittering } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
 import { getEnvironmentVariable } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
 import intlHelper from 'app/utils/intlUtils';

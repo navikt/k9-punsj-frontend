@@ -18,7 +18,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { RootStateType } from 'app/state/RootState';
-import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import ErDuSikkerModal from '../../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 

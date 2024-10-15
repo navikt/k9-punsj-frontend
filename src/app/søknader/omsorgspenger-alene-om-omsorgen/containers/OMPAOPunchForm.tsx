@@ -16,8 +16,8 @@ import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
 
-import VerticalSpacer from '../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import { fieldNames } from '../initialValues';
 import schema from '../schema';

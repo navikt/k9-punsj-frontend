@@ -7,10 +7,10 @@ import { Alert, Panel, TextField } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import DateInput from 'app/components/skjema/DateInput';
-import { IOMPAOSoknad } from 'app/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
+import { IOMPAOSoknad } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 
-import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
-import intlHelper from '../../../utils/intlUtils';
+import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
+import intlHelper from '../../../../utils/intlUtils';
 import './opplysningerOmOMPAOSoknad.less';
 
 const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {

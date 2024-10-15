@@ -7,8 +7,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
-import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
+import { IIdentState } from '../../../models/types/IdentState';
+import { RootStateType } from '../../../state/RootState';
 import api, { hentEksisterendeSoeknader } from '../api';
 import EksisterendeOMPAOSoknader from './EksisterendeOMPAOSoknader';
 
