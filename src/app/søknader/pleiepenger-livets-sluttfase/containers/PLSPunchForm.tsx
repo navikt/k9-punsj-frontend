@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
-import { Periodepaneler } from 'app/containers/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/søknader/pleiepenger/Periodepaneler';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
@@ -28,12 +28,12 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import ArbeidsforholdPanel from '../../../arbeidsforhold/containers/ArbeidsforholdPanel';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../../containers/pleiepenger/OkGaaTilLosModal';
-import { PeriodeinfoPaneler } from '../../../containers/pleiepenger/PeriodeinfoPaneler';
-import SettPaaVentErrorModal from '../../../containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../../containers/pleiepenger/SettPaaVentModal';
-import { pfLand } from '../../../containers/pleiepenger/pfLand';
+import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
+import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
+import { PeriodeinfoPaneler } from 'app/søknader/pleiepenger/PeriodeinfoPaneler';
+import SettPaaVentErrorModal from 'app/søknader/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/søknader/pleiepenger/SettPaaVentModal';
+import { pfLand } from 'app/søknader/pleiepenger/pfLand';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';

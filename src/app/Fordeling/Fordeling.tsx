@@ -10,8 +10,8 @@ import { finnFagsaker } from 'app/api/api';
 import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { ROUTES } from 'app/constants/routes';
-import HåndterInntektsmeldingUtenKrav from 'app/containers/pleiepenger/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/containers/pleiepenger/OkGaaTilLosModal';
+import HåndterInntektsmeldingUtenKrav from 'app/søknader/pleiepenger/HåndterInntektsmeldingUtenKrav';
+import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
 import {
     DokumenttypeForkortelse,
     FordelingDokumenttype,

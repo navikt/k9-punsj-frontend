@@ -5,7 +5,7 @@ import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
 
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
-import { formattereTimerForArbeidstakerPerioder } from '../../../app/containers/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { formattereTimerForArbeidstakerPerioder } from '../../../app/søknader/pleiepenger/SoknadKvittering/SoknadKvittering';
 import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 

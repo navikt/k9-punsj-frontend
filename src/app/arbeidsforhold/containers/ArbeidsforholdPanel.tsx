@@ -17,7 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../components/VerticalSpacer';
 import { CountrySelect } from '../../components/country-select/CountrySelect';
-import { arbeidstidInformasjon } from '../../containers/pleiepenger/ArbeidstidInfo';
+import { arbeidstidInformasjon } from 'app/søknader/pleiepenger/ArbeidstidInfo';
 import { Arbeidstaker, IPeriode } from '../../models/types';
 import { IPLSSoknad } from '../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';

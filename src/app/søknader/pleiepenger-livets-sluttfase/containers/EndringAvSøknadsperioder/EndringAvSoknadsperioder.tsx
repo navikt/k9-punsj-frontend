@@ -7,7 +7,7 @@ import { Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import { Periodepaneler } from '../../../../containers/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/søknader/pleiepenger/Periodepaneler';
 import { IPeriode, Periode } from '../../../../models/types';
 import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
 import CustomAlertstripeAdvarsel from './CustomAlertstripeAdvarsel';

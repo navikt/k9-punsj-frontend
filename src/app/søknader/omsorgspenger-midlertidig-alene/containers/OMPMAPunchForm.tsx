@@ -17,10 +17,10 @@ import intlHelper from 'app/utils/intlUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
-import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../../containers/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from '../../../containers/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../../containers/pleiepenger/SettPaaVentModal';
+import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
+import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
+import SettPaaVentErrorModal from 'app/søknader/pleiepenger/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/søknader/pleiepenger/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';

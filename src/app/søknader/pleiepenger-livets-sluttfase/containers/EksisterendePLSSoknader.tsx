@@ -17,7 +17,7 @@ import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/Journa
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
-import ErDuSikkerModal from '../../../containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
 import {
     chooseEksisterendePLSSoknadAction,
     closeEksisterendePLSSoknadAction,

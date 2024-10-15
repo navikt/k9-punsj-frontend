@@ -10,7 +10,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import 'app/containers/pleiepenger/punchPage.less';
+import 'app/søknader/pleiepenger/punchPage.less';
 export interface Props {
     journalposter: string[];
     children: React.ReactNode;

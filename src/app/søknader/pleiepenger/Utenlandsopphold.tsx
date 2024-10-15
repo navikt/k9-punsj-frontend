@@ -11,7 +11,7 @@ import {
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
-} from 'app/containers/pleiepenger/Listepaneler';
+} from 'app/søknader/pleiepenger/Listepaneler';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
