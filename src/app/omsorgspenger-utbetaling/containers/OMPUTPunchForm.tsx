@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 
-import { Alert, Box, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';

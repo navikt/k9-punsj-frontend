@@ -28,7 +28,6 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
                     </Heading>
                     {arbeidstaker.map((v, index) => (
                         <Arbeidstaker
-                            // eslint-disable-next-line react/no-array-index-key
                             key={index}
                             index={index}
                             antallArbeidsforhold={arbeidstaker.length}

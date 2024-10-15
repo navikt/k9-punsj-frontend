@@ -71,7 +71,7 @@ describe('valideringer', () => {
 
         const skjemaErrors = validerTestskjemaFn(skjemaMedManglendeVerdi);
 
-        // @ts-ignore
+        // @ts-expect-error
         expect(skjemaErrors.testArr[0]?.påkrevdFelt).toBeUndefined();
         // @ts-ignore
         expect(skjemaErrors.testArr[1].påkrevdFelt).toEqual('skjema.validering.påkrevd');

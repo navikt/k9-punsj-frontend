@@ -1,6 +1,6 @@
 import React from 'react';
 import { Person } from 'app/models/types';
-import { BodyShort, Label, Loader } from '@navikt/ds-react';
+import { BodyShort, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { prettifyDateString } from 'app/utils/date-utils/src/format';
 

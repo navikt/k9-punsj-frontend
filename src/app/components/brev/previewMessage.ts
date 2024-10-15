@@ -16,7 +16,7 @@ const getErrorString = (errorText: string): string => {
             if (errorObject && errorObject.melding) {
                 return errorObject.melding;
             }
-        } catch (error) {
+        } catch {
             return errorText;
         }
     }
@@ -83,7 +83,6 @@ export const previewMessage = async (
 
         throw new Error(response.statusText);
     } catch (error) {
-        console.error('Error i forhåndsvisning av brev', error);
         return error.message as string;
     }
 };

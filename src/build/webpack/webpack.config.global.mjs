@@ -1,6 +1,8 @@
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+
+// eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';

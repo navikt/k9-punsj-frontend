@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';

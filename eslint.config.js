@@ -1,26 +1,23 @@
-import tsParser from '@typescript-eslint/parser';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import typescriptPlugin from '@typescript-eslint/eslint-plugin';
-import prettier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
-import eslintImport from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import';
+import pluginJs from '@eslint/js';
+
+// eslint-disable-next-line import/no-unresolved
+import tsParser from '@typescript-eslint/parser';
+// eslint-disable-next-line import/no-unresolved
+import tseslint from 'typescript-eslint';
+
+const OFF = 0;
+const WARNING = 1;
+const ERROR = 2;
 
 export default [
     {
-        name: 'base-config',
-        files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'], // specifying which files this configuration applies to
-        ignores: ['node_modules/**/*', 'dist/**/*'], // specify ignored files
-        languageOptions: {
-            parser: tsParser,
-            sourceType: 'module',
-        },
-        plugins: {
-            '@typescript-eslint': typescriptPlugin,
-            'react-hooks': reactHooksPlugin,
-            react: eslintPluginReact,
-            import: eslintImport,
-        },
         settings: {
+            react: {
+                version: 'detect',
+            },
             'import/resolver': {
                 node: {
                     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.scss'],
@@ -28,30 +25,53 @@ export default [
                 },
             },
         },
+    },
+
+    {
+        name: 'base-config',
+        files: ['**/*.{js,mjs,ts,jsx,tsx}'],
+        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*', '.storybook/**/*'], // specify ignored files
+        languageOptions: {
+            parser: tsParser,
+            sourceType: 'module',
+            ecmaVersion: 'latest',
+        },
+    },
+    pluginJs.configs.recommended,
+    eslintPluginReact.configs.flat.recommended,
+    ...tseslint.configs.recommended,
+    eslintConfigPrettier,
+    importPlugin.flatConfigs.recommended,
+    {
         rules: {
-            'react/no-unused-prop-types': 'warn',
-            'react/forbid-prop-types': 0,
-            '@typescript-eslint/no-use-before-define': ['error'],
-            '@typescript-eslint/no-shadow': 'error',
-            'import/no-extraneous-dependencies': [
-                'warn',
-                { devDependencies: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'] },
-            ],
-            'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
-            'no-use-before-define': 'off',
-            'no-shadow': 'off',
-            'default-param-last': 'off',
-            '@typescript-eslint/no-explicit-any': 'off',
-            'import/prefer-default-export': 'off',
+            'no-console': WARNING,
+            'no-debugger': WARNING,
+            'no-duplicate-imports': ERROR,
+            'no-use-before-define': OFF,
+            'no-shadow': OFF,
+            'no-unused-vars': OFF,
+            'no-undef': OFF,
+            'react/no-unused-prop-types': WARNING,
+            'react/prop-types': OFF,
+            'react/forbid-prop-types': OFF,
+            'react/react-in-jsx-scope': OFF,
+            'react/display-name': OFF,
+            '@typescript-eslint/no-use-before-define': [ERROR],
+            '@typescript-eslint/no-shadow': ERROR,
+            '@typescript-eslint/ban-ts-comment': OFF,
+            '@typescript-eslint/no-explicit-any': OFF,
+            'import/prefer-default-export': OFF,
+            'import/no-unresolved': ERROR,
+            'import/named': OFF,
         },
     },
     {
         name: 'test-specific',
         files: ['*.spec.ts', '*.spec.tsx'],
         rules: {
-            '@typescript-eslint/no-explicit-any': 'off',
-            '@typescript-eslint/ban-ts-comment': 0,
+            '@typescript-eslint/no-explicit-any': OFF,
+            '@typescript-eslint/ban-ts-comment': OFF,
+            'import/no-named-as-default-member': OFF,
         },
     },
-    prettier,
 ];

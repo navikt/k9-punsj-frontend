@@ -219,4 +219,3 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
 };
 
 export default OMPAOPunchForm;
-/* eslint-enable */

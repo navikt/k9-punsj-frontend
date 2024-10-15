@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';

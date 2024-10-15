@@ -20,7 +20,6 @@ import {
     breadcrumbsIntegration,
     reactRouterV6BrowserTracingIntegration,
 } from '@sentry/react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { configureStore } from '@reduxjs/toolkit';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import AuthCallback from './auth/AuthCallback';

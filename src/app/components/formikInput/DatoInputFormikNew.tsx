@@ -1,6 +1,3 @@
-/* eslint-disable react/jsx-pascal-case */
-
-/* eslint-disable camelcase */
 import { useField } from 'formik';
 import React, { useState } from 'react';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { BodyShort, Checkbox, Label, Link, Select, VStack } from '@navikt/ds-react';
+import { BodyShort, Checkbox, Label, Link, Select } from '@navikt/ds-react';
 
 import { IIdentState } from 'app/models/types/IdentState';
-import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
+import { FagsakForSelect } from 'app/types/Fagsak';
 
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { FormattedMessage } from 'react-intl';

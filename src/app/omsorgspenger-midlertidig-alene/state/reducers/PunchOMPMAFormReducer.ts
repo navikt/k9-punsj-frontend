@@ -13,7 +13,6 @@ const initialState: IPunchOMPMAFormState = {
     inputErrors: undefined,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function PunchOMPMAFormReducer(
     punchFormState: IPunchOMPMAFormState,
     action: IPunchOMPMAFormActionTypes,

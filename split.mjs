@@ -1,11 +1,13 @@
 import glob from 'glob';
 
 if (!process.env.CI_TOTAL) {
+    // eslint-disable-next-line no-console
     console.error('No envrionment variable CI_TOTAL defined');
     process.exit(1);
 }
 
 if (!process.env.CI_INDEX) {
+    // eslint-disable-next-line no-console
     console.error('No envrionment variable CI_INDEX defined');
     process.exit(1);
 }

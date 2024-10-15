@@ -1,9 +1,8 @@
 import { FormikValues } from 'formik';
-import yup from 'yup';
+import * as yup from 'yup';
 
 import { capitalize } from './utils';
 
-/* eslint-disable import/prefer-default-export */
 const invalidTextMessage = (text: string) => `Feltet inneholder ugyldige tegn: ${text}`;
 
 const textRegex =
@@ -54,7 +53,6 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
         return [];
     } catch (error) {
         if (!error.inner) {
-            console.log(error);
             return [];
         }
         const errors = error.inner?.map(

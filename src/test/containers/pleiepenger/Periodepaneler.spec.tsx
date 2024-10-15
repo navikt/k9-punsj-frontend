@@ -5,14 +5,13 @@ import * as React from 'react';
 import { TextField } from '@navikt/ds-react';
 import { IntlShape } from 'react-intl';
 
+import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
-} from 'app/containers/pleiepenger/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
-
-import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+} from '../../../app/containers/pleiepenger/PeriodeinfoPaneler';
+import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -78,7 +77,6 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };
 

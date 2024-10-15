@@ -51,7 +51,6 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const { setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
-        // eslint-disable-next-line react/destructuring-assignment
         selectedArbeidsgiver: arbeidstaker?.organisasjonsnummer || '',
         gjelderAnnenArbeidsgiver: !harArbeidsgivere,
         navnPåArbeidsgiver: '',

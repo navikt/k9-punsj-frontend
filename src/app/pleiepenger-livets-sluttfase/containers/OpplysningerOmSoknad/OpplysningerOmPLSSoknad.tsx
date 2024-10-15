@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';

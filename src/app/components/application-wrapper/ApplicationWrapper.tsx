@@ -17,7 +17,6 @@ import './applicationWrapper.less';
 
 interface Props {
     locale: Locale;
-    onChangeLocale: (locale: Locale) => void;
     children?: React.ReactNode;
 }
 

@@ -1,4 +1,4 @@
-const PleiepengerPunsjInitialState = {
+export const PleiepengerPunsjInitialState = {
     PLEIEPENGER_SYKT_BARN: {
         punchFormState: {
             isSoknadLoading: false,

@@ -16,7 +16,6 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
-import { IFordelingState, IJournalpost } from 'app/models/types';
 import ErDuSikkerModal from '../../containers/omsorgspenger/korrigeringAvInntektsmelding/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPMASoknadAction,
@@ -127,7 +126,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        soknader?.forEach((soknadInfo) => {
+        soknader?.forEach((soknadInfo, index) => {
             const søknad = new OMPMASoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummerSøknad = søknad?.k9saksnummer;
@@ -140,7 +139,7 @@ export const EksisterendeOMPMASoknaderComponent: React.FC<IEksisterendeOMPMASokn
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.annenForelder.norskIdent,
-                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
+                <DokumentIdList key={`dok-${index}`} dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummerSøknad,
                 søknad.annenForelder.periode && areBothDatesDefined(søknad.annenForelder.periode)

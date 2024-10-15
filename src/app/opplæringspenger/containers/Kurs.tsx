@@ -26,6 +26,7 @@ const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(institusjonUuidFelt);
     const [isAnnetSelected, setIsAnnetSelected] = useState(false);
 
@@ -62,7 +63,6 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                // eslint-disable-next-line react/no-array-index-key
                                 <React.Fragment key={index}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />

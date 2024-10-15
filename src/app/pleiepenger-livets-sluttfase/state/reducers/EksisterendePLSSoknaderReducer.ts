@@ -11,7 +11,6 @@ const initialState: IEksisterendePLSSoknaderState = {
     isAwaitingSoknadCreation: false,
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function EksisterendePLSSoknaderReducer(
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState,
     action: IEksisterendePLSSoknaderActionTypes,

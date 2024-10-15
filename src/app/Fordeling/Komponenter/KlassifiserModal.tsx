@@ -33,7 +33,6 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/BrevComponent';
-import { get } from 'lodash';
 
 interface Props {
     dedupkey: string;

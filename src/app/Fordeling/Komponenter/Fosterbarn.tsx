@@ -4,7 +4,7 @@ import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { Person } from 'app/models/types';
 import { IdentRules } from 'app/rules';
-import { setFosterbarnAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { setFosterbarnAction } from 'app/state/actions/IdentActions';
 import { RootStateType } from 'app/state/RootState';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,6 +71,7 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                             await hentFosterbarnInfo(item, index);
                         }
                     } catch (error) {
+                        // eslint-disable-next-line no-console
                         console.error('Error fetching fosterbarn info:', error);
                     }
                 }

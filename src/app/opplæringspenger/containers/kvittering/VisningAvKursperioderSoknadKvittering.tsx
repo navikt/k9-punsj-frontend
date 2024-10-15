@@ -9,8 +9,8 @@ interface Props {
 
 const VisningAvKursperioderSoknadKvittering = ({ kursperioder }: Props) => (
     <>
-        {kursperioder.map((kursperiode) => (
-            <div>
+        {kursperioder.map((kursperiode, index) => (
+            <div key={`kursperiode-${index}`}>
                 <p>Periode med opplæring:</p>
                 {periodToFormattedString(kursperiode.periode)}
                 {/*    <p>Avreise</p>

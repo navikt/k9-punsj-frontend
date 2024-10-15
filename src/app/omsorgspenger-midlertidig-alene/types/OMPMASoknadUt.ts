@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { PersonEnkel } from 'app/models/types';
 import { Personvalg } from 'app/models/types/Personvalg';
 

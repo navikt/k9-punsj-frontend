@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Barn, IBarn } from './OMPKSSoknad';
 
 export interface IOMPKSSoknadUt {

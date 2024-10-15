@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import { IOmsorgstid, Periodeinfo } from 'app/models/types';
 
-import { IArbeidstidPeriodeMedTimer, ITimerOgMinutter, Periode } from '../models/types/Periode';
+import { IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
     countDatesInDateRange,
@@ -11,7 +11,6 @@ import {
     removeDatesFromDateRange,
 } from './timeUtils';
 
-/* eslint-disable import/prefer-default-export */
 const sortPeriodsByFomDate = (period1: Periode, period2: Periode): number => {
     if (period1.startsBefore(period2)) {
         return -1;

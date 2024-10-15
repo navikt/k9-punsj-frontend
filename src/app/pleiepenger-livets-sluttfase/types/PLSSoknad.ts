@@ -5,7 +5,6 @@ import {
     IArbeidstaker,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
-    ITimerOgMinutter,
     Periode,
     PeriodeMedTimerMinutter,
     Periodeinfo,

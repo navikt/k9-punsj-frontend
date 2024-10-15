@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-
-/* eslint-disable @typescript-eslint/no-var-requires */
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
 import React from 'react';
@@ -31,6 +28,7 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
 
     const { journalposter } = response;

@@ -82,7 +82,6 @@ export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSo
             rows.push(
                 <tr key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

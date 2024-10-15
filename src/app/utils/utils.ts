@@ -46,7 +46,6 @@ export const erEldreEnn4år = (dato: string) => {
 };
 
 export const printAndReturnValue = (value: any) => {
-    console.log(value);
     return value;
 };
 

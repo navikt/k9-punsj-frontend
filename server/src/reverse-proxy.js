@@ -28,12 +28,14 @@ const proxyOptions = (api) => ({
                         resolve(options);
                     },
                     (error) => {
+                        // eslint-disable-next-line no-console
                         console.log(error);
                         reject(error);
                     },
                 );
             });
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.log(error);
             throw error; // re-throw the error so it can be handled by the caller
         }
@@ -65,7 +67,7 @@ const proxyOptions = (api) => ({
         }
         return headers;
     },
-    // eslint-disable-next-line consistent-return
+
     proxyErrorHandler(err, res, next) {
         switch (err && err.code) {
             case 'ENOTFOUND': {
@@ -86,7 +88,6 @@ const proxyOptions = (api) => ({
     },
 });
 
-// eslint-disable-next-line func-names
 const timedOut = function (req, res, next) {
     if (!req.timedout) {
         next();
@@ -98,6 +99,7 @@ const timedOut = function (req, res, next) {
 const setup = (router) => {
     config.reverseProxyConfig.apis.forEach((api) => {
         router.use(`${api.path}/*`, timedOut, proxy(api.url, proxyOptions(api)));
+        // eslint-disable-next-line no-console
         console.log(`Proxy set up: ${api.path}/* -> ${api.url}`);
     });
 };

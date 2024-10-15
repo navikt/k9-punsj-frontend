@@ -129,7 +129,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        soknader?.forEach((soknadInfo) => {
+        soknader?.forEach((soknadInfo, index) => {
             const søknad = new OMPKSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
@@ -145,7 +145,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
+                <DokumentIdList key={`dok-${index}`} dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
 
@@ -168,7 +168,6 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
             rows.push(
                 <Table.Row key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        // eslint-disable-next-line react/no-array-index-key
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
