@@ -8,9 +8,9 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
 import { Heading } from '@navikt/ds-react';
-import VisningAvPerioderSNSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
-import VisningAvPerioderSoknadKvittering from '../../../components/soknadKvittering/VisningAvPerioderSoknadKvittering';
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import {
     IPSBSoknadKvittering,
     IPSBSoknadKvitteringArbeidstidInfo,
@@ -18,7 +18,7 @@ import {
     IPSBSoknadKvitteringLovbestemtFerie,
     IPSBSoknadKvitteringTilsynsordning,
     IPSBSoknadKvitteringUtenlandsopphold,
-} from '../../../models/types/PSBSoknadKvittering';
+} from 'app/models/types/PSBSoknadKvittering';
 import {
     formatDato,
     formatereTekstMedTimerOgMinutter,
@@ -27,7 +27,7 @@ import {
     getCountryList,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../utils';
+} from 'app/utils';
 import './soknadKvittering.less';
 
 interface IOwnProps {

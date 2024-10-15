@@ -65,11 +65,11 @@ import { PeriodeinfoPaneler } from '../../components/periodeinfoPaneler/Periodei
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';
-import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import PSBSoknadKvittering from './containers/SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './containers/Utenlandsopphold/Utenlandsopphold';
 import { pfLand } from './pfLand';
 import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
-import { PSBKvitteringContainer } from './SoknadKvittering/SoknadKvitteringContainer';
+import { PSBKvitteringContainer } from './containers/SoknadKvittering/SoknadKvitteringContainer';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 
 export interface IPunchFormComponentProps {
