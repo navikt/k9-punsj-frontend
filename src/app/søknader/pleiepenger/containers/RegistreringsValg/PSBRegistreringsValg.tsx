@@ -1,56 +1,44 @@
 import React, { useEffect } from 'react';
+
 import { FormattedMessage } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
-
 import { Alert, Button } from '@navikt/ds-react';
-
 import { ROUTES } from 'app/constants/routes';
 import { IdentRules } from 'app/rules';
-import { IEksisterendeSoknaderState } from '../../models/types';
-import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
-import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from '../../state/actions';
-import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../state/actions/JournalposterPerIdentActions';
-import { EksisterendeSoknader } from './EksisterendeSoknader';
-import './registreringsValg.less';
+import { RootStateType } from 'app/state/RootState';
+import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from 'app/state/actions';
+import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from 'app/state/actions/JournalposterPerIdentActions';
+import { EksisterendeSoknader } from '../../EksisterendeSoknader';
+import { Dispatch } from 'redux';
 
-export interface IRegistreringsValgComponentProps {
+import './pSBRegistreringsValg.less';
+
+interface Props {
     journalpostid: string;
 }
 
-export interface IRegistreringsValgDispatchProps {
-    createNewSoknad: typeof createSoknad;
-    resetSoknadId: typeof resetSoknadidAction;
-    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
-    getEksisterendeSoknader: typeof findEksisterendeSoknader;
-}
-
-export interface IEksisterendeSoknaderStateProps {
-    eksisterendeSoknaderState: IEksisterendeSoknaderState;
-    identState: IIdentState;
-}
-
-type IRegistreringsValgProps = IRegistreringsValgComponentProps &
-    IEksisterendeSoknaderStateProps &
-    IRegistreringsValgDispatchProps;
-
-export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (props: IRegistreringsValgProps) => {
+export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<Dispatch<any>>();
     const location = useLocation();
 
+    const createNewSoknad = (
+        journalpostId: string,
+        søkerId: string,
+        pleietrengendeId: string | null,
+        k9saksnummer?: string,
+    ) => dispatch(createSoknad(journalpostId, søkerId, pleietrengendeId, k9saksnummer));
+    const resetSoknadId = () => dispatch(resetSoknadidAction());
+    const getEksisterendeSoknader = (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId));
+    const getAlleJournalposter = (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent));
+
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const eksisterendeSoknaderState = useSelector((state: RootStateType) => state.eksisterendeSoknaderState);
+    const identState = useSelector((state: RootStateType) => state.identState);
     const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
-    const {
-        journalpostid,
-        identState,
-        eksisterendeSoknaderState,
-        getEksisterendeSoknader,
-        getAlleJournalposter,
-        createNewSoknad,
-        resetSoknadId,
-    } = props;
     const { søkerId, pleietrengendeId } = identState;
     const {
         eksisterendeSoknaderSvar,
@@ -138,18 +126,3 @@ export const RegistreringsValgComponent: React.FC<IRegistreringsValgProps> = (pr
         </div>
     );
 };
-const mapDispatchToProps = (dispatch: any) => ({
-    createNewSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null, k9saksnummer?: string) =>
-        dispatch(createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)),
-    resetSoknadId: () => dispatch(resetSoknadidAction()),
-    getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
-    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
-});
-
-const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    eksisterendeSoknaderState: state.eksisterendeSoknaderState,
-    identState: state.identState,
-});
-
-export const RegistreringsValg = connect(mapStateToProps, mapDispatchToProps)(RegistreringsValgComponent);
