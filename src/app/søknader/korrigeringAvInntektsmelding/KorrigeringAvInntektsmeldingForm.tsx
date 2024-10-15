@@ -13,8 +13,6 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
-import { OMSKorrigering } from '../../../models/types/OMSKorrigering';
 import BekreftInnsendingModal from './BekreftInnsendingModal';
 import ErDuSikkerModal from './ErDuSikkerModal';
 import './KorrigeringAvInntektsmeldingForm.less';
@@ -30,6 +28,7 @@ import VirksomhetPanel from './VirksomhetPanel';
 import { getFormErrors } from './korrigeringAvFormValidering';
 import ActionType from './korrigeringAvInntektsmeldingActions';
 import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
+import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 
 interface KorrigeringAvInntektsmeldingFormProps {
     søkerId: string;

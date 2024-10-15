@@ -23,7 +23,7 @@ import Fordeling from '../Fordeling/Fordeling';
 import { RegistreringsValg as PSBRegistreringsValg } from './pleiepenger/RegistreringsValg';
 import { PSBPunchForm } from './pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
-import KorrigeringAvInntektsmeldingContainer from './omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
+import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
 import JournalførOgFortsettValg from '../Fordeling/Komponenter/JournalførOgFortsettValg';
 

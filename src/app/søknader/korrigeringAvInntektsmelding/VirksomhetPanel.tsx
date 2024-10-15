@@ -14,7 +14,7 @@ import OrganisasjonMedArbeidsforhold from 'app/models/types/OrganisasjonMedArbei
 import { hentArbeidsgivereMedId } from 'app/state/actions/OMSPunchFormActions';
 import intlHelper from 'app/utils/intlUtils';
 
-import { AAREG_URL } from '../../../constants/eksterneLenker';
+import { AAREG_URL } from 'app/constants/eksterneLenker';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,

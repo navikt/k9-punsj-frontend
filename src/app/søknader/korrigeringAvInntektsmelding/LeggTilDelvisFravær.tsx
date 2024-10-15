@@ -11,7 +11,7 @@ import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 
-import DateInput from '../../../components/skjema/DateInput';
+import DateInput from 'app/components/skjema/DateInput';
 import EkspanderbartPanel from './EkspanderbartPanel';
 import {
     KorrigeringAvInntektsmeldingFormFields,
