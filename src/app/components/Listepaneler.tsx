@@ -6,8 +6,8 @@ import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import BinSvg from '../../assets/SVG/BinSVG';
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
+import BinSvg from '../assets/SVG/BinSVG';
+import AddCircleSvg from '../assets/SVG/AddCircleSVG';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
