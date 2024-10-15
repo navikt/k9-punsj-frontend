@@ -72,20 +72,22 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             onChange={(v: Tidsformat) => {
                                 formik.setFieldValue(`${name}.tidsformat`, v);
                                 switch (v) {
-                                    case Tidsformat.Desimaler:
+                                    case Tidsformat.Desimaler: {
                                         const desimaler = timerOgMinutterTilTimerMedDesimaler({
                                             timer: timerField.value,
                                             minutter: minutterField.value,
                                         });
                                         formik.setFieldValue(`${name}.perDagString`, desimaler);
                                         break;
-                                    case Tidsformat.TimerOgMin:
+                                    }
+                                    case Tidsformat.TimerOgMin: {
                                         const [timer, minutter] = timerMedDesimalerTilTimerOgMinutter(
                                             Number(desimalerField.value),
                                         );
                                         formik.setFieldValue(`${name}.timer`, timer);
                                         formik.setFieldValue(`${name}.minutter`, minutter);
                                         break;
+                                    }
                                 }
                             }}
                             value={tidsformatField.value}

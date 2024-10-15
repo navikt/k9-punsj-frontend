@@ -1,9 +1,11 @@
-// eslint-disable-next-line import/no-unresolved
-import tsParser from '@typescript-eslint/parser';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import prettier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
 import importPlugin from 'eslint-plugin-import';
+import pluginJs from '@eslint/js';
+
+// eslint-disable-next-line import/no-unresolved
+import tsParser from '@typescript-eslint/parser';
 // eslint-disable-next-line import/no-unresolved
 import tseslint from 'typescript-eslint';
 
@@ -39,9 +41,10 @@ export default [
             'react-hooks': reactHooksPlugin,
         },
     },
+    pluginJs.configs.recommended,
     eslintPluginReact.configs.flat.recommended,
     ...tseslint.configs.recommended,
-    prettier,
+    eslintConfigPrettier,
     importPlugin.flatConfigs.recommended,
     {
         rules: {
@@ -64,6 +67,7 @@ export default [
             'import/prefer-default-export': OFF,
             '@typescript-eslint/ban-ts-comment': OFF,
             'import/named': OFF,
+            'no-undef': OFF,
         },
     },
     {
