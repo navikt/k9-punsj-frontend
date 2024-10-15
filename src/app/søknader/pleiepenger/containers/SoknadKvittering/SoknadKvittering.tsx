@@ -1,93 +1,37 @@
-import classNames from 'classnames';
 import React from 'react';
-import { IntlShape, useIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
+import classNames from 'classnames';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import Kopier from 'app/components/kopier/Kopier';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
 import { Heading } from '@navikt/ds-react';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
-import {
-    IPSBSoknadKvittering,
-    IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringBosteder,
-    IPSBSoknadKvitteringLovbestemtFerie,
-    IPSBSoknadKvitteringTilsynsordning,
-    IPSBSoknadKvitteringUtenlandsopphold,
-} from 'app/models/types/PSBSoknadKvittering';
+import { IPSBSoknadKvittering, IPSBSoknadKvitteringUtenlandsopphold } from 'app/models/types/PSBSoknadKvittering';
 import {
     formatDato,
-    formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
-    getCountryList,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from 'app/utils';
+
 import './soknadKvittering.less';
+import {
+    endreLandkodeTilLandnavnIPerioder,
+    formattereTimerForArbeidstakerPerioder,
+    formattereTimerOgMinutterForOmsorgstilbudPerioder,
+    genererIkkeSkalHaFerie,
+    genererSkalHaFerie,
+    sjekkHvisPerioderEksisterer,
+} from './soknadKvitteringUtils';
 
-interface IOwnProps {
+interface Props {
     innsendtSøknad: IPSBSoknadKvittering;
-    kopierJournalpostSuccess?: boolean;
-    annenSokerIdent?: string | null;
 }
-
-const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
-    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
-
-const endreLandkodeTilLandnavnIPerioder = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
-) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
-        if (landNavn) kopiAvPerioder[periode].land = landNavn?.name;
-    });
-    return kopiAvPerioder;
-};
-
-export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag)
-            : '0';
-        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = kopiAvPerioder[periode].faktiskArbeidTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag)
-            : '0';
-    });
-    return kopiAvPerioder;
-};
-
-const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSBSoknadKvitteringTilsynsordning) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].etablertTilsynTimerPerDag = formatereTekstMedTimerOgMinutter(
-            kopiAvPerioder[periode].etablertTilsynTimerPerDag,
-        );
-    });
-    return kopiAvPerioder;
-};
-
-export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
-        if (value.skalHaFerie) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-
-export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
-        if (!value.skalHaFerie) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
 
 const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold, intl: IntlShape) => {
     const årsaker = [
@@ -145,13 +89,12 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
     );
 };
 
-export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    innsendtSøknad,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
-    const { ytelse, begrunnelseForInnsending, mottattDato, journalposter } = innsendtSøknad;
+export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
     const intl = useIntl();
+
+    const { ytelse, begrunnelseForInnsending, mottattDato, journalposter } = innsendtSøknad;
+    const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
+    const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
@@ -184,16 +127,23 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
             <Heading size="medium" level="2">
-                {intlHelper(intl, 'skjema.kvittering.oppsummering')}
+                <FormattedMessage id={'skjema.kvittering.oppsummering'} />
             </Heading>
             {kopierJournalpostSuccess && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
+                    <h3>
+                        <FormattedMessage id={'skjema.soknadskvittering.opprettetKopi'} />
+                    </h3>
                     <hr className={classNames('linje')} />
-                    <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
+                    <p>
+                        <FormattedMessage id={'skjema.soknadskvittering.opprettetKopi.innhold'} />
+                    </p>
                     {annenSokerIdent && (
                         <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
+                            <FormattedMessage
+                                id={'ident.identifikasjon.kvittering.annenSoker'}
+                                values={{ fnr: annenSokerIdent }}
+                            />
                             <Kopier verdi={annenSokerIdent} />
                         </p>
                     )}
@@ -201,7 +151,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
             )}
             {visSoknadsperiode && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
+                    <h3>
+                        <FormattedMessage id={'skjema.soknadskvittering.soknadsperiode'} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <p>{formaterSøknadsperioder()}</p>
                 </div>
@@ -209,21 +161,29 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {mottattDato && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                        <b>
+                            <FormattedMessage id={'skjema.mottakelsesdato'} />
+                        </b>
                         {`${formattereDatoFraUTCTilGMT(mottattDato)} - ${formattereTidspunktFraUTCTilGMT(mottattDato)}`}
                     </p>
                     {visTrukkedePerioder && (
                         <p>
-                            <b>Perioder som er fjernet fra søknadsperioden: </b>
+                            <b>
+                                <FormattedMessage id={'skjema.perioderSomFjernet'} />
+                            </b>
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                         </p>
                     )}
                     {begrunnelseForInnsending && (
                         <p>
-                            <b>Begrunnelse for endring: </b>
+                            <b>
+                                <FormattedMessage id={'skjema.begrunnelseForEndring'} />
+                            </b>
                             {begrunnelseForInnsending.tekst}
                         </p>
                     )}
@@ -232,7 +192,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visUtenlandsopphold && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, intl)}
                 </div>
@@ -240,7 +202,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visFerie && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.FERIE} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
@@ -252,7 +216,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visFerieSomSkalSLettes && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
+                    <h3>
+                        <FormattedMessage id={'skjema.ferie.skalslettes'} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
@@ -264,10 +230,14 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visOpplysningerOmSoker && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.relasjontilbarnet')}: `}</b>
+                        <b>
+                            <FormattedMessage id={'skjema.relasjontilbarnet.kvittering'} />{' '}
+                        </b>
                         {ytelse.omsorg.relasjonTilBarnet === 'ANNET'
                             ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}`
                             : `${
@@ -280,12 +250,16 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.ARBEID} />
+                    </h3>
                     <hr className={classNames('linje')} />
 
                     {visArbeidsforhold && (
                         <div>
-                            <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
+                            <h3>
+                                <FormattedMessage id={'arbeidstaker'} />
+                            </h3>
                             {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
@@ -297,12 +271,14 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                     >
                                         <p className={classNames('soknadKvitteringUnderTittel')}>
                                             <b>
-                                                {`${intlHelper(
-                                                    intl,
-                                                    skalOrgNummerVises
-                                                        ? 'skjema.arbeid.arbeidstaker.orgnr'
-                                                        : 'skjema.arbeid.arbeidstaker.ident',
-                                                )}: `}
+                                                <FormattedMessage
+                                                    id={
+                                                        skalOrgNummerVises
+                                                            ? 'skjema.arbeid.arbeidstaker.orgnr'
+                                                            : 'skjema.arbeid.arbeidstaker.ident'
+                                                    }
+                                                />
+                                                {': '}
                                             </b>
                                             {`${
                                                 skalOrgNummerVises
@@ -331,12 +307,16 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
                     {visFrilanserArbeidstidInfo && (
                         <div>
-                            <h3>{intlHelper(intl, 'frilanser')}</h3>
+                            <h3>
+                                <FormattedMessage id={'frilanser'} />
+                            </h3>
                             {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser) &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
-                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato')} `}</b>
+                                        <b>
+                                            <FormattedMessage id={'skjema.frilanserdato'} />{' '}
+                                        </b>
                                         {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
                                 )}
@@ -349,7 +329,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
                                     <p>
-                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')} `}</b>
+                                        <b>
+                                            <FormattedMessage id={'skjema.frilanserdato.slutt'} />{' '}
+                                        </b>
                                         {formatDato(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
                                     </p>
                                 )}
@@ -373,7 +355,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
                     {visSelvstendigNæringsdrivendeInfo && (
                         <div>
-                            <h3>{intlHelper(intl, 'selvstendig')}</h3>
+                            <h3>
+                                <FormattedMessage id={'selvstendig'} />
+                            </h3>
 
                             {sjekkPropertyEksistererOgIkkeErNull(
                                 'selvstendigNæringsdrivende',
@@ -406,7 +390,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visOmsorgstilbud && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OMSORGSTILBUD)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.OMSORGSTILBUD} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
@@ -420,12 +406,14 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {(visNattevak || visBeredskap) && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.BEREDSKAPNATTEVAAK)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.BEREDSKAPNATTEVAAK} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     {visBeredskap && (
                         <>
                             <h4 className="soknadKvitteringUnderTittel">
-                                {intlHelper(intl, 'skjema.beredskap.overskrift')}
+                                <FormattedMessage id={'skjema.beredskap.overskrift'} />
                             </h4>
                             <VisningAvPerioderSoknadKvittering
                                 intl={intl}
@@ -440,7 +428,7 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     {visNattevak && (
                         <div>
                             <h4 className="soknadKvitteringUnderTittel">
-                                {intlHelper(intl, 'skjema.nattevaak.overskrift')}
+                                <FormattedMessage id={'skjema.nattevaak.overskrift'} />
                             </h4>
                             <VisningAvPerioderSoknadKvittering
                                 intl={intl}
@@ -456,7 +444,9 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visMedlemskap && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
+                    <h3>
+                        <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
                         intl={intl}
@@ -469,14 +459,20 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {!!journalposter && journalposter.length > 0 && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
+                    <h3>
+                        <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
+                    </h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
+                        <b>
+                            <FormattedMessage id={'skjema.medisinskeopplysninger.kvittering'} />{' '}
+                        </b>
                         {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
                     </p>
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
+                        <b>
+                            <FormattedMessage id={'skjema.opplysningerikkepunsjet.kvittering'} />{' '}
+                        </b>
                         {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
                     </p>
                 </div>
@@ -485,9 +481,4 @@ export const PSBSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(PSBSoknadKvittering);
+export default PSBSoknadKvittering;
