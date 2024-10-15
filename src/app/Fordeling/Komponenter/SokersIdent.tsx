@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { Label, TextField } from '@navikt/ds-react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -11,7 +10,6 @@ import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { getPersonInfo } from 'app/api/api';
-import PersonInfo from 'app/components/person-info/PersonInfo';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
 interface ISokersIdentProps {

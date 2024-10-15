@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import { IOmsorgstid, Periodeinfo } from 'app/models/types';
 
-import { IArbeidstidPeriodeMedTimer, ITimerOgMinutter, Periode } from '../models/types/Periode';
+import { IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
     countDatesInDateRange,

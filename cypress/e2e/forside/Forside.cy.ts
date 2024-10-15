@@ -3,7 +3,7 @@ import { ApiPath } from 'app/apiConfig';
 describe('forside', () => {
     beforeEach(() => {
         cy.visit('/', {
-            onBeforeLoad: (window) => {},
+            onBeforeLoad: () => {},
         });
     });
     it('kan søke opp journalpost', () => {

@@ -4,7 +4,7 @@ import { ShallowWrapper, shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 
 import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
-import reactRedux from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import intlHelper from '../../../app/utils/intlUtils';
 import {
@@ -110,7 +110,7 @@ const validertSoknad: IPSBSoknadKvittering = {
         opptjeningAktivitet: {},
         trekkKravPerioder: ['2021-06-01/2021-06-30'],
     },
-    begrunnelseForInnsending: undefined,
+    begrunnelseForInnsending: { tekst: '' },
 };
 
 const setupPunchForm = (
@@ -127,7 +127,6 @@ const setupPunchForm = (
         resetSoknadAction: jest.fn(),
         resetPunchFormAction: jest.fn(),
         submitSoknad: jest.fn(),
-        undoChoiceOfEksisterendeSoknadAction: jest.fn(),
         updateSoknad: jest.fn(),
         setSignaturAction: jest.fn(),
         settJournalpostPaaVent: jest.fn(),
@@ -180,12 +179,13 @@ const setupPunchForm = (
         identState,
         signaturState,
         journalposterState,
+        fellesState: undefined,
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
         journalpostid,
         id: soknadId,
-        navigate: undefined,
+        navigate: jest.fn(),
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
@@ -224,7 +224,7 @@ describe('PunchForm', () => {
     }));
 
     beforeEach(() => {
-        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) => callback({}));
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) => callback({}));
     });
 
     it('Viser skjema', () => {
@@ -279,7 +279,7 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         const punchForm = setupPunchForm({ soknad: initialSoknad }, {});
-        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {},
@@ -449,7 +449,7 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {
@@ -533,7 +533,7 @@ describe('PunchForm', () => {
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-08-30', tom: '2021-09-15' }] }, {});
-        (reactRedux.useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {

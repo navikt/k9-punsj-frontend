@@ -32,7 +32,7 @@ Cypress.Commands.add('soekPaaJournalpost', (journalpostId = '200') => {
     cy.findByRole('button', { name: /søk/i }).click();
 });
 
-Cypress.Commands.add('soknadperioderInput', (fom, tom) => {
+Cypress.Commands.add('soknadperioderInput', () => {
     cy.get('.soknadsperiodecontainer').within(() => {
         cy.findByLabelText(/Fra og med/i)
             .should('exist')
@@ -56,5 +56,5 @@ Cypress.Commands.add('sendInnSoknad', () => {
         cy.findByRole('button', { name: /send inn/i })
             .should('exist')
             .click();
-    })
+    });
 });

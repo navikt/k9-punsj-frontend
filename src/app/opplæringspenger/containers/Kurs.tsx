@@ -26,6 +26,7 @@ const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(institusjonUuidFelt);
     const [isAnnetSelected, setIsAnnetSelected] = useState(false);
 

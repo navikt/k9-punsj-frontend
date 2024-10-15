@@ -20,6 +20,7 @@ interface IOwnProps {
 }
 
 export const OMPAOSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvittering }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
     const intl = useIntl();
 

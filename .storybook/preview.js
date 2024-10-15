@@ -1,6 +1,5 @@
 import IntlProvider from '../src/app/components/intl-provider/IntlProvider';
-import { Modal } from '@navikt/ds-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 window.appSettings = { OIDC_AUTH_PROXY: 'undefined', K9_LOS_URL: 'undefined' };
 
 import '@navikt/ds-css';

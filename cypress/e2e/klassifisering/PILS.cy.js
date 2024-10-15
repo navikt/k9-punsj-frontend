@@ -14,8 +14,6 @@ const punchForDataTestId = 'PILSPunchForm';
 
 const klassifiserModalAlertFeilKlassifisering = 'Det oppstod en feil ved klassifisering.';
 const klassifiserModalAlertFeilKopiering = 'Det oppstod en feil ved kopiering av journalpost.';
-const klassifiserModalAlertFeilJfEtterKopiering =
-    'Det oppsto en feil under journalføring av journalposten etter kopiering. Trykk Avbryt og prøv journalføre uten annen søker siden journalposten ble kopiert.';
 const klassifiserModalAlertFeilSetPåVent = 'Det oppstod en feil når journalpost skulle settes på vent.';
 const alertJournalført = 'Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.';
 

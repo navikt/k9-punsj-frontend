@@ -1,5 +1,5 @@
 import { FormikValues } from 'formik';
-import yup from 'yup';
+import * as yup from 'yup';
 
 import { capitalize } from './utils';
 

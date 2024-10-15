@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+// eslint-disable-next-line import/default
 import WebpackDevServer from 'webpack-dev-server';
 import { config } from 'dotenv';
 import webpackConfig from '../webpack/webpack.config.dev.mjs';

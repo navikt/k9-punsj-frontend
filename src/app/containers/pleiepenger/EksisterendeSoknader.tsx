@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IEksisterendeSoknaderState, IFordelingState, IJournalpost } from 'app/models/types';
+import { IEksisterendeSoknaderState } from 'app/models/types';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';

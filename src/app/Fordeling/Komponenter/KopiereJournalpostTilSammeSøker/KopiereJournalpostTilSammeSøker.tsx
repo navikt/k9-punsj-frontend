@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Alert, Button } from '@navikt/ds-react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';

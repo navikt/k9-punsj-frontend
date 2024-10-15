@@ -42,6 +42,7 @@ export enum FagsakYtelseType {
     OMSORGSPENGER_KS = 'OMP_KS',
     OMSORGSPENGER_MA = 'OMP_MA',
     OMSORGSPENGER_AO = 'OMP_AO',
+    // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
     OMSORGSPENGER_UT = 'OMP',
     OPPLÆRINGSPENGER = 'OLP',
 }

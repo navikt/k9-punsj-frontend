@@ -4,6 +4,7 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import prettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
 import importPlugin from 'eslint-plugin-import';
+// eslint-disable-next-line import/no-unresolved
 import tseslint from 'typescript-eslint';
 
 const OFF = 0;
@@ -28,7 +29,7 @@ export default [
     {
         name: 'base-config',
         files: ['**/*.{js,mjs,ts,jsx,tsx}'],
-        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*'], // specify ignored files
+        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*', '.storybook/**/*'], // specify ignored files
         languageOptions: {
             parser: tsParser,
             sourceType: 'module',
@@ -48,6 +49,7 @@ export default [
             'no-console': WARNING,
             'no-debugger': WARNING,
             'import/no-unresolved': ERROR,
+            'no-duplicate-imports': ERROR,
             'react/prop-types': OFF,
             'react/forbid-prop-types': OFF,
             'react/react-in-jsx-scope': OFF,
@@ -60,6 +62,8 @@ export default [
             'default-param-last': OFF,
             '@typescript-eslint/no-explicit-any': OFF,
             'import/prefer-default-export': OFF,
+            '@typescript-eslint/ban-ts-comment': OFF,
+            'import/named': OFF,
         },
     },
     {
@@ -68,6 +72,7 @@ export default [
         rules: {
             '@typescript-eslint/no-explicit-any': OFF,
             '@typescript-eslint/ban-ts-comment': OFF,
+            'import/no-named-as-default-member': OFF,
         },
     },
 ];
