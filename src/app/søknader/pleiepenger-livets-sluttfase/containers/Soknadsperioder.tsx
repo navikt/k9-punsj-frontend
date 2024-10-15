@@ -10,7 +10,7 @@ import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
-import { Periodepaneler } from 'app/søknader/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/components/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
 import intlHelper from '../../../utils/intlUtils';

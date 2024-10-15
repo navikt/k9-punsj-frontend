@@ -10,7 +10,7 @@ import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
 import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
-import { Periodepaneler } from '../../Periodepaneler';
+import { Periodepaneler } from '../../../../components/Periodepaneler';
 
 import './soknadsperioder.less';
 

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
-import { Periodepaneler } from 'app/søknader/pleiepenger/Periodepaneler';
+import { Periodepaneler } from 'app/components/Periodepaneler';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,

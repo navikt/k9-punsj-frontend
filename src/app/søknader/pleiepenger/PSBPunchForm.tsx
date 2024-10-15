@@ -62,7 +62,7 @@ import EndringAvSøknadsperioder from './containers/EndringAvSøknadsperioder/En
 import OpplysningerOmSoknad from './containers/OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './containers/Soknadsperioder/Soknadsperioder';
 import { PeriodeinfoPaneler } from '../../components/periodeinfoPaneler/PeriodeinfoPaneler';
-import { Periodepaneler } from './Periodepaneler';
+import { Periodepaneler } from '../../components/Periodepaneler';
 import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';
 import PSBSoknadKvittering from './containers/SoknadKvittering/SoknadKvittering';

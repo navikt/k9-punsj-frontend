@@ -7,10 +7,10 @@ import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 
-import AddCircleSvg from '../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
+import AddCircleSvg from '../assets/SVG/AddCircleSVG';
+import BinSvg from '../assets/SVG/BinSVG';
+import { IPeriode } from '../models/types/Periode';
+import intlHelper from '../utils/intlUtils';
 
 interface Props {
     intl: IntlShape;
