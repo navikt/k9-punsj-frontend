@@ -25,14 +25,14 @@ import ApplicationWrapper from './components/application-wrapper/ApplicationWrap
 import AuthCallback from './auth/AuthCallback';
 import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
-import SokIndex from './containers/sok/SokIndex';
+import SokIndex from './home/SokIndex';
 import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import logger from 'redux-logger';
-import { getLocaleFromSessionStorage, setLocaleInSessionStorage } from './utils';
+import { getLocaleFromSessionStorage } from './utils';
 import { logError } from './utils/logUtils';
 import { ROUTES } from './constants/routes';
 
@@ -96,20 +96,14 @@ queryClient.setDefaultOptions({
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
 export const App: React.FC = () => {
-    const [locale, setLocale] = React.useState<Locale>(localeFromSessionStorage);
+    const [locale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
         <Sentry.ErrorBoundary onError={logError}>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ReactQueryDevtools initialIsOpen={false} />
-                    <ApplicationWrapper
-                        locale={locale}
-                        onChangeLocale={(activeLocale: Locale) => {
-                            setLocaleInSessionStorage(activeLocale);
-                            setLocale(activeLocale);
-                        }}
-                    >
+                    <ApplicationWrapper locale={locale}>
                         <SentryRoutes>
                             <Route
                                 path={ROUTES.JOURNALPOST_ROOT}

@@ -12,7 +12,7 @@ import {
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent,
-} from '../../../app/containers/pleiepenger/PSBPunchForm';
+} from '../../../app/søknader/pleiepenger/PSBPunchForm';
 
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
@@ -21,6 +21,7 @@ import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvitter
 import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
 import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState';
 import { ISignaturState } from '../../../app/models/types/SignaturState';
+import { Tidsformat } from '../../../app/utils/timeUtils';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -310,8 +311,10 @@ describe('PunchForm', () => {
                             fom: '2020-12-06',
                             tom: '2021-01-15',
                         },
-                        timer: 5,
-                        minutter: 0,
+                        timer: '5',
+                        minutter: '0',
+                        perDagString: '5 timer',
+                        tidsformat: Tidsformat.TimerOgMin,
                     },
                 ],
             },
@@ -372,8 +375,10 @@ describe('PunchForm', () => {
                                     fom: '2020-12-06',
                                     tom: '2021-01-15',
                                 },
-                                timer: 5,
-                                minutter: 0,
+                                timer: '5',
+                                minutter: '0',
+                                perDagString: '5 timer',
+                                tidsformat: Tidsformat.TimerOgMin,
                             },
                         ],
                     },

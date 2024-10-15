@@ -1,4 +1,4 @@
-import { KorrigeringAvInntektsmeldingFormValues } from 'app/containers/omsorgspenger/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { KorrigeringAvInntektsmeldingFormValues } from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingFormFieldsValues';
 
 import { IPeriode } from './Periode';
 

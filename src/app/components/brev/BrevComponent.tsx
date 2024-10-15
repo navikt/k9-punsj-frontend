@@ -11,7 +11,7 @@ import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { finnArbeidsgivere } from '../../api/api';
-import ErDuSikkerModal from '../../containers/pleiepenger/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/søknader/pleiepenger/ErDuSikkerModal';
 import VerticalSpacer from '../VerticalSpacer';
 import { Brev } from './Brev';
 import Brevmal from './Brevmal';
