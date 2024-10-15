@@ -86,7 +86,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad) => {
+        eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPUTSoknad, index) => {
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad.k9saksnummer || søknad.metadata.eksisterendeFagsak?.fagsakId;
 
@@ -97,7 +97,7 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
 
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
+                <DokumentIdList key={`dok-${index}`} dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
                 søknad.metadata?.eksisterendeFagsak?.behandlingsår,

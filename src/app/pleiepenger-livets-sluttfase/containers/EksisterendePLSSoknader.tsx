@@ -136,7 +136,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        soknader?.forEach((soknadInfo) => {
+        soknader?.forEach((soknadInfo, index) => {
             const søknad = new PLSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
@@ -150,7 +150,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
+                <DokumentIdList key={`dok-${index}`} dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
                 generateDateString(søknad.soeknadsperiode),

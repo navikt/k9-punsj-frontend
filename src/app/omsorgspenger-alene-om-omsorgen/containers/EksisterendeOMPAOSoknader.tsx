@@ -88,7 +88,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPAOSoknad) => {
+        eksisterendeSoeknader?.søknader?.forEach((søknad: IOMPAOSoknad, index) => {
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
 
@@ -103,7 +103,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                     ? søknad.barn.norskIdent
                     : søknad.barn.foedselsdato && datetime(intl, TimeFormat.DATE_SHORT, søknad.barn.foedselsdato)) ||
                     '',
-                <DokumentIdList dokUrlParametre={dokUrlParametre} />,
+                <DokumentIdList key={`dok-${index}`} dokUrlParametre={dokUrlParametre} />,
                 Array.from(søknad.journalposter).join(', '),
                 k9saksnummer,
                 søknad.periode && søknad.periode.fom ? dayjs(søknad.periode.fom).format('DD.MM.YYYY') : '',
@@ -126,7 +126,6 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
             rows.push(
                 <Table.Row key={soknadId}>
                     {rowContent.filter((v) => !!v).length ? (
-                        
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">

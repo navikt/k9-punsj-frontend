@@ -1,7 +1,4 @@
 import initialState from '../../state/EksisterendeSoknaderInitialState';
-import pleiepengerSoknadSomKanSendesInn from '../../fixtures/pleiepengerSoknadSomKanSendesInn';
-import { testHandlers } from 'mocks/testHandlers';
-import { ApiPath } from 'app/apiConfig';
 
 describe('Eksisterende søknader pleiepenger', () => {
     beforeEach(() => {

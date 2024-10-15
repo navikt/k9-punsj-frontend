@@ -1,9 +1,10 @@
+// eslint-disable-next-line import/no-unresolved
 import tsParser from '@typescript-eslint/parser';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-config-prettier';
 import eslintPluginReact from 'eslint-plugin-react';
-import eslintImport from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import';
+import tseslint from 'typescript-eslint';
 
 const OFF = 0;
 const WARNING = 1;
@@ -11,20 +12,6 @@ const ERROR = 2;
 
 export default [
     {
-        name: 'base-config',
-        files: ['**/*.{js,mjs,ts,jsx,tsx}'],
-        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*'], // specify ignored files
-        languageOptions: {
-            parser: tsParser,
-            sourceType: 'module',
-            ecmaVersion: 'latest', // Ensure that ES2023 or latest is supported
-        },
-        plugins: {
-            '@typescript-eslint': typescriptPlugin,
-            'react-hooks': reactHooksPlugin,
-            react: eslintPluginReact,
-            import: eslintImport,
-        },
         settings: {
             react: {
                 version: 'detect',
@@ -36,17 +23,40 @@ export default [
                 },
             },
         },
+    },
+
+    {
+        name: 'base-config',
+        files: ['**/*.{js,mjs,ts,jsx,tsx}'],
+        ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*'], // specify ignored files
+        languageOptions: {
+            parser: tsParser,
+            sourceType: 'module',
+            ecmaVersion: 'latest', // Ensure that ES2023 or latest is supported
+        },
+        plugins: {
+            'react-hooks': reactHooksPlugin,
+        },
+    },
+    eslintPluginReact.configs.flat.recommended,
+    ...tseslint.configs.recommended,
+    prettier,
+    importPlugin.flatConfigs.recommended,
+    {
         rules: {
             'react/no-unused-prop-types': WARNING,
             'no-console': WARNING,
             'no-debugger': WARNING,
+            'import/no-unresolved': ERROR,
             'react/prop-types': OFF,
             'react/forbid-prop-types': OFF,
+            'react/react-in-jsx-scope': OFF,
+            'react/display-name': OFF,
             '@typescript-eslint/no-use-before-define': [ERROR],
             '@typescript-eslint/no-shadow': ERROR,
             'no-use-before-define': OFF,
             'no-shadow': OFF,
-            'no-unused-vars': WARNING,
+            'no-unused-vars': OFF,
             'default-param-last': OFF,
             '@typescript-eslint/no-explicit-any': OFF,
             'import/prefer-default-export': OFF,
@@ -60,5 +70,4 @@ export default [
             '@typescript-eslint/ban-ts-comment': OFF,
         },
     },
-    prettier,
 ];
