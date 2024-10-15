@@ -8,8 +8,8 @@ import { Alert, Heading, Panel, TextField } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DateInput from 'app/components/skjema/DateInput';
 
-import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
-import intlHelper from '../../../utils/intlUtils';
+import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
+import intlHelper from '../../../../utils/intlUtils';
 import './opplysningerOmOMPMASoknad.less';
 
 interface IOwnProps {

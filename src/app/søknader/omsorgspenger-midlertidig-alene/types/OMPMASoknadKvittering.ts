@@ -1,4 +1,4 @@
-import BegrunnelseForInnsending from '../../models/types/BegrunnelseForInnsending';
+import BegrunnelseForInnsending from '../../../models/types/BegrunnelseForInnsending';
 import { AnnenForelderType } from './OMPMASoknad';
 
 export interface IOMPMASoknadKvitteringJournalpost {

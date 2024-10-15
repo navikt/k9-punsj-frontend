@@ -9,13 +9,13 @@ import LabelValue from 'app/components/skjema/LabelValue';
 import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 
-import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../utils';
+} from '../../../../utils';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 import './ompMASoknadKvittering.less';
 
