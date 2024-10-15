@@ -24,7 +24,7 @@ import { RegistreringsValg as PSBRegistreringsValg } from 'app/søknader/pleiepe
 import { PSBPunchForm } from 'app/søknader/pleiepenger/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
-import SendBrevPåFagsak from './brev-fagsak/SendBrevPåFagsak';
+import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
 import JournalførOgFortsettValg from '../fordeling/Komponenter/JournalførOgFortsettValg';
 
 const JournalpostRouter: React.FC = () => {

@@ -10,7 +10,7 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/stat
 import Fagsak from 'app/types/Fagsak';
 import { finnForkortelseForDokumenttype } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
-import BrevComponent from '../../components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/BrevComponent';
 
 import './sendBrevPåFagsak.less';
 
