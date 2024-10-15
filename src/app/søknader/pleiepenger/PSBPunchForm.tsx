@@ -60,7 +60,7 @@ import { OkGaaTilLosModal } from '../../components/okGaaTilLosModal/OkGaaTilLosM
 import ArbeidsforholdPanel from './containers/Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './containers/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './containers/OpplysningerOmSoknad/OpplysningerOmSoknad';
-import Soknadsperioder from './containers/Soknadsperioder';
+import Soknadsperioder from './containers/Soknadsperioder/Soknadsperioder';
 import { PeriodeinfoPaneler } from '../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from './Periodepaneler';
 import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';

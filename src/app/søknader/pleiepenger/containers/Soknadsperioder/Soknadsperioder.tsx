@@ -3,14 +3,14 @@ import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import CalendarSvg from '../../../assets/SVG/CalendarSVG';
-import VerticalSpacer from '../../../components/VerticalSpacer';
-import { generateDateString } from '../../../components/skjema/skjemaUtils';
+import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
+import CalendarSvg from 'app/assets/SVG/CalendarSVG';
+import VerticalSpacer from 'app/components/VerticalSpacer';
+import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
-import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from '../../../models/types';
-import { RootStateType } from '../../../state/RootState';
-import { Periodepaneler } from '../Periodepaneler';
+import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from 'app/models/types';
+import { RootStateType } from 'app/state/RootState';
+import { Periodepaneler } from '../../Periodepaneler';
 
 import './soknadsperioder.less';
 
