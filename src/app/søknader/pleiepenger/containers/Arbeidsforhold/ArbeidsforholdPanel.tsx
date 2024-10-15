@@ -20,7 +20,7 @@ import { CountrySelect } from '../../../../components/country-select/CountrySele
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
-import { arbeidstidInformasjon } from '../../ArbeidstidInfo';
+import { arbeidstidInformasjon } from '../../../../components/ArbeidstidInfo';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 
 const erYngreEnn4år = (dato: string) => {

@@ -14,7 +14,7 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import { ApiPath } from '../../../apiConfig';
-import { arbeidstidInformasjon } from 'app/søknader/pleiepenger/ArbeidstidInfo';
+import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
 import ArbeidsgiverResponse from '../../../models/types/ArbeidsgiverResponse';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
 import ActionType from '../types/actionTypes';
