@@ -1,5 +1,5 @@
-import backendSoknad from '../../../cypress/fixtures/omp_ut/backendSoknad';
-import frontendSoknad from '../../../cypress/fixtures/omp_ut/frontendSoknad';
+import backendSoknad from '../../../../cypress/fixtures/omp_ut/backendSoknad';
+import frontendSoknad from '../../../../cypress/fixtures/omp_ut/frontendSoknad';
 import { backendTilFrontendMapping, frontendTilBackendMapping } from './utils';
 import { timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 

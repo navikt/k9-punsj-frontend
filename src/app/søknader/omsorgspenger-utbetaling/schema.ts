@@ -4,7 +4,7 @@ import { IPeriode } from 'app/models/types';
 import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
 
-import nb from '../i18n/nb.json';
+import nb from '../../i18n/nb.json';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
 
 export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPeriode[]) => ({

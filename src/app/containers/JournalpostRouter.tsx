@@ -10,8 +10,8 @@ import { OMPKSRegistreringsValg } from 'app/omsorgspenger-kronisk-sykt-barn/cont
 import { OMPKSPunchForm } from 'app/omsorgspenger-kronisk-sykt-barn/containers/OMPKSPunchForm';
 import { OMPMARegistreringsValg } from 'app/omsorgspenger-midlertidig-alene/containers/OMPMARegistreringsValg';
 import OMPMAPunchFormContainer from 'app/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer';
-import { OMPUTRegistreringsValg } from 'app/omsorgspenger-utbetaling/containers/OMPUTRegistreringsValg';
-import OMPUTPunchFormContainer from 'app/omsorgspenger-utbetaling/containers/OMPUTPunchFormContainer';
+import { OMPUTRegistreringsValg } from 'app/søknader/omsorgspenger-utbetaling/containers/OMPUTRegistreringsValg';
+import OMPUTPunchFormContainer from 'app/søknader/omsorgspenger-utbetaling/containers/OMPUTPunchFormContainer';
 import { OLPRegistreringsValg } from 'app/søknader/opplæringspenger/containers/OLPRegistreringsValg';
 import OLPPunchFormContainer from 'app/søknader/opplæringspenger/containers/OLPPunchFormContainer';
 import { OMPAORegistreringsValg } from 'app/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';

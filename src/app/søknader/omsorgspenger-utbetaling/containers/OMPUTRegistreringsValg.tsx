@@ -8,9 +8,9 @@ import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 
-import { IFordelingState } from '../../models/types/FordelingState';
-import { IIdentState } from '../../models/types/IdentState';
-import { RootStateType } from '../../state/RootState';
+import { IFordelingState } from '../../../models/types/FordelingState';
+import { IIdentState } from '../../../models/types/IdentState';
+import { RootStateType } from '../../../state/RootState';
 import api, { hentEksisterendeSoeknader } from '../api';
 import { EksisterendeOMPUTSoknader } from './EksisterendeOMPUTSoknader';
 
