@@ -21,10 +21,10 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import BinSvg from '../../assets/SVG/BinSVG';
-import { IPeriode } from '../../models/types/Periode';
-import intlHelper from '../../utils/intlUtils';
-import { Periodepaneler } from './Periodepaneler';
+import BinSvg from '../../../../assets/SVG/BinSVG';
+import { IPeriode } from '../../../../models/types/Periode';
+import intlHelper from '../../../../utils/intlUtils';
+import { Periodepaneler } from '../../Periodepaneler';
 import './utenlandsopphold.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
