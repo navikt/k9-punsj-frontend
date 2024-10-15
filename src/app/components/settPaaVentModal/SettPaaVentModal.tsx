@@ -8,7 +8,7 @@ import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';
 import { apiUrl } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
-import './okGaaTilLosModal.less';
+import './settPaaVentModal.less';
 
 interface ISettPaaVentModalProps {
     submit: () => void;

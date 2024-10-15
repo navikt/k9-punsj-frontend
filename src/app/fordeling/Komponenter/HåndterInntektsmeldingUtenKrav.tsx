@@ -20,10 +20,10 @@ import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
-import { OkGaaTilLosModal } from '../../søknader/pleiepenger/OkGaaTilLosModal';
-import OpprettOppgaveIGosysModal from '../../søknader/pleiepenger/OpprettOppgaveIGosysModal';
-import SettPaaVentErrorModal from '../../søknader/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../søknader/pleiepenger/SettPaaVentModal';
+import { OkGaaTilLosModal } from '../../components/okGaaTilLosModal/OkGaaTilLosModal';
+import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
+import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';
+import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';
 import { Dispatch } from 'redux';
 
 interface Props {

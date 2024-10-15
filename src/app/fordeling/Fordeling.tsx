@@ -11,7 +11,7 @@ import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { ROUTES } from 'app/constants/routes';
 import HåndterInntektsmeldingUtenKrav from 'app/fordeling/Komponenter/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 import {
     DokumenttypeForkortelse,
     FordelingDokumenttype,
