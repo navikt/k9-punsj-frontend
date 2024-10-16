@@ -10,9 +10,9 @@ import {
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
-import { ITimerOgMinutter } from '../../models/types/Periode';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
-import { stringToNumber } from '../../utils';
+import { ITimerOgMinutter } from 'app/models/types/Periode';
+import { Periodeinfo } from 'app/models/types/Periodeinfo';
+import { stringToNumber } from 'app/utils';
 
 export function pfTimerMinutter(): PeriodeinfoComponent<ITimerOgMinutter> {
     return (

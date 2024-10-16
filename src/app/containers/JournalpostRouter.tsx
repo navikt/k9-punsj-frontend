@@ -21,7 +21,7 @@ import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
 import Fordeling from '../fordeling/Fordeling';
 import { PSBRegistreringsValg } from 'app/søknader/pleiepenger/containers/RegistreringsValg/PSBRegistreringsValg';
-import { PSBPunchForm } from 'app/søknader/pleiepenger/PSBPunchForm';
+import { PSBPunchForm } from 'app/søknader/pleiepenger/containers/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
