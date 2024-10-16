@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
+
 import { IntlShape } from 'react-intl';
 import { Textarea } from '@navikt/ds-react';
-
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
@@ -9,9 +9,8 @@ import {
     UpdatePeriodeinfoInSoknadState,
 } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import intlHelper from 'app/utils/intlUtils';
-
-import { GetErrorMessage, ITilleggsinformasjon } from '../../models/types';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import { GetErrorMessage, ITilleggsinformasjon } from 'app/models/types';
+import { Periodeinfo } from 'app/models/types/Periodeinfo';
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
     return (

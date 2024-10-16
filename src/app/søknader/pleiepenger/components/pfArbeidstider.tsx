@@ -12,9 +12,9 @@ import {
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
-import UtregningArbeidstid from '../../components/timefoering/UtregningArbeidstidDesimaler';
-import { IArbeidstidPeriodeMedTimer } from '../../models/types/Periode';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import UtregningArbeidstid from '../../../components/timefoering/UtregningArbeidstidDesimaler';
+import { IArbeidstidPeriodeMedTimer } from '../../../models/types/Periode';
+import { Periodeinfo } from '../../../models/types/Periodeinfo';
 
 export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTimer> {
     return (

@@ -67,8 +67,8 @@ import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVent
 import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';
 import PSBSoknadKvittering from './containers/SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './containers/Utenlandsopphold/Utenlandsopphold';
-import { pfLand } from './pfLand';
-import { pfTilleggsinformasjon } from './pfTilleggsinformasjon';
+import { pfLand } from './components/pfLand';
+import { pfTilleggsinformasjon } from './components/pfTilleggsinformasjon';
 import { PSBKvitteringContainer } from './containers/SoknadKvittering/SoknadKvitteringContainer';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
 import { Textarea } from '@navikt/ds-react';
-import { pfTilleggsinformasjon } from '../../../app/søknader/pleiepenger/pfTilleggsinformasjon';
+import { pfTilleggsinformasjon } from '../../../app/søknader/pleiepenger/components/pfTilleggsinformasjon';
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import {

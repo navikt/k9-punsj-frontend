@@ -33,7 +33,7 @@ import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosMod
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
-import { pfLand } from 'app/søknader/pleiepenger/pfLand';
+import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';

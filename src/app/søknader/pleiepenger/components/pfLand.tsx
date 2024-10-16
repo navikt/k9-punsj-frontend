@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React from 'react';
 import { IntlShape } from 'react-intl';
-
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
@@ -9,9 +8,9 @@ import {
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
-import { CountrySelect } from '../../components/country-select/CountrySelect';
-import { IOppholdsLand } from '../../models/types/PSBSoknad';
-import { Periodeinfo } from '../../models/types/Periodeinfo';
+import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import { IOppholdsLand } from 'app/models/types/PSBSoknad';
+import { Periodeinfo } from 'app/models/types/Periodeinfo';
 
 export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
     return (
