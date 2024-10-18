@@ -38,7 +38,7 @@ import Behandlingsknapp from './Behandlingsknapp';
 import { opprettGosysOppgave as omfordelAction } from 'app/state/actions/GosysOppgaveActions';
 import { useMutation } from 'react-query';
 import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
+import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 
 interface IJournalførOgFortsettStateProps {
     journalpost: IJournalpost;

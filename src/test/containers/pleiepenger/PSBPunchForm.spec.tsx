@@ -12,7 +12,7 @@ import {
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent,
-} from '../../../app/søknader/pleiepenger/PSBPunchForm';
+} from '../../../app/søknader/pleiepenger/containers/PSBPunchForm';
 
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';

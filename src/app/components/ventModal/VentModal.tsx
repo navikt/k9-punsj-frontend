@@ -4,9 +4,9 @@ import { useMutation } from 'react-query';
 import { Modal } from '@navikt/ds-react';
 
 import { settJournalpostPaaVent } from 'app/api/api';
-import { OkGaaTilLosModal } from 'app/søknader/pleiepenger/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/søknader/pleiepenger/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/søknader/pleiepenger/SettPaaVentModal';
+import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
+import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
 
 type OwnProps = {
     journalpostId: string;
