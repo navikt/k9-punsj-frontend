@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
-import { formattereTimerForArbeidstakerPerioder } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/SoknadKvittering';
+import { formattereTimerForArbeidstakerPerioder } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/soknadKvitteringUtils';
 import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 

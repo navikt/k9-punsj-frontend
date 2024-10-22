@@ -125,8 +125,8 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
 
     return (
-        <div className={classNames('SoknadKvitteringContainer')}>
-            <Heading size="medium" level="2">
+        <div className={classNames('SoknadKvitteringContainer')} data-testid="kvitter">
+            <Heading size="medium" level="2" data-testid="kvittering.oppsummering">
                 <FormattedMessage id={'skjema.kvittering.oppsummering'} />
             </Heading>
             {kopierJournalpostSuccess && (
@@ -150,7 +150,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                 </div>
             )}
             {visSoknadsperiode && (
-                <div>
+                <div data-testid="soknadsperiode">
                     <h3>
                         <FormattedMessage id={'skjema.soknadskvittering.soknadsperiode'} />
                     </h3>
@@ -160,7 +160,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {mottattDato && (
-                <div>
+                <div data-testid="mottatt-dato">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
                     </h3>
@@ -172,7 +172,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                         {`${formattereDatoFraUTCTilGMT(mottattDato)} - ${formattereTidspunktFraUTCTilGMT(mottattDato)}`}
                     </p>
                     {visTrukkedePerioder && (
-                        <p>
+                        <p data-testid="perioderSomFjernet">
                             <b>
                                 <FormattedMessage id={'skjema.perioderSomFjernet'} />
                             </b>
@@ -180,7 +180,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                         </p>
                     )}
                     {begrunnelseForInnsending && (
-                        <p>
+                        <p data-testid="begrunnelseForEndring">
                             <b>
                                 <FormattedMessage id={'skjema.begrunnelseForEndring'} />
                             </b>
@@ -191,7 +191,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visUtenlandsopphold && (
-                <div>
+                <div data-testid="utenlandsopphold">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
                     </h3>
@@ -201,7 +201,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visFerie && (
-                <div>
+                <div data-testid="ferie">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.FERIE} />
                     </h3>
@@ -215,7 +215,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visFerieSomSkalSLettes && (
-                <div>
+                <div data-testid="ferieSomSkalSlettes">
                     <h3>
                         <FormattedMessage id={'skjema.ferie.skalslettes'} />
                     </h3>
@@ -229,7 +229,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visOpplysningerOmSoker && (
-                <div>
+                <div data-testid="opplysningerOmSoker">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
                     </h3>
@@ -256,7 +256,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     <hr className={classNames('linje')} />
 
                     {visArbeidsforhold && (
-                        <div>
+                        <div data-testid="arbeidsforhold">
                             <h3>
                                 <FormattedMessage id={'arbeidstaker'} />
                             </h3>
@@ -306,7 +306,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
 
                     {visFrilanserArbeidstidInfo && (
-                        <div>
+                        <div data-testid="frilanser">
                             <h3>
                                 <FormattedMessage id={'frilanser'} />
                             </h3>
@@ -354,7 +354,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
 
                     {visSelvstendigNæringsdrivendeInfo && (
-                        <div>
+                        <div data-testid="selvstendignæringsdrivende">
                             <h3>
                                 <FormattedMessage id={'selvstendig'} />
                             </h3>
@@ -389,7 +389,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visOmsorgstilbud && (
-                <div>
+                <div data-testid="visOmsorgstilbud">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.OMSORGSTILBUD} />
                     </h3>
@@ -406,12 +406,12 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {(visNattevak || visBeredskap) && (
                 <div>
-                    <h3>
+                    <h3 data-testid="beredskapnettevaak">
                         <FormattedMessage id={PunchFormPaneler.BEREDSKAPNATTEVAAK} />
                     </h3>
                     <hr className={classNames('linje')} />
                     {visBeredskap && (
-                        <>
+                        <div data-testid="beredskap">
                             <h4 className="soknadKvitteringUnderTittel">
                                 <FormattedMessage id={'skjema.beredskap.overskrift'} />
                             </h4>
@@ -422,11 +422,11 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                                 properties={['tilleggsinformasjon']}
                                 lessClassForAdjustment="visningAvPerioderSoknadBeredskap"
                             />
-                        </>
+                        </div>
                     )}
 
                     {visNattevak && (
-                        <div>
+                        <div data-testid="nattevak">
                             <h4 className="soknadKvitteringUnderTittel">
                                 <FormattedMessage id={'skjema.nattevaak.overskrift'} />
                             </h4>
@@ -443,7 +443,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {visMedlemskap && (
-                <div>
+                <div data-testid="medlemskap">
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
                     </h3>
@@ -458,7 +458,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {!!journalposter && journalposter.length > 0 && (
-                <div>
+                <div data-testid="tilleggsopplysninger">
                     <h3>
                         <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
                     </h3>

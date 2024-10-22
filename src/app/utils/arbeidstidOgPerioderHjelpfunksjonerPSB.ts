@@ -1,4 +1,4 @@
-import { IArbeidstidPeriodeMedTimer, IPeriode, IPunchPSBFormState, Periodeinfo } from '../../../models/types';
+import { IArbeidstidPeriodeMedTimer, IPeriode, IPunchPSBFormState, Periodeinfo } from '../models/types';
 
 export const sjekkHvisArbeidstidPeriodeMedTimerErFylltUt = (
     periode: Periodeinfo<IArbeidstidPeriodeMedTimer>[],
