@@ -195,6 +195,7 @@
     "fordeling.klassifiserModal.ventJpJournalføres": "Journalpost journalføres....",
     "fordeling.klassifiserModal.sendBrev.checkbox": "Send brev til søker, arbeidsgiver eller tredjepart",
     "fordeling.registreringsValg.tilbake": "Tilbake",
+    "fordeling.registreringsValg.createSoknadRequestError": "Det oppsto en feil under opprettelse av søknad.",
     "fordeling.settJpPåVent.modal.tittel": "Sett på vent",
     "fordeling.settJpPåVent.modal.info": "Oppgaven settes på vent til {dato}",
     "fordeling.settJpPåVent.modal.btn.avbryt": "Avbryt",

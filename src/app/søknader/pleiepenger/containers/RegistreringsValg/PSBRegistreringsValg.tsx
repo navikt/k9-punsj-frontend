@@ -55,7 +55,7 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         if (!fordelingState.dokumenttype) {
             navigate(location.pathname.replace('soknader/', ''));
         }
-    }, [fordelingState.dokumenttype, location.pathname, navigate]);
+    }, []);
 
     useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
@@ -63,14 +63,14 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         }
 
         getAlleJournalposter(søkerId);
-    }, [søkerId, pleietrengendeId]);
+    }, []);
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
-        if (søknader?.length === 0) {
+        if (!isEksisterendeSoknaderLoading && søknader?.length === 0) {
             createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [søknader, journalpostid, pleietrengendeId, søkerId]);
+    }, [isEksisterendeSoknaderLoading, søknader]);
 
     useEffect(() => {
         if (isSoknadCreated && soknadid) {
@@ -91,7 +91,7 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
     if (createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="fordeling.registreringsValg.createSoknadRequestError" />
             </Alert>
         );
     }
