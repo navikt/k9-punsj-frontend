@@ -154,7 +154,7 @@ const ArbeidsforholdPanel = ({
                 )}
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                     <>
-                        {arbeidstidInformasjon(intl)}
+                        {arbeidstidInformasjon()}
                         <VerticalSpacer eightPx />
                         <ArbeidstidKalender
                             nyeSoknadsperioder={soeknadsperiode}
@@ -754,7 +754,7 @@ const ArbeidsforholdPanel = ({
                     </>
                 )}
                 <VerticalSpacer eightPx />
-                {arbeidstidInformasjon(intl)}
+                {arbeidstidInformasjon()}
                 <VerticalSpacer eightPx />
                 <ArbeidstidKalender
                     nyeSoknadsperioder={soeknadsperiode}

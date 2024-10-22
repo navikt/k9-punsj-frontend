@@ -268,7 +268,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     )}
                 </div>
             </div>
-            {arbeidstidInformasjon(intl)}
+            {arbeidstidInformasjon()}
             <VerticalSpacer eightPx />
             <ArbeidstidKalender
                 nyeSoknadsperioder={nyeSoknadsperioder}
