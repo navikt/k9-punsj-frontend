@@ -33,6 +33,9 @@ export default [
         ignores: ['node_modules/**/*', 'dist/**/*', '.yarn/**/*', '.yarn', 'src/app/build/**/*', '.storybook/**/*'], // specify ignored files
         languageOptions: {
             parser: tsParser,
+            // parserOptions: {
+            //     project: './tsconfig.json', // Point to your tsconfig.json file
+            //},
             sourceType: 'module',
             ecmaVersion: 'latest',
         },

@@ -17,7 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import VerticalSpacer from '../../VerticalSpacer';
 import { CountrySelect } from '../../country-select/CountrySelect';
-import { arbeidstidInformasjon } from 'app/søknader/pleiepenger/ArbeidstidInfo';
+import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
 import { Arbeidstaker, IPeriode } from '../../../models/types';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
@@ -154,7 +154,7 @@ const ArbeidsforholdPanel = ({
                 )}
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                     <>
-                        {arbeidstidInformasjon(intl)}
+                        {arbeidstidInformasjon()}
                         <VerticalSpacer eightPx />
                         <ArbeidstidKalender
                             nyeSoknadsperioder={soeknadsperiode}
@@ -754,7 +754,7 @@ const ArbeidsforholdPanel = ({
                     </>
                 )}
                 <VerticalSpacer eightPx />
-                {arbeidstidInformasjon(intl)}
+                {arbeidstidInformasjon()}
                 <VerticalSpacer eightPx />
                 <ArbeidstidKalender
                     nyeSoknadsperioder={soeknadsperiode}

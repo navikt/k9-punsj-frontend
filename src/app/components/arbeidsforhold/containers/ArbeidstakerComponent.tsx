@@ -6,7 +6,7 @@ import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/søknader/pleiepenger/Listepaneler';
+import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/components/Listepaneler';
 import usePrevious from 'app/hooks/usePrevious';
 import { Arbeidstaker, GetErrorMessage, IArbeidstaker, IPeriode, OrgOrPers } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -14,7 +14,7 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import { ApiPath } from '../../../apiConfig';
-import { arbeidstidInformasjon } from 'app/søknader/pleiepenger/ArbeidstidInfo';
+import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
 import ArbeidsgiverResponse from '../../../models/types/ArbeidsgiverResponse';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
 import ActionType from '../types/actionTypes';
@@ -268,7 +268,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     )}
                 </div>
             </div>
-            {arbeidstidInformasjon(intl)}
+            {arbeidstidInformasjon()}
             <VerticalSpacer eightPx />
             <ArbeidstidKalender
                 nyeSoknadsperioder={nyeSoknadsperioder}

@@ -1,15 +1,23 @@
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
-import { mocked } from 'jest-mock';
-import * as React from 'react';
-import { IntlShape } from 'react-intl';
+import React from 'react';
 
-import { PSBSoknadKvittering } from '../../../app/søknader/pleiepenger/SoknadKvittering/SoknadKvittering';
+import { render, screen } from '@testing-library/react';
+import { mocked } from 'jest-mock';
+import { useSelector } from 'react-redux';
+import { IntlProvider } from 'react-intl';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
+import { PSBSoknadKvittering } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/SoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 
-jest.mock('react-intl');
-jest.mock('react-router');
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ id }: { id: string }) => id,
+}));
+
+jest.mock('react-redux', () => ({
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn(),
+}));
+
 jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
@@ -188,101 +196,219 @@ const minimalResponse: IPSBSoknadKvittering = {
     begrunnelseForInnsending: { tekst: '' },
 };
 
-const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
-    return shallow(<PSBSoknadKvittering innsendtSøknad={response} />);
-};
-
 describe('SoknadKvittering', () => {
-    const soknadKvitteringFull = setupSoknadKvittering(fullResponse);
-    const soknadKvitteringTom = setupSoknadKvittering(minimalResponse);
+    beforeAll(() => {
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+            callback({
+                identState: {
+                    annenSokerIdent: '12345678901', // mock the annenSokerIdent value
+                },
+                felles: { kopierJournalpostSuccess: false },
+            }),
+        );
 
-    it('Viser søknadsperioder', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.soknadskvittering.soknadsperiode')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('01.06.2021 - 30.06.2021')).toBe(true);
-
-        expect(soknadKvitteringTom.text().includes('skjema.soknadskvittering.soknadsperiode')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('01.06.2021 - 30.06.2021')).toBe(true);
+        mocked(intlHelper).mockImplementation((intl, id) => id);
     });
 
-    it('Viser opplysninger om mottatt dato', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.opplysningeromsoknad')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('skjema.mottakelsesdato:')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('12.10.2020')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('14:53')).toBe(true);
+    const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
+        mocked(intlHelper).mockImplementation((intl, id) => id);
+        return render(
+            <IntlProvider locale="en" messages={{}}>
+                <PSBSoknadKvittering innsendtSøknad={response} />
+            </IntlProvider>,
+        );
+    };
 
-        expect(soknadKvitteringTom.text().includes('skjema.mottakelsesdato:')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('12.10.2020')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('14:53')).toBe(true);
+    it('Viser full kvittering', () => {
+        setupSoknadKvittering(fullResponse);
+
+        // screen.debug();
+
+        // Viser kvittering side
+        expect(screen.getByTestId('kvittering.oppsummering').textContent).toContain('skjema.kvittering.oppsummering');
+
+        //Viser søknadsperioder
+        const søknadsperiode = screen.getByTestId('soknadsperiode').textContent;
+        expect(søknadsperiode).toContain('skjema.soknadskvittering.soknadsperiode');
+        expect(søknadsperiode).toContain('01.06.2021 - 30.06.2021');
+
+        // Viser opplysninger om mottatt dato
+        const mottattDato = screen.getByTestId('mottatt-dato').textContent;
+        expect(mottattDato).toContain('skjema.opplysningeromsoknad');
+        expect(mottattDato).toContain('skjema.mottakelsesdato');
+        expect(mottattDato).toContain('12.10.2020');
+        expect(mottattDato).toContain('14:53');
+        expect(mottattDato).toContain('12.10.2020');
+
+        // Viser utenlandsoppehold
+        const utenlandsopphold = screen.getByTestId('utenlandsopphold').textContent;
+        expect(utenlandsopphold).toContain('skjema.utenlandsopphold.opplysninger');
+        expect(utenlandsopphold).toContain('01.06.2021 - 16.06.2021');
+        expect(utenlandsopphold).toContain('Bahrain');
+
+        // ferie
+        const ferie = screen.getByTestId('ferie').textContent;
+        expect(ferie).toContain('skjema.ferieskjema.periode.overskrift');
+        expect(ferie).toContain('01.06.2021 - 04.06.2021');
+
+        // Viser opplysninger om soker
+        const opplysningerOmSoker = screen.getByTestId('opplysningerOmSoker').textContent;
+        expect(opplysningerOmSoker).toContain('skjema.opplysningeromsoker');
+        expect(opplysningerOmSoker).toContain('skjema.relasjontilbarnet.kvittering');
+        expect(opplysningerOmSoker).toContain('Medmor');
+
+        // Viser arbeidstaker
+        const arbeidsforhold = screen.getByTestId('arbeidsforhold').textContent;
+
+        expect(arbeidsforhold).toContain('arbeidstaker');
+        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.orgnr');
+        expect(arbeidsforhold).toContain('1313123212323');
+        expect(arbeidsforhold).toContain('skjema.periode.overskrift');
+        expect(arbeidsforhold).toContain('01.06.2021 - 30.06.2021');
+        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.timernormalt');
+        expect(arbeidsforhold).toContain('8 timer');
+        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.timerfaktisk');
+        expect(arbeidsforhold).toContain('5 timer');
+
+        // Viser frilanser
+        const frilanser = screen.getByTestId('frilanser').textContent;
+        expect(frilanser).toContain('frilanser');
+        expect(frilanser).toContain('skjema.frilanserdato');
+        expect(frilanser).toContain('01.01.2021');
+        expect(frilanser).toContain('skjema.periode.overskrift');
+        expect(frilanser).toContain('01.06.2021 - 30.06.20218');
+        expect(frilanser).toContain('skjema.arbeid.arbeidstaker.timernormalt');
+        expect(frilanser).toContain('8 timer');
+        expect(frilanser).toContain('5 timer');
+        expect(frilanser).toContain('skjema.arbeid.arbeidstaker.timerfaktisk');
+
+        // Viser selvstendig næringsdrivende
+        const selvstendigNæringsdrivende = screen.getByTestId('selvstendignæringsdrivende').textContent;
+        expect(selvstendigNæringsdrivende).toContain('selvstendig');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.arbeidstaker.orgnr');
+        expect(selvstendigNæringsdrivende).toContain('231232321323');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.virksomhetsnavn');
+        expect(selvstendigNæringsdrivende).toContain('Navn As');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.når');
+        expect(selvstendigNæringsdrivende).toContain('11.06.2015');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.type');
+        expect(selvstendigNæringsdrivende).toContain('Fiske, Dagmamma i eget hjem/familiebarnehage');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.registrertINorge');
+        expect(selvstendigNæringsdrivende).toContain('Ja');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.registrertLand');
+        expect(selvstendigNæringsdrivende).toContain('USA');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.varigendring');
+        expect(selvstendigNæringsdrivende).toContain('Ja');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.varigendringdato');
+        expect(selvstendigNæringsdrivende).toContain('24.02.2021');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.endringbegrunnelse');
+        expect(selvstendigNæringsdrivende).toContain('begunnelse');
+        expect(selvstendigNæringsdrivende).toContain('skjema.sn.endringinntekt');
+        expect(selvstendigNæringsdrivende).toContain('1000000');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.regnskapsførernavn');
+        expect(selvstendigNæringsdrivende).toContain('Test');
+        expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.regnskapsførertlf');
+        expect(selvstendigNæringsdrivende).toContain('46320852');
+
+        // Viser omsorgstilbud
+        const omsorgstilbud = screen.getByTestId('visOmsorgstilbud').textContent;
+        expect(omsorgstilbud).toContain('skjema.omsorgstilbud.overskrift');
+        expect(omsorgstilbud).toContain('skjema.periode.overskrift');
+        expect(omsorgstilbud).toContain('skjema.omsorgstilbud.gjennomsnittlig');
+        expect(omsorgstilbud).toContain('14.06.2021 - 19.06.2021');
+        expect(omsorgstilbud).toContain('7 timer og 30 minutter');
+
+        // Viser beredskap og nattevåk
+        const beredskapnettevaak = screen.getByTestId('beredskapnettevaak').textContent;
+        expect(beredskapnettevaak).toContain('skjema.beredskapognattevaak.overskrift');
+
+        const beredskap = screen.getByTestId('beredskap').textContent;
+        expect(beredskap).toContain('skjema.beredskap.overskrift');
+        expect(beredskap).toContain('Beredskap');
+        expect(beredskap).toContain('skjema.periode.overskrift');
+        expect(beredskap).toContain('01.06.2021 - 10.06.2021');
+        expect(beredskap).toContain('skjema.beredskap.tilleggsinfo.kvittering');
+
+        const nattevaak = screen.getByTestId('nattevak').textContent;
+        expect(nattevaak).toContain('skjema.nattevaak.overskrift');
+        expect(nattevaak).toContain('Nattevåk');
+        expect(nattevaak).toContain('skjema.periode.overskrift');
+        expect(nattevaak).toContain('21.06.2021 - 25.06.2021');
+        expect(nattevaak).toContain('skjema.beredskap.tilleggsinfo.kvittering');
+
+        // Viser medlemskap
+        const medlemskap = screen.getByTestId('medlemskap').textContent;
+        expect(medlemskap).toContain('skjema.medlemskap.overskrift');
+        expect(medlemskap).toContain('skjema.periode.overskrift');
+        expect(medlemskap).toContain('13.04.2021 - 01.06.2021');
+        expect(medlemskap).toContain('skjema.utenlandsopphold.land');
+        expect(medlemskap).toContain('Aserbajdsjan');
+
+        // Viser tilleggsopplysninger
+        const tilleggsopplysninger = screen.getByTestId('tilleggsopplysninger').textContent;
+        expect(tilleggsopplysninger).toContain('skjema.soknadskvittering.tilleggsopplysninger');
+        expect(tilleggsopplysninger).toContain('skjema.medisinskeopplysninger.kvittering Nei');
+        expect(tilleggsopplysninger).toContain('skjema.opplysningerikkepunsjet.kvittering Nei');
     });
 
-    it('Viser utenlandsoppehold', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.utenlandsopphold.opplysninger')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('skjema.utenlandsopphold.opplysninger')).toBe(false);
-    });
+    it('Viser minimal kvittering', () => {
+        setupSoknadKvittering(minimalResponse);
 
-    it('Viser opplysninger om soker', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.opplysningeromsoker')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('Medmor')).toBe(true);
+        // screen.debug();
 
-        expect(soknadKvitteringTom.text().includes('skjema.opplysningeromsoker')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('Bestemor')).toBe(true);
-    });
+        // Viser kvittering side
+        expect(screen.getByTestId('kvittering.oppsummering').textContent).toContain('skjema.kvittering.oppsummering');
 
-    it('Viser arbeidstaker', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr:')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('1313123212323')).toBe(true);
+        //Viser søknadsperioder
+        const søknadsperiode = screen.getByTestId('soknadsperiode').textContent;
+        expect(søknadsperiode).toContain('skjema.soknadskvittering.soknadsperiode');
+        expect(søknadsperiode).toContain('01.06.2021 - 30.06.2021');
 
-        expect(soknadKvitteringTom.text().includes('skjema.arbeid.arbeidstaker.orgnr:')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('1313123212323')).toBe(false);
-    });
+        // Viser opplysninger om mottatt dato
+        const mottattDato = screen.getByTestId('mottatt-dato').textContent;
+        expect(mottattDato).toContain('skjema.opplysningeromsoknad');
+        expect(mottattDato).toContain('skjema.mottakelsesdato');
+        expect(mottattDato).toContain('12.10.2020');
+        expect(mottattDato).toContain('14:53');
+        expect(mottattDato).toContain('12.10.2020');
 
-    it('Viser frilanser', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.frilanserdato')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('01.01.2021')).toBe(true);
+        // Viser opplysninger om soker
+        const opplysningerOmSoker = screen.getByTestId('opplysningerOmSoker').textContent;
+        expect(opplysningerOmSoker).toContain('skjema.opplysningeromsoker');
+        expect(opplysningerOmSoker).toContain('skjema.relasjontilbarnet.kvittering');
+        expect(opplysningerOmSoker).toContain('Bestemor');
 
-        expect(soknadKvitteringTom.text().includes('skjema.frilanserdato')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('01.01.2021')).toBe(false);
-    });
+        // Ikke viser BegrunnelseForEndring
 
-    it('Viser SN', () => {
-        expect(soknadKvitteringFull.text().includes('selvstendig')).toBe(true);
-        expect(soknadKvitteringFull.find('VisningAvPerioderSNSoknadKvittering')).toHaveLength(1);
+        expect(screen.queryByTestId('begrunnelseForEndring')).not.toBeInTheDocument();
 
-        expect(soknadKvitteringTom.text().includes('selvstendig')).toBe(false);
-        expect(soknadKvitteringTom.find('VisningAvPerioderSNSoknadKvittering')).toHaveLength(0);
-    });
+        // Viser period som fjernet
+        const periodSomFjernet = screen.getByTestId('perioderSomFjernet').textContent;
+        expect(periodSomFjernet).toContain('skjema.perioderSomFjernet');
+        expect(periodSomFjernet).toContain('01.06.2021 - 30.06.2021');
 
-    it('Viser omsorgstilbud', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.omsorgstilbud.overskrift')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('skjema.omsorgstilbud.overskrift')).toBe(false);
-    });
+        // Ikke viser utenlandsoppehold
+        expect(screen.queryByTestId('utenlandsopphold')).not.toBeInTheDocument();
 
-    it('Viser beredskap og nattevåk', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.beredskap.overskrift')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('skjema.nattevaak.overskrift')).toBe(true);
+        // Ikke viser arbeidstaker
+        expect(screen.queryByTestId('arbeidsforhold')).not.toBeInTheDocument();
 
-        expect(soknadKvitteringTom.text().includes('skjema.beredskap.overskrift')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('skjema.nattevaak.overskrift')).toBe(false);
-    });
+        // Ikke viser frilanser
+        expect(screen.queryByTestId('frilanser')).not.toBeInTheDocument();
 
-    it('Viser medlemskap', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.medlemskap.overskrift')).toBe(true);
-        expect(soknadKvitteringTom.text().includes('skjema.medlemskap.overskrift')).toBe(false);
-    });
+        // Ikke viser selvstendig næringsdrivende
+        expect(screen.queryByTestId('selvstendignæringsdrivende')).not.toBeInTheDocument();
 
-    it('Viser tilleggsopplysninger', () => {
-        expect(soknadKvitteringFull.text().includes('skjema.soknadskvittering.tilleggsopplysninger')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('skjema.medisinskeopplysninger:')).toBe(true);
-        expect(soknadKvitteringFull.text().includes('skjema.opplysningerikkepunsjet:')).toBe(true);
+        // Ikke viser omsorgstilbud
+        expect(screen.queryByTestId('visOmsorgstilbud')).not.toBeInTheDocument();
 
-        expect(soknadKvitteringTom.text().includes('skjema.soknadskvittering.tilleggsopplysninger')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('skjema.medisinskeopplysninger:')).toBe(false);
-        expect(soknadKvitteringTom.text().includes('skjema.opplysningerikkepunsjet:')).toBe(false);
-    });
+        // Ikke viser beredskap og nattevåk
+        expect(screen.queryByTestId('beredskapnettevaak')).not.toBeInTheDocument();
 
-    it('Viser alle perioder', () => {
-        expect(soknadKvitteringFull.find('VisningAvPerioderSoknadKvittering')).toHaveLength(8);
-        expect(soknadKvitteringTom.find('VisningAvPerioderSoknadKvittering')).toHaveLength(0);
+        // Ikke viser medlemskap
+        expect(screen.queryByTestId('medlemskap')).not.toBeInTheDocument();
+
+        // Ikke viser tilleggsopplysninger
+        expect(screen.queryByTestId('tilleggsopplysninger')).not.toBeInTheDocument();
     });
 });
