@@ -378,9 +378,9 @@ describe('SoknadKvittering', () => {
         expect(opplysningerOmSoker).toContain('skjema.relasjontilbarnet.kvittering');
         expect(opplysningerOmSoker).toContain('Bestemor');
 
-        // BegrunnelseForEndring
-        const begrunnelseForEndring = screen.getByTestId('begrunnelseForEndring').textContent;
-        expect(begrunnelseForEndring).toContain('skjema.begrunnelseForEndring');
+        // Ikke viser BegrunnelseForEndring
+
+        expect(screen.queryByTestId('begrunnelseForEndring')).not.toBeInTheDocument();
 
         // Viser period som fjernet
         const periodSomFjernet = screen.getByTestId('perioderSomFjernet').textContent;

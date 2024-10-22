@@ -179,7 +179,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                         </p>
                     )}
-                    {begrunnelseForInnsending && (
+                    {begrunnelseForInnsending?.tekst.length > 0 && (
                         <p data-testid="begrunnelseForEndring">
                             <b>
                                 <FormattedMessage id={'skjema.begrunnelseForEndring'} />
