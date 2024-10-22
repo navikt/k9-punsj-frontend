@@ -19,9 +19,10 @@ interface Props {
 }
 
 export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) => {
+    const location = useLocation();
+
     const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch<any>>();
-    const location = useLocation();
 
     const createNewSoknad = (
         journalpostId: string,
@@ -62,21 +63,21 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         }
 
         getAlleJournalposter(søkerId);
-    }, [søkerId, pleietrengendeId, getEksisterendeSoknader, getAlleJournalposter]);
+    }, [søkerId, pleietrengendeId]);
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         if (søknader?.length === 0) {
             createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [søknader, journalpostid, pleietrengendeId, søkerId, createNewSoknad]);
+    }, [søknader, journalpostid, pleietrengendeId, søkerId]);
 
     useEffect(() => {
         if (isSoknadCreated && soknadid) {
             resetSoknadId();
             navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
         }
-    }, [isSoknadCreated, soknadid, navigate, resetSoknadId]);
+    }, [isSoknadCreated, soknadid]);
 
     const kanStarteNyRegistrering = () => {
         if (søknader?.length) {
