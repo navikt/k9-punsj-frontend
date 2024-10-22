@@ -9,7 +9,7 @@
         "@grafana/faro-web-sdk": "1.10.2",
         "@grafana/faro-web-tracing": "1.10.2",
         "@k9-punsj-frontend/server": "workspace:",
-        "@navikt/aksel-icons": "7.2.1",
+        "@navikt/aksel-icons": "7.3.1",
         "@navikt/ds-css": "7.2.1",
         "@navikt/ds-icons": "3.4.3",
         "@navikt/ds-react": "7.2.1",
