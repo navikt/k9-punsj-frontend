@@ -2949,10 +2949,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.3.1, @navikt/aksel-icons@npm:^7.3.1":
+"@navikt/aksel-icons@npm:7.3.1":
   version: 7.3.1
   resolution: "@navikt/aksel-icons@npm:7.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.3.1%2F579d009ffc9063af4afd5000a9e73dfba39a1f1c"
   checksum: 10/b60959d58585b8c9e5367d45841af0bda44178453210ccb2ad522940fe0522aa08a048fb1292527125dc41ef902f9d150b560ed84da900f0e07617787ed3076d
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^7.4.0":
+  version: 7.4.0
+  resolution: "@navikt/aksel-icons@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.4.0%2F980a3663268cfaf8c3cc76b178337411f64ea25e"
+  checksum: 10/cb9b7a9dc95a55a58ba4304bcb43a9c3c7a162633a59040f735ab5022f271e5044843c1edef73d2dd21dc62ff4e60643d0138143e910d8f7f51c1011bbcdbee5
   languageName: node
   linkType: hard
 
@@ -2973,28 +2980,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.3.1":
-  version: 7.3.1
-  resolution: "@navikt/ds-react@npm:7.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.3.1%2F0aa76367ae5294f4ed2f598218240efa7a51e136"
+"@navikt/ds-react@npm:7.4.0":
+  version: 7.4.0
+  resolution: "@navikt/ds-react@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.4.0%2F001a7e59cb2bb331a0f571b020e43792a7f082b0"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^7.3.1"
-    "@navikt/ds-tokens": "npm:^7.3.1"
+    "@navikt/aksel-icons": "npm:^7.4.0"
+    "@navikt/ds-tokens": "npm:^7.4.0"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^3.0.0"
-    react-day-picker: "npm:8.10.0"
+    react-day-picker: "npm:8.10.1"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 10/df9bf78973c21d2c1ddafd01d2aabe008ceea1aa2876c4799af9e6dea6e1f54db519853fb24390b4abad98a80bf4397735996af00d3b93250d2707bb455d12e3
+  checksum: 10/af91d8a5718efd3de501fbe2aed3796ebb38970ec23f6f476ceb203108ba6037886b54ff5c7e42fb165c43d9478b90dfc19525fa08685935c6a953264b9a31ff
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.3.1":
-  version: 7.3.1
-  resolution: "@navikt/ds-tokens@npm:7.3.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.3.1%2F806b85e70ee44c469422bf5b415a4e9c026d981d"
-  checksum: 10/50c0d6f839297e6034a1c26e9cb206ebef2bfe0291f7f6074670237eb1adbe99e796b16f82439f5e37c9771798847b1bc06e8754949afa69e5dc47a5a0de6a7c
+"@navikt/ds-tokens@npm:^7.4.0":
+  version: 7.4.0
+  resolution: "@navikt/ds-tokens@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.4.0%2F485112bc65a76a2fc2b273c396fb0188439ad6bc"
+  checksum: 10/c5f7f03d8de1ff3733438b486cc6ea66a0d036ce66f3d92b2aa49a6bcc79926d34d46b7334768b0fef365c3769d6d2bbac74bfbaed78ec993970f8bfdf7fe738
   languageName: node
   linkType: hard
 
@@ -11933,7 +11940,7 @@ __metadata:
     "@navikt/aksel-icons": "npm:7.3.1"
     "@navikt/ds-css": "npm:7.3.1"
     "@navikt/ds-icons": "npm:3.4.3"
-    "@navikt/ds-react": "npm:7.3.1"
+    "@navikt/ds-react": "npm:7.4.0"
     "@navikt/fnrvalidator": "npm:2.1.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
@@ -15029,13 +15036,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:8.10.0":
-  version: 8.10.0
-  resolution: "react-day-picker@npm:8.10.0"
+"react-day-picker@npm:8.10.1":
+  version: 8.10.1
+  resolution: "react-day-picker@npm:8.10.1"
   peerDependencies:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/974496ce004762d521923fc533f6ad6ff8d1f24368220753106617eb199aeb9658b4b7734e12a3fe8a5057840464a3d2d08b4b7f9a84ec77a59c50cc647f6dbc
+  checksum: 10/374056dca7fed70a154a3b0e98c6c746c26b4fc868548fa8f285ef3cab9679537e84c0c21ba7b6db67b3f7f54cc562f5d83efba2c7f2c7bd3705ac8992869607
   languageName: node
   linkType: hard
 
