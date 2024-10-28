@@ -1,8 +1,8 @@
-import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
 
-import { Button, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
+import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Button, Heading, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -11,6 +11,7 @@ import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { requiredValue, validateText } from 'app/utils/validationHelpers';
+import intlHelper from 'app/utils/intlUtils';
 
 import './opprettJournalpost.less';
 
@@ -22,6 +23,8 @@ enum OpprettJournalpostFormKeys {
 }
 
 const OpprettJournalpost: React.FC = () => {
+    const intl = useIntl();
+
     const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
     const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
@@ -29,7 +32,6 @@ const OpprettJournalpost: React.FC = () => {
     const [submitSuccessful, setSubmitSuccessful] = useState(false);
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
-    const intl = useIntl();
 
     const hentFagsaker = (søkersFødselsnummer: string) => {
         setHenteFagsakFeilet(false);
@@ -43,9 +45,13 @@ const OpprettJournalpost: React.FC = () => {
             }
         });
     };
+
     return (
         <div className="opprettJournalpost">
-            <h1 className="heading">{intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}</h1>
+            <Heading size="medium" level="1">
+                <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
+            </Heading>
+
             <div className="formContainer">
                 <Formik
                     initialValues={{
@@ -85,7 +91,7 @@ const OpprettJournalpost: React.FC = () => {
                                     <TextField
                                         {...field}
                                         className="w-64"
-                                        label={intl.formatMessage({ id: 'OpprettJournalpost.søkersFødselsnummer' })}
+                                        label={intlHelper(intl, 'opprettJournalpost.søkersFødselsnummer')}
                                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         maxLength={11}
                                         onChange={(event) => {
@@ -98,18 +104,19 @@ const OpprettJournalpost: React.FC = () => {
                                     />
                                 )}
                             </Field>
+
                             <Field name={OpprettJournalpostFormKeys.fagsakId} validate={requiredValue}>
                                 {({ field, meta }: FieldProps) => (
                                     <div className="fagsagSelectContainer">
                                         <Select
                                             {...field}
                                             className="input select w-64"
-                                            label={intl.formatMessage({ id: 'OpprettJournalpost.velgFagsak' })}
+                                            label={intlHelper(intl, 'opprettJournalpost.velgFagsak')}
                                             error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                             disabled={fagsaker.length === 0}
                                         >
                                             <option value="">
-                                                {intl.formatMessage({ id: 'OpprettJournalpost.velg' })}
+                                                <FormattedMessage id={'opprettJournalpost.velg'} />
                                             </option>
                                             {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                                                 <option key={fagsakId} value={fagsakId}>
@@ -121,6 +128,7 @@ const OpprettJournalpost: React.FC = () => {
                                     </div>
                                 )}
                             </Field>
+
                             <Field
                                 name={OpprettJournalpostFormKeys.tittel}
                                 validate={(value: string) => validateText(value, 200)}
@@ -129,12 +137,13 @@ const OpprettJournalpost: React.FC = () => {
                                     <TextField
                                         {...field}
                                         className="input w-[400px]"
-                                        label={intl.formatMessage({ id: 'OpprettJournalpost.tittel' })}
+                                        label={intlHelper(intl, 'opprettJournalpost.tittel')}
                                         maxLength={200}
                                         error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                     />
                                 )}
                             </Field>
+
                             <Field
                                 name={OpprettJournalpostFormKeys.notat}
                                 validate={(value: string) => validateText(value, 100000)}
@@ -144,13 +153,14 @@ const OpprettJournalpost: React.FC = () => {
                                         <Textarea
                                             {...field}
                                             className="notat"
-                                            label={intl.formatMessage({ id: 'OpprettJournalpost.notat' })}
+                                            label={intlHelper(intl, 'opprettJournalpost.notat')}
                                             maxLength={100000}
                                             error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
                                         />
                                     </div>
                                 )}
                             </Field>
+
                             {!submitSuccessful && (
                                 <Button
                                     size="small"
@@ -158,37 +168,34 @@ const OpprettJournalpost: React.FC = () => {
                                     className="submitButton"
                                     loading={isSubmittingJournalpost}
                                 >
-                                    {intl.formatMessage({ id: 'OpprettJournalpost.opprettJournalpost' })}
+                                    <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
                                 </Button>
                             )}
+
                             <div className="statusContainer">
                                 {opprettJournalpostFeilet && (
                                     <>
                                         <ErrorIcon />
                                         <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.opprettingAvJournalpostFeilet',
-                                            })}
+                                            <FormattedMessage id={'opprettJournalpost.opprettingAvJournalpostFeilet'} />
                                         </Label>
                                     </>
                                 )}
+
                                 {henteFagsakFeilet && (
                                     <>
                                         <ErrorIcon />
                                         <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.hentingAvFagsakFeilet',
-                                            })}
+                                            <FormattedMessage id={'opprettJournalpost.hentingAvFagsakFeilet'} />
                                         </Label>
                                     </>
                                 )}
+
                                 {submitSuccessful && (
                                     <>
                                         <SuccessIcon />
                                         <Label size="small" className="statusText">
-                                            {intl.formatMessage({
-                                                id: 'OpprettJournalpost.journalpostOpprettet',
-                                            })}
+                                            <FormattedMessage id={'opprettJournalpost.journalpostOpprettet'} />
                                         </Label>
                                     </>
                                 )}
@@ -196,6 +203,7 @@ const OpprettJournalpost: React.FC = () => {
                         </Form>
                     )}
                 </Formik>
+
                 {submitSuccessful && (
                     <Button
                         onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
@@ -203,9 +211,7 @@ const OpprettJournalpost: React.FC = () => {
                         size="small"
                         className="submitButton"
                     >
-                        {intl.formatMessage({
-                            id: 'OpprettJournalpost.gåTilJournalpost',
-                        })}
+                        <FormattedMessage id={'opprettJournalpost.gåTilJournalpost'} />
                     </Button>
                 )}
             </div>

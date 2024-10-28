@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/BrevComponent';
 import { finnFagsaker } from 'app/api/api';
