@@ -149,6 +149,7 @@
     "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.kopier.avbryt.btn": "Avbryt",
     "fordeling.kopiereJournal.hjelpetekst": "Bør krysses av dersom det er opplysninger i dokumentet som må legges inn i saken. Dette vil skape en ny Punsj-oppgave i K9-Los.",
     "fordeling.kategoriGosys": "Velg hva journalposten gjelder",
+    "fordeling.kategoriGosys.hentError": "Noe gikk galt ved henting av kategorier",
     "fordeling.kanIkkeOppretteJPIGosys.info": "Dokumentet er allerede journalført.",
     "fordeling.inntektsmeldingUtenKrav.tittel": " Inntektsmelding uten søknad.",
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.1": "Det er mottatt inntektsmelding for omsorgspenger uten refusjonskrav. Det finnes ingen sak eller søknad å knytte inntektsmeldingen til.",

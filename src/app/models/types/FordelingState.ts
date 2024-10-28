@@ -2,6 +2,10 @@ import { FordelingDokumenttype, Sakstype } from 'app/models/enums';
 import { IError } from 'app/models/types/Error';
 import Fagsak from 'app/types/Fagsak';
 
+export interface IGosysGjelderKategorier {
+    [key: string]: string;
+}
+
 export interface IFordelingState {
     sakstype?: Sakstype;
     dokumenttype?: FordelingDokumenttype;
@@ -13,7 +17,7 @@ export interface IFordelingState {
     lukkOppgaveError?: IError;
     lukkOppgaveDone: boolean;
     isAwaitingGosysGjelderResponse?: boolean;
-    gosysGjelderKategorier?: any[];
+    gosysGjelderKategorier?: IGosysGjelderKategorier;
     gosysGjelderKategorierError?: IError;
     valgtGosysKategori: string;
     fagsak?: Fagsak;

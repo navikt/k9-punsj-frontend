@@ -2,29 +2,36 @@ import React from 'react';
 
 import { Button } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { RootStateType } from 'app/state/RootState';
-import { IFordelingProps } from '../Fordeling';
+
 import { ISakstypePunch } from 'app/models/Sakstype';
 import { Sakstype } from 'app/models/enums';
+import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
+import { opprettGosysOppgave as omfordelAction } from 'app/state/actions/GosysOppgaveActions';
+import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
+import Fagsak from 'app/types/Fagsak';
 
-type BehandlingsknappProps = Pick<IFordelingProps, 'omfordel' | 'journalpost' | 'lukkJournalpostOppgave'> & {
+interface Props {
+    journalpost: IJournalpost;
     norskIdent: string;
     gosysKategoriJournalforing: string;
+    fagsak?: Fagsak;
     sakstypeConfig?: ISakstypePunch;
-};
 
-const Behandlingsknapp: React.FC<BehandlingsknappProps> = ({
+    omfordel: typeof omfordelAction;
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
+}
+
+const Behandlingsknapp: React.FC<Props> = ({
     journalpost,
     norskIdent,
-    sakstypeConfig,
     gosysKategoriJournalforing,
+    fagsak,
+    sakstypeConfig,
     omfordel,
     lukkJournalpostOppgave,
-}) => {
+}: Props) => {
     const navigate = useNavigate();
-    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
 
     if (!sakstypeConfig || !journalpost) {
         return (

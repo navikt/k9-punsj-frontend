@@ -231,12 +231,13 @@ const JournalførOgFortsettValg: React.FC<IJournalførOgFortsett> = (props: IJou
 
             <div className="flex space-x-4">
                 <Behandlingsknapp
+                    journalpost={journalpost}
                     norskIdent={identState.søkerId}
+                    gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
+                    sakstypeConfig={konfigForValgtSakstype as any}
+                    fagsak={fagsak}
                     omfordel={omfordel}
                     lukkJournalpostOppgave={lukkJournalpostOppgave}
-                    journalpost={journalpost}
-                    sakstypeConfig={konfigForValgtSakstype as any}
-                    gosysKategoriJournalforing={fordelingState.valgtGosysKategori}
                 />
 
                 <Button size="small" onClick={() => settPåVent.mutate()} data-test-id="settPåVent" variant="secondary">

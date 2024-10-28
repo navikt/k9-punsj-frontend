@@ -175,6 +175,8 @@ export const testHandlers = {
         }),
     ),
 
+    // gosysKategorier: http.get(ApiPath.GOSYS_GJELDER, () => HttpResponse.json({}, { status: 500 })),
+
     hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
         await delay(500);
         return HttpResponse.json(fagsaker, { status: 200 });

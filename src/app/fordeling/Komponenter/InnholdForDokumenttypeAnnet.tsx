@@ -1,45 +1,65 @@
-import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
-import { RootStateType } from 'app/state/RootState';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/state/actions';
+import {
+    hentGjelderKategorierFraGosys,
+    lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
+    setValgtGosysKategoriAction,
+} from 'app/state/actions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 import intlHelper from 'app/utils/intlUtils';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import Fagsak from 'app/types/Fagsak';
 
-import { GosysGjelderKategorier } from './GoSysGjelderKategorier';
+import GosysGjelderKategorier from './GoSysGjelderKategorier';
 
-interface IInnholdForDokumenttypeAnnetProps {
+interface Props {
     journalpost: IJournalpost;
-    kanJournalforingsoppgaveOpprettesiGosys: boolean;
-    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
-    handleSøkerIdChange: (event: any) => void;
-    handleSøkerIdBlur: (event: any) => void;
     sokersIdent: string;
     identState: IIdentState;
     fordelingState: IFordelingState;
+    kanJournalforingsoppgaveOpprettesiGosys: boolean;
+    fagsakFrajournalpost?: Fagsak; // Trenger vi denne?
+
+    handleSøkerIdChange: (event: any) => void;
+    handleSøkerIdBlur: (event: any) => void;
+
+    lukkJournalpostOppgave: typeof lukkJournalpostOppgaveAction;
     omfordel: typeof opprettGosysOppgave;
+    hentGjelderKategorier: typeof hentGjelderKategorierFraGosys;
+    setValgtGosysKategori: typeof setValgtGosysKategoriAction;
 }
 
-const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> = ({
+const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
     journalpost,
-    kanJournalforingsoppgaveOpprettesiGosys,
-    lukkJournalpostOppgave,
-    handleSøkerIdChange,
-    handleSøkerIdBlur,
     sokersIdent,
     identState,
     fordelingState,
+    kanJournalforingsoppgaveOpprettesiGosys,
+    fagsakFrajournalpost,
+
+    handleSøkerIdChange,
+    handleSøkerIdBlur,
+
+    lukkJournalpostOppgave,
     omfordel,
-}): JSX.Element | null => {
+    hentGjelderKategorier,
+    setValgtGosysKategori,
+}: Props) => {
     const intl = useIntl();
-    const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
+
+    const { gosysGjelderKategorier, isAwaitingGosysGjelderResponse, gosysGjelderKategorierError, valgtGosysKategori } =
+        fordelingState;
+
+    const harKategorierBlivitHentet =
+        isAwaitingGosysGjelderResponse === false &&
+        !!gosysGjelderKategorier &&
+        Object.keys(gosysGjelderKategorier).length > 0;
 
     if (!kanJournalforingsoppgaveOpprettesiGosys) {
         return (
@@ -49,13 +69,21 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                 </Alert>
                 <Button
                     variant="secondary"
-                    onClick={() => lukkJournalpostOppgave(journalpost?.journalpostId, sokersIdent, fagsak)}
+                    onClick={() =>
+                        lukkJournalpostOppgave(journalpost?.journalpostId, sokersIdent, fagsakFrajournalpost)
+                    }
                 >
                     <FormattedMessage id="fordeling.sakstype.SKAL_IKKE_PUNSJES" />
                 </Button>
             </div>
         );
     }
+
+    useEffect(() => {
+        if (!harKategorierBlivitHentet) {
+            hentGjelderKategorier();
+        }
+    }, [harKategorierBlivitHentet]);
 
     return (
         <div>
@@ -72,8 +100,24 @@ const InnholdForDokumenttypeAnnet: React.FC<IInnholdForDokumenttypeAnnetProps> =
                         : undefined
                 }
             />
+
             <VerticalSpacer eightPx />
-            <GosysGjelderKategorier />
+
+            {gosysGjelderKategorierError && (
+                <Alert size="small" variant="error" className="mb-4" data-test-id="gosysGjelderKategorierError">
+                    <FormattedMessage id="fordeling.kategoriGosys.hentError" />
+                </Alert>
+            )}
+
+            {harKategorierBlivitHentet && (
+                <GosysGjelderKategorier
+                    intl={intl}
+                    valgtGosysKategori={valgtGosysKategori}
+                    gosysGjelderKategorier={gosysGjelderKategorier}
+                    setValgtGosysKategori={setValgtGosysKategori}
+                />
+            )}
+
             <Button
                 size="small"
                 disabled={IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori}

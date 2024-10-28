@@ -32,7 +32,12 @@ import {
     lukkOppgaveResetAction,
     setErSøkerIdBekreftetAction,
 } from 'app/state/actions';
-import { setDokumenttypeAction, setFagsakAction } from 'app/state/actions/FordelingActions';
+import {
+    hentGjelderKategorierFraGosys,
+    setDokumenttypeAction,
+    setFagsakAction,
+    setValgtGosysKategoriAction,
+} from 'app/state/actions/FordelingActions';
 import {
     opprettGosysOppgave as omfordelAction,
     opprettGosysOppgaveResetAction,
@@ -102,6 +107,8 @@ const Fordeling: React.FC = () => {
     const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
     const setErSøkerIdBekreftet = (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet));
     const setFosterbarn = (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn));
+    const hentGjelderKategorier = () => dispatch(hentGjelderKategorierFraGosys());
+    const setValgtGosysKategori = (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori));
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -633,19 +640,24 @@ const Fordeling: React.FC = () => {
                                     disableRadios={disableRadios}
                                 />
                             )}
+
                             {dokumenttype === FordelingDokumenttype.ANNET && (
                                 <InnholdForDokumenttypeAnnet
                                     journalpost={journalpost}
-                                    lukkJournalpostOppgave={lukkJournalpostOppgave}
-                                    kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
-                                    handleSøkerIdBlur={handleSøkerIdBlur}
-                                    handleSøkerIdChange={handleSøkerIdChange}
                                     sokersIdent={sokersIdent}
                                     identState={identState}
                                     fordelingState={fordelingState}
+                                    kanJournalforingsoppgaveOpprettesiGosys={kanJournalforingsoppgaveOpprettesiGosys}
+                                    fagsakFrajournalpost={journalpost.sak}
+                                    handleSøkerIdBlur={handleSøkerIdBlur}
+                                    handleSøkerIdChange={handleSøkerIdChange}
+                                    lukkJournalpostOppgave={lukkJournalpostOppgave}
                                     omfordel={omfordel}
+                                    hentGjelderKategorier={hentGjelderKategorier}
+                                    setValgtGosysKategori={setValgtGosysKategori}
                                 />
                             )}
+
                             {(erInntektsmeldingUtenKrav || dokumenttype !== FordelingDokumenttype.OMSORGSPENGER) && (
                                 <SokersIdent
                                     dokumenttype={dokumenttype}
