@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import sakstyper from 'app/constants/sakstyper';
 import { FordelingActionKeys, FordelingDokumenttype, Sakstype } from 'app/models/enums';
-import { IError } from 'app/models/types';
+import { IGosysGjelderKategorier, IError } from 'app/models/types';
 import Fagsak from 'app/types/Fagsak';
 import { convertResponseToError, get, post } from 'app/utils';
 import { IResetStateAction } from './GlobalActions';
@@ -66,7 +66,7 @@ interface IGosysGjelderRequestAction {
 }
 interface IGosysGjelderSuccessAction {
     type: FordelingActionKeys.GOSYS_GJELDER_SUCCESS;
-    gjelderKategorierFraGosys: string[];
+    gjelderKategorierFraGosys: IGosysGjelderKategorier;
 }
 interface IGosysGjelderErrorAction {
     type: FordelingActionKeys.GOSYS_GJELDER_ERROR;
@@ -167,8 +167,13 @@ export function hentGjelderKategorierFraGosys() {
         dispatch(gosysGjelderRequestAction());
         get(ApiPath.GOSYS_GJELDER, {}, {}, (response, svar) => {
             if (response.ok) {
+                // eslint-disable-next-line no-console
+                console.log('Response ok');
                 return dispatch(gosysGjelderSuccessAction(svar));
             }
+            // eslint-disable-next-line no-console
+            console.log('Test Response not ok: ', response);
+
             return dispatch(gosysGjelderErrorAction(convertResponseToError(response)));
         });
     };

@@ -1,47 +1,32 @@
-import React, { useEffect } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import React from 'react';
 
+import { IntlShape } from 'react-intl';
 import { Select } from '@navikt/ds-react';
 
-import { IFordelingState } from 'app/models/types';
-import { RootStateType } from 'app/state/RootState';
-import { hentGjelderKategorierFraGosys, setValgtGosysKategoriAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
-
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { IGosysGjelderKategorier } from 'app/models/types/FordelingState';
+import { setValgtGosysKategoriAction } from 'app/state/actions/FordelingActions';
 
-export interface IOwnProps {
-    fordelingState: IFordelingState;
-    hentGjelderKategorier: typeof hentGjelderKategorierFraGosys;
+interface Props {
+    intl: IntlShape;
+    valgtGosysKategori: string;
+    gosysGjelderKategorier: IGosysGjelderKategorier;
     setValgtGosysKategori: typeof setValgtGosysKategoriAction;
 }
 
-type IGosysGjelderKategorierProps = WrappedComponentProps & IOwnProps;
-
-const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKategorierProps> = (
-    props: IGosysGjelderKategorierProps,
-) => {
-    const { intl, fordelingState, hentGjelderKategorier, setValgtGosysKategori } = props;
-
-    useEffect(() => {
-        hentGjelderKategorier();
-    }, []);
-
-    const harKategorierBlivitHentet =
-        fordelingState.isAwaitingGosysGjelderResponse === false &&
-        !!fordelingState.gosysGjelderKategorier &&
-        Object.keys(fordelingState.gosysGjelderKategorier).length > 0;
-
-    if (!harKategorierBlivitHentet) {
-        return null;
-    }
-
+const GosysGjelderKategorier: React.FC<Props> = ({
+    intl,
+    valgtGosysKategori,
+    gosysGjelderKategorier,
+    setValgtGosysKategori,
+}: Props) => {
     return (
         <div>
             <VerticalSpacer sixteenPx />
+
             <Select
-                value={fordelingState.valgtGosysKategori}
+                value={valgtGosysKategori}
                 className="w-64"
                 label={intlHelper(intl, 'fordeling.kategoriGosys')}
                 onChange={(e) => setValgtGosysKategori(e.target.value)}
@@ -49,28 +34,16 @@ const GosysGjelderKategorierComponent: React.FunctionComponent<IGosysGjelderKate
             >
                 <option disabled value="" label=" " aria-label="Tomt valg" />
 
-                {Object.keys(fordelingState.gosysGjelderKategorier!).map((kategori) => (
+                {Object.keys(gosysGjelderKategorier!).map((kategori) => (
                     <option key={kategori} value={kategori}>
-                        {fordelingState.gosysGjelderKategorier![kategori]}
+                        {gosysGjelderKategorier![kategori]}
                     </option>
                 ))}
             </Select>
+
             <VerticalSpacer eightPx />
         </div>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    fordelingState: state.fordelingState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    hentGjelderKategorier: () => dispatch(hentGjelderKategorierFraGosys()),
-    setValgtGosysKategori: (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori)),
-});
-
-const GosysGjelderKategorier = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(GosysGjelderKategorierComponent),
-);
-
-export { GosysGjelderKategorier, GosysGjelderKategorierComponent };
+export default GosysGjelderKategorier;
