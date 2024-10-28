@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Alert, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Button, Heading, Modal, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { ROUTES } from 'app/constants/routes';
@@ -13,32 +14,32 @@ import { RootStateType } from '../state/RootState';
 import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
 import VerticalSpacer from '../components/VerticalSpacer';
-import SokKnapp from '../components/knapp/SokKnapp';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import OpprettJournalpostInngang from './OpprettJournalpostInngang';
-import SendBrevIAvsluttetSakInngang from './SendBrevIAvsluttetSakInngang';
+import OpprettJournalpostInngang from './components/OpprettJournalpostInngang/OpprettJournalpostInngang';
+import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 
-import './sok.less';
+import './home.less';
 
-export const SearchForm = () => {
-    const [journalpostid, setJournalpostid] = useState('');
-
+export const Home: React.FC = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch<any>>();
 
-    const navigate = useNavigate();
-
-    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
-    const notFound = useSelector((state: RootStateType) => state.felles.journalpostNotFound);
-    const forbidden = useSelector((state: RootStateType) => state.felles.journalpostForbidden);
-    const conflict = useSelector((state: RootStateType) => state.felles.journalpostConflict);
-    const journalpostConflictError = useSelector((state: RootStateType) => state.felles.journalpostConflictError);
-    const journalpostRequestError = useSelector((state: RootStateType) => state.felles.journalpostRequestError);
-    const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
-
+    const [journalpostid, setJournalpostid] = useState('');
     const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
     const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
     const [ingenJp, setIngenJp] = useState(false);
+
+    const {
+        journalpost,
+        journalpostNotFound,
+        journalpostForbidden,
+        journalpostConflict,
+        journalpostConflictError,
+        journalpostRequestError,
+    } = useSelector((state: RootStateType) => state.felles);
+
+    const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
 
     const handleLukkDebugg = () => {
         if (journalpostid) {
@@ -80,8 +81,6 @@ export const SearchForm = () => {
         dispatch(lukkOppgaveResetAction());
     }, [dispatch]);
 
-    const disabled = !journalpostid;
-
     useEffect(() => {
         if (journalpost?.journalpostId) {
             // Her har jeg lagt inn en reset av redux state fordi tidligere ble window.location.href brukt for å navigere til journalposten.
@@ -92,6 +91,7 @@ export const SearchForm = () => {
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
+
     if (lukkOppgaveDone) {
         return (
             <Modal key="lukkoppgaveokmodal" onClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
@@ -103,9 +103,10 @@ export const SearchForm = () => {
     return (
         <>
             <div className="sok-container">
-                <h1 className="sok-heading">
+                <Heading size="xlarge" level="1" className="sok-heading">
                     <FormattedMessage id="søk.overskrift" />
-                </h1>
+                </Heading>
+
                 <div className="input-rad">
                     <TextField
                         value={journalpostid}
@@ -114,26 +115,29 @@ export const SearchForm = () => {
                         label={<FormattedMessage id="søk.label.jpid" />}
                         onKeyDown={handleKeydown}
                     />
+
                     <div className="ml-4">
-                        <SokKnapp onClick={onClick} tekstId="søk.knapp.label" disabled={disabled} />
+                        <Button onClick={onClick} size="small" className="sokknapp my-4" disabled={!journalpostid}>
+                            <FormattedMessage id={'søk.knapp.label'} />
+                        </Button>
                     </div>
 
                     <VerticalSpacer sixteenPx />
                 </div>
 
-                {notFound && (
+                {journalpostNotFound && (
                     <Alert size="small" variant="info">
                         <FormattedMessage id="søk.jp.notfound" values={{ jpid: journalpostid }} />
                     </Alert>
                 )}
 
-                {forbidden && (
+                {journalpostForbidden && (
                     <Alert size="small" variant="warning">
                         <FormattedMessage id="søk.jp.forbidden" values={{ jpid: journalpostid }} />
                     </Alert>
                 )}
 
-                {conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET && (
+                {journalpostConflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET && (
                     <ConflictErrorComponent
                         journalpostid={journalpostid}
                         ingenJp={ingenJp}
@@ -155,6 +159,7 @@ export const SearchForm = () => {
                     </Alert>
                 )}
             </div>
+
             <div className="inngangContainer">
                 <OpprettJournalpostInngang />
                 <SendBrevIAvsluttetSakInngang />

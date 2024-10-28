@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { BodyLong } from '@navikt/ds-react';
+import { BodyLong, Heading } from '@navikt/ds-react';
 
 import './sendBrevIAvsluttetSakInngang.less';
 
@@ -9,12 +10,12 @@ const SendBrevIAvsluttetSakInngang = () => {
     return (
         <div className="sendBrevIAvsluttetSakInngang">
             <div className="content">
-                <h1 className="heading">
-                    <FormattedMessage id={`sendBrevIAvsluttetSakInngang.header`} />
-                </h1>
+                <Heading size="xlarge" level="1" className="heading">
+                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.header'} />
+                </Heading>
 
                 <BodyLong>
-                    <FormattedMessage id={`sendBrevIAvsluttetSakInngang.ingress`} />
+                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.ingress'} />
                 </BodyLong>
 
                 <Link
@@ -22,7 +23,7 @@ const SendBrevIAvsluttetSakInngang = () => {
                     to="/brev-avsluttet-sak"
                     data-testid="brev-avsluttet-sak-inngang"
                 >
-                    <FormattedMessage id={`sendBrevIAvsluttetSakInngang.link`} />
+                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.link'} />
                 </Link>
             </div>
         </div>

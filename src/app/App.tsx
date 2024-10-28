@@ -25,16 +25,16 @@ import ApplicationWrapper from './components/application-wrapper/ApplicationWrap
 import AuthCallback from './auth/AuthCallback';
 import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
-import SokIndex from './home/SokIndex';
 import withEnvVariables from './containers/withAppSettings';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
-import SendBrevIAvsluttetSak from './brevIAvsluttetSak/SendBrevIAvsluttetSak';
+import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import logger from 'redux-logger';
 import { getLocaleFromSessionStorage } from './utils';
 import { logError } from './utils/logUtils';
 import { ROUTES } from './constants/routes';
+import { Home } from './home/Home';
 
 import '@navikt/ds-css';
 import './styles/globalStyles.less';
@@ -111,7 +111,7 @@ export const App: React.FC = () => {
                             />
                             <Route path={ROUTES.OPPRETT_JOURNALPOST} element={<OpprettJournalpost />} />
                             <Route path={ROUTES.BREV_AVSLUTTET_SAK} element={<SendBrevIAvsluttetSak />} />
-                            <Route path={ROUTES.HOME} element={<SokIndex />} />
+                            <Route path={ROUTES.HOME} element={<Home />} />
                             <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
                         </SentryRoutes>
