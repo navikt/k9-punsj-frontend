@@ -173,6 +173,7 @@
     "fordeling.klassifiserModal.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert.",
     "fordeling.journalført.alert.success": "Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.",
     "fordeling.journalført.alert.success.reservert": "Journalposten er journalført. Sakstype, søker er lagret til journalpost. Saksnummeret ({saksnummer}) er reservert.",
+    "fordeling.journalført.alert.error.søknadstypeIkkeValgt": "Noe gikk galt. Søknadstype er ikke valgt.",
     "fordeling.journalført.alert.settPåvent.error": "Noe gikk galt under sett på vent.",
     "fordeling.journalført.settPåVent": "Sett på vent",
 
