@@ -21,9 +21,9 @@ import { useMutation } from 'react-query';
 import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 import { Dispatch } from 'redux';
-import { getPunchPathFraSakstype, getSakstypeFraDokumenttype } from './journalførOgFortsettValgUtils';
+import { getPunchPathFraSakstype, getSakstypeFraDokumenttype } from './behandlingAvJournaførtJpUtils';
 
-const JournalførOgFortsettValg: React.FC = () => {
+const BehandlingAvJournaførtJp: React.FC = () => {
     const intl = useIntl();
 
     const navigate = useNavigate();
@@ -140,4 +140,4 @@ const JournalførOgFortsettValg: React.FC = () => {
     );
 };
 
-export default JournalførOgFortsettValg;
+export default BehandlingAvJournaførtJp;

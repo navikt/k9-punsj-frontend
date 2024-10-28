@@ -25,7 +25,7 @@ import { PSBPunchForm } from 'app/søknader/pleiepenger/containers/PSBPunchForm'
 import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
-import JournalførOgFortsettValg from '../fordeling/Komponenter/JournalførOgFortsettValg';
+import BehandlingAvJournaførtJp from '../fordeling/Komponenter/BehandlingAvJournaførtJp';
 
 const JournalpostRouter: React.FC = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
@@ -41,7 +41,7 @@ const JournalpostRouter: React.FC = () => {
         >
             <ErrorBoundary fallback={<ErrorFallback />} onError={logError}>
                 <Routes>
-                    <Route path={ROUTES.PSB_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.PSB_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.PSB_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -52,7 +52,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.PLS_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.PLS_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.PLS_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -63,7 +63,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.OMPKS_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.OMPKS_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.OMPKS_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -74,7 +74,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.OMPMA_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.OMPMA_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.OMPMA_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -88,7 +88,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.OMPUT_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.OMPUT_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.OMPUT_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -102,7 +102,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.OMPAO_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.OMPAO_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.OMPAO_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -116,7 +116,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.OLP_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.OLP_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.OLP_ROOT}>
                         <Route
                             path={ROUTES.VELG_SOKNAD}
@@ -127,7 +127,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
 
-                    <Route path={ROUTES.KORRIGERING_ROOT} element={<JournalførOgFortsettValg />} />
+                    <Route path={ROUTES.KORRIGERING_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.KORRIGERING_ROOT}>
                         <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
                         <Route
