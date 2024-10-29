@@ -1,4 +1,4 @@
-import classNames from 'classnames/bind';
+import classNames from 'classnames';
 import React, { FunctionComponent } from 'react';
 
 import './verticalSpacer.less';
