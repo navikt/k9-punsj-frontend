@@ -111,6 +111,9 @@ const Fordeling: React.FC = () => {
     const hentGjelderKategorier = () => dispatch(hentGjelderKategorierFraGosys());
     const setValgtGosysKategori = (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori));
     const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
+    const setFosterbarnIdentState = (updatedBarn: string[]) => {
+        dispatch(setFosterbarnAction(updatedBarn));
+    };
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -733,7 +736,11 @@ const Fordeling: React.FC = () => {
                             )}
                             {isFetchingFagsaker && <Loader />}
 
-                            <Fosterbarn showComponent={visFosterbarnComponent} />
+                            <Fosterbarn
+                                showComponent={visFosterbarnComponent}
+                                identState={identState}
+                                setFosterbarnIdentState={setFosterbarnIdentState}
+                            />
 
                             {visPleietrengendeComponent && (
                                 <Pleietrengende

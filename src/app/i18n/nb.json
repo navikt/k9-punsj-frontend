@@ -234,6 +234,9 @@
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.2": "Kan ikke være kopi av en annen journalpost",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.3": "Kan ikke være inntektsmelding uten søknad",
 
+    "fosterbarn.btn.slett": "Slett",
+    "fosterbarn.btn.leggTil": "Legg til fosterbarn",
+
     "gosysOppgave.opprettet": "Journalføringsoppgave oprettet i Gosys",
 
     "gosysOppgave.feilet": "Oppretting av journalføringsoppgave i Gosys feilet",
