@@ -1,7 +1,7 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useQueries } from 'react-query';
-import { Panel } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
 import Page from 'app/components/page/Page';
@@ -44,13 +44,13 @@ export const JournalpostOgPdfVisning = (props: Props) => {
           })
         : [];
     const left = () => (
-        <Panel className="omsorgspenger_punch_form min-w-min">
+        <Box className="omsorgspenger_punch_form min-w-min" padding="4">
             <div className="max-w-screen-lg">
                 <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
             </div>
 
             <div className="max-w-screen-lg">{children}</div>
-        </Panel>
+        </Box>
     );
 
     const right = () => !!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />;

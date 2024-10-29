@@ -1,34 +1,32 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { Label } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
-import { CopyButton, HStack } from '@navikt/ds-react';
+import { CopyButton, Label } from '@navikt/ds-react';
+
 import intlHelper from '../../utils/intlUtils';
 
-type ILabelValueProps = {
-    value: string | undefined;
+interface Props {
+    labelTextId?: string;
+    text?: string;
+    value?: string;
     visKopier?: boolean;
-} & ({ text: string; labelTextId?: string } | { labelTextId: string; text?: string });
+}
 
-const LabelValue: React.FC<ILabelValueProps> = ({ labelTextId, text, value, visKopier }) => {
+const LabelValue: React.FC<Props> = ({ labelTextId, text, value, visKopier }: Props) => {
     const intl = useIntl();
 
     return (
-        <HStack gap="10">
-            <Label htmlFor={`journalpostpanel.${text || labelTextId}.label`} className="mb-0">
+        <div className="flex">
+            <Label as="p" className="mb-0" size="small">
                 {text || intlHelper(intl, labelTextId || '')}
             </Label>
 
-            <div id={`journalpostpanel.${text || labelTextId}.value`} className="flex">
+            <div className="flex">
                 <span>{value}</span>
-                {visKopier && value && (
-                    <span>
-                        <CopyButton size="xsmall" copyText={value} className={classNames('copyBtn')} />
-                    </span>
-                )}
+                {visKopier && value && <CopyButton size="xsmall" copyText={value} className={classNames('copyBtn')} />}
             </div>
-        </HStack>
+        </div>
     );
 };
 
