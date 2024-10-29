@@ -28,7 +28,7 @@ export const OkGaaTilLosModal = (props: IOkGaaTilLOsModalProps) => {
 
     return (
         <Modal.Body>
-            <div className="ok-gaa-til-los">
+            <div className="ok-gaa-til-los" data-testid="ok-gaa-til-los-modal">
                 <CheckCircleSvg title="check" />
                 <div className="vl" />
                 <div className="info" data-test-id="opprettIGosysOkModalInfo">

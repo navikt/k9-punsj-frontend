@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Box, Heading } from '@navikt/ds-react';
-import { BackgroundToken } from '@navikt/ds-react/esm/layout/utilities/types';
+import { BackgroundColorToken } from '@navikt/ds-react/esm/layout/utilities/types';
 
 export interface IFeilmeldingPanel {
     children?: React.ReactNode;
     messageId?: string;
-    background?: BackgroundToken;
+    background?: BackgroundColorToken;
 }
 
 const FeilmeldingPanel: React.FC<IFeilmeldingPanel> = ({ children, messageId, background }) => (

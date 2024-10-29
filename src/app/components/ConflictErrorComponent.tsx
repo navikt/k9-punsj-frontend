@@ -24,9 +24,9 @@ const getAlertInfo = (status: number): AlertInfo => {
         case 200:
             return { variant: 'success', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.200', goToLos: true };
         case 400:
-            return { variant: 'success', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.400', goToLos: true };
+            return { variant: 'warning', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.400', goToLos: true };
         case 404:
-            return { variant: 'success', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.404', goToLos: true };
+            return { variant: 'warning', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.404', goToLos: true };
         default:
             return { variant: 'error', textId: 'startPage.feil.ikkeStøttet.lukkDebugg.status.ukjent', goToLos: true };
     }
@@ -42,11 +42,12 @@ export const ConflictErrorComponent: React.FC<Props> = ({
     const { variant, textId, goToLos } = getAlertInfo(lukkDebuggJpStatus || 409);
 
     return (
-        <div className="flex justify-center py-4">
+        <div className="flex justify-center py-4" data-testid="conflict-error-alert">
             <Alert size="small" variant={variant} className="text-left w-[376px]">
                 <FormattedMessage
                     id={ingenJp ? 'startPage.feil.ikkeStøttet.lukkDebugg.ingenJp' : textId}
                     values={{ status: lukkDebuggJpStatus, jp: journalpostid }}
+                    data-testid="conflict-error-info"
                 />
                 <div className="my-3">
                     <Button
@@ -60,6 +61,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                                 handleLukkDebugg();
                             }
                         }}
+                        data-testid="conflict-error-btn"
                     >
                         <FormattedMessage
                             id={`startPage.feil.ikkeStøttet.${goToLos ? 'gåTilLos' : 'lukkDebugg'}.btn`}
