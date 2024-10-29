@@ -49,6 +49,7 @@ import {
     setIdentFellesAction,
 } from 'app/state/actions/IdentActions';
 import { resetBarnAction } from 'app/state/reducers/FellesReducer';
+import { hentBarn } from 'app/state/reducers/HentBarn';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -109,6 +110,7 @@ const Fordeling: React.FC = () => {
     const setFosterbarn = (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn));
     const hentGjelderKategorier = () => dispatch(hentGjelderKategorierFraGosys());
     const setValgtGosysKategori = (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori));
+    const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
 
     const [visKlassifiserModal, setVisKlassifiserModal] = useState(false);
     const [fortsettEtterKlassifiseringModal, setFortsettEtterKlassifiseringModal] = useState(false);
@@ -735,15 +737,17 @@ const Fordeling: React.FC = () => {
 
                             {visPleietrengendeComponent && (
                                 <Pleietrengende
+                                    identState={identState}
+                                    fellesState={fellesState}
                                     toSokereIJournalpost={toSokereIJournalpost}
-                                    pleietrengendeHarIkkeFnrFn={(harBarnetFnr: boolean) =>
-                                        setBarnetHarIkkeFnr(harBarnetFnr)
-                                    }
-                                    visPleietrengende={visPleietrengende}
-                                    jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
                                     skalHenteBarn={
                                         dokumenttype !== FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE
                                     }
+                                    visPleietrengende={visPleietrengende}
+                                    jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
+                                    setIdentAction={setIdentAction}
+                                    henteBarn={henteBarn}
+                                    setBarnetHarIkkeFnr={setBarnetHarIkkeFnr}
                                 />
                             )}
                             {!!barnMedFagsak && !journalpost.erFerdigstilt && (
