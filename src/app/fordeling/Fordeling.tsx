@@ -68,7 +68,7 @@ import KlassifiserModal from './Komponenter/KlassifiserModal';
 import KopiereJournalpostTilSammeSøker from './Komponenter/KopiereJournalpostTilSammeSøker/KopiereJournalpostTilSammeSøker';
 import Pleietrengende from './Komponenter/Pleietrengende';
 import SokersIdent from './Komponenter/SokersIdent';
-import ToSoekere from './Komponenter/ToSoekere';
+import ToSøkere from './Komponenter/ToSøkere';
 import ValgAvBehandlingsÅr from './Komponenter/ValgAvBehandlingsÅr';
 import VentLukkBrevModal from './Komponenter/VentLukkBrevModal';
 
@@ -678,14 +678,14 @@ const Fordeling: React.FC = () => {
                                 />
                             )}
 
-                            <ToSoekere
+                            <ToSøkere
                                 journalpost={journalpost}
                                 identState={identState}
                                 toSokereIJournalpost={toSokereIJournalpost}
-                                setIdentAction={setIdentAction}
-                                setToSokereIJournalpost={setToSokereIJournalpost}
                                 dokumenttype={dokumenttype}
                                 disabled={disableRadios}
+                                setIdentAction={setIdentAction}
+                                setToSokereIJournalpost={setToSokereIJournalpost}
                             />
 
                             {erInntektsmeldingUtenKrav && identState.søkerId ? (

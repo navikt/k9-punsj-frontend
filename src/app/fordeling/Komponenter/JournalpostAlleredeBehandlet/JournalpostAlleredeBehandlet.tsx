@@ -25,7 +25,7 @@ import { setDokumenttypeAction } from 'app/state/actions';
 import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 import AnnenPart from '../AnnenPart';
-import ToSoekere from '../ToSoekere';
+import ToSøkere from '../ToSøkere';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
@@ -206,7 +206,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     valgtDokumentType={fordelingState.dokumenttype as string}
                 />
 
-                <ToSoekere
+                <ToSøkere
                     journalpost={journalpost}
                     identState={identState}
                     toSokereIJournalpost={toSokereIJournalpost}

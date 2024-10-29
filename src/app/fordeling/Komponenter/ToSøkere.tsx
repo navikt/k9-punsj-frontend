@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Checkbox } from '@navikt/ds-react';
+
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { IJournalpost, Person } from 'app/models/types';
@@ -11,28 +13,30 @@ import { getPersonInfo } from 'app/api/api';
 import { IdentRules } from 'app/rules';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
-interface IToSoekereProps {
+interface Props {
     journalpost: IJournalpost;
     identState: IIdentState;
     toSokereIJournalpost: boolean;
-    setIdentAction: typeof setIdentFellesAction;
-    setToSokereIJournalpost: (toSokereIJournalpost: boolean) => void;
     dokumenttype?: FordelingDokumenttype;
     disabled?: boolean;
+
+    setIdentAction: typeof setIdentFellesAction;
+    setToSokereIJournalpost: (toSokereIJournalpost: boolean) => void;
 }
 
-const ToSoekere: React.FC<IToSoekereProps> = ({
+const ToSøkere: React.FC<Props> = ({
     journalpost,
     identState,
     toSokereIJournalpost,
-    setIdentAction,
-    setToSokereIJournalpost,
     dokumenttype,
     disabled,
-}) => {
+
+    setIdentAction,
+    setToSokereIJournalpost,
+}: Props) => {
     const intl = useIntl();
 
-    const [annenSokerIdent, setAnnenSokerIdent] = useState<string>('');
+    const [annenSokerIdentLocal, setAnnenSokerIdentLocal] = useState<string>('');
     const [annenSøkersInfo, setAnnenSøkersInfo] = useState<Person | undefined>(undefined);
     const [annenSøkersInfoLoading, setAnnenSøkersInfoLoading] = useState<boolean>(false);
     const [annenSøkersInfoError, setAnnenSøkersInfoError] = useState<boolean>(false);
@@ -42,6 +46,12 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         dokumenttype !== FordelingDokumenttype.OMSORGSPENGER &&
         !!journalpost?.kanKopieres &&
         (!journalpost.erFerdigstilt || !journalpost.kanSendeInn);
+
+    if (!skalVises) {
+        return null;
+    }
+
+    const { søkerId, pleietrengendeId, annenSokerIdent } = identState;
 
     const hentAnnenSøkersInfo = (søkersFødselsnummer: string) => {
         setAnnenSøkersInfoError(false);
@@ -56,21 +66,23 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         });
     };
 
-    const handleIdentAnnenSoker = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAnnenSokerIdentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
+
         setAnnenSøkersInfo(undefined);
-        if (annenSokerIdent.length > 0 && identFromInput.length < annenSokerIdent.length) {
-            setIdentAction(identState.søkerId, identState.pleietrengendeId);
+
+        if (annenSokerIdent && annenSokerIdent.length > 0 && identFromInput.length < annenSokerIdentLocal.length) {
+            setIdentAction(søkerId, pleietrengendeId);
         }
 
         if (identFromInput.length === 11) {
             if (!IdentRules.erUgyldigIdent(identFromInput)) {
                 hentAnnenSøkersInfo(identFromInput);
             }
-            setIdentAction(identState.søkerId, identState.pleietrengendeId, identFromInput);
+            setIdentAction(søkerId, pleietrengendeId, identFromInput);
         }
 
-        setAnnenSokerIdent(identFromInput);
+        setAnnenSokerIdentLocal(identFromInput);
     };
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,9 +90,10 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 
         setToSokereIJournalpost(checked);
         setAnnenSøkersInfo(undefined);
-        setAnnenSokerIdent('');
+        setAnnenSokerIdentLocal('');
+
         if (!checked) {
-            setIdentAction(identState.søkerId, identState.pleietrengendeId, null);
+            setIdentAction(søkerId, pleietrengendeId, null);
         }
     };
 
@@ -88,12 +101,9 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
         if (!journalpost.erFerdigstilt && journalpost.sak?.fagsakId) {
             return false;
         }
+
         return disabled;
     };
-
-    if (!skalVises) {
-        return null;
-    }
 
     return (
         <>
@@ -130,12 +140,12 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
 
                     <FnrTextField
                         labelId="ident.identifikasjon.annenSoker"
-                        value={annenSokerIdent}
+                        value={annenSokerIdentLocal}
                         loadingPersonsInfo={annenSøkersInfoLoading}
                         errorPersonsInfo={annenSøkersInfoError}
                         person={annenSøkersInfo}
                         errorValidationMessage={visFeilmeldingForAnnenIdentVidJournalKopi(intl, identState)}
-                        onChange={handleIdentAnnenSoker}
+                        onChange={handleAnnenSokerIdentChange}
                     />
                 </div>
             )}
@@ -143,4 +153,4 @@ const ToSoekere: React.FC<IToSoekereProps> = ({
     );
 };
 
-export default ToSoekere;
+export default ToSøkere;
