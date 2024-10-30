@@ -14,6 +14,7 @@ import {
     kopierJournalpostRedux,
     resetBarnAction,
 } from 'app/state/reducers/FellesReducer';
+import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
@@ -24,7 +25,7 @@ import { setDokumenttypeAction } from 'app/state/actions';
 import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 import AnnenPart from '../AnnenPart';
-import ToSoekere from '../ToSoekere';
+import ToSøkere from '../ToSøkere';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
@@ -39,6 +40,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
     const resetBarn = () => dispatch(resetBarnAction());
     const kopiereErrorReset = () => dispatch(getJournalpostKopiereErrorResetAction());
+    const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
 
     const identState = useSelector((state: RootStateType) => state.identState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
@@ -204,7 +206,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     valgtDokumentType={fordelingState.dokumenttype as string}
                 />
 
-                <ToSoekere
+                <ToSøkere
                     journalpost={journalpost}
                     identState={identState}
                     toSokereIJournalpost={toSokereIJournalpost}
@@ -216,9 +218,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
                 <div className="mt-4">
                     <Pleietrengende
-                        visPleietrengende={visPleietrengende}
-                        skalHenteBarn={skalHenteBarn}
+                        identState={identState}
+                        fellesState={fellesState}
                         toSokereIJournalpost={false}
+                        skalHenteBarn={skalHenteBarn}
+                        visPleietrengende={visPleietrengende}
+                        setIdentAction={setIdentAction}
+                        henteBarn={henteBarn}
                     />
                 </div>
 

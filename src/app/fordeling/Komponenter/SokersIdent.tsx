@@ -127,6 +127,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
             {riktigIdentIJournalposten === JaNei.NEI && (
                 <>
                     <FnrTextField
+                        label="ident.identifikasjon.felt"
                         labelId="ident.identifikasjon.felt"
                         value={sokersIdent}
                         loadingPersonsInfo={søkersInfoLoading}

@@ -1,39 +1,27 @@
+import React, { useEffect, useState } from 'react';
+
 import { AddPerson, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
+
 import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { Person } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
-import { setFosterbarnAction } from 'app/state/actions/IdentActions';
-import { RootStateType } from 'app/state/RootState';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
-    showComponent: boolean;
+    identState: IIdentState;
+
+    setFosterbarnIdentState: (updatedBarn?: string[]) => void;
 }
 
-const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
-    if (!showComponent) {
-        return null;
-    }
-
-    const dispatch = useDispatch<Dispatch<any>>();
-    const identState = useSelector((state: RootStateType) => state.identState);
-
-    const fosterbarnFromState = identState.fosterbarn || [];
-
-    const [fosterbarnArray, setFosterbarnArray] = useState<string[]>(fosterbarnFromState);
+const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Props) => {
+    const [fosterbarnArray, setFosterbarnArray] = useState<string[]>(identState.fosterbarn || []);
     const [fosterbarnInfo, setFosterbarnInfo] = useState<Array<Person | null>>([]);
     const [fosterbarnInfoLoadingIndex, setFosterbarnInfoLoadingIndex] = useState<number | undefined>();
     const [fosterbarnInfoErrors, setFosterbarnInfoErrors] = useState<boolean[]>([]);
-
     const [updateFosterbarnInfo, setUpdateFosterbarnInfo] = useState<boolean>(true);
-
-    const updateIdentState = (updatedBarn: string[]) => {
-        dispatch(setFosterbarnAction(updatedBarn));
-    };
 
     const hentFosterbarnInfo = (fosterbarnsFødselsnummer: string, index: number): Promise<void> => {
         return new Promise((resolve, reject) => {
@@ -85,24 +73,28 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
         if (updateFosterbarnInfo) {
             setUpdateFosterbarnInfo(false);
         }
+
         const identFromInput = event.target.value.replace(/\D+/, '');
-
         const updatedArray = fosterbarnArray.map((item, i) => (i === index ? identFromInput : item));
-
         const identFromState = identState.fosterbarn?.find((_, i) => i === index);
-        if (identFromState && identFromState.length > 0 && identFromInput.length < identFromState.length) {
-            // TODO: Slett ident??
+        const identFromLocalState = fosterbarnArray?.[index];
+
+        if (identFromState && identFromState.length > 0 && identFromInput.length < identFromLocalState.length) {
+            // TODO: Slett ident?
             const updatedFosterbarnInfoArray = (fosterbarnInfo || []).slice();
             updatedFosterbarnInfoArray[index] = null;
             setFosterbarnInfo(updatedFosterbarnInfoArray);
-            updateIdentState(updatedArray);
+            setFosterbarnIdentState(updatedArray);
         }
+
         if (identFromInput.length === 11) {
             if (!IdentRules.erUgyldigIdent(identFromInput)) {
                 hentFosterbarnInfo(identFromInput, index);
             }
-            updateIdentState(updatedArray);
+
+            setFosterbarnIdentState(updatedArray);
         }
+
         setFosterbarnArray(updatedArray);
     };
 
@@ -118,14 +110,14 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
         setFosterbarnInfoErrors(updatedErrors);
         setFosterbarnInfo(updatedInfoArray);
 
-        updateIdentState(updatedArray);
+        setFosterbarnIdentState(updatedArray.length === 0 ? undefined : updatedArray);
         setFosterbarnArray(updatedArray);
     };
+
     const validateFosterbarn = (index: number) => {
         const identFromState = identState.fosterbarn?.find((_, i) => i === index);
 
         if (!identFromState || identFromState.length === 0) {
-            // return 'Feltet må fylles ut';
             return undefined;
         }
 
@@ -156,7 +148,8 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                 return (
                     <div className="flex mt-4 mb-4" key={index}>
                         <FnrTextField
-                            labelId="ident.identifikasjon.fosterbarn"
+                            label="ident.identifikasjon.fosterbarn"
+                            labelId={`ident.identifikasjon.fosterbarn ${index + 1}`}
                             value={barn}
                             loadingPersonsInfo={fosterbarnInfoLoadingIndex === index}
                             errorPersonsInfo={fosterbarnInfoErrors[index]}
@@ -164,6 +157,7 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                             errorValidationMessage={validateFosterbarn(index)}
                             onChange={(e) => onChange(e, index)}
                         />
+
                         <div className="flex items-center ml-2 mt-6">
                             <Button
                                 className="slett"
@@ -173,12 +167,13 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                                 icon={<Delete />}
                                 onClick={() => removeBarn(index)}
                             >
-                                Slett
+                                <FormattedMessage id="fosterbarn.btn.slett" />
                             </Button>
                         </div>
                     </div>
                 );
             })}
+
             <Button
                 variant="tertiary"
                 size="small"
@@ -187,7 +182,7 @@ const Fosterbarn: React.FC<Props> = ({ showComponent }: Props) => {
                 onClick={addBarn}
                 data-test-id={'leggTillFosterbarnBtn'}
             >
-                Legg til fosterbarn
+                <FormattedMessage id="fosterbarn.btn.leggTil" />
             </Button>
         </div>
     );

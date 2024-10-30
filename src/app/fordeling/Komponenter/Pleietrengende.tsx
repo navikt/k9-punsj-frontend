@@ -1,37 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Checkbox, Select } from '@navikt/ds-react';
 
 import { IdentRules } from 'app/rules';
-import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import { hentBarn } from 'app/state/reducers/HentBarn';
 import { Person } from 'app/models/types/Person';
 import { getPersonInfo } from 'app/api/api';
-
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
-import { Dispatch } from 'redux';
+import { IIdentState } from 'app/models/types/IdentState';
+import { IFellesState } from 'app/state/reducers/FellesReducer';
 
 import './pleietrengende.less';
+
 export interface Props {
+    identState: IIdentState;
+    fellesState: IFellesState;
     toSokereIJournalpost: boolean;
-    pleietrengendeHarIkkeFnrFn?: (harPleietrengendeFnr: boolean) => void;
+    skalHenteBarn?: boolean;
     visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
-    skalHenteBarn?: boolean;
+
+    setIdentAction: (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) => void;
+    henteBarn: (søkerId: string) => void;
+    setBarnetHarIkkeFnr?: (harPleietrengendeFnr: boolean) => void;
 }
 
 const Pleietrengende: React.FC<Props> = ({
+    identState,
+    fellesState,
     toSokereIJournalpost,
-    pleietrengendeHarIkkeFnrFn,
-    jpErFerdigstiltOgUtenPleietrengende,
     visPleietrengende,
     skalHenteBarn,
+    jpErFerdigstiltOgUtenPleietrengende,
+
+    setIdentAction,
+    henteBarn,
+    setBarnetHarIkkeFnr,
 }: Props) => {
     const intl = useIntl();
 
@@ -42,24 +48,21 @@ const Pleietrengende: React.FC<Props> = ({
     const [pleietrengendeInfoLoading, setPleietrengendeInfoLoading] = useState<boolean>(false);
     const [pleietrengendeInfoError, setPleietrengendeInfoError] = useState<boolean>(false);
 
-    const dispatch = useDispatch<Dispatch<any>>();
-
-    const setIdentAction = (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
-
-    const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
-
-    const identState = useSelector((state: RootStateType) => state.identState);
-    const fellesState = useSelector((state: RootStateType) => state.felles);
+    const { søkerId, pleietrengendeId, annenSokerIdent } = identState;
+    const { barn, hentBarnSuccess, hentBarnError, hentBarnForbidden } = fellesState;
 
     useEffect(() => {
         setPleietrengendeIdent('');
         setPleietrengendeInfo(undefined);
 
-        if (identState.søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
-            henteBarn(identState.søkerId);
+        if (søkerId.length > 0 && skalHenteBarn && visPleietrengende) {
+            henteBarn(søkerId);
         }
-    }, [identState.søkerId, visPleietrengende, skalHenteBarn]);
+    }, [søkerId, visPleietrengende, skalHenteBarn]);
+
+    if (!visPleietrengende) {
+        return null;
+    }
 
     const hentPleietrengendeInfo = (pleietrengendesFødselsnummer: string) => {
         setPleietrengendeInfoError(false);
@@ -78,9 +81,9 @@ const Pleietrengende: React.FC<Props> = ({
     const pleietrengendeIdentInputFieldOnChange = (event: any) => {
         const identFromInput = event.target.value.replace(/\D+/, '');
 
-        if (identState.pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
+        if (pleietrengendeId.length > 0 && identFromInput.length < pleietrengendeIdent.length) {
             setPleietrengendeInfo(undefined);
-            setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+            setIdentAction(søkerId, '', annenSokerIdent);
         }
 
         if (identFromInput.length === 11) {
@@ -88,43 +91,53 @@ const Pleietrengende: React.FC<Props> = ({
                 hentPleietrengendeInfo(identFromInput);
             }
 
-            setIdentAction(identState.søkerId, identFromInput, identState.annenSokerIdent);
+            setIdentAction(søkerId, identFromInput, annenSokerIdent);
         }
 
         setPleietrengendeIdent(identFromInput);
     };
 
     const oppdaterStateMedPleietrengendeFnr = (event: any) => {
-        setIdentAction(identState.søkerId, event.target.value, identState.annenSokerIdent);
+        setIdentAction(søkerId, event.target.value, annenSokerIdent);
     };
 
     const nullUtPleietrengendeIdent = () => {
         setPleietrengendeIdent('');
         setPleietrengendeInfo(undefined);
-        setIdentAction(identState.søkerId, '', identState.annenSokerIdent);
+        setIdentAction(søkerId, '', annenSokerIdent);
     };
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
         setPleietrengendeHarIkkeFnr(checked);
         setPleietrengendeInfo(undefined);
-        if (pleietrengendeHarIkkeFnrFn) pleietrengendeHarIkkeFnrFn(checked);
+        if (setBarnetHarIkkeFnr) setBarnetHarIkkeFnr(checked);
         if (checked) {
             setPleietrengendeIdent('');
-            setIdentAction(identState.søkerId, null, identState.annenSokerIdent);
+            setIdentAction(søkerId, '', annenSokerIdent);
         }
     };
 
-    const isPleitrengendeFnrErSammeSomSøker = identState.søkerId === identState.pleietrengendeId;
+    const isPleitrengendeFnrErSammeSomSøker = søkerId === pleietrengendeId;
+    const visPleietrengendeSelect = !!hentBarnSuccess && !!barn && barn.length > 0;
+    const visPleitrengendeTextInput =
+        gjelderAnnenPleietrengende ||
+        !skalHenteBarn ||
+        !!hentBarnError ||
+        !!hentBarnForbidden ||
+        (!!barn && barn.length === 0);
 
-    if (!visPleietrengende) {
-        return null;
-    }
+    const visPleietrengendeHarIkkeFnrCheckbox = !!setBarnetHarIkkeFnr;
+    const visPleietrengendeHarIkkeFnrInfo =
+        !toSokereIJournalpost && pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende;
+    const visPleietrengendeHarIkkeFnrInfoFerdistiltJp =
+        pleietrengendeHarIkkeFnr && !!jpErFerdigstiltOgUtenPleietrengende;
 
     return (
         <div>
-            {!!fellesState.hentBarnSuccess && !!fellesState.barn && fellesState.barn.length > 0 && (
+            {visPleietrengendeSelect && (
                 <>
                     <VerticalSpacer eightPx />
+
                     <Select
                         className="pleietrengendeSelect"
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
@@ -133,17 +146,20 @@ const Pleietrengende: React.FC<Props> = ({
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         disabled={gjelderAnnenPleietrengende}
-                        defaultValue={identState.pleietrengendeId}
+                        defaultValue={pleietrengendeId}
                     >
                         <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
+
                         {!gjelderAnnenPleietrengende &&
-                            fellesState.barn.map((b) => (
+                            barn?.map((b) => (
                                 <option key={b.identitetsnummer} value={b.identitetsnummer}>
                                     {`${b.fornavn} ${b.etternavn} - ${b.identitetsnummer}`}
                                 </option>
                             ))}
                     </Select>
+
                     <VerticalSpacer eightPx />
+
                     <Checkbox
                         onChange={(e) => {
                             setGjelderAnnenPleietrengende(e.target.checked);
@@ -151,18 +167,15 @@ const Pleietrengende: React.FC<Props> = ({
                         }}
                         checked={gjelderAnnenPleietrengende}
                     >
-                        {intlHelper(intl, 'ident.identifikasjon.annetBarn')}
+                        <FormattedMessage id="ident.identifikasjon.annetBarn" />
                     </Checkbox>
                 </>
             )}
 
-            {(gjelderAnnenPleietrengende ||
-                !skalHenteBarn ||
-                !!fellesState.hentBarnError ||
-                !!fellesState.hentBarnForbidden ||
-                (!!fellesState.barn && fellesState.barn.length === 0)) && (
+            {visPleitrengendeTextInput && (
                 <>
                     <FnrTextField
+                        label="ident.identifikasjon.pleietrengende"
                         labelId="ident.identifikasjon.pleietrengende"
                         value={pleietrengendeIdent}
                         loadingPersonsInfo={pleietrengendeInfoLoading}
@@ -170,7 +183,7 @@ const Pleietrengende: React.FC<Props> = ({
                         person={pleietrengendeInfo}
                         errorValidationMessage={
                             isPleitrengendeFnrErSammeSomSøker ||
-                            (identState.pleietrengendeId && IdentRules.erUgyldigIdent(identState.pleietrengendeId))
+                            (pleietrengendeId && IdentRules.erUgyldigIdent(pleietrengendeId))
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
                         }
@@ -179,33 +192,32 @@ const Pleietrengende: React.FC<Props> = ({
                     />
 
                     <VerticalSpacer eightPx />
-                    {pleietrengendeHarIkkeFnrFn && (
+
+                    {visPleietrengendeHarIkkeFnrCheckbox && (
                         <>
                             <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
-                                {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnr')}
+                                <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnr" />
                             </Checkbox>
-                            {!toSokereIJournalpost &&
-                                pleietrengendeHarIkkeFnr &&
-                                !jpErFerdigstiltOgUtenPleietrengende && (
-                                    <Alert
-                                        size="small"
-                                        variant="info"
-                                        className="infotrygd_info"
-                                        data-test-id="pleietrengendeHarIkkeFnrInformasjon"
-                                    >
-                                        {intlHelper(intl, 'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon')}
-                                    </Alert>
-                                )}
-                            {pleietrengendeHarIkkeFnr && jpErFerdigstiltOgUtenPleietrengende && (
+
+                            {visPleietrengendeHarIkkeFnrInfo && (
+                                <Alert
+                                    size="small"
+                                    variant="info"
+                                    className="infotrygd_info"
+                                    data-test-id="pleietrengendeHarIkkeFnrInformasjon"
+                                >
+                                    <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon" />
+                                </Alert>
+                            )}
+
+                            {visPleietrengendeHarIkkeFnrInfoFerdistiltJp && (
                                 <Alert size="small" variant="info" className="infotrygd_info">
-                                    {intlHelper(
-                                        intl,
-                                        'ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt',
-                                    )}
+                                    <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnrInformasjon.ferdistilt" />
                                 </Alert>
                             )}
                         </>
                     )}
+
                     <VerticalSpacer sixteenPx />
                 </>
             )}

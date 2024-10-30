@@ -9,11 +9,11 @@ import { IIdentState } from 'app/models/types/IdentState';
 interface Props {
     identState: IIdentState;
     showComponent: boolean;
+
     setAnnenPart: (annenPart: string) => void;
 }
 const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
     const [visFeil, setVisFeil] = useState(false);
-
     const [annenPartInfo, setAnnenPartInfo] = useState<Person | undefined>(undefined);
     const [annenPartInfoLoading, setAnnenPartInfoLoading] = useState<boolean>(false);
     const [annenPartInfoError, setAnnenPartInfoError] = useState<boolean>(false);
@@ -24,6 +24,10 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
     useEffect(() => {
         setAnnenPart('');
     }, []);
+
+    if (!showComponent) {
+        return null;
+    }
 
     const hentAnnenPartInfo = (annenPartFødselsnummer: string) => {
         setAnnenPartInfoError(false);
@@ -54,12 +58,10 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
 
     const onBlurHandler = () => setVisFeil(true);
 
-    if (!showComponent) {
-        return null;
-    }
     return (
         <>
             <FnrTextField
+                label="ident.identifikasjon.annenPart"
                 labelId="ident.identifikasjon.annenPart"
                 value={identState.annenPart}
                 loadingPersonsInfo={annenPartInfoLoading}

@@ -1,65 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+
 import { Alert, Loader, Modal } from '@navikt/ds-react';
-
-import Fagsak from 'app/types/Fagsak';
-import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
-
-import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
-import { IError, IJournalpost } from '../models/types';
-import { IJournalpostConflictResponse } from '../models/types/Journalpost/IJournalpostConflictResponse';
-import { RootStateType } from '../state/RootState';
-import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from '../state/actions';
-import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
+import { FormattedMessage } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
+import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
+import { RootStateType } from '../state/RootState';
+import { lukkOppgaveResetAction } from '../state/actions';
+import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 
 import './journalpostLoader.less';
 
-interface IJournaPostStateProps {
-    journalpost?: IJournalpost;
-    isJournalpostLoading?: boolean;
-    journalpostConflictError?: IJournalpostConflictResponse;
-    journalpostRequestError?: IError;
-    forbidden?: boolean;
-    conflict?: boolean;
-    notFound?: boolean;
-    lukkOppgaveDone?: boolean;
-}
-
-interface IJournalpostProps {
+interface Props {
     renderOnLoadComplete: () => React.ReactNode;
 }
 
-interface IDispatchProps {
-    getJournalpost: typeof getJournalpostAction;
-    lukkOppgaveReset: typeof lukkOppgaveResetAction;
-}
-
-export type JournapostLoaderProps = IJournaPostStateProps & IJournalpostProps & IDispatchProps;
-
-export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProps> = ({
-    renderOnLoadComplete,
-    isJournalpostLoading,
-    getJournalpost,
-    lukkOppgaveReset,
-    journalpost,
-    journalpostConflictError,
-    journalpostRequestError,
-    forbidden,
-    conflict,
-    notFound,
-    lukkOppgaveDone,
-}) => {
+const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
+
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const getJournalpost = (id: string) => dispatch(getJournalpostAction(id));
+    const lukkOppgaveReset = () => dispatch(lukkOppgaveResetAction());
+
+    const {
+        journalpost,
+        isJournalpostLoading,
+        journalpostNotFound,
+        journalpostForbidden,
+        journalpostConflict,
+        journalpostConflictError,
+        journalpostRequestError,
+    } = useSelector((state: RootStateType) => state.felles);
+
+    const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
 
     const [pendinglukkDebuggJp, setPendinglukkDebuggJp] = useState(false);
     const [lukkDebuggJpStatus, setLukkDebuggJpStatus] = useState<number | undefined>(undefined);
     const [ingenJp, setIngenJp] = useState(false);
+
+    useEffect(() => {
+        if (journalpostid) {
+            getJournalpost(journalpostid);
+        }
+    }, [journalpostid]);
 
     const handleLukkDebugg = () => {
         if (journalpostid) {
@@ -74,28 +64,30 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         }
     };
 
-    useEffect(() => {
-        if (journalpostid) {
-            getJournalpost(journalpostid);
-        }
-    }, [journalpostid]);
-
     if (isJournalpostLoading) {
         return (
             <div className="h-screen">
                 <div className="justify-content-center align-items-center h-screen flex flex-wrap">
-                    <Loader size="large" />
+                    <Loader size="large" data-testid="spinner" />
                 </div>
             </div>
         );
     }
 
-    if (notFound) {
-        return <FeilmeldingPanel messageId="startPage.feil.journalpost" />;
+    if (journalpostNotFound) {
+        return (
+            <div data-testid="journalpostNotFound">
+                <FeilmeldingPanel messageId="startPage.feil.journalpost" />
+            </div>
+        );
     }
 
-    if (forbidden) {
-        return <FeilmeldingPanel messageId="startPage.feil.ikketilgang" />;
+    if (journalpostForbidden) {
+        return (
+            <div data-testid="journalpostForbidden">
+                <FeilmeldingPanel messageId="startPage.feil.ikketilgang" />
+            </div>
+        );
     }
 
     if (lukkOppgaveDone) {
@@ -106,7 +98,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
         );
     }
 
-    if (conflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {
+    if (journalpostConflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {
         return (
             <ConflictErrorComponent
                 journalpostid={journalpostid || 'ukjent'}
@@ -114,6 +106,7 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
                 pendingLukkDebuggJp={pendinglukkDebuggJp}
                 lukkDebuggJpStatus={lukkDebuggJpStatus}
                 handleLukkDebugg={handleLukkDebugg}
+                data-testid="journalpostConflictComponent"
             />
         );
     }
@@ -137,22 +130,4 @@ export const JournalpostLoaderImpl: React.FunctionComponent<JournapostLoaderProp
     return renderOnLoadComplete();
 };
 
-const mapStateToProps = ({ felles, fordelingState }: RootStateType): IJournaPostStateProps => ({
-    journalpost: felles.journalpost,
-    isJournalpostLoading: felles.isJournalpostLoading,
-    forbidden: felles.journalpostForbidden,
-    conflict: felles.journalpostConflict,
-    journalpostConflictError: felles.journalpostConflictError,
-    journalpostRequestError: felles.journalpostRequestError,
-    notFound: felles.journalpostNotFound,
-    lukkOppgaveDone: fordelingState.lukkOppgaveDone,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    getJournalpost: (id: string) => dispatch(getJournalpostAction(id)),
-    lukkJournalpostOppgave: (jpid: string, soekersIdent: string, fagsak?: Fagsak) =>
-        dispatch(lukkJournalpostOppgaveAction(jpid, soekersIdent, fagsak)),
-    lukkOppgaveReset: () => dispatch(lukkOppgaveResetAction()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(JournalpostLoaderImpl);
+export default JournalpostLoader;

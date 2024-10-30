@@ -8,6 +8,6 @@
     display: flex;
 }
 
-.fagsakContainer label {
+.fagsakContainer p {
     min-width: 10rem;
 }

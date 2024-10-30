@@ -1,48 +1,41 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { ExternalLink } from '@navikt/ds-icons';
-import { Link, Panel } from '@navikt/ds-react';
+import { Box, HStack, Link } from '@navikt/ds-react';
 
-import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
+import { DokumenttypeForkortelse, dokumenttyperMedBehandlingsårValg, FordelingDokumenttype } from 'app/models/enums';
 import { finnVisningsnavnForSakstype, getModiaPath } from 'app/utils';
-
-import { IFordelingState, IJournalpost } from '../../models/types';
-import { IIdentState } from '../../models/types/IdentState';
 import { RootStateType } from '../../state/RootState';
 import intlHelper from '../../utils/intlUtils';
 import LabelValue from '../skjema/LabelValue';
+
 import './journalpostPanel.css';
 
-export interface IJournalpostPanelStateProps {
-    journalpost?: IJournalpost;
-    identState: IIdentState;
-    fordelingState: IFordelingState;
-}
-
-interface IJournalpostComponentStateProps {
+interface Props {
     journalposter?: string[];
 }
 
-export const JournalpostPanelComponent: React.FunctionComponent<
-    IJournalpostPanelStateProps & IJournalpostComponentStateProps
-> = (props) => {
-    const {
-        journalpost,
-        fordelingState,
-        identState: { søkerId, pleietrengendeId, annenPart },
-        journalposter,
-    } = props;
+export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
+    const intl = useIntl();
+
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const { søkerId, pleietrengendeId, annenPart } = useSelector((state: RootStateType) => state.identState);
 
     const ident = søkerId || journalpost?.norskIdent;
     const modiaPath = getModiaPath(ident);
-    const intl = useIntl();
 
-    const dokumenttyperOmpUt = [FordelingDokumenttype.OMSORGSPENGER_UT, FordelingDokumenttype.KORRIGERING_IM];
+    const visSakstype = !!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype;
+    const visPleietrengendeId = pleietrengendeId || journalpost?.sak?.pleietrengendeIdent;
+    const visFagsakId = fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId;
+    const visAnnenPart = !!annenPart;
+    const visBehandlingsår =
+        journalpost?.sak?.behandlingsår && dokumenttyperMedBehandlingsårValg.includes(fordelingState.dokumenttype!);
 
     return (
-        <Panel border className="journalpostpanel">
+        <Box padding="4" borderWidth="1" borderRadius="small" className="journalpostpanel">
             <div>
                 <LabelValue
                     labelTextId="journalpost.id"
@@ -50,23 +43,24 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 />
             </div>
 
-            <div className="flex">
+            <HStack gap="5">
                 <LabelValue
                     labelTextId="journalpost.norskIdent"
                     value={søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
                     visKopier
                 />
+
                 {modiaPath && (
                     <div className="flex-auto">
                         <Link className="modia-lenke" href={modiaPath}>
-                            {intlHelper(intl, 'modia.lenke')}
+                            <FormattedMessage id="modia.lenke" />
                             <ExternalLink />
                         </Link>
                     </div>
                 )}
-            </div>
+            </HStack>
 
-            {(!!fordelingState.fagsak?.sakstype || !!journalpost?.sak?.sakstype) && (
+            {visSakstype && (
                 <div>
                     <LabelValue
                         labelTextId="journalpost.sakstype"
@@ -77,7 +71,7 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 </div>
             )}
 
-            {(pleietrengendeId || journalpost?.sak?.pleietrengendeIdent) && (
+            {visPleietrengendeId && (
                 <div>
                     <LabelValue
                         labelTextId={
@@ -95,13 +89,13 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                 </div>
             )}
 
-            {annenPart && (
+            {visAnnenPart && (
                 <div>
                     <LabelValue labelTextId="journalpost.annenPart" value={annenPart} />
                 </div>
             )}
 
-            {(fordelingState.fagsak?.fagsakId || journalpost?.sak?.fagsakId) && (
+            {visFagsakId && (
                 <div>
                     <LabelValue
                         labelTextId="journalpost.saksnummer"
@@ -113,19 +107,12 @@ export const JournalpostPanelComponent: React.FunctionComponent<
                     />
                 </div>
             )}
-            {journalpost?.sak?.behandlingsår && dokumenttyperOmpUt.includes(fordelingState.dokumenttype!) && (
+
+            {visBehandlingsår && (
                 <div>
                     <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsår} />
                 </div>
             )}
-        </Panel>
+        </Box>
     );
 };
-
-const mapStateToProps = (state: RootStateType): IJournalpostPanelStateProps => ({
-    identState: state.identState,
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
-});
-
-export const JournalpostPanel = connect(mapStateToProps)(JournalpostPanelComponent);

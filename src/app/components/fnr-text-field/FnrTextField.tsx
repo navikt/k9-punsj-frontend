@@ -5,6 +5,7 @@ import PersonInfo from '../person-info/PersonInfo';
 import { Person } from 'app/models/types';
 
 interface Props {
+    label: string;
     labelId: string;
     value: string;
     loadingPersonsInfo: boolean;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const FnrTextField: React.FC<Props> = ({
+    label,
     labelId,
     loadingPersonsInfo,
     errorPersonsInfo,
@@ -32,14 +34,14 @@ const FnrTextField: React.FC<Props> = ({
     return (
         <div className="mt-6">
             <Label htmlFor={labelId}>
-                <FormattedMessage id={labelId} />
+                <FormattedMessage id={label} />
             </Label>
 
             <div className="flex mt-3">
                 <div className="items-end">
                     <TextField
                         id={labelId}
-                        label={<FormattedMessage id={labelId} />}
+                        label={<FormattedMessage id={label} />}
                         hideLabel
                         value={value}
                         onChange={onChange}
