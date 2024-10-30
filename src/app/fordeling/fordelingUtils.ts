@@ -70,6 +70,7 @@ export const isJournalførKnapperDisabled = (
         return true;
     }
 
+    /* 
     if (isDokumenttypeMedFosterbarn && identState.fosterbarn) {
         return (
             identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn)) ||
@@ -80,6 +81,17 @@ export const isJournalførKnapperDisabled = (
                 identState.fosterbarn.some((barn) => barn === identState.annenPart))
         );
     }
+        */
+
+    const notValidFosterbarn =
+        isDokumenttypeMedFosterbarn &&
+        identState.fosterbarn &&
+        (identState.fosterbarn.some((barn) => IdentRules.erUgyldigIdent(barn)) ||
+            identState.fosterbarn.some((barn) => barn === identState.søkerId) ||
+            (toSokereIJournalpost && identState.fosterbarn.some((barn) => barn === identState.annenSokerIdent)) ||
+            (isDokumenttypeMedAnnenPart &&
+                !!identState.annenPart &&
+                identState.fosterbarn.some((barn) => barn === identState.annenPart)));
 
     const disableVidereMidlertidigAlene =
         isDokumenttypeMedAnnenPart &&
@@ -87,7 +99,7 @@ export const isJournalførKnapperDisabled = (
             !!(identState.annenPart && IdentRules.erUgyldigIdent(identState.annenPart)) ||
             identState.annenPart === identState.søkerId);
 
-    return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene;
+    return IdentRules.erUgyldigIdent(identState.søkerId) || disableVidereMidlertidigAlene || notValidFosterbarn;
 };
 
 // For journalførte journalposter

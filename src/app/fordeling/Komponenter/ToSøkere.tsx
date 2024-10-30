@@ -139,6 +139,7 @@ const ToSøkere: React.FC<Props> = ({
                     </Alert>
 
                     <FnrTextField
+                        label="ident.identifikasjon.annenSoker"
                         labelId="ident.identifikasjon.annenSoker"
                         value={annenSokerIdentLocal}
                         loadingPersonsInfo={annenSøkersInfoLoading}

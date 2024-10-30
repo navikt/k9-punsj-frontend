@@ -11,17 +11,12 @@ import { IdentRules } from 'app/rules';
 import { FormattedMessage } from 'react-intl';
 
 interface Props {
-    showComponent: boolean;
     identState: IIdentState;
 
-    setFosterbarnIdentState: (updatedBarn: string[]) => void;
+    setFosterbarnIdentState: (updatedBarn?: string[]) => void;
 }
 
-const Fosterbarn: React.FC<Props> = ({ showComponent, identState, setFosterbarnIdentState }: Props) => {
-    if (!showComponent) {
-        return null;
-    }
-
+const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Props) => {
     const [fosterbarnArray, setFosterbarnArray] = useState<string[]>(identState.fosterbarn || []);
     const [fosterbarnInfo, setFosterbarnInfo] = useState<Array<Person | null>>([]);
     const [fosterbarnInfoLoadingIndex, setFosterbarnInfoLoadingIndex] = useState<number | undefined>();
@@ -82,9 +77,10 @@ const Fosterbarn: React.FC<Props> = ({ showComponent, identState, setFosterbarnI
         const identFromInput = event.target.value.replace(/\D+/, '');
         const updatedArray = fosterbarnArray.map((item, i) => (i === index ? identFromInput : item));
         const identFromState = identState.fosterbarn?.find((_, i) => i === index);
+        const identFromLocalState = fosterbarnArray?.[index];
 
-        if (identFromState && identFromState.length > 0 && identFromInput.length < identFromState.length) {
-            // TODO: Slett ident??
+        if (identFromState && identFromState.length > 0 && identFromInput.length < identFromLocalState.length) {
+            // TODO: Slett ident?
             const updatedFosterbarnInfoArray = (fosterbarnInfo || []).slice();
             updatedFosterbarnInfoArray[index] = null;
             setFosterbarnInfo(updatedFosterbarnInfoArray);
@@ -114,7 +110,7 @@ const Fosterbarn: React.FC<Props> = ({ showComponent, identState, setFosterbarnI
         setFosterbarnInfoErrors(updatedErrors);
         setFosterbarnInfo(updatedInfoArray);
 
-        setFosterbarnIdentState(updatedArray);
+        setFosterbarnIdentState(updatedArray.length === 0 ? undefined : updatedArray);
         setFosterbarnArray(updatedArray);
     };
 
@@ -152,7 +148,8 @@ const Fosterbarn: React.FC<Props> = ({ showComponent, identState, setFosterbarnI
                 return (
                     <div className="flex mt-4 mb-4" key={index}>
                         <FnrTextField
-                            labelId="ident.identifikasjon.fosterbarn"
+                            label="ident.identifikasjon.fosterbarn"
+                            labelId={`ident.identifikasjon.fosterbarn ${index + 1}`}
                             value={barn}
                             loadingPersonsInfo={fosterbarnInfoLoadingIndex === index}
                             errorPersonsInfo={fosterbarnInfoErrors[index]}

@@ -175,6 +175,7 @@ const Pleietrengende: React.FC<Props> = ({
             {visPleitrengendeTextInput && (
                 <>
                     <FnrTextField
+                        label="ident.identifikasjon.pleietrengende"
                         labelId="ident.identifikasjon.pleietrengende"
                         value={pleietrengendeIdent}
                         loadingPersonsInfo={pleietrengendeInfoLoading}

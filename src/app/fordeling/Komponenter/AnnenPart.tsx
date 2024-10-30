@@ -61,6 +61,7 @@ const AnnenPart = ({ showComponent, identState, setAnnenPart }: Props) => {
     return (
         <>
             <FnrTextField
+                label="ident.identifikasjon.annenPart"
                 labelId="ident.identifikasjon.annenPart"
                 value={identState.annenPart}
                 loadingPersonsInfo={annenPartInfoLoading}
