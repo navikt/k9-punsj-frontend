@@ -1,36 +1,40 @@
-import { useField } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
+import { FormikValues, useField, useFormikContext } from 'formik';
+import { set } from 'lodash';
+import { DatePickerProps } from '@navikt/ds-react';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
-
-import { dateToISODate, initializeDate } from 'app/utils';
-
-import { DateInputProps } from '../skjema/DateInput';
-
-const ISO_DATE_FORMAT = 'YYYY-MM-DD';
-export const DDMMYYYY_DATE_FORMAT = 'DD.MM.YYYY';
-
-interface OwnProps extends Omit<DateInputProps, 'value' | 'onChange'> {
+interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disabled'> {
     label: string;
     name: string;
+    disabled?: boolean;
+    handleBlur?: (callback: () => void, values: any) => void;
 }
 
-const DatoInputFormikNew = ({ label, name }: OwnProps) => {
+const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
-    const defaultDate = field.value ? initializeDate(field.value, ISO_DATE_FORMAT).format(DDMMYYYY_DATE_FORMAT) : '';
-    const [fieldValue, setFieldValue] = useState<string>(defaultDate !== 'Invalid Date' ? defaultDate : '');
-    const { datepickerProps, inputProps } = useDatepicker({
-        onDateChange: (selectedDate: Date) => {
-            helper.setValue(dateToISODate(selectedDate));
-            setFieldValue(initializeDate(selectedDate).format(DDMMYYYY_DATE_FORMAT));
-        },
-        defaultSelected: field.value ? initializeDate(field.value, ISO_DATE_FORMAT).toDate() : undefined,
-    });
+    const { values } = useFormikContext<FormikValues>();
+
     return (
-        <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} value={fieldValue} label={label} error={meta.touched && meta.error} />
-        </DatePicker>
+        <NewDateInput
+            label={label}
+            {...field}
+            {...props}
+            onChange={(selectedDate: string) => {
+                helper.setValue(selectedDate);
+                helper.setTouched(true, true);
+            }}
+            onBlur={(selectedDate: string) => {
+                if (handleBlur) {
+                    handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
+                } else {
+                    helper.setValue(selectedDate);
+                    field.onBlur(selectedDate);
+                }
+            }}
+            errorMessage={meta.touched && meta.error}
+        />
     );
 };
 
-export default DatoInputFormikNew;
+export default DatoInputFormik;

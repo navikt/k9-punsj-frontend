@@ -27,7 +27,7 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     value?: string;
 };
 
-export const DateInputNew: React.FC<Props> = ({
+const NewDateInput: React.FC<Props> = ({
     label,
     onChange,
 
@@ -122,3 +122,5 @@ export const DateInputNew: React.FC<Props> = ({
         </div>
     );
 };
+
+export default NewDateInput;
