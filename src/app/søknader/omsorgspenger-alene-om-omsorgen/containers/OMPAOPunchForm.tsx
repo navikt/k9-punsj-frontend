@@ -1,21 +1,18 @@
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-
-import { Alert, Button, ErrorSummary, Heading, Modal, Panel } from '@navikt/ds-react';
-
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
-
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
@@ -39,25 +36,25 @@ export interface IPunchOMPAOFormComponentProps {
 
 type IPunchOMPAOFormProps = IPunchOMPAOFormComponentProps;
 
-const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
-    const {
-        visForhaandsvisModal,
-        setVisForhaandsvisModal,
-        k9FormatErrors,
-        setK9FormatErrors,
-        journalpostid,
-        submitError,
-        setKvittering,
-        kvittering,
-    } = props;
+const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
+    visForhaandsvisModal,
+    setVisForhaandsvisModal,
+    k9FormatErrors,
+    setK9FormatErrors,
+    journalpostid,
+    submitError,
+    setKvittering,
+    kvittering,
+}) => {
+    const intl = useIntl();
 
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+
     const { values, errors, isValid, setTouched, handleSubmit, validateForm, setFieldValue } =
         useFormikContext<IOMPAOSoknad>();
-    const intl = useIntl();
 
     const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
         setKvittering,
@@ -96,8 +93,8 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     }, [values]);
 
     useEffect(() => {
-        if (!values.journalposter.includes(props.journalpostid)) {
-            setFieldValue('journalposter', [...values.journalposter, props.journalpostid], false);
+        if (!values.journalposter.includes(journalpostid)) {
+            setFieldValue('journalposter', [...values.journalposter, journalpostid], false);
         }
     }, []);
 
@@ -113,27 +110,43 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
+
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <Heading size="medium">Alene om omsorgen</Heading>
+
+            <Heading size="medium">
+                <FormattedMessage id={'skjema.ompao.tittel'} />
+            </Heading>
+
             <VerticalSpacer sixteenPx />
+
             <OpplysningerOmOMPAOSoknad />
-            <Panel border className="my-12">
-                <DatoInputFormik label="Søker er alene om omsorgen fra og med" name={`${fieldNames.periode}.fom`} />
-            </Panel>
+
+            <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
+                <DatoInputFormikNew
+                    label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
+                    name={`${fieldNames.periode}.fom`}
+                />
+            </Box>
+
             <VerticalSpacer fourtyPx />
+
             <IkkeRegistrerteOpplysninger intl={intl} />
+
             <VerticalSpacer twentyPx />
+
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
-                <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
+                <ErrorSummary heading={intlHelper(intl, 'skjema.ompao.dateInput.errorSummaryHeading')}>
                     {k9FormatErrors.map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
+
                     {/* Denne bør byttes ut med errors fra formik */}
                     {feilFraYup(schema, values)?.map((error: { message: string; path: string }) => (
                         <ErrorSummary.Item key={`${error.path}-${error.message}`}>{error.message}</ErrorSummary.Item>
                     ))}
                 </ErrorSummary>
             )}
+
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -153,7 +166,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                             });
                         }}
                     >
-                        {intlHelper(intl, 'skjema.knapp.send')}
+                        <FormattedMessage id={'skjema.knapp.send'} />
                     </Button>
 
                     <Button
@@ -162,24 +175,29 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = (props) => {
                         onClick={() => setVisVentModal(true)}
                         disabled={false}
                     >
-                        {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                        <FormattedMessage id={'skjema.knapp.settpaavent'} />
                     </Button>
                 </p>
             </div>
+
             <VerticalSpacer sixteenPx />
+
             {mellomlagringError instanceof Error && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                    <FormattedMessage id={'skjema.feil.ikke_lagret'} />
                 </Alert>
             )}
+
             {submitError instanceof Error && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, submitError.message)}
+                    <FormattedMessage id={submitError.message} />
                 </Alert>
             )}
+
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
+
             {visForhaandsvisModal && (
                 <ForhaandsvisSoeknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}

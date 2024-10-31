@@ -561,6 +561,11 @@
     "skjema.soknadskvittering.opprettetKopi": "Opprettet kopi",
     "skjema.soknadskvittering.opprettetKopi.innhold": "Du har registrert at det er to søkere og opprettet en kopi av journalposten. Ny oppgave er tilgjengelig ved søk på annen søkers fødselsnummer.",
     "skjema.sentInn": "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
+
+    "skjema.ompao.tittel": "Alene om omsorgen",
+    "skjema.ompao.dateInput.label": "Søker er alene om omsorgen fra og med",
+    "skjema.ompao.dateInput.errorSummaryHeading": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
+
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers ID:",
     "journalpost.pleietrengendeId": "Pleietrengendes ID:",
