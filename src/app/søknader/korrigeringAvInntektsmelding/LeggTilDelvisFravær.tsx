@@ -1,31 +1,33 @@
+import React, { useRef } from 'react';
+
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import React from 'react';
-import { useIntl } from 'react-intl';
-
-import { Alert, Fieldset, Panel, TextField } from '@navikt/ds-react';
-
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-
-import DateInput from 'app/components/skjema/DateInput';
 import EkspanderbartPanel from './EkspanderbartPanel';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import './LeggTilDelvisFravær.less';
 import useFocus from './useFocus';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+
+import './LeggTilDelvisFravær.less';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
+
     const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
-    const datoInputRef = React.useRef<HTMLInputElement>(null);
+
+    const datoInputRef = useRef<HTMLInputElement>(null);
     const currentListLength = values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.length;
     const previousListLength = usePrevious(currentListLength);
+
     useFocus(currentListLength, previousListLength, datoInputRef);
 
     return (
@@ -34,40 +36,45 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Panel className="listepanel delvisFravaer">
+            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel delvisFravaer">
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
                             <Fieldset
                                 legend={
                                     <h4 className="korrigering-legend">
-                                        {intlHelper(
-                                            intl,
-                                            'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend',
-                                        )}
+                                        <FormattedMessage
+                                            id={'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend'}
+                                        />
                                     </h4>
                                 }
                                 className="korrigering__skjemagruppe"
                             >
                                 <Alert size="small" variant="info" className="korrigering__infostripe">
-                                    {intlHelper(
-                                        intl,
-                                        'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info',
-                                    )}
+                                    <FormattedMessage
+                                        id={'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info'}
+                                    />
                                 </Alert>
-                                <Panel className="delvisFravaer__inputContainer">
+
+                                <Box
+                                    padding="4"
+                                    borderWidth="1"
+                                    borderRadius="small"
+                                    className="delvisFravaer__inputContainer"
+                                >
                                     {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
                                         (value: DatoMedTimetall, index: number) => {
                                             const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
                                             const isLastElement =
                                                 previousListLength < currentListLength &&
                                                 index === currentListLength - 1;
+
                                             return (
                                                 <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="delvisFravaer__inputfelter">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
-                                                                <DateInput
+                                                                <NewDateInput
                                                                     value={field.value}
                                                                     onChange={(dato) => {
                                                                         setFieldValue(field.name, dato);
@@ -81,11 +88,16 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                 />
                                                             )}
                                                         </Field>
+
                                                         <Field name={`${fieldName}.timer`}>
                                                             {({ field, meta }: FieldProps) => (
                                                                 <TextField
                                                                     {...field}
-                                                                    label={intlHelper(intl, 'skjema.perioder.timer')}
+                                                                    label={
+                                                                        <FormattedMessage
+                                                                            id={'skjema.perioder.timer'}
+                                                                        />
+                                                                    }
                                                                     className="w-12"
                                                                     error={
                                                                         meta.error &&
@@ -96,6 +108,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                 />
                                                             )}
                                                         </Field>
+
                                                         <button
                                                             id="slett"
                                                             className="fjern"
@@ -107,15 +120,17 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             <div className="slettIcon">
                                                                 <BinSvg title="fjern" />
                                                             </div>
-                                                            {intlHelper(intl, 'skjema.liste.fjern_dag')}
+
+                                                            <FormattedMessage id={'skjema.liste.fjern_dag'} />
                                                         </button>
                                                     </div>
                                                 </div>
                                             );
                                         },
                                     )}
-                                </Panel>
+                                </Box>
                             </Fieldset>
+
                             <div className="flex flex-wrap">
                                 <button
                                     id="leggTilDag"
@@ -128,13 +143,14 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     <div className="leggtilperiodeIcon">
                                         <AddCircleSvg title="leggtil" />
                                     </div>
-                                    {intlHelper(intl, 'skjema.dag.legg_til')}
+
+                                    <FormattedMessage id={'skjema.dag.legg_til'} />
                                 </button>
                             </div>
                         </>
                     )}
                 </FieldArray>
-            </Panel>
+            </Box>
         </EkspanderbartPanel>
     );
 };
