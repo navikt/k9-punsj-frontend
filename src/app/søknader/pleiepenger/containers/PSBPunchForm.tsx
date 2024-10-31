@@ -437,7 +437,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private handleMedlemskapChange = (jaNei: JaNeiIkkeOpplyst) => {
         let updatedBosteder;
 
-        if (jaNei === JaNeiIkkeOpplyst.JA && this.state.soknad.bosteder?.length === 0) {
+        if (
+            jaNei === JaNeiIkkeOpplyst.JA &&
+            (!this.state.soknad.bosteder || this.state.soknad.bosteder?.length === 0)
+        ) {
             updatedBosteder = [{ periode: this.initialPeriode, land: '' }];
         } else if (jaNei === JaNeiIkkeOpplyst.NEI) {
             updatedBosteder = [];
