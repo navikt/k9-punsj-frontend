@@ -2858,7 +2858,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.4.0"
-    "@sentry/cli": "npm:2.38.0"
+    "@sentry/cli": "npm:2.38.1"
     axios: "npm:1.7.7"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -2907,17 +2907,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.4.0, @navikt/aksel-icons@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "@navikt/aksel-icons@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.4.0%2F980a3663268cfaf8c3cc76b178337411f64ea25e"
-  checksum: 10/cb9b7a9dc95a55a58ba4304bcb43a9c3c7a162633a59040f735ab5022f271e5044843c1edef73d2dd21dc62ff4e60643d0138143e910d8f7f51c1011bbcdbee5
+"@navikt/aksel-icons@npm:7.4.1, @navikt/aksel-icons@npm:^7.4.1":
+  version: 7.4.1
+  resolution: "@navikt/aksel-icons@npm:7.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.4.1%2F3761bb19ec6b2930ad594e387abeba4abd8ef6ac"
+  checksum: 10/35ac01c7b5bf3d7b05222faf5ac619d74b9771400aa5277c807dd984ce34a9eb13fbc467f80517817d26a7d7e62489f3ff2f8a176cc5866f3b373e6f4a442750
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.4.0":
-  version: 7.4.0
-  resolution: "@navikt/ds-css@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.4.0%2F6deeedbd9c6e72968cfd94a9462a2f814a99684d"
-  checksum: 10/aaa16a8a3810b4ecf4916dc2f7eb923ff4ac0db81a7f7de4659e71251181cc4e70a9c6d98e5f7d2294a4078d2a9b4de5b52e63248707ea780549743a26b34673
+"@navikt/ds-css@npm:7.4.1":
+  version: 7.4.1
+  resolution: "@navikt/ds-css@npm:7.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.4.1%2F03eb462c3e75764ff313ed70c35d02b85979db45"
+  checksum: 10/99bb51c6d75dcd8fe094350dd981c0b2a5bfb3e11af64f875831e488375ba309f8fd72546100ccb5a65cee7c3f62a532c75c46e0028a122ee57f4df248b3b4e9
   languageName: node
   linkType: hard
 
@@ -2931,28 +2931,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.4.0":
-  version: 7.4.0
-  resolution: "@navikt/ds-react@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.4.0%2F001a7e59cb2bb331a0f571b020e43792a7f082b0"
+"@navikt/ds-react@npm:7.4.1":
+  version: 7.4.1
+  resolution: "@navikt/ds-react@npm:7.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.4.1%2F1e3d1e2ea53ce962febe28d66ada13f267481f15"
   dependencies:
     "@floating-ui/react": "npm:0.25.4"
     "@floating-ui/react-dom": "npm:^2.0.9"
-    "@navikt/aksel-icons": "npm:^7.4.0"
-    "@navikt/ds-tokens": "npm:^7.4.0"
+    "@navikt/aksel-icons": "npm:^7.4.1"
+    "@navikt/ds-tokens": "npm:^7.4.1"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^3.0.0"
     react-day-picker: "npm:8.10.1"
   peerDependencies:
     "@types/react": ^17.0.30 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
-  checksum: 10/af91d8a5718efd3de501fbe2aed3796ebb38970ec23f6f476ceb203108ba6037886b54ff5c7e42fb165c43d9478b90dfc19525fa08685935c6a953264b9a31ff
+  checksum: 10/5fd31a1533e54c1ab9a168d9c62273f982a6ec361e793dd7c58c571eded82f3a2e59c0b4d8ed78108f936cf4be39d4e4b9697072baf03a37bd10898d790cf896
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "@navikt/ds-tokens@npm:7.4.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.4.0%2F485112bc65a76a2fc2b273c396fb0188439ad6bc"
-  checksum: 10/c5f7f03d8de1ff3733438b486cc6ea66a0d036ce66f3d92b2aa49a6bcc79926d34d46b7334768b0fef365c3769d6d2bbac74bfbaed78ec993970f8bfdf7fe738
+"@navikt/ds-tokens@npm:^7.4.1":
+  version: 7.4.1
+  resolution: "@navikt/ds-tokens@npm:7.4.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.4.1%2Fbfea3c752d093e831f752b40c213f685131c601d"
+  checksum: 10/d643f6261d7d172be1ba32053b8fb2f02b4504717f94eef9a4ad371e4e222fa3eebf06238943ff7648c07c4a390c681fa61e37248ecdb6bfb81457b1c0c33a10
   languageName: node
   linkType: hard
 
@@ -3485,66 +3485,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-darwin@npm:2.38.0"
+"@sentry/cli-darwin@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-darwin@npm:2.38.1"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-linux-arm64@npm:2.38.0"
+"@sentry/cli-linux-arm64@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-linux-arm64@npm:2.38.1"
   conditions: (os=linux | os=freebsd) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-linux-arm@npm:2.38.0"
+"@sentry/cli-linux-arm@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-linux-arm@npm:2.38.1"
   conditions: (os=linux | os=freebsd) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-linux-i686@npm:2.38.0"
+"@sentry/cli-linux-i686@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-linux-i686@npm:2.38.1"
   conditions: (os=linux | os=freebsd) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-linux-x64@npm:2.38.0"
+"@sentry/cli-linux-x64@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-linux-x64@npm:2.38.1"
   conditions: (os=linux | os=freebsd) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-win32-i686@npm:2.38.0"
+"@sentry/cli-win32-i686@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-win32-i686@npm:2.38.1"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli-win32-x64@npm:2.38.0"
+"@sentry/cli-win32-x64@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli-win32-x64@npm:2.38.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:2.38.0":
-  version: 2.38.0
-  resolution: "@sentry/cli@npm:2.38.0"
+"@sentry/cli@npm:2.38.1":
+  version: 2.38.1
+  resolution: "@sentry/cli@npm:2.38.1"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.38.0"
-    "@sentry/cli-linux-arm": "npm:2.38.0"
-    "@sentry/cli-linux-arm64": "npm:2.38.0"
-    "@sentry/cli-linux-i686": "npm:2.38.0"
-    "@sentry/cli-linux-x64": "npm:2.38.0"
-    "@sentry/cli-win32-i686": "npm:2.38.0"
-    "@sentry/cli-win32-x64": "npm:2.38.0"
+    "@sentry/cli-darwin": "npm:2.38.1"
+    "@sentry/cli-linux-arm": "npm:2.38.1"
+    "@sentry/cli-linux-arm64": "npm:2.38.1"
+    "@sentry/cli-linux-i686": "npm:2.38.1"
+    "@sentry/cli-linux-x64": "npm:2.38.1"
+    "@sentry/cli-win32-i686": "npm:2.38.1"
+    "@sentry/cli-win32-x64": "npm:2.38.1"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -3567,7 +3567,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/48d9b151e70ececd0a957c903ef3433800ccb446465b167d900506c8657dae48b75e204f3bf967e23df966e057d6073965f782a0bc567c225694aba90b5f3fec
+  checksum: 10/79cde14f65be6ce14b3d1e788190695c72f0f286983216527330750de89d4ffce643b8b6dcb4d661a710b95be597255be84204c0f8b2a9d327656b7d4ef010a5
   languageName: node
   linkType: hard
 
@@ -11838,10 +11838,10 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:1.11.0"
     "@grafana/faro-web-tracing": "npm:1.11.0"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:7.4.0"
-    "@navikt/ds-css": "npm:7.4.0"
+    "@navikt/aksel-icons": "npm:7.4.1"
+    "@navikt/ds-css": "npm:7.4.1"
     "@navikt/ds-icons": "npm:3.4.3"
-    "@navikt/ds-react": "npm:7.4.0"
+    "@navikt/ds-react": "npm:7.4.1"
     "@navikt/fnrvalidator": "npm:2.1.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
@@ -11976,7 +11976,7 @@ __metadata:
     typescript-eslint: "npm:^8.11.0"
     typescript-string-operations: "npm:1.5.1"
     ulid: "npm:2.3.0"
-    uuid: "npm:11.0.1"
+    uuid: "npm:11.0.2"
     webpack: "npm:5.95.0"
     webpack-dev-server: "npm:5.1.0"
     yup: "npm:1.4.0"
@@ -17647,12 +17647,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:11.0.1":
-  version: 11.0.1
-  resolution: "uuid@npm:11.0.1"
+"uuid@npm:11.0.2":
+  version: 11.0.2
+  resolution: "uuid@npm:11.0.2"
   bin:
     uuid: dist/esm/bin/uuid
-  checksum: 10/8f2a93ce747613ab63531796fdd383123ad85bd6592808e7035b6975688ef7f01d9279ef66903fcfba6649b1583d77b88f9512b339c93f9a515964f79203a493
+  checksum: 10/b98082f398fa2ece8cacc2264402f739256ca70def4bb82e3a14ec70777d189c01ce1054764c3b59b8fc098b62b135a15d1b24914712904c988822e2ac9b4f44
   languageName: node
   linkType: hard
 

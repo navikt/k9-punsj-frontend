@@ -9,10 +9,10 @@
         "@grafana/faro-web-sdk": "1.11.0",
         "@grafana/faro-web-tracing": "1.11.0",
         "@k9-punsj-frontend/server": "workspace:",
-        "@navikt/aksel-icons": "7.4.0",
-        "@navikt/ds-css": "7.4.0",
+        "@navikt/aksel-icons": "7.4.1",
+        "@navikt/ds-css": "7.4.1",
         "@navikt/ds-icons": "3.4.3",
-        "@navikt/ds-react": "7.4.0",
+        "@navikt/ds-react": "7.4.1",
         "@navikt/fnrvalidator": "2.1.0",
         "@popperjs/core": "2.11.8",
         "@reduxjs/toolkit": "^2.3.0",
@@ -68,7 +68,7 @@
         "tsconfig-paths-webpack-plugin": "4.1.0",
         "typescript-string-operations": "1.5.1",
         "ulid": "2.3.0",
-        "uuid": "11.0.1",
+        "uuid": "11.0.2",
         "yup": "1.4.0"
     },
     "resolutions": {
