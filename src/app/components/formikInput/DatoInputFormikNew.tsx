@@ -11,7 +11,7 @@ interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disable
     handleBlur?: (callback: () => void, values: any) => void;
 }
 
-const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
+const DatoInputFormikNew = ({ label, name, handleBlur, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
 
@@ -37,4 +37,4 @@ const DatoInputFormik = ({ label, name, handleBlur, ...props }: OwnProps) => {
     );
 };
 
-export default DatoInputFormik;
+export default DatoInputFormikNew;
