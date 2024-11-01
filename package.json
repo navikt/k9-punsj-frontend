@@ -174,7 +174,7 @@
         "prettier": "3.3.3",
         "react-refresh": "0.14.2",
         "regenerator-runtime": "0.14.1",
-        "storybook": "8.3.6",
+        "storybook": "8.4.0",
         "style-loader": "4.0.0",
         "stylelint": "16.10.0",
         "terser-webpack-plugin": "5.3.10",
