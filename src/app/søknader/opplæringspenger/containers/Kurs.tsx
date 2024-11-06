@@ -1,17 +1,16 @@
-import { FieldArray, useField, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 
+import { FieldArray, useField, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Checkbox, CheckboxGroup, Heading, Label, Panel } from '@navikt/ds-react';
-
+import { Box, Button, Checkbox, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Periode } from 'app/models/types/Periode';
-
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import InstitusjonSelector from './InstitusjonSelector';
+
 import './kurs.less';
 
 interface KursComponentProps {
@@ -26,8 +25,10 @@ const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(institusjonUuidFelt);
+
     const [isAnnetSelected, setIsAnnetSelected] = useState(false);
 
     const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
@@ -37,12 +38,15 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
         }
     };
 
+    // TODO: Use intl for tekst
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
                 Opplæring
             </Heading>
+
             <VerticalSpacer sixteenPx />
+
             <div className="kurs">
                 {!hentInstitusjonerLoading && (
                     <InstitusjonSelector
@@ -53,11 +57,15 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         isAnnetSelected={isAnnetSelected}
                     />
                 )}
+
                 <VerticalSpacer eightPx />
+
                 <CheckboxGroup legend="Transportmidler" hideLegend={true} onChange={handleCheckBoxChange}>
                     <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
                 </CheckboxGroup>
+
                 <VerticalSpacer twentyPx />
+
                 <FieldArray
                     name="kurs.kursperioder"
                     render={({ push, remove }) => (
@@ -126,7 +134,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     )}
                 />
             </div>
-        </Panel>
+        </Box>
     );
 };
 
