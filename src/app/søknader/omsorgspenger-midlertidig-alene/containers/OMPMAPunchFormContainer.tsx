@@ -1,29 +1,24 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-import { Formik, FormikValues } from 'formik';
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { connect, useDispatch } from 'react-redux';
 
+import { Formik, FormikValues } from 'formik';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { IBarn } from 'app/models/types/Barn';
-import { IIdentState } from 'app/models/types/IdentState';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getEnvironmentVariable } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { useNavigate, useParams } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
-
 import schema from '../schema';
 import { getOMPMASoknad, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import { OMPMAPunchForm } from './OMPMAPunchForm';
 import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
+import { Dispatch } from 'redux';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -46,38 +41,28 @@ const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personva
     harMedisinskeOpplysninger: soknad?.harMedisinskeOpplysninger || false,
 });
 
-interface OwnProps {
+interface Props {
     journalpostid: string;
-    identState: IIdentState;
-    barn?: IBarn[];
-    harHentBarnResponse: boolean | undefined;
-}
-export interface IPunchOMPMAFormStateProps {
-    punchFormState: IPunchOMPMAFormState;
 }
 
-export interface IPunchOMPMAFormDispatchProps {
-    getSoknad: typeof getOMPMASoknad;
-    validateSoknad: typeof validerOMPMASoknad;
-    henteBarn: typeof hentBarn;
-}
+const OMPMAPunchFormContainer = (props: Props) => {
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const punchFormState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState);
+    const barn = useSelector((state: RootStateType) => state.felles.barn);
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
 
-type IPunchOMPMAFormProps = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
-
-const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
-    const { punchFormState, barn, henteBarn, identState } = props;
-    const intl = useIntl();
     const { soknad } = punchFormState;
+
     const { id } = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch<any>>();
 
     useEffect(() => {
-        if (!id || !identState.søkerId) {
+        if (!id) {
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
         }
-    }, [id, identState.søkerId]);
+    }, [id]);
 
     // for å fjerne warning om manglende id
     if (!id) {
@@ -85,19 +70,17 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     }
 
     useEffect(() => {
-        props.getSoknad(id);
+        dispatch(getOMPMASoknad(id));
     }, [id]);
 
     useEffect(() => {
-        if (soknad?.soekerId || identState.søkerId) {
-            henteBarn(soknad?.soekerId || identState.søkerId);
+        if (soknad?.soekerId || identState.søkerId || journalpost?.norskIdent) {
+            dispatch(hentBarn(soknad?.soekerId || identState.søkerId));
         }
     }, [soknad?.soekerId]);
 
-    const handleSubmit = async (soknad: FormikValues) => {
-        props.validateSoknad({
-            ...soknad,
-        });
+    const handleSubmit = async (soknadFormik: FormikValues) => {
+        dispatch(validerOMPMASoknad(soknadFormik as IOMPMASoknadUt, false));
     };
 
     const handleStartButtonClick = () => {
@@ -111,13 +94,14 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
                 <Alert size="small" variant="info" className="fullfortmelding">
                     <FormattedMessage id="skjema.sentInn" />
                 </Alert>
+
                 <div className="punchPage__knapper mt-8">
                     <Button
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                     >
-                        {intlHelper(intl, 'tilbaketilLOS')}
+                        <FormattedMessage id="tilbaketilLOS" />
                     </Button>
                 </div>
                 <OMPMASoknadKvittering response={punchFormState.innsentSoknad} />
@@ -133,11 +117,11 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
         return (
             <>
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}
+                    <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: id }} />
                 </Alert>
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>
-                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                        <FormattedMessage id="skjema.knapp.tilstart" />
                     </Button>
                 </p>
             </>
@@ -147,7 +131,7 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     return (
         <Formik
             initialValues={initialValues(
-                props.punchFormState.soknad,
+                punchFormState.soknad,
                 barn?.map((barnet) => ({
                     norskIdent: barnet.identitetsnummer,
                     navn: `${barnet.fornavn} ${barnet.etternavn}`,
@@ -162,20 +146,4 @@ const OMPMAPunchFormContainer = (props: IPunchOMPMAFormProps) => {
     );
 };
 
-const mapStateToProps = (
-    state: RootStateType,
-): Pick<OwnProps, 'identState' | 'barn' | 'harHentBarnResponse'> & IPunchOMPMAFormStateProps => ({
-    identState: state.identState,
-    barn: state.felles.barn,
-    harHentBarnResponse: state.felles.harHentBarnResponse,
-    punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    validateSoknad: (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
-        dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
-    getSoknad: (id: string) => dispatch(getOMPMASoknad(id)),
-    henteBarn: (sokersIdent: string) => dispatch(hentBarn(sokersIdent)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OMPMAPunchFormContainer);
+export default OMPMAPunchFormContainer;

@@ -654,6 +654,15 @@
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend": "Refusjon av dag skal endres til timer",
     "omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info": "Melder arbeidsgiver at krav om hel dag skal endres til krav om timer, fyll ut dato og antall timer de krever refusjon for.",
 
+    "omsorgspenger.midlertidigAlene.annenForelder.tittel": "Annen forelder",
+    "omsorgspenger.midlertidigAlene.annenForelder.fnr.label": "Identifikasjonsnummer",
+    "omsorgspenger.midlertidigAlene.annenForelder.periode.tilOgMedErIkkeOppgitt": "Til og med er ikke oppgitt",
+    "omsorgspenger.midlertidigAlene.punshcForm.updateSoknadError": "Lagring feilet",
+    "omsorgspenger.midlertidigAlene.punshcForm.updateSoknadSuccess": "Lagret",
+    "omsorgspenger.midlertidigAlene.punshcForm.awaitingUpdateResponse": "Lagrer...",
+    "omsorgspenger.midlertidigAlene.punchForm.barn.tittel": "Barn",
+    "omsorgspenger.midlertidigAlene.punchForm.tittel": "Omsorgsdager - Midlertidig alene om omsorgen",
+
     "omsorgspenger.midlertidigAlene.situasjonstyper.INNLAGT_I_HELSEINSTITUSJON": "Innlagt i helseinstitusjon",
     "omsorgspenger.midlertidigAlene.situasjonstyper.UTØVER_VERNEPLIKT": "Utøver verneplikt",
     "omsorgspenger.midlertidigAlene.situasjonstyper.FENGSEL": "Fengsel",
