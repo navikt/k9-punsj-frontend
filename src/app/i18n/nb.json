@@ -678,9 +678,55 @@
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.ARBEIDSGIVER_KONKURS": "Arbeidsgiver er konkurs",
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Konflikt med arbeidsgiver",
 
+    "omsorgspenger.utbetaling.punchForm.header": "Omsorgspengeutbetaling",
+    "omsorgspenger.utbetaling.punchForm.errorSummary.header": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
+    "omsorgspenger.utbetaling.punchForm.fosterbarn.header": "Fosterbarn",
+
     "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
     "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
     "omsorgspenger.utbetaling.skjematyper.SN/FL": "Selvstendig næringsdrivende/frilanser",
+    "omsorgspenger.utbetaling.arbeidsforhold.valgsValidering": "Du må velge minst ett arbeidsforhold",
+
+    "omsorgspenger.utbetaling.arbeidsforhold.erKorrigering": "Arbeidsforhold - korrigering",
+    "omsorgspenger.utbetaling.arbeidsforhold": "Arbeidsforhold",
+
+    "omsorgspenger.utbetaling.frilanser.tittel": "Frilanser",
+    "omsorgspenger.utbetaling.frilanser.startDato.spm": "Når startet søker som frilanser?",
+    "omsorgspenger.utbetaling.frilanser.jobberFortsatt.spm": "Jobber søker fortsatt som frilanser?",
+    "omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja": "Ja",
+    "omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei": "Nei",
+    "omsorgspenger.utbetaling.frilanser.sluttDato.spm": "Når sluttet søker som frilanser?",
+    "omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel": "Informasjon om fraværsperioder",
+    "omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn": "Legg til periode",
+
+    "omsorgspenger.utbetaling.selvstendig.tittel": "Selvstendig næringsdrivende",
+    "omsorgspenger.utbetaling.selvstendig.orgnummer": "Organisasjonsnummer",
+    "omsorgspenger.utbetaling.selvstendig.startDato.spm": "Når startet virksomheten?",
+    "omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel": "Informasjon om fraværsperioder",
+    "omsorgspenger.utbetaling.selvstendig.fraværsperioder.leggTil.btn": "Legg til periode",
+
+    "omsorgspenger.utbetaling.countrySelect.unselectedoption": "Velg land",
+
+    "omsorgspenger.utbetaling.eksisterendePerioder.tittel": "Eksisterende perioder",
+    "omsorgspenger.utbetaling.fravaersperiode.fjern.btn": "Fjern periode",
+
+    "omsorgspenger.utbetaling.medlemskap.tittel": "Medlemskap",
+    "omsorgspenger.utbetaling.medlemskap.fom.tittel": "Fra og med",
+    "omsorgspenger.utbetaling.medlemskap.tom.tittel": "Til og med",
+    "omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn": "Fjern periode",
+    "omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn": "Legg til periode",
+    "omsorgspenger.utbetaling.medlemskap.unselectedoption": "Velg land",
+    "omsorgspenger.utbetaling.nySoeknadEllerKorrigering.spm": "Er dette en ny søknad eller en korrigering?",
+    "omsorgspenger.utbetaling.nySoeknadEllerKorrigering.optionsLabel.nySøknad": "Ny søknad",
+    "omsorgspenger.utbetaling.nySoeknadEllerKorrigering.optionsLabel.korrigering": "Korrigering",
+
+    "omsorgspenger.utbetaling.utenlandsopphold.tittel": "Utenlandsopphold",
+    "omsorgspenger.utbetaling.utenlandsopphold.fom": "Fra og med",
+    "omsorgspenger.utbetaling.utenlandsopphold.tom": "Til og med",
+    "omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn": "Fjern periode",
+    "omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn": "Legg til periode",
+    "omsorgspenger.utbetaling.utenlandsopphold.unselectedoption": "Velg land",
+
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",

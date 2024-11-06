@@ -1,35 +1,58 @@
-import { Field, FieldProps } from 'formik';
 import React from 'react';
 
-import { Panel } from '@navikt/ds-react';
-
+import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldProps } from 'formik';
+import { Box } from '@navikt/ds-react';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Periode } from 'app/models/types';
+import { useIntl } from 'react-intl';
 
-interface OwnProps {
+enum SøknadsType {
+    NY = 'nySoeknad',
+    KORRIGERING = 'korrigering',
+}
+
+interface Props {
     eksisterendePerioder: Periode[];
 }
 
-export default function NySoeknadEllerKorrigering({ eksisterendePerioder }: OwnProps) {
+const NySoeknadEllerKorrigering: React.FC<Props> = ({ eksisterendePerioder }: Props) => {
+    const intl = useIntl();
+
     if (eksisterendePerioder.length) {
         return (
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Field name="erKorrigering">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
-                            legend="Er dette en ny søknad eller en korrigering?"
+                            legend={intlHelper(intl, 'omsorgspenger.utbetaling.nySoeknadEllerKorrigering.spm')}
                             name={field.name}
                             options={[
-                                { value: 'nySoeknad', label: 'Ny søknad' },
-                                { value: 'korrigering', label: 'Korrigering' },
+                                {
+                                    value: SøknadsType.NY,
+                                    label: intlHelper(
+                                        intl,
+                                        'omsorgspenger.utbetaling.nySoeknadEllerKorrigering.optionsLabel.nySøknad',
+                                    ),
+                                },
+                                {
+                                    value: SøknadsType.KORRIGERING,
+                                    label: intlHelper(
+                                        intl,
+                                        'omsorgspenger.utbetaling.nySoeknadEllerKorrigering.optionsLabel.korrigering',
+                                    ),
+                                },
                             ]}
-                            checked={field.value ? 'korrigering' : 'nySoeknad'}
-                            onChange={(e, value) => form.setFieldValue(field.name, value === 'korrigering')}
+                            checked={field.value ? SøknadsType.KORRIGERING : SøknadsType.NY}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === SøknadsType.KORRIGERING)}
                         />
                     )}
                 </Field>
-            </Panel>
+            </Box>
         );
     }
+
     return null;
-}
+};
+
+export default NySoeknadEllerKorrigering;

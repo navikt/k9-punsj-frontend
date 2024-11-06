@@ -53,7 +53,7 @@ interface Props {
     fosterbarnFraIdentState?: PersonEnkel[];
 }
 
-const PunchOMPUTForm: React.FC<Props> = ({
+const OMPUTPunchForm: React.FC<Props> = ({
     søkerId,
     visForhaandsvisModal,
     setVisForhaandsvisModal,
@@ -199,7 +199,7 @@ const PunchOMPUTForm: React.FC<Props> = ({
 
             <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" spacing>
-                    Fosterbarn
+                    <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.fosterbarn.header'} />
                 </Heading>
                 <Personvelger name="barn" />
             </Box>
@@ -219,7 +219,9 @@ const PunchOMPUTForm: React.FC<Props> = ({
             {!values.erKorrigering && (
                 <>
                     <Medlemskap />
+
                     <VerticalSpacer fourtyPx />
+
                     <Utenlandsopphold />
                 </>
             )}
@@ -229,10 +231,11 @@ const PunchOMPUTForm: React.FC<Props> = ({
             <VerticalSpacer twentyPx />
 
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
-                <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
+                <ErrorSummary heading={intlHelper(intl, 'omsorgspenger.utbetaling.punchForm.errorSummary.header')}>
                     {k9FormatErrors.map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
+
                     {/* Denne bør byttes ut med errors fra formik */}
                     {feilFraYup(schema, values, getSchemaContext(values, eksisterendePerioder))?.map(
                         (error: { message: string; path: string }) => (
@@ -243,6 +246,7 @@ const PunchOMPUTForm: React.FC<Props> = ({
                     )}
                 </ErrorSummary>
             )}
+
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -286,7 +290,7 @@ const PunchOMPUTForm: React.FC<Props> = ({
 
             {submitError instanceof Error && (
                 <Alert size="small" variant="error">
-                    TEST {intlHelper(intl, submitError.message)}
+                    <FormattedMessage id={submitError.message} />
                 </Alert>
             )}
 
@@ -332,4 +336,4 @@ const PunchOMPUTForm: React.FC<Props> = ({
     );
 };
 
-export default PunchOMPUTForm;
+export default OMPUTPunchForm;

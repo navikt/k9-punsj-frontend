@@ -20,7 +20,7 @@ import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
-import PunchOMPUTForm from './OMPUTPunchForm';
+import OMPUTPunchForm from './OMPUTPunchForm';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { Dispatch } from 'redux';
@@ -126,7 +126,7 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
             }
             onSubmit={() => submit()}
         >
-            <PunchOMPUTForm
+            <OMPUTPunchForm
                 visForhaandsvisModal={visForhaandsvisModal}
                 setVisForhaandsvisModal={setVisForhaandsvisModal}
                 k9FormatErrors={k9FormatErrors}
