@@ -3,9 +3,8 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Delete } from '@navikt/ds-icons';
 import { Box, Button } from '@navikt/ds-react';
-
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import intlHelper from 'app/utils/intlUtils';
@@ -98,9 +97,9 @@ const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false
             <VerticalSpacer twentyPx />
 
             <div className="fom-tom-rad">
-                <DatoInputFormik label="Fra og med" name={`${name}.periode.fom`} />
+                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} />
 
-                <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
+                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} />
             </div>
 
             <VerticalSpacer twentyPx />
