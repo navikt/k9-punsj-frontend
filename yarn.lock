@@ -1709,12 +1709,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bundled-es-modules/cookie@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@bundled-es-modules/cookie@npm:2.0.0"
+"@bundled-es-modules/cookie@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@bundled-es-modules/cookie@npm:2.0.1"
   dependencies:
-    cookie: "npm:^0.5.0"
-  checksum: 10/c8ef02aa5d3f6c786cfa407e1c93b4af29c600eb09990973f47a7a49e4771c1bec37c8f8e567638bb9cbc41f4e38d065ff1d8eaf9bf91f0c3613a6d60bc82c8c
+    cookie: "npm:^0.7.2"
+  checksum: 10/0038a5e82c41bfcd722afedabeb6961a5f15747b3681d7f4b61e35eb1e33130039e10ee9250dc9c9e4d3915ce1aeee717c0fb92225111574f0a030411abc0987
   languageName: node
   linkType: hard
 
@@ -6926,10 +6926,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "cookie@npm:0.5.0"
-  checksum: 10/aae7911ddc5f444a9025fbd979ad1b5d60191011339bce48e555cb83343d0f98b865ff5c4d71fecdfb8555a5cafdc65632f6fce172f32aaf6936830a883a0380
+"cookie@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "cookie@npm:0.7.2"
+  checksum: 10/24b286c556420d4ba4e9bc09120c9d3db7d28ace2bd0f8ccee82422ce42322f73c8312441271e5eefafbead725980e5996cc02766dbb89a90ac7f5636ede608f
   languageName: node
   linkType: hard
 
@@ -11919,7 +11919,7 @@ __metadata:
     lodash: "npm:4.17.21"
     lodash.throttle: "npm:4.1.1"
     mini-css-extract-plugin: "npm:2.9.1"
-    msw: "npm:2.5.2"
+    msw: "npm:2.6.2"
     mustache-express: "npm:1.3.2"
     nav-datovelger: "npm:12.6.0"
     nav-frontend-chevron-style: "npm:1.0.4"
@@ -12919,15 +12919,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:2.5.2":
-  version: 2.5.2
-  resolution: "msw@npm:2.5.2"
+"msw@npm:2.6.2":
+  version: 2.6.2
+  resolution: "msw@npm:2.6.2"
   dependencies:
-    "@bundled-es-modules/cookie": "npm:^2.0.0"
+    "@bundled-es-modules/cookie": "npm:^2.0.1"
     "@bundled-es-modules/statuses": "npm:^1.0.1"
     "@bundled-es-modules/tough-cookie": "npm:^0.1.6"
     "@inquirer/confirm": "npm:^5.0.0"
     "@mswjs/interceptors": "npm:^0.36.5"
+    "@open-draft/deferred-promise": "npm:^2.2.0"
     "@open-draft/until": "npm:^2.1.0"
     "@types/cookie": "npm:^0.6.0"
     "@types/statuses": "npm:^2.0.4"
@@ -12947,7 +12948,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10/74633a2baec43f49dad2a35353f43c67eb4cc325ad543b6e2c9298c4e1617ffe8bed7f7d4bc1d4a6090a9806d5abfe6e9f2a16f8f76a73cad443a9d2fd667388
+  checksum: 10/563cf1faba2c1785d8ec7014a7484592acfc7d350dc9b981c35ce41aa11aeaf85f4bdff6400acefa4733db9a4f1e5bdfe0974d6af18d274a54ebd672c88699a8
   languageName: node
   linkType: hard
 
