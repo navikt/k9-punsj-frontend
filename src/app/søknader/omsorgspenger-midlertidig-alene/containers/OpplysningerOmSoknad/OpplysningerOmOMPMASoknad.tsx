@@ -6,7 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../../utils/intlUtils';
 
@@ -37,14 +37,12 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
 
                 <div className="input-row">
                     <Field name="mottattDato">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <NewDateInput
+                        {({ field }: FieldProps<string, FormikValues>) => (
+                            <DatoInputFormikNew
                                 id="soknad-dato"
                                 label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                                errorMessage={meta.touched && meta.error}
-                                value={field.value}
-                                onBlur={(e) => handleBlur(() => field.onBlur(e))}
-                                onChange={(value) => form.setFieldValue('mottattDato', value)}
+                                handleBlur={handleBlur}
+                                {...field}
                             />
                         )}
                     </Field>
