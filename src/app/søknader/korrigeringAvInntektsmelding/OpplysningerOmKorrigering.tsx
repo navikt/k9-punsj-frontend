@@ -1,15 +1,16 @@
 import React from 'react';
 
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
-import { useIntl } from 'react-intl';
-import { Box, Fieldset, TextField } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Box, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import './opplysningerOmKorrigering.less';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+
+import './opplysningerOmKorrigering.less';
 
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
@@ -17,13 +18,17 @@ const OpplysningerOmKorrigering: React.FC = () => {
     const { setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
-        <Fieldset
-            legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>}
-        >
-            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel opplysningerOmKorrigering">
-                <h4 className="opplysningerOmKorrigering__subHeading">Når tok arbeidsgiver kontakt?</h4>
+        <>
+            <Heading level={'3'} size="small">
+                <FormattedMessage id={'skjema.opplysningeromkorrigering'} />
+            </Heading>
 
-                <div className="opplysningerOmKorrigering__fields">
+            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel opplysningerOmKorrigering">
+                <Heading level={'4'} size="xsmall" className="opplysningerOmKorrigering__subHeading">
+                    <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
+                </Heading>
+
+                <div className="input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
                             <NewDateInput
@@ -54,7 +59,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     </Field>
                 </div>
             </Box>
-        </Fieldset>
+        </>
     );
 };
 
