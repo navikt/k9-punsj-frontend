@@ -1,21 +1,16 @@
 import React from 'react';
 
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import { Field, FieldProps } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-import {
-    KorrigeringAvInntektsmeldingFormFields,
-    KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 import './opplysningerOmKorrigering.less';
 
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
-
-    const { setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
         <>
@@ -31,19 +26,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                 <div className="input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
-                            <NewDateInput
-                                value={field.value}
-                                onChange={(dato) => {
-                                    setFieldValue(field.name, dato);
-                                }}
-                                className="opplysningerOmKorrigering__dateInput"
-                                label={intlHelper(intl, 'skjema.dato')}
-                                errorMessage={
-                                    <ErrorMessage
-                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}
-                                    />
-                                }
-                            />
+                            <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />
                         )}
                     </Field>
 
