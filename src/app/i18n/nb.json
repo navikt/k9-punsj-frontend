@@ -492,6 +492,7 @@
     "skjema.utenlandsopphold.fom": "Fra og med:",
     "skjema.utenlandsopphold.tom": "Til og med:",
     "skjema.utenlandsopphold.land": "Land",
+    "skjema.utenlandsopphold.barnInnlagtPerioder.tittel": "Periode(r) barnet er innlagt",
     "skjema.utenlandsopphold.årsak": "Årsak",
     "skjema.utenlandsopphold.utgifterTilInnleggelse": "Hvordan dekkes utgiftene til innleggelsen?",
     "skjema.utenlandsopphold.årsak.norskOfftenligRegning": "For norsk offentlig regning",

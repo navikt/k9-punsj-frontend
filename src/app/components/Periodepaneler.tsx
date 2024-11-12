@@ -20,6 +20,7 @@ interface Props {
     textLeggTil?: string;
     textFjern?: string;
     feilkodeprefiks?: string;
+    doNotShowBorders?: boolean;
 
     editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
@@ -37,6 +38,7 @@ export const Periodepaneler: React.FC<Props> = ({
     textLeggTil,
     textFjern,
     feilkodeprefiks,
+    doNotShowBorders,
 
     editSoknad,
     editSoknadState,
@@ -70,7 +72,7 @@ export const Periodepaneler: React.FC<Props> = ({
     };
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
+        <Box padding="4" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="small" className="periodepanel">
             {periods.map((p, i) => (
                 <div className="flex flex-wrap" key={i}>
                     <div className="periodepanel-input">

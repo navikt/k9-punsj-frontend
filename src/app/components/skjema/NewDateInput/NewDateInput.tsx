@@ -25,6 +25,8 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     inputRef?: React.Ref<HTMLInputElement>;
     onBlur?: (value: string) => void;
     value?: string;
+    fromDate?: Date;
+    toDate?: Date;
 };
 
 const NewDateInput: React.FC<Props> = ({
@@ -41,11 +43,16 @@ const NewDateInput: React.FC<Props> = ({
     locale,
     onBlur,
     value,
+    fromDate,
+    toDate,
 }) => {
     const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
+
+    const fromDateDefault = new Date().setFullYear(new Date().getFullYear() - 5);
+    const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
@@ -108,6 +115,9 @@ const NewDateInput: React.FC<Props> = ({
                 onSelect={onSelect}
                 mode="single"
                 inputDisabled={inputDisabled || disabled}
+                dropdownCaption={true}
+                fromDate={fromDate || fromDateDefault}
+                toDate={toDate || toDateDefault}
             >
                 <DatePicker.Input
                     {...inputProps}
