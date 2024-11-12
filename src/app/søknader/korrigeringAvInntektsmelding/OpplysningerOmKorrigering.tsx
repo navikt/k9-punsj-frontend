@@ -23,23 +23,24 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
                 </Heading>
 
-                <div className="input-row">
+                <div className="flex flex-wrap input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
                             <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />
                         )}
                     </Field>
-
-                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
-                        {({ field }: FieldProps) => (
-                            <TextField
-                                {...field}
-                                type="time"
-                                className="klokkeslett"
-                                label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
-                            />
-                        )}
-                    </Field>
+                    <div>
+                        <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
+                            {({ field }: FieldProps) => (
+                                <TextField
+                                    {...field}
+                                    type="time"
+                                    className="klokkeslett"
+                                    label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
+                                />
+                            )}
+                        </Field>
+                    </div>
                 </div>
             </Box>
         </>
