@@ -15,14 +15,14 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from './useFocus';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 import './LeggTilDelvisFravær.less';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
 
-    const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const { values } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     const datoInputRef = useRef<HTMLInputElement>(null);
     const currentListLength = values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.length;
@@ -65,26 +65,16 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
                                         (value: DatoMedTimetall, index: number) => {
                                             const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
-                                            const isLastElement =
-                                                previousListLength < currentListLength &&
-                                                index === currentListLength - 1;
 
                                             return (
                                                 <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="delvisFravaer__inputfelter">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
-                                                                <NewDateInput
-                                                                    value={field.value}
-                                                                    onChange={(dato) => {
-                                                                        setFieldValue(field.name, dato);
-                                                                    }}
+                                                                <DatoInputFormikNew
+                                                                    {...field}
                                                                     className="dateInput"
                                                                     label={intlHelper(intl, 'skjema.dato')}
-                                                                    errorMessage={
-                                                                        <ErrorMessage name={`${fieldName}.dato`} />
-                                                                    }
-                                                                    inputRef={isLastElement ? datoInputRef : undefined}
                                                                 />
                                                             )}
                                                         </Field>
