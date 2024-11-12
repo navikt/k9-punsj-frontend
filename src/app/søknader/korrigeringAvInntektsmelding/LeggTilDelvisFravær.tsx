@@ -68,7 +68,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
 
                                             return (
                                                 <div className="flex flex-wrap" key={fieldName}>
-                                                    <div className="delvisFravaer__inputfelter">
+                                                    <div className="input-row">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
                                                                 <DatoInputFormikNew
