@@ -108,9 +108,7 @@ const Utenlandsopphold: React.FC = () => {
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
                                 icon={<AddCircle />}
                             >
-                                <FormattedMessage
-                                    id={'"omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn'}
-                                />
+                                <FormattedMessage id={'omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn'} />
                             </Button>
                         </>
                     )}
