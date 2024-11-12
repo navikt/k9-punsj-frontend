@@ -79,40 +79,45 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             )}
                                                         </Field>
 
-                                                        <Field name={`${fieldName}.timer`}>
-                                                            {({ field, meta }: FieldProps) => (
-                                                                <TextField
-                                                                    {...field}
-                                                                    label={
-                                                                        <FormattedMessage
-                                                                            id={'skjema.perioder.timer'}
-                                                                        />
-                                                                    }
-                                                                    className="w-12"
-                                                                    error={
-                                                                        meta.error &&
-                                                                        meta.touched && (
-                                                                            <ErrorMessage name={`${fieldName}.timer`} />
-                                                                        )
-                                                                    }
-                                                                />
-                                                            )}
-                                                        </Field>
+                                                        <div className="ml-2">
+                                                            <Field name={`${fieldName}.timer`}>
+                                                                {({ field, meta }: FieldProps) => (
+                                                                    <TextField
+                                                                        {...field}
+                                                                        label={
+                                                                            <FormattedMessage
+                                                                                id={'skjema.perioder.timer'}
+                                                                            />
+                                                                        }
+                                                                        className="w-12"
+                                                                        error={
+                                                                            meta.error &&
+                                                                            meta.touched && (
+                                                                                <ErrorMessage
+                                                                                    name={`${fieldName}.timer`}
+                                                                                />
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                )}
+                                                            </Field>
+                                                        </div>
+                                                        <div className="ml-2">
+                                                            <button
+                                                                id="slett"
+                                                                className="fjern"
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    remove(index);
+                                                                }}
+                                                            >
+                                                                <div className="slettIcon">
+                                                                    <BinSvg title="fjern" />
+                                                                </div>
 
-                                                        <button
-                                                            id="slett"
-                                                            className="fjern"
-                                                            type="button"
-                                                            onClick={() => {
-                                                                remove(index);
-                                                            }}
-                                                        >
-                                                            <div className="slettIcon">
-                                                                <BinSvg title="fjern" />
-                                                            </div>
-
-                                                            <FormattedMessage id={'skjema.liste.fjern_dag'} />
-                                                        </button>
+                                                                <FormattedMessage id={'skjema.liste.fjern_dag'} />
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             );
