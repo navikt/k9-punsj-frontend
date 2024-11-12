@@ -3,7 +3,6 @@ import React from 'react';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, TextField } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { IOMPAOSoknad } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
@@ -18,9 +17,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
     const { values } = useFormikContext<IOMPAOSoknad>();
 
     return (
-        <div className="mt-12">
-            <VerticalSpacer sixteenPx />
-
+        <div className="mt-4">
             <Box padding="4" borderWidth="1" borderRadius="small">
                 <Alert variant="info" className="alert">
                     <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />

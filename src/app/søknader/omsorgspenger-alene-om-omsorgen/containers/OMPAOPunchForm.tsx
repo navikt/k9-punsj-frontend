@@ -117,8 +117,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                 <FormattedMessage id={'skjema.ompao.tittel'} />
             </Heading>
 
-            <VerticalSpacer sixteenPx />
-
             <OpplysningerOmOMPAOSoknad />
 
             <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
