@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { ErrorMessage, Field, FieldArray, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box } from '@navikt/ds-react';
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
@@ -52,14 +52,16 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
                                         <Field name={fieldName}>
-                                            {() => (
+                                            {({ meta }: FieldProps<string, FormikValues>) => (
                                                 <PeriodInput
                                                     onChange={(period) => {
                                                         setFieldValue(fieldName, period);
                                                     }}
                                                     periode={value}
                                                     intl={intl}
-                                                    errorMessage={<ErrorMessage name={fieldName} />}
+                                                    errorMessage={
+                                                        meta.error ? <ErrorMessage name={fieldName} /> : undefined
+                                                    }
                                                     fomInputRef={isLastElement ? fomInputRef : undefined}
                                                 />
                                             )}
