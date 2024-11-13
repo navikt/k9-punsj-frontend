@@ -35,7 +35,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
             <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
         </Alert>
 
-        <div className="input-row">
+        <div className="flex flex-wrap input-row">
             <NewDateInput
                 value={soknad.mottattDato}
                 id="soknad-dato"
@@ -45,18 +45,19 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
                     mottattDato: selectedDate,
                 }))}
             />
-
-            <TextField
-                value={soknad.klokkeslett || ''}
-                type="time"
-                className="klokkeslett"
-                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                    klokkeslett: event.target.value,
-                }))}
-                error={getErrorMessage('klokkeslett')}
-                size="small"
-            />
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    className="klokkeslett"
+                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                    size="small"
+                />
+            </div>
         </div>
 
         <RadioPanelGruppe
