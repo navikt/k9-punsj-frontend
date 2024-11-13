@@ -92,6 +92,8 @@ export const OMPMAPunchForm: React.FC<Props> = ({
     const punchFormState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState);
     const signaturState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState);
     const journalposterState = useSelector((state: RootStateType) => state.journalposterPerIdentState);
+    const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
+    const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
 
     const { signert } = signaturState;
 
@@ -388,7 +390,11 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 >
                     <Modal.Body>
                         <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering response={punchFormState.validertSoknad} />
+                            <OMPMASoknadKvittering
+                                response={punchFormState.validertSoknad}
+                                kopierJournalpostSuccess={kopierJournalpostSuccess}
+                                annenSokerIdent={annenSokerIdent}
+                            />
                         </div>
 
                         <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
