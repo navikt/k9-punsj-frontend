@@ -48,17 +48,19 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
                 }))}
             />
 
-            <TextField
-                value={soknad.klokkeslett || ''}
-                type="time"
-                className="klokkeslett"
-                size="small"
-                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                    klokkeslett: event.target.value,
-                }))}
-                error={getErrorMessage('klokkeslett')}
-            />
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    className="klokkeslett"
+                    // size="small"
+                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                />
+            </div>
         </div>
 
         <RadioPanelGruppe

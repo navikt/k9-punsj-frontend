@@ -23,7 +23,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
                 </Heading>
 
-                <div className="flex flex-wrap input-row">
+                <div className="input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
                             <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />

@@ -47,21 +47,23 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
                         )}
                     </Field>
 
-                    <Field name="klokkeslett">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <TextField
-                                id="klokkeslett"
-                                type="time"
-                                className="klokkeslett"
-                                size="small"
-                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                                error={meta.touched && meta.error}
-                                {...field}
-                                onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
-                                onBlur={(e) => handleBlur(() => field.onBlur(e))}
-                            />
-                        )}
-                    </Field>
+                    <div>
+                        <Field name="klokkeslett">
+                            {({ field, meta, form }: FieldProps<string, FormikValues>) => (
+                                <TextField
+                                    id="klokkeslett"
+                                    type="time"
+                                    className="klokkeslett"
+                                    // size="small"
+                                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                    error={meta.touched && meta.error}
+                                    {...field}
+                                    onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
+                                    onBlur={(e) => handleBlur(() => field.onBlur(e))}
+                                />
+                            )}
+                        </Field>
+                    </div>
                 </div>
 
                 <RadioPanelGruppe

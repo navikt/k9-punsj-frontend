@@ -43,20 +43,22 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                         )}
                     </Field>
 
-                    <Field name="klokkeslett">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <TextField
-                                id="klokkeslett"
-                                type="time"
-                                className="klokkeslett"
-                                size="small"
-                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                                error={meta.touched && meta.error}
-                                {...field}
-                                onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
-                            />
-                        )}
-                    </Field>
+                    <div>
+                        <Field name="klokkeslett">
+                            {({ field, meta, form }: FieldProps<string, FormikValues>) => (
+                                <TextField
+                                    id="klokkeslett"
+                                    type="time"
+                                    className="klokkeslett"
+                                    // size="small"
+                                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                    error={meta.touched && meta.error}
+                                    {...field}
+                                    onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
+                                />
+                            )}
+                        </Field>
+                    </div>
                 </div>
 
                 {!values.erKorrigering && (

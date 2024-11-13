@@ -35,7 +35,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
             <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
         </Alert>
 
-        <div className="flex flex-wrap input-row">
+        <div className="input-row">
             <NewDateInput
                 value={soknad.mottattDato}
                 id="soknad-dato"
@@ -55,7 +55,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
                         klokkeslett: event.target.value,
                     }))}
                     error={getErrorMessage('klokkeslett')}
-                    size="small"
+                    // size="small"
                 />
             </div>
         </div>
