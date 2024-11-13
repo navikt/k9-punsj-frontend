@@ -1,18 +1,17 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { Field, FieldProps, FormikProps, FormikValues } from 'formik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
-import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 
 import { Alert, Loader, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
-import { IInputError, ISignaturState } from 'app/models/types';
-import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
+import { IInputError } from 'app/models/types';
+import { setSignaturAction } from 'app/state/actions';
 import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -23,14 +22,10 @@ import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosMod
 import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
 import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
-import { IIdentState } from '../../../models/types/IdentState';
-import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
-import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
+
 import {
-    resetOMPMASoknadAction,
-    resetPunchOMPMAFormAction,
     setJournalpostPaaVentResetAction,
     settJournalpostPaaVent,
     submitOMPMASoknad,
@@ -40,37 +35,16 @@ import {
 } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
+import { Dispatch } from 'redux';
 
-interface OwnProps {
+interface Props {
     journalpostid: string;
     id: string;
     formik: FormikProps<IOMPMASoknad>;
     schema: yup.AnyObjectSchema;
 }
-
-export interface IPunchOMPMAFormStateProps {
-    punchFormState: IPunchOMPMAFormState;
-    signaturState: ISignaturState;
-    journalposterState: IJournalposterPerIdentState;
-    identState: IIdentState;
-}
-
-export interface IPunchOMPMAFormDispatchProps {
-    resetSoknadAction: typeof resetOMPMASoknadAction;
-    updateSoknad: typeof updateOMPMASoknad;
-    submitSoknad: typeof submitOMPMASoknad;
-    resetPunchFormAction: typeof resetPunchFormAction;
-    setSignaturAction: typeof setSignaturAction;
-    settJournalpostPaaVent: typeof settJournalpostPaaVent;
-    settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
-    validateSoknad: typeof validerOMPMASoknad;
-    validerSoknadReset: typeof validerOMPMASoknadResetAction;
-}
-
-type Props = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     try {
@@ -89,8 +63,15 @@ const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     }
 };
 
-export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
+export const OMPMAPunchForm: React.FC<Props> = ({
+    journalpostid,
+    id,
+    schema,
+    formik: { values, handleSubmit, errors },
+}: Props) => {
     const intl = useIntl();
+
+    const dispatch = useDispatch<Dispatch<any>>();
 
     const [showStatus, setShowStatus] = useState(false);
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
@@ -98,12 +79,20 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
 
-    const {
-        punchFormState,
-        signaturState,
-        schema,
-        formik: { values, handleSubmit, errors },
-    } = props;
+    const updateSoknadRedux = (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad));
+    const submitSoknad = (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid));
+    const setSignatur = (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert));
+    const settJournalpostPaaVentAction = (journalpostidRedux: string, soeknadid: string) =>
+        dispatch(settJournalpostPaaVent(journalpostidRedux, soeknadid));
+    const settPåventResetAction = () => dispatch(setJournalpostPaaVentResetAction());
+    const validateSoknad = (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
+        dispatch(validerOMPMASoknad(soknad, erMellomlagring));
+    const validerSoknadReset = () => dispatch(validerOMPMASoknadResetAction());
+
+    const punchFormState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState);
+    const signaturState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState);
+    const journalposterState = useSelector((state: RootStateType) => state.journalposterPerIdentState);
+
     const { signert } = signaturState;
 
     const updateSoknad = (soknad: IOMPMASoknad) => {
@@ -111,14 +100,14 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
         const barnMappet = soknad.barn.map((barn) => ({ norskIdent: barn.norskIdent, foedselsdato: '' }));
         const journalposter = Array.from(soknad?.journalposter || []);
 
-        if (!journalposter.includes(props.journalpostid)) {
-            journalposter.push(props.journalpostid);
+        if (!journalposter.includes(journalpostid)) {
+            journalposter.push(journalpostid);
         }
         if (harForsoektAaSendeInn) {
-            props.validateSoknad({ ...soknad, barn: barnMappet, journalposter }, true);
+            validateSoknad({ ...soknad, barn: barnMappet, journalposter }, true);
         }
 
-        return props.updateSoknad({ ...soknad, barn: barnMappet, journalposter });
+        return updateSoknadRedux({ ...soknad, barn: barnMappet, journalposter });
     };
 
     useEffect(() => {
@@ -128,11 +117,11 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
     }, [showStatus]);
 
     const handleSettPaaVent = () => {
-        props.settJournalpostPaaVent(props.journalpostid, values.soeknadId!);
+        settJournalpostPaaVentAction(journalpostid, values.soeknadId!);
         setShowSettPaaVentModal(false);
     };
 
-    const getManglerFromStore = () => props.punchFormState.inputErrors;
+    const getManglerFromStore = () => punchFormState.inputErrors;
 
     const getUhaandterteFeil = (attribute: string): (string | undefined)[] => {
         if (!feilmeldingStier.has(attribute)) {
@@ -207,11 +196,7 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
 
             <VerticalSpacer sixteenPx />
 
-            <OpplysningerOmOMPMASoknad
-                setSignaturAction={props.setSignaturAction}
-                signert={signert}
-                handleBlur={handleBlur}
-            />
+            <OpplysningerOmOMPMASoknad setSignaturAction={setSignatur} signert={signert} handleBlur={handleBlur} />
 
             <VerticalSpacer fourtyPx />
 
@@ -248,6 +233,7 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
                                 onChange={(e) => handleBlur(() => field.onChange(e))}
                                 value=""
                             />
+
                             <HelpText className="hjelpetext" placement="top-end">
                                 <FormattedMessage id={'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst'} />
                             </HelpText>
@@ -359,8 +345,8 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
                 >
                     <div className="">
                         <SettPaaVentModal
-                            journalposter={props.journalposterState.journalposter.filter(
-                                (jp) => jp.journalpostId !== props.journalpostid,
+                            journalposter={journalposterState.journalposter.filter(
+                                (jp) => jp.journalpostId !== journalpostid,
                             )}
                             soknadId={values.soeknadId}
                             submit={() => handleSettPaaVent()}
@@ -373,7 +359,7 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
             {punchFormState.settPaaVentSuccess && (
                 <Modal
                     key="settpaaventokmodal"
-                    onClose={() => props.settPaaventResetAction()}
+                    onClose={() => settPåventResetAction()}
                     aria-label="settpaaventokmodal"
                     open={punchFormState.settPaaVentSuccess}
                 >
@@ -384,26 +370,27 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
             {!!punchFormState.settPaaVentError && (
                 <Modal
                     key="settpaaventerrormodal"
-                    onClose={() => props.settPaaventResetAction()}
+                    onClose={() => settPåventResetAction()}
                     aria-label="settpaaventokmodal"
                     open={!!punchFormState.settPaaVentError}
                 >
-                    <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
+                    <SettPaaVentErrorModal close={() => settPåventResetAction()} />
                 </Modal>
             )}
 
-            {props.punchFormState.isValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
+            {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal
                     key="validertSoknadModal"
                     className="validertSoknadModal"
-                    onClose={() => props.validerSoknadReset()}
+                    onClose={() => validerSoknadReset()}
                     aria-label="validertSoknadModal"
-                    open={!!props.punchFormState.isValid}
+                    open={!!punchFormState.isValid}
                 >
                     <Modal.Body>
                         <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering response={props.punchFormState.validertSoknad} />
+                            <OMPMASoknadKvittering response={punchFormState.validertSoknad} />
                         </div>
+
                         <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
                             <Button
                                 size="small"
@@ -417,7 +404,7 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
                                 variant="secondary"
                                 size="small"
                                 className="validertSoknadOppsummeringContainer_knappTilbake"
-                                onClick={() => props.validerSoknadReset()}
+                                onClick={() => validerSoknadReset()}
                             >
                                 <FormattedMessage id={'skjema.knapp.avbryt'} />
                             </Button>
@@ -430,17 +417,17 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
                 <Modal
                     key="erdusikkermodal"
                     className="erdusikkermodal"
-                    onClose={() => props.validerSoknadReset()}
+                    onClose={() => validerSoknadReset()}
                     aria-label="erdusikkermodal"
                     open={visErDuSikkerModal}
                 >
                     <ErDuSikkerModal
                         melding="modal.erdusikker.sendinn"
                         extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => props.submitSoknad(values.soekerId, props.id)}
+                        onSubmit={() => submitSoknad(values.soekerId, id)}
                         submitKnappText="skjema.knapp.send"
                         onClose={() => {
-                            props.validerSoknadReset();
+                            validerSoknadReset();
                             setVisErDuSikkerModal(false);
                         }}
                     />
@@ -449,27 +436,3 @@ export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
         </>
     );
 };
-
-const mapStateToProps = (state: RootStateType): IPunchOMPMAFormStateProps => ({
-    punchFormState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState,
-    signaturState: state.OMSORGSPENGER_MIDLERTIDIG_ALENE.signaturState,
-    journalposterState: state.journalposterPerIdentState,
-    identState: state.identState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    resetSoknadAction: () => dispatch(resetOMPMASoknadAction()),
-    undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPMASoknadAction()),
-    updateSoknad: (soknad: Partial<IOMPMASoknadUt>) => dispatch(updateOMPMASoknad(soknad)),
-    submitSoknad: (ident: string, soeknadid: string) => dispatch(submitOMPMASoknad(ident, soeknadid)),
-    resetPunchFormAction: () => dispatch(resetPunchOMPMAFormAction()),
-    setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
-    settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
-        dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
-    settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (soknad: IOMPMASoknadUt, erMellomlagring: boolean) =>
-        dispatch(validerOMPMASoknad(soknad, erMellomlagring)),
-    validerSoknadReset: () => dispatch(validerOMPMASoknadResetAction()),
-});
-
-export const OMPMAPunchForm = connect(mapStateToProps, mapDispatchToProps)(PunchOMPMAFormComponent);
