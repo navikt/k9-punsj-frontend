@@ -48,7 +48,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
                         {`${periodToFormattedString(
                             kvittering.mottattDato.substr(0, 10),
                         )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`}

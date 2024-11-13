@@ -38,7 +38,7 @@ const OMSKvittering: React.FC<OMSKvitteringProps> = ({ feltverdier }) => {
             <h3>{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>
             <hr className={classNames('linje')} />
             <p>
-                <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
                 {initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
             </p>
             <h3>Virksomhet</h3>

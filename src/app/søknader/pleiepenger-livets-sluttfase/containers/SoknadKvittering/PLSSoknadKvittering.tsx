@@ -141,7 +141,7 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
                             response.mottattDato,
                         )}`}
