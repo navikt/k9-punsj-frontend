@@ -1,9 +1,10 @@
+import * as React from 'react';
+
 import classNames from 'classnames';
 import { Field, FieldProps, FormikProps, FormikValues } from 'formik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import * as yup from 'yup';
 
@@ -28,7 +29,6 @@ import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
 import { undoChoiceOfEksisterendeOMPMASoknadAction } from '../state/actions/EksisterendeOMPMASoknaderActions';
 import {
-    getOMPMASoknad,
     resetOMPMASoknadAction,
     resetPunchOMPMAFormAction,
     setJournalpostPaaVentResetAction,
@@ -44,7 +44,7 @@ import { IPunchOMPMAFormState } from '../types/PunchOMPMAFormState';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
 
-export interface IPunchOMPMAFormComponentProps {
+interface OwnProps {
     journalpostid: string;
     id: string;
     formik: FormikProps<IOMPMASoknad>;
@@ -59,7 +59,6 @@ export interface IPunchOMPMAFormStateProps {
 }
 
 export interface IPunchOMPMAFormDispatchProps {
-    getSoknad: typeof getOMPMASoknad;
     resetSoknadAction: typeof resetOMPMASoknadAction;
     updateSoknad: typeof updateOMPMASoknad;
     submitSoknad: typeof submitOMPMASoknad;
@@ -71,7 +70,7 @@ export interface IPunchOMPMAFormDispatchProps {
     validerSoknadReset: typeof validerOMPMASoknadResetAction;
 }
 
-type IPunchOMPMAFormProps = IPunchOMPMAFormComponentProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
+type Props = OwnProps & IPunchOMPMAFormStateProps & IPunchOMPMAFormDispatchProps;
 
 const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     try {
@@ -90,12 +89,15 @@ const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
     }
 };
 
-export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) => {
+export const PunchOMPMAFormComponent: React.FC<Props> = (props) => {
+    const intl = useIntl();
+
     const [showStatus, setShowStatus] = useState(false);
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [feilmeldingStier, setFeilmeldingStier] = useState(new Set());
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
+
     const {
         punchFormState,
         signaturState,
@@ -103,7 +105,6 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         formik: { values, handleSubmit, errors },
     } = props;
     const { signert } = signaturState;
-    const intl = useIntl();
 
     const updateSoknad = (soknad: IOMPMASoknad) => {
         setShowStatus(true);
@@ -170,20 +171,22 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
                 <Tag variant="warning" {...{ className }}>
-                    Lagrer …
+                    <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.awaitingUpdateResponse'} />
                 </Tag>
             );
         }
+
         if (punchFormState.updateSoknadError) {
             return (
                 <Tag variant="error" {...{ className }}>
-                    Lagring feilet
+                    <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadError'} />
                 </Tag>
             );
         }
+
         return (
             <Tag variant="success" {...{ className }}>
-                Lagret
+                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadSuccess'} />
             </Tag>
         );
     };
@@ -201,27 +204,38 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
             <JournalposterSync journalposter={values.journalposter} />
 
             {statusetikett()}
+
             <VerticalSpacer sixteenPx />
+
             <OpplysningerOmOMPMASoknad
-                intl={intl}
                 setSignaturAction={props.setSignaturAction}
                 signert={signert}
                 handleBlur={handleBlur}
             />
+
             <VerticalSpacer fourtyPx />
+
             <Heading size="xsmall" spacing>
-                Barn
+                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.barn.tittel'} />
             </Heading>
+
             <Personvelger
                 name="barn"
                 handleBlur={handleBlur}
                 sokersIdent={values.soekerId}
                 populerMedBarn={!values.barn.length}
             />
+
             <VerticalSpacer fourtyPx />
+
             <AnnenForelder intl={intl} handleBlur={handleBlur} />
+
             <VerticalSpacer fourtyPx />
-            <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+
+            <p className="ikkeregistrert">
+                <FormattedMessage id={'skjema.ikkeregistrert'} />
+            </p>
+
             <div className="flex-container">
                 <Field name="harMedisinskeOpplysninger">
                     {({ field }: FieldProps<FormikValues>) => (
@@ -235,13 +249,15 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 value=""
                             />
                             <HelpText className="hjelpetext" placement="top-end">
-                                {intlHelper(intl, 'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst')}
+                                <FormattedMessage id={'skjema.medisinskeopplysninger.omsorgspenger-ks.hjelpetekst'} />
                             </HelpText>
                         </>
                     )}
                 </Field>
             </div>
+
             <VerticalSpacer eightPx />
+
             <div className="flex-container">
                 <Field name="harInfoSomIkkeKanPunsjes">
                     {({ field }: FieldProps<FormikValues>) => (
@@ -255,18 +271,21 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 value=""
                             />
                             <HelpText className="hjelpetext" placement="top-end">
-                                {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                                <FormattedMessage id={'skjema.opplysningerikkepunsjet.hjelpetekst'} />
                             </HelpText>
                         </>
                     )}
                 </Field>
             </div>
+
             <VerticalSpacer twentyPx />
+
             {punchFormState.isAwaitingValidateResponse && (
                 <div className={classNames('loadingSpinner')}>
                     <Loader size="large" />
                 </div>
             )}
+
             {harForsoektAaSendeInn && harFeilISkjema() && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {getUhaandterteFeil('').map((feilmelding) => (
@@ -277,6 +296,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     ))}
                 </ErrorSummary>
             )}
+
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -289,7 +309,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                             handleSubmit();
                         }}
                     >
-                        {intlHelper(intl, 'skjema.knapp.send')}
+                        <FormattedMessage id={'skjema.knapp.send'} />
                     </Button>
 
                     <Button
@@ -298,31 +318,37 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                         onClick={() => setShowSettPaaVentModal(true)}
                         disabled={false}
                     >
-                        {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                        <FormattedMessage id={'skjema.knapp.settpaavent'} />
                     </Button>
                 </p>
             </div>
+
             <VerticalSpacer sixteenPx />
+
             {!!punchFormState.updateSoknadError && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_lagret')}
+                    <FormattedMessage id={'skjema.feil.ikke_lagret'} />
                 </Alert>
             )}
+
             {!!punchFormState.inputErrors?.length && (
                 <Alert size="small" variant="error" className="valideringstripefeil">
-                    {intlHelper(intl, 'skjema.feil.validering')}
+                    <FormattedMessage id={'skjema.feil.validering'} />
                 </Alert>
             )}
+
             {!!punchFormState.submitSoknadError && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_sendt')}
+                    <FormattedMessage id={'skjema.feil.ikke_sendt'} />
                 </Alert>
             )}
+
             {!!punchFormState.submitSoknadConflict && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.konflikt')}
+                    <FormattedMessage id={'skjema.feil.konflikt'} />
                 </Alert>
             )}
+
             {showSettPaaVentModal && (
                 <Modal
                     key="settpaaventmodal"
@@ -343,6 +369,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     </div>
                 </Modal>
             )}
+
             {punchFormState.settPaaVentSuccess && (
                 <Modal
                     key="settpaaventokmodal"
@@ -353,6 +380,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     <OkGaaTilLosModal melding="modal.settpaavent.til" />
                 </Modal>
             )}
+
             {!!punchFormState.settPaaVentError && (
                 <Modal
                     key="settpaaventerrormodal"
@@ -363,6 +391,7 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                     <SettPaaVentErrorModal close={() => props.settPaaventResetAction()} />
                 </Modal>
             )}
+
             {props.punchFormState.isValid && !visErDuSikkerModal && props.punchFormState.validertSoknad && (
                 <Modal
                     key="validertSoknadModal"
@@ -381,20 +410,22 @@ export const PunchOMPMAFormComponent: React.FC<IPunchOMPMAFormProps> = (props) =
                                 className="validertSoknadOppsummeringContainer_knappVidere"
                                 onClick={() => setVisErDuSikkerModal(true)}
                             >
-                                {intlHelper(intl, 'fordeling.knapp.videre')}
+                                <FormattedMessage id={'fordeling.knapp.videre'} />
                             </Button>
+
                             <Button
                                 variant="secondary"
                                 size="small"
                                 className="validertSoknadOppsummeringContainer_knappTilbake"
                                 onClick={() => props.validerSoknadReset()}
                             >
-                                {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                <FormattedMessage id={'skjema.knapp.avbryt'} />
                             </Button>
                         </div>
                     </Modal.Body>
                 </Modal>
             )}
+
             {visErDuSikkerModal && (
                 <Modal
                     key="erdusikkermodal"

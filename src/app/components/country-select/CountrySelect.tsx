@@ -1,16 +1,18 @@
-import * as React from 'react';
-import { Select, SelectProps } from '@navikt/ds-react';
+import React from 'react';
 
+import { Select, SelectProps } from '@navikt/ds-react';
 import { getCountryList } from 'app/utils';
 
-interface ICountrySelectProps extends Omit<SelectProps, 'children'> {
+interface Props extends Omit<SelectProps, 'children'> {
     selectedcountry?: string;
     unselectedoption?: string;
 }
 
-export const CountrySelect = (props: ICountrySelectProps) => {
+export const CountrySelect = (props: Props) => {
     const countryList = getCountryList();
+
     const { unselectedoption, selectedcountry } = props;
+
     if (unselectedoption) {
         countryList.unshift({ code: '', name: unselectedoption });
     }

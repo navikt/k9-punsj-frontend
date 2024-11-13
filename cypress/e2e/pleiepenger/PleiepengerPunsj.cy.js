@@ -52,7 +52,7 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
-        cy.get('.navds-modal').within(() => {
+        cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
             cy.findAllByLabelText('Timer').eq(3).clear({ force: true }).type(7, { force: true });
@@ -76,7 +76,7 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
-        cy.get('.navds-modal').within(() => {
+        cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });

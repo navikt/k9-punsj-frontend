@@ -1,28 +1,30 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
 
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Delete } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
-
+import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import intlHelper from 'app/utils/intlUtils';
-
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
+
 import './fravaersperiode.less';
 
-interface OwnProps {
+interface Props {
     antallFravaersperioder: number;
     name: string;
-    slettPeriode: () => void;
     visSoknadAarsak?: boolean;
+
+    slettPeriode: () => void;
 }
 
-const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknadAarsak = false }: OwnProps) => {
+const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false, slettPeriode }: Props) => {
     const intl = useIntl();
+
     const minstToPerioder = antallFravaersperioder > 1;
+
     const fraværÅrsakOptions = [
         {
             value: '',
@@ -41,6 +43,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
             label: intlHelper(intl, 'omsorgspenger.omsorgspengeutbetaling.fraværsårsaker.SMITTEVERNHENSYN'),
         },
     ];
+
     const søknadÅrsakOptions = [
         {
             value: '',
@@ -62,8 +65,9 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
             label: intlHelper(intl, 'omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER'),
         },
     ];
+
     return (
-        <Panel className="fravaersperiode-container ">
+        <Box padding="4" borderWidth="1" borderRadius="small" className="fravaersperiode-container ">
             <div className="aarsak-rad">
                 <SelectFormik
                     label="Fraværsårsak"
@@ -71,6 +75,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                     name={`${name}.fraværÅrsak`}
                     options={fraværÅrsakOptions}
                 />
+
                 {visSoknadAarsak && (
                     <SelectFormik
                         label="Søknadsårsak"
@@ -79,19 +84,26 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                         options={søknadÅrsakOptions}
                     />
                 )}
+
                 {minstToPerioder && (
                     <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode} icon={<Delete />}>
-                        Fjern periode
+                        <FormattedMessage id={'omsorgspenger.utbetaling.fravaersperiode.fjern.btn'} />
                     </Button>
                 )}
             </div>
+
             <VerticalSpacer twentyPx />
+
             <VerticalSpacer twentyPx />
+
             <div className="fom-tom-rad">
-                <DatoInputFormik label="Fra og med" name={`${name}.periode.fom`} />
-                <DatoInputFormik label="Til og med" name={`${name}.periode.tom`} />
+                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} />
+
+                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} />
             </div>
+
             <VerticalSpacer twentyPx />
+
             <div className="timer-container">
                 <TextFieldFormik
                     className="timer-arbeidet"
@@ -99,6 +111,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                     size="small"
                     name={`${name}.normalArbeidstidPrDag`}
                 />
+
                 <TextFieldFormik
                     className="timer-arbeidet"
                     label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.fraværPerDag')}
@@ -106,8 +119,9 @@ const Fravaersperiode = ({ name, antallFravaersperioder, slettPeriode, visSoknad
                     name={`${name}.faktiskTidPrDag`}
                 />
             </div>
+
             <VerticalSpacer twentyPx />
-        </Panel>
+        </Box>
     );
 };
 

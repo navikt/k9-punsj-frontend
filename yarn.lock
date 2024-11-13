@@ -1859,6 +1859,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@date-fns/tz@npm:^1.1.2":
+  version: 1.2.0
+  resolution: "@date-fns/tz@npm:1.2.0"
+  checksum: 10/a9c2d32f98a5a5c655a7d3843046a5a36779b2ef0db803c608291976e6254e594a085777bf738379f50c7e9fc2ffebbf8bb836e9e9759a5ef2b703f91bb785de
+  languageName: node
+  linkType: hard
+
 "@dual-bundle/import-meta-resolve@npm:^4.1.0":
   version: 4.1.0
   resolution: "@dual-bundle/import-meta-resolve@npm:4.1.0"
@@ -7498,6 +7505,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10/d5f6e9de5bbc52310f786099e18609289ed5e30af60a71e0646784c8185ddd1d0eebcf7c96b7faaaefc4a8366f3a3a4244d099b6d0866ee2bec80d1361e64342
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:1.11.13":
   version: 1.11.13
   resolution: "dayjs@npm:1.11.13"
@@ -9287,28 +9301,6 @@ __metadata:
   version: 0.3.1
   resolution: "focus-group@npm:0.3.1"
   checksum: 10/7184f0f362476251c9e9e42b7001b602d54d822882fec3f661216b06be3ecb8e5bc17ec8f436e6e8620ac76f4834d6c6b09d98c2c7461f40c08d0731ff55d36c
-  languageName: node
-  linkType: hard
-
-"focus-trap-react@npm:^8.6.0":
-  version: 8.11.3
-  resolution: "focus-trap-react@npm:8.11.3"
-  dependencies:
-    focus-trap: "npm:^6.9.4"
-  peerDependencies:
-    prop-types: ^15.8.1
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: 10/937a8b1eb59b54e64ea5daa7d349039c8bfac48e181614ec28cf032a5189125cd934bb0d0c7eb88d946c711d963b549b0f735faf561d3c4a6561fc2247f87cfd
-  languageName: node
-  linkType: hard
-
-"focus-trap@npm:^6.9.4":
-  version: 6.9.4
-  resolution: "focus-trap@npm:6.9.4"
-  dependencies:
-    tabbable: "npm:^5.3.3"
-  checksum: 10/dd64b4522a72836f617a26208cf1f558e0887689f9547b188015079e0f983ca69c29aea70b3ae2a596bc8485643b4c0b35adc653998b8e74af0d0ec6aa004727
   languageName: node
   linkType: hard
 
@@ -11921,7 +11913,6 @@ __metadata:
     mini-css-extract-plugin: "npm:2.9.1"
     msw: "npm:2.5.2"
     mustache-express: "npm:1.3.2"
-    nav-datovelger: "npm:12.6.0"
     nav-frontend-chevron-style: "npm:1.0.4"
     nav-frontend-core: "npm:6.0.1"
     nav-frontend-ekspanderbartpanel: "npm:4.0.4"
@@ -11950,7 +11941,7 @@ __metadata:
     react: "npm:18.3.1"
     react-aria-menubutton: "npm:7.0.3"
     react-collapse: "npm:5.1.1"
-    react-day-picker: "npm:7.4.10"
+    react-day-picker: "npm:9.3.0"
     react-dom: "npm:18.3.1"
     react-intl: "npm:6.8.4"
     react-modal: "npm:3.16.1"
@@ -13023,24 +13014,6 @@ __metadata:
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
   checksum: 10/23ad088b08f898fc9b53011d7bb78ec48e79de7627e01ab5518e806033861bef68d5b0cd0e2205c2f36690ac9571ff6bcb05eb777ced2eeda8d4ac5b44592c3d
-  languageName: node
-  linkType: hard
-
-"nav-datovelger@npm:12.6.0":
-  version: 12.6.0
-  resolution: "nav-datovelger@npm:12.6.0"
-  dependencies:
-    focus-trap-react: "npm:^8.6.0"
-  peerDependencies:
-    classnames: ^2.3.x
-    dayjs: ^1.10.x
-    nav-frontend-core: ^6.0.x
-    nav-frontend-js-utils: ^1.0.x
-    nav-frontend-skjema: ^4.0.x
-    nav-frontend-typografi: ^4.0.x
-    react: 17
-    react-day-picker: ^7.4.x
-  checksum: 10/13bc32691b39d6edfb95b0b4655676239c7cd9a5c52721d250e18254e0a88343b6f7e8071eb9f92a6f802a5db498c946a86eabf6692369ef43aa2015db0f49f4
   languageName: node
   linkType: hard
 
@@ -14671,7 +14644,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:15.8.1, prop-types@npm:^15.6.0, prop-types@npm:^15.7.0, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -14926,17 +14899,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:7.4.10":
-  version: 7.4.10
-  resolution: "react-day-picker@npm:7.4.10"
-  dependencies:
-    prop-types: "npm:^15.6.2"
-  peerDependencies:
-    react: ~0.13.x || ~0.14.x || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10/6a63aced75dbab630cb0f0317f4f843c5930f768a52922bea0eda09c3856c9a211321d30ccac74fd8891a5285671a8da3a541a04a3056dc66b656d8f8415ce0f
-  languageName: node
-  linkType: hard
-
 "react-day-picker@npm:8.10.1":
   version: 8.10.1
   resolution: "react-day-picker@npm:8.10.1"
@@ -14944,6 +14906,18 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/374056dca7fed70a154a3b0e98c6c746c26b4fc868548fa8f285ef3cab9679537e84c0c21ba7b6db67b3f7f54cc562f5d83efba2c7f2c7bd3705ac8992869607
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:9.3.0":
+  version: 9.3.0
+  resolution: "react-day-picker@npm:9.3.0"
+  dependencies:
+    "@date-fns/tz": "npm:^1.1.2"
+    date-fns: "npm:^4.1.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/c16adacaa88189ef2ad75a81d5d8fdaed298986d60538f515684f2222f498fc2b649f0bac3554c4879140e3bd29296a62cb74f01aef555c23af50ff9550164d9
   languageName: node
   linkType: hard
 
@@ -16770,13 +16744,6 @@ __metadata:
     "@pkgr/core": "npm:^0.1.0"
     tslib: "npm:^2.6.2"
   checksum: 10/bff3903976baf8b699b5483228116d70223781a93b17c70e685c277ee960cdfd1a09cb5a741e6a9ec35e2428f14f4664baec41ccc99a598f267608b2a54f529b
-  languageName: node
-  linkType: hard
-
-"tabbable@npm:^5.3.2, tabbable@npm:^5.3.3":
-  version: 5.3.3
-  resolution: "tabbable@npm:5.3.3"
-  checksum: 10/5da150c9ac7aaed95f901623214794ffac9472a86009a1762c7b436249d33b157b7d86d93610986090d0fb1ef152f5dec2c201552e0b67ca895ba00c145a51c5
   languageName: node
   linkType: hard
 

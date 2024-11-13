@@ -1,59 +1,49 @@
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
 
-import { Fieldset, Panel, TextField } from '@navikt/ds-react';
-
-import DateInput from 'app/components/skjema/DateInput';
+import { Field, FieldProps } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Box, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
+import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-import {
-    KorrigeringAvInntektsmeldingFormFields,
-    KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
 import './opplysningerOmKorrigering.less';
 
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
-    const { setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
-        <Fieldset
-            legend={<h3 className="korrigering-legend">{intlHelper(intl, 'skjema.opplysningeromkorrigering')}</h3>}
-        >
-            <Panel className="listepanel opplysningerOmKorrigering">
-                <h4 className="opplysningerOmKorrigering__subHeading">Når tok arbeidsgiver kontakt?</h4>
-                <div className="opplysningerOmKorrigering__fields">
+        <>
+            <Heading level={'3'} size="small">
+                <FormattedMessage id={'skjema.opplysningeromkorrigering'} />
+            </Heading>
+
+            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel opplysningerOmKorrigering">
+                <Heading level={'4'} size="xsmall" className="opplysningerOmKorrigering__subHeading">
+                    <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
+                </Heading>
+
+                <div className="input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
-                            <DateInput
-                                value={field.value}
-                                onChange={(dato) => {
-                                    setFieldValue(field.name, dato);
-                                }}
-                                className="opplysningerOmKorrigering__dateInput"
-                                label={intlHelper(intl, 'skjema.dato')}
-                                errorMessage={
-                                    <ErrorMessage
-                                        name={KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}
-                                    />
-                                }
-                            />
+                            <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />
                         )}
                     </Field>
-                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
-                        {({ field }: FieldProps) => (
-                            <TextField
-                                {...field}
-                                type="time"
-                                className="klokkeslett"
-                                label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
-                            />
-                        )}
-                    </Field>
+                    <div>
+                        <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
+                            {({ field }: FieldProps) => (
+                                <TextField
+                                    {...field}
+                                    type="time"
+                                    className="klokkeslett"
+                                    label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
+                                />
+                            )}
+                        </Field>
+                    </div>
                 </div>
-            </Panel>
-        </Fieldset>
+            </Box>
+        </>
     );
 };
 

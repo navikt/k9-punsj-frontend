@@ -58,7 +58,7 @@ export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     <hr className={classNames('linje')} />
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
                             response.mottattDato,
                         )}`}

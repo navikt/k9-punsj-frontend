@@ -136,7 +136,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')}: `}</b>
+                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
                         {`${formattereDatoFraUTCTilGMT(kvittering.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
                             kvittering.mottattDato,
                         )}`}

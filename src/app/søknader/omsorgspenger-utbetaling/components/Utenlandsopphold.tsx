@@ -1,28 +1,28 @@
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
 
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
-
+import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import intlHelper from 'app/utils/intlUtils';
-
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
+import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-const options = [
-    { value: 'ja', label: 'Ja' },
-    { value: 'nei', label: 'Nei' },
-    { value: 'ikke opplyst', label: 'Ikke opplyst' },
-];
-
-const Utenlandsopphold = () => {
+const Utenlandsopphold: React.FC = () => {
     const intl = useIntl();
+
     const { values, setFieldValue } = useFormikContext<IOMPUTSoknad>();
+
+    const options = [
+        { value: JaNeiIkkeOpplyst.JA, label: intlHelper(intl, 'ja') },
+        { value: JaNeiIkkeOpplyst.NEI, label: intlHelper(intl, 'nei') },
+        { value: JaNeiIkkeOpplyst.IKKE_OPPLYST, label: intlHelper(intl, 'ikkeOpplyst') },
+    ];
 
     useEffect(() => {
         if (values.utenlandsopphold.length && values.metadata.utenlandsopphold !== 'ja') {
@@ -34,16 +34,18 @@ const Utenlandsopphold = () => {
     }, [values.metadata.utenlandsopphold]);
 
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
-                Utenlandsopphold
+                <FormattedMessage id={'omsorgspenger.utbetaling.utenlandsopphold.tittel'} />
             </Heading>
+
             <RadioPanelGruppeFormik
                 legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
                 name="metadata.utenlandsopphold"
                 options={options}
             />
-            {values.metadata.utenlandsopphold === 'ja' && (
+
+            {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
                 <FieldArray
                     name="utenlandsopphold"
                     render={(arrayHelpers) => (
@@ -51,15 +53,18 @@ const Utenlandsopphold = () => {
                             {values.utenlandsopphold?.map((_, index, array) => (
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
+
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik
-                                            label="Fra og med"
+                                        <DatoInputFormikNew
+                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.utenlandsopphold.fom')}
                                             name={`utenlandsopphold[${index}].periode.fom`}
                                         />
-                                        <DatoInputFormik
-                                            label="Til og med"
+
+                                        <DatoInputFormikNew
+                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.utenlandsopphold.tom')}
                                             name={`utenlandsopphold[${index}].periode.tom`}
                                         />
+
                                         {array.length > 1 && (
                                             <Button
                                                 variant="tertiary"
@@ -68,18 +73,25 @@ const Utenlandsopphold = () => {
                                                 style={{ float: 'right' }}
                                                 icon={<Delete />}
                                             >
-                                                Fjern periode
+                                                <FormattedMessage
+                                                    id={'omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn'}
+                                                />
                                             </Button>
                                         )}
                                     </div>
+
                                     <VerticalSpacer sixteenPx />
+
                                     <div style={{ maxWidth: '25%' }}>
                                         <Field name={`utenlandsopphold[${index}].land`}>
-                                            {({ field, meta }: FieldProps<string>) => (
+                                            {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
+                                                    label
                                                     selectedcountry={field.value}
-                                                    unselectedoption="Velg land"
-                                                    feil={meta.touched && meta.error}
+                                                    unselectedoption={intlHelper(
+                                                        intl,
+                                                        'omsorgspenger.utbetaling.utenlandsopphold.unselectedoption',
+                                                    )}
                                                     {...field}
                                                 />
                                             )}
@@ -87,20 +99,22 @@ const Utenlandsopphold = () => {
                                     </div>
                                 </div>
                             ))}
+
                             <VerticalSpacer sixteenPx />
+
                             <Button
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
                                 icon={<AddCircle />}
                             >
-                                Legg til periode
+                                <FormattedMessage id={'omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn'} />
                             </Button>
                         </>
                     )}
                 />
             )}
-        </Panel>
+        </Box>
     );
 };
 

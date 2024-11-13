@@ -1,46 +1,57 @@
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize, get } from 'lodash';
 import React from 'react';
-import { useIntl } from 'react-intl';
 
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { capitalize } from 'lodash';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Label, Panel } from '@navikt/ds-react';
-
+import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
-
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+
 import './arbeidsforhold.less';
 
-const SelvstendigNaeringsdrivende = () => {
-    const { values } = useFormikContext<IOMPUTSoknad>();
-    const virksomhetstype = values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper;
+enum Virksomhetstyper {
+    FISKE = 'Fiske',
+    JORDBRUK = 'Jordbruk',
+    DAGMAMMA = 'Dagmamma i eget hjem/familiebarnehage',
+    ANNEN = 'Annen næringsvirksomhet',
+}
+
+const SelvstendigNaeringsdrivende: React.FC = () => {
     const intl = useIntl();
+
+    const { values } = useFormikContext<IOMPUTSoknad>();
+
+    const virksomhetstype = values?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.virksomhetstyper;
+
     const {
         opptjeningAktivitet: { selvstendigNaeringsdrivende },
     } = values;
-    const virksomhetstyper = ['Fiske', 'Jordbruk', 'Dagmamma i eget hjem/familiebarnehage', 'Annen næringsvirksomhet'];
 
-    const yngreEnn4År = erYngreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
-    const eldreEnn4År = erEldreEnn4år(get(values, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom'));
+    const yngreEnn4År = erYngreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
+    const eldreEnn4År = erEldreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
+
     return (
         <div className="arbeidsforhold-container">
-            <Panel>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" level="5">
-                    Selvstendig næringsdrivende
+                    <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.tittel'} />
                 </Heading>
+
                 <VerticalSpacer twentyPx />
+
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
@@ -54,18 +65,20 @@ const SelvstendigNaeringsdrivende = () => {
                                 />
                             )}
                         </Field>
+
                         <VerticalSpacer sixteenPx />
                     </>
                 )}
+
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
                             legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
-                            options={virksomhetstyper.map((v) => ({ value: v, label: capitalize(v) }))}
+                            options={Object.values(Virksomhetstyper).map((v) => ({ value: v, label: capitalize(v) }))}
                             onChange={(e, value) => {
                                 form.setFieldValue(field.name, value);
-                                if (value !== 'Fiske') {
+                                if (value !== Virksomhetstyper.FISKE) {
                                     form.setFieldValue(
                                         'opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB',
                                         false,
@@ -76,10 +89,12 @@ const SelvstendigNaeringsdrivende = () => {
                         />
                     )}
                 </Field>
+
                 <VerticalSpacer sixteenPx />
+
                 {!values.erKorrigering && (
                     <>
-                        {virksomhetstype === 'Fiske' && (
+                        {virksomhetstype === Virksomhetstyper.FISKE && (
                             <>
                                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB">
                                     {({ field, form }: FieldProps<boolean>) => (
@@ -93,19 +108,22 @@ const SelvstendigNaeringsdrivende = () => {
                                                 value: v,
                                                 label: capitalize(v),
                                             }))}
-                                            checked={field.value ? 'ja' : 'nei'}
-                                            onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                                            checked={field.value ? JaNei.JA : JaNei.NEI}
+                                            onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA)}
                                         />
                                     )}
                                 </Field>
+
                                 <VerticalSpacer twentyPx />
                             </>
                         )}
+
                         <TextFieldFormik
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
                             size="small"
                         />
+
                         <VerticalSpacer twentyPx />
                     </>
                 )}
@@ -114,23 +132,27 @@ const SelvstendigNaeringsdrivende = () => {
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
-                            checked={field.value ? 'nei' : 'ja'}
+                            checked={field.value ? JaNei.NEI : JaNei.JA}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                            onChange={(e, value) => form.setFieldValue(field.name, value === 'nei')}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.NEI)}
                         />
                     )}
                 </Field>
+
                 <VerticalSpacer twentyPx />
 
                 {selvstendigNaeringsdrivende.info.registrertIUtlandet ? (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
-                        {({ field, meta }: FieldProps<string>) => (
+                        {({ field }: FieldProps<string>) => (
                             <div style={{ maxWidth: '25%' }}>
                                 <CountrySelect
+                                    label
                                     selectedcountry={field.value}
-                                    feil={meta.touched && meta.error}
-                                    unselectedoption="Velg land"
+                                    unselectedoption={intlHelper(
+                                        intl,
+                                        'omsorgspenger.utbetaling.countrySelect.unselectedoption',
+                                    )}
                                     {...field}
                                 />
                             </div>
@@ -139,25 +161,28 @@ const SelvstendigNaeringsdrivende = () => {
                 ) : (
                     <TextFieldFormik
                         size="small"
-                        label="Organisasjonsnummer"
+                        label={intlHelper(intl, 'omsorgspenger.utbetaling.selvstendig.orgnummer')}
                         filterPattern={kunTall}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
                     />
                 )}
+
                 <VerticalSpacer twentyPx />
+
                 {!values.erKorrigering && (
                     <>
                         <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
                             {({ field, form }: FieldProps<boolean>) => (
                                 <RadioPanelGruppeFormik
                                     legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                                    checked={field.value ? 'ja' : 'nei'}
+                                    checked={field.value ? JaNei.JA : JaNei.NEI}
                                     name={field.name}
                                     options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                                    onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA)}
                                 />
                             )}
                         </Field>
+
                         <VerticalSpacer twentyPx />
 
                         {selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører && (
@@ -167,6 +192,7 @@ const SelvstendigNaeringsdrivende = () => {
                                     label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                                 />
+
                                 <VerticalSpacer twentyPx />
 
                                 <TextFieldFormik
@@ -178,20 +204,27 @@ const SelvstendigNaeringsdrivende = () => {
                         )}
                     </>
                 )}
+
                 <VerticalSpacer twentyPx />
 
-                <Label size="small">Når startet virksomheten?</Label>
+                <Label size="small">
+                    <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.startDato.spm'} />
+                </Label>
+
                 <div className="fom-tom-rad">
-                    <DatoInputFormik
+                    <DatoInputFormikNew
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                     />
-                    <DatoInputFormik
+
+                    <DatoInputFormikNew
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     />
                 </div>
+
                 <VerticalSpacer twentyPx />
+
                 {!values.erKorrigering && (
                     <>
                         {yngreEnn4År && (
@@ -206,9 +239,15 @@ const SelvstendigNaeringsdrivende = () => {
                         {eldreEnn4År && <VarigEndring />}
                     </>
                 )}
+
                 <VerticalSpacer fourtyPx />
+
                 <hr />
-                <Heading size="small">Informasjon om fraværsperioder</Heading>
+
+                <Heading size="small">
+                    <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel'} />
+                </Heading>
+
                 <FieldArray
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"
                     render={(arrayHelpers) => (
@@ -223,6 +262,7 @@ const SelvstendigNaeringsdrivende = () => {
                                     />
                                 ),
                             )}
+
                             <Button
                                 variant="tertiary"
                                 size="small"
@@ -234,12 +274,14 @@ const SelvstendigNaeringsdrivende = () => {
                                 }
                                 icon={<AddCircle />}
                             >
-                                Legg til periode
+                                <FormattedMessage
+                                    id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.leggTil.btn'}
+                                />
                             </Button>
                         </>
                     )}
                 />
-            </Panel>
+            </Box>
         </div>
     );
 };

@@ -205,13 +205,7 @@ const getDateInputField = (punchFormComponent: ShallowWrapper, containerComponen
     punchFormComponent
         .find(containerComponent)
         .shallow()
-        .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === fieldId)
-        .at(0)
-        .shallow()
-        .find('Datepicker')
-        .dive()
-        .find(`#${fieldId}`)
-        .dive();
+        .findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === fieldId);
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
@@ -262,7 +256,7 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
         const inputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
-        inputField.simulate('blur', { target: { value: newDato } });
+        inputField.simulate('blur', newDato);
         expect(updateSoknad).toHaveBeenCalledTimes(1);
         const expectedUpdatedSoknad = expect.objectContaining({
             mottattDato: newDato,
@@ -274,8 +268,11 @@ describe('PunchForm', () => {
         const newDato = '2020-02-11';
         const punchForm = setupPunchForm({ soknad: initialSoknad });
         const inputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
-        inputField.simulate('change', { target: { value: newDato } });
-        expect(inputField.prop('value')).toEqual(newDato);
+        inputField.simulate('change', newDato);
+        punchForm.update();
+
+        const updatedInputField = getDateInputField(punchForm, 'OpplysningerOmSoknad', 'soknad-dato');
+        expect(updatedInputField.prop('value')).toEqual(newDato);
     });
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {

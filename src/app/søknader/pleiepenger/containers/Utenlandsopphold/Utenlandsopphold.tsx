@@ -1,7 +1,7 @@
 import countries from 'i18n-iso-countries';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
-import { IntlShape } from 'react-intl';
+import { FormattedMessage, IntlShape } from 'react-intl';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -26,6 +26,7 @@ import { IPeriode } from '../../../../models/types/Periode';
 import intlHelper from '../../../../utils/intlUtils';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 import './utenlandsopphold.less';
+import { Heading } from '@navikt/ds-react';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -189,42 +190,47 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         intlShape,
                     )}
                 {land && (
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={[
-                            {
-                                label: 'Ja',
-                                value: jaValue,
-                            },
-                            {
-                                label: 'Nei',
-                                value: 'nei',
-                            },
-                        ]}
-                        name={`arbeidsgivertype_${1}`}
-                        legend={`Er, eller skal, barnet være innlagt i helseinstitusjon i ${countries.getName(
-                            land,
-                            'nb',
-                        )}?`}
-                        onChange={(event) => {
-                            const { value } = event.target as HTMLInputElement;
-                            setVisInnlagtPerioder(value);
-                            if (value !== jaValue) {
-                                const editedInfo = () =>
-                                    editInfo(periodeindeks, {
-                                        innleggelsesperioder: [],
-                                    });
-                                editSoknad(editedInfo());
-                                editSoknadState(editedInfo());
-                            }
-                        }}
-                        checked={visInnlagtPerioder}
-                    />
+                    <div className="mt-8">
+                        <RadioPanelGruppe
+                            className="horizontalRadios "
+                            radios={[
+                                {
+                                    label: 'Ja',
+                                    value: jaValue,
+                                },
+                                {
+                                    label: 'Nei',
+                                    value: 'nei',
+                                },
+                            ]}
+                            name={`arbeidsgivertype_${1}`}
+                            legend={`Er, eller skal, barnet være innlagt i helseinstitusjon i ${countries.getName(
+                                land,
+                                'nb',
+                            )}?`}
+                            onChange={(event) => {
+                                const { value } = event.target as HTMLInputElement;
+                                setVisInnlagtPerioder(value);
+                                if (value !== jaValue) {
+                                    const editedInfo = () =>
+                                        editInfo(periodeindeks, {
+                                            innleggelsesperioder: [],
+                                        });
+                                    editSoknad(editedInfo());
+                                    editSoknadState(editedInfo());
+                                }
+                            }}
+                            checked={visInnlagtPerioder}
+                        />
+                    </div>
                 )}
+
                 {visInnlagtPerioder === jaValue && (
-                    <>
-                        <hr />
-                        <h3>Periode(r) barnet er innlagt</h3>
+                    <div className="mt-6">
+                        <Heading level="3" size="small">
+                            <FormattedMessage id={'skjema.utenlandsopphold.barnInnlagtPerioder.tittel'} />
+                        </Heading>
+
                         <Periodepaneler
                             intl={intl}
                             periods={getInnleggelsesperioder()}
@@ -248,7 +254,9 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             getErrorMessage={getErrorMessage}
                             feilkodeprefiks="innleggelsesperioder"
                             kanHaFlere
+                            doNotShowBorders
                         />
+
                         <RadioPanelGruppe
                             radios={[
                                 {
@@ -292,8 +300,9 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                 editSoknadState(editedInfo());
                             }}
                         />
-                    </>
+                    </div>
                 )}
+
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
                         (getUhaandterteFeil && getUhaandterteFeil(`${feilkodeprefiks}.perioder[${feltIndeks}]`)) || []
@@ -325,8 +334,4 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             medSlettKnapp={medSlettKnapp}
         />
     );
-};
-
-Utenlandsopphold.defaultProps = {
-    periods: [],
 };

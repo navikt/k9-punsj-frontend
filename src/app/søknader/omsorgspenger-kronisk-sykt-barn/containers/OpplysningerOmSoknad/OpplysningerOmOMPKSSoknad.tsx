@@ -1,17 +1,15 @@
 import React from 'react';
 
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { IntlShape } from 'react-intl';
-import { Alert, Panel, TextField } from '@navikt/ds-react';
-import DateInput from 'app/components/skjema/DateInput';
+import { FormattedMessage, IntlShape } from 'react-intl';
+import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../../utils/intlUtils';
 import { OMPKSSoknad } from '../../types/OMPKSSoknad';
 
-import './opplysningerOmOMPKSSoknad.less';
-
-interface IOwnProps {
+interface Props {
     intl: IntlShape;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     getErrorMessage: (attribute: string, indeks?: number) => any;
@@ -20,22 +18,25 @@ interface IOwnProps {
     soknad: OMPKSSoknad;
 }
 
-const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
+const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
     intl,
     changeAndBlurUpdatesSoknad,
     getErrorMessage,
     setSignaturAction,
     signert,
     soknad,
-}) => (
-    <Panel className="opplysningerOmOMPKSSoknad">
-        <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
+}: Props) => (
+    <Box padding="4" borderWidth="1" borderRadius="small" className="opplysningerOmOMPKSSoknad">
+        <Heading size="medium" level="3">
+            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+        </Heading>
+
         <Alert size="small" variant="info">
-            {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+            <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
         </Alert>
 
         <div className="input-row">
-            <DateInput
+            <NewDateInput
                 value={soknad.mottattDato}
                 id="soknad-dato"
                 errorMessage={getErrorMessage('mottattDato')}
@@ -44,19 +45,21 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
                     mottattDato: selectedDate,
                 }))}
             />
-
-            <TextField
-                value={soknad.klokkeslett || ''}
-                type="time"
-                className="klokkeslett"
-                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                {...changeAndBlurUpdatesSoknad((event: any) => ({
-                    klokkeslett: event.target.value,
-                }))}
-                error={getErrorMessage('klokkeslett')}
-                size="small"
-            />
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    className="klokkeslett"
+                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                    // size="small"
+                />
+            </div>
         </div>
+
         <RadioPanelGruppe
             className="horizontalRadios"
             radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
@@ -70,11 +73,12 @@ const OpplysningerOmOMPKSSoknad: React.FunctionComponent<IOwnProps> = ({
                 setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
             }
         />
+
         {signert === JaNeiIkkeRelevant.NEI && (
             <Alert size="small" variant="warning">
-                {intlHelper(intl, 'skjema.usignert.info')}
+                <FormattedMessage id={'skjema.usignert.info'} />
             </Alert>
         )}
-    </Panel>
+    </Box>
 );
 export default OpplysningerOmOMPKSSoknad;

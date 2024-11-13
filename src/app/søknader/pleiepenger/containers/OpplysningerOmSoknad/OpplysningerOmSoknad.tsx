@@ -1,15 +1,14 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React from 'react';
+
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { IntlShape } from 'react-intl';
-
-import { Alert, Fieldset, Panel, TextField } from '@navikt/ds-react';
-
-import DateInput from 'app/components/skjema/DateInput';
-
+import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PSBSoknad } from '../../../../models/types';
 import intlHelper from '../../../../utils/intlUtils';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+
 import './opplysningerOmSoknad.less';
 
 interface IOwnProps {
@@ -29,14 +28,14 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
     signert,
     soknad,
 }) => (
-    <Panel className="opplysningerOmSoknad">
+    <Box padding="4" borderWidth="1" borderRadius="small" className="opplysningerOmSoknad">
         <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
         <Alert size="small" variant="info">
             {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
         </Alert>
         <Fieldset legend="">
             <div className="input-row">
-                <DateInput
+                <NewDateInput
                     value={soknad.mottattDato}
                     id="soknad-dato"
                     errorMessage={getErrorMessage('mottattDato')}
@@ -45,17 +44,19 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                         mottattDato: selectedDate,
                     }))}
                 />
-                <TextField
-                    value={soknad.klokkeslett || ''}
-                    type="time"
-                    className="klokkeslett"
-                    size="small"
-                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                    {...changeAndBlurUpdatesSoknad((event: any) => ({
-                        klokkeslett: event.target.value,
-                    }))}
-                    error={getErrorMessage('klokkeslett')}
-                />
+                <div>
+                    <TextField
+                        value={soknad.klokkeslett || ''}
+                        type="time"
+                        className="klokkeslett"
+                        // size="small"
+                        label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                        {...changeAndBlurUpdatesSoknad((event: any) => ({
+                            klokkeslett: event.target.value,
+                        }))}
+                        error={getErrorMessage('klokkeslett')}
+                    />
+                </div>
             </div>
             <RadioPanelGruppe
                 className="horizontalRadios"
@@ -76,6 +77,6 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                 </Alert>
             )}
         </Fieldset>
-    </Panel>
+    </Box>
 );
 export default OpplysningerOmSoknad;

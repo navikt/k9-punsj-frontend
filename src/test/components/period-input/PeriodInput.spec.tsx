@@ -1,9 +1,8 @@
+import * as React from 'react';
 import { expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import { mocked } from 'jest-mock';
-import * as React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
-
 import { IPeriodInputProps, PeriodInput } from '../../../app/components/period-input/PeriodInput';
 import intlHelper from '../../../app/utils/intlUtils';
 
@@ -32,7 +31,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 describe('PerodInput', () => {
     it('Skal vise inputfelter', () => {
         const periodInput = setupPeriodInput();
-        expect(periodInput.find('DateInput')).toHaveLength(2);
+        expect(periodInput.find('NewDateInput')).toHaveLength(2);
         expect(periodInput.find(`#${inputIdFom}`)).toHaveLength(1);
         expect(periodInput.find(`#${inputIdTom}`)).toHaveLength(1);
     });
@@ -63,12 +62,11 @@ describe('PerodInput', () => {
         const newFraOgMed = '2020-01-03';
         const onChange = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-        const inputField = periodInput
-            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdFom)
-            .at(0)
-            .shallow()
-            .find('Datepicker');
+
+        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdFom);
+
         inputField.simulate('change', newFraOgMed);
+
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
     });
@@ -79,15 +77,8 @@ describe('PerodInput', () => {
         const newFraOgMed = '2020-01-03';
         const onBlur = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        const inputField = periodInput
-            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdFom)
-            .at(0)
-            .shallow()
-            .find('Datepicker')
-            .dive()
-            .find(`#${inputIdFom}`)
-            .dive();
-        inputField.simulate('blur', { target: { value: newFraOgMed } });
+        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdFom);
+        inputField.simulate('blur', newFraOgMed);
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
     });
@@ -98,11 +89,7 @@ describe('PerodInput', () => {
         const newTilOgMed = '2020-02-03';
         const onChange = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-        const inputField = periodInput
-            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdTom)
-            .at(0)
-            .shallow()
-            .find('Datepicker');
+        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdTom);
         inputField.simulate('change', newTilOgMed);
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
@@ -114,15 +101,8 @@ describe('PerodInput', () => {
         const newTilOgMed = '2020-02-03';
         const onBlur = jest.fn();
         const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        const inputField = periodInput
-            .findWhere((n) => n.name() === 'DateInput' && n.prop('id') === inputIdTom)
-            .at(0)
-            .shallow()
-            .find('Datepicker')
-            .dive()
-            .find(`#${inputIdTom}`)
-            .dive();
-        inputField.simulate('blur', { target: { value: newTilOgMed } });
+        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdTom);
+        inputField.simulate('blur', newTilOgMed);
         expect(onBlur).toHaveBeenCalledTimes(1);
         expect(onBlur).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
     });

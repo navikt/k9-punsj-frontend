@@ -1,28 +1,30 @@
+import React, { useState } from 'react';
+
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Panel } from '@navikt/ds-react';
-
+import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
 
-const Bosteder = () => {
+const Bosteder: React.FC = () => {
     const intl = useIntl();
-    const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+
     const [harBoddIUtlandet, setHarBoddIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
 
+    const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+
+    // TODO: Use intl for text
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
@@ -32,17 +34,22 @@ const Bosteder = () => {
                 name="medlemskapjanei"
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
                 onChange={(event) => {
-                    const { value } = event.target;
+                    const target = event.target as HTMLInputElement;
+                    const value = target.value as JaNeiIkkeOpplyst;
+
                     setHarBoddIUtlandet(value);
+
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
                         setFieldValue('bosteder', [initialUtenlandsopphold]);
                     }
+
                     if (value !== JaNeiIkkeOpplyst.JA) {
                         setFieldValue('bosteder', []);
                     }
                 }}
                 checked={values.bosteder.length > 0 ? JaNeiIkkeOpplyst.JA : harBoddIUtlandet}
             />
+
             {values.bosteder.length > 0 && (
                 <FieldArray
                     name="bosteder"
@@ -51,9 +58,18 @@ const Bosteder = () => {
                             {values.bosteder?.map((_, index, array) => (
                                 <div key={index}>
                                     <VerticalSpacer thirtyTwoPx />
+
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormik label="Fra og med" name={`bosteder[${index}].periode.fom`} />
-                                        <DatoInputFormik label="Til og med" name={`bosteder[${index}].periode.tom`} />
+                                        <DatoInputFormikNew
+                                            label="Fra og med"
+                                            name={`bosteder[${index}].periode.fom`}
+                                        />
+
+                                        <DatoInputFormikNew
+                                            label="Til og med"
+                                            name={`bosteder[${index}].periode.tom`}
+                                        />
+
                                         {array.length > 1 && (
                                             <Button
                                                 variant="tertiary"
@@ -66,14 +82,16 @@ const Bosteder = () => {
                                             </Button>
                                         )}
                                     </div>
+
                                     <VerticalSpacer sixteenPx />
+
                                     <div style={{ maxWidth: '25%' }}>
                                         <Field name={`bosteder[${index}].land`}>
-                                            {({ field, meta }: FieldProps<string>) => (
+                                            {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
+                                                    label
                                                     selectedcountry={field.value}
                                                     unselectedoption="Velg land"
-                                                    feil={meta.touched && meta.error}
                                                     {...field}
                                                 />
                                             )}
@@ -81,7 +99,9 @@ const Bosteder = () => {
                                     </div>
                                 </div>
                             ))}
+
                             <VerticalSpacer sixteenPx />
+
                             <Button
                                 variant="tertiary"
                                 size="small"
@@ -94,7 +114,7 @@ const Bosteder = () => {
                     )}
                 />
             )}
-        </Panel>
+        </Box>
     );
 };
 

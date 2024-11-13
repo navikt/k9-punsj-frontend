@@ -1,39 +1,42 @@
+import React from 'react';
+
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize } from 'lodash';
-import React from 'react';
-import { useIntl } from 'react-intl';
-
+import { FormattedMessage, useIntl } from 'react-intl';
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
-
+import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormik from 'app/components/formikInput/DatoInputFormik';
+import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
-
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
+
 import './arbeidsforhold.less';
 
 export default function Frilanser() {
-    const { values } = useFormikContext<IOMPUTSoknad>();
     const intl = useIntl();
+
+    const { values } = useFormikContext<IOMPUTSoknad>();
+
     const {
         opptjeningAktivitet: { frilanser },
     } = values;
 
     return (
         <div className="arbeidsforhold-container">
-            <Panel border>
+            <Box padding="4" borderWidth="1" borderRadius="small">
                 <Heading size="small" level="5">
-                    Frilanser
+                    <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
                 </Heading>
+
                 <VerticalSpacer twentyPx />
+
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
@@ -47,19 +50,22 @@ export default function Frilanser() {
                                 />
                             )}
                         </Field>
+
                         <VerticalSpacer sixteenPx />
                     </>
                 )}
-                <DatoInputFormik
-                    label="Når startet søker som frilanser?"
+
+                <DatoInputFormikNew
+                    label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.startDato.spm')}
                     name="opptjeningAktivitet.frilanser.startdato"
                 />
+
                 <VerticalSpacer twentyPx />
 
                 <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
                     {({ field, form }: FieldProps<string>) => (
                         <RadioGroupFormik
-                            legend="Jobber søker fortsatt som frilanser?"
+                            legend={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.jobberFortsatt.spm')}
                             size="small"
                             name={field.name}
                             value={field.value ? 'ja' : 'nei'}
@@ -69,31 +75,39 @@ export default function Frilanser() {
                                 value="ja"
                                 onChange={() => form.setFieldValue(field.name, true)}
                             >
-                                Ja
+                                <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja'} />
                             </RadioFormik>
+
                             <RadioFormik
                                 name={field.name}
                                 value="nei"
                                 onChange={() => form.setFieldValue(field.name, false)}
                             >
-                                Nei
+                                <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei'} />
                             </RadioFormik>
                         </RadioGroupFormik>
                     )}
                 </Field>
+
                 <VerticalSpacer twentyPx />
 
                 {!frilanser.jobberFortsattSomFrilans && (
                     <>
-                        <DatoInputFormik
-                            label="Når sluttet søker som frilanser?"
+                        <DatoInputFormikNew
+                            label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
                             name="opptjeningAktivitet.frilanser.sluttdato"
                         />
+
                         <VerticalSpacer twentyPx />
                     </>
                 )}
+
                 <hr />
-                <Heading size="small">Informasjon om fraværsperioder</Heading>
+
+                <Heading size="small">
+                    <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel'} />
+                </Heading>
+
                 <FieldArray
                     name="opptjeningAktivitet.frilanser.fravaersperioder"
                     render={(arrayHelpers) => (
@@ -106,6 +120,7 @@ export default function Frilanser() {
                                     slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
                                 />
                             ))}
+
                             <Button
                                 variant="tertiary"
                                 size="small"
@@ -117,12 +132,14 @@ export default function Frilanser() {
                                 }
                                 icon={<AddCircle />}
                             >
-                                Legg til periode
+                                <FormattedMessage
+                                    id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn'}
+                                />
                             </Button>
                         </>
                     )}
                 />
-            </Panel>
+            </Box>
         </div>
     );
 }

@@ -1,26 +1,24 @@
+import * as React from 'react';
+
 import { set } from 'lodash';
 import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
-import * as React from 'react';
 import { useIntl } from 'react-intl';
-
-import { Alert, Panel, TextField, Textarea } from '@navikt/ds-react';
-
+import { Alert, Box, TextField, Textarea } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import DateInput from 'app/components/skjema/DateInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
-
 import VerticalSpacer from '../../VerticalSpacer';
 import { CountrySelect } from '../../country-select/CountrySelect';
 import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
 import { Arbeidstaker, IPeriode } from '../../../models/types';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -75,7 +73,7 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <DateInput
+                <NewDateInput
                     id="frilanser-startdato"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
@@ -122,7 +120,7 @@ const ArbeidsforholdPanel = ({
                 />
                 <VerticalSpacer eightPx />
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <DateInput
+                    <NewDateInput
                         id="frilanser-sluttdato"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
@@ -473,7 +471,7 @@ const ArbeidsforholdPanel = ({
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                 <div className="sn-startdatocontainer">
-                    <DateInput
+                    <NewDateInput
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
@@ -516,10 +514,11 @@ const ArbeidsforholdPanel = ({
                             });
                         }}
                     />
-                    <DateInput
+                    <NewDateInput
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                        noValidateTomtFelt={true}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -640,7 +639,7 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <DateInput
+                            <NewDateInput
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
@@ -812,7 +811,11 @@ const ArbeidsforholdPanel = ({
                 checked={getCheckedValueArbeid(Arbeidsforhold.FRILANSER)}
             />
             <VerticalSpacer eightPx />
-            {!!soknad.opptjeningAktivitet.frilanser && <Panel className="frilanserpanel">{frilanserperioder()}</Panel>}
+            {!!soknad.opptjeningAktivitet.frilanser && (
+                <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
+                    {frilanserperioder()}
+                </Box>
+            )}
             <CheckboksPanel
                 label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                 value={Arbeidsforhold.SELVSTENDIG}
@@ -824,7 +827,9 @@ const ArbeidsforholdPanel = ({
                     <Alert size="small" variant="info" className="sn-alertstripe">
                         {intlHelper(intl, 'skjema.sn.info')}
                     </Alert>
-                    <Panel className="selvstendigpanel">{selvstendigperioder()}</Panel>
+                    <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
+                        {selvstendigperioder()}
+                    </Box>
                 </>
             )}
             <UhaanderteFeilmeldinger
