@@ -164,7 +164,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
             {({ setFieldValue, values }) => (
                 <>
                     <Form className="korrigering">
-                        <Box padding="4" borderWidth="1" borderRadius="small">
+                        <Box padding="4">
                             <Heading size="medium" level="2">
                                 <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
                             </Heading>
