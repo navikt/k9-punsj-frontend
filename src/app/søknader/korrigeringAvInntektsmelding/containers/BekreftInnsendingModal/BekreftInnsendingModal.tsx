@@ -5,8 +5,8 @@ import { Button } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
 
-import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import OMSKvittering from './OMSKvittering';
+import { KorrigeringAvInntektsmeldingFormValues } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import OMSKvittering from '../SøknadKvittering/OMSKvittering';
 import './bekreftInnsendingModal.less';
 
 interface BekreftInnsendingModalProps {

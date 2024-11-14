@@ -14,7 +14,7 @@ import { IdentRules } from 'app/rules';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import ErDuSikkerModal from 'app/søknader/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
 import { IOLPSoknadBackend } from '../../../models/types/OLPSoknad';
 import { hentEksisterendeSoeknader } from '../api';
 

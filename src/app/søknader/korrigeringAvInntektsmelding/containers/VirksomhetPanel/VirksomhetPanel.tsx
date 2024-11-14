@@ -18,7 +18,7 @@ import { AAREG_URL } from 'app/constants/eksterneLenker';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
+} from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import './virksomhetPanel.less';
 
 interface IVirksomhetPanelProps {

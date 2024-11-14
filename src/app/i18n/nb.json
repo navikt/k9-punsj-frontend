@@ -486,6 +486,13 @@
     "skjema.ferie": "Ferie",
     "skjema.ferie.skalslettes": "Ferie som skal slettes",
     "skjema.kvittering.oppsummering": "Oppsummering",
+    "skjema.kvittering.oppsummering.virksomhet": "Virksomhet",
+    "skjema.kvittering.oppsummering.organisasjonsnummer": "Organisasjonsnummer:",
+    "skjema.kvittering.oppsummering.arbeidsforholdId": "ArbeidsforholdId",
+    "skjema.kvittering.oppsummering.omskorrigering.trekkKravPerioder.tittel": "Perioder arbeidsgiver ønsker å trekke krav om refusjon",
+    "skjema.kvittering.oppsummering.omskorrigering.heleDagerMedFrvær.tittel": "Hele dager med fravær arbeidsgiver krever refusjon for",
+    "skjema.kvittering.oppsummering.omskorrigering.delDagerMedFrvær.tittel": "Refusjon av dag skal endres til timer",
+
     "skjema.kvittering.ingenKvittering": "Noe gikk galt ved visning av kvittering",
     "skjema.kvittering.OMPAO.fraOgMed": "Alene om omsorgen fra og med:",
     "skjema.kvittering.barn.tittel": "Barn:",

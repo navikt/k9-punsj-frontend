@@ -23,7 +23,7 @@ import Fordeling from '../fordeling/Fordeling';
 import { PSBRegistreringsValg } from 'app/søknader/pleiepenger/containers/RegistreringsValg/PSBRegistreringsValg';
 import { PSBPunchForm } from 'app/søknader/pleiepenger/containers/PSBPunchForm';
 import ErrorFallback from './ErrorFallback';
-import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingContainer';
+import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/containers/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
 import BehandlingAvJournaførtJp from '../fordeling/Komponenter/BehandlingAvJournaførtJp';
 

@@ -9,12 +9,12 @@ import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import EkspanderbartPanel from './EkspanderbartPanel';
+import EkspanderbartPanel from '../../../../components/EkspanderbartPanel';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from './useFocus';
+} from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import useFocus from '../../../../hooks/useFocus';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 import './LeggTilDelvisFravær.less';

@@ -6,15 +6,15 @@ import { Alert, Fieldset, Panel } from '@navikt/ds-react';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 
-import EkspanderbartPanel from './EkspanderbartPanel';
-import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import { Periodepanel } from './Periodepanel';
+import EkspanderbartPanel from '../../../components/EkspanderbartPanel';
+import { KorrigeringAvInntektsmeldingFormFields } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { Periodepanel } from '../components/Periodepanel';
 
-const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
+const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
     return (
         <EkspanderbartPanel
-            label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.checkbox')}
+            label={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox')}
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
@@ -22,16 +22,16 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                 <Fieldset
                     legend={
                         <h4 className="korrigering-legend">
-                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend')}
+                            {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend')}
                         </h4>
                     }
-                    className="korrigering__skjemagruppe"
+                    className="korrigering__Fieldset"
                 >
                     <Alert size="small" variant="info" className="korrigering__infostripe">
-                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.info')}
+                        {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info')}
                     </Alert>
                     <div className="soknadsperiodecontainer">
-                        <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav} />
+                        <Periodepanel name={KorrigeringAvInntektsmeldingFormFields.Trekkperioder} />
                     </div>
                 </Fieldset>
             </Panel>
@@ -39,4 +39,4 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
     );
 };
 
-export default LeggTilHelePerioder;
+export default TrekkPerioder;

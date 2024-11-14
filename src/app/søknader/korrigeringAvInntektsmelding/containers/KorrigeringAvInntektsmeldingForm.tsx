@@ -13,21 +13,21 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import BekreftInnsendingModal from './BekreftInnsendingModal';
-import ErDuSikkerModal from './ErDuSikkerModal';
+import BekreftInnsendingModal from './BekreftInnsendingModal/BekreftInnsendingModal';
+import ErDuSikkerModal from '../../../components/ErDuSikkerModal2';
 import './KorrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import LeggTilDelvisFravær from './LeggTilDelvisFravær';
-import OMSKvittering from './OMSKvittering';
-import OpplysningerOmKorrigering from './OpplysningerOmKorrigering';
+} from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import LeggTilDelvisFravær from './LeggTilDelvisFravær/LeggTilDelvisFravær';
+import OMSKvittering from './SøknadKvittering/OMSKvittering';
+import OpplysningerOmKorrigering from './OpplysningerOmKorrigering/OpplysningerOmKorrigering';
 import TrekkPerioder from './TrekkPerioder';
-import VirksomhetPanel from './VirksomhetPanel';
+import VirksomhetPanel from './VirksomhetPanel/VirksomhetPanel';
 import { getFormErrors } from './korrigeringAvFormValidering';
-import ActionType from './korrigeringAvInntektsmeldingActions';
-import korrigeringAvInntektsmeldingReducer from './korrigeringAvInntektsmeldingReducer';
+import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
+import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 
 interface KorrigeringAvInntektsmeldingFormProps {

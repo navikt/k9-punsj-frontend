@@ -17,7 +17,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { RootStateType } from 'app/state/RootState';
-import ErDuSikkerModal from 'app/søknader/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 
