@@ -288,7 +288,6 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
-                        variant="secondary"
                         className="send-knapp"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
@@ -297,7 +296,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                             handleSubmit();
                         }}
                     >
-                        <FormattedMessage id={'skjema.knapp.send'} />
+                        <FormattedMessage id="skjema.knapp.send" />
                     </Button>
 
                     <Button
@@ -306,7 +305,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                         onClick={() => setShowSettPaaVentModal(true)}
                         disabled={false}
                     >
-                        <FormattedMessage id={'skjema.knapp.settpaavent'} />
+                        <FormattedMessage id="skjema.knapp.settpaavent" />
                     </Button>
                 </p>
             </div>
@@ -315,25 +314,25 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
             {!!punchFormState.updateSoknadError && (
                 <Alert size="small" variant="error">
-                    <FormattedMessage id={'skjema.feil.ikke_lagret'} />
+                    <FormattedMessage id="skjema.feil.ikke_lagret" />
                 </Alert>
             )}
 
             {!!punchFormState.inputErrors?.length && (
                 <Alert size="small" variant="error" className="valideringstripefeil">
-                    <FormattedMessage id={'skjema.feil.validering'} />
+                    <FormattedMessage id="skjema.feil.validering" />
                 </Alert>
             )}
 
             {!!punchFormState.submitSoknadError && (
                 <Alert size="small" variant="error">
-                    <FormattedMessage id={'skjema.feil.ikke_sendt'} />
+                    <FormattedMessage id="skjema.feil.ikke_sendt" />
                 </Alert>
             )}
 
             {!!punchFormState.submitSoknadConflict && (
                 <Alert size="small" variant="error">
-                    <FormattedMessage id={'skjema.feil.konflikt'} />
+                    <FormattedMessage id="skjema.feil.konflikt" />
                 </Alert>
             )}
 
@@ -403,7 +402,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                                 className="validertSoknadOppsummeringContainer_knappVidere"
                                 onClick={() => setVisErDuSikkerModal(true)}
                             >
-                                <FormattedMessage id={'fordeling.knapp.videre'} />
+                                <FormattedMessage id="fordeling.knapp.videre" />
                             </Button>
 
                             <Button
@@ -412,7 +411,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                                 className="validertSoknadOppsummeringContainer_knappTilbake"
                                 onClick={() => validerSoknadReset()}
                             >
-                                <FormattedMessage id={'skjema.knapp.avbryt'} />
+                                <FormattedMessage id="skjema.knapp.avbryt" />
                             </Button>
                         </div>
                     </Modal.Body>

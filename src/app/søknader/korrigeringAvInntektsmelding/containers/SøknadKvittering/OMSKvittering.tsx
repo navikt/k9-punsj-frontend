@@ -6,7 +6,6 @@ import { Heading } from '@navikt/ds-react';
 import { IPeriode } from 'app/models/types';
 import { initializeDate } from 'app/utils';
 import { KorrigeringAvInntektsmeldingFormValues } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import LabelValue from 'app/components/skjema/LabelValue';
 
 import './omsKvittering.less';
 
@@ -34,6 +33,8 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
     const visPerioderMedRefusjonskrav = () => PerioderMedRefusjonskrav.length > 0 && PerioderMedRefusjonskrav[0].fom;
     const visDagerMedDelvisFravær = () => DagerMedDelvisFravær.length > 0 && DagerMedDelvisFravær[0].dato;
 
+    const mottakelsesdato = initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY');
+
     return (
         <div className="omsKvittering">
             <Heading size="medium" level="2">
@@ -48,10 +49,12 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                 <hr className={classNames('linje')} />
 
                 <p>
-                    <LabelValue
-                        labelTextId="skjema.mottakelsesdato"
-                        value={initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY')}
-                        gap
+                    <FormattedMessage
+                        id="skjema.kvittering.mottakelsesdato"
+                        values={{
+                            mottakelsesdato,
+                            b: (chunks) => <strong>{chunks}</strong>,
+                        }}
                     />
                 </p>
 
@@ -62,10 +65,12 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                 <hr className={classNames('linje')} />
 
                 <p>
-                    <LabelValue
-                        labelTextId="skjema.kvittering.oppsummering.organisasjonsnummer"
-                        value={Virksomhet}
-                        gap
+                    <FormattedMessage
+                        id="skjema.kvittering.oppsummering.organisasjonsnummer"
+                        values={{
+                            organisasjonsnummer: Virksomhet,
+                            b: (chunks) => <strong>{chunks}</strong>,
+                        }}
                     />
                 </p>
 

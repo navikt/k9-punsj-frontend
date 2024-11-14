@@ -12,7 +12,6 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import BekreftInnsendingModal from './BekreftInnsendingModal/BekreftInnsendingModal';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal2';
 import {
     KorrigeringAvInntektsmeldingFormFields,
@@ -29,6 +28,7 @@ import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAv
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 
 import './KorrigeringAvInntektsmeldingForm.less';
+import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 
 interface Props {
     søkerId: string;
@@ -253,23 +253,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     </Form>
 
                     {visBekreftelsemodal && (
-                        <Modal
-                            onClose={() => {
-                                dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
-                            }}
-                            aria-label="Er du sikker?"
-                            open={visBekreftelsemodal}
+                        <ForhaandsvisSoeknadModal
+                            avbryt={() => dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })}
+                            videre={() => dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL })}
+                            intl={intl}
                         >
-                            <BekreftInnsendingModal
-                                feltverdier={values}
-                                lukkModal={() => {
-                                    dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL });
-                                }}
-                                handleVidere={() => {
-                                    dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL });
-                                }}
-                            />
-                        </Modal>
+                            <OMSKvittering feltverdier={values} />
+                        </ForhaandsvisSoeknadModal>
                     )}
 
                     {visErDuSikkerModal && (

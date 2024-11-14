@@ -149,6 +149,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                 <p className="sendknapp-wrapper">
                     <Button
                         className="send-knapp"
+                        type="button"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
@@ -169,6 +170,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
 
                     <Button
                         variant="secondary"
+                        type="button"
                         className="vent-knapp"
                         onClick={() => setVisVentModal(true)}
                         disabled={false}
