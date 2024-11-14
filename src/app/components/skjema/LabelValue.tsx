@@ -11,13 +11,14 @@ interface Props {
     text?: string;
     value?: string;
     visKopier?: boolean;
+    gap?: boolean;
 }
 
-const LabelValue: React.FC<Props> = ({ labelTextId, text, value, visKopier }: Props) => {
+const LabelValue: React.FC<Props> = ({ labelTextId, text, value, visKopier, gap }: Props) => {
     const intl = useIntl();
 
     return (
-        <div className="flex">
+        <div className={`flex ${gap ? 'gap-4' : undefined}`}>
             <Label as="p" className="mb-0" size="small">
                 {text || intlHelper(intl, labelTextId || '')}
             </Label>

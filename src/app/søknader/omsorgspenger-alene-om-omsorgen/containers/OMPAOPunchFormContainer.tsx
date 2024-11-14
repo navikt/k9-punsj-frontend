@@ -1,45 +1,41 @@
-import { Formik, yupToFormErrors } from 'formik';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
-import { connect, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
 
+import { Formik, yupToFormErrors } from 'formik';
+import { FormattedMessage } from 'react-intl';
+import { useMutation, useQuery } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
-
 import { hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema from '../schema';
 import OMPAOPunchForm from './OMPAOPunchForm';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
+import { Dispatch } from 'redux';
 
-interface OwnProps {
+interface Props {
     journalpostid: string;
 }
-export interface IPunchOMPAOFormStateProps {
-    identState: IIdentState;
-}
 
-type IPunchOMPAOFormProps = OwnProps & IPunchOMPAOFormStateProps;
-
-const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
-    const { identState } = props;
+const OMPAOPunchFormContainer = (props: Props) => {
     const { id } = useParams<{ id: string }>();
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPAOSoknadKvittering | undefined>(undefined);
     const [erSendtInn, setErSendtInn] = useState(false);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     if (!id) {
         throw Error('Mangler id');
@@ -54,6 +50,7 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
             dispatch(setIdentFellesAction(data.soekerId, data.barn.norskIdent));
         },
     });
+
     const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
         onSuccess: (data) => {
             if ('søknadId' in data) {
@@ -62,8 +59,6 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
             }
         },
     });
-
-    const intl = useIntl();
 
     const handleStartButtonClick = () => {
         dispatch(resetAllStateAction());
@@ -82,11 +77,12 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
         return (
             <>
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.feil.ikke_funnet', { id })}
+                    <FormattedMessage id={'skjema.feil.ikke_funnet'} values={{ id: id }} />
                 </Alert>
+
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>
-                        {intlHelper(intl, 'skjema.knapp.tilstart')}
+                        <FormattedMessage id={'skjema.knapp.tilstart'} values={{ id: id }} />
                     </Button>
                 </p>
             </>
@@ -122,8 +118,4 @@ const OMPAOPunchFormContainer = (props: IPunchOMPAOFormProps) => {
     );
 };
 
-const mapStateToProps = (state: RootStateType): Partial<IPunchOMPAOFormStateProps> => ({
-    identState: state.identState,
-});
-
-export default connect(mapStateToProps)(OMPAOPunchFormContainer);
+export default OMPAOPunchFormContainer;
