@@ -127,10 +127,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
         );
     }
 
-    // eslint-disable-next-line no-console
-    console.log('TEST formError:', formError);
-    // eslint-disable-next-line no-console
-    console.log('TEST HasSubmittet:', hasSubmitted);
     return (
         <Formik
             initialValues={{
