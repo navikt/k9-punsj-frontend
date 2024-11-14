@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 
-import { IFordelingState, IJournalpost, IPSBSoknad } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { createOMSKorrigering, hentOMSSøknad } from 'app/state/actions/OMSPunchFormActions';
-
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from 'app/constants/routes';
 
-export interface KorrigeringAvInntektsmeldingContainerProps {
-    journalpost?: IJournalpost;
-    identState: IIdentState;
-    fordelingState: IFordelingState;
-}
+const KorrigeringAvInntektsmeldingContainer: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
 
-const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContainerProps> = ({
-    identState,
-    journalpost,
-    fordelingState,
-}) => {
+    const navigate = useNavigate();
+
+    const identState = useSelector((state: RootStateType) => state.identState);
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+
+    const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
+
     const { søkerId } = identState;
     const { fagsak } = fordelingState;
     const k9saksnummer = fagsak?.fagsakId;
-    const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!id) {
@@ -60,13 +56,4 @@ const KorrigeringAvInntektsmelding: React.FC<KorrigeringAvInntektsmeldingContain
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    journalpost: state.felles.journalpost,
-    identState: state.identState,
-    forbidden: state.felles.journalpostForbidden,
-    punchFormState: state.PLEIEPENGER_SYKT_BARN.punchFormState,
-    fordelingState: state.fordelingState,
-});
-
-const KorrigeringAvInntektsmeldingContainer = connect(mapStateToProps)(KorrigeringAvInntektsmelding);
 export default KorrigeringAvInntektsmeldingContainer;
