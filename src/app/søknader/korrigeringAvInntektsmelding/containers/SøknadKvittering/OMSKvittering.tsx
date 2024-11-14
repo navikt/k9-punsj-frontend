@@ -75,7 +75,7 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                 </p>
 
                 {ArbeidsforholdId && (
-                    <>
+                    <div>
                         <Heading size="small" level="3">
                             <FormattedMessage id="skjema.kvittering.oppsummering.arbeidsforholdId" />
                         </Heading>
@@ -83,11 +83,11 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                         <hr className={classNames('linje')} />
 
                         <p>{ArbeidsforholdId}</p>
-                    </>
+                    </div>
                 )}
 
                 {visTrekkperioder() && (
-                    <>
+                    <div>
                         <Heading size="small" level="3">
                             <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.trekkKravPerioder.tittel" />
                         </Heading>
@@ -95,11 +95,11 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                         <hr className={classNames('linje')} />
 
                         <p>{Trekkperioder.map((trekkperiode) => formaterPerioder(trekkperiode)).join(', ')}</p>
-                    </>
+                    </div>
                 )}
 
                 {visPerioderMedRefusjonskrav() && (
-                    <>
+                    <div>
                         <Heading size="small" level="3">
                             <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.heleDagerMedFrvær.tittel" />
                         </Heading>
@@ -111,11 +111,11 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                                 formaterPerioder(periodeMedRefusjonskrav),
                             ).join(', ')}
                         </p>
-                    </>
+                    </div>
                 )}
 
                 {visDagerMedDelvisFravær() && (
-                    <>
+                    <div>
                         <Heading size="small" level="3">
                             <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.delDagerMedFrvær.tittel" />
                         </Heading>
@@ -132,7 +132,7 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                                 })
                                 .join(', ')}
                         </p>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
