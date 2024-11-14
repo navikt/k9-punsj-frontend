@@ -6,6 +6,7 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import { Dispatch } from 'redux';
 
 import { Alert, Loader, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
 
@@ -36,8 +37,7 @@ import {
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
-import { OMPMASoknadKvittering } from './SoknadKvittering/OMPMASoknadKvittering';
-import { Dispatch } from 'redux';
+import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
 
 interface Props {
     journalpostid: string;

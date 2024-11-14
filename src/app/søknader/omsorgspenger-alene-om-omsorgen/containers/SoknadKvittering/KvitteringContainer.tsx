@@ -14,7 +14,7 @@ interface Props {
     kvittering?: IOMPAOSoknadKvittering;
 }
 
-export default function KvitteringContainer({ kvittering }: Props) {
+const KvitteringContainer: React.FC<Props> = ({ kvittering }: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -44,4 +44,6 @@ export default function KvitteringContainer({ kvittering }: Props) {
             <OMPAOSoknadKvittering kvittering={kvittering} />
         </>
     );
-}
+};
+
+export default KvitteringContainer;

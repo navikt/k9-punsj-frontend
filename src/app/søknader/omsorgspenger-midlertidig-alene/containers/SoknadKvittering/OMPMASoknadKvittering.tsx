@@ -25,11 +25,7 @@ interface Props {
     annenSokerIdent?: string | null;
 }
 
-export const OMPMASoknadKvittering: React.FunctionComponent<Props> = ({
-    response,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
+const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuccess, annenSokerIdent }) => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     countries.registerLocale(require('i18n-iso-countries/langs/nb.json')); // Why is this here?
     const intl = useIntl();
