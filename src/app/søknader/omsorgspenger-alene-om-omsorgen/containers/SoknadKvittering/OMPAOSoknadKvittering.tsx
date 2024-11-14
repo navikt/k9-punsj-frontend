@@ -2,7 +2,6 @@ import React from 'react';
 
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import countries from 'i18n-iso-countries';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Heading } from '@navikt/ds-react';
 
@@ -17,9 +16,6 @@ interface Props {
 }
 
 const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
-
     const { journalposter, mottattDato, ytelse } = kvittering || {};
     const { barn, periode } = ytelse || {};
 

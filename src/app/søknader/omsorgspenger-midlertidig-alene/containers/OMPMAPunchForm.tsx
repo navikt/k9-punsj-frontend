@@ -289,6 +289,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 <p className="sendknapp-wrapper">
                     <Button
                         className="send-knapp"
+                        type="button"
                         onClick={() => {
                             if (!harForsoektAaSendeInn) {
                                 setHarForsoektAaSendeInn(true);
@@ -301,6 +302,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
                     <Button
                         variant="secondary"
+                        type="button"
                         className="vent-knapp"
                         onClick={() => setShowSettPaaVentModal(true)}
                         disabled={false}

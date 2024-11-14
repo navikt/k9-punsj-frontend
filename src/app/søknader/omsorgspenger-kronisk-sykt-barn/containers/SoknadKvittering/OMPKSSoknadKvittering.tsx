@@ -1,6 +1,6 @@
-import classNames from 'classnames';
-import countries from 'i18n-iso-countries';
 import React from 'react';
+
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -15,6 +15,7 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../../utils';
 import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
+
 import './ompKSSoknadKvittering.less';
 
 interface IOwnProps {
@@ -28,12 +29,11 @@ export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     kopierJournalpostSuccess,
     annenSokerIdent,
 }) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    const intl = useIntl();
 
     const { journalposter } = response;
+
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
-    const intl = useIntl();
 
     return (
         <div className={classNames('OMPKSSoknadKvitteringContainer')}>

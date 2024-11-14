@@ -1,28 +1,23 @@
-import classNames from 'classnames';
-import countries from 'i18n-iso-countries';
 import React from 'react';
-import { useIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
+import classNames from 'classnames';
+import { useIntl } from 'react-intl';
 import { Alert } from '@navikt/ds-react';
 
 import { aktivitetsFravær } from 'app/søknader/omsorgspenger-utbetaling/konstanter';
-import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../../utils';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
 import FravaersperiodeKvittering from './FravaersperiodeKvittering';
+
 import './ompUtSoknadKvittering.less';
 
-interface IOwnProps {
+interface Props {
     kvittering?: IOMPUTSoknadKvittering;
 }
 
-export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvittering }) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
     const intl = useIntl();
 
     const { journalposter, mottattDato } = kvittering || {};
@@ -43,6 +38,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
     return (
         <div className={classNames('OMPUTSoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+
             {mottattDato && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
@@ -55,6 +51,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     </p>
                 </div>
             )}
+
             <div>
                 <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
                 <hr className={classNames('linje')} />
@@ -66,6 +63,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                         ))}
                     </>
                 )}
+
                 {!!frilanserFravaersperioder.length && (
                     <>
                         <h3>{intlHelper(intl, 'frilanser')}</h3>
@@ -74,6 +72,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                         ))}
                     </>
                 )}
+
                 {!!selvstendigNaeringsdrivendeFravaersperioder.length && (
                     <>
                         <h3>{intlHelper(intl, 'selvstendig')}</h3>
@@ -83,6 +82,7 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
                     </>
                 )}
             </div>
+
             <div>
                 {!!journalposter && journalposter.length > 0 && (
                     <div>
@@ -103,9 +103,4 @@ export const OMPUTSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvit
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(OMPUTSoknadKvittering);
+export default OMPUTSoknadKvittering;
