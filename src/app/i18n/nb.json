@@ -660,6 +660,12 @@
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend": "Korriger fravær i inntektsmelding",
     "omsorgspenger.korrigeringAvInntektsmelding.innsendingError": "Innsending av korrigering feilet",
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet": "Velg virksomhet",
+    "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg": "Velg",
+    "omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret": "Aa-registeret",
+    "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.validering.arbeidsforholdID": "Du må velge et arbeidsforholdID",
+    "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.utenarbeidsforholdId": "uten arbeidsforholdsID",
+    "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError": "Henting av arbeidsforhold for valgt årstall feilet",
+
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId": "Velg arbeidsforholdID",
     "omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox": "Trekk dager eller perioder med fravær",
     "omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend": "Perioder arbeidsgiver ønsker å trekke krav om refusjon",

@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ExternalLink } from '@navikt/ds-icons';
-import { Fieldset, Link, Panel, Select, TextField } from '@navikt/ds-react';
+import { Box, Fieldset, Heading, Link, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -19,17 +19,21 @@ import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+
 import './virksomhetPanel.less';
 
-interface IVirksomhetPanelProps {
+interface Props {
     søkerId: string;
 }
-export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JSX.Element {
+
+const VirksomhetPanel = ({ søkerId }: Props) => {
+    const intl = useIntl();
+
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
     const [arbeidsgivereMedId, setArbeidsgivereMedId] = useState<OrganisasjonMedArbeidsforhold[] | null>(null);
     const [hasFetchArbeidsgiverIdError, setHasFetchArbeidsgiverIdError] = useState(false);
     const [årstallForKorrigering, setÅrstallForKorrigering] = useState<string>('');
-    const intl = useIntl();
+
     const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
     const previousValgtVirksomhet = usePrevious(values.Virksomhet);
 
@@ -79,7 +83,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
         if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
             const arbeidsforholdIDerForValgtArbeidsgiver = finnArbeidsforholdIdForValgtArbeidsgiver();
             if (arbeidsforholdIDerForValgtArbeidsgiver.length > 0 && !value) {
-                return 'Du må velge et arbeidsforholdID';
+                return (
+                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.validering.arbeidsforholdID" />
+                );
             }
         }
         return '';
@@ -88,12 +94,12 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
     return (
         <Fieldset
             legend={
-                <h3 className="korrigering-legend">
-                    {intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend')}
-                </h3>
+                <Heading size="small" level="3">
+                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
+                </Heading>
             }
         >
-            <Panel className="listepanel virksomhetPanel">
+            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel virksomhetPanel">
                 <TextField
                     className="w-12"
                     label="Årstallet korrigeringen gjelder for"
@@ -104,11 +110,18 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                         }
                     }}
                 />
+
                 {hasFetchArbeidsgiverIdError && (
                     <div className="virksomhetPanel feilmelding">
-                        <Feilmelding feil="Henting av arbeidsforhold for valgt årstall feilet" />
+                        <Feilmelding
+                            feil={intlHelper(
+                                intl,
+                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
+                            )}
+                        />
                     </div>
                 )}
+
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field, meta }: FieldProps) => (
                         <Select
@@ -125,8 +138,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             }
                         >
                             <option disabled key="default" value="" label="">
-                                Velg
+                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
                             </option>
+
                             {arbeidsgivereMedNavn.map((arbeidsgiver) => (
                                 <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
                                     {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
@@ -135,9 +149,15 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                         </Select>
                     )}
                 </Field>
+
                 <Link className="eksternLenke" href={AAREG_URL}>
-                    <span>Aa-registeret</span> <ExternalLink />
+                    <span>
+                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
+                    </span>
+
+                    <ExternalLink />
                 </Link>
+
                 <Field
                     name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
                     validate={validateArbeidsforholdId}
@@ -159,13 +179,14 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                             {...field}
                         >
                             <option disabled key="default" value="" label="">
-                                Velg
+                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
                             </option>
+
                             {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
                                 if (arbeidsforholdId === null) {
                                     return (
                                         <option key={`null-${index}`} value="null">
-                                            uten arbeidsforholdsID
+                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.utenarbeidsforholdId" />
                                         </option>
                                     );
                                 }
@@ -178,7 +199,9 @@ export default function VirksomhetPanel({ søkerId }: IVirksomhetPanelProps): JS
                         </Select>
                     )}
                 </Field>
-            </Panel>
+            </Box>
         </Fieldset>
     );
-}
+};
+
+export default VirksomhetPanel;
