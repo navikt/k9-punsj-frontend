@@ -18,7 +18,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel">
+            <Box className="listepanel">
                 <Fieldset
                     legend={
                         <h4 className="korrigering-legend">

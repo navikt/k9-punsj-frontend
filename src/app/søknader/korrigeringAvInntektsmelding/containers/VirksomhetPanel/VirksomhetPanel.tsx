@@ -99,7 +99,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                 </Heading>
             }
         >
-            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel virksomhetPanel">
+            <Box className="listepanel virksomhetPanel">
                 <TextField
                     className="w-12"
                     label="Årstallet korrigeringen gjelder for"
