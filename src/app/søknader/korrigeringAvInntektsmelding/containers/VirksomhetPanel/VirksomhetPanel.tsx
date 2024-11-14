@@ -125,7 +125,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field, meta }: FieldProps) => (
                         <Select
-                            className="w-64"
+                            className="w-64 mt-4"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
@@ -164,7 +164,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                 >
                     {({ field, meta }: FieldProps) => (
                         <Select
-                            className="w-64"
+                            className="w-64 mt-4"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
