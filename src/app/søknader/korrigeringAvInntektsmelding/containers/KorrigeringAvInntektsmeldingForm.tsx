@@ -154,9 +154,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     .then((response) => response.json())
                     .then((data: ValideringResponse) => {
                         const errors = getFormErrors(values, data);
-                        const globalFormError = data?.feil?.find(
-                            (feil) => feil.felt === 'søknad' && feil.feilmelding !== 'temporal',
-                        );
+                        const globalFormError = data?.feil?.find((feil) => feil.feilmelding !== 'temporal');
                         dispatch({
                             type: ActionType.SET_FORM_ERROR,
                             formError: globalFormError?.feilmelding || '',
