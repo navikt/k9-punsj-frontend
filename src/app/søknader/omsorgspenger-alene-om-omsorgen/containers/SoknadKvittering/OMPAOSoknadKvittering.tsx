@@ -68,8 +68,8 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
                 {periode && (
                     <p>
                         <FormattedMessage
-                            id="skjema.kvittering.OMPAO.fraOgMed"
-                            values={{ aleneOmOmsorgenDato, b: (chunks) => <strong>{chunks}</strong> }}
+                            id="skjema.kvittering.OMPAO.aleneOmOmsorgen"
+                            values={{ dato: aleneOmOmsorgenDato, b: (chunks) => <strong>{chunks}</strong> }}
                         />
                     </p>
                 )}
@@ -77,7 +77,7 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
                 {barn?.norskIdentitetsnummer && (
                     <p>
                         <FormattedMessage
-                            id="skjema.kvittering.OMPAO.fraOgMed"
+                            id="skjema.kvittering.identitetsnummer.barn"
                             values={{ fnr: barnetsFnr, b: (chunks) => <strong>{chunks}</strong> }}
                         />
                     </p>

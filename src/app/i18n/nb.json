@@ -500,6 +500,7 @@
     "skjema.kvittering.medisinskeopplysninger": "<b>Dokumentet inneholder medisinske opplysninger:</b> {jaNei}",
     "skjema.kvittering.opplysningerikkepunsjet": "<b>Dokumentet inneholder andre opplysninger som ikke er registrert i skjemaet:</b> {jaNei}",
     "skjema.kvittering.identitetsnummer": "<b>Identitetsnummer:</b> {fnr}",
+    "skjema.kvittering.identitetsnummer.barn": "<b>Barnets identitetsnummer:</b> {fnr}",
 
     "skjema.utenlandsopphold.opplysninger": "Utenlandsopphold",
     "skjema.utenlandsopphold.label": "Skal søker reise til utlandet i perioden det søkes for?",
