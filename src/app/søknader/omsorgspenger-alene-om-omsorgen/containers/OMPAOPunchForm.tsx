@@ -20,7 +20,7 @@ import { fieldNames } from '../initialValues';
 import schema from '../schema';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import OpplysningerOmOMPAOSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPAOSoknad';
-import { OMPAOSoknadKvittering } from './SoknadKvittering/OMPAOSoknadKvittering';
+import OMPAOSoknadKvittering from './SoknadKvittering/OMPAOSoknadKvittering';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 
 export interface IPunchOMPAOFormComponentProps {

@@ -1,14 +1,13 @@
+import React from 'react';
+
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Heading } from '@navikt/ds-react';
 import classNames from 'classnames';
 import countries from 'i18n-iso-countries';
-import React from 'react';
-import { connect } from 'react-redux';
-import { useIntl } from 'react-intl';
 
 import Kopier from 'app/components/kopier/Kopier';
 import LabelValue from 'app/components/skjema/LabelValue';
-import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
-
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
@@ -17,120 +16,163 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../../utils';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+
 import './ompMASoknadKvittering.less';
 
-interface IOwnProps {
+interface Props {
     response: IOMPMASoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
-export const OMPMASoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    response,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
+const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuccess, annenSokerIdent }) => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json'));
+    countries.registerLocale(require('i18n-iso-countries/langs/nb.json')); // Why is this here?
     const intl = useIntl();
+
     const { journalposter, ytelse } = response;
+
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 
     return (
         <div className={classNames('OMPMASoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
-            {kopierJournalpostSuccess && (
-                <div>
-                    <hr className={classNames('linje')} />
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
-                    <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
-                    {annenSokerIdent && (
-                        <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
-                        </p>
-                    )}
-                </div>
-            )}
+            <Heading size="medium" level="2">
+                <FormattedMessage id="skjema.kvittering.oppsummering" />
+            </Heading>
 
-            {visOpplysningerOmSoknad && (
-                <div>
-                    <hr className={classNames('linje')} />
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
-                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato,
-                        )}`}
-                    </p>
-                </div>
-            )}
-            <div>
-                <hr className={classNames('linje')} />
-                <h3>{intlHelper(intl, 'skjema.kvittering.barn')}</h3>
-                {ytelse.barn?.map((barn) => (
-                    <p key={barn.norskIdentitetsnummer}>
-                        <LabelValue
-                            text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
-                            value={barn.norskIdentitetsnummer}
-                        />
-                    </p>
-                ))}
-            </div>
-            <div>
-                <h3>{intlHelper(intl, PunchFormPaneler.ANNEN_FORELDER)}</h3>
-                <hr className={classNames('linje')} />
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.identitetsnummer')}:`}
-                        value={ytelse.annenForelder.norskIdentitetsnummer}
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonstype')}:`}
-                        value={intlHelper(
-                            intl,
-                            `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
-                        )}
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.situasjonsbeskrivelse')}:`}
-                        value={ytelse.annenForelder.situasjonBeskrivelse}
-                    />
-                </p>
-                <p>
-                    <LabelValue
-                        text={`${intlHelper(intl, 'skjema.annenForelder.periode')}:`}
-                        value={periodToFormattedString(ytelse.annenForelder.periode)}
-                    />
-                </p>
-            </div>
-            <div>
-                {!!journalposter && journalposter.length > 0 && (
+            <div className="mt-4">
+                {kopierJournalpostSuccess && (
                     <div>
-                        <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
+                        <Heading size="small" level="3">
+                            <FormattedMessage id="skjema.soknadskvittering.opprettetKopi" />
+                        </Heading>
+
                         <hr className={classNames('linje')} />
+
                         <p>
-                            <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                            {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
+                            <FormattedMessage id="skjema.soknadskvittering.opprettetKopi.innhold" />
                         </p>
+
+                        {annenSokerIdent && (
+                            <p>
+                                <FormattedMessage
+                                    id="ident.identifikasjon.kvittering.annenSoker"
+                                    values={{ fnr: annenSokerIdent }}
+                                />
+
+                                <Kopier verdi={annenSokerIdent} />
+                            </p>
+                        )}
+                    </div>
+                )}
+
+                {visOpplysningerOmSoknad && (
+                    <div>
+                        <Heading size="small" level="3">
+                            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                        </Heading>
+
+                        <hr className={classNames('linje')} />
+
                         <p>
-                            <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                            {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                            <LabelValue
+                                labelTextId="skjema.mottakelsesdato"
+                                value={`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                                    response.mottattDato,
+                                )}`}
+                                gap
+                            />
                         </p>
                     </div>
                 )}
+
+                <div>
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.barn" />
+                    </Heading>
+
+                    <hr className={classNames('linje')} />
+
+                    {ytelse.barn?.map((barn) => (
+                        <p key={barn.norskIdentitetsnummer}>
+                            <LabelValue labelTextId="skjema.identitetsnummer" value={barn.norskIdentitetsnummer} gap />
+                        </p>
+                    ))}
+                </div>
+
+                <div>
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={PunchFormPaneler.ANNEN_FORELDER} />
+                    </Heading>
+
+                    <hr className={classNames('linje')} />
+
+                    <p>
+                        <LabelValue
+                            labelTextId="skjema.identitetsnummer"
+                            value={ytelse.annenForelder.norskIdentitetsnummer}
+                            gap
+                        />
+                    </p>
+
+                    <p>
+                        <LabelValue
+                            labelTextId="skjema.annenForelder.situasjonstype"
+                            value={intlHelper(
+                                intl,
+                                `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
+                            )}
+                            gap
+                        />
+                    </p>
+
+                    <p>
+                        <LabelValue
+                            labelTextId="skjema.annenForelder.situasjonsbeskrivelse"
+                            value={ytelse.annenForelder.situasjonBeskrivelse}
+                            gap
+                        />
+                    </p>
+
+                    <p>
+                        <LabelValue
+                            labelTextId="skjema.annenForelder.periode"
+                            value={periodToFormattedString(ytelse.annenForelder.periode)}
+                            gap
+                        />
+                    </p>
+                </div>
+
+                <div>
+                    {!!journalposter && journalposter.length > 0 && (
+                        <div>
+                            <Heading size="small" level="3">
+                                <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
+                            </Heading>
+
+                            <hr className={classNames('linje')} />
+
+                            <p>
+                                <LabelValue
+                                    labelTextId="skjema.medisinskeopplysninger.kvittering"
+                                    value={journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}
+                                    gap
+                                />
+                            </p>
+
+                            <p>
+                                <LabelValue
+                                    labelTextId="skjema.opplysningerikkepunsjet.kvittering"
+                                    value={journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}
+                                    gap
+                                />
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(OMPMASoknadKvittering);
+export default OMPMASoknadKvittering;

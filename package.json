@@ -117,6 +117,7 @@
         "@types/fetch-headers": "2.0.2",
         "@types/intl": "1.2.2",
         "@types/jest": "29.5.14",
+        "@types/lodash": "^4.17.13",
         "@types/object-hash": "3.0.6",
         "@types/react": "18.3.12",
         "@types/react-aria-menubutton": "6.2.14",

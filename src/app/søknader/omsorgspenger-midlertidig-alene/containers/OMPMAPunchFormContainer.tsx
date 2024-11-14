@@ -46,16 +46,17 @@ interface Props {
 }
 
 const OMPMAPunchFormContainer = (props: Props) => {
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch<Dispatch<any>>();
+
     const identState = useSelector((state: RootStateType) => state.identState);
     const punchFormState = useSelector((state: RootStateType) => state.OMSORGSPENGER_MIDLERTIDIG_ALENE.punchFormState);
     const barn = useSelector((state: RootStateType) => state.felles.barn);
     const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
 
     const { soknad } = punchFormState;
-
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const dispatch = useDispatch<Dispatch<any>>();
 
     useEffect(() => {
         if (!id) {
@@ -119,6 +120,7 @@ const OMPMAPunchFormContainer = (props: Props) => {
                 <Alert size="small" variant="error">
                     <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: id }} />
                 </Alert>
+
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>
                         <FormattedMessage id="skjema.knapp.tilstart" />
