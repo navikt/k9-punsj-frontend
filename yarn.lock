@@ -4457,6 +4457,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.17.13":
+  version: 4.17.13
+  resolution: "@types/lodash@npm:4.17.13"
+  checksum: 10/ddb34e20810c71be2d9445bcc4b64ec25b83976738454de709854b79c7f655b03704b76235445699956d65012987720e0e429a35489de65495cdb5420202d905
+  languageName: node
+  linkType: hard
+
 "@types/mdx@npm:^2.0.0":
   version: 2.0.13
   resolution: "@types/mdx@npm:2.0.13"
@@ -11737,6 +11744,7 @@ __metadata:
     "@types/fetch-headers": "npm:2.0.2"
     "@types/intl": "npm:1.2.2"
     "@types/jest": "npm:29.5.14"
+    "@types/lodash": "npm:^4.17.13"
     "@types/object-hash": "npm:3.0.6"
     "@types/react": "npm:18.3.12"
     "@types/react-aria-menubutton": "npm:6.2.14"
