@@ -652,8 +652,13 @@
     "omsorgsdager.overføring.punch.modal.feil.detaljer": "Oppgi følgende id ved kontakt med teknisk support:",
 
     "omsorgspenger.korrigeringAvInntektsmelding.header": "Korrigering av inntektsmelding omsorgspenger",
-    "omsorgspenger.korrigeringAvInntektsmelding.header.info": "Korrigering av inntektsmelding skal først og fremst benyttes til å slette dager/timer arbeidsgiver melder ifra om at de ikke skal ha refusjon for likevel. Om det samtidig er oppgitt nye dager/timer med fravær, kan du unntaksvis legge til disse. Hovedregelen er at arbeidsgiver skal sende ny inntektsmelding.",
+    "omsorgspenger.korrigeringAvInntektsmelding.header.info": "Korrigering av inntektsmelding skal benyttes til å:",
+    "omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1": "Slette dager/timer arbeidsgiver melder fra de har fått for mye",
+    "omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2": "Endre dager til timer, når arbeidsgiver melder de har fått for mye",
+    "omsorgspenger.korrigeringAvInntektsmelding.sendInn": "Send inn",
+
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend": "Korriger fravær i inntektsmelding",
+    "omsorgspenger.korrigeringAvInntektsmelding.innsendingError": "Innsending av korrigering feilet",
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet": "Velg virksomhet",
     "omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId": "Velg arbeidsforholdID",
     "omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.checkbox": "Trekk dager eller perioder med fravær",

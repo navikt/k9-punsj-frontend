@@ -1,9 +1,8 @@
-import { Form, Formik } from 'formik';
 import React, { useReducer } from 'react';
+
+import { Form, Formik } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-
-import { Alert, Button, Modal, Panel } from '@navikt/ds-react';
-
+import { Alert, Box, Button, Heading, List, Modal } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -15,7 +14,6 @@ import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import BekreftInnsendingModal from './BekreftInnsendingModal/BekreftInnsendingModal';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal2';
-import './KorrigeringAvInntektsmeldingForm.less';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -30,7 +28,9 @@ import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
 import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 
-interface KorrigeringAvInntektsmeldingFormProps {
+import './KorrigeringAvInntektsmeldingForm.less';
+
+interface Props {
     søkerId: string;
     søknadId: string;
     journalposter: string[];
@@ -53,13 +53,11 @@ const initialFormState = {
 
 const getInitialPeriode = () => ({ fom: '', tom: '' });
 
-const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFormProps> = ({
-    søkerId,
-    søknadId,
-    journalposter,
-}): JSX.Element => {
+const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId, journalposter }: Props) => {
     const intl = useIntl();
+
     const [state, dispatch] = useReducer(korrigeringAvInntektsmeldingReducer, initialFormState);
+
     const {
         åpnePaneler,
         visBekreftelsemodal,
@@ -75,12 +73,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
 
     const oppdaterKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
         const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+
         updateOMSKorrigering(korrigering);
     };
 
     const validerKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
         dispatch({ type: ActionType.VALIDER_KORRIGERING_START });
+
         const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+
         validerOMSKorrigering(korrigering).then((response) => {
             if (response.status === 202) {
                 oppdaterKorrigering(values);
@@ -98,7 +99,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             } else {
                 dispatch({
                     type: ActionType.SET_FORM_ERROR,
-                    formError: 'Innsending av korrigering feilet',
+                    formError: intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.innsendingError'),
                 });
             }
         });
@@ -110,15 +111,17 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                 <Alert size="small" variant="info" className="fullfortmelding">
                     <FormattedMessage id="skjema.sentInn" />
                 </Alert>
+
                 <div className="punchPage__knapper mt-8">
                     <Button
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
                         }}
                     >
-                        {intlHelper(intl, 'tilbaketilLOS')}
+                        <FormattedMessage id="tilbaketilLOS" />
                     </Button>
                 </div>
+
                 <OMSKvittering feltverdier={innsendteFormverdier} />
             </>
         );
@@ -140,7 +143,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             }}
             validate={(values) => {
                 oppdaterKorrigering(values);
+
                 const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
+
                 return validerOMSKorrigering(korrigering)
                     .then((response) => response.json())
                     .then((data: ValideringResponse) => {
@@ -159,26 +164,40 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
             {({ setFieldValue, values }) => (
                 <>
                     <Form className="korrigering">
-                        <Panel border>
-                            <h2>{intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header')}</h2>
+                        <Box padding="4" borderWidth="1" borderRadius="small">
+                            <Heading size="medium" level="2">
+                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                            </Heading>
+
                             <Alert size="small" variant="info" className="korrigering__headerInfo">
-                                Korrigering av inntektsmelding skal benyttes til å:
-                                <ul>
-                                    <li> Slette dager/timer arbeidsgiver melder fra de har fått for mye</li>
-                                    <li>Endre dager til timer, når arbeidsgiver melder de har fått for mye</li>
-                                </ul>
+                                <List
+                                    as="ul"
+                                    title={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
+                                >
+                                    <List.Item>
+                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
+                                    </List.Item>
+                                    <List.Item>
+                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2" />
+                                    </List.Item>
+                                </List>
                             </Alert>
+
                             <div className="korrigering__opplysningerOmKorrigeringContainer">
                                 <OpplysningerOmKorrigering />
                             </div>
+
                             <div className="korrigering__virksomhetpanelContainer">
                                 <VirksomhetPanel søkerId={søkerId} />
                             </div>
+
                             <TrekkPerioder
                                 isPanelOpen={åpnePaneler.trekkperioderPanel}
                                 togglePanel={() => {
                                     const toggledPanel = !åpnePaneler.trekkperioderPanel;
+
                                     togglePaneler({ trekkperioderPanel: toggledPanel });
+
                                     if (!toggledPanel) {
                                         setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
                                             getInitialPeriode(),
@@ -186,6 +205,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     }
                                 }}
                             />
+
                             {/* <LeggTilHelePerioder
                                     isPanelOpen={åpnePaneler.leggTilHelePerioderPanel}
                                     togglePanel={() => {
@@ -199,11 +219,14 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                         }
                                     }}
                                 /> */}
+
                             <LeggTilDelvisFravær
                                 isPanelOpen={åpnePaneler.leggTilDelvisFravær}
                                 togglePanel={() => {
                                     const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
+
                                     togglePaneler({ leggTilDelvisFravær: toggledPanel });
+
                                     if (!toggledPanel) {
                                         setFieldValue(KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær, [
                                             {
@@ -214,16 +237,21 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                                     }
                                 }}
                             />
+
                             {formError && hasSubmitted && (
                                 <div className="korrigering__feilmelding">
                                     <Feilmelding feil={formError} />
                                 </div>
                             )}
-                        </Panel>
+                        </Box>
+
                         <div className="korrigering__buttonContainer">
-                            <Button>Send inn</Button>
+                            <Button>
+                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
+                            </Button>
                         </div>
                     </Form>
+
                     {visBekreftelsemodal && (
                         <Modal
                             onClose={() => {
@@ -243,6 +271,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<KorrigeringAvInntektsmeldingFor
                             />
                         </Modal>
                     )}
+
                     {visErDuSikkerModal && (
                         <Modal
                             onClose={() => {
