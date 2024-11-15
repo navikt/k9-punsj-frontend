@@ -64,7 +64,7 @@
         "source-map-loader": "5.0.0",
         "start-server-and-test": "2.0.8",
         "tailwindcss": "3.4.14",
-        "tsconfig-paths-webpack-plugin": "4.1.0",
+        "tsconfig-paths-webpack-plugin": "4.2.0",
         "typescript-string-operations": "1.5.1",
         "ulid": "2.3.0",
         "uuid": "11.0.3",
