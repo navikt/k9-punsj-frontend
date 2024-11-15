@@ -9,12 +9,12 @@ import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
-import EkspanderbartPanel from './EkspanderbartPanel';
+import EkspanderbartPanel from '../../../../components/EkspanderbartPanel';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from './useFocus';
+} from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import useFocus from '../../../../hooks/useFocus';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 import './LeggTilDelvisFravær.less';
@@ -36,24 +36,20 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel delvisFravaer">
+            <Box className="listepanel delvisFravaer">
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
                             <Fieldset
                                 legend={
                                     <h4 className="korrigering-legend">
-                                        <FormattedMessage
-                                            id={'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend'}
-                                        />
+                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend" />
                                     </h4>
                                 }
                                 className="korrigering__skjemagruppe"
                             >
                                 <Alert size="small" variant="info" className="korrigering__infostripe">
-                                    <FormattedMessage
-                                        id={'omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info'}
-                                    />
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info" />
                                 </Alert>
 
                                 <Box
@@ -85,9 +81,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                     <TextField
                                                                         {...field}
                                                                         label={
-                                                                            <FormattedMessage
-                                                                                id={'skjema.perioder.timer'}
-                                                                            />
+                                                                            <FormattedMessage id="skjema.perioder.timer" />
                                                                         }
                                                                         className="w-12"
                                                                         error={
@@ -115,7 +109,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                     <BinSvg title="fjern" />
                                                                 </div>
 
-                                                                <FormattedMessage id={'skjema.liste.fjern_dag'} />
+                                                                <FormattedMessage id="skjema.liste.fjern_dag" />
                                                             </button>
                                                         </div>
                                                     </div>
@@ -139,7 +133,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                         <AddCircleSvg title="leggtil" />
                                     </div>
 
-                                    <FormattedMessage id={'skjema.dag.legg_til'} />
+                                    <FormattedMessage id="skjema.dag.legg_til" />
                                 </button>
                             </div>
                         </>

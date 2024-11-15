@@ -3,7 +3,7 @@ import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { initializeDate } from 'app/utils';
 
-import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import { KorrigeringAvInntektsmeldingFormValues } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 
 interface FormErrors {
     OpplysningerOmKorrigering: string;

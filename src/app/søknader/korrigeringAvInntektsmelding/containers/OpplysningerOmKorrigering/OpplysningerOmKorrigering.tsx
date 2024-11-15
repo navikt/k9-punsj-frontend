@@ -4,7 +4,7 @@ import { Field, FieldProps } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-import { KorrigeringAvInntektsmeldingFormFields } from './KorrigeringAvInntektsmeldingFormFieldsValues';
+import { KorrigeringAvInntektsmeldingFormFields } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 import './opplysningerOmKorrigering.less';
@@ -18,7 +18,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                 <FormattedMessage id={'skjema.opplysningeromkorrigering'} />
             </Heading>
 
-            <Box padding="4" borderWidth="1" borderRadius="small" className="listepanel opplysningerOmKorrigering">
+            <Box className="listepanel opplysningerOmKorrigering">
                 <Heading level={'4'} size="xsmall" className="opplysningerOmKorrigering__subHeading">
                     <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
                 </Heading>

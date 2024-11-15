@@ -17,7 +17,7 @@ import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/Journa
 
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import ErDuSikkerModal from 'app/søknader/korrigeringAvInntektsmelding/ErDuSikkerModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
 import {
     chooseEksisterendeOMPKSSoknadAction,
     closeEksisterendeOMPKSSoknadAction,

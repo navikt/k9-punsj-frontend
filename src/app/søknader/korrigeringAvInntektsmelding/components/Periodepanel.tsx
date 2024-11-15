@@ -12,8 +12,8 @@ import { IPeriode } from 'app/models/types';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
-} from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from './useFocus';
+} from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import useFocus from '../../../hooks/useFocus';
 
 export interface IPeriodepanelerProps {
     name:

@@ -1,5 +1,5 @@
-import { KorrigeringAvInntektsmeldingFormValues } from './KorrigeringAvInntektsmeldingFormFieldsValues';
-import ActionType from './korrigeringAvInntektsmeldingActions';
+import { KorrigeringAvInntektsmeldingFormValues } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import ActionType from '../actions/korrigeringAvInntektsmeldingActions';
 
 interface Paneler {
     trekkperioderPanel: boolean;

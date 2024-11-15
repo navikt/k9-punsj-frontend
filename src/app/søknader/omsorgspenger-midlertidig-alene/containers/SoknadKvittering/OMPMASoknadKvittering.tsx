@@ -3,10 +3,8 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Heading } from '@navikt/ds-react';
 import classNames from 'classnames';
-import countries from 'i18n-iso-countries';
 
 import Kopier from 'app/components/kopier/Kopier';
-import LabelValue from 'app/components/skjema/LabelValue';
 import intlHelper from 'app/utils/intlUtils';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
@@ -26,13 +24,25 @@ interface Props {
 }
 
 const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuccess, annenSokerIdent }) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    countries.registerLocale(require('i18n-iso-countries/langs/nb.json')); // Why is this here?
     const intl = useIntl();
 
     const { journalposter, ytelse } = response;
 
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
+
+    const mottakelsesdato = `${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+        response.mottattDato,
+    )}`;
+    const situasjonstype = intlHelper(
+        intl,
+        `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
+    );
+    const situasjonsbeskrivelse = ytelse.annenForelder.situasjonBeskrivelse;
+    const formattedPeriode = periodToFormattedString(ytelse.annenForelder.periode);
+    const inneholderMedisinskeOpplysninger =
+        journalposter && journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei';
+    const inneholderInformasjonSomIkkeKanPunsjes =
+        journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
 
     return (
         <div className={classNames('OMPMASoknadKvitteringContainer')}>
@@ -57,7 +67,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                             <p>
                                 <FormattedMessage
                                     id="ident.identifikasjon.kvittering.annenSoker"
-                                    values={{ fnr: annenSokerIdent }}
+                                    values={{ fnr: annenSokerIdent, b: (chunks) => <strong>{chunks}</strong> }}
                                 />
 
                                 <Kopier verdi={annenSokerIdent} />
@@ -75,12 +85,12 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                         <hr className={classNames('linje')} />
 
                         <p>
-                            <LabelValue
-                                labelTextId="skjema.mottakelsesdato"
-                                value={`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                                    response.mottattDato,
-                                )}`}
-                                gap
+                            <FormattedMessage
+                                id="skjema.kvittering.mottakelsesdato"
+                                values={{
+                                    mottakelsesdato,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
                             />
                         </p>
                     </div>
@@ -95,7 +105,13 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
 
                     {ytelse.barn?.map((barn) => (
                         <p key={barn.norskIdentitetsnummer}>
-                            <LabelValue labelTextId="skjema.identitetsnummer" value={barn.norskIdentitetsnummer} gap />
+                            <FormattedMessage
+                                id="skjema.kvittering.identitetsnummer"
+                                values={{
+                                    fnr: barn.norskIdentitetsnummer,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
                         </p>
                     ))}
                 </div>
@@ -108,37 +124,42 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                     <hr className={classNames('linje')} />
 
                     <p>
-                        <LabelValue
-                            labelTextId="skjema.identitetsnummer"
-                            value={ytelse.annenForelder.norskIdentitetsnummer}
-                            gap
+                        <FormattedMessage
+                            id="skjema.kvittering.identitetsnummer"
+                            values={{
+                                fnr: ytelse.annenForelder.norskIdentitetsnummer,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
                         />
                     </p>
 
                     <p>
-                        <LabelValue
-                            labelTextId="skjema.annenForelder.situasjonstype"
-                            value={intlHelper(
-                                intl,
-                                `omsorgspenger.midlertidigAlene.situasjonstyper.${ytelse.annenForelder.situasjon}`,
-                            )}
-                            gap
+                        <FormattedMessage
+                            id="skjema.kvittering.annenForelder.situasjonstype"
+                            values={{
+                                situasjonstype,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
                         />
                     </p>
 
                     <p>
-                        <LabelValue
-                            labelTextId="skjema.annenForelder.situasjonsbeskrivelse"
-                            value={ytelse.annenForelder.situasjonBeskrivelse}
-                            gap
+                        <FormattedMessage
+                            id="skjema.kvittering.annenForelder.situasjonsbeskrivelse"
+                            values={{
+                                situasjonsbeskrivelse,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
                         />
                     </p>
 
                     <p>
-                        <LabelValue
-                            labelTextId="skjema.annenForelder.periode"
-                            value={periodToFormattedString(ytelse.annenForelder.periode)}
-                            gap
+                        <FormattedMessage
+                            id="skjema.kvittering.annenForelder.periode"
+                            values={{
+                                periode: formattedPeriode,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
                         />
                     </p>
                 </div>
@@ -153,18 +174,22 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                             <hr className={classNames('linje')} />
 
                             <p>
-                                <LabelValue
-                                    labelTextId="skjema.medisinskeopplysninger.kvittering"
-                                    value={journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}
-                                    gap
+                                <FormattedMessage
+                                    id="skjema.kvittering.medisinskeopplysninger"
+                                    values={{
+                                        jaNei: inneholderMedisinskeOpplysninger,
+                                        b: (chunks) => <strong>{chunks}</strong>,
+                                    }}
                                 />
                             </p>
 
                             <p>
-                                <LabelValue
-                                    labelTextId="skjema.opplysningerikkepunsjet.kvittering"
-                                    value={journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}
-                                    gap
+                                <FormattedMessage
+                                    id="skjema.kvittering.opplysningerikkepunsjet"
+                                    values={{
+                                        jaNei: inneholderInformasjonSomIkkeKanPunsjes,
+                                        b: (chunks) => <strong>{chunks}</strong>,
+                                    }}
                                 />
                             </p>
                         </div>
