@@ -809,20 +809,21 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 >
                     {intlHelper(intl, 'skjema.ekspander')}
                 </Checkbox>
-                <VerticalSpacer sixteenPx />
 
-                <EndringAvSoknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                    getErrorMessage={this.getErrorMessage}
-                    soknad={soknad}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    eksisterendePerioder={eksisterendePerioder}
-                />
                 <VerticalSpacer sixteenPx />
 
                 <Accordion>
+                    <EndringAvSoknadsperioder
+                        isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                        onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                        getErrorMessage={this.getErrorMessage}
+                        soknad={soknad}
+                        updateSoknad={this.updateSoknad}
+                        updateSoknadState={this.updateSoknadState}
+                        eksisterendePerioder={eksisterendePerioder}
+                    />
+                    <VerticalSpacer sixteenPx />
+
                     <Accordion.Item
                         defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
