@@ -109,9 +109,15 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
             </>
         );
     }
+    // eslint-disable-next-line no-console
+    console.log('Test soeknadRespons:', soeknadRespons);
+    const initialValuesTest = initialValues(backendTilFrontendMapping(soeknadRespons, fagsak));
+
+    // eslint-disable-next-line no-console
+    console.log('Test initialValuesTest: ', initialValuesTest);
     return (
         <Formik
-            initialValues={initialValues(backendTilFrontendMapping(soeknadRespons, fagsak))}
+            initialValues={initialValuesTest}
             validate={(values) =>
                 schema
                     .validate(
