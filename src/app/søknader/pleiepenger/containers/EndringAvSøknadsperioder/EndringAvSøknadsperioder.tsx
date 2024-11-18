@@ -1,19 +1,16 @@
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import * as React from 'react';
-import { useIntl } from 'react-intl';
-
-import { Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
-
+import React, { useEffect } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+
 import './endringAvSøknadsperioder.less';
 
-interface EndringAvSøknadsperioderProps {
+interface Props {
     isOpen: boolean;
     onClick: () => void;
     getErrorMessage: (attribute: string, indeks?: number) => React.ReactNode;
@@ -23,12 +20,13 @@ interface EndringAvSøknadsperioderProps {
     eksisterendePerioder?: IPeriode[];
 }
 
-const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.Element | null => {
+const EndringAvSøknadsperioder = (props: Props) => {
     const intl = useIntl();
+
     const { isOpen, onClick, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } = props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (selectedPeriods.length === 0 && soknad.trekkKravPerioder && soknad.trekkKravPerioder.length > 0) {
             setSelectedPeriods(soknad.trekkKravPerioder);
         }
@@ -131,38 +129,48 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
     };
 
     return (
-        <EkspanderbartpanelBase
-            apen={isOpen}
+        <Accordion.Item
+            defaultOpen={isOpen}
+            open={isOpen}
             className="endringAvSøknadsperioder"
-            tittel={intlHelper(intl, 'skjema.endringAvSøknadsperioder')}
-            onClick={onClick}
+            onOpenChange={onClick}
+            data-test-id="accordionItem-endringAvSøknadsperioderpanel"
         >
-            <Label size="small">
-                Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
-            </Label>
-            <Periodepaneler
-                intl={intl}
-                periods={soknad.trekkKravPerioder || []}
-                initialPeriode={{ fom: '', tom: '' }}
-                editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
-                editSoknadState={(perioder, showStatus) => {
-                    updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
-                    setSelectedPeriods(perioder);
-                }}
-                textLeggTil="skjema.perioder.legg_til"
-                textFjern="skjema.perioder.fjern"
-                getErrorMessage={getErrorMessage}
-                feilkodeprefiks="endringAvSøknadsperioder"
-                kanHaFlere
-            />
-            <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
-                {alleTrekkKravPerioderFeilmelding()}
-            </ErrorMessage>
-            {getAlertstriper()}
-            <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
-                {begrunnelseForInnsendingFeilmelding()}
-            </ErrorMessage>
-        </EkspanderbartpanelBase>
+            <Accordion.Header>
+                <FormattedMessage id="skjema.endringAvSøknadsperioder" />
+            </Accordion.Header>
+
+            <Accordion.Content>
+                <Label size="small">
+                    Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
+                </Label>
+
+                <Periodepaneler
+                    intl={intl}
+                    periods={soknad.trekkKravPerioder || []}
+                    initialPeriode={{ fom: '', tom: '' }}
+                    editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
+                    editSoknadState={(perioder, showStatus) => {
+                        updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                        setSelectedPeriods(perioder);
+                    }}
+                    textLeggTil="skjema.perioder.legg_til"
+                    textFjern="skjema.perioder.fjern"
+                    getErrorMessage={getErrorMessage}
+                    feilkodeprefiks="endringAvSøknadsperioder"
+                    kanHaFlere
+                />
+                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                    {alleTrekkKravPerioderFeilmelding()}
+                </ErrorMessage>
+
+                {getAlertstriper()}
+
+                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                    {begrunnelseForInnsendingFeilmelding()}
+                </ErrorMessage>
+            </Accordion.Content>
+        </Accordion.Item>
     );
 };
 export default EndringAvSøknadsperioder;
