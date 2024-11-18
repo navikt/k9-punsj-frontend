@@ -11806,8 +11806,6 @@ __metadata:
     mustache-express: "npm:1.3.2"
     nav-frontend-chevron-style: "npm:1.0.4"
     nav-frontend-core: "npm:6.0.1"
-    nav-frontend-ekspanderbartpanel: "npm:4.0.4"
-    nav-frontend-ekspanderbartpanel-style: "npm:2.0.2"
     nav-frontend-js-utils: "npm:1.0.20"
     nav-frontend-knapper-style: "npm:2.1.2"
     nav-frontend-lenker: "npm:2.0.2"
@@ -12918,32 +12916,6 @@ __metadata:
   version: 6.0.1
   resolution: "nav-frontend-core@npm:6.0.1"
   checksum: 10/7e7ae202d96bc1170c0522e5e885d5e0258cd4f784bfa9357802293a2ca32b459c1f5ddb16c967eb941aa413d5e6a8a7f1bc9a72d593f4ee2ff967b35f6c4fa5
-  languageName: node
-  linkType: hard
-
-"nav-frontend-ekspanderbartpanel-style@npm:2.0.2":
-  version: 2.0.2
-  resolution: "nav-frontend-ekspanderbartpanel-style@npm:2.0.2"
-  peerDependencies:
-    nav-frontend-chevron-style: ^1.0.4
-    nav-frontend-core: ^6.0.0
-    nav-frontend-paneler-style: ^2.0.0
-    nav-frontend-typografi-style: ^2.0.0
-  checksum: 10/116827e6f3ece2aeeca442dbad8b7772a202640852778a39f2c9a390651e49b461cb18ef113bccd48c34ec9f6adb83845b7f8763dd321ad845b756fcd5562402
-  languageName: node
-  linkType: hard
-
-"nav-frontend-ekspanderbartpanel@npm:4.0.4":
-  version: 4.0.4
-  resolution: "nav-frontend-ekspanderbartpanel@npm:4.0.4"
-  peerDependencies:
-    "@types/react-collapse": ^5.0.0
-    classnames: ^2.2.5
-    nav-frontend-ekspanderbartpanel-style: ^2.0.0
-    nav-frontend-js-utils: ^1.0.19
-    react: ^16.8.0 || ^17.0.0
-    react-collapse: ^5.0.0
-  checksum: 10/b694fe56582a7363d2f9f25ec614389f57bce48d9ce5e9dd6922870d39ca0c347ed020f8371430b0bea2f6685a8fa2276e7d8123dbeafc830e78a3bde96dfb77
   languageName: node
   linkType: hard
 
