@@ -283,8 +283,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private checkOpenState = (p: PunchFormPaneler): boolean => {
         const { aapnePaneler, expandAll } = this.state;
         const hasInputErrors = this.props.punchFormState.inputErrors?.length;
-        // eslint-disable-next-line no-console
-        console.log('Test p: ', p);
+
         if (hasInputErrors) {
             return true;
         }
@@ -882,6 +881,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                        data-test-id="accordionItem-utenlandsoppholdpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
@@ -940,6 +940,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.FERIE)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
+                        data-test-id="accordionItem-feriepanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.FERIE} />
@@ -1029,6 +1030,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                        data-test-id="accordionItem-opplysningeromsokerpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
@@ -1066,6 +1068,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         defaultOpen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
                         className={classNames('tilsynsordning')}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}
+                        data-test-id="accordionItem-omsorgstilbudpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.OMSORGSTILBUD} />
@@ -1114,6 +1117,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
+                        data-test-id="accordionItem-beredskapnattevaakpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.BEREDSKAPNATTEVAAK} />
@@ -1146,6 +1150,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
+                        data-test-id="accordionItem-medlemskappanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />

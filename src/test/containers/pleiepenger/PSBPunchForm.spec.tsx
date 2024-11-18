@@ -224,7 +224,15 @@ describe('PunchForm', () => {
 
     it('Viser skjema', () => {
         const punchForm = setupPunchForm();
-        expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(6);
+        expect(
+            punchForm.findWhere(
+                (n) =>
+                    n.name() === 'ForwardRef' &&
+                    n.prop('data-test-id') &&
+                    n.prop('data-test-id').startsWith('accordionItem-'),
+            ),
+        ).toHaveLength(6);
+        // expect(punchForm.find('EkspanderbartpanelBase')).toHaveLength(6);
         expect(punchForm.find('ArbeidsforholdPanel')).toHaveLength(1);
     });
 
@@ -483,19 +491,24 @@ describe('PunchForm', () => {
         const soknad = { ...initialSoknad };
         const punchForm = setupPunchForm({ soknad }, {});
 
-        expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(1);
-        expect(punchForm.find('.feriepanel').find('CheckboksPanel').prop('label')).toEqual('skjema.ferie.leggtil');
+        const feriepanel = punchForm.findWhere(
+            (n) => n.name() === 'ForwardRef' && n.prop('data-test-id') === 'accordionItem-feriepanel',
+        );
+
+        expect(feriepanel.find('CheckboksPanel').prop('label')).toEqual('skjema.ferie.leggtil');
     });
 
     it('Viser legg till ferie og slettade perioder dersom det finns periode', () => {
         const soknad = { ...initialSoknad };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('.feriepanel').find('CheckboksPanel').length).toEqual(2);
-        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(0).prop('label')).toEqual(
-            'skjema.ferie.leggtil',
+        const feriepanel = punchForm.findWhere(
+            (n) => n.name() === 'ForwardRef' && n.prop('data-test-id') === 'accordionItem-feriepanel',
         );
-        expect(punchForm.find('.feriepanel').find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
+
+        expect(feriepanel.find('CheckboksPanel').length).toEqual(2);
+        expect(feriepanel.find('CheckboksPanel').at(0).prop('label')).toEqual('skjema.ferie.leggtil');
+        expect(feriepanel.find('CheckboksPanel').at(1).prop('label')).toEqual('skjema.ferie.fjern');
     });
 
     it('Viser ferieperioder dersom det finnes', () => {
@@ -505,7 +518,11 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').at(0).prop('periods')).toEqual([
+        const feriepanel = punchForm.findWhere(
+            (n) => n.name() === 'ForwardRef' && n.prop('data-test-id') === 'accordionItem-feriepanel',
+        );
+
+        expect(feriepanel.dive().find('Periodepaneler').at(0).prop('periods')).toEqual([
             { fom: '2021-01-30', tom: '2021-04-15' },
         ]);
     });
@@ -517,16 +534,13 @@ describe('PunchForm', () => {
         };
         const punchForm = setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
-        expect(punchForm.find('.feriepanel').dive().find('Periodepaneler').prop('periods')).toEqual([
-            { fom: '2021-01-30', tom: '2021-04-15' },
-        ]);
-        expect(
-            punchForm
-                .find('.feriepanel')
-                .dive()
-                .find('.ekspanderbartPanel__innhold')
-                .findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info'),
-        ).toHaveLength(1);
+        const feriepanel = punchForm.findWhere(
+            (n) => n.name() === 'ForwardRef' && n.prop('data-test-id') === 'accordionItem-feriepanel',
+        );
+
+        expect(feriepanel.find('Periodepaneler').prop('periods')).toEqual([{ fom: '2021-01-30', tom: '2021-04-15' }]);
+
+        expect(feriepanel.findWhere((n) => n.name() === 'ForwardRef' && n.prop('variant') === 'info')).toHaveLength(1);
     });
 
     it('Viser ikke advarsel om overlappende periode når periodene ikke overlapper', () => {
