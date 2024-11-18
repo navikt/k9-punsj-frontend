@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Field, FieldProps, useFormikContext } from 'formik';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
-import { Alert, Box } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Accordion, Alert, Box } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -50,6 +49,7 @@ interface ArbeidsforholdPanelProps {
 
 const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
+
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
@@ -97,6 +97,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
             />
+
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
                 {({ field, form }: FieldProps<boolean>) => (
                     <RadioPanelGruppeFormik
@@ -108,7 +109,9 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     />
                 )}
             </Field>
+
             <VerticalSpacer eightPx />
+
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                 <DatoInputFormikNew
                     className="frilanser-sluttdato"
@@ -116,6 +119,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
                 />
             )}
+
             {values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                 <>
                     <div className="arbeidstidInfo">
@@ -125,6 +129,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             {intlHelper(intl, 'skjema.arbeidstid.info')}
                         </Alert>
                     </div>
+
                     <Field name="arbeidstid.frilanserArbeidstidInfo.perioder">
                         {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                             <ArbeidstidKalender
@@ -154,6 +159,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         value: v,
                     }))}
                 />
+
                 {/* feil={getErrorMessage(
                         `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
                             opptjening?.selvstendigNaeringsdrivende?.info?.periode
@@ -169,6 +175,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         />
                     </div>
                 </div>
+
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
@@ -180,6 +187,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         />
                     )}
                 </Field>
+
                 {!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="flex flex-wrap">
                         <TextFieldFormik
@@ -191,6 +199,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             )} */}
                     </div>
                 )}
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
                         {({ field, form }: FieldProps<boolean>) => (
@@ -235,6 +244,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 className="regnskapsførerNavn"
                             />
                         </div>
+
                         <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
@@ -245,22 +255,27 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         </div>
                     </div>
                 )}
+
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+
                 <div className="sn-startdatocontainer">
                     <DatoInputFormikNew
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                     />
+
                     {/* errorMessage={getErrorMessage(
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
                         )} */}
+
                     <DatoInputFormikNew
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                     />
                 </div>
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <TextFieldFormik
@@ -269,6 +284,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             className="bruttoinntekt"
                         />
                     )}
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erEldreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
@@ -283,6 +299,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             )}
                         </Field>
                     )}
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
@@ -292,6 +309,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                             />
                         </div>
+
                         <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
@@ -300,6 +318,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 type="number"
                             />
                         </div>
+
                         <TextAreaFormik
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             className="endringbegrunnelse"
@@ -308,14 +327,18 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </>
                 )}
                 <VerticalSpacer eightPx />
+
                 <div className="arbeidstidInfo">
                     <hr />
                     <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
+
                     <Alert size="small" variant="info">
                         {intlHelper(intl, 'skjema.arbeidstid.info')}
                     </Alert>
                 </div>
+
                 <VerticalSpacer eightPx />
+
                 <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
                     {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                         <ArbeidstidKalender
@@ -328,6 +351,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         />
                     )}
                 </Field>
+
                 {/* <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
@@ -338,91 +362,108 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
     };
 
     return (
-        <EkspanderbartpanelBase
-            apen={isOpen}
-            className="punchform__paneler"
-            tittel={intlHelper(intl, PunchFormPaneler.ARBEID)}
-            onClick={() => onPanelClick()}
+        <Accordion.Item
+            open={isOpen}
+            defaultOpen={isOpen}
+            onOpenChange={() => onPanelClick()}
+            data-test-id="accordionItem-arbeidsforholdPanel"
         >
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
-                value={Arbeidsforhold.ARBEIDSTAKER}
-                onChange={(e) => {
-                    if (e.target.checked) {
-                        if (!values.arbeidstid || !values.arbeidstid.arbeidstakerList?.length) {
-                            setFieldValue('arbeidstid.arbeidstakerList', [initialArbeidstaker()]);
+            <Accordion.Header>
+                <FormattedMessage id={PunchFormPaneler.ARBEID} />
+            </Accordion.Header>
+
+            <Accordion.Content>
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
+                    value={Arbeidsforhold.ARBEIDSTAKER}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            if (!values.arbeidstid || !values.arbeidstid.arbeidstakerList?.length) {
+                                setFieldValue('arbeidstid.arbeidstakerList', [initialArbeidstaker()]);
+                            }
+                        } else {
+                            setFieldValue('arbeidstid.arbeidstakerList', []);
                         }
-                    } else {
-                        setFieldValue('arbeidstid.arbeidstakerList', []);
-                    }
-                }}
-                checked={values.arbeidstid?.arbeidstakerList?.length > 0}
-            />
-            <VerticalSpacer eightPx />
-            {!!values.arbeidstid?.arbeidstakerList?.length && (
-                <Arbeidstakerperioder
-                    eksisterendePerioder={eksisterendePerioder}
-                    initialArbeidstaker={initialArbeidstaker()}
+                    }}
+                    checked={values.arbeidstid?.arbeidstakerList?.length > 0}
                 />
-            )}
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
-                value={Arbeidsforhold.FRILANSER}
-                onChange={(e) => {
-                    if (e.target.checked) {
-                        if (!values.arbeidstid || !values.arbeidstid.frilanserArbeidstidInfo) {
-                            setFieldValue('arbeidstid.frilanserArbeidstidInfo', new ArbeidstidInfo({}));
-                            setFieldValue('opptjeningAktivitet.frilanser', initialFrilanser());
+
+                <VerticalSpacer eightPx />
+
+                {!!values.arbeidstid?.arbeidstakerList?.length && (
+                    <Arbeidstakerperioder
+                        eksisterendePerioder={eksisterendePerioder}
+                        initialArbeidstaker={initialArbeidstaker()}
+                    />
+                )}
+
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
+                    value={Arbeidsforhold.FRILANSER}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            if (!values.arbeidstid || !values.arbeidstid.frilanserArbeidstidInfo) {
+                                setFieldValue('arbeidstid.frilanserArbeidstidInfo', new ArbeidstidInfo({}));
+                                setFieldValue('opptjeningAktivitet.frilanser', initialFrilanser());
+                            }
+                        } else {
+                            setFieldValue('arbeidstid.frilanserArbeidstidInfo', null);
+                            setFieldValue('opptjeningAktivitet.frilanser', null);
                         }
-                    } else {
-                        setFieldValue('arbeidstid.frilanserArbeidstidInfo', null);
-                        setFieldValue('opptjeningAktivitet.frilanser', null);
-                    }
-                }}
-                checked={!!values.opptjeningAktivitet?.frilanser}
-            />
-            <VerticalSpacer eightPx />
-            {!!values.opptjeningAktivitet.frilanser && (
-                <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
-                    {frilanserperioder()}
-                </Box>
-            )}
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
-                value={Arbeidsforhold.SELVSTENDIG}
-                onChange={(e) => {
-                    if (e.target.checked) {
-                        if (!values.opptjeningAktivitet || !values.opptjeningAktivitet.selvstendigNaeringsdrivende) {
-                            setFieldValue(
-                                'opptjeningAktivitet.selvstendigNaeringsdrivende',
-                                initialSelvstendigNæringsdrivendeOpptjening(),
-                            );
-                            setFieldValue(
-                                'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
-                                new ArbeidstidInfo({}),
-                            );
-                        }
-                    } else {
-                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende', null);
-                        setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo', null);
-                    }
-                }}
-                checked={!!values.opptjeningAktivitet?.selvstendigNaeringsdrivende}
-            />
-            {!!values.opptjeningAktivitet.selvstendigNaeringsdrivende && (
-                <>
-                    <Alert size="small" variant="info" className="sn-alertstripe">
-                        {intlHelper(intl, 'skjema.sn.info')}
-                    </Alert>
-                    <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
-                        {selvstendigperioder()}
+                    }}
+                    checked={!!values.opptjeningAktivitet?.frilanser}
+                />
+
+                <VerticalSpacer eightPx />
+
+                {!!values.opptjeningAktivitet.frilanser && (
+                    <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
+                        {frilanserperioder()}
                     </Box>
-                </>
-            )}
-            {/* <UhaanderteFeilmeldinger
+                )}
+
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
+                    value={Arbeidsforhold.SELVSTENDIG}
+                    onChange={(e) => {
+                        if (e.target.checked) {
+                            if (
+                                !values.opptjeningAktivitet ||
+                                !values.opptjeningAktivitet.selvstendigNaeringsdrivende
+                            ) {
+                                setFieldValue(
+                                    'opptjeningAktivitet.selvstendigNaeringsdrivende',
+                                    initialSelvstendigNæringsdrivendeOpptjening(),
+                                );
+                                setFieldValue(
+                                    'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
+                                    new ArbeidstidInfo({}),
+                                );
+                            }
+                        } else {
+                            setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende', null);
+                            setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo', null);
+                        }
+                    }}
+                    checked={!!values.opptjeningAktivitet?.selvstendigNaeringsdrivende}
+                />
+
+                {!!values.opptjeningAktivitet.selvstendigNaeringsdrivende && (
+                    <>
+                        <Alert size="small" variant="info" className="sn-alertstripe">
+                            {intlHelper(intl, 'skjema.sn.info')}
+                        </Alert>
+                        <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
+                            {selvstendigperioder()}
+                        </Box>
+                    </>
+                )}
+
+                {/* <UhaanderteFeilmeldinger
                 getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
             /> */}
-        </EkspanderbartpanelBase>
+            </Accordion.Content>
+        </Accordion.Item>
     );
 };
 export default ArbeidsforholdPanel;

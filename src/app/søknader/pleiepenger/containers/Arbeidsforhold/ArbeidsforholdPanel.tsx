@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { set } from 'lodash';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
-import { useIntl } from 'react-intl';
-import { Alert, Box, TextField, Textarea } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Accordion, Alert, Box, TextField, Textarea } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -778,62 +777,68 @@ const ArbeidsforholdPanel = ({
     };
 
     return (
-        <EkspanderbartpanelBase
-            apen={isOpen}
-            className="punchform__paneler"
-            tittel={intlHelper(intl, PunchFormPaneler.ARBEID)}
-            onClick={() => onPanelClick()}
+        <Accordion.Item
+            open={isOpen}
+            defaultOpen={isOpen}
+            onOpenChange={() => onPanelClick()}
+            data-test-id="accordionItem-arbeidsforholdPanel"
         >
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
-                value={Arbeidsforhold.ARBEIDSTAKER}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
-                checked={!!soknad.arbeidstid?.arbeidstakerList?.length}
-            />
-            <VerticalSpacer eightPx />
-            {!!soknad.arbeidstid?.arbeidstakerList?.length && (
-                <Arbeidstakerperioder
-                    soknad={soknad}
-                    eksisterendePerioder={eksisterendePerioder}
-                    initialArbeidstaker={initialArbeidstaker}
-                    updateSoknad={updateSoknad}
-                    updateSoknadState={updateSoknadState}
-                    getErrorMessage={getErrorMessage}
-                    getUhaandterteFeil={getUhaandterteFeil}
+            <Accordion.Header>
+                <FormattedMessage id={PunchFormPaneler.ARBEID} />
+            </Accordion.Header>
+
+            <Accordion.Content>
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
+                    value={Arbeidsforhold.ARBEIDSTAKER}
+                    onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
+                    checked={!!soknad.arbeidstid?.arbeidstakerList?.length}
                 />
-            )}
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
-                value={Arbeidsforhold.FRILANSER}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
-                checked={!!soknad.opptjeningAktivitet.frilanser}
-            />
-            <VerticalSpacer eightPx />
-            {!!soknad.opptjeningAktivitet.frilanser && (
-                <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
-                    {frilanserperioder()}
-                </Box>
-            )}
-            <CheckboksPanel
-                label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
-                value={Arbeidsforhold.SELVSTENDIG}
-                onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
-                checked={!!soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende}
-            />
-            {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
-                <>
-                    <Alert size="small" variant="info" className="sn-alertstripe">
-                        {intlHelper(intl, 'skjema.sn.info')}
-                    </Alert>
-                    <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
-                        {selvstendigperioder()}
+                <VerticalSpacer eightPx />
+                {!!soknad.arbeidstid?.arbeidstakerList?.length && (
+                    <Arbeidstakerperioder
+                        soknad={soknad}
+                        eksisterendePerioder={eksisterendePerioder}
+                        initialArbeidstaker={initialArbeidstaker}
+                        updateSoknad={updateSoknad}
+                        updateSoknadState={updateSoknadState}
+                        getErrorMessage={getErrorMessage}
+                        getUhaandterteFeil={getUhaandterteFeil}
+                    />
+                )}
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
+                    value={Arbeidsforhold.FRILANSER}
+                    onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
+                    checked={!!soknad.opptjeningAktivitet.frilanser}
+                />
+                <VerticalSpacer eightPx />
+                {!!soknad.opptjeningAktivitet.frilanser && (
+                    <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
+                        {frilanserperioder()}
                     </Box>
-                </>
-            )}
-            <UhaanderteFeilmeldinger
-                getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
-            />
-        </EkspanderbartpanelBase>
+                )}
+                <CheckboksPanel
+                    label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
+                    value={Arbeidsforhold.SELVSTENDIG}
+                    onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
+                    checked={!!soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende}
+                />
+                {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
+                    <>
+                        <Alert size="small" variant="info" className="sn-alertstripe">
+                            {intlHelper(intl, 'skjema.sn.info')}
+                        </Alert>
+                        <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
+                            {selvstendigperioder()}
+                        </Box>
+                    </>
+                )}
+                <UhaanderteFeilmeldinger
+                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
+                />
+            </Accordion.Content>
+        </Accordion.Item>
     );
 };
 export default ArbeidsforholdPanel;

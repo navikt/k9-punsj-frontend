@@ -1,11 +1,10 @@
-import classNames from 'classnames';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
-import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { ComponentType } from 'react';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 
-import { Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+import classNames from 'classnames';
+import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -810,179 +809,219 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 >
                     {intlHelper(intl, 'skjema.ekspander')}
                 </Checkbox>
+
                 <VerticalSpacer sixteenPx />
-                <EndringAvSoknadsperioder
-                    isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                    getErrorMessage={this.getErrorMessage}
-                    soknad={soknad}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    eksisterendePerioder={eksisterendePerioder}
-                />
-                <VerticalSpacer sixteenPx />
-                <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                    className="punchform__paneler"
-                    tittel={intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                >
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                            label: intlHelper(intl, jnv),
-                            value: jnv,
-                        }))}
-                        name="utlandjaneiikeeopplyst"
-                        legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
-                        onChange={(event) =>
-                            this.updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
-                        }
-                        checked={
-                            this.state.soknad.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : this.state.iUtlandet
-                        }
+
+                <Accordion>
+                    <EndringAvSoknadsperioder
+                        isOpen={this.checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                        onClick={() => this.handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                        getErrorMessage={this.getErrorMessage}
+                        soknad={soknad}
+                        updateSoknad={this.updateSoknad}
+                        updateSoknadState={this.updateSoknadState}
+                        eksisterendePerioder={eksisterendePerioder}
                     />
-                    {!!soknad.utenlandsopphold.length && (
-                        <PeriodeinfoPaneler
-                            periods={soknad.utenlandsopphold}
-                            component={pfLand()}
-                            panelid={(i) => `utenlandsoppholdpanel_${i}`}
-                            initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(perioder) => this.updateSoknad({ utenlandsopphold: perioder })}
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState({ utenlandsopphold: perioder }, showStatus)
-                            }
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            className="utenlandsopphold"
-                            panelClassName="utenlandsoppholdpanel"
-                            getErrorMessage={this.getErrorMessage}
-                            getUhaandterteFeil={this.getUhaandterteFeil}
-                            feilkodeprefiks="ytelse.utenlandsopphold"
-                            kanHaFlere
-                            medSlettKnapp={false}
-                        />
-                    )}
-                </EkspanderbartpanelBase>
-                <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.FERIE)}
-                    className={classNames('punchform__paneler', 'feriepanel')}
-                    tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
-                >
-                    <VerticalSpacer eightPx />
-                    <CheckboksPanel
-                        label={intlHelper(intl, 'skjema.ferie.leggtil')}
-                        value="skjema.ferie.leggtil"
-                        onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
-                        checked={!!soknad.lovbestemtFerie.length}
-                    />
-                    {!!soknad.lovbestemtFerie.length && (
-                        <Periodepaneler
-                            intl={intl}
-                            periods={soknad.lovbestemtFerie}
-                            initialPeriode={this.initialPeriode}
-                            editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
-                            editSoknadState={(perioder, showStatus) =>
-                                this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
-                            }
-                            getErrorMessage={this.getErrorMessage}
-                            getUhaandterteFeil={this.getUhaandterteFeil}
-                            feilkodeprefiks="ytelse.lovbestemtFerie"
-                            kanHaFlere
-                        />
-                    )}
-                    <VerticalSpacer eightPx />
-                    {eksisterendePerioder && eksisterendePerioder?.length > 0 && !punchFormState.hentPerioderError && (
-                        <>
-                            <CheckboksPanel
-                                label={intlHelper(intl, 'skjema.ferie.fjern')}
-                                value="skjema.ferie.fjern"
-                                onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
-                                checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                    <VerticalSpacer sixteenPx />
+
+                    <Accordion.Item
+                        defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                        open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                        onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                        data-test-id="accordionItem-utenlandsoppholdpanel"
+                    >
+                        <Accordion.Header>
+                            <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
+                        </Accordion.Header>
+
+                        <Accordion.Content>
+                            <RadioPanelGruppe
+                                className="horizontalRadios"
+                                radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
+                                    label: intlHelper(intl, jnv),
+                                    value: jnv,
+                                }))}
+                                name="utlandjaneiikeeopplyst"
+                                legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
+                                onChange={(event) =>
+                                    this.updateUtenlandsopphold(
+                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
+                                    )
+                                }
+                                checked={
+                                    this.state.soknad.utenlandsopphold?.length
+                                        ? JaNeiIkkeOpplyst.JA
+                                        : this.state.iUtlandet
+                                }
                             />
-                            {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
-                                <>
-                                    <Alert size="small" variant="info">
-                                        {intlHelper(intl, 'skjema.ferie.fjern.info')}
-                                    </Alert>
-                                    <Periodepaneler
-                                        intl={intl}
-                                        periods={soknad.lovbestemtFerieSomSkalSlettes}
-                                        initialPeriode={this.initialPeriode}
-                                        editSoknad={(perioder) =>
-                                            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
-                                        }
-                                        editSoknadState={(perioder, showStatus) =>
-                                            this.updateSoknadState(
-                                                { lovbestemtFerieSomSkalSlettes: perioder },
-                                                showStatus,
-                                            )
-                                        }
-                                        getErrorMessage={() => undefined}
-                                        getUhaandterteFeil={this.getUhaandterteFeil}
-                                        feilkodeprefiks="ytelse.lovbestemtFerie"
-                                        kanHaFlere
-                                    />
-                                </>
+
+                            {!!soknad.utenlandsopphold.length && (
+                                <PeriodeinfoPaneler
+                                    periods={soknad.utenlandsopphold}
+                                    component={pfLand()}
+                                    panelid={(i) => `utenlandsoppholdpanel_${i}`}
+                                    initialPeriodeinfo={initialUtenlandsopphold}
+                                    editSoknad={(perioder) => this.updateSoknad({ utenlandsopphold: perioder })}
+                                    editSoknadState={(perioder, showStatus) =>
+                                        this.updateSoknadState({ utenlandsopphold: perioder }, showStatus)
+                                    }
+                                    textLeggTil="skjema.perioder.legg_til"
+                                    textFjern="skjema.perioder.fjern"
+                                    className="utenlandsopphold"
+                                    panelClassName="utenlandsoppholdpanel"
+                                    getErrorMessage={this.getErrorMessage}
+                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    feilkodeprefiks="ytelse.utenlandsopphold"
+                                    kanHaFlere
+                                    medSlettKnapp={false}
+                                />
                             )}
-                        </>
-                    )}
-                </EkspanderbartpanelBase>
-                <ArbeidsforholdPanel
-                    isOpen={this.checkOpenState(PunchFormPaneler.ARBEID)}
-                    onPanelClick={() => this.handlePanelClick(PunchFormPaneler.ARBEID)}
-                    handleArbeidsforholdChange={this.handleArbeidsforholdChange}
-                    getCheckedValueArbeid={this.getCheckedValueArbeid}
-                    soknad={soknad}
-                    eksisterendePerioder={eksisterendePerioder}
-                    initialArbeidstaker={this.initialArbeidstaker}
-                    updateSoknad={this.updateSoknad}
-                    updateSoknadState={this.updateSoknadState}
-                    getErrorMessage={this.getErrorMessage}
-                    getUhaandterteFeil={this.getUhaandterteFeil}
-                    handleFrilanserChange={this.handleFrilanserChange}
-                    updateVirksomhetstyper={this.updateVirksomhetstyper}
-                />
-                <EkspanderbartpanelBase
-                    apen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                    className="punchform__paneler"
-                    tittel={intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}
-                    onClick={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
-                >
-                    <RadioPanelGruppe
-                        className="horizontalRadios"
-                        radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
-                        name="medlemskapjanei"
-                        legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                        onChange={(event) =>
-                            this.handleMedlemskapChange((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
-                        }
-                        checked={soknad.bosteder.length ? JaNeiIkkeOpplyst.JA : this.state.harBoddIUtlandet}
+                        </Accordion.Content>
+                    </Accordion.Item>
+
+                    <Accordion.Item
+                        open={this.checkOpenState(PunchFormPaneler.FERIE)}
+                        defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
+                        onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
+                        data-test-id="accordionItem-feriepanel"
+                    >
+                        <Accordion.Header>
+                            <FormattedMessage id={PunchFormPaneler.FERIE} />
+                        </Accordion.Header>
+
+                        <Accordion.Content>
+                            <VerticalSpacer eightPx />
+
+                            <CheckboksPanel
+                                label={intlHelper(intl, 'skjema.ferie.leggtil')}
+                                value="skjema.ferie.leggtil"
+                                onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
+                                checked={!!soknad.lovbestemtFerie.length}
+                            />
+
+                            {!!soknad.lovbestemtFerie.length && (
+                                <Periodepaneler
+                                    intl={intl}
+                                    periods={soknad.lovbestemtFerie}
+                                    initialPeriode={this.initialPeriode}
+                                    editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
+                                    editSoknadState={(perioder, showStatus) =>
+                                        this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
+                                    }
+                                    getErrorMessage={this.getErrorMessage}
+                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    feilkodeprefiks="ytelse.lovbestemtFerie"
+                                    kanHaFlere
+                                />
+                            )}
+
+                            <VerticalSpacer eightPx />
+
+                            {eksisterendePerioder &&
+                                eksisterendePerioder?.length > 0 &&
+                                !punchFormState.hentPerioderError && (
+                                    <>
+                                        <CheckboksPanel
+                                            label={intlHelper(intl, 'skjema.ferie.fjern')}
+                                            value="skjema.ferie.fjern"
+                                            onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
+                                            checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
+                                        />
+                                        {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
+                                            <>
+                                                <Alert size="small" variant="info">
+                                                    {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                                </Alert>
+                                                <Periodepaneler
+                                                    intl={intl}
+                                                    periods={soknad.lovbestemtFerieSomSkalSlettes}
+                                                    initialPeriode={this.initialPeriode}
+                                                    editSoknad={(perioder) =>
+                                                        this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
+                                                    }
+                                                    editSoknadState={(perioder, showStatus) =>
+                                                        this.updateSoknadState(
+                                                            { lovbestemtFerieSomSkalSlettes: perioder },
+                                                            showStatus,
+                                                        )
+                                                    }
+                                                    getErrorMessage={() => undefined}
+                                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                                    feilkodeprefiks="ytelse.lovbestemtFerie"
+                                                    kanHaFlere
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                        </Accordion.Content>
+                    </Accordion.Item>
+
+                    <ArbeidsforholdPanel
+                        isOpen={this.checkOpenState(PunchFormPaneler.ARBEID)}
+                        onPanelClick={() => this.handlePanelClick(PunchFormPaneler.ARBEID)}
+                        handleArbeidsforholdChange={this.handleArbeidsforholdChange}
+                        getCheckedValueArbeid={this.getCheckedValueArbeid}
+                        soknad={soknad}
+                        eksisterendePerioder={eksisterendePerioder}
+                        initialArbeidstaker={this.initialArbeidstaker}
+                        updateSoknad={this.updateSoknad}
+                        updateSoknadState={this.updateSoknadState}
+                        getErrorMessage={this.getErrorMessage}
+                        getUhaandterteFeil={this.getUhaandterteFeil}
+                        handleFrilanserChange={this.handleFrilanserChange}
+                        updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
-                    {!!soknad.bosteder.length && (
-                        <PeriodeinfoPaneler
-                            periods={soknad.bosteder}
-                            component={pfLand()}
-                            panelid={(i) => `bostederpanel_${i}`}
-                            initialPeriodeinfo={initialUtenlandsopphold}
-                            editSoknad={(bosteder) => this.updateSoknad({ bosteder })}
-                            editSoknadState={(bosteder, showStatus) => this.updateSoknadState({ bosteder }, showStatus)}
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            className="bosteder"
-                            panelClassName="bostederpanel"
-                            getErrorMessage={this.getErrorMessage}
-                            getUhaandterteFeil={this.getUhaandterteFeil}
-                            feilkodeprefiks="ytelse.bosteder"
-                            kanHaFlere
-                            medSlettKnapp={false}
-                        />
-                    )}
-                </EkspanderbartpanelBase>
+                    <Accordion.Item
+                        open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
+                        defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
+                        onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
+                        data-test-id="accordionItem-medlemskappanel"
+                    >
+                        <Accordion.Header>
+                            <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
+                        </Accordion.Header>
+
+                        <Accordion.Content>
+                            <RadioPanelGruppe
+                                className="horizontalRadios"
+                                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
+                                    label: intlHelper(intl, jn),
+                                    value: jn,
+                                }))}
+                                name="medlemskapjanei"
+                                legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
+                                onChange={(event) =>
+                                    this.handleMedlemskapChange(
+                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
+                                    )
+                                }
+                                checked={soknad.bosteder.length ? JaNeiIkkeOpplyst.JA : this.state.harBoddIUtlandet}
+                            />
+                            {!!soknad.bosteder.length && (
+                                <PeriodeinfoPaneler
+                                    periods={soknad.bosteder}
+                                    component={pfLand()}
+                                    panelid={(i) => `bostederpanel_${i}`}
+                                    initialPeriodeinfo={initialUtenlandsopphold}
+                                    editSoknad={(bosteder) => this.updateSoknad({ bosteder })}
+                                    editSoknadState={(bosteder, showStatus) =>
+                                        this.updateSoknadState({ bosteder }, showStatus)
+                                    }
+                                    textLeggTil="skjema.perioder.legg_til"
+                                    textFjern="skjema.perioder.fjern"
+                                    className="bosteder"
+                                    panelClassName="bostederpanel"
+                                    getErrorMessage={this.getErrorMessage}
+                                    getUhaandterteFeil={this.getUhaandterteFeil}
+                                    feilkodeprefiks="ytelse.bosteder"
+                                    kanHaFlere
+                                    medSlettKnapp={false}
+                                />
+                            )}
+                        </Accordion.Content>
+                    </Accordion.Item>
+                </Accordion>
                 <VerticalSpacer thirtyTwoPx />
                 <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
                 <div className="flex-container">
