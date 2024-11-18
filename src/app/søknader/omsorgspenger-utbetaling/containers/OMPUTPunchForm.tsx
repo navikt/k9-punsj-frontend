@@ -126,9 +126,10 @@ const OMPUTPunchForm: React.FC<Props> = ({
                     : oppdaterSoeknad(korrigeringFilter(frontendTilBackendMapping(values)));
             }
 
-            return submitSoknad
+            /*return submitSoknad
                 ? oppdaterSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)))
-                : oppdaterSoeknad(frontendTilBackendMapping(values));
+                : oppdaterSoeknad(frontendTilBackendMapping(values));*/
+            return oppdaterSoeknad(frontendTilBackendMapping(filtrerVerdierFoerInnsending(values)));
         },
         {
             onSuccess: (data, { submitSoknad }) => {

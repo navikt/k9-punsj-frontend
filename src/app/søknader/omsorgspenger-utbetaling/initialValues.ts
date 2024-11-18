@@ -100,7 +100,12 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                 },
                 fravaersperioder: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder?.length
                     ? soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.fravaersperioder.map(mapFravaersperiode)
-                    : [],
+                    : [
+                          {
+                              ...fravaersperiodeInitialValue,
+                              aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
+                          },
+                      ],
             },
             frilanser: {
                 startdato: soknad?.opptjeningAktivitet?.frilanser?.startdato || '',
@@ -108,7 +113,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                 jobberFortsattSomFrilans: soknad?.opptjeningAktivitet?.frilanser?.jobberFortsattSomFrilans || false,
                 fravaersperioder: soknad?.opptjeningAktivitet?.frilanser?.fravaersperioder?.length
                     ? soknad?.opptjeningAktivitet?.frilanser?.fravaersperioder.map(mapFravaersperiode)
-                    : [],
+                    : [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.FRILANSER }],
             },
             arbeidstaker: soknad?.opptjeningAktivitet?.arbeidstaker?.length
                 ? soknad?.opptjeningAktivitet?.arbeidstaker.map((arbeidstaker) => ({
@@ -117,7 +122,7 @@ export const initialValues = (soknad: Partial<IOMPUTSoknad> | undefined): IOMPUT
                           ? arbeidstaker.fravaersperioder.map(mapFravaersperiode)
                           : [{ ...fravaersperiodeInitialValue, aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER }],
                   }))
-                : [],
+                : [{ ...arbeidstakerInitialValue }],
         },
         bosteder: soknad?.bosteder?.length
             ? soknad?.bosteder.map((bosted) => ({
