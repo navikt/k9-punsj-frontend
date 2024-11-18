@@ -1,14 +1,12 @@
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import { EkspanderbartpanelBase } from 'nav-frontend-ekspanderbartpanel';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import { useIntl } from 'react-intl';
-
-import { Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
-
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
@@ -44,7 +42,7 @@ import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 
-export interface OwnProps {
+interface OwnProps {
     journalpostid: string;
     visForhaandsvisModal: boolean;
     setVisForhaandsvisModal: (vis: boolean) => void;
@@ -296,75 +294,108 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 {intlHelper(intl, 'skjema.ekspander')}
             </Checkbox>
             <VerticalSpacer sixteenPx />
-            <EndringAvSøknadsperioder
-                onClick={() => handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
-                eksisterendePerioder={eksisterendePerioder}
-                isOpen={checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER) || expandAll}
-            />
-            <EkspanderbartpanelBase
-                apen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                className="punchform__paneler"
-                tittel={intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}
-                onClick={() => handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
-            >
-                <RadioPanelGruppe
-                    className="horizontalRadios"
-                    radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                        label: intlHelper(intl, jnv),
-                        value: jnv,
-                    }))}
-                    name="utlandjaneiikeeopplyst"
-                    legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
-                    onChange={(event) =>
-                        updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
-                    }
-                    checked={
-                        values.utenlandsopphold && values.utenlandsopphold?.length ? JaNeiIkkeOpplyst.JA : iUtlandet
-                    }
+            <Accordion>
+                <EndringAvSøknadsperioder
+                    onClick={() => handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
+                    eksisterendePerioder={eksisterendePerioder}
+                    isOpen={checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER) || expandAll}
                 />
-                {!!values.utenlandsopphold.length && <UtenlandsoppholdContainer />}
-            </EkspanderbartpanelBase>
-            <EkspanderbartpanelBase
-                apen={checkOpenState(PunchFormPaneler.FERIE)}
-                className="punchform__paneler"
-                tittel={intlHelper(intl, PunchFormPaneler.FERIE)}
-                onClick={() => handlePanelClick(PunchFormPaneler.FERIE)}
-            >
-                <LovbestemtFerie />
-            </EkspanderbartpanelBase>
-            <ArbeidsforholdPanel
-                isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
-                onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
-                eksisterendePerioder={eksisterendePerioder}
-            />
-            <EkspanderbartpanelBase
-                apen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                className="punchform__paneler"
-                tittel={intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                onClick={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-            >
-                <SelectFormik
-                    value={values.omsorg.relasjonTilBarnet}
-                    label={intlHelper(intl, 'skjema.relasjontilbarnet')}
-                    name="omsorg.relasjonTilBarnet"
-                    options={Object.values(RelasjonTilBarnet).map((rel) => ({ value: rel, label: rel }))}
+                <Accordion.Item
+                    defaultOpen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    open={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    data-test-id="accordionItem-utenlandsoppholdpanel"
+                >
+                    <Accordion.Header>
+                        <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
+                    </Accordion.Header>
+
+                    <Accordion.Content>
+                        <RadioPanelGruppe
+                            className="horizontalRadios"
+                            radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
+                                label: intlHelper(intl, jnv),
+                                value: jnv,
+                            }))}
+                            name="utlandjaneiikeeopplyst"
+                            legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
+                            onChange={(event) =>
+                                updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
+                            }
+                            checked={
+                                values.utenlandsopphold && values.utenlandsopphold?.length
+                                    ? JaNeiIkkeOpplyst.JA
+                                    : iUtlandet
+                            }
+                        />
+                        {!!values.utenlandsopphold.length && <UtenlandsoppholdContainer />}
+                    </Accordion.Content>
+                </Accordion.Item>
+
+                <Accordion.Item
+                    open={checkOpenState(PunchFormPaneler.FERIE)}
+                    defaultOpen={checkOpenState(PunchFormPaneler.FERIE)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.FERIE)}
+                    data-test-id="accordionItem-feriepanel"
+                >
+                    <Accordion.Header>
+                        <FormattedMessage id={PunchFormPaneler.FERIE} />
+                    </Accordion.Header>
+
+                    <Accordion.Content>
+                        <LovbestemtFerie />
+                    </Accordion.Content>
+                </Accordion.Item>
+
+                <ArbeidsforholdPanel
+                    isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
+                    onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
+                    eksisterendePerioder={eksisterendePerioder}
                 />
-                {values.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
-                    <TextFieldFormik
-                        label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
-                        className="beskrivelseAvOmsorgsrollen"
-                        name="omsorg.beskrivelseAvOmsorgsrollen"
-                    />
-                )}
-            </EkspanderbartpanelBase>
-            <EkspanderbartpanelBase
-                apen={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                className="punchform__paneler"
-                tittel={intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}
-                onClick={() => handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
-            >
-                <Bosteder />
-            </EkspanderbartpanelBase>
+
+                <Accordion.Item
+                    open={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    defaultOpen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    onClick={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    data-test-id="accordionItem-opplysningerOmSøkerPanel"
+                >
+                    <Accordion.Header>
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
+                    </Accordion.Header>
+
+                    <Accordion.Content>
+                        <SelectFormik
+                            value={values.omsorg.relasjonTilBarnet}
+                            label={intlHelper(intl, 'skjema.relasjontilbarnet')}
+                            name="omsorg.relasjonTilBarnet"
+                            options={Object.values(RelasjonTilBarnet).map((rel) => ({ value: rel, label: rel }))}
+                        />
+
+                        {values.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
+                            <TextFieldFormik
+                                label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
+                                className="beskrivelseAvOmsorgsrollen"
+                                name="omsorg.beskrivelseAvOmsorgsrollen"
+                            />
+                        )}
+                    </Accordion.Content>
+                </Accordion.Item>
+
+                <Accordion.Item
+                    open={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
+                    defaultOpen={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
+                    onClick={() => handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
+                    data-test-id="accordionItem-medlemskapPanel"
+                >
+                    <Accordion.Header>
+                        <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
+                    </Accordion.Header>
+
+                    <Accordion.Content>
+                        <Bosteder />
+                    </Accordion.Content>
+                </Accordion.Item>
+            </Accordion>
             <VerticalSpacer thirtyTwoPx />
             <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p> {/* TODO: Hva er dette? */}
             <div className="flex-container">
