@@ -522,7 +522,7 @@ describe('PunchForm', () => {
             (n) => n.name() === 'ForwardRef' && n.prop('data-test-id') === 'accordionItem-feriepanel',
         );
 
-        expect(feriepanel.dive().find('Periodepaneler').at(0).prop('periods')).toEqual([
+        expect(feriepanel.find('Periodepaneler').at(0).prop('periods')).toEqual([
             { fom: '2021-01-30', tom: '2021-04-15' },
         ]);
     });
