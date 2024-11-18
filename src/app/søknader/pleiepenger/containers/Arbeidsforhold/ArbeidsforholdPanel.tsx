@@ -786,6 +786,7 @@ const ArbeidsforholdPanel = ({
             <Accordion.Header>
                 <FormattedMessage id={PunchFormPaneler.ARBEID} />
             </Accordion.Header>
+
             <Accordion.Content>
                 <CheckboksPanel
                     label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
