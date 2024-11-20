@@ -13,7 +13,6 @@ jest.mock('react-router');
 jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
-jest.mock('app/utils/pathUtils');
 
 const enPeriode: IPSBSoknadKvitteringArbeidstidInfo = {
     '2021-06-01/2021-06-30': {

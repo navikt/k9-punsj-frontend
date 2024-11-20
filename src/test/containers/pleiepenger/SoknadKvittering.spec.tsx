@@ -21,7 +21,6 @@ jest.mock('react-redux', () => ({
 jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
-jest.mock('app/utils/pathUtils');
 
 const fullResponse: IPSBSoknadKvittering = {
     journalposter: [
