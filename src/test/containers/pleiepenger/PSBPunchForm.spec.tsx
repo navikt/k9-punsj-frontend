@@ -27,7 +27,6 @@ jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
-jest.mock('app/utils/pathUtils');
 
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),

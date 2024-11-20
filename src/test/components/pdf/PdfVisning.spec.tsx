@@ -6,7 +6,6 @@ import { renderWithIntl } from '../../testUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
-jest.mock('app/utils/pathUtils');
 jest.mock('app/hooks/useQuery', () => () => ({ get: () => '1' }));
 
 describe('<PdfVisning>', () => {
