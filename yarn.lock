@@ -11784,7 +11784,7 @@ __metadata:
     react: "npm:18.3.1"
     react-aria-menubutton: "npm:7.0.3"
     react-collapse: "npm:5.1.1"
-    react-day-picker: "npm:9.3.2"
+    react-day-picker: "npm:9.4.0"
     react-dom: "npm:18.3.1"
     react-intl: "npm:7.0.1"
     react-modal: "npm:3.16.1"
@@ -14639,15 +14639,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:9.3.2":
-  version: 9.3.2
-  resolution: "react-day-picker@npm:9.3.2"
+"react-day-picker@npm:9.4.0":
+  version: 9.4.0
+  resolution: "react-day-picker@npm:9.4.0"
   dependencies:
     "@date-fns/tz": "npm:^1.2.0"
     date-fns: "npm:^4.1.0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10/30358d262c56d84d1c29642f8c41aba8e4ad5518b279c3634e8248950e2687c5a0e3c489819470814f2f34d52b8c2125f1f8675117ea35f213751f5a083e2e83
+  checksum: 10/ba7b496c10fd030533016d9aa04d9f996ec0e2ff33dea0e0b855e727c728a4e8353296941a85fc7e7cb144f1763669aab50a6637360f7538652c66a90f9bf055
   languageName: node
   linkType: hard
 
