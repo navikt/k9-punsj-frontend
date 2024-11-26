@@ -18,11 +18,17 @@ interface ISettPaaVentModalProps {
     children?: React.ReactNode;
 }
 
-const pdfUrl = (journalpost: IJournalpostInfo) =>
-    apiUrl(ApiPath.DOKUMENT, {
+const pdfUrl = (journalpost: IJournalpostInfo) => {
+    // eslint-disable-next-line no-console
+    console.log('Test journalpost', journalpost);
+    const docId =
+        journalpost.dokumenter && journalpost.dokumenter.length ? journalpost.dokumenter[0].dokument_id : 'not_found';
+
+    return apiUrl(ApiPath.DOKUMENT, {
         journalpostId: journalpost.journalpostId,
-        dokumentId: journalpost.dokumenter[0].dokument_id,
+        dokumentId: docId,
     });
+};
 
 const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/skjema/${id}`;
 
