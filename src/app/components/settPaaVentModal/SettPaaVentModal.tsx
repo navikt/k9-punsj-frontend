@@ -63,7 +63,7 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                         <FormattedMessage id="modal.settpaavent.overskrift" />
                     </Heading>
 
-                    <Alert size="small" variant="info">
+                    <Alert size="small" variant="info" className="mb-4">
                         <FormattedMessage id="modal.settpaavent.info" />
                     </Alert>
 
