@@ -1,13 +1,13 @@
-import fetchMock from 'fetch-mock';
-
 import { ApiPath } from '../../app/apiConfig';
 import { apiUrl, convertResponseToError, get, post, put } from '../../app/utils/apiUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
 
+global.fetch = jest.fn();
+
 describe('apiUrl', () => {
-    it('Genererer URL med parametre', () => {
+    it('Generates a URL with parameters', () => {
         const id = 'abc123';
         const url = apiUrl(ApiPath.PSB_SOKNAD_GET, { id });
         expect(url).toContain(id);
@@ -16,99 +16,141 @@ describe('apiUrl', () => {
 
 describe('get', () => {
     beforeEach(() => {
-        fetchMock.reset();
         jest.resetAllMocks();
     });
 
-    it('Utfører get-spørring', async () => {
+    it('Performs a GET request', async () => {
         const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
         const url = apiUrl(path, { id });
 
-        fetchMock.get(url, { status: 200 });
+        // Mock the fetch implementation
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            json: jest.fn().mockResolvedValue({}),
+        });
+
         await get(path, { id });
 
-        expect(fetchMock.called(url, { method: 'get' })).toEqual(true);
+        expect(global.fetch).toHaveBeenCalledWith(url, {
+            credentials: 'include', // Matches the implementation
+            headers: expect.any(Headers), // Expect a Headers instance
+        });
     });
 
-    it('Behandler respons fra get-spørring', async () => {
+    it('Handles the GET response', async () => {
         const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
-        const url = apiUrl(path, { id });
-        const response = { status: 200, json: () => Promise.resolve({ key: 'value' }) };
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
+        const callback = jest.fn();
 
-        fetchMock.get(url, response);
+        const mockResponseData = JSON.stringify({ key: 'value' });
+
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            text: jest.fn().mockResolvedValue(mockResponseData), // Mock response.text()
+        });
+
         await get(path, { id }, {}, callback);
 
         expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(
+            expect.any(Object), // The response object
+            { key: 'value' }, // Parsed JSON data
+        );
     });
 });
 
 describe('post', () => {
     beforeEach(() => {
-        fetchMock.reset();
         jest.resetAllMocks();
     });
 
-    it('Utfører post-spørring', async () => {
+    it('Performs a POST request', async () => {
         const path = ApiPath.PSB_SOKNAD_CREATE;
-        const url = apiUrl(path);
         const body = { test: 'Lorem ipsum dolor sit amet.' };
+        const url = apiUrl(path);
 
-        fetchMock.post(url, { status: 201 });
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            text: jest.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
+        });
+
         await post(path, undefined, undefined, body);
 
-        expect(fetchMock.called(url, { method: 'post', body })).toEqual(true);
+        expect(global.fetch).toHaveBeenCalledWith(
+            url,
+            expect.objectContaining({
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: expect.objectContaining({
+                    'Content-Type': 'application/json',
+                }),
+                credentials: 'include', // Match credentials if they are added
+            }),
+        );
     });
 
-    it('Behandler respons fra post-spørring', async () => {
+    it('Handles the POST response', async () => {
         const path = ApiPath.PSB_SOKNAD_CREATE;
-        const url = apiUrl(path);
-        const response = {
-            status: 201,
-            body: JSON.stringify({ message: 'Hello' }),
-        };
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
+        const body = { test: 'Lorem ipsum dolor sit amet.' };
+        const callback = jest.fn();
 
-        fetchMock.post(url, response);
-        await post(path, undefined, undefined, undefined, callback);
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+            text: jest.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
+        });
+
+        await post(path, undefined, undefined, body, callback);
 
         expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(
+            expect.any(Object), // Response object
+            { message: 'Hello' }, // Parsed JSON data
+        );
     });
 });
 
 describe('put', () => {
     beforeEach(() => {
-        fetchMock.reset();
         jest.resetAllMocks();
     });
 
-    it('Utfører put-spørring', async () => {
+    it('Performs a PUT request', async () => {
         const path = ApiPath.PSB_SOKNAD_UPDATE;
         const id = 'abc123';
         const url = apiUrl(path, { id });
         const body = { test: 'Lorem ipsum dolor sit amet.' };
 
-        fetchMock.put(url, { status: 200 });
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+        });
+
         await put(path, { id }, body);
 
-        expect(fetchMock.called(url, { method: 'put', body })).toEqual(true);
+        expect(global.fetch).toHaveBeenCalledWith(
+            url,
+            expect.objectContaining({
+                method: 'put',
+                headers: expect.any(Object),
+                body: JSON.stringify(body),
+            }),
+        );
     });
 
-    it('Behandler respons fra put-spørring', async () => {
+    it('Handles the PUT response', async () => {
         const path = ApiPath.PSB_SOKNAD_UPDATE;
         const id = 'abc123';
-        const url = apiUrl(path, { id });
-        const body = { test: 'Lorem ipsum dolor sit amet.' };
-        const response = { status: 200 };
-        const callback = jest.fn((r: Response) => Promise.resolve(r));
 
-        fetchMock.put(url, response);
+        const body = { test: 'Lorem ipsum dolor sit amet.' };
+        const callback = jest.fn();
+
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: true,
+        });
+
         await put(path, { id }, body, callback);
 
         expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith(expect.objectContaining(response));
     });
 });
 
