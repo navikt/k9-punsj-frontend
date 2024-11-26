@@ -82,6 +82,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     label={intlHelper(intl, 'skjema.perioder.fom')}
                     inputRef={fomInputRef}
                     // limitations={limitations}
+                    dataTestId="fom"
                 />
 
                 <NewDateInput
@@ -94,6 +95,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                     inputRef={tomInputRef}
                     // limitations={limitations}
                     label={intlHelper(intl, 'skjema.perioder.tom')}
+                    dataTestId="tom"
                 />
             </HStack>
         </Fieldset>

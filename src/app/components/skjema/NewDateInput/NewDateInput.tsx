@@ -27,6 +27,7 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     value?: string;
     fromDate?: Date;
     toDate?: Date;
+    dataTestId?: string;
 };
 
 const NewDateInput: React.FC<Props> = ({
@@ -45,6 +46,7 @@ const NewDateInput: React.FC<Props> = ({
     value,
     fromDate,
     toDate,
+    dataTestId,
 }) => {
     const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
@@ -127,6 +129,7 @@ const NewDateInput: React.FC<Props> = ({
                     disabled={inputDisabled || disabled}
                     onBlur={onInputBlur}
                     ref={inputRef}
+                    data-testid={dataTestId || 'datePickerInput'}
                 />
             </DatePicker>
         </div>
