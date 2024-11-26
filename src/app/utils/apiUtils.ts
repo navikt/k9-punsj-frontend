@@ -7,7 +7,7 @@ import { canStringBeParsedToJSON } from './formatUtils';
 import { getEnvironmentVariable } from './envUtils';
 import { logApiError } from './logUtils';
 
-export const apiUrl = (path: string, parameters?: any) => (parameters ? String.Format(path, parameters) : path);
+export const apiUrl = (path: string, parameters?: any) => (parameters ? String.format(path, parameters) : path);
 
 const login = (): Promise<void> =>
     new Promise((resolve) => {

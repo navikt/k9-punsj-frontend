@@ -1,16 +1,17 @@
-import * as React from 'react';
-import { useIntl } from 'react-intl';
+import React from 'react';
 
-import { Alert, Button, Table } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Button, Heading, Table } from '@navikt/ds-react';
 
 import { ApiPath } from '../../apiConfig';
 import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';
 import { apiUrl } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
+
 import './settPaaVentModal.less';
 
-interface ISettPaaVentModalProps {
+interface Props {
     submit: () => void;
     avbryt: () => void;
     journalposter?: IJournalpostInfo[];
@@ -18,48 +19,72 @@ interface ISettPaaVentModalProps {
     children?: React.ReactNode;
 }
 
-const pdfUrl = (journalpost: IJournalpostInfo) =>
-    apiUrl(ApiPath.DOKUMENT, {
+const pdfUrl = (journalpost: IJournalpostInfo) => {
+    const docId =
+        journalpost.dokumenter && journalpost.dokumenter.length ? journalpost.dokumenter[0].dokument_id : 'not_found';
+
+    return apiUrl(ApiPath.DOKUMENT, {
         journalpostId: journalpost.journalpostId,
-        dokumentId: journalpost.dokumenter[0].dokument_id,
+        dokumentId: docId,
     });
+};
 
 const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/skjema/${id}`;
 
-const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
-    const { submit, avbryt, journalposter, soknadId, children } = props;
+const SettPaaVentModal: React.FC<Props> = (props) => {
     const intl = useIntl();
 
+    const { submit, avbryt, journalposter, soknadId, children } = props;
+
     return (
-        <div className="sett-paa-vent">
-            <h2>{intlHelper(intl, 'skjema.knapp.settpaavent')}</h2>
-            <p>{intlHelper(intl, 'skjema.settpaavent.periode')}</p>
+        <div className="sett-paa-vent pt-4 pb-4">
+            <Heading size="medium" level="2">
+                <FormattedMessage id="skjema.knapp.settpaavent" />
+            </Heading>
+
+            <p>
+                <FormattedMessage id="skjema.settpaavent.periode" />
+            </p>
+
             {children}
+
             <div className="knapper">
-                <Button variant="secondary" onClick={() => submit()} size="small">
-                    {intlHelper(intl, 'skjema.knapp.settpaavent')}
-                </Button>
                 <Button variant="secondary" onClick={() => avbryt()} size="small">
-                    {intlHelper(intl, 'skjema.knapp.avbryt')}
+                    <FormattedMessage id="skjema.knapp.avbryt" />
+                </Button>
+                <Button onClick={() => submit()} size="small">
+                    <FormattedMessage id="skjema.knapp.settpaavent" />
                 </Button>
             </div>
+
             {journalposter && journalposter.length > 0 && soknadId && (
-                <>
-                    <h2>{intlHelper(intl, 'modal.settpaavent.overskrift')}</h2>
-                    <Alert size="small" variant="info">
-                        {intlHelper(intl, 'modal.settpaavent.info')}
+                <div className="pt-4 pb-4">
+                    <Heading size="medium" level="2">
+                        <FormattedMessage id="modal.settpaavent.overskrift" />
+                    </Heading>
+
+                    <Alert size="small" variant="info" className="mb-4">
+                        <FormattedMessage id="modal.settpaavent.info" />
                     </Alert>
 
                     <Table className="punch_mappetabell">
                         <Table.Header>
                             <Table.Row>
-                                <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                                <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                                <Table.HeaderCell>{intlHelper(intl, 'tabell.typeinnsdending')}</Table.HeaderCell>
+                                <Table.HeaderCell>
+                                    <FormattedMessage id="tabell.journalpostid" />
+                                </Table.HeaderCell>
+                                <Table.HeaderCell>
+                                    <FormattedMessage id="tabell.mottakelsesdato" />
+                                </Table.HeaderCell>
+                                <Table.HeaderCell>
+                                    <FormattedMessage id="tabell.typeinnsdending" />
+                                </Table.HeaderCell>
+
                                 <Table.HeaderCell aria-label={intlHelper(intl, 'modal.settpaavent.visjournalpost')} />
                                 <Table.HeaderCell aria-label={intlHelper(intl, 'modal.settpaavent.registrer')} />
                             </Table.Row>
                         </Table.Header>
+
                         <Table.Body>
                             {journalposter.map((j) => (
                                 <Table.Row key={j.journalpostId}>
@@ -69,8 +94,9 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                                     <Table.DataCell>
                                         <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
                                             <VisSvg title="vis" />
+
                                             <div className="vistext">
-                                                {intlHelper(intl, 'modal.settpaavent.visjournalpost')}
+                                                <FormattedMessage id="modal.settpaavent.visjournalpost" />
                                             </div>
                                         </a>
                                     </Table.DataCell>
@@ -82,14 +108,14 @@ const SettPaaVentModal: React.FC<ISettPaaVentModalProps> = (props) => {
                                                 window.location.href = urlTilNyJournalpost(soknadId, j.journalpostId);
                                             }}
                                         >
-                                            {intlHelper(intl, 'modal.settpaavent.registrer')}
+                                            <FormattedMessage id="modal.settpaavent.registrer" />
                                         </Button>
                                     </Table.DataCell>
                                 </Table.Row>
                             ))}
                         </Table.Body>
                     </Table>
-                </>
+                </div>
             )}
         </div>
     );
