@@ -129,6 +129,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         <button
                                             id="slett"
                                             className="fjernlisteelementknapp"
+                                            data-testid="fjernlisteelementknapp"
                                             type="button"
                                             onClick={() => removeItemHandler(itemIndex)}
                                             tabIndex={0}
@@ -163,6 +164,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             {kanHaFlere && (
                 <button
                     id="leggtillisteelementknapp"
+                    data-testid="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
                     type="button"
                     onClick={addItemHandler}
