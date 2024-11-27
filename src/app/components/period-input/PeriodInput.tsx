@@ -72,31 +72,35 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     return (
         <Fieldset error={errorMessage} className={classNames('periodInput', className)} legend={undefined}>
             <HStack wrap gap="4" justify="center">
-                <NewDateInput
-                    value={periode.fom || initialValues?.fom || ''}
-                    onChange={(selectedDate) => handleOnChange(selectedDate, true)}
-                    onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
-                    id={inputIdFom}
-                    inputDisabled={disabled || disabledFom}
-                    errorMessage={errorMessageFom}
-                    label={intlHelper(intl, 'skjema.perioder.fom')}
-                    inputRef={fomInputRef}
-                    // limitations={limitations}
-                    dataTestId="fom"
-                />
+                <div data-testid="datePickerInputFom">
+                    <NewDateInput
+                        value={periode.fom || initialValues?.fom || ''}
+                        onChange={(selectedDate) => handleOnChange(selectedDate, true)}
+                        onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
+                        id={inputIdFom}
+                        inputDisabled={disabled || disabledFom}
+                        errorMessage={errorMessageFom}
+                        label={intlHelper(intl, 'skjema.perioder.fom')}
+                        inputRef={fomInputRef}
+                        // limitations={limitations}
+                        dataTestId="fom"
+                    />
+                </div>
 
-                <NewDateInput
-                    value={periode.tom || initialValues?.tom || ''}
-                    onChange={(selectedDate) => handleOnChange(selectedDate, false)}
-                    onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
-                    id={inputIdTom}
-                    inputDisabled={disabled || disabledTom}
-                    errorMessage={errorMessageTom}
-                    inputRef={tomInputRef}
-                    // limitations={limitations}
-                    label={intlHelper(intl, 'skjema.perioder.tom')}
-                    dataTestId="tom"
-                />
+                <div data-testid="datePickerInputTom">
+                    <NewDateInput
+                        value={periode.tom || initialValues?.tom || ''}
+                        onChange={(selectedDate) => handleOnChange(selectedDate, false)}
+                        onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
+                        id={inputIdTom}
+                        inputDisabled={disabled || disabledTom}
+                        errorMessage={errorMessageTom}
+                        inputRef={tomInputRef}
+                        // limitations={limitations}
+                        label={intlHelper(intl, 'skjema.perioder.tom')}
+                        dataTestId="tom"
+                    />
+                </div>
             </HStack>
         </Fieldset>
     );
