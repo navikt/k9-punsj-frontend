@@ -1,5 +1,4 @@
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
+import { act, render, screen } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
 import { TextField } from '@navikt/ds-react';
@@ -72,22 +71,31 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         editSoknadState: jest.fn(),
         kanHaFlere: true,
         medSlettKnapp: true,
+        getErrorMessage: jest.fn(),
         ...periodepanelerPropsPartial,
     };
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return shallow(<PeriodeinfoPaneler {...periodepanelerProps} />);
+    return render(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };
 
 describe('Periodepaneler', () => {
-    it('Viser listepaneler', () => {
-        const periodepaneler = setupPeriodepaneler();
-        expect(periodepaneler.find('Listepaneler')).toHaveLength(1);
+    it('Viser listepaneler', async () => {
+        await act(async () => {
+            setupPeriodepaneler();
+        });
+
+        expect(screen.getByTestId('listepanel')).toBeInTheDocument();
     });
 
-    it('Viser perioder som listeelementer', () => {
-        const periodepaneler = setupPeriodepaneler();
-        expect(periodepaneler.find('Listepaneler').prop('items')).toEqual(testperioder);
+    it('Viser perioder som listeelementer', async () => {
+        await act(async () => {
+            setupPeriodepaneler();
+        });
+
+        const listItems = screen.getAllByTestId('listepaneler');
+
+        expect(listItems).toHaveLength(testperioder.length);
     });
 });
