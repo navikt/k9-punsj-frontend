@@ -838,6 +838,7 @@
     "opprettJournalpost.journalpostOpprettet": "Journalpost opprettet.",
     "opprettJournalpost.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
     "opprettJournalpost.gåTilJournalpost": "Gå til journalpost",
+    "opprettJournalpost.alert.ingenFagsak": "Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.",
 
     "PLEIEPENGER": "Pleiepenger sykt barn",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",

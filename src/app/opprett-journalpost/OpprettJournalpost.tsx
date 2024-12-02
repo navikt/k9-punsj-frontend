@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button, Heading, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
+import { Alert, Button, Heading, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -81,7 +81,7 @@ const OpprettJournalpost: React.FC = () => {
                         actions.setSubmitting(false);
                     }}
                 >
-                    {({ setFieldValue }) => (
+                    {({ setFieldValue, values }) => (
                         <Form>
                             <Field
                                 name={OpprettJournalpostFormKeys.søkersFødselsnummer}
@@ -107,25 +107,38 @@ const OpprettJournalpost: React.FC = () => {
 
                             <Field name={OpprettJournalpostFormKeys.fagsakId} validate={requiredValue}>
                                 {({ field, meta }: FieldProps) => (
-                                    <div className="fagsagSelectContainer">
-                                        <Select
-                                            {...field}
-                                            className="input select w-64"
-                                            label={intlHelper(intl, 'opprettJournalpost.velgFagsak')}
-                                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                            disabled={fagsaker.length === 0}
-                                        >
-                                            <option value="">
-                                                <FormattedMessage id={'opprettJournalpost.velg'} />
-                                            </option>
-                                            {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
-                                                <option key={fagsakId} value={fagsakId}>
-                                                    {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
+                                    <>
+                                        <div className="fagsagSelectContainer">
+                                            <Select
+                                                {...field}
+                                                className="input select w-64"
+                                                label={intlHelper(intl, 'opprettJournalpost.velgFagsak')}
+                                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
+                                                disabled={fagsaker.length === 0}
+                                            >
+                                                <option value="">
+                                                    <FormattedMessage id={'opprettJournalpost.velg'} />
                                                 </option>
-                                            ))}
-                                        </Select>
-                                        {isFetchingFagsaker && <Loader size="small" />}
-                                    </div>
+                                                {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
+                                                    <option key={fagsakId} value={fagsakId}>
+                                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                            {isFetchingFagsaker && <Loader size="small" />}
+                                        </div>
+
+                                        {values.søkersFødselsnummer && fagsaker.length === 0 && !isFetchingFagsaker && (
+                                            <Alert
+                                                size="small"
+                                                variant="warning"
+                                                className="mb-4 max-w-[425px]"
+                                                data-test-id="opprettJournalpostAlertIngenFagsak"
+                                            >
+                                                <FormattedMessage id="opprettJournalpost.alert.ingenFagsak" />
+                                            </Alert>
+                                        )}
+                                    </>
                                 )}
                             </Field>
 
@@ -167,6 +180,7 @@ const OpprettJournalpost: React.FC = () => {
                                     type="submit"
                                     className="submitButton"
                                     loading={isSubmittingJournalpost}
+                                    disabled={fagsaker.length === 0}
                                 >
                                     <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
                                 </Button>
