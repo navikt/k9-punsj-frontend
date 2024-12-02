@@ -706,7 +706,7 @@
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.velgÅrsak": "Velg søknadsårsak",
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.NYOPPSTARTET_HOS_ARBEIDSGIVER": "Nyoppstartet hos arbeidsgiver",
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.ARBEIDSGIVER_KONKURS": "Arbeidsgiver er konkurs",
-    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Konflikt med arbeidsgiver",
+    "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Bestridelse",
 
     "omsorgspenger.utbetaling.punchForm.header": "Omsorgspengeutbetaling",
     "omsorgspenger.utbetaling.punchForm.errorSummary.header": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
@@ -838,6 +838,7 @@
     "opprettJournalpost.journalpostOpprettet": "Journalpost opprettet.",
     "opprettJournalpost.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
     "opprettJournalpost.gåTilJournalpost": "Gå til journalpost",
+    "opprettJournalpost.alert.ingenFagsak": "Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.",
 
     "PLEIEPENGER": "Pleiepenger sykt barn",
     "PLEIEPENGER_I_LIVETS_SLUTTFASE": "Pleiepenger i livets sluttfase",
