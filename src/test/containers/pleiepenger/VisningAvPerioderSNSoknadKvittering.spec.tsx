@@ -1,12 +1,12 @@
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
-import { mocked } from 'jest-mock';
-import * as React from 'react';
-import { IntlShape, createIntl } from 'react-intl';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { createIntl, IntlShape } from 'react-intl';
 
 import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
+import { mocked } from 'jest-mock';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -63,95 +63,103 @@ const setupVisningAvPerioderSNSoknadKvittering = (
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return shallow(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={response} />);
+    return render(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={response} />);
 };
 
 describe('VisningAvPerioderSNSoknadKvittering', () => {
-    const visningAvPerioderSNSoknadKvitteringFull = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
-    const visningAvPerioderSNSoknadKvitteringVarigEndring = setupVisningAvPerioderSNSoknadKvittering(varigEndring);
-
     it('Viser orgnummer', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.arbeidstaker.orgnr')).toBe(true);
-        expect(
-            visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].organisasjonsnummer),
-        ).toBe(true);
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+
+        expect(screen.getByText('skjema.arbeid.arbeidstaker.orgnr:')).toBeInTheDocument();
+        expect(screen.getByText(fullstendigResponse[0].organisasjonsnummer)).toBeInTheDocument();
     });
 
     it('Viser orgnavn', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.virksomhetsnavn')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes(fullstendigResponse[0].virksomhetNavn)).toBe(
-            true,
-        );
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+
+        expect(screen.getByText('skjema.arbeid.sn.virksomhetsnavn')).toBeInTheDocument();
+        expect(screen.getByText(fullstendigResponse[0].virksomhetNavn)).toBeInTheDocument();
     });
 
     it('Viser periode', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.når')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('01.06.2021 - 30.06.2021')).toBe(true);
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+
+        expect(screen.getByText('skjema.arbeid.sn.når')).toBeInTheDocument();
+        expect(screen.getByText('01.06.2021 - 30.06.2021')).toBeInTheDocument();
     });
 
     it('Viser virksomhetstype', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.type')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Fiske')).toBe(true);
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+
+        expect(screen.getByText('skjema.arbeid.sn.type:')).toBeInTheDocument();
+        expect(screen.getByText('Fiske')).toBeInTheDocument();
     });
 
     it('Viser om virksomheten er registrert i Norge', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.sn.registrertINorge')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ja')).toBe(true);
+        const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
+        expect(screen.getByText('skjema.sn.registrertINorge')).toBeInTheDocument();
+        expect(screen.getByText('Ja')).toBeInTheDocument();
+
+        const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
+        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+
+        rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
+        expect(screen.getByText('skjema.sn.registrertINorge')).toBeInTheDocument();
+        expect(screen.getByText('Nei')).toBeInTheDocument();
+        expect(screen.getByText('skjema.sn.registrertLand')).toBeInTheDocument();
     });
 
     it('Viser att virksomheten er registrert i annet land', () => {
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertINorge')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Nei')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.registrertLand')).toBe(true);
+        const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+        const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
+        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
+        expect(screen.getByText('skjema.sn.registrertINorge')).toBeInTheDocument();
+        expect(screen.getByText('Nei')).toBeInTheDocument();
+        expect(screen.getByText('skjema.sn.registrertLand')).toBeInTheDocument();
     });
 
     it('Viser om ikke informasjon av varig endring da det ikke eksisterer', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.sn.varigendring')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Nei')).toBe(true);
+        const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+        const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
+        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
+
+        expect(screen.getByText('skjema.sn.varigendring')).toBeInTheDocument();
+        expect(screen.getByText('Nei')).toBeInTheDocument();
     });
 
     it('Viser om informasjon om varig endring', () => {
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendring')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('Ja')).toBe(true);
+        const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+        const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
+        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.varigendringdato')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('16.03.2021')).toBe(true);
+        expect(screen.getByText('skjema.sn.varigendring')).toBeInTheDocument();
+        expect(screen.getByText('Ja')).toBeInTheDocument();
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
+        expect(screen.getByText('skjema.sn.varigendringdato')).toBeInTheDocument();
+        expect(screen.getByText('16.03.2021')).toBeInTheDocument();
 
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('skjema.sn.endringbegrunnelse')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringVarigEndring.text().includes('egrunnelse')).toBe(true);
+        expect(screen.getByText('skjema.sn.endringbegrunnelse:')).toBeInTheDocument();
+        expect(screen.getByText('Begrunnelse')).toBeInTheDocument();
     });
 
-    it('Viser om informasjon om brutto inntekt', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.sn.bruttoinntekt')).toBe(true);
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('100000')).toBe(true);
+    it('Viser informasjon om brutto inntekt', () => {
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
+
+        expect(screen.getByText('skjema.sn.bruttoinntekt:')).toBeInTheDocument();
+        expect(screen.getByText('100000')).toBeInTheDocument();
     });
 
-    it('Viser om informasjon om regnskapsfører', () => {
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførernavn')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('Ola Nordmann')).toBe(true);
+    it('Viser informasjon om regnskapsfører', () => {
+        setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
 
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('skjema.arbeid.sn.regnskapsførertlf')).toBe(
-            true,
-        );
-        expect(visningAvPerioderSNSoknadKvitteringFull.text().includes('00000000')).toBe(true);
+        expect(screen.getByText('skjema.arbeid.sn.regnskapsførernavn:')).toBeInTheDocument();
+        expect(screen.getByText('Ola Nordmann')).toBeInTheDocument();
+
+        expect(screen.getByText('skjema.arbeid.sn.regnskapsførertlf:')).toBeInTheDocument();
+        expect(screen.getByText('00000000')).toBeInTheDocument();
     });
 });

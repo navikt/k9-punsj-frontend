@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IntlShape, useIntl } from 'react-intl';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
@@ -61,28 +61,27 @@ export interface IPeriodeinfopanelerProps {
     };
 }
 
-export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProps> = (
-    props: IPeriodeinfopanelerProps,
-) => {
-    const {
-        periods,
-        medSlettKnapp,
-        textLeggTil,
-        textFjern,
-        panelid,
-        initialPeriodeinfo,
-        getErrorMessage: errorMessageFunc,
-        getUhaandterteFeil,
-        className,
-        feilkodeprefiks,
-        periodeFeilkode,
-        onAdd,
-        onRemove,
-        panelClassName,
-    } = props;
-
-    const { component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
-
+export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
+    periods = [],
+    medSlettKnapp,
+    textLeggTil,
+    textFjern,
+    panelid,
+    initialPeriodeinfo,
+    getErrorMessage: errorMessageFunc,
+    getUhaandterteFeil,
+    className,
+    feilkodeprefiks,
+    periodeFeilkode,
+    onAdd,
+    onRemove,
+    panelClassName,
+    component,
+    editSoknad,
+    editSoknadState,
+    kanHaFlere,
+    initialValues,
+}: IPeriodeinfopanelerProps) => {
     const intl = useIntl();
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriodeinfo>) => IPeriodeinfo[] = (
@@ -147,7 +146,7 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
                         <div className="slettIkon">
                             <BinSvg title="fjern" />
                         </div>
-                        {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
+                        {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
                     </button>
                 </div>
                 {!!component &&
@@ -191,8 +190,4 @@ export const PeriodeinfoPaneler: React.FunctionComponent<IPeriodeinfopanelerProp
             medSlettKnapp={medSlettKnapp}
         />
     );
-};
-
-PeriodeinfoPaneler.defaultProps = {
-    periods: [],
 };

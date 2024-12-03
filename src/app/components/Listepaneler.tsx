@@ -104,7 +104,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
     };
 
     return (
-        <Fieldset hideLegend legend="" className={classNames('listepaneler', className)}>
+        <Fieldset hideLegend legend="" className={classNames('listepaneler', className)} data-testid="listepanel">
             {!!items &&
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
@@ -114,6 +114,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                             border={false}
                             id={panelid}
                             key={panelid}
+                            data-testid={`listepaneler`}
                         >
                             <Fieldset hideLegend legend="">
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
@@ -129,6 +130,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         <button
                                             id="slett"
                                             className="fjernlisteelementknapp"
+                                            data-testid="fjernlisteelementknapp"
                                             type="button"
                                             onClick={() => removeItemHandler(itemIndex)}
                                             tabIndex={0}
@@ -163,6 +165,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             {kanHaFlere && (
                 <button
                     id="leggtillisteelementknapp"
+                    data-testid="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
                     type="button"
                     onClick={addItemHandler}

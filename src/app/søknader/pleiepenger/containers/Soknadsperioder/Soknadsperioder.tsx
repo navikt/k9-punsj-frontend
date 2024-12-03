@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
-import { GetUhaandterteFeil, IPSBSoknad, IPeriode } from 'app/models/types';
-import { RootStateType } from 'app/state/RootState';
+import { GetUhaandterteFeil, IPSBSoknad, IPeriode, IPunchPSBFormState } from 'app/models/types';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 
 import './soknadsperioder.less';
@@ -17,6 +16,7 @@ import './soknadsperioder.less';
 interface Props {
     soknad: IPSBSoknad;
     initialPeriode: IPeriode;
+    punchFormState: IPunchPSBFormState;
 
     updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
     updateSoknadState: (soknad: Partial<IPSBSoknad>) => void;
@@ -27,6 +27,7 @@ interface Props {
 const Soknadsperioder: React.FC<Props> = ({
     soknad,
     initialPeriode,
+    punchFormState,
 
     updateSoknad,
     updateSoknadState,
@@ -39,8 +40,6 @@ const Soknadsperioder: React.FC<Props> = ({
 
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
-
-    const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_SYKT_BARN.punchFormState);
 
     useEffect(() => {
         if (harLagretPerioder && visLeggTilPerioder) {
@@ -81,7 +80,13 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
+        <Box
+            padding="4"
+            borderWidth="1"
+            borderRadius="small"
+            className="eksiterendesoknaderpanel"
+            data-testid="søknadsperioder"
+        >
             <Heading size="small" level="3">
                 <FormattedMessage id={'skjema.soknadsperiode'} />
             </Heading>
@@ -123,6 +128,7 @@ const Soknadsperioder: React.FC<Props> = ({
                                     setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
+                                data-testid="leggtilsoknadsperiode"
                             >
                                 <div className="leggtilcircle">
                                     <AddCircleSvg title="leggtilcircle" />

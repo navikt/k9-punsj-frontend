@@ -836,7 +836,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         );
 
         return (
-            <div data-test-id="PSBPunchForm">
+            <div data-testid="PSBPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
@@ -847,6 +847,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     getErrorMessage={this.getErrorMessage}
                     getUhaandterteFeil={this.getUhåndterteFeil}
                     soknad={soknad}
+                    punchFormState={punchFormState}
                 />
                 <VerticalSpacer sixteenPx />
                 <OpplysningerOmSoknad
@@ -884,7 +885,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                        data-test-id="accordionItem-utenlandsoppholdpanel"
+                        data-testid="accordionItem-utenlandsoppholdpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
@@ -943,7 +944,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.FERIE)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
-                        data-test-id="accordionItem-feriepanel"
+                        data-testid="accordionItem-feriepanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.FERIE} />
@@ -955,6 +956,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
+                                data-testid="feriepanel-checkbox"
                             />
                             {!!soknad.lovbestemtFerie.length && (
                                 <Periodepaneler
@@ -1033,7 +1035,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                        data-test-id="accordionItem-opplysningeromsokerpanel"
+                        data-testid="accordionItem-opplysningeromsokerpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
@@ -1071,7 +1073,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         defaultOpen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
                         className={classNames('tilsynsordning')}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}
-                        data-test-id="accordionItem-omsorgstilbudpanel"
+                        data-testid="accordionItem-omsorgstilbudpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.OMSORGSTILBUD} />
@@ -1083,6 +1085,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 value="skjema.omsorgstilbud.checkboks"
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
                                 checked={this.state.iTilsynsordning}
+                                data-testid="omsorgstilbud-checkboks"
                             />
                             {this.state.iTilsynsordning && (
                                 <>
@@ -1120,7 +1123,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
-                        data-test-id="accordionItem-beredskapnattevaakpanel"
+                        data-testid="accordionItem-beredskapnattevaakpanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.BEREDSKAPNATTEVAAK} />
@@ -1135,7 +1138,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 }
                                 checked={!!soknad.beredskap.length}
                             />
-                            {!!soknad.beredskap.length && <>{beredskapperioder()}</>}
+                            {!!soknad.beredskap.length && (
+                                <div data-testid="beredskapsperioder">{beredskapperioder()}</div>
+                            )}
                             <VerticalSpacer eightPx />
                             <CheckboksPanel
                                 label={intlHelper(intl, BeredskapNattevaak.NATTEVAAK)}
@@ -1145,7 +1150,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 }
                                 checked={!!soknad.nattevaak.length}
                             />
-                            {!!soknad.nattevaak.length && nattevaakperioder()}
+                            {!!soknad.nattevaak.length && (
+                                <div data-testid="nattevaaksperioder">{nattevaakperioder()}</div>
+                            )}
                         </Accordion.Content>
                     </Accordion.Item>
 
@@ -1153,7 +1160,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
-                        data-test-id="accordionItem-medlemskappanel"
+                        data-testid="accordionItem-medlemskappanel"
                     >
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
@@ -1239,7 +1246,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
-                        <Button className="send-knapp" onClick={() => this.handleSubmit()}>
+                        <Button className="send-knapp" onClick={() => this.handleSubmit()} data-testid="sendKnapp">
                             {intlHelper(intl, 'skjema.knapp.send')}
                         </Button>
 
@@ -1247,6 +1254,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             variant="secondary"
                             className="vent-knapp"
                             onClick={() => this.setState({ showSettPaaVentModal: true })}
+                            data-testid="ventKnapp"
                         >
                             {intlHelper(intl, 'skjema.knapp.settpaavent')}
                         </Button>
@@ -1277,6 +1285,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         onClose={() => this.setState({ showSettPaaVentModal: false })}
                         aria-label="settpaaventmodal"
                         open={this.state.showSettPaaVentModal}
+                        data-testid="settpaaventmodal"
                     >
                         <div>
                             <SettPaaVentModal
@@ -1320,6 +1329,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label="validertSoknadModal"
                             open={this.props.punchFormState.isValid}
+                            data-testid="validertSoknadModal"
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
@@ -1330,6 +1340,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         size="small"
                                         className="validertSoknadOppsummeringContainer_knappVidere"
                                         onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                        data-testid="validertSoknadOppsummeringContainer_knappVidere"
                                     >
                                         {intlHelper(intl, 'fordeling.knapp.videre')}
                                     </Button>
@@ -1353,6 +1364,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         onClose={() => this.props.validerSoknadReset()}
                         aria-label="erdusikkermodal"
                         open={this.state.visErDuSikkerModal}
+                        data-testid="erdusikkermodal"
                     >
                         <ErDuSikkerModal
                             melding="modal.erdusikker.sendinn"

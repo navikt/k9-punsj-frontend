@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
 import { IPeriodInputProps, PeriodInput } from '../../../app/components/period-input/PeriodInput';
 import intlHelper from '../../../app/utils/intlUtils';
+import userEvent from '@testing-library/user-event';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
@@ -16,8 +16,8 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
     const periodInputProps: IPeriodInputProps = {
         periode: {},
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
-        onChange: jest.fn(),
-        onBlur: jest.fn(),
+        onChange: periodInputPropsPartial?.onChange || jest.fn(),
+        onBlur: periodInputPropsPartial?.onBlur || jest.fn(),
         inputIdFom,
         inputIdTom,
         ...periodInputPropsPartial,
@@ -25,91 +25,85 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return shallow(<PeriodInput {...periodInputProps} />);
+    return render(<PeriodInput {...periodInputProps} />);
 };
 
-describe('PerodInput', () => {
-    it('Skal vise inputfelter', () => {
-        const periodInput = setupPeriodInput();
-        expect(periodInput.find('NewDateInput')).toHaveLength(2);
-        expect(periodInput.find(`#${inputIdFom}`)).toHaveLength(1);
-        expect(periodInput.find(`#${inputIdTom}`)).toHaveLength(1);
+const testDateChange = async (
+    inputId: string,
+    newDate: string,
+    newDateFormatted: string,
+    onChange: jest.Mock,
+    onBlur: jest.Mock,
+) => {
+    const input = screen.getByTestId(inputId) as HTMLInputElement;
+    expect(input).toBeInTheDocument();
+
+    await userEvent.clear(input);
+    await userEvent.type(input, newDate);
+    await userEvent.tab();
+
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ [inputId]: newDateFormatted }));
+    expect(onBlur).toHaveBeenCalledTimes(1);
+    expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ [inputId]: newDateFormatted }));
+};
+
+describe('PeriodInput', () => {
+    it('should display input fields', async () => {
+        setupPeriodInput();
+
+        expect(await screen.findByTestId(inputIdFom)).toBeInTheDocument();
+        expect(await screen.findByTestId(inputIdTom)).toBeInTheDocument();
     });
 
-    it('Skal vise riktig verdi i inputfelter', () => {
+    it('should display the correct value in input fields', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';
-        const periodInput = setupPeriodInput({ periode: { fom, tom } });
-        expect(periodInput.find(`#${inputIdFom}`).prop('value')).toEqual(fom);
-        expect(periodInput.find(`#${inputIdTom}`).prop('value')).toEqual(tom);
+        setupPeriodInput({ periode: { fom, tom } });
+
+        expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
+        expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
     });
 
-    it('Skal vise feilmelding for fom-dato', () => {
-        const errorMessageFom = 'Lorem ipsum solor sit amet';
-        const periodInput = setupPeriodInput({ errorMessageFom });
-        expect(periodInput.find(`#${inputIdFom}`).prop('errorMessage')).toEqual(errorMessageFom);
+    it('should display an error message for fom date', async () => {
+        const errorMessageFom = 'Error message for fom date';
+
+        setupPeriodInput({ errorMessageFom });
+
+        expect(await screen.findByText(errorMessageFom)).toBeInTheDocument();
     });
 
-    it('Skal vise feilmelding for tom-dato', () => {
-        const errorMessageTom = 'Lorem ipsum solor sit amet';
-        const periodInput = setupPeriodInput({ errorMessageTom });
-        expect(periodInput.find(`#${inputIdTom}`).prop('errorMessage')).toEqual(errorMessageTom);
+    it('should display an error message for tom date', async () => {
+        const errorMessageTom = 'Error message fom fom date';
+
+        setupPeriodInput({ errorMessageTom });
+
+        expect(await screen.findByText(errorMessageTom)).toBeInTheDocument();
     });
 
-    it('Skal kalle onChange med ny fom-dato', () => {
+    it('should call onChange and onBlur with a new fom date', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';
-        const newFraOgMed = '2020-01-03';
+        const newFraOgMed = '01.03.2020';
+        const newFraOgMedFormatted = '2020-03-01';
         const onChange = jest.fn();
-        const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-
-        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdFom);
-
-        inputField.simulate('change', newFraOgMed);
-
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
-    });
-
-    it('Skal kalle onBlur med ny fom-dato', () => {
-        const fom = '2020-01-01';
-        const tom = '2020-02-01';
-        const newFraOgMed = '2020-01-03';
         const onBlur = jest.fn();
-        const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdFom);
-        inputField.simulate('blur', newFraOgMed);
-        expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur).toHaveBeenCalledWith({ fom: newFraOgMed, tom });
+
+        setupPeriodInput({ periode: { fom, tom }, onChange, onBlur });
+
+        await testDateChange(inputIdFom, newFraOgMed, newFraOgMedFormatted, onChange, onBlur);
     });
 
-    it('Skal kalle onChange med ny tom-dato', () => {
+    it('should call onChange and onBlur with a new tom date', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';
-        const newTilOgMed = '2020-02-03';
+        const newTilOgMed = '01.03.2020';
+        const newTilOgMedFormatted = '2020-03-01';
         const onChange = jest.fn();
-        const periodInput = setupPeriodInput({ periode: { fom, tom }, onChange });
-        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdTom);
-        inputField.simulate('change', newTilOgMed);
-        expect(onChange).toHaveBeenCalledTimes(1);
-        expect(onChange).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
-    });
-
-    it('Skal kalle onBlur med ny tom-dato', () => {
-        const fom = '2020-01-01';
-        const tom = '2020-02-01';
-        const newTilOgMed = '2020-02-03';
         const onBlur = jest.fn();
-        const periodInput = setupPeriodInput({ periode: { fom, tom }, onBlur });
-        const inputField = periodInput.findWhere((n) => n.name() === 'NewDateInput' && n.prop('id') === inputIdTom);
-        inputField.simulate('blur', newTilOgMed);
-        expect(onBlur).toHaveBeenCalledTimes(1);
-        expect(onBlur).toHaveBeenCalledWith({ fom, tom: newTilOgMed });
-    });
 
-    it('Skal ha egendefinert klassenavn', () => {
-        const className = 'test';
-        const periodInput = setupPeriodInput({ className });
-        expect(periodInput.prop('className')).toContain(className);
+        setupPeriodInput({ periode: { fom, tom }, onChange, onBlur });
+
+        await testDateChange(inputIdTom, newTilOgMed, newTilOgMedFormatted, onChange, onBlur);
     });
 });

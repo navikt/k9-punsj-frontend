@@ -134,7 +134,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
             open={isOpen}
             className="endringAvSøknadsperioder"
             onOpenChange={onClick}
-            data-test-id="accordionItem-endringAvSøknadsperioderpanel"
+            data-testid="accordionItem-endringAvSøknadsperioderpanel"
         >
             <Accordion.Header>
                 <FormattedMessage id="skjema.endringAvSøknadsperioder" />

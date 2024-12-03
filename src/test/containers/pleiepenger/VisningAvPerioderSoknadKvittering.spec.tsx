@@ -1,13 +1,13 @@
 import React from 'react';
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
-import { mocked } from 'jest-mock';
-import { IntlShape, createIntl } from 'react-intl';
+import { render } from '@testing-library/react';
+import { createIntl, createIntlCache, IntlShape } from 'react-intl';
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { formattereTimerForArbeidstakerPerioder } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/soknadKvitteringUtils';
 import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
+import { mocked } from 'jest-mock';
 import intlHelper from '../../../app/utils/intlUtils';
 
+// Mocks and data
 jest.mock('react-intl');
 jest.mock('react-router');
 jest.mock('app/utils/browserUtils');
@@ -32,11 +32,12 @@ const flerePerioder: IPSBSoknadKvitteringArbeidstidInfo = {
     },
 };
 
-const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringArbeidstidInfo) => {
-    const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringArbeidstidInfo, locale: string) => {
+    const cache = createIntlCache();
+    const intlMock = createIntl({ locale, defaultLocale: 'nb' }, cache);
 
-    return shallow(
+    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    return render(
         <VisningAvPerioderSoknadKvittering
             intl={intlMock}
             perioder={formattereTimerForArbeidstakerPerioder(response)}
@@ -51,38 +52,29 @@ const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringAr
 };
 
 describe('VisningAvPerioderSoknadKvittering', () => {
-    const visningAvPerioderSoknadKvitteringEnPeriode = setupVisningAvPerioderSoknadKvittering(enPeriode);
-    const visningAvPerioderSoknadKvitteringFlerePerioder = setupVisningAvPerioderSoknadKvittering(flerePerioder);
-
     it('Viser overskrifter', () => {
-        expect(visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.periode.overskrift')).toBe(true);
-        expect(
-            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timernormalt'),
-        ).toBe(true);
-        expect(
-            visningAvPerioderSoknadKvitteringEnPeriode.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk'),
-        ).toBe(true);
-
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.periode.overskrift')).toBe(true);
-        expect(
-            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timernormalt'),
-        ).toBe(true);
-        expect(
-            visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('skjema.arbeid.arbeidstaker.timerfaktisk'),
-        ).toBe(true);
+        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode, 'nb');
+        expect(getByText(/skjema\.periode\.overskrift/i)).toBeInTheDocument();
+        expect(getByText(/skjema\.arbeid\.arbeidstaker\.timernormalt/i)).toBeInTheDocument();
+        expect(getByText(/skjema\.arbeid\.arbeidstaker\.timerfaktisk/i)).toBeInTheDocument();
     });
 
     it('Viser dato, forventet arbeidstid og verklig arbeidstid', () => {
-        expect(visningAvPerioderSoknadKvitteringEnPeriode.text().includes('01.06.2021 - 30.06.2021')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringEnPeriode.text().includes('8 timer')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringEnPeriode.text().includes('4 timer')).toBe(true);
+        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode, 'nb'); // Set to Arabic for RTL
 
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('01.06.2021 - 30.06.2021')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('8 timer')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('4 timer')).toBe(true);
+        expect(getByText('01.06.2021 - 30.06.2021')).toBeInTheDocument();
+        expect(getByText('8 timer')).toBeInTheDocument();
+        expect(getByText('4 timer')).toBeInTheDocument();
+    });
 
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('01.07.2021 - 30.07.2021')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('7 timer og 30 minutter')).toBe(true);
-        expect(visningAvPerioderSoknadKvitteringFlerePerioder.text().includes('6 timer og 15 minutter')).toBe(true);
+    it('Viser dato, forventet arbeidstid og verklig arbeidstid flere perioder', () => {
+        const { getByText: getByTextFlerePerioder } = setupVisningAvPerioderSoknadKvittering(flerePerioder, 'ar');
+        expect(getByTextFlerePerioder('01.06.2021 - 30.06.2021')).toBeInTheDocument();
+        expect(getByTextFlerePerioder('8 timer')).toBeInTheDocument();
+        expect(getByTextFlerePerioder('4 timer')).toBeInTheDocument();
+
+        expect(getByTextFlerePerioder('01.07.2021 - 30.07.2021')).toBeInTheDocument();
+        expect(getByTextFlerePerioder('7 timer og 30 minutter')).toBeInTheDocument();
+        expect(getByTextFlerePerioder('6 timer og 15 minutter')).toBeInTheDocument();
     });
 });

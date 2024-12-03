@@ -1,8 +1,8 @@
-import { expect } from '@jest/globals';
-import { shallow } from 'enzyme';
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { mocked } from 'jest-mock';
-import { IntlShape, createIntl } from 'react-intl';
-import { Textarea } from '@navikt/ds-react';
+import { createIntl, IntlShape } from 'react-intl';
 import { pfTilleggsinformasjon } from '../../../app/søknader/pleiepenger/components/pfTilleggsinformasjon';
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
 import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
@@ -28,7 +28,7 @@ const testGetErrorMessage = jest.fn();
 const testIntl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 const testKodeord = 'kodeord';
 
-const setupPfTilleggsinformasjon = (
+const renderPfTilleggsinformasjon = (
     optionalPeriodeinfo?: Periodeinfo<ITilleggsinformasjon>,
     optionalPeriodeindex?: number,
     optionalUpdatePeriodeinfoInSoknad?: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
@@ -40,62 +40,65 @@ const setupPfTilleggsinformasjon = (
 ) => {
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return shallow(
-        pfTilleggsinformasjon(optionalKodeord || testKodeord)(
-            optionalPeriodeinfo || testPeriodeinfo,
-            optionalPeriodeindex || testPeriodeindex,
-            optionalUpdatePeriodeinfoInSoknad || testUpdatePeriodeinfoInSoknad,
-            optionalUpdatePeriodeinfoInSoknadState || testUpdatePeriodeinfoInSoknadState,
-            optionalFeilprefiks || testFeilprefiks,
-            optionalGetErrorMessage || testGetErrorMessage,
-            optionalIntl || testIntl,
-        ),
+    const Component = pfTilleggsinformasjon(optionalKodeord || testKodeord)(
+        optionalPeriodeinfo || testPeriodeinfo,
+        optionalPeriodeindex || testPeriodeindex,
+        optionalUpdatePeriodeinfoInSoknad || testUpdatePeriodeinfoInSoknad,
+        optionalUpdatePeriodeinfoInSoknadState || testUpdatePeriodeinfoInSoknadState,
+        optionalFeilprefiks || testFeilprefiks,
+        optionalGetErrorMessage || testGetErrorMessage,
+        optionalIntl || testIntl,
     );
+
+    return render(<>{Component}</>);
 };
 
 describe('pfTilleggsinformasjon', () => {
     beforeEach(() => jest.resetAllMocks());
 
-    it('Virker', () => {
-        expect(pfTilleggsinformasjon(testKodeord)).toBeInstanceOf(Function);
+    it('renders the component', () => {
+        renderPfTilleggsinformasjon();
+        expect(screen.getByLabelText(`skjema.${testKodeord}.tilleggsinfo`)).toBeInTheDocument();
     });
 
-    it('Viser tekstområde', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        tilleggsinformasjon.debug();
-        expect(tilleggsinformasjon.find(Textarea)).toHaveLength(1);
+    it('displays correct label', () => {
+        renderPfTilleggsinformasjon();
+        expect(screen.getByLabelText(`skjema.${testKodeord}.tilleggsinfo`)).toBeTruthy();
     });
 
-    it('Viser riktig etikett', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        expect(tilleggsinformasjon.find(Textarea).prop('label')).toEqual(`skjema.${testKodeord}.tilleggsinfo`);
+    it('shows correct text in textarea', () => {
+        renderPfTilleggsinformasjon();
+        expect(screen.getByLabelText(`skjema.${testKodeord}.tilleggsinfo`)).toHaveValue(testTekst);
     });
 
-    it('Viser riktig tekst i tekstområde', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        expect(tilleggsinformasjon.find(Textarea).prop('value')).toEqual(testPeriodeinfo.tilleggsinformasjon);
-    });
-
-    it('Kaller updatePeriodeinfoInSoknadState på onChange', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        const newValue = 'Integer ut ligula sed est.';
-        tilleggsinformasjon.find(Textarea).simulate('change', { target: { value: newValue } });
-        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledTimes(1);
-        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledWith({ tilleggsinformasjon: newValue }, false);
-    });
-
-    it('Kaller updatePeriodeinfoInSoknad på onBlur', () => {
-        const tilleggsinformasjon = setupPfTilleggsinformasjon();
-        const newValue = 'Integer ut ligula sed est.';
-        tilleggsinformasjon.find(Textarea).simulate('blur', { target: { value: newValue } });
-        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledTimes(1);
-        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledWith({
-            tilleggsinformasjon: newValue,
+    it('calls updatePeriodeinfoInSoknadState on change', async () => {
+        // Mock state update
+        testUpdatePeriodeinfoInSoknadState.mockImplementation((data) => {
+            testPeriodeinfo.tilleggsinformasjon = data.tilleggsinformasjon;
         });
+
+        const { getByLabelText } = renderPfTilleggsinformasjon();
+        const textarea = getByLabelText(`skjema.${testKodeord}.tilleggsinfo`);
+
+        const newValue = 'Integer ut ligula sed est.';
+        fireEvent.change(textarea, { target: { value: newValue } });
+
+        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenCalledTimes(1);
+        expect(testUpdatePeriodeinfoInSoknadState).toHaveBeenLastCalledWith({ tilleggsinformasjon: newValue }, false);
     });
 
-    it('Viser feilmelding', () => {
-        setupPfTilleggsinformasjon();
+    it('calls updatePeriodeinfoInSoknad on blur', async () => {
+        renderPfTilleggsinformasjon();
+        const textarea = screen.getByLabelText(`skjema.${testKodeord}.tilleggsinfo`);
+        const newValue = 'Integer ut ligula sed est.';
+        await userEvent.type(textarea, newValue);
+        await userEvent.tab();
+        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledTimes(1);
+        expect(testUpdatePeriodeinfoInSoknad).toHaveBeenCalledWith({ tilleggsinformasjon: newValue });
+    });
+
+    it('shows error message', () => {
+        renderPfTilleggsinformasjon();
         expect(testGetErrorMessage).toHaveBeenCalledTimes(1);
         expect(testGetErrorMessage).toHaveBeenCalledWith(
             `${testFeilprefiks}.perioder['2020-01-01/2020-12-31'].tilleggsinformasjon`,
