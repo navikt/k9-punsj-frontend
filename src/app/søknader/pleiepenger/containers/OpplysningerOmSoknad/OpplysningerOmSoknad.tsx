@@ -43,6 +43,7 @@ const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
                     {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                         mottattDato: selectedDate,
                     }))}
+                    dataTestId="mottattDato"
                 />
                 <div>
                     <TextField

@@ -781,7 +781,7 @@ const ArbeidsforholdPanel = ({
             open={isOpen}
             defaultOpen={isOpen}
             onOpenChange={() => onPanelClick()}
-            data-test-id="accordionItem-arbeidsforholdPanel"
+            data-testid="accordionItem-arbeidsforholdPanel"
         >
             <Accordion.Header>
                 <FormattedMessage id={PunchFormPaneler.ARBEID} />

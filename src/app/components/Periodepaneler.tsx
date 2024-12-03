@@ -74,7 +74,7 @@ export const Periodepaneler: React.FC<Props> = ({
     return (
         <Box padding="4" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="small" className="periodepanel">
             {periods.map((p, i) => (
-                <div className="flex flex-wrap" key={i}>
+                <div className="flex flex-wrap" key={i} data-testid="periodpaneler_${i}">
                     <div className="periodepanel-input">
                         <PeriodInput
                             periode={p || {}}
