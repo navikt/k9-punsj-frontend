@@ -217,6 +217,6 @@ describe('Test klassifisering PSB', { testIsolation: false }, () => {
 
         cy.get('[data-test-id="bekreftKnapp"]').should('exist').should('not.be.disabled').click();
 
-        cy.get('[data-test-id="PSBPunchForm"]').should('exist');
+        cy.get('[data-testid="PSBPunchForm"]').should('exist');
     });
 });
