@@ -790,8 +790,8 @@
     "opprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
     "opprettJournalpostInngang.link": "Opprett journalpost",
 
-    "sendBrevIAvsluttetSakInngang.header": "Send brev i avsluttet sak",
-    "sendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
+    "sendBrevIAvsluttetSakInngang.header": "Send brev",
+    "sendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet eller uten sak, kan du sende brev her.",
     "sendBrevIAvsluttetSakInngang.link": "Send brev",
     "sendBrevIAvsluttetSak.error.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
     "sendBrevIAvsluttetSak.error.ugyldigFødselsnummer": "Fødselsnummeret er ugyldig",
@@ -800,7 +800,8 @@
     "sendBrevIAvsluttetSak.velgFagsak.velg": "Velg",
     "sendBrevIAvsluttetSak.velgFagsak.options": "{fagsakId} (K9 {sakstypeNavn})",
     "sendBrevIAvsluttetSak.gåTilLOSModal.header": "Brevet er sendt. Du blir nå tatt til LOS.",
-    "sendBrevIAvsluttetSak.header": "Send brev i avsluttet sak",
+    "sendBrevIAvsluttetSak.header": "Send brev",
+    "sendBrevIAvsluttetSak.sendUtenFagsak.checkbox": "Send brev uten fagsak",
 
     "sendBrevPåFagsak.header": "Send brev og lukk oppgave i LOS",
 

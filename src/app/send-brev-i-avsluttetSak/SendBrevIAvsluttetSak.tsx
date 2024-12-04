@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+import { Checkbox, ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
 
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/BrevComponent';
@@ -20,6 +20,7 @@ const SendBrevIAvsluttetSak = () => {
     const [valgtFagsak, setValgtFagsak] = useState('');
     const [visLosModal, setVisLosModal] = useState(false);
     const [fødselsnummerError, setFødselsnummerError] = useState(false);
+    const [sendBrevUtenFagsak, setSendBrevUtenFagsak] = useState(false);
 
     const gyldigLengdePåSøkerId = søkerId.length === 11;
 
@@ -94,7 +95,7 @@ const SendBrevIAvsluttetSak = () => {
                             <Select
                                 className="fagsakSelect"
                                 label={<FormattedMessage id={`sendBrevIAvsluttetSak.velgFagsak`} />}
-                                disabled={fagsaker.length === 0}
+                                disabled={fagsaker.length === 0 || sendBrevUtenFagsak}
                                 onChange={(event) => setValgtFagsak(event.target.value)}
                                 size="small"
                             >
@@ -118,17 +119,26 @@ const SendBrevIAvsluttetSak = () => {
                             {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
                         </div>
 
+                        <Checkbox
+                            onChange={() => {
+                                setSendBrevUtenFagsak(!sendBrevUtenFagsak);
+                            }}
+                            checked={sendBrevUtenFagsak}
+                        >
+                            <FormattedMessage id="sendBrevIAvsluttetSak.sendUtenFagsak.checkbox" />
+                        </Checkbox>
+
                         {henteFagsakFeilet && (
                             <ErrorMessage>
                                 <FormattedMessage id={`sendBrevIAvsluttetSak.error.hentingAvFagsakFeilet`} />
                             </ErrorMessage>
                         )}
 
-                        {valgtFagsak && (
+                        {(valgtFagsak || sendBrevUtenFagsak) && (
                             <BrevComponent
                                 søkerId={søkerId}
-                                sakstype={sakstypeForValgtFagsak()}
-                                fagsakId={valgtFagsak}
+                                sakstype={sendBrevUtenFagsak ? '' : sakstypeForValgtFagsak()}
+                                fagsakId={sendBrevUtenFagsak ? undefined : valgtFagsak}
                                 brevSendtCallback={() => setVisLosModal(true)}
                             />
                         )}
