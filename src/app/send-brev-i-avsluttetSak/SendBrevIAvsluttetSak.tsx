@@ -11,6 +11,7 @@ import { IdentRules } from 'app/rules';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 
 import './sendBrevIAvsluttetSak.less';
+import { DokumenttypeForkortelse } from 'app/models/enums';
 
 const SendBrevIAvsluttetSak = () => {
     const [søkerId, setSøkerId] = useState('');
@@ -137,7 +138,9 @@ const SendBrevIAvsluttetSak = () => {
                         {(valgtFagsak || sendBrevUtenFagsak) && (
                             <BrevComponent
                                 søkerId={søkerId}
-                                sakstype={sendBrevUtenFagsak ? '' : sakstypeForValgtFagsak()}
+                                sakstype={
+                                    sendBrevUtenFagsak ? DokumenttypeForkortelse.UKJENT : sakstypeForValgtFagsak()
+                                }
                                 fagsakId={sendBrevUtenFagsak ? undefined : valgtFagsak}
                                 brevSendtCallback={() => setVisLosModal(true)}
                             />
