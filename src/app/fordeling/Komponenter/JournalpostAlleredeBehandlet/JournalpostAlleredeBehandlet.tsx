@@ -171,6 +171,10 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_UT &&
         fordelingState.dokumenttype !== FordelingDokumenttype.KORRIGERING_IM;
 
+    const sendBrevDisabled =
+        !fellesState.journalpost?.sak?.sakstype &&
+        (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER);
+
     return (
         <>
             <div className="p-4">
@@ -178,6 +182,11 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                 </Alert>
 
+                {!fellesState.journalpost?.sak?.sakstype && (
+                    <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandlet">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
+                    </Alert>
+                )}
                 <DokumentTypeVelgerForKopiering
                     handleDokumenttype={(type: FordelingDokumenttype) => {
                         const prevDokumentType = fordelingState.dokumenttype;
@@ -294,6 +303,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     onClick={handleGåToSendBrev}
                     data-test-id="sendBrevLenkeBtn"
                     type="button"
+                    disabled={sendBrevDisabled}
                 >
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevLenke.btn" />
                 </Button>

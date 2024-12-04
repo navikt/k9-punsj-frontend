@@ -234,6 +234,7 @@
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.1": "Må være inngående journalpost",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.2": "Kan ikke være kopi av en annen journalpost",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.3": "Kan ikke være inntektsmelding uten søknad",
+    "fordeling.journalpostAlleredeBehandlet.sendBrevInfo": "For å sende et brev, må du velge ytelsestype.",
 
     "fosterbarn.btn.slett": "Slett",
     "fosterbarn.btn.leggTil": "Legg til fosterbarn",
