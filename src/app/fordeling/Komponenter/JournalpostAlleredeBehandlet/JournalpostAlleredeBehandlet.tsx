@@ -26,11 +26,15 @@ import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 import AnnenPart from '../AnnenPart';
 import ToSøkere from '../ToSøkere';
+import { useNavigate } from 'react-router';
+import { ROUTES } from 'app/constants/routes';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch<Dispatch<any>>();
 
@@ -150,6 +154,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const handleGåToLOS = () => {
         window.location.href = getEnvironmentVariable('K9_LOS_URL');
+    };
+
+    const handleGåToSendBrev = () => {
+        // Redirect to brev side
+        navigate(
+            `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${ROUTES.BREV_BEHANDLET_JP}`,
+        );
     };
 
     const visPleietrengende = !kopierJournalpostSuccess && isDokumenttypeMedPleietrengende;
@@ -276,6 +287,16 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                         <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.tilbakeTilLOS.btn" />
                     </Button>
                 )}
+
+                <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={handleGåToSendBrev}
+                    data-test-id="sendBrevLenkeBtn"
+                    type="button"
+                >
+                    <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevLenke.btn" />
+                </Button>
             </div>
         </>
     );
