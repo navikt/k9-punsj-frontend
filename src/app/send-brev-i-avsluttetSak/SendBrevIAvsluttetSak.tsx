@@ -139,7 +139,9 @@ const SendBrevIAvsluttetSak = () => {
                             <BrevComponent
                                 søkerId={søkerId}
                                 sakstype={
-                                    sendBrevUtenFagsak ? DokumenttypeForkortelse.UKJENT : sakstypeForValgtFagsak()
+                                    sendBrevUtenFagsak
+                                        ? DokumenttypeForkortelse.IKKE_DEFINERT
+                                        : sakstypeForValgtFagsak()
                                 }
                                 fagsakId={sendBrevUtenFagsak ? undefined : valgtFagsak}
                                 brevSendtCallback={() => setVisLosModal(true)}
