@@ -26,6 +26,7 @@ import ErrorFallback from './ErrorFallback';
 import KorrigeringAvInntektsmeldingContainer from 'app/søknader/korrigeringAvInntektsmelding/containers/KorrigeringAvInntektsmeldingContainer';
 import SendBrevPåFagsak from 'app/brev-fagsak/SendBrevPåFagsak';
 import BehandlingAvJournaførtJp from '../fordeling/Komponenter/BehandlingAvJournaførtJp';
+import SendBrevBehandletJp from 'app/brev-behandlet-journalpost/SendBrevBehandletJp';
 
 const JournalpostRouter: React.FC = () => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
@@ -140,6 +141,7 @@ const JournalpostRouter: React.FC = () => {
                         />
                     </Route>
                     <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsak />} />
+                    <Route path={ROUTES.BREV_BEHANDLET_JP} element={<SendBrevBehandletJp />} />
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
             </ErrorBoundary>

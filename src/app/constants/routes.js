@@ -18,4 +18,5 @@ export const ROUTES = {
     KORRIGERING_ROOT: 'korrigering/',
     VELG_SOKNAD: 'soknader/',
     PUNCH: `skjema/:id/`,
+    BREV_BEHANDLET_JP: 'brev-behandlet-journalpost/',
 };
