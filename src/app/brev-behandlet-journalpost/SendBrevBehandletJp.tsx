@@ -52,7 +52,7 @@ const SendBrevBehandletJp: React.FC = () => {
             <BrevComponent
                 søkerId={norskIdent}
                 sakstype={sakstype}
-                fagsakId={sak?.fagsakId}
+                fagsakId={sak?.fagsakId || 'GENERELL_SAK'}
                 journalpostId={journalpostId}
                 tilbake={true}
             />
