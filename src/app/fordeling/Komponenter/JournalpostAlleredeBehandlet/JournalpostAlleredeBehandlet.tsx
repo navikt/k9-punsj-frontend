@@ -26,11 +26,15 @@ import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
 import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 import AnnenPart from '../AnnenPart';
 import ToSøkere from '../ToSøkere';
+import { useNavigate } from 'react-router';
+import { ROUTES } from 'app/constants/routes';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
     const [behandlingsAar, setBehandlingsAar] = useState<string | undefined>(undefined);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch<Dispatch<any>>();
 
@@ -152,6 +156,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         window.location.href = getEnvironmentVariable('K9_LOS_URL');
     };
 
+    const handleGåToSendBrev = () => {
+        // Redirect to brev side
+        navigate(
+            `${ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId)}/${ROUTES.BREV_BEHANDLET_JP}`,
+        );
+    };
+
     const visPleietrengende = !kopierJournalpostSuccess && isDokumenttypeMedPleietrengende;
 
     const skalHenteBarn =
@@ -160,6 +171,10 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_UT &&
         fordelingState.dokumenttype !== FordelingDokumenttype.KORRIGERING_IM;
 
+    const sendBrevDisabled =
+        !fellesState.journalpost?.sak?.sakstype &&
+        (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER);
+
     return (
         <>
             <div className="p-4">
@@ -167,6 +182,11 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                 </Alert>
 
+                {!fellesState.journalpost?.sak?.sakstype && (
+                    <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandlet">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
+                    </Alert>
+                )}
                 <DokumentTypeVelgerForKopiering
                     handleDokumenttype={(type: FordelingDokumenttype) => {
                         const prevDokumentType = fordelingState.dokumenttype;
@@ -276,6 +296,17 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                         <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.tilbakeTilLOS.btn" />
                     </Button>
                 )}
+
+                <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={handleGåToSendBrev}
+                    data-test-id="sendBrevLenkeBtn"
+                    type="button"
+                    disabled={sendBrevDisabled}
+                >
+                    <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevLenke.btn" />
+                </Button>
             </div>
         </>
     );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import hash from 'object-hash';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
@@ -31,6 +32,7 @@ interface BrevProps {
     journalpostId?: string;
     sendBrevUtenModal?: boolean;
     brevFraModal?: boolean;
+    tilbake?: boolean;
 
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
@@ -45,6 +47,7 @@ const BrevComponent: React.FC<BrevProps> = ({
     journalpostId,
     sendBrevUtenModal,
     brevFraModal: brewFraModal,
+    tilbake,
     setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
     lukkJournalpostOppgave,
@@ -63,6 +66,8 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [submitet, setSubmitet] = useState(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${ApiPath.BREV_MALER}?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
@@ -338,7 +343,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                                         type={sendBrevUtenModal ? 'submit' : 'button'}
                                         icon={<PaperplaneIcon />}
                                     >
-                                        <FormattedMessage id={`brevComponent.btn.sendBrev`} />
+                                        <FormattedMessage id="brevComponent.btn.sendBrev" />
                                     </Button>
 
                                     {lukkJournalpostOppgave !== undefined && (
@@ -349,7 +354,19 @@ const BrevComponent: React.FC<BrevProps> = ({
                                             onClick={() => lukkJournalpostOppgave()}
                                             type={'button'}
                                         >
-                                            <FormattedMessage id={`brevComponent.btn.lukkOppgave`} />
+                                            <FormattedMessage id="brevComponent.btn.lukkOppgave" />
+                                        </Button>
+                                    )}
+
+                                    {tilbake && (
+                                        <Button
+                                            className="goBackButton"
+                                            variant="secondary"
+                                            size="small"
+                                            onClick={() => navigate(-1)}
+                                            type="button"
+                                        >
+                                            <FormattedMessage id="brevComponent.btn.tilbake" />
                                         </Button>
                                     )}
                                 </div>
