@@ -1,16 +1,14 @@
+import React from 'react';
+
 import { FieldArray, useFormikContext } from 'formik';
-import * as React from 'react';
-import { useIntl } from 'react-intl';
-
-import { Panel } from '@navikt/ds-react';
-
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Box, Button } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import BinSvg from '../../../assets/SVG/BinSVG';
 import { IPeriode } from '../../../models/types/Periode';
-import intlHelper from '../../../utils/intlUtils';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -26,17 +24,20 @@ export interface IPeriodepanelerProps {
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const intl = useIntl();
+
     const { periods, kanHaFlere, textLeggTil, fieldName } = props;
+
     const { setFieldValue, setFieldTouched, getFieldMeta } = useFormikContext<OLPSoknad>();
 
     return (
-        <Panel className="periodepanel">
+        <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
             <FieldArray
                 name={fieldName}
                 render={(arrayHelpers) => (
                     <>
                         {periods.map((period, index) => {
                             const fieldMeta = getFieldMeta(fieldName);
+
                             return (
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
@@ -53,7 +54,8 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             }}
                                             errorMessage={fieldMeta.touched && fieldMeta.error}
                                         />
-                                        <button
+
+                                        <Button
                                             id="slett"
                                             className={fieldMeta.touched && fieldMeta.error ? 'fjern-feil' : 'fjern'}
                                             type="button"
@@ -67,21 +69,17 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             <div className="slettIcon">
                                                 <BinSvg title="fjern" />
                                             </div>
-                                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                                        </button>
+
+                                            <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
+                                        </Button>
                                     </div>
                                 </div>
                             );
                         })}
-                        {/* {feilkodeprefiks && (
-                <UhaanderteFeilmeldinger
-                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
-                />
-            )} */}
 
                         {kanHaFlere && (
                             <div className="flex flex-wrap">
-                                <button
+                                <Button
                                     id="leggtilperiode"
                                     className="leggtilperiode"
                                     type="button"
@@ -95,13 +93,14 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                     <div className="leggtilperiodeIcon">
                                         <AddCircleSvg title="leggtil" />
                                     </div>
-                                    {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
-                                </button>
+
+                                    <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
+                                </Button>
                             </div>
                         )}
                     </>
                 )}
             />
-        </Panel>
+        </Box>
     );
 };
