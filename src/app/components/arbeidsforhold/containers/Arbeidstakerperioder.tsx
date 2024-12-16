@@ -190,11 +190,8 @@ const Arbeidstakerperioder = ({
                 className="leggtillisteelementknapp"
                 type="button"
                 onClick={addItemHandler}
+                icon={<AddCircleSvg title="leggtil" />}
             >
-                <div className="leggtilperiodeIcon">
-                    <AddCircleSvg title="leggtil" />
-                </div>
-
                 <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
             </Button>
         </Fieldset>
