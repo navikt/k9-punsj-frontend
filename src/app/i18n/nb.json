@@ -713,6 +713,7 @@
     "omsorgspenger.utbetaling.punchForm.header": "Omsorgspengeutbetaling",
     "omsorgspenger.utbetaling.punchForm.errorSummary.header": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
     "omsorgspenger.utbetaling.punchForm.fosterbarn.header": "Fosterbarn",
+    "omsorgspenger.utbetaling.punchForm.eksisterendePerioder.header": "Eksisterende perioder",
 
     "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
     "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
