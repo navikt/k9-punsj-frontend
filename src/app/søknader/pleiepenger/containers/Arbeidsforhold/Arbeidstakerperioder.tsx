@@ -130,8 +130,6 @@ const Arbeidstakerperioder = ({
 
                 return (
                     <Box
-                        padding="4"
-                        borderWidth="1"
                         borderRadius="small"
                         className={classNames('listepanel', 'arbeidstakerpanel')}
                         id={panelid}

@@ -405,6 +405,9 @@
     "skjema.arbeid.arbeidstaker.ident": "Fødselsnummer til arbeidsgiver",
     "skjema.arbeid.registrerArbeidstidLengrePeriode": "Registrer arbeidstid for en lengre periode",
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
+
+    "skjema.arbeid.arbeidstidKalender.header": "Arbeidstid i søknadsperioden",
+
     "skjema.sn.info": "Dersom søker etterrapporterer opplysninger om arbeidstid skal du kun fylle ut organisasjonsnummer og informasjon om arbeidstid.",
     "skjema.harSoekerDekketOmsorgsdager": "Har søker dekket 10 omsorgsdager?",
     "skjema.harSoekerDekketOmsorgsdager.hjelp": "Når søker har barn som har fylt 12 år i år, eller er yngre, må søker dekke de 10 første omsorgsdagene hvert kalenderår.",
