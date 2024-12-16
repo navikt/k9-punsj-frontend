@@ -1,8 +1,9 @@
-import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
 
+import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
 
 import { arbeidstakerInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -14,6 +15,7 @@ interface Props {
 
 const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
     const { values } = useFormikContext<IOMPUTSoknad>();
+
     const {
         opptjeningAktivitet: { arbeidstaker },
     } = values;
@@ -22,10 +24,11 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
         <FieldArray
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
-                <Panel style={{ backgroundColor: '#eaeaea' }}>
+                <Box padding="4" borderWidth="1" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
                     <Heading size="small" level="5">
-                        Arbeidstaker
+                        <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.arbeidstaker" />
                     </Heading>
+
                     {arbeidstaker.map((v, index) => (
                         <Arbeidstaker
                             key={index}
@@ -35,6 +38,7 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
                             søknadsperiodeFraSak={søknadsperiodeFraSak}
                         />
                     ))}
+
                     <Button
                         variant="tertiary"
                         size="small"
@@ -45,9 +49,9 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
                         }
                         icon={<AddCircle />}
                     >
-                        Legg til arbeidsforhold
+                        <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.leggTil.btn" />
                     </Button>
-                </Panel>
+                </Box>
             )}
         />
     );

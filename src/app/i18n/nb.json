@@ -717,6 +717,15 @@
     "omsorgspenger.utbetaling.punchForm.fosterbarn.header": "Fosterbarn",
     "omsorgspenger.utbetaling.punchForm.eksisterendePerioder.header": "Eksisterende perioder",
 
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn": "Fjern arbeidsforhold",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox": "Gjelder annen organisasjon",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel": "Informasjon om fraværsperioder",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn": "Legg til periode",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold": "Arbeidsforhold {index}",
+
+    "omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.arbeidstaker": "Arbeidstaker",
+    "omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.leggTil.btn": "Legg til arbeidsforhold",
+
     "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
     "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",
     "omsorgspenger.utbetaling.skjematyper.SN/FL": "Selvstendig næringsdrivende/frilanser",
