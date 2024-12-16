@@ -1,41 +1,43 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
 
-import { Alert, Panel } from '@navikt/ds-react';
-
+import { FormattedMessage } from 'react-intl';
+import { Alert, Box, Heading } from '@navikt/ds-react';
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { Periode } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
 
 import './soknadsperioder.less';
 
-interface IOwnProps {
+interface Props {
     eksisterendePerioder: Periode[];
     hentEksisterendePerioderError: boolean;
 }
 
-const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
-    eksisterendePerioder,
-    hentEksisterendePerioderError,
-}) => {
-    const intl = useIntl();
+const Soknadsperioder: React.FC<Props> = ({ eksisterendePerioder, hentEksisterendePerioderError }) => {
     const finnesIkkeEksisterendePerioder = !eksisterendePerioder.length;
 
     return (
-        <Panel className="eksiterendesoknaderpanel">
-            <h3>{intl.formatMessage({ id: 'skjema.soknadsperiode' })}</h3>
+        <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
+            <Heading size="small" level="3">
+                <FormattedMessage id="skjema.soknadsperiode" />
+            </Heading>
+
             {hentEksisterendePerioderError && (
                 <Alert size="small" variant="error">
-                    {intlHelper(intl, 'skjema.eksisterende.feil')}
+                    <FormattedMessage id="skjema.eksisterende.feil" />
                 </Alert>
             )}
+
             {!!eksisterendePerioder?.length && (
                 <>
                     <Alert size="small" variant="info">
-                        {intlHelper(intl, 'skjema.generellinfo')}
+                        <FormattedMessage id="skjema.generellinfo" />
                     </Alert>
-                    <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
+
+                    <Heading size="small" level="4">
+                        <FormattedMessage id="skjema.eksisterende" />
+                    </Heading>
+
                     {eksisterendePerioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
@@ -47,10 +49,10 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
             {finnesIkkeEksisterendePerioder && (
                 <Alert size="small" variant="info">
-                    {intlHelper(intl, 'skjema.opplæringspenger.eksisterende.ingen')}
+                    <FormattedMessage id="skjema.opplæringspenger.eksisterende.ingen" />
                 </Alert>
             )}
-        </Panel>
+        </Box>
     );
 };
 export default Soknadsperioder;
