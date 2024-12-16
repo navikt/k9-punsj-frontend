@@ -518,6 +518,8 @@
     "skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand": "Etter trygdeavtale med et annet land",
     "skjema.utenlandsopphold.årsak.søkerDekkerSelv": "Søker dekker utgiftene selv",
     "skjema.utenlandsopphold.innleggelse": "Er, eller skal, barnet være innlagt i helseinstitusjon i dette landet?",
+    "skjema.utenlandsopphold.utenlandsoppholdContainer.tittle": "Utenlandsopphold",
+    "skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn": "Legg til periode",
     "skjema.signatur.overskrift": "Signatur",
     "skjema.signatur.bekreftelse": "Søknaden er signert",
     "skjema.melding.fyll_ut": "Fyll ut informasjon.",
