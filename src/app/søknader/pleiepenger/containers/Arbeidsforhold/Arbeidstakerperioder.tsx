@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
@@ -41,9 +41,8 @@ const Arbeidstakerperioder = ({
     getErrorMessage,
     getUhaandterteFeil,
 }: Props): JSX.Element => {
-    const intl = useIntl();
-
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
+
     const { arbeidstid, soekerId, soeknadsperiode } = soknad;
 
     const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
@@ -122,11 +121,13 @@ const Arbeidstakerperioder = ({
         <Fieldset className="listepaneler" legend="">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
+
                 const getHarDuplikatOrgnr = () =>
                     items.filter(
                         (item) =>
                             item.organisasjonsnummer && item.organisasjonsnummer === currentItem.organisasjonsnummer,
                     ).length > 1;
+
                 return (
                     <Box
                         padding="4"
@@ -176,7 +177,6 @@ const Arbeidstakerperioder = ({
                                 }
                                 feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
                                 getErrorMessage={getErrorMessage}
-                                intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
                                 nyeSoknadsperioder={soeknadsperiode}
