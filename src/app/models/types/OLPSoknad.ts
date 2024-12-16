@@ -3,7 +3,7 @@ import { Barn, IBarn } from './IBarn';
 import { Kurs } from './Kurs';
 import { Omsorg } from './Omsorg';
 import { OpptjeningAktivitet } from './OpptjeningAktivitet';
-import { Periode } from './Periode';
+import { IPeriode, Periode } from './Periode';
 import { SoknadsInfo } from './SoknadsInfo';
 import { UtenlandsOpphold } from './UtenlandsOpphold';
 import { Uttak } from './Uttak';

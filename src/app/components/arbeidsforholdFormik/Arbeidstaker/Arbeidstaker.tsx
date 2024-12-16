@@ -1,16 +1,15 @@
+import React, { useEffect, useReducer } from 'react';
+import { useIntl } from 'react-intl';
+
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import React, { useEffect, useReducer } from 'react';
-import { IntlShape } from 'react-intl';
-
 import { Checkbox, Fieldset } from '@navikt/ds-react';
-
 import { ApiPath } from 'app/apiConfig';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import usePrevious from 'app/hooks/usePrevious';
-import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types';
+import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from 'app/models/types';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -18,36 +17,37 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
-
+import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import TextFieldFormik from '../../formikInput/TextFieldFormik';
 import ActionType from './actionTypes';
-import './arbeidstaker.less';
-import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 
-interface ArbeidstakerComponentProps {
+import './arbeidstaker.less';
+
+interface Props {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
     listeelementindex: number;
-    intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
-    nyeSoknadsperioder: IPeriode[];
+    nyeSoknadsperioder: IPeriode[] | Periode[];
     eksisterendeSoknadsperioder: IPeriode[];
     name: string;
 }
 
-const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
+const ArbeidstakerComponent: React.FC<Props> = ({
     søkerId,
     arbeidstaker,
     listeelementindex,
-    intl,
     arbeidsgivere,
     harDuplikatOrgnr,
     nyeSoknadsperioder,
     eksisterendeSoknadsperioder,
     name,
 }): JSX.Element => {
+    const intl = useIntl();
+
     const harArbeidsgivere = arbeidsgivere?.length > 0;
+
     const { setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
@@ -125,7 +125,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType = organisasjonsnummer === null ? 'p' : 'o';
 
     return (
-        <Fieldset className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel" legend="" hideLegend>
             <div className="flex flex-wrap">
                 {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
                         {({ field, form }: FieldProps<boolean>) => (
