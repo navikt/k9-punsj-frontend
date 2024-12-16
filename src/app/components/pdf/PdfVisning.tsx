@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { Back, Next } from '@navikt/ds-icons';
-import { Button, Panel, ToggleGroup } from '@navikt/ds-react';
+import { Button, Box, ToggleGroup } from '@navikt/ds-react';
 
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
@@ -102,7 +102,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
             defaultSize={{ width: '60%', height: '100%' }}
             minWidth={400}
         >
-            <Panel className="punch_pdf">
+            <Box className="punch_pdf">
                 {dokumenter.length > 1 && (
                     <div className="fleredokumenter">
                         <ToggleGroup
@@ -121,7 +121,9 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                         </ToggleGroup>
                     </div>
                 )}
+
                 <iframe title="pdf" src={pdfUrl} />
+
                 <div className="knapperad">
                     <Button
                         variant="tertiary"
@@ -137,7 +139,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                     </Button>
                 </div>
                 <Button icon={<Back />} variant="tertiary" onClick={togglePdf} className="button_open" />
-            </Panel>
+            </Box>
         </Resizable>
     );
 };
