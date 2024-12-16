@@ -1,19 +1,17 @@
 import React from 'react';
-import { IntlShape } from 'react-intl';
 
+import { useIntl } from 'react-intl';
 import { Box } from '@navikt/ds-react';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
-
 import AddCircleSvg from '../assets/SVG/AddCircleSVG';
 import BinSvg from '../assets/SVG/BinSVG';
 import { IPeriode } from '../models/types/Periode';
 import intlHelper from '../utils/intlUtils';
 
 interface Props {
-    intl: IntlShape;
     periods: IPeriode[]; // Liste over periodisert informasjon
     initialPeriode: IPeriode;
     kanHaFlere: boolean; // Objektet som legges til når man legger til en ny periode i lista
@@ -31,7 +29,6 @@ interface Props {
 }
 
 export const Periodepaneler: React.FC<Props> = ({
-    intl,
     periods,
     initialPeriode,
     kanHaFlere,
@@ -47,6 +44,8 @@ export const Periodepaneler: React.FC<Props> = ({
     onAdd,
     onRemove,
 }: Props) => {
+    const intl = useIntl();
+
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
         periodeinfo: Partial<IPeriode>,

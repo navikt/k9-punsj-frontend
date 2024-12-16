@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
@@ -34,8 +34,6 @@ const Soknadsperioder: React.FC<Props> = ({
     getErrorMessage,
     getUhaandterteFeil,
 }) => {
-    const intl = useIntl();
-
     const harLagretPerioder = soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0;
 
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
@@ -151,7 +149,6 @@ const Soknadsperioder: React.FC<Props> = ({
                 <Fieldset legend={undefined}>
                     <div className="soknadsperiodecontainer">
                         <Periodepaneler
-                            intl={intl}
                             periods={getPerioder()}
                             initialPeriode={initialPeriode}
                             editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}

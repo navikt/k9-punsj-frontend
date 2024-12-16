@@ -136,7 +136,6 @@ const EndringAvSoknadsperioder = (props: Props) => {
                 </Label>
 
                 <Periodepaneler
-                    intl={intl}
                     periods={soknad.trekkKravPerioder || []}
                     initialPeriode={{ fom: '', tom: '' }}
                     editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}

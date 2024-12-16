@@ -232,7 +232,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         </Heading>
 
                         <Periodepaneler
-                            intl={intl}
                             periods={getInnleggelsesperioder()}
                             initialPeriode={{ fom: '', tom: '' }}
                             editSoknad={(perioder) =>
