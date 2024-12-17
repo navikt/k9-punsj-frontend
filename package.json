@@ -154,7 +154,7 @@
         "less": "4.2.1",
         "less-loader": "12.2.0",
         "lint-staged": "15.2.11",
-        "msw": "2.6.9",
+        "msw": "2.7.0",
         "nav-frontend-skjema-style": "3.0.3",
         "postcss": "8.4.49",
         "postcss-less": "6.0.0",
