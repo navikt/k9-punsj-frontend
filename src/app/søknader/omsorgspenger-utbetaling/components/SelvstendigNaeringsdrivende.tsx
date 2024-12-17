@@ -45,7 +45,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
 
     return (
         <div className="arbeidsforhold-container">
-            <Box style={{ backgroundColor: '#eaeaea' }} className="mb-2">
+            <Box style={{ backgroundColor: '#eaeaea' }} className="mb-2" borderRadius="small">
                 <Heading size="small" level="5">
                     <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.tittel'} />
                 </Heading>
