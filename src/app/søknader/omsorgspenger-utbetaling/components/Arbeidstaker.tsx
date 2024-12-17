@@ -70,7 +70,7 @@ const Arbeidstaker = ({
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
                 <div className="arbeidsforhold-container">
-                    <Box padding="4" className="container">
+                    <Box className="container">
                         <div>
                             {harMinstToArbeidsforhold && (
                                 <>
@@ -122,9 +122,11 @@ const Arbeidstaker = ({
 
                         <hr />
 
-                        <Heading size="small">
-                            <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
-                        </Heading>
+                        <div className="mt-4">
+                            <Heading size="small">
+                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
+                            </Heading>
+                        </div>
 
                         <FieldArray
                             name={`${name}.fravaersperioder`}
