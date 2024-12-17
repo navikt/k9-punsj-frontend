@@ -67,7 +67,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false
     ];
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="fravaersperiode-container ">
+        <Box padding="4" className="fravaersperiode-container ">
             <div className="aarsak-rad">
                 <SelectFormik
                     label="Fraværsårsak"

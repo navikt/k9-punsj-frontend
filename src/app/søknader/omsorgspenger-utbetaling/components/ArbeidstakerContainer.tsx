@@ -24,7 +24,7 @@ const ArbeidstakerContainer = ({ søknadsperiodeFraSak }: Props) => {
         <FieldArray
             name="opptjeningAktivitet.arbeidstaker"
             render={(arrayHelpers) => (
-                <Box padding="4" borderWidth="1" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
+                <Box padding="4" style={{ backgroundColor: '#eaeaea' }}>
                     <Heading size="small" level="5">
                         <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.arbeidstaker" />
                     </Heading>

@@ -23,7 +23,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
     const { values } = useFormikContext<IOMPUTSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4">
             <Heading size="small">
                 <FormattedMessage
                     id={`omsorgspenger.utbetaling.arbeidsforhold${values.erKorrigering ? '.erKorrigering' : ''}`}

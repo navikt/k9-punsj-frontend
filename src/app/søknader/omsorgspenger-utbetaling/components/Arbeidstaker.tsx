@@ -70,7 +70,7 @@ const Arbeidstaker = ({
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
                 <div className="arbeidsforhold-container">
-                    <Box padding="4" borderWidth="1" borderRadius="small" className="container">
+                    <Box padding="4" className="container">
                         <div>
                             {harMinstToArbeidsforhold && (
                                 <>
