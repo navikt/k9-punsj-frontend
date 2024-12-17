@@ -16,7 +16,7 @@
         "@navikt/fnrvalidator": "2.1.5",
         "@popperjs/core": "2.11.8",
         "@reduxjs/toolkit": "^2.5.0",
-        "@sentry/react": "8.45.0",
+        "@sentry/react": "8.45.1",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
         "dayjs": "1.11.13",
@@ -47,7 +47,7 @@
         "react-day-picker": "9.4.4",
         "react-dom": "18.3.1",
         "react-intl": "7.0.4",
-        "react-modal": "3.16.1",
+        "react-modal": "3.16.2",
         "react-popper": "2.3.0",
         "react-query": "3.39.3",
         "react-redux": "9.2.0",
@@ -62,7 +62,7 @@
         "typescript-string-operations": "1.5.1",
         "ulid": "2.3.0",
         "uuid": "11.0.3",
-        "yup": "1.5.0"
+        "yup": "1.6.0"
     },
     "resolutions": {
         "postcss": "8.4.31"
@@ -125,8 +125,8 @@
         "@types/regenerator-runtime": "^0.13.8",
         "@types/testing-library__cypress": "5.0.13",
         "@types/uuid": "^10.0.0",
-        "@typescript-eslint/eslint-plugin": "^8.18.0",
-        "@typescript-eslint/parser": "^8.18.0",
+        "@typescript-eslint/eslint-plugin": "^8.18.1",
+        "@typescript-eslint/parser": "^8.18.1",
         "autoprefixer": "10.4.20",
         "babel-jest": "29.7.0",
         "babel-loader": "9.2.1",
@@ -154,7 +154,7 @@
         "less": "4.2.1",
         "less-loader": "12.2.0",
         "lint-staged": "15.2.11",
-        "msw": "2.6.9",
+        "msw": "2.7.0",
         "nav-frontend-skjema-style": "3.0.3",
         "postcss": "8.4.49",
         "postcss-less": "6.0.0",
@@ -168,7 +168,7 @@
         "terser-webpack-plugin": "5.3.11",
         "ts-jest": "29.2.5",
         "typescript": "^5.7.2",
-        "typescript-eslint": "^8.18.0",
+        "typescript-eslint": "^8.18.1",
         "webpack": "5.97.1",
         "webpack-dev-server": "5.2.0"
     },
