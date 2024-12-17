@@ -970,6 +970,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     getUhaandterteFeil={this.getUhåndterteFeil}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
+                                    doNotShowBorders
                                 />
                             )}
 
