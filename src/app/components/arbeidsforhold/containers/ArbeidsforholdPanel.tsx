@@ -117,7 +117,9 @@ const ArbeidsforholdPanel = ({
                         handleFrilanserChange((event.target as HTMLInputElement).value as JaNei);
                     }}
                 />
+
                 <VerticalSpacer eightPx />
+
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
                     <NewDateInput
                         id="frilanser-sluttdato"
@@ -152,7 +154,9 @@ const ArbeidsforholdPanel = ({
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                     <>
                         {arbeidstidInformasjon()}
+
                         <VerticalSpacer eightPx />
+
                         <ArbeidstidKalender
                             nyeSoknadsperioder={soeknadsperiode}
                             eksisterendeSoknadsperioder={eksisterendePerioder}
@@ -796,7 +800,9 @@ const ArbeidsforholdPanel = ({
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
                     checked={getCheckedValueArbeid(Arbeidsforhold.ARBEIDSTAKER)}
                 />
+
                 <VerticalSpacer eightPx />
+
                 {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
                         soknad={soknad}
@@ -808,6 +814,7 @@ const ArbeidsforholdPanel = ({
                         getUhaandterteFeil={getUhaandterteFeil}
                     />
                 )}
+
                 <CheckboksPanel
                     label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                     value={Arbeidsforhold.FRILANSER}
@@ -815,27 +822,32 @@ const ArbeidsforholdPanel = ({
                     checked={getCheckedValueArbeid(Arbeidsforhold.FRILANSER)}
                 />
                 <VerticalSpacer eightPx />
+
                 {!!soknad.opptjeningAktivitet.frilanser && (
-                    <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
+                    <Box padding="4" borderRadius="small" className="frilanserpanel">
                         {frilanserperioder()}
                     </Box>
                 )}
+
                 <CheckboksPanel
                     label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                     value={Arbeidsforhold.SELVSTENDIG}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
                     checked={getCheckedValueArbeid(Arbeidsforhold.SELVSTENDIG)}
                 />
+
                 {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                     <>
                         <Alert size="small" variant="info" className="sn-alertstripe">
-                            {intlHelper(intl, 'skjema.sn.info')}
+                            <FormattedMessage id="skjema.sn.info" />
                         </Alert>
-                        <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
+
+                        <Box padding="4" borderRadius="small" className="selvstendigpanel">
                             {selvstendigperioder()}
                         </Box>
                     </>
                 )}
+
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
                 />
