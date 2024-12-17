@@ -40,22 +40,24 @@ const Medlemskap: React.FC = () => {
                 <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.tittel" />
             </Heading>
 
-            <Box padding="4">
-                <RadioPanelGruppeFormik
-                    legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                    name="metadata.medlemskap"
-                    options={options}
-                />
+            <VerticalSpacer twentyPx />
 
-                {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
+            <RadioPanelGruppeFormik
+                legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
+                name="metadata.medlemskap"
+                options={options}
+            />
+
+            <VerticalSpacer twentyPx />
+
+            {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
+                <Box padding="4" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
                     <FieldArray
                         name="bosteder"
                         render={(arrayHelpers) => (
                             <>
                                 {values.bosteder?.map((_, bostedIndex, array) => (
                                     <div key={bostedIndex}>
-                                        <VerticalSpacer thirtyTwoPx />
-
                                         <div className="fom-tom-rad">
                                             <DatoInputFormikNew
                                                 label={intlHelper(
@@ -119,8 +121,8 @@ const Medlemskap: React.FC = () => {
                             </>
                         )}
                     />
-                )}
-            </Box>
+                </Box>
+            )}
         </Box>
     );
 };

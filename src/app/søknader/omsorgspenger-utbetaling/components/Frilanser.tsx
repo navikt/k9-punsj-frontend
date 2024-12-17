@@ -35,7 +35,6 @@ export default function Frilanser() {
                     <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
                 </Heading>
 
-                <VerticalSpacer twentyPx />
                 <Box padding="4">
                     {!values.erKorrigering && (
                         <>
@@ -75,7 +74,7 @@ export default function Frilanser() {
                                     value="ja"
                                     onChange={() => form.setFieldValue(field.name, true)}
                                 >
-                                    <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja'} />
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja" />
                                 </RadioFormik>
 
                                 <RadioFormik
@@ -83,7 +82,7 @@ export default function Frilanser() {
                                     value="nei"
                                     onChange={() => form.setFieldValue(field.name, false)}
                                 >
-                                    <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei'} />
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei" />
                                 </RadioFormik>
                             </RadioGroupFormik>
                         )}
@@ -104,8 +103,10 @@ export default function Frilanser() {
 
                     <hr />
 
+                    <VerticalSpacer twentyPx />
+
                     <Heading size="small">
-                        <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel'} />
+                        <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel" />
                     </Heading>
 
                     <FieldArray
@@ -132,9 +133,7 @@ export default function Frilanser() {
                                     }
                                     icon={<AddCircle />}
                                 >
-                                    <FormattedMessage
-                                        id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn'}
-                                    />
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn" />
                                 </Button>
                             </>
                         )}

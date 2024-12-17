@@ -39,22 +39,24 @@ const Utenlandsopphold: React.FC = () => {
                 <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.tittel" />
             </Heading>
 
-            <Box padding="4">
-                <RadioPanelGruppeFormik
-                    legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
-                    name="metadata.utenlandsopphold"
-                    options={options}
-                />
+            <VerticalSpacer twentyPx />
 
-                {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
+            <RadioPanelGruppeFormik
+                legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
+                name="metadata.utenlandsopphold"
+                options={options}
+            />
+
+            <VerticalSpacer twentyPx />
+
+            {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
+                <Box padding="4" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
                     <FieldArray
                         name="utenlandsopphold"
                         render={(arrayHelpers) => (
                             <>
                                 {values.utenlandsopphold?.map((_, index, array) => (
                                     <div key={index}>
-                                        <VerticalSpacer thirtyTwoPx />
-
                                         <div className="fom-tom-rad">
                                             <DatoInputFormikNew
                                                 label={intlHelper(
@@ -118,8 +120,8 @@ const Utenlandsopphold: React.FC = () => {
                             </>
                         )}
                     />
-                )}
-            </Box>
+                </Box>
+            )}
         </Box>
     );
 };
