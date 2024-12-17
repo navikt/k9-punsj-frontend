@@ -36,8 +36,10 @@ const Utenlandsopphold: React.FC = () => {
     return (
         <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
-                <FormattedMessage id={'omsorgspenger.utbetaling.utenlandsopphold.tittel'} />
+                <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.tittel" />
             </Heading>
+
+            <VerticalSpacer twentyPx />
 
             <RadioPanelGruppeFormik
                 legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
@@ -45,74 +47,80 @@ const Utenlandsopphold: React.FC = () => {
                 options={options}
             />
 
+            <VerticalSpacer twentyPx />
+
             {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
-                <FieldArray
-                    name="utenlandsopphold"
-                    render={(arrayHelpers) => (
-                        <>
-                            {values.utenlandsopphold?.map((_, index, array) => (
-                                <div key={index}>
-                                    <VerticalSpacer thirtyTwoPx />
+                <Box padding="4" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
+                    <FieldArray
+                        name="utenlandsopphold"
+                        render={(arrayHelpers) => (
+                            <>
+                                {values.utenlandsopphold?.map((_, index, array) => (
+                                    <div key={index}>
+                                        <div className="fom-tom-rad">
+                                            <DatoInputFormikNew
+                                                label={intlHelper(
+                                                    intl,
+                                                    'omsorgspenger.utbetaling.utenlandsopphold.fom',
+                                                )}
+                                                name={`utenlandsopphold[${index}].periode.fom`}
+                                            />
 
-                                    <div className="fom-tom-rad">
-                                        <DatoInputFormikNew
-                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.utenlandsopphold.fom')}
-                                            name={`utenlandsopphold[${index}].periode.fom`}
-                                        />
+                                            <DatoInputFormikNew
+                                                label={intlHelper(
+                                                    intl,
+                                                    'omsorgspenger.utbetaling.utenlandsopphold.tom',
+                                                )}
+                                                name={`utenlandsopphold[${index}].periode.tom`}
+                                            />
 
-                                        <DatoInputFormikNew
-                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.utenlandsopphold.tom')}
-                                            name={`utenlandsopphold[${index}].periode.tom`}
-                                        />
-
-                                        {array.length > 1 && (
-                                            <Button
-                                                variant="tertiary"
-                                                size="small"
-                                                onClick={() => arrayHelpers.remove(index)}
-                                                style={{ float: 'right' }}
-                                                icon={<Delete />}
-                                            >
-                                                <FormattedMessage
-                                                    id={'omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn'}
-                                                />
-                                            </Button>
-                                        )}
-                                    </div>
-
-                                    <VerticalSpacer sixteenPx />
-
-                                    <div style={{ maxWidth: '25%' }}>
-                                        <Field name={`utenlandsopphold[${index}].land`}>
-                                            {({ field }: FieldProps<string>) => (
-                                                <CountrySelect
-                                                    label
-                                                    selectedcountry={field.value}
-                                                    unselectedoption={intlHelper(
-                                                        intl,
-                                                        'omsorgspenger.utbetaling.utenlandsopphold.unselectedoption',
-                                                    )}
-                                                    {...field}
-                                                />
+                                            {array.length > 1 && (
+                                                <Button
+                                                    variant="tertiary"
+                                                    size="small"
+                                                    onClick={() => arrayHelpers.remove(index)}
+                                                    style={{ float: 'right' }}
+                                                    icon={<Delete />}
+                                                >
+                                                    <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
+                                                </Button>
                                             )}
-                                        </Field>
+                                        </div>
+
+                                        <VerticalSpacer sixteenPx />
+
+                                        <div style={{ maxWidth: '25%' }}>
+                                            <Field name={`utenlandsopphold[${index}].land`}>
+                                                {({ field }: FieldProps<string>) => (
+                                                    <CountrySelect
+                                                        label
+                                                        selectedcountry={field.value}
+                                                        unselectedoption={intlHelper(
+                                                            intl,
+                                                            'omsorgspenger.utbetaling.utenlandsopphold.unselectedoption',
+                                                        )}
+                                                        {...field}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
 
-                            <VerticalSpacer sixteenPx />
+                                <VerticalSpacer sixteenPx />
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<AddCircle />}
-                            >
-                                <FormattedMessage id={'omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn'} />
-                            </Button>
-                        </>
-                    )}
-                />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                    icon={<AddCircle />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn" />
+                                </Button>
+                            </>
+                        )}
+                    />
+                </Box>
             )}
         </Box>
     );

@@ -1,8 +1,8 @@
-import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
-import { Fieldset, Panel } from '@navikt/ds-react';
+import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
+import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import BinSvg from 'app/assets/SVG/BinSVG';
@@ -10,7 +10,6 @@ import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmelding
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
-import intlHelper from 'app/utils/intlUtils';
 
 import {
     getMaxDatoFraSøknadsperioder,
@@ -23,7 +22,7 @@ import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
 type ItemInfo = any;
 
-interface ArbeidstakerperioderProps {
+interface Props {
     soknad: IPSBSoknad;
     eksisterendePerioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
@@ -41,9 +40,9 @@ const Arbeidstakerperioder = ({
     updateSoknadState,
     getErrorMessage,
     getUhaandterteFeil,
-}: ArbeidstakerperioderProps): JSX.Element => {
-    const intl = useIntl();
+}: Props): JSX.Element => {
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
+
     const { arbeidstid, soekerId, soeknadsperiode } = soknad;
 
     const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
@@ -122,30 +121,33 @@ const Arbeidstakerperioder = ({
         <Fieldset className="listepaneler" legend="">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
+
                 const getHarDuplikatOrgnr = () =>
                     items.filter(
                         (item) =>
                             item.organisasjonsnummer && item.organisasjonsnummer === currentItem.organisasjonsnummer,
                     ).length > 1;
+
                 return (
-                    <Panel
+                    <Box
+                        borderRadius="small"
                         className={classNames('listepanel', 'arbeidstakerpanel')}
-                        border={false}
                         id={panelid}
                         key={panelid}
                     >
                         <Fieldset legend="">
                             {itemsWithInitialItem.length > 1 && (
-                                <h2>
+                                <Heading size="small" level="2">
                                     <FormattedMessage
                                         id="skjema.arbeidsforhold.teller"
                                         values={{ indeks: currentItemIndex + 1 }}
                                     />
-                                </h2>
+                                </Heading>
                             )}
+
                             {itemsWithInitialItem.length > 1 && (
                                 <div className="listepanelbunn">
-                                    <button
+                                    <Button
                                         id="slett"
                                         className="fjernlisteelementknapp"
                                         type="button"
@@ -155,10 +157,12 @@ const Arbeidstakerperioder = ({
                                         <div className="slettIcon">
                                             <BinSvg title="fjern" />
                                         </div>
-                                        {intlHelper(intl, 'skjema.arbeid.arbeidstaker.fjernarbeidsgiver')}
-                                    </button>
+
+                                        <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
+                                    </Button>
                                 </div>
                             )}
+
                             <ArbeidstakerComponent
                                 søkerId={soekerId}
                                 arbeidstaker={currentItem as Arbeidstaker}
@@ -171,13 +175,12 @@ const Arbeidstakerperioder = ({
                                 }
                                 feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
                                 getErrorMessage={getErrorMessage}
-                                getUhaandterteFeil={getUhaandterteFeil}
-                                intl={intl}
                                 arbeidsgivere={arbeidsgivere}
                                 harDuplikatOrgnr={getHarDuplikatOrgnr()}
                                 nyeSoknadsperioder={soeknadsperiode}
                                 eksisterendeSoknadsperioder={eksisterendePerioder}
                             />
+
                             <UhaanderteFeilmeldinger
                                 getFeilmeldinger={() =>
                                     (getUhaandterteFeil &&
@@ -188,20 +191,19 @@ const Arbeidstakerperioder = ({
                                 }
                             />
                         </Fieldset>
-                    </Panel>
+                    </Box>
                 );
             })}
-            <button
+
+            <Button
                 id="leggtillisteelementknapp"
                 className="leggtillisteelementknapp"
                 type="button"
                 onClick={addItemHandler}
+                icon={<AddCircleSvg title="leggtil" />}
             >
-                <div className="leggtilperiodeIcon">
-                    <AddCircleSvg title="leggtil" />
-                </div>
-                {intlHelper(intl, 'skjema.arbeid.arbeidstaker.leggtilperiode')}
-            </button>
+                <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
+            </Button>
         </Fieldset>
     );
 };

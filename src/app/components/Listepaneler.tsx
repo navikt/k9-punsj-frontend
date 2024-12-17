@@ -1,10 +1,10 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { Fieldset, Panel } from '@navikt/ds-react';
+import { Box, Button, Fieldset, Heading } from '@navikt/ds-react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
-import intlHelper from 'app/utils/intlUtils';
+
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import BinSvg from '../assets/SVG/BinSVG';
 import AddCircleSvg from '../assets/SVG/AddCircleSVG';
@@ -45,13 +45,13 @@ export interface IListepanelerProps<T> {
 
 type ItemInfo = any;
 
-export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>> = (
-    props: IListepanelerProps<ItemInfo>,
-) => {
-    const { items, initialItem, className, textLeggTil } = props;
-    const itemsWithInitialItem = items.length > 0 ? items : [initialItem];
+export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: IListepanelerProps<ItemInfo>) => {
     const {
         intl,
+        items,
+        initialItem,
+        className,
+        textLeggTil,
         component,
         editSoknad,
         editSoknadState,
@@ -61,6 +61,7 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
         getUhaandterteFeil,
         getErrorMessage,
     } = props;
+    const itemsWithInitialItem = items.length > 0 ? items : [initialItem];
 
     const editItem: (index: number, iteminfo: Partial<ItemInfo>) => ItemInfo[] = (
         index: number,
@@ -109,25 +110,25 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                 items!.map((itemInfo, itemIndex) => {
                     const panelid = props.panelid(itemIndex);
                     return (
-                        <Panel
+                        <Box
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
-                            border={false}
                             id={panelid}
                             key={panelid}
-                            data-testid={`listepaneler`}
+                            data-testid="listepaneler"
                         >
                             <Fieldset hideLegend legend="">
                                 {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
-                                    <h2>
+                                    <Heading size="medium" level="2">
                                         <FormattedMessage
                                             id="skjema.arbeidsforhold.teller"
                                             values={{ indeks: itemIndex + 1 }}
                                         />
-                                    </h2>
+                                    </Heading>
                                 )}
+
                                 {!!medSlettKnapp && itemsWithInitialItem.length > 1 && (
                                     <div className="listepanelbunn">
-                                        <button
+                                        <Button
                                             id="slett"
                                             className="fjernlisteelementknapp"
                                             data-testid="fjernlisteelementknapp"
@@ -138,10 +139,12 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                             <div className="slettIcon">
                                                 <BinSvg title="fjern" />
                                             </div>
-                                            {intlHelper(intl, props.textFjern || 'skjema.liste.fjern')}
-                                        </button>
+
+                                            <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
+                                        </Button>
                                     </div>
                                 )}
+
                                 {!!component &&
                                     component(
                                         itemInfo,
@@ -153,9 +156,10 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
                                         intl,
                                     )}
                             </Fieldset>
-                        </Panel>
+                        </Box>
                     );
                 })}
+
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
@@ -163,18 +167,16 @@ export const Listepaneler: React.FunctionComponent<IListepanelerProps<ItemInfo>>
             )}
 
             {kanHaFlere && (
-                <button
+                <Button
                     id="leggtillisteelementknapp"
                     data-testid="leggtillisteelementknapp"
                     className="leggtillisteelementknapp"
                     type="button"
                     onClick={addItemHandler}
+                    icon={<AddCircleSvg title="leggtil" />}
                 >
-                    <div className="leggtilperiodeIcon">
-                        <AddCircleSvg title="leggtil" />
-                    </div>
-                    {intlHelper(intl, textLeggTil || 'skjema.liste.legg_til')}
-                </button>
+                    <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
+                </Button>
             )}
         </Fieldset>
     );

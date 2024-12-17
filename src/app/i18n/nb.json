@@ -405,6 +405,9 @@
     "skjema.arbeid.arbeidstaker.ident": "Fødselsnummer til arbeidsgiver",
     "skjema.arbeid.registrerArbeidstidLengrePeriode": "Registrer arbeidstid for en lengre periode",
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
+
+    "skjema.arbeid.arbeidstidKalender.header": "Arbeidstid i søknadsperioden",
+
     "skjema.sn.info": "Dersom søker etterrapporterer opplysninger om arbeidstid skal du kun fylle ut organisasjonsnummer og informasjon om arbeidstid.",
     "skjema.harSoekerDekketOmsorgsdager": "Har søker dekket 10 omsorgsdager?",
     "skjema.harSoekerDekketOmsorgsdager.hjelp": "Når søker har barn som har fylt 12 år i år, eller er yngre, må søker dekke de 10 første omsorgsdagene hvert kalenderår.",
@@ -518,6 +521,8 @@
     "skjema.utenlandsopphold.årsak.trygdeavtaleMedAnnetLand": "Etter trygdeavtale med et annet land",
     "skjema.utenlandsopphold.årsak.søkerDekkerSelv": "Søker dekker utgiftene selv",
     "skjema.utenlandsopphold.innleggelse": "Er, eller skal, barnet være innlagt i helseinstitusjon i dette landet?",
+    "skjema.utenlandsopphold.utenlandsoppholdContainer.tittle": "Utenlandsopphold",
+    "skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn": "Legg til periode",
     "skjema.signatur.overskrift": "Signatur",
     "skjema.signatur.bekreftelse": "Søknaden er signert",
     "skjema.melding.fyll_ut": "Fyll ut informasjon.",
@@ -713,6 +718,16 @@
     "omsorgspenger.utbetaling.punchForm.header": "Omsorgspengeutbetaling",
     "omsorgspenger.utbetaling.punchForm.errorSummary.header": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
     "omsorgspenger.utbetaling.punchForm.fosterbarn.header": "Fosterbarn",
+    "omsorgspenger.utbetaling.punchForm.eksisterendePerioder.header": "Eksisterende perioder",
+
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn": "Fjern arbeidsforhold",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox": "Gjelder annen organisasjon",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel": "Informasjon om fraværsperioder",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn": "Legg til periode",
+    "omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold": "Arbeidsforhold {index}",
+
+    "omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.arbeidstaker": "Arbeidstaker",
+    "omsorgspenger.utbetaling.punchForm.arbeidstakerContainer.leggTil.btn": "Legg til arbeidsforhold",
 
     "omsorgspenger.utbetaling.skjematyper.legend": "Gjelder skjemaet arbeidstaker eller selvstendig næringsdrivende/frilanser?",
     "omsorgspenger.utbetaling.skjematyper.AT": "Arbeidstaker",

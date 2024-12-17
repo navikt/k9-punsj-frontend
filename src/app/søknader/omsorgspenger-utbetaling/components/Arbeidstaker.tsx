@@ -1,9 +1,10 @@
-import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 
+import { FormattedMessage } from 'react-intl';
+import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
+import { useQuery } from 'react-query';
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button, Checkbox, Heading, Panel } from '@navikt/ds-react';
+import { Button, Checkbox, Heading, Box } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -15,9 +16,10 @@ import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
+
 import './arbeidsforhold.less';
 
-interface OwnProps {
+interface Props {
     index: number;
     slettArbeidsforhold: () => void;
     antallArbeidsforhold: number;
@@ -29,9 +31,11 @@ const Arbeidstaker = ({
     slettArbeidsforhold,
     antallArbeidsforhold,
     søknadsperiodeFraSak,
-}: OwnProps) => {
+}: Props) => {
     const [gjelderAnnenOrganisasjon, setGjelderAnnenOrganisasjon] = useState(false);
+
     const { values } = useFormikContext<IOMPUTSoknad>();
+
     const fom = søknadsperiodeFraSak?.fom;
     const tom = søknadsperiodeFraSak?.tom;
 
@@ -61,26 +65,33 @@ const Arbeidstaker = ({
         setGjelderAnnenOrganisasjon(!gjelderAnnenOrganisasjon);
         form.setFieldValue(`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`, '');
     };
+
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
                 <div className="arbeidsforhold-container">
-                    <Panel className="container">
+                    <Box className="container">
                         <div>
                             {harMinstToArbeidsforhold && (
                                 <>
-                                    <Heading size="xsmall" level="5">{`Arbeidsforhold ${
-                                        arbeidstakerIndex + 1
-                                    }`}</Heading>
+                                    <Heading size="xsmall" level="5">
+                                        <FormattedMessage
+                                            id="omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold"
+                                            values={{ index: arbeidstakerIndex + 1 }}
+                                        />
+                                    </Heading>
+
                                     <VerticalSpacer twentyPx />
                                 </>
                             )}
+
                             <Organisasjonsvelger
                                 name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
                                 disabled={gjelderAnnenOrganisasjon}
                                 className="inline-block"
                                 organisasjoner={organisasjoner}
                             />
+
                             {harMinstToArbeidsforhold && (
                                 <Button
                                     variant="tertiary"
@@ -89,15 +100,17 @@ const Arbeidstaker = ({
                                     onClick={slettArbeidsforhold}
                                     icon={<Delete />}
                                 >
-                                    Fjern arbeidsforhold
+                                    <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
                                 </Button>
                             )}
+
                             <Checkbox
                                 onChange={() => toggleGjelderAnnenOrganisasjon(form)}
                                 checked={gjelderAnnenOrganisasjon}
                             >
-                                Gjelder annen organisasjon
+                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox" />
                             </Checkbox>
+
                             {gjelderAnnenOrganisasjon && (
                                 <TextFieldFormik
                                     size="small"
@@ -106,15 +119,21 @@ const Arbeidstaker = ({
                                 />
                             )}
                         </div>
+
                         <hr />
-                        <Heading size="small">Informasjon om fraværsperioder</Heading>
+
+                        <div className="mt-4">
+                            <Heading size="small">
+                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
+                            </Heading>
+                        </div>
+
                         <FieldArray
                             name={`${name}.fravaersperioder`}
                             render={(arrayHelpers) => (
                                 <>
                                     {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                         <Fravaersperiode
-                        
                                             key={fravaersperiodeIndex}
                                             name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
                                             antallFravaersperioder={value.fravaersperioder?.length}
@@ -122,6 +141,7 @@ const Arbeidstaker = ({
                                             visSoknadAarsak
                                         />
                                     ))}
+
                                     <Button
                                         variant="tertiary"
                                         size="small"
@@ -133,12 +153,12 @@ const Arbeidstaker = ({
                                         }
                                         icon={<AddCircle />}
                                     >
-                                        Legg til periode
+                                        <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn" />
                                     </Button>
                                 </>
                             )}
                         />
-                    </Panel>
+                    </Box>
                 </div>
             )}
         </Field>

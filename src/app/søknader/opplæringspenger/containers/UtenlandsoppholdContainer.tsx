@@ -1,12 +1,12 @@
-import { FieldArray, useFormikContext } from 'formik';
 import React from 'react';
 
+import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Panel } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-
 import Utenlandsopphold from './Utenlandsopphold';
 
 const utenlandsoppholdInitialValue = {
@@ -19,10 +19,11 @@ const UtenlandsoppholdContainer = () => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
-        <Panel border>
+        <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
-                Utenlandsopphold
+                <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>
+
             <FieldArray
                 name="utenlandsopphold"
                 render={(arrayHelpers) => (
@@ -30,19 +31,21 @@ const UtenlandsoppholdContainer = () => {
                         {values.utenlandsopphold?.map((_, index) => (
                             <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
                         ))}
+
                         <VerticalSpacer sixteenPx />
+
                         <Button
                             variant="tertiary"
                             size="small"
                             onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
                             icon={<AddCircle />}
                         >
-                            Legg til periode
+                            <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
                         </Button>
                     </>
                 )}
             />
-        </Panel>
+        </Box>
     );
 };
 

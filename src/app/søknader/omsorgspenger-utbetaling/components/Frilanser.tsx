@@ -30,115 +30,115 @@ export default function Frilanser() {
 
     return (
         <div className="arbeidsforhold-container">
-            <Box padding="4" borderWidth="1" borderRadius="small">
+            <Box style={{ backgroundColor: '#eaeaea' }} borderRadius="small">
                 <Heading size="small" level="5">
                     <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
                 </Heading>
 
-                <VerticalSpacer twentyPx />
-
-                {!values.erKorrigering && (
-                    <>
-                        <Field name="metadata.harSoekerDekketOmsorgsdager">
-                            {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
-                                    legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
-                                    description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
-                                    name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    onChange={(e, value) => form.setFieldValue(field.name, value)}
-                                />
-                            )}
-                        </Field>
-
-                        <VerticalSpacer sixteenPx />
-                    </>
-                )}
-
-                <DatoInputFormikNew
-                    label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.startDato.spm')}
-                    name="opptjeningAktivitet.frilanser.startdato"
-                />
-
-                <VerticalSpacer twentyPx />
-
-                <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
-                    {({ field, form }: FieldProps<string>) => (
-                        <RadioGroupFormik
-                            legend={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.jobberFortsatt.spm')}
-                            size="small"
-                            name={field.name}
-                            value={field.value ? 'ja' : 'nei'}
-                        >
-                            <RadioFormik
-                                name={field.name}
-                                value="ja"
-                                onChange={() => form.setFieldValue(field.name, true)}
-                            >
-                                <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja'} />
-                            </RadioFormik>
-
-                            <RadioFormik
-                                name={field.name}
-                                value="nei"
-                                onChange={() => form.setFieldValue(field.name, false)}
-                            >
-                                <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei'} />
-                            </RadioFormik>
-                        </RadioGroupFormik>
-                    )}
-                </Field>
-
-                <VerticalSpacer twentyPx />
-
-                {!frilanser.jobberFortsattSomFrilans && (
-                    <>
-                        <DatoInputFormikNew
-                            label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
-                            name="opptjeningAktivitet.frilanser.sluttdato"
-                        />
-
-                        <VerticalSpacer twentyPx />
-                    </>
-                )}
-
-                <hr />
-
-                <Heading size="small">
-                    <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel'} />
-                </Heading>
-
-                <FieldArray
-                    name="opptjeningAktivitet.frilanser.fravaersperioder"
-                    render={(arrayHelpers) => (
+                <Box padding="4">
+                    {!values.erKorrigering && (
                         <>
-                            {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
-                                <Fravaersperiode
-                                    key={fravaersperiodeIndex}
-                                    name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
-                                    antallFravaersperioder={frilanser.fravaersperioder?.length}
-                                    slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                />
-                            ))}
+                            <Field name="metadata.harSoekerDekketOmsorgsdager">
+                                {({ field, form }: FieldProps<boolean>) => (
+                                    <RadioPanelGruppeFormik
+                                        legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
+                                        description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
+                                        name={field.name}
+                                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                        onChange={(e, value) => form.setFieldValue(field.name, value)}
+                                    />
+                                )}
+                            </Field>
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() =>
-                                    arrayHelpers.push({
-                                        ...fravaersperiodeInitialValue,
-                                        aktivitetsFravær: aktivitetsFravær.FRILANSER,
-                                    })
-                                }
-                                icon={<AddCircle />}
-                            >
-                                <FormattedMessage
-                                    id={'omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn'}
-                                />
-                            </Button>
+                            <VerticalSpacer sixteenPx />
                         </>
                     )}
-                />
+
+                    <DatoInputFormikNew
+                        label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.startDato.spm')}
+                        name="opptjeningAktivitet.frilanser.startdato"
+                    />
+
+                    <VerticalSpacer twentyPx />
+
+                    <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
+                        {({ field, form }: FieldProps<string>) => (
+                            <RadioGroupFormik
+                                legend={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.jobberFortsatt.spm')}
+                                size="small"
+                                name={field.name}
+                                value={field.value ? 'ja' : 'nei'}
+                            >
+                                <RadioFormik
+                                    name={field.name}
+                                    value="ja"
+                                    onChange={() => form.setFieldValue(field.name, true)}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja" />
+                                </RadioFormik>
+
+                                <RadioFormik
+                                    name={field.name}
+                                    value="nei"
+                                    onChange={() => form.setFieldValue(field.name, false)}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei" />
+                                </RadioFormik>
+                            </RadioGroupFormik>
+                        )}
+                    </Field>
+
+                    <VerticalSpacer twentyPx />
+
+                    {!frilanser.jobberFortsattSomFrilans && (
+                        <>
+                            <DatoInputFormikNew
+                                label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
+                                name="opptjeningAktivitet.frilanser.sluttdato"
+                            />
+
+                            <VerticalSpacer twentyPx />
+                        </>
+                    )}
+
+                    <hr />
+
+                    <VerticalSpacer twentyPx />
+
+                    <Heading size="small">
+                        <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel" />
+                    </Heading>
+
+                    <FieldArray
+                        name="opptjeningAktivitet.frilanser.fravaersperioder"
+                        render={(arrayHelpers) => (
+                            <>
+                                {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
+                                    <Fravaersperiode
+                                        key={fravaersperiodeIndex}
+                                        name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
+                                        antallFravaersperioder={frilanser.fravaersperioder?.length}
+                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                    />
+                                ))}
+
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() =>
+                                        arrayHelpers.push({
+                                            ...fravaersperiodeInitialValue,
+                                            aktivitetsFravær: aktivitetsFravær.FRILANSER,
+                                        })
+                                    }
+                                    icon={<AddCircle />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn" />
+                                </Button>
+                            </>
+                        )}
+                    />
+                </Box>
             </Box>
         </div>
     );

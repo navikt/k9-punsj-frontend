@@ -1,9 +1,8 @@
-import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
 
+import dayjs from 'dayjs';
+import { FormattedMessage } from 'react-intl';
 import { Button, Heading, Modal } from '@navikt/ds-react';
-
 import {
     ArbeidstidPeriodeMedTimer,
     IArbeidstidPeriodeMedTimer,
@@ -14,9 +13,7 @@ import {
 } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { formats, removeDatesFromPeriods } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
-
 import VerticalSpacer from '../VerticalSpacer';
 import DateContent from '../calendar/DateContent';
 import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
@@ -31,15 +28,15 @@ export interface ArbeidstidKalenderProps {
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
-export default function ArbeidstidKalender({
+const ArbeidstidKalender = ({
     arbeidstidInfo,
     updateSoknad,
     updateSoknadState,
     nyeSoknadsperioder = [],
     eksisterendeSoknadsperioder = [],
-}: ArbeidstidKalenderProps) {
-    const intl = useIntl();
+}: ArbeidstidKalenderProps) => {
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
+
     const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
 
     const gyldigePerioder = [...(nyeSoknadsperioder || []), ...eksisterendeSoknadsperioder].filter(Boolean);
@@ -90,14 +87,19 @@ export default function ArbeidstidKalender({
     };
 
     return (
-        <>
-            <Heading size="small" className="mb-4">
-                Arbeidstid i søknadsperioden
-            </Heading>
+        <div className="mt-6">
+            <div className="mb-4">
+                <Heading size="xsmall">
+                    <FormattedMessage id="skjema.arbeid.arbeidstidKalender.header" />
+                </Heading>
+            </div>
+
             <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
-                {intlHelper(intl, 'skjema.arbeid.registrerArbeidstidLengrePeriode')}
+                <FormattedMessage id="skjema.arbeid.registrerArbeidstidLengrePeriode" />
             </Button>
+
             <VerticalSpacer twentyPx />
+
             <Modal
                 open={visArbeidstidLengrePerioder}
                 onClose={() => setVisArbeidstidLengrePerioder(false)}
@@ -121,6 +123,7 @@ export default function ArbeidstidKalender({
                     />
                 </Modal.Body>
             </Modal>
+
             {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={gyldigePerioder}
@@ -132,6 +135,8 @@ export default function ArbeidstidKalender({
                     dateContentRenderer={DateContent}
                 />
             )}
-        </>
+        </div>
     );
-}
+};
+
+export default ArbeidstidKalender;

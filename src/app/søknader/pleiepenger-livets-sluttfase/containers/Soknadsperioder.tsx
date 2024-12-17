@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
-import { Alert, Panel } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
-
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
 import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -13,30 +12,32 @@ import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from '../../../models/types';
 import { RootStateType } from '../../../state/RootState';
-import intlHelper from '../../../utils/intlUtils';
 import { IPLSSoknad } from '../types/PLSSoknad';
+
 import './soknadsperioder.less';
 
-interface IOwnProps {
-    updateSoknadState: (soknad: Partial<IPLSSoknad>) => void;
-    initialPeriode: IPeriode;
-    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
+interface Props {
     soknad: IPLSSoknad;
-    updateSoknad: (soknad: Partial<IPLSSoknad>) => void;
+    initialPeriode: IPeriode;
+
+    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
     getUhaandterteFeil: GetUhaandterteFeil;
+    updateSoknadState: (soknad: Partial<IPLSSoknad>) => void;
+    updateSoknad: (soknad: Partial<IPLSSoknad>) => void;
 }
 
-const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
-    updateSoknadState,
-    initialPeriode,
-    getErrorMessage,
+const Soknadsperioder: React.FC<Props> = ({
     soknad,
-    updateSoknad,
+    initialPeriode,
+
     getUhaandterteFeil,
+    getErrorMessage,
+    updateSoknadState,
+    updateSoknad,
 }) => {
-    const intl = useIntl();
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
+
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState);
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
@@ -70,26 +71,40 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
     };
 
     return (
-        <Panel className="eksiterendesoknaderpanel">
-            <h3>{intlHelper(intl, 'skjema.soknadsperiode')}</h3>
-            {punchFormState.hentPerioderError && <p>{intlHelper(intl, 'skjema.eksisterende.feil')}</p>}
+        <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
+            <Heading size="small" level="3">
+                <FormattedMessage id="skjema.soknadsperiode" />
+            </Heading>
+
+            {punchFormState.hentPerioderError && (
+                <p>
+                    <FormattedMessage id="skjema.eksisterende.feil" />
+                </p>
+            )}
+
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
                 <>
                     <Alert size="small" variant="info">
-                        {intlHelper(intl, 'skjema.generellinfo')}
+                        <FormattedMessage id="skjema.generellinfo" />
                     </Alert>
-                    <h4>{intlHelper(intl, 'skjema.eksisterende')}</h4>
+
+                    <Heading size="xsmall" level="4">
+                        <FormattedMessage id="skjema.eksisterende" />
+                    </Heading>
+
                     {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
                             <CalendarSvg title="calendar" />
+
                             <div className="periode">{generateDateString(p)}</div>
                         </div>
                     ))}
 
                     <VerticalSpacer eightPx />
+
                     {visLeggTilPerioder && (
                         <div className="knappecontainer">
-                            <button
+                            <Button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
                                 type="button"
@@ -101,8 +116,9 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                                 <div className="leggtilcircle">
                                     <AddCircleSvg title="leggtilcircle" />
                                 </div>
-                                {intlHelper(intl, 'skjema.soknadsperiode.leggtil')}
-                            </button>
+
+                                <FormattedMessage id="skjema.soknadsperiode.leggtil" />
+                            </Button>
                         </div>
                     )}
                 </>
@@ -110,14 +126,13 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
 
             {finnesIkkeEksisterendePerioder && (
                 <Alert size="small" variant="info">
-                    {intlHelper(intl, 'skjema.eksisterende.ingen')}
+                    <FormattedMessage id="skjema.eksisterende.ingen" />
                 </Alert>
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <div className="soknadsperiodecontainer">
                     <Periodepaneler
-                        intl={intl}
                         periods={getPerioder()}
                         initialPeriode={initialPeriode}
                         editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
@@ -134,12 +149,13 @@ const Soknadsperioder: React.FunctionComponent<IOwnProps> = ({
                     />
                 </div>
             )}
+
             {overlappendeSoknadsperiode() && (
                 <Alert size="small" variant="warning">
-                    {intlHelper(intl, 'skjema.soknadsperiode.overlapper')}
+                    <FormattedMessage id="skjema.soknadsperiode.overlapper" />
                 </Alert>
             )}
-        </Panel>
+        </Box>
     );
 };
 export default Soknadsperioder;

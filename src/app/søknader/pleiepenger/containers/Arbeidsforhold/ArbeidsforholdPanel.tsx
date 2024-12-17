@@ -3,7 +3,7 @@ import React from 'react';
 import { set } from 'lodash';
 import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Box, TextField, Textarea } from '@navikt/ds-react';
+import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -32,7 +32,7 @@ const erEldreEnn4år = (dato: string) => {
     return new Date(dato) < fireAarSiden;
 };
 
-interface ArbeidsforholdPanelProps {
+interface Props {
     isOpen: boolean;
     onPanelClick: () => void;
     handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
@@ -60,8 +60,9 @@ const ArbeidsforholdPanel = ({
     updateVirksomhetstyper,
     initialArbeidstaker,
     eksisterendePerioder,
-}: ArbeidsforholdPanelProps): JSX.Element => {
+}: Props): JSX.Element => {
     const intl = useIntl();
+
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
 
     const frilanserperioder = () => {
@@ -115,7 +116,9 @@ const ArbeidsforholdPanel = ({
                         handleFrilanserChange((event.target as HTMLInputElement).value as JaNei);
                     }}
                 />
+
                 <VerticalSpacer eightPx />
+
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
                     <NewDateInput
                         id="frilanser-sluttdato"
@@ -150,7 +153,9 @@ const ArbeidsforholdPanel = ({
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                     <>
                         {arbeidstidInformasjon()}
+
                         <VerticalSpacer eightPx />
+
                         <ArbeidstidKalender
                             nyeSoknadsperioder={soknad.soeknadsperiode}
                             eksisterendeSoknadsperioder={eksisterendePerioder}
@@ -226,7 +231,8 @@ const ArbeidsforholdPanel = ({
                     )}
                     onChange={() => undefined}
                 />
-                <div className="generelleopplysiniger">
+
+                <div className="generelleopplysiniger ">
                     <div className="flex flex-wrap">
                         <TextField
                             label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
@@ -260,46 +266,52 @@ const ArbeidsforholdPanel = ({
                         />
                     </div>
                 </div>
-                <RadioPanelGruppe
-                    className="horizontalRadios"
-                    name="virksomhetRegistrertINorge"
-                    radios={Object.values(JaNei).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
-                    legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
-                    checked={opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet ? JaNei.NEI : JaNei.JA}
-                    onChange={(event) => {
-                        updateSoknad({
-                            opptjeningAktivitet: {
-                                ...opptjening,
-                                selvstendigNaeringsdrivende: {
-                                    ...opptjening.selvstendigNaeringsdrivende,
-                                    info: {
-                                        ...opptjening.selvstendigNaeringsdrivende?.info,
-                                        registrertIUtlandet:
-                                            ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+
+                <div className="mt-4">
+                    <RadioPanelGruppe
+                        className="horizontalRadios"
+                        name="virksomhetRegistrertINorge"
+                        radios={Object.values(JaNei).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
+                        checked={
+                            opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet ? JaNei.NEI : JaNei.JA
+                        }
+                        onChange={(event) => {
+                            updateSoknad({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    selvstendigNaeringsdrivende: {
+                                        ...opptjening.selvstendigNaeringsdrivende,
+                                        info: {
+                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                            registrertIUtlandet:
+                                                ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+                                        },
                                     },
                                 },
-                            },
-                        });
-                        updateSoknadState({
-                            opptjeningAktivitet: {
-                                ...opptjening,
-                                selvstendigNaeringsdrivende: {
-                                    ...opptjening.selvstendigNaeringsdrivende,
-                                    info: {
-                                        ...opptjening.selvstendigNaeringsdrivende?.info,
-                                        registrertIUtlandet:
-                                            ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+                            });
+                            updateSoknadState({
+                                opptjeningAktivitet: {
+                                    ...opptjening,
+                                    selvstendigNaeringsdrivende: {
+                                        ...opptjening.selvstendigNaeringsdrivende,
+                                        info: {
+                                            ...opptjening.selvstendigNaeringsdrivende?.info,
+                                            registrertIUtlandet:
+                                                ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+                                        },
                                     },
                                 },
-                            },
-                        });
-                    }}
-                />
+                            });
+                        }}
+                    />
+                </div>
+
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap mt-6">
                         <TextField
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
@@ -335,57 +347,64 @@ const ArbeidsforholdPanel = ({
                         />
                     </div>
                 )}
+
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <CountrySelect
-                        selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
-                        label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                    <div className="mt-6">
+                        <CountrySelect
+                            selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
+                            label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                            onChange={(event) => {
+                                updateSoknad({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                landkode: event.target.value,
+                                            },
+                                        },
+                                    },
+                                });
+                                updateSoknadState({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                landkode: event.target.value,
+                                            },
+                                        },
+                                    },
+                                });
+                            }}
+                        />
+                    </div>
+                )}
+
+                <div className="mt-6">
+                    <RadioPanelGruppe
+                        className="horizontalRadios"
+                        name="harRegnskapsfører"
+                        radios={Object.values(JaNei).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
+                        checked={
+                            !!harRegnskapsfører ||
+                            opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn ||
+                            opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn
+                                ? JaNei.JA
+                                : JaNei.NEI
+                        }
                         onChange={(event) => {
-                            updateSoknad({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            landkode: event.target.value,
-                                        },
-                                    },
-                                },
-                            });
-                            updateSoknadState({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            landkode: event.target.value,
-                                        },
-                                    },
-                                },
-                            });
+                            handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei);
                         }}
                     />
-                )}
-                <RadioPanelGruppe
-                    className="horizontalRadios"
-                    name="harRegnskapsfører"
-                    radios={Object.values(JaNei).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
-                    legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                    checked={
-                        !!harRegnskapsfører ||
-                        opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn ||
-                        opptjening.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn
-                            ? JaNei.JA
-                            : JaNei.NEI
-                    }
-                    onChange={(event) => {
-                        handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei);
-                    }}
-                />
+                </div>
+
                 {harRegnskapsfører && (
                     <div className="generelleopplysiniger">
                         <div className="flex flex-wrap">
@@ -426,6 +445,7 @@ const ArbeidsforholdPanel = ({
                                 }
                             />
                         </div>
+
                         <div className="flex flex-wrap">
                             <TextField
                                 label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
@@ -467,7 +487,13 @@ const ArbeidsforholdPanel = ({
                         </div>
                     </div>
                 )}
-                <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+
+                <div className="mt-6">
+                    <Label size="small">
+                        <FormattedMessage id="skjema.arbeid.sn.når" />
+                    </Label>
+                </div>
+
                 <div className="sn-startdatocontainer">
                     <NewDateInput
                         className="fom"
@@ -512,6 +538,7 @@ const ArbeidsforholdPanel = ({
                             });
                         }}
                     />
+
                     <NewDateInput
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
@@ -553,15 +580,33 @@ const ArbeidsforholdPanel = ({
                         }}
                     />
                 </div>
+
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <TextField
-                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
-                            className="bruttoinntekt"
-                            value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
-                            onChange={(event: any) =>
-                                updateSoknadState(
-                                    {
+                        <div className="flex flex-wrap">
+                            <TextField
+                                label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                                className="bruttoinntekt"
+                                value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
+                                onChange={(event: any) =>
+                                    updateSoknadState(
+                                        {
+                                            opptjeningAktivitet: {
+                                                ...opptjening,
+                                                selvstendigNaeringsdrivende: {
+                                                    ...opptjening.selvstendigNaeringsdrivende,
+                                                    info: {
+                                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                        bruttoInntekt: event.target.value,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        false,
+                                    )
+                                }
+                                onBlur={(event: any) =>
+                                    updateSoknad({
                                         opptjeningAktivitet: {
                                             ...opptjening,
                                             selvstendigNaeringsdrivende: {
@@ -572,67 +617,60 @@ const ArbeidsforholdPanel = ({
                                                 },
                                             },
                                         },
-                                    },
-                                    false,
-                                )
-                            }
-                            onBlur={(event: any) =>
-                                updateSoknad({
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                bruttoInntekt: event.target.value,
-                                            },
-                                        },
-                                    },
-                                })
-                            }
-                        />
+                                    })
+                                }
+                            />
+                        </div>
                     )}
+
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erEldreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            name="varigEndringradios"
-                            radios={Object.values(JaNei).map((jn) => ({
-                                label: intlHelper(intl, jn),
-                                value: jn,
-                            }))}
-                            legend={intlHelper(intl, 'skjema.sn.varigendring')}
-                            checked={opptjening.selvstendigNaeringsdrivende?.info.erVarigEndring ? JaNei.JA : JaNei.NEI}
-                            onChange={(event) => {
-                                updateSoknad({
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                erVarigEndring:
-                                                    ((event.target as HTMLInputElement).value as JaNei) === JaNei.JA,
+                        <div className="mt-6">
+                            <RadioPanelGruppe
+                                className="horizontalRadios"
+                                name="varigEndringradios"
+                                radios={Object.values(JaNei).map((jn) => ({
+                                    label: intlHelper(intl, jn),
+                                    value: jn,
+                                }))}
+                                legend={intlHelper(intl, 'skjema.sn.varigendring')}
+                                checked={
+                                    opptjening.selvstendigNaeringsdrivende?.info.erVarigEndring ? JaNei.JA : JaNei.NEI
+                                }
+                                onChange={(event) => {
+                                    updateSoknad({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    erVarigEndring:
+                                                        ((event.target as HTMLInputElement).value as JaNei) ===
+                                                        JaNei.JA,
+                                                },
                                             },
                                         },
-                                    },
-                                });
-                                updateSoknadState({
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                erVarigEndring:
-                                                    ((event.target as HTMLInputElement).value as JaNei) === JaNei.JA,
+                                    });
+                                    updateSoknadState({
+                                        opptjeningAktivitet: {
+                                            ...opptjening,
+                                            selvstendigNaeringsdrivende: {
+                                                ...opptjening.selvstendigNaeringsdrivende,
+                                                info: {
+                                                    ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                    erVarigEndring:
+                                                        ((event.target as HTMLInputElement).value as JaNei) ===
+                                                        JaNei.JA,
+                                                },
                                             },
                                         },
-                                    },
-                                });
-                            }}
-                        />
+                                    });
+                                }}
+                            />
+                        </div>
                     )}
+
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
@@ -671,6 +709,7 @@ const ArbeidsforholdPanel = ({
                                 }}
                             />
                         </div>
+
                         <div className="flex flex-wrap">
                             <TextField
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
@@ -749,9 +788,13 @@ const ArbeidsforholdPanel = ({
                         />
                     </>
                 )}
+
                 <VerticalSpacer eightPx />
+
                 {arbeidstidInformasjon()}
+
                 <VerticalSpacer eightPx />
+
                 <ArbeidstidKalender
                     nyeSoknadsperioder={soknad.soeknadsperiode}
                     eksisterendeSoknadsperioder={eksisterendePerioder}
@@ -767,6 +810,7 @@ const ArbeidsforholdPanel = ({
                     }
                     arbeidstidInfo={soknad.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
                 />
+
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
                         getUhaandterteFeil('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]') || []
@@ -794,7 +838,9 @@ const ArbeidsforholdPanel = ({
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
                     checked={!!soknad.arbeidstid?.arbeidstakerList?.length}
                 />
+
                 <VerticalSpacer eightPx />
+
                 {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
                         soknad={soknad}
@@ -806,34 +852,41 @@ const ArbeidsforholdPanel = ({
                         getUhaandterteFeil={getUhaandterteFeil}
                     />
                 )}
+
                 <CheckboksPanel
                     label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                     value={Arbeidsforhold.FRILANSER}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
                     checked={!!soknad.opptjeningAktivitet.frilanser}
                 />
+
                 <VerticalSpacer eightPx />
+
                 {!!soknad.opptjeningAktivitet.frilanser && (
-                    <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
+                    <Box padding="4" borderRadius="small" className="frilanserpanel">
                         {frilanserperioder()}
                     </Box>
                 )}
+
                 <CheckboksPanel
                     label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                     value={Arbeidsforhold.SELVSTENDIG}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}
                     checked={!!soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende}
                 />
+
                 {!!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende && (
                     <>
                         <Alert size="small" variant="info" className="sn-alertstripe">
-                            {intlHelper(intl, 'skjema.sn.info')}
+                            <FormattedMessage id="skjema.sn.info" />
                         </Alert>
-                        <Box padding="4" borderWidth="1" borderRadius="small" className="selvstendigpanel">
+
+                        <Box padding="4" borderRadius="small" className="selvstendigpanel">
                             {selvstendigperioder()}
                         </Box>
                     </>
                 )}
+
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil('ytelse.arbeidstid')) || []}
                 />

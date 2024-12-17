@@ -1,7 +1,6 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
-import { IntlShape } from 'react-intl';
 
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -14,13 +13,14 @@ import { Arbeidstaker, IArbeidstaker, OrgOrPers } from 'app/models/types/Arbeids
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
+import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import { ApiPath } from '../../../../../apiConfig';
 import ActionType from './actionTypes';
-import './arbeidstaker.less';
-import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 
-interface ArbeidstakerComponentProps {
+import './arbeidstaker.less';
+import { useIntl } from 'react-intl';
+
+interface Props {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
     listeelementindex: number;
@@ -28,14 +28,13 @@ interface ArbeidstakerComponentProps {
     updateListeinfoInSoknadState: UpdateListeinfoInSoknadState<IArbeidstaker>;
     feilkodeprefiks: string;
     getErrorMessage: GetErrorMessage;
-    intl: IntlShape;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
     nyeSoknadsperioder: IPeriode[];
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
-const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
+const ArbeidstakerComponent: React.FC<Props> = ({
     søkerId,
     arbeidstaker,
     listeelementindex,
@@ -43,12 +42,13 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     updateListeinfoInSoknadState,
     feilkodeprefiks,
     getErrorMessage,
-    intl,
     arbeidsgivere,
     harDuplikatOrgnr,
     nyeSoknadsperioder,
     eksisterendeSoknadsperioder,
 }): JSX.Element => {
+    const intl = useIntl();
+
     const harArbeidsgivere = arbeidsgivere?.length > 0;
 
     const [state, dispatch] = useReducer(pfArbeidstakerReducer, {
@@ -57,6 +57,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         navnPåArbeidsgiver: '',
         searchOrganisasjonsnummerFailed: false,
     });
+
     const previousArbeidsgivere = usePrevious<Organisasjon[]>(arbeidsgivere);
 
     const { selectedArbeidsgiver, gjelderAnnenArbeidsgiver, navnPåArbeidsgiver, searchOrganisasjonsnummerFailed } =
@@ -113,6 +114,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
         updateListeinfoInSoknadState({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
         updateListeinfoInSoknad({ organisasjonsnummer: newOrganisasjonsnummer, norskIdent: newNorskIdent });
     };
+
     const { orgOrPers, organisasjonsnummer, norskIdent, arbeidstidInfo } = arbeidstaker;
 
     const selectedType: OrgOrPers = orgOrPers();
@@ -138,6 +140,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     checked={selectedType}
                 />
             </div>
+
             {selectedType === 'o' && (
                 <>
                     {harArbeidsgivere && (
@@ -176,7 +179,9 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             ))}
                         </Select>
                     )}
+
                     <VerticalSpacer eightPx />
+
                     {harArbeidsgivere && (
                         <Checkbox
                             onChange={() => {
@@ -196,9 +201,11 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                             Det gjelder annen arbeidsgiver
                         </Checkbox>
                     )}
+
                     {gjelderAnnenArbeidsgiver && (
                         <>
                             <VerticalSpacer sixteenPx />
+
                             <div className="flex flex-wrap">
                                 <div className="input-row">
                                     <TextField
@@ -246,6 +253,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     )}
                 </>
             )}
+
             <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
@@ -266,6 +274,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     )}
                 </div>
             </div>
+
             <ArbeidstidKalender
                 nyeSoknadsperioder={nyeSoknadsperioder}
                 eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}

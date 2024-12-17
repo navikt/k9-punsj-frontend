@@ -960,7 +960,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             />
                             {!!soknad.lovbestemtFerie.length && (
                                 <Periodepaneler
-                                    intl={intl}
                                     periods={soknad.lovbestemtFerie}
                                     initialPeriode={this.initialPeriode}
                                     editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
@@ -971,6 +970,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     getUhaandterteFeil={this.getUhåndterteFeil}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
+                                    doNotShowBorders
                                 />
                             )}
 
@@ -992,7 +992,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                     {intlHelper(intl, 'skjema.ferie.fjern.info')}
                                                 </Alert>
                                                 <Periodepaneler
-                                                    intl={intl}
                                                     periods={soknad.lovbestemtFerieSomSkalSlettes}
                                                     initialPeriode={this.initialPeriode}
                                                     editSoknad={(perioder) =>
