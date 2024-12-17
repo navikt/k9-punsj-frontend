@@ -37,84 +37,90 @@ const Medlemskap: React.FC = () => {
     return (
         <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
-                <FormattedMessage id={'omsorgspenger.utbetaling.medlemskap.tittel'} />
+                <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.tittel" />
             </Heading>
 
-            <RadioPanelGruppeFormik
-                legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                name="metadata.medlemskap"
-                options={options}
-            />
-
-            {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <FieldArray
-                    name="bosteder"
-                    render={(arrayHelpers) => (
-                        <>
-                            {values.bosteder?.map((_, bostedIndex, array) => (
-                                <div key={bostedIndex}>
-                                    <VerticalSpacer thirtyTwoPx />
-
-                                    <div className="fom-tom-rad">
-                                        <DatoInputFormikNew
-                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.medlemskap.fom.tittel')}
-                                            name={`bosteder[${bostedIndex}].periode.fom`}
-                                        />
-
-                                        <DatoInputFormikNew
-                                            label={intlHelper(intl, 'omsorgspenger.utbetaling.medlemskap.tom.tittel')}
-                                            name={`bosteder[${bostedIndex}].periode.tom`}
-                                        />
-
-                                        {array.length > 1 && (
-                                            <Button
-                                                variant="tertiary"
-                                                size="small"
-                                                onClick={() => arrayHelpers.remove(bostedIndex)}
-                                                style={{ float: 'right' }}
-                                                icon={<Delete />}
-                                            >
-                                                <FormattedMessage
-                                                    id={'omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn'}
-                                                />
-                                            </Button>
-                                        )}
-                                    </div>
-
-                                    <VerticalSpacer sixteenPx />
-
-                                    <div style={{ maxWidth: '25%' }}>
-                                        <Field name={`bosteder[${bostedIndex}].land`}>
-                                            {({ field }: FieldProps<string>) => (
-                                                <CountrySelect
-                                                    label
-                                                    selectedcountry={field.value}
-                                                    unselectedoption={intlHelper(
-                                                        intl,
-                                                        'omsorgspenger.utbetaling.medlemskap.unselectedoption',
-                                                    )}
-                                                    {...field}
-                                                />
-                                            )}
-                                        </Field>
-                                    </div>
-                                </div>
-                            ))}
-
-                            <VerticalSpacer sixteenPx />
-
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<AddCircle />}
-                            >
-                                <FormattedMessage id={'omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn'} />
-                            </Button>
-                        </>
-                    )}
+            <Box padding="4">
+                <RadioPanelGruppeFormik
+                    legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
+                    name="metadata.medlemskap"
+                    options={options}
                 />
-            )}
+
+                {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
+                    <FieldArray
+                        name="bosteder"
+                        render={(arrayHelpers) => (
+                            <>
+                                {values.bosteder?.map((_, bostedIndex, array) => (
+                                    <div key={bostedIndex}>
+                                        <VerticalSpacer thirtyTwoPx />
+
+                                        <div className="fom-tom-rad">
+                                            <DatoInputFormikNew
+                                                label={intlHelper(
+                                                    intl,
+                                                    'omsorgspenger.utbetaling.medlemskap.fom.tittel',
+                                                )}
+                                                name={`bosteder[${bostedIndex}].periode.fom`}
+                                            />
+
+                                            <DatoInputFormikNew
+                                                label={intlHelper(
+                                                    intl,
+                                                    'omsorgspenger.utbetaling.medlemskap.tom.tittel',
+                                                )}
+                                                name={`bosteder[${bostedIndex}].periode.tom`}
+                                            />
+
+                                            {array.length > 1 && (
+                                                <Button
+                                                    variant="tertiary"
+                                                    size="small"
+                                                    onClick={() => arrayHelpers.remove(bostedIndex)}
+                                                    style={{ float: 'right' }}
+                                                    icon={<Delete />}
+                                                >
+                                                    <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
+                                                </Button>
+                                            )}
+                                        </div>
+
+                                        <VerticalSpacer sixteenPx />
+
+                                        <div style={{ maxWidth: '25%' }}>
+                                            <Field name={`bosteder[${bostedIndex}].land`}>
+                                                {({ field }: FieldProps<string>) => (
+                                                    <CountrySelect
+                                                        label
+                                                        selectedcountry={field.value}
+                                                        unselectedoption={intlHelper(
+                                                            intl,
+                                                            'omsorgspenger.utbetaling.medlemskap.unselectedoption',
+                                                        )}
+                                                        {...field}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                <VerticalSpacer sixteenPx />
+
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                    icon={<AddCircle />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
+                                </Button>
+                            </>
+                        )}
+                    />
+                )}
+            </Box>
         </Box>
     );
 };
