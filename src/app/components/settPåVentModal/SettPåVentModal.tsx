@@ -43,95 +43,95 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
             className="settpaaventmodal"
             onClose={avbryt}
             aria-label="settpaaventmodal"
+            header={{ heading: intlHelper(intl, 'skjema.knapp.settpaavent'), closeButton: false }}
             data-testid="settpaaventmodal"
             open
         >
-            <div className="sett-paa-vent pt-4 pb-4">
-                <Heading size="medium" level="2">
-                    <FormattedMessage id="skjema.knapp.settpaavent" />
-                </Heading>
-
-                <p>
+            <Modal.Body>
+                <>
                     <FormattedMessage id="skjema.settpaavent.periode" />
-                </p>
 
-                {children}
+                    {children}
 
-                <div className="knapper">
-                    <Button variant="secondary" onClick={() => avbryt()} size="small">
-                        <FormattedMessage id="skjema.knapp.avbryt" />
-                    </Button>
-                    <Button onClick={() => submit()} size="small">
-                        <FormattedMessage id="skjema.knapp.settpaavent" />
-                    </Button>
-                </div>
+                    {journalposter && journalposter.length > 0 && soknadId && (
+                        <div className="pt-4 pb-4">
+                            <Heading size="medium" level="2">
+                                <FormattedMessage id="modal.settpaavent.overskrift" />
+                            </Heading>
 
-                {journalposter && journalposter.length > 0 && soknadId && (
-                    <div className="pt-4 pb-4">
-                        <Heading size="medium" level="2">
-                            <FormattedMessage id="modal.settpaavent.overskrift" />
-                        </Heading>
+                            <Alert size="small" variant="info" className="mb-4">
+                                <FormattedMessage id="modal.settpaavent.info" />
+                            </Alert>
 
-                        <Alert size="small" variant="info" className="mb-4">
-                            <FormattedMessage id="modal.settpaavent.info" />
-                        </Alert>
+                            <Table className="punch_mappetabell">
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>
+                                            <FormattedMessage id="tabell.journalpostid" />
+                                        </Table.HeaderCell>
+                                        <Table.HeaderCell>
+                                            <FormattedMessage id="tabell.mottakelsesdato" />
+                                        </Table.HeaderCell>
+                                        <Table.HeaderCell>
+                                            <FormattedMessage id="tabell.typeinnsdending" />
+                                        </Table.HeaderCell>
 
-                        <Table className="punch_mappetabell">
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell>
-                                        <FormattedMessage id="tabell.journalpostid" />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                        <FormattedMessage id="tabell.mottakelsesdato" />
-                                    </Table.HeaderCell>
-                                    <Table.HeaderCell>
-                                        <FormattedMessage id="tabell.typeinnsdending" />
-                                    </Table.HeaderCell>
-
-                                    <Table.HeaderCell
-                                        aria-label={intlHelper(intl, 'modal.settpaavent.visjournalpost')}
-                                    />
-                                    <Table.HeaderCell aria-label={intlHelper(intl, 'modal.settpaavent.registrer')} />
-                                </Table.Row>
-                            </Table.Header>
-
-                            <Table.Body>
-                                {journalposter.map((j) => (
-                                    <Table.Row key={j.journalpostId}>
-                                        <Table.DataCell>{j.journalpostId}</Table.DataCell>
-                                        <Table.DataCell>{j.dato}</Table.DataCell>
-                                        <Table.DataCell>{j.punsjInnsendingType?.navn || ''}</Table.DataCell>
-                                        <Table.DataCell>
-                                            <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
-                                                <VisSvg title="vis" />
-
-                                                <div className="vistext">
-                                                    <FormattedMessage id="modal.settpaavent.visjournalpost" />
-                                                </div>
-                                            </a>
-                                        </Table.DataCell>
-                                        <Table.DataCell>
-                                            <Button
-                                                variant="secondary"
-                                                size="small"
-                                                onClick={() => {
-                                                    window.location.href = urlTilNyJournalpost(
-                                                        soknadId,
-                                                        j.journalpostId,
-                                                    );
-                                                }}
-                                            >
-                                                <FormattedMessage id="modal.settpaavent.registrer" />
-                                            </Button>
-                                        </Table.DataCell>
+                                        <Table.HeaderCell
+                                            aria-label={intlHelper(intl, 'modal.settpaavent.visjournalpost')}
+                                        />
+                                        <Table.HeaderCell
+                                            aria-label={intlHelper(intl, 'modal.settpaavent.registrer')}
+                                        />
                                     </Table.Row>
-                                ))}
-                            </Table.Body>
-                        </Table>
-                    </div>
-                )}
-            </div>
+                                </Table.Header>
+
+                                <Table.Body>
+                                    {journalposter.map((j) => (
+                                        <Table.Row key={j.journalpostId}>
+                                            <Table.DataCell>{j.journalpostId}</Table.DataCell>
+                                            <Table.DataCell>{j.dato}</Table.DataCell>
+                                            <Table.DataCell>{j.punsjInnsendingType?.navn || ''}</Table.DataCell>
+                                            <Table.DataCell>
+                                                <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
+                                                    <VisSvg title="vis" />
+
+                                                    <div className="vistext">
+                                                        <FormattedMessage id="modal.settpaavent.visjournalpost" />
+                                                    </div>
+                                                </a>
+                                            </Table.DataCell>
+                                            <Table.DataCell>
+                                                <Button
+                                                    variant="secondary"
+                                                    size="small"
+                                                    onClick={() => {
+                                                        window.location.href = urlTilNyJournalpost(
+                                                            soknadId,
+                                                            j.journalpostId,
+                                                        );
+                                                    }}
+                                                >
+                                                    <FormattedMessage id="modal.settpaavent.registrer" />
+                                                </Button>
+                                            </Table.DataCell>
+                                        </Table.Row>
+                                    ))}
+                                </Table.Body>
+                            </Table>
+                        </div>
+                    )}
+                </>
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button onClick={() => submit()} size="small">
+                    <FormattedMessage id="skjema.knapp.settpaavent" />
+                </Button>
+
+                <Button variant="secondary" onClick={() => avbryt()} size="small">
+                    <FormattedMessage id="skjema.knapp.avbryt" />
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 };
