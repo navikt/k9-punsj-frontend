@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { Modal } from '@navikt/ds-react';
 
 import { settJournalpostPaaVent } from 'app/api/api';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 
@@ -36,16 +36,12 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
 
     if (visSuccessModal) {
         return (
-            <Modal
-                key="settpaaventokmodal"
+            <OkGåTilLosModal
+                melding="modal.settpaavent.til"
                 onClose={() => {
                     visModalFn(false);
                 }}
-                aria-label="settpaaventokmodal"
-                open
-            >
-                <OkGaaTilLosModal melding="modal.settpaavent.til" />
-            </Modal>
+            />
         );
     }
 

@@ -28,7 +28,7 @@ import ArbeidsforholdPanel from '../../../components/arbeidsforhold/containers/A
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
@@ -1107,14 +1107,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 )}
 
                 {punchFormState.settPaaVentSuccess && (
-                    <Modal
-                        key="settpaaventokmodal"
+                    <OkGåTilLosModal
+                        melding="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={punchFormState.settPaaVentSuccess}
-                    >
-                        <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                    </Modal>
+                    />
                 )}
                 {!!punchFormState.settPaaVentError && (
                     <Modal

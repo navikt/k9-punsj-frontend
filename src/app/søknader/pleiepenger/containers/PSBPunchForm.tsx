@@ -55,7 +55,7 @@ import { IUtenlandsOpphold } from '../../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../../state/RootState';
 import { initializeDate } from '../../../utils/timeUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../../components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from '../../../components/okGåTilLosModal/OkGåTilLosModal';
 import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
@@ -1289,15 +1289,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
 
                 {punchFormState.settPaaVentSuccess && (
-                    <Modal
-                        key="settpaaventokmodal"
+                    <OkGåTilLosModal
+                        melding="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={punchFormState.settPaaVentSuccess}
-                    >
-                        <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                    </Modal>
+                    />
                 )}
+
                 {punchFormState.settPaaVentError && (
                     <Modal
                         key="settpaaventerrormodal"

@@ -19,7 +19,7 @@ import intlHelper from 'app/utils/intlUtils';
 import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
@@ -348,14 +348,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {punchFormState.settPaaVentSuccess && (
-                <Modal
-                    key="settpaaventokmodal"
-                    onClose={() => settPåventResetAction()}
-                    aria-label="settpaaventokmodal"
-                    open={punchFormState.settPaaVentSuccess}
-                >
-                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                </Modal>
+                <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
             )}
 
             {!!punchFormState.settPaaVentError && (

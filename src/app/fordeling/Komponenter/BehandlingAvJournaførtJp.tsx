@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Alert, Button, Modal } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -19,7 +19,7 @@ import { ROUTES } from 'app/constants/routes';
 
 import { useMutation } from 'react-query';
 import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { Dispatch } from 'redux';
 import { getPunchPathFraSakstype, getSakstypeFraDokumenttype } from './behandlingAvJournaførtJpUtils';
 
@@ -126,16 +126,7 @@ const BehandlingAvJournaførtJp: React.FC = () => {
                 </Button>
             </div>
 
-            {settPåVent.isSuccess && (
-                <Modal
-                    key="settpaaventokmodal"
-                    onClose={() => null}
-                    aria-label="settpaaventokmodal"
-                    open={settPåVent.isSuccess}
-                >
-                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                </Modal>
-            )}
+            {settPåVent.isSuccess && <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => null} />}
         </FormPanel>
     );
 };

@@ -20,7 +20,7 @@ import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
 
 import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
-import { OkGaaTilLosModal } from '../../components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from '../../components/okGåTilLosModal/OkGåTilLosModal';
 import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
 import SettPaaVentErrorModal from '../../components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
@@ -158,16 +158,14 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             )}
 
             {showSettPaaVentSuccessModal && (
-                <Modal
+                <OkGåTilLosModal
+                    melding="modal.settpaavent.til"
                     onClose={() => {
                         resetSetPåVent();
                     }}
-                    aria-label="settpaaventokmodal"
-                    open
-                >
-                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                </Modal>
+                />
             )}
+
             {showSettPaaVentErrorModal && (
                 <Modal
                     onClose={() => {
@@ -208,17 +206,16 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                     </OpprettOppgaveIGosysModal>
                 </Modal>
             )}
+
             {showFerdigstillJournalpostSuccessModal && (
-                <Modal
+                <OkGåTilLosModal
+                    melding="modal.ferdigstilljournalpost"
                     onClose={() => {
                         resetFerdigstillJournalpost();
                     }}
-                    aria-label="ferdigstill journalpostOkModal"
-                    open
-                >
-                    <OkGaaTilLosModal melding="modal.ferdigstilljournalpost" />
-                </Modal>
+                />
             )}
+
             {showFerdigstillJournalpostErrorModal && (
                 <Modal
                     onClose={() => {
