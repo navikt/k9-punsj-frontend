@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -212,25 +212,19 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
             )}
 
             {visErDuSikkerModal && (
-                <Modal
-                    key="erdusikkermodal"
-                    className="erdusikkermodal"
-                    onClose={() => setVisErDuSikkerModal(false)}
-                    aria-label="erdusikkermodal"
+                <ErDuSikkerModal
+                    modalKey="erdusikkermodal"
+                    melding="modal.erdusikker.sendinn"
+                    extraInfo="modal.erdusikker.sendinn.extrainfo"
                     open={visErDuSikkerModal}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.sendinn"
-                        extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => {
-                            updateSoknad({ submitSoknad: true });
-                        }}
-                        submitKnappText="skjema.knapp.send"
-                        onClose={() => {
-                            setVisErDuSikkerModal(false);
-                        }}
-                    />
-                </Modal>
+                    submitKnappText="skjema.knapp.send"
+                    onSubmit={() => {
+                        updateSoknad({ submitSoknad: true });
+                    }}
+                    onClose={() => {
+                        setVisErDuSikkerModal(false);
+                    }}
+                />
             )}
         </>
     );

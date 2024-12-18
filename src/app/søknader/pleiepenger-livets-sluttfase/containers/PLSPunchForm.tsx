@@ -1156,24 +1156,18 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     )}
 
                 {this.state.visErDuSikkerModal && (
-                    <Modal
-                        key="erdusikkermodal"
-                        className="erdusikkermodal"
-                        onClose={() => this.props.validerSoknadReset()}
-                        aria-label="erdusikkermodal"
+                    <ErDuSikkerModal
+                        melding="modal.erdusikker.sendinn"
+                        modalKey="erdusikkermodal"
+                        extraInfo="modal.erdusikker.sendinn.extrainfo"
                         open={this.state.visErDuSikkerModal}
-                    >
-                        <ErDuSikkerModal
-                            melding="modal.erdusikker.sendinn"
-                            extraInfo="modal.erdusikker.sendinn.extrainfo"
-                            onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
-                            submitKnappText="skjema.knapp.send"
-                            onClose={() => {
-                                this.props.validerSoknadReset();
-                                this.setState({ visErDuSikkerModal: false });
-                            }}
-                        />
-                    </Modal>
+                        submitKnappText="skjema.knapp.send"
+                        onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
+                        onClose={() => {
+                            this.props.validerSoknadReset();
+                            this.setState({ visErDuSikkerModal: false });
+                        }}
+                    />
                 )}
             </div>
         );

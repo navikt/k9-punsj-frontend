@@ -393,24 +393,18 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {visErDuSikkerModal && (
-                <Modal
-                    key="erdusikkermodal"
-                    className="erdusikkermodal"
-                    onClose={() => validerSoknadReset()}
-                    aria-label="erdusikkermodal"
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.sendinn"
+                    modalKey="erdusikkermodal"
+                    extraInfo="modal.erdusikker.sendinn.extrainfo"
                     open={visErDuSikkerModal}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.sendinn"
-                        extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => submitSoknad(values.soekerId, id)}
-                        submitKnappText="skjema.knapp.send"
-                        onClose={() => {
-                            validerSoknadReset();
-                            setVisErDuSikkerModal(false);
-                        }}
-                    />
-                </Modal>
+                    submitKnappText="skjema.knapp.send"
+                    onSubmit={() => submitSoknad(values.soekerId, id)}
+                    onClose={() => {
+                        validerSoknadReset();
+                        setVisErDuSikkerModal(false);
+                    }}
+                />
             )}
         </>
     );

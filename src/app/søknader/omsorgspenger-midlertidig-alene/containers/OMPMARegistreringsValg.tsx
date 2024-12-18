@@ -106,7 +106,7 @@ export const RegistreringsValgComponent: React.FC<IOMPMARegistreringsValgProps> 
     if (createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }

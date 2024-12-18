@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import hash from 'object-hash';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Button, ErrorMessage, Modal } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { ApiPath } from 'app/apiConfig';
 import BrevFormKeys from 'app/models/enums/BrevFormKeys';
@@ -173,23 +173,17 @@ const BrevComponent: React.FC<BrevProps> = ({
                 return (
                     <>
                         {!sendBrevUtenModal && (
-                            <Modal
-                                className="modalContainer"
-                                key="erdusikkerpåatsendebrevmodal"
-                                onClose={() => setVisErDuSikkerModal(false)}
-                                aria-label="erdusikkerpåatsendebrevmodal"
+                            <ErDuSikkerModal
+                                melding="modal.erdusikker.sendebrev"
+                                modalKey="erdusikkerpåatsendebrevmodal"
                                 open={visErDuSikkerModal}
-                            >
-                                <ErDuSikkerModal
-                                    submitKnappText="modal.erdusikker.fortsett"
-                                    melding="modal.erdusikker.sendebrev"
-                                    onSubmit={() => {
-                                        setVisErDuSikkerModal(false);
-                                        handleSubmit();
-                                    }}
-                                    onClose={() => setVisErDuSikkerModal(false)}
-                                />
-                            </Modal>
+                                submitKnappText="modal.erdusikker.fortsett"
+                                onSubmit={() => {
+                                    setVisErDuSikkerModal(false);
+                                    handleSubmit();
+                                }}
+                                onClose={() => setVisErDuSikkerModal(false)}
+                            />
                         )}
 
                         <Form>

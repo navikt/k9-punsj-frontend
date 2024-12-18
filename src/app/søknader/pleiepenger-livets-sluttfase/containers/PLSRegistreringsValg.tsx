@@ -104,7 +104,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     if (createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }

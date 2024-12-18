@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { TimeFormat } from 'app/models/enums';
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
@@ -20,17 +20,13 @@ import { IPSBSoknad, PSBSoknad } from '../../../models/types/PSBSoknad';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import { Dispatch } from 'redux';
 
-export interface Props {
+interface Props {
     pleietrengendeId: string | null;
     fagsakId: string;
     kanStarteNyRegistrering: boolean;
 }
 
-export const EksisterendeSoknader: React.FC<Props> = ({
-    pleietrengendeId,
-    fagsakId,
-    kanStarteNyRegistrering,
-}: Props) => {
+const EksisterendeSoknader: React.FC<Props> = ({ pleietrengendeId, fagsakId, kanStarteNyRegistrering }: Props) => {
     const intl = useIntl();
 
     const navigate = useNavigate();
@@ -144,24 +140,14 @@ export const EksisterendeSoknader: React.FC<Props> = ({
                 </tr>,
             );
             modaler.push(
-                <Modal
-                    key={soknadId}
-                    onCancel={() => {
-                        closeEksisterendeSoknad();
-                    }}
-                    onClose={() => {
-                        closeEksisterendeSoknad();
-                    }}
-                    aria-label={soknadId}
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.info"
+                    modalKey={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
-                        onSubmit={() => chooseSoknad(soknadInfo)}
-                        onClose={() => closeEksisterendeSoknad()}
-                        submitKnappText="mappe.lesemodus.knapp.velg"
-                    />
-                </Modal>,
+                    submitKnappText="mappe.lesemodus.knapp.velg"
+                    onSubmit={() => chooseSoknad(soknadInfo)}
+                    onClose={() => closeEksisterendeSoknad()}
+                />,
             );
         });
 
@@ -176,30 +162,37 @@ export const EksisterendeSoknader: React.FC<Props> = ({
                         id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
                     />
                 </Alert>
+
                 <Table zebraStripes className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.mottakelsesdato" />
                             </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.barnetsfnrellerfdato" />
                             </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.dokumenter" />
                             </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.journalpostid" />
                             </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="tabell.fagsakId" />
                             </Table.HeaderCell>
+
                             <Table.HeaderCell scope="col">
                                 <FormattedMessage id="skjema.periode" />
                             </Table.HeaderCell>
                             <Table.HeaderCell scope="col" aria-label="mappe.lesemodus.knapp.velg" />
                         </Table.Row>
                     </Table.Header>
+
                     <Table.Body>{rows}</Table.Body>
                 </Table>
                 {modaler}
@@ -228,3 +221,5 @@ export const EksisterendeSoknader: React.FC<Props> = ({
         </>
     );
 };
+
+export default EksisterendeSoknader;

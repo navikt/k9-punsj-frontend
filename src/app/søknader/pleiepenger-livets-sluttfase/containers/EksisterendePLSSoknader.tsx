@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-
-import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { TimeFormat } from 'app/models/enums';
@@ -12,7 +12,6 @@ import { ROUTES } from 'app/constants/routes';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
@@ -29,14 +28,14 @@ import {
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 
-export interface IEksisterendePLSSoknaderStateProps {
+interface StateProps {
     eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
     journalposterState: IJournalposterPerIdentState;
     journalpost?: IJournalpost;
     fordelingState?: IFordelingState;
 }
 
-export interface IEksisterendePLSSoknaderDispatchProps {
+interface DispatchProps {
     findEksisterendeSoknader: typeof findEksisterendePLSSoknader;
     openEksisterendeSoknadAction: typeof openEksisterendePLSSoknadAction;
     closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
@@ -45,19 +44,19 @@ export interface IEksisterendePLSSoknaderDispatchProps {
     resetAllAction: typeof resetAllStateAction;
 }
 
-export interface IEksisterendePLSSoknaderComponentProps {
+interface ComponentProps {
     søkerId: string;
     pleietrengendeId: string;
     kanStarteNyRegistrering?: boolean;
 }
 
-type IEksisterendePLSSoknaderProps = IEksisterendePLSSoknaderComponentProps &
-    IEksisterendePLSSoknaderStateProps &
-    IEksisterendePLSSoknaderDispatchProps;
+type Props = ComponentProps & StateProps & DispatchProps;
 
-export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknaderProps> = (
-    props: IEksisterendePLSSoknaderProps,
-) => {
+export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) => {
+    const intl = useIntl();
+
+    const navigate = useNavigate();
+
     const {
         eksisterendeSoknaderState,
         journalposterState,
@@ -67,8 +66,6 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
         fordelingState,
         kanStarteNyRegistrering,
     } = props;
-    const intl = useIntl();
-    const navigate = useNavigate();
 
     const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
 
@@ -88,7 +85,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
     if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil i henting av mapper.
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
             </Alert>
         );
     }
@@ -108,7 +105,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
     if (eksisterendeSoknaderState.createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }
@@ -116,7 +113,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
     const technicalError =
         eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
             <Alert size="small" variant="error">
-                Teknisk feil.
+                <FormattedMessage id="eksisterendeSoknader.tekniskFeil" />
             </Alert>
         ) : null;
 
@@ -167,7 +164,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                     }
                     onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
                 >
-                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                    <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
             ];
             rows.push(
@@ -176,25 +173,20 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </tr>,
             );
             modaler.push(
-                <Modal
-                    key={soknadId}
-                    onClose={props.closeEksisterendeSoknadAction}
-                    aria-label={soknadId}
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.info"
+                    modalKey={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
-                        onSubmit={() => chooseSoknad(soknadInfo)}
-                        onClose={() => props.closeEksisterendeSoknadAction()}
-                        submitKnappText="mappe.lesemodus.knapp.velg"
-                    />
-                </Modal>,
+                    submitKnappText="mappe.lesemodus.knapp.velg"
+                    onSubmit={() => chooseSoknad(soknadInfo)}
+                    onClose={() => props.closeEksisterendeSoknadAction()}
+                />,
             );
         });
 
@@ -209,20 +201,38 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
                         id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
                     />
                 </Alert>
+
                 <Table className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
                             <Table.HeaderCell>
-                                {intlHelper(intl, 'tabell.pleietrengendesfnrellerfdato')}
+                                <FormattedMessage id="tabell.mottakelsesdato" />
                             </Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.dokumenter')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.fagsakId')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.pleietrengendesfnrellerfdato" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.dokumenter" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.journalpostid" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.fagsakId" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="skjema.periode" />
+                            </Table.HeaderCell>
+
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
+
                     <Table.Body>{rows}</Table.Body>
                 </Table>
                 {modaler}
@@ -243,15 +253,16 @@ export const EksisterendePLSSoknaderComponent: React.FC<IEksisterendePLSSoknader
         <>
             {technicalError}
             <Alert size="small" variant="info">
-                {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                    antallSokere: pleietrengendeId ? '2' : '1',
-                })}
+                <FormattedMessage
+                    id="mapper.infoboks.ingensoknader"
+                    values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
+                />
             </Alert>
         </>
     );
 };
 
-const mapStateToProps = (state: RootStateType): IEksisterendePLSSoknaderStateProps => ({
+const mapStateToProps = (state: RootStateType): StateProps => ({
     eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
     journalposterState: state.journalposterPerIdentState,
     journalpost: state.felles.journalpost,
