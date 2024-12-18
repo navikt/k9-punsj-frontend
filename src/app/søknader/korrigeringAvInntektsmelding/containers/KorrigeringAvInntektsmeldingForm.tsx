@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 
 import { Form, Formik } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, Heading, List, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, List } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -12,7 +12,7 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import ErDuSikkerModal from '../../../components/ErDuSikkerModal2';
+import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -26,9 +26,9 @@ import { getFormErrors } from './korrigeringAvFormValidering';
 import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
 import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
+import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 
 import './KorrigeringAvInntektsmeldingForm.less';
-import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 
 interface Props {
     søkerId: string;
@@ -261,23 +261,17 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     )}
 
                     {visErDuSikkerModal && (
-                        <Modal
+                        <ErDuSikkerModal
+                            modalKey="Er du sikker?"
+                            melding="modal.erdusikker.sendinn"
+                            extraInfo="modal.erdusikker.sendinn.extrainfo"
+                            open
+                            submitKnappText="skjema.knapp.send"
+                            onSubmit={() => sendInnKorrigering(values)}
                             onClose={() => {
                                 dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                             }}
-                            aria-label="Er du sikker?"
-                            open
-                        >
-                            <ErDuSikkerModal
-                                melding="modal.erdusikker.sendinn"
-                                extraInfo="modal.erdusikker.sendinn.extrainfo"
-                                onSubmit={() => sendInnKorrigering(values)}
-                                submitKnappText="skjema.knapp.send"
-                                onClose={() => {
-                                    dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
-                                }}
-                            />
-                        </Modal>
+                        />
                     )}
                 </>
             )}

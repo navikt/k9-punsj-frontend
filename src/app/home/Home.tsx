@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Alert, Button, Heading, Modal, TextField } from '@navikt/ds-react';
+import { Alert, Button, Heading, TextField } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { ROUTES } from 'app/constants/routes';
@@ -14,7 +14,7 @@ import { RootStateType } from '../state/RootState';
 import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
 import VerticalSpacer from '../components/VerticalSpacer';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import OpprettJournalpostInngang from './components/OpprettJournalpostInngang/OpprettJournalpostInngang';
 import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
@@ -93,11 +93,7 @@ export const Home: React.FC = () => {
     }, [journalpost]);
 
     if (lukkOppgaveDone) {
-        return (
-            <Modal key="lukkoppgaveokmodal" onClose={lukkOppgaveReset} aria-label="settpaaventokmodal" open>
-                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </Modal>
-        );
+        return <OkGåTilLosModal melding="fordeling.lukkoppgave.utfort" onClose={lukkOppgaveReset} />;
     }
 
     return (

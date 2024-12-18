@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ import { Dispatch } from 'redux';
 
 import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { RootStateType } from '../state/RootState';
 import { lukkOppgaveResetAction } from '../state/actions';
@@ -91,11 +91,7 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (lukkOppgaveDone) {
-        return (
-            <Modal key="lukkoppgaveokmodal" onClose={() => lukkOppgaveReset()} aria-label="settpaaventokmodal" open>
-                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </Modal>
-        );
+        return <OkGåTilLosModal melding="fordeling.lukkoppgave.utfort" onClose={() => lukkOppgaveReset()} />;
     }
 
     if (journalpostConflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {

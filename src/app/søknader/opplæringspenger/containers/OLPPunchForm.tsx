@@ -6,7 +6,7 @@ import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Modal } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText } from '@navikt/ds-react';
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
@@ -493,25 +493,19 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 </ForhaandsvisSoeknadModal>
             )}
             {visErDuSikkerModal && (
-                <Modal
-                    key="erdusikkermodal"
-                    className="erdusikkermodal"
-                    onClose={() => setVisErDuSikkerModal(false)}
-                    aria-label="erdusikkermodal"
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.sendinn"
+                    modalKey="erdusikkermodal"
+                    extraInfo="modal.erdusikker.sendinn.extrainfo"
                     open={visErDuSikkerModal}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.sendinn"
-                        extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => {
-                            updateSoknad({ submitSoknad: true });
-                        }}
-                        submitKnappText="skjema.knapp.send"
-                        onClose={() => {
-                            setVisErDuSikkerModal(false);
-                        }}
-                    />
-                </Modal>
+                    submitKnappText="skjema.knapp.send"
+                    onSubmit={() => {
+                        updateSoknad({ submitSoknad: true });
+                    }}
+                    onClose={() => {
+                        setVisErDuSikkerModal(false);
+                    }}
+                />
             )}
         </>
     );

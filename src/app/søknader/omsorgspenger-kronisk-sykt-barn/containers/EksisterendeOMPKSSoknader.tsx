@@ -3,7 +3,7 @@ import { FormattedMessage, WrappedComponentProps, injectIntl, useIntl } from 're
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
@@ -17,7 +17,7 @@ import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/Journa
 
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { IFordelingState, IJournalpost } from 'app/models/types';
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import {
     chooseEksisterendeOMPKSSoknadAction,
     closeEksisterendeOMPKSSoknadAction,
@@ -86,7 +86,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     if (eksisterendeOMPKSSoknaderState.eksisterendeSoknaderRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil i henting av mapper.
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
             </Alert>
         );
     }
@@ -101,7 +101,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     if (eksisterendeOMPKSSoknaderState.createSoknadRequestError) {
         return (
             <Alert size="small" variant="error">
-                Det oppsto en feil under opprettelse av søknad.
+                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
             </Alert>
         );
     }
@@ -109,7 +109,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
     const technicalError =
         eksisterendeOMPKSSoknaderState.isSoknadCreated && !eksisterendeOMPKSSoknaderState.soknadid ? (
             <Alert size="small" variant="error">
-                Teknisk feil.
+                <FormattedMessage id="eksisterendeSoknader.tekniskFeil" />
             </Alert>
         ) : null;
 
@@ -171,27 +171,20 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </Table.Row>,
             );
             modaler.push(
-                <Modal
-                    key={soknadId}
-                    onClose={() => {
-                        props.closeEksisterendeSoknadAction();
-                    }}
-                    aria-label={soknadId}
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.info"
+                    modalKey={soknadId}
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
-                        onSubmit={() => chooseSoknad(soknadInfo)}
-                        onClose={() => props.closeEksisterendeSoknadAction()}
-                        submitKnappText="mappe.lesemodus.knapp.velg"
-                    />
-                </Modal>,
+                    submitKnappText="mappe.lesemodus.knapp.velg"
+                    onSubmit={() => chooseSoknad(soknadInfo)}
+                    onClose={() => props.closeEksisterendeSoknadAction()}
+                />,
             );
         });
 

@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useMutation } from 'react-query';
 
-import { Alert, Box, Button, ErrorSummary, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
 
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -312,25 +312,19 @@ const OMPUTPunchForm: React.FC<Props> = ({
             )}
 
             {visErDuSikkerModal && (
-                <Modal
-                    key="erdusikkermodal"
-                    className="erdusikkermodal"
-                    onClose={() => setVisErDuSikkerModal(false)}
-                    aria-label="erdusikkermodal"
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.sendinn"
+                    modalKey="erdusikkermodal"
+                    extraInfo="modal.erdusikker.sendinn.extrainfo"
                     open={visErDuSikkerModal}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.sendinn"
-                        extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => {
-                            updateSoknad({ submitSoknad: true });
-                        }}
-                        submitKnappText="skjema.knapp.send"
-                        onClose={() => {
-                            setVisErDuSikkerModal(false);
-                        }}
-                    />
-                </Modal>
+                    submitKnappText="skjema.knapp.send"
+                    onSubmit={() => {
+                        updateSoknad({ submitSoknad: true });
+                    }}
+                    onClose={() => {
+                        setVisErDuSikkerModal(false);
+                    }}
+                />
             )}
         </>
     );

@@ -19,9 +19,9 @@ import intlHelper from 'app/utils/intlUtils';
 import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
@@ -339,47 +339,19 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {showSettPaaVentModal && (
-                <Modal
-                    key="settpaaventmodal"
-                    className="settpaaventmodal"
-                    onClose={() => setShowSettPaaVentModal(false)}
-                    aria-label="settpaaventmodal"
-                    open={showSettPaaVentModal}
-                >
-                    <div className="">
-                        <SettPaaVentModal
-                            journalposter={journalposterState.journalposter.filter(
-                                (jp) => jp.journalpostId !== journalpostid,
-                            )}
-                            soknadId={values.soeknadId}
-                            submit={() => handleSettPaaVent()}
-                            avbryt={() => setShowSettPaaVentModal(false)}
-                        />
-                    </div>
-                </Modal>
+                <SettPaaVentModal
+                    journalposter={journalposterState.journalposter.filter((jp) => jp.journalpostId !== journalpostid)}
+                    soknadId={values.soeknadId}
+                    submit={() => handleSettPaaVent()}
+                    avbryt={() => setShowSettPaaVentModal(false)}
+                />
             )}
 
             {punchFormState.settPaaVentSuccess && (
-                <Modal
-                    key="settpaaventokmodal"
-                    onClose={() => settPåventResetAction()}
-                    aria-label="settpaaventokmodal"
-                    open={punchFormState.settPaaVentSuccess}
-                >
-                    <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                </Modal>
+                <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
             )}
 
-            {!!punchFormState.settPaaVentError && (
-                <Modal
-                    key="settpaaventerrormodal"
-                    onClose={() => settPåventResetAction()}
-                    aria-label="settpaaventokmodal"
-                    open={!!punchFormState.settPaaVentError}
-                >
-                    <SettPaaVentErrorModal close={() => settPåventResetAction()} />
-                </Modal>
-            )}
+            {!!punchFormState.settPaaVentError && <SettPåVentErrorModal onClose={() => settPåventResetAction()} />}
 
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal
@@ -421,24 +393,18 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {visErDuSikkerModal && (
-                <Modal
-                    key="erdusikkermodal"
-                    className="erdusikkermodal"
-                    onClose={() => validerSoknadReset()}
-                    aria-label="erdusikkermodal"
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.sendinn"
+                    modalKey="erdusikkermodal"
+                    extraInfo="modal.erdusikker.sendinn.extrainfo"
                     open={visErDuSikkerModal}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.sendinn"
-                        extraInfo="modal.erdusikker.sendinn.extrainfo"
-                        onSubmit={() => submitSoknad(values.soekerId, id)}
-                        submitKnappText="skjema.knapp.send"
-                        onClose={() => {
-                            validerSoknadReset();
-                            setVisErDuSikkerModal(false);
-                        }}
-                    />
-                </Modal>
+                    submitKnappText="skjema.knapp.send"
+                    onSubmit={() => submitSoknad(values.soekerId, id)}
+                    onClose={() => {
+                        validerSoknadReset();
+                        setVisErDuSikkerModal(false);
+                    }}
+                />
             )}
         </>
     );

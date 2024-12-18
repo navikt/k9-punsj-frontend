@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Alert, Button, Heading, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
@@ -18,7 +18,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
 import { RootStateType } from 'app/state/RootState';
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { hentEksisterendeSoeknader } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 
@@ -129,25 +129,20 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </Table.Row>,
             );
             modaler.push(
-                <Modal
-                    key={soknadId}
-                    onClose={() => setValgtSoeknad(undefined)}
-                    aria-label={soknadId}
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.info"
+                    modalKey={soknadId}
                     open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
-                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
-                        onClose={() => setValgtSoeknad(undefined)}
-                        submitKnappText="mappe.lesemodus.knapp.velg"
-                    />
-                </Modal>,
+                    submitKnappText="mappe.lesemodus.knapp.velg"
+                    onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
+                    onClose={() => setValgtSoeknad(undefined)}
+                />,
             );
         });
 

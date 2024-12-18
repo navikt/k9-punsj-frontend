@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import * as React from 'react';
-import { useIntl } from 'react-intl';
+
+import { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-
-import { Alert, Button, Loader, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
@@ -13,29 +13,24 @@ import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/rules';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal2';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { IOLPSoknadBackend } from '../../../models/types/OLPSoknad';
 import { hentEksisterendeSoeknader } from '../api';
 
-export interface IEksisterendeOLPSoknaderComponentProps {
+interface Props {
     søkerId: string;
     pleietrengendeId: string | null;
 }
 
-type IEksisterendeOLPSoknaderProps = IEksisterendeOLPSoknaderComponentProps;
-
-export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSoknaderProps> = (
-    props: IEksisterendeOLPSoknaderProps,
-) => {
-    const { søkerId, pleietrengendeId } = props;
+export const EksisterendeOLPSoknader: React.FC<Props> = ({ søkerId, pleietrengendeId }: Props) => {
     const intl = useIntl();
 
-    const [valgtSoeknad, setValgtSoeknad] = useState<IOLPSoknadBackend | undefined>(undefined);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    React.useEffect(() => {
+    const [valgtSoeknad, setValgtSoeknad] = useState<IOLPSoknadBackend | undefined>(undefined);
+
+    useEffect(() => {
         if (!IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
@@ -76,7 +71,7 @@ export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSo
                 Array.from(søknad.journalposter).join(', '),
 
                 <Button variant="secondary" key={soknadId} size="small" onClick={() => setValgtSoeknad(søknad)}>
-                    {intlHelper(intl, 'mappe.lesemodus.knapp.velg')}
+                    <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
             ];
             rows.push(
@@ -85,38 +80,48 @@ export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSo
                         rowContent.map((v, i) => <Table.DataCell key={`${soknadId}_${i}`}>{v}</Table.DataCell>)
                     ) : (
                         <Table.DataCell colSpan={4} className="punch_mappetabell_tom_soknad">
-                            Tom søknad
+                            <FormattedMessage id="tabell.tomSøknad" />
                         </Table.DataCell>
                     )}
                 </tr>,
             );
             modaler.push(
-                <Modal
-                    key={soknadId}
-                    onClose={() => setValgtSoeknad(undefined)}
-                    aria-label={soknadId}
+                <ErDuSikkerModal
+                    melding="modal.erdusikker.info"
+                    modalKey={soknadId}
                     open={!!valgtSoeknad && soknadId === valgtSoeknad.soeknadId}
-                >
-                    <ErDuSikkerModal
-                        melding="modal.erdusikker.info"
-                        onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
-                        onClose={() => setValgtSoeknad(undefined)}
-                        submitKnappText="mappe.lesemodus.knapp.velg"
-                    />
-                </Modal>,
+                    submitKnappText="mappe.lesemodus.knapp.velg"
+                    onSubmit={() => valgtSoeknad && gaaVidereMedSoeknad(valgtSoeknad)}
+                    onClose={() => setValgtSoeknad(undefined)}
+                />,
             );
         });
 
         return (
             <>
-                <h2>{intlHelper(intl, 'tabell.overskrift')}</h2>
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="tabell.overskrift" />
+                </Heading>
+
                 <Table className="punch_mappetabell">
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.mottakelsesdato')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.soekersFoedselsnummer')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'tabell.journalpostid')}</Table.HeaderCell>
-                            <Table.HeaderCell>{intlHelper(intl, 'skjema.periode')}</Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.mottakelsesdato" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.soekersFoedselsnummer" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="tabell.journalpostid" />
+                            </Table.HeaderCell>
+
+                            <Table.HeaderCell>
+                                <FormattedMessage id="skjema.periode" />
+                            </Table.HeaderCell>
+
                             <Table.HeaderCell aria-label={intlHelper(intl, 'mappe.lesemodus.knapp.velg')} />
                         </Table.Row>
                     </Table.Header>
@@ -133,9 +138,10 @@ export const EksisterendeOLPSoknader: React.FunctionComponent<IEksisterendeOLPSo
 
     return (
         <Alert size="small" variant="info">
-            {intlHelper(intl, 'mapper.infoboks.ingensoknader', {
-                antallSokere: pleietrengendeId ? '2' : '1',
-            })}
+            <FormattedMessage
+                id="mapper.infoboks.ingensoknader"
+                values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
+            />
         </Alert>
     );
 };

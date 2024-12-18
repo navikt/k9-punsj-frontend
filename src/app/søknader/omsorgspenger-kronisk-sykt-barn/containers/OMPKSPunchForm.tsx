@@ -18,9 +18,9 @@ import { connect } from 'react-redux';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
@@ -488,46 +488,25 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <Modal
-                        key="settpaaventmodal"
-                        className="settpaaventmodal"
-                        onClose={() => this.handleShowSettPaaVentModal(false)}
-                        aria-label="settpaaventmodal"
-                        open={this.state.showSettPaaVentModal}
-                    >
-                        <div className="">
-                            <SettPaaVentModal
-                                journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid,
-                                )}
-                                soknadId={soknad.soeknadId}
-                                submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.handleShowSettPaaVentModal(false)}
-                            />
-                        </div>
-                    </Modal>
+                    <SettPaaVentModal
+                        journalposter={this.props.journalposterState.journalposter.filter(
+                            (jp) => jp.journalpostId !== this.props.journalpostid,
+                        )}
+                        soknadId={soknad.soeknadId}
+                        submit={() => this.handleSettPaaVent()}
+                        avbryt={() => this.handleShowSettPaaVentModal(false)}
+                    />
                 )}
 
                 {punchFormState.settPaaVentSuccess && (
-                    <Modal
-                        key="settpaaventokmodal"
+                    <OkGåTilLosModal
+                        melding="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={punchFormState.settPaaVentSuccess}
-                    >
-                        <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                    </Modal>
+                    />
                 )}
 
                 {punchFormState.settPaaVentError && (
-                    <Modal
-                        key="settpaaventerrormodal"
-                        onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={!!punchFormState.settPaaVentError}
-                    >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </Modal>
+                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
                 )}
 
                 {this.props.punchFormState.isValid &&
@@ -566,24 +545,18 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     )}
 
                 {this.state.visErDuSikkerModal && (
-                    <Modal
-                        key="erdusikkermodal"
-                        className="erdusikkermodal"
-                        onClose={() => this.props.validerSoknadReset()}
-                        aria-label="erdusikkermodal"
+                    <ErDuSikkerModal
+                        melding="modal.erdusikker.sendinn"
+                        modalKey="erdusikkermodal"
+                        extraInfo="modal.erdusikker.sendinn.extrainfo"
                         open={this.state.visErDuSikkerModal}
-                    >
-                        <ErDuSikkerModal
-                            melding="modal.erdusikker.sendinn"
-                            extraInfo="modal.erdusikker.sendinn.extrainfo"
-                            onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
-                            submitKnappText="skjema.knapp.send"
-                            onClose={() => {
-                                this.props.validerSoknadReset();
-                                this.handleVisErDuSikkerModal(false);
-                            }}
-                        />
-                    </Modal>
+                        submitKnappText="skjema.knapp.send"
+                        onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
+                        onClose={() => {
+                            this.props.validerSoknadReset();
+                            this.handleVisErDuSikkerModal(false);
+                        }}
+                    />
                 )}
             </>
         );

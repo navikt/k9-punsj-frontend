@@ -1,48 +1,49 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { Button } from '@navikt/ds-react';
-import VerticalSpacer from './VerticalSpacer';
+import { Button, Modal } from '@navikt/ds-react';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 
 interface Props {
     melding: string;
+    modalKey: string;
+    open: boolean;
     submitKnappText: string;
+    extraInfo?: string;
 
     onSubmit: () => void;
     onClose: () => void;
-
-    extraInfo?: string;
 }
 
-const ErDuSikkerModal: React.FC<Props> = ({ melding, submitKnappText, onSubmit, onClose, extraInfo }: Props) => {
-    return (
-        <div className="modal_content">
+const ErDuSikkerModal = ({ melding, modalKey, open, onSubmit, onClose, submitKnappText, extraInfo }: Props) => (
+    <Modal key={modalKey} onClose={onClose} aria-label={modalKey} open={open} data-testid="erdusikkermodal">
+        <Modal.Body>
             <FormattedMessage id={melding} />
-            <VerticalSpacer sixteenPx />
+
             {extraInfo && (
                 <div>
+                    <VerticalSpacer sixteenPx />
                     <FormattedMessage id={extraInfo} />
                 </div>
             )}
-            <div className="punch_mappemodal_knapperad">
-                <Button
-                    size="small"
-                    className="knapp1"
-                    onClick={() => {
-                        onSubmit();
-                        onClose();
-                    }}
-                    type="button"
-                >
-                    <FormattedMessage id={submitKnappText} />
-                </Button>
+        </Modal.Body>
 
-                <Button variant="secondary" size="small" className="knapp2" onClick={() => onClose()}>
-                    <FormattedMessage id={'skjema.knapp.avbryt'} />
-                </Button>
-            </div>
-        </div>
-    );
-};
+        <Modal.Footer>
+            <Button
+                size="small"
+                onClick={() => {
+                    onSubmit();
+                    onClose();
+                }}
+            >
+                <FormattedMessage id={submitKnappText} />
+            </Button>
+
+            <Button variant="secondary" size="small" onClick={() => onClose()}>
+                <FormattedMessage id="skjema.knapp.avbryt" />
+            </Button>
+        </Modal.Footer>
+    </Modal>
+);
 
 export default ErDuSikkerModal;

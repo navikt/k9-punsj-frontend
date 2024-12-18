@@ -48,7 +48,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.get('[data-test-id="oppretteGosysOppgaveBtn"]').should('exist').should('not.be.disabled').click();
 
-        cy.get('[data-test-id="opprettIGosysOkModal"]').should('not.exist');
+        cy.get('[data-test-id="okGåTilLosModal"]').should('not.exist');
 
         cy.get('[data-test-id="opprettIGosysFeil"]').should('exist');
     });
@@ -63,10 +63,10 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.get('[data-test-id="opprettIGosysFeil"]').should('not.exist');
 
-        cy.get('[data-test-id="opprettIGosysOkModal"]').should('exist');
-        cy.get('[data-test-id="opprettIGosysOkModalInfo"]').should('exist');
-        cy.get('[data-test-id="opprettIGosysOkModalOKBtn"]').should('exist').click();
+        cy.get('[data-test-id="okGåTilLosModal"]').should('exist');
+        cy.get('[data-test-id="okGåTilLosModalInfo"]').should('exist');
+        cy.get('[data-test-id="okGåTilLosModalOKBtn"]').should('exist').click();
 
-        cy.get('[data-test-id="opprettIGosysOkModal"]').should('not.exist');
+        cy.get('[data-test-id="okGåTilLosModal"]').should('not.exist');
     });
 });

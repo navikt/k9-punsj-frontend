@@ -55,15 +55,15 @@ import { IUtenlandsOpphold } from '../../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../../state/RootState';
 import { initializeDate } from '../../../utils/timeUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
-import { OkGaaTilLosModal } from '../../../components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from '../../../components/okGåTilLosModal/OkGåTilLosModal';
 import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
-import SettPaaVentErrorModal from '../../../components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../../components/settPaaVentModal/SettPaaVentModal';
+import SettPåVentErrorModal from '../../../components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
 import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
 import { pfLand } from '../components/pfLand';
@@ -1278,45 +1278,25 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <Modal
-                        key="settpaaventmodal"
-                        className="settpaaventmodal"
-                        onClose={() => this.setState({ showSettPaaVentModal: false })}
-                        aria-label="settpaaventmodal"
-                        open={this.state.showSettPaaVentModal}
-                        data-testid="settpaaventmodal"
-                    >
-                        <div>
-                            <SettPaaVentModal
-                                journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid,
-                                )}
-                                soknadId={soknad.soeknadId}
-                                submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.setState({ showSettPaaVentModal: false })}
-                            />
-                        </div>
-                    </Modal>
+                    <SettPaaVentModal
+                        journalposter={this.props.journalposterState.journalposter.filter(
+                            (jp) => jp.journalpostId !== this.props.journalpostid,
+                        )}
+                        soknadId={soknad.soeknadId}
+                        submit={() => this.handleSettPaaVent()}
+                        avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                    />
                 )}
+
                 {punchFormState.settPaaVentSuccess && (
-                    <Modal
-                        key="settpaaventokmodal"
+                    <OkGåTilLosModal
+                        melding="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={punchFormState.settPaaVentSuccess}
-                    >
-                        <OkGaaTilLosModal melding="modal.settpaavent.til" />
-                    </Modal>
+                    />
                 )}
+
                 {punchFormState.settPaaVentError && (
-                    <Modal
-                        key="settpaaventerrormodal"
-                        onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={!!punchFormState.settPaaVentError}
-                    >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </Modal>
+                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
                 )}
 
                 {this.props.punchFormState.isValid &&
@@ -1357,25 +1337,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     )}
 
                 {this.state.visErDuSikkerModal && (
-                    <Modal
-                        key="erdusikkermodal"
-                        className="erdusikkermodal"
-                        onClose={() => this.props.validerSoknadReset()}
-                        aria-label="erdusikkermodal"
+                    <ErDuSikkerModal
+                        melding="modal.erdusikker.sendinn"
+                        modalKey="erdusikkermodal"
+                        extraInfo="modal.erdusikker.sendinn.extrainfo"
+                        submitKnappText="skjema.knapp.send"
                         open={this.state.visErDuSikkerModal}
-                        data-testid="erdusikkermodal"
-                    >
-                        <ErDuSikkerModal
-                            melding="modal.erdusikker.sendinn"
-                            extraInfo="modal.erdusikker.sendinn.extrainfo"
-                            onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
-                            submitKnappText="skjema.knapp.send"
-                            onClose={() => {
-                                this.props.validerSoknadReset();
-                                this.setState({ visErDuSikkerModal: false });
-                            }}
-                        />
-                    </Modal>
+                        onSubmit={() => this.props.submitSoknad(this.state.soknad.soekerId, this.props.id)}
+                        onClose={() => {
+                            this.props.validerSoknadReset();
+                            this.setState({ visErDuSikkerModal: false });
+                        }}
+                    />
                 )}
             </div>
         );

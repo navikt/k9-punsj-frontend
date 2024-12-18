@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Button, ErrorMessage, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -11,7 +11,7 @@ import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { ROUTES } from 'app/constants/routes';
 import HåndterInntektsmeldingUtenKrav from 'app/fordeling/Komponenter/HåndterInntektsmeldingUtenKrav';
-import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import {
     DokumenttypeForkortelse,
     FordelingDokumenttype,
@@ -555,18 +555,13 @@ const Fordeling: React.FC = () => {
 
     if (opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
-            <Modal
-                key="opprettigosysokmodal"
+            <OkGåTilLosModal
+                melding="fordeling.opprettigosys.utfort"
                 onClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
                 }}
-                aria-label="settpaaventokmodal"
-                open={!!opprettIGosysState.gosysOppgaveRequestSuccess}
-                data-test-id="opprettIGosysOkModal"
-            >
-                <OkGaaTilLosModal melding="fordeling.opprettigosys.utfort" />
-            </Modal>
+            />
         );
     }
 
@@ -576,16 +571,12 @@ const Fordeling: React.FC = () => {
 
     if (fordelingState.lukkOppgaveDone) {
         return (
-            <Modal
-                key="lukkoppgaveokmodal"
+            <OkGåTilLosModal
+                melding="fordeling.lukkoppgave.utfort"
                 onClose={() => {
                     lukkOppgaveReset();
                 }}
-                aria-label="settpaaventokmodal"
-                open={!!fordelingState.lukkOppgaveDone}
-            >
-                <OkGaaTilLosModal melding="fordeling.lukkoppgave.utfort" />
-            </Modal>
+            />
         );
     }
 
