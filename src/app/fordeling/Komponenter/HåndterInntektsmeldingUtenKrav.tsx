@@ -22,7 +22,7 @@ import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
 import OkGåTilLosModal from '../../components/okGåTilLosModal/OkGåTilLosModal';
 import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
-import SettPaaVentErrorModal from '../../components/settPåVentModal/SettPåVentErrorModal';
+import SettPåVentErrorModal from '../../components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
 import { Dispatch } from 'redux';
 
@@ -166,17 +166,8 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 />
             )}
 
-            {showSettPaaVentErrorModal && (
-                <Modal
-                    onClose={() => {
-                        resetSetPåVent();
-                    }}
-                    aria-label="settpaaventokmodal"
-                    open
-                >
-                    <SettPaaVentErrorModal close={() => resetSetPåVent()} />
-                </Modal>
-            )}
+            {showSettPaaVentErrorModal && <SettPåVentErrorModal onClose={() => resetSetPåVent()} />}
+
             {showFerdigstillJournalpostModal && (
                 <Modal
                     onClose={() => setShowFerdigstillJournalpostModal(false)}
@@ -191,6 +182,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                     </FerdigstillJournalpostModal>
                 </Modal>
             )}
+
             {journalpost && showOpprettOppgaveIGosysModal && (
                 <Modal
                     className="opprettOppgaveIGosysModal"

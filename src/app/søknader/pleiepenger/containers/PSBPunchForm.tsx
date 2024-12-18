@@ -62,7 +62,7 @@ import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
-import SettPaaVentErrorModal from '../../../components/settPåVentModal/SettPåVentErrorModal';
+import SettPåVentErrorModal from '../../../components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
 import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
@@ -1296,14 +1296,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
 
                 {punchFormState.settPaaVentError && (
-                    <Modal
-                        key="settpaaventerrormodal"
-                        onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={!!punchFormState.settPaaVentError}
-                    >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </Modal>
+                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
                 )}
 
                 {this.props.punchFormState.isValid &&

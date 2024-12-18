@@ -30,7 +30,7 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
@@ -1112,15 +1112,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         onClose={() => this.props.settPaaventResetAction()}
                     />
                 )}
+
                 {!!punchFormState.settPaaVentError && (
-                    <Modal
-                        key="settpaaventerrormodal"
-                        onClose={() => this.props.settPaaventResetAction()}
-                        aria-label="settpaaventokmodal"
-                        open={!!punchFormState.settPaaVentError}
-                    >
-                        <SettPaaVentErrorModal close={() => this.props.settPaaventResetAction()} />
-                    </Modal>
+                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
                 )}
 
                 {this.props.punchFormState.isValid &&

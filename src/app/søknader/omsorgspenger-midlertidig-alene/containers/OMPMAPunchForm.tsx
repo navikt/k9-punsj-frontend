@@ -20,7 +20,7 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
@@ -351,16 +351,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
             )}
 
-            {!!punchFormState.settPaaVentError && (
-                <Modal
-                    key="settpaaventerrormodal"
-                    onClose={() => settPåventResetAction()}
-                    aria-label="settpaaventokmodal"
-                    open={!!punchFormState.settPaaVentError}
-                >
-                    <SettPaaVentErrorModal close={() => settPåventResetAction()} />
-                </Modal>
-            )}
+            {!!punchFormState.settPaaVentError && <SettPåVentErrorModal onClose={() => settPåventResetAction()} />}
 
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal
