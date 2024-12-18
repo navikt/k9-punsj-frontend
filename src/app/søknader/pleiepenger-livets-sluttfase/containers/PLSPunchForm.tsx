@@ -30,8 +30,8 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
@@ -1096,25 +1096,16 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <Modal
-                        key="settpaaventmodal"
-                        className="settpaaventmodal"
-                        onClose={() => this.setState({ showSettPaaVentModal: false })}
-                        aria-label="settpaaventmodal"
-                        open={this.state.showSettPaaVentModal}
-                    >
-                        <div className="">
-                            <SettPaaVentModal
-                                journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid,
-                                )}
-                                soknadId={soknad.soeknadId}
-                                submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.setState({ showSettPaaVentModal: false })}
-                            />
-                        </div>
-                    </Modal>
+                    <SettPaaVentModal
+                        journalposter={this.props.journalposterState.journalposter.filter(
+                            (jp) => jp.journalpostId !== this.props.journalpostid,
+                        )}
+                        soknadId={soknad.soeknadId}
+                        submit={() => this.handleSettPaaVent()}
+                        avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                    />
                 )}
+
                 {punchFormState.settPaaVentSuccess && (
                     <Modal
                         key="settpaaventokmodal"

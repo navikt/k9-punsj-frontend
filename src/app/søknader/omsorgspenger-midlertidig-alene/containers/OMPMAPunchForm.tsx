@@ -20,8 +20,8 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
@@ -339,24 +339,12 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {showSettPaaVentModal && (
-                <Modal
-                    key="settpaaventmodal"
-                    className="settpaaventmodal"
-                    onClose={() => setShowSettPaaVentModal(false)}
-                    aria-label="settpaaventmodal"
-                    open={showSettPaaVentModal}
-                >
-                    <div className="">
-                        <SettPaaVentModal
-                            journalposter={journalposterState.journalposter.filter(
-                                (jp) => jp.journalpostId !== journalpostid,
-                            )}
-                            soknadId={values.soeknadId}
-                            submit={() => handleSettPaaVent()}
-                            avbryt={() => setShowSettPaaVentModal(false)}
-                        />
-                    </div>
-                </Modal>
+                <SettPaaVentModal
+                    journalposter={journalposterState.journalposter.filter((jp) => jp.journalpostId !== journalpostid)}
+                    soknadId={values.soeknadId}
+                    submit={() => handleSettPaaVent()}
+                    avbryt={() => setShowSettPaaVentModal(false)}
+                />
             )}
 
             {punchFormState.settPaaVentSuccess && (

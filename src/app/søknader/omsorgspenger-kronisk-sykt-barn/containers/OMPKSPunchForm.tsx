@@ -19,8 +19,8 @@ import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
@@ -488,24 +488,14 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 )}
 
                 {this.state.showSettPaaVentModal && (
-                    <Modal
-                        key="settpaaventmodal"
-                        className="settpaaventmodal"
-                        onClose={() => this.handleShowSettPaaVentModal(false)}
-                        aria-label="settpaaventmodal"
-                        open={this.state.showSettPaaVentModal}
-                    >
-                        <div className="">
-                            <SettPaaVentModal
-                                journalposter={this.props.journalposterState.journalposter.filter(
-                                    (jp) => jp.journalpostId !== this.props.journalpostid,
-                                )}
-                                soknadId={soknad.soeknadId}
-                                submit={() => this.handleSettPaaVent()}
-                                avbryt={() => this.handleShowSettPaaVentModal(false)}
-                            />
-                        </div>
-                    </Modal>
+                    <SettPaaVentModal
+                        journalposter={this.props.journalposterState.journalposter.filter(
+                            (jp) => jp.journalpostId !== this.props.journalpostid,
+                        )}
+                        soknadId={soknad.soeknadId}
+                        submit={() => this.handleSettPaaVent()}
+                        avbryt={() => this.handleShowSettPaaVentModal(false)}
+                    />
                 )}
 
                 {punchFormState.settPaaVentSuccess && (

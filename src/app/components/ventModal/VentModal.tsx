@@ -5,8 +5,8 @@ import { Modal } from '@navikt/ds-react';
 
 import { settJournalpostPaaVent } from 'app/api/api';
 import { OkGaaTilLosModal } from 'app/components/okGaaTilLosModal/OkGaaTilLosModal';
-import SettPaaVentErrorModal from 'app/components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from 'app/components/settPaaVentModal/SettPaaVentModal';
+import SettPaaVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 
 type OwnProps = {
     journalpostId: string;
@@ -31,18 +31,9 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: OwnProps) => {
     });
 
     if (visHovedmodal) {
-        return (
-            <Modal
-                key="settpaaventmodal"
-                className="settpaaventmodal"
-                onClose={() => setVisHovedmodal(false)}
-                aria-label="settpaaventmodal"
-                open
-            >
-                <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />
-            </Modal>
-        );
+        return <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />;
     }
+
     if (visSuccessModal) {
         return (
             <Modal

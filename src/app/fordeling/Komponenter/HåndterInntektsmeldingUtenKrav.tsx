@@ -22,8 +22,8 @@ import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal
 import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
 import { OkGaaTilLosModal } from '../../components/okGaaTilLosModal/OkGaaTilLosModal';
 import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
-import SettPaaVentErrorModal from '../../components/settPaaVentModal/SettPaaVentErrorModal';
-import SettPaaVentModal from '../../components/settPaaVentModal/SettPaaVentModal';
+import SettPaaVentErrorModal from '../../components/settPåVentModal/SettPåVentErrorModal';
+import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
 import { Dispatch } from 'redux';
 
 interface Props {
@@ -152,17 +152,11 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {getUtførValgKnapp()}
 
             {showSettPaaVentModal && (
-                <Modal
-                    className="settpaaventmodal"
-                    onClose={() => setShowSettPaaVentModal(false)}
-                    aria-label="settpaaventmodal"
-                    open
-                >
-                    <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
-                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
-                    </SettPaaVentModal>
-                </Modal>
+                <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
+                    {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
+                </SettPaaVentModal>
             )}
+
             {showSettPaaVentSuccessModal && (
                 <Modal
                     onClose={() => {

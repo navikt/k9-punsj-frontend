@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button } from '@navikt/ds-react';
 import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
 
-import './settPaaVentModal.less';
+import './settPåVentModal.less';
 
 export interface Props {
     close: () => void;
