@@ -1,6 +1,7 @@
 ingresses:
     - https://k9-punsj-frontend.intern.dev.nav.no
-outboundRules: k9-punsj
+outboundRules: 
+    - k9-punsj
 outboundExternalHosts:
     - k9-formidling.dev-fss-pub.nais.io
 azureTenant: trygdeetaten.no
