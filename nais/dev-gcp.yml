@@ -12,6 +12,16 @@ proxyRedirects:
     - path: '/api/k9-formidling'
       scope: 'api://dev-fss.k9saksbehandling.k9-formidling/.default'
       url: 'https://k9-formidling.dev-fss-pub.nais.io'
+observability:
+  autoInstrumentation:
+    enabled: true
+    runtime: nodejs
+    destinations:
+      - id: "grafana-lgtm"
+  logging:
+    destinations:
+      - id: loki
+      - id: elastic
 env:
     APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.dev.intern.nav.no/k9/web/fagsak/
     K9_LOS_URL: https://k9-los-web.intern.dev.nav.no/
