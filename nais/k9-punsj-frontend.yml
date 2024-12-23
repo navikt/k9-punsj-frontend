@@ -41,6 +41,10 @@ spec:
       memory: 128Mi
   accessPolicy:
     outbound:
+      rules:
+      {{#each outboundRules as |outboundRule|}}
+       - application: {{outboundRule}}
+       {{/each}}
       external:
       {{#each outboundExternalHosts as |host|}}
        - host: {{host}}
