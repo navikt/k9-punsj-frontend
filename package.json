@@ -153,7 +153,7 @@
         "jest-mock": "29.7.0",
         "less": "4.2.1",
         "less-loader": "12.2.0",
-        "lint-staged": "15.2.11",
+        "lint-staged": "15.3.0",
         "msw": "2.7.0",
         "nav-frontend-skjema-style": "3.0.3",
         "postcss": "8.4.49",
