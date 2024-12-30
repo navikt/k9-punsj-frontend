@@ -7240,6 +7240,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns-jalali@npm:^4.1.0-0":
+  version: 4.1.0-0
+  resolution: "date-fns-jalali@npm:4.1.0-0"
+  checksum: 10/0005e0e37d449aa998cfc353395b0292eea4778aba4283dad4fa0e3559cf0a7fc7ce9123fb6f22c235285219d4f4774c88bb9c01fa2694c6a5efbbcd33efe7fc
+  languageName: node
+  linkType: hard
+
 "date-fns@npm:^3.0.0":
   version: 3.6.0
   resolution: "date-fns@npm:3.6.0"
@@ -11482,7 +11489,7 @@ __metadata:
     react: "npm:18.3.1"
     react-aria-menubutton: "npm:7.0.3"
     react-collapse: "npm:5.1.1"
-    react-day-picker: "npm:9.4.4"
+    react-day-picker: "npm:9.5.0"
     react-dom: "npm:18.3.1"
     react-intl: "npm:7.0.4"
     react-modal: "npm:3.16.2"
@@ -14233,15 +14240,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:9.4.4":
-  version: 9.4.4
-  resolution: "react-day-picker@npm:9.4.4"
+"react-day-picker@npm:9.5.0":
+  version: 9.5.0
+  resolution: "react-day-picker@npm:9.5.0"
   dependencies:
     "@date-fns/tz": "npm:^1.2.0"
     date-fns: "npm:^4.1.0"
+    date-fns-jalali: "npm:^4.1.0-0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10/78d30732c1162e415cbe27f3963c1d94323a1bd4adf1068f9a76cb8d36484b2a7e6f9b3c9584aa3d73e8f1dd4a9fb777081c370d925b75eb9edfd7613f00019c
+  checksum: 10/8f68fb0f723e89efa78f814ce8564c13f60901e1746ccebba68f05f0128cdbf5f9cbafdb5b93ac9187bda9373b4f882a2a961aea7198eed5dcd16ab299c84979
   languageName: node
   linkType: hard
 
