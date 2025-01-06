@@ -953,7 +953,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
-                                value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
                                 data-testid="feriepanel-checkbox"
@@ -982,7 +981,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     <>
                                         <CheckboksPanel
                                             label={intlHelper(intl, 'skjema.ferie.fjern')}
-                                            value="skjema.ferie.fjern"
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
                                         />
@@ -1081,9 +1079,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
-                                value="skjema.omsorgstilbud.checkboks"
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
-                                checked={this.state.iTilsynsordning}
+                                checked={!!this.state.iTilsynsordning}
                                 data-testid="omsorgstilbud-checkboks"
                             />
                             {this.state.iTilsynsordning && (
@@ -1131,7 +1128,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, BeredskapNattevaak.BEREDSKAP)}
-                                value={BeredskapNattevaak.BEREDSKAP}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)
                                 }
@@ -1143,7 +1139,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             <VerticalSpacer eightPx />
                             <CheckboksPanel
                                 label={intlHelper(intl, BeredskapNattevaak.NATTEVAAK)}
-                                value={BeredskapNattevaak.NATTEVAAK}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)
                                 }

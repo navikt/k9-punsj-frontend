@@ -1,54 +1,37 @@
 {
-    "soeknadId": "0416e1a2-8d80-48b1-a56e-ab4f4b4821fe",
-    "soekerId": "29099000129",
-    "journalposter": ["200"],
-    "mottattDato": "2020-10-12",
-    "klokkeslett": "12:53",
+    "arbeidstid": null,
     "barn": {
         "norskIdent": "16017725002",
         "foedselsdato": null
     },
+    "begrunnelseForInnsending": null,
+    "beredskap": null,
+    "bosteder": null,
+    "harInfoSomIkkeKanPunsjes": false,
+    "harMedisinskeOpplysninger": false,
+    "journalposter": ["200"],
+    "k9saksnummer": "10002Fi",
+    "klokkeslett": "12:53",
+    "lovbestemtFerie": null,
+    "lovbestemtFerieSomSkalSlettes": null,
+    "metadata": null,
+    "mottattDato": "2024-10-12",
+    "nattevaak": null,
+    "omsorg": null,
+    "opptjeningAktivitet": null,
+    "soekerId": "29099000129",
+    "soeknadId": "0416e1a2-8d80-48b1-a56e-ab4f4b4821fe",
     "soeknadsperiode": [
         {
             "fom": "2021-11-08",
             "tom": "2021-11-11"
         }
     ],
-    "opptjeningAktivitet": {
-        "selvstendigNaeringsdrivende": null,
-        "frilanser": null,
-        "arbeidstaker": []
-    },
-    "arbeidstid": {
-        "arbeidstakerList": [],
-        "frilanserArbeidstidInfo": null,
-        "selvstendigNæringsdrivendeArbeidstidInfo": {
-            "perioder": []
-        }
-    },
-    "beredskap": [],
-    "nattevaak": [],
-    "tilsynsordning": {
-        "perioder": []
-    },
-    "uttak": [],
-    "omsorg": {
-        "relasjonTilBarnet": "",
-        "samtykketOmsorgForBarnet": null,
-        "beskrivelseAvOmsorgsrollen": ""
-    },
-    "bosteder": [],
-    "lovbestemtFerie": [],
-    "lovbestemtFerieSomSkalSlettes": [],
-    "soknadsinfo": {
-        "samtidigHjemme": null,
-        "harMedsoeker": null
-    },
-    "utenlandsopphold": [],
-    "harInfoSomIkkeKanPunsjes": false,
-    "harMedisinskeOpplysninger": false,
+    "soknadsinfo": null,
+    "tilsynsordning": null,
+
     "trekkKravPerioder": [],
-    "begrunnelseForInnsending": {
-        "tekst": ""
-    }
+    "utenlandsopphold": null,
+    "utenlandsoppholdV2": [],
+    "uttak": null
 }

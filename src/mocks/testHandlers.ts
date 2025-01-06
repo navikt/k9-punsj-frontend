@@ -91,7 +91,7 @@ export const testHandlers = {
 
     eksisterendePleiepengesoknad: http.get(
         ApiPath.PSB_SOKNAD_GET.replace('{id}', '0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'),
-        () => HttpResponse.json(journalpost),
+        () => HttpResponse.json(pleiepengerSoknadSomKanSendesInn),
     ),
     eksisterendePilssoknad: http.get(
         ApiPath.PLS_SOKNAD_GET.replace('{id}', '4e3a9001-f872-4288-829e-08f8e1001b28'),
