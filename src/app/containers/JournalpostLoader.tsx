@@ -46,10 +46,10 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     const [ingenJp, setIngenJp] = useState(false);
 
     useEffect(() => {
-        if (journalpostid) {
+        if (!journalpost && journalpostid) {
             getJournalpost(journalpostid);
         }
-    }, [journalpostid]);
+    }, [journalpostid, journalpost]);
 
     const handleLukkDebugg = () => {
         if (journalpostid) {
@@ -66,10 +66,8 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
 
     if (isJournalpostLoading) {
         return (
-            <div className="h-screen">
-                <div className="justify-content-center align-items-center h-screen flex flex-wrap">
-                    <Loader size="large" data-testid="spinner" />
-                </div>
+            <div className="flex justify-center mt-40">
+                <Loader size="3xlarge" data-testid="spinner" />
             </div>
         );
     }

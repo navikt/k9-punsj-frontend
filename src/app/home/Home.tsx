@@ -37,6 +37,7 @@ export const Home: React.FC = () => {
         journalpostConflict,
         journalpostConflictError,
         journalpostRequestError,
+        isJournalpostLoading,
     } = useSelector((state: RootStateType) => state.felles);
 
     const lukkOppgaveDone = useSelector((state: RootStateType) => state.fordelingState.lukkOppgaveDone);
@@ -83,11 +84,6 @@ export const Home: React.FC = () => {
 
     useEffect(() => {
         if (journalpost?.journalpostId) {
-            // Her har jeg lagt inn en reset av redux state fordi tidligere ble window.location.href brukt for å navigere til journalposten.
-            // så hvis man ikke resetter state først skjer det rare ting.
-            // TODO: fiks dette så vi slipper å kjøre kall for å hente ut journalpost to ganger
-            dispatch(resetAllStateAction());
-
             navigate(ROUTES.JOURNALPOST_ROOT.replace(':journalpostid/*', journalpost.journalpostId));
         }
     }, [journalpost]);
@@ -110,10 +106,17 @@ export const Home: React.FC = () => {
                         onChange={onChange}
                         label={<FormattedMessage id="søk.label.jpid" />}
                         onKeyDown={handleKeydown}
+                        disabled={isJournalpostLoading}
                     />
 
                     <div className="ml-4">
-                        <Button onClick={onClick} size="small" className="sokknapp my-4" disabled={!journalpostid}>
+                        <Button
+                            onClick={onClick}
+                            size="small"
+                            className="sokknapp my-4"
+                            disabled={!journalpostid || isJournalpostLoading}
+                            loading={isJournalpostLoading}
+                        >
                             <FormattedMessage id={'søk.knapp.label'} />
                         </Button>
                     </div>

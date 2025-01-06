@@ -26,7 +26,9 @@ import pilsSoknad from '../../cypress/fixtures/pilsSoknad.json';
 import jpOMPUT314 from '../../cypress/fixtures/jpOMPUT314.json';
 
 export const testHandlers = {
-    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
+    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), async ({ params }) => {
+        await delay(500);
+
         if (params.id === '300') {
             return HttpResponse.json(jpPSB300, { status: 201 });
         }
@@ -63,6 +65,7 @@ export const testHandlers = {
         if (params.id === '206') {
             return HttpResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
+
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
     opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
