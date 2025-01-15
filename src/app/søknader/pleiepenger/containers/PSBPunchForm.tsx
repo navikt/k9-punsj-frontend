@@ -942,7 +942,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </Accordion.Item>
 
                     <Accordion.Item
-                        open={this.checkOpenState(PunchFormPaneler.FERIE)}
+                        // open={this.checkOpenState(PunchFormPaneler.FERIE)}
                         // defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         defaultOpen={!!soknad.lovbestemtFerie.length}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
