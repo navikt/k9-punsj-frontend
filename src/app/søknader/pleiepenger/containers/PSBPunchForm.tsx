@@ -835,6 +835,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             />
         );
 
+        console.log('Test def open utenlandsopphold', this.utenlandsOppholdCheckedValue() === JaNeiIkkeOpplyst.JA);
+
         return (
             <div data-testid="PSBPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
@@ -882,9 +884,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
-                        open={this.utenlandsOppholdCheckedValue() === JaNeiIkkeOpplyst.JA}
+                        // open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         // defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                        defaultOpen={this.utenlandsOppholdCheckedValue() === JaNeiIkkeOpplyst.JA}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         data-testid="accordionItem-utenlandsoppholdpanel"
                     >
