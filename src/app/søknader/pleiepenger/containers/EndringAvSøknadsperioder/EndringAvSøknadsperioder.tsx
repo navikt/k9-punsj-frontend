@@ -130,8 +130,8 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
     return (
         <Accordion.Item
-            defaultOpen={isOpen}
             open={isOpen}
+            defaultOpen={!!soknad.trekkKravPerioder && soknad.trekkKravPerioder.length > 0}
             className="endringAvSøknadsperioder"
             onOpenChange={onClick}
             data-testid="accordionItem-endringAvSøknadsperioderpanel"
