@@ -241,11 +241,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
                 iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
+                aapnePaneler: this.getÅpnePanelerVedStart(this.props.punchFormState.soknad as IPSBSoknad),
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
+        // eslint-disable-next-line no-console
+        console.log('TEST Component did update aapnePaneler: ', this.state.aapnePaneler);
     }
 
     componentWillUnmount() {
@@ -278,6 +281,36 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
             return { aapnePaneler: [...aapnePaneler, p] };
         });
+    };
+
+    private getÅpnePanelerVedStart = (soknad: Partial<IPSBSoknad>) => {
+        const åpnePaneler = new Set(this.state.aapnePaneler);
+        // eslint-disable-next-line no-console
+        console.log('TEST getÅpnePanelerVedStart');
+        const panelConditions = [
+            { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: soknad.utenlandsopphold?.length },
+            { panel: PunchFormPaneler.FERIE, condition: soknad.lovbestemtFerie?.length },
+            { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.arbeidstakerList?.length },
+            { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.frilanserArbeidstidInfo },
+            { panel: PunchFormPaneler.ARBEID, condition: soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende },
+            { panel: PunchFormPaneler.OPPLYSINGER_OM_SOKER, condition: soknad.omsorg?.relasjonTilBarnet },
+            {
+                panel: PunchFormPaneler.BEREDSKAPNATTEVAAK,
+                condition: soknad.beredskap?.length || soknad.nattevaak?.length,
+            },
+            { panel: PunchFormPaneler.MEDLEMSKAP, condition: soknad.harMedisinskeOpplysninger },
+        ];
+
+        panelConditions.forEach(({ panel, condition }) => {
+            if (condition && !åpnePaneler.has(panel)) {
+                // eslint-disable-next-line no-console
+                console.log('TEST getÅpnePanelerVedStart upd paneler');
+                åpnePaneler.add(panel);
+            }
+        });
+        // eslint-disable-next-line no-console
+        console.log('TEST getÅpnePanelerVedStart end');
+        return Array.from(åpnePaneler);
     };
 
     private checkOpenState = (p: PunchFormPaneler): boolean => {
