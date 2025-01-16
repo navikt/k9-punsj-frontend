@@ -288,17 +288,20 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         // eslint-disable-next-line no-console
         console.log('TEST getÅpnePanelerVedStart');
         const panelConditions = [
+            { panel: PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER, condition: soknad.trekkKravPerioder?.length },
             { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: soknad.utenlandsopphold?.length },
             { panel: PunchFormPaneler.FERIE, condition: soknad.lovbestemtFerie?.length },
+            { panel: PunchFormPaneler.FERIE, condition: soknad.lovbestemtFerieSomSkalSlettes?.length },
             { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.arbeidstakerList?.length },
             { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.frilanserArbeidstidInfo },
             { panel: PunchFormPaneler.ARBEID, condition: soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende },
             { panel: PunchFormPaneler.OPPLYSINGER_OM_SOKER, condition: soknad.omsorg?.relasjonTilBarnet },
+            { panel: PunchFormPaneler.OMSORGSTILBUD, condition: soknad.tilsynsordning },
             {
                 panel: PunchFormPaneler.BEREDSKAPNATTEVAAK,
                 condition: soknad.beredskap?.length || soknad.nattevaak?.length,
             },
-            { panel: PunchFormPaneler.MEDLEMSKAP, condition: soknad.harMedisinskeOpplysninger },
+            { panel: PunchFormPaneler.MEDLEMSKAP, condition: soknad.bosteder?.length },
         ];
 
         panelConditions.forEach(({ panel, condition }) => {
