@@ -247,8 +247,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
         }
-        // eslint-disable-next-line no-console
-        console.log('TEST Component did update aapnePaneler: ', this.state.aapnePaneler);
     }
 
     componentWillUnmount() {
@@ -285,34 +283,37 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private getÅpnePanelerVedStart = (soknad: Partial<IPSBSoknad>) => {
         const åpnePaneler = new Set(this.state.aapnePaneler);
-        // eslint-disable-next-line no-console
-        console.log('TEST getÅpnePanelerVedStart');
+
         const panelConditions = [
-            { panel: PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER, condition: soknad.trekkKravPerioder?.length },
-            { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: soknad.utenlandsopphold?.length },
-            { panel: PunchFormPaneler.FERIE, condition: soknad.lovbestemtFerie?.length },
-            { panel: PunchFormPaneler.FERIE, condition: soknad.lovbestemtFerieSomSkalSlettes?.length },
-            { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.arbeidstakerList?.length },
-            { panel: PunchFormPaneler.ARBEID, condition: soknad.arbeidstid?.frilanserArbeidstidInfo },
-            { panel: PunchFormPaneler.ARBEID, condition: soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende },
-            { panel: PunchFormPaneler.OPPLYSINGER_OM_SOKER, condition: soknad.omsorg?.relasjonTilBarnet },
-            { panel: PunchFormPaneler.OMSORGSTILBUD, condition: soknad.tilsynsordning },
+            { panel: PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER, condition: !!soknad.trekkKravPerioder?.length },
+            { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: !!soknad.utenlandsopphold?.length },
+            {
+                panel: PunchFormPaneler.FERIE,
+                condition: !!(soknad.lovbestemtFerie?.length || soknad.lovbestemtFerieSomSkalSlettes?.length),
+            },
+            {
+                panel: PunchFormPaneler.ARBEID,
+                condition: !!(
+                    soknad.arbeidstid?.arbeidstakerList?.length ||
+                    soknad.arbeidstid?.frilanserArbeidstidInfo ||
+                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende
+                ),
+            },
+            { panel: PunchFormPaneler.OPPLYSINGER_OM_SOKER, condition: !!soknad.omsorg?.relasjonTilBarnet },
+            { panel: PunchFormPaneler.OMSORGSTILBUD, condition: !!soknad.tilsynsordning?.perioder?.length },
             {
                 panel: PunchFormPaneler.BEREDSKAPNATTEVAAK,
-                condition: soknad.beredskap?.length || soknad.nattevaak?.length,
+                condition: !!(soknad.beredskap?.length || soknad.nattevaak?.length),
             },
-            { panel: PunchFormPaneler.MEDLEMSKAP, condition: soknad.bosteder?.length },
+            { panel: PunchFormPaneler.MEDLEMSKAP, condition: !!soknad.bosteder?.length },
         ];
 
         panelConditions.forEach(({ panel, condition }) => {
             if (condition && !åpnePaneler.has(panel)) {
-                // eslint-disable-next-line no-console
-                console.log('TEST getÅpnePanelerVedStart upd paneler');
                 åpnePaneler.add(panel);
             }
         });
-        // eslint-disable-next-line no-console
-        console.log('TEST getÅpnePanelerVedStart end');
+
         return Array.from(åpnePaneler);
     };
 
