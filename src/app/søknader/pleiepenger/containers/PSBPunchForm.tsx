@@ -835,8 +835,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             />
         );
 
-        console.log('Test def open utenlandsopphold', this.utenlandsOppholdCheckedValue() === JaNeiIkkeOpplyst.JA);
-
         return (
             <div data-testid="PSBPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
@@ -884,9 +882,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
-                        // open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                        defaultOpen={this.utenlandsOppholdCheckedValue() === JaNeiIkkeOpplyst.JA}
+                        open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         data-testid="accordionItem-utenlandsoppholdpanel"
                     >
@@ -944,9 +940,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </Accordion.Item>
 
                     <Accordion.Item
-                        // open={this.checkOpenState(PunchFormPaneler.FERIE)}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
-                        defaultOpen={!!soknad.lovbestemtFerie.length}
+                        open={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
                         data-testid="accordionItem-feriepanel"
                     >
@@ -1034,8 +1028,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                        defaultOpen={!!soknad.omsorg.relasjonTilBarnet}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         data-testid="accordionItem-opplysningeromsokerpanel"
                     >
@@ -1072,8 +1064,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
-                        defaultOpen={!!this.state.iTilsynsordning}
                         className={classNames('tilsynsordning')}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}
                         data-testid="accordionItem-omsorgstilbudpanel"
@@ -1123,8 +1113,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
-                        defaultOpen={!!soknad.beredskap.length || !!soknad.nattevaak.length}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         data-testid="accordionItem-beredskapnattevaakpanel"
                     >
@@ -1159,8 +1147,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                        // defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                        defaultOpen={this.medlemskapCheckedValue() === JaNeiIkkeOpplyst.JA}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
                         data-testid="accordionItem-medlemskappanel"
                     >

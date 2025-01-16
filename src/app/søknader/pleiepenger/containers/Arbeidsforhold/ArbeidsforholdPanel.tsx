@@ -823,11 +823,6 @@ const ArbeidsforholdPanel = ({
     return (
         <Accordion.Item
             open={isOpen}
-            defaultOpen={
-                !!soknad.arbeidstid?.arbeidstakerList?.length ||
-                !!soknad.opptjeningAktivitet.frilanser ||
-                !!soknad.opptjeningAktivitet.selvstendigNaeringsdrivende
-            }
             onOpenChange={() => onPanelClick()}
             data-testid="accordionItem-arbeidsforholdPanel"
         >
