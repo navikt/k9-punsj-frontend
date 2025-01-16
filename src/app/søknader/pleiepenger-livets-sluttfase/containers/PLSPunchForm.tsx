@@ -694,25 +694,34 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private updateIkkeSkalHaFerie = (checked: boolean) => {
-        const { aapnePaneler } = this.state;
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.setState((prevState) => ({
-                soknad: { ...prevState.soknad, lovbestemtFerieSomSkalSlettes: [{}] },
-            }));
-        }
+        this.setState((prevState) => {
+            const { aapnePaneler, soknad } = prevState;
 
-        if (!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.push(PunchFormPaneler.ARBEID);
-        } else if (!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
-        }
+            // Initialize lovbestemtFerieSomSkalSlettes if not already set
+            const updatedSoknad = {
+                ...soknad,
+                lovbestemtFerieSomSkalSlettes: soknad.lovbestemtFerieSomSkalSlettes || [{}],
+            };
 
-        if (!!checked && this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
-            this.addIkkeSkalHaFerie();
-        } else {
-            this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
-            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
-        }
+            // Update aapnePaneler based on checked value
+            const updatedAapnePaneler = checked
+                ? [...aapnePaneler, PunchFormPaneler.ARBEID]
+                : aapnePaneler.filter((panel) => panel !== PunchFormPaneler.ARBEID);
+
+            // Update lovbestemtFerieSomSkalSlettes based on checked value
+            if (checked && updatedSoknad.lovbestemtFerieSomSkalSlettes.length === 0) {
+                this.addIkkeSkalHaFerie();
+            } else if (!checked) {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [];
+                this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
+                this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
+            }
+
+            return {
+                soknad: updatedSoknad,
+                aapnePaneler: updatedAapnePaneler,
+            };
+        });
     };
 
     private statusetikett = () => {
