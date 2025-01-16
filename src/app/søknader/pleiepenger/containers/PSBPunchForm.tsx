@@ -882,7 +882,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         data-testid="accordionItem-utenlandsoppholdpanel"
@@ -942,7 +941,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.FERIE)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
                         data-testid="accordionItem-feriepanel"
                     >
@@ -953,7 +951,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
-                                value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
                                 data-testid="feriepanel-checkbox"
@@ -982,7 +979,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     <>
                                         <CheckboksPanel
                                             label={intlHelper(intl, 'skjema.ferie.fjern')}
-                                            value="skjema.ferie.fjern"
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
                                         />
@@ -1032,7 +1028,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                         data-testid="accordionItem-opplysningeromsokerpanel"
                     >
@@ -1069,7 +1064,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
                         className={classNames('tilsynsordning')}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}
                         data-testid="accordionItem-omsorgstilbudpanel"
@@ -1081,9 +1075,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
-                                value="skjema.omsorgstilbud.checkboks"
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
-                                checked={this.state.iTilsynsordning}
+                                checked={!!this.state.iTilsynsordning}
                                 data-testid="omsorgstilbud-checkboks"
                             />
                             {this.state.iTilsynsordning && (
@@ -1120,7 +1113,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.BEREDSKAPNATTEVAAK)}
                         data-testid="accordionItem-beredskapnattevaakpanel"
                     >
@@ -1131,7 +1123,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <CheckboksPanel
                                 label={intlHelper(intl, BeredskapNattevaak.BEREDSKAP)}
-                                value={BeredskapNattevaak.BEREDSKAP}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)
                                 }
@@ -1143,7 +1134,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             <VerticalSpacer eightPx />
                             <CheckboksPanel
                                 label={intlHelper(intl, BeredskapNattevaak.NATTEVAAK)}
-                                value={BeredskapNattevaak.NATTEVAAK}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)
                                 }
@@ -1157,7 +1147,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
                         data-testid="accordionItem-medlemskappanel"
                     >

@@ -26,7 +26,9 @@ import pilsSoknad from '../../cypress/fixtures/pilsSoknad.json';
 import jpOMPUT314 from '../../cypress/fixtures/jpOMPUT314.json';
 
 export const testHandlers = {
-    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), ({ params }) => {
+    hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), async ({ params }) => {
+        await delay(500);
+
         if (params.id === '300') {
             return HttpResponse.json(jpPSB300, { status: 201 });
         }
@@ -63,6 +65,7 @@ export const testHandlers = {
         if (params.id === '206') {
             return HttpResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
+
         return HttpResponse.json({ ...journalpost, journalpostId: params.id });
     }),
     opprettePleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_CREATE, () =>
@@ -88,7 +91,7 @@ export const testHandlers = {
 
     eksisterendePleiepengesoknad: http.get(
         ApiPath.PSB_SOKNAD_GET.replace('{id}', '0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'),
-        () => HttpResponse.json(journalpost),
+        () => HttpResponse.json(pleiepengerSoknadSomKanSendesInn),
     ),
     eksisterendePilssoknad: http.get(
         ApiPath.PLS_SOKNAD_GET.replace('{id}', '4e3a9001-f872-4288-829e-08f8e1001b28'),

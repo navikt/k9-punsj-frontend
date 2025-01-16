@@ -823,7 +823,6 @@ const ArbeidsforholdPanel = ({
     return (
         <Accordion.Item
             open={isOpen}
-            defaultOpen={isOpen}
             onOpenChange={() => onPanelClick()}
             data-testid="accordionItem-arbeidsforholdPanel"
         >

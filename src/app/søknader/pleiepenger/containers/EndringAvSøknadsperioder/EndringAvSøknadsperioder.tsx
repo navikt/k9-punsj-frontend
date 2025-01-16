@@ -130,7 +130,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
     return (
         <Accordion.Item
-            defaultOpen={isOpen}
             open={isOpen}
             className="endringAvSøknadsperioder"
             onOpenChange={onClick}
