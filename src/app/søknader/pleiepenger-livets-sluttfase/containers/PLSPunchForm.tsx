@@ -321,8 +321,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 panel: PunchFormPaneler.ARBEID,
                 condition: !!(
                     soknad.arbeidstid?.arbeidstakerList?.length ||
-                    soknad.arbeidstid?.frilanserArbeidstidInfo ||
-                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende
+                    soknad.opptjeningAktivitet?.frilanser ||
+                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende ||
+                    soknad.lovbestemtFerieSomSkalSlettes?.length
                 ),
             },
 
