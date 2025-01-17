@@ -207,6 +207,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
                 isFetched: true,
+                aapnePaneler: this.getÅpnePanelerVedStart(this.props.punchFormState.soknad as IPLSSoknad),
             });
 
             if (!soknad.pleietrengende?.norskIdent) {
@@ -304,6 +305,37 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             }
             return { aapnePaneler: [...aapnePaneler, p] };
         });
+    };
+
+    private getÅpnePanelerVedStart = (soknad: Partial<IPLSSoknad>) => {
+        const åpnePaneler = new Set(this.state.aapnePaneler);
+
+        const panelConditions = [
+            { panel: PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER, condition: !!soknad.trekkKravPerioder?.length },
+            { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: !!soknad.utenlandsopphold?.length },
+            {
+                panel: PunchFormPaneler.FERIE,
+                condition: !!(soknad.lovbestemtFerie?.length || soknad.lovbestemtFerieSomSkalSlettes?.length),
+            },
+            {
+                panel: PunchFormPaneler.ARBEID,
+                condition: !!(
+                    soknad.arbeidstid?.arbeidstakerList?.length ||
+                    soknad.arbeidstid?.frilanserArbeidstidInfo ||
+                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende
+                ),
+            },
+
+            { panel: PunchFormPaneler.MEDLEMSKAP, condition: !!soknad.bosteder?.length },
+        ];
+
+        panelConditions.forEach(({ panel, condition }) => {
+            if (condition && !åpnePaneler.has(panel)) {
+                åpnePaneler.add(panel);
+            }
+        });
+
+        return Array.from(åpnePaneler);
     };
 
     private checkOpenState = (p: PunchFormPaneler): boolean => {
