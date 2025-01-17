@@ -88,9 +88,11 @@ const Soknadsperioder: React.FC<Props> = ({
                         <FormattedMessage id="skjema.generellinfo" />
                     </Alert>
 
-                    <Heading size="xsmall" level="4">
-                        <FormattedMessage id="skjema.eksisterende" />
-                    </Heading>
+                    <div className="mb-2 mt-4">
+                        <Heading size="xsmall" level="4">
+                            <FormattedMessage id="skjema.eksisterende" />
+                        </Heading>
+                    </div>
 
                     {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
@@ -112,11 +114,8 @@ const Soknadsperioder: React.FC<Props> = ({
                                     setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
+                                icon={<AddCircleSvg title="leggtilcircle" />}
                             >
-                                <div className="leggtilcircle">
-                                    <AddCircleSvg title="leggtilcircle" />
-                                </div>
-
                                 <FormattedMessage id="skjema.soknadsperiode.leggtil" />
                             </Button>
                         </div>
