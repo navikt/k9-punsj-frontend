@@ -771,10 +771,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         if (punchFormState.error) {
             return (
                 <>
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: this.props.id }} />
+                    </Alert>
+
                     <p>
                         <Button variant="secondary" onClick={this.handleStartButtonClick}>
-                            {intlHelper(intl, 'skjema.knapp.tilstart')}
+                            <FormattedMessage id="skjema.knapp.tilstart" />
                         </Button>
                     </p>
                 </>
@@ -790,8 +793,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         return (
             <div data-test-id="PILSPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
+
                 {this.statusetikett()}
+
                 <VerticalSpacer sixteenPx />
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
@@ -800,7 +806,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     getUhaandterteFeil={this.getUhaandterteFeil}
                     soknad={soknad}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <OpplysningerOmPLSSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -809,14 +817,16 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     signert={signert}
                     soknad={soknad}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <Checkbox
                     onChange={(e) => {
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
                 >
-                    {intlHelper(intl, 'skjema.ekspander')}
+                    <FormattedMessage id="skjema.ekspander" />
                 </Checkbox>
 
                 <VerticalSpacer sixteenPx />
@@ -938,8 +948,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
                                             <>
                                                 <Alert size="small" variant="info">
-                                                    {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                                    <FormattedMessage id="skjema.ferie.fjern.info" />
                                                 </Alert>
+
                                                 <Periodepaneler
                                                     periods={soknad.lovbestemtFerieSomSkalSlettes}
                                                     initialPeriode={this.initialPeriode}
@@ -1029,8 +1040,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Content>
                     </Accordion.Item>
                 </Accordion>
+
                 <VerticalSpacer thirtyTwoPx />
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+
+                <p className="ikkeregistrert">
+                    <FormattedMessage id="skjema.ikkeregistrert" />
+                </p>
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="medisinskeopplysningercheckbox"
@@ -1038,11 +1054,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                        <FormattedMessage id="skjema.medisinskeopplysninger.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer eightPx />
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="opplysningerikkepunsjetcheckbox"
@@ -1050,11 +1069,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                        <FormattedMessage id="skjema.opplysningerikkepunsjet.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer twentyPx />
+
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
@@ -1074,7 +1096,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             onClick={() => this.handleSubmit()}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
-                            {intlHelper(intl, 'skjema.knapp.send')}
+                            <FormattedMessage id="skjema.knapp.send" />
                         </Button>
 
                         <Button
@@ -1083,25 +1105,41 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             onClick={() => this.setState({ showSettPaaVentModal: true })}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
-                            {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                            <FormattedMessage id="skjema.knapp.settpaavent" />
                         </Button>
                     </p>
                 </div>
+
                 <VerticalSpacer sixteenPx />
+
                 {!!punchFormState.updateSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_lagret')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_lagret" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.inputErrors?.length && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.validering')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.validering" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_sendt" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadConflict && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.konflikt" />
+                    </Alert>
                 )}
+
                 {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.sletteferie_manglerarbeidstid" />
+                    </Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (
@@ -1143,24 +1181,26 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         response={this.props.punchFormState.validertSoknad}
                                     />
                                 </div>
-                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                    <Button
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappVidere"
-                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                    >
-                                        {intlHelper(intl, 'fordeling.knapp.videre')}
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappTilbake"
-                                        onClick={() => this.props.validerSoknadReset()}
-                                    >
-                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                    </Button>
-                                </div>
                             </Modal.Body>
+
+                            <Modal.Footer>
+                                <Button
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappVidere"
+                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                >
+                                    <FormattedMessage id="skjema.knapp.videre" />
+                                </Button>
+
+                                <Button
+                                    variant="secondary"
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappTilbake"
+                                    onClick={() => this.props.validerSoknadReset()}
+                                >
+                                    <FormattedMessage id="skjema.knapp.avbryt" />
+                                </Button>
+                            </Modal.Footer>
                         </Modal>
                     )}
 
