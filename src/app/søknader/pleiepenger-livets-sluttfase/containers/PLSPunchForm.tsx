@@ -1124,10 +1124,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         <Loader size="large" />
                     </div>
                 )}
+
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
                         <Button
-                            variant="secondary"
                             className="send-knapp"
                             onClick={() => this.handleSubmit()}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
