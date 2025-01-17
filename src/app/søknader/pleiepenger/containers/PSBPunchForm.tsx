@@ -295,8 +295,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 panel: PunchFormPaneler.ARBEID,
                 condition: !!(
                     soknad.arbeidstid?.arbeidstakerList?.length ||
-                    soknad.arbeidstid?.frilanserArbeidstidInfo ||
-                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende
+                    soknad.opptjeningAktivitet?.frilanser ||
+                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende ||
+                    soknad.lovbestemtFerieSomSkalSlettes?.length
                 ),
             },
             { panel: PunchFormPaneler.OPPLYSINGER_OM_SOKER, condition: !!soknad.omsorg?.relasjonTilBarnet },
@@ -915,8 +916,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         updateSoknadState={this.updateSoknadState}
                         eksisterendePerioder={eksisterendePerioder}
                     />
-
-                    <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}

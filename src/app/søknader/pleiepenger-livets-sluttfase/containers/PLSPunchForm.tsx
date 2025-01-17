@@ -188,8 +188,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
     componentDidMount(): void {
         const { id, søkersIdent, pleietrengendeIdent } = this.props;
-        this.props.getSoknad(id);
-        this.setState((prevState) => prevState);
+
+        if (id) {
+            this.props.getSoknad(id);
+        }
 
         if (søkersIdent && pleietrengendeIdent) {
             this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
@@ -201,19 +203,18 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.props;
         const { soknad } = punchFormState;
 
-        if (!!soknad && !this.state.isFetched) {
+        if (soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
                 isFetched: true,
+                aapnePaneler: this.getÅpnePanelerVedStart(this.props.punchFormState.soknad as IPLSSoknad),
             });
-            if (
-                !soknad.pleietrengende ||
-                !soknad.pleietrengende.norskIdent ||
-                soknad.pleietrengende.norskIdent === ''
-            ) {
+
+            if (!soknad.pleietrengende?.norskIdent) {
                 this.updateSoknad({ pleietrengende: { norskIdent: pleietrengendeIdent || '' } });
             }
         }
+
         if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
             hentPerioder(søkersIdent, pleietrengendeIdent);
             if (!identState.søkerId || !identState.pleietrengendeId) {
@@ -229,14 +230,20 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     }
 
     private handleMedlemskapChange = (jaNei: JaNeiIkkeOpplyst) => {
-        this.setState({
-            harBoddIUtlandet: jaNei,
-        });
+        this.setState((prevState) => {
+            const updatedSoknad = { ...prevState.soknad };
 
-        if (jaNei === JaNeiIkkeOpplyst.JA && this.state.soknad.bosteder!.length === 0) {
-            this.state.soknad.bosteder!.push({ periode: { fom: '', tom: '' }, land: '' });
-            this.forceUpdate();
-        }
+            if (jaNei === JaNeiIkkeOpplyst.JA && updatedSoknad.bosteder!.length === 0) {
+                updatedSoknad.bosteder = [{ periode: { fom: '', tom: '' }, land: '' }];
+            } else if (jaNei !== JaNeiIkkeOpplyst.JA) {
+                updatedSoknad.bosteder = [];
+            }
+
+            return {
+                harBoddIUtlandet: jaNei,
+                soknad: updatedSoknad,
+            };
+        });
 
         if (jaNei !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({ bosteder: [] }, true);
@@ -256,14 +263,22 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private addIkkeSkalHaFerie = () => {
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.setState((prevState) => ({
-                soknad: { ...prevState.soknad, lovbestemtFerieSomSkalSlettes: [{}] },
-            }));
-        }
-        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({ fom: '', tom: '' });
-        this.forceUpdate();
-        this.updateSoknad({ lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes });
+        this.setState((prevState) => {
+            const updatedSoknad = { ...prevState.soknad };
+
+            if (!updatedSoknad.lovbestemtFerieSomSkalSlettes) {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [{ fom: '', tom: '' }];
+            } else {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [
+                    ...updatedSoknad.lovbestemtFerieSomSkalSlettes,
+                    { fom: '', tom: '' },
+                ];
+            }
+
+            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: updatedSoknad.lovbestemtFerieSomSkalSlettes });
+
+            return { soknad: updatedSoknad };
+        });
     };
 
     private handleSubmit = () => {
@@ -283,33 +298,57 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private handlePanelClick = (p: PunchFormPaneler) => {
-        const { aapnePaneler } = this.state;
-        if (aapnePaneler.some((panel) => panel === p)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
-        } else {
-            aapnePaneler.push(p);
-        }
-        this.forceUpdate();
+        this.setState((prevState) => {
+            const { aapnePaneler } = prevState;
+            if (aapnePaneler.includes(p)) {
+                return { aapnePaneler: aapnePaneler.filter((panel) => panel !== p) };
+            }
+            return { aapnePaneler: [...aapnePaneler, p] };
+        });
+    };
+
+    private getÅpnePanelerVedStart = (soknad: Partial<IPLSSoknad>) => {
+        const åpnePaneler = new Set(this.state.aapnePaneler);
+
+        const panelConditions = [
+            { panel: PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER, condition: !!soknad.trekkKravPerioder?.length },
+            { panel: PunchFormPaneler.UTENLANDSOPPHOLD, condition: !!soknad.utenlandsopphold?.length },
+            {
+                panel: PunchFormPaneler.FERIE,
+                condition: !!(soknad.lovbestemtFerie?.length || soknad.lovbestemtFerieSomSkalSlettes?.length),
+            },
+            {
+                panel: PunchFormPaneler.ARBEID,
+                condition: !!(
+                    soknad.arbeidstid?.arbeidstakerList?.length ||
+                    soknad.opptjeningAktivitet?.frilanser ||
+                    soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende ||
+                    soknad.lovbestemtFerieSomSkalSlettes?.length
+                ),
+            },
+
+            { panel: PunchFormPaneler.MEDLEMSKAP, condition: !!soknad.bosteder?.length },
+        ];
+
+        panelConditions.forEach(({ panel, condition }) => {
+            if (condition && !åpnePaneler.has(panel)) {
+                åpnePaneler.add(panel);
+            }
+        });
+
+        return Array.from(åpnePaneler);
     };
 
     private checkOpenState = (p: PunchFormPaneler): boolean => {
         const { aapnePaneler, expandAll } = this.state;
+
         if (this.props.punchFormState.inputErrors?.length) {
             return true;
         }
-        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        return false;
+
+        const isPanelOpen = aapnePaneler.includes(p);
+
+        return expandAll || isPanelOpen;
     };
 
     private updateVirksomhetstyper = (v: Virksomhetstyper, checked: boolean) => {
@@ -694,25 +733,34 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private updateIkkeSkalHaFerie = (checked: boolean) => {
-        const { aapnePaneler } = this.state;
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.setState((prevState) => ({
-                soknad: { ...prevState.soknad, lovbestemtFerieSomSkalSlettes: [{}] },
-            }));
-        }
+        this.setState((prevState) => {
+            const { aapnePaneler, soknad } = prevState;
 
-        if (!!checked && !aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.push(PunchFormPaneler.ARBEID);
-        } else if (!checked && aapnePaneler.some((panel) => panel === PunchFormPaneler.ARBEID)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(PunchFormPaneler.ARBEID), 1);
-        }
+            // Initialize lovbestemtFerieSomSkalSlettes if not already set
+            const updatedSoknad = {
+                ...soknad,
+                lovbestemtFerieSomSkalSlettes: soknad.lovbestemtFerieSomSkalSlettes || [{}],
+            };
 
-        if (!!checked && this.state.soknad.lovbestemtFerieSomSkalSlettes?.length === 0) {
-            this.addIkkeSkalHaFerie();
-        } else {
-            this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
-            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
-        }
+            // Update aapnePaneler based on checked value
+            const updatedAapnePaneler = checked
+                ? [...aapnePaneler, PunchFormPaneler.ARBEID]
+                : aapnePaneler.filter((panel) => panel !== PunchFormPaneler.ARBEID);
+
+            // Update lovbestemtFerieSomSkalSlettes based on checked value
+            if (checked && updatedSoknad.lovbestemtFerieSomSkalSlettes.length === 0) {
+                this.addIkkeSkalHaFerie();
+            } else if (!checked) {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [];
+                this.updateSoknadState({ lovbestemtFerieSomSkalSlettes: [] }, true);
+                this.updateSoknad({ lovbestemtFerieSomSkalSlettes: [] });
+            }
+
+            return {
+                soknad: updatedSoknad,
+                aapnePaneler: updatedAapnePaneler,
+            };
+        });
     };
 
     private statusetikett = () => {
@@ -762,10 +810,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         if (punchFormState.error) {
             return (
                 <>
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: this.props.id }} />
+                    </Alert>
+
                     <p>
                         <Button variant="secondary" onClick={this.handleStartButtonClick}>
-                            {intlHelper(intl, 'skjema.knapp.tilstart')}
+                            <FormattedMessage id="skjema.knapp.tilstart" />
                         </Button>
                     </p>
                 </>
@@ -781,8 +832,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         return (
             <div data-test-id="PILSPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
+
                 {this.statusetikett()}
+
                 <VerticalSpacer sixteenPx />
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
@@ -790,8 +844,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     getErrorMessage={this.getErrorMessage}
                     getUhaandterteFeil={this.getUhaandterteFeil}
                     soknad={soknad}
+                    punchFormState={punchFormState}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <OpplysningerOmPLSSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -800,14 +857,16 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     signert={signert}
                     soknad={soknad}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <Checkbox
                     onChange={(e) => {
                         this.setState({ expandAll: e.target.checked });
                         this.forceUpdate();
                     }}
                 >
-                    {intlHelper(intl, 'skjema.ekspander')}
+                    <FormattedMessage id="skjema.ekspander" />
                 </Checkbox>
 
                 <VerticalSpacer sixteenPx />
@@ -822,10 +881,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         updateSoknadState={this.updateSoknadState}
                         eksisterendePerioder={eksisterendePerioder}
                     />
-                    <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         data-test-id="accordionItem-utenlandsoppholdpanel"
@@ -881,7 +938,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.FERIE)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
                         data-test-id="accordionItem-feriepanel"
                     >
@@ -929,8 +985,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
                                             <>
                                                 <Alert size="small" variant="info">
-                                                    {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                                    <FormattedMessage id="skjema.ferie.fjern.info" />
                                                 </Alert>
+
                                                 <Periodepaneler
                                                     periods={soknad.lovbestemtFerieSomSkalSlettes}
                                                     initialPeriode={this.initialPeriode}
@@ -970,9 +1027,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
+
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
                         data-test-id="accordionItem-medlemskappanel"
                     >
@@ -1020,8 +1077,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Content>
                     </Accordion.Item>
                 </Accordion>
+
                 <VerticalSpacer thirtyTwoPx />
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+
+                <p className="ikkeregistrert">
+                    <FormattedMessage id="skjema.ikkeregistrert" />
+                </p>
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="medisinskeopplysningercheckbox"
@@ -1029,11 +1091,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                        <FormattedMessage id="skjema.medisinskeopplysninger.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer eightPx />
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="opplysningerikkepunsjetcheckbox"
@@ -1041,11 +1106,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                        <FormattedMessage id="skjema.opplysningerikkepunsjet.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer twentyPx />
+
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
@@ -1057,15 +1125,15 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         <Loader size="large" />
                     </div>
                 )}
+
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
                         <Button
-                            variant="secondary"
                             className="send-knapp"
                             onClick={() => this.handleSubmit()}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
-                            {intlHelper(intl, 'skjema.knapp.send')}
+                            <FormattedMessage id="skjema.knapp.send" />
                         </Button>
 
                         <Button
@@ -1074,25 +1142,41 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                             onClick={() => this.setState({ showSettPaaVentModal: true })}
                             disabled={!sjekkHvisArbeidstidErAngitt(this.props.punchFormState)}
                         >
-                            {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                            <FormattedMessage id="skjema.knapp.settpaavent" />
                         </Button>
                     </p>
                 </div>
+
                 <VerticalSpacer sixteenPx />
+
                 {!!punchFormState.updateSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_lagret')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_lagret" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.inputErrors?.length && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.validering')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.validering" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_sendt" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadConflict && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.konflikt')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.konflikt" />
+                    </Alert>
                 )}
+
                 {!sjekkHvisArbeidstidErAngitt(this.props.punchFormState) && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.sletteferie_manglerarbeidstid')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.sletteferie_manglerarbeidstid" />
+                    </Alert>
                 )}
 
                 {this.state.showSettPaaVentModal && (
@@ -1134,24 +1218,26 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                         response={this.props.punchFormState.validertSoknad}
                                     />
                                 </div>
-                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                    <Button
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappVidere"
-                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                    >
-                                        {intlHelper(intl, 'fordeling.knapp.videre')}
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappTilbake"
-                                        onClick={() => this.props.validerSoknadReset()}
-                                    >
-                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                    </Button>
-                                </div>
                             </Modal.Body>
+
+                            <Modal.Footer>
+                                <Button
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappVidere"
+                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                >
+                                    <FormattedMessage id="skjema.knapp.videre" />
+                                </Button>
+
+                                <Button
+                                    variant="secondary"
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappTilbake"
+                                    onClick={() => this.props.validerSoknadReset()}
+                                >
+                                    <FormattedMessage id="skjema.knapp.avbryt" />
+                                </Button>
+                            </Modal.Footer>
                         </Modal>
                     )}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useIntl } from 'react-intl';
-import { Box } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Box, Button } from '@navikt/ds-react';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -9,7 +9,6 @@ import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import AddCircleSvg from '../assets/SVG/AddCircleSVG';
 import BinSvg from '../assets/SVG/BinSVG';
 import { IPeriode } from '../models/types/Periode';
-import intlHelper from '../utils/intlUtils';
 
 interface Props {
     periods: IPeriode[]; // Liste over periodisert informasjon
@@ -53,6 +52,7 @@ export const Periodepaneler: React.FC<Props> = ({
         const newInfo: IPeriode = { ...periods[index], ...periodeinfo };
         const newArray = [...(periods || [])];
         newArray[index] = newInfo;
+
         return newArray;
     };
 
@@ -61,12 +61,14 @@ export const Periodepaneler: React.FC<Props> = ({
     const addItem = () => {
         const newArray = [...(periods || [])];
         newArray.push(initialPeriode);
+
         return newArray;
     };
 
     const removeItem = (index: number) => {
         const newArray = [...(periods || [])];
         newArray.splice(index, 1);
+
         return newArray;
     };
 
@@ -90,7 +92,7 @@ export const Periodepaneler: React.FC<Props> = ({
                         />
 
                         <div className="ml-4">
-                            <button
+                            <Button
                                 id="slett"
                                 className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
                                 type="button"
@@ -104,16 +106,16 @@ export const Periodepaneler: React.FC<Props> = ({
                                         onRemove();
                                     }
                                 }}
+                                icon={<BinSvg title="fjern" />}
+                                size="small"
                             >
-                                <div className="slettIcon">
-                                    <BinSvg title="fjern" />
-                                </div>
-                                {intlHelper(intl, textFjern || 'skjema.liste.fjern')}
-                            </button>
+                                <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                            </Button>
                         </div>
                     </div>
                 </div>
             ))}
+
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
@@ -122,7 +124,7 @@ export const Periodepaneler: React.FC<Props> = ({
 
             {kanHaFlere && (
                 <div className="flex flex-wrap">
-                    <button
+                    <Button
                         id="leggtilperiode"
                         className="leggtilperiode"
                         type="button"
@@ -136,12 +138,11 @@ export const Periodepaneler: React.FC<Props> = ({
                                 onAdd();
                             }
                         }}
+                        icon={<AddCircleSvg title="leggtil" />}
+                        size="small"
                     >
-                        <div className="leggtilperiodeIcon">
-                            <AddCircleSvg title="leggtil" />
-                        </div>
-                        {intlHelper(intl, textLeggTil || 'skjema.periodepanel.legg_til')}
-                    </button>
+                        <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
+                    </Button>
                 </div>
             )}
         </Box>

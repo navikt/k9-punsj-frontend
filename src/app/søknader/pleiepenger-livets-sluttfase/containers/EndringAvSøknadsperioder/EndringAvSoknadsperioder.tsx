@@ -120,12 +120,7 @@ const EndringAvSoknadsperioder = (props: Props) => {
     };
 
     return (
-        <Accordion.Item
-            open={isOpen}
-            defaultOpen={isOpen}
-            onOpenChange={onClick}
-            data-testid="accordionItem-endringAvSøknadsperioderPanel"
-        >
+        <Accordion.Item open={isOpen} onOpenChange={onClick} data-testid="accordionItem-endringAvSøknadsperioderPanel">
             <Accordion.Header>
                 <FormattedMessage id="skjema.endringAvSøknadsperioder" />
             </Accordion.Header>
