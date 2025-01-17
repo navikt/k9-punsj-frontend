@@ -880,7 +880,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         updateSoknadState={this.updateSoknadState}
                         eksisterendePerioder={eksisterendePerioder}
                     />
-                    <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}

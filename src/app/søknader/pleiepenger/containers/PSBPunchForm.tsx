@@ -917,8 +917,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         eksisterendePerioder={eksisterendePerioder}
                     />
 
-                    <VerticalSpacer sixteenPx />
-
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
