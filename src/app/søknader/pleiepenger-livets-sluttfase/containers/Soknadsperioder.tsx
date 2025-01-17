@@ -115,6 +115,7 @@ const Soknadsperioder: React.FC<Props> = ({
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
                                 icon={<AddCircleSvg title="leggtilcircle" />}
+                                size="small"
                             >
                                 <FormattedMessage id="skjema.soknadsperiode.leggtil" />
                             </Button>
