@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 
 import { initializeDate } from 'app/utils';
@@ -11,34 +10,43 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { GetUhaandterteFeil, IPeriode } from '../../../models/types';
-import { RootStateType } from '../../../state/RootState';
 import { IPLSSoknad } from '../types/PLSSoknad';
+import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 
 import './soknadsperioder.less';
 
 interface Props {
     soknad: IPLSSoknad;
     initialPeriode: IPeriode;
+    punchFormState: IPunchPLSFormState;
 
-    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
-    getUhaandterteFeil: GetUhaandterteFeil;
     updateSoknadState: (soknad: Partial<IPLSSoknad>) => void;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => void;
+    getErrorMessage: (attribute: string, indeks?: number | undefined) => string | undefined;
+    getUhaandterteFeil: GetUhaandterteFeil;
 }
 
 const Soknadsperioder: React.FC<Props> = ({
     soknad,
     initialPeriode,
+    punchFormState,
 
-    getUhaandterteFeil,
-    getErrorMessage,
     updateSoknadState,
     updateSoknad,
+    getUhaandterteFeil,
+    getErrorMessage,
 }) => {
+    const harLagretPerioder = soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0;
+
     const [visLeggTilPerioder, setVisLeggTilPerioder] = useState<boolean>(true);
     const [harSlettetPerioder, setHarSlettetPerioder] = useState<boolean>(false);
 
-    const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState);
+    useEffect(() => {
+        if (harLagretPerioder && visLeggTilPerioder) {
+            setVisLeggTilPerioder(false);
+        }
+    }, [harLagretPerioder, visLeggTilPerioder, setVisLeggTilPerioder]);
+
     const finnesIkkeEksisterendePerioder: boolean =
         !punchFormState.hentPerioderError && !punchFormState?.perioder?.length;
 
@@ -59,8 +67,8 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     const getPerioder = () => {
-        if (soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0) {
-            return soknad.soeknadsperiode;
+        if (harLagretPerioder) {
+            return soknad.soeknadsperiode!;
         }
 
         if (harSlettetPerioder) {
@@ -71,7 +79,13 @@ const Soknadsperioder: React.FC<Props> = ({
     };
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="eksiterendesoknaderpanel">
+        <Box
+            padding="4"
+            borderWidth="1"
+            borderRadius="small"
+            className="eksiterendesoknaderpanel"
+            data-testid="søknadsperioder"
+        >
             <Heading size="small" level="3">
                 <FormattedMessage id="skjema.soknadsperiode" />
             </Heading>
@@ -116,6 +130,7 @@ const Soknadsperioder: React.FC<Props> = ({
                                 }}
                                 icon={<AddCircleSvg title="leggtilcircle" />}
                                 size="small"
+                                data-testid="leggtilsoknadsperiode"
                             >
                                 <FormattedMessage id="skjema.soknadsperiode.leggtil" />
                             </Button>
@@ -146,6 +161,7 @@ const Soknadsperioder: React.FC<Props> = ({
                         getUhaandterteFeil={getUhaandterteFeil}
                         kanHaFlere
                         onRemove={() => setHarSlettetPerioder(true)}
+                        doNotShowBorders
                     />
                 </div>
             )}

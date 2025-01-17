@@ -844,6 +844,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     getErrorMessage={this.getErrorMessage}
                     getUhaandterteFeil={this.getUhaandterteFeil}
                     soknad={soknad}
+                    punchFormState={punchFormState}
                 />
 
                 <VerticalSpacer sixteenPx />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
@@ -118,7 +118,7 @@ const Soknadsperioder: React.FC<Props> = ({
 
                     {visLeggTilPerioder && (
                         <div className="knappecontainer">
-                            <button
+                            <Button
                                 id="leggtilsoknadsperiode"
                                 className="leggtilsoknadsperiode"
                                 type="button"
@@ -126,14 +126,12 @@ const Soknadsperioder: React.FC<Props> = ({
                                     setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
+                                icon={<AddCircleSvg title="leggtilcircle" />}
+                                size="small"
                                 data-testid="leggtilsoknadsperiode"
                             >
-                                <div className="leggtilcircle">
-                                    <AddCircleSvg title="leggtilcircle" />
-                                </div>
-
                                 <FormattedMessage id={'skjema.soknadsperiode.leggtil'} />
-                            </button>
+                            </Button>
                         </div>
                     )}
                 </>
@@ -146,26 +144,24 @@ const Soknadsperioder: React.FC<Props> = ({
             )}
 
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <Fieldset legend={undefined}>
-                    <div className="soknadsperiodecontainer">
-                        <Periodepaneler
-                            periods={getPerioder()}
-                            initialPeriode={initialPeriode}
-                            editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
-                            editSoknadState={(perioder) => {
-                                updateSoknadState({ soeknadsperiode: perioder });
-                            }}
-                            textLeggTil="skjema.perioder.legg_til"
-                            textFjern="skjema.perioder.fjern"
-                            feilkodeprefiks="ytelse.søknadsperiode"
-                            getErrorMessage={getErrorMessage}
-                            getUhaandterteFeil={getUhaandterteFeil}
-                            kanHaFlere
-                            onRemove={() => setHarSlettetPerioder(true)}
-                            doNotShowBorders
-                        />
-                    </div>
-                </Fieldset>
+                <div className="soknadsperiodecontainer">
+                    <Periodepaneler
+                        periods={getPerioder()}
+                        initialPeriode={initialPeriode}
+                        editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
+                        editSoknadState={(perioder) => {
+                            updateSoknadState({ soeknadsperiode: perioder });
+                        }}
+                        textLeggTil="skjema.perioder.legg_til"
+                        textFjern="skjema.perioder.fjern"
+                        feilkodeprefiks="ytelse.søknadsperiode"
+                        getErrorMessage={getErrorMessage}
+                        getUhaandterteFeil={getUhaandterteFeil}
+                        kanHaFlere
+                        onRemove={() => setHarSlettetPerioder(true)}
+                        doNotShowBorders
+                    />
+                </div>
             )}
 
             {overlappendeSoknadsperiode() && (
