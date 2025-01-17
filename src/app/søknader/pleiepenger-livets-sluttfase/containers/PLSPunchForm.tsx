@@ -188,8 +188,10 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
     componentDidMount(): void {
         const { id, søkersIdent, pleietrengendeIdent } = this.props;
-        this.props.getSoknad(id);
-        this.setState((prevState) => prevState);
+
+        if (id) {
+            this.props.getSoknad(id);
+        }
 
         if (søkersIdent && pleietrengendeIdent) {
             this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
@@ -201,19 +203,17 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.props;
         const { soknad } = punchFormState;
 
-        if (!!soknad && !this.state.isFetched) {
+        if (soknad && !this.state.isFetched) {
             this.setState({
                 soknad: new PLSSoknad(soknad as IPLSSoknad),
                 isFetched: true,
             });
-            if (
-                !soknad.pleietrengende ||
-                !soknad.pleietrengende.norskIdent ||
-                soknad.pleietrengende.norskIdent === ''
-            ) {
+
+            if (!soknad.pleietrengende?.norskIdent) {
                 this.updateSoknad({ pleietrengende: { norskIdent: pleietrengendeIdent || '' } });
             }
         }
+
         if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
             hentPerioder(søkersIdent, pleietrengendeIdent);
             if (!identState.søkerId || !identState.pleietrengendeId) {
@@ -229,14 +229,20 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     }
 
     private handleMedlemskapChange = (jaNei: JaNeiIkkeOpplyst) => {
-        this.setState({
-            harBoddIUtlandet: jaNei,
-        });
+        this.setState((prevState) => {
+            const updatedSoknad = { ...prevState.soknad };
 
-        if (jaNei === JaNeiIkkeOpplyst.JA && this.state.soknad.bosteder!.length === 0) {
-            this.state.soknad.bosteder!.push({ periode: { fom: '', tom: '' }, land: '' });
-            this.forceUpdate();
-        }
+            if (jaNei === JaNeiIkkeOpplyst.JA && updatedSoknad.bosteder!.length === 0) {
+                updatedSoknad.bosteder = [{ periode: { fom: '', tom: '' }, land: '' }];
+            } else if (jaNei !== JaNeiIkkeOpplyst.JA) {
+                updatedSoknad.bosteder = [];
+            }
+
+            return {
+                harBoddIUtlandet: jaNei,
+                soknad: updatedSoknad,
+            };
+        });
 
         if (jaNei !== JaNeiIkkeOpplyst.JA) {
             this.updateSoknadState({ bosteder: [] }, true);
@@ -256,14 +262,22 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private addIkkeSkalHaFerie = () => {
-        if (!this.state.soknad.lovbestemtFerieSomSkalSlettes) {
-            this.setState((prevState) => ({
-                soknad: { ...prevState.soknad, lovbestemtFerieSomSkalSlettes: [{}] },
-            }));
-        }
-        this.state.soknad.lovbestemtFerieSomSkalSlettes!.push({ fom: '', tom: '' });
-        this.forceUpdate();
-        this.updateSoknad({ lovbestemtFerieSomSkalSlettes: this.state.soknad.lovbestemtFerieSomSkalSlettes });
+        this.setState((prevState) => {
+            const updatedSoknad = { ...prevState.soknad };
+
+            if (!updatedSoknad.lovbestemtFerieSomSkalSlettes) {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [{ fom: '', tom: '' }];
+            } else {
+                updatedSoknad.lovbestemtFerieSomSkalSlettes = [
+                    ...updatedSoknad.lovbestemtFerieSomSkalSlettes,
+                    { fom: '', tom: '' },
+                ];
+            }
+
+            this.updateSoknad({ lovbestemtFerieSomSkalSlettes: updatedSoknad.lovbestemtFerieSomSkalSlettes });
+
+            return { soknad: updatedSoknad };
+        });
     };
 
     private handleSubmit = () => {
@@ -283,33 +297,25 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     };
 
     private handlePanelClick = (p: PunchFormPaneler) => {
-        const { aapnePaneler } = this.state;
-        if (aapnePaneler.some((panel) => panel === p)) {
-            aapnePaneler.splice(aapnePaneler.indexOf(p), 1);
-        } else {
-            aapnePaneler.push(p);
-        }
-        this.forceUpdate();
+        this.setState((prevState) => {
+            const { aapnePaneler } = prevState;
+            if (aapnePaneler.includes(p)) {
+                return { aapnePaneler: aapnePaneler.filter((panel) => panel !== p) };
+            }
+            return { aapnePaneler: [...aapnePaneler, p] };
+        });
     };
 
     private checkOpenState = (p: PunchFormPaneler): boolean => {
         const { aapnePaneler, expandAll } = this.state;
+
         if (this.props.punchFormState.inputErrors?.length) {
             return true;
         }
-        if (expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        if (expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && aapnePaneler.some((panel) => panel === p)) {
-            return true;
-        }
-        if (!expandAll && !aapnePaneler.some((panel) => panel === p)) {
-            return false;
-        }
-        return false;
+
+        const isPanelOpen = aapnePaneler.includes(p);
+
+        return expandAll || isPanelOpen;
     };
 
     private updateVirksomhetstyper = (v: Virksomhetstyper, checked: boolean) => {
@@ -844,7 +850,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     <VerticalSpacer sixteenPx />
 
                     <Accordion.Item
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         open={this.checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
                         data-test-id="accordionItem-utenlandsoppholdpanel"
@@ -900,7 +905,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.FERIE)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.FERIE)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.FERIE)}
                         data-test-id="accordionItem-feriepanel"
                     >
@@ -990,9 +994,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
+
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                        defaultOpen={this.checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
                         data-test-id="accordionItem-medlemskappanel"
                     >

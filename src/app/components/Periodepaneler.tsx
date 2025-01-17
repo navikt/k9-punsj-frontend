@@ -109,7 +109,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                 icon={<BinSvg title="fjern" />}
                                 size="small"
                             >
-                                <FormattedMessage id={`${textFjern}` || 'skjema.liste.fjern'} />
+                                <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
                             </Button>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ export const Periodepaneler: React.FC<Props> = ({
                         icon={<AddCircleSvg title="leggtil" />}
                         size="small"
                     >
-                        <FormattedMessage id={`${textLeggTil}` || 'skjema.periodepanel.legg_til'} />
+                        <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
                     </Button>
                 </div>
             )}
