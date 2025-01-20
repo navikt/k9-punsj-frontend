@@ -3,7 +3,7 @@ import { IInputError } from 'app/models/types/InputError';
 
 import { IPeriode } from '../../../models/types';
 import { IPLSSoknad } from './PLSSoknad';
-import { IPLSSoknadKvittering } from './PLSSoknadKvittering';
+import { IPLSSoknadKvittering } from './IPLSSoknadKvittering';
 
 export interface IPunchPLSFormState {
     soknad?: Partial<IPLSSoknad>;

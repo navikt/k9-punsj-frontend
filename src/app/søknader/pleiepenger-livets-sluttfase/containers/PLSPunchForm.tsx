@@ -1213,10 +1213,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         >
                             <Modal.Body>
                                 <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <PLSSoknadKvittering
-                                        intl={intl}
-                                        response={this.props.punchFormState.validertSoknad}
-                                    />
+                                    <PLSSoknadKvittering response={this.props.punchFormState.validertSoknad} />
                                 </div>
                             </Modal.Body>
 

@@ -10,6 +10,7 @@ import omsorgspengerKsSoknadValidering from '../../cypress/fixtures/omp_ks/sokna
 import pleiepengerSoknad from '../../cypress/fixtures/pleiepengerSoknad.json';
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json';
 import pleiepengerSoknadValidering from '../../cypress/fixtures/pleiepengerSoknadValidering.json';
+import pilsSoknadValidering from '../../cypress/fixtures/pilsSoknadValidering.json';
 import jpPSB300 from '../../cypress/fixtures/jpPSB300.json';
 import jpPILS301 from '../../cypress/fixtures/jpPILS301.json';
 import jpOMPKS302 from '../../cypress/fixtures/jpOMPKS302.json';
@@ -95,7 +96,7 @@ export const testHandlers = {
     ),
     eksisterendePilssoknad: http.get(
         ApiPath.PLS_SOKNAD_GET.replace('{id}', '4e3a9001-f872-4288-829e-08f8e1001b28'),
-        () => HttpResponse.json(jpPILS301),
+        () => HttpResponse.json(pilsSoknad),
     ),
     oppdaterPleiepengesoknad: http.put(ApiPath.PSB_SOKNAD_UPDATE, () =>
         HttpResponse.json(pleiepengerSoknadSomKanSendesInn),
@@ -107,6 +108,12 @@ export const testHandlers = {
     sendPleiepengesoknad: http.post(ApiPath.PSB_SOKNAD_SUBMIT, () =>
         HttpResponse.json(pleiepengerSoknadValidering, { status: 202 }),
     ),
+
+    validerPILSsoknad: http.post(ApiPath.PLS_SOKNAD_VALIDER, () =>
+        HttpResponse.json(pilsSoknadValidering, { status: 202 }),
+    ),
+
+    sendPILS: http.post(ApiPath.PLS_SOKNAD_SUBMIT, () => HttpResponse.json(pilsSoknadValidering, { status: 202 })),
 
     hentArbeidsgivere: http.get(ApiPath.FINN_ARBEIDSGIVERE, () => HttpResponse.json(arbeidsgivere, { status: 202 })),
     hentArbeidsforholdMedIDer: http.post(ApiPath.OMS_FINN_ARBEIDSFORHOLD, () => HttpResponse.json([], { status: 202 })),

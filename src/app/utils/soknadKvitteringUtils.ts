@@ -1,17 +1,17 @@
 import {
-    IPSBSoknadKvitteringArbeidstidInfo,
-    IPSBSoknadKvitteringBosteder,
-    IPSBSoknadKvitteringLovbestemtFerie,
-    IPSBSoknadKvitteringTilsynsordning,
-    IPSBSoknadKvitteringUtenlandsopphold,
-} from 'app/models/types/PSBSoknadKvittering';
+    ISoknadKvitteringArbeidstidInfo,
+    ISoknadKvitteringBosteder,
+    ISoknadKvitteringLovbestemtFerie,
+    ISoknadKvitteringUtenlandsopphold,
+} from 'app/models/types/KvitteringTyper';
+import { IPSBSoknadKvitteringTilsynsordning } from 'app/models/types/PSBSoknadKvittering';
 import { formatereTekstMedTimerOgMinutter, getCountryList, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils';
 
 export const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
 export const endreLandkodeTilLandnavnIPerioder = (
-    perioder: IPSBSoknadKvitteringBosteder | IPSBSoknadKvitteringUtenlandsopphold,
+    perioder: ISoknadKvitteringBosteder | ISoknadKvitteringUtenlandsopphold,
 ) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
@@ -21,7 +21,7 @@ export const endreLandkodeTilLandnavnIPerioder = (
     return kopiAvPerioder;
 };
 
-export const formattereTimerForArbeidstakerPerioder = (perioder: IPSBSoknadKvitteringArbeidstidInfo) => {
+export const formattereTimerForArbeidstakerPerioder = (perioder: ISoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
@@ -44,7 +44,7 @@ export const formattereTimerOgMinutterForOmsorgstilbudPerioder = (perioder: IPSB
     return kopiAvPerioder;
 };
 
-export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
+export const genererSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc: { [key: string]: typeof value }, [key, value]) => {
         if (value.skalHaFerie) {
             acc[key] = value;
@@ -52,7 +52,7 @@ export const genererSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie
         return acc;
     }, {});
 
-export const genererIkkeSkalHaFerie = (perioder: IPSBSoknadKvitteringLovbestemtFerie) =>
+export const genererIkkeSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc: { [key: string]: typeof value }, [key, value]) => {
         if (!value.skalHaFerie) {
             acc[key] = value;

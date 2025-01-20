@@ -1,16 +1,13 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import Kopier from 'app/components/kopier/Kopier';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import { Heading } from '@navikt/ds-react';
+
+import intlHelper from 'app/utils/intlUtils';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
-import { IPSBSoknadKvittering, IPSBSoknadKvitteringUtenlandsopphold } from 'app/models/types/PSBSoknadKvittering';
+import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
 import {
     formatDato,
     formattereDatoFraUTCTilGMT,
@@ -27,13 +24,14 @@ import {
     genererIkkeSkalHaFerie,
     genererSkalHaFerie,
     sjekkHvisPerioderEksisterer,
-} from './soknadKvitteringUtils';
+} from '../../../../utils/soknadKvitteringUtils';
+import { ISoknadKvitteringUtenlandsopphold } from 'app/models/types/KvitteringTyper';
 
 interface Props {
     innsendtSøknad: IPSBSoknadKvittering;
 }
 
-const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold, intl: IntlShape) => {
+const formaterUtenlandsopphold = (perioder: ISoknadKvitteringUtenlandsopphold, intl: IntlShape) => {
     const årsaker = [
         {
             label: intlHelper(intl, 'skjema.utenlandsopphold.årsak.norskOfftenligRegning'),
@@ -53,27 +51,27 @@ const formaterUtenlandsopphold = (perioder: IPSBSoknadKvitteringUtenlandsopphold
         .reduce((obj, key) => {
             obj[key] = perioder[key];
             return obj;
-        }, {});
+        }, {} as ISoknadKvitteringUtenlandsopphold);
+
     const perioderMedInnleggelse = Object.keys(perioder)
         .filter((key) => !!perioder[key].årsak)
         .reduce((obj, key) => {
             obj[key] = perioder[key];
             obj[key].årsak = årsaker.find((årsak) => årsak.value === obj[key].årsak)?.label;
             return obj;
-        }, {} as IPSBSoknadKvitteringUtenlandsopphold);
+        }, {} as ISoknadKvitteringUtenlandsopphold);
 
     return (
         <>
             <VisningAvPerioderSoknadKvittering
-                intl={intl}
                 perioder={endreLandkodeTilLandnavnIPerioder(perioderUtenInnleggelse)}
                 tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                 properties={['land']}
             />
+
             {Object.keys(perioderMedInnleggelse).length > 0 ? (
-                <div className={classNames('marginTop24')}>
+                <div className="marginTop24">
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={endreLandkodeTilLandnavnIPerioder(perioderMedInnleggelse)}
                         tittel={[
                             'skjema.perioder.innleggelse.overskrift',
@@ -93,8 +91,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
     const intl = useIntl();
 
     const { ytelse, begrunnelseForInnsending, mottattDato, journalposter } = innsendtSøknad;
-    const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
-    const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
+
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
@@ -125,64 +122,51 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
 
     return (
-        <div className={classNames('SoknadKvitteringContainer')} data-testid="kvitter">
+        <div className="SoknadKvitteringContainer" data-testid="kvitter">
             <Heading size="medium" level="2" data-testid="kvittering.oppsummering">
                 <FormattedMessage id={'skjema.kvittering.oppsummering'} />
             </Heading>
-            {kopierJournalpostSuccess && (
-                <div>
-                    <h3>
-                        <FormattedMessage id={'skjema.soknadskvittering.opprettetKopi'} />
-                    </h3>
-                    <hr className={classNames('linje')} />
-                    <p>
-                        <FormattedMessage id={'skjema.soknadskvittering.opprettetKopi.innhold'} />
-                    </p>
-                    {annenSokerIdent && (
-                        <p>
-                            <FormattedMessage
-                                id={'ident.identifikasjon.kvittering.annenSoker'}
-                                values={{ fnr: annenSokerIdent }}
-                            />
-                            <Kopier verdi={annenSokerIdent} />
-                        </p>
-                    )}
-                </div>
-            )}
+
             {visSoknadsperiode && (
                 <div data-testid="soknadsperiode">
-                    <h3>
-                        <FormattedMessage id={'skjema.soknadskvittering.soknadsperiode'} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.soknadsperiode" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>{formaterSøknadsperioder()}</p>
                 </div>
             )}
 
             {mottattDato && (
                 <div data-testid="mottatt-dato">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>
                         <b>
-                            <FormattedMessage id={'skjema.mottakelsesdato'} />
+                            <FormattedMessage id={'skjema.mottakelsesdato'} />{' '}
                         </b>
                         {`${formattereDatoFraUTCTilGMT(mottattDato)} - ${formattereTidspunktFraUTCTilGMT(mottattDato)}`}
                     </p>
+
                     {visTrukkedePerioder && (
                         <p data-testid="perioderSomFjernet">
                             <b>
-                                <FormattedMessage id={'skjema.perioderSomFjernet'} />
+                                <FormattedMessage id={'skjema.perioderSomFjernet'} />{' '}
                             </b>
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                         </p>
                     )}
+
                     {begrunnelseForInnsending?.tekst.length > 0 && (
                         <p data-testid="begrunnelseForEndring">
                             <b>
-                                <FormattedMessage id={'skjema.begrunnelseForEndring'} />
+                                <FormattedMessage id={'skjema.begrunnelseForEndring'} />{' '}
                             </b>
                             {begrunnelseForInnsending.tekst}
                         </p>
@@ -192,22 +176,25 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {visUtenlandsopphold && (
                 <div data-testid="utenlandsopphold">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, intl)}
                 </div>
             )}
 
             {visFerie && (
                 <div data-testid="ferie">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.FERIE} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalHaferieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -216,12 +203,13 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {visFerieSomSkalSLettes && (
                 <div data-testid="ferieSomSkalSlettes">
-                    <h3>
-                        <FormattedMessage id={'skjema.ferie.skalslettes'} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.ferie.skalslettes" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalIkkeHaFerieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -230,20 +218,21 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {visOpplysningerOmSoker && (
                 <div data-testid="opplysningerOmSoker">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>
                         <b>
                             <FormattedMessage id={'skjema.relasjontilbarnet.kvittering'} />{' '}
                         </b>
+
                         {ytelse.omsorg.relasjonTilBarnet === 'ANNET'
-                            ? `${ytelse.omsorg.beskrivelseAvOmsorgsrollen}`
-                            : `${
-                                  ytelse.omsorg.relasjonTilBarnet!.charAt(0) +
-                                  ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()
-                              }`}
+                            ? ytelse.omsorg.beskrivelseAvOmsorgsrollen
+                            : ytelse.omsorg.relasjonTilBarnet!.charAt(0) +
+                              ytelse.omsorg.relasjonTilBarnet!.slice(1).toLowerCase()}
                     </p>
                 </div>
             )}
@@ -253,13 +242,15 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     <h3>
                         <FormattedMessage id={PunchFormPaneler.ARBEID} />
                     </h3>
-                    <hr className={classNames('linje')} />
+
+                    <hr className="linje" />
 
                     {visArbeidsforhold && (
                         <div data-testid="arbeidsforhold">
-                            <h3>
-                                <FormattedMessage id={'arbeidstaker'} />
-                            </h3>
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id={PunchFormPaneler.ARBEID} />
+                            </Heading>
+
                             {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
@@ -269,7 +260,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                                             arbeidstakerperiode.organisasjonsnummer
                                         }
                                     >
-                                        <p className={classNames('soknadKvitteringUnderTittel')}>
+                                        <p className="soknadKvitteringUnderTittel">
                                             <b>
                                                 <FormattedMessage
                                                     id={
@@ -280,15 +271,13 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                                                 />
                                                 {': '}
                                             </b>
-                                            {`${
-                                                skalOrgNummerVises
-                                                    ? arbeidstakerperiode.organisasjonsnummer
-                                                    : arbeidstakerperiode.norskIdentitetsnummer
-                                            }`}
+
+                                            {skalOrgNummerVises
+                                                ? arbeidstakerperiode.organisasjonsnummer
+                                                : arbeidstakerperiode.norskIdentitetsnummer}
                                         </p>
 
                                         <VisningAvPerioderSoknadKvittering
-                                            intl={intl}
                                             perioder={formattereTimerForArbeidstakerPerioder(
                                                 arbeidstakerperiode.arbeidstidInfo.perioder,
                                             )}
@@ -307,15 +296,16 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                     {visFrilanserArbeidstidInfo && (
                         <div data-testid="frilanser">
-                            <h3>
-                                <FormattedMessage id={'frilanser'} />
-                            </h3>
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id="frilanser" />
+                            </Heading>
+
                             {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser) &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
                                         <b>
-                                            <FormattedMessage id={'skjema.frilanserdato'} />{' '}
+                                            <FormattedMessage id="skjema.frilanserdato" />{' '}
                                         </b>
                                         {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
@@ -338,7 +328,6 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                             {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder,
                                     )}
@@ -355,9 +344,9 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                     {visSelvstendigNæringsdrivendeInfo && (
                         <div data-testid="selvstendignæringsdrivende">
-                            <h3>
-                                <FormattedMessage id={'selvstendig'} />
-                            </h3>
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id="selvstendig" />
+                            </Heading>
 
                             {sjekkPropertyEksistererOgIkkeErNull(
                                 'selvstendigNæringsdrivende',
@@ -371,7 +360,6 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                             {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder,
                                     )}
@@ -390,12 +378,13 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {visOmsorgstilbud && (
                 <div data-testid="visOmsorgstilbud">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.OMSORGSTILBUD} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={formattereTimerOgMinutterForOmsorgstilbudPerioder(ytelse.tilsynsordning.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.omsorgstilbud.gjennomsnittlig']}
                         properties={['etablertTilsynTimerPerDag']}
@@ -405,18 +394,20 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
             )}
 
             {(visNattevak || visBeredskap) && (
-                <div>
-                    <h3 data-testid="beredskapnettevaak">
+                <div data-testid="beredskapnettevaak">
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.BEREDSKAPNATTEVAAK} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     {visBeredskap && (
                         <div data-testid="beredskap">
                             <h4 className="soknadKvitteringUnderTittel">
-                                <FormattedMessage id={'skjema.beredskap.overskrift'} />
+                                <FormattedMessage id="skjema.beredskap.overskrift" />
                             </h4>
+
                             <VisningAvPerioderSoknadKvittering
-                                intl={intl}
                                 perioder={ytelse.beredskap.perioder}
                                 tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
                                 properties={['tilleggsinformasjon']}
@@ -428,10 +419,10 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     {visNattevak && (
                         <div data-testid="nattevak">
                             <h4 className="soknadKvitteringUnderTittel">
-                                <FormattedMessage id={'skjema.nattevaak.overskrift'} />
+                                <FormattedMessage id="skjema.nattevaak.overskrift" />
                             </h4>
+
                             <VisningAvPerioderSoknadKvittering
-                                intl={intl}
                                 perioder={ytelse.nattevåk.perioder}
                                 tittel={['skjema.periode.overskrift', 'skjema.beredskap.tilleggsinfo.kvittering']}
                                 properties={['tilleggsinformasjon']}
@@ -444,12 +435,13 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {visMedlemskap && (
                 <div data-testid="medlemskap">
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
@@ -459,10 +451,12 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {!!journalposter && journalposter.length > 0 && (
                 <div data-testid="tilleggsopplysninger">
-                    <h3>
-                        <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
-                    </h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>
                         <b>
                             <FormattedMessage id={'skjema.medisinskeopplysninger.kvittering'} />{' '}
@@ -473,7 +467,7 @@ export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                         <b>
                             <FormattedMessage id={'skjema.opplysningerikkepunsjet.kvittering'} />{' '}
                         </b>
-                        {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                        {journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}
                     </p>
                 </div>
             )}

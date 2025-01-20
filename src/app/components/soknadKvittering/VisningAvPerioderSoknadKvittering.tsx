@@ -1,32 +1,30 @@
-import classNames from 'classnames';
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
-import intlHelper from 'app/utils/intlUtils';
+import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
 
-import {
-    IPSBSoknadKvitteringBeredskapNattevak,
-    IPSBSoknadKvitteringBosteder,
-    IPSBSoknadKvitteringLovbestemtFerie,
-    IPSBSoknadKvitteringUtenlandsopphold,
-} from '../../models/types/PSBSoknadKvittering';
+import { IPSBSoknadKvitteringBeredskapNattevak } from '../../models/types/PSBSoknadKvittering';
 import { periodToFormattedString } from '../../utils';
+import {
+    ISoknadKvitteringBosteder,
+    ISoknadKvitteringLovbestemtFerie,
+    ISoknadKvitteringUtenlandsopphold,
+} from 'app/models/types/KvitteringTyper';
+
 import './visningAvPerioderSoknadKvittering.less';
 
-interface IOwnProps {
-    intl: any;
+interface Props {
     perioder:
-        | IPSBSoknadKvitteringUtenlandsopphold
-        | IPSBSoknadKvitteringBosteder
+        | ISoknadKvitteringUtenlandsopphold
+        | ISoknadKvitteringBosteder
         | IPSBSoknadKvitteringBeredskapNattevak
-        | IPSBSoknadKvitteringLovbestemtFerie;
+        | ISoknadKvitteringLovbestemtFerie;
     tittel: string[];
     properties?: string[];
     lessClassForAdjustment?: string;
 }
 
-const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
+const VisningAvPerioderSoknadKvittering: React.FC<Props> = ({
     tittel,
     properties,
     perioder,
@@ -34,24 +32,27 @@ const VisningAvPerioderSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 }) => (
     <div>
         <div className={classNames('visningAvPerioderSoknadKvitteringContainer', !!lessClassForAdjustment)}>
-            {tittel.map((t) => (
-                <h4 key={uuidv4()}>{intlHelper(intl, t)}</h4>
+            {tittel.map((t, index) => (
+                <h4 key={index}>
+                    <FormattedMessage id={t} />
+                </h4>
             ))}
         </div>
-        {Object.keys(perioder)
-            .sort((a, b) => {
-                const fomA = a.split('/')?.[0];
-                const fomB = b.split('/')?.[0];
+
+        {Object.entries(perioder)
+            .sort(([periodeA], [periodeB]) => {
+                const fomA = periodeA.split('/')?.[0];
+                const fomB = periodeB.split('/')?.[0];
                 return new Date(fomA).getTime() - new Date(fomB).getTime();
             })
-            .map((periode) => (
+            .map(([periode, props]) => (
                 <div
                     key={periode}
                     className={classNames('visningAvPerioderSoknadKvitteringContainer', !!lessClassForAdjustment)}
                 >
                     <p>{periodToFormattedString(periode)}</p>
 
-                    {properties && properties.map((prop) => <p key={uuidv4()}>{perioder[periode]![prop]}</p>)}
+                    {properties && properties.map((prop) => <p key={prop}>{props[prop]}</p>)}
                 </div>
             ))}
     </div>

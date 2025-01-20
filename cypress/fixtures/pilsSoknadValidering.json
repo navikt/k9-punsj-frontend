@@ -1,28 +1,20 @@
 {
-    "søknadId": "0416e1a2-8d80-48b1-a56e-ab4f4b4821fe",
+    "søknadId": "4e3a9001-f872-4288-829e-08f8e1001b28",
     "versjon": "1.0.0",
-    "mottattDato": "2020-10-12T10:53:00.000Z",
+    "mottattDato": "2025-01-17T11:05:00.000Z",
     "søker": {
         "norskIdentitetsnummer": "29099000129"
     },
+    "språk": "nb",
     "ytelse": {
-        "type": "PLEIEPENGER_SYKT_BARN",
-        "barn": {
-            "norskIdentitetsnummer": "16017725002",
+        "type": "PLEIEPENGER_LIVETS_SLUTTFASE",
+        "pleietrengende": {
+            "norskIdentitetsnummer": "17519112922",
             "fødselsdato": null
         },
-        "søknadsperiode": ["2021-11-08/2021-11-11"],
-        "endringsperiode": [],
-        "trekkKravPerioder": [],
+        "søknadsperiode": [],
+        "trekkKravPerioder": ["2024-12-03/2024-12-05"],
         "opptjeningAktivitet": {},
-        "dataBruktTilUtledning": {
-            "harForståttRettigheterOgPlikter": null,
-            "harBekreftetOpplysninger": null,
-            "samtidigHjemme": null,
-            "harMedsøker": null,
-            "bekrefterPeriodeOver8Uker": null
-        },
-        "infoFraPunsj": null,
         "bosteder": {
             "perioder": {
                 "2025-01-06/2025-01-08": {
@@ -40,20 +32,6 @@
                 }
             },
             "perioderSomSkalSlettes": {}
-        },
-        "beredskap": {
-            "perioder": {},
-            "perioderSomSkalSlettes": {}
-        },
-        "nattevåk": {
-            "perioder": {},
-            "perioderSomSkalSlettes": {}
-        },
-        "tilsynsordning": {
-            "perioder": {}
-        },
-        "lovbestemtFerie": {
-            "perioder": {}
         },
         "arbeidstid": {
             "arbeidstakerList": [
@@ -83,27 +61,33 @@
             "selvstendigNæringsdrivendeArbeidstidInfo": null
         },
         "uttak": {
+            "perioder": {}
+        },
+        "lovbestemtFerie": {
             "perioder": {
-                "2021-11-08/2021-11-11": {
-                    "timerPleieAvBarnetPerDag": "PT7H30M"
+                "2025-01-01/2025-01-03": {
+                    "skalHaFerie": true
                 }
             }
         },
-        "omsorg": {
-            "relasjonTilBarnet": null,
-            "beskrivelseAvOmsorgsrollen": null
-        }
+        "dataBruktTilUtledning": null
     },
-    "språk": "nb",
     "journalposter": [
         {
             "inneholderInfomasjonSomIkkeKanPunsjes": null,
             "inneholderInformasjonSomIkkeKanPunsjes": false,
-            "inneholderMedisinskeOpplysninger": false,
-            "journalpostId": "201"
+            "inneholderMedisinskeOpplysninger": true,
+            "journalpostId": "453925903"
+        },
+        {
+            "inneholderInfomasjonSomIkkeKanPunsjes": null,
+            "inneholderInformasjonSomIkkeKanPunsjes": false,
+            "inneholderMedisinskeOpplysninger": true,
+            "journalpostId": "453924840"
         }
     ],
     "begrunnelseForInnsending": {
-        "tekst": ""
-    }
+        "tekst": "jbjjbjbbjbj"
+    },
+    "kildesystem": "punsj"
 }
