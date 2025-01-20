@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 
 import { RootStateType } from 'app/state/RootState';
 import { getEnvironmentVariable } from 'app/utils';
-import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
+import PLSSoknadKvittering from './PLSSoknadKvittering';
 
-export const PLSKvitteringContainer = () => {
+const PLSKvitteringContainer = () => {
     const punchFormState = useSelector((state: RootStateType) => state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState);
 
     return (
@@ -31,3 +31,5 @@ export const PLSKvitteringContainer = () => {
         </>
     );
 };
+
+export default PLSKvitteringContainer;

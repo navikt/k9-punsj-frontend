@@ -28,7 +28,7 @@ interface Props {
     response: IPLSSoknadKvittering;
 }
 
-export const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
+const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
     const intl = useIntl();
 
     const { ytelse, journalposter } = response;

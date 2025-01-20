@@ -63,11 +63,10 @@ import { IPLSSoknadUt, PLSSoknadUt } from '../types/PLSSoknadUt';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
 import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSoknad';
-import { PLSSoknadKvittering } from './SoknadKvittering/PLSSoknadKvittering';
+import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
+import PLSKvitteringContainer from './SoknadKvittering/PLSKvitteringContainer';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
-
-import { PLSKvitteringContainer } from './PLSKvittering';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;

@@ -87,7 +87,7 @@ const formaterUtenlandsopphold = (perioder: ISoknadKvitteringUtenlandsopphold, i
     );
 };
 
-export const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
+const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
     const intl = useIntl();
 
     const { ytelse, begrunnelseForInnsending, mottattDato, journalposter } = innsendtSøknad;
