@@ -1,6 +1,5 @@
 import React, { ComponentType } from 'react';
 
-import classNames from 'classnames';
 import { set } from 'lodash';
 import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 
@@ -782,20 +781,20 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
                 <Tag variant="warning" {...{ className }}>
-                    Lagrer …
+                    <FormattedMessage id="skjema.isAwaitingUpdateResponse" />
                 </Tag>
             );
         }
         if (punchFormState.updateSoknadError) {
             return (
                 <Tag variant="error" {...{ className }}>
-                    Lagring feilet
+                    <FormattedMessage id="skjema.updateSoknadError" />
                 </Tag>
             );
         }
         return (
             <Tag variant="success" {...{ className }}>
-                Lagret
+                <FormattedMessage id="skjema.updateSoknadSuccess" />
             </Tag>
         );
     };
@@ -817,10 +816,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         if (punchFormState.error) {
             return (
                 <>
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_funnet', { id: this.props.id })}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id: this.props.id }} />
+                    </Alert>
+
                     <p>
                         <Button variant="secondary" onClick={this.handleStartButtonClick}>
-                            {intlHelper(intl, 'skjema.knapp.tilstart')}
+                            <FormattedMessage id="skjema.knapp.tilstart" />
                         </Button>
                     </p>
                 </>
@@ -876,8 +878,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return (
             <div data-testid="PSBPunchForm">
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
+
                 {this.statusetikett()}
+
                 <VerticalSpacer sixteenPx />
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
@@ -887,7 +892,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     soknad={soknad}
                     punchFormState={punchFormState}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <OpplysningerOmSoknad
                     intl={intl}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
@@ -896,14 +903,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     signert={signert}
                     soknad={soknad}
                 />
+
                 <VerticalSpacer sixteenPx />
+
                 <Checkbox
                     onChange={(e) => {
                         this.setState({ expandAll: e.target.checked });
                     }}
                 >
-                    {intlHelper(intl, 'skjema.ekspander')}
+                    <FormattedMessage id="skjema.ekspander" />
                 </Checkbox>
+
                 <VerticalSpacer sixteenPx />
 
                 <Accordion>
@@ -925,6 +935,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
                         </Accordion.Header>
+
                         <Accordion.Content>
                             <RadioPanelGruppe
                                 className="horizontalRadios"
@@ -933,7 +944,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     value: jnv,
                                 }))}
                                 name="utlandjaneiikeeopplyst"
-                                legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
+                                legend={<FormattedMessage id="skjema.utenlandsopphold.label" />}
                                 onChange={(event) =>
                                     this.updateUtenlandsopphold(
                                         (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
@@ -941,6 +952,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 }
                                 checked={this.utenlandsOppholdCheckedValue()}
                             />
+
                             {(!!soknad.utenlandsopphold?.length || !!soknad.utenlandsoppholdV2.length) && (
                                 <Utenlandsopphold
                                     intl={intl}
@@ -986,11 +998,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                         <Accordion.Content>
                             <CheckboksPanel
-                                label={intlHelper(intl, 'skjema.ferie.leggtil')}
+                                label={<FormattedMessage id="skjema.ferie.leggtil" />}
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
                                 data-testid="feriepanel-checkbox"
                             />
+
                             {!!soknad.lovbestemtFerie.length && (
                                 <Periodepaneler
                                     periods={soknad.lovbestemtFerie}
@@ -1014,15 +1027,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 !punchFormState.hentPerioderError && (
                                     <>
                                         <CheckboksPanel
-                                            label={intlHelper(intl, 'skjema.ferie.fjern')}
+                                            label={<FormattedMessage id="skjema.ferie.fjern" />}
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
                                         />
+
                                         {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
                                             <>
                                                 <Alert size="small" variant="info">
-                                                    {intlHelper(intl, 'skjema.ferie.fjern.info')}
+                                                    <FormattedMessage id="skjema.ferie.fjern.info" />
                                                 </Alert>
+
                                                 <Periodepaneler
                                                     periods={soknad.lovbestemtFerieSomSkalSlettes}
                                                     initialPeriode={this.initialPeriode}
@@ -1074,7 +1089,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Content>
                             <Select
                                 value={soknad.omsorg.relasjonTilBarnet}
-                                label={intlHelper(intl, 'skjema.relasjontilbarnet')}
+                                label={<FormattedMessage id="skjema.relasjontilbarnet" />}
                                 {...this.changeAndBlurUpdatesSoknad((event) => ({
                                     omsorg: { ...soknad.omsorg, relasjonTilBarnet: event.target.value },
                                 }))}
@@ -1085,9 +1100,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     </option>
                                 ))}
                             </Select>
+
                             {soknad.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
                                 <TextField
-                                    label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
+                                    label={<FormattedMessage id="skjema.omsorg.beskrivelse" />}
                                     className="beskrivelseAvOmsorgsrollen"
                                     value={soknad.omsorg.beskrivelseAvOmsorgsrollen}
                                     {...this.changeAndBlurUpdatesSoknad((event) => ({
@@ -1100,7 +1116,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                     <Accordion.Item
                         open={this.checkOpenState(PunchFormPaneler.OMSORGSTILBUD)}
-                        className={classNames('tilsynsordning')}
                         onOpenChange={() => this.handlePanelClick(PunchFormPaneler.OMSORGSTILBUD)}
                         data-testid="accordionItem-omsorgstilbudpanel"
                     >
@@ -1110,14 +1125,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                         <Accordion.Content>
                             <CheckboksPanel
-                                label={intlHelper(intl, 'skjema.omsorgstilbud.checkboks')}
+                                label={<FormattedMessage id="skjema.omsorgstilbud.checkboks" />}
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
                                 checked={!!this.state.iTilsynsordning}
                                 data-testid="omsorgstilbud-checkboks"
                             />
+
                             {this.state.iTilsynsordning && (
                                 <>
                                     <VerticalSpacer twentyPx />
+
                                     <div className="listepanel">
                                         <TilsynKalender
                                             nyeSoknadsperioder={soknad.soeknadsperiode}
@@ -1158,23 +1175,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                         <Accordion.Content>
                             <CheckboksPanel
-                                label={intlHelper(intl, BeredskapNattevaak.BEREDSKAP)}
+                                label={<FormattedMessage id={BeredskapNattevaak.BEREDSKAP} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)
                                 }
                                 checked={!!soknad.beredskap.length}
                             />
+
                             {!!soknad.beredskap.length && (
                                 <div data-testid="beredskapsperioder">{beredskapperioder()}</div>
                             )}
+
                             <VerticalSpacer eightPx />
+
                             <CheckboksPanel
-                                label={intlHelper(intl, BeredskapNattevaak.NATTEVAAK)}
+                                label={<FormattedMessage id={BeredskapNattevaak.NATTEVAAK} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)
                                 }
                                 checked={!!soknad.nattevaak.length}
                             />
+
                             {!!soknad.nattevaak.length && (
                                 <div data-testid="nattevaaksperioder">{nattevaakperioder()}</div>
                             )}
@@ -1189,6 +1210,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         <Accordion.Header>
                             <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
                         </Accordion.Header>
+
                         <Accordion.Content>
                             <RadioPanelGruppe
                                 className="horizontalRadios"
@@ -1197,7 +1219,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     value: jn,
                                 }))}
                                 name="medlemskapjanei"
-                                legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
+                                legend={<FormattedMessage id="skjema.medlemskap.harbodd" />}
                                 onChange={(event) =>
                                     this.handleMedlemskapChange(
                                         (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
@@ -1205,6 +1227,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 }
                                 checked={this.medlemskapCheckedValue()}
                             />
+
                             {!!soknad.bosteder?.length && (
                                 <PeriodeinfoPaneler
                                     periods={soknad.bosteder}
@@ -1232,31 +1255,40 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer thirtyTwoPx />
 
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                <p className="ikkeregistrert">
+                    <FormattedMessage id="skjema.ikkeregistrert" />
+                </p>
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="medisinskeopplysningercheckbox"
-                        label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
+                        label={<FormattedMessage id="skjema.medisinskeopplysninger" />}
                         checked={soknad.harMedisinskeOpplysninger}
                         onChange={(event) => this.updateMedisinskeOpplysninger(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
+                        <FormattedMessage id="skjema.medisinskeopplysninger.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer eightPx />
+
                 <div className="flex-container">
                     <CheckboksPanel
                         id="opplysningerikkepunsjetcheckbox"
-                        label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
+                        label={<FormattedMessage id="skjema.opplysningerikkepunsjet" />}
                         checked={soknad.harInfoSomIkkeKanPunsjes}
                         onChange={(event) => this.updateOpplysningerIkkeKanPunsjes(event.target.checked)}
                     />
+
                     <HelpText className="hjelpetext" placement="top-end">
-                        {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
+                        <FormattedMessage id="skjema.opplysningerikkepunsjet.hjelpetekst" />
                     </HelpText>
                 </div>
+
                 <VerticalSpacer twentyPx />
+
                 {this.getUhåndterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
@@ -1264,14 +1296,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     ))}
 
                 {punchFormState.isAwaitingValidateResponse && (
-                    <div className={classNames('loadingSpinner')}>
+                    <div className="loadingSpinner">
                         <Loader size="large" />
                     </div>
                 )}
+
                 <div className="submit-knapper">
                     <p className="sendknapp-wrapper">
                         <Button className="send-knapp" onClick={() => this.handleSubmit()} data-testid="sendKnapp">
-                            {intlHelper(intl, 'skjema.knapp.send')}
+                            <FormattedMessage id="skjema.knapp.send" />
                         </Button>
 
                         <Button
@@ -1280,20 +1313,31 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             onClick={() => this.setState({ showSettPaaVentModal: true })}
                             data-testid="ventKnapp"
                         >
-                            {intlHelper(intl, 'skjema.knapp.settpaavent')}
+                            <FormattedMessage id="skjema.knapp.settpaavent" />
                         </Button>
                     </p>
                 </div>
+
                 <VerticalSpacer sixteenPx />
+
                 {!!punchFormState.updateSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_lagret')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_lagret" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.inputErrors?.length && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.validering')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.validering" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadError && (
-                    <Alert variant="error">{intlHelper(intl, 'skjema.feil.ikke_sendt')}</Alert>
+                    <Alert variant="error">
+                        <FormattedMessage id="skjema.feil.ikke_sendt" />
+                    </Alert>
                 )}
+
                 {!!punchFormState.submitSoknadConflict && (
                     <Alert variant="error">
                         {punchFormState.submitSoknadConflict.feil ||
@@ -1329,34 +1373,29 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     this.props.punchFormState.validertSoknad && (
                         <Modal
                             key="validertSoknadModal"
-                            className="validertSoknadModal"
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label="validertSoknadModal"
                             open={this.props.punchFormState.isValid}
                             data-testid="validertSoknadModal"
                         >
                             <Modal.Body>
-                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                <div className="validertSoknadOppsummeringContainer">
                                     <PSBSoknadKvittering innsendtSøknad={this.props.punchFormState.validertSoknad} />
                                 </div>
-                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                    <Button
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappVidere"
-                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                        data-testid="validertSoknadOppsummeringContainer_knappVidere"
-                                    >
-                                        {intlHelper(intl, 'fordeling.knapp.videre')}
+
+                                <Modal.Footer>
+                                    <Button size="small" onClick={() => this.setState({ visErDuSikkerModal: true })}>
+                                        <FormattedMessage id="skjema.knapp.videre" />
                                     </Button>
+
                                     <Button
                                         variant="secondary"
                                         size="small"
-                                        className="validertSoknadOppsummeringContainer_knappTilbake"
                                         onClick={() => this.props.validerSoknadReset()}
                                     >
-                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
+                                        <FormattedMessage id="skjema.knapp.avbryt" />
                                     </Button>
-                                </div>
+                                </Modal.Footer>
                             </Modal.Body>
                         </Modal>
                     )}

@@ -1,6 +1,5 @@
 import React, { ComponentType } from 'react';
 
-import classNames from 'classnames';
 import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -773,20 +772,20 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
                 <Tag variant="warning" {...{ className }}>
-                    Lagrer …
+                    <FormattedMessage id="skjema.isAwaitingUpdateResponse" />
                 </Tag>
             );
         }
         if (punchFormState.updateSoknadError) {
             return (
                 <Tag variant="error" {...{ className }}>
-                    Lagring feilet
+                    <FormattedMessage id="skjema.updateSoknadError" />
                 </Tag>
             );
         }
         return (
             <Tag variant="success" {...{ className }}>
-                Lagret
+                <FormattedMessage id="skjema.updateSoknadSuccess" />
             </Tag>
         );
     };
@@ -1120,7 +1119,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     ))}
 
                 {punchFormState.isAwaitingValidateResponse && (
-                    <div className={classNames('loadingSpinner')}>
+                    <div className="loadingSpinner">
                         <Loader size="large" />
                     </div>
                 )}
@@ -1205,30 +1204,24 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     this.props.punchFormState.validertSoknad && (
                         <Modal
                             key="validertSoknadModal"
-                            className="validertSoknadModal"
                             onClose={() => this.props.validerSoknadReset()}
                             aria-label="validertSoknadModal"
                             open={!!this.props.punchFormState.isValid}
                         >
                             <Modal.Body>
-                                <div className={classNames('validertSoknadOppsummeringContainer')}>
+                                <div className="validertSoknadOppsummeringContainer">
                                     <PLSSoknadKvittering response={this.props.punchFormState.validertSoknad} />
                                 </div>
                             </Modal.Body>
 
                             <Modal.Footer>
-                                <Button
-                                    size="small"
-                                    className="validertSoknadOppsummeringContainer_knappVidere"
-                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                >
+                                <Button size="small" onClick={() => this.setState({ visErDuSikkerModal: true })}>
                                     <FormattedMessage id="skjema.knapp.videre" />
                                 </Button>
 
                                 <Button
                                     variant="secondary"
                                     size="small"
-                                    className="validertSoknadOppsummeringContainer_knappTilbake"
                                     onClick={() => this.props.validerSoknadReset()}
                                 >
                                     <FormattedMessage id="skjema.knapp.avbryt" />

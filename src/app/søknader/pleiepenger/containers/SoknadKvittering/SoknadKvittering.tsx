@@ -239,16 +239,16 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
             {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
                 <div>
-                    <h3>
+                    <Heading size="xsmall" level="3">
                         <FormattedMessage id={PunchFormPaneler.ARBEID} />
-                    </h3>
+                    </Heading>
 
                     <hr className="linje" />
 
                     {visArbeidsforhold && (
                         <div data-testid="arbeidsforhold">
                             <Heading size="xsmall" level="3">
-                                <FormattedMessage id={PunchFormPaneler.ARBEID} />
+                                <FormattedMessage id="arbeidstaker" />
                             </Heading>
 
                             {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
