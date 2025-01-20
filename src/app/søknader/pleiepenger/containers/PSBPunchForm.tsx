@@ -1384,7 +1384,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 </div>
 
                                 <Modal.Footer>
-                                    <Button size="small" onClick={() => this.setState({ visErDuSikkerModal: true })}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                        data-testid="validertSoknadOppsummeringContainer_knappVidere"
+                                    >
                                         <FormattedMessage id="skjema.knapp.videre" />
                                     </Button>
 
