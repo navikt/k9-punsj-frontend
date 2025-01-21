@@ -245,7 +245,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     <hr className="linje" />
 
                     {visArbeidsforhold && (
-                        <div data-testid="arbeidsforhold">
+                        <div data-testid="arbeidsforhold" className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="arbeidstaker" />
                             </Heading>
@@ -294,7 +294,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
 
                     {visFrilanserArbeidstidInfo && (
-                        <div data-testid="frilanser">
+                        <div data-testid="frilanser" className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="frilanser" />
                             </Heading>
@@ -342,7 +342,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
 
                     {visSelvstendigNæringsdrivendeInfo && (
-                        <div data-testid="selvstendignæringsdrivende">
+                        <div data-testid="selvstendignæringsdrivende" className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="selvstendig" />
                             </Heading>

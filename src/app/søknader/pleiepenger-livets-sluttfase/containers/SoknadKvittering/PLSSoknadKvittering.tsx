@@ -170,7 +170,7 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     <hr className="linje" />
 
                     {visArbeidsforhold && (
-                        <div>
+                        <div className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="arbeidstaker" />
                             </Heading>
@@ -220,7 +220,7 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     )}
 
                     {visFrilanserArbeidstidInfo && (
-                        <div data-testid="frilanser">
+                        <div data-testid="frilanser" className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="frilanser" />
                             </Heading>
@@ -268,7 +268,7 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     )}
 
                     {visSelvstendigNæringsdrivendeInfo && (
-                        <div data-testid="selvstendignæringsdrivende">
+                        <div data-testid="selvstendignæringsdrivende" className="mt-4">
                             <Heading size="xsmall" level="3">
                                 <FormattedMessage id="selvstendig" />
                             </Heading>
