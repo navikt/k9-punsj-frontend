@@ -16,7 +16,6 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from 'app/utils';
 
-import './soknadKvittering.less';
 import {
     endreLandkodeTilLandnavnIPerioder,
     formattereTimerForArbeidstakerPerioder,
@@ -27,6 +26,7 @@ import {
 } from '../../../../utils/soknadKvitteringUtils';
 import { ISoknadKvitteringUtenlandsopphold } from 'app/models/types/KvitteringTyper';
 
+import './soknadKvittering.less';
 interface Props {
     innsendtSøknad: IPSBSoknadKvittering;
 }
@@ -79,7 +79,6 @@ const formaterUtenlandsopphold = (perioder: ISoknadKvitteringUtenlandsopphold, i
                             'skjema.utenlandsopphold.utgifterTilInnleggelse',
                         ]}
                         properties={['land', 'årsak']}
-                        lessClassForAdjustment="widerLastCell"
                     />
                 </div>
             ) : null}
