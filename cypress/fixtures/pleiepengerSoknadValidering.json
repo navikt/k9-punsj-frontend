@@ -32,18 +32,7 @@
             "perioderSomSkalSlettes": {}
         },
         "utenlandsopphold": {
-            "perioder": {
-                "2024-12-03/2024-12-05": {
-                    "land": "FIN",
-                    "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
-                    "erSammenMedBarnet": true
-                },
-                "2024-12-06/2025-01-09": {
-                    "land": "FIN",
-                    "årsak": null,
-                    "erSammenMedBarnet": true
-                }
-            },
+            "perioder": {},
             "perioderSomSkalSlettes": {}
         },
         "beredskap": {
