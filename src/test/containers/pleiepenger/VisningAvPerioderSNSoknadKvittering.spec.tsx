@@ -4,9 +4,10 @@ import '@testing-library/jest-dom';
 import { createIntl, IntlShape } from 'react-intl';
 
 import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
-import { IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode } from '../../../app/models/types/PSBSoknadKvittering';
+
 import intlHelper from '../../../app/utils/intlUtils';
 import { mocked } from 'jest-mock';
+import { SelvstendigNaeringsdrivendeAktivitet } from '../../../app/models/types/KvitteringTyper';
 
 jest.mock('react-intl');
 jest.mock('react-router');
@@ -14,7 +15,7 @@ jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
-const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
+const fullstendigResponse: SelvstendigNaeringsdrivendeAktivitet[] = [
     {
         perioder: {
             '2021-06-01/2021-06-30': {
@@ -35,7 +36,7 @@ const fullstendigResponse: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriod
     },
 ];
 
-const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
+const varigEndring: SelvstendigNaeringsdrivendeAktivitet[] = [
     {
         perioder: {
             '2021-06-01/2021-06-30': {
@@ -56,9 +57,7 @@ const varigEndring: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[] = [
     },
 ];
 
-const setupVisningAvPerioderSNSoknadKvittering = (
-    response: IPSBSoknadKvitteringSelvstendigNaeringsdrivendePeriode[],
-) => {
+const setupVisningAvPerioderSNSoknadKvittering = (response: SelvstendigNaeringsdrivendeAktivitet[]) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);

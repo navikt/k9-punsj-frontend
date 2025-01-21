@@ -7,7 +7,7 @@ import { convertResponseToError, get, post, put } from 'app/utils';
 import { IHentPerioder } from '../../../../models/types/RequestBodies';
 import { ISendSoknad } from '../../../../models/types/SendSoknad';
 import { IPLSSoknad } from '../../types/PLSSoknad';
-import { IPLSSoknadKvittering } from '../../types/PLSSoknadKvittering';
+import { IPLSSoknadKvittering } from '../../types/IPLSSoknadKvittering';
 import { IPLSSoknadUt } from '../../types/PLSSoknadUt';
 
 interface IResetPunchPLSFormAction {

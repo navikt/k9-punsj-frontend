@@ -1,89 +1,38 @@
-import classNames from 'classnames';
 import React from 'react';
-import { connect } from 'react-redux';
 
-import Kopier from 'app/components/kopier/Kopier';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
+import { Heading } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
     formatDato,
-    formatereTekstMedTimerOgMinutter,
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
-    getCountryList,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../../utils';
+import { IPLSSoknadKvittering } from '../../types/IPLSSoknadKvittering';
+import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
+import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import {
-    IPLSSoknadKvittering,
-    IPLSSoknadKvitteringArbeidstidInfo,
-    IPLSSoknadKvitteringBosteder,
-    IPLSSoknadKvitteringLovbestemtFerie,
-    IPLSSoknadKvitteringUtenlandsopphold,
-} from '../../types/PLSSoknadKvittering';
-import VisningAvPerioderSoknadKvittering from './Komponenter/VisningAvPerioderPLSSoknadKvittering';
-import VisningAvPerioderSNPLSSoknadKvittering from './Komponenter/VisningAvPerioderSNPLSSoknadKvittering';
+    endreLandkodeTilLandnavnIPerioder,
+    formattereTimerForArbeidstakerPerioder,
+    genererIkkeSkalHaFerie,
+    genererSkalHaFerie,
+    sjekkHvisPerioderEksisterer,
+} from 'app/utils/soknadKvitteringUtils';
+
 import './plsSoknadKvittering.less';
 
-interface IOwnProps {
-    intl: any;
+interface Props {
     response: IPLSSoknadKvittering;
-    kopierJournalpostSuccess?: boolean;
-    annenSokerIdent?: string | null;
 }
 
-const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
-    sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
+const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
+    const intl = useIntl();
 
-const endreLandkodeTilLandnavnIPerioder = (
-    perioder: IPLSSoknadKvitteringBosteder | IPLSSoknadKvitteringUtenlandsopphold,
-) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
-        if (landNavn) kopiAvPerioder[periode].land = landNavn?.name;
-    });
-    return kopiAvPerioder;
-};
-
-export const formattereTimerForArbeidstakerPerioder = (perioder: IPLSSoknadKvitteringArbeidstidInfo) => {
-    const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
-    Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag)
-            : '0';
-        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = kopiAvPerioder[periode].faktiskArbeidTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag)
-            : '0';
-    });
-    return kopiAvPerioder;
-};
-
-export const genererSkalHaFerie = (perioder: IPLSSoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
-        if (value.skalHaFerie) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-
-export const genererIkkeSkalHaFerie = (perioder: IPLSSoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
-        if (!value.skalHaFerie) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-
-export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    intl,
-    response,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
     const { ytelse, journalposter } = response;
+
     const skalHaferieListe = genererSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const skalIkkeHaFerieListe = genererIkkeSkalHaFerie(ytelse.lovbestemtFerie.perioder);
     const visSoknadsperiode =
@@ -108,53 +57,58 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
         ytelse.arbeidstid.frilanserArbeidstidInfo !== null ||
         sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
-
     const formaterSøknadsperioder = () =>
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
 
     return (
-        <div className={classNames('SoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
-            {kopierJournalpostSuccess && (
-                <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
-                    {annenSokerIdent && (
-                        <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
-                        </p>
-                    )}
-                </div>
-            )}
+        <div className="SoknadKvitteringContainer">
+            <Heading size="medium" level="2" data-testid="kvittering.oppsummering">
+                <FormattedMessage id="skjema.kvittering.oppsummering" />
+            </Heading>
+
             {visSoknadsperiode && (
-                <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
-                    <hr className={classNames('linje')} />
+                <div data-testid="soknadsperiode">
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.soknadsperiode" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>{formaterSøknadsperioder()}</p>
                 </div>
             )}
 
             {visOpplysningerOmSoknad && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
+                        <b>
+                            <FormattedMessage id="skjema.mottakelsesdato" />{' '}
+                        </b>
                         {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
                             response.mottattDato,
                         )}`}
                     </p>
+
                     {visTrukkedePerioder && (
-                        <p>
-                            <b>Perioder som er fjernet fra søknadsperioden: </b>
+                        <p data-testid="perioderSomFjernet">
+                            <b>
+                                <FormattedMessage id="skjema.perioderSomFjernet" />{' '}
+                            </b>
                             {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                         </p>
                     )}
+
                     {visBegrunnelseForInnsending && (
-                        <p>
-                            <b>Begrunnelse for endring: </b>
+                        <p data-testid="begrunnelseForEndring">
+                            <b>
+                                <FormattedMessage id="skjema.begrunnelseForEndring" />{' '}
+                            </b>
                             {response.begrunnelseForInnsending.tekst}
                         </p>
                     )}
@@ -163,10 +117,13 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visUtenlandsopphold && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={endreLandkodeTilLandnavnIPerioder(ytelse.utenlandsopphold?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
@@ -176,10 +133,13 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visFerie && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id={PunchFormPaneler.FERIE} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalHaferieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -188,10 +148,13 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {visFerieSomSkalSlettes && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.ferie.skalslettes" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalIkkeHaFerieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -200,34 +163,46 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
                 <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id={PunchFormPaneler.ARBEID} />
+                    </Heading>
+
+                    <hr className="linje" />
 
                     {visArbeidsforhold && (
-                        <div>
-                            <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
-                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
+                        <div className="mt-4">
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id="arbeidstaker" />
+                            </Heading>
+
+                            {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode, indeks) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
-                                    <>
-                                        <p className={classNames('soknadKvitteringUnderTittel')}>
+                                    <div
+                                        key={
+                                            arbeidstakerperiode.organisasjonsnummer ||
+                                            arbeidstakerperiode.norskIdentitetsnummer ||
+                                            indeks
+                                        }
+                                    >
+                                        <p className="soknadKvitteringUnderTittel">
                                             <b>
-                                                {`${intlHelper(
-                                                    intl,
-                                                    skalOrgNummerVises
-                                                        ? 'skjema.arbeid.arbeidstaker.orgnr'
-                                                        : 'skjema.arbeid.arbeidstaker.ident',
-                                                )}: `}
+                                                <FormattedMessage
+                                                    id={
+                                                        skalOrgNummerVises
+                                                            ? 'skjema.arbeid.arbeidstaker.orgnr'
+                                                            : 'skjema.arbeid.arbeidstaker.ident'
+                                                    }
+                                                />
+                                                {': '}
                                             </b>
-                                            {`${
-                                                skalOrgNummerVises
-                                                    ? arbeidstakerperiode.organisasjonsnummer
-                                                    : arbeidstakerperiode.norskIdentitetsnummer
-                                            }`}
+
+                                            {skalOrgNummerVises
+                                                ? arbeidstakerperiode.organisasjonsnummer
+                                                : arbeidstakerperiode.norskIdentitetsnummer}
                                         </p>
 
                                         <VisningAvPerioderSoknadKvittering
-                                            intl={intl}
                                             perioder={formattereTimerForArbeidstakerPerioder(
                                                 arbeidstakerperiode.arbeidstidInfo.perioder,
                                             )}
@@ -238,20 +213,25 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                             ]}
                                             properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
                                         />
-                                    </>
+                                    </div>
                                 );
                             })}
                         </div>
                     )}
 
                     {visFrilanserArbeidstidInfo && (
-                        <div>
-                            <h3>{intlHelper(intl, 'frilanser')}</h3>
+                        <div data-testid="frilanser" className="mt-4">
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id="frilanser" />
+                            </Heading>
+
                             {sjekkPropertyEksistererOgIkkeErNull('startdato', ytelse.opptjeningAktivitet.frilanser) &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato &&
                                 ytelse?.opptjeningAktivitet?.frilanser?.startdato?.length > 0 && (
                                     <p>
-                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato')} `}</b>
+                                        <b>
+                                            <FormattedMessage id="skjema.frilanserdato" />{' '}
+                                        </b>
                                         {formatDato(ytelse.opptjeningAktivitet.frilanser?.startdato)}
                                     </p>
                                 )}
@@ -264,14 +244,15 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato &&
                                 ytelse.opptjeningAktivitet.frilanser?.sluttdato?.length > 0 && (
                                     <p>
-                                        <b>{`${intlHelper(intl, 'skjema.frilanserdato.slutt')} `}</b>
+                                        <b>
+                                            <FormattedMessage id="skjema.frilanserdato.slutt" />{' '}
+                                        </b>
                                         {formatDato(ytelse.opptjeningAktivitet.frilanser?.sluttdato)}
                                     </p>
                                 )}
 
                             {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder,
                                     )}
@@ -287,14 +268,16 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
                     )}
 
                     {visSelvstendigNæringsdrivendeInfo && (
-                        <div>
-                            <h3>{intlHelper(intl, 'selvstendig')}</h3>
+                        <div data-testid="selvstendignæringsdrivende" className="mt-4">
+                            <Heading size="xsmall" level="3">
+                                <FormattedMessage id="selvstendig" />
+                            </Heading>
 
                             {sjekkPropertyEksistererOgIkkeErNull(
                                 'selvstendigNæringsdrivende',
                                 ytelse.opptjeningAktivitet,
                             ) && (
-                                <VisningAvPerioderSNPLSSoknadKvittering
+                                <VisningAvPerioderSNSoknadKvittering
                                     intl={intl}
                                     perioder={ytelse.opptjeningAktivitet.selvstendigNæringsdrivende!}
                                 />
@@ -302,7 +285,6 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
                             {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder,
                                     )}
@@ -320,11 +302,14 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
             )}
 
             {visMedlemskap && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
-                    <hr className={classNames('linje')} />
+                <div data-testid="medlemskap">
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id={PunchFormPaneler.MEDLEMSKAP} />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
@@ -334,15 +319,24 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
 
             {!!journalposter && journalposter.length > 0 && (
                 <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                    <hr className={classNames('linje')} />
+                    <Heading size="xsmall" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
+                    </Heading>
+
+                    <hr className="linje" />
+
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                        {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
+                        <b>
+                            <FormattedMessage id="skjema.medisinskeopplysninger.kvittering" />
+                        </b>{' '}
+                        {journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}
                     </p>
+
                     <p>
-                        <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
+                        <b>
+                            <FormattedMessage id="skjema.opplysningerikkepunsjet.kvittering" />{' '}
+                        </b>
+                        {journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}
                     </p>
                 </div>
             )}
@@ -350,9 +344,4 @@ export const PLSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(PLSSoknadKvittering);
+export default PLSSoknadKvittering;

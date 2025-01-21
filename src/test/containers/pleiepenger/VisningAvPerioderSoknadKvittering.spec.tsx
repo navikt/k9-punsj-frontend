@@ -1,27 +1,30 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { createIntl, createIntlCache, IntlShape } from 'react-intl';
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
-import { formattereTimerForArbeidstakerPerioder } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/soknadKvitteringUtils';
-import { IPSBSoknadKvitteringArbeidstidInfo } from '../../../app/models/types/PSBSoknadKvittering';
+import { formattereTimerForArbeidstakerPerioder } from '../../../app/utils/soknadKvitteringUtils';
 import { mocked } from 'jest-mock';
 import intlHelper from '../../../app/utils/intlUtils';
+import { ISoknadKvitteringArbeidstidInfo } from '../../../app/models/types/KvitteringTyper';
+import { IntlShape } from 'react-intl';
 
 // Mocks and data
-jest.mock('react-intl');
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ id }: { id: string }) => id,
+}));
 jest.mock('react-router');
 jest.mock('app/utils/browserUtils');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
 
-const enPeriode: IPSBSoknadKvitteringArbeidstidInfo = {
+const enPeriode: ISoknadKvitteringArbeidstidInfo = {
     '2021-06-01/2021-06-30': {
         jobberNormaltTimerPerDag: 'PT8H',
         faktiskArbeidTimerPerDag: 'PT4H',
     },
 };
 
-const flerePerioder: IPSBSoknadKvitteringArbeidstidInfo = {
+const flerePerioder: ISoknadKvitteringArbeidstidInfo = {
     '2021-06-01/2021-06-30': {
         jobberNormaltTimerPerDag: 'PT8H',
         faktiskArbeidTimerPerDag: 'PT4H',
@@ -32,14 +35,11 @@ const flerePerioder: IPSBSoknadKvitteringArbeidstidInfo = {
     },
 };
 
-const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringArbeidstidInfo, locale: string) => {
-    const cache = createIntlCache();
-    const intlMock = createIntl({ locale, defaultLocale: 'nb' }, cache);
-
+const setupVisningAvPerioderSoknadKvittering = (response: ISoknadKvitteringArbeidstidInfo) => {
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+
     return render(
         <VisningAvPerioderSoknadKvittering
-            intl={intlMock}
             perioder={formattereTimerForArbeidstakerPerioder(response)}
             tittel={[
                 'skjema.periode.overskrift',
@@ -53,14 +53,14 @@ const setupVisningAvPerioderSoknadKvittering = (response: IPSBSoknadKvitteringAr
 
 describe('VisningAvPerioderSoknadKvittering', () => {
     it('Viser overskrifter', () => {
-        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode, 'nb');
+        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode);
         expect(getByText(/skjema\.periode\.overskrift/i)).toBeInTheDocument();
         expect(getByText(/skjema\.arbeid\.arbeidstaker\.timernormalt/i)).toBeInTheDocument();
         expect(getByText(/skjema\.arbeid\.arbeidstaker\.timerfaktisk/i)).toBeInTheDocument();
     });
 
     it('Viser dato, forventet arbeidstid og verklig arbeidstid', () => {
-        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode, 'nb'); // Set to Arabic for RTL
+        const { getByText } = setupVisningAvPerioderSoknadKvittering(enPeriode); // Set to Arabic for RTL
 
         expect(getByText('01.06.2021 - 30.06.2021')).toBeInTheDocument();
         expect(getByText('8 timer')).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('VisningAvPerioderSoknadKvittering', () => {
     });
 
     it('Viser dato, forventet arbeidstid og verklig arbeidstid flere perioder', () => {
-        const { getByText: getByTextFlerePerioder } = setupVisningAvPerioderSoknadKvittering(flerePerioder, 'ar');
+        const { getByText: getByTextFlerePerioder } = setupVisningAvPerioderSoknadKvittering(flerePerioder);
         expect(getByTextFlerePerioder('01.06.2021 - 30.06.2021')).toBeInTheDocument();
         expect(getByTextFlerePerioder('8 timer')).toBeInTheDocument();
         expect(getByTextFlerePerioder('4 timer')).toBeInTheDocument();

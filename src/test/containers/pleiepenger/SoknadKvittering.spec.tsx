@@ -5,7 +5,7 @@ import { mocked } from 'jest-mock';
 import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
-import { PSBSoknadKvittering } from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/SoknadKvittering';
+import PSBSoknadKvittering from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/SoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl', () => ({

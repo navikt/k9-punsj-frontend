@@ -173,7 +173,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <h3>{intlHelper(intl, PunchFormPaneler.FERIE)}</h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalHaferieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -185,7 +184,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <h3>{intlHelper(intl, 'skjema.ferie.skalslettes')}</h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={skalIkkeHaFerieListe}
                         tittel={['skjema.periode.overskrift']}
                     />
@@ -237,7 +235,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                         </p>
 
                                         <VisningAvPerioderSoknadKvittering
-                                            intl={intl}
                                             perioder={formattereTimerForArbeidstakerPerioder(
                                                 arbeidstakerperiode.arbeidstidInfo.perioder,
                                             )}
@@ -281,7 +278,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
 
                             {ytelse.arbeidstid.frilanserArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.frilanserArbeidstidInfo?.perioder,
                                     )}
@@ -312,7 +308,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
 
                             {ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo !== null && (
                                 <VisningAvPerioderSoknadKvittering
-                                    intl={intl}
                                     perioder={formattereTimerForArbeidstakerPerioder(
                                         ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo?.perioder,
                                     )}
@@ -334,7 +329,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <h3>{intlHelper(intl, PunchFormPaneler.MEDLEMSKAP)}</h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
-                        intl={intl}
                         perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}

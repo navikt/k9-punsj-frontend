@@ -36,3 +36,45 @@ export interface Fravaersperiode {
     søknadÅrsak: string;
     årsak: string;
 }
+
+export interface ISoknadKvitteringBosteder {
+    [key: string]: { land: string };
+}
+
+export interface ISoknadKvitteringUtenlandsopphold {
+    [key: string]: {
+        land: string;
+        årsak?: null | string;
+    };
+}
+
+export interface ISoknadKvitteringLovbestemtFerie {
+    [key: string]: { skalHaFerie: string };
+}
+
+export interface ISoknadKvitteringArbeidstidInfo {
+    [key: string]: {
+        jobberNormaltTimerPerDag: string;
+        faktiskArbeidTimerPerDag: string;
+    };
+}
+
+export interface ISoknadKvitteringArbeidstid {
+    arbeidstakerList: {
+        norskIdentitetsnummer: null | string;
+        organisasjonsnummer: null | string;
+        arbeidstidInfo: { perioder: ISoknadKvitteringArbeidstidInfo };
+    }[];
+    frilanserArbeidstidInfo: null | {
+        perioder: ISoknadKvitteringArbeidstidInfo;
+    };
+    selvstendigNæringsdrivendeArbeidstidInfo: null | {
+        perioder: ISoknadKvitteringArbeidstidInfo;
+    };
+}
+
+export interface ISoknadKvitteringJournalpost {
+    inneholderInformasjonSomIkkeKanPunsjes?: boolean;
+    inneholderMedisinskeOpplysninger?: boolean;
+    journalpostId: string;
+}

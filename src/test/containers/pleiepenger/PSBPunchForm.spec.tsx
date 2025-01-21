@@ -4,7 +4,7 @@ import { expect } from '@jest/globals';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 
-import { IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+import { IntlProvider, IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 
 import intlHelper from '../../../app/utils/intlUtils';
@@ -25,7 +25,10 @@ import { ISignaturState } from '../../../app/models/types/SignaturState';
 import userEvent from '@testing-library/user-event';
 import { Tidsformat } from '../../../app/utils/timeUtils';
 
-jest.mock('react-intl');
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ id }: { id: string }) => id,
+}));
 jest.mock('react-router');
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/intlUtils');
@@ -202,12 +205,14 @@ const setupPunchForm = (
     (useDispatch as unknown as jest.Mock).mockReturnValue(jest.fn());
 
     return render(
-        <PunchFormComponent
-            {...punchFormComponentProps}
-            {...wrappedComponentProps}
-            {...punchFormStateProps}
-            {...punchFormDispatchProps}
-        />,
+        <IntlProvider locale="en" messages={{}}>
+            <PunchFormComponent
+                {...punchFormComponentProps}
+                {...wrappedComponentProps}
+                {...punchFormStateProps}
+                {...punchFormDispatchProps}
+            />
+        </IntlProvider>,
     );
 };
 
