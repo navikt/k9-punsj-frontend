@@ -1,50 +1,95 @@
 import React, { useState } from 'react';
-
-import { ErrorMessage, Field, FieldProps, Form, Formik } from 'formik';
+import { FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Button, Heading, Label, Loader, Select, TextField, Textarea } from '@navikt/ds-react';
+import { Alert, Button, Heading, Label, Loader } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
+import { FormSelect } from 'app/components/form/FormSelect';
+import { FormTextField } from 'app/components/form/FormTextField';
+import { FormTextarea } from 'app/components/form/FormTextarea';
+import { useFormState } from 'app/hooks/useFormState';
+import { IJournalpostForm, IJournalpostRequest } from 'app/types/journalpost.types';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
-import { requiredValue, validateText } from 'app/utils/validationHelpers';
 import intlHelper from 'app/utils/intlUtils';
+import { ERROR_MESSAGES, JOURNALPOST_DEFAULT_VALUES, VALIDATION_RULES } from './constants';
 
 import './opprettJournalpost.less';
 
-enum OpprettJournalpostFormKeys {
-    søkersFødselsnummer = 'søkersFødselsnummer',
-    fagsakId = 'fagsakId',
-    tittel = 'tittel',
-    notat = 'notat',
-}
-
 const OpprettJournalpost: React.FC = () => {
     const intl = useIntl();
+    const methods = useForm<IJournalpostForm>({
+        defaultValues: JOURNALPOST_DEFAULT_VALUES,
+    });
 
-    const [opprettJournalpostFeilet, setOpprettJournalpostFeilet] = useState(false);
-    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
-    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [isSubmittingJournalpost, setIsSubmittingJournalpost] = useState(false);
-    const [submitSuccessful, setSubmitSuccessful] = useState(false);
+    const { handleSubmit, watch } = methods;
+
+    const {
+        isSubmitting: isSubmittingJournalpost,
+        isSuccess: submitSuccessful,
+        error: submitError,
+        setSubmitting: setIsSubmittingJournalpost,
+        setSuccess: setSubmitSuccessful,
+        setError: setSubmitError,
+    } = useFormState();
+
+    const {
+        isSubmitting: isFetchingFagsaker,
+        error: fagsakError,
+        setSubmitting: setIsFetchingFagsaker,
+        setError: setFagsakError,
+    } = useFormState();
+
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
 
-    const hentFagsaker = (søkersFødselsnummer: string) => {
-        setHenteFagsakFeilet(false);
+    const søkersFødselsnummer = watch('søkersFødselsnummer');
+
+    const hentFagsaker = (fnr: string) => {
+        if (fnr.length !== 11) return;
+
+        setFagsakError(null);
         setIsFetchingFagsaker(true);
-        finnFagsaker(søkersFødselsnummer, (response, data: Fagsak[]) => {
+        finnFagsaker(fnr, (response, data: Fagsak[]) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
                 setFagsaker(data);
             } else {
-                setHenteFagsakFeilet(true);
+                setFagsakError(ERROR_MESSAGES.henteFagsak);
             }
         });
     };
+
+    const onSubmit = (values: IJournalpostForm) => {
+        setSubmitError(null);
+        setIsSubmittingJournalpost(true);
+
+        const nyJournalpost: IJournalpostRequest = {
+            søkerIdentitetsnummer: values.søkersFødselsnummer,
+            fagsakId: values.fagsakId,
+            tittel: values.tittel,
+            notat: values.notat,
+        };
+
+        post(ApiPath.OPPRETT_NOTAT, undefined, undefined, nyJournalpost, (response, data) => {
+            setIsSubmittingJournalpost(false);
+            if (response.status === 201) {
+                setSubmitSuccessful(true);
+                setOpprettetJournalpostId(data.journalpostId);
+            } else {
+                setSubmitError(ERROR_MESSAGES.opprettJournalpost);
+            }
+        });
+    };
+
+    React.useEffect(() => {
+        if (søkersFødselsnummer.length === 11) {
+            hentFagsaker(søkersFødselsnummer);
+        }
+    }, [søkersFødselsnummer]);
 
     return (
         <div className="opprettJournalpost">
@@ -53,170 +98,113 @@ const OpprettJournalpost: React.FC = () => {
             </Heading>
 
             <div className="formContainer">
-                <Formik
-                    initialValues={{
-                        [OpprettJournalpostFormKeys.søkersFødselsnummer]: '',
-                        [OpprettJournalpostFormKeys.fagsakId]: '',
-                        [OpprettJournalpostFormKeys.tittel]: '',
-                        [OpprettJournalpostFormKeys.notat]: '',
-                    }}
-                    onSubmit={(values, actions) => {
-                        setOpprettJournalpostFeilet(false);
-                        setIsSubmittingJournalpost(true);
-                        const nyJournalpost = {
-                            søkerIdentitetsnummer: values.søkersFødselsnummer,
-                            fagsakId: values.fagsakId,
-                            tittel: values.tittel,
-                            notat: values.notat,
-                        };
-                        post(ApiPath.OPPRETT_NOTAT, undefined, undefined, nyJournalpost, (response, data) => {
-                            setIsSubmittingJournalpost(false);
-                            if (response.status === 201) {
-                                setSubmitSuccessful(true);
-                                setOpprettetJournalpostId(data.journalpostId);
-                            } else {
-                                setOpprettJournalpostFeilet(true);
-                            }
-                        });
-                        actions.setSubmitting(false);
-                    }}
-                >
-                    {({ setFieldValue, values }) => (
-                        <Form>
-                            <Field
-                                name={OpprettJournalpostFormKeys.søkersFødselsnummer}
-                                validate={(value: string) => validateText(value, 11, true)}
+                <FormProvider {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <FormTextField
+                            name="søkersFødselsnummer"
+                            className="w-64"
+                            label={intlHelper(intl, 'opprettJournalpost.søkersFødselsnummer')}
+                            maxLength={11}
+                            rules={VALIDATION_RULES.søkersFødselsnummer}
+                            errorMessage={ERROR_MESSAGES.søkersFødselsnummer}
+                        />
+
+                        <div className="fagsagSelectContainer">
+                            <FormSelect
+                                name="fagsakId"
+                                className="input select w-64"
+                                label={intlHelper(intl, 'opprettJournalpost.velgFagsak')}
+                                disabled={fagsaker.length === 0}
+                                rules={VALIDATION_RULES.fagsakId}
+                                errorMessage={ERROR_MESSAGES.fagsakId}
                             >
-                                {({ field, meta }: FieldProps) => (
-                                    <TextField
-                                        {...field}
-                                        className="w-64"
-                                        label={intlHelper(intl, 'opprettJournalpost.søkersFødselsnummer')}
-                                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                        maxLength={11}
-                                        onChange={(event) => {
-                                            const { value } = event.target;
-                                            setFieldValue(field.name, value);
-                                            if (value.length === 11) {
-                                                hentFagsaker(value);
-                                            }
-                                        }}
-                                    />
-                                )}
-                            </Field>
+                                <option value="">
+                                    <FormattedMessage id={'opprettJournalpost.velg'} />
+                                </option>
+                                {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
+                                    <option key={fagsakId} value={fagsakId}>
+                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${
+                                            reservert ? '(reservert)' : ''
+                                        }`}
+                                    </option>
+                                ))}
+                            </FormSelect>
+                            {isFetchingFagsaker && <Loader size="small" />}
+                        </div>
 
-                            <Field name={OpprettJournalpostFormKeys.fagsakId} validate={requiredValue}>
-                                {({ field, meta }: FieldProps) => (
-                                    <>
-                                        <div className="fagsagSelectContainer">
-                                            <Select
-                                                {...field}
-                                                className="input select w-64"
-                                                label={intlHelper(intl, 'opprettJournalpost.velgFagsak')}
-                                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                                disabled={fagsaker.length === 0}
-                                            >
-                                                <option value="">
-                                                    <FormattedMessage id={'opprettJournalpost.velg'} />
-                                                </option>
-                                                {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
-                                                    <option key={fagsakId} value={fagsakId}>
-                                                        {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
-                                                    </option>
-                                                ))}
-                                            </Select>
-                                            {isFetchingFagsaker && <Loader size="small" />}
-                                        </div>
-
-                                        {values.søkersFødselsnummer && fagsaker.length === 0 && !isFetchingFagsaker && (
-                                            <Alert
-                                                size="small"
-                                                variant="warning"
-                                                className="mb-4 max-w-[425px]"
-                                                data-test-id="opprettJournalpostAlertIngenFagsak"
-                                            >
-                                                <FormattedMessage id="opprettJournalpost.alert.ingenFagsak" />
-                                            </Alert>
-                                        )}
-                                    </>
-                                )}
-                            </Field>
-
-                            <Field
-                                name={OpprettJournalpostFormKeys.tittel}
-                                validate={(value: string) => validateText(value, 200)}
+                        {søkersFødselsnummer && fagsaker.length === 0 && !isFetchingFagsaker && (
+                            <Alert
+                                size="small"
+                                variant="warning"
+                                className="mb-4 max-w-[425px]"
+                                data-test-id="opprettJournalpostAlertIngenFagsak"
                             >
-                                {({ field, meta }: FieldProps) => (
-                                    <TextField
-                                        {...field}
-                                        className="input w-[400px]"
-                                        label={intlHelper(intl, 'opprettJournalpost.tittel')}
-                                        maxLength={200}
-                                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                    />
-                                )}
-                            </Field>
+                                <FormattedMessage id="opprettJournalpost.alert.ingenFagsak" />
+                            </Alert>
+                        )}
 
-                            <Field
-                                name={OpprettJournalpostFormKeys.notat}
-                                validate={(value: string) => validateText(value, 100000)}
+                        <FormTextField
+                            name="tittel"
+                            className="input w-[400px]"
+                            label={intlHelper(intl, 'opprettJournalpost.tittel')}
+                            maxLength={200}
+                            rules={VALIDATION_RULES.tittel}
+                            errorMessage={ERROR_MESSAGES.tittel}
+                        />
+
+                        <div className="notatContainer input">
+                            <FormTextarea
+                                name="notat"
+                                className="notat"
+                                label={intlHelper(intl, 'opprettJournalpost.notat')}
+                                maxLength={100000}
+                                rules={VALIDATION_RULES.notat}
+                                errorMessage={ERROR_MESSAGES.notat}
+                            />
+                        </div>
+
+                        {!submitSuccessful && (
+                            <Button
+                                size="small"
+                                type="submit"
+                                className="submitButton"
+                                loading={isSubmittingJournalpost}
+                                disabled={fagsaker.length === 0}
                             >
-                                {({ field, meta }: FieldProps) => (
-                                    <div className="notatContainer input">
-                                        <Textarea
-                                            {...field}
-                                            className="notat"
-                                            label={intlHelper(intl, 'opprettJournalpost.notat')}
-                                            maxLength={100000}
-                                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                                        />
-                                    </div>
-                                )}
-                            </Field>
+                                <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
+                            </Button>
+                        )}
 
-                            {!submitSuccessful && (
-                                <Button
-                                    size="small"
-                                    type="submit"
-                                    className="submitButton"
-                                    loading={isSubmittingJournalpost}
-                                    disabled={fagsaker.length === 0}
-                                >
-                                    <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
-                                </Button>
+                        <div className="statusContainer">
+                            {submitError && (
+                                <>
+                                    <ErrorIcon />
+                                    <Label size="small" className="statusText">
+                                        {submitError}
+                                    </Label>
+                                </>
                             )}
 
-                            <div className="statusContainer">
-                                {opprettJournalpostFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Label size="small" className="statusText">
-                                            <FormattedMessage id={'opprettJournalpost.opprettingAvJournalpostFeilet'} />
-                                        </Label>
-                                    </>
-                                )}
+                            {fagsakError && (
+                                <>
+                                    <ErrorIcon />
+                                    <Label size="small" className="statusText">
+                                        {fagsakError}
+                                    </Label>
+                                </>
+                            )}
 
-                                {henteFagsakFeilet && (
-                                    <>
-                                        <ErrorIcon />
-                                        <Label size="small" className="statusText">
-                                            <FormattedMessage id={'opprettJournalpost.hentingAvFagsakFeilet'} />
-                                        </Label>
-                                    </>
-                                )}
-
-                                {submitSuccessful && (
-                                    <>
-                                        <SuccessIcon />
-                                        <Label size="small" className="statusText">
-                                            <FormattedMessage id={'opprettJournalpost.journalpostOpprettet'} />
-                                        </Label>
-                                    </>
-                                )}
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
+                            {submitSuccessful && (
+                                <>
+                                    <SuccessIcon />
+                                    <Label size="small" className="statusText">
+                                        <FormattedMessage id={'opprettJournalpost.journalpostOpprettet'} />
+                                    </Label>
+                                </>
+                            )}
+                        </div>
+                    </form>
+                </FormProvider>
 
                 {submitSuccessful && (
                     <Button
@@ -232,4 +220,5 @@ const OpprettJournalpost: React.FC = () => {
         </div>
     );
 };
+
 export default OpprettJournalpost;
