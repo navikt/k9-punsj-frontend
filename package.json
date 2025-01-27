@@ -65,7 +65,7 @@
         "yup": "1.6.1"
     },
     "resolutions": {
-        "postcss": "8.4.31"
+        "postcss": "8.5.1"
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node --trace-deprecation src/build/scripts/start-dev.mjs",
