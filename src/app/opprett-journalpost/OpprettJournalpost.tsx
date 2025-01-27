@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, Heading, Label, Loader } from '@navikt/ds-react';
@@ -82,7 +82,7 @@ const OpprettJournalpost: React.FC = () => {
     const renderForm = ({ watch }: UseFormReturn<IJournalpostForm>) => {
         const søkersFødselsnummer = watch('søkersFødselsnummer');
 
-        React.useEffect(() => {
+        useEffect(() => {
             if (søkersFødselsnummer.length === 11) {
                 hentFagsaker(søkersFødselsnummer);
             }
