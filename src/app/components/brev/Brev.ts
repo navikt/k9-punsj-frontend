@@ -1,22 +1,35 @@
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
+import DokumentMalType from './DookumentMalType';
+import { BrevFormKeys, IBrev, IBrevDokumentdata, IBrevForm, IBrevMottaker } from './types';
 
-import dokumentMalType from './dokumentMalType';
+export const defaultValuesBrev: IBrevForm = {
+    [BrevFormKeys.brevmalkode]: '',
+    [BrevFormKeys.mottaker]: '',
+    [BrevFormKeys.fritekst]: '',
+    [BrevFormKeys.velgAnnenMottaker]: false,
+    [BrevFormKeys.orgNummer]: '',
+    [BrevFormKeys.fritekstbrev]: {
+        overskrift: '',
+        brødtekst: '',
+    },
+};
 
-const lagDokumentdata = (values: BrevFormValues) => {
-    const felterSomSkalMed: Partial<BrevFormValues> = {};
+/*const lagDokumentdata = (values: IBrevForm): Partial<IBrevForm> => {
+    const felterSomSkalMed: Partial<IBrevForm> = {};
 
     Object.keys(values)
-        .filter((key: BrevFormKeys) => key !== BrevFormKeys.mottaker && key !== BrevFormKeys.brevmalkode && values[key])
+        .filter(
+            (key: BrevFormKeys) =>
+                key !== BrevFormKeys.mottaker && key !== BrevFormKeys.brevmalkode && values[key] !== undefined,
+        )
         .forEach((key: BrevFormKeys) => {
             if (key === BrevFormKeys.fritekst) {
-                if (values.brevmalkode === dokumentMalType.INNHENT_DOK) {
+                if (values.brevmalkode === DokumentMalType.INNHENT_DOK) {
                     felterSomSkalMed[key] = values[key];
                 }
             } else if (key === BrevFormKeys.fritekstbrev) {
                 if (
-                    values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV ||
-                    values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK
+                    values.brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV ||
+                    values.brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK
                 ) {
                     felterSomSkalMed[key] = values[key];
                 }
@@ -24,45 +37,35 @@ const lagDokumentdata = (values: BrevFormValues) => {
                 felterSomSkalMed[key] = values[key];
             }
         });
+
     return felterSomSkalMed;
+};*/
+
+export const getDokumentdata = (values: IBrevForm): IBrevDokumentdata => {
+    if (values.brevmalkode === DokumentMalType.INNHENT_DOK) {
+        return {
+            [BrevFormKeys.fritekst]: values[BrevFormKeys.fritekst],
+        };
+    }
+    return {
+        [BrevFormKeys.fritekstbrev]: values[BrevFormKeys.fritekstbrev],
+    };
 };
 
-export class Brev {
-    soekerId: string;
-
-    mottaker: {
-        type: string;
-        id: string;
-    };
-
-    fagsakYtelseType: string;
-
-    dokumentMal: string;
-
-    dokumentdata: Partial<BrevFormValues>;
-
-    journalpostId?: string;
-
-    saksnummer?: string;
-
-    constructor(
-        values: BrevFormValues,
-        søkerId: string,
-        mottaker: {
-            type: string;
-            id: string;
-        },
-        fagsakYtelseType: string,
-        dokumentMal: string,
-        journalpostId?: string,
-        fagsakId?: string,
-    ) {
-        this.soekerId = søkerId;
-        this.mottaker = mottaker;
-        this.fagsakYtelseType = fagsakYtelseType;
-        this.dokumentMal = dokumentMal;
-        this.dokumentdata = lagDokumentdata(values);
-        this.journalpostId = journalpostId;
-        this.saksnummer = fagsakId;
-    }
-}
+export const createBrev = (
+    values: IBrevForm,
+    søkerId: string,
+    mottakerData: IBrevMottaker,
+    sakstype: string,
+    dokumentMal: string,
+    journalpostId?: string,
+    fagsakId?: string,
+): IBrev => ({
+    soekerId: søkerId,
+    mottaker: mottakerData,
+    fagsakYtelseType: sakstype,
+    dokumentMal,
+    dokumentdata: getDokumentdata(values),
+    journalpostId,
+    saksnummer: fagsakId,
+});

@@ -85,14 +85,14 @@ const SendBrevIAvsluttetSak = () => {
     return (
         <div className="sendBrevIAvsluttetSak">
             <Heading size="small" level="1">
-                <FormattedMessage id={`sendBrevIAvsluttetSak.header`} />
+                <FormattedMessage id="sendBrevIAvsluttetSak.header" />
             </Heading>
 
             <TextField
                 value={søkerId}
                 onChange={handleSøkerIdChange}
                 className="fnrInput"
-                label={<FormattedMessage id={'sendBrevIAvsluttetSak.søkersFødselsnummer'} />}
+                label={<FormattedMessage id="sendBrevIAvsluttetSak.søkersFødselsnummer" />}
                 type="text"
                 size="small"
                 inputMode="numeric"
@@ -108,18 +108,18 @@ const SendBrevIAvsluttetSak = () => {
                             value={fagsakId}
                             onChange={(event) => setFagsakId(event.target.value)}
                             className="fagsakSelect"
-                            label={<FormattedMessage id={`sendBrevIAvsluttetSak.velgFagsak`} />}
+                            label={<FormattedMessage id="sendBrevIAvsluttetSak.velgFagsak" />}
                             disabled={fagsaker.length === 0}
                             size="small"
                         >
                             <option value="">
-                                <FormattedMessage id={`sendBrevIAvsluttetSak.velgFagsak.velg`} />
+                                <FormattedMessage id="sendBrevIAvsluttetSak.velgFagsak.velg" />
                             </option>
 
                             {fagsaker.map(({ fagsakId: id, sakstype }) => (
                                 <option key={id} value={id}>
                                     <FormattedMessage
-                                        id={'sendBrevIAvsluttetSak.velgFagsak.options'}
+                                        id="sendBrevIAvsluttetSak.velgFagsak.options"
                                         values={{
                                             fagsakId: id,
                                             sakstypeNavn: finnVisningsnavnForSakstype(sakstype),
@@ -150,7 +150,7 @@ const SendBrevIAvsluttetSak = () => {
                     <div className="modalContent">
                         <SuccessIcon />
                         <Heading spacing size="xsmall" level="3">
-                            <FormattedMessage id={`sendBrevIAvsluttetSak.gåTilLOSModal.header`} />
+                            <FormattedMessage id="sendBrevIAvsluttetSak.gåTilLOSModal.header" />
                         </Heading>
                     </div>
                 </Modal>

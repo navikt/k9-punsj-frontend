@@ -60,6 +60,7 @@ export function get(
             credentials: 'include',
             headers: new Headers(headers),
         });
+
         if (!response.ok && response.status === 401) {
             return response;
         }
@@ -70,9 +71,10 @@ export function get(
 
         if (callbackIfAuth) {
             const data = await response.text();
-            const jsonData = data ? JSON.parse(data) : undefined;
+            const jsonData = data && canStringBeParsedToJSON(data) ? JSON.parse(data) : undefined;
             await callbackIfAuth(response, jsonData);
         }
+
         return response;
     });
 }

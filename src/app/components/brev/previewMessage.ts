@@ -1,6 +1,6 @@
 import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { ApiPath } from 'app/apiConfig';
-import dokumentMalType from './dokumentMalType';
+import DokumentMalType from './DookumentMalType';
 
 interface ErrType {
     feilmelding: string;
@@ -41,8 +41,8 @@ export const previewMessage = async (
     const mottakerId = values.velgAnnenMottaker ? values.orgNummer : values.mottaker;
 
     const isGenereltFritekstbrev =
-        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV ||
-        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK;
+        values.brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV ||
+        values.brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK;
 
     try {
         const response = await fetch(ApiPath.BREV_FORHAANDSVIS, {

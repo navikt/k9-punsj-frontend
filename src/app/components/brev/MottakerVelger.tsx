@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import React, { useState, ChangeEvent, useEffect } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
-import {
-    BodyShort,
-    Checkbox,
-    Select,
-    TextField,
-    VStack,
-    Loader,
-    ErrorMessage as ErrorMesageDs,
-} from '@navikt/ds-react';
+import { useFormContext } from 'react-hook-form';
+import { BodyShort, VStack, Loader, ErrorMessage as ErrorMesageDs } from '@navikt/ds-react';
+
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { Person } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { ApiPath } from 'app/apiConfig';
 import { get } from 'app/utils/apiUtils';
 import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
-import { requiredValue } from 'app/utils/validationHelpers';
+import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
+import { FormSelect, FormCheckbox, FormTextField } from 'app/components/form';
 
 export interface OrgInfo {
     organisasjonsnummer: string;
@@ -33,7 +26,6 @@ interface MottakerVelgerProps {
     orgInfoPending: boolean;
     formSubmitted: boolean;
     person?: Person;
-
     resetBrevStatus: () => void;
     setOrgInfoPending: (value: boolean) => void;
 }
@@ -44,15 +36,24 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     orgInfoPending,
     formSubmitted,
     person,
-
     resetBrevStatus,
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
-
-    const { values, setFieldValue } = useFormikContext<BrevFormValues>();
+    const { watch, setValue, getValues } = useFormContext<IBrevForm>();
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
+
+    const velgAnnenMottaker = watch(BrevFormKeys.velgAnnenMottaker);
+    const mottaker = watch(BrevFormKeys.mottaker);
+
+    useEffect(() => {
+        if (!velgAnnenMottaker) {
+            setValue(BrevFormKeys.orgNummer, '');
+            setOrgInfo(undefined);
+            setErrorOrgInfo(undefined);
+        }
+    }, [velgAnnenMottaker, setValue]);
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -61,22 +62,24 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             { norskIdent: aktørId },
             { 'X-Nav-NorskIdent': aktørId },
             (response, data: ArbeidsgiverResponse) => {
-                if (response.status === 200) {
-                    if (data.navn) {
-                        setOrgInfoPending(false);
-                        setErrorOrgInfo(undefined);
-                        setOrgInfo(data);
-                    }
-                }
-                if (response.status === 404) {
+                if (response.ok && data?.navn) {
                     setOrgInfoPending(false);
-                    setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr }));
+                    setErrorOrgInfo(undefined);
+                    setOrgInfo(data);
+                } else {
+                    setOrgInfoPending(false);
+                    setErrorOrgInfo(
+                        intl.formatMessage(
+                            { id: 'noeGikkGalt' },
+                            { error: response.statusText, status: response.status },
+                        ),
+                    );
                 }
             },
         );
     };
 
-    if (values.velgAnnenMottaker === false && orgInfoPending) {
+    if (velgAnnenMottaker === false && orgInfoPending) {
         setOrgInfoPending(false);
     }
 
@@ -84,97 +87,95 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
         <>
             <VerticalSpacer sixteenPx />
 
-            <Field
+            <FormSelect<IBrevForm>
                 name={BrevFormKeys.mottaker}
-                validate={(value: string) => {
-                    if (values.velgAnnenMottaker) {
+                label={<FormattedMessage id={`mottakerVelger.select.tittel`} />}
+                className="w-[400px]"
+                validate={(value: string | undefined) => {
+                    if (velgAnnenMottaker) {
                         return undefined;
                     }
-                    return requiredValue(value);
+                    return value ? undefined : 'Dette feltet er påkrevd';
                 }}
+                onChange={() => {
+                    resetBrevStatus();
+                }}
+                disabled={velgAnnenMottaker === true}
             >
-                {({ field, meta }: FieldProps) => (
-                    <Select
-                        {...field}
-                        size="small"
-                        label={<FormattedMessage id={`mottakerVelger.select.tittel`} />}
-                        className="w-[400px] "
-                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                        onChange={(event) => {
-                            setFieldValue(field.name, event.target.value);
-                            resetBrevStatus();
-                        }}
-                        disabled={values.velgAnnenMottaker === true}
-                    >
-                        <option disabled key="default" value="" label="">
-                            <FormattedMessage id={`mottakerVelger.select.velg`} />
-                        </option>
+                <option disabled key="default" value="">
+                    <FormattedMessage id={`mottakerVelger.select.velg`} />
+                </option>
 
-                        {aktørId && person && (
-                            <option value={aktørId}>{`${person.sammensattNavn} - ${person.identitetsnummer}`}</option>
-                        )}
-
-                        {arbeidsgivereMedNavn.map((arbeidsgiver) => (
-                            <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
-                                {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
-                            </option>
-                        ))}
-                    </Select>
+                {aktørId && person && (
+                    <option value={aktørId}>{`${person.sammensattNavn} - ${person.identitetsnummer}`}</option>
                 )}
-            </Field>
+
+                {arbeidsgivereMedNavn.map((arbeidsgiver) => (
+                    <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
+                        {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
+                    </option>
+                ))}
+            </FormSelect>
 
             <VerticalSpacer sixteenPx />
 
-            <Field name={BrevFormKeys.velgAnnenMottaker}>
-                {({ field }: FieldProps) => (
-                    <Checkbox {...field} size="small">
-                        <FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />
-                    </Checkbox>
-                )}
-            </Field>
+            <FormCheckbox<IBrevForm>
+                name={BrevFormKeys.velgAnnenMottaker}
+                label={<FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />}
+                onChange={() => {
+                    resetBrevStatus();
+                    const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
+                    if (currentValue && mottaker) {
+                        setValue(BrevFormKeys.mottaker, '', { shouldValidate: true });
+                    }
+                }}
+            />
 
-            {values.velgAnnenMottaker && (
+            {velgAnnenMottaker && (
                 <div className="flex">
-                    <Field
+                    <FormTextField<IBrevForm>
                         name={BrevFormKeys.orgNummer}
-                        validate={(value: string) => {
-                            const error = getOrgNumberValidator({ required: true })(value);
+                        label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
+                        validate={(value: string | undefined) => {
+                            if (!value) return undefined;
+                            const cleanValue = value.replace(/\s/g, '');
+                            const error = getOrgNumberValidator({ required: true })(cleanValue);
 
                             if (errorOrgInfo) {
-                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr: value });
+                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr: cleanValue });
                             }
-                            return error ? intl.formatMessage({ id: error }, { orgnr: value }) : undefined;
+                            return error ? intl.formatMessage({ id: error }, { orgnr: cleanValue }) : undefined;
                         }}
-                    >
-                        {({ field, meta }: FieldProps) => (
-                            <TextField
-                                label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
-                                {...field}
-                                type="text"
-                                size="small"
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-                                maxLength={9}
-                                autoComplete="off"
-                                readOnly={orgInfoPending}
-                                onChange={(event) => {
-                                    setFieldValue(field.name, event.target.value);
-                                    setErrorOrgInfo(undefined);
-                                    setOrgInfo(undefined);
-                                    resetBrevStatus();
-                                    const { value } = event.target;
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9\s]*"
+                        maxLength={11}
+                        autoComplete="off"
+                        readOnly={orgInfoPending}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            let { value } = event.target;
 
-                                    if (!orgInfoPending && value.length === 9) {
-                                        const error = getOrgNumberValidator({ required: true })(value);
-                                        if (error) {
-                                            setErrorOrgInfo(intl.formatMessage({ id: error }, { orgnr: value }));
-                                        } else hentOrgInfo(value);
-                                    }
-                                }}
-                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                            />
-                        )}
-                    </Field>
+                            const digitsOnly = value.replace(/\D/g, '');
+
+                            if (digitsOnly.length <= 9) {
+                                value = digitsOnly.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
+                                event.target.value = value;
+                            }
+
+                            const cleanValue = value.replace(/\s/g, '');
+
+                            setErrorOrgInfo(undefined);
+                            setOrgInfo(undefined);
+                            resetBrevStatus();
+
+                            if (!orgInfoPending && cleanValue.length === 9) {
+                                const error = getOrgNumberValidator({ required: true })(cleanValue);
+                                if (error) {
+                                    setErrorOrgInfo(intl.formatMessage({ id: error }, { orgnr: cleanValue }));
+                                } else hentOrgInfo(cleanValue);
+                            }
+                        }}
+                    />
 
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
                         <VStack gap="2" className="ml-7">

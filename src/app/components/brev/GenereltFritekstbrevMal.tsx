@@ -1,73 +1,52 @@
 import React from 'react';
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+
 import { FormattedMessage } from 'react-intl';
-import { Tag, TextField, Textarea } from '@navikt/ds-react';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Tag } from '@navikt/ds-react';
+
 import { validateText } from 'app/utils/validationHelpers';
 import VerticalSpacer from '../VerticalSpacer';
+import { FormTextField, FormTextarea } from 'app/components/form';
+import { BrevFormKeys, IBrevForm } from './types';
 
-interface GenereltFritekstbrevMalProps {
+interface Props {
     setVisBrevIkkeSendtInfoboks: () => void;
     setPreviewMessageFeil: () => void;
 }
 
-const GenereltFritekstbrevMal: React.FC<GenereltFritekstbrevMalProps> = ({
-    setVisBrevIkkeSendtInfoboks,
-    setPreviewMessageFeil,
-}) => {
-    const { setFieldValue } = useFormikContext();
-
+const GenereltFritekstbrevMal: React.FC<Props> = ({ setVisBrevIkkeSendtInfoboks, setPreviewMessageFeil }) => {
     return (
         <>
             <VerticalSpacer sixteenPx />
 
-            <Field
+            <FormTextField<IBrevForm>
                 name={`${BrevFormKeys.fritekstbrev}.overskrift`}
-                validate={(value: string) => validateText(value, 200)}
-            >
-                {({ field, meta }: FieldProps) => (
-                    <TextField
-                        {...field}
-                        onChange={(event) => {
-                            setFieldValue(field.name, event.target.value);
-                            setPreviewMessageFeil();
-                            setVisBrevIkkeSendtInfoboks();
-                        }}
-                        size="small"
-                        label={<FormattedMessage id={`genereltFritekstbrevMal.fritekstTittel`} />}
-                        maxLength={200}
-                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                    />
-                )}
-            </Field>
+                label={<FormattedMessage id={`genereltFritekstbrevMal.fritekstTittel`} />}
+                validate={(value) => validateText(value, 200)}
+                maxLength={200}
+                onChange={() => {
+                    setPreviewMessageFeil();
+                    setVisBrevIkkeSendtInfoboks();
+                }}
+            />
 
             <VerticalSpacer sixteenPx />
 
-            <Field
-                name={`${BrevFormKeys.fritekstbrev}.brødtekst`}
-                validate={(value: string) => validateText(value, 100000)}
-            >
-                {({ field, meta }: FieldProps) => (
-                    <div className="textareaContainer">
-                        <Textarea
-                            {...field}
-                            size="small"
-                            onChange={(event) => {
-                                setFieldValue(field.name, event.target.value);
-                                setPreviewMessageFeil();
-                                setVisBrevIkkeSendtInfoboks();
-                            }}
-                            label={<FormattedMessage id={`genereltFritekstbrevMal.innholdIBrev`} />}
-                            maxLength={100000}
-                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                        />
+            <div className="textareaContainer">
+                <FormTextarea<IBrevForm>
+                    name={`${BrevFormKeys.fritekstbrev}.brødtekst`}
+                    label={<FormattedMessage id={`genereltFritekstbrevMal.innholdIBrev`} />}
+                    validate={(value) => validateText(value, 100000)}
+                    maxLength={100000}
+                    onChange={() => {
+                        setPreviewMessageFeil();
+                        setVisBrevIkkeSendtInfoboks();
+                    }}
+                />
 
-                        <Tag variant="warning" size="small" className="språkEtikett">
-                            <FormattedMessage id={`genereltFritekstbrevMal.språkEtikett.bokmål`} />
-                        </Tag>
-                    </div>
-                )}
-            </Field>
+                <Tag variant="warning" size="small" className="språkEtikett">
+                    <FormattedMessage id={`genereltFritekstbrevMal.språkEtikett.bokmål`} />
+                </Tag>
+            </div>
         </>
     );
 };

@@ -68,8 +68,25 @@ const prepare = async () => {
             beforeSend: (event) => event,
         });
     }
+
     if (process.env.NODE_ENV !== 'production') {
-        return import('../mocks/browser').then(({ worker }) => worker.start({ onUnhandledRequest: 'bypass' }));
+        try {
+            const { worker } = await import('../mocks/browser');
+
+            await worker.start({
+                onUnhandledRequest: 'bypass',
+                serviceWorker: {
+                    url: '/mockServiceWorker.js',
+                    options: {
+                        scope: '/',
+                    },
+                },
+            });
+            return worker;
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('MSW initialization failed:', error);
+        }
     }
     return Promise.resolve();
 };

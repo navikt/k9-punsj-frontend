@@ -1,10 +1,12 @@
 import React from 'react';
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+
 import { FormattedMessage } from 'react-intl';
-import { Tag, Textarea } from '@navikt/ds-react';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
+import { Tag } from '@navikt/ds-react';
+
 import { validateText } from 'app/utils/validationHelpers';
 import VerticalSpacer from '../VerticalSpacer';
+import { FormTextarea } from 'app/components/form';
+import { BrevFormKeys, IBrevForm } from './types';
 
 interface InnhentDokumentasjonMalProps {
     setVisBrevIkkeSendtInfoboks: () => void;
@@ -15,34 +17,26 @@ const InnhentDokumentasjonMal: React.FC<InnhentDokumentasjonMalProps> = ({
     setVisBrevIkkeSendtInfoboks,
     setPreviewMessageFeil,
 }) => {
-    const { setFieldValue } = useFormikContext();
-
     return (
         <>
             <VerticalSpacer sixteenPx />
 
-            <Field name={BrevFormKeys.fritekst} validate={(value: string) => validateText(value, 4000)}>
-                {({ field, meta }: FieldProps) => (
-                    <div className="textareaContainer">
-                        <Textarea
-                            {...field}
-                            size="small"
-                            onChange={(event) => {
-                                setFieldValue(field.name, event.target.value);
-                                setVisBrevIkkeSendtInfoboks();
-                                setPreviewMessageFeil();
-                            }}
-                            label={<FormattedMessage id={`innhentDokumentasjonMal.fritekstTittel`} />}
-                            maxLength={4000}
-                            error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                        />
+            <div className="textareaContainer">
+                <FormTextarea<IBrevForm>
+                    name={BrevFormKeys.fritekst}
+                    label={<FormattedMessage id="innhentDokumentasjonMal.fritekstTittel" />}
+                    validate={(value) => validateText(value, 4000)}
+                    maxLength={4000}
+                    onChange={() => {
+                        setVisBrevIkkeSendtInfoboks();
+                        setPreviewMessageFeil();
+                    }}
+                />
 
-                        <Tag variant="warning" size="small" className="språkEtikett">
-                            <FormattedMessage id={`innhentDokumentasjonMal.språkEtikett.bokmål`} />
-                        </Tag>
-                    </div>
-                )}
-            </Field>
+                <Tag variant="warning" size="small" className="språkEtikett">
+                    <FormattedMessage id="innhentDokumentasjonMal.språkEtikett.bokmål" />
+                </Tag>
+            </div>
         </>
     );
 };

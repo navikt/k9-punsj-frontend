@@ -888,6 +888,7 @@
     "orgNumberHasInvalidFormat": "Organisasjonsnummeret ({orgnr}) er på et ugyldig format",
     "orgNumberHasNoValue": "Skriv inn organisasjonsnummer",
     "ValidationMessage.InvalidText": "Feltet inneholder ugyldige tegn: {text}",
+    "noeGikkGalt": "Noe gikk galt. Error: {error}. Status: {status}",
 
     "AT": "Arbeidstaker",
     "SN/FL": "Selvstendig næringsdrivende/frilanser"

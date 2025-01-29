@@ -1,18 +1,55 @@
 import React from 'react';
-import { TextField, TextFieldProps } from '@navikt/ds-react';
-import { FormField } from './FormField';
+import { useFormContext, FieldValues, RegisterOptions } from 'react-hook-form';
+import { TextField } from '@navikt/ds-react';
+import { FormTextFieldProps } from './types';
 
-interface FormTextFieldProps extends Omit<TextFieldProps, 'error'> {
-    name: string;
-    rules?: Record<string, any>;
-    errorMessage?: string;
+export function FormTextField<T extends FieldValues>({
+    name,
+    label,
+    validate,
+    required,
+    className,
+    disabled,
+    onChange,
+    type,
+    inputMode,
+    pattern,
+    maxLength,
+    autoComplete,
+    readOnly,
+}: FormTextFieldProps<T>) {
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext<T>();
+
+    const rules: RegisterOptions<T> = {
+        required: required && (typeof required === 'string' ? required : 'Dette feltet er påkrevd'),
+    };
+
+    if (validate) {
+        rules.validate = validate;
+    }
+
+    return (
+        <TextField
+            {...register(name, rules)}
+            size="small"
+            label={label}
+            className={className}
+            error={errors[name]?.message as string}
+            onChange={(event) => {
+                if (onChange) {
+                    onChange(event);
+                }
+            }}
+            disabled={disabled}
+            type={type}
+            inputMode={inputMode}
+            pattern={pattern}
+            maxLength={maxLength}
+            autoComplete={autoComplete}
+            readOnly={readOnly}
+        />
+    );
 }
-
-export const FormTextField: React.FC<FormTextFieldProps> = ({ name, rules, errorMessage, ...props }) => (
-    <FormField
-        name={name}
-        rules={rules}
-        errorMessage={errorMessage}
-        render={(field, error) => <TextField {...field} {...props} error={error} />}
-    />
-);

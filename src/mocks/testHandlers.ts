@@ -214,6 +214,7 @@ export const testHandlers = {
         ),
     ),
 
+    arbeidsgiver: http.get(ApiPath.SØK_ORGNUMMER, () => HttpResponse.json({ navn: 'Test Navn' }, { status: 200 })),
     /*settPåVent: http.post(ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', ':id'), () =>
         HttpResponse.json({ sattPåVent: true }, { status: 200 }),
     ),*/

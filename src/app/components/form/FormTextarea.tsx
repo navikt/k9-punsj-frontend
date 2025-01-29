@@ -1,18 +1,49 @@
 import React from 'react';
-import { Textarea, TextareaProps } from '@navikt/ds-react';
-import { FormField } from './FormField';
+import { useFormContext, FieldValues, RegisterOptions } from 'react-hook-form';
+import { Textarea } from '@navikt/ds-react';
+import { FormTextareaProps } from './types';
 
-interface FormTextareaProps extends Omit<TextareaProps, 'error'> {
-    name: string;
-    rules?: Record<string, any>;
-    errorMessage?: string;
+export function FormTextarea<T extends FieldValues>({
+    name,
+    label,
+    validate,
+    required,
+    className,
+    disabled,
+    onChange,
+    maxLength,
+}: FormTextareaProps<T>) {
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext<T>();
+
+    const rules: RegisterOptions<T> = {
+        required: required && (typeof required === 'string' ? required : 'Dette feltet er påkrevd'),
+    };
+
+    if (validate) {
+        rules.validate = validate;
+    }
+
+    const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
+
+    return (
+        <Textarea
+            {...rest}
+            ref={ref}
+            size="small"
+            label={label}
+            className={className}
+            error={errors[name]?.message as string}
+            onChange={(event) => {
+                registerOnChange(event);
+                if (onChange) {
+                    onChange(event);
+                }
+            }}
+            disabled={disabled}
+            maxLength={maxLength}
+        />
+    );
 }
-
-export const FormTextarea: React.FC<FormTextareaProps> = ({ name, rules, errorMessage, ...props }) => (
-    <FormField
-        name={name}
-        rules={rules}
-        errorMessage={errorMessage}
-        render={(field, error) => <Textarea {...field} {...props} error={error} />}
-    />
-);
