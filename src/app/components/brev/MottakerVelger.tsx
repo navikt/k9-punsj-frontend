@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useFormContext } from 'react-hook-form';
@@ -34,20 +34,14 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
+
     const { watch, setValue, getValues, trigger, clearErrors } = useFormContext<IBrevForm>();
+
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
 
     const velgAnnenMottaker = watch(BrevFormKeys.velgAnnenMottaker);
     const mottaker = watch(BrevFormKeys.mottaker);
-
-    useEffect(() => {
-        if (!velgAnnenMottaker) {
-            setValue(BrevFormKeys.annenMottakerOrgNummer, '');
-            setOrgInfo(undefined);
-            setErrorOrgInfo(undefined);
-        }
-    }, [velgAnnenMottaker, setValue]);
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -72,10 +66,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             },
         );
     };
-
-    if (velgAnnenMottaker === false && orgInfoPending) {
-        setOrgInfoPending(false);
-    }
 
     return (
         <>
@@ -118,7 +108,13 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                 label={<FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />}
                 onChange={() => {
                     resetBrevStatus();
+                    setValue(BrevFormKeys.annenMottakerOrgNummer, '');
+                    setOrgInfoPending(false);
+                    setOrgInfo(undefined);
+                    setErrorOrgInfo(undefined);
+
                     const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
+
                     if (currentValue && mottaker) {
                         setValue(BrevFormKeys.mottaker, '', { shouldValidate: true });
                     }
