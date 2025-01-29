@@ -5,7 +5,7 @@ export const defaultValuesBrev: IBrevForm = {
     [BrevFormKeys.brevmalkode]: '',
     [BrevFormKeys.mottaker]: '',
     [BrevFormKeys.velgAnnenMottaker]: false,
-    [BrevFormKeys.orgNummer]: '',
+    [BrevFormKeys.annenMottakerOrgNummer]: '',
     [BrevFormKeys.overskrift]: '',
     [BrevFormKeys.brødtekst]: '',
 };
@@ -82,8 +82,11 @@ export const previewMessage = async (
     journalpostId?: string,
     fagsakId?: string,
 ): Promise<string | undefined> => {
-    const mottakerType = values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR';
-    const mottakerId = values.velgAnnenMottaker ? values.orgNummer.replace(/\s/g, '') : values.mottaker;
+    const mottakerType =
+        values[BrevFormKeys.mottaker] === aktørId && !values[BrevFormKeys.velgAnnenMottaker] ? 'AKTØRID' : 'ORGNR';
+    const mottakerId = values[BrevFormKeys.velgAnnenMottaker]
+        ? values[BrevFormKeys.annenMottakerOrgNummer].replace(/\s/g, '')
+        : values[BrevFormKeys.mottaker];
 
     const dokumentdata = getDokumentdata(values, valgteMal);
 
@@ -101,7 +104,7 @@ export const previewMessage = async (
                 saksnummer: fagsakId || 'GENERELL_SAK',
                 avsenderApplikasjon: 'K9PUNSJ',
                 overstyrtMottaker: { type: mottakerType, id: mottakerId },
-                dokumentMal: values.brevmalkode,
+                dokumentMal: values[BrevFormKeys.brevmalkode],
                 dokumentdata,
             }),
             headers: { 'Content-Type': 'application/json' },

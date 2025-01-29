@@ -140,7 +140,7 @@ const BrevComponent: React.FC<Props> = ({
                     ? IBrevMottakerType.aktørId
                     : IBrevMottakerType.orgNr,
             id: values[BrevFormKeys.velgAnnenMottaker]
-                ? values[BrevFormKeys.orgNummer].replace(/\s/g, '')
+                ? values[BrevFormKeys.annenMottakerOrgNummer].replace(/\s/g, '')
                 : values[BrevFormKeys.mottaker],
         };
 

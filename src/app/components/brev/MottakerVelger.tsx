@@ -43,7 +43,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
     useEffect(() => {
         if (!velgAnnenMottaker) {
-            setValue(BrevFormKeys.orgNummer, '');
+            setValue(BrevFormKeys.annenMottakerOrgNummer, '');
             setOrgInfo(undefined);
             setErrorOrgInfo(undefined);
         }
@@ -128,7 +128,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             {velgAnnenMottaker && (
                 <div className="flex mt-4">
                     <FormTextField<IBrevForm>
-                        name={BrevFormKeys.orgNummer}
+                        name={BrevFormKeys.annenMottakerOrgNummer}
                         label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
                         validate={(value: string) => {
                             const cleanValue = value.replace(/\s/g, '');
@@ -148,7 +148,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         autoComplete="off"
                         readOnly={orgInfoPending}
                         onChange={async (event: ChangeEvent<HTMLInputElement>) => {
-                            clearErrors(BrevFormKeys.orgNummer);
+                            clearErrors(BrevFormKeys.velgAnnenMottaker);
                             let { value } = event.target;
 
                             const digitsOnly = value.replace(/\D/g, '');
@@ -165,7 +165,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             resetBrevStatus();
 
                             if (!orgInfoPending && cleanValue.length === 9) {
-                                const isValid = await trigger(BrevFormKeys.orgNummer);
+                                const isValid = await trigger(BrevFormKeys.velgAnnenMottaker);
 
                                 if (isValid) {
                                     hentOrgInfo(cleanValue);

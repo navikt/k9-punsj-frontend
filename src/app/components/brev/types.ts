@@ -27,7 +27,7 @@ export enum BrevFormKeys {
     brevmalkode = 'brevmalkode',
     mottaker = 'mottaker',
     velgAnnenMottaker = 'velgAnnenMottaker',
-    orgNummer = 'orgNummer',
+    annenMottakerOrgNummer = 'annenMottakerOrgNummer',
     overskrift = 'overskrift',
     brødtekst = 'brødtekst',
 }
@@ -36,7 +36,7 @@ export interface IBrevForm {
     [BrevFormKeys.brevmalkode]: string;
     [BrevFormKeys.mottaker]: string;
     [BrevFormKeys.velgAnnenMottaker]: boolean;
-    [BrevFormKeys.orgNummer]: string;
+    [BrevFormKeys.annenMottakerOrgNummer]: string;
     [BrevFormKeys.overskrift]: string;
     [BrevFormKeys.brødtekst]: string;
 }
