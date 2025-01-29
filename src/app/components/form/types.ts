@@ -18,6 +18,7 @@ export interface FormTextFieldProps<T extends FieldValues> extends Omit<FormFiel
     maxLength?: number;
     autoComplete?: string;
     readOnly?: boolean;
+    htmlSize?: number;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 

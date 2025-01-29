@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { RootStateType } from 'app/state/RootState';
 import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
 import { Alert, Button, Checkbox, ErrorMessage, Heading, Modal } from '@navikt/ds-react';

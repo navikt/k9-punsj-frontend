@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button, Modal } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';

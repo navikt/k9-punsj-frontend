@@ -7,7 +7,7 @@ import { Heading } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { getForkortelseFraFordelingDokumenttype } from 'app/utils';
 
 import './sendBrevBehandletJp.less';

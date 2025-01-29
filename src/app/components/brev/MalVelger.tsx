@@ -2,13 +2,12 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 
-import { BrevFormKeys, IBrevForm } from './types';
-import Brevmal from './Brevmal';
+import { BrevFormKeys, Brevmal, IBrevForm } from './types';
 import { FormSelect } from 'app/components/form';
 
 interface Props {
-    resetBrevStatus: () => void;
     brevmaler: Brevmal;
+    resetBrevStatus: () => void;
 }
 
 const MalVelger: React.FC<Props> = ({ brevmaler, resetBrevStatus }) => {
@@ -27,7 +26,7 @@ const MalVelger: React.FC<Props> = ({ brevmaler, resetBrevStatus }) => {
             </option>
 
             {brevmalkoder.map((brevmalkode) => (
-                <option key={brevmalkode} value={brevmalkode}>
+                <option key={brevmalkode} value={brevmaler[brevmalkode].kode}>
                     {brevmaler[brevmalkode].navn}
                 </option>
             ))}

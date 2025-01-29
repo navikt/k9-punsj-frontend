@@ -12,9 +12,39 @@ let handlers = [
     http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
             {
-                INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
-                GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
-                GENERELT_FRITEKSTBREV_NYNORSK: { navn: 'Fritekst generelt brev på nynorsk', mottakere: [] },
+                INNHEN: {
+                    navn: 'Innhent dokumentasjon',
+                    mottakere: [],
+                    linker: [
+                        {
+                            type: 'GET',
+                            rel: 'malinnhold',
+                            href: '/k9/formidling/api/brev/maler/VARSEL_FRITEKST?sakstype=PSB&eksternReferanse=null&avsenderApplikasjon=K9PUNSJ',
+                        },
+                    ],
+                    støtterFritekst: true,
+                    støtterTittelOgFritekst: false,
+                    kode: 'INNHEN',
+                    støtterTredjepartsmottaker: false,
+                },
+                GENERELT_FRITEKSTBREV: {
+                    kode: 'GENERELT_FRITEKSTBREV',
+                    linker: [],
+                    mottakere: [],
+                    navn: 'Fritekst generelt brev',
+                    støtterFritekst: false,
+                    støtterTittelOgFritekst: true,
+                    støtterTredjepartsmottaker: true,
+                },
+                GENERELT_FRITEKSTBREV_NYNORSK: {
+                    navn: 'Fritekst generelt brev på nynorsk',
+                    mottakere: [],
+                    linker: [],
+                    støtterFritekst: false,
+                    støtterTittelOgFritekst: true,
+                    kode: 'GENERELT_FRITEKSTBREV_NYNORSK',
+                    støtterTredjepartsmottaker: true,
+                },
             },
             { status: 200 },
         ),

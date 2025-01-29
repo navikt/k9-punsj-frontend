@@ -17,6 +17,7 @@ export function FormTextField<T extends FieldValues>({
     maxLength,
     autoComplete,
     readOnly,
+    htmlSize,
 }: FormTextFieldProps<T>) {
     const {
         register,
@@ -31,14 +32,18 @@ export function FormTextField<T extends FieldValues>({
         rules.validate = validate;
     }
 
+    const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
+
     return (
         <TextField
-            {...register(name, rules)}
+            {...rest}
+            ref={ref}
             size="small"
             label={label}
             className={className}
             error={errors[name]?.message as string}
             onChange={(event) => {
+                registerOnChange(event);
                 if (onChange) {
                     onChange(event);
                 }
@@ -50,6 +55,7 @@ export function FormTextField<T extends FieldValues>({
             maxLength={maxLength}
             autoComplete={autoComplete}
             readOnly={readOnly}
+            htmlSize={htmlSize}
         />
     );
 }

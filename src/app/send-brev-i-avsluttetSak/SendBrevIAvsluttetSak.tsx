@@ -4,7 +4,7 @@ import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt
 
 import { finnFagsaker } from 'app/api/api';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { useFormState } from 'app/hooks/useFormState';
 import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/rules';

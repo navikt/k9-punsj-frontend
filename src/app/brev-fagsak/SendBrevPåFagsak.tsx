@@ -10,7 +10,7 @@ import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction } from 'app/stat
 import Fagsak from 'app/types/Fagsak';
 import { finnForkortelseForDokumenttype } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 
 import './sendBrevPåFagsak.less';
 
@@ -51,7 +51,7 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     return (
         <div className="sendBrevPåFagsak">
             <Heading size="small" level="1">
-                <FormattedMessage id={`sendBrevPåFagsak.header`} />
+                <FormattedMessage id="sendBrevPåFagsak.header" />
             </Heading>
 
             <BrevComponent

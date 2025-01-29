@@ -14,18 +14,12 @@ import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
 import { FormSelect, FormCheckbox, FormTextField } from 'app/components/form';
 
-export interface OrgInfo {
-    organisasjonsnummer: string;
-    navn: string;
-    konkurs: boolean;
-}
-
 interface MottakerVelgerProps {
     aktørId: string;
     arbeidsgivereMedNavn: Organisasjon[];
     orgInfoPending: boolean;
-    formSubmitted: boolean;
     person?: Person;
+
     resetBrevStatus: () => void;
     setOrgInfoPending: (value: boolean) => void;
 }
@@ -34,13 +28,13 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     aktørId,
     arbeidsgivereMedNavn,
     orgInfoPending,
-    formSubmitted,
     person,
+
     resetBrevStatus,
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
-    const { watch, setValue, getValues } = useFormContext<IBrevForm>();
+    const { watch, setValue, getValues, trigger, clearErrors } = useFormContext<IBrevForm>();
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
     const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
 
@@ -132,12 +126,11 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             />
 
             {velgAnnenMottaker && (
-                <div className="flex">
+                <div className="flex mt-4">
                     <FormTextField<IBrevForm>
                         name={BrevFormKeys.orgNummer}
                         label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
-                        validate={(value: string | undefined) => {
-                            if (!value) return undefined;
+                        validate={(value: string) => {
                             const cleanValue = value.replace(/\s/g, '');
                             const error = getOrgNumberValidator({ required: true })(cleanValue);
 
@@ -146,13 +139,16 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             }
                             return error ? intl.formatMessage({ id: error }, { orgnr: cleanValue }) : undefined;
                         }}
+                        required
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9\s]*"
                         maxLength={11}
+                        className="orgNrInput"
                         autoComplete="off"
                         readOnly={orgInfoPending}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                        onChange={async (event: ChangeEvent<HTMLInputElement>) => {
+                            clearErrors(BrevFormKeys.orgNummer);
                             let { value } = event.target;
 
                             const digitsOnly = value.replace(/\D/g, '');
@@ -169,10 +165,11 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             resetBrevStatus();
 
                             if (!orgInfoPending && cleanValue.length === 9) {
-                                const error = getOrgNumberValidator({ required: true })(cleanValue);
-                                if (error) {
-                                    setErrorOrgInfo(intl.formatMessage({ id: error }, { orgnr: cleanValue }));
-                                } else hentOrgInfo(cleanValue);
+                                const isValid = await trigger(BrevFormKeys.orgNummer);
+
+                                if (isValid) {
+                                    hentOrgInfo(cleanValue);
+                                }
                             }
                         }}
                     />
@@ -189,7 +186,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
                             {orgInfoPending && <Loader size="small" title="venter..." />}
 
-                            {!formSubmitted && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
+                            {errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
 
                             {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
                         </VStack>

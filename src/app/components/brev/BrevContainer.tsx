@@ -1,33 +1,22 @@
 import React, { useState } from 'react';
 
-import { CollapseFilled, ExpandFilled } from '@navikt/ds-icons';
-
-import SendIcon from './SendIcon';
-import './brevContainer.less';
+import { Checkbox } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
     children?: React.ReactNode;
 }
 
 const BrevContainer: React.FC<Props> = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [visBrev, setVisBrev] = useState(false);
 
     return (
-        <div className="brevContainer">
-            <button
-                className="brevContainer__button navds-button--tertiary"
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                <SendIcon />
-                Send brev til arbeidsgiver eller søker
-                {isOpen ? (
-                    <ExpandFilled className="brevContainer__chevron" fill="#0067C5" />
-                ) : (
-                    <CollapseFilled className="brevContainer__chevron" fill="#0067C5" />
-                )}
-            </button>
-            {isOpen ? children : null}
+        <div className="mt-6 mb-4">
+            <Checkbox onChange={() => setVisBrev(!visBrev)} checked={visBrev}>
+                <FormattedMessage id="brevContainer.checkbox.tittel" />
+            </Checkbox>
+
+            {visBrev && children}
         </div>
     );
 };

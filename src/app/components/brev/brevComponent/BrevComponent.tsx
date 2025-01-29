@@ -4,31 +4,26 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import hash from 'object-hash';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Button, ErrorMessage } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Tag } from '@navikt/ds-react';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
 import { ApiPath } from 'app/apiConfig';
 import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
-import { finnArbeidsgivere } from '../../api/api';
+import { finnArbeidsgivere } from '../../../api/api';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import VerticalSpacer from '../VerticalSpacer';
-import { createBrev, defaultValuesBrev } from './Brev';
-import Brevmal from './Brevmal';
-import GenereltFritekstbrevMal from './GenereltFritekstbrevMal';
-import InnhentDokumentasjonMal from './InnhentDokumentasjonMal';
-import MalVelger from './MalVelger';
-import MottakerVelger from './MottakerVelger';
-import DokumentMalType from './DookumentMalType';
-import { previewMessage } from './previewMessage';
-import { BrevFormKeys, IBrevForm, IBrevMottakerType } from './types';
+import VerticalSpacer from '../../VerticalSpacer';
+import { createBrev, defaultValuesBrev, getDokumentdata, previewMessage } from '../utils';
+import MalVelger from '../MalVelger';
+import MottakerVelger from '../MottakerVelger';
+import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } from '../types';
+import { validateText } from 'app/utils/validationHelpers';
+import { FormProvider, FormTextarea, FormTextField } from 'app/components/form';
 
-import { FormProvider } from 'app/components/form';
+import './brevComponent.less';
 
-import './brev.less';
-
-interface BrevProps {
+interface Props {
     søkerId: string;
     sakstype: string;
     fagsakId?: string;
@@ -36,12 +31,13 @@ interface BrevProps {
     sendBrevUtenModal?: boolean;
     brevFraModal?: boolean;
     tilbake?: boolean;
+
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
     lukkJournalpostOppgave?: () => void;
 }
 
-const BrevComponent: React.FC<BrevProps> = ({
+const BrevComponent: React.FC<Props> = ({
     søkerId,
     sakstype,
     fagsakId,
@@ -49,10 +45,13 @@ const BrevComponent: React.FC<BrevProps> = ({
     sendBrevUtenModal,
     brevFraModal,
     tilbake,
+
     setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
     lukkJournalpostOppgave,
 }) => {
+    const navigate = useNavigate();
+
     const [brevmaler, setBrevmaler] = useState<Brevmal | undefined>(undefined);
     const [hentBrevmalerError, setHentBrevmalerError] = useState(false);
     const [arbeidsgivereMedNavn, setArbeidsgivereMedNavn] = useState<Organisasjon[]>([]);
@@ -67,8 +66,6 @@ const BrevComponent: React.FC<BrevProps> = ({
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
 
-    const navigate = useNavigate();
-
     const methods = useForm<IBrevForm>({
         defaultValues: defaultValuesBrev,
         mode: 'onSubmit',
@@ -81,23 +78,40 @@ const BrevComponent: React.FC<BrevProps> = ({
     } = methods;
 
     const brevmalkode = watch(BrevFormKeys.brevmalkode);
+    const valgteMal = brevmaler && brevmaler[brevmalkode];
+
+    const visTittelInput = !!valgteMal && valgteMal.støtterTittelOgFritekst;
+    const visFritekstInput = !!valgteMal && (valgteMal.støtterTittelOgFritekst || valgteMal.støtterFritekst);
 
     useEffect(() => {
+        let isMounted = true;
+
         fetch(`${ApiPath.BREV_MALER}?sakstype=${sakstype}&avsenderApplikasjon=K9PUNSJ`, {
             credentials: 'include',
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.json().then((data) => setBrevmaler(data || []));
+                    return response.json();
                 }
-                return setHentBrevmalerError(true);
+                throw new Error('Failed to fetch brevmaler');
+            })
+            .then((data) => {
+                if (isMounted) {
+                    setBrevmaler(data || []);
+                }
             })
             .catch((error) => {
                 // eslint-disable-next-line no-console
-                console.log(error);
-                setHentBrevmalerError(true);
+                console.error('Error fetching brevmaler:', error);
+                if (isMounted) {
+                    setHentBrevmalerError(true);
+                }
             });
-    }, []);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [sakstype]);
 
     useEffect(() => {
         if (søkerId) {
@@ -125,18 +139,18 @@ const BrevComponent: React.FC<BrevProps> = ({
                 values[BrevFormKeys.mottaker] === aktørId && !values[BrevFormKeys.velgAnnenMottaker]
                     ? IBrevMottakerType.aktørId
                     : IBrevMottakerType.orgNr,
-            id: values[BrevFormKeys.velgAnnenMottaker] ? values[BrevFormKeys.orgNummer] : values[BrevFormKeys.mottaker],
+            id: values[BrevFormKeys.velgAnnenMottaker]
+                ? values[BrevFormKeys.orgNummer].replace(/\s/g, '')
+                : values[BrevFormKeys.mottaker],
         };
 
         const dokumentMal = values[BrevFormKeys.brevmalkode];
+        const dokumentdata = getDokumentdata(values, valgteMal);
 
-        const brev = createBrev(values, søkerId, mottakerData, sakstype, dokumentMal, journalpostId, fagsakId);
+        const brev = createBrev(søkerId, mottakerData, sakstype, dokumentMal, dokumentdata, journalpostId, fagsakId);
         const brevHash = hash(brev);
-        console.log('TEST: ', brev);
 
-        const testIkkeSend = true;
-
-        if (brevHash !== forrigeSendteBrevHash && !testIkkeSend) {
+        if (brevHash !== forrigeSendteBrevHash) {
             setVisSammeBrevError(false);
             post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                 if (response.status === 200) {
@@ -158,6 +172,13 @@ const BrevComponent: React.FC<BrevProps> = ({
         }
     };
 
+    const onSubmitPreview = (values: IBrevForm) => {
+        setPreviewMessageFeil(undefined);
+        previewMessage(values, aktørId, sakstype, valgteMal, journalpostId, fagsakId).then((feil) =>
+            setPreviewMessageFeil(feil),
+        );
+    };
+
     if (hentBrevmalerError) {
         return (
             <ErrorMessage size="small">
@@ -174,18 +195,17 @@ const BrevComponent: React.FC<BrevProps> = ({
         <FormProvider<IBrevForm> form={methods} onSubmit={onSubmit}>
             <div className="brev">
                 <MalVelger
+                    brevmaler={brevmaler}
                     resetBrevStatus={() => {
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
                     }}
-                    brevmaler={brevmaler}
                 />
 
                 <MottakerVelger
                     aktørId={aktørId}
                     arbeidsgivereMedNavn={arbeidsgivereMedNavn}
                     orgInfoPending={orgInfoPending}
-                    formSubmitted={isSubmitting}
                     person={person}
                     resetBrevStatus={() => {
                         setPreviewMessageFeil(undefined);
@@ -197,31 +217,52 @@ const BrevComponent: React.FC<BrevProps> = ({
                     }}
                 />
 
-                {brevmalkode === DokumentMalType.INNHENT_DOK && (
-                    <InnhentDokumentasjonMal
-                        setVisBrevIkkeSendtInfoboks={() =>
-                            setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
-                        }
-                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
-                    />
+                {visTittelInput && (
+                    <>
+                        <VerticalSpacer sixteenPx />
+
+                        <FormTextField<IBrevForm>
+                            name={BrevFormKeys.overskrift}
+                            label={<FormattedMessage id="brevComponent.tittel" />}
+                            validate={(value) => validateText(value, 200)}
+                            maxLength={200}
+                            onChange={() => {
+                                setPreviewMessageFeil(undefined);
+                                if (setVisBrevIkkeSendtInfoboks) {
+                                    setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev);
+                                }
+                            }}
+                        />
+                    </>
                 )}
 
-                {brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV && (
-                    <GenereltFritekstbrevMal
-                        setVisBrevIkkeSendtInfoboks={() =>
-                            setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
-                        }
-                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
-                    />
-                )}
+                {visFritekstInput && (
+                    <div className="textareaContainer">
+                        <VerticalSpacer sixteenPx />
 
-                {brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK && (
-                    <GenereltFritekstbrevMal
-                        setVisBrevIkkeSendtInfoboks={() =>
-                            setVisBrevIkkeSendtInfoboks && setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev)
-                        }
-                        setPreviewMessageFeil={() => setPreviewMessageFeil(undefined)}
-                    />
+                        <FormTextarea<IBrevForm>
+                            name={BrevFormKeys.brødtekst}
+                            label={<FormattedMessage id="brevComponent.innhold" />}
+                            validate={(value) => validateText(value, 100000)}
+                            maxLength={100000}
+                            onChange={() => {
+                                setPreviewMessageFeil(undefined);
+                                if (setVisBrevIkkeSendtInfoboks) {
+                                    setVisBrevIkkeSendtInfoboks(!harSendtMinstEttBrev);
+                                }
+                            }}
+                        />
+
+                        <Tag variant="warning" size="small" className="språkEtikett">
+                            <FormattedMessage
+                                id={
+                                    brevmalkode === DokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK
+                                        ? 'brevComponent.språkEtikett.nynorsk'
+                                        : 'brevComponent.språkEtikett.bokmål'
+                                }
+                            />
+                        </Tag>
+                    </div>
                 )}
 
                 <VerticalSpacer sixteenPx />
@@ -239,25 +280,20 @@ const BrevComponent: React.FC<BrevProps> = ({
                                     type="submit"
                                     icon={<PaperplaneIcon />}
                                 >
-                                    <FormattedMessage id={`brevComponent.btn.sendBrev`} />
+                                    <FormattedMessage id="brevComponent.btn.sendBrev" />
                                 </Button>
                             )}
+
                             <Button
                                 size="small"
                                 type="button"
                                 variant="tertiary"
                                 icon={<FileSearchIcon aria-hidden />}
                                 onClick={() => {
-                                    if (isValid) {
-                                        const values = methods.getValues();
-                                        setPreviewMessageFeil(undefined);
-                                        previewMessage(values, aktørId, sakstype, journalpostId, fagsakId).then(
-                                            (feil) => setPreviewMessageFeil(feil),
-                                        );
-                                    }
+                                    handleSubmit(onSubmitPreview)();
                                 }}
                             >
-                                <FormattedMessage id={`brevComponent.btn.forhåndsvisBrev`} />
+                                <FormattedMessage id="brevComponent.btn.forhåndsvisBrev" />
                             </Button>
                         </div>
 
@@ -268,27 +304,28 @@ const BrevComponent: React.FC<BrevProps> = ({
                         )}
                     </div>
                 )}
+
                 <div className="brevStatusContainer">
                     {brevErSendt && (!sendBrevUtenModal || brevFraModal) && (
                         <Alert variant="success" size="medium" fullWidth inline>
-                            <FormattedMessage id={`brevComponent.alert.brevErSendt`} />
+                            <FormattedMessage id="brevComponent.alert.brevErSendt" />
                         </Alert>
                     )}
                     {brevErSendt && sendBrevUtenModal && !brevFraModal && (
                         <Alert variant="success" size="medium" fullWidth inline>
-                            <FormattedMessage id={'brevComponent.alert.brevErSendt.etterKlassifisering'} />
+                            <FormattedMessage id="brevComponent.alert.brevErSendt.etterKlassifisering" />
                         </Alert>
                     )}
 
                     {sendBrevFeilet && (
                         <Alert variant="error" size="medium" fullWidth inline>
-                            <FormattedMessage id={`brevComponent.alert.sendBrevFeilet`} />
+                            <FormattedMessage id="brevComponent.alert.sendBrevFeilet" />
                         </Alert>
                     )}
 
                     {visSammeBrevError && (
                         <Alert variant="error" size="medium" fullWidth inline>
-                            <FormattedMessage id={`brevComponent.alert.visSammeBrevError`} />
+                            <FormattedMessage id="brevComponent.alert.visSammeBrevError" />
                         </Alert>
                     )}
                 </div>
@@ -299,11 +336,11 @@ const BrevComponent: React.FC<BrevProps> = ({
                     <Button
                         variant="primary"
                         className="sendBrevButton"
-                        onClick={() => (sendBrevUtenModal ? null : setVisErDuSikkerModal(true))}
+                        onClick={() => handleSubmit(() => setVisErDuSikkerModal(true))()}
                         size="small"
                         loading={isSubmitting || orgInfoPending}
                         disabled={isSubmitting || orgInfoPending}
-                        type={sendBrevUtenModal ? 'submit' : 'button'}
+                        type="button"
                         icon={<PaperplaneIcon />}
                     >
                         <FormattedMessage id="brevComponent.btn.sendBrev" />
@@ -315,7 +352,7 @@ const BrevComponent: React.FC<BrevProps> = ({
                             variant="secondary"
                             size="small"
                             onClick={() => lukkJournalpostOppgave()}
-                            type={'button'}
+                            type="button"
                         >
                             <FormattedMessage id="brevComponent.btn.lukkOppgave" />
                         </Button>

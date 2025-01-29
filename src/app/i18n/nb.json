@@ -826,6 +826,10 @@
 
     "sendBrevBehandletJournalpost.header": "Send brev",
 
+    "brevComponent.språkEtikett.nynorsk": "Nynorsk",
+    "brevComponent.språkEtikett.bokmål": "Bokmål",
+    "brevComponent.tittel": "Tittel",
+    "brevComponent.innhold": "Innhold i brev",
     "brevComponent.btn.forhåndsvisBrev": "Forhåndsvis brev",
     "brevComponent.btn.lukkOppgave": "Lukk oppgave",
     "brevComponent.btn.sendBrev": "Send brev",
@@ -836,21 +840,16 @@
     "brevComponent.alert.brevErSendt.etterKlassifisering": "Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.",
     "brevComponent.error.hentBrevmalerError": "Henting av brevmaler feilet.",
 
+    "brevContainer.checkbox.tittel": "Send brev til arbeidsgiver eller søker",
+
     "malVelger.brevmalkodeSelect.title": "Velg mal",
     "malVelger.brevmalkodeSelect.velg": "Velg",
 
     "mottakerVelger.select.tittel": "Velg mottaker",
     "mottakerVelger.select.velg": "Velg",
     "mottakerVelger.checkbox.velgAnnenMottaker": "Send til tredjepart",
-    "mottakerVelger.annenMottaker.orgNummer": "Org.nr.",
+    "mottakerVelger.annenMottaker.orgNummer": "Organisasjonsnummer",
     "mottakerVelger.annenMottaker.navn": "Navn",
-
-    "genereltFritekstbrevMal.språkEtikett.bokmål": "Bokmål",
-    "genereltFritekstbrevMal.fritekstTittel": "Tittel",
-    "genereltFritekstbrevMal.innholdIBrev": "Innhold i brev",
-
-    "innhentDokumentasjonMal.fritekstTittel": "Innhold i brev",
-    "innhentDokumentasjonMal.språkEtikett.bokmål": "Bokmål",
 
     "opprettJournalpost.opprettJournalpost": "Opprett journalpost",
     "opprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
