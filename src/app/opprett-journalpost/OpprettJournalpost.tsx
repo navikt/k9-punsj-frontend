@@ -8,14 +8,17 @@ import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
-import { FormProvider, FormSelect, FormTextField, FormTextarea } from 'app/components/form';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { ERROR_MESSAGES, JOURNALPOST_DEFAULT_VALUES } from './constants';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
 import { validateNottatTittel, validateNotatText, validateSøkerIdentitetsnummer } from './utils';
+import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 
 import './opprettJournalpost.less';
+
+const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
+    getTypedFormComponents<IOpprettJournalpostForm>();
 
 const OpprettJournalpost: React.FC = () => {
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
@@ -105,8 +108,8 @@ const OpprettJournalpost: React.FC = () => {
             </Heading>
 
             <div className="formContainer">
-                <FormProvider<IOpprettJournalpostForm> form={methods} onSubmit={onSubmit}>
-                    <FormTextField<IOpprettJournalpostForm>
+                <TypedFormProvider form={methods} onSubmit={onSubmit}>
+                    <TypedFormTextField
                         name={OpprettJournalpostFormKeys.søkerIdentitetsnummer}
                         label={<FormattedMessage id="opprettJournalpost.søkersFødselsnummer" />}
                         className="fnrInput"
@@ -122,7 +125,7 @@ const OpprettJournalpost: React.FC = () => {
                     />
 
                     <div className="fagsakSelectContainer">
-                        <FormSelect<IOpprettJournalpostForm>
+                        <TypedFormSelect
                             name={OpprettJournalpostFormKeys.fagsakId}
                             label={<FormattedMessage id="opprettJournalpost.velgFagsak" />}
                             className="input fagsakSelect"
@@ -146,7 +149,7 @@ const OpprettJournalpost: React.FC = () => {
                                     />
                                 </option>
                             ))}
-                        </FormSelect>
+                        </TypedFormSelect>
 
                         {isFetchingFagsaker && <Loader size="small" />}
                     </div>
@@ -183,7 +186,7 @@ const OpprettJournalpost: React.FC = () => {
                     )}
 
                     <div className="notatContainer">
-                        <FormTextField<IOpprettJournalpostForm>
+                        <TypedFormTextField
                             name={OpprettJournalpostFormKeys.tittel}
                             label={<FormattedMessage id="opprettJournalpost.tittel" />}
                             className="input"
@@ -194,7 +197,7 @@ const OpprettJournalpost: React.FC = () => {
                             disabled={isSubmitting}
                         />
 
-                        <FormTextarea<IOpprettJournalpostForm>
+                        <TypedFormTextarea
                             name={OpprettJournalpostFormKeys.notat}
                             className="input"
                             label={<FormattedMessage id="opprettJournalpost.notat" />}
@@ -249,7 +252,7 @@ const OpprettJournalpost: React.FC = () => {
                             <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
                         </Button>
                     )}
-                </FormProvider>
+                </TypedFormProvider>
 
                 {isSubmitSuccessful && (
                     <Button

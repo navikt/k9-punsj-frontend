@@ -15,13 +15,15 @@ import { finnArbeidsgivere } from '../../../api/api';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import VerticalSpacer from '../../VerticalSpacer';
 import { createBrev, defaultValuesBrev, getDokumentdata, previewMessage } from '../utils';
-import MalVelger from '../MalVelger';
 import MottakerVelger from '../MottakerVelger';
 import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } from '../types';
 import { validateText } from 'app/utils/validationHelpers';
-import { FormProvider, FormTextarea, FormTextField } from 'app/components/form';
+import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 
 import './brevComponent.less';
+
+const { TypedFormProvider, TypedFormTextField, TypedFormTextarea, TypedFormSelect } =
+    getTypedFormComponents<IBrevForm>();
 
 interface Props {
     søkerId: string;
@@ -182,7 +184,7 @@ const BrevComponent: React.FC<Props> = ({
     if (hentBrevmalerError) {
         return (
             <ErrorMessage size="small">
-                <FormattedMessage id={`brevComponent.error.hentBrevmalerError`} />
+                <FormattedMessage id="brevComponent.error.hentBrevmalerError" />
             </ErrorMessage>
         );
     }
@@ -192,15 +194,28 @@ const BrevComponent: React.FC<Props> = ({
     }
 
     return (
-        <FormProvider<IBrevForm> form={methods} onSubmit={onSubmit}>
+        <TypedFormProvider form={methods} onSubmit={onSubmit}>
             <div className="brev">
-                <MalVelger
-                    brevmaler={brevmaler}
-                    resetBrevStatus={() => {
+                <TypedFormSelect
+                    name={BrevFormKeys.brevmalkode}
+                    label={<FormattedMessage id="malVelger.brevmalkodeSelect.title" />}
+                    className="w-[400px]"
+                    required="Dette feltet er påkrevd"
+                    onChange={() => {
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
                     }}
-                />
+                >
+                    <option disabled key="default" value="" label="">
+                        <FormattedMessage id="malVelger.brevmalkodeSelect.velg" />
+                    </option>
+
+                    {Object.keys(brevmaler).map((kode) => (
+                        <option key={kode} value={brevmaler[kode].kode}>
+                            {brevmaler[kode].navn}
+                        </option>
+                    ))}
+                </TypedFormSelect>
 
                 <MottakerVelger
                     aktørId={aktørId}
@@ -221,7 +236,7 @@ const BrevComponent: React.FC<Props> = ({
                     <>
                         <VerticalSpacer sixteenPx />
 
-                        <FormTextField<IBrevForm>
+                        <TypedFormTextField
                             name={BrevFormKeys.overskrift}
                             label={<FormattedMessage id="brevComponent.tittel" />}
                             validate={(value) => validateText(value, 200)}
@@ -240,7 +255,7 @@ const BrevComponent: React.FC<Props> = ({
                     <div className="textareaContainer">
                         <VerticalSpacer sixteenPx />
 
-                        <FormTextarea<IBrevForm>
+                        <TypedFormTextarea
                             name={BrevFormKeys.brødtekst}
                             label={<FormattedMessage id="brevComponent.innhold" />}
                             validate={(value) => validateText(value, 100000)}
@@ -385,7 +400,7 @@ const BrevComponent: React.FC<Props> = ({
                     onClose={() => setVisErDuSikkerModal(false)}
                 />
             )}
-        </FormProvider>
+        </TypedFormProvider>
     );
 };
 

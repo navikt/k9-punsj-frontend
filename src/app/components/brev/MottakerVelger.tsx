@@ -12,8 +12,9 @@ import { get } from 'app/utils/apiUtils';
 import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
 import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
-import { FormSelect, FormCheckbox, FormTextField } from 'app/components/form';
+import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 
+const { TypedFormSelect, TypedFormCheckbox, TypedFormTextField } = getTypedFormComponents<IBrevForm>();
 interface MottakerVelgerProps {
     aktørId: string;
     arbeidsgivereMedNavn: Organisasjon[];
@@ -71,7 +72,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
         <>
             <VerticalSpacer sixteenPx />
 
-            <FormSelect<IBrevForm>
+            <TypedFormSelect
                 name={BrevFormKeys.mottaker}
                 label={<FormattedMessage id={`mottakerVelger.select.tittel`} />}
                 className="w-[400px]"
@@ -99,11 +100,11 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
                     </option>
                 ))}
-            </FormSelect>
+            </TypedFormSelect>
 
             <VerticalSpacer sixteenPx />
 
-            <FormCheckbox<IBrevForm>
+            <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
                 label={<FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />}
                 onChange={() => {
@@ -123,7 +124,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
             {velgAnnenMottaker && (
                 <div className="flex mt-4">
-                    <FormTextField<IBrevForm>
+                    <TypedFormTextField
                         name={BrevFormKeys.annenMottakerOrgNummer}
                         label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
                         validate={(value: string) => {
