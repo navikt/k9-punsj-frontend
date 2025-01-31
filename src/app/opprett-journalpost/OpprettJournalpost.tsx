@@ -29,9 +29,7 @@ const OpprettJournalpost: React.FC = () => {
 
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
     const [opprettJpError, setOpprettJpError] = useState<string>('');
-
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
-
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
@@ -45,12 +43,13 @@ const OpprettJournalpost: React.FC = () => {
     });
 
     const {
+        formState: { isSubmitting, isSubmitSuccessful, errors },
+
         watch,
         setValue,
         trigger,
         clearErrors,
         reset,
-        formState: { isSubmitting, isSubmitSuccessful, errors },
     } = methods;
 
     const søkersFødselsnummer = watch(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
