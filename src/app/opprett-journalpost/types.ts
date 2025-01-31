@@ -6,10 +6,10 @@ export enum OpprettJournalpostFormKeys {
 }
 
 export interface IOpprettJournalpostForm {
-    søkerIdentitetsnummer: string;
-    fagsakId: string;
-    tittel: string;
-    notat: string;
+    [OpprettJournalpostFormKeys.søkerIdentitetsnummer]: string;
+    [OpprettJournalpostFormKeys.fagsakId]: string;
+    [OpprettJournalpostFormKeys.tittel]: string;
+    [OpprettJournalpostFormKeys.notat]: string;
 }
 
 export interface IOpprettJournalpostResponse {

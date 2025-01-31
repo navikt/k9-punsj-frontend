@@ -24,7 +24,7 @@ const OpprettJournalpost: React.FC = () => {
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
 
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [fagsakError, setFagsakError] = useState(false);
+    const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
     const methods = useForm<IOpprettJournalpostForm>({
         defaultValues: JOURNALPOST_DEFAULT_VALUES,
@@ -48,17 +48,17 @@ const OpprettJournalpost: React.FC = () => {
         finnFagsaker(fnr, (response, data: Fagsak[]) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
-                setFagsakError(false);
+                setFetchFagsakError(false);
                 setFagsaker(data);
             } else {
-                setFagsakError(true);
+                setFetchFagsakError(true);
             }
         });
     };
 
     const handleSøkerIdentitetsnummerChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         clearErrors(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
-        setFagsakError(false);
+        setFetchFagsakError(false);
 
         if (fagsaker.length > 0) {
             setFagsaker([]);
@@ -69,6 +69,7 @@ const OpprettJournalpost: React.FC = () => {
 
         if (!isFetchingFagsaker && value.length === 11) {
             const isValid = await trigger(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
+
             if (isValid) {
                 hentFagsaker(value);
             }
@@ -76,7 +77,7 @@ const OpprettJournalpost: React.FC = () => {
     };
 
     const visIngenFagsakAlert =
-        !fagsakError &&
+        !fetchFagsakError &&
         søkersFødselsnummer.length === 11 &&
         !errors.søkerIdentitetsnummer &&
         !isFetchingFagsaker &&
@@ -150,7 +151,7 @@ const OpprettJournalpost: React.FC = () => {
                         {isFetchingFagsaker && <Loader size="small" />}
                     </div>
 
-                    {fagsakError && (
+                    {fetchFagsakError && (
                         <Alert
                             size="small"
                             variant="error"
@@ -158,6 +159,7 @@ const OpprettJournalpost: React.FC = () => {
                             data-test-id="opprettJournalpost.hentFagsakError"
                         >
                             <FormattedMessage id="opprettJournalpost.hentFagsakError" />
+
                             <Button
                                 type="button"
                                 size="small"
