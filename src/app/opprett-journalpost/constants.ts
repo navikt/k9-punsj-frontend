@@ -1,14 +1,14 @@
-import { IJournalpostForm } from 'app/types/journalpost.types';
+import { IOpprettJournalpostForm } from './types';
 
-export const JOURNALPOST_DEFAULT_VALUES: IJournalpostForm = {
-    søkersFødselsnummer: '',
+export const JOURNALPOST_DEFAULT_VALUES: IOpprettJournalpostForm = {
+    søkerIdentitetsnummer: '',
     fagsakId: '',
     tittel: '',
     notat: '',
 };
 
 export const VALIDATION_RULES = {
-    søkersFødselsnummer: {
+    søkerIdentitetsnummer: {
         required: true,
         minLength: 11,
         maxLength: 11,
@@ -27,7 +27,7 @@ export const VALIDATION_RULES = {
 } as const;
 
 export const ERROR_MESSAGES = {
-    søkersFødselsnummer: 'Fødselsnummer må være 11 siffer',
+    søkerIdentitetsnummer: 'Fødselsnummer må være 11 siffer',
     fagsakId: 'Vennligst velg en fagsak',
     tittel: 'Tittel er påkrevd og kan ikke være lengre enn 200 tegn',
     notat: 'Notat er påkrevd og kan ikke være lengre enn 100000 tegn',

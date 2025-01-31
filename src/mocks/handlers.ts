@@ -505,6 +505,7 @@ let handlers = [
     http.post(ApiPath.OPPRETT_NOTAT, async () => {
         await delay(500);
         return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
+        // return new HttpResponse(JSON.stringify({}), { status: 400 });
     }),
 ];
 

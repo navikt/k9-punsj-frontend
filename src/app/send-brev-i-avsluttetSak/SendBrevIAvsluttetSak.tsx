@@ -84,7 +84,7 @@ const SendBrevIAvsluttetSak = () => {
 
     return (
         <div className="sendBrevIAvsluttetSak">
-            <Heading size="small" level="1">
+            <Heading size="medium" level="1">
                 <FormattedMessage id="sendBrevIAvsluttetSak.header" />
             </Heading>
 

@@ -144,7 +144,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         autoComplete="off"
                         readOnly={orgInfoPending}
                         onChange={async (event: ChangeEvent<HTMLInputElement>) => {
-                            clearErrors(BrevFormKeys.velgAnnenMottaker);
+                            clearErrors(BrevFormKeys.annenMottakerOrgNummer);
                             let { value } = event.target;
 
                             const digitsOnly = value.replace(/\D/g, '');
@@ -161,7 +161,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                             resetBrevStatus();
 
                             if (!orgInfoPending && cleanValue.length === 9) {
-                                const isValid = await trigger(BrevFormKeys.velgAnnenMottaker);
+                                const isValid = await trigger(BrevFormKeys.annenMottakerOrgNummer);
 
                                 if (isValid) {
                                     hentOrgInfo(cleanValue);
