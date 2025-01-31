@@ -189,8 +189,8 @@ export const testHandlers = {
 
     hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
         await delay(500);
-        // return HttpResponse.json(fagsaker, { status: 200 });
-        return HttpResponse.json([], { status: 200 });
+        return HttpResponse.json(fagsaker, { status: 200 });
+        // return HttpResponse.json([], { status: 200 });
         // return HttpResponse.json({}, { status: 400 });
     }),
 
