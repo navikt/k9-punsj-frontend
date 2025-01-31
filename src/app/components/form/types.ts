@@ -23,6 +23,7 @@ export interface FormTextFieldProps<T extends FieldValues> extends Omit<FormFiel
 }
 
 export interface FormSelectProps<T extends FieldValues> extends FormFieldProps<T> {
+    readOnly?: boolean;
     children: ReactNode;
 }
 
@@ -31,6 +32,7 @@ export interface FormCheckboxProps<T extends FieldValues> extends Omit<FormField
 }
 
 export interface FormTextareaProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    readOnly?: boolean;
     maxLength?: number;
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }

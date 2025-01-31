@@ -10,6 +10,7 @@ export function FormSelect<T extends FieldValues>({
     required,
     className,
     disabled,
+    readOnly,
     onChange,
     children,
 }: FormSelectProps<T>) {
@@ -43,6 +44,7 @@ export function FormSelect<T extends FieldValues>({
                 }
             }}
             disabled={disabled}
+            readOnly={readOnly}
         >
             {children}
         </Select>

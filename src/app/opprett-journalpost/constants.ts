@@ -7,25 +7,6 @@ export const JOURNALPOST_DEFAULT_VALUES: IOpprettJournalpostForm = {
     notat: '',
 };
 
-export const VALIDATION_RULES = {
-    søkerIdentitetsnummer: {
-        required: true,
-        minLength: 11,
-        maxLength: 11,
-    },
-    fagsakId: {
-        required: true,
-    },
-    tittel: {
-        required: true,
-        maxLength: 200,
-    },
-    notat: {
-        required: true,
-        maxLength: 100000,
-    },
-} as const;
-
 export const ERROR_MESSAGES = {
     søkerIdentitetsnummer: 'Fødselsnummer må være 11 siffer',
     fagsakId: 'Vennligst velg en fagsak',

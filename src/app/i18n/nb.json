@@ -854,6 +854,7 @@
     "opprettJournalpost.opprettJournalpost": "Opprett journalpost",
     "opprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
     "opprettJournalpost.velgFagsak": "Velg fagsak",
+    "opprettJournalpost.fagsakOption": "{fagsakId} (K9 {sakstype}) {reservert}",
     "opprettJournalpost.hentFagsakError": "Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.",
     "opprettJournalpost.hentFagsakerPånytt.btn": "Hent fagsaker på nytt",
     "opprettJournalpost.velg": "Velg",

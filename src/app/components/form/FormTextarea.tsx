@@ -10,6 +10,7 @@ export function FormTextarea<T extends FieldValues>({
     required,
     className,
     disabled,
+    readOnly,
     onChange,
     maxLength,
 }: FormTextareaProps<T>) {
@@ -43,6 +44,7 @@ export function FormTextarea<T extends FieldValues>({
                 }
             }}
             disabled={disabled}
+            readOnly={readOnly}
             maxLength={maxLength}
         />
     );
