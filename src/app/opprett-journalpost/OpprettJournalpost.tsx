@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, CopyButton, Heading, Label, Loader } from '@navikt/ds-react';
+import { useNavigate } from 'react-router';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -17,7 +18,6 @@ import { getTypedFormComponents } from 'app/components/form/getTypedFormComponen
 import { getOpprettJournalpostSchema } from './validationSchema';
 
 import './opprettJournalpost.less';
-import { useNavigate } from 'react-router';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
     getTypedFormComponents<IOpprettJournalpostForm>();
