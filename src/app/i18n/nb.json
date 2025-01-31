@@ -852,6 +852,7 @@
     "mottakerVelger.annenMottaker.navn": "Navn",
 
     "opprettJournalpost.tittel": "Opprett journalpost",
+    "opprettJournalpost.error": "Kunne ikke opprette journalpost",
     "opprettJournalpost.btn": "Opprett journalpost",
     "opprettJournalpost.søkersFødselsnummer": "Søkers fødselsnummer",
     "opprettJournalpost.velgFagsak": "Velg fagsak",

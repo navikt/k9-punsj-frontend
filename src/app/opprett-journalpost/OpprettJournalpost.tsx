@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, CopyButton, Heading, Label, Loader } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
@@ -11,7 +11,7 @@ import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
-import { ERROR_MESSAGES, JOURNALPOST_DEFAULT_VALUES } from './constants';
+import { OPPRETT_JOURNALPOST_DEFAULT_VALUES } from './constants';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { getOpprettJournalpostSchema } from './validationSchema';
@@ -23,6 +23,8 @@ const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextare
     getTypedFormComponents<IOpprettJournalpostForm>();
 
 const OpprettJournalpost: React.FC = () => {
+    const intl = useIntl();
+
     const navigate = useNavigate();
 
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
@@ -36,7 +38,7 @@ const OpprettJournalpost: React.FC = () => {
     const validationSchema = getOpprettJournalpostSchema();
 
     const methods = useForm<IOpprettJournalpostForm>({
-        defaultValues: JOURNALPOST_DEFAULT_VALUES,
+        defaultValues: OPPRETT_JOURNALPOST_DEFAULT_VALUES,
         mode: 'onSubmit',
 
         resolver: yupResolver(validationSchema),
@@ -103,7 +105,12 @@ const OpprettJournalpost: React.FC = () => {
                     resolve();
                 } else {
                     reset(values, { keepValues: true, keepErrors: true, keepDirty: true, keepTouched: true });
-                    setOpprettJpError(ERROR_MESSAGES.opprettJournalpost);
+                    setOpprettJpError(
+                        intl.formatMessage(
+                            { id: 'validation.opprettJournalpost.søkerIdentitetsnummer.length' },
+                            { length: 11 },
+                        ),
+                    );
                 }
             });
         });
