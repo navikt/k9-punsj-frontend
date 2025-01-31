@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button, CopyButton, Heading, Label, Loader } from '@navikt/ds-react';
 
@@ -12,8 +13,8 @@ import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { ERROR_MESSAGES, JOURNALPOST_DEFAULT_VALUES } from './constants';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
-import { validateNottatTittel, validateNotatText, validateSøkerIdentitetsnummer } from './utils';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
+import { getOpprettJournalpostSchema } from './validationSchema';
 
 import './opprettJournalpost.less';
 
@@ -29,9 +30,13 @@ const OpprettJournalpost: React.FC = () => {
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
+    const validationSchema = getOpprettJournalpostSchema();
+
     const methods = useForm<IOpprettJournalpostForm>({
         defaultValues: JOURNALPOST_DEFAULT_VALUES,
         mode: 'onSubmit',
+
+        resolver: yupResolver(validationSchema),
     });
 
     const {
@@ -104,7 +109,7 @@ const OpprettJournalpost: React.FC = () => {
     return (
         <div className="opprettJournalpost">
             <Heading size="medium" level="1">
-                <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
+                <FormattedMessage id="opprettJournalpost.tittel" />
             </Heading>
 
             <div className="formContainer">
@@ -118,8 +123,6 @@ const OpprettJournalpost: React.FC = () => {
                         autoComplete="off"
                         maxLength={11}
                         onChange={handleSøkerIdentitetsnummerChange}
-                        validate={validateSøkerIdentitetsnummer}
-                        required
                         readOnly={isSubmitSuccessful}
                         disabled={isFetchingFagsaker || isSubmitting}
                     />
@@ -131,7 +134,6 @@ const OpprettJournalpost: React.FC = () => {
                             className="input fagsakSelect"
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker || isSubmitting}
-                            required
                         >
                             <option value="">
                                 <FormattedMessage id="opprettJournalpost.velg" />
@@ -188,11 +190,10 @@ const OpprettJournalpost: React.FC = () => {
                     <div className="notatContainer">
                         <TypedFormTextField
                             name={OpprettJournalpostFormKeys.tittel}
-                            label={<FormattedMessage id="opprettJournalpost.tittel" />}
+                            label={<FormattedMessage id="opprettJournalpost.journalpostTittel" />}
                             className="input"
                             maxLength={200}
                             autoComplete="off"
-                            validate={validateNottatTittel}
                             readOnly={isSubmitSuccessful}
                             disabled={isSubmitting}
                         />
@@ -200,9 +201,8 @@ const OpprettJournalpost: React.FC = () => {
                         <TypedFormTextarea
                             name={OpprettJournalpostFormKeys.notat}
                             className="input"
-                            label={<FormattedMessage id="opprettJournalpost.notat" />}
+                            label={<FormattedMessage id="opprettJournalpost.journalpostNotat" />}
                             maxLength={10000}
-                            validate={validateNotatText}
                             readOnly={isSubmitSuccessful}
                             disabled={isSubmitting}
                         />
@@ -249,7 +249,7 @@ const OpprettJournalpost: React.FC = () => {
                             loading={isSubmitting}
                             disabled={isSubmitting || isFetchingFagsaker}
                         >
-                            <FormattedMessage id={'opprettJournalpost.opprettJournalpost'} />
+                            <FormattedMessage id={'opprettJournalpost.btn'} />
                         </Button>
                     )}
                 </TypedFormProvider>
@@ -261,7 +261,7 @@ const OpprettJournalpost: React.FC = () => {
                         size="small"
                         className="submitButton"
                     >
-                        <FormattedMessage id={'opprettJournalpost.gåTilJournalpost'} />
+                        <FormattedMessage id="opprettJournalpost.gåTilJournalpost.btn" />
                     </Button>
                 )}
             </div>
