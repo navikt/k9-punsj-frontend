@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,11 +17,14 @@ import { getTypedFormComponents } from 'app/components/form/getTypedFormComponen
 import { getOpprettJournalpostSchema } from './validationSchema';
 
 import './opprettJournalpost.less';
+import { useNavigate } from 'react-router';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
     getTypedFormComponents<IOpprettJournalpostForm>();
 
 const OpprettJournalpost: React.FC = () => {
+    const navigate = useNavigate();
+
     const [opprettetJournalpostId, setOpprettetJournalpostId] = useState('');
     const [opprettJpError, setOpprettJpError] = useState<string>('');
 
@@ -64,7 +67,7 @@ const OpprettJournalpost: React.FC = () => {
         });
     };
 
-    const handleSøkerIdentitetsnummerChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSøkerIdentitetsnummerChange = async (event: ChangeEvent<HTMLInputElement>) => {
         clearErrors(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
         setFetchFagsakError(false);
 
@@ -256,7 +259,7 @@ const OpprettJournalpost: React.FC = () => {
 
                 {isSubmitSuccessful && (
                     <Button
-                        onClick={() => window.location.assign(`journalpost/${opprettetJournalpostId}`)}
+                        onClick={() => navigate(`/journalpost/${opprettetJournalpostId}`)}
                         type="button"
                         size="small"
                         className="submitButton"
