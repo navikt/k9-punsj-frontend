@@ -9,7 +9,6 @@ import { Person } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { ApiPath } from 'app/apiConfig';
 import { get } from 'app/utils/apiUtils';
-import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
 import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
@@ -20,8 +19,10 @@ interface MottakerVelgerProps {
     arbeidsgivereMedNavn: Organisasjon[];
     orgInfoPending: boolean;
     person?: Person;
+    errorOrgInfo?: string;
 
     resetBrevStatus: () => void;
+    setErrorOrgInfo: (value: string | undefined) => void;
     setOrgInfoPending: (value: boolean) => void;
 }
 
@@ -30,8 +31,10 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     arbeidsgivereMedNavn,
     orgInfoPending,
     person,
+    errorOrgInfo,
 
     resetBrevStatus,
+    setErrorOrgInfo,
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
@@ -39,7 +42,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     const { watch, setValue, getValues, trigger, clearErrors } = useFormContext<IBrevForm>();
 
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
-    const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
 
     const velgAnnenMottaker = watch(BrevFormKeys.velgAnnenMottaker);
     const mottaker = watch(BrevFormKeys.mottaker);
@@ -127,16 +129,6 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                     <TypedFormTextField
                         name={BrevFormKeys.annenMottakerOrgNummer}
                         label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
-                        validate={(value: string) => {
-                            const cleanValue = value.replace(/\s/g, '');
-                            const error = getOrgNumberValidator({ required: true })(cleanValue);
-
-                            if (errorOrgInfo) {
-                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr: cleanValue });
-                            }
-                            return error ? intl.formatMessage({ id: error }, { orgnr: cleanValue }) : undefined;
-                        }}
-                        required
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9\s]*"

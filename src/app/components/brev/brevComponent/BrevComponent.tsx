@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import hash from 'object-hash';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button, ErrorMessage, Tag } from '@navikt/ds-react';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+
 import { ApiPath } from 'app/apiConfig';
 import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
@@ -19,6 +21,7 @@ import MottakerVelger from '../MottakerVelger';
 import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } from '../types';
 import { validateText } from 'app/utils/validationHelpers';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
+import { getBrevComponentSchema } from '../validationSchema';
 
 import './brevComponent.less';
 
@@ -65,12 +68,17 @@ const BrevComponent: React.FC<Props> = ({
     const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
     const [visSammeBrevError, setVisSammeBrevError] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
+    const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
+
+    const validationSchema = getBrevComponentSchema(errorOrgInfo);
 
     const methods = useForm<IBrevForm>({
         defaultValues: defaultValuesBrev,
         mode: 'onSubmit',
+
+        resolver: yupResolver(validationSchema),
     });
 
     const {
@@ -200,7 +208,6 @@ const BrevComponent: React.FC<Props> = ({
                     name={BrevFormKeys.brevmalkode}
                     label={<FormattedMessage id="malVelger.brevmalkodeSelect.title" />}
                     className="w-[400px]"
-                    required="Dette feltet er påkrevd"
                     onChange={() => {
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
@@ -226,6 +233,9 @@ const BrevComponent: React.FC<Props> = ({
                         setPreviewMessageFeil(undefined);
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
+                    }}
+                    setErrorOrgInfo={(value: string | undefined) => {
+                        setErrorOrgInfo(value);
                     }}
                     setOrgInfoPending={(value: boolean) => {
                         setOrgInfoPending(value);

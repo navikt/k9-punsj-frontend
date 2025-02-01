@@ -840,6 +840,16 @@
     "brevComponent.alert.brevErSendt.etterKlassifisering": "Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.",
     "brevComponent.error.hentBrevmalerError": "Henting av brevmaler feilet.",
 
+    "validation.brevComponent.brevmalkode.required": "Du må velge mal.",
+    "validation.brevComponent.mottaker.required": "Du må velge mottaker.",
+    "validation.brevComponent.annenMottakerOrgNummer.invalid": "Organisasjonsnummeret er ugyldig.",
+    "validation.brevComponent.tittel.required": "Du må skrive inn tittel.",
+    "validation.brevComponent.tittel.maxLength": "Tittel kan ikke være lengre enn {max} tegn.",
+    "validation.brevComponent.tittel.minLength": "Tittel må være minst {min} tegn.",
+    "validation.brevComponent.brødtekst.required": "Du må skrive inn innhold.",
+    "validation.brevComponent.brødtekst.minLength": "Innhold må være minst {min} tegn.",
+    "validation.brevComponent.brødtekst.maxLength": "Innhold kan ikke være lengre enn {max} tegn.",
+
     "brevContainer.checkbox.tittel": "Send brev til arbeidsgiver eller søker",
 
     "malVelger.brevmalkodeSelect.title": "Velg mal",
