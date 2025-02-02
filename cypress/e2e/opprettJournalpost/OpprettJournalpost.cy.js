@@ -8,7 +8,7 @@ const journalpostId = '200';
 const illegalChars = '^|~{}[]ñçßøå';
 
 describe('Opprett journalpost', { testIsolation: false }, () => {
-    it('Test open opprett journalpost component', () => {
+    it('Test skal navigere inn fra forsiden', () => {
         cy.visit('/');
         cy.findByTestId('opprett-journalpost-inngang').click();
         cy.url().should('contains', '/opprett-journalpost');
