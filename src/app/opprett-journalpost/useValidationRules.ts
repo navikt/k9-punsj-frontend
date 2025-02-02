@@ -39,13 +39,13 @@ export const useValidationRules = () => {
     const tittelValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTittel.required' });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTittel.minLength' }, { min: 3 });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.minLength' }, { min: 3 });
             }
             if (value.length > 100) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTittel.maxLength' }, { max: 100 });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.maxLength' }, { max: 100 });
             }
             return hasValidText(value);
         },
@@ -54,17 +54,15 @@ export const useValidationRules = () => {
     const notatValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTekst.required' });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTekst.minLength' }, { min: 3 });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.minLength' }, { min: 3 });
             }
             if (value.length > 10000) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTekst.maxLength' }, { max: 10000 });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.maxLength' }, { max: 10000 });
             }
-            if (!hasValidText(value)) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notatTekst.invalid' });
-            }
+
             return hasValidText(value);
         },
     };
