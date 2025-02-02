@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext, FieldValues, RegisterOptions } from 'react-hook-form';
+import { useFormContext, FieldValues } from 'react-hook-form';
 import { Select } from '@navikt/ds-react';
 import { FormSelectProps } from './types';
 
@@ -7,7 +7,6 @@ export function FormSelect<T extends FieldValues>({
     name,
     label,
     validate,
-    required,
     className,
     disabled,
     readOnly,
@@ -19,13 +18,9 @@ export function FormSelect<T extends FieldValues>({
         formState: { errors },
     } = useFormContext<T>();
 
-    const rules: RegisterOptions<T> = {
-        required: required && (typeof required === 'string' ? required : 'Dette feltet er påkrevd'),
+    const rules = {
+        ...(validate || {}),
     };
-
-    if (validate) {
-        rules.validate = validate;
-    }
 
     const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext, FieldValues, RegisterOptions } from 'react-hook-form';
+import { useFormContext, FieldValues } from 'react-hook-form';
 import { Checkbox } from '@navikt/ds-react';
 import { FormCheckboxProps } from './types';
 
@@ -7,35 +7,37 @@ export function FormCheckbox<T extends FieldValues>({
     name,
     label,
     validate,
-    required,
-    disabled,
-    onChange,
-    size = 'small',
-}: FormCheckboxProps<T>) {
-    const { register } = useFormContext<T>();
 
-    const rules: RegisterOptions<T> = {
-        required: required && (typeof required === 'string' ? required : 'Dette feltet er påkrevd'),
+    disabled,
+    size = 'small',
+    onChange,
+}: FormCheckboxProps<T>) {
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext<T>();
+
+    const rules = {
+        ...(validate || {}),
     };
 
-    if (validate) {
-        rules.validate = validate;
-    }
-
-    const { ref, ...rest } = register(name, rules);
+    const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
+    const error = errors[name];
 
     return (
         <Checkbox
             {...rest}
             ref={ref}
             size={size}
-            disabled={disabled}
+            error={!!error}
+            description={error?.message as string}
             onChange={(e) => {
-                rest.onChange(e);
+                registerOnChange(e);
                 if (onChange) {
                     onChange();
                 }
             }}
+            disabled={disabled}
         >
             {label}
         </Checkbox>

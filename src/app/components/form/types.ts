@@ -4,8 +4,7 @@ import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 export interface FormFieldProps<T extends FieldValues> {
     name: Path<T>;
     label: ReactNode;
-    validate?: RegisterOptions<T>['validate'];
-    required?: string | boolean;
+    validate?: RegisterOptions<T>;
     className?: string;
     disabled?: boolean;
     onChange?: () => void;

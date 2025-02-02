@@ -12,20 +12,22 @@ import { get } from 'app/utils/apiUtils';
 import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
+import { useValidationRulesBrev } from './useValidationRules';
 
 const { TypedFormSelect, TypedFormCheckbox, TypedFormTextField } = getTypedFormComponents<IBrevForm>();
-interface MottakerVelgerProps {
+interface Props {
     aktørId: string;
     arbeidsgivereMedNavn: Organisasjon[];
     orgInfoPending: boolean;
     person?: Person;
     errorOrgInfo?: string;
+
     setError: UseFormSetError<IBrevForm>;
     resetBrevStatus: () => void;
     setOrgInfoPending: (value: boolean) => void;
 }
 
-const MottakerVelger: React.FC<MottakerVelgerProps> = ({
+const MottakerVelger: React.FC<Props> = ({
     aktørId,
     arbeidsgivereMedNavn,
     orgInfoPending,
@@ -44,6 +46,8 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
     const velgAnnenMottaker = watch(BrevFormKeys.velgAnnenMottaker);
     const mottaker = watch(BrevFormKeys.mottaker);
+
+    const { mottakerValidationRules, annenMottakerOrgNummerValidationRules } = useValidationRulesBrev();
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -72,7 +76,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
     const handleVelgAnnenMottakerOnChange = () => {
         resetBrevStatus();
-        setValue(BrevFormKeys.annenMottakerOrgNummer, '');
+        setValue(BrevFormKeys.annenMottakerOrgNummer, '', { shouldValidate: false });
         setOrgInfoPending(false);
         setOrgInfo(undefined);
         clearErrors(BrevFormKeys.annenMottakerOrgNummer);
@@ -80,14 +84,12 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
         const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
 
         if (currentValue && mottaker) {
-            setValue(BrevFormKeys.mottaker, '', { shouldValidate: true });
+            setValue(BrevFormKeys.mottaker, '', { shouldValidate: false });
         }
     };
 
     const handleAnnenMottakerOrgNummerOnChange = async (event: ChangeEvent<HTMLInputElement>) => {
-        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
         let { value } = event.target;
-
         const digitsOnly = value.replace(/\D/g, '');
 
         if (digitsOnly.length <= 9) {
@@ -116,21 +118,16 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
             <TypedFormSelect
                 name={BrevFormKeys.mottaker}
-                label={<FormattedMessage id={`mottakerVelger.select.tittel`} />}
+                label={<FormattedMessage id="mottakerVelger.select.tittel" />}
                 className="w-[400px]"
-                validate={(value: string | undefined) => {
-                    if (velgAnnenMottaker) {
-                        return undefined;
-                    }
-                    return value ? undefined : 'Dette feltet er påkrevd';
-                }}
+                validate={mottakerValidationRules}
                 onChange={() => {
                     resetBrevStatus();
                 }}
-                disabled={velgAnnenMottaker === true}
+                disabled={velgAnnenMottaker}
             >
                 <option disabled key="default" value="">
-                    <FormattedMessage id={`mottakerVelger.select.velg`} />
+                    <FormattedMessage id="mottakerVelger.select.velg" />
                 </option>
 
                 {aktørId && person && (
@@ -148,7 +145,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
 
             <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
-                label={<FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />}
+                label={<FormattedMessage id="mottakerVelger.checkbox.velgAnnenMottaker" />}
                 onChange={handleVelgAnnenMottakerOnChange}
             />
 
@@ -161,6 +158,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         inputMode="numeric"
                         pattern="[0-9\s]*"
                         maxLength={11}
+                        validate={annenMottakerOrgNummerValidationRules}
                         className="orgNrInput"
                         autoComplete="off"
                         readOnly={orgInfoPending}
