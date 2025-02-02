@@ -6,7 +6,7 @@ describe('Send brev på fagsak', () => {
     it('skal navigere til visning', () => {
         cy.contains('Pleiepenger sykt barn').should('exist').click();
         cy.findByText(/ja/i).click();
-        cy.findByLabelText(/Velg fagsak/i).select('1DMU93M (K9 Pleiepenger sykt barn)');
+        cy.findByLabelText(/Velg fagsak/i).select(1);
         /*
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Send brev og lukk oppgave i LOS/i).click();

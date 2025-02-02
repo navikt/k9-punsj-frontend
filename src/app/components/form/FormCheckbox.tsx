@@ -7,7 +7,6 @@ export function FormCheckbox<T extends FieldValues>({
     name,
     label,
     validate,
-
     disabled,
     size = 'small',
     onChange,

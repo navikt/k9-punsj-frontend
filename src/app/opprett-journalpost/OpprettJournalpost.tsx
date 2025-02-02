@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, CopyButton, Heading, Label, Loader } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
@@ -12,15 +11,21 @@ import ErrorIcon from 'app/assets/SVG/ErrorIcon';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
-import { OPPRETT_JOURNALPOST_DEFAULT_VALUES } from './constants';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
-import { getOpprettJournalpostSchema } from './validationSchema';
+import { useValidationRules } from './useValidationRules';
 
 import './opprettJournalpost.less';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
     getTypedFormComponents<IOpprettJournalpostForm>();
+
+export const defaultValues: IOpprettJournalpostForm = {
+    søkerIdentitetsnummer: '',
+    fagsakId: '',
+    tittel: '',
+    notat: '',
+};
 
 const OpprettJournalpost: React.FC = () => {
     const intl = useIntl();
@@ -33,13 +38,16 @@ const OpprettJournalpost: React.FC = () => {
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
-    const validationSchema = getOpprettJournalpostSchema();
+    const {
+        søkerIdentitetsnummerValidationRules,
+        fagsakIdValidationRules,
+        tittelValidationRules,
+        notatValidationRules,
+    } = useValidationRules();
 
     const methods = useForm<IOpprettJournalpostForm>({
-        defaultValues: OPPRETT_JOURNALPOST_DEFAULT_VALUES,
+        defaultValues: defaultValues,
         mode: 'onSubmit',
-
-        resolver: yupResolver(validationSchema),
     });
 
     const {
@@ -131,9 +139,10 @@ const OpprettJournalpost: React.FC = () => {
                         inputMode="numeric"
                         autoComplete="off"
                         maxLength={11}
+                        validate={søkerIdentitetsnummerValidationRules}
                         onChange={handleSøkerIdentitetsnummerChange}
                         readOnly={isSubmitSuccessful}
-                        disabled={isFetchingFagsaker || isSubmitting}
+                        disabled={isFetchingFagsaker}
                     />
 
                     <div className="fagsakSelectContainer">
@@ -141,8 +150,9 @@ const OpprettJournalpost: React.FC = () => {
                             name={OpprettJournalpostFormKeys.fagsakId}
                             label={<FormattedMessage id="opprettJournalpost.velgFagsak" />}
                             className="input fagsakSelect"
+                            validate={fagsakIdValidationRules}
                             readOnly={isSubmitSuccessful}
-                            disabled={isFetchingFagsaker || isSubmitting}
+                            disabled={isFetchingFagsaker}
                         >
                             <option value="">
                                 <FormattedMessage id="opprettJournalpost.velg" />
@@ -202,9 +212,9 @@ const OpprettJournalpost: React.FC = () => {
                             label={<FormattedMessage id="opprettJournalpost.journalpostTittel" />}
                             className="input"
                             maxLength={200}
+                            validate={tittelValidationRules}
                             autoComplete="off"
                             readOnly={isSubmitSuccessful}
-                            disabled={isSubmitting}
                         />
 
                         <TypedFormTextarea
@@ -212,8 +222,8 @@ const OpprettJournalpost: React.FC = () => {
                             className="input"
                             label={<FormattedMessage id="opprettJournalpost.journalpostNotat" />}
                             maxLength={10000}
+                            validate={notatValidationRules}
                             readOnly={isSubmitSuccessful}
-                            disabled={isSubmitting}
                         />
                     </div>
 

@@ -7,7 +7,6 @@ export function FormTextField<T extends FieldValues>({
     name,
     label,
     validate,
-    required,
     className,
     disabled,
     type = 'text',
@@ -26,9 +25,6 @@ export function FormTextField<T extends FieldValues>({
 
     const rules = {
         ...(validate || {}),
-        ...(required && {
-            required: typeof required === 'string' ? required : 'Dette feltet er påkrevd',
-        }),
     };
 
     const { ref, onChange: registerOnChange, ...rest } = register(name, rules);

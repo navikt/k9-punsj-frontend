@@ -8,7 +8,6 @@
         "@babel/runtime": "7.26.7",
         "@grafana/faro-web-sdk": "1.12.3",
         "@grafana/faro-web-tracing": "1.12.3",
-        "@hookform/resolvers": "^3.10.0",
         "@k9-punsj-frontend/server": "workspace:",
         "@navikt/aksel-icons": "7.10.0",
         "@navikt/ds-css": "7.10.0",

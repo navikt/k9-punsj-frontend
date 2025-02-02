@@ -46,10 +46,8 @@ export const useValidationRulesBrev = () => {
             if (value.length > 200) {
                 return intl.formatMessage({ id: 'validation.brevComponent.tittel.maxLength' }, { max: 200 });
             }
-            if (!hasValidText(value)) {
-                return intl.formatMessage({ id: 'validation.brevComponent.tittel.invalid' });
-            }
-            return true;
+
+            return hasValidText(value);
         },
     };
 
@@ -64,10 +62,8 @@ export const useValidationRulesBrev = () => {
             if (value.length > 10000) {
                 return intl.formatMessage({ id: 'validation.brevComponent.brødtekst.maxLength' }, { max: 10000 });
             }
-            if (!hasValidText(value)) {
-                return intl.formatMessage({ id: 'validation.brevComponent.brødtekst.invalid' });
-            }
-            return true;
+
+            return hasValidText(value);
         },
     };
 
