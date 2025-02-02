@@ -15,7 +15,7 @@ const OpprettJournalpostInngang = () => {
                 </Heading>
 
                 <BodyLong>
-                    <FormattedMessage id={'opprettJournalpostInngang.ingress'} />
+                    <FormattedMessage id="opprettJournalpostInngang.ingress" />
                 </BodyLong>
 
                 <Link
