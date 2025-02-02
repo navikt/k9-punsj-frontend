@@ -809,14 +809,20 @@
     "sendBrevIAvsluttetSakInngang.header": "Send brev i avsluttet sak",
     "sendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
     "sendBrevIAvsluttetSakInngang.link": "Send brev",
-    "sendBrevIAvsluttetSak.error.hentingAvFagsakFeilet": "Henting av fagsaker feilet.",
+    "sendBrevIAvsluttetSak.alert.fetchFagsaker.error": "Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.",
+    "sendBrevIAvsluttetSak.btn.hentFagsaker": "Hent fagsaker på nytt",
     "sendBrevIAvsluttetSak.error.ugyldigFødselsnummer": "Fødselsnummeret er ugyldig",
     "sendBrevIAvsluttetSak.søkersFødselsnummer": "Søkers fødselsnummer",
     "sendBrevIAvsluttetSak.velgFagsak": "Velg fagsak",
     "sendBrevIAvsluttetSak.velgFagsak.velg": "Velg",
     "sendBrevIAvsluttetSak.velgFagsak.options": "{fagsakId} (K9 {sakstypeNavn})",
+    "sendBrevIAvsluttetSak.alert.hentFagsaker.ingenFagsak": "Det finnes ingen fagsaker for denne søkeren. Du kan ikke sende brev uten fagsak.",
     "sendBrevIAvsluttetSak.gåTilLOSModal.header": "Brevet er sendt. Du blir nå tatt til LOS.",
     "sendBrevIAvsluttetSak.header": "Send brev i avsluttet sak",
+
+    "validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.required": "Du må skrive inn søkers fødselsnummer.",
+    "validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.invalid": "Søkers fødselsnummer er ugyldig.",
+    "validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.length": "Søkers fødselsnummer må være 11 siffer.",
 
     "sendBrevPåFagsak.header": "Send brev og lukk oppgave i LOS",
 

@@ -1,54 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ErrorMessage, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
 
 import { finnFagsaker } from 'app/api/api';
 import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
-import { useFormState } from 'app/hooks/useFormState';
 import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/rules';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
-import { ERROR_MESSAGES } from './messages';
 
 import './sendBrevIAvsluttetSak.less';
 
 const SendBrevIAvsluttetSak = () => {
     const [søkerId, setSøkerId] = useState('');
-    const [fagsakId, setFagsakId] = useState('');
-    const [søkerIdError, setSøkerIdError] = useState('');
+    const [søkerIdError, setSøkerIdError] = useState<ReactNode>('');
+    const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
+    const [fetchFagsakerError, setFetchFagsakerError] = useState(false);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
+    const [fagsakId, setFagsakId] = useState('');
     const [visLosModal, setVisLosModal] = useState(false);
 
-    const {
-        isSubmitting: isFetchingFagsaker,
-        error: fagsakError,
-        setSubmitting: setIsFetchingFagsaker,
-        setError: setFagsakError,
-    } = useFormState();
-
     const hentFagsaker = (søkersFødselsnummer: string) => {
-        setFagsakError(null);
+        setFetchFagsakerError(false);
         setIsFetchingFagsaker(true);
+
         finnFagsaker(søkersFødselsnummer, (response, data: Fagsak[]) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
                 setFagsaker(data);
             } else {
-                setFagsakError(ERROR_MESSAGES.henteFagsak);
+                setFetchFagsakerError(true);
             }
         });
     };
 
     const validateSøkerId = (value: string) => {
         if (!value) {
-            return ERROR_MESSAGES.søkerId.required;
+            return <FormattedMessage id="validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.required" />;
         }
         if (value.length !== 11) {
-            return ERROR_MESSAGES.søkerId.length;
+            return <FormattedMessage id="validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.length" />;
         }
         if (IdentRules.erUgyldigIdent(value)) {
-            return ERROR_MESSAGES.søkerId.invalid;
+            return <FormattedMessage id="validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.invalid" />;
         }
         return '';
     };
@@ -96,6 +90,7 @@ const SendBrevIAvsluttetSak = () => {
                 type="text"
                 size="small"
                 inputMode="numeric"
+                maxLength={11}
                 pattern="[0-9]*"
                 autoComplete="off"
                 error={søkerIdError}
@@ -132,7 +127,31 @@ const SendBrevIAvsluttetSak = () => {
                         {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
                     </div>
 
-                    {fagsakError && <ErrorMessage>{fagsakError}</ErrorMessage>}
+                    {fetchFagsakerError && (
+                        <Alert
+                            size="small"
+                            variant="error"
+                            className="mb-4"
+                            data-test-id="sendBrevIAvsluttetSakAlertFetchFagsakerError"
+                        >
+                            <FormattedMessage id="sendBrevIAvsluttetSak.alert.fetchFagsaker.error" />
+
+                            <Button type="button" size="small" variant="tertiary" onClick={() => hentFagsaker(søkerId)}>
+                                <FormattedMessage id="sendBrevIAvsluttetSak.btn.hentFagsaker" />
+                            </Button>
+                        </Alert>
+                    )}
+
+                    {!isFetchingFagsaker && !fetchFagsakerError && fagsaker.length === 0 && (
+                        <Alert
+                            size="small"
+                            variant="warning"
+                            className="mb-4"
+                            data-test-id="sendBrevIAvsluttetSakAlertIngenFagsak"
+                        >
+                            <FormattedMessage id="sendBrevIAvsluttetSak.alert.hentFagsaker.ingenFagsak" />
+                        </Alert>
+                    )}
 
                     {fagsakId && (
                         <BrevComponent
