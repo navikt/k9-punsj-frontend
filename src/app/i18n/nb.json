@@ -842,6 +842,7 @@
 
     "validation.brevComponent.brevmalkode.required": "Du må velge mal.",
     "validation.brevComponent.mottaker.required": "Du må velge mottaker.",
+    "validation.brevComponent.annenMottakerOrgNummer.required": "Du må skrive inn organisasjonsnummer.",
     "validation.brevComponent.annenMottakerOrgNummer.invalid": "Organisasjonsnummeret er ugyldig.",
     "validation.brevComponent.tittel.required": "Du må skrive inn tittel.",
     "validation.brevComponent.tittel.maxLength": "Tittel kan ikke være lengre enn {max} tegn.",

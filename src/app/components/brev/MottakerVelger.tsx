@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, UseFormSetError } from 'react-hook-form';
 import { BodyShort, VStack, Loader, ErrorMessage as ErrorMesageDs } from '@navikt/ds-react';
 
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
@@ -20,9 +20,8 @@ interface MottakerVelgerProps {
     orgInfoPending: boolean;
     person?: Person;
     errorOrgInfo?: string;
-
+    setError: UseFormSetError<IBrevForm>;
     resetBrevStatus: () => void;
-    setErrorOrgInfo: (value: string | undefined) => void;
     setOrgInfoPending: (value: boolean) => void;
 }
 
@@ -33,8 +32,8 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
     person,
     errorOrgInfo,
 
+    setError,
     resetBrevStatus,
-    setErrorOrgInfo,
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
@@ -55,19 +54,60 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             (response, data: ArbeidsgiverResponse) => {
                 if (response.ok && data?.navn) {
                     setOrgInfoPending(false);
-                    setErrorOrgInfo(undefined);
+                    clearErrors(BrevFormKeys.annenMottakerOrgNummer);
                     setOrgInfo(data);
                 } else {
                     setOrgInfoPending(false);
-                    setErrorOrgInfo(
-                        intl.formatMessage(
+                    setError(BrevFormKeys.annenMottakerOrgNummer, {
+                        type: 'manual',
+                        message: intl.formatMessage(
                             { id: 'noeGikkGalt' },
                             { error: response.statusText, status: response.status },
                         ),
-                    );
+                    });
                 }
             },
         );
+    };
+
+    const handleVelgAnnenMottakerOnChange = () => {
+        resetBrevStatus();
+        setValue(BrevFormKeys.annenMottakerOrgNummer, '');
+        setOrgInfoPending(false);
+        setOrgInfo(undefined);
+        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+
+        const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
+
+        if (currentValue && mottaker) {
+            setValue(BrevFormKeys.mottaker, '', { shouldValidate: true });
+        }
+    };
+
+    const handleAnnenMottakerOrgNummerOnChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+        let { value } = event.target;
+
+        const digitsOnly = value.replace(/\D/g, '');
+
+        if (digitsOnly.length <= 9) {
+            value = digitsOnly.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
+            event.target.value = value;
+        }
+
+        const cleanValue = value.replace(/\s/g, '');
+
+        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+        setOrgInfo(undefined);
+        resetBrevStatus();
+
+        if (!orgInfoPending && cleanValue.length === 9) {
+            const isValid = await trigger(BrevFormKeys.annenMottakerOrgNummer);
+
+            if (isValid) {
+                hentOrgInfo(cleanValue);
+            }
+        }
     };
 
     return (
@@ -109,19 +149,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
                 label={<FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />}
-                onChange={() => {
-                    resetBrevStatus();
-                    setValue(BrevFormKeys.annenMottakerOrgNummer, '');
-                    setOrgInfoPending(false);
-                    setOrgInfo(undefined);
-                    setErrorOrgInfo(undefined);
-
-                    const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
-
-                    if (currentValue && mottaker) {
-                        setValue(BrevFormKeys.mottaker, '', { shouldValidate: true });
-                    }
-                }}
+                onChange={handleVelgAnnenMottakerOnChange}
             />
 
             {velgAnnenMottaker && (
@@ -136,31 +164,7 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
                         className="orgNrInput"
                         autoComplete="off"
                         readOnly={orgInfoPending}
-                        onChange={async (event: ChangeEvent<HTMLInputElement>) => {
-                            clearErrors(BrevFormKeys.annenMottakerOrgNummer);
-                            let { value } = event.target;
-
-                            const digitsOnly = value.replace(/\D/g, '');
-
-                            if (digitsOnly.length <= 9) {
-                                value = digitsOnly.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
-                                event.target.value = value;
-                            }
-
-                            const cleanValue = value.replace(/\s/g, '');
-
-                            setErrorOrgInfo(undefined);
-                            setOrgInfo(undefined);
-                            resetBrevStatus();
-
-                            if (!orgInfoPending && cleanValue.length === 9) {
-                                const isValid = await trigger(BrevFormKeys.annenMottakerOrgNummer);
-
-                                if (isValid) {
-                                    hentOrgInfo(cleanValue);
-                                }
-                            }
-                        }}
+                        onChange={handleAnnenMottakerOrgNummerOnChange}
                     />
 
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (

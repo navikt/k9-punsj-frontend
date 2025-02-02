@@ -18,12 +18,13 @@ import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import VerticalSpacer from '../../VerticalSpacer';
 import { createBrev, defaultValuesBrev, getDokumentdata, previewMessage } from '../utils';
 import MottakerVelger from '../MottakerVelger';
-import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } from '../types';
+import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType, IMal } from '../types';
 import { validateText } from 'app/utils/validationHelpers';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { getBrevComponentSchema } from '../validationSchema';
 
 import './brevComponent.less';
+import { useValidationRules } from '../useValidationRules';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormTextarea, TypedFormSelect } =
     getTypedFormComponents<IBrevForm>();
@@ -68,27 +69,31 @@ const BrevComponent: React.FC<Props> = ({
     const [forrigeSendteBrevHash, setForrigeSendteBrevHash] = useState('');
     const [visSammeBrevError, setVisSammeBrevError] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState<boolean>(false);
-    const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
     const [orgInfoPending, setOrgInfoPending] = useState<boolean>(false);
     const [previewMessageFeil, setPreviewMessageFeil] = useState<string | undefined>(undefined);
+    const [valgteMal, setValgteMal] = useState<IMal | undefined>(undefined);
 
-    const validationSchema = getBrevComponentSchema(errorOrgInfo);
+    // TODO: DO NOT VALIDATE TITTEL input field if !visTittelInput
+    const validationSchema = getBrevComponentSchema();
+
+    const { validateBrevmalkode } = useValidationRules();
 
     const methods = useForm<IBrevForm>({
         defaultValues: defaultValuesBrev,
         mode: 'onSubmit',
 
-        resolver: yupResolver(validationSchema),
+        resolver: yupResolver<IBrevForm>(validationSchema),
     });
 
     const {
         handleSubmit,
         watch,
-        formState: { isSubmitting, isValid },
+        setError,
+        formState: { isSubmitting, isValid, errors },
     } = methods;
 
     const brevmalkode = watch(BrevFormKeys.brevmalkode);
-    const valgteMal = brevmaler && brevmaler[brevmalkode];
+    // const valgteMal = brevmaler && brevmaler[brevmalkode];
 
     const visTittelInput = !!valgteMal && valgteMal.støtterTittelOgFritekst;
     const visFritekstInput = !!valgteMal && (valgteMal.støtterTittelOgFritekst || valgteMal.støtterFritekst);
@@ -200,7 +205,8 @@ const BrevComponent: React.FC<Props> = ({
     if (!brevmaler) {
         return null;
     }
-
+    // eslint-disable-next-line no-console
+    console.log('TEST errors:', errors);
     return (
         <TypedFormProvider form={methods} onSubmit={onSubmit}>
             <div className="brev">
@@ -211,7 +217,9 @@ const BrevComponent: React.FC<Props> = ({
                     onChange={() => {
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
+                        setValgteMal(brevmaler[brevmalkode]);
                     }}
+                    validate={validateBrevmalkode}
                 >
                     <option disabled key="default" value="" label="">
                         <FormattedMessage id="malVelger.brevmalkodeSelect.velg" />
@@ -229,13 +237,11 @@ const BrevComponent: React.FC<Props> = ({
                     arbeidsgivereMedNavn={arbeidsgivereMedNavn}
                     orgInfoPending={orgInfoPending}
                     person={person}
+                    setError={setError}
                     resetBrevStatus={() => {
                         setPreviewMessageFeil(undefined);
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
-                    }}
-                    setErrorOrgInfo={(value: string | undefined) => {
-                        setErrorOrgInfo(value);
                     }}
                     setOrgInfoPending={(value: boolean) => {
                         setOrgInfoPending(value);
