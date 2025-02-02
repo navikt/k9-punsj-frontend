@@ -9,6 +9,7 @@ export function FormCheckbox<T extends FieldValues>({
     validate,
     disabled,
     size = 'small',
+    'data-testid': dataTestId,
     onChange,
 }: FormCheckboxProps<T>) {
     const {
@@ -37,6 +38,7 @@ export function FormCheckbox<T extends FieldValues>({
                 }
             }}
             disabled={disabled}
+            data-testid={dataTestId}
         >
             {label}
         </Checkbox>

@@ -138,6 +138,7 @@ const OpprettJournalpost: React.FC = () => {
                         onChange={handleSøkerIdentitetsnummerChange}
                         readOnly={isSubmitSuccessful}
                         disabled={isFetchingFagsaker}
+                        data-testid="opprettJournalpostFnrInput"
                     />
 
                     <div className="fagsakSelectContainer">
@@ -148,6 +149,7 @@ const OpprettJournalpost: React.FC = () => {
                             validate={fagsakIdValidationRules}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
+                            data-testid="opprettJournalpostFagsakSelect"
                         >
                             <option value="">
                                 <FormattedMessage id="opprettJournalpost.select.fagsakId.option.velg" />
@@ -185,7 +187,7 @@ const OpprettJournalpost: React.FC = () => {
                                 variant="tertiary"
                                 onClick={() => hentFagsaker(søkersFødselsnummer)}
                             >
-                                <FormattedMessage id="opprettJournalpost.btn" />
+                                <FormattedMessage id="opprettJournalpost.btn.hentFagsaker" />
                             </Button>
                         </Alert>
                     )}
@@ -210,6 +212,7 @@ const OpprettJournalpost: React.FC = () => {
                             validate={tittelValidationRules}
                             autoComplete="off"
                             readOnly={isSubmitSuccessful}
+                            data-testid="opprettJournalpostTittelInput"
                         />
 
                         <TypedFormTextarea
@@ -219,10 +222,11 @@ const OpprettJournalpost: React.FC = () => {
                             maxLength={10000}
                             validate={notatValidationRules}
                             readOnly={isSubmitSuccessful}
+                            data-testid="opprettJournalpostNotatTextarea"
                         />
                     </div>
 
-                    <div className="statusContainer">
+                    <div className="statusContainer" data-testid="opprettJournalpostStatusContainer">
                         {errors.root?.message && (
                             <>
                                 <ErrorIcon />
@@ -262,6 +266,7 @@ const OpprettJournalpost: React.FC = () => {
                             className="submitButton"
                             loading={isSubmitting}
                             disabled={isSubmitting || isFetchingFagsaker}
+                            data-testid="opprettJournalpostSubmitButton"
                         >
                             <FormattedMessage id="opprettJournalpost.btn" />
                         </Button>
@@ -274,6 +279,7 @@ const OpprettJournalpost: React.FC = () => {
                         type="button"
                         size="small"
                         className="submitButton"
+                        data-testid="opprettJournalpostGåTilJournalpostButton"
                     >
                         <FormattedMessage id="opprettJournalpost.btn.gåTilJournalpost" />
                     </Button>

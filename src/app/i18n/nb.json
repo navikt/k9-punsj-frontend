@@ -806,10 +806,6 @@
     "søk.jp.forbidden": "Du har ikke tilgang til å slå opp denne personen",
     "søk.jp.internalServerError": "Noe gikk galt",
 
-    "opprettJournalpostInngang.header": "Opprett journalpost",
-    "opprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
-    "opprettJournalpostInngang.link": "Opprett journalpost",
-
     "sendBrevIAvsluttetSakInngang.header": "Send brev i avsluttet sak",
     "sendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
     "sendBrevIAvsluttetSakInngang.link": "Send brev",
@@ -860,12 +856,16 @@
     "validation.brevComponent.textarea.brødtekst.minLength": "Innhold må være minst {min} tegn.",
     "validation.brevComponent.textarea.brødtekst.maxLength": "Innhold kan ikke være lengre enn {max} tegn.",
 
+    "opprettJournalpostInngang.header": "Opprett journalpost",
+    "opprettJournalpostInngang.ingress": "Skal du gjøre rettelser i punsj, kan du opprette ny journalpost her.",
+    "opprettJournalpostInngang.link": "Opprett journalpost",
+
     "opprettJournalpost.tittel": "Opprett journalpost",
     "opprettJournalpost.error": "Kunne ikke opprette journalpost",
     "opprettJournalpost.opprettet": "Opprettet. Journalpost-ID: {journalpostId}",
     "opprettJournalpost.btn.hentFagsaker": "Hent fagsaker på nytt",
     "opprettJournalpost.btn": "Opprett journalpost",
-    "opprettJournalpost.btn.gåTilJournalpost.btn": "Gå til journalpost",
+    "opprettJournalpost.btn.gåTilJournalpost": "Gå til journalpost",
     "opprettJournalpost.textField.søkerIdentitetsnummer.label": "Søkers fødselsnummer",
     "opprettJournalpost.select.fagsakId.label": "Velg fagsak",
     "opprettJournalpost.select.fagsakId.option.velg": "Velg",

@@ -12,6 +12,7 @@ export function FormSelect<T extends FieldValues>({
     readOnly,
     onChange,
     children,
+    'data-testid': dataTestId,
 }: FormSelectProps<T>) {
     const {
         register,
@@ -40,6 +41,7 @@ export function FormSelect<T extends FieldValues>({
             }}
             disabled={disabled}
             readOnly={readOnly}
+            data-testid={dataTestId}
         >
             {children}
         </Select>

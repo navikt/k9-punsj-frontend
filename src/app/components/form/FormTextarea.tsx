@@ -12,6 +12,7 @@ export function FormTextarea<T extends FieldValues>({
     readOnly,
     maxLength,
     onChange,
+    'data-testid': dataTestId,
 }: FormTextareaProps<T>) {
     const {
         register,
@@ -41,6 +42,7 @@ export function FormTextarea<T extends FieldValues>({
             disabled={disabled}
             readOnly={readOnly}
             maxLength={maxLength}
+            data-testid={dataTestId}
         />
     );
 }

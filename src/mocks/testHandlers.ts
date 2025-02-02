@@ -187,11 +187,19 @@ export const testHandlers = {
 
     // gosysKategorier: http.get(ApiPath.GOSYS_GJELDER, () => HttpResponse.json({}, { status: 500 })),
 
-    hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async () => {
+    hentFagsaker: http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, async ({ request }) => {
         await delay(500);
+        const fnrTomtFagsaker = '17519112922';
+        const fnrWithError = '05508239132';
+        const norskIdent = request.headers.get('X-Nav-NorskIdent');
+
+        if (norskIdent === fnrTomtFagsaker) {
+            return HttpResponse.json([], { status: 200 });
+        }
+        if (norskIdent === fnrWithError) {
+            return HttpResponse.json({}, { status: 400 });
+        }
         return HttpResponse.json(fagsaker, { status: 200 });
-        // return HttpResponse.json([], { status: 200 });
-        // return HttpResponse.json({}, { status: 400 });
     }),
 
     settBehandlingsaar: http.post(

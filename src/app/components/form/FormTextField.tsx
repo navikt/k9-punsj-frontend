@@ -16,6 +16,7 @@ export function FormTextField<T extends FieldValues>({
     autoComplete,
     readOnly,
     htmlSize,
+    'data-testid': dataTestId,
     onChange,
 }: FormTextFieldProps<T>) {
     const {
@@ -51,6 +52,7 @@ export function FormTextField<T extends FieldValues>({
             disabled={disabled}
             readOnly={readOnly}
             htmlSize={htmlSize}
+            data-testid={dataTestId}
         />
     );
 }

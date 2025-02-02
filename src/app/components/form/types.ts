@@ -7,6 +7,7 @@ export interface FormFieldProps<T extends FieldValues> {
     validate?: RegisterOptions<T>;
     className?: string;
     disabled?: boolean;
+    'data-testid'?: string;
     onChange?: () => void;
 }
 
