@@ -121,14 +121,14 @@ const OpprettJournalpost: React.FC = () => {
     return (
         <div className="opprettJournalpost">
             <Heading size="medium" level="1">
-                <FormattedMessage id="opprettJournalpost.componentTittel" />
+                <FormattedMessage id="opprettJournalpost.tittel" />
             </Heading>
 
             <div className="formContainer">
                 <TypedFormProvider form={methods} onSubmit={onSubmit}>
                     <TypedFormTextField
                         name={OpprettJournalpostFormKeys.søkerIdentitetsnummer}
-                        label={<FormattedMessage id="opprettJournalpost.søkerIdentitetsnummer.label" />}
+                        label={<FormattedMessage id="opprettJournalpost.textField.søkerIdentitetsnummer.label" />}
                         className="fnrInput"
                         type="text"
                         inputMode="numeric"
@@ -143,20 +143,20 @@ const OpprettJournalpost: React.FC = () => {
                     <div className="fagsakSelectContainer">
                         <TypedFormSelect
                             name={OpprettJournalpostFormKeys.fagsakId}
-                            label={<FormattedMessage id="opprettJournalpost.fagsakId.label" />}
+                            label={<FormattedMessage id="opprettJournalpost.select.fagsakId.label" />}
                             className="input fagsakSelect"
                             validate={fagsakIdValidationRules}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
                         >
                             <option value="">
-                                <FormattedMessage id="opprettJournalpost.fagsakId.option.velg" />
+                                <FormattedMessage id="opprettJournalpost.select.fagsakId.option.velg" />
                             </option>
 
                             {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
                                 <option key={fagsakId} value={fagsakId}>
                                     <FormattedMessage
-                                        id="opprettJournalpost.fagsakId.option"
+                                        id="opprettJournalpost.select.fagsakId.option"
                                         values={{
                                             fagsakId,
                                             sakstype: finnVisningsnavnForSakstype(sakstype),
@@ -175,9 +175,9 @@ const OpprettJournalpost: React.FC = () => {
                             size="small"
                             variant="error"
                             className="mb-4"
-                            data-test-id="opprettJournalpost.hentFagsaker.error"
+                            data-test-id="opprettJournalpostAlertHentFagsakerError"
                         >
-                            <FormattedMessage id="opprettJournalpost.hentFagsaker.error" />
+                            <FormattedMessage id="opprettJournalpost.alert.hentFagsaker.error" />
 
                             <Button
                                 type="button"
@@ -185,7 +185,7 @@ const OpprettJournalpost: React.FC = () => {
                                 variant="tertiary"
                                 onClick={() => hentFagsaker(søkersFødselsnummer)}
                             >
-                                <FormattedMessage id="opprettJournalpost.hentFagsaker.btn" />
+                                <FormattedMessage id="opprettJournalpost.btn" />
                             </Button>
                         </Alert>
                     )}
@@ -197,14 +197,14 @@ const OpprettJournalpost: React.FC = () => {
                             className="mb-4"
                             data-test-id="opprettJournalpostAlertIngenFagsak"
                         >
-                            <FormattedMessage id="opprettJournalpost.hentFagsaker.ingenFagsak" />
+                            <FormattedMessage id="opprettJournalpost.alert.hentFagsaker.ingenFagsak" />
                         </Alert>
                     )}
 
                     <div className="notatContainer">
                         <TypedFormTextField
                             name={OpprettJournalpostFormKeys.tittel}
-                            label={<FormattedMessage id="opprettJournalpost.tittel.label" />}
+                            label={<FormattedMessage id="opprettJournalpost.textField.tittel.label" />}
                             className="input"
                             maxLength={200}
                             validate={tittelValidationRules}
@@ -215,7 +215,7 @@ const OpprettJournalpost: React.FC = () => {
                         <TypedFormTextarea
                             name={OpprettJournalpostFormKeys.notat}
                             className="input"
-                            label={<FormattedMessage id="opprettJournalpost.notat.label" />}
+                            label={<FormattedMessage id="opprettJournalpost.textarea.notat.label" />}
                             maxLength={10000}
                             validate={notatValidationRules}
                             readOnly={isSubmitSuccessful}
@@ -275,7 +275,7 @@ const OpprettJournalpost: React.FC = () => {
                         size="small"
                         className="submitButton"
                     >
-                        <FormattedMessage id="opprettJournalpost.gåTilJournalpost.btn" />
+                        <FormattedMessage id="opprettJournalpost.btn.gåTilJournalpost" />
                     </Button>
                 )}
             </div>

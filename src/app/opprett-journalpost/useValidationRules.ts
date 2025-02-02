@@ -8,44 +8,52 @@ export const useValidationRules = () => {
     const intl = useIntl();
 
     const søkerIdentitetsnummerValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
-        required: intl.formatMessage({ id: 'validation.opprettJournalpost.søkerIdentitetsnummer.required' }),
+        required: intl.formatMessage({ id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.required' }),
         minLength: {
             value: 11,
             message: intl.formatMessage(
-                { id: 'validation.opprettJournalpost.søkerIdentitetsnummer.length' },
+                { id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.length' },
                 { length: 11 },
             ),
         },
         maxLength: {
             value: 11,
             message: intl.formatMessage(
-                { id: 'validation.opprettJournalpost.søkerIdentitetsnummer.length' },
+                { id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.length' },
                 { length: 11 },
             ),
         },
         pattern: {
             value: /^\d+$/,
-            message: intl.formatMessage({ id: 'validation.opprettJournalpost.søkerIdentitetsnummer.digitsOnly' }),
+            message: intl.formatMessage({
+                id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.digitsOnly',
+            }),
         },
         validate: (value: string) =>
             IdentRules.erUgyldigIdent(value) === false ||
-            intl.formatMessage({ id: 'validation.opprettJournalpost.søkerIdentitetsnummer.invalidIdent' }),
+            intl.formatMessage({ id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.invalidIdent' }),
     };
 
     const fagsakIdValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
-        required: intl.formatMessage({ id: 'validation.opprettJournalpost.fagsakId.required' }),
+        required: intl.formatMessage({ id: 'validation.opprettJournalpost.select.fagsakId.required' }),
     };
 
     const tittelValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.required' });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.textField.tittel.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.minLength' }, { min: 3 });
+                return intl.formatMessage(
+                    { id: 'validation.opprettJournalpost.textField.tittel.minLength' },
+                    { min: 3 },
+                );
             }
             if (value.length > 100) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.tittel.maxLength' }, { max: 100 });
+                return intl.formatMessage(
+                    { id: 'validation.opprettJournalpost.textField.tittel.maxLength' },
+                    { max: 100 },
+                );
             }
             return hasValidText(value);
         },
@@ -54,13 +62,16 @@ export const useValidationRules = () => {
     const notatValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.required' });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.textarea.notat.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.minLength' }, { min: 3 });
+                return intl.formatMessage({ id: 'validation.opprettJournalpost.textarea.notat.minLength' }, { min: 3 });
             }
             if (value.length > 10000) {
-                return intl.formatMessage({ id: 'validation.opprettJournalpost.notat.maxLength' }, { max: 10000 });
+                return intl.formatMessage(
+                    { id: 'validation.opprettJournalpost.textarea.notat.maxLength' },
+                    { max: 10000 },
+                );
             }
 
             return hasValidText(value);
