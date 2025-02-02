@@ -203,7 +203,7 @@ const BrevComponent: React.FC<Props> = ({
             <div className="brev">
                 <TypedFormSelect
                     name={BrevFormKeys.brevmalkode}
-                    label={<FormattedMessage id="malVelger.brevmalkodeSelect.title" />}
+                    label={<FormattedMessage id="brevComponent.select.brevmalkode.label" />}
                     className="w-[400px]"
                     onChange={() => {
                         setBrevErSendt(false);
@@ -212,7 +212,7 @@ const BrevComponent: React.FC<Props> = ({
                     validate={brevmalkodeValidationRules}
                 >
                     <option disabled key="default" value="" label="">
-                        <FormattedMessage id="malVelger.brevmalkodeSelect.velg" />
+                        <FormattedMessage id="brevComponent.select.brevmalkode.option.velg" />
                     </option>
 
                     {Object.keys(brevmaler).map((kode) => (
@@ -244,7 +244,7 @@ const BrevComponent: React.FC<Props> = ({
 
                         <TypedFormTextField
                             name={BrevFormKeys.overskrift}
-                            label={<FormattedMessage id="brevComponent.tittel" />}
+                            label={<FormattedMessage id="brevComponent.textField.tittel.label" />}
                             validate={overskriftValidationRules}
                             maxLength={200}
                             onChange={() => {
@@ -263,7 +263,7 @@ const BrevComponent: React.FC<Props> = ({
 
                         <TypedFormTextarea
                             name={BrevFormKeys.brødtekst}
-                            label={<FormattedMessage id="brevComponent.innhold" />}
+                            label={<FormattedMessage id="brevComponent.textarea.brødtekst.label" />}
                             validate={brødtekstValidationRules}
                             maxLength={100000}
                             onChange={() => {

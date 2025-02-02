@@ -118,7 +118,7 @@ const MottakerVelger: React.FC<Props> = ({
 
             <TypedFormSelect
                 name={BrevFormKeys.mottaker}
-                label={<FormattedMessage id="mottakerVelger.select.tittel" />}
+                label={<FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.label" />}
                 className="w-[400px]"
                 validate={mottakerValidationRules}
                 onChange={() => {
@@ -127,7 +127,7 @@ const MottakerVelger: React.FC<Props> = ({
                 disabled={velgAnnenMottaker}
             >
                 <option disabled key="default" value="">
-                    <FormattedMessage id="mottakerVelger.select.velg" />
+                    <FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.option.velg" />
                 </option>
 
                 {aktørId && person && (
@@ -145,7 +145,7 @@ const MottakerVelger: React.FC<Props> = ({
 
             <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
-                label={<FormattedMessage id="mottakerVelger.checkbox.velgAnnenMottaker" />}
+                label={<FormattedMessage id="brevComponent.mottakerVelger.checkbox.velgAnnenMottaker.label" />}
                 onChange={handleVelgAnnenMottakerOnChange}
             />
 
@@ -153,7 +153,9 @@ const MottakerVelger: React.FC<Props> = ({
                 <div className="flex mt-4">
                     <TypedFormTextField
                         name={BrevFormKeys.annenMottakerOrgNummer}
-                        label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
+                        label={
+                            <FormattedMessage id="brevComponent.mottakerVelger.textField.annenMottakerOrgNummer.label" />
+                        }
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9\s]*"
@@ -170,7 +172,7 @@ const MottakerVelger: React.FC<Props> = ({
                             {(orgInfo || orgInfoPending) && (
                                 <BodyShort>
                                     <span className="navds-form-field__label navds-label navds-label--small">
-                                        <FormattedMessage id="mottakerVelger.annenMottaker.navn" />
+                                        <FormattedMessage id="brevComponent.mottakerVelger.annenMottaker.navn" />
                                     </span>
                                 </BodyShort>
                             )}

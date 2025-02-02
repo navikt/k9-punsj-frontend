@@ -8,13 +8,13 @@ export const useValidationRulesBrev = () => {
     const intl = useIntl();
 
     const brevmalkodeValidationRules: RegisterOptions<IBrevForm> = {
-        required: intl.formatMessage({ id: 'validation.brevComponent.brevmalkode.required' }),
+        required: intl.formatMessage({ id: 'validation.brevComponent.select.brevmalkode.required' }),
     };
 
     const mottakerValidationRules: RegisterOptions<IBrevForm> = {
         validate: (value: string, formValues: IBrevForm) => {
             if (!formValues.velgAnnenMottaker && !value) {
-                return intl.formatMessage({ id: 'validation.brevComponent.mottaker.required' });
+                return intl.formatMessage({ id: 'validation.brevComponent.select.mottaker.required' });
             }
             return true;
         },
@@ -24,11 +24,15 @@ export const useValidationRulesBrev = () => {
         validate: (value: string, formValues: IBrevForm) => {
             if (formValues.velgAnnenMottaker) {
                 if (!value) {
-                    return intl.formatMessage({ id: 'validation.brevComponent.annenMottakerOrgNummer.required' });
+                    return intl.formatMessage({
+                        id: 'validation.brevComponent.textField.annenMottakerOrgNummer.required',
+                    });
                 }
                 const cleanValue = value.replace(/\s/g, '');
                 if (!isNotValidOrgNumber(cleanValue)) {
-                    return intl.formatMessage({ id: 'validation.brevComponent.annenMottakerOrgNummer.invalid' });
+                    return intl.formatMessage({
+                        id: 'validation.brevComponent.textField.annenMottakerOrgNummer.invalid',
+                    });
                 }
             }
             return true;
@@ -38,13 +42,13 @@ export const useValidationRulesBrev = () => {
     const overskriftValidationRules: RegisterOptions<IBrevForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.brevComponent.tittel.required' });
+                return intl.formatMessage({ id: 'validation.brevComponent.textField.tittel.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.brevComponent.tittel.minLength' }, { min: 3 });
+                return intl.formatMessage({ id: 'validation.brevComponent.textField.tittel.minLength' }, { min: 3 });
             }
             if (value.length > 200) {
-                return intl.formatMessage({ id: 'validation.brevComponent.tittel.maxLength' }, { max: 200 });
+                return intl.formatMessage({ id: 'validation.brevComponent.textField.tittel.maxLength' }, { max: 200 });
             }
 
             return hasValidText(value);
@@ -54,13 +58,16 @@ export const useValidationRulesBrev = () => {
     const brødtekstValidationRules: RegisterOptions<IBrevForm> = {
         validate: (value: string) => {
             if (!value) {
-                return intl.formatMessage({ id: 'validation.brevComponent.brødtekst.required' });
+                return intl.formatMessage({ id: 'validation.brevComponent.textarea.brødtekst.required' });
             }
             if (value.length < 3) {
-                return intl.formatMessage({ id: 'validation.brevComponent.brødtekst.minLength' }, { min: 3 });
+                return intl.formatMessage({ id: 'validation.brevComponent.textarea.brødtekst.minLength' }, { min: 3 });
             }
             if (value.length > 10000) {
-                return intl.formatMessage({ id: 'validation.brevComponent.brødtekst.maxLength' }, { max: 10000 });
+                return intl.formatMessage(
+                    { id: 'validation.brevComponent.textarea.brødtekst.maxLength' },
+                    { max: 10000 },
+                );
             }
 
             return hasValidText(value);
