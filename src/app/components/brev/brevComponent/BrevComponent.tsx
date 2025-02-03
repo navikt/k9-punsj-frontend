@@ -161,6 +161,7 @@ const BrevComponent: React.FC<Props> = ({
             setVisSammeBrevError(false);
             post(ApiPath.BREV_BESTILL, undefined, undefined, brev, (response) => {
                 if (response.status === 200) {
+                    setSendBrevFeilet(false);
                     setForrigeSendteBrevHash(brevHash);
                     setBrevErSendt(true);
                     setHarSendtMinstEttBrev(true);

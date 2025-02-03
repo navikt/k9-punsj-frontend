@@ -1,4 +1,3 @@
-// import { http, HttpResponse } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 
 const TEST_DATA = {
