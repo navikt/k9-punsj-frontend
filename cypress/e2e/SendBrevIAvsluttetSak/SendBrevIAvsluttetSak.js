@@ -1,3 +1,4 @@
+// import { http, HttpResponse } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 
 const TEST_DATA = {
@@ -117,7 +118,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
             cy.findByText('Not Found').should('exist');
 
-            cy.intercept('POST', `${ApiPath.BREV_FORHAANDSVIS}`, (req) => {
+            cy.intercept('POST', ApiPath.BREV_FORHAANDSVIS, (req) => {
                 expect(req.body).to.have.property('aktørId').to.equal('81549300');
                 expect(req.body).to.have.property('avsenderApplikasjon').to.equal('K9PUNSJ');
                 expect(req.body).to.have.property('dokumentMal').to.equal('GENERELT_FRITEKSTBREV');
@@ -131,6 +132,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                 expect(req.body).to.have.property('saksnummer').to.equal('1DMU93A');
                 expect(req.body.ytelseType).to.have.property('kode').to.equal('PSB');
                 expect(req.body.ytelseType).to.have.property('kodeverk').to.equal('FAGSAK_YTELSE');
+
                 req.reply({
                     statusCode: 200,
                     body: { success: true },
@@ -147,11 +149,45 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
         });
 
         it('should send brev', () => {
+            cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
+                req.reply({
+                    statusCode: 500,
+                    body: null,
+                });
+            }).as('sendBrevError');
+            cy.findByRole('button', { name: /Send brev/i }).click();
+            cy.findByRole('button', { name: /Fortsett/i }).click();
+            cy.wait('@sendBrevError').then((interception) => {
+                expect(interception.response.statusCode).to.equal(500);
+            });
+            cy.findByText(/Sending av brev feilet./i).should('exist');
+
+            cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
+                expect(req.body).to.have.property('soekerId').to.equal(TEST_DATA.fnr);
+                expect(req.body).to.have.property('mottaker');
+                expect(req.body.mottaker).to.have.property('id').to.equal('889640782');
+                expect(req.body.mottaker).to.have.property('type').to.equal('ORGNR');
+                expect(req.body).to.have.property('fagsakYtelseType').to.equal('PSB');
+                expect(req.body).to.have.property('dokumentMal');
+                expect(req.body).to.have.property('dokumentdata');
+                expect(req.body.dokumentdata.fritekstbrev).to.have.property('brødtekst').to.equal(TEST_DATA.validNote);
+                expect(req.body.dokumentdata.fritekstbrev)
+                    .to.have.property('overskrift')
+                    .to.equal(TEST_DATA.validTitle);
+
+                req.reply({
+                    statusCode: 200,
+                    body: { success: true },
+                });
+            }).as('sendBrev');
+
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
             cy.findByRole('button', { name: /Fortsett/i }).click();
-            // TODO check if error message is shown if something goes wrong.
-            // TODO intercept. Check if the correct data is sent to the backend.
+
+            cy.wait('@sendBrev').then((interception) => {
+                expect(interception.response.statusCode).to.equal(200);
+            });
 
             cy.findByText('Brevet er sendt. Du blir nå tatt til LOS.').should('exist');
         });
