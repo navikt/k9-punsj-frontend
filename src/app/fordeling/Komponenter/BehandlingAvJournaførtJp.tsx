@@ -126,7 +126,7 @@ const BehandlingAvJournaførtJp: React.FC = () => {
                 </Button>
             </div>
 
-            {settPåVent.isSuccess && <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => null} />}
+            {settPåVent.isSuccess && <OkGåTilLosModal meldingId="modal.settpaavent.til" onClose={() => null} />}
         </FormPanel>
     );
 };

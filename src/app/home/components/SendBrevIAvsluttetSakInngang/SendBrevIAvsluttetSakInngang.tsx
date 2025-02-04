@@ -11,11 +11,11 @@ const SendBrevIAvsluttetSakInngang = () => {
         <div className="sendBrevIAvsluttetSakInngang">
             <div className="content">
                 <Heading size="xlarge" level="1" className="heading">
-                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.header'} />
+                    <FormattedMessage id="sendBrevIAvsluttetSakInngang.header" />
                 </Heading>
 
                 <BodyLong>
-                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.ingress'} />
+                    <FormattedMessage id="sendBrevIAvsluttetSakInngang.ingress" />
                 </BodyLong>
 
                 <Link
@@ -23,7 +23,7 @@ const SendBrevIAvsluttetSakInngang = () => {
                     to="/brev-avsluttet-sak"
                     data-testid="brev-avsluttet-sak-inngang"
                 >
-                    <FormattedMessage id={'sendBrevIAvsluttetSakInngang.link'} />
+                    <FormattedMessage id="sendBrevIAvsluttetSakInngang.link" />
                 </Link>
             </div>
         </div>

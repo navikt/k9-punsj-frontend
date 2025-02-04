@@ -556,7 +556,7 @@ const Fordeling: React.FC = () => {
     if (opprettIGosysState.gosysOppgaveRequestSuccess && visGaaTilLos) {
         return (
             <OkGåTilLosModal
-                melding="fordeling.opprettigosys.utfort"
+                meldingId="fordeling.opprettigosys.utfort"
                 onClose={() => {
                     resetOmfordelAction();
                     setVisGaaTilLos(false);
@@ -572,7 +572,7 @@ const Fordeling: React.FC = () => {
     if (fordelingState.lukkOppgaveDone) {
         return (
             <OkGåTilLosModal
-                melding="fordeling.lukkoppgave.utfort"
+                meldingId="fordeling.lukkoppgave.utfort"
                 onClose={() => {
                     lukkOppgaveReset();
                 }}

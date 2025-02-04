@@ -825,6 +825,9 @@
     "validation.sendBrevIAvsluttetSak.textField.søkersFødselsnummer.length": "Søkers fødselsnummer må være 11 siffer.",
 
     "sendBrevPåFagsak.header": "Send brev og lukk oppgave i LOS",
+    "sendBrevPåFagsak.btn.lukkOppgave": "Lukk oppgave i LOS",
+    "sendBrevPåFagsak.modal.gåTilLos.melding": "Oppgaven er lukket",
+    "sendBrevPåFagsak.error.lukkOppgave": "Noe gikk galt ved lukking av oppgave",
 
     "sendBrevBehandletJournalpost.header": "Send brev",
 
@@ -842,7 +845,6 @@
     "brevComponent.textField.tittel.label": "Tittel",
     "brevComponent.textarea.brødtekst.label": "Innhold i brev",
     "brevComponent.btn.forhåndsvisBrev": "Forhåndsvis brev",
-    "brevComponent.btn.lukkOppgave": "Lukk oppgave",
     "brevComponent.btn.sendBrev": "Send brev",
     "brevComponent.btn.tilbake": "Tilbake",
     "brevComponent.alert.visSammeBrevError": " Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.",

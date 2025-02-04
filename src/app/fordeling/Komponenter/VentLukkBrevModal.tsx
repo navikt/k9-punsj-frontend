@@ -195,7 +195,6 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                             sakstype={sakstype}
                             fagsakId={fagsakId}
                             journalpostId={journalpostId}
-                            brevSendtCallback={() => null}
                             sendBrevUtenModal={true}
                             brevFraModal={true}
                         />

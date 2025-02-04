@@ -159,7 +159,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
             {showSettPaaVentSuccessModal && (
                 <OkGåTilLosModal
-                    melding="modal.settpaavent.til"
+                    meldingId="modal.settpaavent.til"
                     onClose={() => {
                         resetSetPåVent();
                     }}
@@ -201,7 +201,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
             {showFerdigstillJournalpostSuccessModal && (
                 <OkGåTilLosModal
-                    melding="modal.ferdigstilljournalpost"
+                    meldingId="modal.ferdigstilljournalpost"
                     onClose={() => {
                         resetFerdigstillJournalpost();
                     }}

@@ -89,7 +89,7 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (lukkOppgaveDone) {
-        return <OkGåTilLosModal melding="fordeling.lukkoppgave.utfort" onClose={() => lukkOppgaveReset()} />;
+        return <OkGåTilLosModal meldingId="fordeling.lukkoppgave.utfort" onClose={() => lukkOppgaveReset()} />;
     }
 
     if (journalpostConflict && journalpostConflictError?.type === JournalpostConflictTyper.IKKE_STØTTET) {

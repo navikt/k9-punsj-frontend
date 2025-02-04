@@ -365,7 +365,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                                     sakstype={finnForkortelseForDokumenttype(dokumenttype) || ''}
                                     fagsakId={reservertFagsakIdForBrev}
                                     journalpostId={journalpost.journalpostId}
-                                    brevSendtCallback={() => null}
                                     sendBrevUtenModal={true}
                                 />
                             )}

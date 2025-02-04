@@ -33,11 +33,10 @@ interface Props {
     journalpostId?: string;
     sendBrevUtenModal?: boolean;
     brevFraModal?: boolean;
-    tilbake?: boolean;
+    visTilbakeBtn?: boolean;
 
     setVisBrevIkkeSendtInfoboks?: (erBrevSendt: boolean) => void;
     brevSendtCallback?: () => void;
-    lukkJournalpostOppgave?: () => void;
 }
 
 const BrevComponent: React.FC<Props> = ({
@@ -47,11 +46,10 @@ const BrevComponent: React.FC<Props> = ({
     journalpostId,
     sendBrevUtenModal,
     brevFraModal,
-    tilbake,
+    visTilbakeBtn: tilbake,
 
     setVisBrevIkkeSendtInfoboks,
     brevSendtCallback,
-    lukkJournalpostOppgave,
 }) => {
     const navigate = useNavigate();
 
@@ -172,6 +170,9 @@ const BrevComponent: React.FC<Props> = ({
                         setVisBrevIkkeSendtInfoboks(false);
                     }
                 } else {
+                    if (setVisBrevIkkeSendtInfoboks) {
+                        setVisBrevIkkeSendtInfoboks(true);
+                    }
                     setSendBrevFeilet(true);
                 }
             });
@@ -370,18 +371,6 @@ const BrevComponent: React.FC<Props> = ({
                     >
                         <FormattedMessage id="brevComponent.btn.sendBrev" />
                     </Button>
-
-                    {lukkJournalpostOppgave !== undefined && (
-                        <Button
-                            className="sendBrevButton"
-                            variant="secondary"
-                            size="small"
-                            onClick={() => lukkJournalpostOppgave()}
-                            type="button"
-                        >
-                            <FormattedMessage id="brevComponent.btn.lukkOppgave" />
-                        </Button>
-                    )}
 
                     {tilbake && (
                         <Button

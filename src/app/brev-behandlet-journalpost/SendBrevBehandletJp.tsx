@@ -54,7 +54,7 @@ const SendBrevBehandletJp: React.FC = () => {
                 sakstype={sakstype}
                 fagsakId={sak?.fagsakId || 'GENERELL_SAK'}
                 journalpostId={journalpostId}
-                tilbake={true}
+                visTilbakeBtn={true}
             />
         </div>
     );

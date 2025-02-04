@@ -476,14 +476,19 @@ let handlers = [
     ),
 
     /* This is commented out because it is causing the 'should send brev' cypress test to fail because
-     in cypress test uses intercept to check if the request is made correctly and the intercept is not
-     working as expected if msw is used for the request.
-     if app starts for development by running 'yarn test:e2eUI' and you need to test send brev visually
-     you can uncomment this, but you must comment it back before committing and running the cypress tests.
-
-     TODO: Fix this, maybe
-    */
+     * in cypress test uses intercept to check if the request is made correctly and the intercept is not
+     * working as expected if msw is used for the request.
+     * if app starts for development by running 'yarn test:e2eUI' and you need to test send brev visually
+     * you can uncomment this, but you must comment it back before committing and running the cypress tests.
+     *
+     * TODO: Fix this, maybe
+     */
     // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
+
+    http.post(
+        ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', '300'),
+        () => new HttpResponse(null, { status: 200 }),
+    ),
 
     http.get(ApiPath.PERSON, async () => {
         await delay(2000);
