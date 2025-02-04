@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
-import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
-import { Alert, Button, Checkbox, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
+import { Alert, Button, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
+
+import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
+import { RootStateType } from 'app/state/RootState';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import BrevContainer from 'app/components/brev/BrevContainer';
 
 interface Props {
     open: boolean;
@@ -15,7 +17,6 @@ interface Props {
 }
 
 const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
-    const [visBrev, setVisBrev] = useState(false);
     const [sattPåVent, setSattPåVent] = useState(false);
     const [visLukkOppgave, setVisLukkOppgave] = useState(false);
     const [jpLukket, setJpLukket] = useState(false);
@@ -178,18 +179,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                         <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.alert" />
                     </Alert>
 
-                    <div className="mb-4 mt-4">
-                        <Checkbox
-                            onChange={() => {
-                                setVisBrev(!visBrev);
-                            }}
-                            checked={visBrev}
-                        >
-                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sendBrev.checkbox" />
-                        </Checkbox>
-                    </div>
-
-                    {visBrev && (
+                    <BrevContainer>
                         <BrevComponent
                             søkerId={søkerId}
                             sakstype={sakstype}
@@ -198,7 +188,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                             sendBrevUtenModal={true}
                             brevFraModal={true}
                         />
-                    )}
+                    </BrevContainer>
 
                     {settPåVent.isError && (
                         <div className="mt-4">

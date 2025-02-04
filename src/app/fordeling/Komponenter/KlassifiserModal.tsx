@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
-import { Alert, AlertProps, Button, Checkbox, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
 
@@ -33,6 +33,7 @@ import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import BrevContainer from 'app/components/brev/BrevContainer';
 
 interface Props {
     dedupkey: string;
@@ -46,8 +47,6 @@ interface Props {
 
 const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
     const navigate = useNavigate();
-
-    const [visBrev, setVisBrev] = useState(false);
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -350,16 +349,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
 
                     {visGåTilLosBtn && reservertFagsakIdForBrev && (
                         <div className="mt-2">
-                            <Checkbox
-                                onChange={() => {
-                                    setVisBrev(!visBrev);
-                                }}
-                                checked={visBrev}
-                            >
-                                <FormattedMessage id="fordeling.klassifiserModal.sendBrev.checkbox" />
-                            </Checkbox>
-
-                            {visBrev && (
+                            <BrevContainer>
                                 <BrevComponent
                                     søkerId={identState.søkerId}
                                     sakstype={finnForkortelseForDokumenttype(dokumenttype) || ''}
@@ -367,7 +357,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                                     journalpostId={journalpost.journalpostId}
                                     sendBrevUtenModal={true}
                                 />
-                            )}
+                            </BrevContainer>
                         </div>
                     )}
                 </div>

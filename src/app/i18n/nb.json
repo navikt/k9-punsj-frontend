@@ -195,7 +195,6 @@
     "fordeling.klassifiserModal.kopierLoading": "Journalpost kopieres....",
     "fordeling.klassifiserModal.getJournalpostLoading": "Sjekker journalposten for tilgangsrettigheter ....",
     "fordeling.klassifiserModal.ventJpJournalføres": "Journalpost journalføres....",
-    "fordeling.klassifiserModal.sendBrev.checkbox": "Send brev til søker, arbeidsgiver eller tredjepart",
     "fordeling.registreringsValg.tilbake": "Tilbake",
     "fordeling.registreringsValg.createSoknadRequestError": "Det oppsto en feil under opprettelse av søknad.",
     "fordeling.settJpPåVent.modal.tittel": "Sett på vent",
@@ -211,7 +210,6 @@
     "fordeling.journalført.åpenVentLukkBrevModal.btn": "Sett på vent eller lukk oppgave",
     "fordeling.journalført.åpenVentLukkBrevModal.tittel": "Sett på vent eller lukk oppgave",
     "fordeling.journalført.åpenVentLukkBrevModal.alert": "Har vi ikke mottatt informasjon om den pleietrengende kan du sette oppgaven på vent, eller lukke oppgave i tilfeller hvor det er forsøkt å etterlyse over lang tid.",
-    "fordeling.journalført.åpenVentLukkBrevModal.sendBrev.checkbox": "Send brev til søker, arbeidsgiver eller tredjepart",
     "fordeling.journalført.åpenVentLukkBrevModal.settPåVent.btn": "Sett på vent",
     "fordeling.journalført.åpenVentLukkBrevModal.settPåVentError": "Noe gikk galt.",
     "fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.tittel": "Oppgave satt på vent",
@@ -831,7 +829,7 @@
 
     "sendBrevBehandletJournalpost.header": "Send brev",
 
-    "brevContainer.checkbox.tittel": "Send brev til arbeidsgiver eller søker",
+    "brevContainer.checkbox.tittel": "Send brev til søker, arbeidsgiver eller tredjepart",
 
     "brevComponent.språkEtikett.nynorsk": "Nynorsk",
     "brevComponent.språkEtikett.bokmål": "Bokmål",

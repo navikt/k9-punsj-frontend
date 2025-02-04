@@ -34,6 +34,7 @@ interface Props {
 const opprettJournalføringsoppgaveValue = 'opprettJournalføringsoppgave';
 const ferdigstillJournalpostValue = 'ferdigstillJournalpost';
 const settPåVentValue = 'settPåVent';
+
 const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerId }) => {
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
@@ -120,6 +121,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     return (
         <>
             <VerticalSpacer fourtyPx />
+
             <RadioPanelGruppe
                 name="inntektsmeldingUtenKrav"
                 radios={[
@@ -140,6 +142,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 checked={håndterInntektsmeldingUtenKravValg}
                 onChange={(event) => handleInntektsmeldingUtenKrav((event.target as HTMLInputElement).value)}
             />
+
             <BrevContainer>
                 <BrevComponent
                     søkerId={søkerId}
