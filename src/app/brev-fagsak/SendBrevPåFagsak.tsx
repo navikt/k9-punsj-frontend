@@ -54,12 +54,14 @@ const SendBrevPåFagsakLukkOppgave: React.FC = () => {
                     <FormattedMessage id="sendBrevPåFagsak.header" />
                 </Heading>
             </div>
+
             <BrevComponent
                 søkerId={søkerId}
                 sakstype={sakstype}
                 fagsakId={fagsak?.fagsakId}
                 journalpostId={journalpost?.journalpostId}
             />
+
             {lukkOppgaveError && (
                 <Alert variant="error" size="medium" className="mb-4" fullWidth inline>
                     <FormattedMessage id="sendBrevPåFagsak.error.lukkOppgave" />
