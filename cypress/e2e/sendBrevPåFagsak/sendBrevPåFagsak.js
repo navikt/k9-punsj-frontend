@@ -140,10 +140,57 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByText('Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.').should('exist');
     });
 
-    it('should lukk oppgave i LOS', () => {
+    it('should show error ved lukk oppgave', () => {
+        cy.intercept(
+            'POST',
+            ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', journalpost.journalpostId),
+            (req) => {
+                req.reply({
+                    statusCode: 500,
+                    body: null,
+                });
+            },
+        ).as('lukkOppgaveError');
+
         cy.findByRole('button', { name: /Lukk oppgave/i }).click();
         cy.findByText('Er du sikker på at du vil lukke oppgaven?').should('exist');
-        cy.findByRole('button', { name: /Ja/i }).click();
-        cy.findByText('Oppgave lukket.').should('exist');
+        cy.findByRole('button', { name: /Fortsett/i }).click();
+
+        cy.wait('@lukkOppgaveError').then((interception) => {
+            expect(interception.response.statusCode).to.equal(500);
+        });
+
+        cy.findByText('Noe gikk galt ved lukking av oppgave').should('exist');
+    });
+
+    it('should lukk oppgave i LOS', () => {
+        cy.intercept(
+            'POST',
+            ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', journalpost.journalpostId),
+            (req) => {
+                expect(req.body).to.have.property('norskIdent').to.equal(journalpost.norskIdent);
+                expect(req.body).to.have.property('sak');
+                expect(req.body.sak).to.have.property('fagsakId').to.equal(fagsak.fagsakId);
+                expect(req.body.sak).to.have.property('sakstype').to.equal('FAGSAK');
+
+                req.reply({
+                    statusCode: 200,
+                    body: { success: true },
+                });
+            },
+        ).as('lukkOppgave');
+
+        cy.findByRole('button', { name: /Lukk oppgave/i }).click();
+        cy.findByText('Er du sikker på at du vil lukke oppgaven?').should('exist');
+        cy.findByRole('button', { name: /Fortsett/i }).click();
+
+        cy.wait('@lukkOppgave').then((interception) => {
+            expect(interception.response.statusCode).to.equal(200);
+        });
+
+        cy.findByText('Oppgaven er lukket').should('exist');
+        cy.findByText('Du blir nå tatt tilbake til oppgavekøen i LOS').should('exist');
+        cy.findByRole('button', { name: /Ok/i }).click();
+        cy.findByText('Oppgaven er lukket').should('not.exist');
     });
 });

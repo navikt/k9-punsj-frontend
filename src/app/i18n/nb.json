@@ -825,6 +825,7 @@
     "sendBrevPåFagsak.header": "Send brev og lukk oppgave i LOS",
     "sendBrevPåFagsak.btn.lukkOppgave": "Lukk oppgave i LOS",
     "sendBrevPåFagsak.modal.gåTilLos.melding": "Oppgaven er lukket",
+    "sendBrevPåFagsak.modal.erdusikker.lukkoppgave": "Er du sikker på at du vil lukke oppgaven?",
     "sendBrevPåFagsak.error.lukkOppgave": "Noe gikk galt ved lukking av oppgave",
 
     "sendBrevBehandletJournalpost.header": "Send brev",

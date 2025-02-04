@@ -485,10 +485,10 @@ let handlers = [
      */
     // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
 
-    http.post(
+    /* http.post(
         ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', '300'),
         () => new HttpResponse(null, { status: 200 }),
-    ),
+    ),*/
 
     http.get(ApiPath.PERSON, async () => {
         await delay(2000);

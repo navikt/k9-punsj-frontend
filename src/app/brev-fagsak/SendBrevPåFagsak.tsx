@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { Dispatch } from 'redux';
@@ -11,12 +11,15 @@ import { finnForkortelseForDokumenttype } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 import './sendBrevPåFagsak.less';
 
 const SendBrevPåFagsakLukkOppgave: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch<any>>();
+
+    const [visErDuSikkerLukkModal, setVisErDuSikkerLukkModal] = useState<boolean>(false);
 
     const location = useLocation();
 
@@ -51,14 +54,12 @@ const SendBrevPåFagsakLukkOppgave: React.FC = () => {
                     <FormattedMessage id="sendBrevPåFagsak.header" />
                 </Heading>
             </div>
-
             <BrevComponent
                 søkerId={søkerId}
                 sakstype={sakstype}
                 fagsakId={fagsak?.fagsakId}
                 journalpostId={journalpost?.journalpostId}
             />
-
             {lukkOppgaveError && (
                 <Alert variant="error" size="medium" className="mb-4" fullWidth inline>
                     <FormattedMessage id="sendBrevPåFagsak.error.lukkOppgave" />
@@ -69,7 +70,7 @@ const SendBrevPåFagsakLukkOppgave: React.FC = () => {
                 className="mt-6"
                 variant="secondary"
                 size="small"
-                onClick={lukkJournalpostOppgave}
+                onClick={() => setVisErDuSikkerLukkModal(true)}
                 type="button"
                 loading={isAwaitingLukkOppgaveResponse}
             >
@@ -82,6 +83,20 @@ const SendBrevPåFagsakLukkOppgave: React.FC = () => {
                     onClose={() => {
                         lukkOppgaveReset();
                     }}
+                />
+            )}
+
+            {visErDuSikkerLukkModal && (
+                <ErDuSikkerModal
+                    melding="sendBrevPåFagsak.modal.erdusikker.lukkoppgave"
+                    modalKey="erdusikker.lukkoppgave"
+                    open={visErDuSikkerLukkModal}
+                    submitKnappText="modal.erdusikker.fortsett"
+                    onSubmit={() => {
+                        lukkJournalpostOppgave();
+                        setVisErDuSikkerLukkModal(false);
+                    }}
+                    onClose={() => setVisErDuSikkerLukkModal(false)}
                 />
             )}
         </div>
