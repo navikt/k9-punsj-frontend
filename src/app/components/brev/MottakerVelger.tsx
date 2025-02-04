@@ -119,6 +119,7 @@ const MottakerVelger: React.FC<Props> = ({
             <TypedFormSelect
                 name={BrevFormKeys.mottaker}
                 label={<FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.label" />}
+                size="small"
                 className="w-[400px]"
                 validate={mottakerValidationRules}
                 onChange={() => {
@@ -145,6 +146,7 @@ const MottakerVelger: React.FC<Props> = ({
 
             <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
+                size="small"
                 label={<FormattedMessage id="brevComponent.mottakerVelger.checkbox.velgAnnenMottaker.label" />}
                 onChange={handleVelgAnnenMottakerOnChange}
             />
@@ -156,6 +158,7 @@ const MottakerVelger: React.FC<Props> = ({
                         label={
                             <FormattedMessage id="brevComponent.mottakerVelger.textField.annenMottakerOrgNummer.label" />
                         }
+                        size="small"
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9\s]*"

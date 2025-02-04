@@ -205,6 +205,7 @@ const BrevComponent: React.FC<Props> = ({
                 <TypedFormSelect
                     name={BrevFormKeys.brevmalkode}
                     label={<FormattedMessage id="brevComponent.select.brevmalkode.label" />}
+                    size="small"
                     className="w-[400px]"
                     onChange={() => {
                         setBrevErSendt(false);
@@ -246,6 +247,7 @@ const BrevComponent: React.FC<Props> = ({
                         <TypedFormTextField
                             name={BrevFormKeys.overskrift}
                             label={<FormattedMessage id="brevComponent.textField.tittel.label" />}
+                            size="small"
                             validate={overskriftValidationRules}
                             maxLength={200}
                             onChange={() => {
@@ -265,6 +267,7 @@ const BrevComponent: React.FC<Props> = ({
                         <TypedFormTextarea
                             name={BrevFormKeys.brødtekst}
                             label={<FormattedMessage id="brevComponent.textarea.brødtekst.label" />}
+                            size="small"
                             validate={brødtekstValidationRules}
                             maxLength={100000}
                             onChange={() => {
