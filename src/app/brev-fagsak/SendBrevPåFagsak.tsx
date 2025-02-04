@@ -17,6 +17,7 @@ import './sendBrevPåFagsak.less';
 interface StateProps {
     fagsak?: Fagsak;
     søkerId?: string;
+    // fordeling?: IFordelingState;
     journalpost?: IJournalpost;
     dokumenttype?: FordelingDokumenttype;
 }
@@ -29,6 +30,7 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     fagsak,
     søkerId,
     journalpost,
+    // fordeling,
     lukkJournalpostOppgave,
     dokumenttype,
 }) => {
@@ -45,6 +47,8 @@ const SendBrevPåFagsak: React.FC<StateProps & DispatchProps> = ({
     if (!søkerId || !journalpost) {
         return null;
     }
+
+    // const { lukkOppgaveDone, isAwaitingLukkOppgaveResponse, lukkOppgaveError } = fordeling;
 
     const sakstype = fagsak?.sakstype || finnForkortelseForDokumenttype(dokumenttype) || '';
 
@@ -70,6 +74,7 @@ const mapStateToProps = (state: RootStateType) => ({
     fagsak: state.fordelingState.fagsak,
     dokumenttype: state.fordelingState.dokumenttype,
     søkerId: state.identState.søkerId,
+    fordeling: state.fordelingState,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
