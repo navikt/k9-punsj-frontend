@@ -7,7 +7,7 @@ import { hasValidText } from 'app/utils/validationHelpers';
 export const useValidationRules = () => {
     const intl = useIntl();
 
-    const søkerIdentitetsnummerValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
+    const søkerIdentitetsnummerValidator: RegisterOptions<IOpprettJournalpostForm> = {
         required: intl.formatMessage({ id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.required' }),
         minLength: {
             value: 11,
@@ -34,11 +34,11 @@ export const useValidationRules = () => {
             intl.formatMessage({ id: 'validation.opprettJournalpost.textField.søkerIdentitetsnummer.invalidIdent' }),
     };
 
-    const fagsakIdValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
+    const fagsakIdValidator: RegisterOptions<IOpprettJournalpostForm> = {
         required: intl.formatMessage({ id: 'validation.opprettJournalpost.select.fagsakId.required' }),
     };
 
-    const tittelValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
+    const tittelValidator: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
                 return intl.formatMessage({ id: 'validation.opprettJournalpost.textField.tittel.required' });
@@ -59,7 +59,7 @@ export const useValidationRules = () => {
         },
     };
 
-    const notatValidationRules: RegisterOptions<IOpprettJournalpostForm> = {
+    const notatValidator: RegisterOptions<IOpprettJournalpostForm> = {
         validate: (value: string) => {
             if (!value) {
                 return intl.formatMessage({ id: 'validation.opprettJournalpost.textarea.notat.required' });
@@ -78,9 +78,9 @@ export const useValidationRules = () => {
         },
     };
     return {
-        søkerIdentitetsnummerValidationRules,
-        fagsakIdValidationRules,
-        tittelValidationRules,
-        notatValidationRules,
+        søkerIdentitetsnummerValidator,
+        fagsakIdValidator,
+        tittelValidator,
+        notatValidator,
     };
 };

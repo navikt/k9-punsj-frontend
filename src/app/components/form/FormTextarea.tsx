@@ -11,6 +11,7 @@ export function FormTextarea<T extends FieldValues>({
     disabled,
     readOnly,
     maxLength,
+    size,
     onChange,
     'data-testid': dataTestId,
 }: FormTextareaProps<T>) {
@@ -29,7 +30,7 @@ export function FormTextarea<T extends FieldValues>({
         <Textarea
             {...rest}
             ref={ref}
-            size="small"
+            size={size}
             label={label}
             className={className}
             error={errors[name]?.message as string}

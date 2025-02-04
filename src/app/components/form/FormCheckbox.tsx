@@ -1,17 +1,17 @@
 import React from 'react';
 import { useFormContext, FieldValues } from 'react-hook-form';
 import { Checkbox } from '@navikt/ds-react';
-import { FormCheckboxProps } from './types';
+import { FormFieldProps } from './types';
 
 export function FormCheckbox<T extends FieldValues>({
     name,
     label,
     validate,
     disabled,
-    size = 'small',
+    size,
     'data-testid': dataTestId,
     onChange,
-}: FormCheckboxProps<T>) {
+}: FormFieldProps<T>) {
     const {
         register,
         formState: { errors },

@@ -38,12 +38,7 @@ const OpprettJournalpost: React.FC = () => {
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
-    const {
-        søkerIdentitetsnummerValidationRules,
-        fagsakIdValidationRules,
-        tittelValidationRules,
-        notatValidationRules,
-    } = useValidationRules();
+    const { søkerIdentitetsnummerValidator, fagsakIdValidator, tittelValidator, notatValidator } = useValidationRules();
 
     const methods = useForm<IOpprettJournalpostForm>({
         defaultValues: defaultValues,
@@ -134,7 +129,7 @@ const OpprettJournalpost: React.FC = () => {
                         inputMode="numeric"
                         autoComplete="off"
                         maxLength={11}
-                        validate={søkerIdentitetsnummerValidationRules}
+                        validate={søkerIdentitetsnummerValidator}
                         onChange={handleSøkerIdentitetsnummerChange}
                         readOnly={isSubmitSuccessful}
                         disabled={isFetchingFagsaker}
@@ -146,7 +141,7 @@ const OpprettJournalpost: React.FC = () => {
                             name={OpprettJournalpostFormKeys.fagsakId}
                             label={<FormattedMessage id="opprettJournalpost.select.fagsakId.label" />}
                             className="input fagsakSelect"
-                            validate={fagsakIdValidationRules}
+                            validate={fagsakIdValidator}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
                             data-testid="opprettJournalpostFagsakSelect"
@@ -209,7 +204,7 @@ const OpprettJournalpost: React.FC = () => {
                             label={<FormattedMessage id="opprettJournalpost.textField.tittel.label" />}
                             className="input"
                             maxLength={200}
-                            validate={tittelValidationRules}
+                            validate={tittelValidator}
                             autoComplete="off"
                             readOnly={isSubmitSuccessful}
                             data-testid="opprettJournalpostTittelInput"
@@ -220,69 +215,69 @@ const OpprettJournalpost: React.FC = () => {
                             className="input"
                             label={<FormattedMessage id="opprettJournalpost.textarea.notat.label" />}
                             maxLength={10000}
-                            validate={notatValidationRules}
+                            validate={notatValidator}
                             readOnly={isSubmitSuccessful}
                             data-testid="opprettJournalpostNotatTextarea"
                         />
                     </div>
 
-                    <div className="statusContainer" data-testid="opprettJournalpostStatusContainer">
-                        {errors.root?.message && (
-                            <>
-                                <ErrorIcon />
-                                <Label size="small" className="statusText">
-                                    {errors.root.message}
-                                </Label>
-                            </>
-                        )}
+                    {errors.root?.message && (
+                        <div className="statusContainer">
+                            <ErrorIcon />
+                            <Label size="small" className="statusText">
+                                {errors.root.message}
+                            </Label>
+                        </div>
+                    )}
 
-                        {opprettJpError && (
-                            <>
-                                <ErrorIcon />
-                                <Label size="small" className="statusText">
-                                    {opprettJpError}
-                                </Label>
-                            </>
-                        )}
+                    {opprettJpError && (
+                        <div className="statusContainer">
+                            <ErrorIcon />
+                            <Label size="small" className="statusText">
+                                {opprettJpError}
+                            </Label>
+                        </div>
+                    )}
 
-                        {isSubmitSuccessful && (
-                            <>
-                                <SuccessIcon />
-                                <Label size="small" className="statusText flex items-center">
-                                    <FormattedMessage
-                                        id="opprettJournalpost.opprettet"
-                                        values={{ journalpostId: opprettetJournalpostId }}
-                                    />
-                                    <CopyButton size="xsmall" copyText={opprettetJournalpostId} className="ml-4" />
-                                </Label>
-                            </>
-                        )}
-                    </div>
+                    {isSubmitSuccessful && (
+                        <div className="statusContainer">
+                            <SuccessIcon />
+                            <Label size="small" className="statusText flex items-center">
+                                <FormattedMessage
+                                    id="opprettJournalpost.opprettet"
+                                    values={{ journalpostId: opprettetJournalpostId }}
+                                />
+                                <CopyButton size="xsmall" copyText={opprettetJournalpostId} className="ml-4" />
+                            </Label>
+                        </div>
+                    )}
 
                     {!isSubmitSuccessful && (
-                        <Button
-                            size="small"
-                            type="submit"
-                            className="submitButton"
-                            loading={isSubmitting}
-                            disabled={isSubmitting || isFetchingFagsaker}
-                            data-testid="opprettJournalpostSubmitButton"
-                        >
-                            <FormattedMessage id="opprettJournalpost.btn" />
-                        </Button>
+                        <div className="mt-10">
+                            <Button
+                                type="submit"
+                                size="small"
+                                loading={isSubmitting}
+                                disabled={isSubmitting || isFetchingFagsaker}
+                                data-testid="opprettJournalpostSubmitButton"
+                            >
+                                <FormattedMessage id="opprettJournalpost.btn" />
+                            </Button>
+                        </div>
                     )}
                 </TypedFormProvider>
 
                 {isSubmitSuccessful && (
-                    <Button
-                        onClick={() => navigate(`/journalpost/${opprettetJournalpostId}`)}
-                        type="button"
-                        size="small"
-                        className="submitButton"
-                        data-testid="opprettJournalpostGåTilJournalpostButton"
-                    >
-                        <FormattedMessage id="opprettJournalpost.btn.gåTilJournalpost" />
-                    </Button>
+                    <div className="mt-4">
+                        <Button
+                            onClick={() => navigate(`/journalpost/${opprettetJournalpostId}`)}
+                            type="button"
+                            size="small"
+                            data-testid="opprettJournalpostGåTilJournalpostButton"
+                        >
+                            <FormattedMessage id="opprettJournalpost.btn.gåTilJournalpost" />
+                        </Button>
+                    </div>
                 )}
             </div>
         </div>

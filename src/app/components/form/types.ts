@@ -7,6 +7,8 @@ export interface FormFieldProps<T extends FieldValues> {
     validate?: RegisterOptions<T>;
     className?: string;
     disabled?: boolean;
+    size?: 'small' | 'medium';
+    readOnly?: boolean;
     'data-testid'?: string;
     onChange?: () => void;
 }
@@ -17,22 +19,15 @@ export interface FormTextFieldProps<T extends FieldValues> extends Omit<FormFiel
     pattern?: string;
     maxLength?: number;
     autoComplete?: string;
-    readOnly?: boolean;
     htmlSize?: number;
     onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface FormSelectProps<T extends FieldValues> extends FormFieldProps<T> {
-    readOnly?: boolean;
     children: ReactNode;
 }
 
-export interface FormCheckboxProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'className'> {
-    size?: 'small' | 'medium';
-}
-
 export interface FormTextareaProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
-    readOnly?: boolean;
     maxLength?: number;
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }

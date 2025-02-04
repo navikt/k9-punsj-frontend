@@ -15,6 +15,7 @@ export function FormTextField<T extends FieldValues>({
     maxLength,
     autoComplete,
     readOnly,
+    size,
     htmlSize,
     'data-testid': dataTestId,
     onChange,
@@ -34,7 +35,7 @@ export function FormTextField<T extends FieldValues>({
         <TextField
             {...rest}
             ref={ref}
-            size="small"
+            size={size}
             label={label}
             className={className}
             error={errors[name]?.message as string}

@@ -10,6 +10,7 @@ export function FormSelect<T extends FieldValues>({
     className,
     disabled,
     readOnly,
+    size,
     onChange,
     children,
     'data-testid': dataTestId,
@@ -29,7 +30,7 @@ export function FormSelect<T extends FieldValues>({
         <Select
             {...rest}
             ref={ref}
-            size="small"
+            size={size}
             label={label}
             className={className}
             error={errors[name]?.message as string}
