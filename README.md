@@ -69,8 +69,8 @@ Testene kjører automatisk når ny kode dyttes til [master](https://github.com/n
 
 ## To do
 
--   Utvide for flere søkere
--   Utvide søknadsskjemaet
+- Utvide for flere søkere
+- Utvide søknadsskjemaet
 
 ## Henvendelser
 
@@ -80,3 +80,7 @@ Interne henvendelser kan sendes via Slack i kanalen #sif_saksbehandling.
 
 ![k9-punsj-frontend](logo.png)
 ![7aa5dd7e-33d3-49b4-b23b-ab2b637fbe1a](https://github.com/navikt/k9-punsj-frontend/assets/25080417/4dab2369-6493-4abb-a613-a5f409ecfd57)
+
+## Kode generert av GitHub Copilot
+
+Dette repoet bruker GitHub Copilot til å generere kode.
