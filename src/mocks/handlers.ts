@@ -483,7 +483,7 @@ let handlers = [
      *
      * TODO: Fix this, maybe
      */
-    // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
+    // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 400 })),
 
     /* http.post(
         ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', '300'),
