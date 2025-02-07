@@ -37,3 +37,4 @@ cypress/screenshots/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+storybook-static
