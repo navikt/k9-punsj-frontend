@@ -1,6 +1,50 @@
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { ApiPath } from 'app/apiConfig';
-import dokumentMalType from './dokumentMalType';
+import { BrevFormKeys, IBrev, IBrevDokumentdata, IBrevForm, IBrevMottaker, IMal } from './types';
+
+export const defaultValuesBrev: IBrevForm = {
+    [BrevFormKeys.brevmalkode]: '',
+    [BrevFormKeys.mottaker]: '',
+    [BrevFormKeys.velgAnnenMottaker]: false,
+    [BrevFormKeys.annenMottakerOrgNummer]: '',
+    [BrevFormKeys.overskrift]: '',
+    [BrevFormKeys.brødtekst]: '',
+};
+
+export const getDokumentdata = (values: IBrevForm, valgteMal?: IMal): IBrevDokumentdata => {
+    if (valgteMal && valgteMal.støtterTittelOgFritekst) {
+        return {
+            fritekstbrev: {
+                overskrift: values[BrevFormKeys.overskrift],
+                brødtekst: values[BrevFormKeys.brødtekst],
+            },
+        };
+    }
+    if (valgteMal && valgteMal.støtterFritekst) {
+        return {
+            fritekst: values[BrevFormKeys.brødtekst],
+        };
+    }
+
+    return {};
+};
+
+export const createBrev = (
+    søkerId: string,
+    mottakerData: IBrevMottaker,
+    sakstype: string,
+    dokumentMal: string,
+    dokumentdata: IBrevDokumentdata,
+    journalpostId?: string,
+    fagsakId?: string,
+): IBrev => ({
+    soekerId: søkerId,
+    mottaker: mottakerData,
+    fagsakYtelseType: sakstype,
+    dokumentMal,
+    dokumentdata,
+    journalpostId,
+    saksnummer: fagsakId,
+});
 
 interface ErrType {
     feilmelding: string;
@@ -31,18 +75,20 @@ const getErrorString = (errorText: string): string => {
 };
 
 export const previewMessage = async (
-    values: BrevFormValues,
+    values: IBrevForm,
     aktørId: string,
     sakstype: string,
+    valgteMal?: IMal,
     journalpostId?: string,
     fagsakId?: string,
 ): Promise<string | undefined> => {
-    const mottakerType = values.mottaker === aktørId && !values.velgAnnenMottaker ? 'AKTØRID' : 'ORGNR';
-    const mottakerId = values.velgAnnenMottaker ? values.orgNummer : values.mottaker;
+    const mottakerType =
+        values[BrevFormKeys.mottaker] === aktørId && !values[BrevFormKeys.velgAnnenMottaker] ? 'AKTØRID' : 'ORGNR';
+    const mottakerId = values[BrevFormKeys.velgAnnenMottaker]
+        ? values[BrevFormKeys.annenMottakerOrgNummer].replace(/\s/g, '')
+        : values[BrevFormKeys.mottaker];
 
-    const isGenereltFritekstbrev =
-        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV ||
-        values.brevmalkode === dokumentMalType.GENERELT_FRITEKSTBREV_NYNORSK;
+    const dokumentdata = getDokumentdata(values, valgteMal);
 
     try {
         const response = await fetch(ApiPath.BREV_FORHAANDSVIS, {
@@ -58,11 +104,8 @@ export const previewMessage = async (
                 saksnummer: fagsakId || 'GENERELL_SAK',
                 avsenderApplikasjon: 'K9PUNSJ',
                 overstyrtMottaker: { type: mottakerType, id: mottakerId },
-                dokumentMal: values.brevmalkode,
-                dokumentdata: {
-                    fritekst: !isGenereltFritekstbrev ? values.fritekst : undefined,
-                    fritekstbrev: isGenereltFritekstbrev ? values.fritekstbrev : undefined,
-                },
+                dokumentMal: values[BrevFormKeys.brevmalkode],
+                dokumentdata,
             }),
             headers: { 'Content-Type': 'application/json' },
         });

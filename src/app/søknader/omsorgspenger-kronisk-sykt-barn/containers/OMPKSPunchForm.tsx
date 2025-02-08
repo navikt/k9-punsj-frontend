@@ -500,7 +500,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
 
                 {punchFormState.settPaaVentSuccess && (
                     <OkGåTilLosModal
-                        melding="modal.settpaavent.til"
+                        meldingId="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
                     />
                 )}

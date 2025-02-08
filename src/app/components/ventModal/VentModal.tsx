@@ -36,7 +36,7 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: Props) => {
     if (visSuccessModal) {
         return (
             <OkGåTilLosModal
-                melding="modal.settpaavent.til"
+                meldingId="modal.settpaavent.til"
                 onClose={() => {
                     visModalFn(false);
                 }}

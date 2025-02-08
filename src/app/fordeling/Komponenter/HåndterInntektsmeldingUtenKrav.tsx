@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button, Modal } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import BrevComponent from 'app/components/brev/BrevComponent';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import { IJournalpost } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
@@ -34,6 +34,7 @@ interface Props {
 const opprettJournalføringsoppgaveValue = 'opprettJournalføringsoppgave';
 const ferdigstillJournalpostValue = 'ferdigstillJournalpost';
 const settPåVentValue = 'settPåVent';
+
 const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerId }) => {
     const [showSettPaaVentModal, setShowSettPaaVentModal] = useState(false);
     const [showFerdigstillJournalpostModal, setShowFerdigstillJournalpostModal] = useState(false);
@@ -120,6 +121,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     return (
         <>
             <VerticalSpacer fourtyPx />
+
             <RadioPanelGruppe
                 name="inntektsmeldingUtenKrav"
                 radios={[
@@ -140,6 +142,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 checked={håndterInntektsmeldingUtenKravValg}
                 onChange={(event) => handleInntektsmeldingUtenKrav((event.target as HTMLInputElement).value)}
             />
+
             <BrevContainer>
                 <BrevComponent
                     søkerId={søkerId}
@@ -159,7 +162,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
             {showSettPaaVentSuccessModal && (
                 <OkGåTilLosModal
-                    melding="modal.settpaavent.til"
+                    meldingId="modal.settpaavent.til"
                     onClose={() => {
                         resetSetPåVent();
                     }}
@@ -201,7 +204,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
             {showFerdigstillJournalpostSuccessModal && (
                 <OkGåTilLosModal
-                    melding="modal.ferdigstilljournalpost"
+                    meldingId="modal.ferdigstilljournalpost"
                     onClose={() => {
                         resetFerdigstillJournalpost();
                     }}

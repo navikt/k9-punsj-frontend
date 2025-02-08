@@ -12,9 +12,39 @@ let handlers = [
     http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
             {
-                INNHEN: { navn: 'Innhent dokumentasjon', mottakere: [] },
-                GENERELT_FRITEKSTBREV: { navn: 'Fritekst generelt brev', mottakere: [] },
-                GENERELT_FRITEKSTBREV_NYNORSK: { navn: 'Fritekst generelt brev på nynorsk', mottakere: [] },
+                INNHEN: {
+                    navn: 'Innhent dokumentasjon',
+                    mottakere: [],
+                    linker: [
+                        {
+                            type: 'GET',
+                            rel: 'malinnhold',
+                            href: '/k9/formidling/api/brev/maler/VARSEL_FRITEKST?sakstype=PSB&eksternReferanse=null&avsenderApplikasjon=K9PUNSJ',
+                        },
+                    ],
+                    støtterFritekst: true,
+                    støtterTittelOgFritekst: false,
+                    kode: 'INNHEN',
+                    støtterTredjepartsmottaker: false,
+                },
+                GENERELT_FRITEKSTBREV: {
+                    kode: 'GENERELT_FRITEKSTBREV',
+                    linker: [],
+                    mottakere: [],
+                    navn: 'Fritekst generelt brev',
+                    støtterFritekst: false,
+                    støtterTittelOgFritekst: true,
+                    støtterTredjepartsmottaker: true,
+                },
+                GENERELT_FRITEKSTBREV_NYNORSK: {
+                    navn: 'Fritekst generelt brev på nynorsk',
+                    mottakere: [],
+                    linker: [],
+                    støtterFritekst: false,
+                    støtterTittelOgFritekst: true,
+                    kode: 'GENERELT_FRITEKSTBREV_NYNORSK',
+                    støtterTredjepartsmottaker: true,
+                },
             },
             { status: 200 },
         ),
@@ -445,7 +475,21 @@ let handlers = [
         ),
     ),
 
-    http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 200 })),
+    /* This is commented out because it is causing the 'should send brev' cypress test to fail because
+     * in cypress test uses intercept to check if the request is made correctly and the intercept is not
+     * working as expected if msw is used for the request.
+     * if app starts for development by running 'yarn test:e2eUI' and you need to test send brev visually
+     * you can uncomment this, but you must comment it back before committing and running the cypress tests.
+     *
+     * TODO: Fix this, maybe
+     */
+    // http.post(ApiPath.BREV_BESTILL, () => new HttpResponse(null, { status: 400 })),
+
+    /* http.post(
+        ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', '300'),
+        () => new HttpResponse(null, { status: 200 }),
+    ),*/
+
     http.get(ApiPath.PERSON, async () => {
         await delay(2000);
         return HttpResponse.json(
@@ -475,6 +519,7 @@ let handlers = [
     http.post(ApiPath.OPPRETT_NOTAT, async () => {
         await delay(500);
         return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
+        // return new HttpResponse(JSON.stringify({}), { status: 400 });
     }),
 ];
 

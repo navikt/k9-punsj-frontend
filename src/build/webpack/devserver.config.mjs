@@ -50,10 +50,13 @@ const configureDevServer = () => ({
                 ...envVariables(),
             ]);
         });
+
         app.get('/mockServiceWorker.js', (req, res) => {
             res.set('content-type', 'application/javascript');
+            res.set('service-worker-allowed', '/');
             res.sendFile(path.resolve(__dirname, '../../mocks/mockServiceWorker.js'));
         });
+
         app.get(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
             res.render('index.html');
         });
@@ -70,6 +73,11 @@ const configureDevServer = () => ({
             errors: true,
             warnings: false,
         },
+    },
+
+    historyApiFallback: {
+        disableDotRule: true,
+        index: '/',
     },
 });
 

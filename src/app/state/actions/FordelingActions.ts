@@ -171,8 +171,6 @@ export function hentGjelderKategorierFraGosys() {
                 console.log('Response ok');
                 return dispatch(gosysGjelderSuccessAction(svar));
             }
-            // eslint-disable-next-line no-console
-            console.log('Test Response not ok: ', response);
 
             return dispatch(gosysGjelderErrorAction(convertResponseToError(response)));
         });

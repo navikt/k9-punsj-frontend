@@ -1,6 +1,6 @@
 [
     {
-        "fagsakId": "1DMU93M",
+        "fagsakId": "1DMU93A",
         "sakstype": "PSB",
         "reservert": false,
         "pleietrengende": null,
@@ -11,7 +11,7 @@
         "relatertPerson": null
     },
     {
-        "fagsakId": "1DMUDF6",
+        "fagsakId": "1DMUDFB",
         "sakstype": "OMP",
         "reservert": false,
         "pleietrengende": null,
@@ -24,7 +24,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1DQBDDS",
+        "fagsakId": "1DQBDDC",
         "sakstype": "PSB",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -39,7 +39,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1DQBB6M",
+        "fagsakId": "1DQBB6D",
         "sakstype": "PSB",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -54,7 +54,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1DQB57C",
+        "fagsakId": "1DQB57E",
         "sakstype": "PSB",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -65,7 +65,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1DQBBHQ",
+        "fagsakId": "1DQBBHF",
         "sakstype": "PPN",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -80,7 +80,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1DQBFJK",
+        "fagsakId": "1DQBFJG",
         "sakstype": "PPN",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -91,7 +91,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1DQB7o8",
+        "fagsakId": "1DQB7o6",
         "sakstype": "PPN",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -106,7 +106,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "2DQB7o8",
+        "fagsakId": "2DQB7o5",
         "sakstype": "PPN",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -117,7 +117,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1DQBM7U",
+        "fagsakId": "1DQBM7V",
         "sakstype": "OMP",
         "pleietrengende": null,
         "behandlingsår": 2024,
@@ -129,7 +129,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1WTBMY6",
+        "fagsakId": "1WTBMY7",
         "sakstype": "OMP_KS",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -141,7 +141,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1DQBMY8",
+        "fagsakId": "1DQBMY9",
         "sakstype": "OMP_KS",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -157,7 +157,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "2TQBHY3",
+        "fagsakId": "2TQBHY2",
         "sakstype": "OMP_KS",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
@@ -173,7 +173,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1TQFHE3",
+        "fagsakId": "1TQFHE1",
         "sakstype": "OMP_KS",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -185,7 +185,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1WTBMY6",
+        "fagsakId": "1WTBMY0",
         "sakstype": "OMP_AO",
         "pleietrengende": null,
         "gyldigPeriode": {
@@ -197,7 +197,7 @@
     },
     {
         "reservert": false,
-        "fagsakId": "1DQBMY8",
+        "fagsakId": "1DQBMY2",
         "sakstype": "OMP_AO",
         "pleietrengende": {
             "navn": "Alex Smith",
@@ -213,7 +213,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "2TQBHY3",
+        "fagsakId": "2TQBHY5",
         "sakstype": "OMP_AO",
         "pleietrengende": {
             "navn": "Alex Smith",
@@ -229,7 +229,7 @@
     },
     {
         "reservert": true,
-        "fagsakId": "1TQFHE3",
+        "fagsakId": "1TQFHE0",
         "sakstype": "OMP_AO",
         "pleietrengende": null,
         "gyldigPeriode": {

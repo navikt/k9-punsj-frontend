@@ -348,7 +348,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             )}
 
             {punchFormState.settPaaVentSuccess && (
-                <OkGåTilLosModal melding="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
+                <OkGåTilLosModal meldingId="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
             )}
 
             {!!punchFormState.settPaaVentError && <SettPåVentErrorModal onClose={() => settPåventResetAction()} />}

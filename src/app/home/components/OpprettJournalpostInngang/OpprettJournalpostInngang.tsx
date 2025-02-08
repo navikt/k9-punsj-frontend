@@ -11,11 +11,11 @@ const OpprettJournalpostInngang = () => {
         <div className="opprettJournalpostInngang">
             <div className="content">
                 <Heading size="xlarge" level="1" className="heading">
-                    <FormattedMessage id={'opprettJournalpostInngang.header'} />
+                    <FormattedMessage id="opprettJournalpostInngang.header" />
                 </Heading>
 
                 <BodyLong>
-                    <FormattedMessage id={'opprettJournalpostInngang.ingress'} />
+                    <FormattedMessage id="opprettJournalpostInngang.ingress" />
                 </BodyLong>
 
                 <Link
@@ -23,7 +23,7 @@ const OpprettJournalpostInngang = () => {
                     to="/opprett-journalpost"
                     data-testid="opprett-journalpost-inngang"
                 >
-                    <FormattedMessage id={'opprettJournalpostInngang.link'} />
+                    <FormattedMessage id="opprettJournalpostInngang.link" />
                 </Link>
             </div>
         </div>

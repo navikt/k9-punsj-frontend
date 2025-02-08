@@ -10,7 +10,7 @@ const textRegex =
 const textGyldigRegex =
     /[0-9a-zA-ZæøåÆØÅAaÁáBbCcČčDdĐđEeFfGgHhIiJjKkLlMmNnŊŋOoPpRrSsŠšTtŦŧUuVvZzŽžéôèÉöüäÖÜÄ .'\-‐–‑/%§!?@_()#+:;,="&\s<>~*]*/g;
 
-const hasValidText = (text?: string): true | string => {
+export const hasValidText = (text?: string): true | string => {
     if (!text) {
         return 'Feltet er påkrevd';
     }

@@ -35,11 +35,12 @@ const ErDuSikkerModal = ({ melding, modalKey, open, onSubmit, onClose, submitKna
                     onSubmit();
                     onClose();
                 }}
+                type="button"
             >
                 <FormattedMessage id={submitKnappText} />
             </Button>
 
-            <Button variant="secondary" size="small" onClick={() => onClose()}>
+            <Button variant="secondary" size="small" onClick={() => onClose()} type="button">
                 <FormattedMessage id="skjema.knapp.avbryt" />
             </Button>
         </Modal.Footer>
