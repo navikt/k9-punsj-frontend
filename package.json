@@ -159,7 +159,7 @@
         "postcss": "8.5.1",
         "postcss-less": "6.0.0",
         "postcss-loader": "8.1.1",
-        "prettier": "3.4.2",
+        "prettier": "3.5.0",
         "react-refresh": "0.16.0",
         "regenerator-runtime": "0.14.1",
         "storybook": "8.5.3",
