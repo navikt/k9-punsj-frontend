@@ -133,7 +133,7 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.').should('exist');
     });
 
-    it('shout show error message if sendes same brev', () => {
+    it('should show error message if sendes same brev', () => {
         cy.findByRole('button', { name: /Send brev/i }).click();
         cy.findByRole('button', { name: /Fortsett/i }).click();
         cy.findByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.').should('not.exist');
