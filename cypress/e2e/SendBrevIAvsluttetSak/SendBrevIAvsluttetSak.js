@@ -136,6 +136,13 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                 });
             }).as('forhandsvisBrev');
 
+            cy.window().then((win) => {
+                cy.stub(win, 'open').callsFake((url) => {
+                    // Optionally log or verify the URL that would have been opened
+                    cy.log(`Attempted to open: ${url}`);
+                });
+            });
+
             cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
 
             cy.wait('@forhandsvisBrev').then((interception) => {
