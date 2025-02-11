@@ -140,14 +140,16 @@ const OpprettJournalpost: React.FC = () => {
                         <TypedFormSelect
                             name={OpprettJournalpostFormKeys.fagsakId}
                             label={<FormattedMessage id="opprettJournalpost.select.fagsakId.label" />}
-                            className="input fagsakSelect"
+                            className="fagsakSelect"
                             validate={fagsakIdValidator}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
                             data-testid="opprettJournalpostFagsakSelect"
                         >
                             <option value="">
-                                <FormattedMessage id="opprettJournalpost.select.fagsakId.option.velg" />
+                                {fagsaker.length > 0 && (
+                                    <FormattedMessage id="opprettJournalpost.select.fagsakId.option.velg" />
+                                )}
                             </option>
 
                             {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
@@ -176,14 +178,17 @@ const OpprettJournalpost: React.FC = () => {
                         >
                             <FormattedMessage id="opprettJournalpost.alert.hentFagsaker.error" />
 
-                            <Button
-                                type="button"
-                                size="small"
-                                variant="tertiary"
-                                onClick={() => hentFagsaker(søkersFødselsnummer)}
-                            >
-                                <FormattedMessage id="opprettJournalpost.btn.hentFagsaker" />
-                            </Button>
+                            <div className="mt-4">
+                                <Button
+                                    type="button"
+                                    size="small"
+                                    variant="secondary"
+                                    className="mt-2"
+                                    onClick={() => hentFagsaker(søkersFødselsnummer)}
+                                >
+                                    <FormattedMessage id="opprettJournalpost.btn.hentFagsaker" />
+                                </Button>
+                            </div>
                         </Alert>
                     )}
 

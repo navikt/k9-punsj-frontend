@@ -82,9 +82,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
 
         it('should handle fagsak fetch error', () => {
             cy.findByLabelText('Søkers fødselsnummer').clear().type(TEST_DATA.fnrWithError);
-            cy.findByText(
-                'Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.',
-            ).should('exist');
+            cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.').should('exist');
         });
 
         it('should handle successful fagsak retry', () => {

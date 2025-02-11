@@ -38,9 +38,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                 'exist',
             );
             fnrInput.clear().type(TEST_DATA.fnrWithError);
-            cy.findByText(
-                'Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.',
-            ).should('exist');
+            cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.').should('exist');
             fnrInput.clear().type(TEST_DATA.fnr);
         });
 

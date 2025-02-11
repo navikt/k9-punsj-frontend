@@ -807,7 +807,7 @@
     "sendBrevIAvsluttetSakInngang.header": "Send brev i avsluttet sak",
     "sendBrevIAvsluttetSakInngang.ingress": "Trenger du å sende brev etter saken er avsluttet, kan du sende brev her.",
     "sendBrevIAvsluttetSakInngang.link": "Send brev",
-    "sendBrevIAvsluttetSak.alert.fetchFagsaker.error": "Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.",
+    "sendBrevIAvsluttetSak.alert.fetchFagsaker.error": "Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.",
     "sendBrevIAvsluttetSak.btn.hentFagsaker": "Hent fagsaker på nytt",
     "sendBrevIAvsluttetSak.error.ugyldigFødselsnummer": "Fødselsnummeret er ugyldig",
     "sendBrevIAvsluttetSak.søkersFødselsnummer": "Søkers fødselsnummer",
@@ -878,7 +878,7 @@
     "opprettJournalpost.select.fagsakId.option.velg": "Velg",
     "opprettJournalpost.select.fagsakId.option": "{fagsakId} (K9 {sakstype}) {reservert}",
     "opprettJournalpost.alert.hentFagsaker.ingenFagsak": "Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.",
-    "opprettJournalpost.alert.hentFagsaker.error": "Noe gikk galt ved henting av fagsaker. Sjekk fødselsnummeret, eller prøv å hente fagsakene på nytt.",
+    "opprettJournalpost.alert.hentFagsaker.error": "Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.",
     "opprettJournalpost.textField.tittel.label": "Tittel",
     "opprettJournalpost.textarea.notat.label": "Notat",
 
