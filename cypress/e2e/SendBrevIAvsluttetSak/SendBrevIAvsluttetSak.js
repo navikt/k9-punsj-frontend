@@ -152,11 +152,15 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                     body: null,
                 });
             }).as('sendBrevError');
-            cy.findByRole('button', { name: /Send brev/i }).click();
-            cy.findByRole('button', { name: /Fortsett/i }).click();
+            cy.findByRole('button', { name: /Send brev/i }).as('sendBrevButton');
+            cy.get('@sendBrevButton').click();
+            cy.findByRole('button', { name: /Fortsett/i }).as('fortsettButton');
+            cy.get('@fortsettButton').click();
+
             cy.wait('@sendBrevError').then((interception) => {
                 expect(interception.response.statusCode).to.equal(500);
             });
+
             cy.findByText(/Sending av brev feilet./i).should('exist');
 
             cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
@@ -178,9 +182,9 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                 });
             }).as('sendBrev');
 
-            cy.findByRole('button', { name: /Send brev/i }).click();
+            cy.get('@sendBrevButton').click();
             cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
-            cy.findByRole('button', { name: /Fortsett/i }).click();
+            cy.get('@fortsettButton').click();
 
             cy.wait('@sendBrev').then((interception) => {
                 expect(interception.response.statusCode).to.equal(200);
