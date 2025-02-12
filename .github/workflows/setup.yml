@@ -15,10 +15,14 @@ jobs:
         name: Setup
         runs-on: ubuntu-latest
         outputs:
-            cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
+            cache-hit: ${{ steps.cache.outputs.cache-hit }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+                  sparse-checkout: true
+                  sparse-checkout-cone-mode: true
 
             - name: Setup .yarnrc.yml
               run: |
@@ -39,19 +43,21 @@ jobs:
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Cache yarn dependencies
+            - name: Restore cache
               uses: actions/cache@v3
-              id: yarn-cache
+              id: cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                      .yarn/releases
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
-                      ${{ runner.os }}-yarn-
+                      ${{ runner.os }}-modules-
+                      ${{ runner.os }}-
 
             - name: Install dependencies
-              if: steps.yarn-cache.outputs.cache-hit != 'true'
+              if: steps.cache.outputs.cache-hit != 'true'
               run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}

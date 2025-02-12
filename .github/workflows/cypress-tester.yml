@@ -39,6 +39,7 @@ jobs:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
+                      .yarn/releases
                       ~/.cache/Cypress
                   key: ${{ runner.os }}-modules-cypress-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
