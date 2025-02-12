@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 
 import { FieldValues } from 'react-hook-form';
 
-import { FormCheckboxProps, FormTextareaProps, FormTextFieldProps, FormSelectProps } from './types';
+import { FormTextareaProps, FormTextFieldProps, FormSelectProps, FormFieldProps } from './types';
 import { PunsjFormProvider, PunsjFormProviderProps } from './FormProvider';
 import { FormTextarea } from './FormTextarea';
 import { FormTextField } from './FormTextField';
@@ -13,7 +13,7 @@ export interface TypedFormComponents<T extends FieldValues> {
     TypedFormProvider: (props: PunsjFormProviderProps<T>) => ReactElement;
     TypedFormTextarea: (props: FormTextareaProps<T>) => ReactElement;
     TypedFormTextField: (props: FormTextFieldProps<T>) => ReactElement;
-    TypedFormCheckbox: (props: FormCheckboxProps<T>) => ReactElement;
+    TypedFormCheckbox: (props: FormFieldProps<T>) => ReactElement;
     TypedFormSelect: (props: FormSelectProps<T>) => ReactElement;
 }
 
@@ -22,7 +22,7 @@ export function getTypedFormComponents<T extends FieldValues>(): TypedFormCompon
         TypedFormProvider: (props: PunsjFormProviderProps<T>) => <PunsjFormProvider {...props} />,
         TypedFormTextarea: (props: FormTextareaProps<T>) => <FormTextarea<T> {...props} />,
         TypedFormTextField: (props: FormTextFieldProps<T>) => <FormTextField<T> {...props} />,
-        TypedFormCheckbox: (props: FormCheckboxProps<T>) => <FormCheckbox<T> {...props} />,
+        TypedFormCheckbox: (props: FormFieldProps<T>) => <FormCheckbox<T> {...props} />,
         TypedFormSelect: (props: FormSelectProps<T>) => <FormSelect<T> {...props} />,
     };
 }
