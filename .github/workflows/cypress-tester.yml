@@ -19,20 +19,10 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup .yarnrc.yml
-              run: |
-                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
-                  yarn config set npmScopes.navikt.npmAlwaysAuth true
-                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
-              env:
-                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
                   node-version: 18.x
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
 
             - name: Get yarn cache directory path
               id: yarn-cache-dir-path
@@ -61,8 +51,6 @@ jobs:
 
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
