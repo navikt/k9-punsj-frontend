@@ -23,6 +23,7 @@ jobs:
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
                   yarn config set npmScopes.navikt.npmAlwaysAuth true
                   yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+                  echo "enableScripts: true" >> .yarnrc.yml
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sette opp Node
@@ -47,5 +48,5 @@ jobs:
                   runTests: false
             - run: node split.mjs | xargs yarn cypress run --spec
               env:
-                CI_TOTAL: ${{ matrix.ci_total }}
-                CI_INDEX: ${{ matrix.ci_index }}
+                  CI_TOTAL: ${{ matrix.ci_total }}
+                  CI_INDEX: ${{ matrix.ci_index }}
