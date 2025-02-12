@@ -140,7 +140,7 @@ const OpprettJournalpost: React.FC = () => {
                         <TypedFormSelect
                             name={OpprettJournalpostFormKeys.fagsakId}
                             label={<FormattedMessage id="opprettJournalpost.select.fagsakId.label" />}
-                            className="fagsakSelect"
+                            className="fagsakSelectOpprettJp"
                             validate={fagsakIdValidator}
                             readOnly={isSubmitSuccessful}
                             disabled={isFetchingFagsaker}
