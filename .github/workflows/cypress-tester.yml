@@ -60,12 +60,11 @@ jobs:
                   cache-key: false
                   working-directory: .
                   browser: chrome
-                  headless: true
 
             - name: Run Cypress tests
               id: run-tests
               run: |
-                  if ! node split.mjs | xargs yarn cypress run --spec --browser chrome --headless; then
+                  if ! node split.mjs | xargs yarn cypress run --spec --browser chrome --headed=false; then
                     echo "::error::Cypress tests failed"
                     exit 1
                   fi
