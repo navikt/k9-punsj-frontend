@@ -13,6 +13,14 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v4
 
+            - name: Setup .yarnrc.yml
+              run: |
+                  echo 'npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"' >> .yarnrc.yml
+                  echo 'npmScopes.navikt.npmAlwaysAuth true' >> .yarnrc.yml
+                  echo 'npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN' >> .yarnrc.yml
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - name: Cache Yarn dependencies
               id: yarn-cache
               uses: actions/cache@v3
@@ -22,9 +30,9 @@ jobs:
                   restore-keys: |
                       yarn-${{ runner.os }}-
 
-            - name: Installere moduler (если кеша нет)
+            - name: Install modules (if cache not hit)
               if: steps.yarn-cache.outputs.cache-hit != 'true'
-              run: yarn install --immutable
+              run: yarn install --immutable --mode=skip-build
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
@@ -39,6 +47,14 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
+
+            - name: Setup .yarnrc.yml
+              run: |
+                  echo 'npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"' >> .yarnrc.yml
+                  echo 'npmScopes.navikt.npmAlwaysAuth true' >> .yarnrc.yml
+                  echo 'npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN' >> .yarnrc.yml
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - name: Cache Yarn dependencies
               uses: actions/cache@v3
@@ -58,7 +74,7 @@ jobs:
                   wait-on-timeout: 60
                   runTests: false
 
-            - name: Kjør Cypress tester
+            - name: Run Cypress tests
               run: node split.mjs | xargs yarn cypress run --spec
               env:
                   CI_TOTAL: ${{ matrix.ci_total }}
