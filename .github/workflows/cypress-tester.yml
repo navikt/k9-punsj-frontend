@@ -58,6 +58,21 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v4
 
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18.x
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@navikt'
+
+            - name: Setup .yarnrc.yml
+              run: |
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
               env:
@@ -67,6 +82,7 @@ jobs:
                   wait-on: 'http://localhost:8080'
                   wait-on-timeout: 60
                   runTests: false
+                  install: false
 
             - name: Run Cypress tests
               run: node split.mjs | xargs yarn cypress run --spec
