@@ -7,78 +7,7 @@ on:
                 required: true
 
 jobs:
-    setup:
-        name: Setup
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-
-            - name: Setup .yarnrc.yml
-              run: |
-                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
-                  yarn config set npmScopes.navikt.npmAlwaysAuth true
-                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
-              env:
-                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 18.x
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
-
-            - name: Get yarn cache directory path
-              id: yarn-cache-dir-path
-              run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-            - name: Cache yarn dependencies
-              uses: actions/cache@v3
-              id: yarn-cache
-              with:
-                  path: |
-                      ${{ steps.yarn-cache-dir-path.outputs.dir }}
-                      node_modules
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-
-
-            - name: Install dependencies
-              if: steps.yarn-cache.outputs.cache-hit != 'true'
-              run: yarn install --immutable
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Cache Cypress binary
-              uses: actions/cache@v3
-              id: cypress-binary-cache
-              with:
-                  path: ~/.cache/Cypress
-                  key: cypress-binary-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      cypress-binary-${{ runner.os }}-
-
-            - name: Install Cypress
-              if: steps.cypress-binary-cache.outputs.cache-hit != 'true'
-              run: npx cypress install
-
-            - name: Build app
-              run: yarn build
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Cache build
-              uses: actions/cache@v3
-              id: build-cache
-              with:
-                  path: dist
-                  key: ${{ runner.os }}-build-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'src/**/*.less') }}
-                  restore-keys: |
-                      ${{ runner.os }}-build-
-
     test:
-        needs: setup
         name: Cypress Test (${{ matrix.ci_index }} of ${{ matrix.ci_total }})
         runs-on: ubuntu-latest
         strategy:
@@ -117,19 +46,24 @@ jobs:
                       node_modules
                   key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-            - name: Restore Cypress binary
+            - name: Cache Cypress binary
               uses: actions/cache@v3
+              id: cypress-binary-cache
               with:
                   path: ~/.cache/Cypress
                   key: cypress-binary-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
                       cypress-binary-${{ runner.os }}-
 
-            - name: Restore build
-              uses: actions/cache@v3
+            - name: Install Cypress
+              if: steps.cypress-binary-cache.outputs.cache-hit != 'true'
+              run: npx cypress install
+
+            - name: Download build artifacts
+              uses: actions/download-artifact@v4
               with:
-                  path: dist
-                  key: ${{ runner.os }}-build-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'src/**/*.less') }}
+                  name: dist
+                  path: dist/
 
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
