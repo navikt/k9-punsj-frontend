@@ -118,9 +118,12 @@ jobs:
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
-                  wait-on-timeout: 60
+                  wait-on-timeout: 30
                   runTests: false
+                  install: false
                   cache-key: false
+                  working-directory: .
+                  verify-downloads: false
 
             - name: Run Cypress tests
               run: node split.mjs | xargs yarn cypress run --spec
