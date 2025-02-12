@@ -15,9 +15,9 @@ jobs:
 
             - name: Setup .yarnrc.yml
               run: |
-                  echo 'npmScopes.navikt.npmRegistryServer=https://npm.pkg.github.com' >> .yarnrc.yml
-                  echo 'npmScopes.navikt.npmAlwaysAuth=true' >> .yarnrc.yml
-                  echo 'npmScopes.navikt.npmAuthToken=${{ secrets.READER_TOKEN }}' >> .yarnrc.yml
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
@@ -50,9 +50,9 @@ jobs:
 
             - name: Setup .yarnrc.yml
               run: |
-                  echo 'npmScopes.navikt.npmRegistryServer=https://npm.pkg.github.com' >> .yarnrc.yml
-                  echo 'npmScopes.navikt.npmAlwaysAuth=true' >> .yarnrc.yml
-                  echo 'npmScopes.navikt.npmAuthToken=${{ secrets.READER_TOKEN }}' >> .yarnrc.yml
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
