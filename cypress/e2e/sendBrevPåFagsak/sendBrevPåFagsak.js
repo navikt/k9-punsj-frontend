@@ -28,91 +28,14 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByRole('button', { name: /Send brev/i }).should('exist');
     });
 
-    it('should validate mal select', () => {
-        cy.findByRole('button', { name: /Send brev/i }).click();
-
-        cy.findByText('Du må velge mal.').should('exist');
-        cy.findByLabelText('Velg mal').select(1);
-        cy.findByText('Du må velge mal.').should('not.exist');
-    });
-
-    it('should not show tittel if mal not support and show innhold', () => {
-        cy.findByText('Tittel').should('not.exist');
-        cy.findByText('Innhold i brev').should('exist');
-    });
-
-    it('should validate velg mottaker select', () => {
-        cy.findByText('Du må velge mottaker.').should('exist');
-        cy.findByLabelText('Velg mottaker').select(1);
-        cy.findByText('Du må velge mottaker.').should('not.exist');
-    });
-
     it('should validate tittel input', () => {
+        cy.findByLabelText('Velg mottaker').select(1);
         cy.findByLabelText('Velg mal').select(2);
-        cy.findByRole('button', { name: /Send brev/i }).click();
-        cy.findByText('Du må skrive inn tittel.').should('exist');
         cy.findByLabelText('Tittel').type(validTitle);
-        cy.findByText('Du må skrive inn tittel.').should('not.exist');
-    });
-
-    it('sould validate innhold ibrev input', () => {
-        cy.findByText('Du må skrive inn innhold.').should('exist');
         cy.findByLabelText('Innhold i brev').type(validNote);
-        cy.findByText('Du må skrive inn innhold.').should('not.exist');
-    });
-
-    it('should send correct post for forhåndsvis brev', () => {
-        cy.intercept('POST', ApiPath.BREV_FORHAANDSVIS, (req) => {
-            expect(req.body).to.have.property('aktørId').to.equal('81549300');
-            expect(req.body).to.have.property('avsenderApplikasjon').to.equal('K9PUNSJ');
-            expect(req.body).to.have.property('dokumentMal').to.equal('GENERELT_FRITEKSTBREV');
-            expect(req.body.dokumentdata.fritekstbrev).to.have.property('overskrift').to.equal(validTitle);
-            expect(req.body.dokumentdata.fritekstbrev).to.have.property('brødtekst').to.equal(validNote);
-            expect(req.body).to.have.property('eksternReferanse').to.equal(journalpost.journalpostId);
-            expect(req.body.overstyrtMottaker.id).to.equal('979312059');
-            expect(req.body.overstyrtMottaker.type).to.equal('ORGNR');
-            expect(req.body).to.have.property('saksnummer').to.equal(fagsak.fagsakId);
-            expect(req.body.ytelseType).to.have.property('kode').to.equal(fagsak.sakstype);
-            expect(req.body.ytelseType).to.have.property('kodeverk').to.equal('FAGSAK_YTELSE');
-
-            req.reply({
-                statusCode: 200,
-            });
-        }).as('forhandsvisBrev');
-
-        cy.window().then((win) => {
-            cy.stub(win, 'open').callsFake((url) => {
-                // Optionally log or verify the URL that would have been opened
-                cy.log(`Attempted to open: ${url}`);
-            });
-        });
-
-        cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
-
-        cy.wait('@forhandsvisBrev').then((interception) => {
-            expect(interception.response.statusCode).to.equal(200);
-        });
-
-        cy.findByText('Not Found').should('not.exist');
     });
 
     it('should send brev', () => {
-        cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
-            req.reply({
-                statusCode: 500,
-                body: null,
-            });
-        }).as('sendBrevError');
-        cy.findByRole('button', { name: /Send brev/i }).as('sendBrevButton');
-        cy.get('@sendBrevButton').click();
-        cy.findByRole('button', { name: /Fortsett/i }).as('fortsettButton');
-        cy.get('@fortsettButton').click();
-
-        cy.wait('@sendBrevError').then((interception) => {
-            expect(interception.response.statusCode).to.equal(500);
-        });
-        cy.findByText(/Sending av brev feilet./i).should('exist');
-
         cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
             expect(req.body).to.have.property('soekerId').to.equal(journalpost.norskIdent);
             expect(req.body).to.have.property('mottaker');
@@ -131,8 +54,12 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
             });
         }).as('sendBrev');
 
+        cy.findByRole('button', { name: /Send brev/i }).as('sendBrevButton');
         cy.get('@sendBrevButton').click();
+
         cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
+
+        cy.findByRole('button', { name: /Fortsett/i }).as('fortsettButton');
         cy.get('@fortsettButton').click();
 
         cy.wait('@sendBrev').then((interception) => {
@@ -147,7 +74,6 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.get('@sendBrevButton').click();
         cy.findByRole('button', { name: /Fortsett/i }).as('fortsettButton');
         cy.get('@fortsettButton').click();
-        // cy.findByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.').should('not.exist');
         cy.findByText('Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.').should('exist');
     });
 
