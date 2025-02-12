@@ -34,8 +34,6 @@ jobs:
               uses: actions/checkout@v4
               with:
                   fetch-depth: 1
-                  sparse-checkout: true
-                  sparse-checkout-cone-mode: true
 
             - name: Setup Node
               uses: actions/setup-node@v4
