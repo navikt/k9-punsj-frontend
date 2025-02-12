@@ -63,6 +63,20 @@ jobs:
               if: steps.cypress-binary-cache.outputs.cache-hit != 'true'
               run: npx cypress install
 
+            - name: Build app
+              run: yarn build
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+            - name: Cache build
+              uses: actions/cache@v3
+              id: build-cache
+              with:
+                  path: dist
+                  key: ${{ runner.os }}-build-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'src/**/*.less') }}
+                  restore-keys: |
+                      ${{ runner.os }}-build-
+
     test:
         needs: setup
         name: Cypress Test (${{ matrix.ci_index }} of ${{ matrix.ci_total }})
@@ -111,10 +125,11 @@ jobs:
                   restore-keys: |
                       cypress-binary-${{ runner.os }}-
 
-            - name: Build app
-              run: yarn build
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+            - name: Restore build
+              uses: actions/cache@v3
+              with:
+                  path: dist
+                  key: ${{ runner.os }}-build-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'src/**/*.less') }}
 
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
