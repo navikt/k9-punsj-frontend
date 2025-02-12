@@ -54,14 +54,19 @@ jobs:
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
-                  wait-on-timeout: 15
+                  wait-on-timeout: 60
                   runTests: false
                   install: false
                   cache-key: false
                   working-directory: .
 
             - name: Run Cypress tests
-              run: node split.mjs | xargs yarn cypress run --spec
+              id: run-tests
+              run: |
+                  if ! node split.mjs | xargs yarn cypress run --spec; then
+                    echo "::error::Cypress tests failed"
+                    exit 1
+                  fi
               env:
                   CI_TOTAL: ${{ matrix.ci_total }}
                   CI_INDEX: ${{ matrix.ci_index }}
