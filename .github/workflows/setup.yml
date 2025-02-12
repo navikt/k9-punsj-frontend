@@ -15,19 +15,10 @@ jobs:
         name: Setup
         runs-on: ubuntu-latest
         outputs:
-            cache-hit: ${{ steps.cache.outputs.cache-hit }}
+            cache-hit: ${{ steps.yarn-cache.outputs.cache-hit }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-              with:
-                  fetch-depth: 1
-
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 18.x
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
 
             - name: Setup .yarnrc.yml
               run: |
@@ -37,25 +28,28 @@ jobs:
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 18.x
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@navikt'
+
             - name: Get yarn cache directory path
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Restore cache
+            - name: Cache yarn dependencies
               uses: actions/cache@v3
-              id: cache
+              id: yarn-cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                      .yarn/releases
-                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-modules-
-                      ${{ runner.os }}-
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
             - name: Install dependencies
-              if: steps.cache.outputs.cache-hit != 'true'
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}

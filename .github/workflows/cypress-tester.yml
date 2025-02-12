@@ -18,8 +18,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-              with:
-                  fetch-depth: 1
 
             - name: Setup Node
               uses: actions/setup-node@v4
@@ -30,23 +28,25 @@ jobs:
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Restore caches
+            - name: Restore yarn cache
               uses: actions/cache@v3
-              id: cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                      .yarn/releases
-                      ~/.cache/Cypress
-                  key: ${{ runner.os }}-modules-cypress-${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Cache Cypress binary
+              uses: actions/cache@v3
+              id: cypress-binary-cache
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-binary-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
-                      ${{ runner.os }}-modules-cypress-
-                      ${{ runner.os }}-modules-
-                      ${{ runner.os }}-
+                      cypress-binary-${{ runner.os }}-
 
             - name: Install Cypress
-              if: steps.cache.outputs.cache-hit != 'true'
+              if: steps.cypress-binary-cache.outputs.cache-hit != 'true'
               run: npx cypress install
 
             - name: Start E2E-server
@@ -54,20 +54,14 @@ jobs:
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'
-                  wait-on-timeout: 60
+                  wait-on-timeout: 15
                   runTests: false
                   install: false
                   cache-key: false
                   working-directory: .
-                  browser: chrome
 
             - name: Run Cypress tests
-              id: run-tests
-              run: |
-                  if ! node split.mjs | xargs yarn cypress run --spec --browser chrome --headed=false; then
-                    echo "::error::Cypress tests failed"
-                    exit 1
-                  fi
+              run: node split.mjs | xargs yarn cypress run --spec
               env:
                   CI_TOTAL: ${{ matrix.ci_total }}
                   CI_INDEX: ${{ matrix.ci_index }}

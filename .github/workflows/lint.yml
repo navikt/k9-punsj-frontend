@@ -12,8 +12,6 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-              with:
-                  fetch-depth: 1
 
             - name: Setup Node
               uses: actions/setup-node@v4
@@ -24,18 +22,13 @@ jobs:
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Restore cache
+            - name: Restore yarn cache
               uses: actions/cache@v3
-              id: cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                      .yarn/releases
-                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-modules-
-                      ${{ runner.os }}-
+                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
             - name: Run lint
               run: yarn run lint
