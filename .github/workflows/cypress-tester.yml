@@ -18,6 +18,10 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+                  sparse-checkout: true
+                  sparse-checkout-cone-mode: true
 
             - name: Setup Node
               uses: actions/setup-node@v4
@@ -28,25 +32,22 @@ jobs:
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Restore yarn cache
+            - name: Restore caches
               uses: actions/cache@v3
+              id: cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-
-            - name: Cache Cypress binary
-              uses: actions/cache@v3
-              id: cypress-binary-cache
-              with:
-                  path: ~/.cache/Cypress
-                  key: cypress-binary-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+                      ~/.cache/Cypress
+                  key: ${{ runner.os }}-modules-cypress-${{ hashFiles('**/yarn.lock') }}
                   restore-keys: |
-                      cypress-binary-${{ runner.os }}-
+                      ${{ runner.os }}-modules-cypress-
+                      ${{ runner.os }}-modules-
+                      ${{ runner.os }}-
 
             - name: Install Cypress
-              if: steps.cypress-binary-cache.outputs.cache-hit != 'true'
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npx cypress install
 
             - name: Start E2E-server
@@ -59,11 +60,13 @@ jobs:
                   install: false
                   cache-key: false
                   working-directory: .
+                  browser: chrome
+                  headless: true
 
             - name: Run Cypress tests
               id: run-tests
               run: |
-                  if ! node split.mjs | xargs yarn cypress run --spec; then
+                  if ! node split.mjs | xargs yarn cypress run --spec --browser chrome --headless; then
                     echo "::error::Cypress tests failed"
                     exit 1
                   fi

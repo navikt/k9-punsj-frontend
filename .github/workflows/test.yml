@@ -13,6 +13,10 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1
+                  sparse-checkout: true
+                  sparse-checkout-cone-mode: true
 
             - name: Setup Node
               uses: actions/setup-node@v4
@@ -23,13 +27,17 @@ jobs:
               id: yarn-cache-dir-path
               run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-            - name: Restore yarn cache
+            - name: Restore cache
               uses: actions/cache@v3
+              id: cache
               with:
                   path: |
                       ${{ steps.yarn-cache-dir-path.outputs.dir }}
                       node_modules
-                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-modules-
+                      ${{ runner.os }}-
 
             - name: Run tests
               run: yarn test --maxWorkers=2
