@@ -7,8 +7,29 @@ on:
                 required: true
 
 jobs:
+    cache-dependencies:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Cache Yarn dependencies
+              id: yarn-cache
+              uses: actions/cache@v3
+              with:
+                  path: .yarn/cache
+                  key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      yarn-${{ runner.os }}-
+
+            - name: Installere moduler (если кеша нет)
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
+              run: yarn install --immutable
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
     test:
-        name: Cypress-tester
+        needs: cache-dependencies
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -16,31 +37,16 @@ jobs:
                 ci_index: [0, 1, 2, 3]
                 ci_total: [4]
         steps:
-            - name: Hente kode
+            - name: Checkout repo
               uses: actions/checkout@v4
 
-            - name: Setup .yarnrc.yml
-              run: |
-                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
-                  yarn config set npmScopes.navikt.npmAlwaysAuth true
-                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
-              env:
-                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Sette opp Node
-              uses: actions/setup-node@v4
+            - name: Cache Yarn dependencies
+              uses: actions/cache@v3
               with:
-                  node-version: 18.x
-                  registry-url: https://npm.pkg.github.com/
-                  scope: '@navikt'
-
-            - name: Installere moduler
-              run: yarn install --immutable
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-            - name: Installere Cypress
-              run: npx cypress install
+                  path: .yarn/cache
+                  key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+                  restore-keys: |
+                      yarn-${{ runner.os }}-
 
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
