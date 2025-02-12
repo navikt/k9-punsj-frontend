@@ -111,6 +111,11 @@ jobs:
                   restore-keys: |
                       cypress-binary-${{ runner.os }}-
 
+            - name: Build app
+              run: yarn build
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
               env:
