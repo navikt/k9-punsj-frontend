@@ -25,7 +25,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
-        cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
+        cy.findByText('Send brev til søker, arbeidsgiver eller tredjepart').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Velg mottaker').should('exist');
         cy.findByLabelText('Innhold i brev').should('exist');
@@ -45,7 +45,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
-        cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
+        cy.findByText('Send brev til søker, arbeidsgiver eller tredjepart').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Velg mottaker').should('exist');
         cy.findByLabelText('Send til tredjepart').should('exist');
@@ -75,7 +75,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
         cy.findByText('Sett på vent').should('exist');
-        cy.findByText('Send brev til arbeidsgiver eller søker').should('exist').click();
+        cy.findByText('Send brev til søker, arbeidsgiver eller tredjepart').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Innhent dokumentasjon');
         cy.findByLabelText('Velg mottaker').should('exist');
         cy.findByLabelText('Send til tredjepart').should('exist');

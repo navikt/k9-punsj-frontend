@@ -18,7 +18,7 @@ const klassifiserModalAlertFeilSetPåVent = 'Det oppstod en feil når journalpos
 const alertJournalført = 'Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.';
 
 describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIsolation: false }, () => {
-    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+    it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
@@ -173,7 +173,7 @@ describe(`Test klassifisering ${dokumenttype} feilmeldingene i modal`, { testIso
 });
 
 describe(`Test klassifisering ${dokumenttype}`, { testIsolation: false }, () => {
-    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+    it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);

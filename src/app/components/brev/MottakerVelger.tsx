@@ -1,58 +1,53 @@
-import React, { useState } from 'react';
-import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
+import React, { useState, ChangeEvent } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
-import {
-    BodyShort,
-    Checkbox,
-    Select,
-    TextField,
-    VStack,
-    Loader,
-    ErrorMessage as ErrorMesageDs,
-} from '@navikt/ds-react';
+import { useFormContext, UseFormSetError } from 'react-hook-form';
+import { BodyShort, VStack, Loader, ErrorMessage as ErrorMesageDs } from '@navikt/ds-react';
+
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
-import BrevFormKeys from 'app/models/enums/BrevFormKeys';
-import BrevFormValues from 'app/models/types/brev/BrevFormValues';
 import { Person } from 'app/models/types';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { ApiPath } from 'app/apiConfig';
 import { get } from 'app/utils/apiUtils';
-import getOrgNumberValidator from 'app/utils/getOrgNumberValidator';
-import { requiredValue } from 'app/utils/validationHelpers';
+import { BrevFormKeys, IBrevForm } from './types';
 import VerticalSpacer from '../VerticalSpacer';
+import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
+import { useValidationRulesBrev } from './useValidationRules';
 
-export interface OrgInfo {
-    organisasjonsnummer: string;
-    navn: string;
-    konkurs: boolean;
-}
-
-interface MottakerVelgerProps {
+const { TypedFormSelect, TypedFormCheckbox, TypedFormTextField } = getTypedFormComponents<IBrevForm>();
+interface Props {
     aktørId: string;
     arbeidsgivereMedNavn: Organisasjon[];
     orgInfoPending: boolean;
-    formSubmitted: boolean;
     person?: Person;
+    errorOrgInfo?: string;
 
+    setError: UseFormSetError<IBrevForm>;
     resetBrevStatus: () => void;
     setOrgInfoPending: (value: boolean) => void;
 }
 
-const MottakerVelger: React.FC<MottakerVelgerProps> = ({
+const MottakerVelger: React.FC<Props> = ({
     aktørId,
     arbeidsgivereMedNavn,
     orgInfoPending,
-    formSubmitted,
     person,
+    errorOrgInfo,
 
+    setError,
     resetBrevStatus,
     setOrgInfoPending,
 }) => {
     const intl = useIntl();
 
-    const { values, setFieldValue } = useFormikContext<BrevFormValues>();
+    const { watch, setValue, getValues, trigger, clearErrors } = useFormContext<IBrevForm>();
+
     const [orgInfo, setOrgInfo] = useState<ArbeidsgiverResponse | undefined>();
-    const [errorOrgInfo, setErrorOrgInfo] = useState<string | undefined>();
+
+    const velgAnnenMottaker = watch(BrevFormKeys.velgAnnenMottaker);
+    const mottaker = watch(BrevFormKeys.mottaker);
+
+    const { mottakerValidationRules, annenMottakerOrgNummerValidationRules } = useValidationRulesBrev();
 
     const hentOrgInfo = (orgnr: string) => {
         setOrgInfoPending(true);
@@ -61,134 +56,133 @@ const MottakerVelger: React.FC<MottakerVelgerProps> = ({
             { norskIdent: aktørId },
             { 'X-Nav-NorskIdent': aktørId },
             (response, data: ArbeidsgiverResponse) => {
-                if (response.status === 200) {
-                    if (data.navn) {
-                        setOrgInfoPending(false);
-                        setErrorOrgInfo(undefined);
-                        setOrgInfo(data);
-                    }
-                }
-                if (response.status === 404) {
+                if (response.ok && data?.navn) {
                     setOrgInfoPending(false);
-                    setErrorOrgInfo(intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr }));
+                    clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+                    setOrgInfo(data);
+                } else {
+                    setOrgInfoPending(false);
+                    setError(BrevFormKeys.annenMottakerOrgNummer, {
+                        type: 'manual',
+                        message: intl.formatMessage(
+                            { id: 'noeGikkGalt' },
+                            { error: response.statusText, status: response.status },
+                        ),
+                    });
                 }
             },
         );
     };
 
-    if (values.velgAnnenMottaker === false && orgInfoPending) {
+    const handleVelgAnnenMottakerOnChange = () => {
+        resetBrevStatus();
+        setValue(BrevFormKeys.annenMottakerOrgNummer, '', { shouldValidate: false });
         setOrgInfoPending(false);
-    }
+        setOrgInfo(undefined);
+        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+
+        const currentValue = !getValues(BrevFormKeys.velgAnnenMottaker);
+
+        if (currentValue && mottaker) {
+            setValue(BrevFormKeys.mottaker, '', { shouldValidate: false });
+        }
+    };
+
+    const handleAnnenMottakerOrgNummerOnChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        let { value } = event.target;
+        const digitsOnly = value.replace(/\D/g, '');
+
+        if (digitsOnly.length <= 9) {
+            value = digitsOnly.replace(/(\d{3})(?=\d)/g, '$1 ').trim();
+            event.target.value = value;
+        }
+
+        const cleanValue = value.replace(/\s/g, '');
+
+        clearErrors(BrevFormKeys.annenMottakerOrgNummer);
+        setOrgInfo(undefined);
+        resetBrevStatus();
+
+        if (!orgInfoPending && cleanValue.length === 9) {
+            const isValid = await trigger(BrevFormKeys.annenMottakerOrgNummer);
+
+            if (isValid) {
+                hentOrgInfo(cleanValue);
+            }
+        }
+    };
 
     return (
         <>
             <VerticalSpacer sixteenPx />
 
-            <Field
+            <TypedFormSelect
                 name={BrevFormKeys.mottaker}
-                validate={(value: string) => {
-                    if (values.velgAnnenMottaker) {
-                        return undefined;
-                    }
-                    return requiredValue(value);
+                label={<FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.label" />}
+                size="small"
+                className="w-[400px]"
+                validate={mottakerValidationRules}
+                onChange={() => {
+                    resetBrevStatus();
                 }}
+                disabled={velgAnnenMottaker}
             >
-                {({ field, meta }: FieldProps) => (
-                    <Select
-                        {...field}
-                        size="small"
-                        label={<FormattedMessage id={`mottakerVelger.select.tittel`} />}
-                        className="w-[400px] "
-                        error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                        onChange={(event) => {
-                            setFieldValue(field.name, event.target.value);
-                            resetBrevStatus();
-                        }}
-                        disabled={values.velgAnnenMottaker === true}
-                    >
-                        <option disabled key="default" value="" label="">
-                            <FormattedMessage id={`mottakerVelger.select.velg`} />
-                        </option>
+                <option disabled key="default" value="">
+                    <FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.option.velg" />
+                </option>
 
-                        {aktørId && person && (
-                            <option value={aktørId}>{`${person.sammensattNavn} - ${person.identitetsnummer}`}</option>
-                        )}
-
-                        {arbeidsgivereMedNavn.map((arbeidsgiver) => (
-                            <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
-                                {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
-                            </option>
-                        ))}
-                    </Select>
+                {aktørId && person && (
+                    <option value={aktørId}>{`${person.sammensattNavn} - ${person.identitetsnummer}`}</option>
                 )}
-            </Field>
+
+                {arbeidsgivereMedNavn.map((arbeidsgiver) => (
+                    <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
+                        {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
+                    </option>
+                ))}
+            </TypedFormSelect>
 
             <VerticalSpacer sixteenPx />
 
-            <Field name={BrevFormKeys.velgAnnenMottaker}>
-                {({ field }: FieldProps) => (
-                    <Checkbox {...field} size="small">
-                        <FormattedMessage id={`mottakerVelger.checkbox.velgAnnenMottaker`} />
-                    </Checkbox>
-                )}
-            </Field>
+            <TypedFormCheckbox
+                name={BrevFormKeys.velgAnnenMottaker}
+                size="small"
+                label={<FormattedMessage id="brevComponent.mottakerVelger.checkbox.velgAnnenMottaker.label" />}
+                onChange={handleVelgAnnenMottakerOnChange}
+            />
 
-            {values.velgAnnenMottaker && (
-                <div className="flex">
-                    <Field
-                        name={BrevFormKeys.orgNummer}
-                        validate={(value: string) => {
-                            const error = getOrgNumberValidator({ required: true })(value);
-
-                            if (errorOrgInfo) {
-                                return intl.formatMessage({ id: 'orgNumberHasInvalidFormat' }, { orgnr: value });
-                            }
-                            return error ? intl.formatMessage({ id: error }, { orgnr: value }) : undefined;
-                        }}
-                    >
-                        {({ field, meta }: FieldProps) => (
-                            <TextField
-                                label={<FormattedMessage id="mottakerVelger.annenMottaker.orgNummer" />}
-                                {...field}
-                                type="text"
-                                size="small"
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-                                maxLength={9}
-                                autoComplete="off"
-                                readOnly={orgInfoPending}
-                                onChange={(event) => {
-                                    setFieldValue(field.name, event.target.value);
-                                    setErrorOrgInfo(undefined);
-                                    setOrgInfo(undefined);
-                                    resetBrevStatus();
-                                    const { value } = event.target;
-
-                                    if (!orgInfoPending && value.length === 9) {
-                                        const error = getOrgNumberValidator({ required: true })(value);
-                                        if (error) {
-                                            setErrorOrgInfo(intl.formatMessage({ id: error }, { orgnr: value }));
-                                        } else hentOrgInfo(value);
-                                    }
-                                }}
-                                error={meta.touched && meta.error && <ErrorMessage name={field.name} />}
-                            />
-                        )}
-                    </Field>
+            {velgAnnenMottaker && (
+                <div className="flex mt-4">
+                    <TypedFormTextField
+                        name={BrevFormKeys.annenMottakerOrgNummer}
+                        label={
+                            <FormattedMessage id="brevComponent.mottakerVelger.textField.annenMottakerOrgNummer.label" />
+                        }
+                        size="small"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9\s]*"
+                        maxLength={11}
+                        validate={annenMottakerOrgNummerValidationRules}
+                        className="orgNrInput"
+                        autoComplete="off"
+                        readOnly={orgInfoPending}
+                        onChange={handleAnnenMottakerOrgNummerOnChange}
+                    />
 
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
                         <VStack gap="2" className="ml-7">
                             {(orgInfo || orgInfoPending) && (
                                 <BodyShort>
                                     <span className="navds-form-field__label navds-label navds-label--small">
-                                        <FormattedMessage id="mottakerVelger.annenMottaker.navn" />
+                                        <FormattedMessage id="brevComponent.mottakerVelger.annenMottaker.navn" />
                                     </span>
                                 </BodyShort>
                             )}
 
                             {orgInfoPending && <Loader size="small" title="venter..." />}
 
-                            {!formSubmitted && errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
+                            {errorOrgInfo && <ErrorMesageDs>{errorOrgInfo}</ErrorMesageDs>}
 
                             {orgInfo && <BodyShort>{orgInfo.navn}</BodyShort>}
                         </VStack>

@@ -10,7 +10,7 @@ const annenSøkerFnr = '02918496664';
 const fnrAnnenPart = '02021477330';
 
 describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, () => {
-    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+    it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);

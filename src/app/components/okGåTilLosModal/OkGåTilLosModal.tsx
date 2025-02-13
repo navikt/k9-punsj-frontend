@@ -9,7 +9,7 @@ import { initializeDate } from '../../utils/timeUtils';
 import './okGåTilLosModal.less';
 
 interface Props {
-    melding: string;
+    meldingId: string;
     onClose: () => void;
 }
 
@@ -22,7 +22,7 @@ const utledMelding = (mld: string) => {
     return <FormattedMessage id={mld} />;
 };
 
-const OkGåTilLosModal = ({ melding, onClose }: Props) => {
+const OkGåTilLosModal = ({ meldingId, onClose }: Props) => {
     return (
         <Modal
             key="settpaaventokmodal"
@@ -38,7 +38,7 @@ const OkGåTilLosModal = ({ melding, onClose }: Props) => {
                     <div className="vl" />
 
                     <div className="info" data-test-id="okGåTilLosModalInfo">
-                        <div className="flex flex-wrap">{utledMelding(melding)}</div>
+                        <div className="flex flex-wrap">{utledMelding(meldingId)}</div>
 
                         <div className="flex flex-wrap">
                             <FormattedMessage id="modal.okgaatillos.tillos" />

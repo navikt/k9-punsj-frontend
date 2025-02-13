@@ -23,7 +23,7 @@ const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til j
 const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
 
 describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
-    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+    it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
@@ -89,7 +89,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal med fagsak uten pleietrengende - sett på vent', () => {
+    it('Åpne klassifiser modal med fagsak uten pleietrengende - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -145,7 +145,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal med fagsak og pleietrengende fortsett', () => {
+    it('Åpne klassifiser modal med fagsak og pleietrengende fortsett', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -177,7 +177,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Åpen klassifiser modal med fagsak og pleietrengende - sett på vent', () => {
+    it('Åpne klassifiser modal med fagsak og pleietrengende - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -232,7 +232,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal med reservert fagsak og pleietrengende fortsett', () => {
+    it('Åpne klassifiser modal med reservert fagsak og pleietrengende fortsett', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -264,7 +264,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Åpen klassifiser modal med reservert fagsak og pleietrengende - sett på vent', () => {
+    it('Åpne klassifiser modal med reservert fagsak og pleietrengende - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -317,7 +317,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('PSB Åpen klassifiser modal med reservert fagsak uten pleietrengende - sett på vent', () => {
+    it('PSB Åpne klassifiser modal med reservert fagsak uten pleietrengende - sett på vent', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -381,7 +381,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal fortsett med reserver fagsak og pleietrengende', () => {
+    it('Åpne klassifiser modal fortsett med reserver fagsak og pleietrengende', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -412,7 +412,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Åpen klassifiser modal sett på vent med reserver fagsak og pleietrengende', () => {
+    it('Åpne klassifiser modal sett på vent med reserver fagsak og pleietrengende', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -457,7 +457,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal sett på vent med reserver fagsak og Pleietrengende har ikke fødselsnummer ', () => {
+    it('Åpne klassifiser modal sett på vent med reserver fagsak og Pleietrengende har ikke fødselsnummer ', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -520,7 +520,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
-    it('Åpen klassifiser modal fortsett med ny søker fagsak med pleietrengende', () => {
+    it('Åpne klassifiser modal fortsett med ny søker fagsak med pleietrengende', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -552,7 +552,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Åpen klassifiser modal sett på vent med ny søker og fagsak med pleietrengende', () => {
+    it('Åpne klassifiser modal sett på vent med ny søker og fagsak med pleietrengende', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -635,7 +635,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
     });
 
-    it('Åpen klassifiser modal fortsett med med 2 søkere, reserver fagsak og pleietrengende', () => {
+    it('Åpne klassifiser modal fortsett med med 2 søkere, reserver fagsak og pleietrengende', () => {
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -666,7 +666,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Åpen klassifiser modal sett på vent med 2 søkere, reserver fagsak og pleietrengende', () => {
+    it('Åpne klassifiser modal sett på vent med 2 søkere, reserver fagsak og pleietrengende', () => {
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);

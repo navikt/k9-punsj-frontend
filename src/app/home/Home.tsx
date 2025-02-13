@@ -89,7 +89,7 @@ export const Home: React.FC = () => {
     }, [journalpost]);
 
     if (lukkOppgaveDone) {
-        return <OkGåTilLosModal melding="fordeling.lukkoppgave.utfort" onClose={lukkOppgaveReset} />;
+        return <OkGåTilLosModal meldingId="fordeling.lukkoppgave.utfort" onClose={lukkOppgaveReset} />;
     }
 
     return (

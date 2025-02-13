@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { Button, Modal } from '@navikt/ds-react';
-import FeilCircleSvg from '../../assets/SVG/FeilCircleSVG';
+import { Alert, Button, Modal } from '@navikt/ds-react';
 
 import './settPåVentModal.less';
 
@@ -11,20 +10,18 @@ export interface Props {
 }
 
 const SettPåVentErrorModal: React.FC<Props> = ({ onClose }: Props) => (
-    <Modal key="settpaaventerrormodal" onClose={onClose} aria-label="settpaaventokmodal" open>
+    <Modal key="settpaaventerrormodal" onClose={onClose} aria-label="settpaaventerrormodal" open>
         <Modal.Body>
-            <div className="sett-paa-vent-ok">
-                <FeilCircleSvg title="check" />
-
-                <div className="infoFeil">
-                    <FormattedMessage id={'modal.settpaavent.feil'} />
-                </div>
-
-                <Button variant="secondary" size="small" onClick={onClose}>
-                    <FormattedMessage id={'modal.settpaavent.ok'} />
-                </Button>
-            </div>
+            <Alert variant="error" fullWidth inline>
+                <FormattedMessage id="modal.settpaavent.feil" />
+            </Alert>
         </Modal.Body>
+
+        <Modal.Footer>
+            <Button size="small" onClick={onClose} type="button">
+                <FormattedMessage id="modal.settpaavent.ok" />
+            </Button>
+        </Modal.Footer>
     </Modal>
 );
 

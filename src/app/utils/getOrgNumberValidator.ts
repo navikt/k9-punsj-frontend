@@ -3,9 +3,6 @@ export enum ValidateOrgNumberError {
     orgNumberHasInvalidFormat = 'orgNumberHasInvalidFormat',
 }
 
-interface Options {
-    required?: boolean;
-}
 export const hasValue = (value: any): boolean => value !== '' && value !== undefined && value !== null;
 
 const getMod11 = (strValue: string): number => {
@@ -23,7 +20,7 @@ const getMod11 = (strValue: string): number => {
     return result === 11 ? 0 : result;
 };
 
-const isValidOrgNumber = (value: any): boolean => {
+export const isNotValidOrgNumber = (value: any): boolean => {
     if (
         value &&
         typeof value === 'string' &&
@@ -37,19 +34,4 @@ const isValidOrgNumber = (value: any): boolean => {
     return false;
 };
 
-const getOrgNumberValidator =
-    (options: Options = {}) =>
-    (value: any) => {
-        const { required } = options;
-        if (required && hasValue(value) === false) {
-            return ValidateOrgNumberError.orgNumberHasNoValue;
-        }
-        const isValidFormat = isValidOrgNumber(value);
-
-        if (hasValue(value) && isValidFormat === false) {
-            return ValidateOrgNumberError.orgNumberHasInvalidFormat;
-        }
-        return undefined;
-    };
-
-export default getOrgNumberValidator;
+export default isNotValidOrgNumber;

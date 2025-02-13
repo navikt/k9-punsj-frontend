@@ -262,7 +262,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
 
                     {visErDuSikkerModal && (
                         <ErDuSikkerModal
-                            modalKey="Er du sikker?"
+                            modalKey="modalerdusikkersendinn"
                             melding="modal.erdusikker.sendinn"
                             extraInfo="modal.erdusikker.sendinn.extrainfo"
                             open

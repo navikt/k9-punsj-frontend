@@ -1190,7 +1190,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 {punchFormState.settPaaVentSuccess && (
                     <OkGåTilLosModal
-                        melding="modal.settpaavent.til"
+                        meldingId="modal.settpaavent.til"
                         onClose={() => this.props.settPaaventResetAction()}
                     />
                 )}

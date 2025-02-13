@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import BrevComponent from 'app/components/brev/BrevComponent';
-import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
-import { Alert, Button, Checkbox, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
+import { Alert, Button, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
+
+import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
+import { RootStateType } from 'app/state/RootState';
+import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import BrevContainer from 'app/components/brev/BrevContainer';
 
 interface Props {
     open: boolean;
@@ -15,7 +17,6 @@ interface Props {
 }
 
 const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
-    const [visBrev, setVisBrev] = useState(false);
     const [sattPåVent, setSattPåVent] = useState(false);
     const [visLukkOppgave, setVisLukkOppgave] = useState(false);
     const [jpLukket, setJpLukket] = useState(false);
@@ -53,14 +54,14 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
             <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
                 <Modal.Header closeButton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.tittel" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.tittel" />
                     </Heading>
                 </Modal.Header>
 
                 <Modal.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
-                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukket.info" />
+                            <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukket.info" />
                         </Alert>
                     </div>
                 </Modal.Body>
@@ -74,7 +75,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                         size="small"
                         data-test-id="brevModalGåTilLos"
                     >
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukket.gåTilLosBtn" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukket.gåTilLosBtn" />
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -86,18 +87,18 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
             <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
                 <Modal.Header closeButton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.tittel" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.tittel" />
                     </Heading>
                 </Modal.Header>
 
                 <Modal.Body>
                     <div className="min-w-[500px] max-w-[500px]">
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.info" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.info" />
 
                         {lukkJournalpost.isError && (
                             <div className="mt-4">
                                 <ErrorMessage>
-                                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.error" />
+                                    <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.error" />
                                 </ErrorMessage>
                             </div>
                         )}
@@ -111,7 +112,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                         size="small"
                         data-test-id="brevModalSettPåvent"
                     >
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.bekreft.btn" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.bekreft.btn" />
                     </Button>
 
                     <Button
@@ -133,7 +134,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
             <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
                 <Modal.Header closeButton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.tittel" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.sattPåVent.tittel" />
                     </Heading>
                 </Modal.Header>
 
@@ -141,7 +142,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
                             <FormattedMessage
-                                id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.info"
+                                id="fordeling.journalført.åpneVentLukkBrevModal.sattPåVent.info"
                                 values={{ datoString: get3WeeksDate() }}
                             />
                         </Alert>
@@ -157,7 +158,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                         size="small"
                         data-test-id="brevModalGåTilLos"
                     >
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sattPåVent.gåTilLosBtn" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.sattPåVent.gåTilLosBtn" />
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -168,43 +169,31 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
         <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
             <Modal.Header closeButton={true}>
                 <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
-                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.tittel" />
+                    <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.tittel" />
                 </Heading>
             </Modal.Header>
 
             <Modal.Body>
                 <div className="min-w-[500px] max-w-[500px]">
                     <Alert variant="info" size="small" data-test-id="brevModalInfo">
-                        <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.alert" />
+                        <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.alert" />
                     </Alert>
 
-                    <div className="mb-4 mt-4">
-                        <Checkbox
-                            onChange={() => {
-                                setVisBrev(!visBrev);
-                            }}
-                            checked={visBrev}
-                        >
-                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.sendBrev.checkbox" />
-                        </Checkbox>
-                    </div>
-
-                    {visBrev && (
+                    <BrevContainer>
                         <BrevComponent
                             søkerId={søkerId}
                             sakstype={sakstype}
                             fagsakId={fagsakId}
                             journalpostId={journalpostId}
-                            brevSendtCallback={() => null}
                             sendBrevUtenModal={true}
                             brevFraModal={true}
                         />
-                    )}
+                    </BrevContainer>
 
                     {settPåVent.isError && (
                         <div className="mt-4">
                             <ErrorMessage>
-                                <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.settPåVentError" />
+                                <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.settPåVentError" />
                             </ErrorMessage>
                         </div>
                     )}
@@ -218,7 +207,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     size="small"
                     data-test-id="brevModalSettPåvent"
                 >
-                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.settPåVent.btn" />
+                    <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.settPåVent.btn" />
                 </Button>
 
                 <Button
@@ -228,7 +217,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     variant="secondary"
                     data-test-id="brevModalLukkOppgave"
                 >
-                    <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.lukk.btn" />
+                    <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.btn" />
                 </Button>
             </Modal.Footer>
         </Modal>

@@ -9,7 +9,7 @@ const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
 
 describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
-    it(`Åpen journalpost ${journalpostId} fra LOS`, () => {
+    it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
