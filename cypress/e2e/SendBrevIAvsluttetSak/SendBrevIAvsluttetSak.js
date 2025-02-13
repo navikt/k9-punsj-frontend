@@ -11,8 +11,8 @@ const TEST_DATA = {
 };
 
 describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
-    describe('Navigation', () => {
-        it('should navigate from homepage to brev component', () => {
+    describe('Navigering', () => {
+        it('skal navigere fra hovedsiden til brevkomponent', () => {
             cy.visit('/');
             cy.findByTestId('brev-avsluttet-sak-inngang').click();
             cy.url().should('contains', '/brev-avsluttet-sak');
@@ -20,8 +20,8 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
         });
     });
 
-    describe('Test brev', () => {
-        it('should validate fødselsnummer format and length', () => {
+    describe('Test av brev', () => {
+        it('skal validere fødselsnummer format og lengde', () => {
             const fnrInput = cy.findByLabelText('Søkers fødselsnummer');
 
             fnrInput.type('1');
@@ -42,7 +42,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             fnrInput.clear().type(TEST_DATA.fnr);
         });
 
-        it('should choose fagsak and show brev component', () => {
+        it('skal velge fagsak og vise brevkomponent', () => {
             cy.findByLabelText('Velg fagsak').select(1);
             cy.findByLabelText('Velg mal').should('exist');
             cy.findByLabelText('Velg mottaker').should('exist');
@@ -52,19 +52,19 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
                 .click();
         });
 
-        it('should validate mal select', () => {
+        it('skal validere malvalg', () => {
             cy.findByText('Du må velge mal.').should('exist');
             cy.findByLabelText('Velg mal').select(1);
             cy.findByText('Du må velge mal.').should('not.exist');
         });
 
-        it('should validate velg mottaker select', () => {
+        it('skal validere mottakervalg', () => {
             cy.findByText('Du må velge mottaker.').should('exist');
             cy.findByLabelText('Velg mottaker').select(1);
             cy.findByText('Du må velge mottaker.').should('not.exist');
         });
 
-        it('should validate send til tredjepart', () => {
+        it('skal validere sending til tredjepart', () => {
             cy.findByLabelText('Send til tredjepart').click();
             cy.findByLabelText('Organisasjonsnummer').should('exist').type(1);
             cy.findByText('Organisasjonsnummeret er ugyldig.').should('exist');
@@ -74,24 +74,24 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             cy.findByText('Du må skrive inn organisasjonsnummer.').should('exist');
         });
 
-        it('should get organisajon navn', () => {
+        it('skal hente organisasjonsnavn', () => {
             cy.findByLabelText('Organisasjonsnummer').type('889640782');
             cy.findByText('Test Navn').should('exist');
         });
 
-        it('should not show tittel if mal not support and show innhold', () => {
+        it('skal ikke vise tittel hvis malen ikke støtter det og vise innhold', () => {
             cy.findByLabelText('Velg mal').select(1);
             cy.findByText('Tittel').should('not.exist');
             cy.findByText('Innhold i brev').should('exist');
         });
 
-        it('should not show tittel if mal support and show innhold', () => {
+        it('skal vise tittel hvis malen støtter det og vise innhold', () => {
             cy.findByLabelText('Velg mal').select(2);
             cy.findByText('Tittel').should('exist');
             cy.findByText('Innhold i brev').should('exist');
         });
 
-        it('should validate tittel input', () => {
+        it('skal validere tittelfeltet', () => {
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Du må skrive inn tittel.').should('exist');
             cy.findByLabelText('Tittel').type('E');
@@ -102,7 +102,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             cy.findByText(/Feltet inneholder ugyldige tegn:/i).should('not.exist');
         });
 
-        it('should validate innhold input', () => {
+        it('skal validere innholdfeltet', () => {
             cy.findByLabelText('Innhold i brev').type('E');
             cy.findByText('Innhold må være minst 3 tegn.').should('exist');
             cy.findByLabelText('Innhold i brev').type(TEST_DATA.illegalChars);
@@ -111,7 +111,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             cy.findByText(/Feltet inneholder ugyldige tegn:/i).should('not.exist');
         });
 
-        it('should forhåndsvis brev', () => {
+        it('skal forhåndsvise brevet', () => {
             cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
             cy.findByText('Not Found').should('exist');
 
@@ -152,7 +152,7 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
             cy.findByText('Not Found').should('not.exist');
         });
 
-        it('should send brev', () => {
+        it('skal sende brevet', () => {
             cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
                 req.reply({
                     statusCode: 500,

@@ -7,7 +7,7 @@ const validTitle = 'Eksempel på tittel';
 const validNote = 'Eksempel på notat';
 
 describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () => {
-    it('should navigate from homepage', () => {
+    it('skal navigere fra hovedsiden', () => {
         cy.visit('/journalpost/300');
         cy.findByText(/Skjul/i).click();
         cy.findByText(/Ja/i).click();
@@ -20,7 +20,7 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.get('[data-test-id="bekreftKnapp"]').click();
     });
 
-    it('should show brev component', () => {
+    it('skal vise brevkomponent', () => {
         cy.findByText('Send brev og lukk oppgave i LOS').should('exist');
         cy.findByLabelText('Velg mal').should('exist');
         cy.findByLabelText('Velg mottaker').should('exist');
@@ -28,14 +28,14 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByRole('button', { name: /Send brev/i }).should('exist');
     });
 
-    it('should validate tittel input', () => {
+    it('skal validere tittelfeltet', () => {
         cy.findByLabelText('Velg mottaker').select(1);
         cy.findByLabelText('Velg mal').select(2);
         cy.findByLabelText('Tittel').type(validTitle);
         cy.findByLabelText('Innhold i brev').type(validNote);
     });
 
-    it('should send brev', () => {
+    it('skal sende brev', () => {
         cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
             expect(req.body).to.have.property('soekerId').to.equal(journalpost.norskIdent);
             expect(req.body).to.have.property('mottaker');
@@ -69,7 +69,7 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.').should('exist');
     });
 
-    it('should show error message if sendes same brev', () => {
+    it('skal vise feilmelding hvis samme brev sendes', () => {
         cy.findByRole('button', { name: /Send brev/i }).as('sendBrevButton');
         cy.get('@sendBrevButton').click();
         cy.findByRole('button', { name: /Fortsett/i }).as('fortsettButton');
@@ -77,7 +77,7 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByText('Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.').should('exist');
     });
 
-    it('should show error ved lukk oppgave', () => {
+    it('skal vise feil ved lukking av oppgave', () => {
         cy.intercept(
             'POST',
             ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', journalpost.journalpostId),
@@ -100,7 +100,7 @@ describe('Send brev på fagsak og lukk oppgave', { testIsolation: false }, () =>
         cy.findByText('Noe gikk galt ved lukking av oppgave').should('exist');
     });
 
-    it('should lukk oppgave i LOS', () => {
+    it('skal lukke oppgave i LOS', () => {
         cy.intercept(
             'POST',
             ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', journalpost.journalpostId),

@@ -14,16 +14,16 @@ const TEST_DATA = {
 };
 
 describe('Opprett journalpost', { testIsolation: false }, () => {
-    describe('Navigation', () => {
-        it('should navigate from homepage to opprett journalpost', () => {
+    describe('Navigering', () => {
+        it('skal navigere fra hovedsiden til opprett journalpost', () => {
             cy.visit('/');
             cy.findByTestId('opprett-journalpost-inngang').click();
             cy.url().should('contains', '/opprett-journalpost');
         });
     });
 
-    describe('Form Validation', () => {
-        it('should show validation errors for empty required fields', () => {
+    describe('Skjemavalidering', () => {
+        it('skal vise valideringsfeil for tomme påkrevde felt', () => {
             cy.findByRole('button', { name: /Opprett journalpost/i }).click();
 
             cy.findByText('Du må skrive inn søkers fødselsnummer.').should('exist');
@@ -32,7 +32,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             cy.findByText('Du må skrive inn notat.').should('exist');
         });
 
-        it('should validate fødselsnummer format and length', () => {
+        it('skal validere fødselsnummer format og lengde', () => {
             const fnrInput = cy.findByLabelText('Søkers fødselsnummer');
 
             fnrInput.type('1');
@@ -45,7 +45,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             cy.findByText('Søkers fødselsnummer er ugyldig.').should('not.exist');
         });
 
-        it('should validate title field', () => {
+        it('skal validere tittelfeltet', () => {
             const titleInput = cy.findByLabelText('Tittel');
 
             titleInput.type('E');
@@ -58,7 +58,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             cy.findByText('Tittel må være minst 3 tegn.').should('not.exist');
         });
 
-        it('should validate note field', () => {
+        it('skal validere notatfeltet', () => {
             const noteInput = cy.findByLabelText('Notat');
 
             noteInput.type('E');
@@ -72,20 +72,20 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
         });
     });
 
-    describe('Fagsak Handling', () => {
-        it('should handle empty fagsaker', () => {
+    describe('Fagsakhåndtering', () => {
+        it('skal håndtere tomme fagsaker', () => {
             cy.findByLabelText('Søkers fødselsnummer').type(TEST_DATA.fnrTomtFagsaker);
             cy.findByText(
                 'Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.',
             ).should('exist');
         });
 
-        it('should handle fagsak fetch error', () => {
+        it('skal håndtere feil ved henting av fagsak', () => {
             cy.findByLabelText('Søkers fødselsnummer').clear().type(TEST_DATA.fnrWithError);
             cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.').should('exist');
         });
 
-        it('should handle successful fagsak retry', () => {
+        it('skal håndtere vellykket ny henting av fagsak', () => {
             cy.window().then((window) => {
                 const { worker } = window.msw;
                 worker.use(http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json(fagsaker, { status: 200 })));
@@ -96,8 +96,8 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
         });
     });
 
-    describe('Journalpost Creation', () => {
-        it('should handle failed journalpost creation', () => {
+    describe('Journalpostopprettelse', () => {
+        it('skal håndtere mislykket journalpostopprettelse', () => {
             cy.findByLabelText('Søkers fødselsnummer').type(TEST_DATA.fnr);
             cy.findByLabelText('Velg fagsak').select(1);
             cy.findByLabelText('Tittel').type(TEST_DATA.validTitle);
@@ -112,7 +112,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             cy.findByText('Kunne ikke opprette journalpost').should('exist');
         });
 
-        it('should handle successful journalpost creation and navigation', () => {
+        it('skal håndtere vellykket journalpostopprettelse og navigering', () => {
             cy.window().then((window) => {
                 const { worker } = window.msw;
                 worker.use(
