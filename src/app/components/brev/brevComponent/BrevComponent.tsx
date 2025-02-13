@@ -209,6 +209,7 @@ const BrevComponent: React.FC<Props> = ({
                     size="small"
                     className="w-[400px]"
                     onChange={() => {
+                        setPreviewMessageFeil(undefined);
                         setBrevErSendt(false);
                         setSendBrevFeilet(false);
                     }}
