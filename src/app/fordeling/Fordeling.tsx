@@ -132,7 +132,7 @@ const Fordeling: React.FC = () => {
     const [barnMedFagsak, setBarnMedFagsak] = useState<FagsakForSelect | undefined>(undefined);
     const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
-    const [åpenBrevModal, setÅpenBrevModal] = useState(false);
+    const [åpneBrevModal, setÅpenBrevModal] = useState(false);
 
     const harFagsaker = fagsaker?.length > 0;
 
@@ -907,9 +907,9 @@ const Fordeling: React.FC = () => {
                                             size="small"
                                             variant="secondary"
                                             onClick={() => setÅpenBrevModal(true)}
-                                            data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"
+                                            data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"
                                         >
-                                            <FormattedMessage id="fordeling.journalført.åpenVentLukkBrevModal.btn" />
+                                            <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.btn" />
                                         </Button>
                                     )}
                                 </div>
@@ -928,7 +928,7 @@ const Fordeling: React.FC = () => {
                         )}
 
                         {!!journalpost.sak?.fagsakId && !!dokumenttype && (
-                            <VentLukkBrevModal open={åpenBrevModal} onClose={() => setÅpenBrevModal(false)} />
+                            <VentLukkBrevModal open={åpneBrevModal} onClose={() => setÅpenBrevModal(false)} />
                         )}
 
                         <VerticalSpacer sixteenPx />

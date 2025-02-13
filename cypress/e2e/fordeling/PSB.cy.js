@@ -994,7 +994,7 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
 
     it('Test at det ikke er mulig å gå videre uten pleietrengende', () => {
         cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('exist').should('be.disabled');
-        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]')
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"]')
             .should('exist')
             .should('not.be.disabled');
     });
@@ -1004,7 +1004,7 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
             .select(getBarnInfoForSelect(barn1FraApi))
             .should('have.value', barn1FraApi.identitetsnummer);
         cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('exist').should('not.be.disabled');
-        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]')
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"]')
             .should('exist')
             .should('not.be.disabled');
     });
@@ -1014,7 +1014,7 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
             .select(getBarnInfoForSelect(barn3FraApi))
             .should('have.value', barn3FraApi.identitetsnummer);
         cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('not.exist');
-        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpenVentLukkBrevModalBtn"]').should('not.exist');
+        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"]').should('not.exist');
     });
 
     it('Test at det vises alert ved valg av pleietrengende som er i eksisterende fagsak', () => {

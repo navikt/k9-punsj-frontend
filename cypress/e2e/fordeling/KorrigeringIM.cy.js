@@ -423,7 +423,7 @@ describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: fals
 });
 
 describe(`Fordeling ${dokumenttype} 2 søkere i journalpost`, { testIsolation: false }, () => {
-    it('Open journalpost', () => {
+    it('Åpne journalpost', () => {
         cy.visit(`/journalpost/${journalpostId}`);
         Cypress.config('viewportWidth', 1280);
         Cypress.config('viewportHeight', 1450);
