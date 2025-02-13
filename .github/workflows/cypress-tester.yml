@@ -18,6 +18,7 @@ jobs:
         steps:
             - name: Hente kode
               uses: actions/checkout@v4
+
             - name: Setup .yarnrc.yml
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
@@ -25,6 +26,7 @@ jobs:
                   yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
             - name: Sette opp Node
               uses: actions/setup-node@v4
               with:
@@ -36,6 +38,10 @@ jobs:
               run: yarn install --immutable
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+            - name: Installere Cypress
+              run: npx cypress install
+
             - name: Start E2E-server
               uses: cypress-io/github-action@v6
               env:
@@ -45,7 +51,9 @@ jobs:
                   wait-on: 'http://localhost:8080'
                   wait-on-timeout: 60
                   runTests: false
-            - run: node split.mjs | xargs yarn cypress run --spec
+
+            - name: Kjør Cypress tester
+              run: node split.mjs | xargs yarn cypress run --spec
               env:
-                CI_TOTAL: ${{ matrix.ci_total }}
-                CI_INDEX: ${{ matrix.ci_index }}
+                  CI_TOTAL: ${{ matrix.ci_total }}
+                  CI_INDEX: ${{ matrix.ci_index }}
