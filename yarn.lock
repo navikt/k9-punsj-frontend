@@ -3943,13 +3943,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-webpack5-compiler-swc@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@storybook/addon-webpack5-compiler-swc@npm:2.0.0"
+"@storybook/addon-webpack5-compiler-swc@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@storybook/addon-webpack5-compiler-swc@npm:2.1.0"
   dependencies:
-    "@swc/core": "npm:^1.7.3"
-    swc-loader: "npm:^0.2.3"
-  checksum: 10/c5f6d6af3010e8cc6b8cfefa7e0ba3ee982021fcdcb4c1673f9a462fe53333c78248917cca9438b7620da064f16884c59a1ab185ca7ca0af507a25c20a7ffc8a
+    "@swc/core": "npm:^1.10.8"
+    swc-loader: "npm:^0.2.6"
+  checksum: 10/d91c17ebebdf67ee318f906d0601f3a85ca1500e212fa5a525efff815bd421030bd45167d5e98081dba9ddf224ea37c7ef79003228c3b3547219c0894f5a38de
   languageName: node
   linkType: hard
 
@@ -4326,7 +4326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.7.3":
+"@swc/core@npm:^1.10.8":
   version: 1.10.16
   resolution: "@swc/core@npm:1.10.16"
   dependencies:
@@ -12598,7 +12598,7 @@ __metadata:
     "@sentry/react": "npm:9.0.1"
     "@storybook/addon-essentials": "npm:^8.5.5"
     "@storybook/addon-interactions": "npm:^8.5.5"
-    "@storybook/addon-webpack5-compiler-swc": "npm:^2.0.0"
+    "@storybook/addon-webpack5-compiler-swc": "npm:^2.1.0"
     "@storybook/preview-api": "npm:^8.5.5"
     "@storybook/react": "npm:^8.5.5"
     "@storybook/react-webpack5": "npm:^8.5.5"
@@ -17588,7 +17588,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swc-loader@npm:^0.2.3":
+"swc-loader@npm:^0.2.6":
   version: 0.2.6
   resolution: "swc-loader@npm:0.2.6"
   dependencies:
