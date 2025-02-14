@@ -5,7 +5,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -14,6 +13,7 @@ import { finnArbeidsgivere } from '../../../api/api';
 import { Arbeidstaker, IPeriode } from '../../../models/types';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import ArbeidstakerComponent from './ArbeidstakerComponent';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 type ItemInfo = any;
 
@@ -142,11 +142,8 @@ const Arbeidstakerperioder = ({
                                         type="button"
                                         onClick={() => removeItemHandler(currentItemIndex)}
                                         tabIndex={0}
+                                        icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                     >
-                                        <div className="slettIcon">
-                                            <BinSvg title="fjern" />
-                                        </div>
-
                                         <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
                                     </Button>
                                 </div>

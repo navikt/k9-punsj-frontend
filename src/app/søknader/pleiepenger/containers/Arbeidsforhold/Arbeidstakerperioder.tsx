@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
 
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import BinSvg from 'app/assets/SVG/BinSVG';
+import { TrashIcon } from '@navikt/aksel-icons';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
@@ -155,7 +155,7 @@ const Arbeidstakerperioder = ({
                                         tabIndex={0}
                                     >
                                         <div className="slettIcon">
-                                            <BinSvg title="fjern" />
+                                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
                                         </div>
 
                                         <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />

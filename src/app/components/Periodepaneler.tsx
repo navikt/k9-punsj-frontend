@@ -7,8 +7,8 @@ import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import AddCircleSvg from '../assets/SVG/AddCircleSVG';
-import BinSvg from '../assets/SVG/BinSVG';
 import { IPeriode } from '../models/types/Periode';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
     periods: IPeriode[]; // Liste over periodisert informasjon
@@ -106,7 +106,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                         onRemove();
                                     }
                                 }}
-                                icon={<BinSvg title="fjern" />}
+                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                 size="small"
                             >
                                 <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />

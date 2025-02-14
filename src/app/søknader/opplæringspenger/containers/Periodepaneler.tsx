@@ -7,8 +7,8 @@ import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../../assets/SVG/BinSVG';
 import { IPeriode } from '../../../models/types/Periode';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -67,7 +67,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             }}
                                         >
                                             <div className="slettIcon">
-                                                <BinSvg title="fjern" />
+                                                <TrashIcon fontSize="2rem" color="#C30000" />
                                             </div>
 
                                             <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />

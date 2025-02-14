@@ -17,10 +17,10 @@ import {
     IPeriodeinfoExtension,
     Periodeinfo,
 } from 'app/models/types';
-
-import BinSvg from '../../assets/SVG/BinSVG';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
+import { TrashIcon } from '@navikt/aksel-icons';
+
 import './periodeinfoPaneler.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
@@ -144,8 +144,9 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
                         tabIndex={0}
                     >
                         <div className="slettIkon">
-                            <BinSvg title="fjern" />
+                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
                         </div>
+
                         {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
                     </button>
                 </div>

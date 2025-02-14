@@ -14,6 +14,8 @@ import { getTypedFormComponents } from 'app/components/form/getTypedFormComponen
 import { useValidationRules } from './useValidationRules';
 
 import './opprettJournalpost.less';
+import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
+import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
     getTypedFormComponents<IOpprettJournalpostForm>();
@@ -275,6 +277,14 @@ const OpprettJournalpost: React.FC = () => {
                         </Button>
                     </div>
                 )}
+            </div>
+
+            <div className="mt-6">
+                <AddCircleSvg title="test" />
+            </div>
+
+            <div className="mt-6">
+                <CalendarSvg title="test" />
             </div>
         </div>
     );

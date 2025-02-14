@@ -4,7 +4,7 @@ import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'f
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
 import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import BinSvg from 'app/assets/SVG/BinSVG';
+import { TrashIcon } from '@navikt/aksel-icons';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
@@ -106,7 +106,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                 }}
                                                             >
                                                                 <div className="slettIcon">
-                                                                    <BinSvg title="fjern" />
+                                                                    <TrashIcon fontSize="2rem" color="#C30000" />
                                                                 </div>
 
                                                                 <FormattedMessage id="skjema.liste.fjern_dag" />
