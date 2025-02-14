@@ -70,14 +70,7 @@ const ApplicationWrapper: React.FC<Props> = ({ locale, children }) => {
                     </InternalHeader>
                 </div>
                 <AppContainer>
-                    <Router
-                        future={{
-                            v7_relativeSplatPath: true,
-                            v7_startTransition: true,
-                        }}
-                    >
-                        {children}
-                    </Router>
+                    <Router>{children}</Router>
                 </AppContainer>
             </div>
         </IntlProvider>

@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
 
-import { Checkbox, ToggleGroup } from '@navikt/ds-react';
+import { Field, FieldProps, useField, useFormikContext } from 'formik';
+import { useIntl } from 'react-intl';
+import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
+import { Delete } from '@navikt/ds-icons';
 
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
-
-import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
@@ -55,7 +53,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                             errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
                         />
-                        <Slett onClick={remove} />
+                        <Button icon={<Delete />} size="small" variant="tertiary" className="slett" onClick={remove} />
                     </div>
                     {soknadsperioder.length === 1 && (
                         <Checkbox
