@@ -61,7 +61,6 @@ import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
-import SettPåVentErrorModal from '../../../components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
 import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import PSBKvitteringContainer from './SoknadKvittering/SoknadKvitteringContainer';
@@ -69,6 +68,7 @@ import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
 import { pfLand } from '../components/pfLand';
 import { pfTilleggsinformasjon } from '../components/pfTilleggsinformasjon';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -1353,7 +1353,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         )}
                         soknadId={soknad.soeknadId}
                         submit={() => this.handleSettPaaVent()}
-                        avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                        onClose={() => this.setState({ showSettPaaVentModal: false })}
                     />
                 )}
 
@@ -1364,9 +1364,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     />
                 )}
 
-                {punchFormState.settPaaVentError && (
-                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
-                )}
+                {punchFormState.settPaaVentError && <ErrorModal onClose={() => this.props.settPaaventResetAction()} />}
 
                 {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&

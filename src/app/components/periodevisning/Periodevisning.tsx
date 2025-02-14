@@ -1,14 +1,14 @@
 import React from 'react';
 
-import CalendarSvg from 'app/assets/SVG/CalendarSVG';
-import { Periode } from 'app/models/types';
+import { CalendarIcon } from '@navikt/aksel-icons';
 
+import { Periode } from 'app/models/types';
 import { generateDateString } from '../skjema/skjemaUtils';
 
 export default function Periodevisning({ periode }: { periode: Periode }) {
     return (
         <div key={`${periode.fom}_${periode.tom}`} style={{ display: 'flex' }}>
-            <CalendarSvg title="calendar" />
+            <CalendarIcon title="a11y-title" fontSize="2rem" />
             <div
                 style={{
                     marginLeft: '0.5rem',

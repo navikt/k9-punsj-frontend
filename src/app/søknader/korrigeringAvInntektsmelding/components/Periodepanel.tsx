@@ -3,12 +3,11 @@ import React, { useRef } from 'react';
 import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box } from '@navikt/ds-react';
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import BinSvg from 'app/assets/SVG/BinSVG';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
-
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -78,7 +77,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({
                                             }}
                                         >
                                             <div className="slettIcon">
-                                                <BinSvg title="fjern" />
+                                                <TrashIcon fontSize="2rem" color="#C30000" />
                                             </div>
 
                                             <FormattedMessage id={textFjern || 'skjema.liste.fjern_periode'} />
@@ -98,7 +97,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({
                                 }}
                             >
                                 <div className="leggtilperiodeIcon">
-                                    <AddCircleSvg title="leggtil" />
+                                    <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
                                 </div>
 
                                 <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til_dag_periode'} />

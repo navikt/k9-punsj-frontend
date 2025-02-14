@@ -1,16 +1,16 @@
-import dayjs from 'dayjs';
-import { uniq } from 'lodash';
 import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 
+import dayjs from 'dayjs';
+import { uniq } from 'lodash';
 import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
+import { Delete } from '@navikt/ds-icons';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
-
 import DateRange from '../../models/types/DateRange';
-import Slett from '../buttons/Slett';
 import CalendarGrid from './CalendarGrid';
+
 import './tidsbrukKalender.less';
 
 interface OwnProps {
@@ -198,14 +198,18 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                                     Registrer tid
                                 </Button>
                                 {kanSletteTid && (
-                                    <Slett
+                                    <Button
+                                        icon={<Delete />}
+                                        size="small"
+                                        variant="tertiary"
+                                        className="slett"
                                         onClick={() => {
                                             slettPeriode(selectedDates);
                                             clearSelectedDates();
                                         }}
                                     >
                                         Slett registrert tid
-                                    </Slett>
+                                    </Button>
                                 )}
                             </div>
                             <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>

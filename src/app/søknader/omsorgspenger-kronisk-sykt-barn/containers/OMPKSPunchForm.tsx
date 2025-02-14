@@ -19,7 +19,6 @@ import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
@@ -44,6 +43,7 @@ import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
@@ -494,7 +494,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                         )}
                         soknadId={soknad.soeknadId}
                         submit={() => this.handleSettPaaVent()}
-                        avbryt={() => this.handleShowSettPaaVentModal(false)}
+                        onClose={() => this.handleShowSettPaaVentModal(false)}
                     />
                 )}
 
@@ -505,9 +505,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     />
                 )}
 
-                {punchFormState.settPaaVentError && (
-                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
-                )}
+                {punchFormState.settPaaVentError && <ErrorModal onClose={() => this.props.settPaaventResetAction()} />}
 
                 {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&

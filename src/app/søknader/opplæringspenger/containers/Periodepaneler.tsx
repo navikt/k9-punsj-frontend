@@ -3,11 +3,10 @@ import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-
-import AddCircleSvg from '../../../assets/SVG/AddCircleSVG';
-import BinSvg from '../../../assets/SVG/BinSVG';
 import { IPeriode } from '../../../models/types/Periode';
 
 const initialPeriode = { fom: '', tom: '' };
@@ -67,7 +66,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             }}
                                         >
                                             <div className="slettIcon">
-                                                <BinSvg title="fjern" />
+                                                <TrashIcon fontSize="2rem" color="#C30000" />
                                             </div>
 
                                             <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
@@ -91,7 +90,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                     }}
                                 >
                                     <div className="leggtilperiodeIcon">
-                                        <AddCircleSvg title="leggtil" />
+                                        <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
                                     </div>
 
                                     <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />

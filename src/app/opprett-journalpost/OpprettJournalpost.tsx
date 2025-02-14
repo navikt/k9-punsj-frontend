@@ -2,13 +2,11 @@ import React, { useState, ChangeEvent } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Button, CopyButton, Heading, Label, Loader } from '@navikt/ds-react';
+import { Alert, Button, CopyButton, Heading, Loader } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
-import ErrorIcon from 'app/assets/SVG/ErrorIcon';
-import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
@@ -227,38 +225,31 @@ const OpprettJournalpost: React.FC = () => {
                     </div>
 
                     {errors.root?.message && (
-                        <div className="statusContainer">
-                            <ErrorIcon />
-                            <Label size="small" className="statusText">
-                                {errors.root.message}
-                            </Label>
-                        </div>
+                        <Alert variant="error" size="medium" fullWidth inline>
+                            {errors.root.message}
+                        </Alert>
                     )}
 
                     {opprettJpError && (
-                        <div className="statusContainer">
-                            <ErrorIcon />
-                            <Label size="small" className="statusText">
-                                {opprettJpError}
-                            </Label>
-                        </div>
+                        <Alert variant="error" size="medium" fullWidth inline>
+                            {opprettJpError}
+                        </Alert>
                     )}
 
                     {isSubmitSuccessful && (
-                        <div className="statusContainer">
-                            <SuccessIcon />
-                            <Label size="small" className="statusText flex items-center">
+                        <Alert variant="success" size="medium" fullWidth inline>
+                            <div className="flex">
                                 <FormattedMessage
                                     id="opprettJournalpost.opprettet"
                                     values={{ journalpostId: opprettetJournalpostId }}
                                 />
                                 <CopyButton size="xsmall" copyText={opprettetJournalpostId} className="ml-4" />
-                            </Label>
-                        </div>
+                            </div>
+                        </Alert>
                     )}
 
                     {!isSubmitSuccessful && (
-                        <div className="mt-10">
+                        <div className="mt-4">
                             <Button
                                 type="submit"
                                 size="small"

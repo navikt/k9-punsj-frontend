@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import BinSvg from 'app/assets/SVG/BinSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -142,11 +141,8 @@ const Arbeidstakerperioder = ({
                                         type="button"
                                         onClick={() => removeItemHandler(currentItemIndex)}
                                         tabIndex={0}
+                                        icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                     >
-                                        <div className="slettIcon">
-                                            <BinSvg title="fjern" />
-                                        </div>
-
                                         <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
                                     </Button>
                                 </div>
@@ -190,7 +186,7 @@ const Arbeidstakerperioder = ({
                 className="leggtillisteelementknapp"
                 type="button"
                 onClick={addItemHandler}
-                icon={<AddCircleSvg title="leggtil" />}
+                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
             >
                 <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
             </Button>

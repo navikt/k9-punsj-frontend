@@ -1,12 +1,11 @@
-import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import React from 'react';
-import { useIntl } from 'react-intl';
 
-import { Checkbox, ToggleGroup } from '@navikt/ds-react';
+import { Field, FieldProps, useField, useFormikContext } from 'formik';
+import { useIntl } from 'react-intl';
+import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
+import { Delete } from '@navikt/ds-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-
-import Slett from '../buttons/Slett';
 import { PeriodInput } from '../period-input/PeriodInput';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
@@ -52,7 +51,15 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                             errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
                         />
-                        <Slett style={{ marginTop: '1.5rem', paddingLeft: '0.3125rem' }} onClick={remove} />
+
+                        <Button
+                            icon={<Delete />}
+                            size="small"
+                            variant="tertiary"
+                            className="slett"
+                            style={{ marginTop: '1.5rem', paddingLeft: '0.3125rem' }}
+                            onClick={remove}
+                        />
                     </div>
                     {soknadsperioder.length === 1 && (
                         <Checkbox

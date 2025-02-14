@@ -2,7 +2,8 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { Button, Modal } from '@navikt/ds-react';
-import CheckCircleSvg from '../../assets/SVG/CheckCircleSVG';
+import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
+
 import { getEnvironmentVariable } from '../../utils';
 import { initializeDate } from '../../utils/timeUtils';
 
@@ -33,20 +34,18 @@ const OkGåTilLosModal = ({ meldingId, onClose }: Props) => {
         >
             <Modal.Body>
                 <div className="ok-gaa-til-los" data-testid="ok-gaa-til-los-modal">
-                    <CheckCircleSvg title="check" />
+                    <CheckmarkCircleFillIcon className="successIcon-gå-to-los" title="check" />
 
-                    <div className="vl" />
+                    <div className="vl-gå-to-los" />
 
-                    <div className="info" data-test-id="okGåTilLosModalInfo">
-                        <div className="flex flex-wrap">{utledMelding(meldingId)}</div>
+                    <div className="info-gå-to-los" data-test-id="okGåTilLosModalInfo">
+                        <div>{utledMelding(meldingId)}</div>
 
-                        <div className="flex flex-wrap">
-                            <FormattedMessage id="modal.okgaatillos.tillos" />
-                        </div>
+                        <FormattedMessage id="modal.okgaatillos.tillos" />
                     </div>
 
                     <Button
-                        className="okknapp"
+                        className="okknapp-gå-to-los"
                         size="small"
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');

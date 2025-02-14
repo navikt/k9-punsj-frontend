@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
+import { CalendarIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
@@ -109,7 +108,8 @@ const Soknadsperioder: React.FC<Props> = ({
 
                     {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
-                            <CalendarSvg title="calendar" />
+                            <CalendarIcon title="calendar" fontSize="2rem" />
+
                             <div className="periode">{generateDateString(p)}</div>
                         </div>
                     ))}
@@ -126,7 +126,7 @@ const Soknadsperioder: React.FC<Props> = ({
                                     setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
-                                icon={<AddCircleSvg title="leggtilcircle" />}
+                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                                 size="small"
                                 data-testid="leggtilsoknadsperiode"
                             >

@@ -21,12 +21,13 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import BinSvg from '../../../../assets/SVG/BinSVG';
+import { Heading } from '@navikt/ds-react';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { IPeriode } from '../../../../models/types/Periode';
 import intlHelper from '../../../../utils/intlUtils';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+
 import './utenlandsopphold.less';
-import { Heading } from '@navikt/ds-react';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -174,8 +175,9 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         tabIndex={0}
                     >
                         <div className="slettIkon">
-                            <BinSvg title="fjern" />
+                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
                         </div>
+
                         {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
                     </button>
                 </div>

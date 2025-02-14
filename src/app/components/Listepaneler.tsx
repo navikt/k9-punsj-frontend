@@ -6,8 +6,7 @@ import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import BinSvg from '../assets/SVG/BinSVG';
-import AddCircleSvg from '../assets/SVG/AddCircleSVG';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
@@ -135,11 +134,8 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                                             type="button"
                                             onClick={() => removeItemHandler(itemIndex)}
                                             tabIndex={0}
+                                            icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                         >
-                                            <div className="slettIcon">
-                                                <BinSvg title="fjern" />
-                                            </div>
-
                                             <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
                                         </Button>
                                     </div>
@@ -173,7 +169,7 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                     className="leggtillisteelementknapp"
                     type="button"
                     onClick={addItemHandler}
-                    icon={<AddCircleSvg title="leggtil" />}
+                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                 >
                     <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
                 </Button>

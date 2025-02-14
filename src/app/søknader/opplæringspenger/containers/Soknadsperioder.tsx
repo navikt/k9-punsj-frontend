@@ -2,7 +2,8 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { Alert, Box, Heading } from '@navikt/ds-react';
-import CalendarSvg from 'app/assets/SVG/CalendarSVG';
+import { CalendarIcon } from '@navikt/aksel-icons';
+
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { Periode } from 'app/models/types';
 
@@ -40,7 +41,8 @@ const Soknadsperioder: React.FC<Props> = ({ eksisterendePerioder, hentEksisteren
 
                     {eksisterendePerioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
-                            <CalendarSvg title="calendar" />
+                            <CalendarIcon title="calendar" fontSize="2rem" />
+
                             <div className="periode">{generateDateString(p)}</div>
                         </div>
                     ))}
