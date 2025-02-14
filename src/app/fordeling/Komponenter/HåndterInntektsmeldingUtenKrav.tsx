@@ -1,9 +1,10 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
+
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Alert, Button, Modal } from '@navikt/ds-react';
+import { Dispatch } from 'redux';
+import { Alert, Button } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
@@ -17,14 +18,10 @@ import {
 } from 'app/state/actions/FordelingFerdigstillJournalpostActions';
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-
-import FerdigstillJournalpostErrorModal from './FerdigstillJournalpostErrorModal';
-import FerdigstillJournalpostModal from './FerdigstillJournalpostModal';
+import ErrorModal from './ErrorModal';
 import OkGåTilLosModal from '../../components/okGåTilLosModal/OkGåTilLosModal';
-import OpprettOppgaveIGosysModal from './OpprettOppgaveIGosysModal';
-import SettPåVentErrorModal from '../../components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
-import { Dispatch } from 'redux';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
 interface Props {
     journalpost?: IJournalpost;
@@ -169,37 +166,30 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 />
             )}
 
-            {showSettPaaVentErrorModal && <SettPåVentErrorModal onClose={() => resetSetPåVent()} />}
+            {showSettPaaVentErrorModal && <ErrorModal onClose={() => resetSetPåVent()} />}
 
             {showFerdigstillJournalpostModal && (
-                <Modal
+                <ErDuSikkerModal
+                    melding="fordeling.inntektsmeldingUtenKrav.erDuSikkerModal.ferdigstill"
+                    modalKey="erdusikker.ferdigstill"
+                    open={showFerdigstillJournalpostModal}
+                    submitKnappText="modal.erdusikker.fortsett"
+                    extraInfo={visBrevIkkeSendtInfoboks ? 'fordeling.inntektsmeldingUtenKrav.brevIkkeSendt' : undefined}
+                    onSubmit={handleFerdigstillJournalpost}
                     onClose={() => setShowFerdigstillJournalpostModal(false)}
-                    aria-label="ferdigstill journalpostmodal"
-                    open
-                >
-                    <FerdigstillJournalpostModal
-                        submit={() => handleFerdigstillJournalpost()}
-                        avbryt={() => setShowFerdigstillJournalpostModal(false)}
-                    >
-                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
-                    </FerdigstillJournalpostModal>
-                </Modal>
+                />
             )}
 
-            {journalpost && showOpprettOppgaveIGosysModal && (
-                <Modal
-                    className="opprettOppgaveIGosysModal"
+            {!!journalpost && showOpprettOppgaveIGosysModal && (
+                <ErDuSikkerModal
+                    melding="fordeling.inntektsmeldingUtenKrav.erDuSikkerModal.opprettOppgaveIGosys"
+                    modalKey="erdusikker.opprettOppgaveIGosys"
+                    open={!!journalpost && showOpprettOppgaveIGosysModal}
+                    submitKnappText="modal.erdusikker.fortsett"
+                    extraInfo={visBrevIkkeSendtInfoboks ? 'fordeling.inntektsmeldingUtenKrav.brevIkkeSendt' : undefined}
+                    onSubmit={() => dispatch(opprettGosysOppgave(journalpost.journalpostId, søkerId, 'Annet'))}
                     onClose={() => setShowOpprettOppgaveIGosysModal(false)}
-                    aria-label="opprettOppgaveIGosysModal"
-                    open
-                >
-                    <OpprettOppgaveIGosysModal
-                        submit={() => dispatch(opprettGosysOppgave(journalpost.journalpostId, søkerId, 'Annet'))}
-                        avbryt={() => setShowOpprettOppgaveIGosysModal(false)}
-                    >
-                        {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
-                    </OpprettOppgaveIGosysModal>
-                </Modal>
+                />
             )}
 
             {showFerdigstillJournalpostSuccessModal && (
@@ -211,17 +201,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 />
             )}
 
-            {showFerdigstillJournalpostErrorModal && (
-                <Modal
-                    onClose={() => {
-                        resetFerdigstillJournalpost();
-                    }}
-                    aria-label="ferdigstill journalpostFeilModal"
-                    open
-                >
-                    <FerdigstillJournalpostErrorModal close={() => resetFerdigstillJournalpost()} />
-                </Modal>
-            )}
+            {showFerdigstillJournalpostErrorModal && <ErrorModal onClose={() => resetFerdigstillJournalpost()} />}
         </>
     );
 };

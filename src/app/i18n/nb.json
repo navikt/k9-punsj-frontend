@@ -157,6 +157,8 @@
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.3": "Sett oppgaven på vent i påvente av svar fra arbeidsgiver eller søknad fra bruker.",
     "fordeling.inntektsmeldingUtenKrav.infoboks.punkt.4": "Er inntektsmeldingen sendt feil, skal journalposten ferdigstilles.",
     "fordeling.inntektsmeldingUtenKrav.brevIkkeSendt": "Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.",
+    "fordeling.inntektsmeldingUtenKrav.erDuSikkerModal.ferdigstill": "Er du sikker på at du vil ferdigstille journalposten?",
+    "fordeling.inntektsmeldingUtenKrav.erDuSikkerModal.opprettOppgaveIGosys": "Er du sikker på at du vil opprette journalføringsoppgave i Gosys?",
     "fordeling.klassifiserModal.tittel": "Vil du lagre følgende informasjon til journalposten?",
     "fordeling.klassifiserModal.tittel.settPåVent": "Vil du lagre følgende informasjon til journalposten og sett på vent?",
     "fordeling.klassifiserModal.klassifiseringInfo.sakstype": "Sakstype:",
@@ -790,7 +792,8 @@
     "modal.okgaatillos.tillos": "Du blir nå tatt tilbake til oppgavekøen i LOS",
     "modal.settpaavent.feil": "Det oppstod en feil. Prøv igjen senere.",
     "modal.settpaavent.ok": "OK",
-    "modal.ferdigstilljournalpost.feil": "Det oppstod en feil. Prøv igjen senere.",
+    "modal.error.feil": "Det oppstod en feil. Prøv igjen senere.",
+    "modal.error.ok.btn": "OK",
     "modal.ferdigstilljournalpost.ok": "OK",
     "modal.ferdigstilljournalpost": "Journalposten er ferdigstilt",
 
