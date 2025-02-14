@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { CalendarIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 import { initializeDate } from 'app/utils';
-import CalendarSvg from '../../../assets/SVG/CalendarSVG';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import { Periodepaneler } from 'app/components/Periodepaneler';
@@ -110,7 +109,7 @@ const Soknadsperioder: React.FC<Props> = ({
 
                     {punchFormState.perioder.map((p) => (
                         <div key={`${p.fom}_${p.tom}`} className="datocontainer">
-                            <CalendarSvg title="calendar" />
+                            <CalendarIcon title="calendar" fontSize="2rem" />
 
                             <div className="periode">{generateDateString(p)}</div>
                         </div>
