@@ -51,8 +51,8 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                     {children}
 
                     {journalposter && journalposter.length > 0 && soknadId && (
-                        <>
-                            <Heading size="medium" level="2" className="mt-4">
+                        <div className="mt-4">
+                            <Heading size="medium" level="2">
                                 <FormattedMessage id="modal.settpaavent.overskrift" />
                             </Heading>
 
@@ -113,7 +113,7 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                                     ))}
                                 </Table.Body>
                             </Table>
-                        </>
+                        </div>
                     )}
                 </>
             </Modal.Body>

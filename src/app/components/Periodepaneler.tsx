@@ -6,9 +6,8 @@ import { Box, Button } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
-import AddCircleSvg from '../assets/SVG/AddCircleSVG';
 import { IPeriode } from '../models/types/Periode';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
     periods: IPeriode[]; // Liste over periodisert informasjon
@@ -138,7 +137,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                 onAdd();
                             }
                         }}
-                        icon={<AddCircleSvg title="leggtil" />}
+                        icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                         size="small"
                     >
                         <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />

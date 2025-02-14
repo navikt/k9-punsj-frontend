@@ -3,8 +3,8 @@ import React, { useRef } from 'react';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
@@ -130,7 +130,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     }}
                                 >
                                     <div className="leggtilperiodeIcon">
-                                        <AddCircleSvg title="leggtil" />
+                                        <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
                                     </div>
 
                                     <FormattedMessage id="skjema.dag.legg_til" />

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import CalendarSvg from 'app/assets/SVG/CalendarSVG';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
@@ -126,7 +126,7 @@ const Soknadsperioder: React.FC<Props> = ({
                                     setVisLeggTilPerioder(false);
                                     updateSoknadState({ soeknadsperiode: [initialPeriode] });
                                 }}
-                                icon={<AddCircleSvg title="leggtilcircle" />}
+                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                                 size="small"
                                 data-testid="leggtilsoknadsperiode"
                             >

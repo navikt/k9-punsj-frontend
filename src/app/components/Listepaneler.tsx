@@ -6,8 +6,7 @@ import { FormattedMessage, IntlShape } from 'react-intl';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import AddCircleSvg from '../assets/SVG/AddCircleSVG';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 export type UpdateListeinfoInSoknad<T> = (info: Partial<T>) => any;
 export type UpdateListeinfoInSoknadState<T> = (info: Partial<T>, showStatus?: boolean) => any;
@@ -170,7 +169,7 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                     className="leggtillisteelementknapp"
                     type="button"
                     onClick={addItemHandler}
-                    icon={<AddCircleSvg title="leggtil" />}
+                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                 >
                     <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
                 </Button>

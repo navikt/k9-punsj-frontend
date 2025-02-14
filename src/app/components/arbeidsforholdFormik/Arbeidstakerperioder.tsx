@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { Fieldset, Heading, Box, Button } from '@navikt/ds-react';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import { finnArbeidsgivere } from 'app/api/api';
-import AddCircleSvg from 'app/assets/SVG/AddCircleSVG';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
@@ -14,7 +14,6 @@ import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Organisasjon from 'app/models/types/Organisasjon';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
-import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
     eksisterendePerioder: IPeriode[];
@@ -121,7 +120,7 @@ const Arbeidstakerperioder = ({
                         className="leggtillisteelementknapp"
                         type="button"
                         onClick={() => arrayHelpers.push(initialArbeidstaker)}
-                        icon={<AddCircleSvg title="leggtil" />}
+                        icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                     >
                         <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
                     </Button>
