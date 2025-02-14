@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Button, Heading, Modal, Table } from '@navikt/ds-react';
+import { Alert, Button, Heading, Modal, Table, Link } from '@navikt/ds-react';
+import { EyeFillIcon } from '@navikt/aksel-icons';
 
 import { ApiPath } from '../../apiConfig';
-import VisSvg from '../../assets/SVG/VisSVG';
 import { IJournalpostInfo } from '../../models/types';
 import { apiUrl } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
@@ -92,13 +92,11 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                                             <Table.DataCell>{j.dato}</Table.DataCell>
                                             <Table.DataCell>{j.punsjInnsendingType?.navn || ''}</Table.DataCell>
                                             <Table.DataCell>
-                                                <a className="visjp" href={pdfUrl(j)} target="_blank" rel="noreferrer">
-                                                    <VisSvg title="vis" />
+                                                <Link href={pdfUrl(j)} target="_blank" rel="noreferrer">
+                                                    <EyeFillIcon title="Vis journalpost" />
 
-                                                    <div className="vistext">
-                                                        <FormattedMessage id="modal.settpaavent.visjournalpost" />
-                                                    </div>
-                                                </a>
+                                                    <FormattedMessage id="modal.settpaavent.visjournalpost" />
+                                                </Link>
                                             </Table.DataCell>
                                             <Table.DataCell>
                                                 <Button
