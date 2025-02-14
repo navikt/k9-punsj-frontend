@@ -29,7 +29,6 @@ import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
@@ -66,6 +65,7 @@ import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
 import PLSKvitteringContainer from './SoknadKvittering/PLSKvitteringContainer';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
@@ -1184,7 +1184,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         )}
                         soknadId={soknad.soeknadId}
                         submit={() => this.handleSettPaaVent()}
-                        avbryt={() => this.setState({ showSettPaaVentModal: false })}
+                        onClose={() => this.setState({ showSettPaaVentModal: false })}
                     />
                 )}
 
@@ -1196,7 +1196,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 )}
 
                 {!!punchFormState.settPaaVentError && (
-                    <SettPåVentErrorModal onClose={() => this.props.settPaaventResetAction()} />
+                    <ErrorModal onClose={() => this.props.settPaaventResetAction()} />
                 )}
 
                 {this.props.punchFormState.isValid &&

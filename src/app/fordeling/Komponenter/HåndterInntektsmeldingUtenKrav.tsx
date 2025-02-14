@@ -152,7 +152,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
             {getUtførValgKnapp()}
 
             {showSettPaaVentModal && (
-                <SettPaaVentModal submit={() => handleSettPaaVent()} avbryt={() => setShowSettPaaVentModal(false)}>
+                <SettPaaVentModal submit={() => handleSettPaaVent()} onClose={() => setShowSettPaaVentModal(false)}>
                     {visBrevIkkeSendtInfoboks && getBrevIkkeSendtInfoboks()}
                 </SettPaaVentModal>
             )}

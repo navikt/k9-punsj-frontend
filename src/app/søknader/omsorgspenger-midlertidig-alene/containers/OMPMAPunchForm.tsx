@@ -20,7 +20,6 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
@@ -38,6 +37,7 @@ import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
 import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 interface Props {
     journalpostid: string;
@@ -343,7 +343,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                     journalposter={journalposterState.journalposter.filter((jp) => jp.journalpostId !== journalpostid)}
                     soknadId={values.soeknadId}
                     submit={() => handleSettPaaVent()}
-                    avbryt={() => setShowSettPaaVentModal(false)}
+                    onClose={() => setShowSettPaaVentModal(false)}
                 />
             )}
 
@@ -351,7 +351,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 <OkGåTilLosModal meldingId="modal.settpaavent.til" onClose={() => settPåventResetAction()} />
             )}
 
-            {!!punchFormState.settPaaVentError && <SettPåVentErrorModal onClose={() => settPåventResetAction()} />}
+            {!!punchFormState.settPaaVentError && <ErrorModal onClose={() => settPåventResetAction()} />}
 
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal

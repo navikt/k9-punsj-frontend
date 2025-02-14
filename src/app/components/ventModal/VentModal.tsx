@@ -4,8 +4,8 @@ import { useMutation } from 'react-query';
 
 import { settJournalpostPaaVent } from 'app/api/api';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import SettPåVentErrorModal from 'app/components/settPåVentModal/SettPåVentErrorModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 interface Props {
     journalpostId: string;
@@ -30,7 +30,7 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: Props) => {
     });
 
     if (visHovedmodal) {
-        return <SettPaaVentModal submit={() => settPaaVent()} avbryt={() => visModalFn(false)} />;
+        return <SettPaaVentModal submit={() => settPaaVent()} onClose={() => visModalFn(false)} />;
     }
 
     if (visSuccessModal) {
@@ -45,7 +45,7 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: Props) => {
     }
 
     if (visErrorModal) {
-        return <SettPåVentErrorModal onClose={() => visModalFn(false)} />;
+        return <ErrorModal onClose={() => visModalFn(false)} />;
     }
 
     return null;

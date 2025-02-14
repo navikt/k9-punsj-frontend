@@ -9,11 +9,9 @@ import { IJournalpostInfo } from '../../models/types';
 import { apiUrl } from '../../utils';
 import intlHelper from '../../utils/intlUtils';
 
-import './settPåVentModal.less';
-
 interface Props {
     submit: () => void;
-    avbryt: () => void;
+    onClose: () => void;
 
     journalposter?: IJournalpostInfo[];
     soknadId?: string;
@@ -35,13 +33,12 @@ const urlTilNyJournalpost = (id: string, jpid: string) => `${jpid}/pleiepenger/s
 const SettPaaVentModal: React.FC<Props> = (props) => {
     const intl = useIntl();
 
-    const { submit, avbryt, journalposter, soknadId, children } = props;
+    const { submit, onClose, journalposter, soknadId, children } = props;
 
     return (
         <Modal
             key="settpaaventmodal"
-            className="settpaaventmodal"
-            onClose={avbryt}
+            onClose={onClose}
             aria-label="settpaaventmodal"
             header={{ heading: intlHelper(intl, 'skjema.knapp.settpaavent'), closeButton: false }}
             data-testid="settpaaventmodal"
@@ -54,8 +51,8 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                     {children}
 
                     {journalposter && journalposter.length > 0 && soknadId && (
-                        <div className="pt-4 pb-4">
-                            <Heading size="medium" level="2">
+                        <>
+                            <Heading size="medium" level="2" className="mt-4">
                                 <FormattedMessage id="modal.settpaavent.overskrift" />
                             </Heading>
 
@@ -116,17 +113,17 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                                     ))}
                                 </Table.Body>
                             </Table>
-                        </div>
+                        </>
                     )}
                 </>
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={() => submit()} size="small">
+                <Button onClick={submit} size="small">
                     <FormattedMessage id="skjema.knapp.settpaavent" />
                 </Button>
 
-                <Button variant="secondary" onClick={() => avbryt()} size="small">
+                <Button variant="secondary" onClick={onClose} size="small">
                     <FormattedMessage id="skjema.knapp.avbryt" />
                 </Button>
             </Modal.Footer>
