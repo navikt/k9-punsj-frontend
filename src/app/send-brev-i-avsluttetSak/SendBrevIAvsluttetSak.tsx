@@ -167,7 +167,7 @@ const SendBrevIAvsluttetSak = () => {
             {visLosModal && (
                 <Modal open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
                     <div className="modalContent">
-                        <CheckmarkCircleFillIcon className="successIcon" />
+                        <CheckmarkCircleFillIcon className="successIcon" title="checkIcon" />
                         <Heading spacing size="xsmall" level="3">
                             <FormattedMessage id="sendBrevIAvsluttetSak.gåTilLOSModal.header" />
                         </Heading>
