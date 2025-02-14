@@ -3007,7 +3007,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
-    "@navikt/oasis": "npm:3.6.0"
+    "@navikt/oasis": "npm:3.7.0"
     "@sentry/cli": "npm:2.41.1"
     axios: "npm:1.7.9"
     connect-timeout: "npm:1.9.0"
@@ -3129,14 +3129,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:3.6.0":
-  version: 3.6.0
-  resolution: "@navikt/oasis@npm:3.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.6.0%2F8e7b3918165b037c18cfbc36ad4aeee04fc0650f"
+"@navikt/oasis@npm:3.7.0":
+  version: 3.7.0
+  resolution: "@navikt/oasis@npm:3.7.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F3.7.0%2F751fcd04f8bd873590fc8ad516f906012caaf9ef"
   dependencies:
     jose: "npm:^5.2.3"
     openid-client: "npm:^5.6.5"
     prom-client: "npm:^15.1.0"
-  checksum: 10/97ddbc4c3becce8d21a6eee79bae0e635312a4fc141f9be04ba9e2a274c9052c49b263eee4385214696a60056cc78a0271c1937485cc168582d5f910733da499
+  checksum: 10/a2325d48e84a7ad66557bf33fd35ad617fd6f50738d211e5d09fcfbe0bc9a6f2128fb61595a831f0fd58cbd0a73c7c9bdb6a093dde8ff3dba6935187d4d611c2
   languageName: node
   linkType: hard
 
