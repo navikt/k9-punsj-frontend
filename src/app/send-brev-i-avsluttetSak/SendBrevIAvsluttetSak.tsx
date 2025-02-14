@@ -1,9 +1,9 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Button, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 
 import { finnFagsaker } from 'app/api/api';
-import SuccessIcon from 'app/assets/SVG/SuccessIcon';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/rules';
@@ -167,7 +167,7 @@ const SendBrevIAvsluttetSak = () => {
             {visLosModal && (
                 <Modal open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
                     <div className="modalContent">
-                        <SuccessIcon />
+                        <CheckmarkCircleFillIcon className="successIcon" />
                         <Heading spacing size="xsmall" level="3">
                             <FormattedMessage id="sendBrevIAvsluttetSak.gåTilLOSModal.header" />
                         </Heading>
