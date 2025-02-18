@@ -10931,12 +10931,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-iso-countries@npm:7.13.0":
-  version: 7.13.0
-  resolution: "i18n-iso-countries@npm:7.13.0"
+"i18n-iso-countries@npm:7.14.0":
+  version: 7.14.0
+  resolution: "i18n-iso-countries@npm:7.14.0"
   dependencies:
     diacritics: "npm:1.3.0"
-  checksum: 10/22666670568d5cab8d9b551a642a09119299fbdec31a6a9af95536b9c577e36b20ef2c71dc15394e924703f3ee3625b46b5f9e4399d196d700400a40f6ed881f
+  checksum: 10/e042ad6f7d608f76ad1b014b3cb3581e5ebdca952bd9fb1436f6d6ce5c419b8c9414c4388cfeb47234ed0d41b37f1ae3186be4d6e15836d30b2d73c546e3bffe
   languageName: node
   linkType: hard
 
@@ -12755,7 +12755,7 @@ __metadata:
     formik: "npm:2.4.6"
     html-webpack-harddisk-plugin: "npm:2.0.0"
     html-webpack-plugin: "npm:5.6.3"
-    i18n-iso-countries: "npm:7.13.0"
+    i18n-iso-countries: "npm:7.14.0"
     intl: "npm:1.2.5"
     jest: "npm:29.7.0"
     jest-cli: "npm:29.7.0"
