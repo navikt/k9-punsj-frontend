@@ -61,7 +61,7 @@
         "tailwindcss": "3.4.17",
         "typescript-string-operations": "1.5.1",
         "ulid": "2.3.0",
-        "uuid": "11.0.5",
+        "uuid": "11.1.0",
         "yup": "1.6.1"
     },
     "scripts": {
