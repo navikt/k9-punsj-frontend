@@ -3175,10 +3175,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.13.0":
-  version: 7.13.0
-  resolution: "@navikt/ds-css@npm:7.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.13.0%2F208180e5bb9f3c344913c7e96ac40256325b1bd3"
-  checksum: 10/abd3d1324dd3852be9cea9c5066b021e980fb043bd0563f88104ed430fb410e7ca48b7596adbdd52a294acb3a999568dfca2507e755c3c7996809d4b7b135455
+"@navikt/ds-css@npm:7.14.1":
+  version: 7.14.1
+  resolution: "@navikt/ds-css@npm:7.14.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.14.1%2Fbc6e8c656547a8ee11a49638ace30659d55bf4c2"
+  checksum: 10/7011244f261ded30e7cde3a31c08f457b92327179c1bcb96c626a048967157849db1f6c74c7f106b763fe2dc8bf84f3ca55c0c51d46c4a8e444f9599d9d0fd33
   languageName: node
   linkType: hard
 
@@ -12689,7 +12689,7 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:1.13.3"
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": "npm:7.13.0"
-    "@navikt/ds-css": "npm:7.13.0"
+    "@navikt/ds-css": "npm:7.14.1"
     "@navikt/ds-icons": "npm:3.4.3"
     "@navikt/ds-react": "npm:7.13.0"
     "@navikt/ds-tailwind": "npm:^7.13.0"
