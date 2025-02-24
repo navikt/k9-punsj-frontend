@@ -15,7 +15,7 @@
         "@navikt/ds-react": "7.13.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@popperjs/core": "2.11.8",
-        "@reduxjs/toolkit": "^2.5.1",
+        "@reduxjs/toolkit": "^2.6.0",
         "@sentry/react": "9.1.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
