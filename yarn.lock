@@ -3207,10 +3207,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "@navikt/ds-tailwind@npm:7.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.13.0%2Fbcaed338844416c299db88e9971e5a827aa44867"
-  checksum: 10/d20166c4525683582894d469fccbd05e4404d31b9e95f2f829b8c0eecc0cb7564a8886dc179af422f06905ffab94b13cfa9d33342d2befb81b7807011c2e547e
+"@navikt/ds-tailwind@npm:^7.14.2":
+  version: 7.14.2
+  resolution: "@navikt/ds-tailwind@npm:7.14.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.14.2%2F90536aea111468f0bc3403ac24063e05da7e6ba7"
+  checksum: 10/9304ec4cfa91ffedc113ea81a15a8fa0f39674e407d0484f4bced00f99d20dc3c088fa2275e826756024ac0f0393d07114fc24beebc5b0a27346d37b6a2b2e5a
   languageName: node
   linkType: hard
 
@@ -12719,7 +12719,7 @@ __metadata:
     "@navikt/ds-css": "npm:7.14.2"
     "@navikt/ds-icons": "npm:3.4.3"
     "@navikt/ds-react": "npm:7.13.0"
-    "@navikt/ds-tailwind": "npm:^7.13.0"
+    "@navikt/ds-tailwind": "npm:^7.14.2"
     "@navikt/fnrvalidator": "npm:2.1.5"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
     "@popperjs/core": "npm:2.11.8"
