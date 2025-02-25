@@ -3121,7 +3121,7 @@ __metadata:
     jose: "npm:5.9.6"
     morgan: "npm:1.10.0"
     node-cache: "npm:5.1.2"
-    openid-client: "npm:6.1.7"
+    openid-client: "npm:6.3.3"
     winston: "npm:3.17.0"
   languageName: unknown
   linkType: soft
@@ -12422,7 +12422,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:5.9.6, jose@npm:^5.9.6":
+"jose@npm:5.9.6":
   version: 5.9.6
   resolution: "jose@npm:5.9.6"
   checksum: 10/3ebbda9f6a96d493944f2720bf4436347884666cd87b7087a61cff12a3b540fe6fd743b5eb8defe7bc2a45aa58992ae6687da78797d91fc4e3e5e8588aa98c7d
@@ -12440,6 +12440,13 @@ __metadata:
   version: 5.6.3
   resolution: "jose@npm:5.6.3"
   checksum: 10/829f07b8857221ada1cd112a5ebd084e34748f6e3247f5cb03aca0a1f25dd6a07283c9a4f5b854935bda505e3243405640550f8e9eb46c45b172dc4cb336ac89
+  languageName: node
+  linkType: hard
+
+"jose@npm:^6.0.6":
+  version: 6.0.6
+  resolution: "jose@npm:6.0.6"
+  checksum: 10/cf9a01df6fd6e2d502137169cb6c91ff78d035cf3e8bfbbc1a2d7ed9d4ba2ebe7df29324b59eca9f216c0e4aa45a5daf5f307c21caff422322f8a72673a5abc8
   languageName: node
   linkType: hard
 
@@ -14146,10 +14153,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.1.4":
-  version: 3.1.4
-  resolution: "oauth4webapi@npm:3.1.4"
-  checksum: 10/0cb0b11529128b0601ead0dd06f7b54a542b4221b9f8b7e8fc1385a41b391a5724ee6fcf12af22631a1ae8f16f1f8098e3e6cc56457cefa89140d69f11f1fb7c
+"oauth4webapi@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "oauth4webapi@npm:3.3.0"
+  checksum: 10/231ab4f4b0d9414789712d837b896600359f0656f00f60b954ec3ecaad44eda083b32217a57598b850513c79b9f4f3e56311a1ed8e0bc06840cc84905758199f
   languageName: node
   linkType: hard
 
@@ -14399,13 +14406,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openid-client@npm:6.1.7":
-  version: 6.1.7
-  resolution: "openid-client@npm:6.1.7"
+"openid-client@npm:6.3.3":
+  version: 6.3.3
+  resolution: "openid-client@npm:6.3.3"
   dependencies:
-    jose: "npm:^5.9.6"
-    oauth4webapi: "npm:^3.1.4"
-  checksum: 10/191718ab5c13a9ac8c403c502eaca7622967ed4f8b954edc219ae48a46a4e784545997fa3dbc034b88668575b5ae7eb18818d46b97caeb7f8dc12efe4d97cdf4
+    jose: "npm:^6.0.6"
+    oauth4webapi: "npm:^3.3.0"
+  checksum: 10/7cd96270c5c6313c3857122eb9685b3df6fa9cbb2a97757734891480dbefac28e218960226e82bf8c752d4ee1e0742c705bfef2f9c42bfa1d17a652c39929199
   languageName: node
   linkType: hard
 
