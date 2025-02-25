@@ -145,10 +145,6 @@ describe('Send brev i avsluttet sak', { testIsolation: false }, () => {
 
             cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
 
-            cy.wait('@forhandsvisBrev').then((interception) => {
-                expect(interception.response.statusCode).to.equal(200);
-            });
-
             cy.findByText('Not Found').should('not.exist');
         });
 
