@@ -21,7 +21,8 @@
         "noUnusedLocals": false,
         "baseUrl": "./src",
         "typeRoots": ["./node_modules/@types", "./src/@types"],
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "types": ["node"]
     },
     "tsLoaderOptions": {
         "useCache": false
