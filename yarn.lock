@@ -2614,7 +2614,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-sdk@npm:1.13.3, @grafana/faro-web-sdk@npm:^1.13.3":
+"@grafana/faro-core@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "@grafana/faro-core@npm:1.14.0"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.9.0"
+    "@opentelemetry/otlp-transformer": "npm:^0.57.1"
+  checksum: 10/e1d50eaeeb2a54ff7fe673cded5ea0139ba1491b1b12ee995d6d71f0a266e15748d1a293c3e97de954680c8a3987a47a1fdc813e8c3959720f91d3490ea776a6
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:1.13.3":
   version: 1.13.3
   resolution: "@grafana/faro-web-sdk@npm:1.13.3"
   dependencies:
@@ -2625,13 +2635,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grafana/faro-web-tracing@npm:1.13.3":
-  version: 1.13.3
-  resolution: "@grafana/faro-web-tracing@npm:1.13.3"
+"@grafana/faro-web-sdk@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "@grafana/faro-web-sdk@npm:1.14.0"
   dependencies:
-    "@grafana/faro-web-sdk": "npm:^1.13.3"
+    "@grafana/faro-core": "npm:^1.14.0"
+    ua-parser-js: "npm:^1.0.32"
+    web-vitals: "npm:^4.0.1"
+  checksum: 10/a84d12a387299fdc3a61614f7a4909359cd9774ac49d766d2e945a9b545d303770af9f9e1c7fa31ab9365e4e8108db4b1b97630d757aead48d986741e8af5e44
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-tracing@npm:1.14.0":
+  version: 1.14.0
+  resolution: "@grafana/faro-web-tracing@npm:1.14.0"
+  dependencies:
+    "@grafana/faro-web-sdk": "npm:^1.14.0"
     "@opentelemetry/api": "npm:^1.9.0"
-    "@opentelemetry/context-zone": "npm:1.30.1"
     "@opentelemetry/core": "npm:^1.30.0"
     "@opentelemetry/exporter-trace-otlp-http": "npm:^0.57.0"
     "@opentelemetry/instrumentation": "npm:^0.57.0"
@@ -2641,7 +2661,7 @@ __metadata:
     "@opentelemetry/resources": "npm:^1.30.0"
     "@opentelemetry/sdk-trace-web": "npm:^1.30.0"
     "@opentelemetry/semantic-conventions": "npm:^1.28.0"
-  checksum: 10/c7a74139e6012d36aa85c3b2a72c69abf8f2cc29e298ff068984036248d055973b6eeec06cba071b631a98a99a2f012413593f32ac359ce104eb6cc375d9f963
+  checksum: 10/e4af9490120da8f4f1a81b39bd18ab2dc5f292614749fec1aef1a4aac793187981ff49146657ae1d8198662dc629ee313d7ac101d0c6dc3aae358cd4c2caafc7
   languageName: node
   linkType: hard
 
@@ -3335,26 +3355,6 @@ __metadata:
   version: 1.9.0
   resolution: "@opentelemetry/api@npm:1.9.0"
   checksum: 10/a607f0eef971893c4f2ee2a4c2069aade6ec3e84e2a1f5c2aac19f65c5d9eeea41aa72db917c1029faafdd71789a1a040bdc18f40d63690e22ccae5d7070f194
-  languageName: node
-  linkType: hard
-
-"@opentelemetry/context-zone-peer-dep@npm:1.30.1":
-  version: 1.30.1
-  resolution: "@opentelemetry/context-zone-peer-dep@npm:1.30.1"
-  peerDependencies:
-    "@opentelemetry/api": ">=1.0.0 <1.10.0"
-    zone.js: ^0.10.2 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^0.14.0 || ^0.15.0
-  checksum: 10/07fcc721f718f356902cb1028cb1bf79a029dc81113e386a7a5e2110331fddef20e5f1e04e905c8ce22b2b8879ba5a86509794b285357e128fcde95cf31d7fdf
-  languageName: node
-  linkType: hard
-
-"@opentelemetry/context-zone@npm:1.30.1":
-  version: 1.30.1
-  resolution: "@opentelemetry/context-zone@npm:1.30.1"
-  dependencies:
-    "@opentelemetry/context-zone-peer-dep": "npm:1.30.1"
-    zone.js: "npm:^0.11.0 || ^0.12.0 || ^0.13.0 || ^0.14.0 || ^0.15.0"
-  checksum: 10/54517b4dbd9b32c1fc5c268a85d3778e0c3daadc6e2963d491e4e3b889175c02ae1e0e128ae5d180a0c6b6ac80655551693a301391408d78c8dd96cd08217aa2
   languageName: node
   linkType: hard
 
@@ -12686,7 +12686,7 @@ __metadata:
     "@babel/runtime": "npm:7.26.9"
     "@eslint/js": "npm:^9.20.0"
     "@grafana/faro-web-sdk": "npm:1.13.3"
-    "@grafana/faro-web-tracing": "npm:1.13.3"
+    "@grafana/faro-web-tracing": "npm:1.14.0"
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": "npm:7.13.0"
     "@navikt/ds-css": "npm:7.13.0"
@@ -19450,12 +19450,5 @@ __metadata:
     toposort: "npm:^2.0.2"
     type-fest: "npm:^2.19.0"
   checksum: 10/19dba13403160a8739a9e57c8b816254842f3a9e01672846a980d8230cee8763783c089ded88662b30158d1479cf6bce0b51dce7f19ae7d0477be0c981024bc0
-  languageName: node
-  linkType: hard
-
-"zone.js@npm:^0.11.0 || ^0.12.0 || ^0.13.0 || ^0.14.0 || ^0.15.0":
-  version: 0.15.0
-  resolution: "zone.js@npm:0.15.0"
-  checksum: 10/99b9381edcf1ca3da147375a9776f8ad5e6570b9e2cbd33095284a67904d94b5083448440ffcb8ec1e418a505020de0e37837db04d6a0303e111b054a8b752a2
   languageName: node
   linkType: hard
