@@ -12734,7 +12734,6 @@ __metadata:
     prop-types: "npm:15.8.1"
     re-resizable: "npm:6.11.2"
     react: "npm:18.3.1"
-    react-day-picker: "npm:9.5.1"
     react-dom: "npm:18.3.1"
     react-hook-form: "npm:^7.54.2"
     react-intl: "npm:7.1.6"
@@ -15615,19 +15614,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
   checksum: 10/8f68fb0f723e89efa78f814ce8564c13f60901e1746ccebba68f05f0128cdbf5f9cbafdb5b93ac9187bda9373b4f882a2a961aea7198eed5dcd16ab299c84979
-  languageName: node
-  linkType: hard
-
-"react-day-picker@npm:9.5.1":
-  version: 9.5.1
-  resolution: "react-day-picker@npm:9.5.1"
-  dependencies:
-    "@date-fns/tz": "npm:^1.2.0"
-    date-fns: "npm:^4.1.0"
-    date-fns-jalali: "npm:^4.1.0-0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 10/e458e082a6712adb5d40fcc28c54cd20d415b5e2f5b2156f7a0d3fac0efd0f09b6721dd0fdce7993743c0e2d0d95abecc0bda47157f348e581eb1484a99b28fb
   languageName: node
   linkType: hard
 
