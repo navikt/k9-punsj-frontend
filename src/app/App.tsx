@@ -30,7 +30,6 @@ import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
-import logger from 'redux-logger';
 import { getLocaleFromSessionStorage } from './utils';
 import { logError } from './utils/logUtils';
 import { ROUTES } from './constants/routes';
@@ -91,11 +90,9 @@ const prepare = async () => {
     return Promise.resolve();
 };
 
-const middleware = [logger];
-
 const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({}),
     // @ts-ignore
     preloadedState: window.Cypress ? window.__initialState__ : undefined,
     devTools: process.env.NODE_ENV !== 'production',
