@@ -37,6 +37,10 @@ yarn dev
 5. Start opp klassen [K9PunsjApplicationWithMocks](https://github.com/navikt/k9-punsj/blob/master/app/src/test/kotlin/no/nav/k9punsj/K9PunsjApplicationWithMocks.kt) i [k9-punsj](https://github.com/navikt/k9-punsj)
     - Om du får feil lignende `Process [/var/folders/***/embedded-pg/***/bin/initdb, -A, trust, -U, postgres, -D, /var/folders/h/***, -E, UTF-8] failed` følg løsning med å sette environment variabler beskrevet i [her](https://github.com/zonkyio/embedded-postgres/issues/11#issuecomment-533468269)
 
+### Obs!
+
+redux-logger slettet, bruk Redux DevTools Extension i nettleser
+
 ### Saksnummer for lokal utvikling
 
 Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser.

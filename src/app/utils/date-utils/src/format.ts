@@ -1,5 +1,4 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { format, isValid } from 'date-fns';
 import initializeDate from './initialize';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -33,7 +32,6 @@ export type InputDateString = string;
 export type INVALID_DATE_TYPE = 'Invalid date';
 
 export const ISO_DATE_STRING_FORMAT: ISODateString = 'YYYY-MM-DD';
-export const ISO_DATE_STRING_FORMAT_date_fns: ISODateString = 'yyyy-MM-dd';
 
 const stringToUTCDate = (dateString: string | undefined, dateFormat: string): Date | undefined => {
     if (dateString !== undefined && dateString.trim && dateString.trim().length === 10) {
@@ -44,7 +42,8 @@ const stringToUTCDate = (dateString: string | undefined, dateFormat: string): Da
 };
 
 export const dateToISODateString = (date: Date): ISODateString | INVALID_DATE_TYPE => {
-    return isValid(date) ? format(date, ISO_DATE_STRING_FORMAT_date_fns) : date.toString();
+    const d = dayjs(date);
+    return d.isValid() ? d.format(ISO_DATE_STRING_FORMAT) : date.toString();
 };
 
 export const ISODateStringToUTCDate = (isoDateString?: ISODateString): Date | undefined => {
