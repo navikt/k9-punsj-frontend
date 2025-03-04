@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 import { Alert } from '@navikt/ds-react';
 
@@ -103,10 +104,10 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
         sjekkPropertyEksistererOgIkkeErNull('frilanser', ytelse.opptjeningAktivitet);
     const visMedlemskap = sjekkHvisPerioderEksisterer('bosteder', ytelse);
     const visKurs = ytelse.kurs && ytelse.kurs.kursperioder.length > 0;
-
+    const visReise = ytelse.kurs && ytelse.kurs.reise && ytelse.kurs.reise.reisedager.length > 0;
+    const visUtenlandsopphold = ytelse.utenlandsopphold && Object.keys(ytelse.utenlandsopphold.perioder).length > 0;
     const formaterSøknadsperioder = () =>
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
-
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
             <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
@@ -160,13 +161,27 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 </div>
             )}
 
-            {/* {visUtenlandsopphold && (
+            {visReise && (
+                <div>
+                    <h3>Reise</h3>
+                    <hr className={classNames('linje')} />
+                    <p>Reisedager:</p>
+                    {ytelse.kurs.reise.reisedager.map((reisedag) => (
+                        <p key={reisedag}>{dayjs(reisedag).format('DD.MM.YYYY')}</p>
+                    ))}
+                </div>
+            )}
+            {visUtenlandsopphold && (
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
                     <hr className={classNames('linje')} />
-                    {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, countryList, intl)}
+                    <VisningAvPerioderSoknadKvittering
+                        perioder={ytelse.utenlandsopphold?.perioder}
+                        tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
+                        properties={['land']}
+                    />
                 </div>
-            )} */}
+            )}
 
             {visFerie && (
                 <div>

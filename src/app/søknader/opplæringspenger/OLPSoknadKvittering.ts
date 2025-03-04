@@ -1,7 +1,12 @@
 import Kvittering from 'app/models/forms/soeknader/Kvittering';
 import { ArbeidstidPeriodeMedTimer } from 'app/models/types';
 import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending';
-import { FrilanserAktivitet, SelvstendigNaeringsdrivendeAktivitet } from 'app/models/types/KvitteringTyper';
+import { Reise } from 'app/models/types/Kurs';
+import {
+    FrilanserAktivitet,
+    ISoknadKvitteringUtenlandsopphold,
+    SelvstendigNaeringsdrivendeAktivitet,
+} from 'app/models/types/KvitteringTyper';
 
 export interface IOLPSoknadKvittering extends Kvittering {
     ytelse: {
@@ -63,20 +68,13 @@ export interface Bosteder {
 
 export interface Kurs {
     kursholder: Kursholder;
-    kursperioder: KursperioderSoknadKvittering[];
+    kursperioder: string[];
+    reise: Reise;
 }
 
 export interface Kursholder {
     holder: null;
     institusjonsidentifikator: string;
-}
-
-export interface KursperioderSoknadKvittering {
-    periode: string;
-    avreise: string;
-    hjemkomst: string;
-    begrunnelseReisetidTil: null;
-    begrunnelseReisetidHjem: null;
 }
 
 export interface LovbestemtFerie {
@@ -98,7 +96,7 @@ export interface OpptjeningAktivitet {
 }
 
 export interface Utenlandsopphold {
-    perioder: UtenlandsoppholdPerioder;
+    perioder: ISoknadKvitteringUtenlandsopphold;
     perioderSomSkalSlettes: PerioderSomSkalSlettesClass;
 }
 

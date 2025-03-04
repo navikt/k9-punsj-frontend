@@ -21,7 +21,9 @@ interface KursComponentProps {
 
 const institusjonUuidFelt = 'kurs.kursHolder.institusjonsUuid';
 
-const initialKursperiode = { periode: new Periode({}), avreise: '', hjemkomst: '' };
+const initialKursperiode = {
+    periode: new Periode({}),
+};
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values } = useFormikContext<OLPSoknad>();
@@ -74,7 +76,21 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                 <React.Fragment key={index}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
-                                    <Label as="p">Periode med opplæring:</Label>
+                                    <div>
+                                        <Label as="p">Periode med opplæring:</Label>
+                                        {index > 0 && (
+                                            <div className="flex items-end float-right">
+                                                <Button
+                                                    variant="tertiary"
+                                                    size="small"
+                                                    icon={<Delete />}
+                                                    onClick={() => remove(index)}
+                                                >
+                                                    Fjern periode
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
                                     <VerticalSpacer sixteenPx />
                                     <div style={{ display: 'flex', gap: '30px' }}>
                                         <DatoInputFormikNew
@@ -87,39 +103,12 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                         />
                                     </div>
                                     <VerticalSpacer thirtyTwoPx />
-                                    <Label as="p">Reisetid:</Label>
+
                                     <VerticalSpacer sixteenPx />
-                                    <div style={{ display: 'flex', gap: '30px' }}>
-                                        <DatoInputFormikNew
-                                            label="Avreise (dato)"
-                                            name={`kurs.kursperioder.${index}.avreise`}
-                                        />
-                                        <DatoInputFormikNew
-                                            label="Hjemkomst (dato)"
-                                            name={`kurs.kursperioder.${index}.hjemkomst`}
-                                        />
-                                        {index > 0 && (
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'flex-end',
-                                                    paddingBottom: '3px',
-                                                }}
-                                            >
-                                                <Button
-                                                    variant="tertiary"
-                                                    size="small"
-                                                    onClick={() => remove(index)}
-                                                    icon={<Delete />}
-                                                >
-                                                    Fjern periode
-                                                </Button>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <VerticalSpacer thirtyTwoPx />
                                 </React.Fragment>
                             ))}
+
+                            <VerticalSpacer twentyPx />
 
                             <Button
                                 className="kurs__addButton"
