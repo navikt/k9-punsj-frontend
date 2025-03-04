@@ -8,9 +8,8 @@ import { IJournalpost, Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import initializeDate from 'app/utils/date-utils/src/initialize';
 import intlHelper from 'app/utils/intlUtils';
-import dayjs from 'dayjs';
+import { erYngreEnn18år } from 'app/utils/validationHelpers';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -92,13 +91,8 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                 setIdentErrorMessage(intlHelper(intl, 'ident.feil.ugyldigident'));
                 return true;
             }
-            const individnummerFraFødselsnummer = ident.substring(6, 9);
-            const århundreFraFødselsnummer = +individnummerFraFødselsnummer < 500 ? '19' : '20';
-            const søkerFødselsdato = initializeDate(
-                `${ident.substring(0, 4)}${århundreFraFødselsnummer}${ident.substring(4, 6)}`,
-                ['DDMMYYYY'],
-            );
-            if (dayjs().diff(søkerFødselsdato, 'years') < 18) {
+
+            if (erYngreEnn18år(ident)) {
                 setIdentErrorMessage(intlHelper(intl, 'ident.feil.søkerUnder18'));
                 return true;
             }

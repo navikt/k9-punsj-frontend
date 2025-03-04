@@ -1,6 +1,8 @@
 import { FormikValues } from 'formik';
 import * as yup from 'yup';
 
+import dayjs from 'dayjs';
+import { initializeDate } from './timeUtils';
 import { capitalize } from './utils';
 
 const invalidTextMessage = (text: string) => `Feltet inneholder ugyldige tegn: ${text}`;
@@ -63,4 +65,14 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
         );
         return errors;
     }
+};
+
+export const erYngreEnn18år = (fødselsnummer: string) => {
+    const individnummerFraFødselsnummer = fødselsnummer.substring(6, 9);
+    const århundreFraFødselsnummer = +individnummerFraFødselsnummer < 500 ? '19' : '20';
+    const søkerFødselsdato = initializeDate(
+        `${fødselsnummer.substring(0, 4)}${århundreFraFødselsnummer}${fødselsnummer.substring(4, 6)}`,
+        ['DDMMYYYY'],
+    );
+    return dayjs().diff(søkerFødselsdato, 'years') < 18;
 };

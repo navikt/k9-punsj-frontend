@@ -2,6 +2,7 @@ import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
+import { erYngreEnn18år } from 'app/utils/validationHelpers';
 
 export const checkIfFagsakMedValgtBehandlingsår = (
     fagsaker: FagsakForSelect[],
@@ -34,6 +35,11 @@ export const isJournalførKnapperDisabled = (
         if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
             return true;
         }
+
+        if (!IdentRules.erUgyldigIdent(identState.søkerId) && erYngreEnn18år(identState.søkerId)) {
+            return true;
+        }
+
         if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende && !toSokereIJournalpost) {
             return fagsak === undefined;
         }
