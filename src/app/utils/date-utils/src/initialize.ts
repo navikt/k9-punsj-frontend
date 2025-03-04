@@ -7,6 +7,6 @@ dayjs.extend(utc);
 
 const supportedFormats = ['YYYY-MM-DD', 'DD.MM.YYYY'];
 
-export default function initializeDate(dateString: string) {
-    return dayjs(dateString, supportedFormats).utc(true).startOf('day');
+export default function initializeDate(dateString: string, formats = supportedFormats): dayjs.Dayjs {
+    return dayjs(dateString, formats).utc(true).startOf('day');
 }

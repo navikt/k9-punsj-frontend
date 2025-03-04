@@ -278,6 +278,7 @@
     "ident.feil.annenSøkerJournalkopiSoker": "Fødselsnummeret kan ikke være søkers fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiBarn": "Fødselsnummeret kan ikke være pleietrengendes fødselsnummer.",
     "ident.feil.annenSøkerJournalkopiAnnenPart": "Fødselsnummeret kan ikke være annen parts fødselsnummer.",
+    "ident.feil.søkerUnder18": "Søker kan ikke være under 18 år.",
     "arbeidsforhold.arbeidstaker": "Arbeidstaker",
     "arbeidsforhold.annet": "Annet",
     "mapper.infoboks": "Det finnes ingen påbegynte registreringer knyttet til søkeren. Klikk på knappen under for å opprette en ny.",

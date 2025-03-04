@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { getPersonInfo } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import { IJournalpost, Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import initializeDate from 'app/utils/date-utils/src/initialize';
 import intlHelper from 'app/utils/intlUtils';
-import { getPersonInfo } from 'app/api/api';
-import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
+import dayjs from 'dayjs';
+import { RadioPanelGruppe } from 'nav-frontend-skjema';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface ISokersIdentProps {
     journalpost: IJournalpost;
@@ -50,6 +52,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     const [søkersInfo, setSøkersInfo] = useState<Person | undefined>(undefined);
     const [søkersInfoLoading, setSøkersInfoLoading] = useState<boolean>(false);
     const [søkersInfoError, setSøkersInfoError] = useState<boolean>(false);
+    const [identErrorMessage, setIdentErrorMessage] = useState<string | undefined>(undefined);
 
     const skalVises = erInntektsmeldingUtenKrav || (!!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype));
     const journalpostident = journalpost?.norskIdent;
@@ -83,12 +86,33 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
         });
     };
 
+    const checkIdentError = (ident: string): boolean => {
+        if (ident) {
+            if (IdentRules.erUgyldigIdent(ident)) {
+                setIdentErrorMessage(intlHelper(intl, 'ident.feil.ugyldigident'));
+                return true;
+            }
+            const individnummerFraFødselsnummer = ident.substring(6, 9);
+            const århundreFraFødselsnummer = +individnummerFraFødselsnummer < 500 ? '19' : '20';
+            const søkerFødselsdato = initializeDate(
+                `${ident.substring(0, 4)}${århundreFraFødselsnummer}${ident.substring(4, 6)}`,
+                ['DDMMYYYY'],
+            );
+            if (dayjs().diff(søkerFødselsdato, 'years') < 18) {
+                setIdentErrorMessage(intlHelper(intl, 'ident.feil.søkerUnder18'));
+                return true;
+            }
+        }
+        setIdentErrorMessage(undefined);
+        return false;
+    };
+
     const handleSøkersIdentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleSøkerIdChange(event);
 
         const identFromInput = event.target.value.replace(/\D+/, '');
 
-        if (identFromInput.length === 11 && !IdentRules.erUgyldigIdent(identFromInput)) {
+        if (identFromInput.length === 11 && !checkIdentError(identFromInput)) {
             hentSøkersInfo(identFromInput);
         } else {
             setSøkersInfo(undefined);
@@ -133,11 +157,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         loadingPersonsInfo={søkersInfoLoading}
                         errorPersonsInfo={søkersInfoError}
                         person={søkersInfo}
-                        errorValidationMessage={
-                            identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)
-                                ? intlHelper(intl, 'ident.feil.ugyldigident')
-                                : undefined
-                        }
+                        errorValidationMessage={identErrorMessage}
                         onChange={(event) => handleSøkersIdentChange(event)}
                     />
                 </>
