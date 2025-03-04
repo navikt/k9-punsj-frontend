@@ -3158,7 +3158,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.15.0, @navikt/aksel-icons@npm:^7.15.0":
+"@navikt/aksel-icons@npm:7.16.0":
+  version: 7.16.0
+  resolution: "@navikt/aksel-icons@npm:7.16.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.16.0%2F65fbe711a1c243b265ff217f97633223d91b8d59"
+  checksum: 10/862f2f0eef6c72f311b38a2db24f7ba03def9ba03dde710500c2d27a77c8ada542afb2dc64ee37293711799a31d435c1dd7c276736dc29d0a28e91d26176be8b
+  languageName: node
+  linkType: hard
+
+"@navikt/aksel-icons@npm:^7.15.0":
   version: 7.15.0
   resolution: "@navikt/aksel-icons@npm:7.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.15.0%2Fb9f685c3e2f9cb7ec6562e6a964dc3983140e610"
   checksum: 10/92ad80e741c85832e060567588ccf8880ce30f7831b80c2a14b903810656ef2fd9825f0f43911c8a0867268ebd5ce51b96b3076616f5c6d67b39e910b84bd186
@@ -12619,7 +12626,7 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:1.14.1"
     "@grafana/faro-web-tracing": "npm:1.14.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:7.15.0"
+    "@navikt/aksel-icons": "npm:7.16.0"
     "@navikt/ds-css": "npm:7.15.0"
     "@navikt/ds-icons": "npm:3.4.3"
     "@navikt/ds-react": "npm:7.15.0"
