@@ -157,7 +157,10 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     }
                     const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
                     uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
-                        const feilmeldingKey = uhaandtertFeilmelding.felt.replace('ytelse.', '');
+                        const feilmeldingKey = uhaandtertFeilmelding.felt
+                            .replace('ytelse.', '')
+                            // støgg fiks for validering av reisedager
+                            .replace('.<list element>', '');
                         setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
                     });
                 } else {
