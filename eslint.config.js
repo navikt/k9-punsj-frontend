@@ -14,6 +14,9 @@ const ERROR = 2;
 
 export default [
     {
+        ignores: ['node_modules', 'dist', '.yarn', 'src/app/build', '.storybook', 'storybook-static'],
+    },
+    {
         settings: {
             react: {
                 version: 'detect',
@@ -30,16 +33,6 @@ export default [
     {
         name: 'base-config',
         files: ['**/*.{js,mjs,ts,jsx,tsx}'],
-        ignores: [
-            'node_modules/**/*',
-            'dist/**/*',
-            '.yarn/**/*',
-            '.yarn',
-            'src/app/build/**/*',
-            '.storybook/**/*',
-            'storybook-static/**/*',
-            'storybook-static',
-        ], // specify ignored files
         languageOptions: {
             parser: tsParser,
             // parserOptions: {
