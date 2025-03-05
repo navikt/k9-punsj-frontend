@@ -6,7 +6,7 @@ Frontend for manuell "punching" av papirsøknader som kommer inn for ytelser i k
 
 ## Komme i gang
 
-k9-los-web har dependencies til pakker publisert fra [@navikt](https://github.com/navikt).
+k9-punsj-frontend har dependencies til pakker publisert fra [@navikt](https://github.com/navikt).
 
 For å få hentet pakker fra GitHub sitt pakkeregistry må man sette opp lokal NPM med autentisering mot GitHub med en Personal Access Token (PAT) med `read:packages`-tilgang i lokalt utviklingsmiljø, før man gjør `yarn install`. GitHub har en guide på hvordan man gjør dette [her](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
@@ -73,8 +73,8 @@ Testene kjører automatisk når ny kode dyttes til [master](https://github.com/n
 
 ## To do
 
-- Utvide for flere søkere
-- Utvide søknadsskjemaet
+-   Utvide for flere søkere
+-   Utvide søknadsskjemaet
 
 ## Henvendelser
 
