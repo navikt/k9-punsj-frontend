@@ -1,23 +1,22 @@
 import React from 'react';
 
-import { KursperioderSoknadKvittering } from 'app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { periodToFormattedString } from 'app/utils';
 
 interface Props {
-    kursperioder: KursperioderSoknadKvittering[];
+    kursperioder: string[];
 }
 
-const VisningAvKursperioderSoknadKvittering = ({ kursperioder }: Props) => (
-    <>
-        {kursperioder.map((kursperiode, index) => (
-            <div key={`kursperiode-${index}`}>
-                <p>Periode med opplæring:</p>
-                {periodToFormattedString(kursperiode.periode)}
-                {/*    <p>Avreise</p>
-            <p>Hjemkomst</p> */}
-            </div>
-        ))}
-    </>
-);
+const VisningAvKursperioderSoknadKvittering = ({ kursperioder }: Props) => {
+    return (
+        <>
+            {kursperioder.map((kursperiode, index) => (
+                <div key={`kursperiode-${index}`}>
+                    <p>Periode med opplæring:</p>
+                    {periodToFormattedString(kursperiode)}
+                </div>
+            ))}
+        </>
+    );
+};
 
 export default VisningAvKursperioderSoknadKvittering;

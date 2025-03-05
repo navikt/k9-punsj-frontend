@@ -118,10 +118,11 @@ const OLPSchema = yup.object({
         kursperioder: yup.array().of(
             yup.object({
                 periode: periode(),
-                avreise: yup.string().required(),
-                hjemkomst: yup.string().required(),
             }),
         ),
+        reise: yup.object({
+            reisedager: yup.array().of(yup.string().required()),
+        }),
     }),
 });
 export default OLPSchema;

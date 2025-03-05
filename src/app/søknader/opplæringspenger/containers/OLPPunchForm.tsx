@@ -41,6 +41,7 @@ import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
+import Reisedager from './Reisedager';
 
 interface OwnProps {
     journalpostid: string;
@@ -109,10 +110,13 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
 
     useEffect(() => {
         const panelerSomSkalÅpnes = [];
-        if (values.utenlandsopphold) {
+        if (values.kurs.reise.reisedager.length > 0) {
+            panelerSomSkalÅpnes.push(PunchFormPaneler.REISE);
+        }
+        if (values.utenlandsopphold.length > 0) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.UTENLANDSOPPHOLD);
         }
-        if (values.lovbestemtFerie) {
+        if (values.lovbestemtFerie.length > 0) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.FERIE);
         }
         if (
@@ -153,7 +157,10 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     }
                     const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
                     uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
-                        const feilmeldingKey = uhaandtertFeilmelding.felt.replace('ytelse.', '');
+                        const feilmeldingKey = uhaandtertFeilmelding.felt
+                            .replace('ytelse.', '')
+                            // støgg fiks for validering av reisedager
+                            .replace('.<list element>', '');
                         setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
                     });
                 } else {
@@ -262,6 +269,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 PunchFormPaneler.ARBEID,
                 PunchFormPaneler.OPPLYSINGER_OM_SOKER,
                 PunchFormPaneler.MEDLEMSKAP,
+                PunchFormPaneler.REISE,
             ]);
         } else {
             setÅpnePaneler([]);
@@ -272,20 +280,20 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         <>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             <Soknadsperioder
                 eksisterendePerioder={eksisterendePerioder}
                 hentEksisterendePerioderError={hentEksisterendePerioderError}
             />
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             <OpplysningerOmSoknad />
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             <KursComponent
                 institusjoner={institusjoner}
                 hentInstitusjonerLoading={hentInstitusjonerLoading}
                 hentInstitusjonerError={hentInstitusjonerError}
             />
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             <Checkbox
                 onChange={(e) => {
                     toggleAllePaneler(e.target.checked);
@@ -293,13 +301,24 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             >
                 {intlHelper(intl, 'skjema.ekspander')}
             </Checkbox>
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             <Accordion>
                 <EndringAvSøknadsperioder
                     onClick={() => handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}
                     eksisterendePerioder={eksisterendePerioder}
                     isOpen={checkOpenState(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER) || expandAll}
                 />
+                <Accordion.Item
+                    defaultOpen={checkOpenState(PunchFormPaneler.REISE)}
+                    open={checkOpenState(PunchFormPaneler.REISE)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.REISE)}
+                    data-test-id="accordionItem-reisepanel"
+                >
+                    <Accordion.Header>Reisedager</Accordion.Header>
+                    <Accordion.Content>
+                        <Reisedager name="kurs.reise.reisedager" />
+                    </Accordion.Content>
+                </Accordion.Item>
                 <Accordion.Item
                     defaultOpen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
                     open={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
@@ -356,7 +375,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 <Accordion.Item
                     open={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                     defaultOpen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    onClick={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
                     data-test-id="accordionItem-opplysningerOmSøkerPanel"
                 >
                     <Accordion.Header>
@@ -384,7 +403,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 <Accordion.Item
                     open={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
                     defaultOpen={checkOpenState(PunchFormPaneler.MEDLEMSKAP)}
-                    onClick={() => handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.MEDLEMSKAP)}
                     data-test-id="accordionItem-medlemskapPanel"
                 >
                     <Accordion.Header>
@@ -466,7 +485,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     </Button>
                 </p>
             </div>
-            <VerticalSpacer sixteenPx />
+            <VerticalSpacer thirtyTwoPx />
             {mellomlagringError instanceof Error && (
                 <Alert size="small" variant="error">
                     {intlHelper(intl, 'skjema.feil.ikke_lagret')}
