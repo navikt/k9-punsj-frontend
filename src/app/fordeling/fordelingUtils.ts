@@ -31,12 +31,11 @@ export const isJournalførKnapperDisabled = (
     behandlingsÅr?: string,
     barnMedFagsak?: FagsakForSelect,
 ) => {
+    if (!IdentRules.erUgyldigIdent(identState.søkerId) && erYngreEnn18år(identState.søkerId)) {
+        return true;
+    }
     if (isDokumenttypeMedPleietrengende) {
         if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
-            return true;
-        }
-
-        if (!IdentRules.erUgyldigIdent(identState.søkerId) && erYngreEnn18år(identState.søkerId)) {
             return true;
         }
 

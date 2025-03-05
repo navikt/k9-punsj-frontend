@@ -29,5 +29,11 @@ describe('validationHelpers', () => {
             const exactEighteenPerson = `0101${(year - 18).toString().slice(-2)}99900`;
             expect(erYngreEnn18år(exactEighteenPerson)).toBe(false);
         });
+        it('handles D-numbers correctly for person younger than 18', () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const youngDnrPerson = `5101${(year - 15).toString().slice(-2)}99900`;
+            expect(erYngreEnn18år(youngDnrPerson)).toBe(true);
+        });
     });
 });
