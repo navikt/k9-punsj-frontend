@@ -28,12 +28,13 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
     fromDate?: Date;
     toDate?: Date;
     dataTestId?: string;
+    hideLabel?: boolean;
 };
 
 const NewDateInput: React.FC<Props> = ({
     label,
     onChange,
-
+    hideLabel,
     className,
     errorMessage,
     id,
@@ -123,6 +124,7 @@ const NewDateInput: React.FC<Props> = ({
             >
                 <DatePicker.Input
                     {...inputProps}
+                    hideLabel={hideLabel}
                     id={id}
                     label={label}
                     error={error}

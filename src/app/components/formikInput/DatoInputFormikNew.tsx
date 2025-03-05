@@ -7,17 +7,19 @@ import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disabled'> {
     label: string;
     name: string;
+    hideLabel?: boolean;
     disabled?: boolean;
     handleBlur?: (callback: () => void, values: any) => void;
 }
 
-const DatoInputFormikNew = ({ label, name, handleBlur, ...props }: OwnProps) => {
+const DatoInputFormikNew = ({ label, name, handleBlur, hideLabel, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
 
     return (
         <NewDateInput
             label={label}
+            hideLabel={hideLabel}
             {...field}
             {...props}
             onChange={(selectedDate: string) => {

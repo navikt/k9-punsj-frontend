@@ -42,9 +42,13 @@ yarn dev
 Man kan taste in hvilket nummer som helst som journalpostID. Noen journalpostnummer har ulike responser.
 
 ```
-- 200: Gir journalpost med PDF dokument.
+- 200: Gir journalpost med PDF dokument knyttet til PSB-sak
 - 404: Finnes ikke
 - 403: Ikke tilgang
+- 409: IkkeStøttet
+- 500: AbacError
+- 420: Journalpost knyttet til OLP-sak
+- 7523521: Ferdigstilt med saksnummer
 - 463687943: Finns informasjon i Infotrygd.
 - 45537868838: Journalpost støttes ikke.
 ```
