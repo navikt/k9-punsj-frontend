@@ -12,7 +12,7 @@
         "@navikt/aksel-icons": "7.15.0",
         "@navikt/ds-css": "7.15.0",
         "@navikt/ds-icons": "3.4.3",
-        "@navikt/ds-react": "7.15.0",
+        "@navikt/ds-react": "7.17.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@reduxjs/toolkit": "^2.6.0",
         "@sentry/react": "9.3.0",
