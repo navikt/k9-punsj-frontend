@@ -15,7 +15,7 @@
         "@navikt/ds-react": "7.15.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@reduxjs/toolkit": "^2.6.0",
-        "@sentry/react": "9.3.0",
+        "@sentry/react": "9.4.0",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.0",
         "dayjs": "1.11.13",
