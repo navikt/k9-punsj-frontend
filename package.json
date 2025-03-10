@@ -83,7 +83,7 @@
         "@babel/preset-env": "7.26.9",
         "@babel/preset-react": "7.26.3",
         "@babel/preset-typescript": "7.26.0",
-        "@eslint/js": "^9.21.0",
+        "@eslint/js": "^9.22.0",
         "@navikt/ds-tailwind": "^7.15.0",
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.15",
         "@storybook/addon-essentials": "^8.6.3",
