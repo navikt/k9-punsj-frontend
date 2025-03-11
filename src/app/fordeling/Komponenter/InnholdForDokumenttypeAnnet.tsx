@@ -87,24 +87,22 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
     }, [harKategorierBlivitHentet]);
 
     const identErrorMessage = useMemo(() => {
-        if (identState.søkerId) {
-            if (IdentRules.erUgyldigIdent(identState.søkerId)) {
-                return intlHelper(intl, 'ident.feil.ugyldigident');
-            }
-
-            if (erYngreEnn18år(identState.søkerId)) {
-                return intlHelper(intl, 'ident.feil.søkerUnder18');
-            }
+        if (identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)) {
+            return intlHelper(intl, 'ident.feil.ugyldigident');
         }
 
         return undefined;
     }, [identState.søkerId]);
 
+    const under18WarningMessage = useMemo(() => {
+        if (identState.søkerId && erYngreEnn18år(identState.søkerId)) {
+            return intlHelper(intl, 'ident.warning.søkerUnder18');
+        }
+        return undefined;
+    }, [identState.søkerId]);
+
     const isSubmitDisabled = useMemo(
-        () =>
-            IdentRules.erUgyldigIdent(identState.søkerId) ||
-            !fordelingState.valgtGosysKategori ||
-            (!IdentRules.erUgyldigIdent(identState.søkerId) && erYngreEnn18år(identState.søkerId)),
+        () => IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori,
         [identState.søkerId, fordelingState.valgtGosysKategori],
     );
 
@@ -119,6 +117,11 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
                 maxLength={11}
                 error={identErrorMessage}
             />
+            {under18WarningMessage && (
+                <Alert size="small" variant="warning">
+                    {under18WarningMessage}
+                </Alert>
+            )}
 
             <VerticalSpacer eightPx />
 

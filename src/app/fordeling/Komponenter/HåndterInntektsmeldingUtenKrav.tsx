@@ -20,7 +20,6 @@ import {
 } from 'app/state/actions/FordelingFerdigstillJournalpostActions';
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-import { erYngreEnn18år } from 'app/utils/validationHelpers';
 import OkGåTilLosModal from '../../components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
 import ErrorModal from './ErrorModal';
@@ -90,10 +89,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     const skalSetteInntektsmeldingUtenKravPåVent = () =>
         håndterInntektsmeldingUtenKravValg === settPåVentValue && søkerId;
 
-    const isSubmitDisabled = useMemo(
-        () => IdentRules.erUgyldigIdent(søkerId) || (!IdentRules.erUgyldigIdent(søkerId) && erYngreEnn18år(søkerId)),
-        [søkerId],
-    );
+    const isSubmitDisabled = useMemo(() => IdentRules.erUgyldigIdent(søkerId), [søkerId]);
 
     const getUtførValgKnapp = () => {
         if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {

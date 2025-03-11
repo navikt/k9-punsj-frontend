@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import { Alert } from '@navikt/ds-react';
 import { getPersonInfo } from 'app/api/api';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
@@ -86,20 +87,21 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     };
 
     const checkIdentError = (ident: string): boolean => {
-        if (ident) {
-            if (IdentRules.erUgyldigIdent(ident)) {
-                setIdentErrorMessage(intlHelper(intl, 'ident.feil.ugyldigident'));
-                return true;
-            }
-
-            if (erYngreEnn18år(ident)) {
-                setIdentErrorMessage(intlHelper(intl, 'ident.feil.søkerUnder18'));
-                return true;
-            }
+        if (ident && IdentRules.erUgyldigIdent(ident)) {
+            setIdentErrorMessage(intlHelper(intl, 'ident.feil.ugyldigident'));
+            return true;
         }
+
         setIdentErrorMessage(undefined);
         return false;
     };
+
+    const under18WarningMessage = useMemo(() => {
+        if (identState.søkerId && erYngreEnn18år(identState.søkerId)) {
+            return intlHelper(intl, 'ident.warning.søkerUnder18');
+        }
+        return undefined;
+    }, [identState.søkerId]);
 
     const handleSøkersIdentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleSøkerIdChange(event);
@@ -154,6 +156,11 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         errorValidationMessage={identErrorMessage}
                         onChange={(event) => handleSøkersIdentChange(event)}
                     />
+                    {under18WarningMessage && (
+                        <Alert size="small" variant="warning">
+                            {under18WarningMessage}
+                        </Alert>
+                    )}
                 </>
             )}
         </>
