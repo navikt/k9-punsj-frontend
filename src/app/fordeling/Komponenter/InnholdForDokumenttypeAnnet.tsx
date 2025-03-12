@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, TextField } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { IFordelingState, IJournalpost } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
 import { IdentRules } from 'app/rules';
 import {
     hentGjelderKategorierFraGosys,
@@ -11,11 +13,10 @@ import {
     setValgtGosysKategoriAction,
 } from 'app/state/actions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-import intlHelper from 'app/utils/intlUtils';
-import { IFordelingState, IJournalpost } from 'app/models/types';
-import { IIdentState } from 'app/models/types/IdentState';
 import Fagsak from 'app/types/Fagsak';
+import intlHelper from 'app/utils/intlUtils';
 
+import { erYngreEnn18år } from 'app/utils/validationHelpers';
 import GosysGjelderKategorier from './GoSysGjelderKategorier';
 
 interface Props {
@@ -85,6 +86,26 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
         }
     }, [harKategorierBlivitHentet]);
 
+    const identErrorMessage = useMemo(() => {
+        if (identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)) {
+            return intlHelper(intl, 'ident.feil.ugyldigident');
+        }
+
+        return undefined;
+    }, [identState.søkerId]);
+
+    const under18WarningMessage = useMemo(() => {
+        if (identState.søkerId && erYngreEnn18år(identState.søkerId)) {
+            return intlHelper(intl, 'ident.warning.søkerUnder18');
+        }
+        return undefined;
+    }, [identState.søkerId]);
+
+    const isSubmitDisabled = useMemo(
+        () => IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori,
+        [identState.søkerId, fordelingState.valgtGosysKategori],
+    );
+
     return (
         <div>
             <TextField
@@ -94,12 +115,13 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
                 value={sokersIdent}
                 className="bold-label ident-soker-1"
                 maxLength={11}
-                error={
-                    IdentRules.erUgyldigIdent(identState.søkerId)
-                        ? intlHelper(intl, 'ident.feil.ugyldigident')
-                        : undefined
-                }
+                error={identErrorMessage}
             />
+            {under18WarningMessage && (
+                <Alert size="small" variant="warning">
+                    {under18WarningMessage}
+                </Alert>
+            )}
 
             <VerticalSpacer eightPx />
 
@@ -120,7 +142,7 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
 
             <Button
                 size="small"
-                disabled={IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori}
+                disabled={isSubmitDisabled}
                 onClick={() =>
                     omfordel(journalpost?.journalpostId, identState.søkerId, fordelingState.valgtGosysKategori)
                 }

@@ -34,6 +34,7 @@ export const isJournalførKnapperDisabled = (
         if (journalpost.erFerdigstilt && journalpost.sak?.reservertSaksnummer) {
             return true;
         }
+
         if (harFagsaker && !reserverSaksnummerTilNyFagsak && !ingenInfoOmPleitrengende && !toSokereIJournalpost) {
             return fagsak === undefined;
         }

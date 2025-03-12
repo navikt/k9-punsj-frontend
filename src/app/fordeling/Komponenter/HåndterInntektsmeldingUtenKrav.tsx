@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import { Alert, Button } from '@navikt/ds-react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Alert, Button } from '@navikt/ds-react';
 
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { IJournalpost } from 'app/models/types';
+import { IdentRules } from 'app/rules';
 import { RootStateType } from 'app/state/RootState';
 import { setJournalpostPaaVentResetAction } from 'app/state/actions';
 import {
@@ -18,10 +20,9 @@ import {
 } from 'app/state/actions/FordelingFerdigstillJournalpostActions';
 import { settJournalpostPaaVent } from 'app/state/actions/FordelingSettPaaVentActions';
 import { opprettGosysOppgave } from 'app/state/actions/GosysOppgaveActions';
-import ErrorModal from './ErrorModal';
 import OkGåTilLosModal from '../../components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentModal from '../../components/settPåVentModal/SettPåVentModal';
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import ErrorModal from './ErrorModal';
 
 interface Props {
     journalpost?: IJournalpost;
@@ -88,10 +89,12 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
     const skalSetteInntektsmeldingUtenKravPåVent = () =>
         håndterInntektsmeldingUtenKravValg === settPåVentValue && søkerId;
 
+    const isSubmitDisabled = useMemo(() => IdentRules.erUgyldigIdent(søkerId), [søkerId]);
+
     const getUtførValgKnapp = () => {
         if (skalOppretteGosysoppgaveForInntektsmeldingUtenKrav()) {
             return (
-                <Button size="small" onClick={() => setShowOpprettOppgaveIGosysModal(true)}>
+                <Button size="small" onClick={() => setShowOpprettOppgaveIGosysModal(true)} disabled={isSubmitDisabled}>
                     <FormattedMessage id="fordeling.sakstype.ANNET" />
                 </Button>
             );
@@ -99,7 +102,11 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
         if (skalFerdigstilleJournalpost()) {
             return (
-                <Button size="small" onClick={() => setShowFerdigstillJournalpostModal(true)}>
+                <Button
+                    size="small"
+                    onClick={() => setShowFerdigstillJournalpostModal(true)}
+                    disabled={isSubmitDisabled}
+                >
                     <FormattedMessage id="skjema.knapp.ferdigstillJournalpost" />
                 </Button>
             );
@@ -107,7 +114,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
 
         if (skalSetteInntektsmeldingUtenKravPåVent()) {
             return (
-                <Button size="small" onClick={() => setShowSettPaaVentModal(true)}>
+                <Button size="small" onClick={() => setShowSettPaaVentModal(true)} disabled={isSubmitDisabled}>
                     <FormattedMessage id="skjema.knapp.settpaavent" />
                 </Button>
             );
