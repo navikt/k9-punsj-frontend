@@ -39,9 +39,7 @@ export default function ArbeidstidPeriodeListe({
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values) => {
-                lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)));
-            }}
+            onSubmit={(values) => lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)))}
             validationSchema={schema}
         >
             {({ handleSubmit, values }) => (
