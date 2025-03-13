@@ -39,7 +39,9 @@ export default function ArbeidstidPeriodeListe({
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values) => lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)))}
+            onSubmit={(values) => {
+                lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)));
+            }}
             validationSchema={schema}
         >
             {({ handleSubmit, values }) => (
@@ -61,6 +63,7 @@ export default function ArbeidstidPeriodeListe({
                                 <div className="mb-8 mt-4">
                                     <Button
                                         variant="tertiary"
+                                        type="button"
                                         onClick={() => arrayHelpers.push(new ArbeidstidPeriodeMedTimer({}))}
                                         icon={<AddCircle />}
                                     >
@@ -70,13 +73,13 @@ export default function ArbeidstidPeriodeListe({
                                 <div style={{ display: 'flex' }}>
                                     <Button
                                         style={{ flexGrow: 1, marginRight: '0.9375rem' }}
-                                        type="submit"
+                                        type="button"
                                         onClick={() => handleSubmit()}
                                     >
                                         Lagre
                                     </Button>
 
-                                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={avbryt}>
+                                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={avbryt} type="button">
                                         Avbryt
                                     </Button>
                                 </div>

@@ -36,8 +36,14 @@ const ArbeidstidKalender = ({
     eksisterendeSoknadsperioder = [],
 }: ArbeidstidKalenderProps) => {
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
+    const [originalePerioder, setOriginalePerioder] = useState<IArbeidstidPeriodeMedTimer[]>([]);
 
-    const toggleVisArbeidstidLengrePerioder = () => setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
+    const toggleVisArbeidstidLengrePerioder = () => {
+        if (!visArbeidstidLengrePerioder) {
+            setOriginalePerioder([...arbeidstidInfo.perioder]);
+        }
+        setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
+    };
 
     const gyldigePerioder = [...(nyeSoknadsperioder || []), ...eksisterendeSoknadsperioder].filter(Boolean);
 
@@ -86,6 +92,22 @@ const ArbeidstidKalender = ({
         }
     };
 
+    const lagrePerioder = (nyePerioder: IArbeidstidPeriodeMedTimer[]) => {
+        const perioderIkkeIModal = originalePerioder.filter(
+            (orig) =>
+                !nyePerioder.some(
+                    (ny) => ny.periode?.fom === orig.periode?.fom && ny.periode?.tom === orig.periode?.tom,
+                ),
+        );
+
+        const allePerioder = [...perioderIkkeIModal, ...nyePerioder];
+
+        updateSoknad(allePerioder);
+        if (updateSoknadState) {
+            updateSoknadState(allePerioder);
+        }
+    };
+
     return (
         <div className="mt-6">
             <div className="mb-4">
@@ -113,10 +135,7 @@ const ArbeidstidKalender = ({
                         soknadsperioder={gyldigePerioder}
                         nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
-                            updateSoknad(periodeInfo);
-                            if (updateSoknadState) {
-                                updateSoknadState(periodeInfo);
-                            }
+                            lagrePerioder(periodeInfo);
                             toggleVisArbeidstidLengrePerioder();
                         }}
                         avbryt={toggleVisArbeidstidLengrePerioder}
