@@ -116,7 +116,10 @@ export default function ArbeidstidPeriodeListe({
     }
 
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
-        perioder: initialPerioder,
+        perioder: initialPerioder.sort(
+            (a, b) =>
+                dayjs(a.periode?.fom, formats.YYYYMMDD).valueOf() - dayjs(b.periode?.fom, formats.YYYYMMDD).valueOf(),
+        ),
     };
 
     const handleSaveValues = (values?: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }) => {
