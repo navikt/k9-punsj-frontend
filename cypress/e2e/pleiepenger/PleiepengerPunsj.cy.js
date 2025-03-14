@@ -27,9 +27,11 @@ describe('Pleiepenger punsj', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
+                .clear({ force: true })
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
+                .clear({ force: true })
                 .type('11.11.2021');
         });
 
@@ -55,7 +57,8 @@ describe('Pleiepenger punsj', () => {
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
-            cy.findAllByLabelText('Timer').eq(3).clear({ force: true }).type(7, { force: true });
+            cy.findAllByLabelText('Timer').eq(2).clear({ force: true }).type(7, { force: true });
+
             cy.findByRole('button', { name: /Lagre/i }).click();
         });
         cy.findByRole('button', { name: /vis mer/i }).click();
