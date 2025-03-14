@@ -36,14 +36,38 @@ export default function ArbeidstidPeriodeListe({
 
     if (harEksisterendePerioder) {
         initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
+
+        const eksisterendePerioder = new Set(
+            initialPerioder
+                .filter((p) => p.periode && p.periode.fom && p.periode.tom)
+                .map((p) => `${p.periode?.fom || ''}_${p.periode?.tom || ''}`),
+        );
+
+        const manglendePerioder = soknadsperioder.filter(
+            (p) => p.fom && p.tom && !eksisterendePerioder.has(`${p.fom}_${p.tom}`),
+        );
+
+        if (manglendePerioder.length > 0) {
+            const nyePerioder = manglendePerioder.map(
+                (p) =>
+                    new ArbeidstidPeriodeMedTimer({
+                        periode: p,
+                        faktiskArbeidPerDag: { timer: '', minutter: '' },
+                        jobberNormaltPerDag: { timer: '', minutter: '' },
+                    }),
+            );
+
+            initialPerioder = [...initialPerioder, ...nyePerioder];
+        }
     } else if (soknadsperioder.length > 0) {
-        initialPerioder = soknadsperioder.map((p) => {
-            return new ArbeidstidPeriodeMedTimer({
-                periode: p,
-                faktiskArbeidPerDag: { timer: '', minutter: '' },
-                jobberNormaltPerDag: { timer: '', minutter: '' },
-            });
-        });
+        initialPerioder = soknadsperioder.map(
+            (p) =>
+                new ArbeidstidPeriodeMedTimer({
+                    periode: p,
+                    faktiskArbeidPerDag: { timer: '', minutter: '' },
+                    jobberNormaltPerDag: { timer: '', minutter: '' },
+                }),
+        );
     } else {
         initialPerioder = [
             new ArbeidstidPeriodeMedTimer({
