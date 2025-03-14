@@ -88,7 +88,7 @@
         "@pmmmwh/react-refresh-webpack-plugin": "0.5.15",
         "@storybook/addon-essentials": "^8.6.4",
         "@storybook/addon-interactions": "^8.6.4",
-        "@storybook/addon-webpack5-compiler-swc": "^2.1.0",
+        "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
         "@storybook/preview-api": "^8.6.4",
         "@storybook/react": "^8.6.4",
         "@storybook/react-webpack5": "^8.6.4",
