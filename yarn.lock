@@ -3135,7 +3135,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.7.0"
-    "@sentry/cli": "npm:2.42.2"
+    "@sentry/cli": "npm:2.42.3"
     axios: "npm:1.8.3"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -3734,66 +3734,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-darwin@npm:2.42.2"
+"@sentry/cli-darwin@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-darwin@npm:2.42.3"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-linux-arm64@npm:2.42.2"
+"@sentry/cli-linux-arm64@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-linux-arm64@npm:2.42.3"
   conditions: (os=linux | os=freebsd) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-linux-arm@npm:2.42.2"
+"@sentry/cli-linux-arm@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-linux-arm@npm:2.42.3"
   conditions: (os=linux | os=freebsd) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-linux-i686@npm:2.42.2"
+"@sentry/cli-linux-i686@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-linux-i686@npm:2.42.3"
   conditions: (os=linux | os=freebsd) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-linux-x64@npm:2.42.2"
+"@sentry/cli-linux-x64@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-linux-x64@npm:2.42.3"
   conditions: (os=linux | os=freebsd) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-win32-i686@npm:2.42.2"
+"@sentry/cli-win32-i686@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-win32-i686@npm:2.42.3"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli-win32-x64@npm:2.42.2"
+"@sentry/cli-win32-x64@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli-win32-x64@npm:2.42.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:2.42.2":
-  version: 2.42.2
-  resolution: "@sentry/cli@npm:2.42.2"
+"@sentry/cli@npm:2.42.3":
+  version: 2.42.3
+  resolution: "@sentry/cli@npm:2.42.3"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.42.2"
-    "@sentry/cli-linux-arm": "npm:2.42.2"
-    "@sentry/cli-linux-arm64": "npm:2.42.2"
-    "@sentry/cli-linux-i686": "npm:2.42.2"
-    "@sentry/cli-linux-x64": "npm:2.42.2"
-    "@sentry/cli-win32-i686": "npm:2.42.2"
-    "@sentry/cli-win32-x64": "npm:2.42.2"
+    "@sentry/cli-darwin": "npm:2.42.3"
+    "@sentry/cli-linux-arm": "npm:2.42.3"
+    "@sentry/cli-linux-arm64": "npm:2.42.3"
+    "@sentry/cli-linux-i686": "npm:2.42.3"
+    "@sentry/cli-linux-x64": "npm:2.42.3"
+    "@sentry/cli-win32-i686": "npm:2.42.3"
+    "@sentry/cli-win32-x64": "npm:2.42.3"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -3816,7 +3816,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/f92800b54a88c2f9f1d7a2604bb6b4a17c429a836871df2b966595af7d382bdac490586b19e5ab81d278d38d498207fcdbd94ceba0a50acec2ab77f1a6a4f3af
+  checksum: 10/6a0bf510161edc11bd91b1e458463a7f18afb6268b6525154d8f46ca36d34b186e8a553ab5b9e23b509a4a0b551f900eb2d7af4a4202094685a10dac2ce5b2fc
   languageName: node
   linkType: hard
 
@@ -6249,7 +6249,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.8.3, axios@npm:^1.7.9":
+"axios@npm:1.8.3, axios@npm:^1.8.2":
   version: 1.8.3
   resolution: "axios@npm:1.8.3"
   dependencies:
@@ -7034,7 +7034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-table3@npm:~0.6.1":
+"cli-table3@npm:~0.6.1, cli-table3@npm:~0.6.5":
   version: 0.6.5
   resolution: "cli-table3@npm:0.6.5"
   dependencies:
@@ -7845,9 +7845,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^14.1.0":
-  version: 14.1.0
-  resolution: "cypress@npm:14.1.0"
+"cypress@npm:^14.2.0":
+  version: 14.2.0
+  resolution: "cypress@npm:14.2.0"
   dependencies:
     "@cypress/request": "npm:^3.0.7"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -7862,7 +7862,7 @@ __metadata:
     check-more-types: "npm:^2.24.0"
     ci-info: "npm:^4.1.0"
     cli-cursor: "npm:^3.1.0"
-    cli-table3: "npm:~0.6.1"
+    cli-table3: "npm:~0.6.5"
     commander: "npm:^6.2.1"
     common-tags: "npm:^1.8.0"
     dayjs: "npm:^1.10.4"
@@ -7894,7 +7894,7 @@ __metadata:
     yauzl: "npm:^2.10.0"
   bin:
     cypress: bin/cypress
-  checksum: 10/35b7081f00c2e3ba8c757c571d9cb7650e7e64a9294717c4ba8ad35af337be855584946cc517b6a91fa2cd3b8d947bb4e883f7c0fe393727513ea3ec9c99d170
+  checksum: 10/1352ac3dec9986e532f05587efff498b7e5ad795ba44703485b22b2ca62ecbfb99d04c4be0ba9dfff247fe535a72baa5515480aa9d82303251c51721eea6ffea
   languageName: node
   linkType: hard
 
@@ -12671,7 +12671,7 @@ __metadata:
     cross-env: "npm:^7.0.3"
     css-loader: "npm:7.1.2"
     css-minimizer-webpack-plugin: "npm:7.0.2"
-    cypress: "npm:^14.1.0"
+    cypress: "npm:^14.2.0"
     cypress-wait-until: "npm:^3.0.2"
     dayjs: "npm:1.11.13"
     dotenv: "npm:16.4.7"
@@ -12696,7 +12696,7 @@ __metadata:
     jest-mock: "npm:29.7.0"
     less: "npm:4.2.2"
     less-loader: "npm:12.2.0"
-    lint-staged: "npm:15.4.3"
+    lint-staged: "npm:15.5.0"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.9.2"
     msw: "npm:2.7.3"
@@ -12731,7 +12731,7 @@ __metadata:
     redux-logger: "npm:3.0.6"
     regenerator-runtime: "npm:0.14.1"
     source-map-loader: "npm:5.0.0"
-    start-server-and-test: "npm:2.0.10"
+    start-server-and-test: "npm:2.0.11"
     storybook: "npm:^8.6.4"
     storybook-addon-fetch-mock: "npm:^2.0.1"
     style-loader: "npm:4.0.0"
@@ -12919,9 +12919,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:15.4.3":
-  version: 15.4.3
-  resolution: "lint-staged@npm:15.4.3"
+"lint-staged@npm:15.5.0":
+  version: 15.5.0
+  resolution: "lint-staged@npm:15.5.0"
   dependencies:
     chalk: "npm:^5.4.1"
     commander: "npm:^13.1.0"
@@ -12935,7 +12935,7 @@ __metadata:
     yaml: "npm:^2.7.0"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10/14a6a9cb9b5e8027b1347cb24e114839d618d343d5c724c26def7d45ca9b9a9b813b585531c68f5a3d13332407c2dba198987a73f0350df483d99a876ba69c60
+  checksum: 10/5873584649c5f840b990036c20abd4b58d6b1313dad5505627b4d0cc077f0ec8ac0d6cf4cf4d959e66e0ab085db384bb12dce9490ff29217bf4ed96d0442ed51
   languageName: node
   linkType: hard
 
@@ -16305,12 +16305,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.1, rxjs@npm:^7.8.1":
+"rxjs@npm:^7.5.1":
   version: 7.8.1
   resolution: "rxjs@npm:7.8.1"
   dependencies:
     tslib: "npm:^2.1.0"
   checksum: 10/b10cac1a5258f885e9dd1b70d23c34daeb21b61222ee735d2ec40a8685bdca40429000703a44f0e638c27a684ac139e1c37e835d2a0dc16f6fc061a138ae3abb
+  languageName: node
+  linkType: hard
+
+"rxjs@npm:^7.8.2":
+  version: 7.8.2
+  resolution: "rxjs@npm:7.8.2"
+  dependencies:
+    tslib: "npm:^2.1.0"
+  checksum: 10/03dff09191356b2b87d94fbc1e97c4e9eb3c09d4452399dddd451b09c2f1ba8d56925a40af114282d7bc0c6fe7514a2236ca09f903cf70e4bbf156650dddb49d
   languageName: node
   linkType: hard
 
@@ -17012,9 +17021,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"start-server-and-test@npm:2.0.10":
-  version: 2.0.10
-  resolution: "start-server-and-test@npm:2.0.10"
+"start-server-and-test@npm:2.0.11":
+  version: 2.0.11
+  resolution: "start-server-and-test@npm:2.0.11"
   dependencies:
     arg: "npm:^5.0.2"
     bluebird: "npm:3.7.2"
@@ -17023,12 +17032,12 @@ __metadata:
     execa: "npm:5.1.1"
     lazy-ass: "npm:1.6.0"
     ps-tree: "npm:1.2.0"
-    wait-on: "npm:8.0.2"
+    wait-on: "npm:8.0.3"
   bin:
     server-test: src/bin/start.js
     start-server-and-test: src/bin/start.js
     start-test: src/bin/start.js
-  checksum: 10/8025825ad0360da4f3c87f5b9ccf214f7a821d4df7ab99f81e52707f013eddea9fbc1046b86d983da18927e34a14247d0282d5c99588cbfbbef62a3e6c3a74af
+  checksum: 10/f05ce974e72c8072a3e7dfe06e02fe27283c6b4f78bcbd8864736413e5dd3878b29f379b65a5050e33ee434dabe90291978b18014af67f5a89af44ea6c53dcfd
   languageName: node
   linkType: hard
 
@@ -18588,18 +18597,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wait-on@npm:8.0.2":
-  version: 8.0.2
-  resolution: "wait-on@npm:8.0.2"
+"wait-on@npm:8.0.3":
+  version: 8.0.3
+  resolution: "wait-on@npm:8.0.3"
   dependencies:
-    axios: "npm:^1.7.9"
+    axios: "npm:^1.8.2"
     joi: "npm:^17.13.3"
     lodash: "npm:^4.17.21"
     minimist: "npm:^1.2.8"
-    rxjs: "npm:^7.8.1"
+    rxjs: "npm:^7.8.2"
   bin:
     wait-on: bin/wait-on
-  checksum: 10/be688f1f0512ed4d57d3361d6ab1ed7dd22c0a2146c9e77c2ad4d64660e87959ce75e4e375a2bd2d17c58b1b0a65ac88f9ad2097e16bc12424a3b2895611c817
+  checksum: 10/7669a2c876bc3f188f8692adfb836576359adfaea1aa233271fc2c33b422625870e1dce06b64d7122681c5eb30b38a938a11fad07ef7992e6e9669aa7d9a2a1b
   languageName: node
   linkType: hard
 
