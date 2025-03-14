@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
@@ -28,6 +28,7 @@ export interface ArbeidstidKalenderProps {
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
+// Wrapper-komponent for FaktiskOgNormalTid
 const FaktiskOgNormalTidWrapper = (props: {
     heading: string;
     lagre: (
@@ -53,11 +54,26 @@ const ArbeidstidKalender = ({
     eksisterendeSoknadsperioder = [],
 }: ArbeidstidKalenderProps) => {
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
-    const [originalePerioder, setOriginalePerioder] = useState<IArbeidstidPeriodeMedTimer[]>([]);
+    // Holder en kopi av perioder som vises i modalen
+    const [perioderForModal, setPerioderForModal] = useState<IArbeidstidPeriodeMedTimer[]>([]);
+
+    // Oppdaterer perioderForModal når arbeidstidInfo endres
+    useEffect(() => {
+        if (arbeidstidInfo && arbeidstidInfo.perioder) {
+            // Kopier alle perioder fra arbeidstidInfo
+            const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
+            setPerioderForModal(perioder);
+        }
+    }, [arbeidstidInfo, arbeidstidInfo.perioder]);
 
     const toggleVisArbeidstidLengrePerioder = () => {
+        // Sikrer at vi har oppdaterte perioder når modalen åpnes
         if (!visArbeidstidLengrePerioder) {
-            setOriginalePerioder([...arbeidstidInfo.perioder]);
+            // Når modalen åpnes, oppdaterer vi perioderForModal med de nyeste data fra arbeidstidInfo
+            if (arbeidstidInfo && arbeidstidInfo.perioder) {
+                const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
+                setPerioderForModal(perioder);
+            }
         }
         setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
     };
@@ -78,6 +94,9 @@ const ArbeidstidKalender = ({
             if (updateSoknadState) {
                 updateSoknadState(perioderFiltert);
             }
+
+            // Oppdaterer også perioder for modal
+            setPerioderForModal(perioderFiltert);
         };
 
     const lagreTimer = (
@@ -103,26 +122,26 @@ const ArbeidstidKalender = ({
             faktiskArbeidPerDag,
             jobberNormaltPerDag,
         }));
-        updateSoknad([...eksisterendePerioderUtenSelectedDates, ...payload]);
+
+        const nyePerioder = [...eksisterendePerioderUtenSelectedDates, ...payload];
+
+        updateSoknad(nyePerioder);
         if (updateSoknadState) {
-            updateSoknadState([...eksisterendePerioderUtenSelectedDates, ...payload]);
+            updateSoknadState(nyePerioder);
         }
+
+        setPerioderForModal(nyePerioder);
     };
 
     const lagrePerioder = (nyePerioder: IArbeidstidPeriodeMedTimer[]) => {
-        const perioderFraKalender = originalePerioder.filter(
-            (orig) =>
-                !arbeidstidInfo.perioder.some(
-                    (ap) => ap.periode?.fom === orig.periode?.fom && ap.periode?.tom === orig.periode?.tom,
-                ),
-        );
-
-        const allePerioder = [...perioderFraKalender, ...nyePerioder];
-
-        updateSoknad(allePerioder);
+        // Ved lagring erstatter vi alle periodene med de nye fra modalvinduet
+        updateSoknad(nyePerioder);
         if (updateSoknadState) {
-            updateSoknadState(allePerioder);
+            updateSoknadState(nyePerioder);
         }
+
+        // Oppdaterer også perioder for modal
+        setPerioderForModal(nyePerioder);
     };
 
     return (
@@ -139,34 +158,35 @@ const ArbeidstidKalender = ({
 
             <VerticalSpacer twentyPx />
 
-            <Modal
-                open={visArbeidstidLengrePerioder}
-                onClose={() => setVisArbeidstidLengrePerioder(false)}
-                className="venstrestilt lengre-periode-modal"
-                aria-label="Periode med jobb modal"
-            >
-                <Modal.Body data-test-id="arbeidstid-periode-liste">
-                    <ArbeidstidPeriodeListe
-                        heading="Periode med jobb"
-                        arbeidstidPerioder={arbeidstidInfo.perioder}
-                        soknadsperioder={gyldigePerioder}
-                        nyeSoknadsperioder={nyeSoknadsperioder}
-                        lagre={(periodeInfo) => {
-                            lagrePerioder(periodeInfo);
-                            toggleVisArbeidstidLengrePerioder();
-                        }}
-                        avbryt={toggleVisArbeidstidLengrePerioder}
-                    />
-                </Modal.Body>
-            </Modal>
+            {visArbeidstidLengrePerioder && (
+                <Modal
+                    open={true}
+                    onClose={() => setVisArbeidstidLengrePerioder(false)}
+                    className="venstrestilt lengre-periode-modal"
+                    aria-label="Periode med jobb modal"
+                >
+                    <Modal.Body data-test-id="arbeidstid-periode-liste">
+                        <ArbeidstidPeriodeListe
+                            heading="Periode med jobb"
+                            arbeidstidPerioder={perioderForModal}
+                            soknadsperioder={gyldigePerioder}
+                            lagre={(periodeInfo) => {
+                                lagrePerioder(periodeInfo);
+                                toggleVisArbeidstidLengrePerioder();
+                            }}
+                            avbryt={toggleVisArbeidstidLengrePerioder}
+                        />
+                    </Modal.Body>
+                </Modal>
+            )}
 
             {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={gyldigePerioder}
                     ModalContent={<FaktiskOgNormalTidWrapper heading="Registrer arbeidstid" lagre={lagreTimer} />}
-                    kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
-                        arbeidstidPeriodeTilKalenderdag(periode),
-                    )}
+                    kalenderdager={arbeidstidInfo.perioder
+                        .map((periode) => new ArbeidstidPeriodeMedTimer(periode))
+                        .flatMap((periode) => arbeidstidPeriodeTilKalenderdag(periode))}
                     slettPeriode={slettDager(arbeidstidInfo.perioder)}
                     dateContentRenderer={DateContent}
                 />
