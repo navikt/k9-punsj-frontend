@@ -1,5 +1,5 @@
-import { FieldArray, Formik } from 'formik';
-import React, { Fragment } from 'react';
+import { FieldArray, Formik, FormikProps } from 'formik';
+import React, { Fragment, useRef } from 'react';
 import * as yup from 'yup';
 
 import { AddCircle } from '@navikt/ds-icons';
@@ -30,17 +30,31 @@ export default function ArbeidstidPeriodeListe({
     soknadsperioder: IPeriode[];
     nyeSoknadsperioder: IPeriode[] | null;
 }) {
+    const formikRef = useRef<FormikProps<{ perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }>>(null);
+
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: arbeidstidPerioder.length
             ? [...arbeidstidPerioder]
             : (nyeSoknadsperioder || []).map((periode) => new ArbeidstidPeriodeMedTimer({ periode })),
     };
 
+    const handleSaveValues = (values?: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }) => {
+        const currentValues = values || formikRef.current?.values;
+        if (currentValues) {
+            const processedPeriods = currentValues.perioder
+                .filter((period) => period && period.periode) // Убеждаемся, что период существует и имеет поле periode
+                .map((v) => konverterPeriodeTilTimerOgMinutter(v));
+
+            lagre(processedPeriods);
+        }
+    };
+
     return (
         <Formik
             initialValues={initialValues}
-            onSubmit={(values) => lagre(values.perioder.map((v) => konverterPeriodeTilTimerOgMinutter(v)))}
+            onSubmit={(values) => handleSaveValues(values)}
             validationSchema={schema}
+            innerRef={formikRef}
         >
             {({ handleSubmit, values }) => (
                 <>
@@ -54,7 +68,9 @@ export default function ArbeidstidPeriodeListe({
                                         <ArbeidstidPeriode
                                             name={`perioder.${index}`}
                                             soknadsperioder={soknadsperioder}
-                                            remove={() => arrayHelpers.remove(index)}
+                                            remove={() => {
+                                                arrayHelpers.remove(index);
+                                            }}
                                         />
                                     </Fragment>
                                 ))}

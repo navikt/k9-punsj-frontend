@@ -28,6 +28,24 @@ export interface ArbeidstidKalenderProps {
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
+// Создаем компонент-обертку для FaktiskOgNormalTid
+const FaktiskOgNormalTidWrapper = (props: {
+    heading: string;
+    lagre: (
+        params: { faktiskArbeidPerDag: ITimerOgMinutterString; jobberNormaltPerDag: ITimerOgMinutterString },
+        selectedDates: Date[],
+    ) => void;
+    toggleModal?: () => void;
+    selectedDates?: Date[];
+    clearSelectedDates?: () => void;
+}) => (
+    <FaktiskOgNormalTid
+        {...props}
+        toggleModal={props.toggleModal || (() => {})}
+        selectedDates={props.selectedDates || []}
+    />
+);
+
 const ArbeidstidKalender = ({
     arbeidstidInfo,
     updateSoknad,
@@ -93,14 +111,14 @@ const ArbeidstidKalender = ({
     };
 
     const lagrePerioder = (nyePerioder: IArbeidstidPeriodeMedTimer[]) => {
-        const perioderIkkeIModal = originalePerioder.filter(
+        const perioderFraKalender = originalePerioder.filter(
             (orig) =>
-                !nyePerioder.some(
-                    (ny) => ny.periode?.fom === orig.periode?.fom && ny.periode?.tom === orig.periode?.tom,
+                !arbeidstidInfo.perioder.some(
+                    (ap) => ap.periode?.fom === orig.periode?.fom && ap.periode?.tom === orig.periode?.tom,
                 ),
         );
 
-        const allePerioder = [...perioderIkkeIModal, ...nyePerioder];
+        const allePerioder = [...perioderFraKalender, ...nyePerioder];
 
         updateSoknad(allePerioder);
         if (updateSoknadState) {
@@ -146,7 +164,7 @@ const ArbeidstidKalender = ({
             {!!gyldigePerioder.length && (
                 <TidsbrukKalenderContainer
                     gyldigePerioder={gyldigePerioder}
-                    ModalContent={<FaktiskOgNormalTid heading="Registrer arbeidstid" lagre={lagreTimer} />}
+                    ModalContent={<FaktiskOgNormalTidWrapper heading="Registrer arbeidstid" lagre={lagreTimer} />}
                     kalenderdager={arbeidstidInfo.perioder.flatMap((periode) =>
                         arbeidstidPeriodeTilKalenderdag(periode),
                     )}
