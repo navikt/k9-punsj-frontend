@@ -124,9 +124,15 @@ export default function ArbeidstidPeriodeListe({
 
     const handleSaveValues = (values?: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }) => {
         const currentValues = values || formikRef.current?.values;
+
         if (currentValues) {
             const processedPeriods = currentValues.perioder
-                .filter((period) => period && period.periode) // Kontrollerer at perioden eksisterer og har periode-felt
+                .filter(
+                    (period) =>
+                        period &&
+                        period.periode &&
+                        (period.jobberNormaltPerDag?.timer || period.jobberNormaltTimerPerDag),
+                ) // Kontrollerer at perioden eksisterer og har periode-felt
                 .map((v) => konverterPeriodeTilTimerOgMinutter(v));
 
             lagre(processedPeriods);
