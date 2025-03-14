@@ -1,45 +1,55 @@
 version: 2
 registries:
-  npm-github:
-    type: npm-registry
-    url: https://npm.pkg.github.com
-    token: ${{secrets.READER_TOKEN}}
+    npm-github:
+        type: npm-registry
+        url: https://npm.pkg.github.com
+        token: ${{secrets.READER_TOKEN}}
 updates:
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 20
-    registries:
-      - npm-github
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
-    groups:
-      react:
-        patterns:
-          - "react"
-          - "react-dom"
-          - "@types/react"
-      babel:
-        patterns:
-          - "@babel*"
-      typescript-eslint:
-        patterns:
-          - "@typescript-eslint*"
-      storybook:
-        patterns:
-          - "@storybook/*"
-        exclude-patterns:
-          - "@storybook/storybook-deployer"
-          - "@storybook/testing-react"
-          - "@storybook/testing-library"
-  - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-  - package-ecosystem: docker
-    directory: "/"
-    schedule:
-      interval: daily
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          interval: daily
+      open-pull-requests-limit: 30
+      registries:
+          - npm-github
+      groups:
+          patch-and-minor:
+              patterns:
+                  - '*'
+              update-types:
+                  - 'patch'
+                  - 'minor'
+              exclude-patterns:
+                  - 'react*'
+                  - '@types/react'
+                  - '@navikt*'
+          storybook:
+              update-types:
+                  - 'major'
+              patterns:
+                  - 'storybook'
+                  - '@storybook/*'
+          react:
+              patterns:
+                  - 'react'
+                  - 'react-dom'
+                  - '@types/react'
+          designsystem:
+              patterns:
+                  - '@navikt/aksel-icons'
+                  - '@navikt/ds-*'
+          ft-frontend:
+              patterns:
+                  - '@navikt/ft-*'
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          interval: daily
+      groups:
+          github:
+              patterns:
+                  - '*'
+    - package-ecosystem: docker
+      directory: '/'
+      schedule:
+          interval: daily
