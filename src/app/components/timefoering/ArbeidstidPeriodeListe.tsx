@@ -37,13 +37,13 @@ export default function ArbeidstidPeriodeListe({
     if (harEksisterendePerioder) {
         initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
     } else if (soknadsperioder.length > 0) {
-        initialPerioder = [
-            new ArbeidstidPeriodeMedTimer({
-                periode: soknadsperioder[0],
+        initialPerioder = soknadsperioder.map((p) => {
+            return new ArbeidstidPeriodeMedTimer({
+                periode: p,
                 faktiskArbeidPerDag: { timer: '', minutter: '' },
                 jobberNormaltPerDag: { timer: '', minutter: '' },
-            }),
-        ];
+            });
+        });
     } else {
         initialPerioder = [
             new ArbeidstidPeriodeMedTimer({
