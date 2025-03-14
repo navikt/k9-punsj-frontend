@@ -7,7 +7,8 @@ import { Button, Heading } from '@navikt/ds-react';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
-import { konverterPeriodeTilTimerOgMinutter } from 'app/utils';
+import { formats, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
+import dayjs from 'dayjs';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
@@ -30,36 +31,72 @@ export default function ArbeidstidPeriodeListe({
 }) {
     const formikRef = useRef<FormikProps<{ perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }>>(null);
 
-    const harEksisterendePerioder = arbeidstidPerioder && arbeidstidPerioder.length > 0;
+    const harEksisterendePerioder = Array.isArray(arbeidstidPerioder) && arbeidstidPerioder.length > 0;
 
     let initialPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [];
 
     if (harEksisterendePerioder) {
         initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
 
-        const eksisterendePerioder = new Set(
-            initialPerioder
-                .filter((p) => p.periode && p.periode.fom && p.periode.tom)
-                .map((p) => `${p.periode?.fom || ''}_${p.periode?.tom || ''}`),
-        );
+        const eksisterendeDatoer = new Set<string>();
+        initialPerioder.forEach((p) => {
+            if (p.periode?.fom && p.periode?.tom) {
+                const start = dayjs(p.periode.fom, formats.YYYYMMDD);
+                const end = dayjs(p.periode.tom, formats.YYYYMMDD);
 
-        const manglendePerioder = soknadsperioder.filter(
-            (p) => p.fom && p.tom && !eksisterendePerioder.has(`${p.fom}_${p.tom}`),
-        );
+                let currentDate = start;
+                while (!currentDate.isAfter(end)) {
+                    eksisterendeDatoer.add(currentDate.format(formats.YYYYMMDD));
+                    currentDate = currentDate.add(1, 'day');
+                }
+            }
+        });
 
-        if (manglendePerioder.length > 0) {
-            const nyePerioder = manglendePerioder.map(
-                (p) =>
-                    new ArbeidstidPeriodeMedTimer({
-                        periode: p,
-                        faktiskArbeidPerDag: { timer: '', minutter: '' },
-                        jobberNormaltPerDag: { timer: '', minutter: '' },
-                    }),
+        const filtrerteSoknadsperioder: { fom: string; tom: string }[] = [];
+
+        soknadsperioder.forEach((periode) => {
+            if (!periode.fom || !periode.tom) {
+                console.warn('Пропущен период с некорректными датами:', periode);
+                return;
+            }
+
+            const start = dayjs(periode.fom, formats.YYYYMMDD);
+            const end = dayjs(periode.tom, formats.YYYYMMDD);
+
+            let currentDate = start;
+            let nyPeriodeStart: string | null = null;
+            let nyPeriodeSlutt: string | null = null;
+
+            while (!currentDate.isAfter(end)) {
+                const dateString = currentDate.format(formats.YYYYMMDD);
+                if (!eksisterendeDatoer.has(dateString)) {
+                    if (!nyPeriodeStart) {
+                        nyPeriodeStart = dateString;
+                    }
+                    nyPeriodeSlutt = dateString;
+                } else if (nyPeriodeStart && nyPeriodeSlutt) {
+                    filtrerteSoknadsperioder.push({ fom: nyPeriodeStart, tom: nyPeriodeSlutt });
+                    nyPeriodeStart = null;
+                    nyPeriodeSlutt = null;
+                }
+                currentDate = currentDate.add(1, 'day');
+            }
+
+            if (nyPeriodeStart && nyPeriodeSlutt) {
+                filtrerteSoknadsperioder.push({ fom: nyPeriodeStart, tom: nyPeriodeSlutt });
+            }
+        });
+
+        filtrerteSoknadsperioder.forEach((periode) => {
+            initialPerioder.push(
+                new ArbeidstidPeriodeMedTimer({
+                    periode,
+                    faktiskArbeidPerDag: { timer: '', minutter: '' },
+                    jobberNormaltPerDag: { timer: '', minutter: '' },
+                }),
             );
-
-            initialPerioder = [...initialPerioder, ...nyePerioder];
-        }
-    } else if (soknadsperioder.length > 0) {
+        });
+    } else if (Array.isArray(soknadsperioder) && soknadsperioder.length > 0) {
         initialPerioder = soknadsperioder.map(
             (p) =>
                 new ArbeidstidPeriodeMedTimer({
