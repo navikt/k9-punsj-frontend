@@ -28,7 +28,6 @@ export interface ArbeidstidKalenderProps {
     eksisterendeSoknadsperioder: IPeriode[];
 }
 
-// Создаем компонент-обертку для FaktiskOgNormalTid
 const FaktiskOgNormalTidWrapper = (props: {
     heading: string;
     lagre: (
