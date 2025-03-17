@@ -56,7 +56,6 @@ export default function ArbeidstidPeriodeListe({
 
         soknadsperioder.forEach((periode) => {
             if (!periode.fom || !periode.tom) {
-                console.warn('Пропущен период с некорректными датами:', periode);
                 return;
             }
 
