@@ -124,7 +124,9 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
         formik.setFieldValue(`${name}.periode`, periode);
     };
 
-    const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
+    const nullstillPeriode = () => {
+        formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
+    };
 
     return (
         <Field name={name}>
@@ -148,10 +150,13 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     </div>
                     {soknadsperioder.length === 1 && (
                         <Checkbox
-                            onClick={(event) =>
-                                (event.target as HTMLInputElement).checked
-                                    ? velgSoknadsperiode(soknadsperioder[0])
-                                    : nullstillPeriode()
+                            onChange={(event) =>
+                                event.target.checked ? velgSoknadsperiode(soknadsperioder[0]) : nullstillPeriode()
+                            }
+                            checked={
+                                field.value.periode &&
+                                field.value.periode.fom === soknadsperioder[0].fom &&
+                                field.value.periode.tom === soknadsperioder[0].tom
                             }
                         >
                             Velg hele søknadsperioden
