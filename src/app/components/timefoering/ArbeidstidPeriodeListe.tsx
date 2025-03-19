@@ -37,64 +37,6 @@ export default function ArbeidstidPeriodeListe({
 
     if (harEksisterendePerioder) {
         initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-
-        const eksisterendeDatoer = new Set<string>();
-        initialPerioder.forEach((p) => {
-            if (p.periode?.fom && p.periode?.tom) {
-                const start = dayjs(p.periode.fom, formats.YYYYMMDD);
-                const end = dayjs(p.periode.tom, formats.YYYYMMDD);
-
-                let currentDate = start;
-                while (!currentDate.isAfter(end)) {
-                    eksisterendeDatoer.add(currentDate.format(formats.YYYYMMDD));
-                    currentDate = currentDate.add(1, 'day');
-                }
-            }
-        });
-
-        const filtrerteSoknadsperioder: { fom: string; tom: string }[] = [];
-
-        soknadsperioder.forEach((periode) => {
-            if (!periode.fom || !periode.tom) {
-                return;
-            }
-
-            const start = dayjs(periode.fom, formats.YYYYMMDD);
-            const end = dayjs(periode.tom, formats.YYYYMMDD);
-
-            let currentDate = start;
-            let nyPeriodeStart: string | null = null;
-            let nyPeriodeSlutt: string | null = null;
-
-            while (!currentDate.isAfter(end)) {
-                const dateString = currentDate.format(formats.YYYYMMDD);
-                if (!eksisterendeDatoer.has(dateString)) {
-                    if (!nyPeriodeStart) {
-                        nyPeriodeStart = dateString;
-                    }
-                    nyPeriodeSlutt = dateString;
-                } else if (nyPeriodeStart && nyPeriodeSlutt) {
-                    filtrerteSoknadsperioder.push({ fom: nyPeriodeStart, tom: nyPeriodeSlutt });
-                    nyPeriodeStart = null;
-                    nyPeriodeSlutt = null;
-                }
-                currentDate = currentDate.add(1, 'day');
-            }
-
-            if (nyPeriodeStart && nyPeriodeSlutt) {
-                filtrerteSoknadsperioder.push({ fom: nyPeriodeStart, tom: nyPeriodeSlutt });
-            }
-        });
-
-        filtrerteSoknadsperioder.forEach((periode) => {
-            initialPerioder.push(
-                new ArbeidstidPeriodeMedTimer({
-                    periode,
-                    faktiskArbeidPerDag: { timer: '', minutter: '' },
-                    jobberNormaltPerDag: { timer: '', minutter: '' },
-                }),
-            );
-        });
     } else if (Array.isArray(soknadsperioder) && soknadsperioder.length > 0) {
         initialPerioder = soknadsperioder.map(
             (p) =>
