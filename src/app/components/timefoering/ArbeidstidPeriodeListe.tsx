@@ -37,23 +37,24 @@ export default function ArbeidstidPeriodeListe({
 
     if (harEksisterendePerioder) {
         initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-    } else if (Array.isArray(soknadsperioder) && soknadsperioder.length > 0) {
-        initialPerioder = soknadsperioder.map(
-            (p) =>
+    } else {
+        if (soknadsperioder.length === 1) {
+            initialPerioder = [
                 new ArbeidstidPeriodeMedTimer({
-                    periode: p,
+                    periode: soknadsperioder[0],
                     faktiskArbeidPerDag: { timer: '', minutter: '' },
                     jobberNormaltPerDag: { timer: '', minutter: '' },
                 }),
-        );
-    } else {
-        initialPerioder = [
-            new ArbeidstidPeriodeMedTimer({
-                periode: { fom: '', tom: '' },
-                faktiskArbeidPerDag: { timer: '', minutter: '' },
-                jobberNormaltPerDag: { timer: '', minutter: '' },
-            }),
-        ];
+            ];
+        } else {
+            initialPerioder = [
+                new ArbeidstidPeriodeMedTimer({
+                    periode: { fom: '', tom: '' },
+                    faktiskArbeidPerDag: { timer: '', minutter: '' },
+                    jobberNormaltPerDag: { timer: '', minutter: '' },
+                }),
+            ];
+        }
     }
 
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
@@ -67,14 +68,47 @@ export default function ArbeidstidPeriodeListe({
         const currentValues = values || formikRef.current?.values;
 
         if (currentValues) {
-            const processedPeriods = currentValues.perioder
-                .filter(
-                    (period) =>
-                        period &&
-                        period.periode &&
-                        (period.jobberNormaltPerDag?.timer || period.jobberNormaltTimerPerDag),
-                ) // Kontrollerer at perioden eksisterer og har periode-felt
-                .map((v) => konverterPeriodeTilTimerOgMinutter(v));
+            const uniquePeriodsMap = new Map<string, IArbeidstidPeriodeMedTimer>();
+
+            currentValues.perioder.forEach((period) => {
+                if (!period || !period.periode || !period.jobberNormaltPerDag?.timer) {
+                    return;
+                }
+
+                const start = dayjs(period.periode.fom, formats.YYYYMMDD);
+                const end = dayjs(period.periode.tom, formats.YYYYMMDD);
+
+                let isDuplicate = false;
+                for (const [, existingPeriod] of uniquePeriodsMap.entries()) {
+                    if (!existingPeriod.periode) continue;
+
+                    const existingStart = dayjs(existingPeriod.periode.fom, formats.YYYYMMDD);
+                    const existingEnd = dayjs(existingPeriod.periode.tom, formats.YYYYMMDD);
+
+                    if (start.isSameOrAfter(existingStart) && end.isSameOrBefore(existingEnd)) {
+                        isDuplicate = true;
+                        break;
+                    }
+                    if (existingStart.isSameOrAfter(start) && existingEnd.isSameOrBefore(end)) {
+                        const key = `${start.format(formats.YYYYMMDD)}-${end.format(formats.YYYYMMDD)}`;
+                        uniquePeriodsMap.set(key, period);
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if (!isDuplicate) {
+                    uniquePeriodsMap.set(`${start.format(formats.YYYYMMDD)}-${end.format(formats.YYYYMMDD)}`, period);
+                }
+            });
+
+            const processedPeriods = Array.from(uniquePeriodsMap.values())
+                .map((v) => konverterPeriodeTilTimerOgMinutter(v))
+                .sort(
+                    (a, b) =>
+                        dayjs(a.periode.fom, formats.YYYYMMDD).valueOf() -
+                        dayjs(b.periode.fom, formats.YYYYMMDD).valueOf(),
+                );
 
             lagre(processedPeriods);
         }
