@@ -12,45 +12,45 @@ import dayjs from 'dayjs';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
-// Функция для проверки пересечения периодов
+// Funksjon for å sjekke overlappende perioder
 const checkPeriodOverlap = (periods: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => {
     for (let i = 0; i < periods.length; i++) {
         const currentPeriod = periods[i];
         if (!currentPeriod.periode?.fom || !currentPeriod.periode?.tom) {
-            return true; // Пустые даты считаются ошибкой
+            return true; // Tomme datoer regnes som feil
         }
 
         const currentStart = dayjs(currentPeriod.periode.fom, formats.YYYYMMDD);
         const currentEnd = dayjs(currentPeriod.periode.tom, formats.YYYYMMDD);
 
-        // Проверяем пересечение с остальными периодами
+        // Sjekker overlapp med andre perioder
         for (let j = i + 1; j < periods.length; j++) {
             const otherPeriod = periods[j];
             if (!otherPeriod.periode?.fom || !otherPeriod.periode?.tom) {
-                return true; // Пустые даты считаются ошибкой
+                return true; // Tomme datoer regnes som feil
             }
 
             const otherStart = dayjs(otherPeriod.periode.fom, formats.YYYYMMDD);
             const otherEnd = dayjs(otherPeriod.periode.tom, formats.YYYYMMDD);
 
-            // Проверяем пересечение периодов
-            // Периоды пересекаются, если:
-            // 1. Начало одного периода находится внутри другого периода
-            // 2. Конец одного периода находится внутри другого периода
-            // 3. Один период полностью содержит другой
+            // Sjekker overlappende perioder
+            // Perioder overlapper hvis:
+            // 1. Starten på én periode er innenfor en annen periode
+            // 2. Slutten på én periode er innenfor en annen periode
+            // 3. Én periode inneholder en annen helt
             if (
-                (currentStart.isSameOrAfter(otherStart) && currentStart.isSameOrBefore(otherEnd)) || // Начало текущего периода внутри другого
-                (currentEnd.isSameOrAfter(otherStart) && currentEnd.isSameOrBefore(otherEnd)) || // Конец текущего периода внутри другого
-                (otherStart.isSameOrAfter(currentStart) && otherStart.isSameOrBefore(currentEnd)) || // Начало другого периода внутри текущего
-                (otherEnd.isSameOrAfter(currentStart) && otherEnd.isSameOrBefore(currentEnd)) || // Конец другого периода внутри текущего
-                (currentStart.isSameOrBefore(otherStart) && currentEnd.isSameOrAfter(otherEnd)) || // Текущий период полностью содержит другой
-                (otherStart.isSameOrBefore(currentStart) && otherEnd.isSameOrAfter(currentEnd)) // Другой период полностью содержит текущий
+                (currentStart.isSameOrAfter(otherStart) && currentStart.isSameOrBefore(otherEnd)) || // Starten på nåværende periode er innenfor en annen
+                (currentEnd.isSameOrAfter(otherStart) && currentEnd.isSameOrBefore(otherEnd)) || // Slutten på nåværende periode er innenfor en annen
+                (otherStart.isSameOrAfter(currentStart) && otherStart.isSameOrBefore(currentEnd)) || // Starten på annen periode er innenfor nåværende
+                (otherEnd.isSameOrAfter(currentStart) && otherEnd.isSameOrBefore(currentEnd)) || // Slutten på annen periode er innenfor nåværende
+                (currentStart.isSameOrBefore(otherStart) && currentEnd.isSameOrAfter(otherEnd)) || // Nåværende periode inneholder en annen helt
+                (otherStart.isSameOrBefore(currentStart) && otherEnd.isSameOrAfter(currentEnd)) // Annen periode inneholder nåværende helt
             ) {
-                return true; // Найдено пересечение
+                return true; // Overlapp funnet
             }
         }
     }
-    return false; // Пересечений не найдено
+    return false; // Ingen overlapp funnet
 };
 
 const schema = yup.object({
