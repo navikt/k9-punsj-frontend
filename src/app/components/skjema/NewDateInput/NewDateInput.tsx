@@ -62,12 +62,7 @@ const NewDateInput: React.FC<Props> = ({
         const isoDateString = date ? dateToISODateString(date) : '';
 
         setInputValue(isoDateString ? prettifyDateString(isoDateString) : '');
-        if (isoDateString && isoDateString !== value) {
-            onChange(isoDateString);
-        }
-        if (noValidateTomtFelt && isoDateString !== value) {
-            onChange(isoDateString);
-        }
+        onChange(isoDateString);
     };
 
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
@@ -96,14 +91,11 @@ const NewDateInput: React.FC<Props> = ({
 
         setInputValue(evt.target.value);
 
-        if (
-            (isoDateString || noValidateTomtFelt) &&
-            isoDateString !== INVALID_DATE_VALUE &&
-            isISODateString(value) &&
-            previous !== isoDateString &&
-            !!onBlur
-        ) {
-            onBlur(isoDateString);
+        if (isoDateString && isoDateString !== INVALID_DATE_VALUE) {
+            onChange(isoDateString);
+            if (!!onBlur) {
+                onBlur(isoDateString);
+            }
         }
     };
 
@@ -112,8 +104,21 @@ const NewDateInput: React.FC<Props> = ({
 
         setInputValue(isoDateString ? prettifyDateString(isoDateString) : '');
 
-        if (isoDateString !== value && !!onBlur) {
-            onBlur(isoDateString);
+        if (isoDateString) {
+            onChange(isoDateString);
+            if (!!onBlur) {
+                onBlur(isoDateString);
+            }
+        }
+    };
+
+    const onInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = evt.target.value;
+        setInputValue(newValue);
+
+        const isoDateString = newValue ? InputDateStringToISODateString(newValue) : '';
+        if (isoDateString && isoDateString !== INVALID_DATE_VALUE) {
+            onChange(isoDateString);
         }
     };
 
@@ -137,6 +142,7 @@ const NewDateInput: React.FC<Props> = ({
                     error={error}
                     disabled={inputDisabled || disabled}
                     onBlur={onInputBlur}
+                    onChange={onInputChange}
                     ref={inputRef}
                     data-testid={dataTestId || 'datePickerInput'}
                     value={inputValue}
