@@ -88,78 +88,43 @@ export default function ArbeidstidPeriodeListe({
 }) {
     const formikRef = useRef<FormikProps<FormValues>>(null);
 
-    const harEksisterendePerioder = Array.isArray(arbeidstidPerioder) && arbeidstidPerioder.length > 0;
-
-    let initialPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [];
-
-    if (harEksisterendePerioder) {
-        initialPerioder = arbeidstidPerioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-    } else {
-        if (soknadsperioder.length === 1) {
-            initialPerioder = [
-                new ArbeidstidPeriodeMedTimer({
-                    periode: soknadsperioder[0],
-                    faktiskArbeidPerDag: { timer: '', minutter: '' },
-                    jobberNormaltPerDag: { timer: '', minutter: '' },
-                }),
-            ];
-        } else {
-            initialPerioder = [
-                new ArbeidstidPeriodeMedTimer({
-                    periode: { fom: '', tom: '' },
-                    faktiskArbeidPerDag: { timer: '', minutter: '' },
-                    jobberNormaltPerDag: { timer: '', minutter: '' },
-                }),
-            ];
-        }
-    }
-
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
-        perioder: initialPerioder.sort(
-            (a, b) =>
-                dayjs(a.periode?.fom, formats.YYYYMMDD).valueOf() - dayjs(b.periode?.fom, formats.YYYYMMDD).valueOf(),
-        ),
+        perioder: [
+            new ArbeidstidPeriodeMedTimer({
+                periode: { fom: '', tom: '' },
+                faktiskArbeidPerDag: { timer: '', minutter: '' },
+                jobberNormaltPerDag: { timer: '', minutter: '' },
+            }),
+        ],
     };
 
     const handleSaveValues = (values?: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] }) => {
         const currentValues = values || formikRef.current?.values;
 
         if (currentValues) {
-            const uniquePeriodsMap = new Map<string, IArbeidstidPeriodeMedTimer>();
+            let allPeriods: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [...arbeidstidPerioder];
 
-            currentValues.perioder.forEach((period) => {
-                if (!period || !period.periode || !period.jobberNormaltPerDag?.timer) {
-                    return;
-                }
+            currentValues.perioder.forEach((newPeriod) => {
+                if (!newPeriod || !newPeriod.periode) return;
 
-                const start = dayjs(period.periode.fom, formats.YYYYMMDD);
-                const end = dayjs(period.periode.tom, formats.YYYYMMDD);
+                const newStart = dayjs(newPeriod.periode.fom, formats.YYYYMMDD);
+                const newEnd = dayjs(newPeriod.periode.tom, formats.YYYYMMDD);
 
-                let isDuplicate = false;
-                for (const [, existingPeriod] of uniquePeriodsMap.entries()) {
-                    if (!existingPeriod.periode) continue;
-
+                allPeriods = allPeriods.filter((existingPeriod) => {
+                    if (!existingPeriod.periode) return false;
                     const existingStart = dayjs(existingPeriod.periode.fom, formats.YYYYMMDD);
                     const existingEnd = dayjs(existingPeriod.periode.tom, formats.YYYYMMDD);
 
-                    if (start.isSameOrAfter(existingStart) && end.isSameOrBefore(existingEnd)) {
-                        isDuplicate = true;
-                        break;
-                    }
-                    if (existingStart.isSameOrAfter(start) && existingEnd.isSameOrBefore(end)) {
-                        const key = `${start.format(formats.YYYYMMDD)}-${end.format(formats.YYYYMMDD)}`;
-                        uniquePeriodsMap.set(key, period);
-                        isDuplicate = true;
-                        break;
-                    }
-                }
+                    return !(
+                        (newStart.isSameOrBefore(existingEnd) && newEnd.isSameOrAfter(existingStart)) ||
+                        (existingStart.isSameOrBefore(newEnd) && existingEnd.isSameOrAfter(newStart))
+                    );
+                });
 
-                if (!isDuplicate) {
-                    uniquePeriodsMap.set(`${start.format(formats.YYYYMMDD)}-${end.format(formats.YYYYMMDD)}`, period);
-                }
+                allPeriods.push(newPeriod);
             });
 
-            const processedPeriods = Array.from(uniquePeriodsMap.values())
+            const processedPeriods = allPeriods
                 .map((v) => konverterPeriodeTilTimerOgMinutter(v))
                 .sort(
                     (a, b) =>
