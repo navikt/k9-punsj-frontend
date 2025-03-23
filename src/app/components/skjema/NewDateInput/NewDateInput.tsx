@@ -93,7 +93,7 @@ const NewDateInput: React.FC<Props> = ({
 
         if (isoDateString && isoDateString !== INVALID_DATE_VALUE) {
             onChange(isoDateString);
-            if (!!onBlur) {
+            if (onBlur) {
                 onBlur(isoDateString);
             }
         }
@@ -106,7 +106,7 @@ const NewDateInput: React.FC<Props> = ({
 
         if (isoDateString) {
             onChange(isoDateString);
-            if (!!onBlur) {
+            if (onBlur) {
                 onBlur(isoDateString);
             }
         }
