@@ -102,28 +102,87 @@ export default function ArbeidstidPeriodeListe({
         const currentValues = values || formikRef.current?.values;
 
         if (currentValues) {
+            // Starter med eksisterende perioder
             let allPeriods: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [...arbeidstidPerioder];
 
+            // Behandler nye perioder
             currentValues.perioder.forEach((newPeriod) => {
                 if (!newPeriod || !newPeriod.periode) return;
 
                 const newStart = dayjs(newPeriod.periode.fom, formats.YYYYMMDD);
                 const newEnd = dayjs(newPeriod.periode.tom, formats.YYYYMMDD);
 
-                allPeriods = allPeriods.filter((existingPeriod) => {
-                    if (!existingPeriod.periode) return false;
+                // Behandler hver eksisterende periode
+                const updatedPeriods: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [];
+
+                allPeriods.forEach((existingPeriod) => {
+                    if (!existingPeriod.periode) return;
+
                     const existingStart = dayjs(existingPeriod.periode.fom, formats.YYYYMMDD);
                     const existingEnd = dayjs(existingPeriod.periode.tom, formats.YYYYMMDD);
 
-                    return !(
-                        (newStart.isSameOrBefore(existingEnd) && newEnd.isSameOrAfter(existingStart)) ||
-                        (existingStart.isSameOrBefore(newEnd) && existingEnd.isSameOrAfter(newStart))
-                    );
+                    // Hvis eksisterende periode er helt innenfor den nye perioden, hopper vi over den
+                    if (newStart.isSameOrBefore(existingStart) && newEnd.isSameOrAfter(existingEnd)) {
+                        return;
+                    }
+
+                    // Hvis periodene overlapper delvis
+                    if (newStart.isSameOrBefore(existingEnd) && newEnd.isSameOrAfter(existingStart)) {
+                        // Hvis ny periode er helt innenfor eksisterende periode
+                        if (newStart.isSameOrAfter(existingStart) && newEnd.isSameOrBefore(existingEnd)) {
+                            // Deler opp eksisterende periode i tre deler
+                            if (existingStart.isBefore(newStart)) {
+                                updatedPeriods.push({
+                                    ...existingPeriod,
+                                    periode: {
+                                        fom: existingStart.format(formats.YYYYMMDD),
+                                        tom: newStart.subtract(1, 'day').format(formats.YYYYMMDD),
+                                    },
+                                });
+                            }
+                            if (newEnd.isBefore(existingEnd)) {
+                                updatedPeriods.push({
+                                    ...existingPeriod,
+                                    periode: {
+                                        fom: newEnd.add(1, 'day').format(formats.YYYYMMDD),
+                                        tom: existingEnd.format(formats.YYYYMMDD),
+                                    },
+                                });
+                            }
+                        }
+                        // Hvis ny periode overlapper delvis
+                        else {
+                            if (newStart.isBefore(existingStart)) {
+                                updatedPeriods.push({
+                                    ...newPeriod,
+                                    periode: {
+                                        fom: newStart.format(formats.YYYYMMDD),
+                                        tom: existingStart.subtract(1, 'day').format(formats.YYYYMMDD),
+                                    },
+                                });
+                            }
+                            if (newEnd.isAfter(existingEnd)) {
+                                updatedPeriods.push({
+                                    ...newPeriod,
+                                    periode: {
+                                        fom: existingEnd.add(1, 'day').format(formats.YYYYMMDD),
+                                        tom: newEnd.format(formats.YYYYMMDD),
+                                    },
+                                });
+                            }
+                        }
+                    } else {
+                        // Hvis periodene ikke overlapper, beholder eksisterende periode
+                        updatedPeriods.push(existingPeriod);
+                    }
                 });
 
-                allPeriods.push(newPeriod);
+                // Legger til den nye perioden
+                updatedPeriods.push(newPeriod);
+                allPeriods = updatedPeriods;
             });
 
+            // Sorterer perioder etter startdato
             const processedPeriods = allPeriods
                 .map((v) => konverterPeriodeTilTimerOgMinutter(v))
                 .sort(
