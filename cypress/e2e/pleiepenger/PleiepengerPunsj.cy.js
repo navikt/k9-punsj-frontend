@@ -98,6 +98,8 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
+        cy.findByLabelText(/Velg hele søknadsperioden/i).click();
+
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
