@@ -198,7 +198,6 @@ export default function ArbeidstidPeriodeListe({
             enableReinitialize
         >
             {({ handleSubmit, values, errors, touched }) => {
-                console.log('TEST Erroers: ', errors);
                 return (
                     <>
                         <Heading size="small">{heading}</Heading>
