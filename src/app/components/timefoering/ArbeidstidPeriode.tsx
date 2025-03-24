@@ -144,9 +144,6 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                         formik.setFieldValue(`${name}.periode`, v);
                         formik.setFieldTouched(`${name}.periode`, true);
                     }}
-                    onBlur={() => {
-                        formik.setFieldTouched(`${name}.periode`, true);
-                    }}
                     errorMessageFom={undefined}
                     errorMessageTom={undefined}
                     initialValues={{
