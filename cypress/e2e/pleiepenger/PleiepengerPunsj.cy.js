@@ -98,9 +98,18 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
-        cy.findByLabelText(/Velg hele søknadsperioden/i).click();
+        // cy.findByLabelText(/Velg hele søknadsperioden/i).click();
 
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
+            cy.findByLabelText(/Fra og med/i)
+                .should('exist')
+                .clear({ force: true })
+                .type('08.11.2021');
+            cy.findByLabelText(/Til og med/i)
+                .should('exist')
+                .clear({ force: true })
+                .type('11.11.2021');
+
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });

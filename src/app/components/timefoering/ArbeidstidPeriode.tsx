@@ -131,6 +131,9 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
         periodeField.value.fom === soknadsperioder[0]?.fom &&
         periodeField.value.tom === soknadsperioder[0]?.tom;
 
+    // Midlertidig. Bør fixes feil
+    const showCheckBox = false;
+
     return (
         <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
             <div className="flex items-end gap-4">
@@ -153,7 +156,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                 />
                 <Button icon={<Delete />} size="small" variant="tertiary" className="slett" onClick={remove} />
             </div>
-            {soknadsperioder.length === 1 && (
+            {showCheckBox && (
                 <Checkbox
                     onChange={(event) => {
                         if (event.target.checked) {
