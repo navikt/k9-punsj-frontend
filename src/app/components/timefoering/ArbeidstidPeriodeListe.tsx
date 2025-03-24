@@ -60,12 +60,6 @@ const schema = yup.object({
         .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
             if (!periods) return true;
             return !checkPeriodOverlap(periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]);
-        })
-        .test('no-empty-dates', 'Alle perioder må ha både start- og sluttdato', (periods) => {
-            if (!periods) return true;
-            return (periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]).every(
-                (period) => period.periode?.fom && period.periode?.tom,
-            );
         }),
 });
 
@@ -203,70 +197,76 @@ export default function ArbeidstidPeriodeListe({
             innerRef={formikRef}
             enableReinitialize
         >
-            {({ handleSubmit, values, errors, touched }) => (
-                <>
-                    <Heading size="small">{heading}</Heading>
+            {({ handleSubmit, values, errors, touched }) => {
+                console.log('TEST Erroers: ', errors);
+                return (
+                    <>
+                        <Heading size="small">{heading}</Heading>
 
-                    <FieldArray
-                        name="perioder"
-                        render={(arrayHelpers) => (
-                            <div>
-                                {values.perioder && values.perioder.length > 0 ? (
-                                    values.perioder.map((periode, index) => (
-                                        <Fragment key={index}>
-                                            <ArbeidstidPeriode
-                                                name={`perioder.${index}`}
-                                                soknadsperioder={soknadsperioder}
-                                                remove={() => arrayHelpers.remove(index)}
-                                            />
-                                        </Fragment>
-                                    ))
-                                ) : (
-                                    <div>Ingen perioder å vise</div>
-                                )}
-                                {touched.perioder && errors.perioder && (
-                                    <Alert variant="error" className="mb-4">
-                                        {typeof errors.perioder === 'string'
-                                            ? errors.perioder
-                                            : 'Det er feil i periodene'}
-                                    </Alert>
-                                )}
-                                <div className="mb-8 mt-4">
-                                    <Button
-                                        variant="tertiary"
-                                        type="button"
-                                        onClick={() => {
-                                            arrayHelpers.push(
-                                                new ArbeidstidPeriodeMedTimer({
-                                                    periode: { fom: '', tom: '' },
-                                                    faktiskArbeidPerDag: { timer: '', minutter: '' },
-                                                    jobberNormaltPerDag: { timer: '', minutter: '' },
-                                                }),
-                                            );
-                                        }}
-                                        icon={<AddCircle />}
-                                    >
-                                        Legg til periode
-                                    </Button>
-                                </div>
-                                <div style={{ display: 'flex' }}>
-                                    <Button
-                                        style={{ flexGrow: 1, marginRight: '0.9375rem' }}
-                                        type="button"
-                                        onClick={() => handleSubmit()}
-                                    >
-                                        Lagre
-                                    </Button>
+                        <FieldArray
+                            name="perioder"
+                            render={(arrayHelpers) => (
+                                <div>
+                                    {values.perioder && values.perioder.length > 0 ? (
+                                        values.perioder.map((periode, index) => (
+                                            <Fragment key={index}>
+                                                <ArbeidstidPeriode
+                                                    name={`perioder.${index}`}
+                                                    soknadsperioder={soknadsperioder}
+                                                    remove={() => arrayHelpers.remove(index)}
+                                                />
+                                            </Fragment>
+                                        ))
+                                    ) : (
+                                        <div>Ingen perioder å vise</div>
+                                    )}
+                                    {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
+                                        <Alert variant="error" className="mb-4">
+                                            {errors.perioder}
+                                        </Alert>
+                                    )}
+                                    <div className="mb-8 mt-4">
+                                        <Button
+                                            variant="tertiary"
+                                            type="button"
+                                            onClick={() => {
+                                                arrayHelpers.push(
+                                                    new ArbeidstidPeriodeMedTimer({
+                                                        periode: { fom: '', tom: '' },
+                                                        faktiskArbeidPerDag: { timer: '', minutter: '' },
+                                                        jobberNormaltPerDag: { timer: '', minutter: '' },
+                                                    }),
+                                                );
+                                            }}
+                                            icon={<AddCircle />}
+                                        >
+                                            Legg til periode
+                                        </Button>
+                                    </div>
+                                    <div style={{ display: 'flex' }}>
+                                        <Button
+                                            style={{ flexGrow: 1, marginRight: '0.9375rem' }}
+                                            type="button"
+                                            onClick={() => handleSubmit()}
+                                        >
+                                            Lagre
+                                        </Button>
 
-                                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={avbryt} type="button">
-                                        Avbryt
-                                    </Button>
+                                        <Button
+                                            style={{ flexGrow: 1 }}
+                                            variant="tertiary"
+                                            onClick={avbryt}
+                                            type="button"
+                                        >
+                                            Avbryt
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    />
-                </>
-            )}
+                            )}
+                        />
+                    </>
+                );
+            }}
         </Formik>
     );
 }
