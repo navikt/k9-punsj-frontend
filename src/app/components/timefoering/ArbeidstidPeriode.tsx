@@ -23,6 +23,9 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltTimerPerDag`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidTimerPerDag`);
+    const errors =
+        jobberNormaltPerDagMeta.touched && jobberNormaltPerDagMeta.error ? String(jobberNormaltPerDagMeta.error) : '';
+    const faktiskErrors = faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? String(faktiskPerDagMeta.error) : '';
     return (
         <div className="ml-4 mt-7">
             <div className="flex gap-8 mt-6">
@@ -31,11 +34,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         label="Normal arbeidstid"
                         onChange={(v) => formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v)}
                         value={normaltField.value}
-                        error={
-                            jobberNormaltPerDagMeta.touched && jobberNormaltPerDagMeta.error
-                                ? jobberNormaltPerDagMeta.error
-                                : ''
-                        }
+                        error={errors}
                         onBlur={() => formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`)}
                     />
                     <div className="mt-1">
@@ -47,7 +46,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         label="Faktisk arbeidstid"
                         onChange={(v) => formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, v)}
                         value={faktiskField.value}
-                        error={faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? faktiskPerDagMeta.error : ''}
+                        error={faktiskErrors}
                         onBlur={() => formik.setFieldTouched(`${name}.faktiskArbeidTimerPerDag`)}
                     />
                     <div className="mt-1">
@@ -66,6 +65,9 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
     const formik = useFormikContext();
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag`);
+    const errors =
+        jobberNormaltPerDagMeta.touched && jobberNormaltPerDagMeta.error ? String(jobberNormaltPerDagMeta.error) : '';
+    const faktiskErrors = faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? String(faktiskPerDagMeta.error) : '';
     return (
         <div className="flex gap-4 mt-6">
             <div className="max-w-[11rem]">
@@ -75,10 +77,7 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
                     onChangeMinutter={(v) => formik.setFieldValue(`${name}.jobberNormaltPerDag.minutter`, v)}
                     timer={String(normaltField.value.timer)}
                     minutter={String(normaltField.value.minutter)}
-                    error={
-                        jobberNormaltPerDagMeta.touched &&
-                        (jobberNormaltPerDagMeta.error?.timer || jobberNormaltPerDagMeta?.error?.minutter)
-                    }
+                    error={errors}
                     onBlur={() => {
                         formik.setFieldTouched(`${name}.jobberNormaltPerDag`);
                     }}
@@ -94,10 +93,7 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
                     onChangeMinutter={(v) => formik.setFieldValue(`${name}.faktiskArbeidPerDag.minutter`, v)}
                     timer={String(faktiskField.value.timer)}
                     minutter={String(faktiskField.value.minutter)}
-                    error={
-                        faktiskPerDagMeta.touched &&
-                        (faktiskPerDagMeta.error?.timer || faktiskPerDagMeta?.error?.minutter)
-                    }
+                    error={faktiskErrors}
                     onBlur={() => {
                         formik.setFieldTouched(`${name}.faktiskArbeidPerDag`);
                     }}
@@ -119,14 +115,26 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [faktiskField] = useField(`${name}.faktiskArbeidPerDag`);
     const [normaltDesimalerField] = useField(`${name}.jobberNormaltTimerPerDag`);
     const [faktiskDesimalerField] = useField(`${name}.faktiskArbeidTimerPerDag`);
+    const [periodeField] = useField(`${name}.periode`);
     const intl = useIntl();
+
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);
+        formik.setFieldTouched(`${name}.periode`, true);
     };
 
     const nullstillPeriode = () => {
         formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
+        formik.setFieldTouched(`${name}.periode`, true);
     };
+
+    const erSoknadsperiode =
+        periodeField.value &&
+        periodeField.value.fom === soknadsperioder[0]?.fom &&
+        periodeField.value.tom === soknadsperioder[0]?.tom;
+
+    // Midlertidig. Bør fixes feil
+    const showCheckBox = false;
 
     return (
         <Field name={name}>
@@ -148,16 +156,16 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                         />
                         <Button icon={<Delete />} size="small" variant="tertiary" className="slett" onClick={remove} />
                     </div>
-                    {soknadsperioder.length === 1 && (
+                    {showCheckBox && (
                         <Checkbox
-                            onChange={(event) =>
-                                event.target.checked ? velgSoknadsperiode(soknadsperioder[0]) : nullstillPeriode()
-                            }
-                            checked={
-                                field.value.periode &&
-                                field.value.periode.fom === soknadsperioder[0].fom &&
-                                field.value.periode.tom === soknadsperioder[0].tom
-                            }
+                            onChange={(event) => {
+                                if (event.target.checked) {
+                                    velgSoknadsperiode(soknadsperioder[0]);
+                                } else {
+                                    nullstillPeriode();
+                                }
+                            }}
+                            checked={erSoknadsperiode}
                         >
                             Velg hele søknadsperioden
                         </Checkbox>
