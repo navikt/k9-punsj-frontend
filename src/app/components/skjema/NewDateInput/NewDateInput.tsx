@@ -7,7 +7,6 @@ import {
     INVALID_DATE_VALUE,
     isISODateString,
     ISODateStringToUTCDate,
-    prettifyDateString,
 } from 'app/utils/date-utils/src/format';
 
 import './newDateInput.less';
@@ -50,8 +49,8 @@ const NewDateInput: React.FC<Props> = ({
     toDate,
     dataTestId,
 }) => {
+    const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
-    const [inputValue, setInputValue] = useState(value ? prettifyDateString(value) : '');
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
@@ -60,9 +59,12 @@ const NewDateInput: React.FC<Props> = ({
 
     const onDateChange = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
-
-        setInputValue(isoDateString ? prettifyDateString(isoDateString) : '');
-        onChange(isoDateString);
+        if (isoDateString && isoDateString !== value) {
+            onChange(isoDateString);
+        }
+        if (noValidateTomtFelt && isoDateString !== value) {
+            onChange(isoDateString);
+        }
     };
 
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
@@ -76,49 +78,35 @@ const NewDateInput: React.FC<Props> = ({
     const previous = usePrevious(value);
 
     useEffect(() => {
-        if (previous !== value) {
-            setInputValue(value ? prettifyDateString(value) : '');
+        if (previous !== value && firstOpen) {
+            setFirstOpen(false);
             if (isISODateString(value)) {
                 setSelected(ISODateStringToUTCDate(value));
             } else {
                 setSelected(undefined);
             }
         }
-    }, [value, previous, setSelected]);
+    }, [firstOpen, value, previous, setSelected]);
 
     const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
         const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
 
-        setInputValue(evt.target.value);
-
-        if (isoDateString && isoDateString !== INVALID_DATE_VALUE) {
-            onChange(isoDateString);
-            if (onBlur) {
-                onBlur(isoDateString);
-            }
+        if (
+            (isoDateString || noValidateTomtFelt) &&
+            isoDateString !== INVALID_DATE_VALUE &&
+            isISODateString(value) &&
+            previous !== isoDateString &&
+            !!onBlur
+        ) {
+            onBlur(isoDateString);
         }
     };
 
     const onSelect = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
 
-        setInputValue(isoDateString ? prettifyDateString(isoDateString) : '');
-
-        if (isoDateString) {
-            onChange(isoDateString);
-            if (onBlur) {
-                onBlur(isoDateString);
-            }
-        }
-    };
-
-    const onInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = evt.target.value;
-        setInputValue(newValue);
-
-        const isoDateString = newValue ? InputDateStringToISODateString(newValue) : '';
-        if (isoDateString && isoDateString !== INVALID_DATE_VALUE) {
-            onChange(isoDateString);
+        if (isoDateString !== value && !!onBlur) {
+            onBlur(isoDateString);
         }
     };
 
@@ -142,10 +130,8 @@ const NewDateInput: React.FC<Props> = ({
                     error={error}
                     disabled={inputDisabled || disabled}
                     onBlur={onInputBlur}
-                    onChange={onInputChange}
                     ref={inputRef}
                     data-testid={dataTestId || 'datePickerInput'}
-                    value={inputValue}
                 />
             </DatePicker>
         </div>

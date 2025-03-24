@@ -49,13 +49,14 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         onBlur,
         fomInputRef,
         tomInputRef,
+
+        // limitations,
     } = props;
 
     const handleOnChange = (selectedDate: string, isFom: boolean) => {
         const newPeriod = isFom
             ? { fom: selectedDate, tom: periode?.tom || '' }
             : { fom: periode?.fom || '', tom: selectedDate };
-
         onChange(newPeriod);
     };
 
@@ -64,7 +65,6 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
             const newPeriod = isFom
                 ? { fom: selectedDate, tom: periode?.tom || '' }
                 : { fom: periode?.fom || '', tom: selectedDate };
-
             onBlur(newPeriod);
         }
     };
@@ -74,7 +74,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
             <HStack wrap gap="4" justify="center">
                 <div data-testid="datePickerInputFom">
                     <NewDateInput
-                        value={periode?.fom || initialValues?.fom || ''}
+                        value={periode.fom || initialValues?.fom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, true)}
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
                         id={inputIdFom}
@@ -82,19 +82,21 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         inputRef={fomInputRef}
+                        // limitations={limitations}
                         dataTestId="fom"
                     />
                 </div>
 
                 <div data-testid="datePickerInputTom">
                     <NewDateInput
-                        value={periode?.tom || initialValues?.tom || ''}
+                        value={periode.tom || initialValues?.tom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, false)}
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
                         id={inputIdTom}
                         inputDisabled={disabled || disabledTom}
                         errorMessage={errorMessageTom}
                         inputRef={tomInputRef}
+                        // limitations={limitations}
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         dataTestId="tom"
                     />
