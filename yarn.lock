@@ -12760,7 +12760,7 @@ __metadata:
     typescript: "npm:5.8.2"
     typescript-eslint: "npm:^8.27.0"
     typescript-string-operations: "npm:1.5.1"
-    ulid: "npm:2.4.0"
+    ulid: "npm:3.0.0"
     uuid: "npm:11.1.0"
     webpack: "npm:5.98.0"
     webpack-dev-server: "npm:5.2.0"
@@ -18313,12 +18313,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ulid@npm:2.4.0":
-  version: 2.4.0
-  resolution: "ulid@npm:2.4.0"
+"ulid@npm:3.0.0":
+  version: 3.0.0
+  resolution: "ulid@npm:3.0.0"
   bin:
-    ulid: bin/cli.js
-  checksum: 10/409ad0a703ea9f25d2a35cf790b767030a2c7b5ca0df6acb73669628156ab63bb97925a3fd7aaaf0b2384d39bd3ed2f7cd2c2de9f1171df6bc79b8c097865d92
+    ulid: dist/cli.js
+  checksum: 10/1ca4a233782d8109a18bce4b4d839aa8ea948f055b093bc85b812e53acf04d19a662d3a394ec483645d0f608d6319cb684e8859ab79a4f184c0b4cc1cd958816
   languageName: node
   linkType: hard
 
