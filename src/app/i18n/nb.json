@@ -450,7 +450,6 @@
     "skjema.perioder.fjern": "Fjern periode",
     "skjema.periodepanel.legg_til": "Ny periode",
     "skjema.periodepanel.legg_til_dag_periode": "Legg til ny dag / periode",
-    "skjema.registrerTidLengrePeriode": "Registrer tid for en lengre periode",
     "skjema.perioder.legg_til": "Legg til ny periode",
     "skjema.dag.legg_til": "Legg til ny dag",
     "skjema.dag.fjern": "Fjern dag",
@@ -596,6 +595,16 @@
     "skjema.ompao.tittel": "Alene om omsorgen",
     "skjema.ompao.dateInput.label": "Søker er alene om omsorgen fra og med",
     "skjema.ompao.dateInput.errorSummaryHeading": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
+
+    "tilsyn.kalender.lengrePeriodeÅpen.btn": "Registrer tilsyn for en lengre periode",
+
+    "tilsyn.kalender.tilsynPeriodeListe.modal.tittel": "Periode med tilsyn",
+    "tilsyn.kalender.tilsynPeriodeListe.modal.leggTil.btn": "Legg til periode",
+    "tilsyn.kalender.tilsynPeriodeListe.modal.lagre.btn": "Lagre",
+    "tilsyn.kalender.tilsynPeriodeListe.modal.avbryt.btn": "Avbryt",
+
+    "tilsyn.periode.velgHeleSøknadsperiode.checkbox": "Velg hele søknadsperioden",
+    "tilsyn.periode.hvordanDuVillOppgiSpm.toggle.label": "Hvordan vil du oppgi tid i omsorgstilbud?",
 
     "journalpost.id": "Journalpostnummer:",
     "journalpost.norskIdent": "Søkers ID:",

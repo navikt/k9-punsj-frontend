@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import { IOmsorgstid, Periodeinfo } from 'app/models/types';
 
-import { IArbeidstidPeriodeMedTimer, Periode } from '../models/types/Periode';
+import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from '../models/types/Periode';
 import { formats } from './formatUtils';
 import {
     countDatesInDateRange,
@@ -139,3 +139,15 @@ export const removeDatesFromPeriods = (
         })
         .filter(Boolean)
         .flat();
+
+export const includesDate = (periode: IPeriode, day: string | Date) => {
+    const dateInQuestion = initializeDate(day);
+
+    const fomDayjs = initializeDate(periode.fom);
+    const tomDayjs = initializeDate(periode.tom);
+
+    return (
+        (dateInQuestion.isSame(fomDayjs) || dateInQuestion.isAfter(fomDayjs)) &&
+        (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
+    );
+};

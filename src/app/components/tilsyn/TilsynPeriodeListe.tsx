@@ -1,50 +1,67 @@
-import { FieldArray, Formik } from 'formik';
-import React, { Fragment } from 'react';
-import * as yup from 'yup';
+import React from 'react';
 
 import { AddCircle } from '@navikt/ds-icons';
 import { Button, Heading } from '@navikt/ds-react';
+import { FieldArray, Formik } from 'formik';
+import { FormattedMessage } from 'react-intl';
+import * as yup from 'yup';
 
-import { IPeriode, ITimerOgMinutter, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
+import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 
 import VerticalSpacer from '../VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
+import { Tidsformat } from 'app/utils';
 
-const schema = yup.object({
+const validationSchema = yup.object({
     perioder: yup.array().of(periodeMedTimerOgMinutterSchema),
 });
 
-export default function TilsynPeriodeListe({
-    perioder,
-    heading,
-    lagre,
-    avbryt,
-    soknadsperioder,
-    nyeSoknadsperioder,
-}: {
-    perioder: Periodeinfo<ITimerOgMinutter>[];
-    heading: string;
-    lagre: (tilsynstidInfo: Periodeinfo<ITimerOgMinutter>[]) => void;
-    avbryt: () => void;
+interface Props {
+    perioder: Periodeinfo<IOmsorgstid>[];
     soknadsperioder: IPeriode[];
     nyeSoknadsperioder: IPeriode[];
-}) {
-    const initialValues: { perioder: Periodeinfo<ITimerOgMinutter>[] } = {
+
+    lagre: (tilsynstidInfo: Periodeinfo<IOmsorgstid>[]) => void;
+    avbryt: () => void;
+}
+
+const TilsynPeriodeListe = (props: Props) => {
+    const { perioder, soknadsperioder, nyeSoknadsperioder } = props;
+    const { lagre, avbryt } = props;
+
+    const initialValues: { perioder: Periodeinfo<IOmsorgstid>[] } = {
         perioder: perioder.length
             ? perioder
-            : nyeSoknadsperioder.map((periode) => new PeriodeMedTimerMinutter({ periode })),
+            : nyeSoknadsperioder.map(
+                  (periode) =>
+                      new PeriodeMedTimerMinutter({
+                          periode,
+                          timer: '0',
+                          minutter: '0',
+                          perDagString: '',
+                          tidsformat: Tidsformat.TimerOgMin,
+                      }),
+              ),
     };
+
     return (
-        <Formik initialValues={initialValues} onSubmit={(values) => lagre(values.perioder)} validationSchema={schema}>
+        <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => lagre(values.perioder)}
+            validationSchema={validationSchema}
+        >
             {({ handleSubmit, values }) => (
                 <>
-                    <Heading size="small">{heading}</Heading>
                     <FieldArray
                         name="perioder"
                         render={(arrayHelpers) => (
                             <div>
-                                {values.perioder.map((periode, index) => (
+                                <Heading level="1" size="medium">
+                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.tittel" />
+                                </Heading>
+
+                                {values.perioder.map((_, index) => (
                                     <div className="mb-8" key={index}>
                                         <TilsynPeriode
                                             name={`perioder.${index}`}
@@ -53,25 +70,34 @@ export default function TilsynPeriodeListe({
                                         />
                                     </div>
                                 ))}
+
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => arrayHelpers.push(new PeriodeMedTimerMinutter({}))}
+                                    onClick={() =>
+                                        arrayHelpers.push(
+                                            new PeriodeMedTimerMinutter({
+                                                periode: {},
+                                                timer: '0',
+                                                minutter: '0',
+                                                perDagString: '',
+                                                tidsformat: Tidsformat.TimerOgMin,
+                                            }),
+                                        )
+                                    }
                                     icon={<AddCircle />}
                                 >
-                                    Legg til periode
+                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.leggTil.btn" />
                                 </Button>
+
                                 <VerticalSpacer sixteenPx />
-                                <div style={{ display: 'flex' }}>
-                                    <Button
-                                        style={{ flexGrow: 1, marginRight: '0.9375rem' }}
-                                        type="submit"
-                                        onClick={() => handleSubmit()}
-                                    >
-                                        Lagre
+
+                                <div className="flex">
+                                    <Button type="submit" className="flex-grow mr-4" onClick={() => handleSubmit()}>
+                                        <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.lagre.btn" />
                                     </Button>
 
-                                    <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={avbryt}>
-                                        Avbryt
+                                    <Button variant="tertiary" onClick={avbryt} className="flex-grow">
+                                        <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.avbryt.btn" />
                                     </Button>
                                 </div>
                             </div>
@@ -81,4 +107,6 @@ export default function TilsynPeriodeListe({
             )}
         </Formik>
     );
-}
+};
+
+export default TilsynPeriodeListe;
