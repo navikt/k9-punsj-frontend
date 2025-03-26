@@ -75,8 +75,11 @@ interface Props {
     avbryt: () => void;
 }
 
-const ArbeidstidPeriodeListe = ({ arbeidstidPerioder, lagre, avbryt, soknadsperioder }: Props) => {
+const ArbeidstidPeriodeListe = (props: Props) => {
     const formikRef = useRef<FormikProps<FormValues>>(null);
+
+    const { arbeidstidPerioder, soknadsperioder } = props;
+    const { lagre, avbryt } = props;
 
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
         perioder: [
