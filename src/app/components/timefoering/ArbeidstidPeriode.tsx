@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import { useIntl } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
@@ -140,7 +140,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
                 <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-                    <div className="flex items-end gap-4">
+                    <div className="flex items-end">
                         <PeriodInput
                             periode={field.value.periode || {}}
                             intl={intl}
@@ -154,7 +154,14 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                             errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
                         />
-                        <Button icon={<Delete />} size="small" variant="tertiary" className="slett" onClick={remove} />
+                        <div className="ml-4">
+                            <Button
+                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                size="small"
+                                variant="tertiary"
+                                onClick={remove}
+                            />
+                        </div>
                     </div>
                     {showCheckBox && (
                         <Checkbox

@@ -11,6 +11,7 @@ import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
     name: string;
@@ -46,7 +47,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
             {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
-                        <div className="flex">
+                        <div className="flex items-end">
                             <PeriodInput
                                 periode={field.value.periode ?? {}}
                                 intl={intl}
@@ -61,13 +62,14 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                 errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
                             />
 
-                            <Button
-                                icon={<Delete />}
-                                size="small"
-                                variant="tertiary"
-                                className="mt-6 pl-1"
-                                onClick={remove}
-                            />
+                            <div className="ml-4">
+                                <Button
+                                    icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                    size="small"
+                                    variant="tertiary"
+                                    onClick={remove}
+                                />
+                            </div>
                         </div>
 
                         {visCheckbox && soknadsperioder.length === 1 && (
