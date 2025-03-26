@@ -145,7 +145,7 @@ const ArbeidstidPeriode = (props: Props) => {
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
                 <div className="mt-4">
-                    <div className="flex items-end">
+                    <div className="flex items-start">
                         <PeriodInput
                             periode={field.value.periode || {}}
                             intl={intl}
@@ -160,7 +160,7 @@ const ArbeidstidPeriode = (props: Props) => {
                             errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
                         />
 
-                        <div className="ml-4">
+                        <div className="ml-4 mt-10">
                             <Button
                                 icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                 size="small"

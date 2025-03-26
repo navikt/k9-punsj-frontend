@@ -46,7 +46,6 @@ const TilsynKalender = ({
                     <TilsynPeriodeListe
                         perioder={perioderMedTimer}
                         soknadsperioder={gyldigePerioder}
-                        nyeSoknadsperioder={nyeSoknadsperioder}
                         lagre={(periodeInfo) => {
                             updateSoknad(periodeInfo);
                             updateSoknadState(periodeInfo);

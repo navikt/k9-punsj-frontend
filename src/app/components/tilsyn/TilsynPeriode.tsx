@@ -46,22 +46,18 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
             {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
-                        <div className="flex items-end">
+                        <div className="flex items-start">
                             <PeriodInput
                                 periode={field.value.periode ?? {}}
                                 intl={intl}
                                 onChange={(v) => {
                                     formik.setFieldValue(`${name}.periode`, v);
                                 }}
-                                onBlur={() => {
-                                    formik.setFieldTouched(`${name}.periode.fom`);
-                                    formik.setFieldTouched(`${name}.periode.tom`);
-                                }}
                                 errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                                 errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
                             />
 
-                            <div className="ml-4">
+                            <div className="ml-4 mt-10">
                                 <Button
                                     icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
                                     size="small"

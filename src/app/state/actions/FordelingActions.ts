@@ -167,8 +167,6 @@ export function hentGjelderKategorierFraGosys() {
         dispatch(gosysGjelderRequestAction());
         get(ApiPath.GOSYS_GJELDER, {}, {}, (response, svar) => {
             if (response.ok) {
-                // eslint-disable-next-line no-console
-                console.log('Response ok');
                 return dispatch(gosysGjelderSuccessAction(svar));
             }
 

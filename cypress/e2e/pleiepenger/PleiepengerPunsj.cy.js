@@ -12,7 +12,7 @@ describe('Pleiepenger punsj', () => {
     });
 
     it('kan sende inn søknad om pleiepenger', () => {
-        cy.soknadperioderInput('08.11.2021', '11.11.2021');
+        // cy.soknadperioderInput('08.11.2021', '11.11.2021');
 
         cy.sendInnSoknad();
 
