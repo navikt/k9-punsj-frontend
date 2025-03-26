@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FieldArray, Formik, FormikProps } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import * as yup from 'yup';
@@ -13,9 +13,16 @@ import VerticalSpacer from '../VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
 import { formats, Tidsformat } from 'app/utils';
 import dayjs from 'dayjs';
+import { checkPeriodOverlapTilsyn } from './utils';
 
 const validationSchema = yup.object({
-    perioder: yup.array().of(periodeMedTimerOgMinutterSchema),
+    perioder: yup
+        .array()
+        .of(periodeMedTimerOgMinutterSchema)
+        .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
+            if (!periods) return true;
+            return !checkPeriodOverlapTilsyn(periods as Periodeinfo<IOmsorgstid>[]);
+        }),
 });
 interface FormValues {
     perioder: Periodeinfo<IOmsorgstid>[];
@@ -146,7 +153,7 @@ const TilsynPeriodeListe = (props: Props) => {
             innerRef={formikRef}
             // enableReinitialize
         >
-            {({ handleSubmit, values }) => (
+            {({ handleSubmit, values, errors, touched }) => (
                 <FieldArray
                     name="perioder"
                     render={(arrayHelpers) => (
@@ -164,6 +171,12 @@ const TilsynPeriodeListe = (props: Props) => {
                                     />
                                 </div>
                             ))}
+
+                            {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
+                                <Alert variant="error" className="mb-4">
+                                    {errors.perioder}
+                                </Alert>
+                            )}
 
                             <Button
                                 variant="tertiary"

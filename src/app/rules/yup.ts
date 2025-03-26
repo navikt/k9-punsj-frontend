@@ -2,8 +2,9 @@ import * as yup from 'yup';
 
 import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
-import { Tidsformat } from 'app/utils';
+import { formats, Tidsformat } from 'app/utils';
 import { IIdentState } from 'app/models/types/IdentState';
+import dayjs from 'dayjs';
 
 const yupLocale = {
     mixed: {
@@ -110,7 +111,15 @@ export const timerOgMinutter = yup.object({
 export const periodeMedTimerOgMinutter = yup.object({
     periode: yup.object({
         fom: yup.string().required().label('Fra og med'),
-        tom: yup.string().required().label('Til og med'),
+        tom: yup
+            .string()
+            .required()
+            .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', function (value) {
+                const { fom } = this.parent;
+                if (!fom || !value) return true; // Skip validation if either date is missing
+                return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));
+            })
+            .label('Til og med'),
     }),
     timer,
     minutter,
@@ -120,7 +129,15 @@ export const periodeMedTimerOgMinutter = yup.object({
 export const arbeidstimerPeriode = yup.object().shape({
     periode: yup.object({
         fom: yup.string().required().label('Fra og med'),
-        tom: yup.string().required().label('Til og med'),
+        tom: yup
+            .string()
+            .required()
+            .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', function (value) {
+                const { fom } = this.parent;
+                if (!fom || !value) return true; // Skip validation if either date is missing
+                return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));
+            })
+            .label('Til og med'),
     }),
     faktiskArbeidPerDag: timerOgMinutter,
     jobberNormaltPerDag: yup.object({
