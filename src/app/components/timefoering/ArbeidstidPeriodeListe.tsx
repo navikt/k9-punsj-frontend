@@ -67,17 +67,15 @@ interface FormValues {
     perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
 }
 
-export default function ArbeidstidPeriodeListe({
-    arbeidstidPerioder,
-    lagre,
-    avbryt,
-    soknadsperioder,
-}: {
+interface Props {
     arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
+    soknadsperioder: IPeriode[];
+
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
-    soknadsperioder: IPeriode[];
-}) {
+}
+
+const ArbeidstidPeriodeListe = ({ arbeidstidPerioder, lagre, avbryt, soknadsperioder }: Props) => {
     const formikRef = useRef<FormikProps<FormValues>>(null);
 
     const initialValues: { perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[] } = {
@@ -259,4 +257,6 @@ export default function ArbeidstidPeriodeListe({
             )}
         </Formik>
     );
-}
+};
+
+export default ArbeidstidPeriodeListe;

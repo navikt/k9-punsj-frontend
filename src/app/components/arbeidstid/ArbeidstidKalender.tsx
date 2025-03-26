@@ -166,7 +166,6 @@ const ArbeidstidKalender = ({
                 >
                     <Modal.Body data-test-id="arbeidstid-periode-liste">
                         <ArbeidstidPeriodeListe
-                            heading="Periode med jobb"
                             arbeidstidPerioder={perioderForModal}
                             soknadsperioder={gyldigePerioder}
                             lagre={(periodeInfo) => {
