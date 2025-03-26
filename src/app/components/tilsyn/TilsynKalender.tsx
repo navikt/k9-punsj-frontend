@@ -41,7 +41,7 @@ const TilsynKalender = ({
 
             <VerticalSpacer twentyPx />
 
-            <Modal ref={modalRef} className="venstrestilt lengre-periode-modal" aria-label="Lengre periode modal">
+            <Modal ref={modalRef} aria-label="Lengre periode modal">
                 <Modal.Body>
                     <TilsynPeriodeListe
                         perioder={perioderMedTimer}

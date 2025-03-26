@@ -84,7 +84,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                             </Checkbox>
                         )}
 
-                        <div className="mt-4">
+                        <div className="mt-6">
                             <ToggleGroup
                                 label={<FormattedMessage id="tilsyn.periode.hvordanDuVillOppgiSpm.toggle.label" />}
                                 size="small"

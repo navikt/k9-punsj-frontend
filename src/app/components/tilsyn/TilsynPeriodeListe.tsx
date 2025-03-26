@@ -52,58 +52,56 @@ const TilsynPeriodeListe = (props: Props) => {
             validationSchema={validationSchema}
         >
             {({ handleSubmit, values }) => (
-                <>
-                    <FieldArray
-                        name="perioder"
-                        render={(arrayHelpers) => (
-                            <div>
-                                <Heading level="1" size="medium">
-                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.tittel" />
-                                </Heading>
+                <FieldArray
+                    name="perioder"
+                    render={(arrayHelpers) => (
+                        <div>
+                            <Heading level="1" size="medium">
+                                <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.tittel" />
+                            </Heading>
 
-                                {values.perioder.map((_, index) => (
-                                    <div className="mb-8" key={index}>
-                                        <TilsynPeriode
-                                            name={`perioder.${index}`}
-                                            soknadsperioder={soknadsperioder}
-                                            remove={() => arrayHelpers.remove(index)}
-                                        />
-                                    </div>
-                                ))}
+                            {values.perioder.map((_, index) => (
+                                <div className="mb-8" key={index}>
+                                    <TilsynPeriode
+                                        name={`perioder.${index}`}
+                                        soknadsperioder={soknadsperioder}
+                                        remove={() => arrayHelpers.remove(index)}
+                                    />
+                                </div>
+                            ))}
 
-                                <Button
-                                    variant="tertiary"
-                                    onClick={() =>
-                                        arrayHelpers.push(
-                                            new PeriodeMedTimerMinutter({
-                                                periode: {},
-                                                timer: '0',
-                                                minutter: '0',
-                                                perDagString: '',
-                                                tidsformat: Tidsformat.TimerOgMin,
-                                            }),
-                                        )
-                                    }
-                                    icon={<AddCircle />}
-                                >
-                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.leggTil.btn" />
+                            <Button
+                                variant="tertiary"
+                                onClick={() =>
+                                    arrayHelpers.push(
+                                        new PeriodeMedTimerMinutter({
+                                            periode: {},
+                                            timer: '0',
+                                            minutter: '0',
+                                            perDagString: '',
+                                            tidsformat: Tidsformat.TimerOgMin,
+                                        }),
+                                    )
+                                }
+                                icon={<AddCircle />}
+                            >
+                                <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.leggTil.btn" />
+                            </Button>
+
+                            <VerticalSpacer sixteenPx />
+
+                            <div className="flex">
+                                <Button type="submit" className="flex-grow mr-4" onClick={() => handleSubmit()}>
+                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.lagre.btn" />
                                 </Button>
 
-                                <VerticalSpacer sixteenPx />
-
-                                <div className="flex">
-                                    <Button type="submit" className="flex-grow mr-4" onClick={() => handleSubmit()}>
-                                        <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.lagre.btn" />
-                                    </Button>
-
-                                    <Button variant="tertiary" onClick={avbryt} className="flex-grow">
-                                        <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.avbryt.btn" />
-                                    </Button>
-                                </div>
+                                <Button variant="tertiary" onClick={avbryt} className="flex-grow">
+                                    <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.avbryt.btn" />
+                                </Button>
                             </div>
-                        )}
-                    />
-                </>
+                        </div>
+                    )}
+                />
             )}
         </Formik>
     );

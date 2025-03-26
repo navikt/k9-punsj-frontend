@@ -134,12 +134,12 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
         periodeField.value.tom === soknadsperioder[0]?.tom;
 
     // Midlertidig. Bør fixes feil
-    const showCheckBox = false;
+    const showCheckbox = false;
 
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
-                <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
+                <div className="mt-4">
                     <div className="flex items-end">
                         <PeriodInput
                             periode={field.value.periode || {}}
@@ -154,6 +154,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                             errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
                         />
+
                         <div className="ml-4">
                             <Button
                                 icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
@@ -163,7 +164,8 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             />
                         </div>
                     </div>
-                    {showCheckBox && (
+
+                    {showCheckbox && (
                         <Checkbox
                             onChange={(event) => {
                                 if (event.target.checked) {
@@ -177,7 +179,8 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             Velg hele søknadsperioden
                         </Checkbox>
                     )}
-                    <div style={{ marginTop: '1.5625rem' }}>
+
+                    <div className="mt-6">
                         <ToggleGroup
                             label="Hvordan vil du oppgi arbeidstid?"
                             defaultValue={Tidsformat.TimerOgMin}
@@ -224,6 +227,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     {tidsformatField.value === Tidsformat.TimerOgMin && (
                         <ArbeidstidPeriodeTimerOgMinutter name={name} />
                     )}
+
                     {tidsformatField.value === Tidsformat.Desimaler && <ArbeidstidPeriodeDesimaler name={`${name}`} />}
                 </div>
             )}

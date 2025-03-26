@@ -1,5 +1,5 @@
 import { FieldArray, Formik, FormikProps } from 'formik';
-import React, { Fragment, useRef } from 'react';
+import React, { useRef } from 'react';
 import * as yup from 'yup';
 
 import { AddCircle } from '@navikt/ds-icons';
@@ -197,75 +197,68 @@ export default function ArbeidstidPeriodeListe({
             innerRef={formikRef}
             enableReinitialize
         >
-            {({ handleSubmit, values, errors, touched }) => {
-                return (
-                    <>
-                        <Heading size="small">{heading}</Heading>
+            {({ handleSubmit, values, errors, touched }) => (
+                <FieldArray
+                    name="perioder"
+                    render={(arrayHelpers) => (
+                        <div>
+                            <Heading level="1" size="medium">
+                                Periode med jobb
+                            </Heading>
 
-                        <FieldArray
-                            name="perioder"
-                            render={(arrayHelpers) => (
-                                <div>
-                                    {values.perioder && values.perioder.length > 0 ? (
-                                        values.perioder.map((periode, index) => (
-                                            <Fragment key={index}>
-                                                <ArbeidstidPeriode
-                                                    name={`perioder.${index}`}
-                                                    soknadsperioder={soknadsperioder}
-                                                    remove={() => arrayHelpers.remove(index)}
-                                                />
-                                            </Fragment>
-                                        ))
-                                    ) : (
-                                        <div>Ingen perioder å vise</div>
-                                    )}
-                                    {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
-                                        <Alert variant="error" className="mb-4">
-                                            {errors.perioder}
-                                        </Alert>
-                                    )}
-                                    <div className="mb-8 mt-4">
-                                        <Button
-                                            variant="tertiary"
-                                            type="button"
-                                            onClick={() => {
-                                                arrayHelpers.push(
-                                                    new ArbeidstidPeriodeMedTimer({
-                                                        periode: { fom: '', tom: '' },
-                                                        faktiskArbeidPerDag: { timer: '', minutter: '' },
-                                                        jobberNormaltPerDag: { timer: '', minutter: '' },
-                                                    }),
-                                                );
-                                            }}
-                                            icon={<AddCircle />}
-                                        >
-                                            Legg til periode
-                                        </Button>
+                            {values.perioder && values.perioder.length > 0 ? (
+                                values.perioder.map((periode, index) => (
+                                    <div className="mb-8" key={index}>
+                                        <ArbeidstidPeriode
+                                            name={`perioder.${index}`}
+                                            soknadsperioder={soknadsperioder}
+                                            remove={() => arrayHelpers.remove(index)}
+                                        />
                                     </div>
-                                    <div style={{ display: 'flex' }}>
-                                        <Button
-                                            style={{ flexGrow: 1, marginRight: '0.9375rem' }}
-                                            type="button"
-                                            onClick={() => handleSubmit()}
-                                        >
-                                            Lagre
-                                        </Button>
-
-                                        <Button
-                                            style={{ flexGrow: 1 }}
-                                            variant="tertiary"
-                                            onClick={avbryt}
-                                            type="button"
-                                        >
-                                            Avbryt
-                                        </Button>
-                                    </div>
-                                </div>
+                                ))
+                            ) : (
+                                <div>Ingen perioder å vise</div>
                             )}
-                        />
-                    </>
-                );
-            }}
+                            {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
+                                <Alert variant="error" className="mb-4">
+                                    {errors.perioder}
+                                </Alert>
+                            )}
+                            <div className="mb-8 mt-4">
+                                <Button
+                                    variant="tertiary"
+                                    type="button"
+                                    onClick={() => {
+                                        arrayHelpers.push(
+                                            new ArbeidstidPeriodeMedTimer({
+                                                periode: { fom: '', tom: '' },
+                                                faktiskArbeidPerDag: { timer: '', minutter: '' },
+                                                jobberNormaltPerDag: { timer: '', minutter: '' },
+                                            }),
+                                        );
+                                    }}
+                                    icon={<AddCircle />}
+                                >
+                                    Legg til periode
+                                </Button>
+                            </div>
+                            <div style={{ display: 'flex' }}>
+                                <Button
+                                    style={{ flexGrow: 1, marginRight: '0.9375rem' }}
+                                    type="button"
+                                    onClick={() => handleSubmit()}
+                                >
+                                    Lagre
+                                </Button>
+
+                                <Button style={{ flexGrow: 1 }} variant="tertiary" onClick={avbryt} type="button">
+                                    Avbryt
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                />
+            )}
         </Formik>
     );
 }
