@@ -13,12 +13,6 @@ import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
 
-interface OwnProps {
-    name: string;
-    remove: () => void;
-    soknadsperioder: IPeriode[];
-}
-
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltTimerPerDag`);
@@ -106,8 +100,20 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
     );
 };
 
-const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
+interface Props {
+    name: string;
+    soknadsperioder: IPeriode[];
+
+    remove: () => void;
+}
+
+const ArbeidstidPeriode = (props: Props) => {
+    const intl = useIntl();
+
     const formik = useFormikContext();
+
+    const { name, soknadsperioder, remove } = props;
+
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [, periodeTomMeta] = useField(`${name}.periode.tom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
@@ -116,7 +122,6 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [normaltDesimalerField] = useField(`${name}.jobberNormaltTimerPerDag`);
     const [faktiskDesimalerField] = useField(`${name}.faktiskArbeidTimerPerDag`);
     const [periodeField] = useField(`${name}.periode`);
-    const intl = useIntl();
 
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);

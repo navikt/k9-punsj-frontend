@@ -1,14 +1,14 @@
-import { FieldArray, Formik, FormikProps } from 'formik';
 import React, { useRef } from 'react';
-import * as yup from 'yup';
 
 import { AddCircle } from '@navikt/ds-icons';
-import { Button, Heading, Alert } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
+import { FieldArray, Formik, FormikProps } from 'formik';
+import * as yup from 'yup';
+import dayjs from 'dayjs';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { formats, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
-import dayjs from 'dayjs';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
@@ -70,12 +70,10 @@ interface FormValues {
 export default function ArbeidstidPeriodeListe({
     arbeidstidPerioder,
     lagre,
-    heading,
     avbryt,
     soknadsperioder,
 }: {
     arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
-    heading: string;
     lagre: (arbeidstidInfo: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => void;
     avbryt: () => void;
     soknadsperioder: IPeriode[];

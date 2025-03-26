@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
 import { PeriodInput } from '../period-input/PeriodInput';
@@ -11,7 +11,6 @@ import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import { TrashIcon } from '@navikt/aksel-icons';
 
 interface Props {
     name: string;
