@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 
 import { Button, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
@@ -30,32 +30,38 @@ const TilsynKalender = ({
     updateSoknad,
     updateSoknadState,
 }: Props) => {
-    const modalRef = useRef<HTMLDialogElement>(null);
+    const [openPeriodeListe, setOpenPeriodeListe] = useState(false);
+
     const gyldigePerioder = [...nyeSoknadsperioder, ...eksisterendeSoknadsperioder];
 
     return (
         <>
-            <Button variant="secondary" onClick={() => modalRef.current?.showModal()}>
+            <Button variant="secondary" onClick={() => setOpenPeriodeListe(true)}>
                 <FormattedMessage id="tilsyn.kalender.lengrePeriodeÅpen.btn" />
             </Button>
 
             <VerticalSpacer twentyPx />
 
-            <Modal ref={modalRef} aria-label="Lengre periode modal">
-                <Modal.Body>
-                    <TilsynPeriodeListe
-                        perioder={perioderMedTimer}
-                        soknadsperioder={gyldigePerioder}
-                        lagre={(periodeInfo) => {
-                            updateSoknad(periodeInfo);
-                            updateSoknadState(periodeInfo);
-
-                            modalRef.current?.close();
-                        }}
-                        avbryt={() => modalRef.current?.close()}
-                    />
-                </Modal.Body>
-            </Modal>
+            {openPeriodeListe && (
+                <Modal
+                    open={openPeriodeListe}
+                    aria-label="Lengre periode modal"
+                    onClose={() => setOpenPeriodeListe(false)}
+                >
+                    <Modal.Body>
+                        <TilsynPeriodeListe
+                            perioder={perioderMedTimer}
+                            soknadsperioder={gyldigePerioder}
+                            lagre={(periodeInfo) => {
+                                updateSoknad(periodeInfo);
+                                updateSoknadState(periodeInfo);
+                                setOpenPeriodeListe(false);
+                            }}
+                            avbryt={() => setOpenPeriodeListe(false)}
+                        />
+                    </Modal.Body>
+                </Modal>
+            )}
 
             {gyldigePerioder && (
                 <TidsbrukKalenderContainer
