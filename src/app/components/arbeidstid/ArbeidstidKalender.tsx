@@ -162,12 +162,10 @@ const ArbeidstidKalender = ({
                 <Modal
                     open={true}
                     onClose={() => setVisArbeidstidLengrePerioder(false)}
-                    className="venstrestilt lengre-periode-modal"
                     aria-label="Periode med jobb modal"
                 >
                     <Modal.Body data-test-id="arbeidstid-periode-liste">
                         <ArbeidstidPeriodeListe
-                            heading="Periode med jobb"
                             arbeidstidPerioder={perioderForModal}
                             soknadsperioder={gyldigePerioder}
                             lagre={(periodeInfo) => {

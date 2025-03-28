@@ -9,16 +9,24 @@ import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTime
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
 import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import { IOmsorgstid } from 'app/models/types';
+
+export interface ITilsynTidPayload extends IOmsorgstid {
+    selectedDates?: Date[];
+}
 
 interface OwnProps {
-    lagre: (params: any) => void;
-    toggleModal: () => void;
-    selectedDates?: Date[];
     heading: string;
+    selectedDates?: Date[];
+
+    lagre: (payload: ITilsynTidPayload) => void;
+    toggleModal: () => void;
     clearSelectedDates?: () => void;
 }
 
-const TilsynTid = ({ lagre, heading, selectedDates, toggleModal, clearSelectedDates = () => {} }: OwnProps) => {
+const TilsynTid = (props: OwnProps) => {
+    const { heading, selectedDates, lagre, toggleModal, clearSelectedDates = () => {} } = props;
+
     const [timer, setTimer] = useState('');
     const [minutter, setMinutter] = useState('');
     const [error, setError] = useState('');
@@ -37,7 +45,7 @@ const TilsynTid = ({ lagre, heading, selectedDates, toggleModal, clearSelectedDa
         setMinutter(timerOgMinutterKonvertert[1]);
     };
 
-    const payload = {
+    const payload: ITilsynTidPayload = {
         timer,
         minutter,
         selectedDates,

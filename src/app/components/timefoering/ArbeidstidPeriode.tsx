@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import { useIntl } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
@@ -12,12 +12,6 @@ import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
-
-interface OwnProps {
-    name: string;
-    remove: () => void;
-    soknadsperioder: IPeriode[];
-}
 
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
@@ -106,8 +100,20 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
     );
 };
 
-const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
+interface Props {
+    name: string;
+    soknadsperioder: IPeriode[];
+
+    remove: () => void;
+}
+
+const ArbeidstidPeriode = (props: Props) => {
+    const intl = useIntl();
+
     const formik = useFormikContext();
+
+    const { name, soknadsperioder, remove } = props;
+
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [, periodeTomMeta] = useField(`${name}.periode.tom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
@@ -116,7 +122,6 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
     const [normaltDesimalerField] = useField(`${name}.jobberNormaltTimerPerDag`);
     const [faktiskDesimalerField] = useField(`${name}.faktiskArbeidTimerPerDag`);
     const [periodeField] = useField(`${name}.periode`);
-    const intl = useIntl();
 
     const velgSoknadsperiode = (periode: IPeriode) => {
         formik.setFieldValue(`${name}.periode`, periode);
@@ -134,13 +139,13 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
         periodeField.value.tom === soknadsperioder[0]?.tom;
 
     // Midlertidig. Bør fixes feil
-    const showCheckBox = false;
+    const showCheckbox = false;
 
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
-                <div style={{ marginLeft: '1rem', marginTop: '1.875rem' }}>
-                    <div className="flex items-end gap-4">
+                <div className="mt-4">
+                    <div className="flex items-start">
                         <PeriodInput
                             periode={field.value.periode || {}}
                             intl={intl}
@@ -154,9 +159,18 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                             errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
                         />
-                        <Button icon={<Delete />} size="small" variant="tertiary" className="slett" onClick={remove} />
+
+                        <div className="ml-4 mt-10">
+                            <Button
+                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                size="small"
+                                variant="tertiary"
+                                onClick={remove}
+                            />
+                        </div>
                     </div>
-                    {showCheckBox && (
+
+                    {showCheckbox && (
                         <Checkbox
                             onChange={(event) => {
                                 if (event.target.checked) {
@@ -170,7 +184,8 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                             Velg hele søknadsperioden
                         </Checkbox>
                     )}
-                    <div style={{ marginTop: '1.5625rem' }}>
+
+                    <div className="mt-6">
                         <ToggleGroup
                             label="Hvordan vil du oppgi arbeidstid?"
                             defaultValue={Tidsformat.TimerOgMin}
@@ -217,6 +232,7 @@ const ArbeidstidPeriode = ({ name, remove, soknadsperioder }: OwnProps) => {
                     {tidsformatField.value === Tidsformat.TimerOgMin && (
                         <ArbeidstidPeriodeTimerOgMinutter name={name} />
                     )}
+
                     {tidsformatField.value === Tidsformat.Desimaler && <ArbeidstidPeriodeDesimaler name={`${name}`} />}
                 </div>
             )}
