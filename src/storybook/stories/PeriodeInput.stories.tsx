@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import { Button, HStack, Checkbox } from '@navikt/ds-react';
-import PeriodeInputV2 from 'app/components/periode-inputV2/PeriodeInputV2';
+import PeriodeInput from 'app/components/periode-inputV2/PeriodeInputV2';
 import { IPeriode } from 'app/models/types/Periode';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
@@ -11,8 +11,8 @@ import { within, userEvent, waitFor } from '@storybook/testing-library';
 import type { StoryObj } from '@storybook/react';
 
 const meta = {
-    title: 'Components/PeriodeInputV2',
-    component: PeriodeInputV2,
+    title: 'Components/PeriodeInput',
+    component: PeriodeInput,
     parameters: {
         layout: 'centered',
     },
@@ -39,7 +39,7 @@ const periodeSchema = yup.object({
     }),
 });
 
-const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
+const PeriodeInputWithFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
 
     return (
@@ -54,10 +54,10 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
         >
             {({ handleSubmit, values, setFieldValue, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
-                    <PeriodeInputV2
+                    <PeriodeInput
                         periode={values.periode}
-                        onChange={(periode) => setFieldValue('periode', periode)}
-                        onBlur={(periode) => setFieldValue('periode', periode)}
+                        onChange={(periode: IPeriode) => setFieldValue('periode', periode)}
+                        onBlur={(periode: IPeriode) => setFieldValue('periode', periode)}
                         fomInputProps={{
                             error: touched.periode?.fom && errors.periode?.fom,
                         }}
@@ -84,7 +84,7 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
     );
 };
 
-const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
+const PeriodeInputWithoutFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [periode, setPeriode] = useState<IPeriode>(initialValues || { fom: null, tom: null });
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
     const [errors, setErrors] = useState<{ fom?: string; tom?: string }>({});
@@ -117,13 +117,13 @@ const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPerio
 
     return (
         <form onSubmit={handleSubmit}>
-            <PeriodeInputV2
+            <PeriodeInput
                 periode={periode}
-                onChange={(newPeriode) => {
+                onChange={(newPeriode: IPeriode) => {
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
-                onBlur={(newPeriode) => {
+                onBlur={(newPeriode: IPeriode) => {
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
@@ -151,7 +151,7 @@ const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPerio
     );
 };
 
-const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) => {
+const PeriodeInputSimple = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [periode, setPeriode] = useState<IPeriode>(initialValues || { fom: null, tom: null });
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
     const [errors, setErrors] = useState<{ fom?: string; tom?: string }>({});
@@ -183,13 +183,13 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
 
     return (
         <div>
-            <PeriodeInputV2
+            <PeriodeInput
                 periode={periode}
-                onChange={(newPeriode) => {
+                onChange={(newPeriode: IPeriode) => {
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
-                onBlur={(newPeriode) => {
+                onBlur={(newPeriode: IPeriode) => {
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
@@ -217,7 +217,7 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
     );
 };
 
-const PeriodeInputV2WithPresetPeriod = () => {
+const PeriodeInputWithPresetPeriod = () => {
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
     const [usePresetPeriod, setUsePresetPeriod] = useState(false);
 
@@ -241,10 +241,10 @@ const PeriodeInputV2WithPresetPeriod = () => {
         >
             {({ handleSubmit, values, setFieldValue, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
-                    <PeriodeInputV2
+                    <PeriodeInput
                         periode={currentPeriod}
-                        onChange={(periode) => setFieldValue('periode', periode)}
-                        onBlur={(periode) => setFieldValue('periode', periode)}
+                        onChange={(periode: IPeriode) => setFieldValue('periode', periode)}
+                        onBlur={(periode: IPeriode) => setFieldValue('periode', periode)}
                         fomInputProps={{
                             error: touched.periode?.fom && errors.periode?.fom,
                         }}
@@ -284,7 +284,7 @@ const PeriodeInputV2WithPresetPeriod = () => {
 
 export const Default: StoryObj = {
     name: 'Default',
-    render: () => <PeriodeInputV2Simple />,
+    render: () => <PeriodeInputSimple />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -315,7 +315,7 @@ export const Default: StoryObj = {
 export const WithInitialValues: StoryObj = {
     name: 'With Initial Values',
     render: () => (
-        <PeriodeInputV2Simple
+        <PeriodeInputSimple
             initialValues={{
                 fom: '2024-01-01',
                 tom: '2024-12-31',
@@ -354,7 +354,7 @@ export const WithInitialValues: StoryObj = {
 
 export const WithFormik: StoryObj = {
     name: 'With Formik',
-    render: () => <PeriodeInputV2WithFormik />,
+    render: () => <PeriodeInputWithFormik />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -390,7 +390,7 @@ export const WithFormik: StoryObj = {
 export const WithFormikAndInitialValues: StoryObj = {
     name: 'With Formik and Initial Values',
     render: () => (
-        <PeriodeInputV2WithFormik
+        <PeriodeInputWithFormik
             initialValues={{
                 fom: '2024-01-01',
                 tom: '2024-12-31',
@@ -438,7 +438,7 @@ export const WithFormikAndInitialValues: StoryObj = {
 
 export const WithForm: StoryObj = {
     name: 'With Form',
-    render: () => <PeriodeInputV2WithoutFormik />,
+    render: () => <PeriodeInputWithoutFormik />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -474,7 +474,7 @@ export const WithForm: StoryObj = {
 export const WithFormAndInitialValues: StoryObj = {
     name: 'With Form and Initial Values',
     render: () => (
-        <PeriodeInputV2WithoutFormik
+        <PeriodeInputWithoutFormik
             initialValues={{
                 fom: '2024-01-01',
                 tom: '2024-12-31',
@@ -514,7 +514,7 @@ export const WithFormAndInitialValues: StoryObj = {
 
 export const WithPresetPeriod: StoryObj = {
     name: 'With Preset Period',
-    render: () => <PeriodeInputV2WithPresetPeriod />,
+    render: () => <PeriodeInputWithPresetPeriod />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -563,7 +563,7 @@ export const WithPresetPeriod: StoryObj = {
 // Test for validering av datoer
 export const ValidationTest: StoryObj = {
     name: 'Validation Test',
-    render: () => <PeriodeInputV2Simple />,
+    render: () => <PeriodeInputSimple />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -605,7 +605,7 @@ export const ValidationTest: StoryObj = {
 // Test for delvis utfylling
 export const PartialInputTest: StoryObj = {
     name: 'Partial Input Test',
-    render: () => <PeriodeInputV2Simple />,
+    render: () => <PeriodeInputSimple />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
@@ -639,7 +639,7 @@ export const PartialInputTest: StoryObj = {
 // Test for tilgjengelighet (a11y)
 export const AccessibilityTest: StoryObj = {
     name: 'Accessibility Test',
-    render: () => <PeriodeInputV2Simple />,
+    render: () => <PeriodeInputSimple />,
     play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
         const canvas = within(canvasElement);
 
