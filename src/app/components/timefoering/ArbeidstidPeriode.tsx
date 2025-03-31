@@ -107,6 +107,14 @@ interface Props {
     remove: () => void;
 }
 
+// Typisering for feilmeldingsobjektet
+interface ArbeidstidFormErrors {
+    periode?: {
+        fom?: string;
+        tom?: string;
+    };
+}
+
 const ArbeidstidPeriode = (props: Props) => {
     const intl = useIntl();
 
@@ -143,99 +151,106 @@ const ArbeidstidPeriode = (props: Props) => {
 
     return (
         <Field name={name}>
-            {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => (
-                <div className="mt-4">
-                    <div className="flex items-start">
-                        <PeriodInput
-                            periode={field.value.periode || {}}
-                            intl={intl}
-                            onChange={(v) => {
-                                formik.setFieldValue(`${name}.periode`, v);
-                            }}
-                            onBlur={() => {
-                                formik.setFieldTouched(`${name}.periode.fom`);
-                                formik.setFieldTouched(`${name}.periode.tom`);
-                            }}
-                            errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
-                            errorMessageTom={periodeTomMeta.touched && meta.error?.periode?.tom}
-                        />
+            {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => {
+                // Eksplisitt typekonvertering for meta.error
+                const errors = meta.error as unknown as ArbeidstidFormErrors;
 
-                        <div className="ml-4 mt-10">
-                            <Button
-                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                size="small"
-                                variant="tertiary"
-                                onClick={remove}
+                return (
+                    <div className="mt-4">
+                        <div className="flex items-start">
+                            <PeriodInput
+                                periode={field.value.periode || {}}
+                                intl={intl}
+                                onChange={(v) => {
+                                    formik.setFieldValue(`${name}.periode`, v);
+                                }}
+                                onBlur={() => {
+                                    formik.setFieldTouched(`${name}.periode.fom`);
+                                    formik.setFieldTouched(`${name}.periode.tom`);
+                                }}
+                                errorMessageFom={periodeFomMeta.touched && errors?.periode?.fom}
+                                errorMessageTom={periodeTomMeta.touched && errors?.periode?.tom}
                             />
+
+                            <div className="ml-4 mt-10">
+                                <Button
+                                    icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                    size="small"
+                                    variant="tertiary"
+                                    onClick={remove}
+                                />
+                            </div>
                         </div>
+
+                        {showCheckbox && (
+                            <Checkbox
+                                onChange={(event) => {
+                                    if (event.target.checked) {
+                                        velgSoknadsperiode(soknadsperioder[0]);
+                                    } else {
+                                        nullstillPeriode();
+                                    }
+                                }}
+                                checked={erSoknadsperiode}
+                            >
+                                Velg hele søknadsperioden
+                            </Checkbox>
+                        )}
+
+                        <div className="mt-6">
+                            <ToggleGroup
+                                label="Hvordan vil du oppgi arbeidstid?"
+                                defaultValue={Tidsformat.TimerOgMin}
+                                size="small"
+                                onChange={(v: Tidsformat) => {
+                                    formik.setFieldValue(`${name}.tidsformat`, v);
+                                    if (v === Tidsformat.Desimaler) {
+                                        const normalDesimaler = timerOgMinutterTilTimerMedDesimaler({
+                                            timer: normaltField.value.timer,
+                                            minutter: normaltField.value.minutter,
+                                        });
+                                        const faktiskDesimaler = timerOgMinutterTilTimerMedDesimaler({
+                                            timer: faktiskField.value.timer,
+                                            minutter: faktiskField.value.minutter,
+                                        });
+                                        formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalDesimaler);
+                                        formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskDesimaler);
+                                    }
+
+                                    if (v === Tidsformat.TimerOgMin) {
+                                        const normalTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
+                                            Number(normaltDesimalerField.value),
+                                        );
+                                        const faktiskTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
+                                            Number(faktiskDesimalerField.value),
+                                        );
+                                        formik.setFieldValue(`${name}.jobberNormaltPerDag`, {
+                                            timer: normalTimerOgMinutter[0],
+                                            minutter: normalTimerOgMinutter[1],
+                                        });
+                                        formik.setFieldValue(`${name}.faktiskArbeidPerDag`, {
+                                            timer: faktiskTimerOgMinutter[0],
+                                            minutter: faktiskTimerOgMinutter[1],
+                                        });
+                                    }
+                                }}
+                                value={tidsformatField.value}
+                            >
+                                <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                                <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
+                            </ToggleGroup>
+                        </div>
+
+                        {tidsformatField.value === Tidsformat.TimerOgMin && (
+                            <ArbeidstidPeriodeTimerOgMinutter name={name} />
+                        )}
+
+                        {tidsformatField.value === Tidsformat.Desimaler && (
+                            <ArbeidstidPeriodeDesimaler name={`${name}`} />
+                        )}
                     </div>
-
-                    {showCheckbox && (
-                        <Checkbox
-                            onChange={(event) => {
-                                if (event.target.checked) {
-                                    velgSoknadsperiode(soknadsperioder[0]);
-                                } else {
-                                    nullstillPeriode();
-                                }
-                            }}
-                            checked={erSoknadsperiode}
-                        >
-                            Velg hele søknadsperioden
-                        </Checkbox>
-                    )}
-
-                    <div className="mt-6">
-                        <ToggleGroup
-                            label="Hvordan vil du oppgi arbeidstid?"
-                            defaultValue={Tidsformat.TimerOgMin}
-                            size="small"
-                            onChange={(v: Tidsformat) => {
-                                formik.setFieldValue(`${name}.tidsformat`, v);
-                                if (v === Tidsformat.Desimaler) {
-                                    const normalDesimaler = timerOgMinutterTilTimerMedDesimaler({
-                                        timer: normaltField.value.timer,
-                                        minutter: normaltField.value.minutter,
-                                    });
-                                    const faktiskDesimaler = timerOgMinutterTilTimerMedDesimaler({
-                                        timer: faktiskField.value.timer,
-                                        minutter: faktiskField.value.minutter,
-                                    });
-                                    formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, normalDesimaler);
-                                    formik.setFieldValue(`${name}.faktiskArbeidTimerPerDag`, faktiskDesimaler);
-                                }
-
-                                if (v === Tidsformat.TimerOgMin) {
-                                    const normalTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
-                                        Number(normaltDesimalerField.value),
-                                    );
-                                    const faktiskTimerOgMinutter = timerMedDesimalerTilTimerOgMinutter(
-                                        Number(faktiskDesimalerField.value),
-                                    );
-                                    formik.setFieldValue(`${name}.jobberNormaltPerDag`, {
-                                        timer: normalTimerOgMinutter[0],
-                                        minutter: normalTimerOgMinutter[1],
-                                    });
-                                    formik.setFieldValue(`${name}.faktiskArbeidPerDag`, {
-                                        timer: faktiskTimerOgMinutter[0],
-                                        minutter: faktiskTimerOgMinutter[1],
-                                    });
-                                }
-                            }}
-                            value={tidsformatField.value}
-                        >
-                            <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
-                            <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
-                        </ToggleGroup>
-                    </div>
-
-                    {tidsformatField.value === Tidsformat.TimerOgMin && (
-                        <ArbeidstidPeriodeTimerOgMinutter name={name} />
-                    )}
-
-                    {tidsformatField.value === Tidsformat.Desimaler && <ArbeidstidPeriodeDesimaler name={`${name}`} />}
-                </div>
-            )}
+                );
+            }}
         </Field>
     );
 };
