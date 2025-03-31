@@ -6,7 +6,7 @@ import { IPeriode } from 'app/models/types/Periode';
 
 interface Props extends Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate' | 'defaultSelected'> {
     periode?: IPeriode;
-    onChange?: (periode: IPeriode) => void;
+    onChange: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
     fromInputProps?: {
         className?: string;
@@ -46,12 +46,10 @@ const PeriodeInputV2: React.FC<Props> = ({
         fromDate,
         toDate,
         onRangeChange: (range) => {
-            if (onChange) {
-                onChange({
-                    fom: range?.from ? dateToISODateString(range.from) : null,
-                    tom: range?.to ? dateToISODateString(range.to) : null,
-                });
-            }
+            onChange({
+                fom: range?.from ? dateToISODateString(range.from) : null,
+                tom: range?.to ? dateToISODateString(range.to) : null,
+            });
         },
         defaultSelected: periode
             ? {
