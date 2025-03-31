@@ -19,6 +19,16 @@ interface Props {
     remove: () => void;
 }
 
+// Typisering for feilmeldingsobjektet
+interface TilsynFormErrors {
+    periode?: {
+        fom?: string;
+        tom?: string;
+    };
+    timer?: string;
+    minutter?: string;
+}
+
 const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
     const intl = useIntl();
 
@@ -39,11 +49,12 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
     // TODO: Midlertidig løsning. Det ternges å fikse PeriodeInput
     const visCheckbox = false;
 
-    // TODO: Fix types i formik validering for å ungå warning meta.error?.periode?.fom
-
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
+                // Eksplisitt typekonvertering for meta.error
+                const errors = meta.error as unknown as TilsynFormErrors;
+
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
@@ -53,8 +64,8 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                 onChange={(v) => {
                                     formik.setFieldValue(`${name}.periode`, v);
                                 }}
-                                errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
-                                errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
+                                errorMessageFom={periodeFomMeta.touched && errors?.periode?.fom}
+                                errorMessageTom={periodeFomMeta.touched && errors?.periode?.tom}
                             />
 
                             <div className="ml-4 mt-10">
@@ -120,7 +131,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                         onChangeMinutter={(v) => formik.setFieldValue(`${name}.minutter`, v)}
                                         timer={field.value.timer ?? ''}
                                         minutter={field.value.minutter ?? ''}
-                                        error={meta.touched && (meta.error?.timer || meta.error?.minutter)}
+                                        error={(meta.touched && (errors?.timer || errors?.minutter)) || undefined}
                                         onBlur={() => {
                                             formik.setFieldTouched(`${name}.timer`);
                                             formik.setFieldTouched(`${name}.minutter`);
