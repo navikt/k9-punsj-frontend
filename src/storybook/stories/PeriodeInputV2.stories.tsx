@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
-import { Button } from '@navikt/ds-react';
+import { Button, HStack } from '@navikt/ds-react';
 import PeriodeInputV2 from 'app/components/periode-inputV2/PeriodeInputV2';
 import { IPeriode } from 'app/models/types/Periode';
 
@@ -26,14 +26,16 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
                 setSubmittedValues(values.periode);
             }}
         >
-            {({ values, setFieldValue }) => (
-                <form onSubmit={(e) => e.preventDefault()}>
+            {({ values, setFieldValue, handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
                     <PeriodeInputV2
                         periode={values.periode}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
                     />
-                    <Button type="submit">Send</Button>
+                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
+                        <Button type="submit">Send</Button>
+                    </HStack>
                     <div style={{ marginTop: '20px' }}>
                         <h3>Current values:</h3>
                         <pre>{JSON.stringify(values.periode, null, 2)}</pre>

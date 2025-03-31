@@ -1,19 +1,48 @@
 import React from 'react';
-import { DatePicker, HStack, useRangeDatepicker } from '@navikt/ds-react';
+import { DatePicker, HStack, useRangeDatepicker, DatePickerProps } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
 import { IPeriode } from 'app/models/types/Periode';
 
-interface Props {
+interface Props extends Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate' | 'defaultSelected'> {
     periode?: IPeriode;
     onChange?: (periode: IPeriode) => void;
     onBlur?: (periode: IPeriode) => void;
+    fromInputProps?: {
+        className?: string;
+        description?: React.ReactNode;
+        error?: React.ReactNode | string;
+        id?: string;
+        disabled?: boolean;
+        hideLabel?: boolean;
+        dataTestId?: string;
+    };
+    toInputProps?: {
+        className?: string;
+        description?: React.ReactNode;
+        error?: React.ReactNode | string;
+        id?: string;
+        disabled?: boolean;
+        hideLabel?: boolean;
+        dataTestId?: string;
+    };
 }
 
-const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur }) => {
+const PeriodeInputV2: React.FC<Props> = ({
+    periode,
+    onChange,
+    onBlur,
+    fromInputProps,
+    toInputProps,
+    ...datePickerProps
+}) => {
     const { fromDate, toDate } = getDateRange();
 
-    const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
+    const {
+        datepickerProps,
+        toInputProps: defaultToInputProps,
+        fromInputProps: defaultFromInputProps,
+    } = useRangeDatepicker({
         fromDate,
         toDate,
         onRangeChange: (range) => {
@@ -42,10 +71,15 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur }) => {
     };
 
     return (
-        <DatePicker {...datepickerProps}>
+        <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range">
             <HStack wrap gap="4" justify="center">
-                <DatePicker.Input {...fromInputProps} label="Fra og med" onBlur={handleBlur} />
-                <DatePicker.Input {...toInputProps} label="Til og med" onBlur={handleBlur} />
+                <DatePicker.Input
+                    {...defaultFromInputProps}
+                    {...fromInputProps}
+                    label="Fra og med"
+                    onBlur={handleBlur}
+                />
+                <DatePicker.Input {...defaultToInputProps} {...toInputProps} label="Til og med" onBlur={handleBlur} />
             </HStack>
         </DatePicker>
     );
