@@ -3,6 +3,7 @@ import { DatePicker, HStack, useRangeDatepicker, DatePickerProps } from '@navikt
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
 import { IPeriode } from 'app/models/types/Periode';
+import './PeriodeInputV2.less';
 
 interface Props extends Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate' | 'defaultSelected'> {
     periode?: IPeriode;
@@ -85,26 +86,28 @@ const PeriodeInputV2: React.FC<Props> = ({
     };
 
     return (
-        <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range" dropdownCaption={true}>
-            <HStack wrap gap="4" justify="center">
-                <div style={{ minHeight: '4rem' }}>
-                    <DatePicker.Input
-                        {...defaultFromInputProps}
-                        {...fromInputProps}
-                        label="Fra og med"
-                        onBlur={handleBlur}
-                    />
-                </div>
-                <div style={{ minHeight: '4rem' }}>
-                    <DatePicker.Input
-                        {...defaultToInputProps}
-                        {...toInputProps}
-                        label="Til og med"
-                        onBlur={handleBlur}
-                    />
-                </div>
-            </HStack>
-        </DatePicker>
+        <div className="container">
+            <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range" dropdownCaption={true}>
+                <HStack wrap gap="4" justify="center">
+                    <div className="inputContainer">
+                        <DatePicker.Input
+                            {...defaultFromInputProps}
+                            {...fromInputProps}
+                            label="Fra og med"
+                            onBlur={handleBlur}
+                        />
+                    </div>
+                    <div className="inputContainer">
+                        <DatePicker.Input
+                            {...defaultToInputProps}
+                            {...toInputProps}
+                            label="Til og med"
+                            onBlur={handleBlur}
+                        />
+                    </div>
+                </HStack>
+            </DatePicker>
+        </div>
     );
 };
 
