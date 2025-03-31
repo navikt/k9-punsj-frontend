@@ -17,32 +17,48 @@ describe('PeriodeInputV2', () => {
         jest.clearAllMocks();
     });
 
-    it('rendrer uten å krasje', () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+    it('rendrer uten å krasje', async () => {
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
         expect(screen.getByLabelText('Fra og med')).toBeInTheDocument();
         expect(screen.getByLabelText('Til og med')).toBeInTheDocument();
     });
 
-    it('viser initielle verdier når de er angitt', () => {
+    it('viser initielle verdier når de er angitt', async () => {
         const initialValues: IPeriode = {
             fom: '2024-01-01',
             tom: '2024-12-31',
         };
-        render(<PeriodeInputV2 {...defaultProps} periode={initialValues} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} periode={initialValues} />);
+        });
+
+        // Vent på at verdiene er oppdatert
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
 
         expect(screen.getByLabelText('Fra og med')).toHaveValue('01.01.2024');
         expect(screen.getByLabelText('Til og med')).toHaveValue('31.12.2024');
     });
 
     it('kaller onChange når datoer endres', async () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
 
         const fomInput = screen.getByLabelText('Fra og med');
         const tomInput = screen.getByLabelText('Til og med');
 
         await act(async () => {
             fireEvent.change(fomInput, { target: { value: '01.01.2024' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        await act(async () => {
             fireEvent.change(tomInput, { target: { value: '31.12.2024' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
         expect(mockOnChange).toHaveBeenCalledTimes(2);
@@ -53,31 +69,38 @@ describe('PeriodeInputV2', () => {
     });
 
     it('kaller onBlur når input mister fokus', async () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
 
         const fomInput = screen.getByLabelText('Fra og med');
         await act(async () => {
             fireEvent.blur(fomInput);
+            await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
         expect(mockOnBlur).toHaveBeenCalled();
     });
 
-    it('viser feilmeldinger når de er angitt', () => {
+    it('viser feilmeldinger når de er angitt', async () => {
         const errorProps = {
             ...defaultProps,
             fomInputProps: { error: 'Fra og med er påkrevd' },
             tomInputProps: { error: 'Til og med er påkrevd' },
         };
 
-        render(<PeriodeInputV2 {...errorProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...errorProps} />);
+        });
 
         expect(screen.getByText('Fra og med er påkrevd')).toBeInTheDocument();
         expect(screen.getByText('Til og med er påkrevd')).toBeInTheDocument();
     });
 
     it('håndterer datovalidering korrekt', async () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
 
         const fomInput = screen.getByLabelText('Fra og med');
         const tomInput = screen.getByLabelText('Til og med');
@@ -85,7 +108,12 @@ describe('PeriodeInputV2', () => {
         await act(async () => {
             // Sett tom før fom
             fireEvent.change(tomInput, { target: { value: '01.01.2024' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        await act(async () => {
             fireEvent.change(fomInput, { target: { value: '31.12.2024' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
         expect(mockOnChange).toHaveBeenCalledTimes(2);
@@ -96,14 +124,21 @@ describe('PeriodeInputV2', () => {
     });
 
     it('håndterer tomme datoinput korrekt', async () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
 
         const fomInput = screen.getByLabelText('Fra og med');
         const tomInput = screen.getByLabelText('Til og med');
 
         await act(async () => {
             fireEvent.change(fomInput, { target: { value: '' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        });
+
+        await act(async () => {
             fireEvent.change(tomInput, { target: { value: '' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
         // DatePicker kaller ikke onChange for tomme verdier
@@ -111,11 +146,14 @@ describe('PeriodeInputV2', () => {
     });
 
     it('håndterer delvise datoinput korrekt', async () => {
-        render(<PeriodeInputV2 {...defaultProps} />);
+        await act(async () => {
+            render(<PeriodeInputV2 {...defaultProps} />);
+        });
 
         const fomInput = screen.getByLabelText('Fra og med');
         await act(async () => {
             fireEvent.change(fomInput, { target: { value: '01.01.2024' } });
+            await new Promise((resolve) => setTimeout(resolve, 0));
         });
 
         expect(mockOnChange).toHaveBeenCalledWith({
