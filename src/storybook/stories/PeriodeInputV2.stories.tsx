@@ -3,6 +3,9 @@ import { Formik } from 'formik';
 import { Button, HStack, Checkbox } from '@navikt/ds-react';
 import PeriodeInputV2 from 'app/components/periode-inputV2/PeriodeInputV2';
 import { IPeriode } from 'app/models/types/Periode';
+import * as yup from 'yup';
+import dayjs from 'dayjs';
+import { formats } from 'app/utils';
 
 const meta = {
     title: 'Components/PeriodeInputV2',
@@ -18,6 +21,21 @@ interface FormValues {
     periode: IPeriode;
 }
 
+const periodeSchema = yup.object({
+    periode: yup.object({
+        fom: yup.string().required().label('Fra og med'),
+        tom: yup
+            .string()
+            .required()
+            .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', function (value) {
+                const { fom } = this.parent;
+                if (!fom || !value) return true; // Skip validation if either date is missing
+                return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));
+            })
+            .label('Til og med'),
+    }),
+});
+
 const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
 
@@ -26,16 +44,23 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
             initialValues={{
                 periode: initialValues || { fom: null, tom: null },
             }}
+            validationSchema={periodeSchema}
             onSubmit={(values) => {
                 setSubmittedValues(values.periode);
             }}
         >
-            {({ handleSubmit, values, setFieldValue }) => (
+            {({ handleSubmit, values, setFieldValue, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
                     <PeriodeInputV2
                         periode={values.periode}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
+                        fromInputProps={{
+                            error: touched.periode?.fom && errors.periode?.fom,
+                        }}
+                        toInputProps={{
+                            error: touched.periode?.tom && errors.periode?.tom,
+                        }}
                     />
                     <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
                         <Button type="submit">Send</Button>
@@ -59,18 +84,52 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
 const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [periode, setPeriode] = useState<IPeriode>(initialValues || { fom: null, tom: null });
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
+    const [errors, setErrors] = useState<{ fom?: string; tom?: string }>({});
+
+    const validate = (values: IPeriode) => {
+        const newErrors: { fom?: string; tom?: string } = {};
+
+        if (!values.fom) {
+            newErrors.fom = 'Fra og med er påkrevd';
+        }
+
+        if (!values.tom) {
+            newErrors.tom = 'Til og med er påkrevd';
+        } else if (values.fom && dayjs(values.tom, formats.YYYYMMDD).isBefore(dayjs(values.fom, formats.YYYYMMDD))) {
+            newErrors.tom = 'Sluttdato kan ikke være før startdato';
+        }
+
+        return newErrors;
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmittedValues(periode);
+        const validationErrors = validate(periode);
+        if (Object.keys(validationErrors).length === 0) {
+            setSubmittedValues(periode);
+        } else {
+            setErrors(validationErrors);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <PeriodeInputV2
                 periode={periode}
-                onChange={setPeriode}
-                onBlur={(periodeValue) => setPeriode(periodeValue)}
+                onChange={(newPeriode) => {
+                    setPeriode(newPeriode);
+                    setErrors(validate(newPeriode));
+                }}
+                onBlur={(newPeriode) => {
+                    setPeriode(newPeriode);
+                    setErrors(validate(newPeriode));
+                }}
+                fromInputProps={{
+                    error: errors.fom,
+                }}
+                toInputProps={{
+                    error: errors.tom,
+                }}
             />
             <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
                 <Button type="submit">Send</Button>
@@ -92,17 +151,51 @@ const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPerio
 const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [periode, setPeriode] = useState<IPeriode>(initialValues || { fom: null, tom: null });
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
+    const [errors, setErrors] = useState<{ fom?: string; tom?: string }>({});
+
+    const validate = (values: IPeriode) => {
+        const newErrors: { fom?: string; tom?: string } = {};
+
+        if (!values.fom) {
+            newErrors.fom = 'Fra og med er påkrevd';
+        }
+
+        if (!values.tom) {
+            newErrors.tom = 'Til og med er påkrevd';
+        } else if (values.fom && dayjs(values.tom, formats.YYYYMMDD).isBefore(dayjs(values.fom, formats.YYYYMMDD))) {
+            newErrors.tom = 'Sluttdato kan ikke være før startdato';
+        }
+
+        return newErrors;
+    };
 
     const handleSubmit = () => {
-        setSubmittedValues(periode);
+        const validationErrors = validate(periode);
+        if (Object.keys(validationErrors).length === 0) {
+            setSubmittedValues(periode);
+        } else {
+            setErrors(validationErrors);
+        }
     };
 
     return (
         <div>
             <PeriodeInputV2
                 periode={periode}
-                onChange={setPeriode}
-                onBlur={(periodeValue) => setPeriode(periodeValue)}
+                onChange={(newPeriode) => {
+                    setPeriode(newPeriode);
+                    setErrors(validate(newPeriode));
+                }}
+                onBlur={(newPeriode) => {
+                    setPeriode(newPeriode);
+                    setErrors(validate(newPeriode));
+                }}
+                fromInputProps={{
+                    error: errors.fom,
+                }}
+                toInputProps={{
+                    error: errors.tom,
+                }}
             />
             <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
                 <Button onClick={handleSubmit}>Send</Button>
@@ -137,17 +230,24 @@ const PeriodeInputV2WithPresetPeriod = () => {
             initialValues={{
                 periode: currentPeriod,
             }}
+            validationSchema={periodeSchema}
             onSubmit={(values) => {
                 setSubmittedValues(values.periode);
             }}
             enableReinitialize
         >
-            {({ handleSubmit, values, setFieldValue }) => (
+            {({ handleSubmit, values, setFieldValue, errors, touched }) => (
                 <form onSubmit={handleSubmit}>
                     <PeriodeInputV2
                         periode={currentPeriod}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
+                        fromInputProps={{
+                            error: touched.periode?.fom && errors.periode?.fom,
+                        }}
+                        toInputProps={{
+                            error: touched.periode?.tom && errors.periode?.tom,
+                        }}
                     />
                     <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
                         <Checkbox

@@ -87,13 +87,22 @@ const PeriodeInputV2: React.FC<Props> = ({
     return (
         <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range" dropdownCaption={true}>
             <HStack wrap gap="4" justify="center">
-                <DatePicker.Input
-                    {...defaultFromInputProps}
-                    {...fromInputProps}
-                    label="Fra og med"
-                    onBlur={handleBlur}
-                />
-                <DatePicker.Input {...defaultToInputProps} {...toInputProps} label="Til og med" onBlur={handleBlur} />
+                <div style={{ minHeight: '4rem' }}>
+                    <DatePicker.Input
+                        {...defaultFromInputProps}
+                        {...fromInputProps}
+                        label="Fra og med"
+                        onBlur={handleBlur}
+                    />
+                </div>
+                <div style={{ minHeight: '4rem' }}>
+                    <DatePicker.Input
+                        {...defaultToInputProps}
+                        {...toInputProps}
+                        label="Til og med"
+                        onBlur={handleBlur}
+                    />
+                </div>
             </HStack>
         </DatePicker>
     );
