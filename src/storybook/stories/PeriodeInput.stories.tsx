@@ -151,6 +151,71 @@ const PeriodeInputWithoutFormik = ({ initialValues }: { initialValues?: IPeriode
     );
 };
 
+const PeriodeInputWithPresetPeriod = () => {
+    const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
+    const [usePresetPeriod, setUsePresetPeriod] = useState(false);
+
+    const presetPeriod = {
+        fom: '2024-01-01',
+        tom: '2024-12-31',
+    };
+
+    const currentPeriod = usePresetPeriod ? presetPeriod : { fom: null, tom: null };
+
+    return (
+        <Formik<FormValues>
+            initialValues={{
+                periode: currentPeriod,
+            }}
+            validationSchema={periodeSchema}
+            onSubmit={(values) => {
+                setSubmittedValues(values.periode);
+            }}
+            enableReinitialize
+        >
+            {({ handleSubmit, values, setFieldValue, errors, touched }) => (
+                <form onSubmit={handleSubmit}>
+                    <PeriodeInput
+                        periode={currentPeriod}
+                        onChange={(periode: IPeriode) => setFieldValue('periode', periode)}
+                        onBlur={(periode: IPeriode) => setFieldValue('periode', periode)}
+                        fomInputProps={{
+                            error: touched.periode?.fom && errors.periode?.fom,
+                        }}
+                        tomInputProps={{
+                            error: touched.periode?.tom && errors.periode?.tom,
+                        }}
+                    />
+                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
+                        <Checkbox
+                            checked={usePresetPeriod}
+                            onChange={(e) => {
+                                setUsePresetPeriod(e.target.checked);
+                                setFieldValue('periode', e.target.checked ? presetPeriod : { fom: null, tom: null });
+                            }}
+                        >
+                            Bruk forhåndsinnstilt periode (01.01.2024 - 31.12.2024)
+                        </Checkbox>
+                    </HStack>
+                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
+                        <Button type="submit">Send</Button>
+                    </HStack>
+                    <div style={{ marginTop: '20px' }}>
+                        <h3>Nåværende verdier:</h3>
+                        <pre>{JSON.stringify(values.periode, null, 2)}</pre>
+                        {submittedValues && (
+                            <>
+                                <h3>Sendte verdier:</h3>
+                                <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
+                            </>
+                        )}
+                    </div>
+                </form>
+            )}
+        </Formik>
+    );
+};
+
 const PeriodeInputSimple = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [periode, setPeriode] = useState<IPeriode>(initialValues || { fom: null, tom: null });
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
@@ -214,71 +279,6 @@ const PeriodeInputSimple = ({ initialValues }: { initialValues?: IPeriode }) => 
                 )}
             </div>
         </div>
-    );
-};
-
-const PeriodeInputWithPresetPeriod = () => {
-    const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
-    const [usePresetPeriod, setUsePresetPeriod] = useState(false);
-
-    const presetPeriod = {
-        fom: '2024-01-01',
-        tom: '2024-12-31',
-    };
-
-    const currentPeriod = usePresetPeriod ? presetPeriod : { fom: null, tom: null };
-
-    return (
-        <Formik<FormValues>
-            initialValues={{
-                periode: currentPeriod,
-            }}
-            validationSchema={periodeSchema}
-            onSubmit={(values) => {
-                setSubmittedValues(values.periode);
-            }}
-            enableReinitialize
-        >
-            {({ handleSubmit, values, setFieldValue, errors, touched }) => (
-                <form onSubmit={handleSubmit}>
-                    <PeriodeInput
-                        periode={currentPeriod}
-                        onChange={(periode: IPeriode) => setFieldValue('periode', periode)}
-                        onBlur={(periode: IPeriode) => setFieldValue('periode', periode)}
-                        fomInputProps={{
-                            error: touched.periode?.fom && errors.periode?.fom,
-                        }}
-                        tomInputProps={{
-                            error: touched.periode?.tom && errors.periode?.tom,
-                        }}
-                    />
-                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
-                        <Checkbox
-                            checked={usePresetPeriod}
-                            onChange={(e) => {
-                                setUsePresetPeriod(e.target.checked);
-                                setFieldValue('periode', e.target.checked ? presetPeriod : { fom: null, tom: null });
-                            }}
-                        >
-                            Bruk forhåndsinnstilt periode (01.01.2024 - 31.12.2024)
-                        </Checkbox>
-                    </HStack>
-                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
-                        <Button type="submit">Send</Button>
-                    </HStack>
-                    <div style={{ marginTop: '20px' }}>
-                        <h3>Nåværende verdier:</h3>
-                        <pre>{JSON.stringify(values.periode, null, 2)}</pre>
-                        {submittedValues && (
-                            <>
-                                <h3>Sendte verdier:</h3>
-                                <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
-                            </>
-                        )}
-                    </div>
-                </form>
-            )}
-        </Formik>
     );
 };
 
