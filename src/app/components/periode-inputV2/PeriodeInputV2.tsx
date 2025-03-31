@@ -1,6 +1,7 @@
 import React from 'react';
 import { DatePicker, HStack, useRangeDatepicker } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
+import { getDateRange } from 'app/utils/date-utils/src/range';
 
 interface PeriodeInputV2Props {
     value?: {
@@ -8,16 +9,15 @@ interface PeriodeInputV2Props {
         tom: string | null;
     };
     onChange?: (periode: { fom: string | null; tom: string | null }) => void;
+    onBlur?: (periode: { fom: string | null; tom: string | null }) => void;
 }
 
-const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange }) => {
-    const today = new Date();
-    const fourYearsAgo = new Date(today.getFullYear() - 4, today.getMonth(), today.getDate());
-    const fourYearsAhead = new Date(today.getFullYear() + 4, today.getMonth(), today.getDate());
+const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange, onBlur }) => {
+    const { fromDate, toDate } = getDateRange();
 
     const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
-        fromDate: fourYearsAgo,
-        toDate: fourYearsAhead,
+        fromDate,
+        toDate,
         onRangeChange: (range) => {
             if (onChange) {
                 onChange({
@@ -34,11 +34,20 @@ const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange }) => {
             : undefined,
     });
 
+    const handleBlur = () => {
+        if (onBlur) {
+            onBlur({
+                fom: value?.fom || null,
+                tom: value?.tom || null,
+            });
+        }
+    };
+
     return (
         <DatePicker {...datepickerProps}>
             <HStack wrap gap="4" justify="center">
-                <DatePicker.Input {...fromInputProps} label="Fra og med" />
-                <DatePicker.Input {...toInputProps} label="Til og med" />
+                <DatePicker.Input {...fromInputProps} label="Fra og med" onBlur={handleBlur} />
+                <DatePicker.Input {...toInputProps} label="Til og med" onBlur={handleBlur} />
             </HStack>
         </DatePicker>
     );
