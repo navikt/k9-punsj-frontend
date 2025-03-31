@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { DatePicker, HStack, useRangeDatepicker, DatePickerProps } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
@@ -37,19 +37,25 @@ const PeriodeInputV2: React.FC<Props> = ({
     ...datePickerProps
 }) => {
     const { fromDate, toDate } = getDateRange();
+    const prevPeriodeRef = useRef<IPeriode | undefined>(periode);
 
     const {
         datepickerProps,
         toInputProps: defaultToInputProps,
         fromInputProps: defaultFromInputProps,
+        setSelected,
     } = useRangeDatepicker({
         fromDate,
         toDate,
         onRangeChange: (range) => {
-            onChange({
+            const newPeriode = {
                 fom: range?.from ? dateToISODateString(range.from) : null,
                 tom: range?.to ? dateToISODateString(range.to) : null,
-            });
+            };
+
+            if (newPeriode.fom !== periode?.fom || newPeriode.tom !== periode?.tom) {
+                onChange(newPeriode);
+            }
         },
         defaultSelected: periode
             ? {
@@ -58,6 +64,16 @@ const PeriodeInputV2: React.FC<Props> = ({
               }
             : undefined,
     });
+
+    useEffect(() => {
+        if (periode && (periode.fom !== prevPeriodeRef.current?.fom || periode.tom !== prevPeriodeRef.current?.tom)) {
+            setSelected({
+                from: periode.fom ? new Date(periode.fom) : undefined,
+                to: periode.tom ? new Date(periode.tom) : undefined,
+            });
+            prevPeriodeRef.current = periode;
+        }
+    }, [periode, setSelected]);
 
     const handleBlur = () => {
         if (onBlur) {

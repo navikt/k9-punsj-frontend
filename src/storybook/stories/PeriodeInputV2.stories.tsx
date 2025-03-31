@@ -130,10 +130,12 @@ const PeriodeInputV2WithPresetPeriod = () => {
         tom: '2024-12-31',
     };
 
+    const currentPeriod = usePresetPeriod ? presetPeriod : { fom: null, tom: null };
+
     return (
         <Formik<FormValues>
             initialValues={{
-                periode: usePresetPeriod ? presetPeriod : { fom: null, tom: null },
+                periode: currentPeriod,
             }}
             onSubmit={(values) => {
                 setSubmittedValues(values.periode);
@@ -143,7 +145,7 @@ const PeriodeInputV2WithPresetPeriod = () => {
             {({ handleSubmit, values, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
                     <PeriodeInputV2
-                        periode={values.periode}
+                        periode={currentPeriod}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
                     />
