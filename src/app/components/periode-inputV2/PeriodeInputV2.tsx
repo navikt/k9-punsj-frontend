@@ -69,7 +69,7 @@ const PeriodeInputV2: React.FC<Props> = ({
     };
 
     return (
-        <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range">
+        <DatePicker {...(datepickerProps as any)} {...datePickerProps} mode="range" dropdownCaption={true}>
             <HStack wrap gap="4" justify="center">
                 <DatePicker.Input
                     {...defaultFromInputProps}
