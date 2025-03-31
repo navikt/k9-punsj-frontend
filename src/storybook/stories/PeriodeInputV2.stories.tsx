@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, Checkbox } from '@navikt/ds-react';
 import PeriodeInputV2 from 'app/components/periode-inputV2/PeriodeInputV2';
 import { IPeriode } from 'app/models/types/Periode';
 
@@ -14,11 +14,15 @@ const meta = {
 
 export default meta;
 
+interface FormValues {
+    periode: IPeriode;
+}
+
 const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
     const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
 
     return (
-        <Formik
+        <Formik<FormValues>
             initialValues={{
                 periode: initialValues || { fom: null, tom: null },
             }}
@@ -26,7 +30,7 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
                 setSubmittedValues(values.periode);
             }}
         >
-            {({ values, setFieldValue, handleSubmit }) => (
+            {({ handleSubmit, values, setFieldValue }) => (
                 <form onSubmit={handleSubmit}>
                     <PeriodeInputV2
                         periode={values.periode}
@@ -117,6 +121,62 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
     );
 };
 
+const PeriodeInputV2WithPresetPeriod = () => {
+    const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
+    const [usePresetPeriod, setUsePresetPeriod] = useState(false);
+
+    const presetPeriod = {
+        fom: '2024-01-01',
+        tom: '2024-12-31',
+    };
+
+    return (
+        <Formik<FormValues>
+            initialValues={{
+                periode: usePresetPeriod ? presetPeriod : { fom: null, tom: null },
+            }}
+            onSubmit={(values) => {
+                setSubmittedValues(values.periode);
+            }}
+            enableReinitialize
+        >
+            {({ handleSubmit, values, setFieldValue }) => (
+                <form onSubmit={handleSubmit}>
+                    <PeriodeInputV2
+                        periode={values.periode}
+                        onChange={(periode) => setFieldValue('periode', periode)}
+                        onBlur={(periode) => setFieldValue('periode', periode)}
+                    />
+                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
+                        <Checkbox
+                            checked={usePresetPeriod}
+                            onChange={(e) => {
+                                setUsePresetPeriod(e.target.checked);
+                                setFieldValue('periode', e.target.checked ? presetPeriod : { fom: null, tom: null });
+                            }}
+                        >
+                            Bruk forhåndsinnstilt periode (01.01.2024 - 31.12.2024)
+                        </Checkbox>
+                    </HStack>
+                    <HStack wrap gap="4" justify="start" style={{ marginTop: '1rem' }}>
+                        <Button type="submit">Send</Button>
+                    </HStack>
+                    <div style={{ marginTop: '20px' }}>
+                        <h3>Current values:</h3>
+                        <pre>{JSON.stringify(values.periode, null, 2)}</pre>
+                        {submittedValues && (
+                            <>
+                                <h3>Submitted values:</h3>
+                                <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
+                            </>
+                        )}
+                    </div>
+                </form>
+            )}
+        </Formik>
+    );
+};
+
 export const Default = {
     name: 'Default',
     render: () => <PeriodeInputV2Simple />,
@@ -166,4 +226,9 @@ export const WithFormAndInitialValues = {
             }}
         />
     ),
+};
+
+export const WithPresetPeriod = {
+    name: 'With Preset Period',
+    render: () => <PeriodeInputV2WithPresetPeriod />,
 };
