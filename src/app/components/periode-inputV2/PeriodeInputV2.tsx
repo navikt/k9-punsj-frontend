@@ -2,17 +2,15 @@ import React from 'react';
 import { DatePicker, HStack, useRangeDatepicker } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
+import { IPeriode } from 'app/models/types/Periode';
 
-interface PeriodeInputV2Props {
-    value?: {
-        fom: string | null;
-        tom: string | null;
-    };
-    onChange?: (periode: { fom: string | null; tom: string | null }) => void;
-    onBlur?: (periode: { fom: string | null; tom: string | null }) => void;
+interface Props {
+    periode?: IPeriode;
+    onChange?: (periode: IPeriode) => void;
+    onBlur?: (periode: IPeriode) => void;
 }
 
-const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange, onBlur }) => {
+const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur }) => {
     const { fromDate, toDate } = getDateRange();
 
     const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
@@ -26,10 +24,10 @@ const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange, onBlur
                 });
             }
         },
-        defaultSelected: value
+        defaultSelected: periode
             ? {
-                  from: value.fom ? new Date(value.fom) : undefined,
-                  to: value.tom ? new Date(value.tom) : undefined,
+                  from: periode.fom ? new Date(periode.fom) : undefined,
+                  to: periode.tom ? new Date(periode.tom) : undefined,
               }
             : undefined,
     });
@@ -37,8 +35,8 @@ const PeriodeInputV2: React.FC<PeriodeInputV2Props> = ({ value, onChange, onBlur
     const handleBlur = () => {
         if (onBlur) {
             onBlur({
-                fom: value?.fom || null,
-                tom: value?.tom || null,
+                fom: periode?.fom || null,
+                tom: periode?.tom || null,
             });
         }
     };

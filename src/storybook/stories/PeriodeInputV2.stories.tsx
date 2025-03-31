@@ -1,107 +1,66 @@
 import React, { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
 import { Formik } from 'formik';
-import { Box, Button } from '@navikt/ds-react';
-import PeriodeInputV2 from '../../app/components/periode-inputV2/PeriodeInputV2';
+import { Button } from '@navikt/ds-react';
+import PeriodeInputV2 from 'app/components/periode-inputV2/PeriodeInputV2';
+import { IPeriode } from 'app/models/types/Periode';
 
-const meta: Meta<typeof PeriodeInputV2> = {
+const meta = {
     title: 'Components/PeriodeInputV2',
     component: PeriodeInputV2,
     parameters: {
         layout: 'centered',
     },
-    tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof PeriodeInputV2>;
 
-const PeriodeInputV2WithFormik: React.FC = () => {
-    const [submittedValues, setSubmittedValues] = useState<any>(null);
+const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode }) => {
+    const [submittedValues, setSubmittedValues] = useState<IPeriode | null>(null);
 
     return (
         <Formik
             initialValues={{
-                periode: {
-                    fom: null,
-                    tom: null,
-                },
+                periode: initialValues || { fom: null, tom: null },
             }}
             onSubmit={(values) => {
-                setSubmittedValues(values);
+                setSubmittedValues(values.periode);
             }}
         >
-            {({ values, setFieldValue, handleSubmit }) => (
-                <Box>
-                    <form onSubmit={handleSubmit}>
-                        <PeriodeInputV2
-                            value={values.periode}
-                            onChange={(periode) => setFieldValue('periode', periode)}
-                        />
-                        <Box paddingBlock="4">
-                            <Button type="submit">Send</Button>
-                        </Box>
-                    </form>
-                    <Box paddingBlock="4" className="bg-gray-50 p-4 rounded">
-                        <div>Current values:</div>
-                        <pre>{JSON.stringify(values, null, 2)}</pre>
+            {({ values, setFieldValue }) => (
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <PeriodeInputV2
+                        periode={values.periode}
+                        onChange={(periode) => setFieldValue('periode', periode)}
+                        onBlur={(periode) => setFieldValue('periode', periode)}
+                    />
+                    <Button type="submit">Send</Button>
+                    <div style={{ marginTop: '20px' }}>
+                        <h3>Current values:</h3>
+                        <pre>{JSON.stringify(values.periode, null, 2)}</pre>
                         {submittedValues && (
                             <>
-                                <div>Submitted values:</div>
+                                <h3>Submitted values:</h3>
                                 <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
                             </>
                         )}
-                    </Box>
-                </Box>
+                    </div>
+                </form>
             )}
         </Formik>
     );
 };
 
-export const Default: Story = {
+export const Default = {
     render: () => <PeriodeInputV2WithFormik />,
 };
 
-export const WithInitialValues: Story = {
-    render: () => {
-        const [submittedValues, setSubmittedValues] = useState<any>(null);
-
-        return (
-            <Formik
-                initialValues={{
-                    periode: {
-                        fom: '2024-01-01',
-                        tom: '2024-12-31',
-                    },
-                }}
-                onSubmit={(values) => {
-                    setSubmittedValues(values);
-                }}
-            >
-                {({ values, setFieldValue, handleSubmit }) => (
-                    <Box>
-                        <form onSubmit={handleSubmit}>
-                            <PeriodeInputV2
-                                value={values.periode}
-                                onChange={(periode) => setFieldValue('periode', periode)}
-                            />
-                            <Box paddingBlock="4">
-                                <Button type="submit">Send</Button>
-                            </Box>
-                        </form>
-                        <Box paddingBlock="4" className="bg-gray-50 p-4 rounded">
-                            <div>Current values:</div>
-                            <pre>{JSON.stringify(values, null, 2)}</pre>
-                            {submittedValues && (
-                                <>
-                                    <div>Submitted values:</div>
-                                    <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
-                                </>
-                            )}
-                        </Box>
-                    </Box>
-                )}
-            </Formik>
-        );
-    },
+export const WithInitialValues = {
+    render: () => (
+        <PeriodeInputV2WithFormik
+            initialValues={{
+                fom: '2024-01-01',
+                tom: '2024-12-31',
+            }}
+        />
+    ),
 };
