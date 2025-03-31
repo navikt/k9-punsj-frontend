@@ -55,10 +55,10 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
                         periode={values.periode}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
-                        fromInputProps={{
+                        fomInputProps={{
                             error: touched.periode?.fom && errors.periode?.fom,
                         }}
-                        toInputProps={{
+                        tomInputProps={{
                             error: touched.periode?.tom && errors.periode?.tom,
                         }}
                     />
@@ -124,10 +124,10 @@ const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPerio
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
-                fromInputProps={{
+                fomInputProps={{
                     error: errors.fom,
                 }}
-                toInputProps={{
+                tomInputProps={{
                     error: errors.tom,
                 }}
             />
@@ -190,10 +190,10 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
                     setPeriode(newPeriode);
                     setErrors(validate(newPeriode));
                 }}
-                fromInputProps={{
+                fomInputProps={{
                     error: errors.fom,
                 }}
-                toInputProps={{
+                tomInputProps={{
                     error: errors.tom,
                 }}
             />
@@ -242,10 +242,10 @@ const PeriodeInputV2WithPresetPeriod = () => {
                         periode={currentPeriod}
                         onChange={(periode) => setFieldValue('periode', periode)}
                         onBlur={(periode) => setFieldValue('periode', periode)}
-                        fromInputProps={{
+                        fomInputProps={{
                             error: touched.periode?.fom && errors.periode?.fom,
                         }}
-                        toInputProps={{
+                        tomInputProps={{
                             error: touched.periode?.tom && errors.periode?.tom,
                         }}
                     />
