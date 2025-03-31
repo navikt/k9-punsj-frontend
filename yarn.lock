@@ -3613,9 +3613,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.15":
-  version: 0.5.15
-  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.15"
+"@pmmmwh/react-refresh-webpack-plugin@npm:0.5.16":
+  version: 0.5.16
+  resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.5.16"
   dependencies:
     ansi-html: "npm:^0.0.9"
     core-js-pure: "npm:^3.23.3"
@@ -3646,7 +3646,7 @@ __metadata:
       optional: true
     webpack-plugin-serve:
       optional: true
-  checksum: 10/d8c978654c4c6873edc3336bca87d359d3a7f32571e8404af8a3defd0e515aa34d9dc8324a9157d0220d72fb8a6a350660301c2757df964f845422a898714bc7
+  checksum: 10/d7ac4c58a377d37a4dc2f19d1434a14f83ff73d38fd7e374bdab2b2b73b7dc398803c1fb6eb84e8787417bffdc1735f83f65f55d8acac30a800de7122c16428e
   languageName: node
   linkType: hard
 
@@ -3750,54 +3750,54 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/browser-utils@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry-internal/browser-utils@npm:9.10.0"
+"@sentry-internal/browser-utils@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry-internal/browser-utils@npm:9.10.1"
   dependencies:
-    "@sentry/core": "npm:9.10.0"
-  checksum: 10/e9183498b22755e121d65f0e59215deeb7c61561d3580b507b4a4aed7797c85d968e590748ef0e7e35336dc1300a857c2d9c8984118b516168a45c333e89449e
+    "@sentry/core": "npm:9.10.1"
+  checksum: 10/94dc9267ec8afb872dbf29268459edf67e313f2de5e080df77e84257a8f2819b9ef2f6cdc646814c5ee1226a1ccb42f6c0642d324df0bce75689140d3fe01ba2
   languageName: node
   linkType: hard
 
-"@sentry-internal/feedback@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry-internal/feedback@npm:9.10.0"
+"@sentry-internal/feedback@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry-internal/feedback@npm:9.10.1"
   dependencies:
-    "@sentry/core": "npm:9.10.0"
-  checksum: 10/4b99d4f2bc5ce1396c849501f3566d6e8eb37fd8f9f6274f777ce36090099216002f5f588372133420b86aca27e51aee81dac7d6a2c60ae02044da4eda2badf7
+    "@sentry/core": "npm:9.10.1"
+  checksum: 10/186a12a2ab17fa3856a9787075bfd5b5850d20b566bde11a57c3d38dd99877c009f6aba021926d53f9589f3ebfb7583208ef781901100ffee3ddd0d523ecd357
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay-canvas@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry-internal/replay-canvas@npm:9.10.0"
+"@sentry-internal/replay-canvas@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry-internal/replay-canvas@npm:9.10.1"
   dependencies:
-    "@sentry-internal/replay": "npm:9.10.0"
-    "@sentry/core": "npm:9.10.0"
-  checksum: 10/e97788945c6162be95fc3545091831a680327b865061d306d67aefbb0e41e94f36903a53301f9af3f643127e22b94690087443244fe944573ed6da6ab573a42f
+    "@sentry-internal/replay": "npm:9.10.1"
+    "@sentry/core": "npm:9.10.1"
+  checksum: 10/c40d4ff09c99f429c4f1a0f2cb6ea85bf7efce57444a11c2bdc8b76c0a9a840871ef9a7d3b242d9dd356788bbfa72e22520f8b58fb298777d2f2db9b2a29264c
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry-internal/replay@npm:9.10.0"
+"@sentry-internal/replay@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry-internal/replay@npm:9.10.1"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:9.10.0"
-    "@sentry/core": "npm:9.10.0"
-  checksum: 10/112e6609ebda2d963721ede342faeed404a62701728fd0bfdcd50e35432f7a7d63b883262b058645ef7ee022bd1bc17589edbeae6fad03c5a0bf66d2e6e60a0a
+    "@sentry-internal/browser-utils": "npm:9.10.1"
+    "@sentry/core": "npm:9.10.1"
+  checksum: 10/706d1f6d0fc084589206fc79d831a1a94b0d1db25b8f6a1c746bfc8b9ca36becda308dc5bc8c93cb777a65d29710ea627f0512be22d6e6ac6fbe1184429ecd34
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry/browser@npm:9.10.0"
+"@sentry/browser@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry/browser@npm:9.10.1"
   dependencies:
-    "@sentry-internal/browser-utils": "npm:9.10.0"
-    "@sentry-internal/feedback": "npm:9.10.0"
-    "@sentry-internal/replay": "npm:9.10.0"
-    "@sentry-internal/replay-canvas": "npm:9.10.0"
-    "@sentry/core": "npm:9.10.0"
-  checksum: 10/9e2b876e01b32fe5d1efa208d0a4b830db8a4f74b682bf1114a52224d23cc9c39a5af7ca97bc22cbb1794953c838deb1709ee34d7c0b0e3aa098f097637014d5
+    "@sentry-internal/browser-utils": "npm:9.10.1"
+    "@sentry-internal/feedback": "npm:9.10.1"
+    "@sentry-internal/replay": "npm:9.10.1"
+    "@sentry-internal/replay-canvas": "npm:9.10.1"
+    "@sentry/core": "npm:9.10.1"
+  checksum: 10/abc9a5ab4d676ca9736ea774d458d9dfc9512200a0730dfa30ff0f5d0f30fd4781041ddf06e6849f631dd2f4550c527dfe1eae1654c508403d2d88a9b61ecd00
   languageName: node
   linkType: hard
 
@@ -3897,23 +3897,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry/core@npm:9.10.0"
-  checksum: 10/6a016bf9760fe37be31ac39988b55822d37d9b54d9497f02d760d31809d95af5517873d46d5a9fa234c3d720e79c6f6e1c4bc0f982d0d46fb156efe5feeb15d0
+"@sentry/core@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry/core@npm:9.10.1"
+  checksum: 10/a509833c47e116df98100811e39bef382d2036f9f0e257a8a651ed471bec4ef3099ce0a234188630bd8ef07adca443df2c8e3f1c5cf18fac4d1079dfbf75faf8
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:9.10.0":
-  version: 9.10.0
-  resolution: "@sentry/react@npm:9.10.0"
+"@sentry/react@npm:9.10.1":
+  version: 9.10.1
+  resolution: "@sentry/react@npm:9.10.1"
   dependencies:
-    "@sentry/browser": "npm:9.10.0"
-    "@sentry/core": "npm:9.10.0"
+    "@sentry/browser": "npm:9.10.1"
+    "@sentry/core": "npm:9.10.1"
     hoist-non-react-statics: "npm:^3.3.2"
   peerDependencies:
     react: ^16.14.0 || 17.x || 18.x || 19.x
-  checksum: 10/b2a01c57d33cfeba4336207651438f656cae35b69e7a940f1c6c813b7922e689a4da714801277fa3cfc5e9aa01514414b982b9a3397df4025eb18c6f7e7a17cb
+  checksum: 10/afe6ef2676ed6fb8756a7aaac9e25df63832386504db1bcd054347ac31c85eb62901d1dea3dd8539130fafbc62a8383e3199815261876f7a083c8c0c80f8b422
   languageName: node
   linkType: hard
 
@@ -12735,9 +12735,9 @@ __metadata:
     "@navikt/ds-react": "npm:7.17.4"
     "@navikt/ds-tailwind": "npm:^7.17.4"
     "@navikt/fnrvalidator": "npm:2.1.5"
-    "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.15"
+    "@pmmmwh/react-refresh-webpack-plugin": "npm:0.5.16"
     "@reduxjs/toolkit": "npm:^2.6.1"
-    "@sentry/react": "npm:9.10.0"
+    "@sentry/react": "npm:9.10.1"
     "@storybook/addon-essentials": "npm:^8.6.11"
     "@storybook/addon-interactions": "npm:^8.6.11"
     "@storybook/addon-webpack5-compiler-swc": "npm:^3.0.0"
