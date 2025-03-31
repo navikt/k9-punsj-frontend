@@ -151,7 +151,7 @@
         "postcss-less": "6.0.0",
         "postcss-loader": "8.1.1",
         "prettier": "3.5.3",
-        "react-refresh": "0.16.0",
+        "react-refresh": "0.17.0",
         "regenerator-runtime": "0.14.1",
         "storybook": "^8.6.11",
         "storybook-addon-fetch-mock": "^2.0.1",
