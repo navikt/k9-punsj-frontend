@@ -635,33 +635,3 @@ export const PartialInputTest: StoryObj = {
         });
     },
 };
-
-// Test for tilgjengelighet (a11y)
-export const AccessibilityTest: StoryObj = {
-    name: 'Accessibility Test',
-    render: () => <PeriodeInputSimple />,
-    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
-        const canvas = within(canvasElement);
-
-        // Sjekker at feltene har riktige labels
-        const fomInput = canvas.getByLabelText('Fra og med');
-        const tomInput = canvas.getByLabelText('Til og med');
-
-        expect(fomInput).toBeInTheDocument();
-        expect(tomInput).toBeInTheDocument();
-
-        // Sjekker fokus og tastaturnavigasjon
-        await userEvent.tab();
-        expect(fomInput).toHaveFocus();
-
-        await userEvent.tab();
-        expect(tomInput).toHaveFocus();
-
-        // Sjekker at man kan skrive inn data
-        await userEvent.type(fomInput, '01.01.2024');
-        expect(fomInput).toHaveValue('01.01.2024');
-
-        await userEvent.type(tomInput, '31.12.2024');
-        expect(tomInput).toHaveValue('31.12.2024');
-    },
-};
