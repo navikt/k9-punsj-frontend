@@ -118,10 +118,29 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
 };
 
 export const Default = {
-    render: () => <PeriodeInputV2WithFormik />,
+    name: 'Default',
+    render: () => <PeriodeInputV2Simple />,
 };
 
 export const WithInitialValues = {
+    name: 'With Initial Values',
+    render: () => (
+        <PeriodeInputV2Simple
+            initialValues={{
+                fom: '2024-01-01',
+                tom: '2024-12-31',
+            }}
+        />
+    ),
+};
+
+export const WithFormik = {
+    name: 'With Formik',
+    render: () => <PeriodeInputV2WithFormik />,
+};
+
+export const WithFormikAndInitialValues = {
+    name: 'With Formik and Initial Values',
     render: () => (
         <PeriodeInputV2WithFormik
             initialValues={{
@@ -132,28 +151,15 @@ export const WithInitialValues = {
     ),
 };
 
-export const WithoutFormik = {
+export const WithForm = {
+    name: 'With Form',
     render: () => <PeriodeInputV2WithoutFormik />,
 };
 
-export const WithoutFormikWithInitialValues = {
+export const WithFormAndInitialValues = {
+    name: 'With Form and Initial Values',
     render: () => (
         <PeriodeInputV2WithoutFormik
-            initialValues={{
-                fom: '2024-01-01',
-                tom: '2024-12-31',
-            }}
-        />
-    ),
-};
-
-export const Simple = {
-    render: () => <PeriodeInputV2Simple />,
-};
-
-export const SimpleWithInitialValues = {
-    render: () => (
-        <PeriodeInputV2Simple
             initialValues={{
                 fom: '2024-01-01',
                 tom: '2024-12-31',
