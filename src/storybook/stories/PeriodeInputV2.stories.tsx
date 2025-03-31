@@ -23,10 +23,10 @@ interface FormValues {
 
 const periodeSchema = yup.object({
     periode: yup.object({
-        fom: yup.string().required().label('Fra og med'),
+        fom: yup.string().required('Fra og med er påkrevd').label('Fra og med'),
         tom: yup
             .string()
-            .required()
+            .required('Til og med er påkrevd')
             .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', function (value) {
                 const { fom } = this.parent;
                 if (!fom || !value) return true; // Skip validation if either date is missing
@@ -66,11 +66,11 @@ const PeriodeInputV2WithFormik = ({ initialValues }: { initialValues?: IPeriode 
                         <Button type="submit">Send</Button>
                     </HStack>
                     <div style={{ marginTop: '20px' }}>
-                        <h3>Current values:</h3>
+                        <h3>Nåværende verdier:</h3>
                         <pre>{JSON.stringify(values.periode, null, 2)}</pre>
                         {submittedValues && (
                             <>
-                                <h3>Submitted values:</h3>
+                                <h3>Sendte verdier:</h3>
                                 <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
                             </>
                         )}
@@ -135,11 +135,11 @@ const PeriodeInputV2WithoutFormik = ({ initialValues }: { initialValues?: IPerio
                 <Button type="submit">Send</Button>
             </HStack>
             <div style={{ marginTop: '20px' }}>
-                <h3>Current values:</h3>
+                <h3>Nåværende verdier:</h3>
                 <pre>{JSON.stringify(periode, null, 2)}</pre>
                 {submittedValues && (
                     <>
-                        <h3>Submitted values:</h3>
+                        <h3>Sendte verdier:</h3>
                         <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
                     </>
                 )}
@@ -201,11 +201,11 @@ const PeriodeInputV2Simple = ({ initialValues }: { initialValues?: IPeriode }) =
                 <Button onClick={handleSubmit}>Send</Button>
             </HStack>
             <div style={{ marginTop: '20px' }}>
-                <h3>Current values:</h3>
+                <h3>Nåværende verdier:</h3>
                 <pre>{JSON.stringify(periode, null, 2)}</pre>
                 {submittedValues && (
                     <>
-                        <h3>Submitted values:</h3>
+                        <h3>Sendte verdier:</h3>
                         <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
                     </>
                 )}
@@ -264,11 +264,11 @@ const PeriodeInputV2WithPresetPeriod = () => {
                         <Button type="submit">Send</Button>
                     </HStack>
                     <div style={{ marginTop: '20px' }}>
-                        <h3>Current values:</h3>
+                        <h3>Nåværende verdier:</h3>
                         <pre>{JSON.stringify(values.periode, null, 2)}</pre>
                         {submittedValues && (
                             <>
-                                <h3>Submitted values:</h3>
+                                <h3>Sendte verdier:</h3>
                                 <pre>{JSON.stringify(submittedValues, null, 2)}</pre>
                             </>
                         )}
