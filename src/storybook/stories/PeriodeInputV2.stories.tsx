@@ -6,6 +6,9 @@ import { IPeriode } from 'app/models/types/Periode';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
 import { formats } from 'app/utils';
+import { expect } from '@storybook/jest';
+import { within, userEvent, waitFor } from '@storybook/testing-library';
+import type { StoryObj } from '@storybook/react';
 
 const meta = {
     title: 'Components/PeriodeInputV2',
@@ -279,12 +282,37 @@ const PeriodeInputV2WithPresetPeriod = () => {
     );
 };
 
-export const Default = {
+export const Default: StoryObj = {
     name: 'Default',
     render: () => <PeriodeInputV2Simple />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at komponenten er riktig rendret
+        await expect(canvas.getByLabelText('Fra og med')).toBeInTheDocument();
+        await expect(canvas.getByLabelText('Til og med')).toBeInTheDocument();
+
+        // Skriver inn datoer
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await userEvent.type(fomInput, '01.01.2024');
+        await userEvent.type(tomInput, '31.12.2024');
+
+        // Sjekker at inntastede verdier vises
+        await waitFor(() => {
+            const currentValues = canvas.getByText(/"fom": "2024-01-01"/);
+            expect(currentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const currentValues = canvas.getByText(/"tom": "2024-12-31"/);
+            expect(currentValues).toBeInTheDocument();
+        });
+    },
 };
 
-export const WithInitialValues = {
+export const WithInitialValues: StoryObj = {
     name: 'With Initial Values',
     render: () => (
         <PeriodeInputV2Simple
@@ -294,14 +322,72 @@ export const WithInitialValues = {
             }}
         />
     ),
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at initielle verdier vises riktig
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await expect(fomInput).toHaveValue('01.01.2024');
+        await expect(tomInput).toHaveValue('31.12.2024');
+
+        // Endrer verdier
+        await userEvent.clear(fomInput);
+        await userEvent.type(fomInput, '15.02.2024');
+
+        await userEvent.clear(tomInput);
+        await userEvent.type(tomInput, '20.03.2024');
+
+        // Sjekker at nye verdier vises
+        await waitFor(() => {
+            const currentValues = canvas.getByText(/"fom": "2024-02-15"/);
+            expect(currentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const currentValues = canvas.getByText(/"tom": "2024-03-20"/);
+            expect(currentValues).toBeInTheDocument();
+        });
+    },
 };
 
-export const WithFormik = {
+export const WithFormik: StoryObj = {
     name: 'With Formik',
     render: () => <PeriodeInputV2WithFormik />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Skriver inn datoer
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await userEvent.type(fomInput, '01.01.2024');
+        await userEvent.type(tomInput, '31.12.2024');
+
+        // Klikker på send-knappen
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at sendte verdier vises
+        await waitFor(() => {
+            const sentValues = canvas.getByText('Sendte verdier:');
+            expect(sentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const sentFomValue = canvas.getAllByText(/"fom": "2024-01-01"/);
+            expect(sentFomValue.length).toBeGreaterThan(0);
+        });
+
+        await waitFor(() => {
+            const sentTomValue = canvas.getAllByText(/"tom": "2024-12-31"/);
+            expect(sentTomValue.length).toBeGreaterThan(0);
+        });
+    },
 };
 
-export const WithFormikAndInitialValues = {
+export const WithFormikAndInitialValues: StoryObj = {
     name: 'With Formik and Initial Values',
     render: () => (
         <PeriodeInputV2WithFormik
@@ -311,14 +397,81 @@ export const WithFormikAndInitialValues = {
             }}
         />
     ),
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at initielle verdier vises riktig
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await expect(fomInput).toHaveValue('01.01.2024');
+        await expect(tomInput).toHaveValue('31.12.2024');
+
+        // Endrer verdier
+        await userEvent.clear(fomInput);
+        await userEvent.type(fomInput, '15.02.2024');
+
+        await userEvent.clear(tomInput);
+        await userEvent.type(tomInput, '20.03.2024');
+
+        // Sender skjema
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at sendte verdier vises
+        await waitFor(() => {
+            const sentValues = canvas.getByText('Sendte verdier:');
+            expect(sentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const sentFomValue = canvas.getAllByText(/"fom": "2024-02-15"/);
+            expect(sentFomValue.length).toBeGreaterThan(0);
+        });
+
+        await waitFor(() => {
+            const sentTomValue = canvas.getAllByText(/"tom": "2024-03-20"/);
+            expect(sentTomValue.length).toBeGreaterThan(0);
+        });
+    },
 };
 
-export const WithForm = {
+export const WithForm: StoryObj = {
     name: 'With Form',
     render: () => <PeriodeInputV2WithoutFormik />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Skriver inn datoer
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await userEvent.type(fomInput, '01.01.2024');
+        await userEvent.type(tomInput, '31.12.2024');
+
+        // Klikker på send-knappen
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at sendte verdier vises
+        await waitFor(() => {
+            const sentValues = canvas.getByText('Sendte verdier:');
+            expect(sentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const sentFomValue = canvas.getAllByText(/"fom": "2024-01-01"/);
+            expect(sentFomValue.length).toBeGreaterThan(0);
+        });
+
+        await waitFor(() => {
+            const sentTomValue = canvas.getAllByText(/"tom": "2024-12-31"/);
+            expect(sentTomValue.length).toBeGreaterThan(0);
+        });
+    },
 };
 
-export const WithFormAndInitialValues = {
+export const WithFormAndInitialValues: StoryObj = {
     name: 'With Form and Initial Values',
     render: () => (
         <PeriodeInputV2WithoutFormik
@@ -328,9 +481,187 @@ export const WithFormAndInitialValues = {
             }}
         />
     ),
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at initielle verdier vises riktig
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await expect(fomInput).toHaveValue('01.01.2024');
+        await expect(tomInput).toHaveValue('31.12.2024');
+
+        // Sjekker validering ved feil input
+        await userEvent.clear(fomInput);
+        await userEvent.clear(tomInput);
+
+        // Sender skjema med tomme verdier
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at feilmeldinger vises
+        await waitFor(() => {
+            const errorMessages = canvas.getAllByText('Fra og med er påkrevd');
+            expect(errorMessages.length).toBeGreaterThan(0);
+        });
+
+        await waitFor(() => {
+            const errorMessages = canvas.getAllByText('Til og med er påkrevd');
+            expect(errorMessages.length).toBeGreaterThan(0);
+        });
+    },
 };
 
-export const WithPresetPeriod = {
+export const WithPresetPeriod: StoryObj = {
     name: 'With Preset Period',
     render: () => <PeriodeInputV2WithPresetPeriod />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at feltene er tomme i starten
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        expect(fomInput).toHaveValue('');
+        expect(tomInput).toHaveValue('');
+
+        // Aktiverer forhåndsinnstilt periode via checkbox
+        const checkbox = canvas.getByRole('checkbox');
+        await userEvent.click(checkbox);
+
+        // Sjekker at verdiene har endret seg til forhåndsinnstilte
+        await waitFor(() => {
+            expect(fomInput).toHaveValue('01.01.2024');
+            expect(tomInput).toHaveValue('31.12.2024');
+        });
+
+        // Sender skjema
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker sendte verdier
+        await waitFor(() => {
+            const sentValues = canvas.getByText('Sendte verdier:');
+            expect(sentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const sentFomValue = canvas.getAllByText(/"fom": "2024-01-01"/);
+            expect(sentFomValue.length).toBeGreaterThan(0);
+        });
+
+        // Deaktiverer checkbox og sjekker at feltene er tomme igjen
+        await userEvent.click(checkbox);
+
+        await waitFor(() => {
+            expect(fomInput).toHaveValue('');
+            expect(tomInput).toHaveValue('');
+        });
+    },
+};
+
+// Test for validering av datoer
+export const ValidationTest: StoryObj = {
+    name: 'Validation Test',
+    render: () => <PeriodeInputV2Simple />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Skriver inn ugyldige datoer (sluttdato før startdato)
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        await userEvent.type(fomInput, '31.12.2024');
+        await userEvent.type(tomInput, '01.01.2024');
+
+        // Klikker på send-knappen
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at valideringsfeilmelding vises
+        await waitFor(() => {
+            const errorMessage = canvas.getByText('Sluttdato kan ikke være før startdato');
+            expect(errorMessage).toBeInTheDocument();
+        });
+
+        // Korrigerer datoene
+        await userEvent.clear(fomInput);
+        await userEvent.type(fomInput, '01.01.2024');
+
+        await userEvent.clear(tomInput);
+        await userEvent.type(tomInput, '31.12.2024');
+
+        // Sender skjema på nytt
+        await userEvent.click(submitButton);
+
+        // Sjekker at feilen er borte og skjemaet sendes
+        await waitFor(() => {
+            const sentValues = canvas.getByText('Sendte verdier:');
+            expect(sentValues).toBeInTheDocument();
+        });
+    },
+};
+
+// Test for delvis utfylling
+export const PartialInputTest: StoryObj = {
+    name: 'Partial Input Test',
+    render: () => <PeriodeInputV2Simple />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Fyller bare ut startdato
+        const fomInput = canvas.getByLabelText('Fra og med');
+        await userEvent.type(fomInput, '01.01.2024');
+
+        // Sjekker at fom er oppdatert, men tom fortsatt er null
+        await waitFor(() => {
+            const currentValues = canvas.getByText(/"fom": "2024-01-01"/);
+            expect(currentValues).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const currentTomValue = canvas.getByText(/"tom": null/);
+            expect(currentTomValue).toBeInTheDocument();
+        });
+
+        // Klikker på send-knappen
+        const submitButton = canvas.getByRole('button', { name: 'Send' });
+        await userEvent.click(submitButton);
+
+        // Sjekker at feilmelding vises for tom
+        await waitFor(() => {
+            const errorMessage = canvas.getByText('Til og med er påkrevd');
+            expect(errorMessage).toBeInTheDocument();
+        });
+    },
+};
+
+// Test for tilgjengelighet (a11y)
+export const AccessibilityTest: StoryObj = {
+    name: 'Accessibility Test',
+    render: () => <PeriodeInputV2Simple />,
+    play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+        const canvas = within(canvasElement);
+
+        // Sjekker at feltene har riktige labels
+        const fomInput = canvas.getByLabelText('Fra og med');
+        const tomInput = canvas.getByLabelText('Til og med');
+
+        expect(fomInput).toBeInTheDocument();
+        expect(tomInput).toBeInTheDocument();
+
+        // Sjekker fokus og tastaturnavigasjon
+        await userEvent.tab();
+        expect(fomInput).toHaveFocus();
+
+        await userEvent.tab();
+        expect(tomInput).toHaveFocus();
+
+        // Sjekker at man kan skrive inn data
+        await userEvent.type(fomInput, '01.01.2024');
+        expect(fomInput).toHaveValue('01.01.2024');
+
+        await userEvent.type(tomInput, '31.12.2024');
+        expect(tomInput).toHaveValue('31.12.2024');
+    },
 };
