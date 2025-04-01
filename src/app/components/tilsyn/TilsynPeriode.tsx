@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-import { PeriodInput } from '../period-input/PeriodInput';
+import PeriodeInputV2 from '../periode-inputV2/PeriodeInputV2';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
@@ -30,8 +30,6 @@ interface TilsynFormErrors {
 }
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
-    const intl = useIntl();
-
     const formik = useFormikContext();
 
     const [timerField] = useField(`${name}.timer`);
@@ -58,14 +56,15 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodInput
-                                periode={field.value.periode ?? {}}
-                                intl={intl}
-                                onChange={(v) => {
-                                    formik.setFieldValue(`${name}.periode`, v);
+                            <PeriodeInputV2
+                                periode={field.value.periode}
+                                onChange={(periode: IPeriode) => formik.setFieldValue(`${name}.periode`, periode)}
+                                fomInputProps={{
+                                    error: periodeFomMeta.touched && errors?.periode?.fom,
                                 }}
-                                errorMessageFom={periodeFomMeta.touched && errors?.periode?.fom}
-                                errorMessageTom={periodeFomMeta.touched && errors?.periode?.tom}
+                                tomInputProps={{
+                                    error: periodeFomMeta.touched && errors?.periode?.tom,
+                                }}
                             />
 
                             <div className="ml-4 mt-10">
