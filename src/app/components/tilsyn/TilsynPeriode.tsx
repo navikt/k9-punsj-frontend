@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
@@ -32,20 +32,15 @@ interface TilsynFormErrors {
 const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
     const formik = useFormikContext();
 
+    const [useSøknadsperiode, setUseSøknadsperiode] = useState(false);
+
     const [timerField] = useField(`${name}.timer`);
     const [minutterField] = useField(`${name}.minutter`);
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
 
-    const velgSoknadsperiode = (periode: IPeriode) => {
-        formik.setFieldValue(`${name}.periode`, periode);
-    };
-
-    const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
-
-    // TODO: Midlertidig løsning. Det ternges å fikse PeriodeInput
-    const visCheckbox = false;
+    const currentPeriod = useSøknadsperiode ? soknadsperioder[0] : { fom: null, tom: null };
 
     return (
         <Field name={name}>
@@ -57,7 +52,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                     <div className="mt-4">
                         <div className="flex items-start">
                             <PeriodeInputV2
-                                periode={field.value.periode}
+                                periode={currentPeriod}
                                 onChange={(periode: IPeriode) => formik.setFieldValue(`${name}.periode`, periode)}
                                 fomInputProps={{
                                     error: periodeFomMeta.touched && errors?.periode?.fom,
@@ -77,13 +72,16 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                             </div>
                         </div>
 
-                        {visCheckbox && soknadsperioder.length === 1 && (
+                        {soknadsperioder.length === 1 && (
                             <Checkbox
-                                onClick={(event) =>
-                                    event.currentTarget.checked
-                                        ? velgSoknadsperiode(soknadsperioder[0])
-                                        : nullstillPeriode()
-                                }
+                                checked={useSøknadsperiode}
+                                onChange={(e) => {
+                                    setUseSøknadsperiode(e.target.checked);
+                                    formik.setFieldValue(
+                                        'periode',
+                                        e.target.checked ? soknadsperioder[0] : { fom: null, tom: null },
+                                    );
+                                }}
                             >
                                 <FormattedMessage id="tilsyn.periode.velgHeleSøknadsperiode.checkbox" />
                             </Checkbox>
