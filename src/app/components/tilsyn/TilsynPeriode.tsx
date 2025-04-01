@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-import { PeriodInput } from '../period-input/PeriodInput';
+import PeriodeInputV2 from '../periode-inputV2/PeriodeInputV2';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
@@ -19,61 +19,72 @@ interface Props {
     remove: () => void;
 }
 
-const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
-    const intl = useIntl();
+// Typisering for feilmeldingsobjektet
+interface TilsynFormErrors {
+    periode?: {
+        fom?: string;
+        tom?: string;
+    };
+    timer?: string;
+    minutter?: string;
+}
 
+const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
     const formik = useFormikContext();
+
+    const [useSøknadsperiode, setUseSøknadsperiode] = useState(false);
 
     const [timerField] = useField(`${name}.timer`);
     const [minutterField] = useField(`${name}.minutter`);
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
+    const [periodeField] = useField(`${name}.periode`);
 
-    const velgSoknadsperiode = (periode: IPeriode) => {
-        formik.setFieldValue(`${name}.periode`, periode);
-    };
-
-    const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
-
-    // TODO: Midlertidig løsning. Det ternges å fikse PeriodeInput
-    const visCheckbox = false;
-
-    // TODO: Fix types i formik validering for å ungå warning meta.error?.periode?.fom
+    const currentPeriod = useSøknadsperiode ? soknadsperioder[0] : periodeField.value;
 
     return (
         <Field name={name}>
             {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
+                // Eksplisitt typekonvertering for meta.error
+                const errors = meta.error as unknown as TilsynFormErrors;
+
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodInput
-                                periode={field.value.periode ?? {}}
-                                intl={intl}
-                                onChange={(v) => {
-                                    formik.setFieldValue(`${name}.periode`, v);
+                            <PeriodeInputV2
+                                periode={currentPeriod}
+                                onChange={(periode: IPeriode) => {
+                                    formik.setFieldValue(`${name}.periode`, periode);
+                                    formik.setFieldTouched(`${name}.periode`, true);
                                 }}
-                                errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
-                                errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
+                                fomInputProps={{
+                                    error: periodeFomMeta.touched && errors?.periode?.fom,
+                                }}
+                                tomInputProps={{
+                                    error: periodeFomMeta.touched && errors?.periode?.tom,
+                                }}
                             />
 
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-6">
                                 <Button
                                     icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                    size="small"
+                                    // size="small"
                                     variant="tertiary"
                                     onClick={remove}
                                 />
                             </div>
                         </div>
 
-                        {visCheckbox && soknadsperioder.length === 1 && (
+                        {soknadsperioder.length === 1 && (
                             <Checkbox
-                                onClick={(event) =>
-                                    event.currentTarget.checked
-                                        ? velgSoknadsperiode(soknadsperioder[0])
-                                        : nullstillPeriode()
-                                }
+                                checked={useSøknadsperiode}
+                                onChange={(e) => {
+                                    setUseSøknadsperiode(e.target.checked);
+                                    const newPeriod = e.target.checked ? soknadsperioder[0] : { fom: null, tom: null };
+                                    formik.setFieldValue(`${name}.periode`, newPeriod);
+                                    formik.setFieldTouched(`${name}.periode`, true);
+                                }}
                             >
                                 <FormattedMessage id="tilsyn.periode.velgHeleSøknadsperiode.checkbox" />
                             </Checkbox>
@@ -120,7 +131,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                         onChangeMinutter={(v) => formik.setFieldValue(`${name}.minutter`, v)}
                                         timer={field.value.timer ?? ''}
                                         minutter={field.value.minutter ?? ''}
-                                        error={meta.touched && (meta.error?.timer || meta.error?.minutter)}
+                                        error={(meta.touched && (errors?.timer || errors?.minutter)) || undefined}
                                         onBlur={() => {
                                             formik.setFieldTouched(`${name}.timer`);
                                             formik.setFieldTouched(`${name}.minutter`);

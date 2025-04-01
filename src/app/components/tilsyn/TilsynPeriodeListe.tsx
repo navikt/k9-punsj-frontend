@@ -151,7 +151,7 @@ const TilsynPeriodeListe = (props: Props) => {
             onSubmit={handleSaveValues}
             validationSchema={validationSchema}
             innerRef={formikRef}
-            // enableReinitialize
+            enableReinitialize
         >
             {({ handleSubmit, values, errors, touched }) => (
                 <FieldArray
