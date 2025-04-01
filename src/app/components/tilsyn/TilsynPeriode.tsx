@@ -39,8 +39,9 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
+    const [periodeField] = useField(`${name}.periode`);
 
-    const currentPeriod = useSøknadsperiode ? soknadsperioder[0] : { fom: null, tom: null };
+    const currentPeriod = useSøknadsperiode ? soknadsperioder[0] : periodeField.value;
 
     return (
         <Field name={name}>
@@ -53,7 +54,10 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                         <div className="flex items-start">
                             <PeriodeInputV2
                                 periode={currentPeriod}
-                                onChange={(periode: IPeriode) => formik.setFieldValue(`${name}.periode`, periode)}
+                                onChange={(periode: IPeriode) => {
+                                    formik.setFieldValue(`${name}.periode`, periode);
+                                    formik.setFieldTouched(`${name}.periode`, true);
+                                }}
                                 fomInputProps={{
                                     error: periodeFomMeta.touched && errors?.periode?.fom,
                                 }}
@@ -62,10 +66,10 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                 }}
                             />
 
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-6">
                                 <Button
                                     icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                    size="small"
+                                    // size="small"
                                     variant="tertiary"
                                     onClick={remove}
                                 />
@@ -77,10 +81,9 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                 checked={useSøknadsperiode}
                                 onChange={(e) => {
                                     setUseSøknadsperiode(e.target.checked);
-                                    formik.setFieldValue(
-                                        'periode',
-                                        e.target.checked ? soknadsperioder[0] : { fom: null, tom: null },
-                                    );
+                                    const newPeriod = e.target.checked ? soknadsperioder[0] : { fom: null, tom: null };
+                                    formik.setFieldValue(`${name}.periode`, newPeriod);
+                                    formik.setFieldTouched(`${name}.periode`, true);
                                 }}
                             >
                                 <FormattedMessage id="tilsyn.periode.velgHeleSøknadsperiode.checkbox" />
