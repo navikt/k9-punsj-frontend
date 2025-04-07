@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
-import { useIntl } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import { ArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
-import { PeriodInput } from '../period-input/PeriodInput';
+import PeriodeInputV2 from '../periode-inputV2/PeriodeInputV2';
 import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
@@ -15,11 +14,13 @@ import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
 
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
+
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltTimerPerDag`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidTimerPerDag`);
     const errors =
         jobberNormaltPerDagMeta.touched && jobberNormaltPerDagMeta.error ? String(jobberNormaltPerDagMeta.error) : '';
     const faktiskErrors = faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? String(faktiskPerDagMeta.error) : '';
+
     return (
         <div className="ml-4 mt-7">
             <div className="flex gap-8 mt-6">
@@ -35,6 +36,7 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
                         <UtregningArbeidstidDesimaler arbeidstid={normaltField.value} />
                     </div>
                 </div>
+
                 <div>
                     <TimerMedDesimaler
                         label="Faktisk arbeidstid"
@@ -57,11 +59,13 @@ const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
 
 const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
     const formik = useFormikContext();
+
     const [normaltField, jobberNormaltPerDagMeta] = useField(`${name}.jobberNormaltPerDag`);
     const [faktiskField, faktiskPerDagMeta] = useField(`${name}.faktiskArbeidPerDag`);
     const errors =
         jobberNormaltPerDagMeta.touched && jobberNormaltPerDagMeta.error ? String(jobberNormaltPerDagMeta.error) : '';
     const faktiskErrors = faktiskPerDagMeta.touched && faktiskPerDagMeta.error ? String(faktiskPerDagMeta.error) : '';
+
     return (
         <div className="flex gap-4 mt-6">
             <div className="max-w-[11rem]">
@@ -80,6 +84,7 @@ const ArbeidstidPeriodeTimerOgMinutter = ({ name }: { name: string }) => {
                     <UtregningArbeidstid arbeidstid={normaltField.value} />
                 </div>
             </div>
+
             <div>
                 <TimerOgMinutter
                     label="Faktisk arbeidstid"
@@ -116,11 +121,13 @@ interface ArbeidstidFormErrors {
 }
 
 const ArbeidstidPeriode = (props: Props) => {
-    const intl = useIntl();
-
     const formik = useFormikContext();
 
     const { name, soknadsperioder, remove } = props;
+
+    const [useSøknadsperiode, setUseSøknadsperiode] = useState(false);
+
+    const [søknadsPeriode, setSøknadsPeriode] = useState<IPeriode | undefined>(undefined);
 
     const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [, periodeTomMeta] = useField(`${name}.periode.tom`);
@@ -131,67 +138,53 @@ const ArbeidstidPeriode = (props: Props) => {
     const [faktiskDesimalerField] = useField(`${name}.faktiskArbeidTimerPerDag`);
     const [periodeField] = useField(`${name}.periode`);
 
-    const velgSoknadsperiode = (periode: IPeriode) => {
-        formik.setFieldValue(`${name}.periode`, periode);
-        formik.setFieldTouched(`${name}.periode`, true);
-    };
+    // const currentPeriod = useSøknadsperiode ? soknadsperioder[0] : periodeField.value;
 
-    const nullstillPeriode = () => {
-        formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
-        formik.setFieldTouched(`${name}.periode`, true);
-    };
-
-    const erSoknadsperiode =
-        periodeField.value &&
-        periodeField.value.fom === soknadsperioder[0]?.fom &&
-        periodeField.value.tom === soknadsperioder[0]?.tom;
-
-    // Midlertidig. Bør fixes feil
-    const showCheckbox = false;
+    console.log('Test periodeField:', periodeField.value);
 
     return (
         <Field name={name}>
-            {({ field, meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => {
+            {({ meta }: FieldProps<Periodeinfo<ArbeidstidPeriodeMedTimer>>) => {
                 // Eksplisitt typekonvertering for meta.error
                 const errors = meta.error as unknown as ArbeidstidFormErrors;
 
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodInput
-                                periode={field.value.periode || {}}
-                                intl={intl}
-                                onChange={(v) => {
-                                    formik.setFieldValue(`${name}.periode`, v);
+                            <PeriodeInputV2
+                                periode={søknadsPeriode}
+                                onChange={(periode: IPeriode) => {
+                                    formik.setFieldValue(`${name}.periode`, periode);
+                                    formik.setFieldTouched(`${name}.periode`, true);
                                 }}
-                                onBlur={() => {
-                                    formik.setFieldTouched(`${name}.periode.fom`);
-                                    formik.setFieldTouched(`${name}.periode.tom`);
+                                fomInputProps={{
+                                    error: periodeFomMeta.touched && errors?.periode?.fom,
                                 }}
-                                errorMessageFom={periodeFomMeta.touched && errors?.periode?.fom}
-                                errorMessageTom={periodeTomMeta.touched && errors?.periode?.tom}
+                                tomInputProps={{
+                                    error: periodeTomMeta.touched && errors?.periode?.tom,
+                                }}
                             />
 
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-6">
                                 <Button
                                     icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                    size="small"
                                     variant="tertiary"
                                     onClick={remove}
                                 />
                             </div>
                         </div>
 
-                        {showCheckbox && (
+                        {soknadsperioder.length === 1 && (
                             <Checkbox
-                                onChange={(event) => {
-                                    if (event.target.checked) {
-                                        velgSoknadsperiode(soknadsperioder[0]);
+                                checked={useSøknadsperiode}
+                                onChange={(e) => {
+                                    setUseSøknadsperiode(e.target.checked);
+                                    if (e.target.checked) {
+                                        setSøknadsPeriode(soknadsperioder[0]);
                                     } else {
-                                        nullstillPeriode();
+                                        setSøknadsPeriode({ fom: '', tom: '' });
                                     }
                                 }}
-                                checked={erSoknadsperiode}
                             >
                                 Velg hele søknadsperioden
                             </Checkbox>

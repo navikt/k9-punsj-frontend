@@ -34,10 +34,12 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
 
     const [useSøknadsperiode, setUseSøknadsperiode] = useState(false);
 
+    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
+    const [, periodeTomMeta] = useField(`${name}.periode.tom`);
+    const [tidsformatField] = useField(`${name}.tidsformat`);
     const [timerField] = useField(`${name}.timer`);
     const [minutterField] = useField(`${name}.minutter`);
-    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
-    const [tidsformatField] = useField(`${name}.tidsformat`);
+
     const [desimalerField] = useField(`${name}.perDagString`);
     const [periodeField] = useField(`${name}.periode`);
 
@@ -62,14 +64,13 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                     error: periodeFomMeta.touched && errors?.periode?.fom,
                                 }}
                                 tomInputProps={{
-                                    error: periodeFomMeta.touched && errors?.periode?.tom,
+                                    error: periodeTomMeta.touched && errors?.periode?.tom,
                                 }}
                             />
 
                             <div className="ml-4 mt-6">
                                 <Button
                                     icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                    // size="small"
                                     variant="tertiary"
                                     onClick={remove}
                                 />

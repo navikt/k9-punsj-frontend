@@ -69,7 +69,8 @@ describe('Pleiepenger punsj', () => {
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('exist')
-                .type('20.11.2021');
+                .clear({ force: true })
+                .type('20.11.2021', { force: true });
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('exist')
@@ -88,9 +89,11 @@ describe('Pleiepenger punsj', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
+                .clear({ force: true })
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
+                .clear({ force: true })
                 .type('11.11.2021');
         });
 

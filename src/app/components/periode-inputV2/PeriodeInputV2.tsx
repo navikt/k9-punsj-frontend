@@ -32,7 +32,11 @@ interface Props {
 
 const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputProps, tomInputProps }) => {
     const { fromDate, toDate } = getDateRange();
-    const prevPeriodeRef = useRef<IPeriode | undefined>(periode);
+
+    const sanitizedPeriode = {
+        fom: periode?.fom || '',
+        tom: periode?.tom || '',
+    };
 
     const {
         datepickerProps,
@@ -44,37 +48,37 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputPr
         toDate,
         onRangeChange: (range) => {
             const newPeriode = {
-                fom: range?.from ? dateToISODateString(range.from) : null,
-                tom: range?.to ? dateToISODateString(range.to) : null,
+                fom: range?.from ? dateToISODateString(range.from) : '',
+                tom: range?.to ? dateToISODateString(range.to) : '',
             };
 
-            if (newPeriode.fom !== periode?.fom || newPeriode.tom !== periode?.tom) {
+            if (newPeriode.fom !== sanitizedPeriode.fom || newPeriode.tom !== sanitizedPeriode.tom) {
                 onChange(newPeriode);
             }
         },
-        defaultSelected: periode
-            ? {
-                  from: periode.fom ? new Date(periode.fom) : undefined,
-                  to: periode.tom ? new Date(periode.tom) : undefined,
-              }
-            : undefined,
+        defaultSelected:
+            sanitizedPeriode.fom || sanitizedPeriode.tom
+                ? {
+                      from: sanitizedPeriode.fom ? new Date(sanitizedPeriode.fom) : undefined,
+                      to: sanitizedPeriode.tom ? new Date(sanitizedPeriode.tom) : undefined,
+                  }
+                : undefined,
     });
 
     useEffect(() => {
-        if (periode && (periode.fom !== prevPeriodeRef.current?.fom || periode.tom !== prevPeriodeRef.current?.tom)) {
+        if (periode) {
             setSelected({
                 from: periode.fom ? new Date(periode.fom) : undefined,
                 to: periode.tom ? new Date(periode.tom) : undefined,
             });
-            prevPeriodeRef.current = periode;
         }
     }, [periode, setSelected]);
 
     const handleBlur = () => {
         if (onBlur) {
             onBlur({
-                fom: periode?.fom || null,
-                tom: periode?.tom || null,
+                fom: sanitizedPeriode.fom,
+                tom: sanitizedPeriode.tom,
             });
         }
     };
