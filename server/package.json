@@ -21,7 +21,7 @@
         "jose": "6.0.10",
         "morgan": "1.10.0",
         "node-cache": "5.1.2",
-        "openid-client": "6.3.4",
+        "openid-client": "6.4.1",
         "winston": "3.17.0"
     }
 }
