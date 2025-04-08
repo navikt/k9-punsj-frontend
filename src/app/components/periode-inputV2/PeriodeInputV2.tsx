@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { DatePicker, HStack, useRangeDatepicker, DateInputProps } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
