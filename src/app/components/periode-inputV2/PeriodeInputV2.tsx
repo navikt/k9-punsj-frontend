@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DatePicker, HStack, useRangeDatepicker, DateInputProps } from '@navikt/ds-react';
 import { dateToISODateString } from 'app/utils/date-utils/src/format';
 import { getDateRange } from 'app/utils/date-utils/src/range';
@@ -32,6 +32,12 @@ interface Props {
 
 const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputProps, tomInputProps }) => {
     const { fromDate, toDate } = getDateRange();
+    const [isEditing, setIsEditing] = useState(false);
+    const [localPeriode, setLocalPeriode] = useState<IPeriode>({
+        fom: periode?.fom || '',
+        tom: periode?.tom || '',
+    });
+    const prevPeriodeRef = useRef<IPeriode | undefined>(periode);
 
     const sanitizedPeriode = {
         fom: periode?.fom || '',
@@ -52,8 +58,12 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputPr
                 tom: range?.to ? dateToISODateString(range.to) : '',
             };
 
-            if (newPeriode.fom !== sanitizedPeriode.fom || newPeriode.tom !== sanitizedPeriode.tom) {
-                onChange(newPeriode);
+            setLocalPeriode(newPeriode);
+
+            if (!isEditing) {
+                if (newPeriode.fom !== sanitizedPeriode.fom || newPeriode.tom !== sanitizedPeriode.tom) {
+                    onChange(newPeriode);
+                }
             }
         },
         defaultSelected:
@@ -66,21 +76,33 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputPr
     });
 
     useEffect(() => {
-        if (periode) {
+        if (
+            periode &&
+            !isEditing &&
+            (periode.fom !== prevPeriodeRef.current?.fom || periode.tom !== prevPeriodeRef.current?.tom)
+        ) {
             setSelected({
                 from: periode.fom ? new Date(periode.fom) : undefined,
                 to: periode.tom ? new Date(periode.tom) : undefined,
             });
+            setLocalPeriode(periode);
+            prevPeriodeRef.current = periode;
         }
-    }, [periode, setSelected]);
+    }, [periode, setSelected, isEditing]);
 
     const handleBlur = () => {
+        setIsEditing(false);
         if (onBlur) {
-            onBlur({
-                fom: sanitizedPeriode.fom,
-                tom: sanitizedPeriode.tom,
-            });
+            onBlur(localPeriode);
         }
+        // Sørg for at endringer fra manuell input blir sendt til parent
+        if (localPeriode.fom !== sanitizedPeriode.fom || localPeriode.tom !== sanitizedPeriode.tom) {
+            onChange(localPeriode);
+        }
+    };
+
+    const handleFocus = () => {
+        setIsEditing(true);
     };
 
     return (
@@ -93,6 +115,7 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputPr
                             {...fomInputProps}
                             label="Fra og med"
                             onBlur={handleBlur}
+                            onFocus={handleFocus}
                         />
                     </div>
                     <div className="periode-input__container">
@@ -101,6 +124,7 @@ const PeriodeInputV2: React.FC<Props> = ({ periode, onChange, onBlur, fomInputPr
                             {...tomInputProps}
                             label="Til og med"
                             onBlur={handleBlur}
+                            onFocus={handleFocus}
                         />
                     </div>
                 </HStack>
