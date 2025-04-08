@@ -66,7 +66,7 @@ describe('PeriodInput', () => {
     });
 
     it('should display an error message for fom date', async () => {
-        const errorMessageFom = 'Error message for fom date';
+        const errorMessageFom = 'Fra og med er påkrevd';
 
         setupPeriodInput({ errorMessageFom });
 
@@ -74,7 +74,7 @@ describe('PeriodInput', () => {
     });
 
     it('should display an error message for tom date', async () => {
-        const errorMessageTom = 'Error message fom fom date';
+        const errorMessageTom = 'Til og med er påkrevd';
 
         setupPeriodInput({ errorMessageTom });
 
