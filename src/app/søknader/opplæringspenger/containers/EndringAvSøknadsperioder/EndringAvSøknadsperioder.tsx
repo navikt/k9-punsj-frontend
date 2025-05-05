@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -26,14 +26,6 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
 
     const { values, errors } = useFormikContext<OLPSoknad>();
 
-    const [selectedPeriods, setSelectedPeriods] = useState<IPeriode[]>(values.trekkKravPerioder || []);
-
-    useEffect(() => {
-        if (selectedPeriods.length === 0 && values.trekkKravPerioder && values.trekkKravPerioder.length > 0) {
-            setSelectedPeriods(values.trekkKravPerioder);
-        }
-    }, [values.trekkKravPerioder]);
-
     if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
         return null;
     }
@@ -44,8 +36,8 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             : null;
 
     const getAlertstriper = () => {
-        const komplettePerioder = selectedPeriods.filter((periode) => periode.fom && periode.tom);
-        if (komplettePerioder.length === 0) {
+        const komplettePerioder = values.trekkKravPerioder?.filter((periode) => periode.fom && periode.tom);
+        if (komplettePerioder?.length === 0) {
             return null;
         }
 
@@ -53,17 +45,17 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
-        const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
+        const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder?.some((periode) =>
             formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
         );
-        const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
+        const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder?.some((periode) =>
             formaterteEksisterendePerioder.some(
                 (eksisterendePeriode) =>
                     initializeDate(periode.fom).isAfter(initializeDate(eksisterendePeriode.fom)) &&
                     initializeDate(periode.tom).isBefore(initializeDate(eksisterendePeriode.tom)),
             ),
         );
-        const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
+        const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder?.some((periode) =>
             formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
         );
 
