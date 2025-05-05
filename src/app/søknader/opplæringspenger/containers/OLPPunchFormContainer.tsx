@@ -69,7 +69,10 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         error,
     } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
         onSuccess: (data) => {
-            hentPerioderK9({ ident: data.soekerId, barnIdent: data.barn?.norskIdent as string });
+            hentPerioderK9({
+                ident: data.soekerId,
+                barnIdent: data.barn?.norskIdent || identState.pleietrengendeId,
+            });
             hentInstitusjonerK9();
         },
     });
