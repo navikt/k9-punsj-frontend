@@ -46,7 +46,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const intl = useIntl();
 
     const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation(
-        (ident: string) => hentEksisterendePerioder(ident),
+        ({ ident, barnIdent }: { ident: string; barnIdent: string }) => hentEksisterendePerioder(ident, barnIdent),
         {
             onSuccess: (data) => setEksisterendePerioder(data),
         },
@@ -69,7 +69,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         error,
     } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
         onSuccess: (data) => {
-            hentPerioderK9(data.soekerId);
+            hentPerioderK9({ ident: data.soekerId, barnIdent: data.barn?.norskIdent as string });
             hentInstitusjonerK9();
         },
     });
