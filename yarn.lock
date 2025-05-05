@@ -3129,7 +3129,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.8.0"
-    "@sentry/cli": "npm:2.43.1"
+    "@sentry/cli": "npm:2.44.0"
     axios: "npm:1.9.0"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -3753,74 +3753,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-darwin@npm:2.43.1"
+"@sentry/cli-darwin@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-darwin@npm:2.44.0"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-arm64@npm:2.43.1"
+"@sentry/cli-linux-arm64@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-linux-arm64@npm:2.44.0"
   conditions: (os=linux | os=freebsd) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-arm@npm:2.43.1"
+"@sentry/cli-linux-arm@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-linux-arm@npm:2.44.0"
   conditions: (os=linux | os=freebsd) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-i686@npm:2.43.1"
+"@sentry/cli-linux-i686@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-linux-i686@npm:2.44.0"
   conditions: (os=linux | os=freebsd) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-x64@npm:2.43.1"
+"@sentry/cli-linux-x64@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-linux-x64@npm:2.44.0"
   conditions: (os=linux | os=freebsd) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-arm64@npm:2.43.1"
+"@sentry/cli-win32-arm64@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-win32-arm64@npm:2.44.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-i686@npm:2.43.1"
+"@sentry/cli-win32-i686@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-win32-i686@npm:2.44.0"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-x64@npm:2.43.1"
+"@sentry/cli-win32-x64@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli-win32-x64@npm:2.44.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli@npm:2.43.1"
+"@sentry/cli@npm:2.44.0":
+  version: 2.44.0
+  resolution: "@sentry/cli@npm:2.44.0"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.43.1"
-    "@sentry/cli-linux-arm": "npm:2.43.1"
-    "@sentry/cli-linux-arm64": "npm:2.43.1"
-    "@sentry/cli-linux-i686": "npm:2.43.1"
-    "@sentry/cli-linux-x64": "npm:2.43.1"
-    "@sentry/cli-win32-arm64": "npm:2.43.1"
-    "@sentry/cli-win32-i686": "npm:2.43.1"
-    "@sentry/cli-win32-x64": "npm:2.43.1"
+    "@sentry/cli-darwin": "npm:2.44.0"
+    "@sentry/cli-linux-arm": "npm:2.44.0"
+    "@sentry/cli-linux-arm64": "npm:2.44.0"
+    "@sentry/cli-linux-i686": "npm:2.44.0"
+    "@sentry/cli-linux-x64": "npm:2.44.0"
+    "@sentry/cli-win32-arm64": "npm:2.44.0"
+    "@sentry/cli-win32-i686": "npm:2.44.0"
+    "@sentry/cli-win32-x64": "npm:2.44.0"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -3845,7 +3845,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/9a77374c01c5b528974fef865b01d62463744448f308dfb64c42b1ab3cc1862d0d0e07183be1a08ab8ca7ec93604b8cc410e8607deb6d4fc25f12cca6ee4bc25
+  checksum: 10/efd4f4349e886a514e9b9d4f49ad18654321371bf58e81ecbba7310d6d02eabb74a1c6bc4e70ede0c471101a1586827c6a71a22718f880a313ebb1047a41207a
   languageName: node
   linkType: hard
 
