@@ -233,7 +233,6 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     setIdentAction={setIdentAction}
                     setToSokereIJournalpost={setToSokereIJournalpost}
                     dokumenttype={fordelingState.dokumenttype}
-                    // disabled={disableRadios}
                 />
 
                 <div className="mt-4">

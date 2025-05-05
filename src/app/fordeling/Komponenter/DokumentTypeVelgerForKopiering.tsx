@@ -8,6 +8,7 @@ import { Heading } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
 
 import './DokumentTypeVelger.less';
+import { getEnvironmentVariable } from 'app/utils/envUtils';
 
 interface Props {
     valgtDokumentType: string;
@@ -79,6 +80,15 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
                     checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 />
+
+                {getEnvironmentVariable('OLP_ENABLED') === 'true' && (
+                    <RadioPanel
+                        label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
+                        value={FordelingDokumenttype.OPPLAERINGSPENGER}
+                        checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
+                        onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                    />
+                )}
             </div>
         </div>
     );
