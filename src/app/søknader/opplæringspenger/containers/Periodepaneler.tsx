@@ -36,7 +36,6 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                     <>
                         {periods.map((period, index) => {
                             const fieldMeta = getFieldMeta(fieldName);
-
                             return (
                                 <div className="flex flex-wrap" key={index}>
                                     <div className="periodepanel-input">
@@ -51,7 +50,6 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                 setFieldTouched(`${fieldName}.${index}.fom`);
                                                 setFieldTouched(`${fieldName}.${index}.tom`);
                                             }}
-                                            errorMessage={fieldMeta.touched && fieldMeta.error}
                                         />
 
                                         <Button
