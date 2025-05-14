@@ -145,6 +145,7 @@ const Pleietrengende: React.FC<Props> = ({
                             setPleietrengendeIdent(e.target.value);
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
+                        value={pleietrengendeId}
                         disabled={gjelderAnnenPleietrengende}
                         defaultValue={pleietrengendeId}
                     >
