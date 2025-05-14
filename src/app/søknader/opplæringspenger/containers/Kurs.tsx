@@ -34,9 +34,9 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
         setFieldValue(kursholderUuid, null);
         setFieldValue(kursholderNavn, null);
         if (valgteCheckBokser.includes('Annen')) {
-            setFieldValue('meta.harValgtAnnenInstitusjon', true);
+            setFieldValue('metadata.harValgtAnnenInstitusjon', true);
         } else {
-            setFieldValue('meta.harValgtAnnenInstitusjon', false);
+            setFieldValue('metadata.harValgtAnnenInstitusjon', false);
         }
     };
 
@@ -56,7 +56,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={values.meta.harValgtAnnenInstitusjon}
+                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon}
                     />
                 )}
 
@@ -66,7 +66,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
                 </CheckboxGroup>
 
-                {values.meta.harValgtAnnenInstitusjon && (
+                {values?.metadata?.harValgtAnnenInstitusjon && (
                     <>
                         <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>

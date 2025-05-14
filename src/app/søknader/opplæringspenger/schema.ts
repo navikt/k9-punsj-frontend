@@ -102,7 +102,7 @@ const frilanser = () =>
     });
 
 const OLPSchema = yup.object({
-    meta: yup.object({
+    metadata: yup.object({
         harValgtAnnenInstitusjon: yup.boolean(),
     }),
     mottattDato: passertDato,

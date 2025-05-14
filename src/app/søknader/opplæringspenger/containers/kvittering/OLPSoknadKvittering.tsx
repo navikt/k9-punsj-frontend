@@ -150,13 +150,12 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     )}
                 </div>
             )}
-
             {visKurs && (
                 <div>
                     <h3>Opplæring</h3>
                     <hr className={classNames('linje')} />
                     <p>Kursholder:</p>
-                    <p>{ytelse.kurs.kursholder.institusjonsidentifikator}</p>
+                    <p>{ytelse.kurs.kursholder.navn}</p>
                     <VisningAvKursperioderSoknadKvittering kursperioder={ytelse.kurs.kursperioder} />
                 </div>
             )}

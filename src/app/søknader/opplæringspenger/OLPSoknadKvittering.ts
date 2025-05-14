@@ -73,7 +73,7 @@ export interface Kurs {
 }
 
 export interface Kursholder {
-    holder: null;
+    navn: string;
     institusjonsidentifikator: string;
 }
 
