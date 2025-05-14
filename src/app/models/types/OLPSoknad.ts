@@ -9,6 +9,7 @@ import { UtenlandsOpphold } from './UtenlandsOpphold';
 import { Uttak } from './Uttak';
 
 export interface IOLPSoknadBackend {
+    meta: any;
     arbeidstid?: Arbeidstid;
     barn?: IBarn;
     begrunnelseForInnsending?: BegrunnelseForInnsending;
@@ -52,6 +53,7 @@ export interface IOppholdsLand {
 }
 
 export class OLPSoknad implements IOLPSoknadBackend {
+    meta: any;
     arbeidstid: Arbeidstid;
 
     barn?: Barn;

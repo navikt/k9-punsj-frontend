@@ -102,6 +102,9 @@ const frilanser = () =>
     });
 
 const OLPSchema = yup.object({
+    meta: yup.object({
+        harValgtAnnenInstitusjon: yup.boolean(),
+    }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,
     opptjeningAktivitet: yup.object({
@@ -113,7 +116,8 @@ const OLPSchema = yup.object({
     utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
     kurs: yup.object({
         kursHolder: yup.object({
-            institusjonsUuid: yup.string().required(),
+            institusjonsUuid: yup.string(),
+            holder: yup.string(),
         }),
         kursperioder: yup.array().of(
             yup.object({

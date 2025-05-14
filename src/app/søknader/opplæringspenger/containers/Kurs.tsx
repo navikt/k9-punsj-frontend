@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
@@ -30,15 +30,13 @@ const initialKursperiode = {
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
-    const [isAnnetSelected, setIsAnnetSelected] = useState(false);
-
     const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
         setFieldValue(kursholderUuid, null);
         setFieldValue(kursholderNavn, null);
         if (valgteCheckBokser.includes('Annen')) {
-            setIsAnnetSelected(true);
+            setFieldValue('meta.harValgtAnnenInstitusjon', true);
         } else {
-            setIsAnnetSelected(false);
+            setFieldValue('meta.harValgtAnnenInstitusjon', false);
         }
     };
 
@@ -58,7 +56,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={isAnnetSelected}
+                        isAnnetSelected={values.meta.harValgtAnnenInstitusjon}
                     />
                 )}
 
@@ -68,7 +66,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
                 </CheckboxGroup>
 
-                {isAnnetSelected && (
+                {values.meta.harValgtAnnenInstitusjon && (
                     <>
                         <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>
