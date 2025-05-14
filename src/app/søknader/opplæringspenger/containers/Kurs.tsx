@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { FieldArray, useField, useFormikContext } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Box, Button, Checkbox, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -12,6 +12,7 @@ import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplær
 import InstitusjonSelector from './InstitusjonSelector';
 
 import './kurs.less';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -19,24 +20,25 @@ interface KursComponentProps {
     hentInstitusjonerError: boolean;
 }
 
-const institusjonUuidFelt = 'kurs.kursHolder.institusjonsUuid';
-
+const kursholder = 'kurs.kursHolder';
+const kursholderUuid = `${kursholder}.institusjonsUuid`;
+const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
 };
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
-    const { values } = useFormikContext<OLPSoknad>();
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [field, meta, helpers] = useField(institusjonUuidFelt);
+    const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     const [isAnnetSelected, setIsAnnetSelected] = useState(false);
 
     const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
-        setIsAnnetSelected(valgteCheckBokser.includes('Annen'));
+        setFieldValue(kursholderUuid, null);
+        setFieldValue(kursholderNavn, null);
         if (valgteCheckBokser.includes('Annen')) {
-            helpers.setValue(null);
+            setIsAnnetSelected(true);
+        } else {
+            setIsAnnetSelected(false);
         }
     };
 
@@ -53,7 +55,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                 {!hentInstitusjonerLoading && (
                     <InstitusjonSelector
                         label="Velg institusjon"
-                        name={institusjonUuidFelt}
+                        name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
                         isAnnetSelected={isAnnetSelected}
@@ -62,9 +64,15 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
                 <VerticalSpacer eightPx />
 
-                <CheckboxGroup legend="Transportmidler" hideLegend={true} onChange={handleCheckBoxChange}>
+                <CheckboxGroup legend="Institusjon" hideLegend={true} onChange={handleCheckBoxChange}>
                     <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
                 </CheckboxGroup>
+
+                {isAnnetSelected && (
+                    <>
+                        <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
+                    </>
+                )}
 
                 <VerticalSpacer twentyPx />
 
