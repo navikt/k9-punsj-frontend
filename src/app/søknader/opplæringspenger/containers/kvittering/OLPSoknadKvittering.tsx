@@ -12,8 +12,6 @@ import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/V
 import {
     IOLPSoknadKvittering,
     IOLPSoknadKvitteringArbeidstidInfo,
-    IOLPSoknadKvitteringLovbestemtFerie,
-    IOLPSoknadKvitteringUtenlandsoppholdInfo,
 } from 'app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { RootStateType } from 'app/state/RootState';
 import { formattereTidspunktFraUTCTilGMT, getCountryList, periodToFormattedString } from 'app/utils';
@@ -24,11 +22,12 @@ import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
 import './soknadKvittering.less';
+import { ISoknadKvitteringBosteder, ISoknadKvitteringLovbestemtFerie } from 'app/models/types/KvitteringTyper';
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>
     sjekkPropertyEksistererOgIkkeErNull(property, object) && Object.keys(object[property].perioder).length > 0;
 
-const endreLandkodeTilLandnavnIPerioder = (perioder: IOLPSoknadKvitteringUtenlandsoppholdInfo) => {
+const endreLandkodeTilLandnavnIPerioder = (perioder: ISoknadKvitteringBosteder) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
         const landNavn = getCountryList().find((country) => country.code === perioder[periode].land);
@@ -50,7 +49,7 @@ export const formattereTimerForArbeidstakerPerioder = (perioder: IOLPSoknadKvitt
     return kopiAvPerioder;
 };
 
-export const genererSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtFerie) =>
+export const genererSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
         if (value.skalHaFerie) {
             acc[key] = value;
@@ -58,7 +57,7 @@ export const genererSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtFerie
         return acc;
     }, {});
 
-export const genererIkkeSkalHaFerie = (perioder: IOLPSoknadKvitteringLovbestemtFerie) =>
+export const genererIkkeSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
     Object.entries(perioder).reduce((acc, [key, value]) => {
         if (!value.skalHaFerie) {
             acc[key] = value;
@@ -175,7 +174,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <h3>{intlHelper(intl, PunchFormPaneler.UTENLANDSOPPHOLD)}</h3>
                     <hr className={classNames('linje')} />
                     <VisningAvPerioderSoknadKvittering
-                        perioder={ytelse.utenlandsopphold?.perioder}
+                        perioder={endreLandkodeTilLandnavnIPerioder(ytelse.utenlandsopphold?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />

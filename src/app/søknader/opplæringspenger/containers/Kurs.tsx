@@ -31,8 +31,8 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
-        setFieldValue(kursholderUuid, null);
-        setFieldValue(kursholderNavn, null);
+        setFieldValue(kursholderUuid, '');
+        setFieldValue(kursholderNavn, '');
         if (valgteCheckBokser.includes('Annen')) {
             setFieldValue('metadata.harValgtAnnenInstitusjon', true);
         } else {
@@ -84,18 +84,16 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                     <VerticalSpacer thirtyTwoPx />
                                     <div>
                                         <Label as="p">Periode med opplæring:</Label>
-                                        {index > 0 && (
-                                            <div className="flex items-end float-right">
-                                                <Button
-                                                    variant="tertiary"
-                                                    size="small"
-                                                    icon={<Delete />}
-                                                    onClick={() => remove(index)}
-                                                >
-                                                    Fjern periode
-                                                </Button>
-                                            </div>
-                                        )}
+                                        <div className="flex items-end float-right">
+                                            <Button
+                                                variant="tertiary"
+                                                size="small"
+                                                icon={<Delete />}
+                                                onClick={() => remove(index)}
+                                            >
+                                                Fjern periode
+                                            </Button>
+                                        </div>
                                     </div>
                                     <VerticalSpacer sixteenPx />
                                     <div style={{ display: 'flex', gap: '30px' }}>

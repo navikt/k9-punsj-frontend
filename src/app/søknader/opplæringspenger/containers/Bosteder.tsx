@@ -13,7 +13,7 @@ import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-const initialUtenlandsopphold: IUtenlandsOpphold = { land: '', innleggelsesperioder: [] };
+const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
 
 const Bosteder: React.FC = () => {
     const intl = useIntl();
@@ -22,7 +22,6 @@ const Bosteder: React.FC = () => {
 
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
-    // TODO: Use intl for text
     return (
         <Box padding="4" borderWidth="1" borderRadius="small">
             <RadioPanelGruppe
