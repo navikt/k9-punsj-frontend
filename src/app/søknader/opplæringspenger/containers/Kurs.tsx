@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
@@ -13,6 +13,7 @@ import InstitusjonSelector from './InstitusjonSelector';
 
 import './kurs.less';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -30,15 +31,12 @@ const initialKursperiode = {
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
-    const handleCheckBoxChange = (valgteCheckBokser: string[]) => {
-        setFieldValue(kursholderUuid, '');
-        setFieldValue(kursholderNavn, '');
-        if (valgteCheckBokser.includes('Annen')) {
-            setFieldValue('metadata.harValgtAnnenInstitusjon', true);
-        } else {
-            setFieldValue('metadata.harValgtAnnenInstitusjon', false);
+    useEffect(() => {
+        if (values?.metadata?.harValgtAnnenInstitusjon) {
+            setFieldValue(kursholderUuid, '');
+            setFieldValue(kursholderNavn, '');
         }
-    };
+    }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     // TODO: Use intl for tekst
     return (
@@ -56,17 +54,17 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon}
+                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon.includes('ja')}
                     />
                 )}
 
                 <VerticalSpacer eightPx />
 
-                <CheckboxGroup legend="Institusjon" hideLegend={true} onChange={handleCheckBoxChange}>
-                    <Checkbox value={'Annen'}>Annen institusjon (ikke i listen)</Checkbox>
-                </CheckboxGroup>
+                <CheckboxFormik value={'ja'} name="metadata.harValgtAnnenInstitusjon">
+                    Annen institusjon (ikke i listen)
+                </CheckboxFormik>
 
-                {values?.metadata?.harValgtAnnenInstitusjon && (
+                {values?.metadata?.harValgtAnnenInstitusjon.includes('ja') && (
                     <>
                         <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>

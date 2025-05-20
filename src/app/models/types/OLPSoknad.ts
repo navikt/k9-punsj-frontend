@@ -95,6 +95,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
     uttak: Uttak[] | null;
 
     constructor(soknad: IOLPSoknadBackend) {
+        this.metadata = soknad.metadata || {};
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
