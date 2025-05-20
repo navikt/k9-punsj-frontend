@@ -10,14 +10,11 @@ import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText } from '@nav
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
-import SelectFormik from 'app/components/formikInput/SelectFormik';
-import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
 import { FordelingActionKeys } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
-import { RelasjonTilBarnet } from 'app/models/enums/RelasjonTilBarnet';
 import { IInputError, Periode } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -42,6 +39,7 @@ import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import Reisedager from './Reisedager';
+import RelasjonTilBarnet from './RelasjonTilBarnet';
 
 interface OwnProps {
     journalpostid: string;
@@ -383,20 +381,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     </Accordion.Header>
 
                     <Accordion.Content>
-                        <SelectFormik
-                            value={values.omsorg.relasjonTilBarnet}
-                            label={intlHelper(intl, 'skjema.relasjontilbarnet')}
-                            name="omsorg.relasjonTilBarnet"
-                            options={Object.values(RelasjonTilBarnet).map((rel) => ({ value: rel, label: rel }))}
-                        />
-
-                        {values.omsorg.relasjonTilBarnet === RelasjonTilBarnet.ANNET && (
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.omsorg.beskrivelse')}
-                                className="beskrivelseAvOmsorgsrollen"
-                                name="omsorg.beskrivelseAvOmsorgsrollen"
-                            />
-                        )}
+                        <RelasjonTilBarnet />
                     </Accordion.Content>
                 </Accordion.Item>
 
