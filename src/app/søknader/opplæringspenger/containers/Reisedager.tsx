@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Button } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -11,7 +11,7 @@ const Reisedager = () => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
-        <>
+        <Box padding="4" borderRadius="small" className="bg-bg-subtle">
             <FieldArray
                 name={`kurs.reise.reisedager`}
                 render={({ push, remove }) => (
@@ -49,7 +49,7 @@ const Reisedager = () => {
                     <TextAreaFormik label="Beskrivelse" name={`kurs.reise.reisedagerBeskrivelse`} />
                 </div>
             )}
-        </>
+        </Box>
     );
 };
 
