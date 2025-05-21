@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 
 import { IPeriode } from 'app/models/types';
-import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
+import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
 import { erYngreEnn4år } from 'app/utils';
 
 import nb from '../../i18n/nb.json';
@@ -173,8 +173,8 @@ const OMPUTSchema = yup.object({
             frilanser: yup.object().when('$frilanser', { is: true, then: frilanser }),
         }),
     }),
-    bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
-    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
+    bosteder: yup.array().when('$medlemskap', { is: 'ja', then: yup.array().of(utenlandsperiode) }),
+    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsperiode) }),
     barn: yup.array.of(barn),
 });
 export default OMPUTSchema;

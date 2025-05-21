@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { AddCircle, Delete } from '@navikt/ds-icons';
-import { Box, Button, Checkbox, CheckboxGroup, Heading, Label } from '@navikt/ds-react';
+import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { Kursperiode } from 'app/models/types/Kurs';
@@ -54,7 +54,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon.includes('ja')}
+                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes('ja')}
                     />
                 )}
 
@@ -64,7 +64,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     Annen institusjon (ikke i listen)
                 </CheckboxFormik>
 
-                {values?.metadata?.harValgtAnnenInstitusjon.includes('ja') && (
+                {values?.metadata?.harValgtAnnenInstitusjon?.includes('ja') && (
                     <>
                         <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>
@@ -80,29 +80,26 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                 <React.Fragment key={index}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
-                                    <div>
-                                        <Label as="p">Periode med opplæring:</Label>
-                                        <div className="flex items-end float-right">
-                                            <Button
-                                                variant="tertiary"
-                                                size="small"
-                                                icon={<Delete />}
-                                                onClick={() => remove(index)}
-                                            >
-                                                Fjern periode
-                                            </Button>
+                                    <Label className="mb-2">Periode med opplæring:</Label>
+                                    <div className="flex justify-between">
+                                        <div className="flex gap-4 mr-2">
+                                            <DatoInputFormikNew
+                                                label="Fra"
+                                                name={`kurs.kursperioder.${index}.periode.fom`}
+                                            />
+                                            <DatoInputFormikNew
+                                                label="Til"
+                                                name={`kurs.kursperioder.${index}.periode.tom`}
+                                            />
                                         </div>
-                                    </div>
-                                    <VerticalSpacer sixteenPx />
-                                    <div style={{ display: 'flex', gap: '30px' }}>
-                                        <DatoInputFormikNew
-                                            label="Fra"
-                                            name={`kurs.kursperioder.${index}.periode.fom`}
-                                        />
-                                        <DatoInputFormikNew
-                                            label="Til"
-                                            name={`kurs.kursperioder.${index}.periode.tom`}
-                                        />
+                                        <Button
+                                            variant="tertiary"
+                                            size="small"
+                                            icon={<Delete />}
+                                            onClick={() => remove(index)}
+                                        >
+                                            Fjern periode
+                                        </Button>
                                     </div>
                                     <VerticalSpacer thirtyTwoPx />
 

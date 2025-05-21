@@ -30,7 +30,8 @@ const InstitusjonSelector = ({
     isAnnetSelected,
 }: InstitusjonSelectorProps): JSX.Element => {
     const { setFieldValue } = useFormikContext<OLPSoknad>();
-    const [field, meta] = useField(`${name}.institusjonsUuid`);
+    const [field] = useField(`${name}.institusjonsUuid`);
+    const [, meta] = useField(`${name}.holder`);
     const [institusjoner] = useState<ComboboxOption[]>(mapTilComboboxOptions(godkjentOpplæringsinstitusjoner));
 
     const findInstitusjonsNavn = (institusjonUuid: string) =>

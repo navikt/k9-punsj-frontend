@@ -314,7 +314,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 >
                     <Accordion.Header>Reisedager</Accordion.Header>
                     <Accordion.Content>
-                        <Reisedager name="kurs.reise.reisedager" />
+                        <Reisedager />
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item
