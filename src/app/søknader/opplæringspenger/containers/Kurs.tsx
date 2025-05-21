@@ -32,7 +32,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
-        if (values?.metadata?.harValgtAnnenInstitusjon) {
+        if (values?.metadata?.harValgtAnnenInstitusjon?.includes('ja')) {
             setFieldValue(kursholderUuid, '');
             setFieldValue(kursholderNavn, '');
         }
