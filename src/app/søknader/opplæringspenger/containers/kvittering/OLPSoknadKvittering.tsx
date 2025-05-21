@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort, Label } from '@navikt/ds-react';
 
 import Kopier from 'app/components/kopier/Kopier';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
@@ -127,7 +127,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.soknadsperiode')}</h3>
                     <hr className={classNames('linje')} />
-                    <p>{formaterSøknadsperioder()}</p>
+                    <BodyShort size="small">{formaterSøknadsperioder()}</BodyShort>
                 </div>
             )}
 
@@ -135,17 +135,19 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 <div>
                     <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
                     <hr className={classNames('linje')} />
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
-                        {`${formattereDatoFraUTCTilGMT(kvittering.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            kvittering.mottattDato,
-                        )}`}
-                    </p>
+                    <div className="flex flex-col gap-2">
+                        <Label size="small">Mottakelsesdato</Label>
+                        <BodyShort size="small">
+                            {`${formattereDatoFraUTCTilGMT(kvittering.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+                                kvittering.mottattDato,
+                            )}`}
+                        </BodyShort>
+                    </div>
                     {visBegrunnelseForInnsending && (
-                        <p>
-                            <b>Begrunnelse for endring: </b>
-                            {kvittering.begrunnelseForInnsending.tekst}
-                        </p>
+                        <div className="flex flex-col gap-2">
+                            <Label size="small">Begrunnelse for endring</Label>
+                            <BodyShort size="small">{kvittering.begrunnelseForInnsending.tekst}</BodyShort>
+                        </div>
                     )}
                 </div>
             )}
@@ -153,9 +155,13 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 <div>
                     <h3>Opplæring</h3>
                     <hr className={classNames('linje')} />
-                    <p>Kursholder:</p>
-                    <p>{ytelse.kurs.kursholder.navn}</p>
-                    <VisningAvKursperioderSoknadKvittering kursperioder={ytelse.kurs.kursperioder} />
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-2">
+                            <Label size="small">Kursholder</Label>
+                            <BodyShort size="small">{ytelse.kurs.kursholder.navn}</BodyShort>
+                        </div>
+                        <VisningAvKursperioderSoknadKvittering kursperioder={ytelse.kurs.kursperioder} />
+                    </div>
                 </div>
             )}
 
@@ -163,10 +169,20 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 <div>
                     <h3>Reise</h3>
                     <hr className={classNames('linje')} />
-                    <p>Reisedager:</p>
-                    {ytelse.kurs.reise.reisedager.map((reisedag) => (
-                        <p key={reisedag}>{dayjs(reisedag).format('DD.MM.YYYY')}</p>
-                    ))}
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-2">
+                            <Label size="small">Reisedager</Label>
+                            {ytelse.kurs.reise.reisedager.map((reisedag) => (
+                                <BodyShort size="small" key={reisedag}>
+                                    {dayjs(reisedag).format('DD.MM.YYYY')}
+                                </BodyShort>
+                            ))}
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label size="small">Beskrivelse</Label>
+                            <BodyShort size="small">{ytelse.kurs.reise.reisedagerBeskrivelse}</BodyShort>
+                        </div>
+                    </div>
                 </div>
             )}
             {visUtenlandsopphold && (

@@ -38,7 +38,6 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
         }
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
-    // TODO: Use intl for tekst
     return (
         <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
