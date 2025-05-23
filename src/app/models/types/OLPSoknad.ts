@@ -9,6 +9,7 @@ import { UtenlandsOpphold } from './UtenlandsOpphold';
 import { Uttak } from './Uttak';
 
 export interface IOLPSoknadBackend {
+    metadata?: any;
     arbeidstid?: Arbeidstid;
     barn?: IBarn;
     begrunnelseForInnsending?: BegrunnelseForInnsending;
@@ -52,6 +53,7 @@ export interface IOppholdsLand {
 }
 
 export class OLPSoknad implements IOLPSoknadBackend {
+    metadata: any;
     arbeidstid: Arbeidstid;
 
     barn?: Barn;
@@ -93,6 +95,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
     uttak: Uttak[] | null;
 
     constructor(soknad: IOLPSoknadBackend) {
+        this.metadata = soknad.metadata || {};
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };

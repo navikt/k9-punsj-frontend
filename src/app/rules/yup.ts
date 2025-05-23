@@ -89,7 +89,7 @@ export const periode = () =>
         tom: yup.string().required().label('Til og med'),
     });
 
-export const utenlandsopphold = yup.object().shape({
+export const utenlandsperiode = yup.object().shape({
     periode: periode(),
     land: yup.string().required().label('Land'),
 });

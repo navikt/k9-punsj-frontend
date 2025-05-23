@@ -124,7 +124,9 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                         },
                     )
                     .then(() => ({}))
-                    .catch((err) => yupToFormErrors(err))
+                    .catch((err) => {
+                        return yupToFormErrors(err);
+                    })
             }
             onSubmit={() => submit()}
         >

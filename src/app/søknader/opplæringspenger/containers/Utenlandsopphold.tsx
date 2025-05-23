@@ -16,26 +16,26 @@ interface Props {
 const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Props) => {
     const { values } = useFormikContext<OLPSoknad>();
 
-    // TODO: Use intl for tekst
     return (
         <div>
             <VerticalSpacer thirtyTwoPx />
 
-            <div className="fom-tom-rad">
-                <DatoInputFormikNew label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
-
-                <DatoInputFormikNew label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
-
+            <div className="flex gap-2 justify-between">
+                <div className="flex gap-2">
+                    <DatoInputFormikNew label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
+                    <DatoInputFormikNew label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
+                </div>
                 {values.utenlandsopphold.length > 1 && (
-                    <Button
-                        variant="tertiary"
-                        size="small"
-                        onClick={() => arrayHelpers.remove(fieldArrayIndex)}
-                        style={{ float: 'right' }}
-                        icon={<Delete />}
-                    >
-                        Fjern periode
-                    </Button>
+                    <div className="block content-center">
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            onClick={() => arrayHelpers.remove(fieldArrayIndex)}
+                            icon={<Delete />}
+                        >
+                            Fjern periode
+                        </Button>
+                    </div>
                 )}
             </div>
 

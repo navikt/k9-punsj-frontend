@@ -1,4 +1,4 @@
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
@@ -6,6 +6,7 @@ import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import './institusjonSelector.css';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 
 interface InstitusjonSelectorProps {
     label: string;
@@ -28,7 +29,9 @@ const InstitusjonSelector = ({
     hentInstitusjonerError,
     isAnnetSelected,
 }: InstitusjonSelectorProps): JSX.Element => {
-    const [field, meta, helpers] = useField(name);
+    const { setFieldValue } = useFormikContext<OLPSoknad>();
+    const [field] = useField(`${name}.institusjonsUuid`);
+    const [, meta] = useField(`${name}.holder`);
     const [institusjoner] = useState<ComboboxOption[]>(mapTilComboboxOptions(godkjentOpplæringsinstitusjoner));
 
     const findInstitusjonsNavn = (institusjonUuid: string) =>
@@ -53,7 +56,8 @@ const InstitusjonSelector = ({
                 shouldAutocomplete={true}
                 error={error}
                 onToggleSelected={(option) => {
-                    helpers.setValue(option);
+                    setFieldValue(`${name}.institusjonsUuid`, option);
+                    setFieldValue(`${name}.holder`, findInstitusjonsNavn(option));
                 }}
             />
         </div>

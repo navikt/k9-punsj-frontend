@@ -19,7 +19,7 @@ const UtenlandsoppholdContainer = () => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4" borderRadius="small" className="bg-bg-subtle">
             <Heading size="small" level="5">
                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>

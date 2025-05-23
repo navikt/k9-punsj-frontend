@@ -4,6 +4,8 @@ import BegrunnelseForInnsending from 'app/models/types/BegrunnelseForInnsending'
 import { Reise } from 'app/models/types/Kurs';
 import {
     FrilanserAktivitet,
+    ISoknadKvitteringBosteder,
+    ISoknadKvitteringLovbestemtFerie,
     ISoknadKvitteringUtenlandsopphold,
     SelvstendigNaeringsdrivendeAktivitet,
 } from 'app/models/types/KvitteringTyper';
@@ -16,9 +18,17 @@ export interface IOLPSoknadKvittering extends Kvittering {
         trekkKravPerioder: any[];
         opptjeningAktivitet: OpptjeningAktivitet;
         dataBruktTilUtledning: null;
-        bosteder: Bosteder;
-        utenlandsopphold: Utenlandsopphold;
-        lovbestemtFerie: LovbestemtFerie;
+        bosteder: {
+            perioder: ISoknadKvitteringBosteder;
+            perioderSomSkalSlettes: ISoknadKvitteringBosteder;
+        };
+        utenlandsopphold: {
+            perioder: ISoknadKvitteringUtenlandsopphold;
+            perioderSomSkalSlettes: ISoknadKvitteringUtenlandsopphold;
+        };
+        lovbestemtFerie: {
+            perioder: ISoknadKvitteringLovbestemtFerie;
+        };
         arbeidstid: Arbeidstid;
         uttak: Uttak;
         omsorg: Omsorg;
@@ -61,11 +71,6 @@ export interface Barn {
     fødselsdato: null;
 }
 
-export interface Bosteder {
-    perioder: PerioderSomSkalSlettesClass;
-    perioderSomSkalSlettes: PerioderSomSkalSlettesClass;
-}
-
 export interface Kurs {
     kursholder: Kursholder;
     kursperioder: string[];
@@ -73,16 +78,8 @@ export interface Kurs {
 }
 
 export interface Kursholder {
-    holder: null;
+    navn: string;
     institusjonsidentifikator: string;
-}
-
-export interface LovbestemtFerie {
-    perioder: LovbestemtFeriePerioder;
-}
-
-export interface IOLPSoknadKvitteringLovbestemtFerie {
-    [key: string]: { skalHaFerie: boolean };
 }
 
 export interface Omsorg {
@@ -93,20 +90,6 @@ export interface Omsorg {
 export interface OpptjeningAktivitet {
     selvstendigNæringsdrivende: SelvstendigNaeringsdrivendeAktivitet[];
     frilanser: FrilanserAktivitet;
-}
-
-export interface Utenlandsopphold {
-    perioder: ISoknadKvitteringUtenlandsopphold;
-    perioderSomSkalSlettes: PerioderSomSkalSlettesClass;
-}
-
-export interface UtenlandsoppholdPerioder {
-    [key: string]: IOLPSoknadKvitteringUtenlandsoppholdInfo;
-}
-
-export interface IOLPSoknadKvitteringUtenlandsoppholdInfo {
-    land: string;
-    årsak: null;
 }
 
 export interface Uttak {

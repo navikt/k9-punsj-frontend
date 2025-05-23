@@ -3,18 +3,16 @@ import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { IPeriode } from '../../../models/types/Periode';
+import { AddCircle, Delete } from '@navikt/ds-icons';
 
 const initialPeriode = { fom: '', tom: '' };
 
 export interface IPeriodepanelerProps {
     periods: IPeriode[]; // Liste over periodisert informasjon
-    textLeggTil?: string;
-    textFjern?: string;
     onAdd?: () => any;
     onRemove?: () => any;
     kanHaFlere: boolean;
@@ -24,22 +22,20 @@ export interface IPeriodepanelerProps {
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const intl = useIntl();
 
-    const { periods, kanHaFlere, textLeggTil, fieldName } = props;
+    const { periods, kanHaFlere, fieldName } = props;
 
-    const { setFieldValue, setFieldTouched, getFieldMeta } = useFormikContext<OLPSoknad>();
+    const { setFieldValue, setFieldTouched } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
+        <Box padding="4" borderRadius="small" className="periodepanel">
             <FieldArray
                 name={fieldName}
                 render={(arrayHelpers) => (
                     <>
                         {periods.map((period, index) => {
-                            const fieldMeta = getFieldMeta(fieldName);
-
                             return (
-                                <div className="flex flex-wrap" key={index}>
-                                    <div className="periodepanel-input">
+                                <div className="flex flex-col gap-4" key={index}>
+                                    <div className="flex justify-between">
                                         <PeriodInput
                                             className="mr-3"
                                             periode={period || {}}
@@ -51,49 +47,42 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                 setFieldTouched(`${fieldName}.${index}.fom`);
                                                 setFieldTouched(`${fieldName}.${index}.tom`);
                                             }}
-                                            errorMessage={fieldMeta.touched && fieldMeta.error}
                                         />
-
-                                        <Button
-                                            id="slett"
-                                            className={fieldMeta.touched && fieldMeta.error ? 'fjern-feil' : 'fjern'}
-                                            type="button"
-                                            onClick={() => {
-                                                arrayHelpers.remove(index);
-                                                if (props.onRemove) {
-                                                    props.onRemove();
-                                                }
-                                            }}
-                                        >
-                                            <div className="slettIcon">
-                                                <TrashIcon fontSize="2rem" color="#C30000" />
-                                            </div>
-
-                                            <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
-                                        </Button>
+                                        <div className="block content-center">
+                                            <Button
+                                                variant="tertiary"
+                                                size="small"
+                                                onClick={() => {
+                                                    arrayHelpers.remove(index);
+                                                    if (props.onRemove) {
+                                                        props.onRemove();
+                                                    }
+                                                }}
+                                                icon={<Delete />}
+                                            >
+                                                Fjern periode
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })}
 
                         {kanHaFlere && (
-                            <div className="flex flex-wrap">
+                            <div className="mt-4">
                                 <Button
                                     id="leggtilperiode"
-                                    className="leggtilperiode"
-                                    type="button"
+                                    variant="tertiary"
+                                    size="small"
                                     onClick={() => {
                                         arrayHelpers.push(initialPeriode);
                                         if (props.onAdd) {
                                             props.onAdd();
                                         }
                                     }}
+                                    icon={<AddCircle />}
                                 >
-                                    <div className="leggtilperiodeIcon">
-                                        <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
-                                    </div>
-
-                                    <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
+                                    <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
                                 </Button>
                             </div>
                         )}

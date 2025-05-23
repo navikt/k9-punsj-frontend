@@ -1,5 +1,5 @@
 import { IPeriode } from 'app/models/types';
-import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsopphold } from 'app/rules/yup';
+import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
 
 import nb from '../../i18n/nb.json';
 import { OLPSoknad } from '../../models/types/OLPSoknad';
@@ -24,17 +24,23 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
         }),
     );
+
 const arbeidstaker = () =>
     yup.object({
         organisasjonsnummer: yup.string().required().label('Organisasjonsnummer'),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: true }),
     });
+
 const selvstendigNaeringsdrivende = () =>
     yup.object({
         virksomhetNavn: yup.string().required().label('Virksomhetsnavn'),
         organisasjonsnummer: yup
             .string()
-            .when('$registrertIUtlandet', { is: false, then: yup.string().required(), otherwise: yup.string() })
+            .when('$registrertIUtlandet', {
+                is: (value: boolean) => !value,
+                then: (schema) => schema.required(),
+                otherwise: (schema) => schema,
+            })
             .label('Organisasjonsnummer'),
         info: yup.object({
             periode: yup.object({
@@ -42,46 +48,71 @@ const selvstendigNaeringsdrivende = () =>
                 tom: yup.string().label('Til og med'),
             }),
             virksomhetstyper: yup.array().of(yup.string()).required().label('Virksomhetstype'),
-            erFiskerPåBladB: yup
-                .string()
-                .when('virksomhetstyper', { is: 'Fisker', then: (schema) => schema.required() }),
+            erFiskerPåBladB: yup.string().when('virksomhetstyper', {
+                is: 'Fisker',
+                then: (schema) => schema.required(),
+            }),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', {
                     is: true,
-                    then: yup.string().required(),
-                    otherwise: yup.string().nullable(),
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
                 })
                 .label('Land'),
             regnskapsførerNavn: yup
                 .string()
-                .when('harSøkerRegnskapsfører', { is: true, then: yup.string().required() })
+                .when('harSøkerRegnskapsfører', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                })
                 .label(nb['skjema.arbeid.sn.regnskapsførernavn']),
             regnskapsførerTlf: yup
                 .string()
-                .when('harSøkerRegnskapsfører', { is: true, then: (schema) => schema.required() })
+                .when('harSøkerRegnskapsfører', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                })
                 .label(nb['skjema.arbeid.sn.regnskapsførertlf']),
             harSøkerRegnskapsfører: yup.boolean(),
             registrertIUtlandet: yup.boolean(),
             bruttoInntekt: yup
                 .string()
-                .when('$erNyoppstartet', { is: true, then: yup.string().required() })
+                .when('$erNyoppstartet', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                })
                 .label(nb['skjema.sn.bruttoinntekt']),
             erVarigEndring: yup
                 .boolean()
-                .when('$erNyoppstartet', { is: false, then: yup.boolean().required() })
+                .when('$erNyoppstartet', {
+                    is: false,
+                    then: (schema) => schema.required(),
+                })
                 .label('Varig endring'),
             endringInntekt: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
+                .when('erVarigEndring', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
                 .label(nb['skjema.sn.endringinntekt']),
             endringDato: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
+                .when('erVarigEndring', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
                 .label(nb['skjema.sn.varigendringdato']),
             endringBegrunnelse: yup
                 .string()
-                .when('erVarigEndring', { is: true, then: yup.string().required(), otherwise: yup.string().nullable() })
+                .when('erVarigEndring', {
+                    is: true,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
                 .label(nb['skjema.sn.endringbegrunnelse']),
         }),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
@@ -94,7 +125,7 @@ const frilanser = () =>
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: yup.string().required(),
+                then: (schema) => schema.required(),
             })
             .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
@@ -102,6 +133,9 @@ const frilanser = () =>
     });
 
 const OLPSchema = yup.object({
+    metadata: yup.object({
+        harValgtAnnenInstitusjon: yup.array().of(yup.string()),
+    }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,
     opptjeningAktivitet: yup.object({
@@ -109,11 +143,18 @@ const OLPSchema = yup.object({
         selvstendigNaeringsdrivende: selvstendigNaeringsdrivende().nullable(),
         frilanser: frilanser().nullable(),
     }),
-    bosteder: yup.array().when('$bosteder', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
-    utenlandsopphold: yup.array().when('$utenlandsopphold', { is: 'ja', then: yup.array().of(utenlandsopphold) }),
+    bosteder: yup.array().when('$bosteder', {
+        is: 'ja',
+        then: (schema) => schema.of(utenlandsperiode),
+    }),
+    utenlandsopphold: yup.array().when('$utenlandsopphold', {
+        is: 'ja',
+        then: (schema) => schema.of(utenlandsperiode),
+    }),
     kurs: yup.object({
         kursHolder: yup.object({
-            institusjonsUuid: yup.string().required(),
+            institusjonsUuid: yup.string(),
+            holder: yup.string().required(),
         }),
         kursperioder: yup.array().of(
             yup.object({
@@ -122,7 +163,13 @@ const OLPSchema = yup.object({
         ),
         reise: yup.object({
             reisedager: yup.array().of(yup.string().required()),
+            reisedagerBeskrivelse: yup.string().when('$kurs.reise.reisedager', {
+                is: (reisedager: string[]) => reisedager.length > 0,
+                then: (schema) => schema.required(),
+                otherwise: (schema) => schema.nullable(),
+            }),
         }),
     }),
 });
+
 export default OLPSchema;
