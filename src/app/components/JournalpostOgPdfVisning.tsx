@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useQueries } from 'react-query';
 import { Box } from '@navikt/ds-react';
@@ -11,6 +11,8 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import './punchPage.less';
+import '../styles/journalpostModal.less';
+
 export interface Props {
     journalposter: string[];
     children: React.ReactNode;
@@ -23,6 +25,29 @@ export interface Props {
 export const JournalpostOgPdfVisning = (props: Props) => {
     const { journalposter, children } = props;
     const intl = useIntl();
+    const leftPanelRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const updateLeftPanelWidth = () => {
+            if (leftPanelRef.current) {
+                const width = leftPanelRef.current.offsetWidth;
+                document.documentElement.style.setProperty('--left-panel-width', `${width}px`);
+            }
+        };
+
+        // Initial update
+        updateLeftPanelWidth();
+
+        // Create ResizeObserver to watch for size changes
+        const resizeObserver = new ResizeObserver(updateLeftPanelWidth);
+        if (leftPanelRef.current) {
+            resizeObserver.observe(leftPanelRef.current);
+        }
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, []);
 
     const queryObjects = journalposter.map((journalpostidentifikator) => ({
         queryKey: ['journalpost', journalpostidentifikator],
@@ -44,7 +69,7 @@ export const JournalpostOgPdfVisning = (props: Props) => {
           })
         : [];
     const left = () => (
-        <Box className="omsorgspenger_punch_form min-w-min" padding="4">
+        <Box ref={leftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="4">
             <div className="max-w-screen-lg">
                 <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
             </div>
@@ -55,7 +80,7 @@ export const JournalpostOgPdfVisning = (props: Props) => {
 
     const right = () => !!journalpostDokumenter.length && <PdfVisning journalpostDokumenter={journalpostDokumenter} />;
     return (
-        <Page title={intlHelper(intl, 'startPage.tittel')} className="punch">
+        <Page title={intlHelper(intl, 'startPage.tittel')} className="punch journalpost-modal">
             <div className="panels-wrapper" id="panels-wrapper">
                 {left()}
                 {right()}
