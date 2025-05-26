@@ -66,6 +66,9 @@ const ArbeidsforholdPanel = ({
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const soeknadsperiode = soknad?.soeknadsperiode || [];
 
+    const limitFromDate = new Date();
+    limitFromDate.setFullYear(limitFromDate.getFullYear() - 60);
+
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
@@ -78,6 +81,7 @@ const ArbeidsforholdPanel = ({
                     className="frilanser-startdato"
                     label={intlHelper(intl, 'skjema.frilanserdato')}
                     errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
+                    fromDate={limitFromDate}
                     onChange={(selectedDate: any) => {
                         updateSoknadState(
                             {
@@ -126,6 +130,7 @@ const ArbeidsforholdPanel = ({
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                        fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -481,6 +486,7 @@ const ArbeidsforholdPanel = ({
                         errorMessage={getErrorMessage(
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder',
                         )}
+                        fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -522,6 +528,7 @@ const ArbeidsforholdPanel = ({
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         noValidateTomtFelt={true}
+                        fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -646,6 +653,7 @@ const ArbeidsforholdPanel = ({
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
+                                fromDate={limitFromDate}
                                 onChange={(selectedDate: any) => {
                                     updateSoknadState(
                                         {
