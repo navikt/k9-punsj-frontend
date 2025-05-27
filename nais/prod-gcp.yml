@@ -4,6 +4,11 @@ outboundExternalHosts:
     - k9-punsj.prod-fss-pub.nais.io
     - k9-formidling.prod-fss-pub.nais.io
 azureTenant: nav.no
+observability:
+    logging:
+        destinations:
+            - id: loki
+            - id: elastic
 proxyRedirects:
     - path: '/api/k9-punsj'
       scope: 'api://prod-fss.k9saksbehandling.k9-punsj/.default'
