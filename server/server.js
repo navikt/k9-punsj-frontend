@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { validateToken } from '@navikt/oasis';
 import { decodeJwt } from 'jose';
+import { rateLimit } from 'express-rate-limit';
 
 import * as headers from './src/headers.js';
 import logger from './src/log.js';
@@ -153,7 +154,17 @@ async function startApp() {
         const rootDir = './dist';
         server.use('/dist', express.static(rootDir));
 
-        // Fallback to SPA for unmatched routes (excluding API and dist)
+        // Create rate limiter just for fallback requests (e.g., 20 per minute per IP)
+        const fallbackLimiter = rateLimit({
+            windowMs: 60 * 1000, // 1 minute
+            max: 20, // limit each IP to 20 requests per windowMs
+            standardHeaders: true,
+            legacyHeaders: false,
+            message: 'Too many requests, please try again later.',
+        });
+
+        // Apply fallback + limiter
+        server.use(fallbackLimiter);
         server.use((req, res, next) => {
             const isStatic =
                 req.path.startsWith('/dist') || req.path.startsWith('/api') || req.path.startsWith('/health');

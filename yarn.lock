@@ -3196,6 +3196,7 @@ __metadata:
     dotenv: "npm:16.5.0"
     express: "npm:5.1.0"
     express-http-proxy: "npm:2.1.1"
+    express-rate-limit: "npm:^7.5.0"
     helmet: "npm:8.1.0"
     jose: "npm:6.0.11"
     morgan: "npm:1.10.0"
@@ -9660,6 +9661,15 @@ __metadata:
     es6-promise: "npm:^4.1.1"
     raw-body: "npm:^2.3.0"
   checksum: 10/d0670a06109f6d3bd56be81c0c35e7a5c221eb70a4624ff746481ac402cad9dca836cf544d9c9a1294bf30209f83d76988d9c80a463cdeda2737e8bb4cfdc0aa
+  languageName: node
+  linkType: hard
+
+"express-rate-limit@npm:^7.5.0":
+  version: 7.5.0
+  resolution: "express-rate-limit@npm:7.5.0"
+  peerDependencies:
+    express: ^4.11 || 5 || ^5.0.0-beta.1
+  checksum: 10/eff34c83bf586789933a332a339b66649e2cca95c8e977d193aa8bead577d3182ac9f0e9c26f39389287539b8038890ff023f910b54ebb506a26a2ce135b92ca
   languageName: node
   linkType: hard
 
