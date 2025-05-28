@@ -154,8 +154,12 @@ async function startApp() {
         server.use('/dist', express.static(rootDir));
 
         // Fallback to SPA for unmatched routes (excluding API and dist)
-        server.use(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
-            res.sendFile('index.html', { root: rootDir });
+        server.use((req, res, next) => {
+            const isStatic =
+                req.path.startsWith('/dist') || req.path.startsWith('/api') || req.path.startsWith('/health');
+            if (isStatic) return next();
+
+            res.sendFile('index.html', { root: './dist' });
         });
 
         // Global error handler
@@ -169,6 +173,8 @@ async function startApp() {
         logger.info(`Listening on port ${port}`);
     } catch (error) {
         logger.error('Error during start-up:', error);
+        // eslint-disable-next-line no-console
+        console.log('Error in startApp:', error);
     }
 }
 
