@@ -3190,7 +3190,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.8.0"
-    "@sentry/cli": "npm:2.45.0"
+    "@sentry/cli": "npm:2.46.0"
     axios: "npm:1.9.0"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -3844,74 +3844,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-darwin@npm:2.45.0"
+"@sentry/cli-darwin@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-darwin@npm:2.46.0"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-linux-arm64@npm:2.45.0"
-  conditions: (os=linux | os=freebsd) & cpu=arm64
+"@sentry/cli-linux-arm64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-arm64@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-linux-arm@npm:2.45.0"
-  conditions: (os=linux | os=freebsd) & cpu=arm
+"@sentry/cli-linux-arm@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-arm@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-linux-i686@npm:2.45.0"
-  conditions: (os=linux | os=freebsd) & (cpu=x86 | cpu=ia32)
+"@sentry/cli-linux-i686@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-i686@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-linux-x64@npm:2.45.0"
-  conditions: (os=linux | os=freebsd) & cpu=x64
+"@sentry/cli-linux-x64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-x64@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-win32-arm64@npm:2.45.0"
+"@sentry/cli-win32-arm64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-arm64@npm:2.46.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-win32-i686@npm:2.45.0"
+"@sentry/cli-win32-i686@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-i686@npm:2.46.0"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli-win32-x64@npm:2.45.0"
+"@sentry/cli-win32-x64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-x64@npm:2.46.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:2.45.0":
-  version: 2.45.0
-  resolution: "@sentry/cli@npm:2.45.0"
+"@sentry/cli@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli@npm:2.46.0"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.45.0"
-    "@sentry/cli-linux-arm": "npm:2.45.0"
-    "@sentry/cli-linux-arm64": "npm:2.45.0"
-    "@sentry/cli-linux-i686": "npm:2.45.0"
-    "@sentry/cli-linux-x64": "npm:2.45.0"
-    "@sentry/cli-win32-arm64": "npm:2.45.0"
-    "@sentry/cli-win32-i686": "npm:2.45.0"
-    "@sentry/cli-win32-x64": "npm:2.45.0"
+    "@sentry/cli-darwin": "npm:2.46.0"
+    "@sentry/cli-linux-arm": "npm:2.46.0"
+    "@sentry/cli-linux-arm64": "npm:2.46.0"
+    "@sentry/cli-linux-i686": "npm:2.46.0"
+    "@sentry/cli-linux-x64": "npm:2.46.0"
+    "@sentry/cli-win32-arm64": "npm:2.46.0"
+    "@sentry/cli-win32-i686": "npm:2.46.0"
+    "@sentry/cli-win32-x64": "npm:2.46.0"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -3936,7 +3936,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/8a9d9381b673a4e37ec7e97bdae8eb8cff92e5620524e3e635f0e7fccb83b1aa22d6d4b1051fb749223dcd8a8ee814dd398f689b97020e244e353e03abd83eb4
+  checksum: 10/b3d9f7f8cdd20d8ee43987dd0d275167f698436a4ec6779d8b42a5a15050d5f55cc28995576bc6fbabcb27b373ea61dc0beec6221a98dd10ecfd57e71b1e9f63
   languageName: node
   linkType: hard
 
