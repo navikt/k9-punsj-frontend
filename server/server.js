@@ -1,15 +1,11 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-import timeout from 'connect-timeout';
 import { validateToken } from '@navikt/oasis';
-
 import { decodeJwt } from 'jose';
 
 import * as headers from './src/headers.js';
 import logger from './src/log.js';
-
-// for debugging during development
 import config from './src/config.js';
 import reverseProxy from './src/reverse-proxy.js';
 import { envVariables } from './envVariables.js';
@@ -17,33 +13,52 @@ import { envVariables } from './envVariables.js';
 const server = express();
 const { port } = config.server;
 
-// Enable rate limiting
+/**
+ * Custom async timeout middleware using AbortController.
+ * Ends the request with 503 if it exceeds the specified duration.
+ */
+function requestTimeout(ms) {
+    return (req, res, next) => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => {
+            controller.abort();
+            res.status(503).send('Request Timeout');
+        }, ms);
+
+        req.signal = controller.signal;
+
+        res.on('finish', () => clearTimeout(timeout));
+        res.on('close', () => clearTimeout(timeout));
+
+        next();
+    };
+}
 
 async function startApp() {
     try {
-        // log request
-        server.use(timeout('10m'));
+        // Request timeout middleware (10 minutes)
+        server.use(requestTimeout(10 * 60 * 1000));
+
+        // Setup custom headers
         headers.setup(server);
 
-        // Logging i json format
+        // Logging
         server.use(logger.morganMiddleware);
 
+        // Trust reverse proxy
         server.set('trust proxy', 1);
 
+        // Security headers
         server.use(
             helmet({
                 contentSecurityPolicy: {
                     useDefaults: false,
                     directives: {
-                        'default-src': ["'self'", "'unsafe-inline'"],
+                        'default-src': ["'self'"],
                         'base-uri': ["'self'"],
-                        'connect-src': [
-                            "'self'",
-                            'https://sentry.gc.nav.no',
-                            process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
-                        ],
-                        'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
-                        'img-src': ["'self'", 'data:', 'blob:'],
+                        'connect-src': ["'self'", 'https://sentry.gc.nav.no', process.env.NAIS_FRONTEND_URL || ''],
+                        'font-src': ["'self'", 'https://fonts.gstatic.com'],
+                        'img-src': ["'self'", 'data:'],
                         'style-src': ["'self'", "'unsafe-inline'"],
                         'frame-src': ["'self'"],
                         'child-src': ["'self'"],
@@ -57,7 +72,7 @@ async function startApp() {
             }),
         );
 
-        // CORS konfig
+        // CORS configuration
         server.use(
             cors({
                 origin: config.server.host,
@@ -67,54 +82,61 @@ async function startApp() {
             }),
         );
 
-        // Liveness and readiness probes for Kubernetes / nais
+        // Kubernetes liveness and readiness probes
         server.get('/health/isAlive', (req, res) => {
             res.status(200).send('Alive');
         });
+
         server.get('/health/isReady', (req, res) => {
             res.status(200).send('Ready');
         });
 
-        server.get(['/oauth2/login'], async (req, res) => {
+        // Block direct access to login route
+        server.get('/oauth2/login', async (req, res) => {
             res.status(502).send({
                 message: 'Wonderwall must handle /oauth2/login',
             });
         });
 
+        // Authentication middleware
         const ensureAuthenticated = async (req, res, next) => {
             try {
-                const token = req.headers.authorization.replace('Bearer ', '');
+                const token = req.headers.authorization;
 
                 if (!token) {
-                    logger.debug('User token missing. Redirecting to login.');
-                    res.status(401).send();
+                    logger.debug('User token missing.');
+                    return res.status(401).send();
                 }
+
                 const validation = await validateToken(token);
 
                 if (!validation.ok) {
-                    logger.debug('User token not valid. Redirecting to login.');
-                    res.status(401).send();
-                } else {
-                    logger.debug('User token is valid. Continue.');
-                    next();
+                    logger.debug('User token not valid.');
+                    return res.status(401).send();
                 }
+
+                logger.debug('User token is valid.');
+                next();
             } catch (error) {
-                logger.error('Error getting session:', error);
+                logger.error('Error validating token:', error);
                 res.status(401).send();
             }
         };
 
-        // The routes below require the user to be authenticated
+        // Apply auth middleware to protected routes
         server.use(ensureAuthenticated);
 
-        server.get(['/logout'], async (req, res) => {
+        server.get('/logout', async (req, res) => {
             if (req.headers.authorization) {
                 res.redirect('/oauth2/logout');
+            } else {
+                res.status(204).send();
             }
         });
 
         server.get('/me', (req, res) => {
-            const user = decodeJwt(req.headers.authorization);
+            const token = req.headers.authorization;
+            const user = decodeJwt(token);
             res.send({
                 name: user.name,
             });
@@ -123,19 +145,31 @@ async function startApp() {
         server.get('/envVariables', (req, res) => {
             res.json(envVariables());
         });
+
+        // Setup reverse proxy
         reverseProxy.setup(server);
 
-        // serve static files
+        // Serve static files
         const rootDir = './dist';
-        server.use('/dist', express.static('./dist'));
+        server.use('/dist', express.static(rootDir));
+
+        // Fallback to SPA for unmatched routes (excluding API and dist)
         server.use(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
             res.sendFile('index.html', { root: rootDir });
         });
 
-        server.listen(port, () => logger.info(`Listening on port ${port}`));
+        // Global error handler
+        server.use((err, req, res) => {
+            logger.error('Unhandled error:', err);
+            res.status(500).send('Internal Server Error');
+        });
+
+        // Start server
+        await new Promise((resolve) => server.listen(port, resolve));
+        logger.info(`Listening on port ${port}`);
     } catch (error) {
-        logger.error('Error during start-up: ', error);
+        logger.error('Error during start-up:', error);
     }
 }
 
-startApp().catch((err) => logger.error(err));
+startApp().catch((err) => logger.error('Fatal error:', err));
