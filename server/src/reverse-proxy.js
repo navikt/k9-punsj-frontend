@@ -28,15 +28,14 @@ const proxyOptions = (api) => ({
                         resolve(options);
                     },
                     (error) => {
-                        // eslint-disable-next-line no-console
-                        console.log(error);
+                        log.error(error);
                         reject(error);
                     },
                 );
             });
         } catch (error) {
             // eslint-disable-next-line no-console
-            console.log(error);
+            log.error(error);
             throw error; // re-throw the error so it can be handled by the caller
         }
     },
@@ -100,7 +99,7 @@ const setup = (router) => {
     config.reverseProxyConfig.apis.forEach((api) => {
         router.use(`${api.path}/*`, timedOut, proxy(api.url, proxyOptions(api)));
         // eslint-disable-next-line no-console
-        console.log(`Proxy set up: ${api.path}/* -> ${api.url}`);
+        log.info(`Proxy set up: ${api.path}/* -> ${api.url}`);
     });
 };
 
