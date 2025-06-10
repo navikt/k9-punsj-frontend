@@ -3399,7 +3399,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:3.8.0"
-    "@sentry/cli": "npm:2.43.1"
+    "@sentry/cli": "npm:2.46.0"
     axios: "npm:1.9.0"
     connect-timeout: "npm:1.9.0"
     cors: "npm:2.8.5"
@@ -3407,10 +3407,10 @@ __metadata:
     express: "npm:4.21.2"
     express-http-proxy: "npm:2.1.1"
     helmet: "npm:8.1.0"
-    jose: "npm:6.0.10"
+    jose: "npm:6.0.11"
     morgan: "npm:1.10.0"
     node-cache: "npm:5.1.2"
-    openid-client: "npm:6.4.2"
+    openid-client: "npm:6.5.1"
     winston: "npm:3.17.0"
   languageName: unknown
   linkType: soft
@@ -4064,74 +4064,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-darwin@npm:2.43.1"
+"@sentry/cli-darwin@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-darwin@npm:2.46.0"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-arm64@npm:2.43.1"
-  conditions: (os=linux | os=freebsd) & cpu=arm64
+"@sentry/cli-linux-arm64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-arm64@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-arm@npm:2.43.1"
-  conditions: (os=linux | os=freebsd) & cpu=arm
+"@sentry/cli-linux-arm@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-arm@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-i686@npm:2.43.1"
-  conditions: (os=linux | os=freebsd) & (cpu=x86 | cpu=ia32)
+"@sentry/cli-linux-i686@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-i686@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-linux-x64@npm:2.43.1"
-  conditions: (os=linux | os=freebsd) & cpu=x64
+"@sentry/cli-linux-x64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-linux-x64@npm:2.46.0"
+  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-arm64@npm:2.43.1"
+"@sentry/cli-win32-arm64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-arm64@npm:2.46.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-i686@npm:2.43.1"
+"@sentry/cli-win32-i686@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-i686@npm:2.46.0"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli-win32-x64@npm:2.43.1"
+"@sentry/cli-win32-x64@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli-win32-x64@npm:2.46.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:2.43.1":
-  version: 2.43.1
-  resolution: "@sentry/cli@npm:2.43.1"
+"@sentry/cli@npm:2.46.0":
+  version: 2.46.0
+  resolution: "@sentry/cli@npm:2.46.0"
   dependencies:
-    "@sentry/cli-darwin": "npm:2.43.1"
-    "@sentry/cli-linux-arm": "npm:2.43.1"
-    "@sentry/cli-linux-arm64": "npm:2.43.1"
-    "@sentry/cli-linux-i686": "npm:2.43.1"
-    "@sentry/cli-linux-x64": "npm:2.43.1"
-    "@sentry/cli-win32-arm64": "npm:2.43.1"
-    "@sentry/cli-win32-i686": "npm:2.43.1"
-    "@sentry/cli-win32-x64": "npm:2.43.1"
+    "@sentry/cli-darwin": "npm:2.46.0"
+    "@sentry/cli-linux-arm": "npm:2.46.0"
+    "@sentry/cli-linux-arm64": "npm:2.46.0"
+    "@sentry/cli-linux-i686": "npm:2.46.0"
+    "@sentry/cli-linux-x64": "npm:2.46.0"
+    "@sentry/cli-win32-arm64": "npm:2.46.0"
+    "@sentry/cli-win32-i686": "npm:2.46.0"
+    "@sentry/cli-win32-x64": "npm:2.46.0"
     https-proxy-agent: "npm:^5.0.0"
     node-fetch: "npm:^2.6.7"
     progress: "npm:^2.0.3"
@@ -4156,7 +4156,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/9a77374c01c5b528974fef865b01d62463744448f308dfb64c42b1ab3cc1862d0d0e07183be1a08ab8ca7ec93604b8cc410e8607deb6d4fc25f12cca6ee4bc25
+  checksum: 10/b3d9f7f8cdd20d8ee43987dd0d275167f698436a4ec6779d8b42a5a15050d5f55cc28995576bc6fbabcb27b373ea61dc0beec6221a98dd10ecfd57e71b1e9f63
   languageName: node
   linkType: hard
 
@@ -12731,10 +12731,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.0.10, jose@npm:^6.0.10":
-  version: 6.0.10
-  resolution: "jose@npm:6.0.10"
-  checksum: 10/8ba0d1aca94bdf780247c737328114fab3e394e1531e881dfe3fdd1d4a293b08cf7c0242769e72c8c8eee15c95761b542cf10730c3dfbb108084762df7d25cec
+"jose@npm:6.0.11, jose@npm:^6.0.11":
+  version: 6.0.11
+  resolution: "jose@npm:6.0.11"
+  checksum: 10/f362a02bb8230e6364ac701c757442d4737f1d29bc70042ec8d2d93e1f2822e68b1d3cd5c26d12545b2b49afb87dcc155c6e448f9758ed58626714062ece2cbd
   languageName: node
   linkType: hard
 
@@ -14420,10 +14420,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.4.1":
-  version: 3.5.0
-  resolution: "oauth4webapi@npm:3.5.0"
-  checksum: 10/7ac858b6edf3701c4752f386788acab01f7567a3e6068316582d80298b8113999bb9062d498ce0ab8bb4c4802d8007c5a1afdcb42974ffcf603af20b6d832993
+"oauth4webapi@npm:^3.5.2":
+  version: 3.5.2
+  resolution: "oauth4webapi@npm:3.5.2"
+  checksum: 10/84106d4cd6c37a30c63cf2eaadd055656cb66e26eef248f8aa62a7120ada15ce7317144630b60efa613d19061d132bbcf129d8c8261fb1e76454145232c2a49d
   languageName: node
   linkType: hard
 
@@ -14665,13 +14665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openid-client@npm:6.4.2":
-  version: 6.4.2
-  resolution: "openid-client@npm:6.4.2"
+"openid-client@npm:6.5.1":
+  version: 6.5.1
+  resolution: "openid-client@npm:6.5.1"
   dependencies:
-    jose: "npm:^6.0.10"
-    oauth4webapi: "npm:^3.4.1"
-  checksum: 10/798d4c88e6a5e52a37c8d321b92da9a93a431cfc6f909857ae1aadb558d2444d31fde68e03fd59e2779b69cdf46707f5a52e5ba9eaf4ab2e4bd63e621b51ada8
+    jose: "npm:^6.0.11"
+    oauth4webapi: "npm:^3.5.2"
+  checksum: 10/6a479aad8d66037009f56aaf323709c527d2f39baac1469bf607de46cc79b6bb3711256f015c55ebbe79983600b06a99f54197a20417a086d7a6b604a9cdd494
   languageName: node
   linkType: hard
 
