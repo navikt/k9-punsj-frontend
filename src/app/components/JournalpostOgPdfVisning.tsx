@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { useQueries } from 'react-query';
+import { useQueries } from '@tanstack/react-query';
 import { Box } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
@@ -60,7 +60,7 @@ export const JournalpostOgPdfVisning = (props: Props) => {
             }),
     }));
 
-    const queries = useQueries(queryObjects);
+    const queries = useQueries({ queries: queryObjects });
 
     const journalpostDokumenter: IJournalpostDokumenter[] = queries.every((query) => query.isSuccess)
         ? queries.map((query) => {

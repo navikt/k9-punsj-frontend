@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Formik, yupToFormErrors } from 'formik';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -54,27 +54,32 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
         throw Error('Mangler id');
     }
 
-    const { mutate: hentPerioderK9 } = useMutation(
-        ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
+    const { mutate: hentPerioderK9 } = useMutation({
+        mutationFn: ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
             hentEksisterendePerioder(soekerId, periode),
-        {
-            onSuccess: (data) => setEksisterendePerioder(data),
-        },
-    );
+        onSuccess: (data) => setEksisterendePerioder(data),
+    });
     const {
         data: soeknadRespons,
-        isLoading,
+        isPending,
         error,
-    } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
-        onSuccess: (data) => {
-            dispatch(setIdentFellesAction(data.soekerId));
-            hentPerioderK9({
-                soekerId: data.soekerId,
-                periode: fagsak?.gyldigPeriode || data.metadata?.eksisterendeFagsak?.gyldigPeriode,
-            });
-        },
+    } = useQuery({
+        queryKey: [id],
+        queryFn: () => hentSoeknad(identState.søkerId, id),
     });
-    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
+
+    useEffect(() => {
+        if (soeknadRespons) {
+            dispatch(setIdentFellesAction(soeknadRespons.soekerId));
+            hentPerioderK9({
+                soekerId: soeknadRespons.soekerId,
+                periode: fagsak?.gyldigPeriode || soeknadRespons.metadata?.eksisterendeFagsak?.gyldigPeriode,
+            });
+        }
+    }, [soeknadRespons, dispatch, hentPerioderK9, fagsak]);
+
+    const { error: submitError, mutate: submit } = useMutation({
+        mutationFn: () => sendSoeknad(id, identState.søkerId),
         onSuccess: (data) => {
             if ('søknadId' in data) {
                 setErSendtInn(true);
@@ -87,7 +92,7 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
         navigate(ROUTES.HOME);
     };
 
-    if (isLoading) {
+    if (isPending) {
         return <Loader size="large" />;
     }
 

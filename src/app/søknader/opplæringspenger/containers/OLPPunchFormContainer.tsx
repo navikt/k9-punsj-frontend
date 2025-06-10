@@ -1,7 +1,7 @@
 import { Formik, yupToFormErrors } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { connect, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -45,18 +45,18 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const dispatch = useDispatch();
     const intl = useIntl();
 
-    const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation(
-        ({ ident, barnIdent }: { ident: string; barnIdent: string }) => hentEksisterendePerioder(ident, barnIdent),
-        {
-            onSuccess: (data) => setEksisterendePerioder(data),
-        },
-    );
+    const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation({
+        mutationFn: ({ ident, barnIdent }: { ident: string; barnIdent: string }) =>
+            hentEksisterendePerioder(ident, barnIdent),
+        onSuccess: (data) => setEksisterendePerioder(data),
+    });
 
     const {
         mutate: hentInstitusjonerK9,
         error: hentInstitusjonerError,
-        isLoading: hentInstitusjonerLoading,
-    } = useMutation(() => hentInstitusjoner(), {
+        isPending: hentInstitusjonerLoading,
+    } = useMutation({
+        mutationFn: () => hentInstitusjoner(),
         onSuccess: (data) => setInstitusjoner(data),
     });
 
@@ -65,18 +65,25 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     }
     const {
         data: soeknadRespons,
-        isLoading,
+        isPending,
         error,
-    } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
-        onSuccess: (data) => {
+    } = useQuery({
+        queryKey: [id],
+        queryFn: () => hentSoeknad(identState.søkerId, id),
+    });
+
+    useEffect(() => {
+        if (soeknadRespons) {
             hentPerioderK9({
-                ident: data.soekerId,
-                barnIdent: data.barn?.norskIdent || identState.pleietrengendeId,
+                ident: soeknadRespons.soekerId,
+                barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
             });
             hentInstitusjonerK9();
-        },
-    });
-    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
+        }
+    }, [soeknadRespons, hentPerioderK9, hentInstitusjonerK9, identState.pleietrengendeId]);
+
+    const { error: submitError, mutate: submit } = useMutation({
+        mutationFn: () => sendSoeknad(id, identState.søkerId),
         onSuccess: (data) => {
             if ('søknadId' in data) {
                 setErSendtInn(true);
@@ -93,7 +100,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         return <KvitteringContainer kvittering={kvittering} />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <Loader size="large" />;
     }
 

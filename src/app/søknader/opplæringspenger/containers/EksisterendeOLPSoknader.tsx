@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
@@ -35,13 +35,16 @@ export const EksisterendeOLPSoknader: React.FC<Props> = ({ søkerId, pleietrenge
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
         }
-    }, [søkerId, pleietrengendeId]);
+    }, [søkerId, pleietrengendeId, dispatch, navigate]);
 
     const {
         data: eksisterendeSoeknader,
-        isLoading: lasterSoeknader,
+        isPending: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOLP', () => hentEksisterendeSoeknader(søkerId));
+    } = useQuery({
+        queryKey: ['hentSoeknaderOLP'],
+        queryFn: () => hentEksisterendeSoeknader(søkerId),
+    });
 
     if (lasterSoeknader) {
         return <Loader />;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -49,15 +49,21 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
 
     const {
         data: eksisterendeSoeknader,
-        isLoading: lasterSoeknader,
+        isPending: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOMPAO', () => hentEksisterendeSoeknader(søkerId));
+    } = useQuery({
+        queryKey: ['hentSoeknaderOMPAO'],
+        queryFn: () => hentEksisterendeSoeknader(søkerId),
+    });
 
     const {
         data: alleJournalposterPerIdent,
-        isLoading: lasterAlleJournalposterPerIdent,
+        isPending: lasterAlleJournalposterPerIdent,
         error: hentAlleJournalposterPerIdentError,
-    } = useQuery(`hentAlleJPPerIdentOMPAO_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
+    } = useQuery({
+        queryKey: [`hentAlleJPPerIdentOMPAO_${søkerId}`],
+        queryFn: () => hentAlleJournalposterPerIdent(søkerId),
+    });
 
     if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;
