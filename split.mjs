@@ -1,4 +1,4 @@
-import glob from 'glob';
+import { glob } from 'glob';
 
 if (!process.env.CI_TOTAL) {
     // eslint-disable-next-line no-console
