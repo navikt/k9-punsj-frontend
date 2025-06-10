@@ -28,6 +28,9 @@ async function startApp() {
         // Logging i json format
         server.use(logger.morganMiddleware);
 
+        server.use(express.json());
+        server.use(express.urlencoded({ extended: true }));
+
         server.set('trust proxy', 1);
 
         server.use(
