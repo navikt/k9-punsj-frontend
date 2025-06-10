@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText } from '@navikt/ds-react';
@@ -135,55 +135,51 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
     }, []);
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
-    const { mutate: valider } = useMutation(
+    const { mutate: valider } = useMutation({
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
+        mutationFn: ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad?: boolean }) =>
             validerSoeknad(values, identState.søkerId),
-        {
-            onSuccess: (data: ValideringResponse | any, { skalForhaandsviseSoeknad }) => {
-                if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
-                    const kvitteringResponse = data as any;
-                    setVisForhaandsvisModal(true);
-                    if (setKvittering) {
-                        setKvittering(kvitteringResponse);
-                    }
+        onSuccess: (data: ValideringResponse | any, { skalForhaandsviseSoeknad }) => {
+            if (data?.ytelse && skalForhaandsviseSoeknad && isValid) {
+                const kvitteringResponse = data as any;
+                setVisForhaandsvisModal(true);
+                if (setKvittering) {
+                    setKvittering(kvitteringResponse);
                 }
-                if (data?.feil?.length) {
-                    setK9FormatErrors(data.feil);
-                    if (setKvittering) {
-                        setKvittering(undefined);
-                    }
-                    const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
-                    uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
-                        const feilmeldingKey = uhaandtertFeilmelding.felt
-                            .replace('ytelse.', '')
-                            // støgg fiks for validering av reisedager
-                            .replace('.<list element>', '');
-                        setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
-                    });
-                } else {
-                    setK9FormatErrors([]);
+            }
+            if (data?.feil?.length) {
+                setK9FormatErrors(data.feil);
+                if (setKvittering) {
+                    setKvittering(undefined);
                 }
-            },
+                const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
+                uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
+                    const feilmeldingKey = uhaandtertFeilmelding.felt
+                        .replace('ytelse.', '')
+                        // støgg fiks for validering av reisedager
+                        .replace('.<list element>', '');
+                    setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
+                });
+            } else {
+                setK9FormatErrors([]);
+            }
         },
-    );
+    });
 
     const {
-        isLoading: mellomlagrer,
+        isPending: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
-    } = useMutation(
-        ({ submitSoknad }: { submitSoknad: boolean }) =>
+    } = useMutation({
+        mutationFn: ({ submitSoknad }: { submitSoknad: boolean }) =>
             submitSoknad ? oppdaterSoeknad(values) : oppdaterSoeknad(values),
-        {
-            onSuccess: (data, { submitSoknad }) => {
-                setHarMellomlagret(true);
-                if (submitSoknad) {
-                    handleSubmit();
-                }
-            },
+        onSuccess: (data, { submitSoknad }) => {
+            setHarMellomlagret(true);
+            if (submitSoknad) {
+                handleSubmit();
+            }
         },
-    );
+    });
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
         if (harForsoektAaSendeInn) {

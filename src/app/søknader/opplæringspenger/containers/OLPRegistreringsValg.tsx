@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { connect, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -41,18 +41,20 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     }, [søkerId, location.pathname, navigate]);
 
     const {
-        isLoading: oppretterSoknad,
+        isPending: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer), {
+    } = useMutation({
+        mutationFn: () => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer),
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad?.soeknadId)}`);
         },
     });
 
-    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery('hentSoeknaderOLP', () =>
-        hentEksisterendeSoeknader(søkerId),
-    );
+    const { data: eksisterendeSoeknader, isPending: isEksisterendeSoknaderLoading } = useQuery({
+        queryKey: ['hentSoeknaderOLP'],
+        queryFn: () => hentEksisterendeSoeknader(søkerId),
+    });
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {

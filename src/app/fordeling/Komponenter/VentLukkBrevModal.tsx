@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { Alert, Button, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
 
@@ -34,18 +34,24 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
 
     const settPåVent = useMutation({
         mutationFn: () => settJournalpostPaaVentUtenSøknadId(journalpostId),
-        onSuccess: () => {
-            setSattPåVent(true);
-        },
     });
 
     const lukkJournalpost = useMutation({
         mutationFn: () => lukkJournalpostEtterKopiering(journalpostId, søkerId, fagsak),
-        onSuccess: () => {
+    });
+
+    useEffect(() => {
+        if (settPåVent.isSuccess) {
+            setSattPåVent(true);
+        }
+    }, [settPåVent.isSuccess]);
+
+    useEffect(() => {
+        if (lukkJournalpost.isSuccess) {
             setVisLukkOppgave(false);
             setJpLukket(true);
-        },
-    });
+        }
+    }, [lukkJournalpost.isSuccess]);
 
     const get3WeeksDate = () => initializeDate().add(21, 'days').format('DD.MM.YYYY');
 

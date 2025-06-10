@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Formik, yupToFormErrors } from 'formik';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Button, Loader } from '@navikt/ds-react';
@@ -43,18 +43,24 @@ const OMPAOPunchFormContainer = (props: Props) => {
 
     const {
         data: soeknadRespons,
-        isLoading,
+        isPending,
         error,
-    } = useQuery(id, () => hentSoeknad(identState.søkerId, id), {
-        onSuccess: (data) => {
-            dispatch(setIdentFellesAction(data.soekerId, data.barn.norskIdent));
-        },
+    } = useQuery({
+        queryKey: [id],
+        queryFn: () => hentSoeknad(identState.søkerId, id),
     });
 
-    const { error: submitError, mutate: submit } = useMutation(() => sendSoeknad(id, identState.søkerId), {
+    useEffect(() => {
+        if (soeknadRespons) {
+            dispatch(setIdentFellesAction(soeknadRespons.soekerId, soeknadRespons.barn.norskIdent));
+        }
+    }, [soeknadRespons, dispatch]);
+
+    const { error: submitError, mutate: submit } = useMutation({
+        mutationFn: () => sendSoeknad(id, identState.søkerId),
         onSuccess: (data) => {
             if ('søknadId' in data) {
-                setKvittering(data);
+                setKvittering(data as IOMPAOSoknadKvittering);
                 setErSendtInn(true);
             }
         },
@@ -69,7 +75,7 @@ const OMPAOPunchFormContainer = (props: Props) => {
         return <KvitteringContainer kvittering={kvittering} />;
     }
 
-    if (isLoading) {
+    if (isPending) {
         return <Loader size="large" />;
     }
 

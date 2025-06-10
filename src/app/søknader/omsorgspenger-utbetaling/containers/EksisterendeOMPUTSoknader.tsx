@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -43,19 +43,25 @@ export const EksisterendeOMPUTSoknader: React.FC<IEksisterendeOMPUTSoknaderCompo
             dispatch(resetAllStateAction());
             navigate(ROUTES.HOME);
         }
-    }, [søkerId, pleietrengendeId]);
+    }, [søkerId, pleietrengendeId, dispatch, navigate]);
 
     const {
         data: eksisterendeSoeknader,
-        isLoading: lasterSoeknader,
+        isPending: lasterSoeknader,
         error: eksisterendeSoeknaderError,
-    } = useQuery('hentSoeknaderOMPUT', () => hentEksisterendeSoeknader(søkerId));
+    } = useQuery({
+        queryKey: ['hentSoeknaderOMPUT'],
+        queryFn: () => hentEksisterendeSoeknader(søkerId),
+    });
 
     const {
         data: alleJournalposterPerIdent,
-        isLoading: lasterAlleJournalposterPerIdent,
+        isPending: lasterAlleJournalposterPerIdent,
         error: hentAlleJournalposterPerIdentError,
-    } = useQuery(`hentAlleJPPerIdentOMPUT_${søkerId}`, () => hentAlleJournalposterPerIdent(søkerId));
+    } = useQuery({
+        queryKey: [`hentAlleJPPerIdentOMPUT_${søkerId}`],
+        queryFn: () => hentAlleJournalposterPerIdent(søkerId),
+    });
 
     if (lasterSoeknader || lasterAlleJournalposterPerIdent) {
         return <Loader />;

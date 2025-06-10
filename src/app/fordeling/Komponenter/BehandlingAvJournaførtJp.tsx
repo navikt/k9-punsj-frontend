@@ -17,7 +17,7 @@ import { setSakstypeAction } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
 import { ROUTES } from 'app/constants/routes';
 
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { Dispatch } from 'redux';

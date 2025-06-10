@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { settJournalpostPaaVent } from 'app/api/api';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
@@ -18,7 +18,8 @@ const VentModal = ({ journalpostId, soeknadId, visModalFn }: Props) => {
     const [visErrorModal, setVisErrormodal] = useState(false);
     const [visSuccessModal, setVisSuccessModal] = useState(false);
 
-    const { mutate: settPaaVent } = useMutation(() => settJournalpostPaaVent(journalpostId, soeknadId), {
+    const { mutate: settPaaVent } = useMutation({
+        mutationFn: () => settJournalpostPaaVent(journalpostId, soeknadId),
         onError: () => {
             setVisHovedmodal(false);
             setVisErrormodal(true);

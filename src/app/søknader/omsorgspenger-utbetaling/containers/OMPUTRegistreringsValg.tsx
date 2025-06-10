@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -43,19 +43,20 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
     }, [søkerId, location.pathname, navigate]);
 
     const {
-        isLoading: oppretterSoknad,
+        isPending: oppretterSoknad,
         error: opprettSoknadError,
         mutate: opprettSoknad,
-    } = useMutation(() => api.opprettSoeknad(journalpostid, søkerId, k9saksnummer), {
+    } = useMutation({
+        mutationFn: () => api.opprettSoeknad(journalpostid, søkerId, k9saksnummer),
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad.soeknadId)}`);
         },
     });
 
-    const { data: eksisterendeSoeknader, isLoading: isEksisterendeSoknaderLoading } = useQuery(
-        'hentSoeknaderOMPUT',
-        () => hentEksisterendeSoeknader(søkerId),
-    );
+    const { data: eksisterendeSoeknader, isPending: isEksisterendeSoknaderLoading } = useQuery({
+        queryKey: ['hentSoeknaderOMPUT'],
+        queryFn: () => hentEksisterendeSoeknader(søkerId),
+    });
 
     if (!journalpostid) {
         throw Error('Mangler journalpostid');
