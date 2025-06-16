@@ -1,24 +1,27 @@
 name: Deploy redirect
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to (dev or prod)'
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: 'Environment to deploy to (dev or prod)'
+                required: true
+                type: choice
+                options:
+                    - dev
+                    - prod
+
+permissions:
+    contents: read
+    id-token: write
+
 jobs:
-  deploy-redirect-gcp:
-    name: Deploye redirect fra ${{github.event.inputs.environment}}-fss til ${{github.event.inputs.environment}}-gcp
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploye til dev
-        uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: ${{ github.event.inputs.environment }}-fss
-          RESOURCE: nais/${{ github.event.inputs.environment }}-fss-redirect.yml
+    deploy-redirect-gcp:
+        name: Deploye redirect fra ${{github.event.inputs.environment}}-fss til ${{github.event.inputs.environment}}-gcp
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Deploye til dev
+              uses: nais/deploy/actions/deploy@v2
+              env:
+                  CLUSTER: ${{ github.event.inputs.environment }}-fss
+                  RESOURCE: nais/${{ github.event.inputs.environment }}-fss-redirect.yml
