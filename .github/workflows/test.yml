@@ -10,6 +10,8 @@ jobs:
     test:
         name: Tester
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         steps:
             - name: Hente kode
               uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
                   node-version: 18.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
-                  
+
             - name: Installere moduler
               run: yarn install --immutable
               env:
