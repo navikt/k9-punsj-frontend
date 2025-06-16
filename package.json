@@ -195,5 +195,8 @@
         "extends": [
             "plugin:storybook/recommended"
         ]
+    },
+    "resolutions": {
+        "brace-expansion": "^1.1.12"
     }
 }
