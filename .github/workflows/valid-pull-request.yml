@@ -1,23 +1,27 @@
 name: Validere pull request
 on:
-  pull_request:
-    types: [opened, synchronize]
+    pull_request:
+        types: [opened, synchronize]
+
+permissions:
+    contents: read
+
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    lint:
+        uses: ./.github/workflows/lint.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
 
-  test:
-    uses: ./.github/workflows/test.yml
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    test:
+        uses: ./.github/workflows/test.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
 
-  test-cypress:
-    uses: ./.github/workflows/cypress-tester.yml
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
-  build:
-    uses: ./.github/workflows/build.yml
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    test-cypress:
+        uses: ./.github/workflows/cypress-tester.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}
+    build:
+        uses: ./.github/workflows/build.yml
+        secrets:
+            READER_TOKEN: ${{ secrets.READER_TOKEN }}

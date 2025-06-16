@@ -6,12 +6,13 @@ on:
             READER_TOKEN:
                 required: true
 
+permissions:
+    contents: read
+
 jobs:
     test:
         name: Tester
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
         steps:
             - name: Hente kode
               uses: actions/checkout@v4

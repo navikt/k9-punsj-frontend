@@ -6,12 +6,13 @@ on:
             READER_TOKEN:
                 required: true
 
+permissions:
+    contents: read
+
 jobs:
     test:
         name: Cypress-tester
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
         strategy:
             fail-fast: false
             matrix:
