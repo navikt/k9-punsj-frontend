@@ -10,6 +10,8 @@ jobs:
     test:
         name: Cypress-tester
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         strategy:
             fail-fast: false
             matrix:
@@ -30,7 +32,7 @@ jobs:
             - name: Sette opp Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 18.x
+                  node-version: 20.x
                   registry-url: https://npm.pkg.github.com/
                   scope: '@navikt'
 
