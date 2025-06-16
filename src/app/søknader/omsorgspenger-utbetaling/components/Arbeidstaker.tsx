@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AddCircle, Delete } from '@navikt/ds-icons';
 import { Button, Checkbox, Heading, Box } from '@navikt/ds-react';
 
@@ -39,25 +39,27 @@ const Arbeidstaker = ({
     const fom = søknadsperiodeFraSak?.fom;
     const tom = søknadsperiodeFraSak?.tom;
 
-    const { data: organisasjoner } = useQuery<Organisasjon[]>(
-        ['organisasjoner'],
-        () =>
+    const { data: organisasjoner } = useQuery<Organisasjon[]>({
+        queryKey: ['organisasjoner'],
+        queryFn: () =>
             finnArbeidsgivere(values.soekerId, undefined, fom, tom).then((response) => {
                 if (response.ok) {
                     return response.json().then((json) => json.organisasjoner);
                 }
                 return [];
             }),
-        {
-            onSuccess: (data) => {
-                const orgnr = values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer;
-                if (orgnr && !data.some((org) => org.organisasjonsnummer === orgnr)) {
-                    setGjelderAnnenOrganisasjon(true);
-                }
-            },
-            staleTime: 1000 * 60 * 5,
-        },
-    );
+
+        staleTime: 1000 * 60 * 5,
+    });
+
+    useEffect(() => {
+        if (organisasjoner) {
+            const orgnr = values.opptjeningAktivitet.arbeidstaker[arbeidstakerIndex].organisasjonsnummer;
+            if (orgnr && !organisasjoner.some((org) => org.organisasjonsnummer === orgnr)) {
+                setGjelderAnnenOrganisasjon(true);
+            }
+        }
+    }, [organisasjoner, values.opptjeningAktivitet.arbeidstaker, arbeidstakerIndex]);
 
     const harMinstToArbeidsforhold = antallArbeidsforhold > 1;
 

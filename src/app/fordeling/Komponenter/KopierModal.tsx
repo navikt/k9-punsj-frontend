@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Dispatch } from 'redux';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
@@ -55,7 +55,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
         lukkJournalpost.mutate();
     };
 
-    const disabled = ['loading'].includes(lukkJournalpost.status);
+    const disabled = lukkJournalpost.isPending;
 
     return (
         <Modal open onClose={lukkModal} aria-labelledby="modal-heading">

@@ -1,4 +1,4 @@
-import { UseMutationResult, useMutation } from 'react-query';
+import { UseMutationResult, useMutation } from '@tanstack/react-query';
 
 import { ApiPath } from 'app/apiConfig';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -82,9 +82,13 @@ export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPAOSoknadSv
     });
 
 export const useOppdaterSoeknadMutation = (payload: any, options: any): UseMutationResult<IOMPAOSoknad> =>
-    useMutation(() => oppdaterSoeknad(payload), options);
+    useMutation({ mutationFn: () => oppdaterSoeknad(payload), ...options });
 
-export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks: any): UseMutationResult<void> => {
+export const useValiderSoeknadMutation = (
+    payload: any,
+    isValid: boolean,
+    hooks: any,
+): UseMutationResult<void, Error, { skalForhaandsviseSoeknad: boolean }> => {
     const validateSoeknad = async ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad: boolean }) => {
         try {
             const data = await validerSoeknad(payload, payload.norskIdent);
@@ -105,7 +109,8 @@ export const useValiderSoeknadMutation = (payload: any, isValid: boolean, hooks:
         }
     };
 
-    return useMutation(validateSoeknad, {
+    return useMutation({
+        mutationFn: validateSoeknad,
         onSuccess: () => {
             if (!hooks.setKvittering) {
                 throw Error('Kvittering-context er ikke satt');
