@@ -63,7 +63,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
     });
 
     const {
-        isLoading: mellomlagrer,
+        isPending: mellomlagrer,
         error: mellomlagringError,
         mutate: mellomlagreSoeknad,
     } = useOppdaterSoeknadMutation(values, {
