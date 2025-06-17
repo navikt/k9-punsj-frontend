@@ -43,13 +43,12 @@ export function FormRadioGroup<T extends FieldValues>({
                     size={size}
                     description={description}
                 >
-                    <div className={layout === 'horizontal' ? 'flex items-center' : ''}>
-                        {options.map((option, index) => (
-                            <Radio
-                                key={String(option.value)}
-                                value={option.value}
-                                className={layout === 'horizontal' && index > 0 ? `ml-${horizontalSpacing}` : ''}
-                            >
+                    <div
+                        className={layout === 'horizontal' ? 'flex items-center' : ''}
+                        style={layout === 'horizontal' ? { gap: `${horizontalSpacing}rem` } : undefined}
+                    >
+                        {options.map((option) => (
+                            <Radio key={String(option.value)} value={option.value}>
                                 {option.label}
                             </Radio>
                         ))}

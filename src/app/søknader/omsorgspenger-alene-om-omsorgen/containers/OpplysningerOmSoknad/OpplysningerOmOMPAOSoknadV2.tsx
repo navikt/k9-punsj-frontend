@@ -16,7 +16,9 @@ const { TypedFormDatePicker, TypedFormTextField, TypedFormRadioGroup } = getType
 
 const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
     const intl = useIntl();
+
     const { watch } = useFormContext<IOMPAOSoknad>();
+
     const validationRules = useOMPAOValidationRules<IOMPAOSoknad>();
 
     const signatur = watch('metadata.signatur');
@@ -43,21 +45,23 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
                     />
                 </div>
 
-                <TypedFormRadioGroup
-                    legend={intlHelper(intl, 'ident.signatur.etikett')}
-                    name="metadata.signatur"
-                    layout="horizontal"
-                    horizontalSpacing={16}
-                    options={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
-                    validate={validationRules.getSignatureRule()}
-                />
+                <div className="mt-4">
+                    <TypedFormRadioGroup
+                        legend={intlHelper(intl, 'ident.signatur.etikett')}
+                        name="metadata.signatur"
+                        layout="horizontal"
+                        horizontalSpacing={6}
+                        options={Object.values(JaNeiIkkeRelevant).map((jn) => ({
+                            label: intlHelper(intl, jn),
+                            value: jn,
+                        }))}
+                        validate={validationRules.getSignatureRule()}
+                    />
+                </div>
 
                 {signatur === JaNeiIkkeRelevant.NEI && (
                     <Alert size="small" variant="warning">
-                        <FormattedMessage id={'skjema.usignert.info'} />
+                        <FormattedMessage id="skjema.usignert.info" />
                     </Alert>
                 )}
             </Box>

@@ -25,25 +25,28 @@ const { TypedFormDatePicker } = getTypedFormComponents<IOMPAOSoknad>();
 interface OMPAOPunchFormV2Props {
     journalpostid: string;
     visForhaandsvisModal: boolean;
-    setVisForhaandsvisModal: (vis: boolean) => void;
     k9FormatErrors: Feil[];
-    setK9FormatErrors: (feil: Feil[]) => void;
     submitError: unknown;
-    setKvittering: (kvittering?: IOMPAOSoknadKvittering) => void;
     kvittering?: IOMPAOSoknadKvittering;
+
+    setVisForhaandsvisModal: (vis: boolean) => void;
+    setK9FormatErrors: (feil: Feil[]) => void;
+    setKvittering: (kvittering?: IOMPAOSoknadKvittering) => void;
 }
 
-const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({
-    visForhaandsvisModal,
-    setVisForhaandsvisModal,
-    k9FormatErrors,
-    setK9FormatErrors,
-    journalpostid,
-    submitError,
-    setKvittering,
-    kvittering,
-}) => {
+const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchFormV2Props) => {
     const intl = useIntl();
+
+    const {
+        journalpostid,
+        visForhaandsvisModal,
+        k9FormatErrors,
+        submitError,
+        kvittering,
+        setVisForhaandsvisModal,
+        setK9FormatErrors,
+        setKvittering,
+    } = props;
 
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -89,14 +92,17 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({
     }, [harMellomlagret]);
 
     const harFeilISkjema = Object.keys(errors).length > 0 || k9FormatErrors.length > 0;
+
     return (
         <>
             <JournalposterSync journalposter={values.journalposter || []} />
 
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
 
+            <VerticalSpacer fourtyPx />
+
             <Heading size="medium">
-                <FormattedMessage id={'skjema.ompao.tittel'} />
+                <FormattedMessage id="skjema.ompao.tittel" />
             </Heading>
 
             <OpplysningerOmOMPAOSoknadV2 />
@@ -127,32 +133,26 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({
             )}
 
             <div className="submit-knapper">
-                <p className="sendknapp-wrapper">
-                    <Button
-                        className="send-knapp"
-                        type="submit"
-                        onClick={async () => {
-                            const isValid = await trigger();
-                            if (isValid) {
-                                valider({ skalForhaandsviseSoeknad: true });
-                            } else {
-                                valider({ skalForhaandsviseSoeknad: false });
-                            }
-                        }}
-                    >
-                        <FormattedMessage id={'skjema.knapp.send'} />
-                    </Button>
+                <Button
+                    className="send-knapp"
+                    type="button"
+                    onClick={async () => {
+                        const isValid = await trigger();
+                        valider({ skalForhaandsviseSoeknad: isValid });
+                    }}
+                >
+                    <FormattedMessage id={'skjema.knapp.send'} />
+                </Button>
 
-                    <Button
-                        variant="secondary"
-                        type="button"
-                        className="vent-knapp"
-                        onClick={() => setVisVentModal(true)}
-                        disabled={false}
-                    >
-                        <FormattedMessage id={'skjema.knapp.settpaavent'} />
-                    </Button>
-                </p>
+                <Button
+                    variant="secondary"
+                    type="button"
+                    className="vent-knapp"
+                    onClick={() => setVisVentModal(true)}
+                    disabled={false}
+                >
+                    <FormattedMessage id="skjema.knapp.settpaavent" />
+                </Button>
             </div>
 
             <VerticalSpacer sixteenPx />
