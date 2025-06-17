@@ -15,7 +15,7 @@ export interface FormFieldProps<T extends FieldValues> {
 }
 
 export interface FormTextFieldProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
-    type?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
+    type?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'time';
     inputMode?: 'text' | 'numeric';
     pattern?: string;
     maxLength?: number;
@@ -43,5 +43,6 @@ export interface FormDatePickerProps<T extends FieldValues> extends Omit<FormFie
 export interface FormRadioGroupProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
     options: { label: string | React.ReactNode; value: any }[];
     layout?: 'vertical' | 'horizontal';
+    horizontalSpacing?: number;
     description?: React.ReactNode;
 }

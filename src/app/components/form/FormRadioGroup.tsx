@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, FieldValues, useFormContext } from 'react-hook-form';
-import { Radio, RadioGroup, HStack } from '@navikt/ds-react';
+import { Radio, RadioGroup } from '@navikt/ds-react';
 import { FormRadioGroupProps } from './types';
 
 export function FormRadioGroup<T extends FieldValues>({
@@ -14,6 +14,7 @@ export function FormRadioGroup<T extends FieldValues>({
     size,
     description,
     layout = 'vertical',
+    horizontalSpacing = 4,
     'data-testid': dataTestId,
 }: FormRadioGroupProps<T>) {
     const {
@@ -42,21 +43,17 @@ export function FormRadioGroup<T extends FieldValues>({
                     size={size}
                     description={description}
                 >
-                    {layout === 'horizontal' ? (
-                        <HStack gap="4" align="start" wrap={false}>
-                            {options.map((option) => (
-                                <Radio key={String(option.value)} value={option.value}>
-                                    {option.label}
-                                </Radio>
-                            ))}
-                        </HStack>
-                    ) : (
-                        options.map((option) => (
-                            <Radio key={String(option.value)} value={option.value}>
+                    <div className={layout === 'horizontal' ? 'flex items-center' : ''}>
+                        {options.map((option, index) => (
+                            <Radio
+                                key={String(option.value)}
+                                value={option.value}
+                                className={layout === 'horizontal' && index > 0 ? `ml-${horizontalSpacing}` : ''}
+                            >
                                 {option.label}
                             </Radio>
-                        ))
-                    )}
+                        ))}
+                    </div>
                 </RadioGroup>
             )}
         />
