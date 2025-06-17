@@ -7,3 +7,4 @@ export * from './FormProvider';
 export * from './getTypedFormComponents';
 export * from './types';
 export * from './FormDatePicker';
+export * from './FormRadioGroup';

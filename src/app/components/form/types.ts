@@ -3,7 +3,8 @@ import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
 export interface FormFieldProps<T extends FieldValues> {
     name: Path<T>;
-    label: ReactNode;
+    label?: ReactNode;
+    legend?: ReactNode;
     validate?: RegisterOptions<T>;
     className?: string;
     disabled?: boolean;
@@ -37,4 +38,10 @@ export interface FormDatePickerProps<T extends FieldValues> extends Omit<FormFie
     minDate?: Date;
     onChange?: (date: Date | undefined) => void;
     dropdownCaption?: boolean;
+}
+
+export interface FormRadioGroupProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    options: { label: string | React.ReactNode; value: any }[];
+    layout?: 'vertical' | 'horizontal';
+    description?: React.ReactNode;
 }
