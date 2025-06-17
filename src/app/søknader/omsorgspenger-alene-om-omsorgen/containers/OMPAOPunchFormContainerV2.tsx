@@ -57,6 +57,13 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
         }
     }, [soeknadRespons, methods]);
 
+    useEffect(() => {
+        const currentJournalposter = methods.getValues('journalposter') || [];
+        if (props.journalpostid && !currentJournalposter.includes(props.journalpostid)) {
+            methods.setValue('journalposter', [...currentJournalposter, props.journalpostid]);
+        }
+    }, [props.journalpostid, methods]);
+
     const handleStartButtonClick = () => {
         dispatch(resetAllStateAction());
         navigate(ROUTES.HOME);

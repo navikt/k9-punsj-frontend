@@ -35,8 +35,6 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({ journalpostid, onSo
         watch,
         trigger,
         formState: { errors },
-        setValue,
-        getValues,
     } = useFormContext<IOMPAOSoknad>();
     const values = watch();
     const periodeFomValue = watch('periode.fom');
@@ -55,13 +53,6 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({ journalpostid, onSo
         onSoknadSendError: setSubmitError,
         onSoknadUpdated: () => setHarMellomlagret(true),
     });
-
-    useEffect(() => {
-        const currentJournalposter = getValues('journalposter') || [];
-        if (!currentJournalposter.includes(journalpostid)) {
-            setValue('journalposter', [...currentJournalposter, journalpostid]);
-        }
-    }, [journalpostid, setValue, getValues]);
 
     useEffect(() => {
         if (harMellomlagret) {
