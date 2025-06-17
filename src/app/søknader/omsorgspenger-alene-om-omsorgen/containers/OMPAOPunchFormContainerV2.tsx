@@ -13,13 +13,14 @@ import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 import { hentSoeknad, sendSoeknad } from '../api';
-import { initialValues } from '../initialValues';
+import { defaultOMPAOSoknadValues, initialValues } from '../initialValues';
 import OMPAOPunchFormV2 from './OMPAOPunchFormV2';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
 import { getTypedFormComponents } from '../../../components/form/getTypedFormComponents';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import { useForm } from 'react-hook-form';
+import { OMPAOSoknadResolver } from '../OMPAOValidationSchema';
 
 const { TypedFormProvider } = getTypedFormComponents<IOMPAOSoknad>();
 interface Props {
@@ -69,8 +70,15 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
     });
 
     const methods = useForm<IOMPAOSoknad>({
-        defaultValues: soeknadRespons ? initialValues(soeknadRespons) : undefined,
+        resolver: OMPAOSoknadResolver,
+        defaultValues: defaultOMPAOSoknadValues,
     });
+
+    useEffect(() => {
+        if (soeknadRespons) {
+            methods.reset(initialValues(soeknadRespons));
+        }
+    }, [soeknadRespons, methods]);
 
     const handleFormSubmit = () => submit();
 
@@ -112,6 +120,8 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
                 submitError={submitError}
                 setKvittering={setKvittering}
                 kvittering={kvittering}
+                setSubmitError={() => {}}
+                setErSendtInn={setErSendtInn}
                 {...props}
             />
         </TypedFormProvider>

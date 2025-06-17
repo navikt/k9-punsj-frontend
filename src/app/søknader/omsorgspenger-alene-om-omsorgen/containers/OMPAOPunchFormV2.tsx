@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { debounce } from 'lodash';
 import { useFormContext } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
@@ -8,19 +8,35 @@ import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/Fo
 import IkkeRegistrerteOpplysningerV2 from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysningerV2';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
-import { Feil } from 'app/models/types/ValideringResponse';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import { useOppdaterSoeknadMutation, useValiderSoeknadMutation } from '../api';
+import { useOppdaterSoeknadMutation, useSendSoeknadMutation, useValiderSoeknadMutation } from '../api';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import OMPAOSoknadKvittering from './SoknadKvittering/OMPAOSoknadKvittering';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 import OpplysningerOmOMPAOSoknadV2 from './OpplysningerOmSoknad/OpplysningerOmOMPAOSoknadV2';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
-import { useOMPAOValidationRules } from '../validation/useOMPAOValidationRules';
 
 const { TypedFormDatePicker } = getTypedFormComponents<IOMPAOSoknad>();
+
+const flattenErrors = (errors: object) => {
+    const errorMessages: { key: string; message: string }[] = [];
+    const recurse = (obj: any, path: string) => {
+        if (!obj) return;
+        if (typeof obj.message === 'string') {
+            errorMessages.push({ key: path, message: obj.message });
+        } else {
+            Object.keys(obj).forEach((key) => {
+                const newPath = path ? `${path}.${key}` : key;
+                recurse(obj[key], newPath);
+            });
+        }
+    };
+    recurse(errors, '');
+    return errorMessages;
+};
 
 interface OMPAOPunchFormV2Props {
     journalpostid: string;
@@ -32,6 +48,8 @@ interface OMPAOPunchFormV2Props {
     setVisForhaandsvisModal: (vis: boolean) => void;
     setK9FormatErrors: (feil: Feil[]) => void;
     setKvittering: (kvittering?: IOMPAOSoknadKvittering) => void;
+    setSubmitError: (error: unknown) => void;
+    setErSendtInn: (erSendtInn: boolean) => void;
 }
 
 const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchFormV2Props) => {
@@ -46,44 +64,111 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
         setVisForhaandsvisModal,
         setK9FormatErrors,
         setKvittering,
+        setSubmitError,
+        setErSendtInn,
     } = props;
 
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
+    const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
 
     const {
         watch,
         trigger,
         formState: { errors },
+        setValue,
+        getValues,
     } = useFormContext<IOMPAOSoknad>();
-    const validationRules = useOMPAOValidationRules<IOMPAOSoknad>();
     const values = watch();
+    const periodeFomValue = watch('periode.fom');
 
-    const { mutate: valider } = useValiderSoeknadMutation(values, !Object.keys(errors).length, {
+    const { mutate: valider } = useValiderSoeknadMutation({
         setKvittering,
         setK9FormatErrors,
         setVisForhaandsvisModal,
     });
 
+    const { mutate: sendSoeknadMutate } = useSendSoeknadMutation(
+        (data: IOMPAOSoknadKvittering | ValideringResponse) => {
+            if ('søknadId' in data) {
+                setKvittering(data as IOMPAOSoknadKvittering);
+                setErSendtInn(true);
+            }
+        },
+        (error: Error) => {
+            setSubmitError(error);
+        },
+    );
+
     const {
         isPending: mellomlagrer,
         error: mellomlagringError,
-        // mutate: mellomlagreSoeknad,
-    } = useOppdaterSoeknadMutation(values, {
-        onSuccess: (data: any, { submitSoknad }: { submitSoknad: boolean }) => {
+        mutate: mellomlagreSoeknad,
+    } = useOppdaterSoeknadMutation({
+        onSuccess: (data: any, { submitSoknad }: { soeknad: Partial<IOMPAOSoknad>; submitSoknad: boolean }) => {
             setHarMellomlagret(true);
             if (submitSoknad) {
-                // RHF's handleSubmit will trigger this path
+                const valuesAfterUpdate = getValues();
+                sendSoeknadMutate({
+                    soeknadId: valuesAfterUpdate.soeknadId,
+                    ident: valuesAfterUpdate.soekerId,
+                });
             }
         },
     });
 
+    const callbackDependencies = useRef({
+        getValues,
+        harForsoektAaSendeInn,
+        valider,
+        mellomlagreSoeknad,
+    });
+
+    callbackDependencies.current = {
+        getValues,
+        harForsoektAaSendeInn,
+        valider,
+        mellomlagreSoeknad,
+    };
+
+    const debounceCallback = useCallback(
+        debounce(() => {
+            const currentValues = callbackDependencies.current.getValues();
+            if (callbackDependencies.current.harForsoektAaSendeInn) {
+                callbackDependencies.current.valider({
+                    soeknad: currentValues,
+                    skalForhaandsviseSoeknad: false,
+                    isValid: false,
+                });
+            }
+            callbackDependencies.current.mellomlagreSoeknad({ soeknad: currentValues, submitSoknad: false });
+        }, 1000),
+        [],
+    );
+
+    const isMounted = useRef(false);
     useEffect(() => {
-        if (!values.journalposter?.includes(journalpostid)) {
-            // Logic to add journalpostid if not present
+        const subscription = watch(() => {
+            if (isMounted.current) {
+                debounceCallback();
+            } else {
+                isMounted.current = true;
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+            debounceCallback.cancel();
+        };
+    }, [watch, debounceCallback]);
+
+    useEffect(() => {
+        const currentJournalposter = getValues('journalposter') || [];
+        if (!currentJournalposter.includes(journalpostid)) {
+            setValue('journalposter', [...currentJournalposter, journalpostid]);
         }
-    }, [journalpostid, values.journalposter]);
+    }, [journalpostid, setValue, getValues]);
 
     useEffect(() => {
         if (harMellomlagret) {
@@ -92,6 +177,7 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
     }, [harMellomlagret]);
 
     const harFeilISkjema = Object.keys(errors).length > 0 || k9FormatErrors.length > 0;
+    const flatErrors = flattenErrors(errors);
 
     return (
         <>
@@ -109,9 +195,9 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
 
             <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
                 <TypedFormDatePicker
+                    key={periodeFomValue}
                     label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
                     name="periode.fom"
-                    validate={validationRules.getDateRule()}
                 />
             </Box>
 
@@ -126,8 +212,8 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
                     {k9FormatErrors.map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
-                    {Object.entries(errors).map(([key, error]) => (
-                        <ErrorSummary.Item key={key}>{error.message}</ErrorSummary.Item>
+                    {flatErrors.map((error) => (
+                        <ErrorSummary.Item key={error.key}>{error.message}</ErrorSummary.Item>
                     ))}
                 </ErrorSummary>
             )}
@@ -137,8 +223,11 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
                     className="send-knapp"
                     type="button"
                     onClick={async () => {
+                        if (!harForsoektAaSendeInn) {
+                            setHarForsoektAaSendeInn(true);
+                        }
                         const isValid = await trigger();
-                        valider({ skalForhaandsviseSoeknad: isValid });
+                        valider({ soeknad: getValues(), skalForhaandsviseSoeknad: isValid, isValid });
                     }}
                 >
                     <FormattedMessage id={'skjema.knapp.send'} />
@@ -194,7 +283,19 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
                     open={visErDuSikkerModal}
                     submitKnappText="skjema.knapp.send"
                     onSubmit={() => {
-                        // This will be triggered from the main form's onSubmit
+                        const currentValues = callbackDependencies.current.getValues();
+                        if (callbackDependencies.current.harForsoektAaSendeInn) {
+                            callbackDependencies.current.valider({
+                                soeknad: currentValues,
+                                skalForhaandsviseSoeknad: false,
+                                isValid: false,
+                            });
+                        }
+                        callbackDependencies.current.mellomlagreSoeknad({
+                            soeknad: currentValues,
+                            submitSoknad: true,
+                        });
+                        setVisErDuSikkerModal(false);
                     }}
                     onClose={() => {
                         setVisErDuSikkerModal(false);

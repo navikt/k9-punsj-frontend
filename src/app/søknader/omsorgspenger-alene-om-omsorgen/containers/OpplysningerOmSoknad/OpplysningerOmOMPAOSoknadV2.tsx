@@ -6,7 +6,6 @@ import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import intlHelper from 'app/utils/intlUtils';
 import { useFormContext } from 'react-hook-form';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
-import { useOMPAOValidationRules } from '../../validation/useOMPAOValidationRules';
 
 import { IOMPAOSoknad } from '../../types/OMPAOSoknad';
 
@@ -19,9 +18,8 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
 
     const { watch } = useFormContext<IOMPAOSoknad>();
 
-    const validationRules = useOMPAOValidationRules<IOMPAOSoknad>();
-
     const signatur = watch('metadata.signatur');
+    const mottattDatoValue = watch('mottattDato');
 
     return (
         <div className="mt-4">
@@ -31,18 +29,21 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
                 </Alert>
 
                 <div className="input-row">
-                    <TypedFormDatePicker
-                        name="mottattDato"
-                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                        validate={validationRules.getDateRule()}
-                    />
-                    <TypedFormTextField
-                        name="klokkeslett"
-                        label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                        type="time"
-                        className="klokkeslett"
-                        validate={validationRules.getTimeRule()}
-                    />
+                    <div>
+                        <TypedFormDatePicker
+                            key={mottattDatoValue}
+                            name="mottattDato"
+                            label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                        />
+                    </div>
+                    <div>
+                        <TypedFormTextField
+                            name="klokkeslett"
+                            label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                            type="time"
+                            className="klokkeslett"
+                        />
+                    </div>
                 </div>
 
                 <div className="mt-4">
@@ -55,7 +56,6 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
                             label: intlHelper(intl, jn),
                             value: jn,
                         }))}
-                        validate={validationRules.getSignatureRule()}
                     />
                 </div>
 

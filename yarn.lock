@@ -2925,6 +2925,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookform/resolvers@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@hookform/resolvers@npm:5.1.1"
+  dependencies:
+    "@standard-schema/utils": "npm:^0.3.0"
+  peerDependencies:
+    react-hook-form: ^7.55.0
+  checksum: 10/4d686cd268786e1b56b5e6478e4298542ac7866ffe978de970399480dc42fddf57ebbb6c1df87a0b37c5f42e0fef26770843912639599b1419056ff5d99b4dcb
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -13581,6 +13592,7 @@ __metadata:
     "@eslint/js": "npm:^9.29.0"
     "@grafana/faro-web-sdk": "npm:1.18.2"
     "@grafana/faro-web-tracing": "npm:1.18.2"
+    "@hookform/resolvers": "npm:^5.1.1"
     "@jest/globals": "npm:30.0.0"
     "@k9-punsj-frontend/server": "workspace:"
     "@navikt/aksel-icons": "npm:7.23.0"

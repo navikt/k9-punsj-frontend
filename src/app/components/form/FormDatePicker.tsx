@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Controller, FieldValues, useFormContext } from 'react-hook-form';
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
+import dayjs from 'dayjs';
 import { FormDatePickerProps } from './types';
+
+// Helper for deeply nested properties
+const get = (obj: any, path: string) =>
+    path
+        .replace(/\[(\w+)\]/g, '.$1')
+        .replace(/^\./, '')
+        .split('.')
+        .reduce((acc, part) => acc && acc[part], obj);
 
 export function FormDatePicker<T extends FieldValues>({
     name,
@@ -25,21 +34,29 @@ export function FormDatePicker<T extends FieldValues>({
         ...(validate || {}),
     };
 
+    const inputRef = useRef<HTMLInputElement>(null);
+
     return (
         <Controller
             control={control}
             name={name}
             rules={rules}
             render={({ field }) => {
-                const valueAsDate = field.value ? new Date(`${field.value}T00:00:00`) : undefined;
+                const valueAsDate = field.value ? dayjs(field.value).toDate() : undefined;
+                const error = get(errors, name);
 
                 const { datepickerProps, inputProps } = useDatepicker({
                     fromDate: minDate || new Date('2000-01-01'),
                     toDate: maxDate || new Date(new Date().getFullYear() + 5, 11, 31),
                     defaultSelected: valueAsDate,
                     onDateChange: (date) => {
-                        const newDate = date ? date.toISOString().split('T')[0] : undefined;
-                        field.onChange(newDate);
+                        if (date) {
+                            const newDate = date.toISOString().split('T')[0];
+                            field.onChange(newDate);
+                        } else {
+                            field.onChange(inputRef.current?.value);
+                        }
+
                         if (onChange) {
                             onChange(date);
                         }
@@ -50,10 +67,11 @@ export function FormDatePicker<T extends FieldValues>({
                     <DatePicker {...datepickerProps} dropdownCaption={dropdownCaption}>
                         <DatePicker.Input
                             {...inputProps}
+                            ref={inputRef}
                             label={label}
                             className={className}
                             data-testid={dataTestId}
-                            error={errors[name]?.message as string}
+                            error={error?.message as string}
                             disabled={disabled}
                             readOnly={readOnly}
                         />

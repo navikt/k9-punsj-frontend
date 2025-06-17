@@ -3,6 +3,14 @@ import { Controller, FieldValues, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@navikt/ds-react';
 import { FormFieldProps } from './types';
 
+// Helper for deeply nested properties
+const get = (obj: any, path: string) =>
+    path
+        .replace(/\[(\w+)\]/g, '.$1')
+        .replace(/^\./, '')
+        .split('.')
+        .reduce((acc, part) => acc && acc[part], obj);
+
 export function FormCheckbox<T extends FieldValues>({
     name,
     label,
@@ -21,7 +29,7 @@ export function FormCheckbox<T extends FieldValues>({
         ...(validate || {}),
     };
 
-    const error = errors[name];
+    const error = get(errors, name);
 
     return (
         <Controller
