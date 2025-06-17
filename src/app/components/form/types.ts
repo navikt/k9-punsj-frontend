@@ -31,3 +31,10 @@ export interface FormTextareaProps<T extends FieldValues> extends Omit<FormField
     maxLength?: number;
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
+
+export interface FormDatePickerProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    maxDate?: Date;
+    minDate?: Date;
+    onChange?: (date: Date | undefined) => void;
+    dropdownCaption?: boolean;
+}
