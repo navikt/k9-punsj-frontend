@@ -51,7 +51,7 @@ export function FormDatePicker<T extends FieldValues>({
                     defaultSelected: valueAsDate,
                     onDateChange: (date) => {
                         if (date) {
-                            const newDate = date.toISOString().split('T')[0];
+                            const newDate = dayjs(date).format('YYYY-MM-DD');
                             field.onChange(newDate);
                         } else {
                             field.onChange(inputRef.current?.value);
