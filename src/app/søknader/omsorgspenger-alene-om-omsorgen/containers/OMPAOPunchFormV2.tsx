@@ -37,7 +37,6 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({ journalpostid, onSo
         formState: { errors },
     } = useFormContext<IOMPAOSoknad>();
     const values = watch();
-    const periodeFomValue = watch('periode.fom');
 
     const {
         mellomlagrer,
@@ -78,11 +77,7 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({ journalpostid, onSo
             <OpplysningerOmOMPAOSoknadV2 />
 
             <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
-                <TypedFormDatePicker
-                    key={periodeFomValue}
-                    label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
-                    name="periode.fom"
-                />
+                <TypedFormDatePicker label={intlHelper(intl, 'skjema.ompao.dateInput.label')} name="periode.fom" />
             </Box>
 
             <VerticalSpacer fourtyPx />

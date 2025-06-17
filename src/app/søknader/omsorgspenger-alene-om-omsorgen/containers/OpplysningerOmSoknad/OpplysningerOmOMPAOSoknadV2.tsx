@@ -19,7 +19,6 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
     const { watch } = useFormContext<IOMPAOSoknad>();
 
     const signatur = watch('metadata.signatur');
-    const mottattDatoValue = watch('mottattDato');
 
     return (
         <div className="mt-4">
@@ -30,11 +29,7 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
 
                 <div className="input-row">
                     <div>
-                        <TypedFormDatePicker
-                            key={mottattDatoValue}
-                            name="mottattDato"
-                            label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                        />
+                        <TypedFormDatePicker name="mottattDato" label={intlHelper(intl, 'skjema.mottakelsesdato')} />
                     </div>
                     <div>
                         <TypedFormTextField
