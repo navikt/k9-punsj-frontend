@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { Dispatch } from 'redux';
 
-import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
-import { hentSoeknad, sendSoeknad } from '../api';
 import { defaultOMPAOSoknadValues, initialValues } from '../initialValues';
 import OMPAOPunchFormV2 from './OMPAOPunchFormV2';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
@@ -21,6 +18,7 @@ import { getTypedFormComponents } from '../../../components/form/getTypedFormCom
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import { useForm } from 'react-hook-form';
 import { OMPAOSoknadResolver } from '../OMPAOValidationSchema';
+import { useOmpaoSoknad } from '../hooks/useOmpaoSoknad';
 
 const { TypedFormProvider } = getTypedFormComponents<IOMPAOSoknad>();
 interface Props {
@@ -34,40 +32,19 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
     const dispatch = useDispatch<Dispatch<any>>();
 
     const identState = useSelector((state: RootStateType) => state.identState);
-
-    const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
-    const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [kvittering, setKvittering] = useState<IOMPAOSoknadKvittering | undefined>(undefined);
-    const [erSendtInn, setErSendtInn] = useState(false);
 
     if (!id) {
         throw Error('Mangler id');
     }
 
-    const {
-        data: soeknadRespons,
-        isPending,
-        error,
-    } = useQuery({
-        queryKey: [id],
-        queryFn: () => hentSoeknad(identState.søkerId, id),
-    });
+    const { soeknadRespons, isPending, error } = useOmpaoSoknad(id, identState.søkerId);
 
     useEffect(() => {
         if (soeknadRespons) {
             dispatch(setIdentFellesAction(soeknadRespons.soekerId, soeknadRespons.barn.norskIdent));
         }
     }, [soeknadRespons, dispatch]);
-
-    const { error: submitError, mutate: submit } = useMutation({
-        mutationFn: () => sendSoeknad(id, identState.søkerId),
-        onSuccess: (data) => {
-            if ('søknadId' in data) {
-                setKvittering(data as IOMPAOSoknadKvittering);
-                setErSendtInn(true);
-            }
-        },
-    });
 
     const methods = useForm<IOMPAOSoknad>({
         resolver: OMPAOSoknadResolver,
@@ -80,14 +57,12 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
         }
     }, [soeknadRespons, methods]);
 
-    const handleFormSubmit = () => submit();
-
     const handleStartButtonClick = () => {
         dispatch(resetAllStateAction());
         navigate(ROUTES.HOME);
     };
 
-    if (kvittering && erSendtInn) {
+    if (kvittering) {
         return <KvitteringContainer kvittering={kvittering} />;
     }
 
@@ -111,19 +86,8 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
         );
     }
     return (
-        <TypedFormProvider form={methods} onSubmit={handleFormSubmit}>
-            <OMPAOPunchFormV2
-                visForhaandsvisModal={visForhaandsvisModal}
-                setVisForhaandsvisModal={setVisForhaandsvisModal}
-                k9FormatErrors={k9FormatErrors}
-                setK9FormatErrors={setK9FormatErrors}
-                submitError={submitError}
-                setKvittering={setKvittering}
-                kvittering={kvittering}
-                setSubmitError={() => {}}
-                setErSendtInn={setErSendtInn}
-                {...props}
-            />
+        <TypedFormProvider form={methods} onSubmit={() => {}}>
+            <OMPAOPunchFormV2 onSoknadSent={setKvittering} journalpostid={props.journalpostid} />
         </TypedFormProvider>
     );
 };
