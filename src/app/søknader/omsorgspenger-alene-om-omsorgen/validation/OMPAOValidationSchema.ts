@@ -39,7 +39,7 @@ const OMPAOValidationSchema: ObjectSchema<IOMPAOSoknad> = yup.object({
     // Fra IOMPAOSoknad
     metadata: yup
         .object({
-            signatur: yup.string().required('Signatur er et påkrevd felt.'),
+            signatur: yup.string().required().label('Signatur'),
         })
         .required(),
     periode: yup

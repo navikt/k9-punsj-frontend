@@ -17,7 +17,7 @@ import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
 import { getTypedFormComponents } from '../../../components/form/getTypedFormComponents';
 import { IOMPAOSoknad } from '../types/OMPAOSoknad';
 import { useForm } from 'react-hook-form';
-import { OMPAOSoknadResolver } from '../OMPAOValidationSchema';
+import { OMPAOSoknadResolver } from '../validation/OMPAOValidationSchema';
 import { useOmpaoSoknad } from '../hooks/useOmpaoSoknad';
 
 const { TypedFormProvider } = getTypedFormComponents<IOMPAOSoknad>();

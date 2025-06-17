@@ -24,7 +24,7 @@ const OpplysningerOmOMPAOSoknadV2: React.FunctionComponent = () => {
         <div className="mt-4">
             <Box padding="4" borderWidth="1" borderRadius="small">
                 <Alert variant="info" className="alert">
-                    <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
+                    <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
 
                 <div className="input-row">
