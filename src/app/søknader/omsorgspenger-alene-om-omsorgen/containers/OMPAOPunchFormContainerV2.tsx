@@ -81,12 +81,12 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
         return (
             <>
                 <Alert size="small" variant="error">
-                    <FormattedMessage id={'skjema.feil.ikke_funnet'} values={{ id }} />
+                    <FormattedMessage id="skjema.feil.ikke_funnet" values={{ id }} />
                 </Alert>
 
                 <p>
                     <Button variant="secondary" onClick={handleStartButtonClick}>
-                        <FormattedMessage id={'skjema.knapp.tilstart'} values={{ id }} />
+                        <FormattedMessage id="skjema.knapp.tilstart" values={{ id }} />
                     </Button>
                 </p>
             </>
