@@ -4,7 +4,7 @@ import { SoeknadType } from '../../../models/forms/soeknader/SoeknadType';
 
 export interface IOMPAOSoknad extends SoeknadType {
     metadata: {
-        signatur: string;
+        signatur: string | null;
     };
     periode: {
         fom: string;

@@ -1,4 +1,4 @@
-import { UseMutationResult, useMutation } from '@tanstack/react-query';
+import { UseMutationOptions, UseMutationResult, useMutation } from '@tanstack/react-query';
 
 import { ApiPath } from 'app/apiConfig';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -81,17 +81,36 @@ export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPAOSoknadSv
         return response.json();
     });
 
-export const useOppdaterSoeknadMutation = (payload: any, options: any): UseMutationResult<IOMPAOSoknad> =>
-    useMutation({ mutationFn: () => oppdaterSoeknad(payload), ...options });
+export const useOppdaterSoeknadMutation = (
+    options?: Omit<
+        UseMutationOptions<IOMPAOSoknad, Error, { soeknad: Partial<IOMPAOSoknad>; submitSoknad: boolean }>,
+        'mutationFn'
+    >,
+): UseMutationResult<IOMPAOSoknad, Error, { soeknad: Partial<IOMPAOSoknad>; submitSoknad: boolean }> =>
+    useMutation({
+        mutationFn: ({ soeknad }: { soeknad: Partial<IOMPAOSoknad>; submitSoknad: boolean }) =>
+            oppdaterSoeknad(soeknad),
+        ...options,
+    });
 
 export const useValiderSoeknadMutation = (
-    payload: any,
-    isValid: boolean,
     hooks: any,
-): UseMutationResult<void, Error, { skalForhaandsviseSoeknad: boolean }> => {
-    const validateSoeknad = async ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad: boolean }) => {
+): UseMutationResult<
+    void,
+    Error,
+    { soeknad: Partial<IOMPAOSoknad>; skalForhaandsviseSoeknad: boolean; isValid: boolean }
+> => {
+    const validateSoeknad = async ({
+        soeknad,
+        skalForhaandsviseSoeknad,
+        isValid,
+    }: {
+        soeknad: Partial<IOMPAOSoknad>;
+        skalForhaandsviseSoeknad: boolean;
+        isValid: boolean;
+    }) => {
         try {
-            const data = await validerSoeknad(payload, payload.norskIdent);
+            const data = await validerSoeknad(soeknad, soeknad.soekerId as string);
             if ('ytelse' in data && skalForhaandsviseSoeknad && isValid) {
                 const kvitteringResponse = data as IOMPAOSoknadKvittering;
                 hooks.setVisForhaandsvisModal(true);
@@ -118,6 +137,17 @@ export const useValiderSoeknadMutation = (
         },
     });
 };
+
+export function useSendSoeknadMutation(
+    onSuccess: (data: IOMPAOSoknadKvittering | ValideringResponse) => void,
+    onError: (error: Error) => void,
+) {
+    return useMutation({
+        mutationFn: ({ soeknadId, ident }: { soeknadId: string; ident: string }) => sendSoeknad(soeknadId, ident),
+        onSuccess,
+        onError,
+    });
+}
 
 export default {
     opprettSoeknad,

@@ -4,6 +4,26 @@ export const periodeInitialValue = {
     fom: '',
 };
 
+export const defaultOMPAOSoknadValues: IOMPAOSoknad = {
+    soeknadId: '',
+    soekerId: '',
+    mottattDato: '',
+    klokkeslett: '',
+    barn: {
+        norskIdent: '',
+        foedselsdato: '',
+    },
+    journalposter: [],
+    harInfoSomIkkeKanPunsjes: false,
+    harMedisinskeOpplysninger: false,
+    metadata: {
+        signatur: null,
+    },
+    periode: {
+        fom: '',
+    },
+};
+
 export const fieldNames = {
     periode: 'periode',
     barn: 'barn',
@@ -21,7 +41,7 @@ export const initialValues = (soknad: Partial<IOMPAOSoknad> | undefined): IOMPAO
     }
     return {
         metadata: {
-            signatur: soknad?.metadata?.signatur || '',
+            signatur: soknad?.metadata?.signatur || null,
         },
         barn: soknad?.barn || {
             norskIdent: '',

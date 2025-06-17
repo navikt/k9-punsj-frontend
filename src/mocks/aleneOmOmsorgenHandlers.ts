@@ -32,9 +32,8 @@ const aleneOmOmsorgenHandlers = {
                     begrunnelseForInnsending: null,
                     harInfoSomIkkeKanPunsjes: false,
                     harMedisinskeOpplysninger: false,
-                    metadata: {
-                        signatur: '',
-                    },
+                    metadata: null,
+                    k9saksnummer: '1DQBMY2',
                 },
             ],
         }),
@@ -56,6 +55,7 @@ const aleneOmOmsorgenHandlers = {
             harInfoSomIkkeKanPunsjes: null,
             harMedisinskeOpplysninger: null,
             metadata: null,
+            k9saksnummer: '1DQBMY2',
         }),
     ),
 
@@ -77,9 +77,8 @@ const aleneOmOmsorgenHandlers = {
             begrunnelseForInnsending: null,
             harInfoSomIkkeKanPunsjes: false,
             harMedisinskeOpplysninger: false,
-            metadata: {
-                signatur: '',
-            },
+            metadata: null,
+            k9saksnummer: '1DQBMY2',
         }),
     ),
 

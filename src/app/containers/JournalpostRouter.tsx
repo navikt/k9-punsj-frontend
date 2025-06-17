@@ -15,7 +15,7 @@ import OMPUTPunchFormContainer from 'app/søknader/omsorgspenger-utbetaling/cont
 import { OLPRegistreringsValg } from 'app/søknader/opplæringspenger/containers/OLPRegistreringsValg';
 import OLPPunchFormContainer from 'app/søknader/opplæringspenger/containers/OLPPunchFormContainer';
 import { OMPAORegistreringsValg } from 'app/søknader/omsorgspenger-alene-om-omsorgen/containers/OMPAORegistreringsValg';
-import OMPAOPunchFormContainer from 'app/søknader/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainer';
+import OMPAOPunchFormContainerV2 from 'app/søknader/omsorgspenger-alene-om-omsorgen/containers/OMPAOPunchFormContainerV2';
 import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { logError } from 'app/utils/logUtils';
@@ -112,7 +112,7 @@ const JournalpostRouter: React.FC = () => {
                         <Route path={ROUTES.SEND_BREV_FAGSAK} element={<SendBrevPåFagsakLukkOppgave />} />
                         <Route
                             path={ROUTES.PUNCH}
-                            element={<OMPAOPunchFormContainer journalpostid={journalpostid} />}
+                            element={<OMPAOPunchFormContainerV2 journalpostid={journalpostid} />}
                         />
                         <Route path="*" element={<Navigate to={ROUTES.VELG_SOKNAD} />} />
                     </Route>
