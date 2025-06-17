@@ -147,13 +147,10 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = (props: OMPAOPunchForm
         [],
     );
 
-    const isMounted = useRef(false);
     useEffect(() => {
-        const subscription = watch(() => {
-            if (isMounted.current) {
+        const subscription = watch((_value, { type }) => {
+            if (type) {
                 debounceCallback();
-            } else {
-                isMounted.current = true;
             }
         });
 
