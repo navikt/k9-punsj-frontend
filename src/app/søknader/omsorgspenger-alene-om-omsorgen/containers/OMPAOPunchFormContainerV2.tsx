@@ -40,16 +40,16 @@ const OMPAOPunchFormContainerV2 = (props: Props) => {
 
     const { soeknadRespons, isPending, error } = useOmpaoSoknad(id, identState.søkerId);
 
+    const methods = useForm<IOMPAOSoknad>({
+        resolver: OMPAOSoknadResolver,
+        defaultValues: defaultOMPAOSoknadValues,
+    });
+
     useEffect(() => {
         if (soeknadRespons) {
             dispatch(setIdentFellesAction(soeknadRespons.soekerId, soeknadRespons.barn.norskIdent));
         }
     }, [soeknadRespons, dispatch]);
-
-    const methods = useForm<IOMPAOSoknad>({
-        resolver: OMPAOSoknadResolver,
-        defaultValues: defaultOMPAOSoknadValues,
-    });
 
     useEffect(() => {
         if (soeknadRespons) {
