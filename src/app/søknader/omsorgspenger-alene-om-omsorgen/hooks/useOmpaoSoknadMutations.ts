@@ -102,11 +102,11 @@ export const useOmpaoSoknadMutations = ({
         };
     }, [watch, debounceCallback, harForsoektAaSendeInn]);
 
-    const submit = (isValid: boolean) => {
+    const submit = () => {
         if (!harForsoektAaSendeInn) {
             setHarForsoektAaSendeInn(true);
         }
-        valider({ soeknad: getValues(), skalForhaandsviseSoeknad: isValid, isValid });
+        valider({ soeknad: getValues(), skalForhaandsviseSoeknad: true, isValid: true });
     };
 
     const confirmAndSend = () => {

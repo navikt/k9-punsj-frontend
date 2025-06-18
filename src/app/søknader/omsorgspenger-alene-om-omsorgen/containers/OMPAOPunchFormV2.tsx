@@ -103,7 +103,9 @@ const OMPAOPunchFormV2: React.FC<OMPAOPunchFormV2Props> = ({ journalpostid, onSo
                     type="button"
                     onClick={async () => {
                         const isValid = await trigger();
-                        submit(isValid);
+                        if (isValid) {
+                            submit();
+                        }
                     }}
                 >
                     <FormattedMessage id={'skjema.knapp.send'} />
