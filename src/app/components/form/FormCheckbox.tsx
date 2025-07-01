@@ -1,7 +1,15 @@
 import React from 'react';
-import { useFormContext, FieldValues } from 'react-hook-form';
+import { Controller, FieldValues, useFormContext } from 'react-hook-form';
 import { Checkbox } from '@navikt/ds-react';
 import { FormFieldProps } from './types';
+
+// Helper for deeply nested properties
+const get = (obj: any, path: string) =>
+    path
+        .replace(/\[(\w+)\]/g, '.$1')
+        .replace(/^\./, '')
+        .split('.')
+        .reduce((acc, part) => acc && acc[part], obj);
 
 export function FormCheckbox<T extends FieldValues>({
     name,
@@ -13,7 +21,7 @@ export function FormCheckbox<T extends FieldValues>({
     onChange,
 }: FormFieldProps<T>) {
     const {
-        register,
+        control,
         formState: { errors },
     } = useFormContext<T>();
 
@@ -21,26 +29,32 @@ export function FormCheckbox<T extends FieldValues>({
         ...(validate || {}),
     };
 
-    const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
-    const error = errors[name];
+    const error = get(errors, name);
 
     return (
-        <Checkbox
-            {...rest}
-            ref={ref}
-            size={size}
-            error={!!error}
-            description={error?.message as string}
-            onChange={(e) => {
-                registerOnChange(e);
-                if (onChange) {
-                    onChange();
-                }
-            }}
-            disabled={disabled}
-            data-testid={dataTestId}
-        >
-            {label}
-        </Checkbox>
+        <Controller
+            name={name}
+            control={control}
+            rules={rules}
+            render={({ field: { value, onChange: onFieldChange, ref } }) => (
+                <Checkbox
+                    ref={ref}
+                    checked={!!value}
+                    onChange={(e) => {
+                        onFieldChange(e.target.checked);
+                        if (onChange) {
+                            onChange();
+                        }
+                    }}
+                    size={size}
+                    error={!!error}
+                    disabled={disabled}
+                    data-testid={dataTestId}
+                >
+                    {label}
+                    {error && <div className="navds-error-message navds-label">{String(error.message)}</div>}
+                </Checkbox>
+            )}
+        />
     );
 }

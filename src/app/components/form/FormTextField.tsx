@@ -3,6 +3,14 @@ import { useFormContext, FieldValues } from 'react-hook-form';
 import { TextField } from '@navikt/ds-react';
 import { FormTextFieldProps } from './types';
 
+// Helper for deeply nested properties
+const get = (obj: any, path: string) =>
+    path
+        .replace(/\[(\w+)\]/g, '.$1')
+        .replace(/^\./, '')
+        .split('.')
+        .reduce((acc, part) => acc && acc[part], obj);
+
 export function FormTextField<T extends FieldValues>({
     name,
     label,
@@ -30,6 +38,7 @@ export function FormTextField<T extends FieldValues>({
     };
 
     const { ref, onChange: registerOnChange, ...rest } = register(name, rules);
+    const error = get(errors, name);
 
     return (
         <TextField
@@ -38,7 +47,7 @@ export function FormTextField<T extends FieldValues>({
             size={size}
             label={label}
             className={className}
-            error={errors[name]?.message as string}
+            error={error?.message as string}
             type={type}
             inputMode={inputMode}
             pattern={pattern}

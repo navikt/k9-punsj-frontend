@@ -3,7 +3,8 @@ import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
 export interface FormFieldProps<T extends FieldValues> {
     name: Path<T>;
-    label: ReactNode;
+    label?: ReactNode;
+    legend?: ReactNode;
     validate?: RegisterOptions<T>;
     className?: string;
     disabled?: boolean;
@@ -14,7 +15,7 @@ export interface FormFieldProps<T extends FieldValues> {
 }
 
 export interface FormTextFieldProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
-    type?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url';
+    type?: 'text' | 'number' | 'email' | 'password' | 'tel' | 'url' | 'time';
     inputMode?: 'text' | 'numeric';
     pattern?: string;
     maxLength?: number;
@@ -30,4 +31,18 @@ export interface FormSelectProps<T extends FieldValues> extends FormFieldProps<T
 export interface FormTextareaProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
     maxLength?: number;
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+export interface FormDatePickerProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    maxDate?: Date;
+    minDate?: Date;
+    onChange?: (date: Date | undefined) => void;
+    dropdownCaption?: boolean;
+}
+
+export interface FormRadioGroupProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    options: { label: string | React.ReactNode; value: any }[];
+    layout?: 'vertical' | 'horizontal';
+    horizontalSpacing?: number;
+    description?: React.ReactNode;
 }
