@@ -15,7 +15,7 @@
         "@navikt/ds-react": "7.24.0",
         "@navikt/fnrvalidator": "2.1.5",
         "@reduxjs/toolkit": "^2.8.2",
-        "@sentry/react": "9.33.0",
+        "@sentry/react": "9.34.0",
         "@tanstack/react-query": "5.81.5",
         "@tanstack/react-query-devtools": "5.81.5",
         "classnames": "2.5.1",
