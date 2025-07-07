@@ -2,7 +2,6 @@ import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { BodyShort, CopyButton, Heading, VStack } from '@navikt/ds-react';
-// import classNames from 'classnames';
 
 import intlHelper from 'app/utils/intlUtils';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
@@ -13,8 +12,6 @@ import {
     sjekkPropertyEksistererOgIkkeErNull,
 } from '../../../../utils';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
-
-// import './ompMASoknadKvittering.less';
 
 interface Props {
     response: IOMPMASoknadKvittering;
@@ -167,7 +164,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
             {!!journalposter && journalposter.length > 0 && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
-                        <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
                     </Heading>
 
                     <div className="h-px bg-gray-300 mb-4" />

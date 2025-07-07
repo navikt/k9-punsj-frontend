@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 import classNames from 'classnames';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 
-import { Alert, Button, HelpText, Modal, Tag, Loader } from '@navikt/ds-react';
+import { Alert, Button, HelpText, Modal, Tag, Loader, Heading } from '@navikt/ds-react';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
@@ -13,7 +13,7 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { ROUTES } from 'app/constants/routes';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -56,6 +56,7 @@ export interface IPunchOMPKSFormStateProps {
     signaturState: ISignaturState;
     journalposterState: IJournalposterPerIdentState;
     identState: IIdentState;
+    kopierJournalpostSuccess?: boolean;
 }
 
 export interface IPunchOMPKSFormDispatchProps {
@@ -511,34 +512,44 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     !this.state.visErDuSikkerModal &&
                     this.props.punchFormState.validertSoknad && (
                         <Modal
-                            key="validertSoknadModal"
-                            className="validertSoknadModal"
                             onClose={() => this.props.validerSoknadReset()}
-                            aria-label="validertSoknadModal"
                             open={this.props.punchFormState.isValid}
+                            key="validertOMPKSSoknadModal"
+                            aria-label="validertOMPKSSoknadModal"
+                            data-test-id="validertOMPKSSoknadModal"
                         >
+                            <Modal.Header closeButton={false}>
+                                <Heading size="medium" level="1" data-test-id="OMPKSPunchFormKvitteringHeader">
+                                    <FormattedMessage id="skjema.kvittering.oppsummering" />
+                                </Heading>
+                            </Modal.Header>
+
                             <Modal.Body>
-                                <div className={classNames('validertSoknadOppsummeringContainer')}>
-                                    <OMPKSSoknadKvittering response={this.props.punchFormState.validertSoknad} />
-                                </div>
-                                <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                                    <Button
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappVidere"
-                                        onClick={() => this.setState({ visErDuSikkerModal: true })}
-                                    >
-                                        {intlHelper(intl, 'fordeling.knapp.videre')}
-                                    </Button>
-                                    <Button
-                                        variant="secondary"
-                                        size="small"
-                                        className="validertSoknadOppsummeringContainer_knappTilbake"
-                                        onClick={() => this.props.validerSoknadReset()}
-                                    >
-                                        {intlHelper(intl, 'skjema.knapp.avbryt')}
-                                    </Button>
-                                </div>
+                                <OMPKSSoknadKvittering
+                                    response={this.props.punchFormState.validertSoknad}
+                                    annenSokerIdent={this.props.identState.annenSokerIdent}
+                                    kopierJournalpostSuccess={this.props.kopierJournalpostSuccess}
+                                />
                             </Modal.Body>
+
+                            <Modal.Footer>
+                                <Button
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappVidere"
+                                    onClick={() => this.setState({ visErDuSikkerModal: true })}
+                                >
+                                    <FormattedMessage id="fordeling.knapp.videre" />
+                                </Button>
+
+                                <Button
+                                    variant="secondary"
+                                    size="small"
+                                    className="validertSoknadOppsummeringContainer_knappTilbake"
+                                    onClick={() => this.props.validerSoknadReset()}
+                                >
+                                    <FormattedMessage id="skjema.knapp.avbryt" />
+                                </Button>
+                            </Modal.Footer>
                         </Modal>
                     )}
 
@@ -566,6 +577,7 @@ const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
     signaturState: state.OMSORGSPENGER_KRONISK_SYKT_BARN.signaturState,
     journalposterState: state.journalposterPerIdentState,
     identState: state.identState,
+    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -588,3 +600,5 @@ const mapDispatchToProps = (dispatch: any) => ({
 export const OMPKSPunchForm = withHooks(
     injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent)),
 );
+
+export default connect(mapStateToProps)(OMPKSSoknadKvittering);
