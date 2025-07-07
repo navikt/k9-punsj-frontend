@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Copy } from '@navikt/ds-icons';
 
-import './kopier.less';
-
 export default function Kopier({ verdi }: { verdi?: string }): JSX.Element | null {
     const kopierTilClipboard = (v: string) => {
         navigator.clipboard.writeText(v);
@@ -13,7 +11,12 @@ export default function Kopier({ verdi }: { verdi?: string }): JSX.Element | nul
         return null;
     }
     return (
-        <button aria-label="Kopier" className="kopier" type="button" onClick={() => kopierTilClipboard(verdi)}>
+        <button
+            aria-label="Kopier"
+            className="bg-transparent border-none cursor-pointer mx-1"
+            type="button"
+            onClick={() => kopierTilClipboard(verdi)}
+        >
             <Copy />
         </button>
     );

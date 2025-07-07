@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Heading } from '@navikt/ds-react';
-import classNames from 'classnames';
+import { BodyShort, CopyButton, Heading, VStack } from '@navikt/ds-react';
+// import classNames from 'classnames';
 
-import Kopier from 'app/components/kopier/Kopier';
 import intlHelper from 'app/utils/intlUtils';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
@@ -15,7 +14,7 @@ import {
 } from '../../../../utils';
 import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
 
-import './ompMASoknadKvittering.less';
+// import './ompMASoknadKvittering.less';
 
 interface Props {
     response: IOMPMASoknadKvittering;
@@ -45,66 +44,64 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
         journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
 
     return (
-        <div className={classNames('OMPMASoknadKvitteringContainer')}>
-            <Heading size="medium" level="2">
-                <FormattedMessage id="skjema.kvittering.oppsummering" />
-            </Heading>
+        <>
+            {kopierJournalpostSuccess && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.opprettetKopi" />
+                    </Heading>
 
-            <div className="mt-4">
-                {kopierJournalpostSuccess && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id="skjema.soknadskvittering.opprettetKopi" />
-                        </Heading>
+                    <div className="h-px bg-gray-300 mb-4" />
 
-                        <hr className={classNames('linje')} />
-
-                        <p>
+                    <VStack gap="4">
+                        <BodyShort size="small">
                             <FormattedMessage id="skjema.soknadskvittering.opprettetKopi.innhold" />
-                        </p>
+                        </BodyShort>
 
                         {annenSokerIdent && (
-                            <p>
+                            <BodyShort size="small" className="flex gap-1">
                                 <FormattedMessage
                                     id="ident.identifikasjon.kvittering.annenSoker"
                                     values={{ fnr: annenSokerIdent, b: (chunks) => <strong>{chunks}</strong> }}
                                 />
 
-                                <Kopier verdi={annenSokerIdent} />
-                            </p>
+                                <CopyButton size="xsmall" copyText={annenSokerIdent} />
+                            </BodyShort>
                         )}
-                    </div>
-                )}
+                    </VStack>
+                </div>
+            )}
 
-                {visOpplysningerOmSoknad && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-                        </Heading>
-
-                        <hr className={classNames('linje')} />
-
-                        <p>
-                            <FormattedMessage
-                                id="skjema.kvittering.mottakelsesdato"
-                                values={{
-                                    mottakelsesdato,
-                                    b: (chunks) => <strong>{chunks}</strong>,
-                                }}
-                            />
-                        </p>
-                    </div>
-                )}
-
-                <div>
+            {visOpplysningerOmSoknad && (
+                <div className="mb-4">
                     <Heading size="small" level="3">
-                        <FormattedMessage id="skjema.kvittering.barn" />
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
                     </Heading>
 
-                    <hr className={classNames('linje')} />
+                    <div className="h-px bg-gray-300 mb-4" />
 
+                    <BodyShort size="small">
+                        <FormattedMessage
+                            id="skjema.kvittering.mottakelsesdato"
+                            values={{
+                                mottakelsesdato,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
+                        />
+                    </BodyShort>
+                </div>
+            )}
+
+            <div className="mb-4">
+                <Heading size="small" level="3">
+                    <FormattedMessage id="skjema.kvittering.barn" />
+                </Heading>
+
+                <div className="h-px bg-gray-300 mb-4" />
+
+                <VStack gap="4">
                     {ytelse.barn?.map((barn) => (
-                        <p key={barn.norskIdentitetsnummer}>
+                        <BodyShort size="small" spacing key={barn.norskIdentitetsnummer} as="p">
                             <FormattedMessage
                                 id="skjema.kvittering.identitetsnummer"
                                 values={{
@@ -112,18 +109,20 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                                     b: (chunks) => <strong>{chunks}</strong>,
                                 }}
                             />
-                        </p>
+                        </BodyShort>
                     ))}
-                </div>
+                </VStack>
+            </div>
 
-                <div>
-                    <Heading size="small" level="3">
-                        <FormattedMessage id={PunchFormPaneler.ANNEN_FORELDER} />
-                    </Heading>
+            <div className="mb-4">
+                <Heading size="small" level="3">
+                    <FormattedMessage id={PunchFormPaneler.ANNEN_FORELDER} />
+                </Heading>
 
-                    <hr className={classNames('linje')} />
+                <div className="h-px bg-gray-300 mb-4" />
 
-                    <p>
+                <VStack gap="4">
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.identitetsnummer"
                             values={{
@@ -131,9 +130,9 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                                 b: (chunks) => <strong>{chunks}</strong>,
                             }}
                         />
-                    </p>
+                    </BodyShort>
 
-                    <p>
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.annenForelder.situasjonstype"
                             values={{
@@ -141,9 +140,9 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                                 b: (chunks) => <strong>{chunks}</strong>,
                             }}
                         />
-                    </p>
+                    </BodyShort>
 
-                    <p>
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.annenForelder.situasjonsbeskrivelse"
                             values={{
@@ -151,9 +150,9 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                                 b: (chunks) => <strong>{chunks}</strong>,
                             }}
                         />
-                    </p>
+                    </BodyShort>
 
-                    <p>
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.annenForelder.periode"
                             values={{
@@ -161,42 +160,42 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                                 b: (chunks) => <strong>{chunks}</strong>,
                             }}
                         />
-                    </p>
-                </div>
-
-                <div>
-                    {!!journalposter && journalposter.length > 0 && (
-                        <div>
-                            <Heading size="small" level="3">
-                                <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
-                            </Heading>
-
-                            <hr className={classNames('linje')} />
-
-                            <p>
-                                <FormattedMessage
-                                    id="skjema.kvittering.medisinskeopplysninger"
-                                    values={{
-                                        jaNei: inneholderMedisinskeOpplysninger,
-                                        b: (chunks) => <strong>{chunks}</strong>,
-                                    }}
-                                />
-                            </p>
-
-                            <p>
-                                <FormattedMessage
-                                    id="skjema.kvittering.opplysningerikkepunsjet"
-                                    values={{
-                                        jaNei: inneholderInformasjonSomIkkeKanPunsjes,
-                                        b: (chunks) => <strong>{chunks}</strong>,
-                                    }}
-                                />
-                            </p>
-                        </div>
-                    )}
-                </div>
+                    </BodyShort>
+                </VStack>
             </div>
-        </div>
+
+            {!!journalposter && journalposter.length > 0 && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={'skjema.soknadskvittering.tilleggsopplysninger'} />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <VStack gap="4">
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.medisinskeopplysninger"
+                                values={{
+                                    jaNei: inneholderMedisinskeOpplysninger,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.opplysningerikkepunsjet"
+                                values={{
+                                    jaNei: inneholderInformasjonSomIkkeKanPunsjes,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+                    </VStack>
+                </div>
+            )}
+        </>
     );
 };
 

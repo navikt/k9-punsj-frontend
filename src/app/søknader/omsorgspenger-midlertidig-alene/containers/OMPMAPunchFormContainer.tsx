@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Formik, FormikValues } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Alert, Button, Loader } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, Loader } from '@navikt/ds-react';
 
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
@@ -96,7 +96,7 @@ const OMPMAPunchFormContainer = (props: Props) => {
                     <FormattedMessage id="skjema.sentInn" />
                 </Alert>
 
-                <div className="punchPage__knapper mt-8">
+                <div className="my-8">
                     <Button
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
@@ -105,7 +105,16 @@ const OMPMAPunchFormContainer = (props: Props) => {
                         <FormattedMessage id="tilbaketilLOS" />
                     </Button>
                 </div>
-                <OMPMASoknadKvittering response={punchFormState.innsentSoknad} />
+
+                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                    <div className="mb-6">
+                        <Heading size="medium" level="2">
+                            <FormattedMessage id="skjema.kvittering.oppsummering" />
+                        </Heading>
+                    </div>
+
+                    <OMPMASoknadKvittering response={punchFormState.innsentSoknad} />
+                </Box>
             </>
         );
     }

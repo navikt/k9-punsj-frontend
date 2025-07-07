@@ -356,39 +356,43 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal
                     key="validertSoknadModal"
-                    className="validertSoknadModal"
                     onClose={() => validerSoknadReset()}
-                    aria-label="validertSoknadModal"
                     open={!!punchFormState.isValid}
+                    aria-label="validertSoknadModal"
+                    data-test-id="validertSoknadModal"
                 >
+                    <Modal.Header closeButton={false}>
+                        <Heading size="medium" level="1" data-test-id="OMPMAPunchFormKvitteringHeader">
+                            <FormattedMessage id="skjema.kvittering.oppsummering" />
+                        </Heading>
+                    </Modal.Header>
+
                     <Modal.Body>
-                        <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering
-                                response={punchFormState.validertSoknad}
-                                kopierJournalpostSuccess={kopierJournalpostSuccess}
-                                annenSokerIdent={annenSokerIdent}
-                            />
-                        </div>
-
-                        <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                            <Button
-                                size="small"
-                                className="validertSoknadOppsummeringContainer_knappVidere"
-                                onClick={() => setVisErDuSikkerModal(true)}
-                            >
-                                <FormattedMessage id="fordeling.knapp.videre" />
-                            </Button>
-
-                            <Button
-                                variant="secondary"
-                                size="small"
-                                className="validertSoknadOppsummeringContainer_knappTilbake"
-                                onClick={() => validerSoknadReset()}
-                            >
-                                <FormattedMessage id="skjema.knapp.avbryt" />
-                            </Button>
-                        </div>
+                        <OMPMASoknadKvittering
+                            response={punchFormState.validertSoknad}
+                            kopierJournalpostSuccess={kopierJournalpostSuccess}
+                            annenSokerIdent={annenSokerIdent}
+                        />
                     </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button
+                            size="small"
+                            className="validertSoknadOppsummeringContainer_knappVidere"
+                            onClick={() => setVisErDuSikkerModal(true)}
+                        >
+                            <FormattedMessage id="fordeling.knapp.videre" />
+                        </Button>
+
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            className="validertSoknadOppsummeringContainer_knappTilbake"
+                            onClick={() => validerSoknadReset()}
+                        >
+                            <FormattedMessage id="skjema.knapp.avbryt" />
+                        </Button>
+                    </Modal.Footer>
                 </Modal>
             )}
 
