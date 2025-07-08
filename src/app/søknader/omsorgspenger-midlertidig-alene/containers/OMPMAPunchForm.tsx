@@ -215,7 +215,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
             <VerticalSpacer fourtyPx />
 
-            <AnnenForelder intl={intl} handleBlur={handleBlur} />
+            <AnnenForelder handleBlur={handleBlur} />
 
             <VerticalSpacer fourtyPx />
 
