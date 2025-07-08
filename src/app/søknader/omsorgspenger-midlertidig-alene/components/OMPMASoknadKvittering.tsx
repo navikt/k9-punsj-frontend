@@ -4,14 +4,14 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { BodyShort, CopyButton, Heading, VStack } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
-import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import {
     formattereDatoFraUTCTilGMT,
     formattereTidspunktFraUTCTilGMT,
     periodToFormattedString,
     sjekkPropertyEksistererOgIkkeErNull,
-} from '../../../../utils';
-import { IOMPMASoknadKvittering } from '../../types/OMPMASoknadKvittering';
+} from '../../../utils';
+import { IOMPMASoknadKvittering } from '../types/OMPMASoknadKvittering';
 
 interface Props {
     response: IOMPMASoknadKvittering;
