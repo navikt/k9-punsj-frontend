@@ -15,8 +15,8 @@ import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
 import VerticalSpacer from '../components/VerticalSpacer';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import OpprettJournalpostInngang from './components/OpprettJournalpostInngang/OpprettJournalpostInngang';
-import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
+import OpprettJournalpostInngang from './components/OpprettJournalpostInngang';
+import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 
 import './home.less';
@@ -159,7 +159,7 @@ export const Home: React.FC = () => {
                 )}
             </div>
 
-            <div className="inngangContainer">
+            <div className="flex justify-center gap-18">
                 <OpprettJournalpostInngang />
                 <SendBrevIAvsluttetSakInngang />
             </div>
