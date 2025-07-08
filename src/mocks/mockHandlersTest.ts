@@ -26,7 +26,7 @@ import barn from '../../cypress/fixtures/barn.json';
 import pilsSoknad from '../../cypress/fixtures/pilsSoknad.json';
 import jpOMPUT314 from '../../cypress/fixtures/jpOMPUT314.json';
 
-export const testHandlers = {
+const mockHandlersTest = {
     hentJournalpost: http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', ':id'), async ({ params }) => {
         await delay(500);
 
@@ -228,3 +228,5 @@ export const testHandlers = {
         HttpResponse.json({ sattPåVent: true }, { status: 200 }),
     ),*/
 };
+
+export default mockHandlersTest;

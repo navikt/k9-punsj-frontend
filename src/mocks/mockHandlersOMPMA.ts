@@ -1,7 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { ApiPath } from 'app/apiConfig';
 
-const handlers = {
+const mockHandlersOMPMA = {
     tomMappe: http.get(ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
@@ -215,4 +215,4 @@ const handlers = {
     ),
 };
 
-export default handlers;
+export default mockHandlersOMPMA;

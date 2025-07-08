@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw';
 
 import { ApiPath } from 'app/apiConfig';
 
-const omsorgspengerutbetalingHandlers = {
+const mockHandlersOMPUT = {
     tomMappe: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
             søker: '29099000129',
@@ -123,21 +123,24 @@ const omsorgspengerutbetalingHandlers = {
         }),
     ),
     nySoeknad: http.post(ApiPath.OMP_UT_SOKNAD_CREATE, () =>
-        HttpResponse.json({
-            soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
-            soekerId: '29099000129',
-            mottattDato: null,
-            klokkeslett: null,
-            barn: [],
-            journalposter: ['200'],
-            bosteder: null,
-            utenlandsopphold: [],
-            opptjeningAktivitet: null,
-            fravaersperioder: null,
-            harInfoSomIkkeKanPunsjes: null,
-            harMedisinskeOpplysninger: null,
-            metadata: null,
-        }),
+        HttpResponse.json(
+            {
+                soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
+                soekerId: '29099000129',
+                mottattDato: null,
+                klokkeslett: null,
+                barn: [],
+                journalposter: ['200'],
+                bosteder: null,
+                utenlandsopphold: [],
+                opptjeningAktivitet: null,
+                fravaersperioder: null,
+                harInfoSomIkkeKanPunsjes: null,
+                harMedisinskeOpplysninger: null,
+                metadata: null,
+            },
+            { status: 201 },
+        ),
     ),
 
     soknad: http.get(ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', 'bc12baac-0f0c-427e-a059-b9fbf9a3adff'), () =>
@@ -186,95 +189,101 @@ const omsorgspengerutbetalingHandlers = {
     ),
 
     sendInn: http.post(ApiPath.OMP_UT_SOKNAD_SUBMIT, () =>
-        HttpResponse.json({
-            søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
-            versjon: '1.1.0',
-            mottattDato: '2020-10-12T10:53:00.000Z',
-            søker: {
-                norskIdentitetsnummer: '29099000129',
-            },
-            ytelse: {
-                type: 'OMP_UT',
-                fosterbarn: [],
-                aktivitet: {},
-                fraværsperioder: [
-                    {
-                        periode: '2022-10-01/2022-10-10',
-                        duration: 'PT7H30M',
-                        delvisFravær: {
-                            normalarbeidstid: 'PT7H',
-                            fravær: 'PT7H',
+        HttpResponse.json(
+            {
+                søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
+                versjon: '1.1.0',
+                mottattDato: '2020-10-12T10:53:00.000Z',
+                søker: {
+                    norskIdentitetsnummer: '29099000129',
+                },
+                ytelse: {
+                    type: 'OMP_UT',
+                    fosterbarn: [],
+                    aktivitet: {},
+                    fraværsperioder: [
+                        {
+                            periode: '2022-10-01/2022-10-10',
+                            duration: 'PT7H30M',
+                            delvisFravær: {
+                                normalarbeidstid: 'PT7H',
+                                fravær: 'PT7H',
+                            },
+                            årsak: 'ORDINÆRT_FRAVÆR',
+                            søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
+                            aktivitetFravær: ['ARBEIDSTAKER'],
+                            arbeidsforholdId: null,
+                            arbeidsgiverOrgNr: '979312059',
                         },
-                        årsak: 'ORDINÆRT_FRAVÆR',
-                        søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
-                        aktivitetFravær: ['ARBEIDSTAKER'],
-                        arbeidsforholdId: null,
-                        arbeidsgiverOrgNr: '979312059',
+                    ],
+                    fraværsperioderKorrigeringIm: null,
+                    bosteder: null,
+                    utenlandsopphold: null,
+                },
+                språk: 'nb',
+                journalposter: [
+                    {
+                        inneholderInfomasjonSomIkkeKanPunsjes: null,
+                        inneholderInformasjonSomIkkeKanPunsjes: false,
+                        inneholderMedisinskeOpplysninger: false,
+                        journalpostId: '05060',
                     },
                 ],
-                fraværsperioderKorrigeringIm: null,
-                bosteder: null,
-                utenlandsopphold: null,
-            },
-            språk: 'nb',
-            journalposter: [
-                {
-                    inneholderInfomasjonSomIkkeKanPunsjes: null,
-                    inneholderInformasjonSomIkkeKanPunsjes: false,
-                    inneholderMedisinskeOpplysninger: false,
-                    journalpostId: '05060',
+                begrunnelseForInnsending: {
+                    tekst: null,
                 },
-            ],
-            begrunnelseForInnsending: {
-                tekst: null,
             },
-        }),
+            { status: 202 },
+        ),
     ),
 
     valider: http.post(ApiPath.OMP_UT_SOKNAD_VALIDER, () =>
-        HttpResponse.json({
-            søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
-            versjon: '1.1.0',
-            mottattDato: '2020-10-12T10:53:00.000Z',
-            søker: {
-                norskIdentitetsnummer: '29099000129',
-            },
-            ytelse: {
-                type: 'OMP_UT',
-                fosterbarn: [],
-                aktivitet: {},
-                fraværsperioder: [
-                    {
-                        periode: '2022-10-01/2022-10-10',
-                        duration: 'PT7H30M',
-                        delvisFravær: {
-                            normalarbeidstid: 'PT7H',
-                            fravær: 'PT7H',
+        HttpResponse.json(
+            {
+                søknadId: '008635f0-25c5-4b3a-8855-56d0d6cd252e',
+                versjon: '1.1.0',
+                mottattDato: '2020-10-12T10:53:00.000Z',
+                søker: {
+                    norskIdentitetsnummer: '29099000129',
+                },
+                ytelse: {
+                    type: 'OMP_UT',
+                    fosterbarn: [],
+                    aktivitet: {},
+                    fraværsperioder: [
+                        {
+                            periode: '2022-10-01/2022-10-10',
+                            duration: 'PT7H30M',
+                            delvisFravær: {
+                                normalarbeidstid: 'PT7H',
+                                fravær: 'PT7H',
+                            },
+                            årsak: 'ORDINÆRT_FRAVÆR',
+                            søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
+                            aktivitetFravær: ['ARBEIDSTAKER'],
+                            arbeidsforholdId: null,
+                            arbeidsgiverOrgNr: '979312059',
                         },
-                        årsak: 'ORDINÆRT_FRAVÆR',
-                        søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
-                        aktivitetFravær: ['ARBEIDSTAKER'],
-                        arbeidsforholdId: null,
-                        arbeidsgiverOrgNr: '979312059',
+                    ],
+                    fraværsperioderKorrigeringIm: null,
+                    bosteder: null,
+                    utenlandsopphold: null,
+                },
+                språk: 'nb',
+                journalposter: [
+                    {
+                        inneholderInfomasjonSomIkkeKanPunsjes: null,
+                        inneholderInformasjonSomIkkeKanPunsjes: false,
+                        inneholderMedisinskeOpplysninger: false,
+                        journalpostId: '05060',
                     },
                 ],
-                fraværsperioderKorrigeringIm: null,
-                bosteder: null,
-                utenlandsopphold: null,
-            },
-            språk: 'nb',
-            journalposter: [
-                {
-                    inneholderInfomasjonSomIkkeKanPunsjes: null,
-                    inneholderInformasjonSomIkkeKanPunsjes: false,
-                    inneholderMedisinskeOpplysninger: false,
-                    journalpostId: '05060',
+                begrunnelseForInnsending: {
+                    tekst: null,
                 },
-            ],
-            begrunnelseForInnsending: {
-                tekst: null,
             },
-        }),
+            { status: 202 },
+        ),
     ),
 
     validerFeil: http.post(ApiPath.OMP_UT_SOKNAD_VALIDER, () =>
@@ -294,4 +303,4 @@ const omsorgspengerutbetalingHandlers = {
     ),
 };
 
-export default omsorgspengerutbetalingHandlers;
+export default mockHandlersOMPUT;
