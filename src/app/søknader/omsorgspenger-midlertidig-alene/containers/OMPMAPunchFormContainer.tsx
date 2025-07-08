@@ -17,7 +17,7 @@ import { getOMPMASoknad, validerOMPMASoknad } from '../state/actions/OMPMAPunchF
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { OMPMAPunchForm } from './OMPMAPunchForm';
-import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
+import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
 import { Dispatch } from 'redux';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({

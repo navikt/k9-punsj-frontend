@@ -35,8 +35,8 @@ import {
 } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
-import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
+import OpplysningerOmOMPMASoknad from '../components/OpplysningerOmOMPMASoknad';
+import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 interface Props {

@@ -7,10 +7,8 @@ import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
-import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
-import intlHelper from '../../../../utils/intlUtils';
-
-import './opplysningerOmOMPMASoknad.less';
+import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
+import intlHelper from '../../../utils/intlUtils';
 
 interface Props {
     signert: JaNeiIkkeRelevant | null;
@@ -31,7 +29,7 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
             <VerticalSpacer sixteenPx />
 
             <Box padding="4" borderWidth="1" borderRadius="small">
-                <Alert variant="info" className="alert">
+                <Alert variant="info" className="mt-4">
                     <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
                 </Alert>
 
@@ -53,7 +51,7 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
                                 <TextField
                                     id="klokkeslett"
                                     type="time"
-                                    className="klokkeslett"
+                                    className="ml-4"
                                     // size="small"
                                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                     error={meta.touched && meta.error}
