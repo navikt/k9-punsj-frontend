@@ -4,22 +4,20 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { BodyLong, Heading } from '@navikt/ds-react';
 
-import './sendBrevIAvsluttetSakInngang.less';
-
 const SendBrevIAvsluttetSakInngang = () => {
     return (
-        <div className="sendBrevIAvsluttetSakInngang">
-            <div className="content">
-                <Heading size="xlarge" level="1" className="heading">
-                    <FormattedMessage id="sendBrevIAvsluttetSakInngang.header" />
-                </Heading>
+        <div className="flex flex-col items-center p-[2.875rem_5.25rem] bg-[#fff9f0] max-w-[37.5rem]">
+            <Heading size="xlarge" level="1" className="pt-6 pb-6">
+                <FormattedMessage id="sendBrevIAvsluttetSakInngang.header" />
+            </Heading>
 
-                <BodyLong>
-                    <FormattedMessage id="sendBrevIAvsluttetSakInngang.ingress" />
-                </BodyLong>
+            <BodyLong>
+                <FormattedMessage id="sendBrevIAvsluttetSakInngang.ingress" />
+            </BodyLong>
 
+            <div className="mt-12">
                 <Link
-                    className="linkButton navds-button navds-button--primary navds-button--medium"
+                    className="navds-button navds-button--primary navds-button--medium"
                     to="/brev-avsluttet-sak"
                     data-testid="brev-avsluttet-sak-inngang"
                 >
