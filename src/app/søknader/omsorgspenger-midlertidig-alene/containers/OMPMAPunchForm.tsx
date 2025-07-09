@@ -157,11 +157,11 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             return null;
         }
 
-        const className = 'statusetikett';
+        const className = 'absolute top-[60px] left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
-                <Tag variant="warning" {...{ className }}>
+                <Tag variant="warning" className={className}>
                     <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.awaitingUpdateResponse'} />
                 </Tag>
             );
@@ -169,14 +169,14 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
         if (punchFormState.updateSoknadError) {
             return (
-                <Tag variant="error" {...{ className }}>
+                <Tag variant="error" className={className}>
                     <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadError'} />
                 </Tag>
             );
         }
 
         return (
-            <Tag variant="success" {...{ className }}>
+            <Tag variant="success" className={className}>
                 <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadSuccess'} />
             </Tag>
         );

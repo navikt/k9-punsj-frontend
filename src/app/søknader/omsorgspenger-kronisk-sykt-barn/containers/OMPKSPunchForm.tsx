@@ -249,24 +249,25 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         }
 
         const { punchFormState } = this.props;
-        const className = 'statusetikett';
+
+        const className = 'absolute top-[60px] left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
-                <Tag variant="warning" {...{ className }}>
+                <Tag variant="warning" className={className}>
                     Lagrer …
                 </Tag>
             );
         }
         if (punchFormState.updateSoknadError) {
             return (
-                <Tag variant="error" {...{ className }}>
+                <Tag variant="error" className={className}>
                     Lagring feilet
                 </Tag>
             );
         }
         return (
-            <Tag variant="success" {...{ className }}>
+            <Tag variant="success" className={className}>
                 Lagret
             </Tag>
         );

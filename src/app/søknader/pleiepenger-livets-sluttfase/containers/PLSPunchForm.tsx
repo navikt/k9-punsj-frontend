@@ -767,24 +767,24 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
 
         const { punchFormState } = this.props;
-        const className = 'statusetikett';
+        const className = 'absolute top-[60px] left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
-                <Tag variant="warning" {...{ className }}>
+                <Tag variant="warning" className={className}>
                     <FormattedMessage id="skjema.isAwaitingUpdateResponse" />
                 </Tag>
             );
         }
         if (punchFormState.updateSoknadError) {
             return (
-                <Tag variant="error" {...{ className }}>
+                <Tag variant="error" className={className}>
                     <FormattedMessage id="skjema.updateSoknadError" />
                 </Tag>
             );
         }
         return (
-            <Tag variant="success" {...{ className }}>
+            <Tag variant="success" className={className}>
                 <FormattedMessage id="skjema.updateSoknadSuccess" />
             </Tag>
         );
