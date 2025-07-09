@@ -86,14 +86,12 @@ const Arbeidstaker = ({
                                     <VerticalSpacer twentyPx />
                                 </>
                             )}
-
                             <Organisasjonsvelger
                                 name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
                                 disabled={gjelderAnnenOrganisasjon}
                                 className="inline-block"
                                 organisasjoner={organisasjoner}
                             />
-
                             {harMinstToArbeidsforhold && (
                                 <Button
                                     variant="tertiary"
@@ -105,7 +103,6 @@ const Arbeidstaker = ({
                                     <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
                                 </Button>
                             )}
-
                             <Checkbox
                                 onChange={() => toggleGjelderAnnenOrganisasjon(form)}
                                 checked={gjelderAnnenOrganisasjon}
@@ -114,11 +111,13 @@ const Arbeidstaker = ({
                             </Checkbox>
 
                             {gjelderAnnenOrganisasjon && (
-                                <TextFieldFormik
-                                    size="small"
-                                    label="Organisasjonsnummer"
-                                    name={`${name}.organisasjonsnummer`}
-                                />
+                                <div className="input-row">
+                                    <TextFieldFormik
+                                        size="small"
+                                        label="Organisasjonsnummer"
+                                        name={`${name}.organisasjonsnummer`}
+                                    />
+                                </div>
                             )}
                         </div>
 

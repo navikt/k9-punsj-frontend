@@ -21,8 +21,6 @@ import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import TextFieldFormik from '../../formikInput/TextFieldFormik';
 import ActionType from './actionTypes';
 
-import './arbeidstaker.less';
-
 interface Props {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
@@ -251,9 +249,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                                             searchOrganisasjonsnummerFailed ? 'Ingen treff på organisasjonsnummer' : ''
                                         }
                                     />
-                                    {navnPåArbeidsgiver && (
-                                        <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
-                                    )}
+                                    {navnPåArbeidsgiver && <p className="ml-4 py-3 self-end">{navnPåArbeidsgiver}</p>}
                                 </div>
                             </div>
                         </>
