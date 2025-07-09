@@ -83,3 +83,28 @@ body {
     width: auto;
     min-width: 20rem;
 }
+
+/* Tilpassede scrollbar-stiler med Aksel-farger */
+.custom-scrollbar {
+    @apply overflow-y-auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--a-gray-400) var(--a-gray-100);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background: var(--a-gray-100);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--a-gray-400);
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--a-gray-600);
+}

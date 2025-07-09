@@ -45,49 +45,47 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
                 <FormattedMessage id="fordeling.detteGjelder" />
             </Heading>
 
-            <div className="mt-4">
+            <RadioPanel
+                label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER)}
+                value={FordelingDokumenttype.PLEIEPENGER}
+                checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER}
+                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+            />
+
+            <RadioPanel
+                label={intlHelper(intl, FordelingDokumenttype.OMSORGSPENGER)}
+                value={FordelingDokumenttype.OMSORGSPENGER}
+                checked={valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER}
+                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+            />
+
+            {erDokumenttypeOmsorgspenger &&
+                OmsorgspengerSubRadioPaneler.map((a) => (
+                    <div key={a.value} className="ml-16 pb-2">
+                        <RadioPanel
+                            label={a.label}
+                            value={a.value}
+                            checked={valgtDokumentType === a.value}
+                            onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+                        />
+                    </div>
+                ))}
+
+            <RadioPanel
+                label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE)}
+                value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
+                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
+            />
+
+            {getEnvironmentVariable('OLP_ENABLED') === 'true' && (
                 <RadioPanel
-                    label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER)}
-                    value={FordelingDokumenttype.PLEIEPENGER}
-                    checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER}
+                    label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
+                    value={FordelingDokumenttype.OPPLAERINGSPENGER}
+                    checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
                     onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
                 />
-
-                <RadioPanel
-                    label={intlHelper(intl, FordelingDokumenttype.OMSORGSPENGER)}
-                    value={FordelingDokumenttype.OMSORGSPENGER}
-                    checked={valgtDokumentType === FordelingDokumenttype.OMSORGSPENGER}
-                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                />
-
-                {erDokumenttypeOmsorgspenger &&
-                    OmsorgspengerSubRadioPaneler.map((a) => (
-                        <div key={a.value} className="ml-16 pb-2">
-                            <RadioPanel
-                                label={a.label}
-                                value={a.value}
-                                checked={valgtDokumentType === a.value}
-                                onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                            />
-                        </div>
-                    ))}
-
-                <RadioPanel
-                    label={intlHelper(intl, FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE)}
-                    value={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
-                    checked={valgtDokumentType === FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE}
-                    onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                />
-
-                {getEnvironmentVariable('OLP_ENABLED') === 'true' && (
-                    <RadioPanel
-                        label={intlHelper(intl, FordelingDokumenttype.OPPLAERINGSPENGER)}
-                        value={FordelingDokumenttype.OPPLAERINGSPENGER}
-                        checked={valgtDokumentType === FordelingDokumenttype.OPPLAERINGSPENGER}
-                        onChange={(e) => handleDokumenttype(e.target.value as FordelingDokumenttype)}
-                    />
-                )}
-            </div>
+            )}
         </div>
     );
 };
