@@ -6,8 +6,6 @@ import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from 'app/mo
 import { Heading } from '@navikt/ds-react';
 
 import intlHelper from 'app/utils/intlUtils';
-
-import './DokumentTypeVelger.less';
 import { getEnvironmentVariable } from 'app/utils/envUtils';
 
 interface Props {
@@ -42,7 +40,7 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
     }
 
     return (
-        <div className="dokumentTypeVelgerContainer mt-6">
+        <div className="space-y-2 mt-6">
             <Heading size="xsmall" level="3">
                 <FormattedMessage id="fordeling.detteGjelder" />
             </Heading>
@@ -64,7 +62,7 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
 
                 {erDokumenttypeOmsorgspenger &&
                     OmsorgspengerSubRadioPaneler.map((a) => (
-                        <div key={a.value} className="dokumentTypeVelgerSubkategori">
+                        <div key={a.value} className="ml-16 pb-2">
                             <RadioPanel
                                 label={a.label}
                                 value={a.value}
