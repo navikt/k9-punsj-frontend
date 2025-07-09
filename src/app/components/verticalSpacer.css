@@ -1,0 +1,63 @@
+/* VerticalSpacer komponent med Tailwind klasser */
+
+.fourPx {
+    @apply my-1;
+}
+
+.fourPx.hr,
+.fourPx.dashed {
+    @apply my-0.5;
+}
+
+.eightPx {
+    @apply my-2;
+}
+
+.eightPx.hr,
+.eightPx.dashed {
+    @apply my-1;
+}
+
+.sixteenPx {
+    @apply my-4;
+}
+
+.sixteenPx.hr,
+.sixteenPx.dashed {
+    @apply my-2;
+}
+
+.twentyPx {
+    @apply my-5;
+}
+
+.twentyPx.hr,
+.twentyPx.dashed {
+    @apply my-2.5;
+}
+
+.thirtyTwoPx {
+    @apply my-8;
+}
+
+.thirtyTwoPx.hr,
+.thirtyTwoPx.dashed {
+    @apply my-4;
+}
+
+.fourtyPx {
+    @apply my-10;
+}
+
+.fourtyPx.hr,
+.fourtyPx.dashed {
+    @apply my-5;
+}
+
+.hr {
+    @apply border-b border-gray-600;
+}
+
+.dashed {
+    @apply border-b border-dashed border-gray-600;
+}

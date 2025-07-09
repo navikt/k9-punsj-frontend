@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { FunctionComponent } from 'react';
 
-import './verticalSpacer.less';
+import './verticalSpacer.css';
 
 interface IOwnProps {
     fourPx?: boolean;
