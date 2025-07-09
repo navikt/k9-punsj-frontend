@@ -15,8 +15,6 @@ import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
 import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 
-import './journalpostLoader.less';
-
 interface Props {
     renderOnLoadComplete: () => React.ReactNode;
 }
