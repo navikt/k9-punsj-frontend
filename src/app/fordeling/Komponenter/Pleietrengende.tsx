@@ -12,8 +12,6 @@ import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 
-import './pleietrengende.less';
-
 export interface Props {
     identState: IIdentState;
     fellesState: IFellesState;
@@ -139,7 +137,7 @@ const Pleietrengende: React.FC<Props> = ({
                     <VerticalSpacer eightPx />
 
                     <Select
-                        className="pleietrengendeSelect"
+                        className="pleietrengende-select"
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
                             setPleietrengendeIdent(e.target.value);

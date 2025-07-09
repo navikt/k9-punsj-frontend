@@ -76,7 +76,8 @@
         "docker-up": "docker-compose -f dev/docker-compose.yml up -d",
         "docker-down": "docker-compose -f dev/docker-compose.yml down",
         "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build"
+        "build-storybook": "storybook build",
+        "lint:css": "stylelint 'src/**/*.{css,less}'"
     },
     "devDependencies": {
         "@babel/cli": "7.28.0",

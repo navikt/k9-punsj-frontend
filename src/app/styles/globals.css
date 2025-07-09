@@ -2,12 +2,10 @@
 @import url('tailwindcss/components');
 @import url('tailwindcss/utilities');
 
-/* Глобальные базовые стили */
 body {
     @apply bg-white font-sans m-0;
 }
 
-/* layout */
 .fit-window-height {
     @apply h-screen flex flex-col relative overflow-x-hidden;
 }
@@ -16,7 +14,6 @@ body {
     @apply w-full;
 }
 
-/* кастомные компоненты / input-grupper */
 .horizontalRadios {
     @apply my-2;
 
@@ -41,7 +38,6 @@ body {
     }
 }
 
-/* utility-классы */
 .margin-top-1 {
     @apply mt-4;
 }
@@ -72,4 +68,18 @@ body {
 
 .slett {
     @apply text-red-600 !important;
+}
+
+.journalpost-modal dialog::backdrop {
+    width: var(--left-panel-width, 40%);
+}
+
+.journalpost-modal .navds-modal {
+    margin-left: 5% !important;
+}
+
+.pleietrengende-select .navds-select__container {
+    max-width: none;
+    width: auto;
+    min-width: 20rem;
 }
