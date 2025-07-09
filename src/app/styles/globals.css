@@ -1,0 +1,75 @@
+@import url('tailwindcss/base');
+@import url('tailwindcss/components');
+@import url('tailwindcss/utilities');
+
+/* Глобальные базовые стили */
+body {
+    @apply bg-white font-sans m-0;
+}
+
+/* layout */
+.fit-window-height {
+    @apply h-screen flex flex-col relative overflow-x-hidden;
+}
+
+.header {
+    @apply w-full;
+}
+
+/* кастомные компоненты / input-grupper */
+.horizontalRadios {
+    @apply my-2;
+
+    legend {
+        @apply mb-2 !important;
+    }
+
+    .inputPanelGruppe__inner {
+        @apply flex;
+
+        .inputPanel {
+            @apply flex-grow basis-0 mb-0;
+
+            &:not(:first-child) {
+                @apply ml-2;
+            }
+
+            &:not(:last-child) {
+                @apply mr-2;
+            }
+        }
+    }
+}
+
+/* utility-классы */
+.margin-top-1 {
+    @apply mt-4;
+}
+
+.venstrestilt {
+    margin-right: 50%;
+}
+
+.lengre-periode-modal {
+    @apply w-[570px];
+}
+
+.fom-tom-rad {
+    @apply flex;
+
+    > div {
+        @apply inline-block mr-4;
+    }
+}
+
+.alertstripe {
+    @apply m-4;
+
+    .alertstripe__tekst {
+        max-width: unset;
+    }
+}
+
+.slett {
+    @apply text-red-600 !important;
+}

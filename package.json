@@ -163,6 +163,8 @@
         "storybook-addon-fetch-mock": "^2.0.1",
         "style-loader": "4.0.0",
         "stylelint": "16.21.1",
+        "stylelint-config-standard": "^38.0.0",
+        "stylelint-config-tailwindcss": "^1.0.0",
         "terser-webpack-plugin": "5.3.14",
         "ts-jest": "29.4.0",
         "tsconfig-paths-webpack-plugin": "^4.2.0",
