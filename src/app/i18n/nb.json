@@ -513,6 +513,7 @@
     "skjema.kvittering.identitetsnummer": "<b>Identitetsnummer:</b> {fnr}",
     "skjema.kvittering.identitetsnummer.barn": "<b>Barnets identitetsnummer:</b> {fnr}",
     "skjema.kvittering.orgnummer": "<b>Organisasjonsnummer:</b> {orgnr}",
+    "skjema.kvittering.relasjontilbarnet": "<b>Relasjon til barnet:</b> {relasjon}",
 
     "skjema.utenlandsopphold.opplysninger": "Utenlandsopphold",
     "skjema.utenlandsopphold.label": "Skal søker reise til utlandet i perioden det søkes for?",
