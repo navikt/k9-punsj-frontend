@@ -108,3 +108,11 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--a-gray-600);
 }
+
+.custom-button-internal-header {
+    color: white !important;
+    background-color: grey !important;
+    &:hover {
+        background-color: darkgray !important;
+    }
+}
