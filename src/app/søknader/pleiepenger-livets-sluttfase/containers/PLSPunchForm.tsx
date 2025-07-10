@@ -848,12 +848,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 <VerticalSpacer sixteenPx />
 
                 <OpplysningerOmPLSSoknad
-                    intl={intl}
+                    signert={signert}
+                    soknad={soknad}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
-                    signert={signert}
-                    soknad={soknad}
                 />
 
                 <VerticalSpacer sixteenPx />

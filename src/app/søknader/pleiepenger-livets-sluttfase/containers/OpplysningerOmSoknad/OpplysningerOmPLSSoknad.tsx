@@ -1,40 +1,37 @@
 import React from 'react';
 
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { FormattedMessage, IntlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
-import intlHelper from '../../../../utils/intlUtils';
 import { PLSSoknad } from '../../types/PLSSoknad';
 
-import './opplysningerOmPLSSoknad.less';
-
 interface Props {
-    intl: IntlShape;
+    signert: JaNeiIkkeRelevant | null;
+    soknad: PLSSoknad;
+
     changeAndBlurUpdatesSoknad: (event: any) => any;
     getErrorMessage: (attribute: string, indeks?: number) => any;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
-    signert: JaNeiIkkeRelevant | null;
-    soknad: PLSSoknad;
 }
 
 const OpplysningerOmPLSSoknad: React.FC<Props> = ({
-    intl,
+    signert,
+    soknad,
     changeAndBlurUpdatesSoknad,
     getErrorMessage,
     setSignaturAction,
-    signert,
-    soknad,
 }) => (
-    <Box padding="4" borderWidth="1" borderRadius="small" className="opplysningerOmSoknad">
+    <Box padding="4" borderWidth="1" borderRadius="small">
         <Heading size="small" level="3">
             <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
         </Heading>
 
         <Alert size="small" variant="info">
-            <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
+            <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
         </Alert>
 
         <div className="input-row">
@@ -42,7 +39,7 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
                 value={soknad.mottattDato}
                 id="soknad-dato"
                 errorMessage={getErrorMessage('mottattDato')}
-                label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                label={<FormattedMessage id="skjema.mottakelsesdato" />}
                 {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                     mottattDato: selectedDate,
                 }))}
@@ -53,8 +50,7 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
                     value={soknad.klokkeslett || ''}
                     type="time"
                     className="klokkeslett"
-                    // size="small"
-                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                    label={<FormattedMessage id="skjema.mottatt.klokkeslett" />}
                     {...changeAndBlurUpdatesSoknad((event: any) => ({
                         klokkeslett: event.target.value,
                     }))}
@@ -66,11 +62,11 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
         <RadioPanelGruppe
             className="horizontalRadios"
             radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                label: intlHelper(intl, jn),
+                label: <FormattedMessage id={`${jn}`} />,
                 value: jn,
             }))}
             name="signatur"
-            legend={intlHelper(intl, 'ident.signatur.etikett')}
+            legend={<FormattedMessage id="ident.signatur.etikett" />}
             checked={signert || undefined}
             onChange={(event) =>
                 setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
@@ -79,7 +75,7 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
 
         {signert === JaNeiIkkeRelevant.NEI && (
             <Alert size="small" variant="warning">
-                <FormattedMessage id={'skjema.usignert.info'} />
+                <FormattedMessage id="skjema.usignert.info" />
             </Alert>
         )}
     </Box>
