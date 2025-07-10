@@ -26,9 +26,11 @@ const OpplysningerOmSoknad: React.FC<Props> = ({
     setSignaturAction,
 }) => (
     <Box padding="4" borderWidth="1" borderRadius="small">
-        <Heading size="small" level="3">
-            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-        </Heading>
+        <div className="mb-4">
+            <Heading size="small" level="3">
+                <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+            </Heading>
+        </div>
 
         <Alert size="small" variant="info">
             <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
