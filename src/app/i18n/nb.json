@@ -506,10 +506,13 @@
     "skjema.kvittering.OMPAO.aleneOmOmsorgen": "<b>Alene om omsorgen fra og med:</b> {dato}",
     "skjema.kvittering.barn.tittel": "<b>Barn:</b> {fnr}",
     "skjema.kvittering.mottakelsesdato": "<b>Mottatt dato:</b> {mottakelsesdato}",
+    "skjema.kvittering.perioderSomFjernet": "<b>Perioder som er fjernet fra søknadsperioden:</b> {perioder}",
+    "skjema.kvittering.begrunnelseForEndring": "<b>Begrunnelse for endring:</b> {begrunnelse}",
     "skjema.kvittering.medisinskeopplysninger": "<b>Dokumentet inneholder medisinske opplysninger:</b> {jaNei}",
     "skjema.kvittering.opplysningerikkepunsjet": "<b>Dokumentet inneholder andre opplysninger som ikke er registrert i skjemaet:</b> {jaNei}",
     "skjema.kvittering.identitetsnummer": "<b>Identitetsnummer:</b> {fnr}",
     "skjema.kvittering.identitetsnummer.barn": "<b>Barnets identitetsnummer:</b> {fnr}",
+    "skjema.kvittering.orgnummer": "<b>Organisasjonsnummer:</b> {orgnr}",
 
     "skjema.utenlandsopphold.opplysninger": "Utenlandsopphold",
     "skjema.utenlandsopphold.label": "Skal søker reise til utlandet i perioden det søkes for?",

@@ -27,7 +27,7 @@ const KvitteringContainer: React.FC<Props> = ({ kvittering }: Props) => {
 
     return (
         <>
-            <Alert size="small" variant="info" className="fullfortmelding">
+            <Alert size="small" variant="info" className="mt-4">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
 
