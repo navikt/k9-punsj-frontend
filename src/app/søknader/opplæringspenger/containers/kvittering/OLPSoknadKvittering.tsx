@@ -1,12 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { Alert, BodyShort, Label } from '@navikt/ds-react';
+import { Alert, BodyShort, CopyButton, Label } from '@navikt/ds-react';
 
-import Kopier from 'app/components/kopier/Kopier';
 import VisningAvPerioderSNSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 import VisningAvPerioderSoknadKvittering from 'app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import {
@@ -117,8 +116,14 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
                     {annenSokerIdent && (
                         <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
+                            <BodyShort size="small" className="flex gap-1">
+                                <FormattedMessage
+                                    id="ident.identifikasjon.kvittering.annenSoker"
+                                    values={{ fnr: annenSokerIdent, b: (chunks) => <strong>{chunks}</strong> }}
+                                />
+
+                                <CopyButton size="xsmall" copyText={annenSokerIdent} />
+                            </BodyShort>
                         </p>
                     )}
                 </div>

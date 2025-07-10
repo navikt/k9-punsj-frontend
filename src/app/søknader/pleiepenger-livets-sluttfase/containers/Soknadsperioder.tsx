@@ -85,9 +85,11 @@ const Soknadsperioder: React.FC<Props> = ({
             className="eksiterendesoknaderpanel"
             data-testid="søknadsperioder"
         >
-            <Heading size="small" level="3">
-                <FormattedMessage id="skjema.soknadsperiode" />
-            </Heading>
+            <div className="mb-4">
+                <Heading size="small" level="3">
+                    <FormattedMessage id="skjema.soknadsperiode" />
+                </Heading>
+            </div>
 
             {punchFormState.hentPerioderError && (
                 <p>

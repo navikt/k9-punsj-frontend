@@ -3,14 +3,12 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Heading } from '@navikt/ds-react';
+import { Box, Heading } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { getForkortelseFraFordelingDokumenttype } from 'app/utils';
-
-import './sendBrevBehandletJp.less';
 
 const SendBrevBehandletJp: React.FC = () => {
     const navigate = useNavigate();
@@ -44,7 +42,7 @@ const SendBrevBehandletJp: React.FC = () => {
     }
 
     return (
-        <div className="sendBrevBehandletJp">
+        <Box margin="4">
             <Heading size="small" level="1">
                 <FormattedMessage id="sendBrevBehandletJournalpost.header" />
             </Heading>
@@ -56,7 +54,7 @@ const SendBrevBehandletJp: React.FC = () => {
                 journalpostId={journalpostId}
                 visTilbakeBtn={true}
             />
-        </div>
+        </Box>
     );
 };
 

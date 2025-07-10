@@ -1,4 +1,4 @@
-import omsorgspengerutbetalingHandlers from 'mocks/omsorgspengeutbetalingHandlers';
+import omsorgspengerutbetalingHandlers from 'mocks/mockHandlersOMPUT';
 
 import { initialState } from '../../state/omsorgspenger-utbetaling/eksisterendeSoeknaderInitialState';
 

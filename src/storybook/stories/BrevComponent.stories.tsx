@@ -12,7 +12,7 @@ import { sendBrev, sendBrevMedFeil } from '../mocks/sendBrev';
 import { hentPerson } from '../mocks/hentPerson';
 
 import '@navikt/ds-css/dist/index.css';
-import '../../app/styles/globalStyles.less';
+import '../../app/styles/globals.css';
 
 const meta: Meta<typeof BrevComponent> = {
     title: 'Components/BrevComponent',

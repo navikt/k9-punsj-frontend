@@ -1,14 +1,18 @@
 import React from 'react';
 import { Box } from '@navikt/ds-react';
 
-import './formPanel.less';
-
 interface Props {
     children: React.ReactNode;
 }
 
-const FormPanel: React.FunctionComponent<Props> = ({ children }) => (
-    <Box padding="4" borderWidth="1" borderRadius="small" className="sakstype_punch_form">
+const FormPanel: React.FC<Props> = ({ children }) => (
+    <Box
+        padding="6"
+        borderWidth="1"
+        borderRadius="medium"
+        borderColor="border-default"
+        className="flex-1 custom-scrollbar"
+    >
         {children}
     </Box>
 );

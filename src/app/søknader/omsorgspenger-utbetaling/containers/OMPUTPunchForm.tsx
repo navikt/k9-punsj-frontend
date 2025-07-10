@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
 
-import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
+import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
@@ -297,16 +297,16 @@ const OMPUTPunchForm: React.FC<Props> = ({
             )}
 
             {visForhaandsvisModal && (
-                <ForhaandsvisSoeknadModal
+                <ForhåndsvisSøknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
                     videre={() => {
                         setVisForhaandsvisModal(false);
                         setVisErDuSikkerModal(true);
                     }}
-                    intl={intl}
+                    dataTestId="validertOMPUTSoknadModal"
                 >
                     <OMPUTSoknadKvittering kvittering={kvittering} />
-                </ForhaandsvisSoeknadModal>
+                </ForhåndsvisSøknadModal>
             )}
 
             {visErDuSikkerModal && (

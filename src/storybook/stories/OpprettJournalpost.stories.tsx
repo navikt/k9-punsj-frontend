@@ -9,7 +9,7 @@ import { hentFagsaker, hentFagsakerMedFeil, hentFagsakerTomtArray } from '../moc
 import { opprettNottat, opprettNottatMedFeil } from '../mocks/opprettNottat';
 
 import '@navikt/ds-css/dist/index.css';
-import '../../app/styles/globalStyles.less';
+import '../../app/styles/globals.css';
 
 const meta: Meta<typeof OpprettJournalpost> = {
     title: 'Components/OpprettJournalpost',

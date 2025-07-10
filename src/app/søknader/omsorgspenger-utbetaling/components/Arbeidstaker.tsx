@@ -17,8 +17,6 @@ import { aktivitetsFravær } from '../konstanter';
 import { Arbeidstaker as ArbeidstakerType, IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 
-import './arbeidsforhold.less';
-
 interface Props {
     index: number;
     slettArbeidsforhold: () => void;
@@ -71,97 +69,94 @@ const Arbeidstaker = ({
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
-                <div className="arbeidsforhold-container">
-                    <Box className="container">
-                        <div>
-                            {harMinstToArbeidsforhold && (
-                                <>
-                                    <Heading size="xsmall" level="5">
-                                        <FormattedMessage
-                                            id="omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold"
-                                            values={{ index: arbeidstakerIndex + 1 }}
-                                        />
-                                    </Heading>
+                <Box padding="4">
+                    <div>
+                        {harMinstToArbeidsforhold && (
+                            <>
+                                <Heading size="xsmall" level="5">
+                                    <FormattedMessage
+                                        id="omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold"
+                                        values={{ index: arbeidstakerIndex + 1 }}
+                                    />
+                                </Heading>
 
-                                    <VerticalSpacer twentyPx />
-                                </>
-                            )}
-
-                            <Organisasjonsvelger
-                                name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
-                                disabled={gjelderAnnenOrganisasjon}
-                                className="inline-block"
-                                organisasjoner={organisasjoner}
-                            />
-
-                            {harMinstToArbeidsforhold && (
-                                <Button
-                                    variant="tertiary"
-                                    size="small"
-                                    className="slett"
-                                    onClick={slettArbeidsforhold}
-                                    icon={<Delete />}
-                                >
-                                    <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
-                                </Button>
-                            )}
-
-                            <Checkbox
-                                onChange={() => toggleGjelderAnnenOrganisasjon(form)}
-                                checked={gjelderAnnenOrganisasjon}
+                                <VerticalSpacer twentyPx />
+                            </>
+                        )}
+                        <Organisasjonsvelger
+                            name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
+                            disabled={gjelderAnnenOrganisasjon}
+                            className="inline-block"
+                            organisasjoner={organisasjoner}
+                        />
+                        {harMinstToArbeidsforhold && (
+                            <Button
+                                variant="tertiary"
+                                size="small"
+                                className="float-right"
+                                onClick={slettArbeidsforhold}
+                                icon={<Delete />}
                             >
-                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox" />
-                            </Checkbox>
+                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
+                            </Button>
+                        )}
+                        <Checkbox
+                            onChange={() => toggleGjelderAnnenOrganisasjon(form)}
+                            checked={gjelderAnnenOrganisasjon}
+                        >
+                            <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox" />
+                        </Checkbox>
 
-                            {gjelderAnnenOrganisasjon && (
+                        {gjelderAnnenOrganisasjon && (
+                            <div className="input-row">
                                 <TextFieldFormik
                                     size="small"
                                     label="Organisasjonsnummer"
                                     name={`${name}.organisasjonsnummer`}
                                 />
-                            )}
-                        </div>
+                            </div>
+                        )}
+                    </div>
 
-                        <hr />
+                    <hr />
 
-                        <div className="mt-4">
-                            <Heading size="small">
-                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
-                            </Heading>
-                        </div>
+                    <div className="mt-4">
+                        <Heading size="small">
+                            <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
+                        </Heading>
+                    </div>
 
-                        <FieldArray
-                            name={`${name}.fravaersperioder`}
-                            render={(arrayHelpers) => (
-                                <>
-                                    {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
-                                        <Fravaersperiode
-                                            key={fravaersperiodeIndex}
-                                            name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
-                                            antallFravaersperioder={value.fravaersperioder?.length}
-                                            slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
-                                            visSoknadAarsak
-                                        />
-                                    ))}
+                    <FieldArray
+                        name={`${name}.fravaersperioder`}
+                        render={(arrayHelpers) => (
+                            <>
+                                {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
+                                    <Fravaersperiode
+                                        key={fravaersperiodeIndex}
+                                        name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
+                                        antallFravaersperioder={value.fravaersperioder?.length}
+                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                        visSoknadAarsak
+                                    />
+                                ))}
 
-                                    <Button
-                                        variant="tertiary"
-                                        size="small"
-                                        onClick={() =>
-                                            arrayHelpers.push({
-                                                ...fravaersperiodeInitialValue,
-                                                aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
-                                            })
-                                        }
-                                        icon={<AddCircle />}
-                                    >
-                                        <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn" />
-                                    </Button>
-                                </>
-                            )}
-                        />
-                    </Box>
-                </div>
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() =>
+                                        arrayHelpers.push({
+                                            ...fravaersperiodeInitialValue,
+                                            aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
+                                        })
+                                    }
+                                    icon={<AddCircle />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn" />
+                                </Button>
+                            </>
+                        )}
+                    />
+                </Box>
             )}
         </Field>
     );
