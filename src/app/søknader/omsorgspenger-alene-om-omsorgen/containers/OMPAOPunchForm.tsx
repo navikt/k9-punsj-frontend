@@ -207,15 +207,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                     }}
                     dataTestId="validertOMPAOSoknadModal"
                 >
-                    <>
-                        <div className="mb-6">
-                            <Heading size="medium" level="2">
-                                <FormattedMessage id="skjema.kvittering.oppsummering" />
-                            </Heading>
-                        </div>
-
-                        <OMPAOSoknadKvittering kvittering={kvittering} />
-                    </>
+                    <OMPAOSoknadKvittering kvittering={kvittering} />
                 </ForhåndsvisSøknadModal>
             )}
 

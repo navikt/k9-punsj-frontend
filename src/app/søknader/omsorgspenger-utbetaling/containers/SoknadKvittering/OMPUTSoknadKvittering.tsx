@@ -1,25 +1,19 @@
 import React from 'react';
 
-import classNames from 'classnames';
-import { useIntl } from 'react-intl';
-import { Alert } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 
 import { aktivitetsFravær } from 'app/søknader/omsorgspenger-utbetaling/konstanter';
-import intlHelper from 'app/utils/intlUtils';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../../utils';
 import { IOMPUTSoknadKvittering } from '../../types/OMPUTSoknadKvittering';
-import FravaersperiodeKvittering from './FravaersperiodeKvittering';
-
-import './ompUtSoknadKvittering.less';
+import OMPUTFravaersperiodeKvittering from './OMPUTFravaersperiodeKvittering';
 
 interface Props {
     kvittering?: IOMPUTSoknadKvittering;
 }
 
 export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
-    const intl = useIntl();
-
     const { journalposter, mottattDato } = kvittering || {};
 
     if (!kvittering) {
@@ -35,71 +29,119 @@ export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
         periode.aktivitetFravær.includes(aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE),
     );
 
-    return (
-        <div className={classNames('OMPUTSoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+    const mottakelsesdato = `${periodToFormattedString(
+        kvittering.mottattDato.substr(0, 10),
+    )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`;
 
+    const inneholderMedisinskeOpplysninger =
+        journalposter && journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei';
+    const inneholderInformasjonSomIkkeKanPunsjes =
+        journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
+
+    return (
+        <>
             {mottattDato && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
-                        {`${periodToFormattedString(
-                            kvittering.mottattDato.substr(0, 10),
-                        )}  ${formattereTidspunktFraUTCTilGMT(kvittering.mottattDato)}`}
-                    </p>
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">
+                        <FormattedMessage
+                            id="skjema.kvittering.mottakelsesdato"
+                            values={{
+                                mottakelsesdato,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
+                        />
+                    </BodyShort>
                 </div>
             )}
 
-            <div>
-                <h3>{intlHelper(intl, PunchFormPaneler.ARBEID)}</h3>
-                <hr className={classNames('linje')} />
+            <div className="mb-4">
+                <Heading size="small" level="3">
+                    <FormattedMessage id={PunchFormPaneler.ARBEID} />
+                </Heading>
+
+                <div className="h-px bg-gray-300 mb-4" />
+
                 {!!arbeidstakerFravaersperioder.length && (
                     <>
-                        <h3>{intlHelper(intl, 'arbeidstaker')}</h3>
+                        <div className="mb-4">
+                            <Heading size="small" level="4">
+                                <FormattedMessage id="arbeidstaker" />
+                            </Heading>
+                        </div>
+
                         {arbeidstakerFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
+                            <OMPUTFravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}
 
                 {!!frilanserFravaersperioder.length && (
                     <>
-                        <h3>{intlHelper(intl, 'frilanser')}</h3>
+                        <div className="mt-4">
+                            <Heading size="small" level="4">
+                                <FormattedMessage id="frilanser" />
+                            </Heading>
+                        </div>
+
                         {frilanserFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
+                            <OMPUTFravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}
 
                 {!!selvstendigNaeringsdrivendeFravaersperioder.length && (
                     <>
-                        <h3>{intlHelper(intl, 'selvstendig')}</h3>
+                        <div className="mt-4">
+                            <Heading size="small" level="4">
+                                <FormattedMessage id="selvstendig" />
+                            </Heading>
+                        </div>
+
                         {selvstendigNaeringsdrivendeFravaersperioder.map((periode) => (
-                            <FravaersperiodeKvittering key={periode.periode} periode={periode} />
+                            <OMPUTFravaersperiodeKvittering key={periode.periode} periode={periode} />
                         ))}
                     </>
                 )}
             </div>
 
-            <div>
-                {!!journalposter && journalposter.length > 0 && (
-                    <div>
-                        <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                        <hr className={classNames('linje')} />
-                        <p>
-                            <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                            {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                        </p>
-                        <p>
-                            <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                            {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
+            {!!journalposter && journalposter.length > 0 && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <VStack gap="4">
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.medisinskeopplysninger"
+                                values={{
+                                    jaNei: inneholderMedisinskeOpplysninger,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.opplysningerikkepunsjet"
+                                values={{
+                                    jaNei: inneholderInformasjonSomIkkeKanPunsjes,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+                    </VStack>
+                </div>
+            )}
+        </>
     );
 };
 

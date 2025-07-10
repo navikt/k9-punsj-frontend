@@ -788,6 +788,13 @@
     "omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn": "Legg til periode",
     "omsorgspenger.utbetaling.utenlandsopphold.unselectedoption": "Velg land",
 
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.tittel": "<b>Fraværsperiode:</b> {periode}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.timernormalt": "<b>Normal arbeidstid per dag:</b>  {normalarbeidstid}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværPerDag": "<b>Timer fravær per dag:</b>  {fraværPerDag}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.søknadsårsak": "<b>Søknadsårsak:</b>  {søknadsårsak}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværsårsak": "<b>Fraværsårsak:</b>  {fraværsårsak}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.organisasjonsnummer": "<b>Organisasjonsnummer:</b>  {organisasjonsnummer}",
+
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",
     "modal.settpaavent.visjournalpost": "Vis journalpost",

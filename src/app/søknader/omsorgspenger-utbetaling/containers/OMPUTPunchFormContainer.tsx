@@ -21,7 +21,7 @@ import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
 import OMPUTPunchForm from './OMPUTPunchForm';
-import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
+import OMPUTSoknadKvitteringContainer from './SoknadKvittering/OMPUTSoknadKvitteringContainer';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { Dispatch } from 'redux';
 
@@ -97,7 +97,7 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
     }
 
     if (erSendtInn && kvittering) {
-        return <KvitteringContainer kvittering={kvittering} />;
+        return <OMPUTSoknadKvitteringContainer kvittering={kvittering} />;
     }
 
     if (error || !soeknadRespons) {
