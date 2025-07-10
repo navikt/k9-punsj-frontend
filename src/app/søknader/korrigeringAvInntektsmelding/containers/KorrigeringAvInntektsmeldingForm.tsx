@@ -163,15 +163,18 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                 <>
                     <Form className="korrigering">
                         <Box padding="4">
-                            <Heading size="medium" level="2">
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                            </Heading>
+                            <div className="mb-4">
+                                <Heading size="medium" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
+                            </div>
 
                             <Alert size="small" variant="info" className="korrigering__headerInfo">
-                                <List
-                                    as="ul"
-                                    title={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
-                                >
+                                <Heading size="small" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
+
+                                <List as="ul">
                                     <List.Item>
                                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
                                     </List.Item>
