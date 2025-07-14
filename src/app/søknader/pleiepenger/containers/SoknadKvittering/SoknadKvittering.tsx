@@ -122,12 +122,12 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
     const mottattDatoFormatted = `${formattereDatoFraUTCTilGMT(mottattDato)} - ${formattereTidspunktFraUTCTilGMT(mottattDato)}`;
 
     const inneholderMedisinskeOpplysninger =
-        journalposter && journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei';
+        journalposter && journalposter[0]?.inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei';
     const inneholderInformasjonSomIkkeKanPunsjes =
-        journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
+        journalposter && journalposter[0]?.inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
 
     return (
-        <div data-testid="kvitter">
+        <div data-testid="kvittering.oppsummering">
             {visSoknadsperiode && (
                 <div data-testid="soknadsperiode" className="mb-4">
                     <Heading size="xsmall" level="3">

@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ForhåndsvisSøknadModal = ({ children, dataTestId, videre, avbryt }: Props) => (
-    <Modal key="validertSoknadModal" aria-label="validertSoknadModal" data-test-id={dataTestId} onClose={avbryt} open>
+    <Modal key="validertSoknadModal" aria-label="validertSoknadModal" data-testid={dataTestId} onClose={avbryt} open>
         <Modal.Header closeButton={false}>
             <Heading size="medium" level="1">
                 <FormattedMessage id="skjema.kvittering.oppsummering" />
@@ -21,11 +21,11 @@ const ForhåndsvisSøknadModal = ({ children, dataTestId, videre, avbryt }: Prop
         <Modal.Body>{children}</Modal.Body>
 
         <Modal.Footer>
-            <Button size="small" onClick={videre}>
+            <Button size="small" onClick={videre} data-testid="videreKnapp">
                 <FormattedMessage id="skjema.knapp.videre" />
             </Button>
 
-            <Button variant="secondary" size="small" onClick={avbryt}>
+            <Button variant="secondary" size="small" onClick={avbryt} data-testid="avbrytKnapp">
                 <FormattedMessage id="skjema.knapp.avbryt" />
             </Button>
         </Modal.Footer>
