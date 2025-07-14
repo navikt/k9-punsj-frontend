@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import DocumentTitle from 'app/components/document-title/DocumentTitle';
 
-import './page.less';
-
 interface IPageProps {
     className?: string;
     title: string;
@@ -22,7 +20,7 @@ class Page extends React.Component<IPageProps> {
             <>
                 <DocumentTitle title={title} />
                 {topContentRenderer && topContentRenderer()}
-                <div className={`page ${className}`}>{children}</div>
+                <div className={className}>{children}</div>
             </>
         );
     }

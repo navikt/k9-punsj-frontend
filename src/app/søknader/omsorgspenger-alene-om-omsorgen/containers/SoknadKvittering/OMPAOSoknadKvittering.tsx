@@ -1,15 +1,12 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 
 import { formattereTidspunktFraUTCTilGMT, periodToFormattedString } from '../../../../utils';
 import { IOMPAOSoknadKvittering } from '../../types/OMPAOSoknadKvittering';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
-
-import './OMPAOSoknadKvittering.less';
 
 interface Props {
     kvittering?: IOMPAOSoknadKvittering;
@@ -39,83 +36,81 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
         journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
 
     return (
-        <div className={classNames('OMPAOSoknadKvitteringContainer')}>
-            <Heading size="medium" level="2">
-                <FormattedMessage id="skjema.kvittering.oppsummering" />
-            </Heading>
+        <>
+            {mottattDato && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                    </Heading>
 
-            <div className="mt-4">
-                {mottattDato && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-                        </Heading>
+                    <div className="h-px bg-gray-300 mb-4" />
 
-                        <hr className={classNames('linje')} />
+                    <BodyShort size="small">
+                        <FormattedMessage
+                            id="skjema.kvittering.mottakelsesdato"
+                            values={{
+                                mottakelsesdato,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
+                        />
+                    </BodyShort>
+                </div>
+            )}
 
-                        <p>
-                            <FormattedMessage
-                                id="skjema.kvittering.mottakelsesdato"
-                                values={{
-                                    mottakelsesdato,
-                                    b: (chunks) => <strong>{chunks}</strong>,
-                                }}
-                            />
-                        </p>
-                    </div>
-                )}
-
-                {periode && (
-                    <p>
+            {periode && (
+                <div className="mb-4">
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.OMPAO.aleneOmOmsorgen"
                             values={{ dato: aleneOmOmsorgenDato, b: (chunks) => <strong>{chunks}</strong> }}
                         />
-                    </p>
-                )}
+                    </BodyShort>
+                </div>
+            )}
 
-                {barn?.norskIdentitetsnummer && (
-                    <p>
+            {barn?.norskIdentitetsnummer && (
+                <div className="mb-4">
+                    <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.identitetsnummer.barn"
                             values={{ fnr: barnetsFnr, b: (chunks) => <strong>{chunks}</strong> }}
                         />
-                    </p>
-                )}
-
-                <div>
-                    {!!journalposter && journalposter.length > 0 && (
-                        <div>
-                            <Heading size="small" level="3">
-                                <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
-                            </Heading>
-
-                            <hr className={classNames('linje')} />
-
-                            <p>
-                                <FormattedMessage
-                                    id="skjema.kvittering.medisinskeopplysninger"
-                                    values={{
-                                        jaNei: inneholderMedisinskeOpplysninger,
-                                        b: (chunks) => <strong>{chunks}</strong>,
-                                    }}
-                                />
-                            </p>
-
-                            <p>
-                                <FormattedMessage
-                                    id="skjema.kvittering.opplysningerikkepunsjet"
-                                    values={{
-                                        jaNei: inneholderInformasjonSomIkkeKanPunsjes,
-                                        b: (chunks) => <strong>{chunks}</strong>,
-                                    }}
-                                />
-                            </p>
-                        </div>
-                    )}
+                    </BodyShort>
                 </div>
-            </div>
-        </div>
+            )}
+
+            {!!journalposter && journalposter.length > 0 && (
+                <>
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <VStack gap="4">
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.medisinskeopplysninger"
+                                values={{
+                                    jaNei: inneholderMedisinskeOpplysninger,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.opplysningerikkepunsjet"
+                                values={{
+                                    jaNei: inneholderInformasjonSomIkkeKanPunsjes,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+                    </VStack>
+                </>
+            )}
+        </>
     );
 };
 

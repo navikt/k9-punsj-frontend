@@ -1,13 +1,11 @@
 import React from 'react';
 
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { Heading } from '@navikt/ds-react';
+import { BodyShort, Heading } from '@navikt/ds-react';
+
 import { IPeriode } from 'app/models/types';
 import { initializeDate } from 'app/utils';
 import { KorrigeringAvInntektsmeldingFormValues } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-
-import './omsKvittering.less';
 
 const formaterPerioder = (periode: IPeriode) => {
     const fom = initializeDate(periode.fom).format('DD.MM.YYYY');
@@ -36,19 +34,15 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
     const mottakelsesdato = initializeDate(OpplysningerOmKorrigering.dato).format('DD.MM.YYYY');
 
     return (
-        <div className="omsKvittering">
-            <Heading size="medium" level="2">
-                <FormattedMessage id="skjema.kvittering.oppsummering" />
-            </Heading>
-
-            <div className="mt-4">
+        <>
+            <div className="mb-4">
                 <Heading size="small" level="3">
                     <FormattedMessage id="skjema.opplysningeromkorrigering" />
                 </Heading>
 
-                <hr className={classNames('linje')} />
+                <div className="h-px bg-gray-300 mb-4" />
 
-                <p>
+                <BodyShort size="small">
                     <FormattedMessage
                         id="skjema.kvittering.mottakelsesdato"
                         values={{
@@ -56,15 +50,17 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                             b: (chunks) => <strong>{chunks}</strong>,
                         }}
                     />
-                </p>
+                </BodyShort>
+            </div>
 
+            <div className="mb-4">
                 <Heading size="small" level="3">
                     <FormattedMessage id="skjema.kvittering.oppsummering.virksomhet" />
                 </Heading>
 
-                <hr className={classNames('linje')} />
+                <div className="h-px bg-gray-300 mb-4" />
 
-                <p>
+                <BodyShort size="small">
                     <FormattedMessage
                         id="skjema.kvittering.oppsummering.organisasjonsnummer"
                         values={{
@@ -72,70 +68,72 @@ const OMSKvittering: React.FC<Props> = ({ feltverdier }: Props) => {
                             b: (chunks) => <strong>{chunks}</strong>,
                         }}
                     />
-                </p>
-
-                {ArbeidsforholdId && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id="skjema.kvittering.oppsummering.arbeidsforholdId" />
-                        </Heading>
-
-                        <hr className={classNames('linje')} />
-
-                        <p>{ArbeidsforholdId}</p>
-                    </div>
-                )}
-
-                {visTrekkperioder() && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.trekkKravPerioder.tittel" />
-                        </Heading>
-
-                        <hr className={classNames('linje')} />
-
-                        <p>{Trekkperioder.map((trekkperiode) => formaterPerioder(trekkperiode)).join(', ')}</p>
-                    </div>
-                )}
-
-                {visPerioderMedRefusjonskrav() && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.heleDagerMedFrvær.tittel" />
-                        </Heading>
-
-                        <hr className={classNames('linje')} />
-
-                        <p>
-                            {PerioderMedRefusjonskrav.map((periodeMedRefusjonskrav) =>
-                                formaterPerioder(periodeMedRefusjonskrav),
-                            ).join(', ')}
-                        </p>
-                    </div>
-                )}
-
-                {visDagerMedDelvisFravær() && (
-                    <div>
-                        <Heading size="small" level="3">
-                            <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.delDagerMedFrvær.tittel" />
-                        </Heading>
-
-                        <hr className={classNames('linje')} />
-
-                        <p>
-                            {DagerMedDelvisFravær.filter(
-                                (dagMedDelvisFravær) => dagMedDelvisFravær.dato && dagMedDelvisFravær.timer,
-                            )
-                                .map((dagMedDelvisFravær) => {
-                                    const dag = initializeDate(dagMedDelvisFravær.dato).format('DD.MM.YYYY');
-                                    return `${dag} - ${dagMedDelvisFravær.timer} timer`;
-                                })
-                                .join(', ')}
-                        </p>
-                    </div>
-                )}
+                </BodyShort>
             </div>
-        </div>
+
+            {ArbeidsforholdId && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.oppsummering.arbeidsforholdId" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">{ArbeidsforholdId}</BodyShort>
+                </div>
+            )}
+
+            {visTrekkperioder() && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.trekkKravPerioder.tittel" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">
+                        {Trekkperioder.map((trekkperiode) => formaterPerioder(trekkperiode)).join(', ')}
+                    </BodyShort>
+                </div>
+            )}
+
+            {visPerioderMedRefusjonskrav() && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.heleDagerMedFrvær.tittel" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">
+                        {PerioderMedRefusjonskrav.map((periodeMedRefusjonskrav) =>
+                            formaterPerioder(periodeMedRefusjonskrav),
+                        ).join(', ')}
+                    </BodyShort>
+                </div>
+            )}
+
+            {visDagerMedDelvisFravær() && (
+                <div>
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.oppsummering.omskorrigering.delDagerMedFrvær.tittel" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">
+                        {DagerMedDelvisFravær.filter(
+                            (dagMedDelvisFravær) => dagMedDelvisFravær.dato && dagMedDelvisFravær.timer,
+                        )
+                            .map((dagMedDelvisFravær) => {
+                                const dag = initializeDate(dagMedDelvisFravær.dato).format('DD.MM.YYYY');
+                                return `${dag} - ${dagMedDelvisFravær.timer} timer`;
+                            })
+                            .join(', ')}
+                    </BodyShort>
+                </div>
+            )}
+        </>
     );
 };
 

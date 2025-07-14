@@ -11,8 +11,6 @@ import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateI
 import DateRange from '../../models/types/DateRange';
 import CalendarGrid from './CalendarGrid';
 
-import './tidsbrukKalender.less';
-
 interface OwnProps {
     gyldigePerioder: DateRange[];
     ModalContent: React.ReactElement;
@@ -214,7 +212,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                             </div>
                             <Provider rootElement={document.getElementById(ref?.current?.id) || undefined}>
                                 <Modal
-                                    className="venstrestilt registrer-tid-modal exempt-from-click-outside"
+                                    className="venstrestilt max-w-[28.125rem] exempt-from-click-outside"
                                     open={visModal}
                                     onClose={() => {
                                         setVisModal(false);

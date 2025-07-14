@@ -1,4 +1,4 @@
-import aleneOmOmsorgenHandlers from 'mocks/aleneOmOmsorgenHandlers';
+import aleneOmOmsorgenHandlers from 'mocks/mockHandlersOMPAO';
 
 describe('Alene om omsorgen - ny søknad', () => {
     beforeEach(() => {

@@ -7,10 +7,10 @@ import { IntlProvider } from 'react-intl';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import PSBSoknadKvittering from '../../../app/søknader/pleiepenger/containers/SoknadKvittering/SoknadKvittering';
 import intlHelper from '../../../app/utils/intlUtils';
+import messages from '../../../app/i18n/nb.json';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ id }: { id: string }) => id,
 }));
 
 jest.mock('react-redux', () => ({
@@ -212,7 +212,7 @@ describe('SoknadKvittering', () => {
     const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
         mocked(intlHelper).mockImplementation((intl, id) => id);
         return render(
-            <IntlProvider locale="en" messages={{}}>
+            <IntlProvider locale="en" messages={messages}>
                 <PSBSoknadKvittering innsendtSøknad={response} />
             </IntlProvider>,
         );
@@ -224,66 +224,78 @@ describe('SoknadKvittering', () => {
         // screen.debug();
 
         // Viser kvittering side
-        expect(screen.getByTestId('kvittering.oppsummering').textContent).toContain('skjema.kvittering.oppsummering');
+        expect(screen.getByTestId('kvittering.oppsummering')).toBeDefined();
 
         //Viser søknadsperioder
         const søknadsperiode = screen.getByTestId('soknadsperiode').textContent;
-        expect(søknadsperiode).toContain('skjema.soknadskvittering.soknadsperiode');
+        expect(søknadsperiode).toContain('Søknadsperioder');
         expect(søknadsperiode).toContain('01.06.2021 - 30.06.2021');
 
         // Viser opplysninger om mottatt dato
         const mottattDato = screen.getByTestId('mottatt-dato').textContent;
-        expect(mottattDato).toContain('skjema.opplysningeromsoknad');
-        expect(mottattDato).toContain('skjema.mottakelsesdato');
-        expect(mottattDato).toContain('12.10.2020');
-        expect(mottattDato).toContain('14:53');
-        expect(mottattDato).toContain('12.10.2020');
+        expect(mottattDato).toContain('Opplysninger om søknaden');
+
+        const mottakelsesdato = screen.getByTestId('mottakelsesdato').textContent;
+        expect(mottakelsesdato).toContain('Mottatt dato:');
+        expect(mottakelsesdato).toContain('12.10.2020 - 14:53');
+
+        const perioderSomFjernet = screen.getByTestId('perioderSomFjernet').textContent;
+        expect(perioderSomFjernet).toContain('Perioder som er fjernet fra søknadsperioden:');
+        expect(perioderSomFjernet).toContain('01.06.2021 - 30.06.2021');
 
         // Viser utenlandsoppehold
         const utenlandsopphold = screen.getByTestId('utenlandsopphold').textContent;
-        expect(utenlandsopphold).toContain('skjema.utenlandsopphold.opplysninger');
+        expect(utenlandsopphold).toContain('Utenlandsopphold');
+
+        expect(utenlandsopphold).toContain('Periode');
         expect(utenlandsopphold).toContain('01.06.2021 - 16.06.2021');
+        expect(utenlandsopphold).toContain('Land');
         expect(utenlandsopphold).toContain('Bahrain');
 
         // ferie
         const ferie = screen.getByTestId('ferie').textContent;
-        expect(ferie).toContain('skjema.ferieskjema.periode.overskrift');
+        expect(ferie).toContain('Ferie');
+        expect(ferie).toContain('Periode');
         expect(ferie).toContain('01.06.2021 - 04.06.2021');
 
         // Viser opplysninger om soker
         const opplysningerOmSoker = screen.getByTestId('opplysningerOmSoker').textContent;
-        expect(opplysningerOmSoker).toContain('skjema.opplysningeromsoker');
-        expect(opplysningerOmSoker).toContain('skjema.relasjontilbarnet.kvittering');
-        expect(opplysningerOmSoker).toContain('Medmor');
+
+        expect(opplysningerOmSoker).toContain('Opplysninger om søker');
+        expect(opplysningerOmSoker).toContain('Opplysninger om søkerRelasjon til barnet: Medmor');
 
         // Viser arbeidstaker
         const arbeidsforhold = screen.getByTestId('arbeidsforhold').textContent;
 
-        expect(arbeidsforhold).toContain('arbeidstaker');
-        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.orgnr');
+        expect(arbeidsforhold).toContain('Arbeidstaker');
+        expect(arbeidsforhold).toContain('Organisasjonsnummer:');
         expect(arbeidsforhold).toContain('1313123212323');
-        expect(arbeidsforhold).toContain('skjema.periode.overskrift');
+
+        expect(arbeidsforhold).toContain('Periode');
         expect(arbeidsforhold).toContain('01.06.2021 - 30.06.2021');
-        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.timernormalt');
+        expect(arbeidsforhold).toContain('Normal arbeidstid per dag');
         expect(arbeidsforhold).toContain('8 timer');
-        expect(arbeidsforhold).toContain('skjema.arbeid.arbeidstaker.timerfaktisk');
+        expect(arbeidsforhold).toContain('Faktisk arbeidstid per dag');
         expect(arbeidsforhold).toContain('5 timer');
 
         // Viser frilanser
         const frilanser = screen.getByTestId('frilanser').textContent;
-        expect(frilanser).toContain('frilanser');
-        expect(frilanser).toContain('skjema.frilanserdato');
+        expect(frilanser).toContain('Frilanser');
+        expect(frilanser).toContain('Når startet søker som frilanser?');
         expect(frilanser).toContain('01.01.2021');
-        expect(frilanser).toContain('skjema.periode.overskrift');
+
+        expect(frilanser).toContain('Periode');
         expect(frilanser).toContain('01.06.2021 - 30.06.20218');
-        expect(frilanser).toContain('skjema.arbeid.arbeidstaker.timernormalt');
+
+        expect(frilanser).toContain('Normal arbeidstid per dag');
         expect(frilanser).toContain('8 timer');
+
+        expect(frilanser).toContain('Faktisk arbeidstid per dag');
         expect(frilanser).toContain('5 timer');
-        expect(frilanser).toContain('skjema.arbeid.arbeidstaker.timerfaktisk');
 
         // Viser selvstendig næringsdrivende
         const selvstendigNæringsdrivende = screen.getByTestId('selvstendignæringsdrivende').textContent;
-        expect(selvstendigNæringsdrivende).toContain('selvstendig');
+        expect(selvstendigNæringsdrivende).toContain('Selvstendig næringsdrivende');
         expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.arbeidstaker.orgnr');
         expect(selvstendigNæringsdrivende).toContain('231232321323');
         expect(selvstendigNæringsdrivende).toContain('skjema.arbeid.sn.virksomhetsnavn');
@@ -311,43 +323,48 @@ describe('SoknadKvittering', () => {
 
         // Viser omsorgstilbud
         const omsorgstilbud = screen.getByTestId('visOmsorgstilbud').textContent;
-        expect(omsorgstilbud).toContain('skjema.omsorgstilbud.overskrift');
-        expect(omsorgstilbud).toContain('skjema.periode.overskrift');
-        expect(omsorgstilbud).toContain('skjema.omsorgstilbud.gjennomsnittlig');
+        expect(omsorgstilbud).toContain('Omsorgstilbud');
+
+        expect(omsorgstilbud).toContain('Periode');
         expect(omsorgstilbud).toContain('14.06.2021 - 19.06.2021');
+
+        expect(omsorgstilbud).toContain('Gjennomsnittlig antall timer/minutter per dag denne perioden');
         expect(omsorgstilbud).toContain('7 timer og 30 minutter');
 
         // Viser beredskap og nattevåk
         const beredskapnettevaak = screen.getByTestId('beredskapnettevaak').textContent;
-        expect(beredskapnettevaak).toContain('skjema.beredskapognattevaak.overskrift');
+        expect(beredskapnettevaak).toContain('Beredskap og nattevåk');
 
         const beredskap = screen.getByTestId('beredskap').textContent;
-        expect(beredskap).toContain('skjema.beredskap.overskrift');
         expect(beredskap).toContain('Beredskap');
-        expect(beredskap).toContain('skjema.periode.overskrift');
+
+        expect(beredskap).toContain('Beredskap');
+        expect(beredskap).toContain('Periode');
         expect(beredskap).toContain('01.06.2021 - 10.06.2021');
-        expect(beredskap).toContain('skjema.beredskap.tilleggsinfo.kvittering');
+        expect(beredskap).toContain('Tilleggsopplysninger vedrørende beredskap');
 
         const nattevaak = screen.getByTestId('nattevak').textContent;
-        expect(nattevaak).toContain('skjema.nattevaak.overskrift');
+
         expect(nattevaak).toContain('Nattevåk');
-        expect(nattevaak).toContain('skjema.periode.overskrift');
+        expect(nattevaak).toContain('Periode');
         expect(nattevaak).toContain('21.06.2021 - 25.06.2021');
-        expect(nattevaak).toContain('skjema.beredskap.tilleggsinfo.kvittering');
+        expect(nattevaak).toContain('Tilleggsopplysninger vedrørende beredskap');
 
         // Viser medlemskap
         const medlemskap = screen.getByTestId('medlemskap').textContent;
-        expect(medlemskap).toContain('skjema.medlemskap.overskrift');
-        expect(medlemskap).toContain('skjema.periode.overskrift');
+        expect(medlemskap).toContain('Medlemskap');
+        expect(medlemskap).toContain('Periode');
         expect(medlemskap).toContain('13.04.2021 - 01.06.2021');
-        expect(medlemskap).toContain('skjema.utenlandsopphold.land');
+        expect(medlemskap).toContain('Land');
         expect(medlemskap).toContain('Aserbajdsjan');
 
         // Viser tilleggsopplysninger
         const tilleggsopplysninger = screen.getByTestId('tilleggsopplysninger').textContent;
-        expect(tilleggsopplysninger).toContain('skjema.soknadskvittering.tilleggsopplysninger');
-        expect(tilleggsopplysninger).toContain('skjema.medisinskeopplysninger.kvittering Nei');
-        expect(tilleggsopplysninger).toContain('skjema.opplysningerikkepunsjet.kvittering Nei');
+        expect(tilleggsopplysninger).toContain('Tilleggsopplysninger');
+        expect(tilleggsopplysninger).toContain('Dokumentet inneholder medisinske opplysninger: Nei');
+        expect(tilleggsopplysninger).toContain(
+            'Dokumentet inneholder andre opplysninger som ikke er registrert i skjemaet: Nei',
+        );
     });
 
     it('Viser minimal kvittering', () => {
@@ -356,35 +373,28 @@ describe('SoknadKvittering', () => {
         // screen.debug();
 
         // Viser kvittering side
-        expect(screen.getByTestId('kvittering.oppsummering').textContent).toContain('skjema.kvittering.oppsummering');
+        expect(screen.getByTestId('kvittering.oppsummering')).toBeDefined();
 
         //Viser søknadsperioder
         const søknadsperiode = screen.getByTestId('soknadsperiode').textContent;
-        expect(søknadsperiode).toContain('skjema.soknadskvittering.soknadsperiode');
+        expect(søknadsperiode).toContain('Søknadsperioder');
         expect(søknadsperiode).toContain('01.06.2021 - 30.06.2021');
 
         // Viser opplysninger om mottatt dato
         const mottattDato = screen.getByTestId('mottatt-dato').textContent;
-        expect(mottattDato).toContain('skjema.opplysningeromsoknad');
-        expect(mottattDato).toContain('skjema.mottakelsesdato');
-        expect(mottattDato).toContain('12.10.2020');
-        expect(mottattDato).toContain('14:53');
-        expect(mottattDato).toContain('12.10.2020');
+        expect(mottattDato).toContain('Opplysninger om søknaden');
+        expect(mottattDato).toContain('Mottatt dato: 12.10.2020 - 14:53');
+
+        // Viser period som fjernet
+        expect(mottattDato).toContain('Perioder som er fjernet fra søknadsperioden: 01.06.2021 - 30.06.2021');
 
         // Viser opplysninger om soker
         const opplysningerOmSoker = screen.getByTestId('opplysningerOmSoker').textContent;
-        expect(opplysningerOmSoker).toContain('skjema.opplysningeromsoker');
-        expect(opplysningerOmSoker).toContain('skjema.relasjontilbarnet.kvittering');
-        expect(opplysningerOmSoker).toContain('Bestemor');
+        expect(opplysningerOmSoker).toContain('Opplysninger om søker');
+        expect(opplysningerOmSoker).toContain('Relasjon til barnet: Bestemor');
 
         // Ikke viser BegrunnelseForEndring
-
         expect(screen.queryByTestId('begrunnelseForEndring')).not.toBeInTheDocument();
-
-        // Viser period som fjernet
-        const periodSomFjernet = screen.getByTestId('perioderSomFjernet').textContent;
-        expect(periodSomFjernet).toContain('skjema.perioderSomFjernet');
-        expect(periodSomFjernet).toContain('01.06.2021 - 30.06.2021');
 
         // Ikke viser utenlandsoppehold
         expect(screen.queryByTestId('utenlandsopphold')).not.toBeInTheDocument();

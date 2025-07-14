@@ -7,20 +7,20 @@ import intlHelper from 'app/utils/intlUtils';
 import { KorrigeringAvInntektsmeldingFormFields } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-import './opplysningerOmKorrigering.less';
-
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
 
     return (
         <>
-            <Heading level={'3'} size="small">
-                <FormattedMessage id={'skjema.opplysningeromkorrigering'} />
-            </Heading>
+            <div className="mb-4">
+                <Heading level="3" size="small">
+                    <FormattedMessage id="skjema.opplysningeromkorrigering" />
+                </Heading>
+            </div>
 
-            <Box className="listepanel opplysningerOmKorrigering">
-                <Heading level={'4'} size="xsmall" className="opplysningerOmKorrigering__subHeading">
-                    <FormattedMessage id={'skjema.opplysningeromkorrigering.spm'} />
+            <Box background="bg-subtle" padding="4" borderRadius="medium">
+                <Heading level="4" size="xsmall">
+                    <FormattedMessage id="skjema.opplysningeromkorrigering.spm" />
                 </Heading>
 
                 <div className="input-row">
@@ -29,13 +29,12 @@ const OpplysningerOmKorrigering: React.FC = () => {
                             <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />
                         )}
                     </Field>
-                    <div>
+                    <div className="ml-4">
                         <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
                             {({ field }: FieldProps) => (
                                 <TextField
                                     {...field}
                                     type="time"
-                                    className="klokkeslett"
                                     label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
                                 />
                             )}

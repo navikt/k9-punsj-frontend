@@ -37,7 +37,7 @@ import { ROUTES } from './constants/routes';
 import { Home } from './home/Home';
 
 import '@navikt/ds-css';
-import './styles/globalStyles.less';
+import './styles/globals.css';
 
 const environment = window.location.hostname;
 

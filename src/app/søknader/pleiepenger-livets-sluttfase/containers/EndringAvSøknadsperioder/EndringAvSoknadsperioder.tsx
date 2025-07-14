@@ -6,7 +6,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { IPeriode, Periode } from '../../../../models/types';
 import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
-import CustomAlertstripeAdvarsel from './CustomAlertstripeAdvarsel';
+import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 
 import './endringAvSøknadsperioder.less';
 

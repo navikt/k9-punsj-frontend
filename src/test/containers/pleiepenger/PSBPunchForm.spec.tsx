@@ -513,7 +513,7 @@ describe('PunchForm', () => {
 
         expect(screen.getByTestId('validertSoknadModal')).toBeDefined();
 
-        const videreKnapp = screen.getByTestId('validertSoknadOppsummeringContainer_knappVidere');
+        const videreKnapp = screen.getByTestId('videreKnapp');
 
         await act(async () => {
             fireEvent.click(videreKnapp);

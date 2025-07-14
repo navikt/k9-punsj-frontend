@@ -3,10 +3,12 @@ import { HttpResponse, delay, http } from 'msw';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { ApiPath } from 'app/apiConfig';
 
-import omsorgspengerutbetalingHandlers from './omsorgspengeutbetalingHandlers';
-import midlertidigAleneHandlers from './omsorgspengerMidlertidigAleneHandlers';
-import { testHandlers } from './testHandlers';
-import aleneOmOmsorgenHandlers from './aleneOmOmsorgenHandlers';
+import mockHandlersOMPAO from './mockHandlersOMPAO';
+import mockHandlersOMPKS from './mockHandlersOMPKS';
+import mockHandlersOMPMA from './mockHandlersOMPMA';
+import mockHandlersOMPUT from './mockHandlersOMPUT';
+import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
+import mockHandlersTest from './mockHandlersTest';
 
 let handlers = [
     http.get(ApiPath.BREV_MALER, () =>
@@ -515,7 +517,7 @@ let handlers = [
     }),
     http.post(ApiPath.JOURNALPOST_HENT, async () => HttpResponse.json({ poster: [] })),
 
-    testHandlers.barn,
+    mockHandlersTest.barn,
     http.post(ApiPath.OPPRETT_NOTAT, async () => {
         await delay(500);
         return new HttpResponse(JSON.stringify({ journalpostId: '200' }), { status: 201 });
@@ -525,10 +527,12 @@ let handlers = [
 
 if (process.env.MSW_MODE === 'test') {
     handlers = handlers
-        .concat(Object.values(testHandlers))
-        .concat(Object.values(omsorgspengerutbetalingHandlers))
-        .concat(Object.values(midlertidigAleneHandlers))
-        .concat(Object.values(aleneOmOmsorgenHandlers));
+        .concat(Object.values(mockHandlersOMPUT))
+        .concat(Object.values(mockHandlersOMPMA))
+        .concat(Object.values(mockHandlersOMPAO))
+        .concat(Object.values(mockHandlersOMPKS))
+        .concat(Object.values(mockHandlersOMPUTKorrigering))
+        .concat(Object.values(mockHandlersTest));
 }
 
 export { handlers };

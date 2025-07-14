@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { Fieldset, HStack } from '@navikt/ds-react';
-import classNames from 'classnames';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
+
 import { IPeriode } from '../../models/types/Periode';
 import NewDateInput from '../skjema/NewDateInput/NewDateInput';
-
-import './periodInput.less';
 
 export interface IPeriodInputProps {
     intl: IntlShape;
@@ -70,7 +68,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
     };
 
     return (
-        <Fieldset error={errorMessage} className={classNames('periodInput', className)} legend={undefined}>
+        <Fieldset error={errorMessage} className={className} legend={undefined}>
             <HStack wrap gap="4" justify="center">
                 <div data-testid="datePickerInputFom">
                     <NewDateInput
