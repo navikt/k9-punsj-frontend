@@ -13561,7 +13561,7 @@ __metadata:
     re-resizable: "npm:6.11.2"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    react-hook-form: "npm:^7.60.0"
+    react-hook-form: "npm:^7.61.0"
     react-intl: "npm:7.1.11"
     react-redux: "npm:9.2.0"
     react-refresh: "npm:0.17.0"
@@ -16492,12 +16492,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.60.0":
-  version: 7.60.0
-  resolution: "react-hook-form@npm:7.60.0"
+"react-hook-form@npm:^7.61.0":
+  version: 7.61.0
+  resolution: "react-hook-form@npm:7.61.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10/cc86ef4029f7b06f82dff919c8933156683b70669a6306d2471706443192b8916afaa07bc64452b590ecb18ea94f3d156f3fb38d59ada3462f5b108e89e186c9
+  checksum: 10/dd271a7835b9e649c90133d7f39ea54a8e30a682a46d1a4b07d70c3e41f7753ededf920bd169ea985a4ac5fdd51071604cb9d3f46288dadafd495f345e4a8ed2
   languageName: node
   linkType: hard
 
