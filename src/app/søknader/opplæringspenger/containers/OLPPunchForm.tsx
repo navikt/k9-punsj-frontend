@@ -6,10 +6,9 @@ import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary } from '@navikt/ds-react';
 import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/ArbeidsforholdPanel';
 import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
-import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
 import { FordelingActionKeys } from 'app/models/enums';
@@ -397,29 +396,6 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 </Accordion.Item>
             </Accordion>
             <VerticalSpacer thirtyTwoPx />
-            <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p> {/* TODO: Hva er dette? */}
-            <div className="flex-container">
-                <CheckboksPanelFormik
-                    name="harMedisinskeOpplysninger"
-                    label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
-                    valueIsBoolean
-                />
-                <HelpText className="hjelpetext" placement="top-end">
-                    {intlHelper(intl, 'skjema.medisinskeopplysninger.hjelpetekst')}
-                </HelpText>
-            </div>
-            <VerticalSpacer eightPx />
-            <div className="flex-container">
-                <CheckboksPanelFormik
-                    name="harInfoSomIkkeKanPunsjes"
-                    label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
-                    valueIsBoolean
-                />
-                <HelpText className="hjelpetext" placement="top-end">
-                    {intlHelper(intl, 'skjema.opplysningerikkepunsjet.hjelpetekst')}
-                </HelpText>
-            </div>
-            <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
                     {getUhaandterteFeil().map((feil) => (

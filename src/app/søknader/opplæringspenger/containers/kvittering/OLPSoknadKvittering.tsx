@@ -74,7 +74,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
     const kopierJournalpostSuccess = useSelector((state: RootStateType) => state.felles.kopierJournalpostSuccess);
     const annenSokerIdent = useSelector((state: RootStateType) => state.identState.annenSokerIdent);
 
-    const { journalposter, ytelse } = kvittering || {};
+    const { ytelse } = kvittering || {};
 
     if (!ytelse) {
         return <Alert variant="error">Noe gikk galt ved visning av kvittering</Alert>;
@@ -362,21 +362,6 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
                     />
-                </div>
-            )}
-
-            {!!journalposter && journalposter.length > 0 && (
-                <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                        {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                    </p>
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                        {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                    </p>
                 </div>
             )}
         </div>
