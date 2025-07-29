@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
+import { FormikErrors, getIn, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -79,8 +78,8 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
     const [expandAll, setExpandAll] = useState(false);
     const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue, setFieldError } =
         useFormikContext<OLPSoknad>();
+
     const [åpnePaneler, setÅpnePaneler] = useState<string[]>([]);
-    const [iUtlandet, setIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
     const dispatch = useDispatch();
     const intl = useIntl();
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -93,7 +92,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         }
     };
 
-    const getFormaterteUhaandterteFeilmeldinger = (formatErrors: Feil[]) =>
+    const getFormaterteFeilmeldinger = (formatErrors: Feil[]) =>
         formatErrors?.filter((m: IInputError) => {
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
@@ -110,7 +109,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         if (values.kurs.reise.reisedager.length > 0) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.REISE);
         }
-        if (values.utenlandsopphold.length > 0) {
+        if (values.metadata.harUtenlandsopphold === JaNeiIkkeOpplyst.JA) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.UTENLANDSOPPHOLD);
         }
         if (values.lovbestemtFerie.length > 0) {
@@ -126,7 +125,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         if (values.omsorg.relasjonTilBarnet) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.OPPLYSINGER_OM_SOKER);
         }
-        if (values.bosteder.length > 0) {
+        if (values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.MEDLEMSKAP);
         }
 
@@ -147,17 +146,25 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 }
             }
             if (data?.feil?.length) {
-                setK9FormatErrors(data.feil);
                 if (setKvittering) {
                     setKvittering(undefined);
                 }
-                const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(data.feil);
-                uhaandterteFeilmeldinger.forEach((uhaandtertFeilmelding) => {
+                const feilmeldinger = getFormaterteFeilmeldinger(data.feil).map((uhaandtertFeilmelding) => {
                     const feilmeldingKey = uhaandtertFeilmelding.felt
                         .replace('ytelse.', '')
                         // støgg fiks for validering av reisedager
                         .replace('.<list element>', '');
-                    setFieldError(feilmeldingKey, uhaandtertFeilmelding.feilmelding);
+                    return {
+                        felt: feilmeldingKey,
+                        feilkode: uhaandtertFeilmelding.feilkode,
+                        feilmelding: uhaandtertFeilmelding.feilmelding,
+                    };
+                });
+                setK9FormatErrors(feilmeldinger);
+                feilmeldinger.forEach((feil) => {
+                    if (!getIn(errors, feil.felt)) {
+                        setFieldError(feil.felt, feil.feilmelding);
+                    }
                 });
             } else {
                 setK9FormatErrors([]);
@@ -226,32 +233,10 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         }
     }, [identState, values.barn]);
 
-    // TODO: bør flytttes
-    const getUhaandterteFeil = (): Feil[] => {
-        const uhaandterteFeilmeldinger = getFormaterteUhaandterteFeilmeldinger(k9FormatErrors);
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => error).filter(Boolean);
-        }
-        return [];
-    };
-
     const harFeilISkjema = (errorList: FormikErrors<OLPSoknad>) =>
-        !![...getUhaandterteFeil(), ...Object.keys(errorList)].length;
+        !![...getFormaterteFeilmeldinger(k9FormatErrors), ...Object.keys(errorList)].length;
 
     const checkOpenState = (panel: string) => åpnePaneler.includes(panel);
-
-    const updateUtenlandsopphold = (jaNeiIkkeOpplyst: JaNeiIkkeOpplyst) => {
-        setIUtlandet(jaNeiIkkeOpplyst);
-
-        if (jaNeiIkkeOpplyst === JaNeiIkkeOpplyst.JA && values.utenlandsopphold.length === 0) {
-            setFieldValue('utenlandsopphold', [{ land: undefined, periode: {}, innleggelsesperioder: [] }]);
-        }
-
-        if (jaNeiIkkeOpplyst !== JaNeiIkkeOpplyst.JA) {
-            setFieldValue('utenlandsopphold', []);
-        }
-    };
 
     const toggleAllePaneler = (erCheckboxChecked: boolean) => {
         setExpandAll(erCheckboxChecked);
@@ -323,24 +308,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     </Accordion.Header>
 
                     <Accordion.Content>
-                        <RadioPanelGruppe
-                            className="horizontalRadios"
-                            radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                                label: intlHelper(intl, jnv),
-                                value: jnv,
-                            }))}
-                            name="utlandjaneiikeeopplyst"
-                            legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
-                            onChange={(event) =>
-                                updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
-                            }
-                            checked={
-                                values.utenlandsopphold && values.utenlandsopphold?.length
-                                    ? JaNeiIkkeOpplyst.JA
-                                    : iUtlandet
-                            }
-                        />
-                        {!!values.utenlandsopphold.length && <UtenlandsoppholdContainer />}
+                        <UtenlandsoppholdContainer />
                     </Accordion.Content>
                 </Accordion.Item>
 
@@ -398,14 +366,14 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <VerticalSpacer thirtyTwoPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getUhaandterteFeil().map((feil) => (
+                    {getFormaterteFeilmeldinger(k9FormatErrors).map((feil) => (
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
-                    {feilFraYup(schema, values, getSchemaContext(values, eksisterendePerioder))?.map(
+                    {feilFraYup(schema, values, getSchemaContext(eksisterendePerioder))?.map(
                         (error: { message: string; path: string }) => (
                             <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                {error.message}
+                                {error.path}: {error.message}
                             </ErrorSummary.Item>
                         ),
                     )}

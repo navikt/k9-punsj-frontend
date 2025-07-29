@@ -59,10 +59,12 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
             return [];
         }
         const errors = error.inner?.map(
-            ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
-                message: capitalize(message),
-                path,
-            }),
+            ({ message, params: { path } }: { message: string; params: { path: string } }) => {
+                return {
+                    message: capitalize(message),
+                    path,
+                };
+            },
         );
         return errors;
     }
