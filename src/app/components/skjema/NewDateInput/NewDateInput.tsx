@@ -60,6 +60,7 @@ const NewDateInput: React.FC<Props> = ({
     const onDateChange = (date?: Date) => {
         if (!date) {
             onChange('');
+            return;
         }
         const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
