@@ -40,7 +40,7 @@ const NewDateInput: React.FC<Props> = ({
     id,
     inputDisabled,
     disabled,
-    noValidateTomtFelt,
+    noValidateTomtFelt = true,
     inputRef,
     locale,
     onBlur,
@@ -58,6 +58,9 @@ const NewDateInput: React.FC<Props> = ({
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
+        if (!date) {
+            onChange('');
+        }
         const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
             onChange(isoDateString);
