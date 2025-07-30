@@ -151,3 +151,55 @@ export const includesDate = (periode: IPeriode, day: string | Date) => {
         (dateInQuestion.isSame(tomDayjs) || dateInQuestion.isBefore(tomDayjs))
     );
 };
+
+/**
+ * Sjekker om arbeidstidperioder er innenfor søknadsperioder
+ * Hver arbeidstidperiode må være helt innenfor én søknadsperiode
+ *
+ * @param arbeidstidPerioder - Liste over arbeidstidperioder som skal valideres
+ * @param soknadsperioder - Liste over søknadsperioder som arbeidstidperioder må være innenfor
+ * @returns true hvis noen periode er utenfor søknadsperioder, false hvis alle perioder er innenfor
+ */
+export const checkArbeidstidWithinSoknadsperioder = (
+    arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[],
+    soknadsperioder: IPeriode[],
+): boolean => {
+    // Hvis ingen søknadsperioder er definert, returnerer vi false (ingen validering)
+    if (!soknadsperioder || soknadsperioder.length === 0) {
+        return false;
+    }
+
+    // Går gjennom hver arbeidstidperiode
+    for (const arbeidstidPeriode of arbeidstidPerioder) {
+        // Hopp over perioder uten gyldig dato
+        if (!arbeidstidPeriode.periode?.fom || !arbeidstidPeriode.periode?.tom) {
+            continue;
+        }
+
+        const arbeidstidStart = dayjs(arbeidstidPeriode.periode.fom, formats.YYYYMMDD);
+        const arbeidstidEnd = dayjs(arbeidstidPeriode.periode.tom, formats.YYYYMMDD);
+
+        // Sjekker om arbeidstidperioden er helt innenfor minst én søknadsperiode
+        const erInnenforEnSoknadsperiode = soknadsperioder.some((soknadsperiode) => {
+            // Hopp over søknadsperioder uten gyldig dato
+            if (!soknadsperiode.fom || !soknadsperiode.tom) {
+                return false;
+            }
+
+            const soknadsStart = dayjs(soknadsperiode.fom, formats.YYYYMMDD);
+            const soknadsEnd = dayjs(soknadsperiode.tom, formats.YYYYMMDD);
+
+            // Arbeidstidperioden må være helt innenfor søknadsperioden
+            // Starter på eller etter start av søknadsperiode og slutter på eller før slutt av søknadsperiode
+            return arbeidstidStart.isSameOrAfter(soknadsStart) && arbeidstidEnd.isSameOrBefore(soknadsEnd);
+        });
+
+        // Hvis denne arbeidstidperioden ikke er innenfor noen søknadsperiode, returnerer vi true (validering feilet)
+        if (!erInnenforEnSoknadsperiode) {
+            return true;
+        }
+    }
+
+    // Alle arbeidstidperioder er innenfor søknadsperioder
+    return false;
+};

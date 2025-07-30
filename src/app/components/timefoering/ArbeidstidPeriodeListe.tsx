@@ -9,8 +9,25 @@ import dayjs from 'dayjs';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { formats, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
+import { checkArbeidstidWithinSoknadsperioder } from 'app/utils/periodUtils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
+
+// Funksjon for å formatere søknadsperioder til lesbar tekst
+const formatSoknadsperioder = (soknadsperioder: IPeriode[]): string => {
+    if (!soknadsperioder || soknadsperioder.length === 0) {
+        return '';
+    }
+
+    return soknadsperioder
+        .filter((periode) => periode.fom && periode.tom)
+        .map((periode) => {
+            const fom = dayjs(periode.fom, formats.YYYYMMDD).format('DD.MM.YYYY');
+            const tom = dayjs(periode.tom, formats.YYYYMMDD).format('DD.MM.YYYY');
+            return `${fom} - ${tom}`;
+        })
+        .join(', ');
+};
 
 // Funksjon for å sjekke overlappende perioder
 const checkPeriodOverlap = (periods: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => {
@@ -53,15 +70,27 @@ const checkPeriodOverlap = (periods: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) 
     return false; // Ingen overlapp funnet
 };
 
-const schema = yup.object({
-    perioder: yup
-        .array()
-        .of(arbeidstimerPeriode)
-        .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
-            if (!periods) return true;
-            return !checkPeriodOverlap(periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]);
-        }),
-});
+const createValidationSchema = (soknadsperioder: IPeriode[]) =>
+    yup.object({
+        perioder: yup
+            .array()
+            .of(arbeidstimerPeriode)
+            .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
+                if (!periods) return true;
+                return !checkPeriodOverlap(periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]);
+            })
+            .test(
+                'within-soknadsperioder',
+                `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
+                (periods) => {
+                    if (!periods) return true;
+                    return !checkArbeidstidWithinSoknadsperioder(
+                        periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
+                        soknadsperioder,
+                    );
+                },
+            ),
+    });
 
 interface FormValues {
     perioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[];
@@ -192,7 +221,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
         <Formik<FormValues>
             initialValues={initialValues}
             onSubmit={(values) => handleSaveValues(values)}
-            validationSchema={schema}
+            validationSchema={createValidationSchema(soknadsperioder)}
             innerRef={formikRef}
             enableReinitialize
         >
