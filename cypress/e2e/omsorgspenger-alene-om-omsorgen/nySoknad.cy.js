@@ -15,7 +15,7 @@ describe('Alene om omsorgen - ny søknad', () => {
     });
     it('Kan sende inn søknad', () => {
         cy.findByText('Ikke relevant').click();
-        cy.findByLabelText('Søker er alene om omsorgen fra og med').type('01.10.2022').blur();
+        cy.findByLabelText('Søker er alene om omsorgen fra og med').type('01.10.2022').blur()
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
         cy.get('.navds-modal').within(() => {

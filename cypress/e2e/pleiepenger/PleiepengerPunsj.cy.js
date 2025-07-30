@@ -85,15 +85,6 @@ describe('Pleiepenger punsj', () => {
     });
 
     it('kan bytte bytte mellom timer og minutter og desimaler i arbeidstid', () => {
-        cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .type('08.11.2021');
-            cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .type('11.11.2021');
-        });
-
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
