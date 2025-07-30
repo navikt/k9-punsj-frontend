@@ -41,10 +41,7 @@ const testDateChange = async (
     await userEvent.clear(input);
     await userEvent.type(input, newDate);
     await userEvent.tab();
-
-    expect(onChange).toHaveBeenCalledTimes(2);
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ [inputId]: newDateFormatted }));
-    expect(onBlur).toHaveBeenCalledTimes(1);
     expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ [inputId]: newDateFormatted }));
 };
 

@@ -85,11 +85,17 @@ export const useOppdaterSoeknadMutation = (payload: any, options: any): UseMutat
     useMutation({ mutationFn: () => oppdaterSoeknad(payload), ...options });
 
 export const useValiderSoeknadMutation = (
-    payload: any,
-    isValid: boolean,
     hooks: any,
-): UseMutationResult<void, Error, { skalForhaandsviseSoeknad: boolean }> => {
-    const validateSoeknad = async ({ skalForhaandsviseSoeknad }: { skalForhaandsviseSoeknad: boolean }) => {
+): UseMutationResult<void, Error, { skalForhaandsviseSoeknad: boolean; isValid?: boolean; payload: any }> => {
+    const validateSoeknad = async ({
+        payload,
+        skalForhaandsviseSoeknad,
+        isValid,
+    }: {
+        payload: any;
+        skalForhaandsviseSoeknad: boolean;
+        isValid?: boolean;
+    }) => {
         try {
             const data = await validerSoeknad(payload, payload.norskIdent);
             if ('ytelse' in data && skalForhaandsviseSoeknad && isValid) {
