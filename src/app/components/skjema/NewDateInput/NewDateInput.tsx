@@ -58,10 +58,6 @@ const NewDateInput: React.FC<Props> = ({
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
-        if (!date) {
-            onChange('');
-            return;
-        }
         const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
             onChange(isoDateString);
