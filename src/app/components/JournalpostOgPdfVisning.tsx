@@ -11,7 +11,6 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
 import './punchPage.less';
-import '../styles/journalpostModal.less';
 
 export interface Props {
     journalposter: string[];

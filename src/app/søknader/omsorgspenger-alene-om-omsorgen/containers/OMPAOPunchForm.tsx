@@ -5,7 +5,7 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
-import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
+import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
@@ -53,10 +53,9 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
 
-    const { values, errors, isValid, setTouched, handleSubmit, validateForm, setFieldValue } =
-        useFormikContext<IOMPAOSoknad>();
+    const { values, errors, setTouched, handleSubmit, validateForm, setFieldValue } = useFormikContext<IOMPAOSoknad>();
 
-    const { mutate: valider } = useValiderSoeknadMutation(values, isValid, {
+    const { mutate: valider } = useValiderSoeknadMutation({
         setKvittering,
         setK9FormatErrors,
         setVisForhaandsvisModal,
@@ -77,7 +76,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
 
     const updateSoknad = ({ submitSoknad }: { submitSoknad: boolean }) => {
         if (harForsoektAaSendeInn) {
-            valider({ skalForhaandsviseSoeknad: false });
+            valider({ payload: values, skalForhaandsviseSoeknad: false });
             setTouched(setNestedObjectValues(values, true));
         }
         return mellomlagreSoeknad({ submitSoknad });
@@ -106,7 +105,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
 
     const harFeilISkjema = (errorList: FormikErrors<IOMPAOSoknad>) =>
         !![...k9FormatErrors, ...Object.keys(errorList)].length;
-
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
@@ -156,12 +154,13 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                                 setTouched(setNestedObjectValues(values, true));
                             }
                             validateForm(values).then((v) => {
-                                if (Object.keys(v).length) {
-                                    valider({ skalForhaandsviseSoeknad: false });
+                                const isValid = !Object.keys(v).length;
+                                if (!isValid) {
+                                    valider({ payload: values, skalForhaandsviseSoeknad: false, isValid: false });
                                     return;
                                 }
 
-                                valider({ skalForhaandsviseSoeknad: true });
+                                valider({ payload: values, skalForhaandsviseSoeknad: true, isValid });
                             });
                         }}
                     >
@@ -199,16 +198,16 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
             )}
 
             {visForhaandsvisModal && (
-                <ForhaandsvisSoeknadModal
+                <ForhåndsvisSøknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
                     videre={() => {
                         setVisForhaandsvisModal(false);
                         setVisErDuSikkerModal(true);
                     }}
-                    intl={intl}
+                    dataTestId="validertOMPAOSoknadModal"
                 >
                     <OMPAOSoknadKvittering kvittering={kvittering} />
-                </ForhaandsvisSoeknadModal>
+                </ForhåndsvisSøknadModal>
             )}
 
             {visErDuSikkerModal && (

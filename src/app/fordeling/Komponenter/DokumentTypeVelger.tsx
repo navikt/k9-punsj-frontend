@@ -7,8 +7,6 @@ import { FordelingDokumenttype, FordelingOmsorgspengerSubMenyValg } from 'app/mo
 import { getEnvironmentVariable } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import './DokumentTypeVelger.less';
-
 interface Props {
     valgtDokumentType: string;
     disableRadios?: boolean;
@@ -80,7 +78,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
     };
 
     return (
-        <div className="dokumentTypeVelgerContainer">
+        <div className="space-y-2">
             <div className="mb-4">
                 <Heading size="xsmall" level="3">
                     <FormattedMessage id="fordeling.detteGjelder" />
@@ -107,7 +105,7 @@ const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios,
 
             {erDokumenttypeOmsorgspenger &&
                 OmsorgspengerSubRadioPaneler.map((a) => (
-                    <div key={a.value} className="dokumentTypeVelgerSubkategori">
+                    <div key={a.value} className="ml-16 pb-2">
                         <RadioPanel
                             label={a.label}
                             value={a.value}

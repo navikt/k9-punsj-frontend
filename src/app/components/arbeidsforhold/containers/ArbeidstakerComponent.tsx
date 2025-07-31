@@ -19,8 +19,6 @@ import ArbeidsgiverResponse from '../../../models/types/ArbeidsgiverResponse';
 import pfArbeidstakerReducer from '../state/reducers/pfArbeidstakerReducer';
 import ActionType from '../types/actionTypes';
 
-import './arbeidstakerComponent.less';
-
 interface ArbeidstakerComponentProps {
     søkerId: string;
     arbeidstaker: Arbeidstaker;
@@ -120,7 +118,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     const selectedType: OrgOrPers = orgOrPers();
 
     return (
-        <Fieldset className="arbeidstaker-panel">
+        <Fieldset className="arbeidstaker-panel" legend="">
             <div className="flex flex-wrap">
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -239,9 +237,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                                                 : getErrorMessage(`${feilkodeprefiks}.identified`)
                                         }
                                     />
-                                    {navnPåArbeidsgiver && (
-                                        <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
-                                    )}
+                                    {navnPåArbeidsgiver && <p className="ml-4 py-3 self-end">{navnPåArbeidsgiver}</p>}
                                 </div>
                             </div>
                         </>

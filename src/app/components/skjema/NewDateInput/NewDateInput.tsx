@@ -9,7 +9,7 @@ import {
     ISODateStringToUTCDate,
 } from 'app/utils/date-utils/src/format';
 
-import './newDateInput.less';
+import './newDateInput.css';
 
 type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate' | 'disabled'> & {
     label: string;
@@ -40,7 +40,7 @@ const NewDateInput: React.FC<Props> = ({
     id,
     inputDisabled,
     disabled,
-    noValidateTomtFelt,
+    noValidateTomtFelt = true,
     inputRef,
     locale,
     onBlur,

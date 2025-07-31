@@ -1,4 +1,4 @@
-import aleneOmOmsorgenHandlers from 'mocks/aleneOmOmsorgenHandlers';
+import aleneOmOmsorgenHandlers from 'mocks/mockHandlersOMPAO';
 
 import { initialState } from '../../state/omsorgspenger-alene-om-omsorgen/eksisterendeSoeknaderInitialState';
 

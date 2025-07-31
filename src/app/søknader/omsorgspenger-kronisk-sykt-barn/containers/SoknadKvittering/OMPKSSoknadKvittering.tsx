@@ -1,12 +1,7 @@
 import React from 'react';
 
-import classNames from 'classnames';
-import { connect } from 'react-redux';
-import { useIntl } from 'react-intl';
-
-import Kopier from 'app/components/kopier/Kopier';
-import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
+import { FormattedMessage } from 'react-intl';
+import { BodyShort, CopyButton, Heading, VStack } from '@navikt/ds-react';
 
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import {
@@ -16,78 +11,108 @@ import {
 } from '../../../../utils';
 import { IOMPKSSoknadKvittering } from '../../types/OMPKSSoknadKvittering';
 
-import './ompKSSoknadKvittering.less';
-
-interface IOwnProps {
+interface Props {
     response: IOMPKSSoknadKvittering;
     kopierJournalpostSuccess?: boolean;
     annenSokerIdent?: string | null;
 }
 
-export const OMPKSSoknadKvittering: React.FunctionComponent<IOwnProps> = ({
-    response,
-    kopierJournalpostSuccess,
-    annenSokerIdent,
-}) => {
-    const intl = useIntl();
-
+export const OMPKSSoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuccess, annenSokerIdent }) => {
     const { journalposter } = response;
 
     const visOpplysningerOmSoknad = sjekkPropertyEksistererOgIkkeErNull('mottattDato', response);
 
+    const mottakelsesdato = `${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
+        response.mottattDato,
+    )}`;
+
+    const inneholderMedisinskeOpplysninger =
+        journalposter && journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei';
+    const inneholderInformasjonSomIkkeKanPunsjes =
+        journalposter && journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei';
+
     return (
-        <div className={classNames('OMPKSSoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
+        <>
             {kopierJournalpostSuccess && (
-                <div>
-                    <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi.innhold')}</p>
-                    {annenSokerIdent && (
-                        <p>
-                            {`${intlHelper(intl, 'ident.identifikasjon.annenSoker')}: ${annenSokerIdent}`}
-                            <Kopier verdi={annenSokerIdent} />
-                        </p>
-                    )}
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.opprettetKopi" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <VStack gap="4">
+                        <BodyShort size="small">
+                            <FormattedMessage id="skjema.soknadskvittering.opprettetKopi.innhold" />
+                        </BodyShort>
+
+                        {annenSokerIdent && (
+                            <BodyShort size="small" className="flex gap-1">
+                                <FormattedMessage
+                                    id="ident.identifikasjon.kvittering.annenSoker"
+                                    values={{ fnr: annenSokerIdent, b: (chunks) => <strong>{chunks}</strong> }}
+                                />
+
+                                <CopyButton size="xsmall" copyText={annenSokerIdent} />
+                            </BodyShort>
+                        )}
+                    </VStack>
                 </div>
             )}
 
             {visOpplysningerOmSoknad && (
-                <div>
-                    <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
-                    <hr className={classNames('linje')} />
-                    <p>
-                        <b>{`${intlHelper(intl, 'skjema.mottakelsesdato')} `}</b>
-                        {`${formattereDatoFraUTCTilGMT(response.mottattDato)} - ${formattereTidspunktFraUTCTilGMT(
-                            response.mottattDato,
-                        )}`}
-                    </p>
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <BodyShort size="small">
+                        <FormattedMessage
+                            id="skjema.kvittering.mottakelsesdato"
+                            values={{
+                                mottakelsesdato,
+                                b: (chunks) => <strong>{chunks}</strong>,
+                            }}
+                        />
+                    </BodyShort>
                 </div>
             )}
 
-            <div>
-                {!!journalposter && journalposter.length > 0 && (
-                    <div>
-                        <h3>{intlHelper(intl, 'skjema.soknadskvittering.tilleggsopplysninger')}</h3>
-                        <hr className={classNames('linje')} />
-                        <p>
-                            <b>{`${intlHelper(intl, 'skjema.medisinskeopplysninger')}: `}</b>
-                            {`${journalposter[0].inneholderMedisinskeOpplysninger ? 'Ja' : 'Nei'}`}
-                        </p>
-                        <p>
-                            <b>{`${intlHelper(intl, 'skjema.opplysningerikkepunsjet')}: `}</b>
-                            {`${journalposter[0].inneholderInformasjonSomIkkeKanPunsjes ? 'Ja' : 'Nei'}`}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
+            {!!journalposter && journalposter.length > 0 && (
+                <div className="mb-4">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.soknadskvittering.tilleggsopplysninger" />
+                    </Heading>
+
+                    <div className="h-px bg-gray-300 mb-4" />
+
+                    <VStack gap="4">
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.medisinskeopplysninger"
+                                values={{
+                                    jaNei: inneholderMedisinskeOpplysninger,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+
+                        <BodyShort size="small">
+                            <FormattedMessage
+                                id="skjema.kvittering.opplysningerikkepunsjet"
+                                values={{
+                                    jaNei: inneholderInformasjonSomIkkeKanPunsjes,
+                                    b: (chunks) => <strong>{chunks}</strong>,
+                                }}
+                            />
+                        </BodyShort>
+                    </VStack>
+                </div>
+            )}
+        </>
     );
 };
 
-const mapStateToProps = (state: RootStateType) => ({
-    kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
-    annenSokerIdent: state.identState.annenSokerIdent,
-});
-
-export default connect(mapStateToProps)(OMPKSSoknadKvittering);
+export default OMPKSSoknadKvittering;

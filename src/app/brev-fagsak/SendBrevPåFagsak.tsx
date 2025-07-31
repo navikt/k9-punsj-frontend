@@ -13,8 +13,6 @@ import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 
-import './sendBrevPåFagsak.less';
-
 const SendBrevPåFagsakLukkOppgave: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch<any>>();
@@ -48,7 +46,7 @@ const SendBrevPåFagsakLukkOppgave: React.FC = () => {
     const lukkOppgaveReset = () => dispatch(lukkOppgaveResetAction());
 
     return (
-        <div className="sendBrevPåFagsak">
+        <div className="mt-10 max-w-[31.875rem]">
             <div className="mb-10">
                 <Heading size="medium" level="1">
                     <FormattedMessage id="sendBrevPåFagsak.header" />

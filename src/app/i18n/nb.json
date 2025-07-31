@@ -506,10 +506,14 @@
     "skjema.kvittering.OMPAO.aleneOmOmsorgen": "<b>Alene om omsorgen fra og med:</b> {dato}",
     "skjema.kvittering.barn.tittel": "<b>Barn:</b> {fnr}",
     "skjema.kvittering.mottakelsesdato": "<b>Mottatt dato:</b> {mottakelsesdato}",
+    "skjema.kvittering.perioderSomFjernet": "<b>Perioder som er fjernet fra søknadsperioden:</b> {perioder}",
+    "skjema.kvittering.begrunnelseForEndring": "<b>Begrunnelse for endring:</b> {begrunnelse}",
     "skjema.kvittering.medisinskeopplysninger": "<b>Dokumentet inneholder medisinske opplysninger:</b> {jaNei}",
     "skjema.kvittering.opplysningerikkepunsjet": "<b>Dokumentet inneholder andre opplysninger som ikke er registrert i skjemaet:</b> {jaNei}",
     "skjema.kvittering.identitetsnummer": "<b>Identitetsnummer:</b> {fnr}",
     "skjema.kvittering.identitetsnummer.barn": "<b>Barnets identitetsnummer:</b> {fnr}",
+    "skjema.kvittering.orgnummer": "<b>Organisasjonsnummer:</b> {orgnr}",
+    "skjema.kvittering.relasjontilbarnet": "<b>Relasjon til barnet:</b> {relasjon}",
 
     "skjema.utenlandsopphold.opplysninger": "Utenlandsopphold",
     "skjema.utenlandsopphold.label": "Skal søker reise til utlandet i perioden det søkes for?",
@@ -787,6 +791,13 @@
     "omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn": "Fjern periode",
     "omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn": "Legg til periode",
     "omsorgspenger.utbetaling.utenlandsopphold.unselectedoption": "Velg land",
+
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.tittel": "<b>Fraværsperiode:</b> {periode}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.timernormalt": "<b>Normal arbeidstid per dag:</b>  {normalarbeidstid}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværPerDag": "<b>Timer fravær per dag:</b>  {fraværPerDag}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.søknadsårsak": "<b>Søknadsårsak:</b>  {søknadsårsak}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværsårsak": "<b>Fraværsårsak:</b>  {fraværsårsak}",
+    "omsorgspenger.utbetaling.kvittering.fravaersperiode.organisasjonsnummer": "<b>Organisasjonsnummer:</b>  {organisasjonsnummer}",
 
     "modal.settpaavent.overskrift": "Ubehandlede journalposter",
     "modal.settpaavent.info": "Det finnes ubehandlede journalposter på søker. Se om noen av disse journalpostene inneholder nødvendige opplysninger du trenger eller om du likevel vil sette på vent.",

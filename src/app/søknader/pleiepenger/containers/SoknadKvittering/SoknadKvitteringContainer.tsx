@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 import { getEnvironmentVariable } from 'app/utils';
@@ -13,11 +13,11 @@ const PSBKvitteringContainer = () => {
 
     return (
         <>
-            <Alert size="small" variant="info" className="fullfortmelding">
+            <Alert size="small" variant="info" className="mt-4">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
 
-            <div className="punchPage__knapper mt-8">
+            <div className="my-8">
                 <Button
                     onClick={() => {
                         window.location.href = getEnvironmentVariable('K9_LOS_URL');
@@ -27,7 +27,17 @@ const PSBKvitteringContainer = () => {
                 </Button>
             </div>
 
-            {!!punchFormState.innsentSoknad && <PSBSoknadKvittering innsendtSøknad={punchFormState.innsentSoknad} />}
+            <div className="mb-6">
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="skjema.kvittering.oppsummering" />
+                </Heading>
+            </div>
+
+            {!!punchFormState.innsentSoknad && (
+                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                    <PSBSoknadKvittering innsendtSøknad={punchFormState.innsentSoknad} />
+                </Box>
+            )}
         </>
     );
 };

@@ -10,8 +10,6 @@ import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
 import KopierLukkJpModal from '../KopierModal';
 
-import './kopiereJournalpostTilSammeSøker.less';
-
 interface Props {
     barnMedFagsak: Fagsak;
 }

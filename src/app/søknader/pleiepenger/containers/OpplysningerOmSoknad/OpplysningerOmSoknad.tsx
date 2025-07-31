@@ -1,83 +1,86 @@
 import React from 'react';
 
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
-import { IntlShape } from 'react-intl';
-import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PSBSoknad } from '../../../../models/types';
-import intlHelper from '../../../../utils/intlUtils';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 
-import './opplysningerOmSoknad.less';
+interface Props {
+    signert: JaNeiIkkeRelevant | null;
+    soknad: PSBSoknad;
 
-interface IOwnProps {
-    intl: IntlShape;
     changeAndBlurUpdatesSoknad: (event: any) => any;
     getErrorMessage: (attribute: string, indeks?: number) => any;
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
-    signert: JaNeiIkkeRelevant | null;
-    soknad: PSBSoknad;
 }
 
-const OpplysningerOmSoknad: React.FunctionComponent<IOwnProps> = ({
-    intl,
+const OpplysningerOmSoknad: React.FC<Props> = ({
+    signert,
+    soknad,
     changeAndBlurUpdatesSoknad,
     getErrorMessage,
     setSignaturAction,
-    signert,
-    soknad,
 }) => (
-    <Box padding="4" borderWidth="1" borderRadius="small" className="opplysningerOmSoknad">
-        <h3>{intlHelper(intl, PunchFormPaneler.OPPLYSINGER_OM_SOKNAD)}</h3>
+    <Box padding="4" borderWidth="1" borderRadius="small">
+        <div className="mb-4">
+            <Heading size="small" level="3">
+                <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+            </Heading>
+        </div>
+
         <Alert size="small" variant="info">
-            {intlHelper(intl, 'skjema.mottakelsesdato.informasjon')}
+            <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
         </Alert>
-        <Fieldset legend="">
-            <div className="input-row">
-                <NewDateInput
-                    value={soknad.mottattDato}
-                    id="soknad-dato"
-                    errorMessage={getErrorMessage('mottattDato')}
-                    label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                    {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                        mottattDato: selectedDate,
-                    }))}
-                    dataTestId="mottattDato"
-                />
-                <div>
-                    <TextField
-                        value={soknad.klokkeslett || ''}
-                        type="time"
-                        className="klokkeslett"
-                        // size="small"
-                        label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                        {...changeAndBlurUpdatesSoknad((event: any) => ({
-                            klokkeslett: event.target.value,
-                        }))}
-                        error={getErrorMessage('klokkeslett')}
-                    />
-                </div>
-            </div>
-            <RadioPanelGruppe
-                className="horizontalRadios"
-                radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                    label: intlHelper(intl, jn),
-                    value: jn,
+
+        <div className="input-row">
+            <NewDateInput
+                value={soknad.mottattDato}
+                id="soknad-dato"
+                errorMessage={getErrorMessage('mottattDato')}
+                label={<FormattedMessage id="skjema.mottakelsesdato" />}
+                {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
+                    mottattDato: selectedDate,
                 }))}
-                name="signatur"
-                legend={intlHelper(intl, 'ident.signatur.etikett')}
-                checked={signert || undefined}
-                onChange={(event) =>
-                    setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
-                }
+                dataTestId="mottattDato"
             />
-            {signert === JaNeiIkkeRelevant.NEI && (
-                <Alert size="small" variant="warning">
-                    {intlHelper(intl, 'skjema.usignert.info')}
-                </Alert>
-            )}
-        </Fieldset>
+
+            <div>
+                <TextField
+                    value={soknad.klokkeslett || ''}
+                    type="time"
+                    className="klokkeslett"
+                    label={<FormattedMessage id="skjema.mottatt.klokkeslett" />}
+                    {...changeAndBlurUpdatesSoknad((event: any) => ({
+                        klokkeslett: event.target.value,
+                    }))}
+                    error={getErrorMessage('klokkeslett')}
+                />
+            </div>
+        </div>
+
+        <RadioPanelGruppe
+            className="horizontalRadios"
+            radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
+                label: <FormattedMessage id={`${jn}`} />,
+                value: jn,
+            }))}
+            name="signatur"
+            legend={<FormattedMessage id="ident.signatur.etikett" />}
+            checked={signert || undefined}
+            onChange={(event) =>
+                setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
+            }
+        />
+
+        {signert === JaNeiIkkeRelevant.NEI && (
+            <Alert size="small" variant="warning">
+                <FormattedMessage id="skjema.usignert.info" />
+            </Alert>
+        )}
     </Box>
 );
 export default OpplysningerOmSoknad;
