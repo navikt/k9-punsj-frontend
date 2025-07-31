@@ -15,11 +15,9 @@ import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as fellesReducerGetJournalpost } from '../state/reducers/FellesReducer';
 import VerticalSpacer from '../components/VerticalSpacer';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import OpprettJournalpostInngang from './components/OpprettJournalpostInngang/OpprettJournalpostInngang';
-import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang/SendBrevIAvsluttetSakInngang';
+import OpprettJournalpostInngang from './components/OpprettJournalpostInngang';
+import SendBrevIAvsluttetSakInngang from './components/SendBrevIAvsluttetSakInngang';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
-
-import './home.less';
 
 export const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -93,13 +91,13 @@ export const Home: React.FC = () => {
     }
 
     return (
-        <>
-            <div className="sok-container">
-                <Heading size="xlarge" level="1" className="sok-heading">
+        <div className="flex flex-col items-center justify-center">
+            <div className="py-36">
+                <Heading size="xlarge" level="1">
                     <FormattedMessage id="søk.overskrift" />
                 </Heading>
 
-                <div className="input-rad">
+                <div className="flex items-center justify-center mt-10">
                     <TextField
                         value={journalpostid}
                         className="w-64"
@@ -109,20 +107,18 @@ export const Home: React.FC = () => {
                         disabled={isJournalpostLoading}
                     />
 
-                    <div className="ml-4">
+                    <div className="ml-4 self-end">
                         <Button
                             onClick={onClick}
-                            size="small"
-                            className="sokknapp my-4"
                             disabled={!journalpostid || isJournalpostLoading}
                             loading={isJournalpostLoading}
                         >
-                            <FormattedMessage id={'søk.knapp.label'} />
+                            <FormattedMessage id="søk.knapp.label" />
                         </Button>
                     </div>
-
-                    <VerticalSpacer sixteenPx />
                 </div>
+
+                <VerticalSpacer sixteenPx />
 
                 {journalpostNotFound && (
                     <Alert size="small" variant="info">
@@ -159,10 +155,10 @@ export const Home: React.FC = () => {
                 )}
             </div>
 
-            <div className="inngangContainer">
+            <div className="flex justify-center gap-18">
                 <OpprettJournalpostInngang />
                 <SendBrevIAvsluttetSakInngang />
             </div>
-        </>
+        </div>
     );
 };

@@ -1,0 +1,118 @@
+@import url('tailwindcss/base');
+@import url('tailwindcss/components');
+@import url('tailwindcss/utilities');
+
+body {
+    @apply bg-white font-sans m-0;
+}
+
+.fit-window-height {
+    @apply h-screen flex flex-col relative overflow-x-hidden;
+}
+
+.header {
+    @apply w-full;
+}
+
+.horizontalRadios {
+    @apply my-2;
+
+    legend {
+        @apply mb-2 !important;
+    }
+
+    .inputPanelGruppe__inner {
+        @apply flex;
+
+        .inputPanel {
+            @apply flex-grow basis-0 mb-0;
+
+            &:not(:first-child) {
+                @apply ml-2;
+            }
+
+            &:not(:last-child) {
+                @apply mr-2;
+            }
+        }
+    }
+}
+
+.margin-top-1 {
+    @apply mt-4;
+}
+
+.venstrestilt {
+    margin-right: 50%;
+}
+
+.lengre-periode-modal {
+    @apply w-[570px];
+}
+
+.fom-tom-rad {
+    @apply flex;
+
+    > div {
+        @apply inline-block mr-4;
+    }
+}
+
+.alertstripe {
+    @apply m-4;
+
+    .alertstripe__tekst {
+        max-width: unset;
+    }
+}
+
+.slett {
+    @apply text-red-600 !important;
+}
+
+.journalpost-modal dialog::backdrop {
+    width: var(--left-panel-width, 40%);
+}
+
+.journalpost-modal .navds-modal {
+    margin-left: 5% !important;
+}
+
+.pleietrengende-select .navds-select__container {
+    max-width: none;
+    width: auto;
+    min-width: 20rem;
+}
+
+/* Tilpassede scrollbar-stiler med Aksel-farger */
+.custom-scrollbar {
+    @apply overflow-y-auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--a-gray-400) var(--a-gray-100);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background: var(--a-gray-100);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--a-gray-400);
+    border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--a-gray-600);
+}
+
+.custom-button-internal-header {
+    color: white !important;
+    background-color: grey !important;
+    &:hover {
+        background-color: darkgray !important;
+    }
+}

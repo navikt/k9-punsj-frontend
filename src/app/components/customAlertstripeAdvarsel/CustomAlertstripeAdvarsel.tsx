@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './customAlertstripeAdvarsel.less';
+import './customAlertstripeAdvarsel.css';
 
 interface CustomAlertstripeAdvarselProps {
     children: React.ReactNode;

@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
+import { useIntl } from 'react-intl';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -16,9 +17,6 @@ import intlHelper from 'app/utils/intlUtils';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
 import { ApiPath } from '../../../../../apiConfig';
 import ActionType from './actionTypes';
-
-import './arbeidstaker.less';
-import { useIntl } from 'react-intl';
 
 interface Props {
     søkerId: string;
@@ -245,7 +243,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                                         }
                                     />
                                     {navnPåArbeidsgiver && (
-                                        <p className="arbeidstaker__arbeidsgiverNavn">{navnPåArbeidsgiver}</p>
+                                        <div className="ml-4 py-3 self-end">{navnPåArbeidsgiver}</div>
                                     )}
                                 </div>
                             </div>

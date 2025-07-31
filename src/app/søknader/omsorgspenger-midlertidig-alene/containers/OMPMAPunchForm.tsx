@@ -35,8 +35,8 @@ import {
 } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import OpplysningerOmOMPMASoknad from './OpplysningerOmSoknad/OpplysningerOmOMPMASoknad';
-import OMPMASoknadKvittering from './SoknadKvittering/OMPMASoknadKvittering';
+import OpplysningerOmOMPMASoknad from '../components/OpplysningerOmOMPMASoknad';
+import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 interface Props {
@@ -157,11 +157,11 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             return null;
         }
 
-        const className = 'statusetikett';
+        const className = 'absolute top-[60px] left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
-                <Tag variant="warning" {...{ className }}>
+                <Tag variant="warning" className={className}>
                     <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.awaitingUpdateResponse'} />
                 </Tag>
             );
@@ -169,14 +169,14 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
         if (punchFormState.updateSoknadError) {
             return (
-                <Tag variant="error" {...{ className }}>
+                <Tag variant="error" className={className}>
                     <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadError'} />
                 </Tag>
             );
         }
 
         return (
-            <Tag variant="success" {...{ className }}>
+            <Tag variant="success" className={className}>
                 <FormattedMessage id={'omsorgspenger.midlertidigAlene.punshcForm.updateSoknadSuccess'} />
             </Tag>
         );
@@ -215,7 +215,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
             <VerticalSpacer fourtyPx />
 
-            <AnnenForelder intl={intl} handleBlur={handleBlur} />
+            <AnnenForelder handleBlur={handleBlur} />
 
             <VerticalSpacer fourtyPx />
 
@@ -356,39 +356,43 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
                 <Modal
                     key="validertSoknadModal"
-                    className="validertSoknadModal"
                     onClose={() => validerSoknadReset()}
-                    aria-label="validertSoknadModal"
                     open={!!punchFormState.isValid}
+                    aria-label="validertSoknadModal"
+                    data-test-id="validertSoknadModal"
                 >
+                    <Modal.Header closeButton={false}>
+                        <Heading size="medium" level="1" data-test-id="OMPMAPunchFormKvitteringHeader">
+                            <FormattedMessage id="skjema.kvittering.oppsummering" />
+                        </Heading>
+                    </Modal.Header>
+
                     <Modal.Body>
-                        <div className={classNames('validertSoknadOppsummeringContainer')}>
-                            <OMPMASoknadKvittering
-                                response={punchFormState.validertSoknad}
-                                kopierJournalpostSuccess={kopierJournalpostSuccess}
-                                annenSokerIdent={annenSokerIdent}
-                            />
-                        </div>
-
-                        <div className={classNames('validertSoknadOppsummeringContainerKnapper')}>
-                            <Button
-                                size="small"
-                                className="validertSoknadOppsummeringContainer_knappVidere"
-                                onClick={() => setVisErDuSikkerModal(true)}
-                            >
-                                <FormattedMessage id="fordeling.knapp.videre" />
-                            </Button>
-
-                            <Button
-                                variant="secondary"
-                                size="small"
-                                className="validertSoknadOppsummeringContainer_knappTilbake"
-                                onClick={() => validerSoknadReset()}
-                            >
-                                <FormattedMessage id="skjema.knapp.avbryt" />
-                            </Button>
-                        </div>
+                        <OMPMASoknadKvittering
+                            response={punchFormState.validertSoknad}
+                            kopierJournalpostSuccess={kopierJournalpostSuccess}
+                            annenSokerIdent={annenSokerIdent}
+                        />
                     </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button
+                            size="small"
+                            className="validertSoknadOppsummeringContainer_knappVidere"
+                            onClick={() => setVisErDuSikkerModal(true)}
+                        >
+                            <FormattedMessage id="fordeling.knapp.videre" />
+                        </Button>
+
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            className="validertSoknadOppsummeringContainer_knappTilbake"
+                            onClick={() => validerSoknadReset()}
+                        >
+                            <FormattedMessage id="skjema.knapp.avbryt" />
+                        </Button>
+                    </Modal.Footer>
                 </Modal>
             )}
 

@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 
 import { Form, Formik } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, Heading, List } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, List, Modal } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -26,7 +26,6 @@ import { getFormErrors } from './korrigeringAvFormValidering';
 import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
 import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
-import ForhaandsvisSoeknadModal from 'app/components/forhaandsvisSoeknadModal/ForhaandsvisSoeknadModal';
 
 import './KorrigeringAvInntektsmeldingForm.less';
 
@@ -112,7 +111,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     <FormattedMessage id="skjema.sentInn" />
                 </Alert>
 
-                <div className="punchPage__knapper mt-8">
+                <div className="my-8">
                     <Button
                         onClick={() => {
                             window.location.href = getEnvironmentVariable('K9_LOS_URL');
@@ -122,7 +121,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     </Button>
                 </div>
 
-                <OMSKvittering feltverdier={innsendteFormverdier} />
+                <div className="mb-6">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="skjema.kvittering.oppsummering" />
+                    </Heading>
+                </div>
+
+                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                    <OMSKvittering feltverdier={innsendteFormverdier} />
+                </Box>
             </>
         );
     }
@@ -163,15 +170,18 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                 <>
                     <Form className="korrigering">
                         <Box padding="4">
-                            <Heading size="medium" level="2">
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                            </Heading>
+                            <div className="mb-4">
+                                <Heading size="medium" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
+                            </div>
 
                             <Alert size="small" variant="info" className="korrigering__headerInfo">
-                                <List
-                                    as="ul"
-                                    title={intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.header.info')}
-                                >
+                                <Heading size="small" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
+
+                                <List as="ul">
                                     <List.Item>
                                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
                                     </List.Item>
@@ -243,21 +253,46 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             )}
                         </Box>
 
-                        <div className="korrigering__buttonContainer">
-                            <Button>
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
-                            </Button>
-                        </div>
+                        <Button>
+                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
+                        </Button>
                     </Form>
 
                     {visBekreftelsemodal && (
-                        <ForhaandsvisSoeknadModal
-                            avbryt={() => dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })}
-                            videre={() => dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL })}
-                            intl={intl}
+                        <Modal
+                            key="validertSoknadModal"
+                            onClose={() => dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })}
+                            aria-label="validertSoknadModal"
+                            data-test-id="validertSoknadModal"
+                            open
                         >
-                            <OMSKvittering feltverdier={values} />
-                        </ForhaandsvisSoeknadModal>
+                            <Modal.Header closeButton={false}>
+                                <Heading size="medium" level="1" data-test-id="OMPKorrigeringPunchFormKvitteringHeader">
+                                    <FormattedMessage id="skjema.kvittering.oppsummering" />
+                                </Heading>
+                            </Modal.Header>
+
+                            <Modal.Body>
+                                <OMSKvittering feltverdier={values} />
+                            </Modal.Body>
+
+                            <Modal.Footer>
+                                <Button
+                                    size="small"
+                                    onClick={() => dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL })}
+                                >
+                                    <FormattedMessage id="fordeling.knapp.videre" />
+                                </Button>
+
+                                <Button
+                                    variant="secondary"
+                                    size="small"
+                                    onClick={() => dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })}
+                                >
+                                    <FormattedMessage id="skjema.knapp.avbryt" />
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
                     )}
 
                     {visErDuSikkerModal && (

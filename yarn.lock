@@ -13600,6 +13600,8 @@ __metadata:
     storybook-addon-fetch-mock: "npm:^2.0.1"
     style-loader: "npm:4.0.0"
     stylelint: "npm:16.23.0"
+    stylelint-config-standard: "npm:^38.0.0"
+    stylelint-config-tailwindcss: "npm:^1.0.0"
     tailwindcss: "npm:3.4.17"
     terser-webpack-plugin: "npm:5.3.14"
     ts-jest: "npm:29.4.0"
@@ -18234,6 +18236,36 @@ __metadata:
   peerDependencies:
     postcss: ^8.4.31
   checksum: 10/fc9d6b1e0b996d139a77f391df6db49ee1ab7e8fdeb32a8fa6b4c11512e72eb072470c32080171e46ebe123c9c96d763b9e4421b09c9c428985077940b6ba085
+  languageName: node
+  linkType: hard
+
+"stylelint-config-recommended@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "stylelint-config-recommended@npm:16.0.0"
+  peerDependencies:
+    stylelint: ^16.16.0
+  checksum: 10/711595ec35f387422154b14bc1d05217c48762b62dcee13ca73a0edbb7353d537e3a9f6646e9631b2988dfadc8a015a893611e6cca65971c9b99ab8bb096704f
+  languageName: node
+  linkType: hard
+
+"stylelint-config-standard@npm:^38.0.0":
+  version: 38.0.0
+  resolution: "stylelint-config-standard@npm:38.0.0"
+  dependencies:
+    stylelint-config-recommended: "npm:^16.0.0"
+  peerDependencies:
+    stylelint: ^16.18.0
+  checksum: 10/6704f80e93990a15e28043f25b926f08b6a585a6374d3610e1fa782c6e39279cdbd963c4614a58045372dc70254101f5d622f6578bbd7b2974fc3b4ce629db26
+  languageName: node
+  linkType: hard
+
+"stylelint-config-tailwindcss@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "stylelint-config-tailwindcss@npm:1.0.0"
+  peerDependencies:
+    stylelint: ">=13.13.1"
+    tailwindcss: ">=2.2.16"
+  checksum: 10/3e0b0d886f57291afce1b298ad2008ecc44b5601567bda7e4555aeb7e5202f13d38213c88b62589b0e01bd36c9c22d3cd05bf652529cb9aaf38594f2b7093b43
   languageName: node
   linkType: hard
 

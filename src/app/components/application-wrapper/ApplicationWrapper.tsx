@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, InternalHeader, Spacer } from '@navikt/ds-react';
@@ -13,14 +14,10 @@ import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
 import { checkAuth } from 'app/state/actions';
 
-import './applicationWrapper.less';
-
 interface Props {
     locale: Locale;
     children?: React.ReactNode;
 }
-
-const isDev = window.location.hostname.includes('intern.dev.nav.no');
 
 const ApplicationWrapper: React.FC<Props> = ({ locale, children }) => {
     const dispatch = useDispatch<Dispatch<any>>();
@@ -47,7 +44,7 @@ const ApplicationWrapper: React.FC<Props> = ({ locale, children }) => {
     return (
         <IntlProvider {...{ locale }}>
             <div className="app fit-window-height">
-                <div className={isDev ? 'headercontainer' : ''}>
+                <div>
                     <InternalHeader>
                         <InternalHeader.Title as="a" href="/">
                             <FormattedMessage id="applicationWrapper.header.tittel.punsj" />
@@ -59,7 +56,7 @@ const ApplicationWrapper: React.FC<Props> = ({ locale, children }) => {
                                 onClick={handleButtonClick}
                                 iconPosition="right"
                                 icon={<ExternalLinkIcon />}
-                                className="custom-button"
+                                className="custom-button-internal-header"
                             >
                                 <FormattedMessage id="applicationWrapper.header.tittel.los" />
                             </Button>

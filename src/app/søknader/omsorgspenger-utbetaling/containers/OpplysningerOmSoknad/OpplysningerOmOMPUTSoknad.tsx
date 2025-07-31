@@ -10,8 +10,6 @@ import { IOMPUTSoknad } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUT
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../../utils/intlUtils';
 
-import './opplysningerOmOMPUTSoknad.less';
-
 const OpplysningerOmOMPUTSoknad: React.FC = () => {
     const intl = useIntl();
 
@@ -20,14 +18,14 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
     return (
         <>
             <Heading size="small">
-                <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.header'} />
+                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.header" />
             </Heading>
 
             <VerticalSpacer sixteenPx />
 
             <Box padding="4" borderWidth="1" borderRadius="small">
                 <Alert variant="info" className="alert">
-                    <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
+                    <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
 
                 <div className="input-row">
@@ -43,14 +41,12 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                         )}
                     </Field>
 
-                    <div>
+                    <div className="ml-4">
                         <Field name="klokkeslett">
                             {({ field, meta, form }: FieldProps<string, FormikValues>) => (
                                 <TextField
                                     id="klokkeslett"
                                     type="time"
-                                    className="klokkeslett"
-                                    // size="small"
                                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                     error={meta.touched && meta.error}
                                     {...field}
@@ -73,8 +69,8 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 )}
 
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
-                    <Alert size="small" variant="warning">
-                        <FormattedMessage id={'skjema.usignert.info'} />
+                    <Alert size="small" variant="warning" className="mt-4">
+                        <FormattedMessage id="skjema.usignert.info" />
                     </Alert>
                 )}
             </Box>

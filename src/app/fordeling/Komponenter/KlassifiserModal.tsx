@@ -204,7 +204,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
             />
         );
         return (
-            <Alert variant={variant} size="small">
+            <Alert variant={variant} size="small" className="mt-4">
                 {messageContent}
             </Alert>
         );
