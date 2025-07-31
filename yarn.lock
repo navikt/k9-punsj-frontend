@@ -3605,7 +3605,7 @@ __metadata:
     axios: "npm:1.11.0"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.5"
-    dotenv: "npm:16.5.0"
+    dotenv: "npm:17.2.1"
     express: "npm:4.21.2"
     express-http-proxy: "npm:2.1.1"
     helmet: "npm:8.1.0"
@@ -9079,13 +9079,6 @@ __metadata:
     no-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10/a65e3519414856df0228b9f645332f974f2bf5433370f544a681122eab59e66038fc3349b4be1cdc47152779dac71a5864f1ccda2f745e767c46e9c6543b1169
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:16.5.0":
-  version: 16.5.0
-  resolution: "dotenv@npm:16.5.0"
-  checksum: 10/e68a16834f1a41cc2dfb01563bc150668ad675e6cd09191211467b5c0806b6ecd6ec438e021aa8e01cd0e72d2b70ef4302bec7cc0fe15b6955f85230b62dc8a9
   languageName: node
   linkType: hard
 
