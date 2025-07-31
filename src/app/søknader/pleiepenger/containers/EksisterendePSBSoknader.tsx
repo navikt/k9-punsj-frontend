@@ -157,7 +157,7 @@ const EksisterendeSoknader: React.FC<Props> = ({ pleietrengendeId, fagsakId, kan
                     <FormattedMessage id="tabell.overskrift" />
                 </Heading>
 
-                <Alert size="small" variant="info" className="mb-10 max-w-max">
+                <Alert size="small" variant="info" className="mt-4 mb-10 max-w-max">
                     <FormattedMessage
                         id={`tabell.info${kanStarteNyRegistrering ? '' : '.kanIkkeStarteNyRegistrering'}`}
                     />
