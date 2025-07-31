@@ -40,7 +40,7 @@ const NewDateInput: React.FC<Props> = ({
     id,
     inputDisabled,
     disabled,
-    noValidateTomtFelt,
+    noValidateTomtFelt = true,
     inputRef,
     locale,
     onBlur,

@@ -15,7 +15,6 @@ interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disable
 const DatoInputFormikNew = ({ label, name, handleBlur, hideLabel, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
-
     return (
         <NewDateInput
             label={label}
@@ -31,6 +30,7 @@ const DatoInputFormikNew = ({ label, name, handleBlur, hideLabel, ...props }: Ow
                     handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
                 } else {
                     helper.setValue(selectedDate);
+                    helper.setTouched(true, true);
                     field.onBlur(selectedDate);
                 }
             }}
