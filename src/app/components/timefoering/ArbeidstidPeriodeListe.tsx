@@ -4,31 +4,15 @@ import { AddCircle } from '@navikt/ds-icons';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FieldArray, Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
-import dayjs from 'dayjs';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
-import { formats } from 'app/utils';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
-import { checkArbeidstidWithinSoknadsperioder } from 'app/utils/periodUtils';
+import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder } from 'app/utils/periodUtils';
+import { formats } from 'app/utils';
+import dayjs from 'dayjs';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
-
-// Funksjon for å formatere søknadsperioder til lesbar tekst
-const formatSoknadsperioder = (soknadsperioder: IPeriode[]): string => {
-    if (!soknadsperioder || soknadsperioder.length === 0) {
-        return '';
-    }
-
-    return soknadsperioder
-        .filter((periode) => periode.fom && periode.tom)
-        .map((periode) => {
-            const fom = dayjs(periode.fom, formats.YYYYMMDD).format('DD.MM.YYYY');
-            const tom = dayjs(periode.tom, formats.YYYYMMDD).format('DD.MM.YYYY');
-            return `${fom} - ${tom}`;
-        })
-        .join(', ');
-};
 
 // Funksjon for å sjekke overlappende perioder
 const checkPeriodOverlap = (periods: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => {
@@ -85,7 +69,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                 `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
-                    return !checkArbeidstidWithinSoknadsperioder(
+                    return !checkPeriodsWithinSoknadsperioder(
                         periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
                         soknadsperioder,
                     );

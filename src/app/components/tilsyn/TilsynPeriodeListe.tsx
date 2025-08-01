@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
+import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder } from 'app/utils/periodUtils';
 
 import VerticalSpacer from '../VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
@@ -15,15 +16,24 @@ import { formats, Tidsformat } from 'app/utils';
 import dayjs from 'dayjs';
 import { checkPeriodOverlapTilsyn } from './utils';
 
-const validationSchema = yup.object({
-    perioder: yup
-        .array()
-        .of(periodeMedTimerOgMinutterSchema)
-        .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
-            if (!periods) return true;
-            return !checkPeriodOverlapTilsyn(periods as Periodeinfo<IOmsorgstid>[]);
-        }),
-});
+const createValidationSchema = (soknadsperioder: IPeriode[]) =>
+    yup.object({
+        perioder: yup
+            .array()
+            .of(periodeMedTimerOgMinutterSchema)
+            .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
+                if (!periods) return true;
+                return !checkPeriodOverlapTilsyn(periods as Periodeinfo<IOmsorgstid>[]);
+            })
+            .test(
+                'within-soknadsperioder',
+                `Tilsyn må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
+                (periods) => {
+                    if (!periods) return true;
+                    return !checkPeriodsWithinSoknadsperioder(periods as Periodeinfo<IOmsorgstid>[], soknadsperioder);
+                },
+            ),
+    });
 interface FormValues {
     perioder: Periodeinfo<IOmsorgstid>[];
 }
@@ -149,7 +159,7 @@ const TilsynPeriodeListe = (props: Props) => {
         <Formik<FormValues>
             initialValues={initialValues}
             onSubmit={handleSaveValues}
-            validationSchema={validationSchema}
+            validationSchema={createValidationSchema(soknadsperioder)}
             innerRef={formikRef}
             // enableReinitialize
         >
