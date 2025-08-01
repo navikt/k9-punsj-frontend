@@ -275,3 +275,48 @@ export const checkPeriodsWithinSoknadsperioder = <T>(
     // Alle perioder er innenfor søknadsperioder
     return false;
 };
+
+/**
+ * Sjekker om perioder overlapper hverandre
+ * @param perioder - Liste over perioder som skal sjekkes
+ * @returns true hvis perioder overlapper, false hvis ikke
+ */
+export const checkPeriodOverlap = <T>(periods: Periodeinfo<T>[]): boolean => {
+    for (let i = 0; i < periods.length; i++) {
+        const currentPeriod = periods[i];
+        if (!currentPeriod.periode?.fom || !currentPeriod.periode?.tom) {
+            return true; // Tomme datoer regnes som feil
+        }
+
+        const currentStart = dayjs(currentPeriod.periode.fom, formats.YYYYMMDD);
+        const currentEnd = dayjs(currentPeriod.periode.tom, formats.YYYYMMDD);
+
+        // Sjekker overlapp med andre perioder
+        for (let j = i + 1; j < periods.length; j++) {
+            const otherPeriod = periods[j];
+            if (!otherPeriod.periode?.fom || !otherPeriod.periode?.tom) {
+                return true; // Tomme datoer regnes som feil
+            }
+
+            const otherStart = dayjs(otherPeriod.periode.fom, formats.YYYYMMDD);
+            const otherEnd = dayjs(otherPeriod.periode.tom, formats.YYYYMMDD);
+
+            // Sjekker overlappende perioder
+            // Perioder overlapper hvis:
+            // 1. Starten på én periode er innenfor en annen periode
+            // 2. Slutten på én periode er innenfor en annen periode
+            // 3. Én periode inneholder en annen helt
+            if (
+                (currentStart.isSameOrAfter(otherStart) && currentStart.isSameOrBefore(otherEnd)) || // Starten på nåværende periode er innenfor en annen
+                (currentEnd.isSameOrAfter(otherStart) && currentEnd.isSameOrBefore(otherEnd)) || // Slutten på nåværende periode er innenfor en annen
+                (otherStart.isSameOrAfter(currentStart) && otherStart.isSameOrBefore(currentEnd)) || // Starten på annen periode er innenfor nåværende
+                (otherEnd.isSameOrAfter(currentStart) && otherEnd.isSameOrBefore(currentEnd)) || // Slutten på annen periode er innenfor nåværende
+                (currentStart.isSameOrBefore(otherStart) && currentEnd.isSameOrAfter(otherEnd)) || // Nåværende periode inneholder en annen helt
+                (otherStart.isSameOrBefore(currentStart) && otherEnd.isSameOrAfter(currentEnd)) // Annen periode inneholder nåværende helt
+            ) {
+                return true; // Overlapp funnet
+            }
+        }
+    }
+    return false; // Ingen overlapp funnet
+};

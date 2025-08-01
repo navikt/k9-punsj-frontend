@@ -8,13 +8,12 @@ import * as yup from 'yup';
 
 import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
-import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder } from 'app/utils/periodUtils';
+import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
 
 import VerticalSpacer from '../VerticalSpacer';
 import TilsynPeriode from './TilsynPeriode';
 import { formats, Tidsformat } from 'app/utils';
 import dayjs from 'dayjs';
-import { checkPeriodOverlapTilsyn } from './utils';
 
 const createValidationSchema = (soknadsperioder: IPeriode[]) =>
     yup.object({
@@ -23,7 +22,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
             .of(periodeMedTimerOgMinutterSchema)
             .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
                 if (!periods) return true;
-                return !checkPeriodOverlapTilsyn(periods as Periodeinfo<IOmsorgstid>[]);
+                return !checkPeriodOverlap(periods as Periodeinfo<IOmsorgstid>[]);
             })
             .test(
                 'within-soknadsperioder',

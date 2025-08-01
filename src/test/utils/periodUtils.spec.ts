@@ -1,9 +1,161 @@
-import { checkArbeidstidWithinSoknadsperioder, checkPeriodsWithinSoknadsperioder, formatSoknadsperioder } from '../../app/utils/periodUtils';
+import {
+    checkArbeidstidWithinSoknadsperioder,
+    checkPeriodsWithinSoknadsperioder,
+    formatSoknadsperioder,
+    checkPeriodOverlap,
+} from '../../app/utils/periodUtils';
 import { IPeriode } from '../../app/models/types/Periode';
-import { IArbeidstidPeriodeMedTimer, Periodeinfo } from '../../app/models/types';
-import { IOmsorgstid } from '../../app/models/types';
+import { IArbeidstidPeriodeMedTimer, Periodeinfo, IOmsorgstid } from '../../app/models/types';
 
 describe('periodUtils', () => {
+    describe('checkPeriodOverlap', () => {
+        const createArbeidstidPeriode = (fom: string, tom: string): Periodeinfo<IArbeidstidPeriodeMedTimer> => ({
+            periode: { fom, tom },
+            faktiskArbeidPerDag: { timer: '8', minutter: '0' },
+            jobberNormaltPerDag: { timer: '8', minutter: '0' },
+        });
+
+        const createTilsynPeriode = (fom: string, tom: string): Periodeinfo<IOmsorgstid> => ({
+            periode: { fom, tom },
+            timer: '8',
+            minutter: '0',
+            perDagString: '',
+            tidsformat: 'timerOgMinutter' as any,
+        });
+
+        describe('når perioder ikke overlapper', () => {
+            it('skal returnere false når perioder er etter hverandre', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                    createArbeidstidPeriode('2024-01-16', '2024-01-31'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når perioder er før hverandre', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-02-01', '2024-02-15'),
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når perioder er helt adskilt', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-10'),
+                    createArbeidstidPeriode('2024-03-01', '2024-03-10'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når perioder starter og slutter på samme dato', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                    createArbeidstidPeriode('2024-01-15', '2024-01-31'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+        });
+
+        describe('når perioder overlapper', () => {
+            it('skal returnere true når perioder overlapper delvis', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-20'),
+                    createArbeidstidPeriode('2024-01-15', '2024-01-31'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når én periode er helt innenfor en annen', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-31'),
+                    createArbeidstidPeriode('2024-01-10', '2024-01-20'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når perioder starter på samme dato', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                    createArbeidstidPeriode('2024-01-01', '2024-01-20'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når perioder slutter på samme dato', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-31'),
+                    createArbeidstidPeriode('2024-01-15', '2024-01-31'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når perioder er identiske', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+        });
+
+        describe('edge cases', () => {
+            it('skal returnere true når periode har tomme datoer', () => {
+                const perioder = [
+                    createArbeidstidPeriode('2024-01-01', '2024-01-15'),
+                    {
+                        periode: { fom: '', tom: '' },
+                        faktiskArbeidPerDag: { timer: '8', minutter: '0' },
+                        jobberNormaltPerDag: { timer: '8', minutter: '0' },
+                    },
+                ];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere false når ingen perioder er definert', () => {
+                const result = checkPeriodOverlap([]);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når kun én periode er definert', () => {
+                const perioder = [createArbeidstidPeriode('2024-01-01', '2024-01-15')];
+
+                const result = checkPeriodOverlap(perioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal fungere med tilsyn perioder', () => {
+                const tilsynPerioder = [
+                    createTilsynPeriode('2024-01-01', '2024-01-15'),
+                    createTilsynPeriode('2024-01-10', '2024-01-20'),
+                ];
+
+                const result = checkPeriodOverlap(tilsynPerioder);
+                expect(result).toBe(true);
+            });
+        });
+    });
+
     describe('formatSoknadsperioder', () => {
         it('skal returnere tom streng når ingen perioder er definert', () => {
             const result = formatSoknadsperioder([]);
