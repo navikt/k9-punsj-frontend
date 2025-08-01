@@ -9,6 +9,7 @@ import {
     findDateIntervalsFromDates,
     initializeDate,
     removeDatesFromDateRange,
+    getDatesInDateRange,
 } from './timeUtils';
 
 const sortPeriodsByFomDate = (period1: Periode, period2: Periode): number => {
@@ -319,4 +320,211 @@ export const checkPeriodOverlap = <T>(periods: Periodeinfo<T>[]): boolean => {
         }
     }
     return false; // Ingen overlapp funnet
+};
+
+/**
+ * Generisk funksjon for å gruppere sammenhengende arbeidsdager
+ * @param workDays - Liste over arbeidsdager
+ * @param templatePeriod - Template periode som brukes for å lage nye perioder
+ * @returns Liste over perioder med sammenhengende arbeidsdager
+ */
+const groupConsecutiveWorkDaysGeneric = <T>(workDays: Date[], templatePeriod: Periodeinfo<T>): Periodeinfo<T>[] => {
+    if (workDays.length === 0) {
+        return [];
+    }
+
+    const periods: Periodeinfo<T>[] = [];
+    let currentGroup: Date[] = [workDays[0]];
+
+    for (let i = 1; i < workDays.length; i++) {
+        const currentDay = workDays[i];
+        const previousDay = workDays[i - 1];
+
+        // Sjekk om dagene er sammenhengende (ingen helger mellom)
+        const daysDiff = dayjs(currentDay).diff(dayjs(previousDay), 'day');
+        if (daysDiff <= 1) {
+            currentGroup.push(currentDay);
+        } else {
+            // Avslutt nåværende gruppe og start ny
+            if (currentGroup.length > 0) {
+                periods.push({
+                    ...templatePeriod,
+                    periode: {
+                        fom: dayjs(currentGroup[0]).format(formats.YYYYMMDD),
+                        tom: dayjs(currentGroup[currentGroup.length - 1]).format(formats.YYYYMMDD),
+                    },
+                });
+            }
+            currentGroup = [currentDay];
+        }
+    }
+
+    // Legg til siste gruppe
+    if (currentGroup.length > 0) {
+        periods.push({
+            ...templatePeriod,
+            periode: {
+                fom: dayjs(currentGroup[0]).format(formats.YYYYMMDD),
+                tom: dayjs(currentGroup[currentGroup.length - 1]).format(formats.YYYYMMDD),
+            },
+        });
+    }
+
+    return periods;
+};
+
+/**
+ * Generisk funksjon for å filtrere bort helger fra perioder
+ * @param periods - Liste over perioder som skal filtreres
+ * @returns Liste over perioder kun med arbeidsdager
+ */
+export const filterWeekendsFromPeriodsGeneric = <T>(periods: Periodeinfo<T>[]): Periodeinfo<T>[] => {
+    const workDayPeriods: Periodeinfo<T>[] = [];
+
+    periods.forEach((period) => {
+        if (!period.periode?.fom || !period.periode?.tom) {
+            return;
+        }
+
+        const startDate = dayjs(period.periode.fom, formats.YYYYMMDD);
+        const endDate = dayjs(period.periode.tom, formats.YYYYMMDD);
+
+        // Hent alle arbeidsdager i perioden
+        const allDays = getDatesInDateRange(
+            { fom: startDate.toDate(), tom: endDate.toDate() },
+            true, // onlyWeekDays = true
+        );
+
+        // Grupper sammenhengende arbeidsdager
+        const workDayGroups = groupConsecutiveWorkDaysGeneric(allDays, period);
+        workDayPeriods.push(...workDayGroups);
+    });
+
+    return workDayPeriods;
+};
+
+/**
+ * Generisk funksjon for å håndtere overlapp mellom perioder
+ *
+ * @param newPeriod - Ny periode som skal legges til
+ * @param existingPeriods - Liste over eksisterende perioder
+ * @returns Oppdatert liste over perioder uten overlapp
+ */
+const handlePeriodOverlapsGeneric = <T>(
+    newPeriod: Periodeinfo<T>,
+    existingPeriods: Periodeinfo<T>[],
+): Periodeinfo<T>[] => {
+    if (!newPeriod.periode?.fom || !newPeriod.periode?.tom) {
+        return existingPeriods;
+    }
+
+    const newStart = dayjs(newPeriod.periode.fom, formats.YYYYMMDD);
+    const newEnd = dayjs(newPeriod.periode.tom, formats.YYYYMMDD);
+    const updatedPeriods: Periodeinfo<T>[] = [];
+
+    existingPeriods.forEach((existingPeriod) => {
+        if (!existingPeriod.periode?.fom || !existingPeriod.periode?.tom) {
+            updatedPeriods.push(existingPeriod);
+            return;
+        }
+
+        const existingStart = dayjs(existingPeriod.periode.fom, formats.YYYYMMDD);
+        const existingEnd = dayjs(existingPeriod.periode.tom, formats.YYYYMMDD);
+
+        // Hvis eksisterende periode er helt innenfor den nye perioden, hopper vi over den
+        if (newStart.isSameOrBefore(existingStart) && newEnd.isSameOrAfter(existingEnd)) {
+            return;
+        }
+
+        // Hvis periodene overlapper delvis
+        if (newStart.isSameOrBefore(existingEnd) && newEnd.isSameOrAfter(existingStart)) {
+            // Hvis ny periode er helt innenfor eksisterende periode
+            if (newStart.isSameOrAfter(existingStart) && newEnd.isSameOrBefore(existingEnd)) {
+                // Deler opp eksisterende periode i tre deler
+                if (existingStart.isBefore(newStart)) {
+                    updatedPeriods.push({
+                        ...existingPeriod,
+                        periode: {
+                            fom: existingStart.format(formats.YYYYMMDD),
+                            tom: newStart.subtract(1, 'day').format(formats.YYYYMMDD),
+                        },
+                    });
+                }
+                if (newEnd.isBefore(existingEnd)) {
+                    updatedPeriods.push({
+                        ...existingPeriod,
+                        periode: {
+                            fom: newEnd.add(1, 'day').format(formats.YYYYMMDD),
+                            tom: existingEnd.format(formats.YYYYMMDD),
+                        },
+                    });
+                }
+            }
+            // Hvis ny periode overlapper delvis
+            else {
+                if (newStart.isBefore(existingStart)) {
+                    updatedPeriods.push({
+                        ...newPeriod,
+                        periode: {
+                            fom: newStart.format(formats.YYYYMMDD),
+                            tom: existingStart.subtract(1, 'day').format(formats.YYYYMMDD),
+                        },
+                    });
+                }
+                if (newEnd.isAfter(existingEnd)) {
+                    updatedPeriods.push({
+                        ...newPeriod,
+                        periode: {
+                            fom: existingEnd.add(1, 'day').format(formats.YYYYMMDD),
+                            tom: newEnd.format(formats.YYYYMMDD),
+                        },
+                    });
+                }
+            }
+        } else {
+            // Hvis periodene ikke overlapper, beholder eksisterende periode
+            updatedPeriods.push(existingPeriod);
+        }
+    });
+
+    // Legger til den nye perioden
+    updatedPeriods.push(newPeriod);
+    return updatedPeriods;
+};
+
+/**
+ * Hovedfunksjon for å behandle tilsynperioder
+ *
+ * @param newPeriods - Nye perioder som skal legges til
+ * @param existingPeriods - Eksisterende perioder
+ * @param options - Alternativer for behandling
+ * @returns Behandlet liste over perioder
+ */
+export const processTilsynPeriods = (
+    newPeriods: Periodeinfo<IOmsorgstid>[],
+    existingPeriods: Periodeinfo<IOmsorgstid>[],
+    options: { filterWeekends?: boolean } = {},
+): Periodeinfo<IOmsorgstid>[] => {
+    let allPeriods: Periodeinfo<IOmsorgstid>[] = [...existingPeriods];
+
+    // Behandler nye perioder
+    newPeriods.forEach((newPeriod) => {
+        if (!newPeriod || !newPeriod.periode) return;
+
+        // Filtrerer bort helger hvis det er aktivert
+        let processedNewPeriods = [newPeriod];
+        if (options.filterWeekends) {
+            processedNewPeriods = filterWeekendsFromPeriodsGeneric([newPeriod]);
+        }
+
+        // Behandler hver behandlet periode
+        processedNewPeriods.forEach((processedPeriod) => {
+            allPeriods = handlePeriodOverlapsGeneric(processedPeriod, allPeriods);
+        });
+    });
+
+    // Sorterer perioder etter startdato
+    return allPeriods.sort(
+        (a, b) => dayjs(a.periode?.fom, formats.YYYYMMDD).valueOf() - dayjs(b.periode?.fom, formats.YYYYMMDD).valueOf(),
+    );
 };

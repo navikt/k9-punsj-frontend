@@ -3,11 +3,122 @@ import {
     checkPeriodsWithinSoknadsperioder,
     formatSoknadsperioder,
     checkPeriodOverlap,
+    processTilsynPeriods,
+    filterWeekendsFromPeriodsGeneric,
 } from '../../app/utils/periodUtils';
 import { IPeriode } from '../../app/models/types/Periode';
 import { IArbeidstidPeriodeMedTimer, Periodeinfo, IOmsorgstid } from '../../app/models/types';
 
 describe('periodUtils', () => {
+    describe('processTilsynPeriods', () => {
+        const createTilsynPeriode = (fom: string, tom: string): Periodeinfo<IOmsorgstid> => ({
+            periode: { fom, tom },
+            timer: '8',
+            minutter: '0',
+            perDagString: '',
+            tidsformat: 'timerOgMinutter' as any,
+        });
+
+        it('skal behandle perioder uten helgefiltrering', () => {
+            const newPeriods = [createTilsynPeriode('2024-01-01', '2024-01-07')];
+            const existingPeriods: Periodeinfo<IOmsorgstid>[] = [];
+
+            const result = processTilsynPeriods(newPeriods, existingPeriods, { filterWeekends: false });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+            expect(result[0].periode?.tom).toBe('2024-01-07');
+        });
+
+        it('skal behandle perioder med helgefiltrering', () => {
+            const newPeriods = [createTilsynPeriode('2024-01-01', '2024-01-07')]; // Mandag til søndag
+            const existingPeriods: Periodeinfo<IOmsorgstid>[] = [];
+
+            const result = processTilsynPeriods(newPeriods, existingPeriods, { filterWeekends: true });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+            expect(result[0].periode?.tom).toBe('2024-01-05'); // Kun mandag til fredag
+        });
+
+        it('skal håndtere overlappende perioder', () => {
+            const newPeriods = [createTilsynPeriode('2024-01-05', '2024-01-10')];
+            const existingPeriods = [createTilsynPeriode('2024-01-01', '2024-01-15')];
+
+            const result = processTilsynPeriods(newPeriods, existingPeriods);
+
+            expect(result).toHaveLength(3);
+            // Sjekker at periodene er sortert etter startdato
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+            expect(result[1].periode?.fom).toBe('2024-01-05');
+            expect(result[2].periode?.fom).toBe('2024-01-11');
+        });
+
+        it('skal håndtere tomme perioder', () => {
+            const newPeriods: Periodeinfo<IOmsorgstid>[] = [];
+            const existingPeriods = [createTilsynPeriode('2024-01-01', '2024-01-15')];
+
+            const result = processTilsynPeriods(newPeriods, existingPeriods);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+        });
+    });
+
+    describe('filterWeekendsFromPeriodsGeneric', () => {
+        const createTilsynPeriode = (fom: string, tom: string): Periodeinfo<IOmsorgstid> => ({
+            periode: { fom, tom },
+            timer: '8',
+            minutter: '0',
+            perDagString: '',
+            tidsformat: 'timerOgMinutter' as any,
+        });
+
+        it('skal filtrere bort helger fra periode', () => {
+            const periods = [createTilsynPeriode('2024-01-01', '2024-01-07')]; // Mandag til søndag
+
+            const result = filterWeekendsFromPeriodsGeneric(periods);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+            expect(result[0].periode?.tom).toBe('2024-01-05'); // Kun mandag til fredag
+        });
+
+        it('skal håndtere periode som kun inneholder helger', () => {
+            const periods = [createTilsynPeriode('2024-01-06', '2024-01-07')]; // Lørdag til søndag
+
+            const result = filterWeekendsFromPeriodsGeneric(periods);
+
+            expect(result).toHaveLength(0); // Ingen arbeidsdager
+        });
+
+        it('skal håndtere periode som starter på arbeidsdag og slutter på helg', () => {
+            const periods = [createTilsynPeriode('2024-01-03', '2024-01-06')]; // Onsdag til lørdag
+
+            const result = filterWeekendsFromPeriodsGeneric(periods);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-03');
+            expect(result[0].periode?.tom).toBe('2024-01-05'); // Onsdag til fredag
+        });
+
+        it('skal fungere med arbeidstid perioder også', () => {
+            const arbeidstidPeriods: Periodeinfo<IArbeidstidPeriodeMedTimer>[] = [
+                {
+                    periode: { fom: '2024-01-01', tom: '2024-01-07' },
+                    faktiskArbeidPerDag: { timer: '8', minutter: '0' },
+                    jobberNormaltPerDag: { timer: '8', minutter: '0' },
+                },
+            ];
+
+            const result = filterWeekendsFromPeriodsGeneric(arbeidstidPeriods);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].periode?.fom).toBe('2024-01-01');
+            expect(result[0].periode?.tom).toBe('2024-01-05');
+        });
+    });
+
     describe('checkPeriodOverlap', () => {
         const createArbeidstidPeriode = (fom: string, tom: string): Periodeinfo<IArbeidstidPeriodeMedTimer> => ({
             periode: { fom, tom },
@@ -54,7 +165,7 @@ describe('periodUtils', () => {
                 expect(result).toBe(false);
             });
 
-            it('skal returnere false når perioder starter og slutter på samme dato', () => {
+            it('skal returnere true når perioder starter og slutter på samme dato', () => {
                 const perioder = [
                     createArbeidstidPeriode('2024-01-01', '2024-01-15'),
                     createArbeidstidPeriode('2024-01-15', '2024-01-31'),
