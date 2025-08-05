@@ -71,7 +71,7 @@ describe('useRegistreringsValg', () => {
         expect(result.current.isCreatingSoknad).toBe(false);
     });
 
-    it('should provide all required functions', () => {
+    it('should provide all required functions and values', () => {
         mockFetchEksisterendeSoknader.mockResolvedValue({ søknader: [] });
 
         const { result } = renderHook(
@@ -85,7 +85,7 @@ describe('useRegistreringsValg', () => {
         );
 
         expect(typeof result.current.createSoknad).toBe('function');
-        expect(typeof result.current.kanStarteNyRegistrering).toBe('function');
+        expect(typeof result.current.kanStarteNyRegistrering).toBe('boolean');
         expect(typeof result.current.handleTilbake).toBe('function');
     });
 
@@ -107,5 +107,67 @@ describe('useRegistreringsValg', () => {
         expect(result.current.søkerId).toBe('test-søker');
         expect(result.current.pleietrengendeId).toBe('test-pleietrengende');
         expect(result.current.k9saksnummer).toBe('test-sak');
+    });
+
+    it('should return correct kanStarteNyRegistrering logic', async () => {
+        // Test case 1: No søknader - should allow new registration
+        mockFetchEksisterendeSoknader.mockResolvedValue({ søknader: [] });
+
+        const { result: result1 } = renderHook(
+            () =>
+                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                    journalpostid: 'test-jp',
+                    søkerId: 'test-søker',
+                }),
+            { wrapper: createWrapper() },
+        );
+
+        await waitFor(() => {
+            expect(result1.current.kanStarteNyRegistrering).toBe(true);
+        });
+
+        // Test case 2: Søknader exist but none match journalpostid - should allow new registration
+        mockFetchEksisterendeSoknader.mockResolvedValue({
+            søknader: [
+                {
+                    journalposter: ['other-jp'],
+                },
+            ],
+        });
+
+        const { result: result2 } = renderHook(
+            () =>
+                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                    journalpostid: 'test-jp',
+                    søkerId: 'test-søker',
+                }),
+            { wrapper: createWrapper() },
+        );
+
+        await waitFor(() => {
+            expect(result2.current.kanStarteNyRegistrering).toBe(true);
+        });
+
+        // Test case 3: Søknad exists with matching journalpostid - should not allow new registration
+        mockFetchEksisterendeSoknader.mockResolvedValue({
+            søknader: [
+                {
+                    journalposter: ['test-jp'],
+                },
+            ],
+        });
+
+        const { result: result3 } = renderHook(
+            () =>
+                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                    journalpostid: 'test-jp',
+                    søkerId: 'test-søker',
+                }),
+            { wrapper: createWrapper() },
+        );
+
+        await waitFor(() => {
+            expect(result3.current.kanStarteNyRegistrering).toBe(false);
+        });
     });
 });
