@@ -26,20 +26,6 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
     const navigate = useNavigate();
     const dispatch = useDispatch<Dispatch<any>>();
 
-    const createNewSoknad = (
-        journalpostId: string,
-        søkerId: string,
-        pleietrengendeId: string | null,
-        k9saksnummer?: string,
-    ) => dispatch(createPLSSoknad(journalpostId, søkerId, pleietrengendeId, k9saksnummer));
-
-    const getAlleJournalposter = (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent));
-
-    const getEksisterendeSoknader = (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId));
-
-    const resetSoknadId = () => dispatch(resetPLSSoknadidAction());
-
     const { søkerId, pleietrengendeId } = useSelector((state: RootStateType) => state.identState);
     const eksisterendeSoknaderState = useSelector((state: RootStateType) => state.eksisterendePLSSoknaderState);
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
@@ -63,25 +49,25 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
 
     useEffect(() => {
         if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            getEksisterendeSoknader(søkerId, null);
+            dispatch(findEksisterendeSoknader(søkerId, null));
         }
 
-        getAlleJournalposter(søkerId);
-    }, [søkerId, pleietrengendeId, getEksisterendeSoknader, getAlleJournalposter]);
+        dispatch(hentAlleJournalposterPerIdentAction(søkerId));
+    }, [søkerId, pleietrengendeId, dispatch]);
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         if (søknader?.length === 0) {
-            createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
+            dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer));
         }
-    }, [createNewSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
+    }, [dispatch, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
 
     useEffect(() => {
         if (eksisterendeSoknaderSvar && isSoknadCreated && soknadid) {
-            resetSoknadId();
+            dispatch(resetPLSSoknadidAction());
             navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
         }
-    }, [eksisterendeSoknaderSvar, isSoknadCreated, navigate, resetSoknadId, soknadid]);
+    }, [eksisterendeSoknaderSvar, isSoknadCreated, navigate, dispatch, soknadid]);
 
     const kanStarteNyRegistrering = () => {
         if (søknader?.length) {
@@ -118,7 +104,9 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
 
                 {kanStarteNyRegistrering() && (
                     <Button
-                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
+                        onClick={() =>
+                            dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer))
+                        }
                         className="knapp knapp2"
                         size="small"
                         disabled={isEksisterendeSoknaderLoading}
