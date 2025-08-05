@@ -1,149 +1,77 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
+import { Alert, Button, Heading, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IdentRules } from 'app/rules';
-import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import { IJournalpostInfo } from 'app/models/types/Journalpost/Journalpost';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
-import { IFordelingState, IJournalpost } from 'app/models/types';
 import { generateDateString } from '../../../components/skjema/skjemaUtils';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
-import {
-    chooseEksisterendePLSSoknadAction,
-    closeEksisterendePLSSoknadAction,
-    createPLSSoknad,
-    findEksisterendePLSSoknader,
-    openEksisterendePLSSoknadAction,
-    resetPLSSoknadidAction,
-} from '../state/actions/EksisterendePLSSoknaderActions';
-import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 
-interface StateProps {
-    eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
-    journalposterState: IJournalposterPerIdentState;
-    journalpost?: IJournalpost;
-    fordelingState?: IFordelingState;
-}
-
-interface DispatchProps {
-    findEksisterendeSoknader: typeof findEksisterendePLSSoknader;
-    openEksisterendeSoknadAction: typeof openEksisterendePLSSoknadAction;
-    closeEksisterendeSoknadAction: typeof closeEksisterendePLSSoknadAction;
-    chooseEksisterendeSoknadAction: typeof chooseEksisterendePLSSoknadAction;
-    resetSoknadidAction: typeof resetPLSSoknadidAction;
-    resetAllAction: typeof resetAllStateAction;
-}
-
-interface ComponentProps {
+interface Props {
+    søknader: IPLSSoknad[];
+    journalposter: IJournalpostInfo[];
     søkerId: string;
     pleietrengendeId: string;
     kanStarteNyRegistrering?: boolean;
+    fagsakId?: string;
 }
 
-type Props = ComponentProps & StateProps & DispatchProps;
-
-export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) => {
+export const EksisterendePLSSoknader: React.FC<Props> = ({
+    søknader,
+    journalposter,
+    søkerId,
+    pleietrengendeId,
+    kanStarteNyRegistrering,
+    fagsakId,
+}: Props) => {
     const intl = useIntl();
-
     const navigate = useNavigate();
 
-    const {
-        eksisterendeSoknaderState,
-        journalposterState,
-        søkerId,
-        pleietrengendeId,
-        journalpost,
-        fordelingState,
-        kanStarteNyRegistrering,
-    } = props;
-
-    const soknader = eksisterendeSoknaderState.eksisterendeSoknaderSvar.søknader;
-
-    useEffect(() => {
-        if (IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)) {
-            props.findEksisterendeSoknader(søkerId, null);
-        } else {
-            props.resetAllAction();
-            navigate(ROUTES.HOME);
-        }
-    }, [søkerId, pleietrengendeId]);
+    // Lokalt tilstand for modal vindu
+    const [chosenSoknad, setChosenSoknad] = useState<IPLSSoknad | null>(null);
 
     if (!søkerId || søkerId === '') {
         return null;
     }
 
-    if (eksisterendeSoknaderState.eksisterendeSoknaderRequestError) {
-        return (
-            <Alert size="small" variant="error">
-                <FormattedMessage id="eksisterendeSoknader.requestError" />
-            </Alert>
-        );
-    }
-
-    if (
-        eksisterendeSoknaderState.isEksisterendeSoknaderLoading ||
-        eksisterendeSoknaderState.isAwaitingSoknadCreation ||
-        journalposterState.isJournalposterLoading
-    ) {
-        return (
-            <div>
-                <Loader size="large" />
-            </div>
-        );
-    }
-
-    if (eksisterendeSoknaderState.createSoknadRequestError) {
-        return (
-            <Alert size="small" variant="error">
-                <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
-            </Alert>
-        );
-    }
-
-    const technicalError =
-        eksisterendeSoknaderState.isSoknadCreated && !eksisterendeSoknaderState.soknadid ? (
-            <Alert size="small" variant="error">
-                <FormattedMessage id="eksisterendeSoknader.tekniskFeil" />
-            </Alert>
-        ) : null;
-
     const chooseSoknad = (soknad: IPLSSoknad) => {
         if (soknad.soeknadId) {
-            props.chooseEksisterendeSoknadAction(soknad);
-            props.resetSoknadidAction();
+            setChosenSoknad(null); // Lukker modal vindu
             navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
         } else {
             throw new Error('Søknad mangler søknadid');
         }
     };
 
-    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+    const openSoknad = (soknad: IPLSSoknad) => {
+        setChosenSoknad(soknad);
+    };
+
+    const closeSoknad = () => {
+        setChosenSoknad(null);
+    };
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];
         const rows: Array<JSX.Element> = [];
 
-        soknader?.forEach((soknadInfo, index) => {
+        søknader?.forEach((soknadInfo, index) => {
             const søknad = new PLSSoknad(soknadInfo);
             const soknadId = søknad.soeknadId;
             const k9saksnummer = søknad?.k9saksnummer;
 
             const dokUrlParametre = dokumenterPreviewUtils.getDokUrlParametreFraJournalposter(
                 Array.from(søknad.journalposter),
-                journalposterState.journalposter,
+                journalposter,
             );
 
-            const { chosenSoknad } = props.eksisterendeSoknaderState;
             const rowContent = [
                 søknad.mottattDato ? datetime(intl, TimeFormat.DATE_SHORT, søknad.mottattDato) : '',
                 søknad.pleietrengende.norskIdent ? søknad.pleietrengende.norskIdent : '',
@@ -162,7 +90,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) 
                             pleietrengendeId !== null) ||
                         (!!k9saksnummer && fagsakId !== k9saksnummer)
                     }
-                    onClick={() => props.openEksisterendeSoknadAction(soknadInfo)}
+                    onClick={() => openSoknad(soknadInfo)}
                 >
                     <FormattedMessage id="mappe.lesemodus.knapp.velg" />
                 </Button>,
@@ -185,7 +113,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) 
                     open={!!chosenSoknad && soknadId === chosenSoknad.soeknadId}
                     submitKnappText="mappe.lesemodus.knapp.velg"
                     onSubmit={() => chooseSoknad(soknadInfo)}
-                    onClose={() => props.closeEksisterendeSoknadAction()}
+                    onClose={closeSoknad}
                 />,
             );
         });
@@ -240,45 +168,16 @@ export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) 
         );
     };
 
-    if (soknader && soknader.length) {
-        return (
-            <>
-                {technicalError}
-                {showSoknader()}
-            </>
-        );
+    if (søknader && søknader.length) {
+        return showSoknader();
     }
 
     return (
-        <>
-            {technicalError}
-            <Alert size="small" variant="info">
-                <FormattedMessage
-                    id="mapper.infoboks.ingensoknader"
-                    values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
-                />
-            </Alert>
-        </>
+        <Alert size="small" variant="info">
+            <FormattedMessage
+                id="mapper.infoboks.ingensoknader"
+                values={{ antallSokere: pleietrengendeId ? '2' : '1' }}
+            />
+        </Alert>
     );
 };
-
-const mapStateToProps = (state: RootStateType): StateProps => ({
-    eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
-    journalposterState: state.journalposterPerIdentState,
-    journalpost: state.felles.journalpost,
-    fordelingState: state.fordelingState,
-});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    findEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendePLSSoknader(søkerId, pleietrengendeId)),
-    openEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(openEksisterendePLSSoknadAction(info)),
-    closeEksisterendeSoknadAction: () => dispatch(closeEksisterendePLSSoknadAction()),
-    chooseEksisterendeSoknadAction: (info: IPLSSoknad) => dispatch(chooseEksisterendePLSSoknadAction(info)),
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId)),
-    resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
-    resetAllAction: () => dispatch(resetAllStateAction()),
-});
-
-export const EksisterendePLSSoknader = connect(mapStateToProps, mapDispatchToProps)(EksisterendePLSSoknaderComponent);

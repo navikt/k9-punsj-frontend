@@ -19,11 +19,14 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
     const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
     const {
+        søknader,
+        journalposter,
         isEksisterendeSoknaderLoading,
         isJournalposterLoading,
         isCreatingSoknad,
-        createSoknadError,
+        eksisterendeSoknaderError,
         journalposterError,
+        createSoknadError,
         createSoknad,
         kanStarteNyRegistrering,
         handleTilbake,
@@ -38,6 +41,14 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         return (
             <Alert size="small" variant="error">
                 <FormattedMessage id="eksisterendeSoknader.createSoknadRequestError" />
+            </Alert>
+        );
+    }
+
+    if (eksisterendeSoknaderError) {
+        return (
+            <Alert size="small" variant="error">
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
             </Alert>
         );
     }
@@ -69,9 +80,12 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
             ) : (
                 <>
                     <EksisterendePLSSoknader
+                        søknader={søknader}
+                        journalposter={journalposter}
                         søkerId={søkerId}
                         pleietrengendeId={pleietrengendeId}
                         kanStarteNyRegistrering={kanStarteNyRegistrering()}
+                        fagsakId={k9saksnummer}
                     />
 
                     <div className="flex gap-4 mt-4">
