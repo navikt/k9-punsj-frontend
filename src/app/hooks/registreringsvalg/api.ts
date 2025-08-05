@@ -27,6 +27,8 @@ export const createSoknad = async (config: SoknadConfig, params: RegistreringsVa
     // Legg til riktig ident-felt basert på søknadstype
     if (config.type === 'OMP_MA' && params.annenPart) {
         requestBody.annenPart = params.annenPart;
+        // OMP_MA har også barn-felt som array
+        requestBody.barn = [];
     } else if (params.pleietrengendeId) {
         // For PLS bruker vi pleietrengendeIdent, for andre kan det være barnIdent
         if (config.type === 'PPN') {

@@ -8,6 +8,11 @@ export interface RegistreringsValgParams {
     k9saksnummer?: string;
 }
 
+// Hjelpefunksjon for å sjekke om søknadstype bruker annenPart
+export const brukerAnnenPart = (soknadType: DokumenttypeForkortelse): boolean => {
+    return soknadType === DokumenttypeForkortelse.OMP_MA;
+};
+
 export interface SoknadConfig {
     type: DokumenttypeForkortelse;
     eksisterendeSoknaderPath: string;

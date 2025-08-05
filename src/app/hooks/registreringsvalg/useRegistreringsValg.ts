@@ -23,7 +23,7 @@ export const useRegistreringsValg = (
         isLoading: isEksisterendeSoknaderLoading,
         error: eksisterendeSoknaderError,
     } = useQuery({
-        queryKey: [config.queryKey, søkerId, pleietrengendeId],
+        queryKey: [config.queryKey, søkerId, pleietrengendeId, annenPart],
         queryFn: () => fetchEksisterendeSoknader(config, søkerId, pleietrengendeId),
         enabled: !!søkerId && IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId),
     });
