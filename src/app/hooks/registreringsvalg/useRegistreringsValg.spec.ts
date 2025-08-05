@@ -12,6 +12,11 @@ jest.mock('./api', () => ({
     createSoknad: jest.fn(),
 }));
 
+// Mock hentAlleJournalposterPerIdent
+jest.mock('app/api/api', () => ({
+    hentAlleJournalposterPerIdent: jest.fn().mockResolvedValue({ poster: [] }),
+}));
+
 const mockFetchEksisterendeSoknader = jest.mocked(api.fetchEksisterendeSoknader);
 
 const createWrapper = () => {
@@ -109,13 +114,12 @@ describe('useRegistreringsValg', () => {
         expect(result.current.k9saksnummer).toBe('test-sak');
     });
 
-    it('should return correct kanStarteNyRegistrering logic', async () => {
-        // Test case 1: No søknader - should allow new registration
+    it('should return correct kanStarteNyRegistrering logic when no søknader exist', async () => {
         mockFetchEksisterendeSoknader.mockResolvedValue({ søknader: [] });
 
-        const { result: result1 } = renderHook(
+        const { result } = renderHook(
             () =>
-                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                useRegistreringsValg(DokumenttypeForkortelse.OMP_UT, {
                     journalpostid: 'test-jp',
                     søkerId: 'test-søker',
                 }),
@@ -123,10 +127,11 @@ describe('useRegistreringsValg', () => {
         );
 
         await waitFor(() => {
-            expect(result1.current.kanStarteNyRegistrering).toBe(true);
+            expect(result.current.kanStarteNyRegistrering).toBe(true);
         });
+    });
 
-        // Test case 2: Søknader exist but none match journalpostid - should allow new registration
+    it('should return correct kanStarteNyRegistrering logic when søknader exist but none match journalpostid', async () => {
         mockFetchEksisterendeSoknader.mockResolvedValue({
             søknader: [
                 {
@@ -135,9 +140,9 @@ describe('useRegistreringsValg', () => {
             ],
         });
 
-        const { result: result2 } = renderHook(
+        const { result } = renderHook(
             () =>
-                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                useRegistreringsValg(DokumenttypeForkortelse.OMP_UT, {
                     journalpostid: 'test-jp',
                     søkerId: 'test-søker',
                 }),
@@ -145,10 +150,11 @@ describe('useRegistreringsValg', () => {
         );
 
         await waitFor(() => {
-            expect(result2.current.kanStarteNyRegistrering).toBe(true);
+            expect(result.current.kanStarteNyRegistrering).toBe(true);
         });
+    });
 
-        // Test case 3: Søknad exists with matching journalpostid - should not allow new registration
+    it('should return correct kanStarteNyRegistrering logic when søknad exists with matching journalpostid', async () => {
         mockFetchEksisterendeSoknader.mockResolvedValue({
             søknader: [
                 {
@@ -157,9 +163,9 @@ describe('useRegistreringsValg', () => {
             ],
         });
 
-        const { result: result3 } = renderHook(
+        const { result } = renderHook(
             () =>
-                useRegistreringsValg(DokumenttypeForkortelse.PPN, {
+                useRegistreringsValg(DokumenttypeForkortelse.OMP_UT, {
                     journalpostid: 'test-jp',
                     søkerId: 'test-søker',
                 }),
@@ -167,7 +173,8 @@ describe('useRegistreringsValg', () => {
         );
 
         await waitFor(() => {
-            expect(result3.current.kanStarteNyRegistrering).toBe(false);
+            expect(result.current.søknader).toHaveLength(1);
+            expect(result.current.kanStarteNyRegistrering).toBe(false);
         });
     });
 });
