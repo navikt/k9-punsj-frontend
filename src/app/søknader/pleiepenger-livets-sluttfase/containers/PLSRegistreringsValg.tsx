@@ -1,61 +1,50 @@
 import React, { useEffect } from 'react';
+
 import { FormattedMessage } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Alert, Button } from '@navikt/ds-react';
-
 import { ROUTES } from 'app/constants/routes';
 import { IdentRules } from 'app/rules';
 import { findEksisterendeSoknader } from 'app/state/actions';
-import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../../state/actions/JournalposterPerIdentActions';
 import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/EksisterendePLSSoknaderActions';
-import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
 
 import './plsRegistreringsValg.less';
 
-export interface IPLSRegistreringsValgComponentProps {
+export interface Props {
     journalpostid: string;
 }
 
-export interface IPLSRegistreringsValgDispatchProps {
-    createSoknad: typeof createPLSSoknad;
-    resetSoknadidAction: typeof resetPLSSoknadidAction;
-    getAlleJournalposter: typeof hentAlleJournalposterPerIdentAction;
-    getEksisterendeSoknader: typeof findEksisterendeSoknader;
-}
-
-export interface IEksisterendeSoknaderStateProps {
-    eksisterendeSoknaderState: IEksisterendePLSSoknaderState;
-    identState: IIdentState;
-}
-
-type IPLSRegistreringsValgProps = IPLSRegistreringsValgComponentProps &
-    IEksisterendeSoknaderStateProps &
-    IPLSRegistreringsValgDispatchProps;
-
-export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistreringsValgProps> = (
-    props: IPLSRegistreringsValgProps,
-) => {
-    const navigate = useNavigate();
+export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) => {
     const location = useLocation();
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch<Dispatch<any>>();
+
+    const createNewSoknad = (
+        journalpostId: string,
+        søkerId: string,
+        pleietrengendeId: string | null,
+        k9saksnummer?: string,
+    ) => dispatch(createPLSSoknad(journalpostId, søkerId, pleietrengendeId, k9saksnummer));
+
+    const getAlleJournalposter = (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent));
+
+    const getEksisterendeSoknader = (søkerId: string, pleietrengendeId: string | null) =>
+        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId));
+
+    const resetSoknadId = () => dispatch(resetPLSSoknadidAction());
+
+    const { søkerId, pleietrengendeId } = useSelector((state: RootStateType) => state.identState);
+    const eksisterendeSoknaderState = useSelector((state: RootStateType) => state.eksisterendePLSSoknaderState);
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const k9saksnummer = fordelingState.fagsak?.fagsakId;
 
-    const {
-        journalpostid,
-        identState,
-        eksisterendeSoknaderState,
-        createSoknad,
-        resetSoknadidAction,
-        getAlleJournalposter,
-        getEksisterendeSoknader,
-    } = props;
-    const { søkerId, pleietrengendeId } = identState;
     const {
         eksisterendeSoknaderSvar,
         soknadid,
@@ -83,16 +72,16 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         if (søknader?.length === 0) {
-            createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
+            createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [createSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
+    }, [createNewSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
 
     useEffect(() => {
         if (eksisterendeSoknaderSvar && isSoknadCreated && soknadid) {
-            resetSoknadidAction();
+            resetSoknadId();
             navigate(`../${ROUTES.PUNCH.replace(':id', soknadid)}`);
         }
-    }, [eksisterendeSoknaderSvar, isSoknadCreated, navigate, resetSoknadidAction, soknadid]);
+    }, [eksisterendeSoknaderSvar, isSoknadCreated, navigate, resetSoknadId, soknadid]);
 
     const kanStarteNyRegistrering = () => {
         if (søknader?.length) {
@@ -124,34 +113,20 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                     size="small"
                     disabled={isEksisterendeSoknaderLoading}
                 >
-                    Tilbake
+                    <FormattedMessage id="eksisterendeSoknader.btn.tilbake" />
                 </Button>
+
                 {kanStarteNyRegistrering() && (
                     <Button
-                        onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
+                        onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp knapp2"
                         size="small"
                         disabled={isEksisterendeSoknaderLoading}
                     >
-                        <FormattedMessage id="ident.knapp.nyregistrering" />
+                        <FormattedMessage id="eksisterendeSoknader.btn.startNyRegistrering" />
                     </Button>
                 )}
             </div>
         </div>
     );
 };
-const mapDispatchToProps = (dispatch: any) => ({
-    createSoknad: (journalpostid: string, søkerId: string, pleietrengendeId: string | null, k9saksnummer?: string) =>
-        dispatch(createPLSSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)),
-    resetSoknadidAction: () => dispatch(resetPLSSoknadidAction()),
-    getAlleJournalposter: (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent)),
-    getEksisterendeSoknader: (søkerId: string, pleietrengendeId: string | null) =>
-        dispatch(findEksisterendeSoknader(søkerId, pleietrengendeId)),
-});
-
-const mapStateToProps = (state: RootStateType): IEksisterendeSoknaderStateProps => ({
-    eksisterendeSoknaderState: state.eksisterendePLSSoknaderState,
-    identState: state.identState,
-});
-
-export const PLSRegistreringsValg = connect(mapStateToProps, mapDispatchToProps)(PLSRegistreringsValgComponent);
