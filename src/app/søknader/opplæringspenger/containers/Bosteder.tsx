@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
@@ -8,17 +8,15 @@ import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import { IUtenlandsOpphold } from 'app/models/types';
+import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-const initialUtenlandsopphold: IUtenlandsOpphold = { land: '' };
+const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({ land: '', periode: new Periode({ fom: '', tom: '' }) });
 
 const Bosteder: React.FC = () => {
     const intl = useIntl();
-
-    const [harBoddIUtlandet, setHarBoddIUtlandet] = useState<JaNeiIkkeOpplyst | undefined>(undefined);
 
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
@@ -30,13 +28,13 @@ const Bosteder: React.FC = () => {
                     label: intlHelper(intl, jn),
                     value: jn,
                 }))}
-                name="medlemskapjanei"
+                name="metadata.harBoddIUtlandet"
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
                 onChange={(event) => {
                     const target = event.target as HTMLInputElement;
                     const value = target.value as JaNeiIkkeOpplyst;
 
-                    setHarBoddIUtlandet(value);
+                    setFieldValue('metadata.harBoddIUtlandet', value);
 
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
                         setFieldValue('bosteder', [initialUtenlandsopphold]);
@@ -46,10 +44,10 @@ const Bosteder: React.FC = () => {
                         setFieldValue('bosteder', []);
                     }
                 }}
-                checked={values.bosteder.length > 0 ? JaNeiIkkeOpplyst.JA : harBoddIUtlandet}
+                checked={values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA ? JaNeiIkkeOpplyst.JA : undefined}
             />
 
-            {values.bosteder.length > 0 && (
+            {values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
                 <FieldArray
                     name="bosteder"
                     render={(arrayHelpers) => (

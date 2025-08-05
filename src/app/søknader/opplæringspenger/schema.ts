@@ -2,13 +2,9 @@ import { IPeriode } from 'app/models/types';
 import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
 
 import nb from '../../i18n/nb.json';
-import { OLPSoknad } from '../../models/types/OLPSoknad';
+import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 
-export const getSchemaContext = (soknad: OLPSoknad, eksisterendePerioder: IPeriode[]) => ({
-    ...soknad.opptjeningAktivitet,
-    bosteder: soknad?.bosteder,
-    utenlandsopphold: soknad?.utenlandsopphold,
-    kurs: soknad?.kurs,
+export const getSchemaContext = (eksisterendePerioder: IPeriode[]) => ({
     eksisterendePerioder,
 });
 
@@ -135,6 +131,8 @@ const frilanser = () =>
 const OLPSchema = yup.object({
     metadata: yup.object({
         harValgtAnnenInstitusjon: yup.array().of(yup.string()),
+        harUtenlandsopphold: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
+        harBoddIUtlandet: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
     }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,
@@ -143,12 +141,12 @@ const OLPSchema = yup.object({
         selvstendigNaeringsdrivende: selvstendigNaeringsdrivende().nullable(),
         frilanser: frilanser().nullable(),
     }),
-    bosteder: yup.array().when('$bosteder', {
-        is: 'ja',
+    bosteder: yup.array().when('metadata.harBoddIUtlandet', {
+        is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
         then: (schema) => schema.of(utenlandsperiode),
     }),
-    utenlandsopphold: yup.array().when('$utenlandsopphold', {
-        is: 'ja',
+    utenlandsopphold: yup.array().when('metadata.harUtenlandsopphold', {
+        is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
         then: (schema) => schema.of(utenlandsperiode),
     }),
     kurs: yup.object({
@@ -162,10 +160,10 @@ const OLPSchema = yup.object({
             }),
         ),
         reise: yup.object({
-            reisedager: yup.array().of(yup.string().required()),
-            reisedagerBeskrivelse: yup.string().when('$kurs.reise.reisedager', {
-                is: (reisedager: string[]) => reisedager.length > 0,
-                then: (schema) => schema.required(),
+            reisedager: yup.array().of(yup.string().required().label('Dato')),
+            reisedagerBeskrivelse: yup.string().when('reisedager', {
+                is: (reisedager: string[]) => reisedager?.length > 0,
+                then: (schema) => schema.required().label('Beskrivelse'),
                 otherwise: (schema) => schema.nullable(),
             }),
         }),
