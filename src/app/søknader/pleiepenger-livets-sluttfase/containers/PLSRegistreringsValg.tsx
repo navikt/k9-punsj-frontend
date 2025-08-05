@@ -9,8 +9,6 @@ import { RootStateType } from '../../../state/RootState';
 import { useRegistreringsValg } from '../../../hooks/registreringsvalg/useRegistreringsValg';
 import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
 
-import './plsRegistreringsValg.less';
-
 export interface Props {
     journalpostid: string;
 }
@@ -43,16 +41,15 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
     }
 
     return (
-        <div className="registrering-page">
+        <div className="space-y-4">
             <EksisterendePLSSoknader
                 søkerId={søkerId}
                 pleietrengendeId={pleietrengendeId}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
-            <div className="knapperad">
+            <div className="flex gap-4 mt-4">
                 <Button
                     variant="secondary"
-                    className="knapp knapp1"
                     onClick={handleTilbake}
                     size="small"
                     disabled={isEksisterendeSoknaderLoading}
@@ -63,7 +60,6 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
                 {kanStarteNyRegistrering() && (
                     <Button
                         onClick={createSoknad}
-                        className="knapp knapp2"
                         size="small"
                         disabled={isEksisterendeSoknaderLoading || isCreatingSoknad}
                     >
