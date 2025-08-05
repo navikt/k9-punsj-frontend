@@ -20,7 +20,7 @@ export const trengerPleietrengendeId = (soknadType: DokumenttypeForkortelse): bo
         DokumenttypeForkortelse.PPN,
         DokumenttypeForkortelse.OMP_AO,
         DokumenttypeForkortelse.OMP_KS,
-        DokumenttypeForkortelse.OLP
+        DokumenttypeForkortelse.OLP,
     ].includes(soknadType);
 };
 
@@ -52,6 +52,7 @@ export interface RegistreringsValgResult {
     // Funksjoner
     createSoknad: () => void;
     kanStarteNyRegistrering: () => boolean;
+    handleTilbake: () => void;
 
     // Parametere
     journalpostid: string;
