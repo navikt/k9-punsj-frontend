@@ -39,3 +39,4 @@ cypress/screenshots/
 !.yarn/versions
 storybook-static
 *storybook.log
+docs/PROGRESS.md
