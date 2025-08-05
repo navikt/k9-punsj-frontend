@@ -310,6 +310,8 @@
     "eksisterendeSoknader.requestError": "Det oppsto en feil i henting av mapper.",
     "eksisterendeSoknader.createSoknadRequestError": "Det oppsto en feil under opprettelse av søknad.",
     "eksisterendeSoknader.tekniskFeil": "Teknisk feil.",
+    "eksisterendeSoknader.loading.henting": "Henter eksisterende søknader...",
+    "eksisterendeSoknader.loading.opprettelse": "Oppretter ny søknad...",
     "mapper.visning.infoboks": "Det finnes påbegynte søknader knyttet til {antallSokere, plural, one {identitetsnummeret} other {identitetsnumrene}}. Velg søknaden som hører til dokumentet.",
     "mappe.lesemodus.mottakelsesdato": "Mottakelsesdato:",
     "mappe.lesemodus.perioder": "Perioder:",

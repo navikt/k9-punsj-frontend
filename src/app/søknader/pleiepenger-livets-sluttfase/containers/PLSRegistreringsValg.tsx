@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { Alert, Button } from '@navikt/ds-react';
+import { Alert, Button, Loader } from '@navikt/ds-react';
 import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
 import { RootStateType } from '../../../state/RootState';
 import { useRegistreringsValg } from '../../../hooks/registreringsvalg/useRegistreringsValg';
@@ -42,31 +42,41 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
 
     return (
         <div className="space-y-4">
-            <EksisterendePLSSoknader
-                søkerId={søkerId}
-                pleietrengendeId={pleietrengendeId}
-                kanStarteNyRegistrering={kanStarteNyRegistrering()}
-            />
-            <div className="flex gap-4 mt-4">
-                <Button
-                    variant="secondary"
-                    onClick={handleTilbake}
-                    size="small"
-                    disabled={isEksisterendeSoknaderLoading}
-                >
-                    <FormattedMessage id="eksisterendeSoknader.btn.tilbake" />
-                </Button>
+            {isEksisterendeSoknaderLoading ? (
+                <div className="flex justify-center items-center py-8">
+                    <div className="flex items-center gap-2">
+                        <Loader />
+                        <FormattedMessage id="eksisterendeSoknader.loading.henting" />
+                    </div>
+                </div>
+            ) : isCreatingSoknad ? (
+                <div className="flex justify-center items-center py-8">
+                    <div className="flex items-center gap-2">
+                        <Loader />
+                        <FormattedMessage id="eksisterendeSoknader.loading.opprettelse" />
+                    </div>
+                </div>
+            ) : (
+                <>
+                    <EksisterendePLSSoknader
+                        søkerId={søkerId}
+                        pleietrengendeId={pleietrengendeId}
+                        kanStarteNyRegistrering={kanStarteNyRegistrering()}
+                    />
 
-                {kanStarteNyRegistrering() && (
-                    <Button
-                        onClick={createSoknad}
-                        size="small"
-                        disabled={isEksisterendeSoknaderLoading || isCreatingSoknad}
-                    >
-                        <FormattedMessage id="eksisterendeSoknader.btn.startNyRegistrering" />
-                    </Button>
-                )}
-            </div>
+                    <div className="flex gap-4 mt-4">
+                        <Button variant="secondary" onClick={handleTilbake} size="small">
+                            <FormattedMessage id="eksisterendeSoknader.btn.tilbake" />
+                        </Button>
+
+                        {kanStarteNyRegistrering() && (
+                            <Button onClick={createSoknad} size="small">
+                                <FormattedMessage id="eksisterendeSoknader.btn.startNyRegistrering" />
+                            </Button>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };
