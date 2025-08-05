@@ -1,4 +1,5 @@
 import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
+import { IJournalpostInfo } from 'app/models/types/Journalpost/Journalpost';
 
 export interface RegistreringsValgParams {
     journalpostid: string;
@@ -40,13 +41,16 @@ export interface RegistreringsValgResult {
     // Data
     eksisterendeSoknader: any;
     søknader: any[];
+    journalposter: IJournalpostInfo[];
 
     // Laste tilstander
     isEksisterendeSoknaderLoading: boolean;
+    isJournalposterLoading: boolean;
     isCreatingSoknad: boolean;
 
     // Feil
     eksisterendeSoknaderError: Error | null;
+    journalposterError: Error | null;
     createSoknadError: Error | null;
 
     // Funksjoner

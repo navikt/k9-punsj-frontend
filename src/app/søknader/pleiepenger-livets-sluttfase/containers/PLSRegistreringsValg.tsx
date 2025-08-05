@@ -20,8 +20,10 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
 
     const {
         isEksisterendeSoknaderLoading,
+        isJournalposterLoading,
         isCreatingSoknad,
         createSoknadError,
+        journalposterError,
         createSoknad,
         kanStarteNyRegistrering,
         handleTilbake,
@@ -40,9 +42,17 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         );
     }
 
+    if (journalposterError) {
+        return (
+            <Alert size="small" variant="error">
+                <FormattedMessage id="eksisterendeSoknader.requestError" />
+            </Alert>
+        );
+    }
+
     return (
         <div className="space-y-4">
-            {isEksisterendeSoknaderLoading ? (
+            {isEksisterendeSoknaderLoading || isJournalposterLoading ? (
                 <div className="flex justify-center items-center py-8">
                     <div className="flex items-center gap-2">
                         <Loader />

@@ -6,6 +6,7 @@ import { IdentRules } from 'app/rules';
 import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
 import { SOKNAD_CONFIGS } from './config';
 import { fetchEksisterendeSoknader, createSoknad } from './api';
+import { hentAlleJournalposterPerIdent } from 'app/api/api';
 import { RegistreringsValgParams, RegistreringsValgResult, trengerIkkeEkstraIdent } from './types';
 
 export const useRegistreringsValg = (
@@ -36,6 +37,17 @@ export const useRegistreringsValg = (
         enabled:
             !!søkerId &&
             (trengerIkkeEkstraIdent(config.type) || IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId ?? null)),
+    });
+
+    // Hent journalposter per ident
+    const {
+        data: journalposter,
+        isLoading: isJournalposterLoading,
+        error: journalposterError,
+    } = useQuery({
+        queryKey: ['hentJournalposter', søkerId],
+        queryFn: () => hentAlleJournalposterPerIdent(søkerId),
+        enabled: !!søkerId,
     });
 
     // Opprett ny søknad
@@ -73,13 +85,16 @@ export const useRegistreringsValg = (
         // Data
         eksisterendeSoknader,
         søknader: eksisterendeSoknader?.søknader || [],
+        journalposter: journalposter?.poster || [],
 
         // Laste tilstander
         isEksisterendeSoknaderLoading,
+        isJournalposterLoading,
         isCreatingSoknad: createSoknadMutation.isPending,
 
         // Feil
         eksisterendeSoknaderError,
+        journalposterError,
         createSoknadError: createSoknadMutation.error,
 
         // Funksjoner
