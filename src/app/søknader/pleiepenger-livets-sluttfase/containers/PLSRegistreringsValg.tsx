@@ -27,8 +27,8 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
         eksisterendeSoknaderError,
         journalposterError,
         createSoknadError,
-        createSoknad,
         kanStarteNyRegistrering,
+        createSoknad,
         handleTilbake,
     } = useRegistreringsValg(DokumenttypeForkortelse.PPN, {
         journalpostid,
