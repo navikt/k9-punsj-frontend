@@ -6,7 +6,7 @@ import { IdentRules } from 'app/rules';
 import { DokumenttypeForkortelse } from 'app/models/enums/FordelingDokumenttype';
 import { SOKNAD_CONFIGS } from './config';
 import { fetchEksisterendeSoknader, createSoknad } from './api';
-import { RegistreringsValgParams, RegistreringsValgResult } from './types';
+import { RegistreringsValgParams, RegistreringsValgResult, trengerPleietrengendeId, trengerIkkeEkstraIdent } from './types';
 
 export const useRegistreringsValg = (
     soknadType: DokumenttypeForkortelse,
@@ -24,8 +24,8 @@ export const useRegistreringsValg = (
         error: eksisterendeSoknaderError,
     } = useQuery({
         queryKey: [config.queryKey, søkerId, pleietrengendeId, annenPart],
-        queryFn: () => fetchEksisterendeSoknader(config, søkerId, pleietrengendeId),
-        enabled: !!søkerId && IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId),
+        queryFn: () => fetchEksisterendeSoknader(config, søkerId, pleietrengendeId ?? null),
+        enabled: !!søkerId && (trengerIkkeEkstraIdent(config.type) || IdentRules.erAlleIdenterGyldige(søkerId, pleietrengendeId)),
     });
 
     // Opprett ny søknad
