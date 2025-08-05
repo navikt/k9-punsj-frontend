@@ -47,6 +47,7 @@ export interface RegistreringsValgResult {
     isEksisterendeSoknaderLoading: boolean;
     isJournalposterLoading: boolean;
     isCreatingSoknad: boolean;
+    kanStarteNyRegistrering: boolean;
 
     // Feil
     eksisterendeSoknaderError: Error | null;
@@ -55,7 +56,6 @@ export interface RegistreringsValgResult {
 
     // Funksjoner
     createSoknad: () => void;
-    kanStarteNyRegistrering: () => boolean;
     handleTilbake: () => void;
 
     // Parametere

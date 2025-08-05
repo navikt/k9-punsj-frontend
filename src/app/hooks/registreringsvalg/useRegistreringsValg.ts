@@ -63,18 +63,15 @@ export const useRegistreringsValg = (
         if (!isEksisterendeSoknaderLoading && eksisterendeSoknader?.søknader?.length === 0) {
             createSoknadMutation.mutate();
         }
-    }, [isEksisterendeSoknaderLoading, eksisterendeSoknader?.søknader?.length, createSoknadMutation]);
+    }, [isEksisterendeSoknaderLoading, eksisterendeSoknader?.søknader?.length]);
 
     // Sjekk om bruker kan starte ny registrering
-    const kanStarteNyRegistrering = () => {
-        const søknader = eksisterendeSoknader?.søknader;
-        if (søknader?.length) {
-            return !søknader.some((soknad: any) =>
-                Array.from(soknad.journalposter || []).some((jp: string) => jp === journalpostid),
-            );
-        }
-        return true;
-    };
+    const søknader = eksisterendeSoknader?.søknader;
+    const kanStarteNyRegistrering = søknader?.length
+        ? !søknader.some((soknad: any) =>
+              Array.from(soknad.journalposter || []).some((jp: string) => jp === journalpostid),
+          )
+        : true;
 
     // Hjelpefunksjon for å navigere tilbake
     const handleTilbake = () => {

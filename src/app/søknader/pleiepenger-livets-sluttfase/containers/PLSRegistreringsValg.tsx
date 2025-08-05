@@ -84,7 +84,7 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
                         journalposter={journalposter}
                         søkerId={søkerId}
                         pleietrengendeId={pleietrengendeId}
-                        kanStarteNyRegistrering={kanStarteNyRegistrering()}
+                        kanStarteNyRegistrering={kanStarteNyRegistrering}
                         fagsakId={k9saksnummer}
                     />
 
@@ -93,7 +93,7 @@ export const PLSRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
                             <FormattedMessage id="eksisterendeSoknader.btn.tilbake" />
                         </Button>
 
-                        {kanStarteNyRegistrering() && (
+                        {kanStarteNyRegistrering && (
                             <Button onClick={createSoknad} size="small">
                                 <FormattedMessage id="eksisterendeSoknader.btn.startNyRegistrering" />
                             </Button>
