@@ -4,7 +4,7 @@ import { SoknadConfig, RegistreringsValgParams } from './types';
 export const fetchEksisterendeSoknader = async (
     config: SoknadConfig,
     søkerId: string,
-    pleietrengendeId?: string | null,
+    pleietrengendeId: string | null | undefined,
 ) => {
     const idents = pleietrengendeId ? `${søkerId},${pleietrengendeId}` : søkerId;
     const response = await get(config.eksisterendeSoknaderPath, undefined, { 'X-Nav-NorskIdent': idents });
