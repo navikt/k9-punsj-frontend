@@ -3612,7 +3612,7 @@ __metadata:
     jose: "npm:6.0.12"
     morgan: "npm:1.10.1"
     node-cache: "npm:5.1.2"
-    openid-client: "npm:6.6.2"
+    openid-client: "npm:6.6.3"
     winston: "npm:3.17.0"
   languageName: unknown
   linkType: soft
@@ -9897,9 +9897,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:5.5.3":
-  version: 5.5.3
-  resolution: "eslint-plugin-prettier@npm:5.5.3"
+"eslint-plugin-prettier@npm:5.5.4":
+  version: 5.5.4
+  resolution: "eslint-plugin-prettier@npm:5.5.4"
   dependencies:
     prettier-linter-helpers: "npm:^1.0.0"
     synckit: "npm:^0.11.7"
@@ -9913,7 +9913,7 @@ __metadata:
       optional: true
     eslint-config-prettier:
       optional: true
-  checksum: 10/0cdb838997440284145ed1e3cfa1502adffa0e92f893c4100cf2af32dff85fa8f1e86c1547c5462ad8126ee89906a9cb6180b87c4f1ad6000e4b04542938eb3c
+  checksum: 10/5e39e3b7046d4ba0e1111cc2048630ee9d0aa5d5bb00d6230bef56893fdae37cbe2261babfb26db350cc2ad517c81d283b3f8b04cfee4e5aef7cd4bee72f90de
   languageName: node
   linkType: hard
 
@@ -13220,7 +13220,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.0.12":
+"jose@npm:6.0.12, jose@npm:^6.0.12":
   version: 6.0.12
   resolution: "jose@npm:6.0.12"
   checksum: 10/48b7aee43a88e157eb973c7e950f5835175264ecda01a7fcb1750ad6cc02672153e2bd486b65db969841b38c01b1596d86cb71f65e2ccb5311b67127ba4f8549
@@ -13238,13 +13238,6 @@ __metadata:
   version: 5.6.3
   resolution: "jose@npm:5.6.3"
   checksum: 10/829f07b8857221ada1cd112a5ebd084e34748f6e3247f5cb03aca0a1f25dd6a07283c9a4f5b854935bda505e3243405640550f8e9eb46c45b172dc4cb336ac89
-  languageName: node
-  linkType: hard
-
-"jose@npm:^6.0.11":
-  version: 6.0.11
-  resolution: "jose@npm:6.0.11"
-  checksum: 10/f362a02bb8230e6364ac701c757442d4737f1d29bc70042ec8d2d93e1f2822e68b1d3cd5c26d12545b2b49afb87dcc155c6e448f9758ed58626714062ece2cbd
   languageName: node
   linkType: hard
 
@@ -13535,7 +13528,7 @@ __metadata:
     eslint-config-prettier: "npm:10.1.8"
     eslint-plugin-import: "npm:2.32.0"
     eslint-plugin-jsx-a11y: "npm:6.10.2"
-    eslint-plugin-prettier: "npm:5.5.3"
+    eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:5.2.0"
     eslint-plugin-storybook: "npm:^9.1.1"
@@ -14907,10 +14900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.5.4":
-  version: 3.6.0
-  resolution: "oauth4webapi@npm:3.6.0"
-  checksum: 10/c0389d9db9cf23ab9a486ea1a6de8da928b01188e93839db11c8aced5e7105c75d74b87d8105888423d7ad295578e1863b131cc47893f5ce923d001596de757f
+"oauth4webapi@npm:^3.6.1":
+  version: 3.6.1
+  resolution: "oauth4webapi@npm:3.6.1"
+  checksum: 10/12fcda932796622b2de011ac42961f67ff5b808c0df30163f669dfaf4e0264689008964843e5181250426dba686a338eec0ff3a714d0df0cb626b884b122a4ff
   languageName: node
   linkType: hard
 
@@ -15159,13 +15152,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openid-client@npm:6.6.2":
-  version: 6.6.2
-  resolution: "openid-client@npm:6.6.2"
+"openid-client@npm:6.6.3":
+  version: 6.6.3
+  resolution: "openid-client@npm:6.6.3"
   dependencies:
-    jose: "npm:^6.0.11"
-    oauth4webapi: "npm:^3.5.4"
-  checksum: 10/e64966d11bdee9a6c1c6878af943c73d9d2166f6be635db9fe5cb001d416f951067bf243409dc2167983396a02c513e6ffa3d72df56c95a8ee98e0779f164617
+    jose: "npm:^6.0.12"
+    oauth4webapi: "npm:^3.6.1"
+  checksum: 10/36bc745182c522c288ef4d1ef25708af5004bedb60137b32b141c68aac22dcdd4d6c82e5bcc36ff7cfc918342b5b84fa74373b2feb964d5fde616eed890236cd
   languageName: node
   linkType: hard
 
