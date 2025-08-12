@@ -41,7 +41,7 @@ jobs:
             image: ${{ steps.docker-push.outputs.image }}
         steps:
             - name: Hente kode
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Setup .yarnrc.yml
               run: |
@@ -58,7 +58,7 @@ jobs:
                   registry-url: 'https://npm.pkg.github.com'
                   scope: '@navikt'
 
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v5
               with:
                   name: dist
                   path: ./dist
