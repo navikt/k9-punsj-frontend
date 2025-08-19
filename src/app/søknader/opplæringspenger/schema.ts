@@ -152,8 +152,8 @@ const OLPSchema = yup.object({
     kurs: yup.object({
         kursHolder: yup.object({
             institusjonsUuid: yup.string().nullable(),
-            holder: yup.string().required(),
-        }),
+            holder: yup.string().nullable(),
+        }).nullable(),
         kursperioder: yup.array().of(
             yup.object({
                 periode: periode(),

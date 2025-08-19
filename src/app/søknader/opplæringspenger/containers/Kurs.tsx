@@ -23,7 +23,6 @@ interface KursComponentProps {
 }
 
 const kursholder = 'kurs.kursHolder';
-const kursholderUuid = `${kursholder}.institusjonsUuid`;
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
@@ -33,10 +32,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
-        if (values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)) {
-            setFieldValue(kursholderUuid, null);
-            setFieldValue(kursholderNavn, "");
-        }
+        setFieldValue(kursholder, null);
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
@@ -66,7 +62,14 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
                 {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
                     <>
-                        <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
+                        <TextFieldFormik
+                            label="Navn på institusjon"
+                            name={kursholderNavn}
+                            onChange={(e) => {
+                                setFieldValue(kursholderNavn, e.target.value);
+                            }}
+                            value={values.kurs.kursHolder?.holder}
+                        />
                     </>
                 )}
 
@@ -109,15 +112,17 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
                             <VerticalSpacer twentyPx />
 
-                            <Button
-                                className="kurs__addButton"
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => push(initialKursperiode)}
-                                icon={<AddCircle />}
-                            >
-                                Legg til ny periode med opplæring
-                            </Button>
+                            {values.kurs.kursHolder?.holder && (
+                                <Button
+                                    className="kurs__addButton"
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => push(initialKursperiode)}
+                                    icon={<AddCircle />}
+                                >
+                                    Legg til ny periode med opplæring
+                                </Button>
+                            )}
                         </>
                     )}
                 />
