@@ -112,7 +112,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.journalposter = soknad.journalposter || [];
         this.klokkeslett = soknad.klokkeslett || '';
         this.kurs = new Kurs(
-            soknad.kurs || { kursHolder: null, kursperioder: [], reise: { reisedager: [], reisedagerBeskrivelse: '' } },
+            soknad.kurs || { kursHolder: { institusjonsUuid: '', holder: '' }, kursperioder: [], reise: { reisedager: [], reisedagerBeskrivelse: '' } },
         );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.mottattDato = soknad.mottattDato || '';
