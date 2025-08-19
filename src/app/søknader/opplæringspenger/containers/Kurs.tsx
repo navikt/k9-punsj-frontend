@@ -33,6 +33,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
     useEffect(() => {
         setFieldValue(kursholder, null);
+        setFieldValue('kurs.kursperioder', []);
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
