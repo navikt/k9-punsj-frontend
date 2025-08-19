@@ -33,7 +33,6 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
     useEffect(() => {
         setFieldValue(kursholder, null);
-        setFieldValue('kurs.kursperioder', []);
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
@@ -113,17 +112,15 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
                             <VerticalSpacer twentyPx />
 
-                            {values.kurs.kursHolder?.holder && (
-                                <Button
-                                    className="kurs__addButton"
-                                    variant="tertiary"
-                                    size="small"
-                                    onClick={() => push(initialKursperiode)}
-                                    icon={<AddCircle />}
-                                >
-                                    Legg til ny periode med opplæring
-                                </Button>
-                            )}
+                            <Button
+                                className="kurs__addButton"
+                                variant="tertiary"
+                                size="small"
+                                onClick={() => push(initialKursperiode)}
+                                icon={<AddCircle />}
+                            >
+                                Legg til ny periode med opplæring
+                            </Button>
                         </>
                     )}
                 />
