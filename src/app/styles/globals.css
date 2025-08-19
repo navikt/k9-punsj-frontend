@@ -7,7 +7,7 @@ body {
 }
 
 .fit-window-height {
-    @apply h-screen flex flex-col relative overflow-x-hidden;
+    @apply h-screen flex flex-col relative;
 }
 
 .header {
