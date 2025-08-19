@@ -111,7 +111,9 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.journalposter = soknad.journalposter || [];
         this.klokkeslett = soknad.klokkeslett || '';
-        this.kurs = new Kurs(soknad.kurs || {});
+        this.kurs = new Kurs(
+            soknad.kurs || { kursHolder: { institusjonsUuid: '', holder: '' }, kursperioder: [], reise: { reisedager: [], reisedagerBeskrivelse: '' } },
+        );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.mottattDato = soknad.mottattDato || '';
         this.omsorg = new Omsorg(soknad.omsorg || {});

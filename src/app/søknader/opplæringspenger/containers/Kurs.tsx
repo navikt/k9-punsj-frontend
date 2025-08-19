@@ -23,7 +23,6 @@ interface KursComponentProps {
 }
 
 const kursholder = 'kurs.kursHolder';
-const kursholderUuid = `${kursholder}.institusjonsUuid`;
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
@@ -33,10 +32,10 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
-        if (values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)) {
-            setFieldValue(kursholderUuid, null);
-            setFieldValue(kursholderNavn, "");
-        }
+        setFieldValue(kursholder, {
+            institusjonsUuid: '',
+            holder: '',
+        });
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
