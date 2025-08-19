@@ -32,7 +32,10 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
-        setFieldValue(kursholder, null);
+        setFieldValue(kursholder, {
+            institusjonsUuid: '',
+            holder: '',
+        });
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
@@ -62,14 +65,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
 
                 {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
                     <>
-                        <TextFieldFormik
-                            label="Navn på institusjon"
-                            name={kursholderNavn}
-                            onChange={(e) => {
-                                setFieldValue(kursholderNavn, e.target.value);
-                            }}
-                            value={values.kurs.kursHolder?.holder}
-                        />
+                        <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>
                 )}
 
