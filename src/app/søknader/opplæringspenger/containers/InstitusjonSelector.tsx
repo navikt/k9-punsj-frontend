@@ -49,8 +49,8 @@ const InstitusjonSelector = ({
             <UNSAFE_Combobox
                 label={label}
                 size="medium"
-                options={institusjoner}
-                selectedOptions={[findInstitusjonsNavn(field.value)]}
+                options={[{ label: 'Velg institusjon', value: '' }, ...institusjoner]}
+                selectedOptions={[field.value ? findInstitusjonsNavn(field.value) : 'Velg institusjon']}
                 disabled={isAnnetSelected}
                 toggleListButton={!isAnnetSelected}
                 shouldAutocomplete={true}

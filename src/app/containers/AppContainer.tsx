@@ -5,7 +5,7 @@ interface Props {
 }
 
 const AppContainer: React.FC<Props> = ({ children }) => (
-    <div className="pb-4 min-h-[100px] mx-4 h-full">{children}</div>
+    <div className="min-h-[100px] ml-4 h-full">{children}</div>
 );
 
 export default AppContainer;

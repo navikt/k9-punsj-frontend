@@ -106,9 +106,11 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
     const visUtenlandsopphold = ytelse.utenlandsopphold && Object.keys(ytelse.utenlandsopphold.perioder).length > 0;
     const formaterSøknadsperioder = () =>
         ytelse.søknadsperiode.map((periode) => periodToFormattedString(periode)).join(', ');
+
+    const visTrekkKravPerioder = ytelse.trekkKravPerioder && ytelse.trekkKravPerioder.length > 0;
+
     return (
         <div className={classNames('SoknadKvitteringContainer')}>
-            <h2>{intlHelper(intl, 'skjema.kvittering.oppsummering')}</h2>
             {kopierJournalpostSuccess && (
                 <div>
                     <h3>{intlHelper(intl, 'skjema.soknadskvittering.opprettetKopi')}</h3>
@@ -366,6 +368,17 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                         perioder={endreLandkodeTilLandnavnIPerioder(ytelse.bosteder?.perioder)}
                         tittel={['skjema.periode.overskrift', 'skjema.utenlandsopphold.land']}
                         properties={['land']}
+                    />
+                </div>
+            )}
+
+            {visTrekkKravPerioder && (
+                <div>
+                    <h3>Perioder som trekkes</h3>
+                    <hr className={classNames('linje')} />
+                    <VisningAvPerioderSoknadKvittering
+                        perioder={ytelse.trekkKravPerioder}
+                        tittel={['skjema.periode.overskrift']}
                     />
                 </div>
             )}

@@ -57,10 +57,6 @@ const configureDevServer = () => ({
             res.sendFile(path.resolve(__dirname, '../../mocks/mockServiceWorker.js'));
         });
 
-        app.get(/^\/(?!.*dist)(?!api).*$/, (req, res) => {
-            res.render('index.html');
-        });
-
         return middlewares;
     },
     static: {

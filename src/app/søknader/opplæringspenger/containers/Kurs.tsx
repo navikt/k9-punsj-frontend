@@ -14,6 +14,7 @@ import InstitusjonSelector from './InstitusjonSelector';
 import './kurs.less';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
+import { JaNei } from 'app/models/enums';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -22,7 +23,6 @@ interface KursComponentProps {
 }
 
 const kursholder = 'kurs.kursHolder';
-const kursholderUuid = `${kursholder}.institusjonsUuid`;
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
@@ -32,10 +32,10 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
-        if (values?.metadata?.harValgtAnnenInstitusjon?.includes('ja')) {
-            setFieldValue(kursholderUuid, '');
-            setFieldValue(kursholderNavn, '');
-        }
+        setFieldValue(kursholder, {
+            institusjonsUuid: '',
+            holder: '',
+        });
     }, [values?.metadata?.harValgtAnnenInstitusjon]);
 
     return (
@@ -53,7 +53,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                         name={kursholder}
                         godkjentOpplæringsinstitusjoner={institusjoner}
                         hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes('ja')}
+                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
                     />
                 )}
 
@@ -63,7 +63,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     Annen institusjon (ikke i listen)
                 </CheckboxFormik>
 
-                {values?.metadata?.harValgtAnnenInstitusjon?.includes('ja') && (
+                {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
                     <>
                         <TextFieldFormik label="Navn på institusjon" name={kursholderNavn} />
                     </>

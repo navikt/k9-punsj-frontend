@@ -2,20 +2,20 @@ import { glob } from 'glob';
 
 if (!process.env.CI_TOTAL) {
     // eslint-disable-next-line no-console
-    console.error('No envrionment variable CI_TOTAL defined');
+    console.error('No environment variable CI_TOTAL defined');
     process.exit(1);
 }
 
 if (!process.env.CI_INDEX) {
     // eslint-disable-next-line no-console
-    console.error('No envrionment variable CI_INDEX defined');
+    console.error('No environment variable CI_INDEX defined');
     process.exit(1);
 }
 
 function splitChunks(items, total) {
     const chunks = [];
-
     let currentChunk = 0;
+
     for (let currentItem = 0; currentItem < items.length; currentItem++) {
         if (!chunks[currentChunk]) {
             chunks[currentChunk] = [];
@@ -34,9 +34,9 @@ function splitChunks(items, total) {
 
 const files = glob.sync('cypress/e2e/**/*.@(js|ts)');
 const chunks = splitChunks(files, process.env.CI_TOTAL);
+const selected = chunks[process.env.CI_INDEX] || [];
 
-if (chunks[process.env.CI_INDEX]) {
-    for (const file of chunks[process.env.CI_INDEX]) {
-        process.stdout.write(file + '\n');
-    }
+if (selected.length > 0) {
+    // eslint-disable-next-line no-console
+    console.log(selected.join(','));
 }
