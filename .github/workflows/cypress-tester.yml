@@ -60,3 +60,6 @@ jobs:
               env:
                   CI_TOTAL: ${{ matrix.ci_total }}
                   CI_INDEX: ${{ matrix.ci_index }}
+                  CI: 1
+                  TERM: xterm
+                  DBUS_SESSION_BUS_ADDRESS: /dev/null
