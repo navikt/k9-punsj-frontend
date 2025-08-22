@@ -16,8 +16,6 @@ export interface IOLPSoknadBackend {
     barn?: IBarn;
     begrunnelseForInnsending?: BegrunnelseForInnsending;
     bosteder?: Bosteder[];
-    harInfoSomIkkeKanPunsjes?: boolean;
-    harMedisinskeOpplysninger?: boolean;
     journalposter: string[];
     klokkeslett?: string;
     kurs?: Kurs;
@@ -69,10 +67,6 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     bosteder: Bosteder[];
 
-    harInfoSomIkkeKanPunsjes: boolean;
-
-    harMedisinskeOpplysninger: boolean;
-
     journalposter: string[];
 
     klokkeslett?: string;
@@ -107,12 +101,14 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.barn = new Barn(soknad.barn || {});
         this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
         this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
-        this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
-        this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.journalposter = soknad.journalposter || [];
         this.klokkeslett = soknad.klokkeslett || '';
         this.kurs = new Kurs(
-            soknad.kurs || { kursHolder: { institusjonsUuid: '', holder: '' }, kursperioder: [], reise: { reisedager: [], reisedagerBeskrivelse: '' } },
+            soknad.kurs || {
+                kursHolder: { institusjonsUuid: '', holder: '' },
+                kursperioder: [],
+                reise: { reisedager: [], reisedagerBeskrivelse: '' },
+            },
         );
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.mottattDato = soknad.mottattDato || '';
