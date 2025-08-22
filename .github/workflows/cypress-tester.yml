@@ -56,7 +56,7 @@ jobs:
                   runTests: false
 
             - name: Kjør Cypress tester
-              run: node split.mjs | xargs yarn cypress run --spec
+              run: yarn cypress run --spec "$(node split.mjs)"
               env:
                   CI_TOTAL: ${{ matrix.ci_total }}
                   CI_INDEX: ${{ matrix.ci_index }}
