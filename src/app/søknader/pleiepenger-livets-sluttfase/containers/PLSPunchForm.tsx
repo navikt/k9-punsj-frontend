@@ -43,7 +43,7 @@ import { IPeriode } from '../../../models/types/Periode';
 import { RootStateType } from '../../../state/RootState';
 import { setIdentFellesAction } from '../../../state/actions/IdentActions';
 import { initializeDate } from '../../../utils/timeUtils';
-import { undoChoiceOfEksisterendePLSSoknadAction } from '../state/actions/EksisterendePLSSoknaderActions';
+
 import {
     getPLSSoknad,
     hentPLSPerioderFraK9Sak,
@@ -456,7 +456,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 }
                 break;
             default:
-                // Handle default case here FIX THIS
+                // Håndter standard tilfelle her FIX THIS
                 break;
         }
     };
@@ -735,18 +735,18 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         this.setState((prevState) => {
             const { aapnePaneler, soknad } = prevState;
 
-            // Initialize lovbestemtFerieSomSkalSlettes if not already set
+            // Initialiser lovbestemtFerieSomSkalSlettes hvis ikke allerede satt
             const updatedSoknad = {
                 ...soknad,
                 lovbestemtFerieSomSkalSlettes: soknad.lovbestemtFerieSomSkalSlettes || [{}],
             };
 
-            // Update aapnePaneler based on checked value
+            // Oppdater aapnePaneler basert på avkrysset verdi
             const updatedAapnePaneler = checked
                 ? [...aapnePaneler, PunchFormPaneler.ARBEID]
                 : aapnePaneler.filter((panel) => panel !== PunchFormPaneler.ARBEID);
 
-            // Update lovbestemtFerieSomSkalSlettes based on checked value
+            // Oppdater lovbestemtFerieSomSkalSlettes basert på avkrysset verdi
             if (checked && updatedSoknad.lovbestemtFerieSomSkalSlettes.length === 0) {
                 this.addIkkeSkalHaFerie();
             } else if (!checked) {
@@ -1258,7 +1258,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetAllStateAction: () => dispatch(resetAllStateAction()),
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
+
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),
     resetPunchFormAction: () => dispatch(resetPLSPunchFormAction()),
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => dispatch(setSignaturAction(signert)),
