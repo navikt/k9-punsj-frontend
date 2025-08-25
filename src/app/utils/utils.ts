@@ -76,6 +76,10 @@ export const finnVisningsnavnForSakstype = (kode: string) => {
             kode: DokumenttypeForkortelse.OMP_UT,
             navn: 'Direkte utbetaling av omsorgspenger',
         },
+        {
+            kode: DokumenttypeForkortelse.OLP,
+            navn: 'Opplæringspenger',
+        },
     ];
     return sakstyper.find((st) => st.kode === kode)?.navn || kode;
 };
