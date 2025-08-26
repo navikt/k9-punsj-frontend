@@ -8,11 +8,13 @@ import * as yup from 'yup';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
-import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
+// import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
+import { checkPeriodOverlap } from 'app/utils/periodUtils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
-const createValidationSchema = (soknadsperioder: IPeriode[]) =>
+// const createValidationSchema = (soknadsperioder: IPeriode[]) =>
+const createValidationSchema = () =>
     yup.object({
         perioder: yup
             .array()
@@ -20,8 +22,8 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
             .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
                 if (!periods) return true;
                 return !checkPeriodOverlap(periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]);
-            })
-            .test(
+            }),
+        /*.test(
                 'within-soknadsperioder',
                 `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
@@ -31,7 +33,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                         soknadsperioder,
                     );
                 },
-            ),
+            ),*/
     });
 
 interface FormValues {
@@ -80,7 +82,8 @@ const ArbeidstidPeriodeListe = (props: Props) => {
         <Formik<FormValues>
             initialValues={initialValues}
             onSubmit={(values) => handleSaveValues(values)}
-            validationSchema={createValidationSchema(soknadsperioder)}
+            // validationSchema={createValidationSchema(soknadsperioder)}
+            validationSchema={createValidationSchema()}
             innerRef={formikRef}
             enableReinitialize
         >
