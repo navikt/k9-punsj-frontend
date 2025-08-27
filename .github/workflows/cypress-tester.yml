@@ -20,7 +20,7 @@ jobs:
                 ci_total: [4]
         steps:
             - name: Hente kode
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Setup .yarnrc.yml
               run: |
