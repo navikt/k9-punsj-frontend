@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Fieldset, TextField } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, TextField } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import usePrevious from 'app/hooks/usePrevious';
@@ -97,18 +97,18 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             </Field>
                                                         </div>
                                                         <div className="ml-2">
-                                                            <button
+                                                            <Button
                                                                 id="slett"
-                                                                className="delete-button"
+                                                                className="slett-knapp-med-icon-for-input !mt-10"
                                                                 type="button"
                                                                 onClick={() => {
                                                                     remove(index);
                                                                 }}
+                                                                variant="tertiary"
+                                                                icon={<TrashIcon title="slett" />}
                                                             >
-                                                                <TrashIcon fontSize="2rem" color="#C30000" className="mr-2" />
-
                                                                 <FormattedMessage id="skjema.liste.fjern_dag" />
-                                                            </button>
+                                                            </Button>
                                                         </div>
                                                     </div>
                                                 </div>

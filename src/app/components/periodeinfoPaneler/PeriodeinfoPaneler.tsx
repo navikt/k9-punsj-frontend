@@ -20,8 +20,6 @@ import {
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 import { TrashIcon } from '@navikt/aksel-icons';
-
-import './periodeinfoPaneler.less';
 import { Button } from '@navikt/ds-react';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
