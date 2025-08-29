@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -13,7 +13,10 @@ import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({ land: '', periode: new Periode({ fom: '', tom: '' }) });
+const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
+    land: '',
+    periode: new Periode({ fom: '', tom: '' }),
+});
 
 const Bosteder: React.FC = () => {
     const intl = useIntl();
@@ -71,9 +74,10 @@ const Bosteder: React.FC = () => {
                                             <Button
                                                 variant="tertiary"
                                                 size="small"
+                                                className="slett-knapp-med-icon-for-input !mt-10"
                                                 onClick={() => arrayHelpers.remove(index)}
                                                 style={{ float: 'right' }}
-                                                icon={<Delete />}
+                                                icon={<TrashIcon title="slett periode" />}
                                             >
                                                 Fjern periode
                                             </Button>
@@ -103,7 +107,7 @@ const Bosteder: React.FC = () => {
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
-                                icon={<AddCircle />}
+                                icon={<PlusCircleIcon title="legg til periode" />}
                             >
                                 Legg til periode
                             </Button>

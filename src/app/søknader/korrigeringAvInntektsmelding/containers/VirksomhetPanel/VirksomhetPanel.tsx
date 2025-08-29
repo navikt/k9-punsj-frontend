@@ -2,7 +2,7 @@ import { ErrorMessage, Field, FieldProps, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Box, Fieldset, Heading, Link, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
@@ -155,7 +155,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
                     </span>
 
-                    <ExternalLink />
+                    <ExternalLinkIcon />
                 </Link>
 
                 <Field

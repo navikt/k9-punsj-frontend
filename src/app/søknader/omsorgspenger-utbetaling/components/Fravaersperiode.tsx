@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Delete } from '@navikt/ds-icons';
-import { Box, Button } from '@navikt/ds-react';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
@@ -14,13 +14,14 @@ import './fravaersperiode.less';
 
 interface Props {
     antallFravaersperioder: number;
+    index: number;
     name: string;
     visSoknadAarsak?: boolean;
 
     slettPeriode: () => void;
 }
 
-const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false, slettPeriode }: Props) => {
+const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak = false, slettPeriode }: Props) => {
     const intl = useIntl();
 
     const minstToPerioder = antallFravaersperioder > 1;
@@ -68,27 +69,42 @@ const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false
 
     return (
         <Box padding="4" borderWidth="1" borderRadius="small" className="fravaersperiode-container">
-            <div className="aarsak-rad">
+            {minstToPerioder && (
+                <div className="flex items-center justify-between mb-4">
+                    <Heading size="xsmall" level="5">
+                        <FormattedMessage
+                            id="omsorgspenger.utbetaling.fravaersperiode.tittel"
+                            values={{ number: index + 1 }}
+                        />
+                    </Heading>
+
+                    <Button
+                        variant="tertiary"
+                        className="slett-knapp-med-icon"
+                        onClick={slettPeriode}
+                        icon={<TrashIcon title="slett periode" />}
+                    >
+                        <FormattedMessage id="omsorgspenger.utbetaling.fravaersperiode.fjern.btn" />
+                    </Button>
+                </div>
+            )}
+
+            <div className="flex items-start">
                 <SelectFormik
                     label="Fraværsårsak"
-                    size="small"
                     name={`${name}.fraværÅrsak`}
                     options={fraværÅrsakOptions}
+                    size="small"
                 />
 
                 {visSoknadAarsak && (
                     <SelectFormik
                         label="Søknadsårsak"
-                        size="small"
                         name={`${name}.søknadÅrsak`}
                         options={søknadÅrsakOptions}
+                        className="flex-none ml-4"
+                        size="small"
                     />
-                )}
-
-                {minstToPerioder && (
-                    <Button variant="tertiary" size="small" className="slett" onClick={slettPeriode} icon={<Delete />}>
-                        <FormattedMessage id={'omsorgspenger.utbetaling.fravaersperiode.fjern.btn'} />
-                    </Button>
                 )}
             </div>
 
@@ -96,10 +112,10 @@ const Fravaersperiode = ({ name, antallFravaersperioder, visSoknadAarsak = false
 
             <VerticalSpacer twentyPx />
 
-            <div className="fom-tom-rad">
-                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} />
+            <div className="flex items-start">
+                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} size="small" />
 
-                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} />
+                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} className="ml-4" size="small" />
             </div>
 
             <VerticalSpacer twentyPx />

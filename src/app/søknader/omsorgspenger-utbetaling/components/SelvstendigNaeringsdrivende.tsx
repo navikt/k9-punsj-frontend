@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { AddCircle } from '@navikt/ds-icons';
+import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -261,6 +261,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                                 (fravaersperiode, fravaersperiodeIndex) => (
                                     <Fravaersperiode
                                         key={fravaersperiodeIndex}
+                                        index={fravaersperiodeIndex}
                                         name={`opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder[${fravaersperiodeIndex}]`}
                                         antallFravaersperioder={selvstendigNaeringsdrivende.fravaersperioder?.length}
                                         slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
@@ -277,7 +278,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                                         aktivitetsFravær: aktivitetsFravær.SELVSTENDIG_NÆRINGSDRIVENDE,
                                     })
                                 }
-                                icon={<AddCircle />}
+                                icon={<PersonPlusIcon title="legg til fraværsperiode" />}
                             >
                                 <FormattedMessage
                                     id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.leggTil.btn'}

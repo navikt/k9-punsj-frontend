@@ -115,30 +115,33 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                             key={panelid}
                             data-testid="listepaneler"
                         >
-                            <Fieldset hideLegend legend="">
-                                {feilkodeprefiks === 'arbeidstid.arbeidstaker' && itemsWithInitialItem.length > 1 && (
-                                    <Heading size="medium" level="2">
-                                        <FormattedMessage
-                                            id="skjema.arbeidsforhold.teller"
-                                            values={{ indeks: itemIndex + 1 }}
-                                        />
-                                    </Heading>
-                                )}
+                            <>
+                                {itemsWithInitialItem.length > 1 && (
+                                    <>
+                                        {feilkodeprefiks === 'arbeidstid.arbeidstaker' && (
+                                            <Heading size="medium" level="2">
+                                                <FormattedMessage
+                                                    id="skjema.arbeidsforhold.teller"
+                                                    values={{ indeks: itemIndex + 1 }}
+                                                />
+                                            </Heading>
+                                        )}
 
-                                {!!medSlettKnapp && itemsWithInitialItem.length > 1 && (
-                                    <div className="listepanelbunn">
-                                        <Button
-                                            id="slett"
-                                            className="fjernlisteelementknapp"
-                                            data-testid="fjernlisteelementknapp"
-                                            type="button"
-                                            onClick={() => removeItemHandler(itemIndex)}
-                                            tabIndex={0}
-                                            icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                        >
-                                            <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
-                                        </Button>
-                                    </div>
+                                        {!!medSlettKnapp && (
+                                            <Button
+                                                id="slett"
+                                                className="slett-knapp-med-icon"
+                                                data-testid="fjernlisteelementknapp"
+                                                type="button"
+                                                onClick={() => removeItemHandler(itemIndex)}
+                                                tabIndex={0}
+                                                icon={<TrashIcon title="slett" />}
+                                                variant="tertiary"
+                                            >
+                                                <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
+                                            </Button>
+                                        )}
+                                    </>
                                 )}
 
                                 {!!component &&
@@ -151,7 +154,7 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                                         getErrorMessage,
                                         intl,
                                     )}
-                            </Fieldset>
+                            </>
                         </Box>
                     );
                 })}

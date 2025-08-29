@@ -123,60 +123,55 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <Fieldset legend="" hideLegend>
-                            {itemsWithInitialItem.length > 1 && (
+                        {itemsWithInitialItem.length > 1 && (
+                            <div className="flex justify-between items-center">
                                 <Heading size="small" level="2">
                                     <FormattedMessage
                                         id="skjema.arbeidsforhold.teller"
                                         values={{ indeks: currentItemIndex + 1 }}
                                     />
                                 </Heading>
-                            )}
 
-                            {itemsWithInitialItem.length > 1 && (
-                                <div className="listepanelbunn">
-                                    <Button
-                                        id="slett"
-                                        className="fjernlisteelementknapp"
-                                        type="button"
-                                        onClick={() => removeItemHandler(currentItemIndex)}
-                                        tabIndex={0}
-                                        icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                    >
-                                        <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
-                                    </Button>
-                                </div>
-                            )}
+                                <Button
+                                    id="slett"
+                                    className="slett-knapp-med-icon"
+                                    type="button"
+                                    onClick={() => removeItemHandler(currentItemIndex)}
+                                    tabIndex={0}
+                                    icon={<TrashIcon title="slett" />}
+                                    variant="tertiary"
+                                >
+                                    <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
+                                </Button>
+                            </div>
+                        )}
 
-                            <ArbeidstakerComponent
-                                søkerId={soknad.soekerId}
-                                arbeidstaker={currentItem as Arbeidstaker}
-                                listeelementindex={currentItemIndex}
-                                nyeSoknadsperioder={soknad.soeknadsperiode || []}
-                                eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
-                                updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
-                                    editSoknad(editItem(currentItemIndex, info))
-                                }
-                                updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
-                                    editSoknadState(editItem(currentItemIndex, info), showStatus)
-                                }
-                                feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
-                                getErrorMessage={getErrorMessage}
-                                intl={intl}
-                                arbeidsgivere={arbeidsgivere}
-                                harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                            />
+                        <ArbeidstakerComponent
+                            søkerId={soknad.soekerId}
+                            arbeidstaker={currentItem as Arbeidstaker}
+                            listeelementindex={currentItemIndex}
+                            nyeSoknadsperioder={soknad.soeknadsperiode || []}
+                            eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                            updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
+                                editSoknad(editItem(currentItemIndex, info))
+                            }
+                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
+                                editSoknadState(editItem(currentItemIndex, info), showStatus)
+                            }
+                            feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
+                            getErrorMessage={getErrorMessage}
+                            intl={intl}
+                            arbeidsgivere={arbeidsgivere}
+                            harDuplikatOrgnr={getHarDuplikatOrgnr()}
+                        />
 
-                            <UhaanderteFeilmeldinger
-                                getFeilmeldinger={() =>
-                                    (getUhaandterteFeil &&
-                                        getUhaandterteFeil(
-                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
-                                        )) ||
-                                    []
-                                }
-                            />
-                        </Fieldset>
+                        <UhaanderteFeilmeldinger
+                            getFeilmeldinger={() =>
+                                (getUhaandterteFeil &&
+                                    getUhaandterteFeil(`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`)) ||
+                                []
+                            }
+                        />
                     </Box>
                 );
             })}

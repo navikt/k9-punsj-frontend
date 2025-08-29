@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { AddPerson, Delete } from '@navikt/ds-icons';
 import { Button } from '@navikt/ds-react';
-
+import { TrashIcon, PersonPlusIcon } from '@navikt/aksel-icons';
 import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { Person } from 'app/models/types';
@@ -146,7 +145,7 @@ const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Pr
         <div className="mt-4 mb-4">
             {fosterbarnArray.map((barn, index) => {
                 return (
-                    <div className="flex mt-4 mb-4" key={index}>
+                    <div className="flex items-center mt-4 mb-4" key={index}>
                         <FnrTextField
                             label="ident.identifikasjon.fosterbarn"
                             labelId={`ident.identifikasjon.fosterbarn ${index + 1}`}
@@ -158,18 +157,14 @@ const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Pr
                             onChange={(e) => onChange(e, index)}
                         />
 
-                        <div className="flex items-center ml-2 mt-6">
-                            <Button
-                                className="slett"
-                                variant="tertiary"
-                                size="small"
-                                iconPosition="left"
-                                icon={<Delete />}
-                                onClick={() => removeBarn(index)}
-                            >
-                                <FormattedMessage id="fosterbarn.btn.slett" />
-                            </Button>
-                        </div>
+                        <Button
+                            className="slett-knapp-med-icon-for-input"
+                            variant="tertiary"
+                            icon={<TrashIcon title="slett barn" />}
+                            onClick={() => removeBarn(index)}
+                        >
+                            <FormattedMessage id="fosterbarn.btn.slett" />
+                        </Button>
                     </div>
                 );
             })}
@@ -177,7 +172,7 @@ const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Pr
             <Button
                 variant="tertiary"
                 size="small"
-                icon={<AddPerson />}
+                icon={<PersonPlusIcon />}
                 iconPosition="left"
                 onClick={addBarn}
                 data-test-id={'leggTillFosterbarnBtn'}

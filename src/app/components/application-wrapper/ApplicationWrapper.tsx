@@ -55,7 +55,7 @@ const ApplicationWrapper: React.FC<Props> = ({ locale, children }) => {
                                 size="small"
                                 onClick={handleButtonClick}
                                 iconPosition="right"
-                                icon={<ExternalLinkIcon />}
+                                icon={<ExternalLinkIcon title="gå til los" />}
                                 className="custom-button-internal-header"
                             >
                                 <FormattedMessage id="applicationWrapper.header.tittel.los" />

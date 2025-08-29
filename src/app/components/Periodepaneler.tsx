@@ -74,44 +74,42 @@ export const Periodepaneler: React.FC<Props> = ({
     return (
         <Box padding="4" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="small" className="periodepanel">
             {periods.map((p, i) => (
-                <div className="flex flex-wrap" key={i} data-testid="periodpaneler_${i}">
-                    <div className="periodepanel-input">
-                        <PeriodInput
-                            periode={p || {}}
-                            intl={intl}
-                            onChange={(periode) => {
-                                if (editSoknadState) {
-                                    editSoknadState(editPeriode(i, periode));
-                                }
-                            }}
-                            onBlur={(periode) => editSoknad(editPeriode(i, periode))}
-                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
-                            errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
-                            errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
-                        />
+                <div className="flex items-start" key={i} data-testid={`periodpaneler_${i}`}>
+                    <PeriodInput
+                        periode={p || {}}
+                        intl={intl}
+                        onChange={(periode) => {
+                            if (editSoknadState) {
+                                editSoknadState(editPeriode(i, periode));
+                            }
+                        }}
+                        onBlur={(periode) => editSoknad(editPeriode(i, periode))}
+                        errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
+                        errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
+                        errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
+                    />
 
-                        <div className="ml-4">
-                            <Button
-                                id="slett"
-                                className={getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'fjern'}
-                                type="button"
-                                onClick={() => {
-                                    const newArray: IPeriode[] = removeItem(i);
-                                    if (editSoknadState) {
-                                        editSoknadState(newArray);
-                                    }
-                                    editSoknad(newArray);
-                                    if (onRemove) {
-                                        onRemove();
-                                    }
-                                }}
-                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                size="small"
-                            >
-                                <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
-                            </Button>
-                        </div>
-                    </div>
+                    <Button
+                        id="slett"
+                        className={
+                            getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'
+                        }
+                        type="button"
+                        onClick={() => {
+                            const newArray: IPeriode[] = removeItem(i);
+                            if (editSoknadState) {
+                                editSoknadState(newArray);
+                            }
+                            editSoknad(newArray);
+                            if (onRemove) {
+                                onRemove();
+                            }
+                        }}
+                        icon={<TrashIcon title="slettPeriode" />}
+                        variant="tertiary"
+                    >
+                        <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                    </Button>
                 </div>
             ))}
 

@@ -3,7 +3,7 @@ import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -197,7 +197,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                                 </Button>
                                 {kanSletteTid && (
                                     <Button
-                                        icon={<Delete />}
+                                        icon={<TrashIcon />}
                                         size="small"
                                         variant="tertiary"
                                         className="slett"

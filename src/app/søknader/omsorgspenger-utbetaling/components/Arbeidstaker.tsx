@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
 import { useQuery } from '@tanstack/react-query';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Checkbox, Heading, Box } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -69,40 +68,41 @@ const Arbeidstaker = ({
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
-                <Box padding="4">
+                <Box padding="4" background="bg-subtle" borderRadius="small" className="mb-2">
                     <div>
                         {harMinstToArbeidsforhold && (
-                            <>
-                                <Heading size="xsmall" level="5">
+                            <div className="flex justify-between items-center mb-4">
+                                <Heading size="small" level="5">
                                     <FormattedMessage
                                         id="omsorgspenger.utbetaling.punchForm.arbeidstaker.arbeidsforhold"
                                         values={{ index: arbeidstakerIndex + 1 }}
                                     />
                                 </Heading>
 
-                                <VerticalSpacer twentyPx />
-                            </>
+                                <Button
+                                    id="slett"
+                                    className="slett-knapp-med-icon"
+                                    type="button"
+                                    onClick={slettArbeidsforhold}
+                                    icon={<TrashIcon title="slett arbeidsforhold" />}
+                                    variant="tertiary"
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
+                                </Button>
+                            </div>
                         )}
+
                         <Organisasjonsvelger
                             name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
                             disabled={gjelderAnnenOrganisasjon}
                             className="inline-block"
                             organisasjoner={organisasjoner}
                         />
-                        {harMinstToArbeidsforhold && (
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                className="float-right"
-                                onClick={slettArbeidsforhold}
-                                icon={<Delete />}
-                            >
-                                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
-                            </Button>
-                        )}
+
                         <Checkbox
                             onChange={() => toggleGjelderAnnenOrganisasjon(form)}
                             checked={gjelderAnnenOrganisasjon}
+                            size="small"
                         >
                             <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.gjelderAnnenOrg.checkbox" />
                         </Checkbox>
@@ -120,8 +120,8 @@ const Arbeidstaker = ({
 
                     <hr />
 
-                    <div className="mt-4">
-                        <Heading size="small">
+                    <div className="mt-4 mb-4">
+                        <Heading size="small" level="5">
                             <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
                         </Heading>
                     </div>
@@ -130,12 +130,13 @@ const Arbeidstaker = ({
                         name={`${name}.fravaersperioder`}
                         render={(arrayHelpers) => (
                             <>
-                                {value.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
+                                {value.fravaersperioder?.map((fravaersperiode, index) => (
                                     <Fravaersperiode
-                                        key={fravaersperiodeIndex}
-                                        name={`${name}.fravaersperioder[${fravaersperiodeIndex}]`}
+                                        key={index}
                                         antallFravaersperioder={value.fravaersperioder?.length}
-                                        slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
+                                        index={index}
+                                        name={`${name}.fravaersperioder[${index}]`}
+                                        slettPeriode={() => arrayHelpers.remove(index)}
                                         visSoknadAarsak
                                     />
                                 ))}
@@ -149,7 +150,7 @@ const Arbeidstaker = ({
                                             aktivitetsFravær: aktivitetsFravær.ARBEIDSTAKER,
                                         })
                                     }
-                                    icon={<AddCircle />}
+                                    icon={<PlusCircleIcon />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.leggTil.btn" />
                                 </Button>

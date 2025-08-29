@@ -13,9 +13,8 @@ const ValgAvBehandlingsÅr = ({ behandlingsAar, onChange }: Props) => {
         <Select
             value={behandlingsAar}
             label="Hvilket år gjelder dokumentet?"
-            size="small"
             onChange={(e) => onChange(e.target.value)}
-            className="my-8"
+            className="my-8 max-w-64"
             data-test-id="valgAvbehandlingsÅr"
         >
             <option value="">Velg</option>

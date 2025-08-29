@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -31,7 +31,8 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
                             variant="tertiary"
                             size="small"
                             onClick={() => arrayHelpers.remove(fieldArrayIndex)}
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
+                            className="slett-knapp-med-icon-for-input !mt-10"
                         >
                             Fjern periode
                         </Button>

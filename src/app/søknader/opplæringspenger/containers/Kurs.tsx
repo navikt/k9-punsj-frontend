@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -93,8 +93,9 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                         </div>
                                         <Button
                                             variant="tertiary"
+                                            className="slett-knapp-med-icon-for-input !mt-8"
                                             size="small"
-                                            icon={<Delete />}
+                                            icon={<TrashIcon title="slett periode" />}
                                             onClick={() => remove(index)}
                                         >
                                             Fjern periode
@@ -113,7 +114,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => push(initialKursperiode)}
-                                icon={<AddCircle />}
+                                icon={<PlusCircleIcon title="legg til periode" />}
                             >
                                 Legg til ny periode med opplæring
                             </Button>

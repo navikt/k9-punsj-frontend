@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { TrashIcon, PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -56,8 +56,8 @@ const Utenlandsopphold: React.FC = () => {
                         render={(arrayHelpers) => (
                             <>
                                 {values.utenlandsopphold?.map((_, index, array) => (
-                                    <div key={index}>
-                                        <div className="fom-tom-rad">
+                                    <div key={index} className="mb-6">
+                                        <div className="flex items-start">
                                             <DatoInputFormikNew
                                                 label={intlHelper(
                                                     intl,
@@ -72,6 +72,7 @@ const Utenlandsopphold: React.FC = () => {
                                                     'omsorgspenger.utbetaling.utenlandsopphold.tom',
                                                 )}
                                                 name={`utenlandsopphold[${index}].periode.tom`}
+                                                className="ml-4"
                                             />
 
                                             {array.length > 1 && (
@@ -79,8 +80,8 @@ const Utenlandsopphold: React.FC = () => {
                                                     variant="tertiary"
                                                     size="small"
                                                     onClick={() => arrayHelpers.remove(index)}
-                                                    style={{ float: 'right' }}
-                                                    icon={<Delete />}
+                                                    className="slett-knapp-med-icon-for-input !mt-10"
+                                                    icon={<TrashIcon title="slett periode" />}
                                                 >
                                                     <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
                                                 </Button>
@@ -113,7 +114,7 @@ const Utenlandsopphold: React.FC = () => {
                                     variant="tertiary"
                                     size="small"
                                     onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<AddCircle />}
+                                    icon={<PersonPlusIcon title="legg til utenlandsopphold" />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn" />
                                 </Button>
