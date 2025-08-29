@@ -5,7 +5,7 @@ import { EksisterendeOMPKSSoknaderReducer } from '../søknader/omsorgspenger-kro
 import { PunchOMPKSFormReducer } from '../søknader/omsorgspenger-kronisk-sykt-barn/state/reducers/PunchOMPKSFormReducer';
 import { EksisterendeOMPMASoknaderReducer } from '../søknader/omsorgspenger-midlertidig-alene/state/reducers/EksisterendeOMPMASoknaderReducer';
 import { PunchOMPMAFormReducer } from '../søknader/omsorgspenger-midlertidig-alene/state/reducers/PunchOMPMAFormReducer';
-import { EksisterendePLSSoknaderReducer } from '../søknader/pleiepenger-livets-sluttfase/state/reducers/EksisterendePLSSoknaderReducer';
+
 import { PunchPLSFormReducer } from '../søknader/pleiepenger-livets-sluttfase/state/reducers/PunchPLSFormReducer';
 import {
     AuthReducer,
@@ -52,7 +52,7 @@ export const rootReducer = combineReducers({
     eksisterendeSoknaderState: EksisterendeSoknaderReducer,
     fordelingSettPåVentState: FordelingSettPaaVentReducer, // trenger ikke være global
     fordelingFerdigstillJournalpostState: FordelingFerdigstillJournalpostReducer, // trenger ikke være global
-    eksisterendePLSSoknaderState: EksisterendePLSSoknaderReducer, // trenger ikke være global
+
     eksisterendeOMPKSSoknaderState: EksisterendeOMPKSSoknaderReducer, // trenger ikke være global
     eksisterendeOMPMASoknaderState: EksisterendeOMPMASoknaderReducer, // trenger ikke være global
 });
