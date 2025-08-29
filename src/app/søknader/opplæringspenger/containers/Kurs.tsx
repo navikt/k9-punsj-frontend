@@ -93,7 +93,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                         </div>
                                         <Button
                                             variant="tertiary"
-                                            className="slett-knapp-med-icon-for-input !mt-10"
+                                            className="slett-knapp-med-icon-for-input !mt-8"
                                             size="small"
                                             icon={<TrashIcon title="slett periode" />}
                                             onClick={() => remove(index)}
