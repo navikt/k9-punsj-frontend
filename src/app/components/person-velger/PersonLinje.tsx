@@ -47,11 +47,13 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
                     />
                     <div className="navn">
                         <Label size="small">Navn</Label>
-                        <BodyShort size="small">{field.value.navn}</BodyShort>
+                        <BodyShort className="mt-2" size="small">
+                            {field.value.navn}
+                        </BodyShort>
                     </div>
 
                     <Button
-                        className="slett-knapp-med-icon-for-input"
+                        className="slett-knapp-med-icon"
                         variant="tertiary"
                         size="small"
                         icon={<TrashIcon title="slett" />}
