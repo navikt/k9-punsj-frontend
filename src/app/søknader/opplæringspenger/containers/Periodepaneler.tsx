@@ -58,6 +58,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                         props.onRemove();
                                                     }
                                                 }}
+                                                className="slett-knapp-med-icon-for-input !mt-10"
                                                 icon={<TrashIcon title="slett periode" />}
                                             >
                                                 Fjern periode

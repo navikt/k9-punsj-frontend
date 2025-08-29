@@ -74,6 +74,7 @@ const Bosteder: React.FC = () => {
                                             <Button
                                                 variant="tertiary"
                                                 size="small"
+                                                className="slett-knapp-med-icon-for-input !mt-10"
                                                 onClick={() => arrayHelpers.remove(index)}
                                                 style={{ float: 'right' }}
                                                 icon={<TrashIcon title="slett periode" />}
