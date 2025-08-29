@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { capitalize } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -113,6 +113,7 @@ export default function Frilanser() {
                             {frilanser.fravaersperioder?.map((fravaersperiode, fravaersperiodeIndex) => (
                                 <Fravaersperiode
                                     key={fravaersperiodeIndex}
+                                    index={fravaersperiodeIndex}
                                     name={`opptjeningAktivitet.frilanser.fravaersperioder[${fravaersperiodeIndex}]`}
                                     antallFravaersperioder={frilanser.fravaersperioder?.length}
                                     slettPeriode={() => arrayHelpers.remove(fravaersperiodeIndex)}
@@ -128,7 +129,7 @@ export default function Frilanser() {
                                         aktivitetsFravær: aktivitetsFravær.FRILANSER,
                                     })
                                 }
-                                icon={<AddCircle />}
+                                icon={<PlusCircleIcon />}
                             >
                                 <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.leggTil.btn" />
                             </Button>

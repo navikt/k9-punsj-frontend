@@ -7,7 +7,7 @@ import { Box, Button } from '@navikt/ds-react';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { IPeriode } from '../../../models/types/Periode';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -58,7 +58,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                         props.onRemove();
                                                     }
                                                 }}
-                                                icon={<Delete />}
+                                                icon={<TrashIcon title="slett periode" />}
                                             >
                                                 Fjern periode
                                             </Button>
@@ -80,7 +80,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             props.onAdd();
                                         }
                                     }}
-                                    icon={<AddCircle />}
+                                    icon={<PlusCircleIcon title="legg til periode" />}
                                 >
                                     <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
                                 </Button>

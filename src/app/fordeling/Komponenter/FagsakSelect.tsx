@@ -8,7 +8,7 @@ import { FagsakForSelect } from 'app/types/Fagsak';
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { FormattedMessage } from 'react-intl';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
     fagsaker: FagsakForSelect[];
@@ -180,7 +180,7 @@ const FagsakSelect = ({
                             <BodyShort as="p">
                                 <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
                             </BodyShort>
-                            <ExternalLink />
+                            <ExternalLinkIcon title="åpne fagsak i k9sak" />
                         </Link>
                     )}
                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -57,8 +57,8 @@ const Medlemskap: React.FC = () => {
                         render={(arrayHelpers) => (
                             <>
                                 {values.bosteder?.map((_, bostedIndex, array) => (
-                                    <div key={bostedIndex}>
-                                        <div className="fom-tom-rad">
+                                    <div key={bostedIndex} className="mb-6">
+                                        <div className="flex items-start">
                                             <DatoInputFormikNew
                                                 label={intlHelper(
                                                     intl,
@@ -73,15 +73,16 @@ const Medlemskap: React.FC = () => {
                                                     'omsorgspenger.utbetaling.medlemskap.tom.tittel',
                                                 )}
                                                 name={`bosteder[${bostedIndex}].periode.tom`}
+                                                className="ml-4"
                                             />
 
                                             {array.length > 1 && (
                                                 <Button
                                                     variant="tertiary"
-                                                    size="small"
+                                                    className="slett-knapp-med-icon-for-input !mt-10"
                                                     onClick={() => arrayHelpers.remove(bostedIndex)}
-                                                    style={{ float: 'right' }}
-                                                    icon={<Delete />}
+                                                    icon={<TrashIcon title="slett periode" />}
+                                                    size="small"
                                                 >
                                                     <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
                                                 </Button>
@@ -114,7 +115,7 @@ const Medlemskap: React.FC = () => {
                                     variant="tertiary"
                                     size="small"
                                     onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<AddCircle />}
+                                    icon={<PlusCircleIcon />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
                                 </Button>

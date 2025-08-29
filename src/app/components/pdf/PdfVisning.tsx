@@ -3,7 +3,7 @@ import { Resizable } from 're-resizable';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Back, Next } from '@navikt/ds-icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { Button, Box, ToggleGroup } from '@navikt/ds-react';
 
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
@@ -129,7 +129,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                         variant="tertiary"
                         onClick={togglePdf}
                         className="knapp1"
-                        icon={<Next />}
+                        icon={<ChevronRightIcon />}
                         iconPosition="right"
                     >
                         <FormattedMessage id="dokument.skjul" />
@@ -138,7 +138,7 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
                         <FormattedMessage id="dokument.nyttvindu" />
                     </Button>
                 </div>
-                <Button icon={<Back />} variant="tertiary" onClick={togglePdf} className="button_open" />
+                <Button icon={<ChevronLeftIcon />} variant="tertiary" onClick={togglePdf} className="button_open" />
             </Box>
         </Resizable>
     );

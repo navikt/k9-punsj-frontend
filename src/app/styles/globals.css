@@ -70,6 +70,35 @@ body {
     @apply text-red-600 !important;
 }
 
+.slett-knapp-med-icon-for-input {
+    @apply ml-4 text-red-600 underline decoration-red-600 p-0 !important;
+    margin-top: 3.2rem;
+}
+
+.slett-knapp-med-icon-for-input:hover,
+.slett-knapp-med-icon-for-input:focus,
+.slett-knapp-med-icon-for-input:active {
+    @apply bg-transparent text-red-600 underline decoration-red-600 !important;
+    background-color: transparent !important;
+    color: #dc2626 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #dc2626 !important;
+}
+
+.slett-knapp-med-icon {
+    @apply text-red-600 underline decoration-red-600 !important;
+}
+
+.slett-knapp-med-icon:hover,
+.slett-knapp-med-icon:focus,
+.slett-knapp-med-icon:active {
+    @apply bg-transparent text-red-600 underline decoration-red-600 !important;
+    background-color: transparent !important;
+    color: #dc2626 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #dc2626 !important;
+}
+
 .journalpost-modal dialog::backdrop {
     width: var(--left-panel-width, 40%);
 }

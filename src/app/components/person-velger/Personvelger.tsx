@@ -1,7 +1,7 @@
 import { FieldArray, useField, useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 
-import { AddPerson } from '@navikt/ds-icons';
+import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 
 import { hentBarn } from 'app/api/api';
@@ -61,7 +61,7 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
                         <Button
                             variant="tertiary"
                             size="small"
-                            icon={<AddPerson />}
+                            icon={<PersonPlusIcon />}
                             iconPosition="left"
                             onClick={() => arrayHelpers.push({ norskIdent: '', navn: '' })}
                         >

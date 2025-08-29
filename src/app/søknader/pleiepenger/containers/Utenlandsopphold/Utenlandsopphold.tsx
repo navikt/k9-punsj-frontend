@@ -21,13 +21,10 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import { Heading } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { IPeriode } from '../../../../models/types/Periode';
-import intlHelper from '../../../../utils/intlUtils';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
-
-import './utenlandsopphold.less';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -154,7 +151,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
 
         return (
             <div className="utenlandsopphold">
-                <div className="periodeinfopanel_container">
+                <div className="flex items-start">
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
                         intl={intlShape}
@@ -167,20 +164,20 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
                     />
-                    <button
+
+                    <Button
                         id="slett"
-                        className="removePeriodeKnapp ml-3"
                         type="button"
+                        className="slett-knapp-med-icon-for-input"
                         onClick={removePeriode}
                         tabIndex={0}
+                        icon={<TrashIcon title="slettPeriode" />}
+                        variant="tertiary"
                     >
-                        <div className="slettIkon">
-                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
-                        </div>
-
-                        {intlHelper(intl, props.textFjern || 'skjema.perioder.fjern')}
-                    </button>
+                        <FormattedMessage id="skjema.perioder.fjern" />
+                    </Button>
                 </div>
+
                 {!!component &&
                     component(
                         periodeinfo,

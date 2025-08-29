@@ -99,15 +99,13 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                         <div className="ml-2">
                                                             <button
                                                                 id="slett"
-                                                                className="fjern"
+                                                                className="delete-button"
                                                                 type="button"
                                                                 onClick={() => {
                                                                     remove(index);
                                                                 }}
                                                             >
-                                                                <div className="slettIcon">
-                                                                    <TrashIcon fontSize="2rem" color="#C30000" />
-                                                                </div>
+                                                                <TrashIcon fontSize="2rem" color="#C30000" className="mr-2" />
 
                                                                 <FormattedMessage id="skjema.liste.fjern_dag" />
                                                             </button>

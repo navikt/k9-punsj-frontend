@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { AddCircle } from '@navikt/ds-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FieldArray, Formik, FormikProps } from 'formik';
 import { FormattedMessage } from 'react-intl';
@@ -131,7 +131,7 @@ const TilsynPeriodeListe = (props: Props) => {
                                         }),
                                     )
                                 }
-                                icon={<AddCircle />}
+                                icon={<PlusCircleIcon />}
                             >
                                 <FormattedMessage id="tilsyn.kalender.tilsynPeriodeListe.modal.leggTil.btn" />
                             </Button>

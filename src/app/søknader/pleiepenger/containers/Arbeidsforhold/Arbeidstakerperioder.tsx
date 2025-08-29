@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -117,7 +117,7 @@ const Arbeidstakerperioder = ({
     };
 
     return (
-        <Fieldset className="listepaneler" legend="">
+        <div className="listepaneler">
             {items?.map((currentItem, currentItemIndex) => {
                 const panelid = `arbeidstakerpanel_${currentItemIndex}`;
 
@@ -134,62 +134,54 @@ const Arbeidstakerperioder = ({
                         id={panelid}
                         key={panelid}
                     >
-                        <Fieldset legend="">
-                            {itemsWithInitialItem.length > 1 && (
+                        {itemsWithInitialItem.length > 1 && (
+                            <div className="flex justify-between items-center">
                                 <Heading size="small" level="2">
                                     <FormattedMessage
                                         id="skjema.arbeidsforhold.teller"
                                         values={{ indeks: currentItemIndex + 1 }}
                                     />
                                 </Heading>
-                            )}
 
-                            {itemsWithInitialItem.length > 1 && (
-                                <div className="listepanelbunn">
-                                    <Button
-                                        id="slett"
-                                        className="fjernlisteelementknapp"
-                                        type="button"
-                                        onClick={() => removeItemHandler(currentItemIndex)}
-                                        tabIndex={0}
-                                    >
-                                        <div className="slettIcon">
-                                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
-                                        </div>
+                                <Button
+                                    id="slett"
+                                    className="slett-knapp-med-icon"
+                                    type="button"
+                                    onClick={() => removeItemHandler(currentItemIndex)}
+                                    tabIndex={0}
+                                    variant="tertiary"
+                                    icon={<TrashIcon title="fjernarbeidsgiver" />}
+                                >
+                                    <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
+                                </Button>
+                            </div>
+                        )}
 
-                                        <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
-                                    </Button>
-                                </div>
-                            )}
+                        <ArbeidstakerComponent
+                            søkerId={soekerId}
+                            arbeidstaker={currentItem as Arbeidstaker}
+                            listeelementindex={currentItemIndex}
+                            updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
+                                editSoknad(editItem(currentItemIndex, info))
+                            }
+                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
+                                editSoknadState(editItem(currentItemIndex, info), showStatus)
+                            }
+                            feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
+                            getErrorMessage={getErrorMessage}
+                            arbeidsgivere={arbeidsgivere}
+                            harDuplikatOrgnr={getHarDuplikatOrgnr()}
+                            nyeSoknadsperioder={soeknadsperiode}
+                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                        />
 
-                            <ArbeidstakerComponent
-                                søkerId={soekerId}
-                                arbeidstaker={currentItem as Arbeidstaker}
-                                listeelementindex={currentItemIndex}
-                                updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
-                                    editSoknad(editItem(currentItemIndex, info))
-                                }
-                                updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
-                                    editSoknadState(editItem(currentItemIndex, info), showStatus)
-                                }
-                                feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}
-                                getErrorMessage={getErrorMessage}
-                                arbeidsgivere={arbeidsgivere}
-                                harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                nyeSoknadsperioder={soeknadsperiode}
-                                eksisterendeSoknadsperioder={eksisterendePerioder}
-                            />
-
-                            <UhaanderteFeilmeldinger
-                                getFeilmeldinger={() =>
-                                    (getUhaandterteFeil &&
-                                        getUhaandterteFeil(
-                                            `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
-                                        )) ||
-                                    []
-                                }
-                            />
-                        </Fieldset>
+                        <UhaanderteFeilmeldinger
+                            getFeilmeldinger={() =>
+                                (getUhaandterteFeil &&
+                                    getUhaandterteFeil(`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`)) ||
+                                []
+                            }
+                        />
                     </Box>
                 );
             })}
@@ -203,7 +195,7 @@ const Arbeidstakerperioder = ({
             >
                 <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
             </Button>
-        </Fieldset>
+        </div>
     );
 };
 export default Arbeidstakerperioder;

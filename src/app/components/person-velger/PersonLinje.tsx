@@ -2,7 +2,7 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { get, set } from 'lodash';
 import React from 'react';
 
-import { Delete } from '@navikt/ds-icons';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label } from '@navikt/ds-react';
 
 import { Personvalg } from 'app/models/types/Personvalg';
@@ -49,12 +49,12 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
                         <Label size="small">Navn</Label>
                         <BodyShort size="small">{field.value.navn}</BodyShort>
                     </div>
+
                     <Button
-                        className="slett"
+                        className="slett-knapp-med-icon-for-input"
                         variant="tertiary"
                         size="small"
-                        iconPosition="left"
-                        icon={<Delete />}
+                        icon={<TrashIcon title="slett" />}
                         onClick={slettHandler}
                     >
                         Slett

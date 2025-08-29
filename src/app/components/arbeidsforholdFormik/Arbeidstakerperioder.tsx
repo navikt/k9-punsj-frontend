@@ -65,52 +65,49 @@ const Arbeidstakerperioder = ({
                                 id={panelid}
                                 key={panelid}
                             >
-                                <Fieldset legend="" hideLegend>
-                                    {itemsWithInitialItem.length > 1 && (
+                                {itemsWithInitialItem.length > 1 && (
+                                    <div className="flex justify-between items-center">
                                         <Heading size="medium" level="2">
                                             <FormattedMessage
                                                 id="skjema.arbeidsforhold.teller"
                                                 values={{ indeks: currentItemIndex + 1 }}
                                             />
                                         </Heading>
-                                    )}
 
-                                    {itemsWithInitialItem.length > 1 && (
-                                        <div className="listepanelbunn">
-                                            <Button
-                                                id="slett"
-                                                className="fjernlisteelementknapp"
-                                                type="button"
-                                                onClick={() => arrayHelpers.remove(currentItemIndex)}
-                                                tabIndex={0}
-                                                icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
-                                            >
-                                                <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
-                                            </Button>
-                                        </div>
-                                    )}
+                                        <Button
+                                            id="slett"
+                                            className="slett-knapp-med-icon"
+                                            type="button"
+                                            onClick={() => arrayHelpers.remove(currentItemIndex)}
+                                            tabIndex={0}
+                                            icon={<TrashIcon title="fjernarbeidsgiver" />}
+                                            variant="tertiary"
+                                        >
+                                            <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
+                                        </Button>
+                                    </div>
+                                )}
 
-                                    <ArbeidstakerComponent
-                                        søkerId={soekerId}
-                                        arbeidstaker={currentItem as Arbeidstaker}
-                                        listeelementindex={currentItemIndex}
-                                        arbeidsgivere={arbeidsgivere}
-                                        harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                        nyeSoknadsperioder={soeknadsperiode || []}
-                                        eksisterendeSoknadsperioder={eksisterendePerioder}
-                                        name={`${arrayHelpers.name}.${currentItemIndex}`}
-                                    />
+                                <ArbeidstakerComponent
+                                    søkerId={soekerId}
+                                    arbeidstaker={currentItem as Arbeidstaker}
+                                    listeelementindex={currentItemIndex}
+                                    arbeidsgivere={arbeidsgivere}
+                                    harDuplikatOrgnr={getHarDuplikatOrgnr()}
+                                    nyeSoknadsperioder={soeknadsperiode || []}
+                                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                                    name={`${arrayHelpers.name}.${currentItemIndex}`}
+                                />
 
-                                    <UhaanderteFeilmeldinger
-                                        getFeilmeldinger={() =>
-                                            (getUhaandterteFeil &&
-                                                getUhaandterteFeil(
-                                                    `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
-                                                )) ||
-                                            []
-                                        }
-                                    />
-                                </Fieldset>
+                                <UhaanderteFeilmeldinger
+                                    getFeilmeldinger={() =>
+                                        (getUhaandterteFeil &&
+                                            getUhaandterteFeil(
+                                                `ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`,
+                                            )) ||
+                                        []
+                                    }
+                                />
                             </Box>
                         );
                     })}

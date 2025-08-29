@@ -22,6 +22,7 @@ import intlHelper from '../../utils/intlUtils';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import './periodeinfoPaneler.less';
+import { Button } from '@navikt/ds-react';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -123,7 +124,7 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
         const feltIndeks = periodeSpenn(periodeinfo.periode);
         return (
             <>
-                <div className="periodeinfopanel_container">
+                <div className="flex items-start">
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
                         intl={intlShape}
@@ -136,19 +137,18 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
                         errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
                     />
-                    <button
+
+                    <Button
                         id="slett"
-                        className="removePeriodeKnapp"
+                        className="slett-knapp-med-icon-for-input"
                         type="button"
                         onClick={removePeriode}
                         tabIndex={0}
+                        icon={<TrashIcon title="slett" />}
+                        variant="tertiary"
                     >
-                        <div className="slettIkon">
-                            <TrashIcon fontSize="2rem" color="#C30000" title="slett" />
-                        </div>
-
                         {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
-                    </button>
+                    </Button>
                 </div>
                 {!!component &&
                     component(

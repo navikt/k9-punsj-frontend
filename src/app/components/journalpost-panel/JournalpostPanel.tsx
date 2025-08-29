@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { ExternalLink } from '@navikt/ds-icons';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Box, HStack, Link } from '@navikt/ds-react';
 
 import { DokumenttypeForkortelse, dokumenttyperMedBehandlingsårValg, FordelingDokumenttype } from 'app/models/enums';
@@ -54,7 +54,7 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
                     <div className="flex-auto">
                         <Link className="modia-lenke" href={modiaPath}>
                             <FormattedMessage id="modia.lenke" />
-                            <ExternalLink />
+                            <ExternalLinkIcon title="Se dialog i Modia" />
                         </Link>
                     </div>
                 )}

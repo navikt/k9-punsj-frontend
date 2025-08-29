@@ -774,6 +774,7 @@
 
     "omsorgspenger.utbetaling.eksisterendePerioder.tittel": "Eksisterende perioder",
     "omsorgspenger.utbetaling.fravaersperiode.fjern.btn": "Fjern periode",
+    "omsorgspenger.utbetaling.fravaersperiode.tittel": "Fraværsperiode {number}",
 
     "omsorgspenger.utbetaling.medlemskap.tittel": "Medlemskap",
     "omsorgspenger.utbetaling.medlemskap.fom.tittel": "Fra og med",

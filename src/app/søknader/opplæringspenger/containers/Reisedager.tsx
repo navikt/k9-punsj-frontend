@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
-import { AddCircle, Delete } from '@navikt/ds-icons';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -28,7 +28,7 @@ const Reisedager = () => {
                                         variant="tertiary"
                                         size="small"
                                         onClick={() => remove(reisedagIndex)}
-                                        icon={<Delete />}
+                                        icon={<TrashIcon title="slett reisedag" />}
                                     >
                                         Fjern reisedag
                                     </Button>
@@ -37,7 +37,12 @@ const Reisedager = () => {
                             </React.Fragment>
                         ))}
 
-                        <Button variant="tertiary" size="small" onClick={() => push('')} icon={<AddCircle />}>
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            onClick={() => push('')}
+                            icon={<PlusCircleIcon title="legg til reisedag" />}
+                        >
                             Legg til reisedag
                         </Button>
                     </div>
