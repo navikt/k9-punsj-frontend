@@ -20,7 +20,7 @@ const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
-    id: uuidv4(),
+    key: uuidv4(),
 };
 
 const KursComponent = () => {
@@ -67,7 +67,8 @@ const KursComponent = () => {
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                <React.Fragment key={kursperiode.id}>
+                                <React.Fragment key={kursperiode.key}>
+                                    <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
                                     <div className="flex gap-4">
                                         <div className="flex gap-4 mr-2">
