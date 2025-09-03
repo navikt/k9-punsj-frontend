@@ -2,33 +2,28 @@ import React, { useEffect } from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading, Label } from '@navikt/ds-react';
+import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Periode } from 'app/models/types/Periode';
-import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import InstitusjonSelector from './InstitusjonSelector';
 
 import './kurs.less';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import { JaNei } from 'app/models/enums';
-
-interface KursComponentProps {
-    institusjoner: GodkjentOpplæringsinstitusjon[];
-    hentInstitusjonerLoading: boolean;
-    hentInstitusjonerError: boolean;
-}
+import { v4 as uuidv4 } from 'uuid';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
+    id: uuidv4(),
 };
 
-const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
+const KursComponent = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     useEffect(() => {
@@ -41,21 +36,17 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
     return (
         <Box padding="4" borderWidth="1" borderRadius="small">
             <Heading size="small" level="5">
-                Opplæring
+                Søknadsperiode og institusjon
             </Heading>
 
             <VerticalSpacer sixteenPx />
 
             <div className="kurs">
-                {!hentInstitusjonerLoading && (
-                    <InstitusjonSelector
-                        label="Velg institusjon"
-                        name={kursholder}
-                        godkjentOpplæringsinstitusjoner={institusjoner}
-                        hentInstitusjonerError={hentInstitusjonerError}
-                        isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
-                    />
-                )}
+                <InstitusjonSelector
+                    label="På hvilken helseinstitusjon eller kompetansesenter foregår opplæringen?"
+                    name={kursholder}
+                    isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
+                />
 
                 <VerticalSpacer eightPx />
 
@@ -76,29 +67,31 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                <React.Fragment key={index}>
-                                    <div className="kurs__spacer" />
+                                <React.Fragment key={kursperiode.id}>
                                     <VerticalSpacer thirtyTwoPx />
-                                    <Label className="mb-2">Periode med opplæring:</Label>
-                                    <div className="flex justify-between">
+                                    <div className="flex gap-4">
                                         <div className="flex gap-4 mr-2">
                                             <DatoInputFormikNew
                                                 label="Fra"
-                                                name={`kurs.kursperioder.${index}.periode.fom`}
+                                                name={`kurs.kursperioder[${index}].periode.fom`}
+                                                size="small"
                                             />
                                             <DatoInputFormikNew
                                                 label="Til"
-                                                name={`kurs.kursperioder.${index}.periode.tom`}
+                                                name={`kurs.kursperioder[${index}].periode.tom`}
+                                                size="small"
                                             />
                                         </div>
                                         <Button
                                             variant="tertiary"
                                             className="slett-knapp-med-icon-for-input !mt-8"
                                             size="small"
-                                            icon={<TrashIcon title="slett periode" />}
-                                            onClick={() => remove(index)}
+                                            icon={<TrashIcon fontSize={24} title="slett periode" />}
+                                            onClick={() => {
+                                                remove(index);
+                                            }}
                                         >
-                                            Fjern periode
+                                            Fjern
                                         </Button>
                                     </div>
                                     <VerticalSpacer thirtyTwoPx />
@@ -116,7 +109,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                 onClick={() => push(initialKursperiode)}
                                 icon={<PlusCircleIcon title="legg til periode" />}
                             >
-                                Legg til ny periode med opplæring
+                                Legg til ny periode
                             </Button>
                         </>
                     )}

@@ -35,7 +35,6 @@ import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
-import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import Reisedager from './Reisedager';
 import RelasjonTilBarnet from './RelasjonTilBarnet';
 
@@ -50,9 +49,6 @@ interface OwnProps {
     hentEksisterendePerioderError: boolean;
     setKvittering?: (kvittering?: IOLPSoknadKvittering) => void;
     kvittering: IOLPSoknadKvittering | undefined;
-    institusjoner: GodkjentOpplæringsinstitusjon[];
-    hentInstitusjonerLoading: boolean;
-    hentInstitusjonerError: boolean;
 }
 
 export const OLPPunchForm: React.FC<OwnProps> = (props) => {
@@ -67,9 +63,6 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         hentEksisterendePerioderError,
         setKvittering,
         kvittering,
-        institusjoner,
-        hentInstitusjonerLoading,
-        hentInstitusjonerError,
     } = props;
     const [harMellomlagret, setHarMellomlagret] = useState(false);
     const [visVentModal, setVisVentModal] = useState(false);
@@ -266,11 +259,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <VerticalSpacer thirtyTwoPx />
             <OpplysningerOmSoknad />
             <VerticalSpacer thirtyTwoPx />
-            <KursComponent
-                institusjoner={institusjoner}
-                hentInstitusjonerLoading={hentInstitusjonerLoading}
-                hentInstitusjonerError={hentInstitusjonerError}
-            />
+            <KursComponent />
             <VerticalSpacer thirtyTwoPx />
             <Checkbox
                 onChange={(e) => {

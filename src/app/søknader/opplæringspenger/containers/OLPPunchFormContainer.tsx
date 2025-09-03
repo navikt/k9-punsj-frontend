@@ -15,13 +15,14 @@ import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 
-import { hentEksisterendePerioder, hentInstitusjoner, hentSoeknad, sendSoeknad } from '../api';
+import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
-import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
+
+
 
 interface OwnProps {
     journalpostid: string;
@@ -38,7 +39,8 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
-    const [institusjoner, setInstitusjoner] = useState<GodkjentOpplæringsinstitusjon[]>([]);
+
+
     const [kvittering, setKvittering] = useState<IOLPSoknadKvittering | undefined>(undefined);
     const [erSendtInn, setErSendtInn] = useState(false);
     const navigate = useNavigate();
@@ -51,14 +53,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         onSuccess: (data) => setEksisterendePerioder(data),
     });
 
-    const {
-        mutate: hentInstitusjonerK9,
-        error: hentInstitusjonerError,
-        isPending: hentInstitusjonerLoading,
-    } = useMutation({
-        mutationFn: () => hentInstitusjoner(),
-        onSuccess: (data) => setInstitusjoner(data),
-    });
+
 
     if (!id) {
         throw Error('Mangler id');
@@ -78,9 +73,8 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                 ident: soeknadRespons.soekerId,
                 barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
             });
-            hentInstitusjonerK9();
         }
-    }, [soeknadRespons, hentPerioderK9, hentInstitusjonerK9, identState.pleietrengendeId]);
+    }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);
 
     const { error: submitError, mutate: submit } = useMutation({
         mutationFn: () => sendSoeknad(id, identState.søkerId),
@@ -147,9 +141,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                 hentEksisterendePerioderError={!!hentEksisterendePerioderError}
                 setKvittering={setKvittering}
                 kvittering={kvittering}
-                institusjoner={institusjoner}
-                hentInstitusjonerLoading={!!hentInstitusjonerLoading}
-                hentInstitusjonerError={!!hentInstitusjonerError}
                 {...props}
             />
         </Formik>
