@@ -15,6 +15,7 @@ import './kurs.less';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import { JaNei } from 'app/models/enums';
+import { v4 as uuidv4 } from 'uuid';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -26,6 +27,7 @@ const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
+    key: uuidv4(),
 };
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
