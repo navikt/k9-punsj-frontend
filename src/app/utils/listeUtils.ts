@@ -1,9 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Brukes for å berike en liste med objekter med en id
-// Kan brukes der vi trenger en React Key for rendring av lister der vi IKKE har en unik id
-export const berikMedId = <T>(liste: Array<T & { id?: string }>): Array<T & { id: string }> =>
+// Bruk der vi ikke har unik data som kan brukes til key ved rendring av lister
+export const berikMedKey = <T>(liste: Array<T & { key?: string }>): Array<T & { key: string }> =>
     liste.map((item) => ({
         ...item,
-        id: item.id || uuidv4(),
+        key: item.key || uuidv4(),
     }));

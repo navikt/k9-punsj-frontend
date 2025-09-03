@@ -76,7 +76,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                <React.Fragment key={index}>
+                                <React.Fragment key={kursperiode.key}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
                                     <Label className="mb-2">Periode med opplæring:</Label>
