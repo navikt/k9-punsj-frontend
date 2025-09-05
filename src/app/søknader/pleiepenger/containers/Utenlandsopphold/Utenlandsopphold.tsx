@@ -85,7 +85,15 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
     // Bruker objekt for å lagre state per element
-    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState<{ [key: number]: string }>({});
+    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState<{ [key: number]: string }>(() => {
+        const initialState: { [key: number]: string } = {};
+        periods.forEach((periode, index) => {
+            if (periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0) {
+                initialState[index] = jaValue;
+            }
+        });
+        return initialState;
+    });
     const editInfo: (
         index: number,
         periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>,
