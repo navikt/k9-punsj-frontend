@@ -84,11 +84,8 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         periods = [],
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
-    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(
-        periods.some((periode) => periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0)
-            ? jaValue
-            : '',
-    );
+    // Bruker objekt for å lagre state per element
+    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState<{ [key: number]: string }>({});
     const editInfo: (
         index: number,
         periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>,
@@ -135,6 +132,19 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                     return 'null';
                 }
                 return innleggelsesperioder[0].årsak;
+            }
+            return '';
+        };
+
+        // Henter verdi for radioknapp fra state
+        const getVisInnlagtPerioder = () => {
+            // Hvis det finnes innleggelsesperioder, er "Ja" valgt
+            if (periods[periodeindeks].innleggelsesperioder && periods[periodeindeks].innleggelsesperioder.length > 0) {
+                return jaValue;
+            }
+            // Hvis det finnes lagret state for dette elementet, bruk den
+            if (visInnlagtPerioder[periodeindeks]) {
+                return visInnlagtPerioder[periodeindeks];
             }
             return '';
         };
@@ -202,14 +212,19 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                     value: 'nei',
                                 },
                             ]}
-                            name={`arbeidsgivertype_${1}`}
+                            name={`innleggelse_${periodeindeks}`}
                             legend={`Er, eller skal, barnet være innlagt i helseinstitusjon i ${countries.getName(
                                 land,
                                 'nb',
                             )}?`}
                             onChange={(event) => {
                                 const { value } = event.target as HTMLInputElement;
-                                setVisInnlagtPerioder(value);
+                                // Oppdaterer state for dette elementet
+                                setVisInnlagtPerioder((prev) => ({
+                                    ...prev,
+                                    [periodeindeks]: value,
+                                }));
+
                                 if (value !== jaValue) {
                                     const editedInfo = () =>
                                         editInfo(periodeindeks, {
@@ -219,12 +234,12 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                     editSoknadState(editedInfo());
                                 }
                             }}
-                            checked={visInnlagtPerioder}
+                            checked={getVisInnlagtPerioder()}
                         />
                     </div>
                 )}
 
-                {visInnlagtPerioder === jaValue && (
+                {getVisInnlagtPerioder() === jaValue && (
                     <div className="mt-6">
                         <Heading level="3" size="small">
                             <FormattedMessage id={'skjema.utenlandsopphold.barnInnlagtPerioder.tittel'} />
