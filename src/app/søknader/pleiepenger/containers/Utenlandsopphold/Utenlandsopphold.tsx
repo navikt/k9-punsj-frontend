@@ -171,7 +171,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             <div className="utenlandsopphold">
                 <div className="flex items-start">
                     <PeriodInput
-                        key={`period_${periodeindeks}_${periods[periodeindeks].periode?.fom}_${periods[periodeindeks].periode?.tom}`}
+                        key={`period_${periodeindeks}_${periods[periodeindeks].periode?.fom || ''}_${periods[periodeindeks].periode?.tom || ''}`}
                         periode={periods[periodeindeks].periode || {}}
                         intl={intlShape}
                         onChange={(periode) => {
