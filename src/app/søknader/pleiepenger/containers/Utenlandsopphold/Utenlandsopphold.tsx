@@ -91,13 +91,13 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>,
     ) => Periodeinfo<IUtenlandsOpphold>[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: Periodeinfo<IUtenlandsOpphold> = { ...periods[index], ...periodeinfo };
-        const newArray = periods;
+        const newArray = [...periods]; // Lager kopi av array
         newArray[index] = newInfo;
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = periods;
+        const newArray = [...periods]; // Lager kopi av array
         newArray.splice(index, 1);
         return newArray;
     };
@@ -163,7 +163,8 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             <div className="utenlandsopphold">
                 <div className="flex items-start">
                     <PeriodInput
-                        periode={periodeinfo.periode || {}}
+                        key={`period_${periodeindeks}_${periods[periodeindeks].periode?.fom}_${periods[periodeindeks].periode?.tom}`}
+                        periode={periods[periodeindeks].periode || {}}
                         intl={intlShape}
                         onChange={(periode) => {
                             editSoknadState(editPeriode(periodeindeks, periode));
@@ -219,6 +220,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             )}?`}
                             onChange={(event) => {
                                 const { value } = event.target as HTMLInputElement;
+
                                 // Oppdaterer state for dette elementet
                                 setVisInnlagtPerioder((prev) => ({
                                     ...prev,
