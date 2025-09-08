@@ -165,6 +165,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-2">
                             <Label size="small">Kursholder</Label>
+                            <BodyShort size="small">{ytelse.kurs.kursholder.orgnr}</BodyShort>
                             <BodyShort size="small">{ytelse.kurs.kursholder.navn}</BodyShort>
                         </div>
                         <VisningAvKursperioderSoknadKvittering kursperioder={ytelse.kurs.kursperioder} />

@@ -57,7 +57,7 @@ const InstitusjonSelector = ({ label, name, isAnnetSelected }: InstitusjonSelect
         <div className="institusjonContainer">
             <UNSAFE_Combobox
                 label={label}
-                size="medium"
+                size="small"
                 options={[{ label: 'Velg institusjon', value: '' }, ...mappedOptions]}
                 selectedOptions={[field.value ? findInstitusjonsNavn(field.value) : 'Velg institusjon']}
                 disabled={isAnnetSelected || !!hentInstitusjonerError}

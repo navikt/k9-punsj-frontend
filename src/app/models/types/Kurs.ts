@@ -4,6 +4,7 @@ import { Periode } from './Periode';
 export interface Kursholder {
     institusjonsUuid?: string;
     holder: string;
+    orgnr?: string;
 }
 
 export interface Kursperiode {

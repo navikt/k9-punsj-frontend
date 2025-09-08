@@ -79,6 +79,7 @@ export interface Kurs {
 
 export interface Kursholder {
     navn: string;
+    orgnr?: string;
     institusjonsidentifikator: string;
 }
 

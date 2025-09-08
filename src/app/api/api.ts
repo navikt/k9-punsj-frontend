@@ -25,6 +25,21 @@ export const finnArbeidsgivere = (
     return get(ApiPath.FINN_ARBEIDSGIVERE, { norskIdent: søkerId }, { 'X-Nav-NorskIdent': søkerId }, callback);
 };
 
+export const getOrgnavn = (orgnr: string): Promise<string> =>
+    get(ApiPath.SØK_ORGNUMMER + '?organisasjonsnummer=' + orgnr, undefined, undefined, undefined).then((response) => {
+        if (!response.ok) {
+            throw Error('Det oppstod en feil ved henting av organisasjoninfo.');
+        }
+        try {
+            return response.json().then((data) => {
+                return data.navn;
+            });
+        } catch (error) {
+            console.error(error);
+            throw Error('Det oppstod en feil ved henting av organisasjoninfo.');
+        }
+    });
+
 export const settJournalpostPaaVent = (journalpostid: string, soeknadId: string): Promise<Error | void> =>
     post(ApiPath.JOURNALPOST_SETT_PAA_VENT, { journalpostId: journalpostid }, undefined, { soeknadId }).then(
         (response) => {
