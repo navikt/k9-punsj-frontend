@@ -27,6 +27,9 @@ export const finnArbeidsgivere = (
 
 export const getOrgnavn = (orgnr: string): Promise<string> =>
     get(ApiPath.SØK_ORGNUMMER + '?organisasjonsnummer=' + orgnr, undefined, undefined, undefined).then((response) => {
+        if (response.status === 404) {
+            throw Error('Ingen treff på organisasjonsnummer.');
+        }
         if (!response.ok) {
             throw Error('Det oppstod en feil ved henting av organisasjoninfo.');
         }
