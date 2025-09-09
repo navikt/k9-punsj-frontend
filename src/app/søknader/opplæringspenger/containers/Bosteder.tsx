@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4" borderWidth="1" borderRadius="large">
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({

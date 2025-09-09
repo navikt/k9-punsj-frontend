@@ -11,7 +11,7 @@ const Reisedager = () => {
     const { values } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderRadius="small" className="bg-bg-subtle">
+        <Box padding="4" borderRadius="large" className="bg-bg-subtle">
             <FieldArray
                 name={`kurs.reise.reisedager`}
                 render={({ push, remove }) => (

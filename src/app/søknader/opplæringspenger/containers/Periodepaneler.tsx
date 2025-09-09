@@ -27,7 +27,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const { setFieldValue, setFieldTouched } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderRadius="small" className="periodepanel">
+        <Box padding="4" borderRadius="large" className="periodepanel">
             <FieldArray
                 name={fieldName}
                 render={(arrayHelpers) => (

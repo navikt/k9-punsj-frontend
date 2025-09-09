@@ -62,7 +62,7 @@ const Kurs = ({
     };
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4" borderWidth="1" borderRadius="large">
             <Heading size="small" level="5">
                 Søknadsperiode og institusjon
             </Heading>
@@ -88,7 +88,7 @@ const Kurs = ({
 
             <VerticalSpacer sixteenPx />
             {nyttInstitusjonsopphold && (
-                <Box padding="4" background="bg-subtle" borderRadius="small">
+                <Box padding="4" background="bg-subtle" borderRadius="large">
                     <div className="flex flex-col gap-4">
                         <InstitusjonSelector
                             label="På hvilken helseinstitusjon eller kompetansesenter foregår opplæringen?"
