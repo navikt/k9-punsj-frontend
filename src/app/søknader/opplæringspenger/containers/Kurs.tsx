@@ -15,6 +15,7 @@ import './kurs.less';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import { JaNei } from 'app/models/enums';
+import { v4 as uuidv4 } from 'uuid';
 
 interface KursComponentProps {
     institusjoner: GodkjentOpplæringsinstitusjon[];
@@ -26,6 +27,7 @@ const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
 const initialKursperiode = {
     periode: new Periode({}),
+    key: uuidv4(),
 };
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
@@ -76,7 +78,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                     render={({ push, remove }) => (
                         <>
                             {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                <React.Fragment key={index}>
+                                <React.Fragment key={kursperiode.key}>
                                     <div className="kurs__spacer" />
                                     <VerticalSpacer thirtyTwoPx />
                                     <Label className="mb-2">Periode med opplæring:</Label>

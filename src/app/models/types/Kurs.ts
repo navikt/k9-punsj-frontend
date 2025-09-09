@@ -1,3 +1,4 @@
+import { berikMedKey } from 'app/utils/listeUtils';
 import { Periode } from './Periode';
 
 export interface Kursholder {
@@ -7,6 +8,7 @@ export interface Kursholder {
 
 export interface Kursperiode {
     periode: Periode;
+    key: string;
 }
 
 export interface IKurs {
@@ -31,7 +33,7 @@ export class Kurs implements Required<Omit<IKurs, 'reise'>> {
 
     constructor(kurs: IKurs) {
         this.kursHolder = kurs.kursHolder || null;
-        this.kursperioder = kurs.kursperioder || [];
+        this.kursperioder = berikMedKey(kurs.kursperioder || []);
         this.reise = kurs.reise || { reisedager: [], reisedagerBeskrivelse: '' };
     }
 }
