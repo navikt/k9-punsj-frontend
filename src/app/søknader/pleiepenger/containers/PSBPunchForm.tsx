@@ -565,7 +565,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private addSkalHaFerie = () => {
         const { soknad } = this.state;
         const lovbestemtFerie = soknad.lovbestemtFerie || [];
-        const updatedFerie = [...lovbestemtFerie, { fom: '', tom: '' }];
+        const updatedFerie = berikMedKey([...lovbestemtFerie, { fom: '', tom: '' }]);
 
         const updatedSoknad = {
             ...soknad,
@@ -579,7 +579,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private addIkkeSkalHaFerie = () => {
         const { soknad } = this.state;
         const lovbestemtFerieSomSkalSlettes = soknad.lovbestemtFerieSomSkalSlettes || [];
-        const updatedFerie = [...lovbestemtFerieSomSkalSlettes, { fom: '', tom: '' }];
+        const updatedFerie = berikMedKey([...lovbestemtFerieSomSkalSlettes, { fom: '', tom: '' }]);
 
         const updatedSoknad = {
             ...soknad,
@@ -1007,11 +1007,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                             {!!soknad.lovbestemtFerie.length && (
                                 <Periodepaneler
-                                    periods={soknad.lovbestemtFerie}
+                                    periods={berikMedKey(soknad.lovbestemtFerie)}
                                     initialPeriode={this.initialPeriode}
-                                    editSoknad={(perioder) => this.updateSoknad({ lovbestemtFerie: perioder })}
+                                    editSoknad={(perioder) =>
+                                        this.updateSoknad({ lovbestemtFerie: berikMedKey(perioder) })
+                                    }
                                     editSoknadState={(perioder, showStatus) =>
-                                        this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
+                                        this.updateSoknadState({ lovbestemtFerie: berikMedKey(perioder) }, showStatus)
                                     }
                                     getErrorMessage={this.getErrorMessage}
                                     getUhaandterteFeil={this.getUhåndterteFeil}
@@ -1040,14 +1042,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                 </Alert>
 
                                                 <Periodepaneler
-                                                    periods={soknad.lovbestemtFerieSomSkalSlettes}
+                                                    periods={berikMedKey(soknad.lovbestemtFerieSomSkalSlettes)}
                                                     initialPeriode={this.initialPeriode}
                                                     editSoknad={(perioder) =>
-                                                        this.updateSoknad({ lovbestemtFerieSomSkalSlettes: perioder })
+                                                        this.updateSoknad({
+                                                            lovbestemtFerieSomSkalSlettes: berikMedKey(perioder),
+                                                        })
                                                     }
                                                     editSoknadState={(perioder, showStatus) =>
                                                         this.updateSoknadState(
-                                                            { lovbestemtFerieSomSkalSlettes: perioder },
+                                                            { lovbestemtFerieSomSkalSlettes: berikMedKey(perioder) },
                                                             showStatus,
                                                         )
                                                     }
