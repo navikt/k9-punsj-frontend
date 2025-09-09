@@ -65,6 +65,7 @@ import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentMo
 import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
 import PSBKvitteringContainer from './SoknadKvittering/SoknadKvitteringContainer';
 import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
+import { berikMedKey } from 'app/utils/listeUtils';
 import { pfLand } from '../components/pfLand';
 import { pfTilleggsinformasjon } from '../components/pfTilleggsinformasjon';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
@@ -956,11 +957,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                             {(!!soknad.utenlandsopphold?.length || !!soknad.utenlandsoppholdV2.length) && (
                                 <Utenlandsopphold
                                     intl={intl}
-                                    periods={
+                                    periods={berikMedKey(
                                         soknad.utenlandsoppholdV2.length > 0
                                             ? soknad.utenlandsoppholdV2
-                                            : soknad.utenlandsopphold || []
-                                    }
+                                            : soknad.utenlandsopphold || [],
+                                    )}
                                     component={pfLand()}
                                     panelid={(i) => `utenlandsoppholdpanel_${i}`}
                                     initialPeriodeinfo={initialUtenlandsopphold}

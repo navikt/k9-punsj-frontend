@@ -20,6 +20,7 @@ import {
     IUtenlandsOpphold,
     Periodeinfo,
 } from 'app/models/types';
+import { berikMedKey } from 'app/utils/listeUtils';
 
 import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -87,7 +88,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
     // Bruker objekt for å lagre state per element
     const [visInnlagtPerioder, setVisInnlagtPerioder] = useState<{ [key: number]: string }>(() => {
         const initialState: { [key: number]: string } = {};
-        periods.forEach((periode, index) => {
+        berikMedKey(periods).forEach((periode, index) => {
             if (periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0) {
                 initialState[index] = jaValue;
             }
@@ -101,13 +102,13 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         const newInfo: Periodeinfo<IUtenlandsOpphold> = { ...periods[index], ...periodeinfo };
         const newArray = [...periods]; // Lager kopi av array
         newArray[index] = newInfo;
-        return newArray;
+        return berikMedKey(newArray);
     };
 
     const removeItem = (index: number) => {
         const newArray = [...periods]; // Lager kopi av array
         newArray.splice(index, 1);
-        return newArray;
+        return berikMedKey(newArray);
     };
 
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, { periode });
@@ -162,16 +163,16 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                 .map((innleggelsesperiode) => innleggelsesperiode.periode) as IPeriode[];
 
             if (innleggelsesperioder.length > 0) {
-                return innleggelsesperioder;
+                return berikMedKey(innleggelsesperioder);
             }
-            return [{ fom: '', tom: '' }];
+            return berikMedKey([{ fom: '', tom: '' }]);
         };
 
         return (
             <div className="utenlandsopphold">
                 <div className="flex items-start">
                     <PeriodInput
-                        key={`period_${periodeindeks}_${periods[periodeindeks].periode?.fom || ''}_${periods[periodeindeks].periode?.tom || ''}`}
+                        key={periods[periodeindeks].key || `period_${periodeindeks}`}
                         periode={periods[periodeindeks].periode || {}}
                         intl={intlShape}
                         onChange={(periode) => {
@@ -338,11 +339,11 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
     return (
         <Listepaneler
             intl={intl}
-            items={periods}
+            items={berikMedKey(periods)}
             panelid={panelid}
-            initialItem={initialPeriodeinfo}
-            editSoknad={editSoknad}
-            editSoknadState={editSoknadState}
+            initialItem={berikMedKey([initialPeriodeinfo])[0]}
+            editSoknad={(newPeriods) => editSoknad(berikMedKey(newPeriods))}
+            editSoknadState={(newPeriods) => editSoknadState(berikMedKey(newPeriods))}
             getErrorMessage={errorMessageFunc}
             getUhaandterteFeil={getUhaandterteFeil}
             className={className}
