@@ -25,10 +25,10 @@ interface KursComponentProps {
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
-const initialKursperiode = {
+const initialKursperiode = () => ({
     periode: new Periode({}),
     key: uuidv4(),
-};
+});
 
 const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjonerError }: KursComponentProps) => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
@@ -115,7 +115,7 @@ const KursComponent = ({ institusjoner, hentInstitusjonerLoading, hentInstitusjo
                                 className="kurs__addButton"
                                 variant="tertiary"
                                 size="small"
-                                onClick={() => push(initialKursperiode)}
+                                onClick={() => push(initialKursperiode())}
                                 icon={<PlusCircleIcon title="legg til periode" />}
                             >
                                 Legg til ny periode med opplæring
