@@ -352,7 +352,7 @@
     "skjema.opplysningerombarnet": "Opplysninger om barnet",
     "skjema.barn": "Opplysninger om barn",
     "skjema.mottakelsesdato": "Mottatt dato:",
-    "skjema.mottakelsesdato.informasjon": "Dobbeltsjekk at mottatt dato og tidspunkt er korrekt. Dette er viktig for å sikre riktig behandlingsrekkefølge. Dersom dokumentet er scannet er det allerede trukket fra to virkedager automatisk.",
+    "skjema.mottakelsesdato.informasjon": "Dobbeltsjekk at mottatt dato og tidspunkt er korrekt.",
     "skjema.perioderSomFjernet": "Perioder som er fjernet fra søknadsperioden:",
     "skjema.begrunnelseForEndring": "Begrunnelse for endring:",
     "skjema.mottatt.klokkeslett": "Mottatt klokkeslett",
