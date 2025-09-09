@@ -28,10 +28,9 @@ import { oppdaterSoeknad, validerSoeknad } from '../api';
 import schema, { getSchemaContext } from '../schema';
 import Bosteder from './Bosteder';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
-import KursComponent from './Kurs';
+import Kurs from './Kurs';
 import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
-import Soknadsperioder from './Soknadsperioder';
 import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
 import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
@@ -252,14 +251,12 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer thirtyTwoPx />
-            <Soknadsperioder
+            <OpplysningerOmSoknad />
+            <VerticalSpacer thirtyTwoPx />
+            <Kurs
                 eksisterendePerioder={eksisterendePerioder}
                 hentEksisterendePerioderError={hentEksisterendePerioderError}
             />
-            <VerticalSpacer thirtyTwoPx />
-            <OpplysningerOmSoknad />
-            <VerticalSpacer thirtyTwoPx />
-            <KursComponent />
             <VerticalSpacer thirtyTwoPx />
             <Checkbox
                 onChange={(e) => {
