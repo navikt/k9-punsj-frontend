@@ -3,9 +3,11 @@ import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsp
 
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import { JaNei } from 'app/models/enums';
 
-export const getSchemaContext = (eksisterendePerioder: IPeriode[]) => ({
+export const getSchemaContext = (eksisterendePerioder: IPeriode[], harValgtAnnenInstitusjon: JaNei[]) => ({
     eksisterendePerioder,
+    harValgtAnnenInstitusjon,
 });
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
@@ -130,7 +132,7 @@ const frilanser = () =>
 
 const OLPSchema = yup.object({
     metadata: yup.object({
-        harValgtAnnenInstitusjon: yup.array().of(yup.string()),
+        harValgtAnnenInstitusjon: yup.array().of(yup.string().oneOf(Object.values(JaNeiIkkeOpplyst))),
         harUtenlandsopphold: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
         harBoddIUtlandet: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
     }),
@@ -151,14 +153,30 @@ const OLPSchema = yup.object({
     }),
     kurs: yup.object({
         kursHolder: yup.object({
-            institusjonsUuid: yup.string().nullable(),
-            holder: yup.string().nullable(),
-        }),
-        kursperioder: yup.array().of(
-            yup.object({
-                periode: periode(),
+            institusjonsUuid: yup.string().when(['$eksisterendePerioder', '$harValgtAnnenInstitusjon'], {
+                is: (value: IPeriode[], harValgtAnnenInstitusjon: JaNeiIkkeOpplyst[]) =>
+                    value.length === 0 && !harValgtAnnenInstitusjon.includes(JaNeiIkkeOpplyst.JA),
+                then: (schema) => schema.required(),
+                otherwise: (schema) => schema.nullable(),
             }),
-        ),
+            holder: yup
+                .string()
+                .when('$eksisterendePerioder', {
+                    is: (value: IPeriode[]) => value.length === 0,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
+                .label('Navn på institusjon'),
+        }),
+        kursperioder: yup.array().when(['$eksisterendePerioder'], {
+            is: (value: IPeriode[]) => value.length === 0,
+            then: (schema) =>
+                schema.of(
+                    yup.object({
+                        periode: periode(),
+                    }),
+                ),
+        }),
         reise: yup.object({
             reisedager: yup.array().of(yup.string().required().label('Dato')),
             reisedagerBeskrivelse: yup.string().when('reisedager', {

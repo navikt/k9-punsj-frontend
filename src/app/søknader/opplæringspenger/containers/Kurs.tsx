@@ -13,15 +13,11 @@ import InstitusjonSelector from './InstitusjonSelector';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import { v4 as uuidv4 } from 'uuid';
-import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
-import { capitalize } from 'lodash';
-import { EregSøk } from 'app/components/ereg-søk/EregSøk';
 import { FormattedMessage } from 'react-intl';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
-const kursholderOrgnr = `${kursholder}.organisasjonsnummer`;
 
 const initialKursperiode = () => {
     return {
@@ -45,9 +41,8 @@ const Kurs = ({
         setNyttInstitusjonsopphold(false);
         setFieldValue('kurs.kursperioder', []);
         setFieldValue('kurs.kursHolder', {
-            institusjonsUuid: null,
-            holder: null,
-            organisasjonsnummer: null,
+            institusjonsUuid: '',
+            holder: '',
         });
     };
 
@@ -55,9 +50,8 @@ const Kurs = ({
         setNyttInstitusjonsopphold(true);
         setFieldValue('kurs.kursperioder', [initialKursperiode()]);
         setFieldValue('kurs.kursHolder', {
-            institusjonsUuid: null,
-            holder: null,
-            organisasjonsnummer: null,
+            institusjonsUuid: '',
+            holder: '',
         });
     };
 
@@ -95,7 +89,6 @@ const Kurs = ({
                             name={kursholder}
                             isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
                         />
-
                         <Checkbox
                             size="small"
                             checked={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
@@ -106,44 +99,17 @@ const Kurs = ({
                                     setFieldValue('metadata.harValgtAnnenInstitusjon', [JaNei.JA]);
                                 }
                                 setFieldValue(kursholder, {
-                                    institusjonsUuid: null,
-                                    holder: null,
-                                    orgnr: '',
+                                    institusjonsUuid: '',
+                                    holder: '',
                                 });
-                                setFieldValue('metadata.harOrgnr', '');
                             }}
                         >
                             Annen institusjon (ikke i listen)
                         </Checkbox>
-
                         {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
-                            <div className="flex flex-col gap-4">
-                                <RadioGroupFormik
-                                    size="small"
-                                    name="metadata.harOrgnr"
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    legend="Har institusjon/kompetansesenter et organisasjonsnummer?"
-                                />
-
-                                {values?.metadata?.harOrgnr?.includes(JaNei.NEI) && (
-                                    <>
-                                        <TextFieldFormik
-                                            size="small"
-                                            label="Navn på institusjon"
-                                            name={kursholderNavn}
-                                        />
-                                    </>
-                                )}
-
-                                {values?.metadata?.harOrgnr?.includes(JaNei.JA) && (
-                                    <EregSøk
-                                        orgnavn={values?.kurs?.kursHolder?.holder}
-                                        setOrgnavn={(orgnavn) => setFieldValue(kursholderNavn, orgnavn)}
-                                        orgnr={values?.kurs?.kursHolder?.organisasjonsnummer}
-                                        setOrgnr={(orgnr) => setFieldValue(kursholderOrgnr, orgnr)}
-                                    />
-                                )}
-                            </div>
+                            <>
+                                <TextFieldFormik size="small" label="Navn på institusjon" name={kursholderNavn} />
+                            </>
                         )}
                         <div>
                             <FieldArray
@@ -153,7 +119,7 @@ const Kurs = ({
                                         {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
                                             <div className="mb-4" key={kursperiode.key}>
                                                 <div className="flex gap-4">
-                                                    <div className="flex gap-4 mr-2">
+                                                    <div className="flex gap-4">
                                                         <DatoInputFormikNew
                                                             label="Fra"
                                                             name={`kurs.kursperioder[${index}].periode.fom`}
@@ -168,15 +134,13 @@ const Kurs = ({
                                                     {values.kurs.kursperioder.length > 1 && (
                                                         <Button
                                                             variant="tertiary"
-                                                            className="slett-knapp-med-icon-for-input !mt-8"
+                                                            className="slett-knapp-med-icon-for-input !mt-7"
                                                             size="small"
                                                             icon={<TrashIcon fontSize={24} title="slett periode" />}
                                                             onClick={() => {
                                                                 remove(index);
                                                             }}
-                                                        >
-                                                            Fjern
-                                                        </Button>
+                                                        />
                                                     )}
                                                 </div>
                                             </div>

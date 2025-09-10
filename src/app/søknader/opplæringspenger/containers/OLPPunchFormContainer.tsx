@@ -22,8 +22,6 @@ import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 
-
-
 interface OwnProps {
     journalpostid: string;
 }
@@ -40,7 +38,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
 
-
     const [kvittering, setKvittering] = useState<IOLPSoknadKvittering | undefined>(undefined);
     const [erSendtInn, setErSendtInn] = useState(false);
     const navigate = useNavigate();
@@ -52,8 +49,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
             hentEksisterendePerioder(ident, barnIdent),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
-
-
 
     if (!id) {
         throw Error('Mangler id');
@@ -121,7 +116,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                         { ...values },
                         {
                             abortEarly: false,
-                            context: getSchemaContext(eksisterendePerioder),
+                            context: getSchemaContext(eksisterendePerioder, values.metadata.harValgtAnnenInstitusjon),
                         },
                     )
                     .then(() => ({}))

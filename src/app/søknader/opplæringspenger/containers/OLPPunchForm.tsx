@@ -10,7 +10,7 @@ import ArbeidsforholdPanel from 'app/components/arbeidsforholdFormik/Arbeidsforh
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
-import { FordelingActionKeys } from 'app/models/enums';
+import { FordelingActionKeys, JaNei } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { IInputError, Periode } from 'app/models/types';
@@ -98,7 +98,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
 
     useEffect(() => {
         const panelerSomSkalÅpnes = [];
-        if (values.kurs.reise.reisedager.length > 0) {
+        if (values.metadata.skalOppgiReise === JaNei.JA) {
             panelerSomSkalÅpnes.push(PunchFormPaneler.REISE);
         }
         if (values.metadata.harUtenlandsopphold === JaNeiIkkeOpplyst.JA) {
@@ -278,26 +278,28 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     onOpenChange={() => handlePanelClick(PunchFormPaneler.REISE)}
                     data-test-id="accordionItem-reisepanel"
                 >
-                    <Accordion.Header>Reisedager</Accordion.Header>
+                    <Accordion.Header>Reisedag</Accordion.Header>
                     <Accordion.Content>
                         <Reisedager />
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item
-                    defaultOpen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                    open={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                    onOpenChange={() => handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
-                    data-test-id="accordionItem-utenlandsoppholdpanel"
+                    open={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    defaultOpen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
+                    data-test-id="accordionItem-opplysningerOmSøkerPanel"
                 >
-                    <Accordion.Header>
-                        <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
-                    </Accordion.Header>
+                    <Accordion.Header>Relasjon til barnet</Accordion.Header>
 
                     <Accordion.Content>
-                        <UtenlandsoppholdContainer />
+                        <RelasjonTilBarnet />
                     </Accordion.Content>
                 </Accordion.Item>
-
+                <ArbeidsforholdPanel
+                    isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
+                    onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
+                    eksisterendePerioder={eksisterendePerioder}
+                />
                 <Accordion.Item
                     open={checkOpenState(PunchFormPaneler.FERIE)}
                     defaultOpen={checkOpenState(PunchFormPaneler.FERIE)}
@@ -312,25 +314,18 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                         <LovbestemtFerie />
                     </Accordion.Content>
                 </Accordion.Item>
-
-                <ArbeidsforholdPanel
-                    isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
-                    onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
-                    eksisterendePerioder={eksisterendePerioder}
-                />
-
                 <Accordion.Item
-                    open={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    defaultOpen={checkOpenState(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    onOpenChange={() => handlePanelClick(PunchFormPaneler.OPPLYSINGER_OM_SOKER)}
-                    data-test-id="accordionItem-opplysningerOmSøkerPanel"
+                    defaultOpen={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    open={checkOpenState(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    onOpenChange={() => handlePanelClick(PunchFormPaneler.UTENLANDSOPPHOLD)}
+                    data-test-id="accordionItem-utenlandsoppholdpanel"
                 >
                     <Accordion.Header>
-                        <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKER} />
+                        <FormattedMessage id={PunchFormPaneler.UTENLANDSOPPHOLD} />
                     </Accordion.Header>
 
                     <Accordion.Content>
-                        <RelasjonTilBarnet />
+                        <UtenlandsoppholdContainer />
                     </Accordion.Content>
                 </Accordion.Item>
 

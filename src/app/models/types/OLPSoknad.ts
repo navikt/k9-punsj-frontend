@@ -58,7 +58,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         harUtenlandsopphold: JaNeiIkkeOpplyst;
         // checkbox komponenten er array, men vi har kun en verdi
         harValgtAnnenInstitusjon: Array<JaNei>;
-        harOrgnr: JaNei;
+        skalOppgiReise: JaNei;
     };
     arbeidstid: Arbeidstid;
 
