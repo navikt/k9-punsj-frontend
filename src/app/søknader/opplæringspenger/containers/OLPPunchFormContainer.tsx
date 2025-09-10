@@ -21,6 +21,7 @@ import schema, { getSchemaContext } from '../schema';
 import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
+import { ValidationError } from 'yup';
 
 interface OwnProps {
     journalpostid: string;
@@ -121,6 +122,10 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                     )
                     .then(() => ({}))
                     .catch((err) => {
+                        if (!(err instanceof ValidationError)) {
+                            console.error(err);
+                            throw err;
+                        }
                         return yupToFormErrors(err);
                     })
             }
