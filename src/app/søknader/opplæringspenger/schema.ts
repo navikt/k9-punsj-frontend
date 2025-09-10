@@ -1,5 +1,14 @@
 import { IPeriode } from 'app/models/types';
-import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
+import yup, {
+    dato,
+    fomDato,
+    passertDato,
+    passertKlokkeslettPaaMottattDato,
+    periode,
+    tomDato,
+    tomEtterFom,
+    utenlandsperiode,
+} from 'app/rules/yup';
 
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
@@ -173,7 +182,12 @@ const OLPSchema = yup.object({
             then: (schema) =>
                 schema.of(
                     yup.object({
-                        periode: periode(),
+                        periode: yup.object({
+                            fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', dato.test),
+                            tom: tomDato
+                                .test('tom-not-empty', 'Til og med må være gyldig dato', dato.test)
+                                .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
+                        }),
                     }),
                 ),
         }),

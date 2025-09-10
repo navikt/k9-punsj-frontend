@@ -351,13 +351,15 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                         <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
                     ))}
                     {/* Denne bør byttes ut med errors fra formik */}
-                    {feilFraYup(schema, values, getSchemaContext(eksisterendePerioder))?.map(
-                        (error: { message: string; path: string }) => (
-                            <ErrorSummary.Item key={`${error.path}-${error.message}`}>
-                                {error.path}: {error.message}
-                            </ErrorSummary.Item>
-                        ),
-                    )}
+                    {feilFraYup(
+                        schema,
+                        values,
+                        getSchemaContext(eksisterendePerioder, values.metadata.harValgtAnnenInstitusjon),
+                    )?.map((error: { message: string; path: string }) => (
+                        <ErrorSummary.Item key={`${error.path}-${error.message}`}>
+                            {error.path}: {error.message}
+                        </ErrorSummary.Item>
+                    ))}
                 </ErrorSummary>
             )}
             <div className="submit-knapper">
