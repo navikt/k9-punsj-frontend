@@ -24,6 +24,7 @@ const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, ...props
             {...props}
             onChange={(selectedDate: string) => {
                 helper.setValue(selectedDate);
+                helper.setTouched(true, true);
             }}
             onBlur={(selectedDate: string) => {
                 if (handleBlur) {
