@@ -1,11 +1,22 @@
 import { IPeriode } from 'app/models/types';
-import yup, { passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
+import yup, {
+    dato,
+    fomDato,
+    passertDato,
+    passertKlokkeslettPaaMottattDato,
+    periode,
+    tomDato,
+    tomEtterFom,
+    utenlandsperiode,
+} from 'app/rules/yup';
 
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
+import { JaNei } from 'app/models/enums';
 
-export const getSchemaContext = (eksisterendePerioder: IPeriode[]) => ({
+export const getSchemaContext = (eksisterendePerioder: IPeriode[], harValgtAnnenInstitusjon: JaNei[]) => ({
     eksisterendePerioder,
+    harValgtAnnenInstitusjon,
 });
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
@@ -130,7 +141,7 @@ const frilanser = () =>
 
 const OLPSchema = yup.object({
     metadata: yup.object({
-        harValgtAnnenInstitusjon: yup.array().of(yup.string()),
+        harValgtAnnenInstitusjon: yup.array().of(yup.string().oneOf(Object.values(JaNeiIkkeOpplyst))),
         harUtenlandsopphold: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
         harBoddIUtlandet: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
     }),
@@ -151,14 +162,35 @@ const OLPSchema = yup.object({
     }),
     kurs: yup.object({
         kursHolder: yup.object({
-            institusjonsUuid: yup.string(),
-            holder: yup.string(),
-        }),
-        kursperioder: yup.array().of(
-            yup.object({
-                periode: periode(),
+            institusjonsUuid: yup.string().when(['$eksisterendePerioder', '$harValgtAnnenInstitusjon'], {
+                is: (value: IPeriode[], harValgtAnnenInstitusjon: JaNeiIkkeOpplyst[]) =>
+                    value.length === 0 && !harValgtAnnenInstitusjon.includes(JaNeiIkkeOpplyst.JA),
+                then: (schema) => schema.required(),
+                otherwise: (schema) => schema.nullable(),
             }),
-        ),
+            holder: yup
+                .string()
+                .when('$eksisterendePerioder', {
+                    is: (value: IPeriode[]) => value.length === 0,
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
+                })
+                .label('Navn på institusjon'),
+        }),
+        kursperioder: yup.array().when(['$eksisterendePerioder'], {
+            is: (value: IPeriode[]) => value.length === 0,
+            then: (schema) =>
+                schema.of(
+                    yup.object({
+                        periode: yup.object({
+                            fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', dato.test),
+                            tom: tomDato
+                                .test('tom-not-empty', 'Til og med må være gyldig dato', dato.test)
+                                .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
+                        }),
+                    }),
+                ),
+        }),
         reise: yup.object({
             reisedager: yup.array().of(yup.string().required().label('Dato')),
             reisedagerBeskrivelse: yup.string().when('reisedager', {

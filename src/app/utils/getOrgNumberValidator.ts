@@ -20,7 +20,7 @@ const getMod11 = (strValue: string): number => {
     return result === 11 ? 0 : result;
 };
 
-export const isNotValidOrgNumber = (value: any): boolean => {
+export const isValidOrgNumber = (value: any): boolean => {
     if (
         value &&
         typeof value === 'string' &&
@@ -34,4 +34,4 @@ export const isNotValidOrgNumber = (value: any): boolean => {
     return false;
 };
 
-export default isNotValidOrgNumber;
+export default isValidOrgNumber;

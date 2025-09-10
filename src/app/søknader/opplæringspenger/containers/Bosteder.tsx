@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4" borderWidth="1" borderRadius="large">
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
@@ -36,7 +36,6 @@ const Bosteder: React.FC = () => {
                 onChange={(event) => {
                     const target = event.target as HTMLInputElement;
                     const value = target.value as JaNeiIkkeOpplyst;
-
                     setFieldValue('metadata.harBoddIUtlandet', value);
 
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
@@ -47,7 +46,7 @@ const Bosteder: React.FC = () => {
                         setFieldValue('bosteder', []);
                     }
                 }}
-                checked={values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA ? JaNeiIkkeOpplyst.JA : undefined}
+                checked={values.metadata.harBoddIUtlandet}
             />
 
             {values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
