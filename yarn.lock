@@ -3738,7 +3738,7 @@ __metadata:
   dependencies:
     "@navikt/oasis": "npm:3.8.0"
     "@sentry/cli": "npm:2.53.0"
-    axios: "npm:1.11.0"
+    axios: "npm:1.12.0"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.5"
     dotenv: "npm:17.2.2"
@@ -7174,7 +7174,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.11.0, axios@npm:^1.11.0":
+"axios@npm:1.12.0":
+  version: 1.12.0
+  resolution: "axios@npm:1.12.0"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.4"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10/6c45e294b6ee72f832dbee94cb3fe7331bf2961874fa6b656d909a93b3574c59281f0c62eb92baf7b3e4f39be71936c9f1fcbbe494c90f7ff4d7cc2d7932f06d
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.11.0":
   version: 1.11.0
   resolution: "axios@npm:1.11.0"
   dependencies:
