@@ -147,6 +147,7 @@ const frilanser = () =>
             .when('jobberFortsattSomFrilans', {
                 is: false,
                 then: (schema) => schema.required(),
+                otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
