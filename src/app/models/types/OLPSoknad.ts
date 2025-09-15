@@ -58,7 +58,7 @@ const initialKurs = (soknad: IOLPSoknadBackend, eksisterendePerioder: Periode[])
     // vi har en ny søknad, og vi har perioder i k9
     if (eksisterendePerioder.length > 0) {
         return new Kurs({
-            kursHolder: { institusjonsUuid: '', holder: '' },
+            kursHolder: { institusjonsUuid: null, holder: '' },
             kursperioder: [],
             reise: { reisedager: [], reisedagerBeskrivelse: '' },
         });
@@ -66,7 +66,7 @@ const initialKurs = (soknad: IOLPSoknadBackend, eksisterendePerioder: Periode[])
 
     // vi har en ny søknad, og ingen perioder i k9
     return new Kurs({
-        kursHolder: { institusjonsUuid: '', holder: '' },
+        kursHolder: { institusjonsUuid: null, holder: '' },
         kursperioder: [{ periode: new Periode({ fom: '', tom: '' }), key: v4() }],
         reise: { reisedager: [], reisedagerBeskrivelse: '' },
     });
