@@ -127,6 +127,12 @@ const Kurs = ({
                                                             label="Til"
                                                             name={`kurs.kursperioder[${index}].periode.tom`}
                                                             size="small"
+                                                            fromDate={
+                                                                new Date(values.kurs.kursperioder[index].periode.fom)
+                                                            }
+                                                            defaultMonth={
+                                                                new Date(values.kurs.kursperioder[index].periode.fom)
+                                                            }
                                                         />
                                                     </div>
                                                     {values.kurs.kursperioder.length > 1 && (
