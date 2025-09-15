@@ -22,7 +22,6 @@ import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { ValidationError } from 'yup';
-import dayjs from 'dayjs';
 
 interface OwnProps {
     journalpostid: string;
