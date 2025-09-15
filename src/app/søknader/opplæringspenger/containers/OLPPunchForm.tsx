@@ -354,7 +354,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     {feilFraYup(
                         schema,
                         values,
-                        getSchemaContext(eksisterendePerioder, values.metadata.harValgtAnnenInstitusjon),
+                        getSchemaContext(values, eksisterendePerioder, values.metadata.harValgtAnnenInstitusjon),
                     )?.map((error: { message: string; path: string }) => (
                         <ErrorSummary.Item key={`${error.path}-${error.message}`}>
                             {error.path}: {error.message}

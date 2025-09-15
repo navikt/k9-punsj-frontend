@@ -13,11 +13,21 @@ import yup, {
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { JaNei } from 'app/models/enums';
+import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
+import { erYngreEnn4år } from 'app/utils';
 
-export const getSchemaContext = (eksisterendePerioder: IPeriode[], harValgtAnnenInstitusjon: JaNei[]) => ({
-    eksisterendePerioder,
-    harValgtAnnenInstitusjon,
-});
+export const getSchemaContext = (
+    soknad: IOLPSoknadBackend,
+    eksisterendePerioder: IPeriode[],
+    harValgtAnnenInstitusjon: JaNei[],
+) => {
+    const startdatoSN = soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode.fom;
+    return {
+        eksisterendePerioder,
+        harValgtAnnenInstitusjon,
+        erNyoppstartet: startdatoSN ? !!erYngreEnn4år(startdatoSN) : false,
+    };
+};
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
@@ -72,6 +82,7 @@ const selvstendigNaeringsdrivende = () =>
                 .when('harSøkerRegnskapsfører', {
                     is: true,
                     then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
                 })
                 .label(nb['skjema.arbeid.sn.regnskapsførernavn']),
             regnskapsførerTlf: yup
@@ -79,15 +90,17 @@ const selvstendigNaeringsdrivende = () =>
                 .when('harSøkerRegnskapsfører', {
                     is: true,
                     then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
                 })
                 .label(nb['skjema.arbeid.sn.regnskapsførertlf']),
-            harSøkerRegnskapsfører: yup.boolean(),
+            harSøkerRegnskapsfører: yup.boolean().nullable(),
             registrertIUtlandet: yup.boolean(),
             bruttoInntekt: yup
                 .string()
                 .when('$erNyoppstartet', {
                     is: true,
                     then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
                 })
                 .label(nb['skjema.sn.bruttoinntekt']),
             erVarigEndring: yup
@@ -95,6 +108,7 @@ const selvstendigNaeringsdrivende = () =>
                 .when('$erNyoppstartet', {
                     is: false,
                     then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.nullable(),
                 })
                 .label('Varig endring'),
             endringInntekt: yup
@@ -133,6 +147,7 @@ const frilanser = () =>
             .when('jobberFortsattSomFrilans', {
                 is: false,
                 then: (schema) => schema.required(),
+                otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
