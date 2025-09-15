@@ -142,8 +142,8 @@ const frilanser = () =>
 const OLPSchema = yup.object({
     metadata: yup.object({
         harValgtAnnenInstitusjon: yup.array().of(yup.string().oneOf(Object.values(JaNeiIkkeOpplyst))),
-        harUtenlandsopphold: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
-        harBoddIUtlandet: yup.string().oneOf(Object.values(JaNeiIkkeOpplyst)),
+        harUtenlandsopphold: yup.string(),
+        harBoddIUtlandet: yup.string(),
     }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,

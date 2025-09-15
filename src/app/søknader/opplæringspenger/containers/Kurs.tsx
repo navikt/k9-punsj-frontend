@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { CalendarIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
@@ -34,11 +34,9 @@ const Kurs = ({
     hentEksisterendePerioderError: boolean;
 }) => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
-    const [nyttInstitusjonsopphold, setNyttInstitusjonsopphold] = useState<boolean>(
-        Array.isArray(eksisterendePerioder) && eksisterendePerioder.length === 0,
-    );
+
     const handleAvbryt = () => {
-        setNyttInstitusjonsopphold(false);
+        setFieldValue('metadata.nyttInstitusjonsopphold', false);
         setFieldValue('kurs.kursperioder', []);
         setFieldValue('kurs.kursHolder', {
             institusjonsUuid: null,
@@ -47,7 +45,7 @@ const Kurs = ({
     };
 
     const handleLeggTilNyttInstitusjonsopphold = () => {
-        setNyttInstitusjonsopphold(true);
+        setFieldValue('metadata.nyttInstitusjonsopphold', true);
         setFieldValue('kurs.kursperioder', [initialKursperiode()]);
         setFieldValue('kurs.kursHolder', {
             institusjonsUuid: null,
@@ -81,7 +79,7 @@ const Kurs = ({
             )}
 
             <VerticalSpacer sixteenPx />
-            {nyttInstitusjonsopphold && (
+            {values.metadata.nyttInstitusjonsopphold && (
                 <Box padding="4" background="bg-subtle" borderRadius="large">
                     <div className="flex flex-col gap-4">
                         <InstitusjonSelector
@@ -162,7 +160,7 @@ const Kurs = ({
                             />
                         </div>
                         <div>
-                            {nyttInstitusjonsopphold && eksisterendePerioder.length > 0 && (
+                            {values.metadata.nyttInstitusjonsopphold && eksisterendePerioder.length > 0 && (
                                 <Button variant="secondary" size="small" onClick={handleAvbryt}>
                                     Avbryt
                                 </Button>
@@ -171,7 +169,7 @@ const Kurs = ({
                     </div>
                 </Box>
             )}
-            {!nyttInstitusjonsopphold && (
+            {!values.metadata.nyttInstitusjonsopphold && (
                 <Button
                     variant="tertiary"
                     size="small"

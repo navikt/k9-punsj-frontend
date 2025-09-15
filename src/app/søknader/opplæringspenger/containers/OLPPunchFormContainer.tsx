@@ -45,11 +45,17 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const dispatch = useDispatch();
     const intl = useIntl();
 
-    const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation({
+    const {
+        mutate: hentPerioderK9,
+        isSuccess: isSuccessPerioderK9,
+        isError: isErrorPerioderK9,
+        error: hentEksisterendePerioderError,
+    } = useMutation({
         mutationFn: ({ ident, barnIdent }: { ident: string; barnIdent: string }) =>
             hentEksisterendePerioder(ident, barnIdent),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
+    const isSettledPerioderK9 = isSuccessPerioderK9 || isErrorPerioderK9;
 
     if (!id) {
         throw Error('Mangler id');
@@ -90,7 +96,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         return <KvitteringContainer kvittering={kvittering} />;
     }
 
-    if (isPending) {
+    if (isPending || !isSettledPerioderK9) {
         return <Loader size="large" />;
     }
 
@@ -110,7 +116,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     }
     return (
         <Formik
-            initialValues={initialValues(soeknadRespons)}
+            initialValues={initialValues(soeknadRespons, eksisterendePerioder)}
             validate={(values) =>
                 schema
                     .validate(

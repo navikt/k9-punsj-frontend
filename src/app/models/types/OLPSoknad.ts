@@ -9,6 +9,7 @@ import { Periode } from './Periode';
 import { SoknadsInfo } from './SoknadsInfo';
 import { UtenlandsOpphold } from './UtenlandsOpphold';
 import { Uttak } from './Uttak';
+import { v4 } from 'uuid';
 
 export interface IOLPSoknadBackend {
     metadata?: any;
@@ -48,6 +49,29 @@ const getTrekkKravPerioder = (soknad: IOLPSoknadBackend) => {
     return undefined;
 };
 
+const initialKurs = (soknad: IOLPSoknadBackend, eksisterendePerioder: Periode[]) => {
+    // vi har en mellomlagret søknad
+    if (soknad.kurs) {
+        return new Kurs(soknad.kurs);
+    }
+
+    // vi har en ny søknad, og vi har perioder i k9
+    if (eksisterendePerioder.length > 0) {
+        return new Kurs({
+            kursHolder: { institusjonsUuid: null, holder: '' },
+            kursperioder: [],
+            reise: { reisedager: [], reisedagerBeskrivelse: '' },
+        });
+    }
+
+    // vi har en ny søknad, og ingen perioder i k9
+    return new Kurs({
+        kursHolder: { institusjonsUuid: null, holder: '' },
+        kursperioder: [{ periode: new Periode({ fom: '', tom: '' }), key: v4() }],
+        reise: { reisedager: [], reisedagerBeskrivelse: '' },
+    });
+};
+
 export interface IOppholdsLand {
     land?: string;
 }
@@ -59,6 +83,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         // checkbox komponenten er array, men vi har kun en verdi
         harValgtAnnenInstitusjon: Array<JaNei>;
         skalOppgiReise: JaNei;
+        nyttInstitusjonsopphold: boolean;
     };
     arbeidstid: Arbeidstid;
 
@@ -96,12 +121,13 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     uttak: Uttak[] | null;
 
-    constructor(soknad: IOLPSoknadBackend) {
+    constructor(soknad: IOLPSoknadBackend, eksisterendePerioder: Periode[] = []) {
         this.metadata = soknad.metadata || {
             harBoddIUtlandet: '',
             harUtenlandsopphold: '',
             harValgtAnnenInstitusjon: [],
             skalOppgiReise: '',
+            nyttInstitusjonsopphold: soknad.kurs || eksisterendePerioder.length === 0,
         };
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});
@@ -109,13 +135,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.bosteder = (soknad.bosteder || []).map((m) => new UtenlandsOpphold(m));
         this.journalposter = soknad.journalposter || [];
         this.klokkeslett = soknad.klokkeslett || '';
-        this.kurs = new Kurs(
-            soknad.kurs || {
-                kursHolder: { institusjonsUuid: null, holder: '' },
-                kursperioder: [],
-                reise: { reisedager: [], reisedagerBeskrivelse: '' },
-            },
-        );
+        this.kurs = initialKurs(soknad, eksisterendePerioder);
         this.lovbestemtFerie = (soknad.lovbestemtFerie || []).map((p) => new Periode(p));
         this.mottattDato = soknad.mottattDato || '';
         this.omsorg = new Omsorg(soknad.omsorg || {});
