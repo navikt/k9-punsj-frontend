@@ -77,7 +77,6 @@ const Kurs = ({
                     </VStack>
                 </Box>
             )}
-
             <VerticalSpacer sixteenPx />
             {values.metadata.nyttInstitusjonsopphold && (
                 <Box padding="4" background="bg-subtle" borderRadius="large">
@@ -128,10 +127,10 @@ const Kurs = ({
                                                             name={`kurs.kursperioder[${index}].periode.tom`}
                                                             size="small"
                                                             fromDate={
-                                                                new Date(values.kurs.kursperioder[index].periode.fom)
+                                                                values.kurs.kursperioder[index].periode.fom ? new Date(values.kurs.kursperioder[index].periode.fom) : undefined
                                                             }
                                                             defaultMonth={
-                                                                new Date(values.kurs.kursperioder[index].periode.fom)
+                                                                values.kurs.kursperioder[index].periode.fom ? new Date(values.kurs.kursperioder[index].periode.fom) : undefined
                                                             }
                                                         />
                                                     </div>
