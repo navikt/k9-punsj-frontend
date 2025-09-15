@@ -50,6 +50,7 @@ const NewDateInput: React.FC<Props> = ({
     toDate,
     dataTestId,
     size,
+    defaultMonth,
 }) => {
     const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
@@ -71,6 +72,7 @@ const NewDateInput: React.FC<Props> = ({
 
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
         locale,
+        defaultMonth,
         onDateChange: onDateChange,
         onValidate: (val) => {
             setIsInvalidDate(!val.isValidDate && (!noValidateTomtFelt || !val.isEmpty));
