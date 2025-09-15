@@ -2,7 +2,7 @@ import { berikMedKey } from 'app/utils/listeUtils';
 import { Periode } from './Periode';
 
 export interface Kursholder {
-    institusjonsUuid?: string;
+    institusjonsUuid?: string | null;
     holder: string;
 }
 
