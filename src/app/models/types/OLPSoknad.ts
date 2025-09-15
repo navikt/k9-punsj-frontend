@@ -111,7 +111,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.klokkeslett = soknad.klokkeslett || '';
         this.kurs = new Kurs(
             soknad.kurs || {
-                kursHolder: { institusjonsUuid: '', holder: '' },
+                kursHolder: { institusjonsUuid: null, holder: '' },
                 kursperioder: [],
                 reise: { reisedager: [], reisedagerBeskrivelse: '' },
             },

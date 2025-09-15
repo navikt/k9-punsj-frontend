@@ -162,12 +162,7 @@ const OLPSchema = yup.object({
     }),
     kurs: yup.object({
         kursHolder: yup.object({
-            institusjonsUuid: yup.string().when(['$eksisterendePerioder', '$harValgtAnnenInstitusjon'], {
-                is: (value: IPeriode[], harValgtAnnenInstitusjon: JaNeiIkkeOpplyst[]) =>
-                    value.length === 0 && !harValgtAnnenInstitusjon.includes(JaNeiIkkeOpplyst.JA),
-                then: (schema) => schema.required(),
-                otherwise: (schema) => schema.nullable(),
-            }),
+            institusjonsUuid: yup.string().nullable(),
             holder: yup
                 .string()
                 .when('$eksisterendePerioder', {

@@ -41,7 +41,7 @@ const Kurs = ({
         setNyttInstitusjonsopphold(false);
         setFieldValue('kurs.kursperioder', []);
         setFieldValue('kurs.kursHolder', {
-            institusjonsUuid: '',
+            institusjonsUuid: null,
             holder: '',
         });
     };
@@ -50,7 +50,7 @@ const Kurs = ({
         setNyttInstitusjonsopphold(true);
         setFieldValue('kurs.kursperioder', [initialKursperiode()]);
         setFieldValue('kurs.kursHolder', {
-            institusjonsUuid: '',
+            institusjonsUuid: null,
             holder: '',
         });
     };
@@ -99,7 +99,7 @@ const Kurs = ({
                                     setFieldValue('metadata.harValgtAnnenInstitusjon', [JaNei.JA]);
                                 }
                                 setFieldValue(kursholder, {
-                                    institusjonsUuid: '',
+                                    institusjonsUuid: null,
                                     holder: '',
                                 });
                             }}
