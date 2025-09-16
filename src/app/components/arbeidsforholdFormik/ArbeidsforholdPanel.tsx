@@ -50,7 +50,6 @@ interface ArbeidsforholdPanelProps {
 const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
 
-    const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     const getSoknadsperiode = () => {
@@ -110,7 +109,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 )}
             </Field>
 
-            <VerticalSpacer eightPx />
+            <VerticalSpacer sixteenPx />
 
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                 <DatoInputFormikNew
@@ -166,6 +165,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         )}].virksomhetstyper`
                     )} */}
 
+                <VerticalSpacer sixteenPx />
+
                 <div className="generelleopplysiniger">
                     <div className="flex flex-wrap">
                         <TextFieldFormik
@@ -175,6 +176,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         />
                     </div>
                 </div>
+
+                <VerticalSpacer sixteenPx />
 
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
@@ -187,6 +190,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         />
                     )}
                 </Field>
+
+                <VerticalSpacer sixteenPx />
 
                 {!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="flex flex-wrap">
@@ -202,61 +207,65 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
-                        {({ field, form }: FieldProps<boolean>) => (
+                        {({ field, form, meta }: FieldProps<string>) => (
                             <CountrySelect
                                 selectedcountry={opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.landkode || ''}
                                 label={intlHelper(intl, 'skjema.sn.registrertLand')}
                                 onChange={(event) => {
                                     form.setFieldValue(field.name, event.target.value);
+                                    form.setFieldTouched(field.name, true);
                                 }}
+                                error={meta.touched && meta.error}
                             />
                         )}
                     </Field>
                 )}
 
+                <VerticalSpacer sixteenPx />
+
                 <RadioPanelGruppeFormik
                     legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                    checked={
-                        harRegnskapsfører || opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn
-                            ? 'ja'
-                            : 'nei'
-                    }
-                    name="harRegnskapsfører"
+                    checked={values.metadata.harSøkerRegnskapsfører === JaNei.JA ? JaNei.JA : JaNei.NEI}
+                    name="metadata.harSøkerRegnskapsfører"
                     options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                     onChange={(e, value) => {
-                        setHasRegnskapsfører(value === 'ja');
-                        if (value === 'ja') {
-                            setFieldValue(
-                                'opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn',
-                                '',
-                            );
-                            setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf', '');
-                        }
+                        setFieldValue('metadata.harSøkerRegnskapsfører', value);
+                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn', '');
+                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf', '');
                     }}
                 />
 
-                {harRegnskapsfører && (
-                    <div className="generelleopplysiniger">
-                        <div className="flex flex-wrap">
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
-                                className="regnskapsførerNavn"
-                            />
-                        </div>
+                {values.metadata.harSøkerRegnskapsfører === JaNei.JA && (
+                    <>
+                        <VerticalSpacer sixteenPx />
+                        <div className="generelleopplysiniger">
+                            <div className="flex flex-wrap">
+                                <TextFieldFormik
+                                    label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
+                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
+                                    className="regnskapsførerNavn"
+                                />
+                            </div>
 
-                        <div className="flex flex-wrap">
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
-                                className="sn-regskasførertlf"
-                                type="number"
-                            />
+                            <VerticalSpacer sixteenPx />
+
+                            <div className="flex flex-wrap">
+                                <TextFieldFormik
+                                    label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
+                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
+                                    className="sn-regskasførertlf"
+                                    type="number"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
 
+                <VerticalSpacer sixteenPx />
+
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+
+                <VerticalSpacer sixteenPx />
 
                 <div className="sn-startdatocontainer">
                     <DatoInputFormikNew
@@ -276,28 +285,36 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     />
                 </div>
 
+                <VerticalSpacer sixteenPx />
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <TextFieldFormik
-                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
-                            className="bruttoinntekt"
-                        />
+                        <>
+                            <TextFieldFormik
+                                label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
+                                className="bruttoinntekt"
+                            />
+                            <VerticalSpacer sixteenPx />
+                        </>
                     )}
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erEldreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
-                            {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
-                                    legend={intlHelper(intl, 'skjema.sn.varigendring')}
-                                    checked={field.value ? 'ja' : 'nei'}
-                                    name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
-                                />
-                            )}
-                        </Field>
+                        <>
+                            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
+                                {({ field, form }: FieldProps<boolean>) => (
+                                    <RadioPanelGruppeFormik
+                                        legend={intlHelper(intl, 'skjema.sn.varigendring')}
+                                        checked={field.value ? 'ja' : 'nei'}
+                                        name={field.name}
+                                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                        onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                                    />
+                                )}
+                            </Field>
+                            <VerticalSpacer sixteenPx />
+                        </>
                     )}
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
@@ -309,7 +326,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                             />
                         </div>
-
+                        <VerticalSpacer sixteenPx />
                         <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
@@ -318,15 +335,15 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 type="number"
                             />
                         </div>
-
+                        <VerticalSpacer sixteenPx />
                         <TextAreaFormik
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             className="endringbegrunnelse"
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
                         />
+                        <VerticalSpacer sixteenPx />
                     </>
                 )}
-                <VerticalSpacer eightPx />
 
                 <div className="arbeidstidInfo">
                     <hr />
@@ -337,7 +354,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </Alert>
                 </div>
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
                     {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
@@ -388,7 +405,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     checked={values.arbeidstid?.arbeidstakerList?.length > 0}
                 />
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 {!!values.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
@@ -414,7 +431,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     checked={!!values.opptjeningAktivitet?.frilanser}
                 />
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 {!!values.opptjeningAktivitet.frilanser && (
                     <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
@@ -439,10 +456,12 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                     'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
                                     new ArbeidstidInfo({}),
                                 );
+                                setFieldValue('metadata.harSøkerRegnskapsfører', JaNei.NEI);
                             }
                         } else {
                             setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende', null);
                             setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo', null);
+                            setFieldValue('metadata.harSøkerRegnskapsfører', JaNei.NEI);
                         }
                     }}
                     checked={!!values.opptjeningAktivitet?.selvstendigNaeringsdrivende}

@@ -84,6 +84,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
         harValgtAnnenInstitusjon: Array<JaNei>;
         skalOppgiReise: JaNei;
         nyttInstitusjonsopphold: boolean;
+        harSøkerRegnskapsfører: JaNei;
     };
     arbeidstid: Arbeidstid;
 
@@ -128,6 +129,7 @@ export class OLPSoknad implements IOLPSoknadBackend {
             harValgtAnnenInstitusjon: [],
             skalOppgiReise: '',
             nyttInstitusjonsopphold: soknad.kurs || eksisterendePerioder.length === 0,
+            harSøkerRegnskapsfører: JaNei.NEI,
         };
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});

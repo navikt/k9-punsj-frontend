@@ -16,9 +16,10 @@ interface CheckboxGroupFormikProps {
 }
 
 const CheckboxGroupFormik = ({ name, legend, checkboxes, hideLegend }: CheckboxGroupFormikProps) => {
-    const [, meta, helpers] = useField({ name });
+    const [field, meta, helpers] = useField({ name });
     return (
         <CheckboxGroup
+            value={field.value}
             legend={legend}
             onChange={(v) => helpers.setValue(v)}
             error={meta.error ?? null}
