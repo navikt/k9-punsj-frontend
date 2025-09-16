@@ -90,7 +90,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
         });
 
     const frilanserperioder = () => (
-        <>
+        <div>
             <DatoInputFormikNew
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
@@ -108,14 +108,22 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     />
                 )}
             </Field>
-
             <VerticalSpacer sixteenPx />
-
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                 <DatoInputFormikNew
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    fromDate={
+                        values.opptjeningAktivitet.frilanser?.startdato
+                            ? new Date(values.opptjeningAktivitet.frilanser.startdato)
+                            : undefined
+                    }
+                    defaultMonth={
+                        values.opptjeningAktivitet.frilanser?.startdato
+                            ? new Date(values.opptjeningAktivitet.frilanser.startdato)
+                            : undefined
+                    }
                 />
             )}
 
@@ -143,7 +151,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </Field>
                 </>
             )}
-        </>
+        </div>
     );
 
     const selvstendigperioder = () => {
@@ -282,6 +290,16 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        fromDate={
+                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
+                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
+                        defaultMonth={
+                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
+                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
                     />
                 </div>
 

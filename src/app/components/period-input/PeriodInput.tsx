@@ -97,6 +97,8 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         // limitations={limitations}
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         dataTestId="tom"
+                        fromDate={periode.fom ? new Date(periode.fom) : undefined}
+                        defaultMonth={periode.fom ? new Date(periode.fom) : undefined}
                     />
                 </div>
             </HStack>

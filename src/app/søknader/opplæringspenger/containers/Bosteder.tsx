@@ -67,6 +67,16 @@ const Bosteder: React.FC = () => {
                                         <DatoInputFormikNew
                                             label="Til og med"
                                             name={`bosteder[${index}].periode.tom`}
+                                            fromDate={
+                                                values.bosteder[index].periode.fom
+                                                    ? new Date(values.bosteder[index].periode.fom)
+                                                    : undefined
+                                            }
+                                            defaultMonth={
+                                                values.bosteder[index].periode.fom
+                                                    ? new Date(values.bosteder[index].periode.fom)
+                                                    : undefined
+                                            }
                                         />
 
                                         {array.length > 1 && (
