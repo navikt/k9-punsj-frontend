@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
-import { PersonPlusIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
@@ -64,7 +64,7 @@ const UtenlandsoppholdContainer = () => {
                                 variant="tertiary"
                                 size="small"
                                 onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<PersonPlusIcon />}
+                                icon={<PlusCircleIcon />}
                             >
                                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
                             </Button>

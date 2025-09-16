@@ -23,7 +23,20 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
                     <DatoInputFormikNew label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
-                    <DatoInputFormikNew label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
+                    <DatoInputFormikNew 
+                        label="Til og med" 
+                        name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`}
+                        fromDate={
+                            values.utenlandsopphold[fieldArrayIndex].periode.fom
+                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
+                                : undefined
+                        }
+                        defaultMonth={
+                            values.utenlandsopphold[fieldArrayIndex].periode.fom
+                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
+                                : undefined
+                        }
+                    />
                 </div>
                 {values.utenlandsopphold.length > 1 && (
                     <div className="block content-center">
