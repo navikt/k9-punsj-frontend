@@ -19,6 +19,7 @@ export const CountrySelect = (props: Props) => {
 
     return (
         <Select {...props} value={selectedcountry}>
+            <option value="">Velg land</option>
             {countryList.map((country) => (
                 <option key={country.code} value={country.code}>
                     {country.name}

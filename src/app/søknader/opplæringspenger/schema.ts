@@ -12,20 +12,17 @@ import yup, {
 
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import { JaNei } from 'app/models/enums';
 import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 import { erYngreEnn4år } from 'app/utils';
+import { JaNei } from 'app/models/enums';
 
-export const getSchemaContext = (
-    soknad: IOLPSoknadBackend,
-    eksisterendePerioder: IPeriode[],
-    harValgtAnnenInstitusjon: JaNei[],
-) => {
+export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder: IPeriode[]) => {
     const startdatoSN = soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode.fom;
     return {
         eksisterendePerioder,
-        harValgtAnnenInstitusjon,
+        harValgtAnnenInstitusjon: soknad.metadata.harValgtAnnenInstitusjon,
         erNyoppstartet: startdatoSN ? !!erYngreEnn4år(startdatoSN) : false,
+        harSøkerRegnskapsfører: soknad.metadata.harSøkerRegnskapsfører,
     };
 };
 
@@ -53,8 +50,8 @@ const selvstendigNaeringsdrivende = () =>
         virksomhetNavn: yup.string().required().label('Virksomhetsnavn'),
         organisasjonsnummer: yup
             .string()
-            .when('$registrertIUtlandet', {
-                is: (value: boolean) => !value,
+            .when('info.registrertIUtlandet', {
+                is: (value: boolean) => value === false,
                 then: (schema) => schema.required(),
                 otherwise: (schema) => schema,
             })
@@ -65,35 +62,30 @@ const selvstendigNaeringsdrivende = () =>
                 tom: yup.string().label('Til og med'),
             }),
             virksomhetstyper: yup.array().of(yup.string()).required().label('Virksomhetstype'),
-            erFiskerPåBladB: yup.string().when('virksomhetstyper', {
-                is: 'Fisker',
-                then: (schema) => schema.required(),
-            }),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', {
                     is: true,
-                    then: (schema) => schema.required(),
+                    then: (schema) => schema.required().min(1, 'Land er påkrevd'),
                     otherwise: (schema) => schema.nullable(),
                 })
                 .label('Land'),
             regnskapsførerNavn: yup
                 .string()
-                .when('harSøkerRegnskapsfører', {
-                    is: true,
+                .when('$harSøkerRegnskapsfører', {
+                    is: JaNei.JA,
                     then: (schema) => schema.required(),
                     otherwise: (schema) => schema.nullable(),
                 })
                 .label(nb['skjema.arbeid.sn.regnskapsførernavn']),
             regnskapsførerTlf: yup
                 .string()
-                .when('harSøkerRegnskapsfører', {
-                    is: true,
+                .when('$harSøkerRegnskapsfører', {
+                    is: JaNei.JA,
                     then: (schema) => schema.required(),
                     otherwise: (schema) => schema.nullable(),
                 })
                 .label(nb['skjema.arbeid.sn.regnskapsførertlf']),
-            harSøkerRegnskapsfører: yup.boolean().nullable(),
             registrertIUtlandet: yup.boolean(),
             bruttoInntekt: yup
                 .string()
@@ -159,6 +151,7 @@ const OLPSchema = yup.object({
         harValgtAnnenInstitusjon: yup.array().of(yup.string().oneOf(Object.values(JaNeiIkkeOpplyst))),
         harUtenlandsopphold: yup.string(),
         harBoddIUtlandet: yup.string(),
+        harSøkerRegnskapsfører: yup.string(),
     }),
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,

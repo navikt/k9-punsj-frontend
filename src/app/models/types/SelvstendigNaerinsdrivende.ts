@@ -51,7 +51,7 @@ export class SelvstendigNaerinsdrivende implements Required<Periodeinfo<ISelvste
         this.landkode = selvstendigNaeringsdrivende.landkode || null;
         this.regnskapsførerNavn = selvstendigNaeringsdrivende.regnskapsførerNavn || null;
         this.regnskapsførerTlf = selvstendigNaeringsdrivende.regnskapsførerTlf || null;
-        this.registrertIUtlandet = selvstendigNaeringsdrivende.registrertIUtlandet || false;
+        this.registrertIUtlandet = selvstendigNaeringsdrivende.registrertIUtlandet ?? true;
         this.bruttoInntekt = selvstendigNaeringsdrivende.bruttoInntekt || null;
         this.erNyoppstartet = selvstendigNaeringsdrivende.erNyoppstartet || false;
         this.erVarigEndring = selvstendigNaeringsdrivende.erVarigEndring || false;

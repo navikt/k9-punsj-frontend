@@ -123,7 +123,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                         { ...values },
                         {
                             abortEarly: false,
-                            context: getSchemaContext(soeknadRespons, eksisterendePerioder, values.metadata.harValgtAnnenInstitusjon),
+                            context: getSchemaContext(soeknadRespons, eksisterendePerioder),
                         },
                     )
                     .then(() => ({}))
