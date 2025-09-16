@@ -20,9 +20,8 @@ export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder
     const startdatoSN = soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode.fom;
     return {
         eksisterendePerioder,
-        harValgtAnnenInstitusjon: soknad.metadata.harValgtAnnenInstitusjon,
         erNyoppstartet: startdatoSN ? !!erYngreEnn4år(startdatoSN) : false,
-        harSøkerRegnskapsfører: soknad.metadata.harSøkerRegnskapsfører,
+        harSøkerRegnskapsfører: soknad?.metadata?.harSøkerRegnskapsfører,
     };
 };
 
