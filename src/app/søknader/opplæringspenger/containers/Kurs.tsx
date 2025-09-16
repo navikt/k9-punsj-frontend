@@ -64,7 +64,7 @@ const Kurs = ({
                 </Alert>
             )}
 
-            {eksisterendePerioder.length > 0 && (
+            {eksisterendePerioder.length > 0 ? (
                 <Box className="bg-bg-subtle rounded-lg p-4 mt-[8px]">
                     <VStack gap="4">
                         <Label size="medium">Eksisterende søknadsperioder</Label>
@@ -76,6 +76,14 @@ const Kurs = ({
                         ))}
                     </VStack>
                 </Box>
+            ) : (
+                <>
+                    <VerticalSpacer sixteenPx />
+                    <Alert size="small" variant="info">
+                        Det finnes ingen eksisterende søknadsperioder. Legg til institusjon og perioden søker er på
+                        opplæring, inkludert eventuelle reisedager.
+                    </Alert>
+                </>
             )}
             <VerticalSpacer sixteenPx />
             {values.metadata.nyttInstitusjonsopphold && (
@@ -127,10 +135,18 @@ const Kurs = ({
                                                             name={`kurs.kursperioder[${index}].periode.tom`}
                                                             size="small"
                                                             fromDate={
-                                                                values.kurs.kursperioder[index].periode.fom ? new Date(values.kurs.kursperioder[index].periode.fom) : undefined
+                                                                values.kurs.kursperioder[index].periode.fom
+                                                                    ? new Date(
+                                                                          values.kurs.kursperioder[index].periode.fom,
+                                                                      )
+                                                                    : undefined
                                                             }
                                                             defaultMonth={
-                                                                values.kurs.kursperioder[index].periode.fom ? new Date(values.kurs.kursperioder[index].periode.fom) : undefined
+                                                                values.kurs.kursperioder[index].periode.fom
+                                                                    ? new Date(
+                                                                          values.kurs.kursperioder[index].periode.fom,
+                                                                      )
+                                                                    : undefined
                                                             }
                                                         />
                                                     </div>
