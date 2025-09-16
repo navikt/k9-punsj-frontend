@@ -67,6 +67,10 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         }
     };
 
+    // Vi sjekker om fom er en gyldig dato
+    const isValidFromDate = periode.fom && new Date(periode.fom).toString() !== 'Invalid Date';
+    const fromDateValue = isValidFromDate ? new Date(periode.fom!) : undefined;
+
     return (
         <Fieldset error={errorMessage} className={className} legend={undefined}>
             <HStack wrap gap="4" justify="center">
@@ -97,8 +101,8 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         // limitations={limitations}
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         dataTestId="tom"
-                        fromDate={periode.fom ? new Date(periode.fom) : undefined}
-                        defaultMonth={periode.fom ? new Date(periode.fom) : undefined}
+                        fromDate={fromDateValue}
+                        defaultMonth={fromDateValue}
                     />
                 </div>
             </HStack>
