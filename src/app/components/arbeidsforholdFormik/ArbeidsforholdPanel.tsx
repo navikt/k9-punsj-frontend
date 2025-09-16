@@ -183,10 +183,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
-                            checked={field.value ? 'nei' : 'ja'}
+                            checked={field.value ? JaNei.NEI : JaNei.JA}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                            onChange={(e, value) => form.setFieldValue(field.name, value !== 'ja')}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA ? false : true)}
                         />
                     )}
                 </Field>
