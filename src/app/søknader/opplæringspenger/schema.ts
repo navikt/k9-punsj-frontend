@@ -1,6 +1,7 @@
 import { IPeriode } from 'app/models/types';
 import yup, {
-    dato,
+    datoErGyldig,
+    datoErIkkeIHelg,
     fomDato,
     passertDato,
     passertKlokkeslettPaaMottattDato,
@@ -185,16 +186,25 @@ const OLPSchema = yup.object({
                 schema.of(
                     yup.object({
                         periode: yup.object({
-                            fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', dato.test),
+                            fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', datoErGyldig.test),
                             tom: tomDato
-                                .test('tom-not-empty', 'Til og med må være gyldig dato', dato.test)
+                                .test(datoErGyldig)
                                 .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
                         }),
                     }),
                 ),
         }),
         reise: yup.object({
-            reisedager: yup.array().of(yup.string().required().label('Dato')),
+            reisedager: yup
+                .array()
+                .of(
+                    yup
+                        .string()
+                        .required()
+                        .label('Dato')
+                        .test(datoErGyldig)
+                        .test({ test: datoErIkkeIHelg, message: 'Reisedagen kan ikke være i helg' }),
+                ),
             reisedagerBeskrivelse: yup.string().when('reisedager', {
                 is: (reisedager: string[]) => reisedager?.length > 0,
                 then: (schema) => schema.required().label('Beskrivelse'),

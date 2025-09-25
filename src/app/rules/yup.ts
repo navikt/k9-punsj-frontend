@@ -77,13 +77,19 @@ export const identifikatorAnnenPart = yup.object().shape({
         }),
 });
 
-export const dato = {
+export const datoErGyldig = {
     test: (v?: string) => {
         if (!v) return false;
         return dayjs(v).isValid();
     },
     message: 'Må ha en gyldig dato',
 };
+
+export const datoErIkkeIHelg = (v?: string) => {
+    if (!v) return false;
+    return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
+};
+
 export const periode = () =>
     yup.object().shape({
         fom: yup.string().required().label('Fra og med'),
