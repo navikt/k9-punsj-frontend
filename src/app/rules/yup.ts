@@ -90,6 +90,13 @@ export const datoErIkkeIHelg = (v?: string) => {
     return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
 };
 
+export const periodeErIkkeKunHelg = ({ fom, tom }: { fom?: string; tom?: string }) => {
+    if (!fom || !tom) return false;
+    const totalDays = dayjs(tom).diff(dayjs(fom), 'day');
+    const kunHelg = totalDays < 3 && !datoErIkkeIHelg(fom) && !datoErIkkeIHelg(tom);
+    return !kunHelg;
+};
+
 export const periode = () =>
     yup.object().shape({
         fom: yup.string().required().label('Fra og med'),
