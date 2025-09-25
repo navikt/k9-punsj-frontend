@@ -1,10 +1,12 @@
 import { IPeriode } from 'app/models/types';
 import yup, {
-    dato,
+    datoErGyldig,
+    datoErIkkeIHelg,
     fomDato,
     passertDato,
     passertKlokkeslettPaaMottattDato,
     periode,
+    periodeErIkkeKunHelg,
     tomDato,
     tomEtterFom,
     utenlandsperiode,
@@ -184,17 +186,28 @@ const OLPSchema = yup.object({
             then: (schema) =>
                 schema.of(
                     yup.object({
-                        periode: yup.object({
-                            fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', dato.test),
-                            tom: tomDato
-                                .test('tom-not-empty', 'Til og med må være gyldig dato', dato.test)
-                                .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
-                        }),
+                        periode: yup
+                            .object({
+                                fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', datoErGyldig.test),
+                                tom: tomDato
+                                    .test(datoErGyldig)
+                                    .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
+                            })
+                            .test({ test: periodeErIkkeKunHelg, message: 'Periode kan ikke være kun helg' }),
                     }),
                 ),
         }),
         reise: yup.object({
-            reisedager: yup.array().of(yup.string().required().label('Dato')),
+            reisedager: yup
+                .array()
+                .of(
+                    yup
+                        .string()
+                        .required()
+                        .label('Dato')
+                        .test(datoErGyldig)
+                        .test({ test: datoErIkkeIHelg, message: 'Reisedagen kan ikke være i helg' }),
+                ),
             reisedagerBeskrivelse: yup.string().when('reisedager', {
                 is: (reisedager: string[]) => reisedager?.length > 0,
                 then: (schema) => schema.required().label('Beskrivelse'),

@@ -376,10 +376,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                 <div>
                     <h3>Perioder som trekkes</h3>
                     <hr className={classNames('linje')} />
-                    <VisningAvPerioderSoknadKvittering
-                        perioder={ytelse.trekkKravPerioder}
-                        tittel={['skjema.periode.overskrift']}
-                    />
+                    {ytelse.trekkKravPerioder.map((periode) => periodToFormattedString(periode)).join(', ')}
                 </div>
             )}
         </div>

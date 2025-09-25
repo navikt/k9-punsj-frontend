@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Button } from '@navikt/ds-react';
+import { Box, Button, Label } from '@navikt/ds-react';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -28,6 +28,9 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
 
     return (
         <Box padding="4" borderRadius="large" className="periodepanel">
+            <Label size="small">
+                Hvilke perioder vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
+            </Label>
             <FieldArray
                 name={fieldName}
                 render={(arrayHelpers) => (
