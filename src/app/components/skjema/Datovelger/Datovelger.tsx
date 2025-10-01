@@ -59,6 +59,7 @@ const Datovelger = ({
                 showWeekNumber={true}
                 mode="single"
                 inputDisabled={disabled}
+                onSelect={onBlur}
                 dropdownCaption={true}
                 fromDate={fromDate || fromDateDefault}
                 toDate={toDate || toDateDefault}
