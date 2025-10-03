@@ -1016,7 +1016,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         handleArbeidsforholdChange={this.handleArbeidsforholdChange}
                         getCheckedValueArbeid={this.getCheckedValueArbeid}
                         soknad={soknad}
-                        eksisterendePerioder={eksisterendePerioder}
+                        søknadsperioder={[...eksisterendePerioder, ...(soknad?.soeknadsperiode || [])]}
                         initialArbeidstaker={this.initialArbeidstaker}
                         updateSoknad={this.updateSoknad}
                         updateSoknadState={this.updateSoknadState}

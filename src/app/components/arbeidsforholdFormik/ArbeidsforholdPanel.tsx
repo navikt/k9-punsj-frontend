@@ -39,25 +39,16 @@ const erEldreEnn4år = (dato: string) => {
     return new Date(dato) < fireAarSiden;
 };
 
-const initialPeriode: IPeriode = { fom: '', tom: '' };
-
 interface ArbeidsforholdPanelProps {
     isOpen: boolean;
     onPanelClick: () => void;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
 }
 
-const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: ArbeidsforholdPanelProps): JSX.Element => {
+const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
 
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
-
-    const getSoknadsperiode = () => {
-        if (values?.soeknadsperiode && values.soeknadsperiode.length > 0) {
-            return values.soeknadsperiode;
-        }
-        return [initialPeriode];
-    };
 
     const initialArbeidstaker = () =>
         new Arbeidstaker({
@@ -76,7 +67,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
     const initialSelvstedigNæringsdrivende = () =>
         new SelvstendigNaerinsdrivende({
-            periode: getSoknadsperiode()[0],
+            periode: { fom: '', tom: '' },
             virksomhetstyper: [],
             registrertIUtlandet: false,
             landkode: '',
@@ -140,8 +131,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     <Field name="arbeidstid.frilanserArbeidstidInfo.perioder">
                         {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                             <ArbeidstidKalender
-                                nyeSoknadsperioder={values.soeknadsperiode}
-                                eksisterendeSoknadsperioder={eksisterendePerioder}
+                                søknadsperioder={søknadsperioder}
                                 updateSoknad={(perioder) => {
                                     form.setFieldValue(field.name, [...perioder]);
                                 }}
@@ -377,8 +367,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
                     {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                         <ArbeidstidKalender
-                            nyeSoknadsperioder={values.soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
                                 form.setFieldValue(field.name, [...perioder]);
                             }}
@@ -427,8 +416,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
                 {!!values.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
-                        eksisterendePerioder={eksisterendePerioder}
                         initialArbeidstaker={initialArbeidstaker()}
+                        søknadsperioder={søknadsperioder}
                     />
                 )}
 

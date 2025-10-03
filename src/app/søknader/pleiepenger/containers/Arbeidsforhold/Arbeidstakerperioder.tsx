@@ -23,7 +23,7 @@ type ItemInfo = any;
 
 interface Props {
     soknad: IPSBSoknad;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
@@ -34,7 +34,7 @@ interface Props {
 const Arbeidstakerperioder = ({
     soknad,
     initialArbeidstaker,
-    eksisterendePerioder,
+    søknadsperioder,
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
@@ -42,10 +42,10 @@ const Arbeidstakerperioder = ({
 }: Props): JSX.Element => {
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
 
-    const { arbeidstid, soekerId, soeknadsperiode } = soknad;
+    const { arbeidstid, soekerId } = soknad;
 
-    const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
-    const tom = getMaxDatoFraSøknadsperioder(soeknadsperiode);
+    const fom = getMinDatoFraSøknadsperioder(søknadsperioder);
+    const tom = getMaxDatoFraSøknadsperioder(søknadsperioder);
 
     useEffect(() => {
         if (soekerId) {
@@ -171,8 +171,7 @@ const Arbeidstakerperioder = ({
                             getErrorMessage={getErrorMessage}
                             arbeidsgivere={arbeidsgivere}
                             harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                            nyeSoknadsperioder={soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                         />
 
                         <UhaanderteFeilmeldinger

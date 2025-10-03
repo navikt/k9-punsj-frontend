@@ -112,8 +112,6 @@ export class OLPSoknad implements IOLPSoknadBackend {
 
     soeknadId: string;
 
-    soeknadsperiode: Periode[] | null;
-
     soknadsinfo: SoknadsInfo;
 
     trekkKravPerioder?: Periode[];
@@ -144,10 +142,6 @@ export class OLPSoknad implements IOLPSoknadBackend {
         this.opptjeningAktivitet = new OpptjeningAktivitet(soknad.opptjeningAktivitet || {});
         this.soekerId = soknad.soekerId || '';
         this.soeknadId = soknad.soeknadId || '';
-        this.soeknadsperiode =
-            soknad.soeknadsperiode && soknad.soeknadsperiode.length > 0
-                ? soknad.soeknadsperiode.map((s) => new Periode(s))
-                : null;
         this.soknadsinfo = new SoknadsInfo(soknad.soknadsinfo || {});
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.utenlandsopphold = (soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u));
