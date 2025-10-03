@@ -14,7 +14,8 @@ import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from '../../VerticalSpacer';
 import { CountrySelect } from '../../country-select/CountrySelect';
 import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
-import { Arbeidstaker, IPeriode } from '../../../models/types';
+import { Arbeidstaker } from '../../../models/types';
+import { IPeriode } from '../../../models/types/Periode';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
@@ -37,7 +38,7 @@ interface ArbeidsforholdPanelProps {
     handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
     getCheckedValueArbeid: (af: Arbeidsforhold) => boolean;
     soknad: IPLSSoknad;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => void;
@@ -53,7 +54,7 @@ const ArbeidsforholdPanel = ({
     handleArbeidsforholdChange,
     getCheckedValueArbeid,
     soknad,
-    eksisterendePerioder,
+    søknadsperioder,
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
@@ -64,7 +65,6 @@ const ArbeidsforholdPanel = ({
 }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
-    const soeknadsperiode = soknad?.soeknadsperiode || [];
 
     const limitFromDate = new Date();
     limitFromDate.setFullYear(limitFromDate.getFullYear() - 60);
@@ -163,8 +163,7 @@ const ArbeidsforholdPanel = ({
                         <VerticalSpacer eightPx />
 
                         <ArbeidstidKalender
-                            nyeSoknadsperioder={soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
                                 updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
                             }}
@@ -767,8 +766,7 @@ const ArbeidsforholdPanel = ({
                 {arbeidstidInformasjon()}
                 <VerticalSpacer eightPx />
                 <ArbeidstidKalender
-                    nyeSoknadsperioder={soeknadsperiode}
-                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                    søknadsperioder={søknadsperioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
                             arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
@@ -814,7 +812,7 @@ const ArbeidsforholdPanel = ({
                 {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
                         soknad={soknad}
-                        eksisterendeSoknadsperioder={eksisterendePerioder}
+                        søknadsperioder={søknadsperioder}
                         initialArbeidstaker={initialArbeidstaker}
                         updateSoknad={updateSoknad}
                         updateSoknadState={updateSoknadState}

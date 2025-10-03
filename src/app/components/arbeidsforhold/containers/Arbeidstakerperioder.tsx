@@ -18,7 +18,7 @@ type ItemInfo = any;
 
 interface Props {
     soknad: IPLSSoknad;
-    eksisterendeSoknadsperioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPLSSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPLSSoknad>, showStatus?: boolean) => void;
@@ -28,7 +28,7 @@ interface Props {
 
 const Arbeidstakerperioder = ({
     soknad,
-    eksisterendeSoknadsperioder,
+    søknadsperioder,
     initialArbeidstaker,
     updateSoknad,
     updateSoknadState,
@@ -150,8 +150,7 @@ const Arbeidstakerperioder = ({
                             søkerId={soknad.soekerId}
                             arbeidstaker={currentItem as Arbeidstaker}
                             listeelementindex={currentItemIndex}
-                            nyeSoknadsperioder={soknad.soeknadsperiode || []}
-                            eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                            søknadsperioder={søknadsperioder}
                             updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
                                 editSoknad(editItem(currentItemIndex, info))
                             }

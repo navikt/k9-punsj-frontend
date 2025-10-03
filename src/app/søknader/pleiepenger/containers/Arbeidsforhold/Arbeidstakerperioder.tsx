@@ -23,7 +23,7 @@ type ItemInfo = any;
 
 interface Props {
     soknad: IPSBSoknad;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
@@ -34,7 +34,7 @@ interface Props {
 const Arbeidstakerperioder = ({
     soknad,
     initialArbeidstaker,
-    eksisterendePerioder,
+    søknadsperioder,
     updateSoknad,
     updateSoknadState,
     getErrorMessage,
@@ -171,8 +171,7 @@ const Arbeidstakerperioder = ({
                             getErrorMessage={getErrorMessage}
                             arbeidsgivere={arbeidsgivere}
                             harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                            nyeSoknadsperioder={soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                         />
 
                         <UhaanderteFeilmeldinger
