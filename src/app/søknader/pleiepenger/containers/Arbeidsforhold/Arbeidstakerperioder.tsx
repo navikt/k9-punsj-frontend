@@ -42,10 +42,10 @@ const Arbeidstakerperioder = ({
 }: Props): JSX.Element => {
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
 
-    const { arbeidstid, soekerId, soeknadsperiode } = soknad;
+    const { arbeidstid, soekerId } = soknad;
 
-    const fom = getMinDatoFraSøknadsperioder(soeknadsperiode);
-    const tom = getMaxDatoFraSøknadsperioder(soeknadsperiode);
+    const fom = getMinDatoFraSøknadsperioder(søknadsperioder);
+    const tom = getMaxDatoFraSøknadsperioder(søknadsperioder);
 
     useEffect(() => {
         if (soekerId) {
