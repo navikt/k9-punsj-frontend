@@ -215,7 +215,7 @@ const OLPSchema = yup.object({
                 .of(
                     yup
                         .string()
-                        .required()
+                        .nullable()
                         .label('Dato')
                         .test(datoErGyldig)
                         .test({ test: datoErIkkeIHelg, message: 'Reisedagen kan ikke være i helg' }),
