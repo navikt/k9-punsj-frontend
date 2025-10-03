@@ -5,11 +5,9 @@ import yup, {
     fomDato,
     passertDato,
     passertKlokkeslettPaaMottattDato,
-    periode,
     periodeErIkkeKunHelg,
     tomDato,
     tomEtterFom,
-    utenlandsperiode,
 } from 'app/rules/yup';
 
 import nb from '../../i18n/nb.json';
@@ -27,6 +25,14 @@ export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder
     };
 };
 
+const utenlandsperiode = yup.object().shape({
+    periode: yup.object().shape({
+        fom: yup.string().label('Fra og med').test(datoErGyldig),
+        tom: yup.string().label('Til og med').test(datoErGyldig),
+    }),
+    land: yup.string().required().label('Land'),
+});
+
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
         yup.object({
@@ -34,7 +40,10 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             organisasjonsnummer: yup.string(),
             fraværÅrsak: yup.string().required().label('Fraværsårsak'),
             søknadÅrsak: medSoknadAarsak ? yup.string().required().label('Søknadsårsak') : yup.string().nullable(),
-            periode: periode(),
+            periode: yup.object().shape({
+                fom: yup.string().label('Fra og med').test(datoErGyldig),
+                tom: yup.string().label('Til og med').test(datoErGyldig),
+            }),
             faktiskTidPrDag: yup.string().required().label('Timer fravær per dag'),
             normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
         }),
@@ -59,8 +68,8 @@ const selvstendigNaeringsdrivende = () =>
             .label('Organisasjonsnummer'),
         info: yup.object({
             periode: yup.object({
-                fom: yup.string().required().label('Fra og med'),
-                tom: yup.string().label('Til og med'),
+                fom: yup.string().label('Fra og med').test(datoErGyldig),
+                tom: yup.string().label('Til og med').test(datoErGyldig),
             }),
             virksomhetstyper: yup.array().of(yup.string()).required().label('Virksomhetstype'),
             landkode: yup
@@ -134,7 +143,7 @@ const selvstendigNaeringsdrivende = () =>
 
 const frilanser = () =>
     yup.object({
-        startdato: yup.string().required().label('Startdato'),
+        startdato: yup.string().label('Startdato').test(datoErGyldig),
         sluttdato: yup
             .string()
             .when('jobberFortsattSomFrilans', {
@@ -142,7 +151,8 @@ const frilanser = () =>
                 then: (schema) => schema.required(),
                 otherwise: (schema) => schema.nullable(),
             })
-            .label('Sluttdato'),
+            .label('Sluttdato')
+            .test(datoErGyldig),
         jobberFortsattSomFrilans: yup.boolean(),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
@@ -169,6 +179,12 @@ const OLPSchema = yup.object({
         is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
         then: (schema) => schema.of(utenlandsperiode),
     }),
+    lovbestemtFerie: yup.array().of(
+        yup.object({
+            fom: yup.string().label('Fra og med').test(datoErGyldig),
+            tom: yup.string().label('Til og med').test(datoErGyldig),
+        }),
+    ),
     kurs: yup.object({
         kursHolder: yup.object({
             institusjonsUuid: yup.string().nullable(),
@@ -199,7 +215,7 @@ const OLPSchema = yup.object({
                 .of(
                     yup
                         .string()
-                        .required()
+                        .nullable()
                         .label('Dato')
                         .test(datoErGyldig)
                         .test({ test: datoErIkkeIHelg, message: 'Reisedagen kan ikke være i helg' }),

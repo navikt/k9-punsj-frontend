@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { FieldArray, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FieldArray } from 'formik';
+import { FormattedMessage } from 'react-intl';
 import { Box, Button, Label } from '@navikt/ds-react';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -15,22 +14,17 @@ export interface IPeriodepanelerProps {
     periods: IPeriode[]; // Liste over periodisert informasjon
     onAdd?: () => any;
     onRemove?: () => any;
+    label?: string;
     kanHaFlere: boolean;
     fieldName: string;
 }
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
-    const intl = useIntl();
-
-    const { periods, kanHaFlere, fieldName } = props;
-
-    const { setFieldValue, setFieldTouched } = useFormikContext<OLPSoknad>();
+    const { periods, kanHaFlere, fieldName, label } = props;
 
     return (
         <Box padding="4" borderRadius="large" className="periodepanel">
-            <Label size="small">
-                Hvilke perioder vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
-            </Label>
+            <Label size="small">{label}</Label>
             <FieldArray
                 name={fieldName}
                 render={(arrayHelpers) => (
@@ -38,18 +32,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         {periods.map((period, index) => {
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
-                                    <div className="flex justify-between">
-                                        <PeriodInput
-                                            className="mr-3"
-                                            periode={period || {}}
-                                            intl={intl}
-                                            onChange={(periode) => {
-                                                setFieldValue(`${fieldName}.${index}`, periode);
-                                            }}
-                                            onBlur={() => {
-                                                setFieldTouched(`${fieldName}.${index}.fom`);
-                                                setFieldTouched(`${fieldName}.${index}.tom`);
-                                            }}
+                                    <div className="flex gap-4">
+                                        <DatovelgerFormik label="Fra og med" name={`${fieldName}.${index}.fom`} />
+                                        <DatovelgerFormik
+                                            label="Til og med"
+                                            name={`${fieldName}.${index}.tom`}
+                                            fromDate={period.fom ? new Date(period.fom) : undefined}
+                                            defaultMonth={period.fom ? new Date(period.fom) : undefined}
                                         />
                                         <div className="block content-center">
                                             <Button

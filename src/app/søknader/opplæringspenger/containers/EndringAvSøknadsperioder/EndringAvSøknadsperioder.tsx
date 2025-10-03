@@ -119,7 +119,12 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
             </Accordion.Header>
 
             <Accordion.Content>
-                <Periodepaneler periods={values.trekkKravPerioder || []} fieldName="trekkKravPerioder" kanHaFlere />
+                <Periodepaneler
+                    periods={values.trekkKravPerioder || []}
+                    fieldName="trekkKravPerioder"
+                    kanHaFlere
+                    label="Hvilke perioder vil du fjerne?"
+                />
 
                 {getAlertstriper()}
 
