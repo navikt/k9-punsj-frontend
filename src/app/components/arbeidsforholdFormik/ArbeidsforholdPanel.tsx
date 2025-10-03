@@ -25,7 +25,7 @@ import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../formikInput/TextAreaFormik';
 import TextFieldFormik from '../formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatoInputFormikNew from '../formikInput/DatoInputFormikNew';
+import DatovelgerFormik from '../skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -91,7 +91,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
     const frilanserperioder = () => (
         <div>
-            <DatoInputFormikNew
+            <DatovelgerFormik
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
@@ -110,7 +110,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
             </Field>
             <VerticalSpacer sixteenPx />
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
-                <DatoInputFormikNew
+                <DatovelgerFormik
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
@@ -276,7 +276,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 <VerticalSpacer sixteenPx />
 
                 <div className="sn-startdatocontainer">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
@@ -286,7 +286,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
                         )} */}
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
@@ -338,7 +338,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <DatoInputFormikNew
+                            <DatovelgerFormik
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"

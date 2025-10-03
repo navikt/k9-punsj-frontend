@@ -3,11 +3,11 @@ import { FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import { JaNei } from 'app/models/enums/JaNei';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const Reisedager = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
@@ -40,7 +40,7 @@ const Reisedager = () => {
                                 {values.kurs.reise.reisedager?.map((reisedag: any, reisedagIndex: number) => (
                                     <React.Fragment key={reisedagIndex}>
                                         <div className="flex justify-between">
-                                            <DatoInputFormikNew
+                                            <DatovelgerFormik
                                                 label="Reisedag (dato)"
                                                 hideLabel={true}
                                                 name={`kurs.reise.reisedager.${reisedagIndex}`}

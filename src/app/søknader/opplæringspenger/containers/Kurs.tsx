@@ -4,7 +4,6 @@ import { FieldArray, useFormikContext } from 'formik';
 import { CalendarIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Checkbox, Heading, Label, VStack } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Periode } from 'app/models/types/Periode';
@@ -15,6 +14,7 @@ import { JaNei } from 'app/models/enums';
 import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
@@ -125,15 +125,34 @@ const Kurs = ({
                                             <div className="mb-4" key={kursperiode.key}>
                                                 <div className="flex gap-4">
                                                     <div className="flex gap-4">
-                                                        <DatoInputFormikNew
+                                                        <DatovelgerFormik
                                                             label="Fra"
                                                             name={`kurs.kursperioder[${index}].periode.fom`}
-                                                            size="small"
+                                                            toDate={
+                                                                values.kurs.kursperioder[index].periode.tom
+                                                                    ? new Date(
+                                                                          values.kurs.kursperioder[index].periode.tom,
+                                                                      )
+                                                                    : undefined
+                                                            }
+                                                            fromDate={
+                                                                values.kurs.kursperioder[index].periode.fom
+                                                                    ? new Date(
+                                                                          values.kurs.kursperioder[index].periode.fom,
+                                                                      )
+                                                                    : undefined
+                                                            }
+                                                            defaultMonth={
+                                                                values.kurs.kursperioder[index].periode.fom
+                                                                    ? new Date(
+                                                                          values.kurs.kursperioder[index].periode.fom,
+                                                                      )
+                                                                    : undefined
+                                                            }
                                                         />
-                                                        <DatoInputFormikNew
+                                                        <DatovelgerFormik
                                                             label="Til"
                                                             name={`kurs.kursperioder[${index}].periode.tom`}
-                                                            size="small"
                                                             fromDate={
                                                                 values.kurs.kursperioder[index].periode.fom
                                                                     ? new Date(
