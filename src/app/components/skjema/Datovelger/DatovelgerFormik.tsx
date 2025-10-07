@@ -5,9 +5,10 @@ import { useField } from 'formik';
 type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaultMonth' | 'label'> & {
     name: string;
     className?: string;
+    id?: string;
 };
 
-const DatovelgerFormik = ({ name, label, toDate, fromDate, hideLabel, defaultMonth, className }: Props) => {
+const DatovelgerFormik = ({ name, label, toDate, fromDate, hideLabel, defaultMonth, className, id }: Props) => {
     const [field, meta, helper] = useField(name);
     return (
         <Datovelger
@@ -22,6 +23,7 @@ const DatovelgerFormik = ({ name, label, toDate, fromDate, hideLabel, defaultMon
             hideLabel={hideLabel}
             defaultMonth={defaultMonth}
             className={className}
+            id={id}
         />
     );
 };

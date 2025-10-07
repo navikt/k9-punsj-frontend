@@ -14,7 +14,7 @@ import { JaNei } from 'app/models/enums';
 import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
@@ -125,49 +125,7 @@ const Kurs = ({
                                             <div className="mb-4" key={kursperiode.key}>
                                                 <div className="flex gap-4">
                                                     <div className="flex gap-4">
-                                                        <DatovelgerFormik
-                                                            label="Fra"
-                                                            name={`kurs.kursperioder[${index}].periode.fom`}
-                                                            toDate={
-                                                                values.kurs.kursperioder[index].periode.tom
-                                                                    ? new Date(
-                                                                          values.kurs.kursperioder[index].periode.tom,
-                                                                      )
-                                                                    : undefined
-                                                            }
-                                                            fromDate={
-                                                                values.kurs.kursperioder[index].periode.fom
-                                                                    ? new Date(
-                                                                          values.kurs.kursperioder[index].periode.fom,
-                                                                      )
-                                                                    : undefined
-                                                            }
-                                                            defaultMonth={
-                                                                values.kurs.kursperioder[index].periode.fom
-                                                                    ? new Date(
-                                                                          values.kurs.kursperioder[index].periode.fom,
-                                                                      )
-                                                                    : undefined
-                                                            }
-                                                        />
-                                                        <DatovelgerFormik
-                                                            label="Til"
-                                                            name={`kurs.kursperioder[${index}].periode.tom`}
-                                                            fromDate={
-                                                                values.kurs.kursperioder[index].periode.fom
-                                                                    ? new Date(
-                                                                          values.kurs.kursperioder[index].periode.fom,
-                                                                      )
-                                                                    : undefined
-                                                            }
-                                                            defaultMonth={
-                                                                values.kurs.kursperioder[index].periode.fom
-                                                                    ? new Date(
-                                                                          values.kurs.kursperioder[index].periode.fom,
-                                                                      )
-                                                                    : undefined
-                                                            }
-                                                        />
+                                                        <Periodevelger name={`kurs.kursperioder[${index}].periode`} />
                                                     </div>
                                                     {values.kurs.kursperioder.length > 1 && (
                                                         <Button
