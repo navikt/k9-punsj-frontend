@@ -37,7 +37,7 @@ interface Props {
     onPanelClick: () => void;
     handleArbeidsforholdChange: (af: Arbeidsforhold, checked: boolean) => void;
     soknad: PSBSoknad;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
@@ -59,7 +59,7 @@ const ArbeidsforholdPanel = ({
     handleFrilanserChange,
     updateVirksomhetstyper,
     initialArbeidstaker,
-    eksisterendePerioder,
+    søknadsperioder,
 }: Props): JSX.Element => {
     const intl = useIntl();
 
@@ -162,8 +162,7 @@ const ArbeidsforholdPanel = ({
                         <VerticalSpacer eightPx />
 
                         <ArbeidstidKalender
-                            nyeSoknadsperioder={soknad.soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
                                 updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
                             }}
@@ -804,8 +803,7 @@ const ArbeidsforholdPanel = ({
                 <VerticalSpacer eightPx />
 
                 <ArbeidstidKalender
-                    nyeSoknadsperioder={soknad.soeknadsperiode}
-                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                    søknadsperioder={søknadsperioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
                             arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
@@ -851,7 +849,7 @@ const ArbeidsforholdPanel = ({
                 {!!soknad.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
                         soknad={soknad}
-                        eksisterendePerioder={eksisterendePerioder}
+                        søknadsperioder={søknadsperioder}
                         initialArbeidstaker={initialArbeidstaker}
                         updateSoknad={updateSoknad}
                         updateSoknadState={updateSoknadState}

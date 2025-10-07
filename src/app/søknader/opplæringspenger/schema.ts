@@ -201,7 +201,7 @@ const OLPSchema = yup.object({
             yup.object({
                 periode: yup
                     .object({
-                        fom: fomDato.test('fom-not-empty', 'Fra og med må være gyldig dato', datoErGyldig.test),
+                        fom: fomDato.test(datoErGyldig),
                         tom: tomDato
                             .test(datoErGyldig)
                             .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
