@@ -298,7 +298,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 <ArbeidsforholdPanel
                     isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
                     onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
-                    eksisterendePerioder={eksisterendePerioder}
+                    søknadsperioder={[...eksisterendePerioder, ...values.kurs.kursperioder.map((p) => p.periode)]}
                 />
                 <Accordion.Item
                     open={checkOpenState(PunchFormPaneler.FERIE)}

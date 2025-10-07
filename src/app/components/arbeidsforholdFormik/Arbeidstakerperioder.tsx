@@ -16,21 +16,17 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import ArbeidstakerComponent from './Arbeidstaker/Arbeidstaker';
 
 interface Props {
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
 
     getUhaandterteFeil: (kode: string) => (string | undefined)[];
 }
 
-const Arbeidstakerperioder = ({
-    initialArbeidstaker,
-    eksisterendePerioder,
-    getUhaandterteFeil,
-}: Props): JSX.Element => {
+const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaandterteFeil }: Props): JSX.Element => {
     const [arbeidsgivere, setArbeidsgivere] = useState<Organisasjon[]>([]);
 
     const { values } = useFormikContext<OLPSoknad>();
-    const { arbeidstid, soekerId, soeknadsperiode } = values;
+    const { arbeidstid, soekerId } = values;
 
     useEffect(() => {
         if (soekerId) {
@@ -94,8 +90,7 @@ const Arbeidstakerperioder = ({
                                     listeelementindex={currentItemIndex}
                                     arbeidsgivere={arbeidsgivere}
                                     harDuplikatOrgnr={getHarDuplikatOrgnr()}
-                                    nyeSoknadsperioder={soeknadsperiode || []}
-                                    eksisterendeSoknadsperioder={eksisterendePerioder}
+                                    søknadsperioder={søknadsperioder}
                                     name={`${arrayHelpers.name}.${currentItemIndex}`}
                                 />
 
