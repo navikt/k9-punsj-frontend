@@ -4,30 +4,48 @@ import DatovelgerFormik from './DatovelgerFormik';
 import { useField } from 'formik';
 
 const Periodevelger = ({ name }: { name: string }) => {
+    const fomFieldName = `${name}.fom`;
+    const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
-    const [, fomFieldMeta] = useField(`${name}.fom`);
-    const [, tomFieldMeta] = useField(`${name}.tom`);
+    const [, fomFieldMeta] = useField(fomFieldName);
+    const [, tomFieldMeta] = useField(tomFieldName);
 
     return (
-        <div>
-            <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-2">
+            <div className="flex gap-4 flex-wrap">
                 <DatovelgerFormik
-                    id={`${name}.fom`}
-                    name={`${name}.fom`}
+                    id={fomFieldName}
+                    name={fomFieldName}
                     label="Fra og med"
                     toDate={tomFieldMeta.value ? new Date(tomFieldMeta.value) : undefined}
+                    visFeilmelding={false}
                 />
                 <DatovelgerFormik
-                    id={`${name}.tom`}
-                    name={`${name}.tom`}
+                    id={tomFieldName}
+                    name={tomFieldName}
                     label="Til og med"
                     defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
                     fromDate={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
+                    visFeilmelding={false}
                 />
             </div>
-            {(fomFieldMeta.touched || tomFieldMeta.touched) && typeof periodeFieldMeta.error === 'string' && (
-                <ErrorMessage showIcon={true}>{periodeFieldMeta.error}</ErrorMessage>
-            )}
+            <div>
+                {fomFieldMeta.touched && fomFieldMeta.error && (
+                    <ErrorMessage aria-describedby={fomFieldName} showIcon>
+                        Fra og med: {fomFieldMeta.error}
+                    </ErrorMessage>
+                )}
+                {tomFieldMeta.touched && tomFieldMeta.error && (
+                    <ErrorMessage aria-describedby={tomFieldName} showIcon>
+                        Til og med: {tomFieldMeta.error}
+                    </ErrorMessage>
+                )}
+                {(fomFieldMeta.touched || tomFieldMeta.touched) && typeof periodeFieldMeta.error === 'string' && (
+                    <ErrorMessage aria-describedby={name} showIcon={true}>
+                        {periodeFieldMeta.error}
+                    </ErrorMessage>
+                )}
+            </div>
         </div>
     );
 };

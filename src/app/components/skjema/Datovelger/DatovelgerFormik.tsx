@@ -6,9 +6,21 @@ type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaul
     name: string;
     className?: string;
     id?: string;
+    visFeilmelding?: boolean;
 };
 
-const DatovelgerFormik = ({ name, label, toDate, fromDate, hideLabel, defaultMonth, className, id }: Props) => {
+const DatovelgerFormik = ({
+    name,
+    label,
+    toDate,
+    fromDate,
+    hideLabel,
+    defaultMonth,
+    className,
+    id,
+    // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
+    visFeilmelding = true,
+}: Props) => {
     const [field, meta, helper] = useField(name);
     return (
         <Datovelger
@@ -17,7 +29,7 @@ const DatovelgerFormik = ({ name, label, toDate, fromDate, hideLabel, defaultMon
             selectedDay={field.value}
             onChange={(value) => helper.setValue(value)}
             onBlur={() => helper.setTouched(true, true)}
-            errorMessage={meta.touched && meta.error}
+            errorMessage={meta.touched && visFeilmelding ? meta.error : !!meta.error}
             toDate={toDate}
             fromDate={fromDate}
             hideLabel={hideLabel}
