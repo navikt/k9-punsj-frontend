@@ -371,7 +371,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                             }
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
-                                    valider({ skalForhaandsviseSoeknad: false });
+                                    return;
                                 } else {
                                     valider({ skalForhaandsviseSoeknad: true });
                                 }
