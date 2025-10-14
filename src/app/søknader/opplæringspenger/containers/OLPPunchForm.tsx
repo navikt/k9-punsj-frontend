@@ -298,7 +298,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                 <ArbeidsforholdPanel
                     isOpen={checkOpenState(PunchFormPaneler.ARBEID)}
                     onPanelClick={() => handlePanelClick(PunchFormPaneler.ARBEID)}
-                    eksisterendePerioder={eksisterendePerioder}
+                    søknadsperioder={[...eksisterendePerioder, ...values.kurs.kursperioder.map((p) => p.periode)]}
                 />
                 <Accordion.Item
                     open={checkOpenState(PunchFormPaneler.FERIE)}
@@ -371,6 +371,8 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                             }
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
+                                    // Hvis det er valideringsfeil i frontend skal disse vises før vi prøver å validere mot backend.
+                                    // Nøklene er tekniske og forvirrende
                                     return;
                                 } else {
                                     valider({ skalForhaandsviseSoeknad: true });

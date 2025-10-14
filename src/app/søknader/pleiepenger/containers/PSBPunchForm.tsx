@@ -1067,6 +1067,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         onPanelClick={() => this.handlePanelClick(PunchFormPaneler.ARBEID)}
                         handleArbeidsforholdChange={this.handleArbeidsforholdChange}
                         soknad={soknad}
+                        søknadsperioder={[...eksisterendePerioder, ...soknad.soeknadsperiode]}
                         initialArbeidstaker={this.initialArbeidstaker}
                         updateSoknad={this.updateSoknad}
                         updateSoknadState={this.updateSoknadState}
@@ -1074,7 +1075,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         getUhaandterteFeil={this.getUhåndterteFeil}
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
-                        eksisterendePerioder={eksisterendePerioder}
                     />
 
                     <Accordion.Item
