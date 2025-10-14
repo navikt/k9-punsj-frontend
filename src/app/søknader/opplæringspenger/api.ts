@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
-import { apiUrl, get, post, put } from 'app/utils';
+import { get, post, put } from 'app/utils';
 
 import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
 import { IOLPSoknadKvittering } from './OLPSoknadKvittering';
