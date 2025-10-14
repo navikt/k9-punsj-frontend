@@ -371,7 +371,9 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                             }
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
-                                    valider({ skalForhaandsviseSoeknad: false });
+                                    // Hvis det er valideringsfeil i frontend skal disse vises før vi prøver å validere mot backend.
+                                    // Nøklene er tekniske og forvirrende
+                                    return;
                                 } else {
                                     valider({ skalForhaandsviseSoeknad: true });
                                 }
