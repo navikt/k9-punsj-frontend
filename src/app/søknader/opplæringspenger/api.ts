@@ -45,6 +45,23 @@ export const hentEksisterendePerioder = async (ident: string, barnIdent: string)
     return response.json();
 };
 
+export const hentEksisterendePerioderForSaksnummer = async (
+    ident: string,
+    barnIdent: string,
+    saksnummer: string,
+): Promise<Periode[]> => {
+    const response = await post(
+        ApiPath.OLP_K9_PERIODER,
+        { saksnummer },
+        { 'X-Nav-NorskIdent': ident },
+        { brukerIdent: ident, barnIdent, saksnummer },
+    );
+    if (!response.ok) {
+        throw Error('Kunne ikke hente eksisterende perioder');
+    }
+    return response.json();
+};
+
 export const hentInstitusjoner = async (): Promise<GodkjentOpplæringsinstitusjon[]> => {
     const response = await get(ApiPath.OLP_INSTITUSJONER, {});
     if (!response.ok) {
