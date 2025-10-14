@@ -1,7 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
-import { get, post, put } from 'app/utils';
+import { apiUrl, get, post, put } from 'app/utils';
 
 import { IOLPSoknadBackend } from '../../models/types/OLPSoknad';
 import { IOLPSoknadKvittering } from './OLPSoknadKvittering';
@@ -51,8 +51,8 @@ export const hentEksisterendePerioderForSaksnummer = async (
     saksnummer: string,
 ): Promise<Periode[]> => {
     const response = await post(
-        ApiPath.OLP_K9_PERIODER,
-        { saksnummer },
+        ApiPath.OLP_K9_PERIODER + '?saksnummer=' + saksnummer,
+        {},
         { 'X-Nav-NorskIdent': ident },
         { brukerIdent: ident, barnIdent, saksnummer },
     );
