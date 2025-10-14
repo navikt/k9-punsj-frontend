@@ -2,7 +2,7 @@ import { Formik, yupToFormErrors } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
@@ -15,7 +15,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 
-import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
+import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { OLPPunchForm } from './OLPPunchForm';
@@ -43,6 +43,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [erSendtInn, setErSendtInn] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const fellesState = useSelector((state: RootStateType) => state.felles);
     const intl = useIntl();
 
     const {
@@ -51,8 +52,8 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         isError: isErrorPerioderK9,
         error: hentEksisterendePerioderError,
     } = useMutation({
-        mutationFn: ({ ident, barnIdent }: { ident: string; barnIdent: string }) =>
-            hentEksisterendePerioder(ident, barnIdent),
+        mutationFn: ({ ident, barnIdent, saksnummer }: { ident: string; barnIdent: string; saksnummer: string }) =>
+            hentEksisterendePerioderForSaksnummer(ident, barnIdent, saksnummer),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
     const isSettledPerioderK9 = isSuccessPerioderK9 || isErrorPerioderK9;
@@ -74,6 +75,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
             hentPerioderK9({
                 ident: soeknadRespons.soekerId,
                 barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
+                saksnummer: fellesState.journalpost?.sak?.fagsakId || '',
             });
         }
     }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);

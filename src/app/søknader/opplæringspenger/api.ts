@@ -51,8 +51,8 @@ export const hentEksisterendePerioderForSaksnummer = async (
     saksnummer: string,
 ): Promise<Periode[]> => {
     const response = await post(
-        ApiPath.OLP_K9_PERIODER + '?saksnummer=' + saksnummer,
-        {},
+        ApiPath.OLP_K9_PERIODER,
+        { saksnummer },
         { 'X-Nav-NorskIdent': ident },
         { brukerIdent: ident, barnIdent, saksnummer },
     );
