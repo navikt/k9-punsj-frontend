@@ -143,9 +143,9 @@ const ArbeidstidPeriode = (props: Props) => {
                     <div className="mt-4">
                         <div className="flex items-start">
                             <Periodevelger name={`${name}.periode`} />
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-7">
                                 <Button
-                                    icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                    icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
                                     size="small"
                                     variant="tertiary"
                                     onClick={remove}
