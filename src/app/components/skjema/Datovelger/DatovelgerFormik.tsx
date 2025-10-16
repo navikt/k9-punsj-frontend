@@ -22,6 +22,16 @@ const DatovelgerFormik = ({
     visFeilmelding = true,
 }: Props) => {
     const [field, meta, helper] = useField(name);
+
+    const getErrorMessage = () => {
+        // Vi viser feilmelding hvis visFeilmelding er true og feltet har blitt besøkt og har en feilmelding
+        if (visFeilmelding) {
+            return meta.touched && meta.error ? meta.error : undefined;
+        }
+        // Hvis vi ikke skal vise feilmelding, så må vi uansett sende inn boolean når vi har en feil
+        // for å få rød border på inputfeltet
+        return meta.touched && !!meta.error;
+    };
     return (
         <Datovelger
             label={label}
@@ -29,7 +39,7 @@ const DatovelgerFormik = ({
             selectedDay={field.value}
             onChange={(value) => helper.setValue(value)}
             onBlur={() => helper.setTouched(true, true)}
-            errorMessage={meta.touched && visFeilmelding ? meta.error : !!meta.error}
+            errorMessage={getErrorMessage()}
             toDate={toDate}
             fromDate={fromDate}
             hideLabel={hideLabel}
