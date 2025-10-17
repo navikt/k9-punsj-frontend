@@ -3,7 +3,7 @@ import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@nav
 import { dateToISODateString, ISODateStringToUTCDate } from 'app/utils/date-utils/src/format';
 
 export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
-    Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description'> & {
+    Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
         onChange: (value: string) => void;
         errorMessage?: React.ReactNode | string;
         selectedDay: string;
@@ -26,6 +26,7 @@ const Datovelger = ({
     toDate,
     defaultMonth,
     size = 'small',
+    id,
 }: DatovelgerProps) => {
     const fromDateDefault = new Date().setFullYear(new Date().getFullYear() - 5);
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
@@ -76,6 +77,7 @@ const Datovelger = ({
                     error={errorMessage}
                     disabled={disabled}
                     size={size}
+                    id={id}
                 />
             </DatePicker>
         </div>
