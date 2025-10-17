@@ -7,7 +7,12 @@ import { canStringBeParsedToJSON } from './formatUtils';
 import { getEnvironmentVariable } from './envUtils';
 import { logApiError } from './logUtils';
 
-export const apiUrl = (path: string, parameters?: any) => (parameters ? String.format(path, parameters) : path);
+// Denne funksjonen brukes for å formattere path parametere i path
+// apiUrl(ApiPath.DOKUMENT, { journalpostId: '123', dokumentId: '456' })
+// /journalpost/{journalpostId}/dokument/{dokumentId} vil returnere:
+// /journalpost/123/dokument/456
+export const apiUrl = (path: string, pathParameters?: any) =>
+    pathParameters ? String.format(path, pathParameters) : path;
 
 const login = (): Promise<void> =>
     new Promise((resolve) => {

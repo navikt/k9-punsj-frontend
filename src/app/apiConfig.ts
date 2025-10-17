@@ -85,7 +85,7 @@ export const ApiPath = {
     OLP_SOKNAD_UPDATE: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/oppdater`,
     OLP_SOKNAD_VALIDER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/valider`,
     OLP_SOKNAD_SUBMIT: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/send`,
-    OLP_K9_PERIODER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/k9sak/info`,
+    OLP_K9_PERIODER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/k9sak/info/saksnummer`,
     OLP_INSTITUSJONER: `${BASE_PATHS.K9_PUNSJ}/opplaeringspenger-soknad/institusjoner`,
     BREV_AKTØRID: `${BASE_PATHS.K9_PUNSJ}/brev/aktorId`,
     BREV_BESTILL: `${BASE_PATHS.K9_PUNSJ}/brev/bestill`,
