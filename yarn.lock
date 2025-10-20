@@ -4771,11 +4771,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:9.1.10":
-  version: 9.1.10
-  resolution: "@storybook/builder-webpack5@npm:9.1.10"
+"@storybook/builder-webpack5@npm:9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/builder-webpack5@npm:9.1.13"
   dependencies:
-    "@storybook/core-webpack": "npm:9.1.10"
+    "@storybook/core-webpack": "npm:9.1.13"
     case-sensitive-paths-webpack-plugin: "npm:^2.4.0"
     cjs-module-lexer: "npm:^1.2.3"
     css-loader: "npm:^6.7.1"
@@ -4791,22 +4791,22 @@ __metadata:
     webpack-hot-middleware: "npm:^2.25.1"
     webpack-virtual-modules: "npm:^0.6.0"
   peerDependencies:
-    storybook: ^9.1.10
+    storybook: ^9.1.13
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/d3735ae08e1d1f0a0897ba1f66b0b495c96122d695ffd817b85d6911d2b976a2cc17707484a4fcce344efe97d23774dec5c67418302f15592f5a9540d8c07137
+  checksum: 10/801187f26250096c1a5e9edf0c8f05d2ea3c42b06b6433936083b832c0002fae655035a9b62015f0d4b7ded0ed3239df5710090b93776c43e2519b1b25a4e997
   languageName: node
   linkType: hard
 
-"@storybook/core-webpack@npm:9.1.10":
-  version: 9.1.10
-  resolution: "@storybook/core-webpack@npm:9.1.10"
+"@storybook/core-webpack@npm:9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/core-webpack@npm:9.1.13"
   dependencies:
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^9.1.10
-  checksum: 10/77116cf13e540b5f2a355bc9e76e48ca7e092761f551023d538eec5bfdc1fa7b9cb1b3f3adf5df5b65e847e503196d606da05fcf4417818064dd4ea5e39aa42e
+    storybook: ^9.1.13
+  checksum: 10/4250b158a802d3481fa0d242470065c511a8354821e91be9322096c9f446293e290905175251c086d4404becde2836a2bc2f090228b735856fb4b8d1b5f0818e
   languageName: node
   linkType: hard
 
@@ -4850,11 +4850,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/preset-react-webpack@npm:9.1.10":
-  version: 9.1.10
-  resolution: "@storybook/preset-react-webpack@npm:9.1.10"
+"@storybook/preset-react-webpack@npm:9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/preset-react-webpack@npm:9.1.13"
   dependencies:
-    "@storybook/core-webpack": "npm:9.1.10"
+    "@storybook/core-webpack": "npm:9.1.13"
     "@storybook/react-docgen-typescript-plugin": "npm:1.0.6--canary.9.0c3f3b7.0"
     "@types/semver": "npm:^7.3.4"
     find-up: "npm:^7.0.0"
@@ -4867,11 +4867,11 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    storybook: ^9.1.10
+    storybook: ^9.1.13
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/1bc182723d75a4577bdefbf626bcf1f0016c4d9dece21e47ff752d6f9101331e7cb3608a052a2e3421df9ec531000673157574297cb503f707cbfc7488416529
+  checksum: 10/1a7a3a7fe31eb829737b7101a2faa7d5eabc5cc0690da02fa2b8bcb5f7a3313e7e9c085bc62eda72455c45ce188fe662fcbf69b36ff528fe678481b23300cbde
   languageName: node
   linkType: hard
 
@@ -4924,26 +4924,55 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-webpack5@npm:^9.1.10":
-  version: 9.1.10
-  resolution: "@storybook/react-webpack5@npm:9.1.10"
-  dependencies:
-    "@storybook/builder-webpack5": "npm:9.1.10"
-    "@storybook/preset-react-webpack": "npm:9.1.10"
-    "@storybook/react": "npm:9.1.10"
+"@storybook/react-dom-shim@npm:9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/react-dom-shim@npm:9.1.13"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
-    storybook: ^9.1.10
+    storybook: ^9.1.13
+  checksum: 10/01243edbe9f188822b8de718936ec98460b1930d9a9bb431eb77a92f54cbd146163fd462a08bafde2f4010f2f0475313cf47d7109f6805b3f8cb13f7ce0a3bdd
+  languageName: node
+  linkType: hard
+
+"@storybook/react-webpack5@npm:^9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/react-webpack5@npm:9.1.13"
+  dependencies:
+    "@storybook/builder-webpack5": "npm:9.1.13"
+    "@storybook/preset-react-webpack": "npm:9.1.13"
+    "@storybook/react": "npm:9.1.13"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    storybook: ^9.1.13
     typescript: ">= 4.9.x"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/0bd2cfda57cbec9dbfc9c015935192fb933beb35150a49e816f8f536697c535ae986cd8283bb011fb227071c9a377f8e973c31b7634933bf28dc4267df7bfefe
+  checksum: 10/0f56d70766fd57c04dffce9fa95564fa3a24f754c777b0c280bd08ec45296950ebf72e459a3fb64baca8746ea8cd7e7efc56c2fc7309d10fd0950f9f82632d0a
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:9.1.10, @storybook/react@npm:^9.1.10":
+"@storybook/react@npm:9.1.13":
+  version: 9.1.13
+  resolution: "@storybook/react@npm:9.1.13"
+  dependencies:
+    "@storybook/global": "npm:^5.0.0"
+    "@storybook/react-dom-shim": "npm:9.1.13"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+    storybook: ^9.1.13
+    typescript: ">= 4.9.x"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/4a407f8a7ae9f3080ebcd74e0282e018aca658c83fb5354c1456c27c0e44f4162503f4c5ca25df4ac3aa42f0494f169aa09bd22cf8aa599821e459f979915269
+  languageName: node
+  linkType: hard
+
+"@storybook/react@npm:^9.1.10":
   version: 9.1.10
   resolution: "@storybook/react@npm:9.1.10"
   dependencies:
@@ -13714,7 +13743,7 @@ __metadata:
     "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.1"
     "@storybook/preview-api": "npm:^8.6.14"
     "@storybook/react": "npm:^9.1.10"
-    "@storybook/react-webpack5": "npm:^9.1.10"
+    "@storybook/react-webpack5": "npm:^9.1.13"
     "@tanstack/react-query": "npm:5.90.2"
     "@tanstack/react-query-devtools": "npm:5.90.2"
     "@testing-library/cypress": "npm:10.1.0"
