@@ -94,7 +94,7 @@
         "@storybook/addon-interactions": "^8.6.14",
         "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
         "@storybook/preview-api": "^8.6.14",
-        "@storybook/react": "^9.1.10",
+        "@storybook/react": "^9.1.13",
         "@storybook/react-webpack5": "^9.1.10",
         "@testing-library/cypress": "10.1.0",
         "@testing-library/dom": "^10.4.1",
