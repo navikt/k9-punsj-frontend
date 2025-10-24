@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@navikt/oasis": "3.8.0",
-        "@sentry/cli": "2.56.0",
+        "@sentry/cli": "2.57.0",
         "axios": "1.12.2",
         "connect-timeout": "1.9.1",
         "cors": "2.8.5",
