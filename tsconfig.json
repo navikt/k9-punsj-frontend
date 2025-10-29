@@ -11,7 +11,7 @@
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "jsx": "react",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,

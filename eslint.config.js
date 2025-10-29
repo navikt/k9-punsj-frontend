@@ -24,7 +24,7 @@ export default [
             'import/resolver': {
                 node: {
                     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.scss'],
-                    moduleDirectory: ['node_modules', 'src/'],
+                    moduleDirectory: ['node_modules', 'src/', 'server/node_modules'],
                 },
             },
         },
@@ -77,6 +77,13 @@ export default [
             '@typescript-eslint/no-explicit-any': OFF,
             '@typescript-eslint/ban-ts-comment': OFF,
             'import/no-named-as-default-member': OFF,
+        },
+    },
+    {
+        name: 'server-specific',
+        files: ['server/**/*.js'],
+        rules: {
+            'import/no-unresolved': OFF,
         },
     },
 ];
