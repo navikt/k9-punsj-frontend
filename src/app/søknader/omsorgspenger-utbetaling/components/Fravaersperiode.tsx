@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import intlHelper from 'app/utils/intlUtils';
@@ -113,9 +113,9 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
             <VerticalSpacer twentyPx />
 
             <div className="flex items-start">
-                <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} size="small" />
+                <DatovelgerFormik label="Fra og med" name={`${name}.periode.fom`} size="small" />
 
-                <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} className="ml-4" size="small" />
+                <DatovelgerFormik label="Til og med" name={`${name}.periode.tom`} className="ml-4" size="small" />
             </div>
 
             <VerticalSpacer twentyPx />

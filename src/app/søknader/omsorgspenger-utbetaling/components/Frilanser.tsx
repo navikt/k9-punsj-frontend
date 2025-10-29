@@ -6,7 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
@@ -51,7 +51,7 @@ export default function Frilanser() {
                     </>
                 )}
 
-                <DatoInputFormikNew
+                <DatovelgerFormik
                     label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.startDato.spm')}
                     name="opptjeningAktivitet.frilanser.startdato"
                 />
@@ -89,7 +89,7 @@ export default function Frilanser() {
 
                 {!frilanser.jobberFortsattSomFrilans && (
                     <>
-                        <DatoInputFormikNew
+                        <DatovelgerFormik
                             label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
                             name="opptjeningAktivitet.frilanser.sluttdato"
                         />
