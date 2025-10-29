@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
@@ -20,13 +20,10 @@ interface Props {
 }
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
-    const intl = useIntl();
-
     const formik = useFormikContext();
 
     const [timerField] = useField(`${name}.timer`);
     const [minutterField] = useField(`${name}.minutter`);
-    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
 
