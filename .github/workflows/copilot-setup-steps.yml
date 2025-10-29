@@ -1,16 +1,17 @@
 name: Copilot Setup Steps
 
 on:
-  workflow_dispatch:
-  push:
-    paths:
-      - .github/workflows/copilot-setup-steps.yml
-  pull_request:
-    paths:
-      - .github/workflows/copilot-setup-steps.yml
+    workflow_dispatch:
+    push:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+    pull_request:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
 
 permissions:
     contents: read
+    packages: read
 
 jobs:
     setup:
@@ -23,9 +24,7 @@ jobs:
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
                   yarn config set npmScopes.navikt.npmAlwaysAuth true
-                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
-              env:
-                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  yarn config set npmScopes.navikt.npmAuthToken ${{ secrets.GITHUB_TOKEN }}
 
             - name: Sette opp Node
               uses: actions/setup-node@v4
@@ -36,5 +35,3 @@ jobs:
 
             - name: Installere moduler
               run: yarn install --immutable
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
