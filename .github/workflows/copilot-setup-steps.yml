@@ -1,0 +1,34 @@
+name: Copilot Setup Steps
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    setup:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Hente kode
+              uses: actions/checkout@v5
+
+            - name: Setup .yarnrc.yml
+              run: |
+                  yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+                  yarn config set npmScopes.navikt.npmAlwaysAuth true
+                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
+              env:
+                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+            - name: Sette opp Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+                  registry-url: 'https://npm.pkg.github.com'
+                  scope: '@navikt'
+
+            - name: Installere moduler
+              run: yarn install --immutable
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
