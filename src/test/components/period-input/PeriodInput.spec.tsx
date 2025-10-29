@@ -35,7 +35,7 @@ const testDateChange = async (
     onChange: jest.Mock,
     onBlur: jest.Mock,
 ) => {
-    const input = screen.getByTestId(inputId) as HTMLInputElement;
+    const input = screen.getByRole('textbox', { name: inputId === 'fom' ? 'skjema.perioder.fom' : 'skjema.perioder.tom' }) as HTMLInputElement;
     expect(input).toBeInTheDocument();
 
     await userEvent.clear(input);
@@ -49,8 +49,8 @@ describe('PeriodInput', () => {
     it('should display input fields', async () => {
         setupPeriodInput();
 
-        expect(await screen.findByTestId(inputIdFom)).toBeInTheDocument();
-        expect(await screen.findByTestId(inputIdTom)).toBeInTheDocument();
+        expect(await screen.findByRole('textbox', { name: 'skjema.perioder.fom' })).toBeInTheDocument();
+        expect(await screen.findByRole('textbox', { name: 'skjema.perioder.tom' })).toBeInTheDocument();
     });
 
     it('should display the correct value in input fields', async () => {
@@ -58,8 +58,8 @@ describe('PeriodInput', () => {
         const tom = '2020-02-01';
         setupPeriodInput({ periode: { fom, tom } });
 
-        expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
-        expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
+        expect(await screen.findByRole('textbox', { name: 'skjema.perioder.fom' })).toHaveValue('01.01.2020');
+        expect(await screen.findByRole('textbox', { name: 'skjema.perioder.tom' })).toHaveValue('01.02.2020');
     });
 
     it('should display an error message for fom date', async () => {
