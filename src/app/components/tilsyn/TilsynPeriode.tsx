@@ -6,7 +6,7 @@ import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-import { PeriodInput } from '../period-input/PeriodInput';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
@@ -47,15 +47,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodInput
-                                periode={field.value.periode ?? {}}
-                                intl={intl}
-                                onChange={(v) => {
-                                    formik.setFieldValue(`${name}.periode`, v);
-                                }}
-                                errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
-                                errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
-                            />
+                            <Periodevelger name={`${name}.periode`} />
 
                             <div className="ml-4 mt-10">
                                 <Button

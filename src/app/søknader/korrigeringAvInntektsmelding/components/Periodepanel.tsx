@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
 import {
@@ -44,21 +44,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                 previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 <div className="flex items-start" key={index}>
-                                    <Field name={fieldName}>
-                                        {({ meta }: FieldProps<string, FormikValues>) => (
-                                            <PeriodInput
-                                                onChange={(period) => {
-                                                    setFieldValue(fieldName, period);
-                                                }}
-                                                periode={value}
-                                                intl={intl}
-                                                errorMessage={
-                                                    meta.error ? <ErrorMessage name={fieldName} /> : undefined
-                                                }
-                                                fomInputRef={isLastElement ? fomInputRef : undefined}
-                                            />
-                                        )}
-                                    </Field>
+                                    <Periodevelger name={fieldName} />
 
                                     <Button
                                         id="slett"
