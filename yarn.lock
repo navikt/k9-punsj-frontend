@@ -4891,7 +4891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^8.6.14":
+"@storybook/addon-essentials@npm:8.6.14":
   version: 8.6.14
   resolution: "@storybook/addon-essentials@npm:8.6.14"
   dependencies:
@@ -4922,7 +4922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^8.6.14":
+"@storybook/addon-interactions@npm:8.6.14":
   version: 8.6.14
   resolution: "@storybook/addon-interactions@npm:8.6.14"
   dependencies:
@@ -5122,15 +5122,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/b712639d74214549dec44da617076e784d0468f465eb24f0131de05ca823444f596b0a4d4ff7b655e70aea3cee760d677c297344fcd6d35abbe31728ba66084b
-  languageName: node
-  linkType: hard
-
-"@storybook/preview-api@npm:^8.6.14":
-  version: 8.6.14
-  resolution: "@storybook/preview-api@npm:8.6.14"
-  peerDependencies:
-    storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
-  checksum: 10/9b77288f2f627a7c70cfd3e88bdc4348c1425fab6b333ed77efb913e45881bcdf2ca67f1174e47fe978a7993c2a653fb8accf518ba51441cfb9450145101e9d8
   languageName: node
   linkType: hard
 
@@ -13887,10 +13878,9 @@ __metadata:
     "@reduxjs/toolkit": "npm:^2.9.2"
     "@sentry/cli": "npm:2.57.0"
     "@sentry/react": "npm:10.22.0"
-    "@storybook/addon-essentials": "npm:^8.6.14"
-    "@storybook/addon-interactions": "npm:^8.6.14"
+    "@storybook/addon-essentials": "npm:8.6.14"
+    "@storybook/addon-interactions": "npm:8.6.14"
     "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.1"
-    "@storybook/preview-api": "npm:^8.6.14"
     "@storybook/react": "npm:^10.0.0"
     "@storybook/react-webpack5": "npm:^10.0.0"
     "@tanstack/react-query": "npm:5.90.5"
