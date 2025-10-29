@@ -1,5 +1,6 @@
 import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
+
+import type { Meta, StoryObj } from '@storybook/react';
 import OpprettJournalpost from '../../app/opprett-journalpost/OpprettJournalpost';
 import { MemoryRouter } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
