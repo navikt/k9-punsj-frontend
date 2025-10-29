@@ -5,7 +5,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 
 import { IPeriode } from '../../models/types/Periode';
-import NewDateInput from '../skjema/NewDateInput/NewDateInput';
+import Datovelger from '../skjema/Datovelger/Datovelger';
 
 export interface IPeriodInputProps {
     intl: IntlShape;
@@ -58,11 +58,12 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         onChange(newPeriod);
     };
 
-    const handleOnBlur = (selectedDate: string, isFom: boolean) => {
+    const handleOnBlur = (isFom: boolean) => {
         if (onBlur) {
-            const newPeriod = isFom
-                ? { fom: selectedDate, tom: periode?.tom || '' }
-                : { fom: periode?.fom || '', tom: selectedDate };
+            const newPeriod = {
+                fom: periode?.fom || '',
+                tom: periode?.tom || '',
+            };
             onBlur(newPeriod);
         }
     };
@@ -75,32 +76,30 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         <Fieldset error={errorMessage} className={className} legend={undefined}>
             <HStack wrap gap="4" justify="center">
                 <div data-testid="datePickerInputFom">
-                    <NewDateInput
+                    <Datovelger
                         value={periode.fom || initialValues?.fom || ''}
+                        selectedDay={periode.fom || initialValues?.fom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, true)}
-                        onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
+                        onBlur={() => handleOnBlur(true)}
                         id={inputIdFom}
-                        inputDisabled={disabled || disabledFom}
+                        disabled={disabled || disabledFom}
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
-                        inputRef={fomInputRef}
                         // limitations={limitations}
-                        dataTestId="fom"
                     />
                 </div>
 
                 <div data-testid="datePickerInputTom">
-                    <NewDateInput
+                    <Datovelger
                         value={periode.tom || initialValues?.tom || ''}
+                        selectedDay={periode.tom || initialValues?.tom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, false)}
-                        onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
+                        onBlur={() => handleOnBlur(false)}
                         id={inputIdTom}
-                        inputDisabled={disabled || disabledTom}
+                        disabled={disabled || disabledTom}
                         errorMessage={errorMessageTom}
-                        inputRef={tomInputRef}
                         // limitations={limitations}
                         label={intlHelper(intl, 'skjema.perioder.tom')}
-                        dataTestId="tom"
                         fromDate={fromDateValue}
                         defaultMonth={fromDateValue}
                     />

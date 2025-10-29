@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, TextField } from '@navikt/ds-react';
 
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import { IOMPAOSoknad } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../../utils/intlUtils';
@@ -24,12 +24,14 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
             <div className="input-row">
                 <Field name="mottattDato">
                     {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                        <NewDateInput
+                        <Datovelger
                             id="soknad-dato"
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
                             errorMessage={meta.touched && meta.error}
                             value={field.value}
+                            selectedDay={field.value}
                             onChange={(value: string) => form.setFieldValue('mottattDato', value)}
+                            onBlur={() => form.setFieldTouched('mottattDato', true)}
                         />
                     )}
                 </Field>
