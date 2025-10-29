@@ -46,7 +46,6 @@ const OpplysningerOmSoknad: React.FC<Props> = ({
                 {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
                     mottattDato: selectedDate,
                 }))}
-                dataTestId="mottattDato"
             />
 
             <div>
