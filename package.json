@@ -54,7 +54,7 @@
         "tailwindcss": "3.4.18",
         "typescript-string-operations": "1.6.1",
         "ulid": "3.0.1",
-        "uuid": "13.0.0",
+        "uuid": "11.1.0",
         "yup": "1.7.1"
     },
     "scripts": {
@@ -90,10 +90,9 @@
         "@navikt/ds-tailwind": "^7.32.3",
         "@pmmmwh/react-refresh-webpack-plugin": "0.6.1",
         "@sentry/cli": "2.57.0",
-        "@storybook/addon-essentials": "^8.6.14",
-        "@storybook/addon-interactions": "^8.6.14",
+        "@storybook/addon-essentials": "^10.0.0",
+        "@storybook/addon-interactions": "^10.0.0",
         "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
-        "@storybook/preview-api": "^8.6.14",
         "@storybook/react": "^10.0.0",
         "@storybook/react-webpack5": "^10.0.0",
         "@testing-library/cypress": "10.1.0",
