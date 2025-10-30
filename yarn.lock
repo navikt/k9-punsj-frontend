@@ -13890,7 +13890,7 @@ __metadata:
     regenerator-runtime: "npm:0.14.1"
     source-map-loader: "npm:5.0.0"
     start-server-and-test: "npm:2.1.2"
-    storybook: "npm:^10.0.0"
+    storybook: "npm:^10.0.1"
     storybook-addon-fetch-mock: "npm:^2.0.1"
     style-loader: "npm:4.0.0"
     stylelint: "npm:16.25.0"
@@ -18143,9 +18143,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "storybook@npm:10.0.0"
+"storybook@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "storybook@npm:10.0.1"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.6.0"
@@ -18165,7 +18165,7 @@ __metadata:
       optional: true
   bin:
     storybook: ./dist/bin/dispatcher.js
-  checksum: 10/deb49dd66adf0525fab07798e4ab4364c6a6229794eec10396c3612d70d372590f926106f331c7c699ed185e24c8aa43db6e4d7a418ca1de40f2ce3a67b8a985
+  checksum: 10/543c882bdc2ee1bb7d95c44fd8d26ad53f17e2186222f8e153e583f8e74a1cc1091a5efdffbe3ab3926772aeeda6116cd143c2595182689eac671433109004b4
   languageName: node
   linkType: hard
 
