@@ -10277,15 +10277,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-storybook@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "eslint-plugin-storybook@npm:10.0.0"
+"eslint-plugin-storybook@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "eslint-plugin-storybook@npm:10.0.1"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.8.1"
   peerDependencies:
     eslint: ">=8"
-    storybook: ^10.0.0
-  checksum: 10/f12e6bfbb354324557d362e4496ddc917139a289cac1dd2471254a4515413247170c761d22b614cc71c55a8584c07346cd597bbbd361c1f2e0a6c3e641dbda3a
+    storybook: ^10.0.1
+  checksum: 10/e71ed069d3e0d0a0056dc4c788dea3ea06b2da0a53d1a94a8fb8248cce259f344f86e1f6fe1ae79474a76cfae60434ca8ddf510a9724f787dc5bdad3a4dd4d1a
   languageName: node
   linkType: hard
 
@@ -13840,7 +13840,7 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:7.0.1"
-    eslint-plugin-storybook: "npm:^10.0.0"
+    eslint-plugin-storybook: "npm:^10.0.1"
     formik: "npm:2.4.6"
     glob: "npm:11.0.3"
     html-webpack-harddisk-plugin: "npm:2.0.0"
