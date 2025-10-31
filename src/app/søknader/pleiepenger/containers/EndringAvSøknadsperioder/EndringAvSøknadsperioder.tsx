@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
+
+import { Periodepaneler } from '../../../../components/Periodepaneler';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
+import intlHelper from 'app/utils/intlUtils';
 
 import './endringAvSøknadsperioder.less';
 
@@ -125,15 +127,17 @@ const EndringAvSøknadsperioder = (props: Props) => {
             <>
                 {hasPeriodeUtenforGrenser && (
                     <Alert size="small" variant="warning" className="mt-6">
-                        Den valgte perioden går utenfor grensene for eksisterende søknadsperioder. Sjekk at du har valgt
-                        riktig periode.
+                        <FormattedMessage id="skjema.felt.endringAvSøknadsperioder.alert.utenforGrenser" />
                     </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && (
                     <Alert size="small" variant="warning" className="mt-6">
-                        Du vil fjerne en periode i <b>starten</b> av eksisterende søknadsperiode. Dette vil føre til
-                        nytt skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
-                        Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iStarten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {!hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode &&
                             !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode &&
                             begrunnelsesfelt}
@@ -141,18 +145,23 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
                     <Alert size="small" variant="warning" className="mt-6">
-                        Du vil fjerne en periode i <b>midten</b> av en eksisterende søknadsperiode. Dette vil føre til
-                        nye skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike
-                        tidspunkt. Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var
-                        innvilget.
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iMidten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {!hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && begrunnelsesfelt}
                     </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
                     <Alert size="small" variant="info" className="mt-6">
-                        Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
-                        du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
-                        enn den du fjerner.
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iSlutten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {begrunnelsesfelt}
                     </Alert>
                 )}
@@ -173,7 +182,12 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
             <Accordion.Content>
                 <Label size="small">
-                    Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
+                    <FormattedMessage
+                        id="skjema.felt.endringAvSøknadsperioder.spørsmålHvilkenPeriode"
+                        values={{
+                            u: (chunks) => <span className="endringAvSøknadsperioder__underscore">{chunks}</span>,
+                        }}
+                    />
                 </Label>
 
                 <Periodepaneler
