@@ -87,7 +87,12 @@ const mockHandlersTest = {
             søknader: [],
         }),
     ),
-    infoPleiepenger: http.post(ApiPath.PSB_K9SAK_PERIODER, () => HttpResponse.json([])),
+    infoPleiepenger: http.post(ApiPath.PSB_K9SAK_PERIODER, () =>
+        HttpResponse.json([
+            { fom: '2021-10-01', tom: '2021-10-15' },
+            { fom: '2021-12-01', tom: '2021-12-20' },
+        ]),
+    ),
     infoPils: http.post(ApiPath.PLS_K9SAK_PERIODER, () => HttpResponse.json([])),
 
     eksisterendePleiepengesoknad: http.get(

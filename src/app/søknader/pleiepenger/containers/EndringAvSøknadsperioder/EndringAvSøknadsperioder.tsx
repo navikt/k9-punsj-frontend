@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
-import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
@@ -12,12 +11,12 @@ import './endringAvSøknadsperioder.less';
 
 interface Props {
     isOpen: boolean;
+    soknad: PSBSoknad;
+    eksisterendePerioder?: IPeriode[];
     onClick: () => void;
     getErrorMessage: (attribute: string, indeks?: number) => React.ReactNode;
-    soknad: PSBSoknad;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
-    eksisterendePerioder?: IPeriode[];
 }
 
 const EndringAvSøknadsperioder = (props: Props) => {
@@ -125,32 +124,32 @@ const EndringAvSøknadsperioder = (props: Props) => {
         return (
             <>
                 {hasPeriodeUtenforGrenser && (
-                    <CustomAlertstripeAdvarsel>
+                    <Alert size="small" variant="warning" className="mt-6">
                         Den valgte perioden går utenfor grensene for eksisterende søknadsperioder. Sjekk at du har valgt
                         riktig periode.
-                    </CustomAlertstripeAdvarsel>
+                    </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && (
-                    <CustomAlertstripeAdvarsel>
+                    <Alert size="small" variant="warning" className="mt-6">
                         Du vil fjerne en periode i <b>starten</b> av eksisterende søknadsperiode. Dette vil føre til
                         nytt skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
                         Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
                         {!hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode &&
                             !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode &&
                             begrunnelsesfelt}
-                    </CustomAlertstripeAdvarsel>
+                    </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
-                    <CustomAlertstripeAdvarsel>
+                    <Alert size="small" variant="warning" className="mt-6">
                         Du vil fjerne en periode i <b>midten</b> av en eksisterende søknadsperiode. Dette vil føre til
                         nye skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike
                         tidspunkt. Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var
                         innvilget.
                         {!hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && begrunnelsesfelt}
-                    </CustomAlertstripeAdvarsel>
+                    </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
-                    <Alert size="small" variant="info" className="endringAvSøknadsperioder__alert">
+                    <Alert size="small" variant="info" className="mt-6">
                         Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
                         du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
                         enn den du fjerner.
