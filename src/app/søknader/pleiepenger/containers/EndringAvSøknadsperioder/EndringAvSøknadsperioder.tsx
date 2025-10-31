@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
-
-import './endringAvSøknadsperioder.less';
 
 interface Props {
     isOpen: boolean;
@@ -22,8 +19,6 @@ interface Props {
 }
 
 const EndringAvSøknadsperioder = (props: Props) => {
-    const intl = useIntl();
-
     const { isOpen, onClick, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } = props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
 
@@ -38,9 +33,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
     }
 
     const begrunnelseForInnsendingFeilmelding = () =>
-        getErrorMessage('begrunnelseForInnsending')
-            ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
-            : null;
+        getErrorMessage('begrunnelseForInnsending') ? (
+            <FormattedMessage id="skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding" />
+        ) : null;
 
     const alleTrekkKravPerioderFeilmelding = () => getErrorMessage('alleTrekkKravPerioderFeilmelding') || null;
 
@@ -105,9 +100,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
         );
 
         const begrunnelsesfelt = (
-            <div className="endringAvSøknadsperioder__begrunnelse">
+            <div className="mt-4">
                 <Textarea
-                    label={intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse')}
+                    label={<FormattedMessage id="skjema.felt.endringAvSøknadsperioder.begrunnelse" />}
                     value={soknad.begrunnelseForInnsending?.tekst || ''}
                     onChange={(event) => {
                         const { value } = event.target;
@@ -172,7 +167,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
     return (
         <Accordion.Item
             open={isOpen}
-            className="endringAvSøknadsperioder"
+            className="mb-2"
             onOpenChange={onClick}
             data-testid="accordionItem-endringAvSøknadsperioderpanel"
         >
@@ -185,7 +180,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
                     <FormattedMessage
                         id="skjema.felt.endringAvSøknadsperioder.spørsmålHvilkenPeriode"
                         values={{
-                            u: (chunks) => <span className="endringAvSøknadsperioder__underscore">{chunks}</span>,
+                            u: (chunks) => <span className="underline">{chunks}</span>,
                         }}
                     />
                 </Label>
@@ -204,13 +199,13 @@ const EndringAvSøknadsperioder = (props: Props) => {
                     feilkodeprefiks="endringAvSøknadsperioder"
                     kanHaFlere
                 />
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                <ErrorMessage size="small" className="mt-2 ml-4" aria-hidden="true">
                     {alleTrekkKravPerioderFeilmelding()}
                 </ErrorMessage>
 
                 {getAlertstriper()}
 
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                <ErrorMessage size="small" className="mt-2 ml-4" aria-hidden="true">
                     {begrunnelseForInnsendingFeilmelding()}
                 </ErrorMessage>
             </Accordion.Content>
