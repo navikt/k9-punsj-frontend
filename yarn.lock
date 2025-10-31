@@ -9021,10 +9021,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.18":
-  version: 1.11.18
-  resolution: "dayjs@npm:1.11.18"
-  checksum: 10/7d29a90834cf4da2feb437c2f34b8235c3f94493a06d2f1bf9f506f1fa49eadf796f26e1d685b9fe8cb5e75ce6ee067825115e196f1af3d07b3552ff857bfc39
+"dayjs@npm:1.11.19":
+  version: 1.11.19
+  resolution: "dayjs@npm:1.11.19"
+  checksum: 10/185b820d68492b83a3ce2b8ddc7543034edc1dfd1423183f6ae4707b29929a3cc56503a81826309279f9084680c15966b99456e74cf41f7d1f6a2f98f9c7196f
   languageName: node
   linkType: hard
 
@@ -10277,15 +10277,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-storybook@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "eslint-plugin-storybook@npm:10.0.0"
+"eslint-plugin-storybook@npm:^10.0.2":
+  version: 10.0.2
+  resolution: "eslint-plugin-storybook@npm:10.0.2"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.8.1"
   peerDependencies:
     eslint: ">=8"
-    storybook: ^10.0.0
-  checksum: 10/f12e6bfbb354324557d362e4496ddc917139a289cac1dd2471254a4515413247170c761d22b614cc71c55a8584c07346cd597bbbd361c1f2e0a6c3e641dbda3a
+    storybook: ^10.0.2
+  checksum: 10/b5448c2562e9a5b09e3d0b8a10be8cb6a64f1d8ce166bc69e010bc459bdb5400b7a18e04f398077ea7ba746ac4be8b87e9e00f427a0fb5e72c32b123a7daa18e
   languageName: node
   linkType: hard
 
@@ -13831,7 +13831,7 @@ __metadata:
     cypress: "npm:^15.5.0"
     cypress-wait-until: "npm:^3.0.2"
     date-fns: "npm:4.1.0"
-    dayjs: "npm:1.11.18"
+    dayjs: "npm:1.11.19"
     dotenv: "npm:17.2.3"
     eslint: "npm:^9.38.0"
     eslint-config-prettier: "npm:10.1.8"
@@ -13840,7 +13840,7 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:7.0.1"
-    eslint-plugin-storybook: "npm:^10.0.0"
+    eslint-plugin-storybook: "npm:^10.0.2"
     formik: "npm:2.4.6"
     glob: "npm:11.0.3"
     html-webpack-harddisk-plugin: "npm:2.0.0"
