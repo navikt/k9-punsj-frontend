@@ -47,6 +47,33 @@ const EndringAvSoknadsperioder = (props: Props) => {
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
+        // Finn minste fom og største tom fra alle eksisterende perioder
+        const minEksisterendeFom = formaterteEksisterendePerioder.reduce(
+            (min, periode) => {
+                const periodeFom = initializeDate(periode.fom);
+                return !min || periodeFom.isBefore(min) ? periodeFom : min;
+            },
+            null as ReturnType<typeof initializeDate> | null,
+        );
+
+        const maxEksisterendeTom = formaterteEksisterendePerioder.reduce(
+            (max, periode) => {
+                const periodeTom = initializeDate(periode.tom);
+                return !max || periodeTom.isAfter(max) ? periodeTom : max;
+            },
+            null as ReturnType<typeof initializeDate> | null,
+        );
+
+        // Sjekk om noen perioder går utenfor grensene
+        const hasPeriodeUtenforGrenser = komplettePerioder.some((periode) => {
+            const periodeFom = initializeDate(periode.fom);
+            const periodeTom = initializeDate(periode.tom);
+            return (
+                (minEksisterendeFom && periodeFom.isBefore(minEksisterendeFom)) ||
+                (maxEksisterendeTom && periodeTom.isAfter(maxEksisterendeTom))
+            );
+        });
+
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
         );
@@ -82,6 +109,11 @@ const EndringAvSoknadsperioder = (props: Props) => {
 
         return (
             <>
+                {hasPeriodeUtenforGrenser && (
+                    <Alert size="small" variant="warning" className="mt-6">
+                        <FormattedMessage id="skjema.felt.endringAvSøknadsperioder.alert.utenforGrenser" />
+                    </Alert>
+                )}
                 {hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && (
                     <Alert size="small" variant="warning" className="mt-6">
                         <FormattedMessage
