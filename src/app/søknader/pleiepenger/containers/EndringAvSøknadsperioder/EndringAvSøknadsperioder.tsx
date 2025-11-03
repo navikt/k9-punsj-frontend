@@ -6,7 +6,7 @@ import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-reac
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
+import { initializeDate, slåSammenSammenhengendePerioder, checkPeriodsOutsideBounds } from 'app/utils';
 
 interface Props {
     isOpen: boolean;
@@ -49,32 +49,8 @@ const EndringAvSøknadsperioder = (props: Props) => {
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
-        // Finn minste fom og største tom fra alle eksisterende perioder
-        const minEksisterendeFom = formaterteEksisterendePerioder.reduce(
-            (min, periode) => {
-                const periodeFom = initializeDate(periode.fom);
-                return !min || periodeFom.isBefore(min) ? periodeFom : min;
-            },
-            null as ReturnType<typeof initializeDate> | null,
-        );
-
-        const maxEksisterendeTom = formaterteEksisterendePerioder.reduce(
-            (max, periode) => {
-                const periodeTom = initializeDate(periode.tom);
-                return !max || periodeTom.isAfter(max) ? periodeTom : max;
-            },
-            null as ReturnType<typeof initializeDate> | null,
-        );
-
         // Sjekk om noen perioder går utenfor grensene
-        const hasPeriodeUtenforGrenser = komplettePerioder.some((periode) => {
-            const periodeFom = initializeDate(periode.fom);
-            const periodeTom = initializeDate(periode.tom);
-            return (
-                (minEksisterendeFom && periodeFom.isBefore(minEksisterendeFom)) ||
-                (maxEksisterendeTom && periodeTom.isAfter(maxEksisterendeTom))
-            );
-        });
+        const hasPeriodeUtenforGrenser = checkPeriodsOutsideBounds(komplettePerioder, formaterteEksisterendePerioder);
 
         /*
          * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,

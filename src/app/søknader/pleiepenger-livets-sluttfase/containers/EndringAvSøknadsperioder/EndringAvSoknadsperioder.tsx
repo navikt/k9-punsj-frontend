@@ -6,7 +6,7 @@ import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-reac
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { IPeriode, Periode } from '../../../../models/types';
 import { IPLSSoknad, PLSSoknad } from '../../types/PLSSoknad';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
+import { initializeDate, slåSammenSammenhengendePerioder, checkPeriodsOutsideBounds } from 'app/utils';
 
 interface Props {
     isOpen: boolean;
@@ -47,32 +47,8 @@ const EndringAvSoknadsperioder = (props: Props) => {
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
 
-        // Finn minste fom og største tom fra alle eksisterende perioder
-        const minEksisterendeFom = formaterteEksisterendePerioder.reduce(
-            (min, periode) => {
-                const periodeFom = initializeDate(periode.fom);
-                return !min || periodeFom.isBefore(min) ? periodeFom : min;
-            },
-            null as ReturnType<typeof initializeDate> | null,
-        );
-
-        const maxEksisterendeTom = formaterteEksisterendePerioder.reduce(
-            (max, periode) => {
-                const periodeTom = initializeDate(periode.tom);
-                return !max || periodeTom.isAfter(max) ? periodeTom : max;
-            },
-            null as ReturnType<typeof initializeDate> | null,
-        );
-
         // Sjekk om noen perioder går utenfor grensene
-        const hasPeriodeUtenforGrenser = komplettePerioder.some((periode) => {
-            const periodeFom = initializeDate(periode.fom);
-            const periodeTom = initializeDate(periode.tom);
-            return (
-                (minEksisterendeFom && periodeFom.isBefore(minEksisterendeFom)) ||
-                (maxEksisterendeTom && periodeTom.isAfter(maxEksisterendeTom))
-            );
-        });
+        const hasPeriodeUtenforGrenser = checkPeriodsOutsideBounds(komplettePerioder, formaterteEksisterendePerioder);
 
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
