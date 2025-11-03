@@ -50,8 +50,15 @@ const EndringAvSoknadsperioder = (props: Props) => {
         // Sjekk om noen perioder går utenfor grensene
         const hasPeriodeUtenforGrenser = checkPeriodsOutsideBounds(komplettePerioder, formaterteEksisterendePerioder);
 
+        /*
+         * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
+         * Fra k9 format validator
+         */
+
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
+                initializeDate(periode.fom).isSameOrBefore(initializeDate(eksisterendePeriode.fom)),
+            ),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some(
@@ -61,7 +68,9 @@ const EndringAvSoknadsperioder = (props: Props) => {
             ),
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
+                initializeDate(periode.tom).isSameOrAfter(initializeDate(eksisterendePeriode.tom)),
+            ),
         );
 
         const begrunnelsesfelt = (
