@@ -161,20 +161,24 @@ const EndringAvSøknadsperioder = (props: Props) => {
                     />
                 </Label>
 
-                <Periodepaneler
-                    periods={soknad.trekkKravPerioder || []}
-                    initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
-                    editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
-                        setSelectedPeriods(perioder);
-                    }}
-                    textLeggTil="skjema.perioder.legg_til"
-                    textFjern="skjema.perioder.fjern"
-                    getErrorMessage={getErrorMessage}
-                    feilkodeprefiks="endringAvSøknadsperioder"
-                    kanHaFlere
-                />
+                <div className="flex">
+                    <Periodepaneler
+                        periods={soknad.trekkKravPerioder || []}
+                        initialPeriode={{ fom: '', tom: '' }}
+                        editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
+                        editSoknadState={(perioder, showStatus) => {
+                            updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                            setSelectedPeriods(perioder);
+                        }}
+                        textLeggTil="skjema.perioder.legg_til"
+                        textFjern="skjema.perioder.fjern"
+                        getErrorMessage={getErrorMessage}
+                        feilkodeprefiks="endringAvSøknadsperioder"
+                        kanHaFlere
+                        doNotShowBorders={true}
+                    />
+                </div>
+
                 <ErrorMessage size="small" className="mt-2 ml-4" aria-hidden="true">
                     {alleTrekkKravPerioderFeilmelding()}
                 </ErrorMessage>
