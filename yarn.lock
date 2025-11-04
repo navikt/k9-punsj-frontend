@@ -5066,6 +5066,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/react-dom-shim@npm:10.0.3":
+  version: 10.0.3
+  resolution: "@storybook/react-dom-shim@npm:10.0.3"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    storybook: ^10.0.3
+  checksum: 10/bc7a2b9ed7a9f783e54596e5c87450985befc2cf05eea0909dfc55fd0ce129456be0434a08057ef3e871e3161f9c8fc552b8a715c4741ee3b8de23156d88427a
+  languageName: node
+  linkType: hard
+
 "@storybook/react-dom-shim@npm:8.6.14":
   version: 8.6.14
   resolution: "@storybook/react-dom-shim@npm:8.6.14"
@@ -5096,7 +5107,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:10.0.0, @storybook/react@npm:^10.0.0":
+"@storybook/react@npm:10.0.0":
   version: 10.0.0
   resolution: "@storybook/react@npm:10.0.0"
   dependencies:
@@ -5111,6 +5122,24 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/eb67db1499a752e875c8aa07f7812e79789f67fdb10a8d3da55b5478e0e0da386d96a8f94a565766ea4e076dd5089b9a3d8c9c059f24ac63a77a972f77d49902
+  languageName: node
+  linkType: hard
+
+"@storybook/react@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "@storybook/react@npm:10.0.3"
+  dependencies:
+    "@storybook/global": "npm:^5.0.0"
+    "@storybook/react-dom-shim": "npm:10.0.3"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    storybook: ^10.0.3
+    typescript: ">= 4.9.x"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/70d358cb18961f9170bad5a361d8e6b6943c5fd313b77aab9ec44d028cf50e07bab5f0fc2dbfda3d9cec57f4173de40b7a08eb35bf111cd9ebce6f5aca7c63df
   languageName: node
   linkType: hard
 
@@ -13790,7 +13819,7 @@ __metadata:
     "@storybook/addon-essentials": "npm:8.6.14"
     "@storybook/addon-interactions": "npm:8.6.14"
     "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.1"
-    "@storybook/react": "npm:^10.0.0"
+    "@storybook/react": "npm:^10.0.3"
     "@storybook/react-webpack5": "npm:^10.0.0"
     "@tanstack/react-query": "npm:5.90.5"
     "@tanstack/react-query-devtools": "npm:5.90.2"
