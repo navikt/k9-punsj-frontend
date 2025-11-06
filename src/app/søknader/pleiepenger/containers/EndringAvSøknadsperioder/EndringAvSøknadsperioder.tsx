@@ -1,28 +1,24 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+
+import { FormattedMessage } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
-import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
-import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
-import intlHelper from 'app/utils/intlUtils';
+
+import { Periodepaneler } from '../../../../components/Periodepaneler';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode, Periode } from '../../../../models/types/Periode';
-import { Periodepaneler } from '../../../../components/Periodepaneler';
-
-import './endringAvSøknadsperioder.less';
+import { initializeDate, slåSammenSammenhengendePerioder, checkPeriodsOutsideBounds } from 'app/utils';
 
 interface Props {
     isOpen: boolean;
+    soknad: PSBSoknad;
+    eksisterendePerioder?: IPeriode[];
     onClick: () => void;
     getErrorMessage: (attribute: string, indeks?: number) => React.ReactNode;
-    soknad: PSBSoknad;
     updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
-    eksisterendePerioder?: IPeriode[];
 }
 
 const EndringAvSøknadsperioder = (props: Props) => {
-    const intl = useIntl();
-
     const { isOpen, onClick, getErrorMessage, soknad, updateSoknad, updateSoknadState, eksisterendePerioder } = props;
     const [selectedPeriods, setSelectedPeriods] = React.useState<IPeriode[]>(soknad.trekkKravPerioder || []);
 
@@ -37,9 +33,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
     }
 
     const begrunnelseForInnsendingFeilmelding = () =>
-        getErrorMessage('begrunnelseForInnsending')
-            ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
-            : null;
+        getErrorMessage('begrunnelseForInnsending') ? (
+            <FormattedMessage id="skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding" />
+        ) : null;
 
     const alleTrekkKravPerioderFeilmelding = () => getErrorMessage('alleTrekkKravPerioderFeilmelding') || null;
 
@@ -52,6 +48,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
         const formaterteEksisterendePerioder = slåSammenSammenhengendePerioder(
             eksisterendePerioder.map((periode) => new Periode(periode)),
         );
+
+        // Sjekk om noen perioder går utenfor grensene
+        const hasPeriodeUtenforGrenser = checkPeriodsOutsideBounds(komplettePerioder, formaterteEksisterendePerioder);
 
         /*
          * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
@@ -77,9 +76,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
         );
 
         const begrunnelsesfelt = (
-            <div className="endringAvSøknadsperioder__begrunnelse">
+            <div className="mt-4">
                 <Textarea
-                    label={intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse')}
+                    label={<FormattedMessage id="skjema.felt.endringAvSøknadsperioder.begrunnelse" />}
                     value={soknad.begrunnelseForInnsending?.tekst || ''}
                     onChange={(event) => {
                         const { value } = event.target;
@@ -97,30 +96,43 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
         return (
             <>
+                {hasPeriodeUtenforGrenser && (
+                    <Alert size="small" variant="warning" className="mt-6">
+                        <FormattedMessage id="skjema.felt.endringAvSøknadsperioder.alert.utenforGrenser" />
+                    </Alert>
+                )}
                 {hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && (
-                    <CustomAlertstripeAdvarsel>
-                        Du vil fjerne en periode i <b>starten</b> av eksisterende søknadsperiode. Dette vil føre til
-                        nytt skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
-                        Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
+                    <Alert size="small" variant="warning" className="mt-6">
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iStarten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {!hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode &&
                             !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode &&
                             begrunnelsesfelt}
-                    </CustomAlertstripeAdvarsel>
+                    </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
-                    <CustomAlertstripeAdvarsel>
-                        Du vil fjerne en periode i <b>midten</b> av en eksisterende søknadsperiode. Dette vil føre til
-                        nye skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike
-                        tidspunkt. Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var
-                        innvilget.
+                    <Alert size="small" variant="warning" className="mt-6">
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iMidten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {!hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && begrunnelsesfelt}
-                    </CustomAlertstripeAdvarsel>
+                    </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
-                    <Alert size="small" variant="info" className="endringAvSøknadsperioder__alert">
-                        Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
-                        du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
-                        enn den du fjerner.
+                    <Alert size="small" variant="info" className="mt-6">
+                        <FormattedMessage
+                            id="skjema.felt.endringAvSøknadsperioder.alert.iSlutten"
+                            values={{
+                                b: (chunks) => <b>{chunks}</b>,
+                            }}
+                        />
                         {begrunnelsesfelt}
                     </Alert>
                 )}
@@ -131,7 +143,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
     return (
         <Accordion.Item
             open={isOpen}
-            className="endringAvSøknadsperioder"
+            className="mb-2"
             onOpenChange={onClick}
             data-testid="accordionItem-endringAvSøknadsperioderpanel"
         >
@@ -141,30 +153,39 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
             <Accordion.Content>
                 <Label size="small">
-                    Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
+                    <FormattedMessage
+                        id="skjema.felt.endringAvSøknadsperioder.spørsmålHvilkenPeriode"
+                        values={{
+                            u: (chunks) => <span className="underline">{chunks}</span>,
+                        }}
+                    />
                 </Label>
 
-                <Periodepaneler
-                    periods={soknad.trekkKravPerioder || []}
-                    initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
-                    editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
-                        setSelectedPeriods(perioder);
-                    }}
-                    textLeggTil="skjema.perioder.legg_til"
-                    textFjern="skjema.perioder.fjern"
-                    getErrorMessage={getErrorMessage}
-                    feilkodeprefiks="endringAvSøknadsperioder"
-                    kanHaFlere
-                />
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                <div className="flex">
+                    <Periodepaneler
+                        periods={soknad.trekkKravPerioder || []}
+                        initialPeriode={{ fom: '', tom: '' }}
+                        editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
+                        editSoknadState={(perioder, showStatus) => {
+                            updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                            setSelectedPeriods(perioder);
+                        }}
+                        textLeggTil="skjema.perioder.legg_til"
+                        textFjern="skjema.perioder.fjern"
+                        getErrorMessage={getErrorMessage}
+                        feilkodeprefiks="endringAvSøknadsperioder"
+                        kanHaFlere
+                        doNotShowBorders={true}
+                    />
+                </div>
+
+                <ErrorMessage size="small" className="mt-2 ml-4" aria-hidden="true">
                     {alleTrekkKravPerioderFeilmelding()}
                 </ErrorMessage>
 
                 {getAlertstriper()}
 
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
+                <ErrorMessage size="small" className="mt-2 ml-4" aria-hidden="true">
                     {begrunnelseForInnsendingFeilmelding()}
                 </ErrorMessage>
             </Accordion.Content>
