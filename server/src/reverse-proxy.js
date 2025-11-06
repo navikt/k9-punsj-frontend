@@ -98,9 +98,9 @@ const timedOut = function (req, res, next) {
 
 const setup = (router) => {
     config.reverseProxyConfig.apis.forEach((api) => {
-        router.use(`${api.path}/*`, timedOut, proxy(api.url, proxyOptions(api)));
+        router.use(`${api.path}/*splat`, timedOut, proxy(api.url, proxyOptions(api)));
         // eslint-disable-next-line no-console
-        console.log(`Proxy set up: ${api.path}/* -> ${api.url}`);
+        console.log(`Proxy set up: ${api.path}/*splat -> ${api.url}`);
     });
 };
 
