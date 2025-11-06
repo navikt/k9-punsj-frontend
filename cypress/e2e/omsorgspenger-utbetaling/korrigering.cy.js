@@ -30,7 +30,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
+            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
@@ -59,7 +59,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
+            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
@@ -94,7 +94,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Timer fravær per dag').type('7');
 
         cy.findByText(
-            'Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?',
+            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
         ).should('not.exist');
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');

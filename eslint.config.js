@@ -3,9 +3,7 @@ import eslintPluginReact from 'eslint-plugin-react';
 import importPlugin from 'eslint-plugin-import';
 import pluginJs from '@eslint/js';
 
-// eslint-disable-next-line import/no-unresolved
 import tsParser from '@typescript-eslint/parser';
-// eslint-disable-next-line import/no-unresolved
 import tseslint from 'typescript-eslint';
 
 const OFF = 0;
@@ -22,6 +20,7 @@ export default [
                 version: 'detect',
             },
             'import/resolver': {
+                typescript: {},
                 node: {
                     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less', '.scss'],
                     moduleDirectory: ['node_modules', 'src/'],
@@ -77,6 +76,13 @@ export default [
             '@typescript-eslint/no-explicit-any': OFF,
             '@typescript-eslint/ban-ts-comment': OFF,
             'import/no-named-as-default-member': OFF,
+        },
+    },
+    {
+        name: 'server-specific',
+        files: ['server/**/*.js'],
+        rules: {
+            'import/no-unresolved': OFF,
         },
     },
 ];

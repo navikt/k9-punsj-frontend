@@ -25,7 +25,7 @@ import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../formikInput/TextAreaFormik';
 import TextFieldFormik from '../formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatoInputFormikNew from '../formikInput/DatoInputFormikNew';
+import DatovelgerFormik from '../skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -39,26 +39,16 @@ const erEldreEnn4år = (dato: string) => {
     return new Date(dato) < fireAarSiden;
 };
 
-const initialPeriode: IPeriode = { fom: '', tom: '' };
-
 interface ArbeidsforholdPanelProps {
     isOpen: boolean;
     onPanelClick: () => void;
-    eksisterendePerioder: IPeriode[];
+    søknadsperioder: IPeriode[];
 }
 
-const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: ArbeidsforholdPanelProps): JSX.Element => {
+const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
 
-    const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
-
-    const getSoknadsperiode = () => {
-        if (values?.soeknadsperiode && values.soeknadsperiode.length > 0) {
-            return values.soeknadsperiode;
-        }
-        return [initialPeriode];
-    };
 
     const initialArbeidstaker = () =>
         new Arbeidstaker({
@@ -77,7 +67,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
     const initialSelvstedigNæringsdrivende = () =>
         new SelvstendigNaerinsdrivende({
-            periode: getSoknadsperiode()[0],
+            periode: { fom: '', tom: '' },
             virksomhetstyper: [],
             registrertIUtlandet: false,
             landkode: '',
@@ -91,8 +81,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
         });
 
     const frilanserperioder = () => (
-        <>
-            <DatoInputFormikNew
+        <div>
+            <DatovelgerFormik
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
@@ -109,14 +99,22 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     />
                 )}
             </Field>
-
-            <VerticalSpacer eightPx />
-
+            <VerticalSpacer sixteenPx />
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
-                <DatoInputFormikNew
+                <DatovelgerFormik
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    fromDate={
+                        values.opptjeningAktivitet.frilanser?.startdato
+                            ? new Date(values.opptjeningAktivitet.frilanser.startdato)
+                            : undefined
+                    }
+                    defaultMonth={
+                        values.opptjeningAktivitet.frilanser?.startdato
+                            ? new Date(values.opptjeningAktivitet.frilanser.startdato)
+                            : undefined
+                    }
                 />
             )}
 
@@ -133,8 +131,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     <Field name="arbeidstid.frilanserArbeidstidInfo.perioder">
                         {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                             <ArbeidstidKalender
-                                nyeSoknadsperioder={values.soeknadsperiode}
-                                eksisterendeSoknadsperioder={eksisterendePerioder}
+                                søknadsperioder={søknadsperioder}
                                 updateSoknad={(perioder) => {
                                     form.setFieldValue(field.name, [...perioder]);
                                 }}
@@ -144,7 +141,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </Field>
                 </>
             )}
-        </>
+        </div>
     );
 
     const selvstendigperioder = () => {
@@ -166,6 +163,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                         )}].virksomhetstyper`
                     )} */}
 
+                <VerticalSpacer sixteenPx />
+
                 <div className="generelleopplysiniger">
                     <div className="flex flex-wrap">
                         <TextFieldFormik
@@ -176,17 +175,21 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </div>
                 </div>
 
+                <VerticalSpacer sixteenPx />
+
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
                         <RadioPanelGruppeFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
-                            checked={field.value ? 'nei' : 'ja'}
+                            checked={field.value ? JaNei.NEI : JaNei.JA}
                             name={field.name}
                             options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                            onChange={(e, value) => form.setFieldValue(field.name, value !== 'ja')}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA ? false : true)}
                         />
                     )}
                 </Field>
+
+                <VerticalSpacer sixteenPx />
 
                 {!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="flex flex-wrap">
@@ -202,64 +205,68 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
-                        {({ field, form }: FieldProps<boolean>) => (
+                        {({ field, form, meta }: FieldProps<string>) => (
                             <CountrySelect
                                 selectedcountry={opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.landkode || ''}
                                 label={intlHelper(intl, 'skjema.sn.registrertLand')}
                                 onChange={(event) => {
                                     form.setFieldValue(field.name, event.target.value);
+                                    form.setFieldTouched(field.name, true);
                                 }}
+                                error={meta.touched && meta.error}
                             />
                         )}
                     </Field>
                 )}
 
+                <VerticalSpacer sixteenPx />
+
                 <RadioPanelGruppeFormik
                     legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
-                    checked={
-                        harRegnskapsfører || opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.regnskapsførerNavn
-                            ? 'ja'
-                            : 'nei'
-                    }
-                    name="harRegnskapsfører"
+                    checked={values.metadata.harSøkerRegnskapsfører === JaNei.JA ? JaNei.JA : JaNei.NEI}
+                    name="metadata.harSøkerRegnskapsfører"
                     options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                     onChange={(e, value) => {
-                        setHasRegnskapsfører(value === 'ja');
-                        if (value === 'ja') {
-                            setFieldValue(
-                                'opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn',
-                                '',
-                            );
-                            setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf', '');
-                        }
+                        setFieldValue('metadata.harSøkerRegnskapsfører', value);
+                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn', '');
+                        setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf', '');
                     }}
                 />
 
-                {harRegnskapsfører && (
-                    <div className="generelleopplysiniger">
-                        <div className="flex flex-wrap">
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
-                                className="regnskapsførerNavn"
-                            />
-                        </div>
+                {values.metadata.harSøkerRegnskapsfører === JaNei.JA && (
+                    <>
+                        <VerticalSpacer sixteenPx />
+                        <div className="generelleopplysiniger">
+                            <div className="flex flex-wrap">
+                                <TextFieldFormik
+                                    label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
+                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
+                                    className="regnskapsførerNavn"
+                                />
+                            </div>
 
-                        <div className="flex flex-wrap">
-                            <TextFieldFormik
-                                label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
-                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
-                                className="sn-regskasførertlf"
-                                type="number"
-                            />
+                            <VerticalSpacer sixteenPx />
+
+                            <div className="flex flex-wrap">
+                                <TextFieldFormik
+                                    label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
+                                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
+                                    className="sn-regskasførertlf"
+                                    type="number"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
+
+                <VerticalSpacer sixteenPx />
 
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
 
+                <VerticalSpacer sixteenPx />
+
                 <div className="sn-startdatocontainer">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
@@ -269,47 +276,65 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
                         )} */}
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        fromDate={
+                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
+                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
+                        defaultMonth={
+                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
+                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
                     />
                 </div>
 
+                <VerticalSpacer sixteenPx />
+
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <TextFieldFormik
-                            label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
-                            className="bruttoinntekt"
-                        />
+                        <>
+                            <TextFieldFormik
+                                label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
+                                className="bruttoinntekt"
+                            />
+                            <VerticalSpacer sixteenPx />
+                        </>
                     )}
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erEldreEnn4år(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
-                        <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
-                            {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
-                                    legend={intlHelper(intl, 'skjema.sn.varigendring')}
-                                    checked={field.value ? 'ja' : 'nei'}
-                                    name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
-                                    onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
-                                />
-                            )}
-                        </Field>
+                        <>
+                            <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
+                                {({ field, form }: FieldProps<boolean>) => (
+                                    <RadioPanelGruppeFormik
+                                        legend={intlHelper(intl, 'skjema.sn.varigendring')}
+                                        checked={field.value ? 'ja' : 'nei'}
+                                        name={field.name}
+                                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
+                                        onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
+                                    />
+                                )}
+                            </Field>
+                            <VerticalSpacer sixteenPx />
+                        </>
                     )}
 
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <DatoInputFormikNew
+                            <DatovelgerFormik
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                             />
                         </div>
-
+                        <VerticalSpacer sixteenPx />
                         <div className="flex flex-wrap">
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
@@ -318,15 +343,15 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                 type="number"
                             />
                         </div>
-
+                        <VerticalSpacer sixteenPx />
                         <TextAreaFormik
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             className="endringbegrunnelse"
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
                         />
+                        <VerticalSpacer sixteenPx />
                     </>
                 )}
-                <VerticalSpacer eightPx />
 
                 <div className="arbeidstidInfo">
                     <hr />
@@ -337,13 +362,12 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     </Alert>
                 </div>
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
                     {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                         <ArbeidstidKalender
-                            nyeSoknadsperioder={values.soeknadsperiode}
-                            eksisterendeSoknadsperioder={eksisterendePerioder}
+                            søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
                                 form.setFieldValue(field.name, [...perioder]);
                             }}
@@ -388,12 +412,12 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     checked={values.arbeidstid?.arbeidstakerList?.length > 0}
                 />
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 {!!values.arbeidstid?.arbeidstakerList?.length && (
                     <Arbeidstakerperioder
-                        eksisterendePerioder={eksisterendePerioder}
                         initialArbeidstaker={initialArbeidstaker()}
+                        søknadsperioder={søknadsperioder}
                     />
                 )}
 
@@ -414,7 +438,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                     checked={!!values.opptjeningAktivitet?.frilanser}
                 />
 
-                <VerticalSpacer eightPx />
+                <VerticalSpacer sixteenPx />
 
                 {!!values.opptjeningAktivitet.frilanser && (
                     <Box padding="4" borderWidth="1" borderRadius="small" className="frilanserpanel">
@@ -439,10 +463,12 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, eksisterendePerioder }: Arb
                                     'arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo',
                                     new ArbeidstidInfo({}),
                                 );
+                                setFieldValue('metadata.harSøkerRegnskapsfører', JaNei.NEI);
                             }
                         } else {
                             setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende', null);
                             setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo', null);
+                            setFieldValue('metadata.harSøkerRegnskapsfører', JaNei.NEI);
                         }
                     }}
                     checked={!!values.opptjeningAktivitet?.selvstendigNaeringsdrivende}

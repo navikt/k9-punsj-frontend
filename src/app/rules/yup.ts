@@ -77,17 +77,34 @@ export const identifikatorAnnenPart = yup.object().shape({
         }),
 });
 
-export const dato = () =>
-    yup.string().test({
-        test: (v) => !!gyldigDato(v || ''),
-        message: 'Må ha en gyldig dato',
-    });
+export const datoErGyldig = {
+    test: (v?: string) => {
+        if (!v) return false;
+        return dayjs(v).isValid();
+    },
+    message: 'Må ha en gyldig dato',
+};
+
+export const datoErIkkeIHelg = (v?: string) => {
+    if (!v) return false;
+    return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
+};
+
+export const periodeErIkkeKunHelg = ({ fom, tom }: { fom?: string; tom?: string }) => {
+    if (!fom || !tom) return false;
+    const totalDays = dayjs(tom).diff(dayjs(fom), 'day');
+    const kunHelg = totalDays < 3 && !datoErIkkeIHelg(fom) && !datoErIkkeIHelg(tom);
+    return !kunHelg;
+};
 
 export const periode = () =>
     yup.object().shape({
         fom: yup.string().required().label('Fra og med'),
         tom: yup.string().required().label('Til og med'),
     });
+
+export const fomDato = yup.string().label('Fra og med');
+export const tomDato = yup.string().label('Til og med');
 
 export const utenlandsperiode = yup.object().shape({
     periode: periode(),
@@ -107,6 +124,12 @@ export const timerOgMinutter = yup.object({
     timer,
     minutter,
 });
+
+export const tomEtterFom = function (value: string) {
+    const { fom } = this.parent;
+    if (!fom || !value) return true; // Skip validation if either date is missing
+    return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));
+};
 
 export const periodeMedTimerOgMinutter = yup.object({
     periode: yup.object({

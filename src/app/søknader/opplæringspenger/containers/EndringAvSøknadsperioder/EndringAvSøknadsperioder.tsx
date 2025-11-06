@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, ErrorMessage, Label } from '@navikt/ds-react';
+import { Accordion, Alert, ErrorMessage } from '@navikt/ds-react';
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -118,17 +118,12 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
                 <FormattedMessage id="skjema.endringAvSøknadsperioder" />
             </Accordion.Header>
 
-            <Label size="small">
-                Hvilken periode vil du <span className="endringAvSøknadsperioder__underscore">fjerne</span>?
-            </Label>
-
             <Accordion.Content>
                 <Periodepaneler
                     periods={values.trekkKravPerioder || []}
                     fieldName="trekkKravPerioder"
-                    textLeggTil="skjema.perioder.legg_til"
-                    textFjern="skjema.perioder.fjern"
                     kanHaFlere
+                    label="Hvilke perioder vil du fjerne?"
                 />
 
                 {getAlertstriper()}

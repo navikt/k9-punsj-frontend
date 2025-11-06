@@ -1,6 +1,6 @@
 import { RegisterOptions } from 'react-hook-form';
 import { useIntl } from 'react-intl';
-import { isNotValidOrgNumber } from 'app/utils/getOrgNumberValidator';
+import { isValidOrgNumber } from 'app/utils/getOrgNumberValidator';
 import { IBrevForm } from './types';
 import { hasValidText } from 'app/utils/validationHelpers';
 
@@ -29,7 +29,7 @@ export const useValidationRulesBrev = () => {
                     });
                 }
                 const cleanValue = value.replace(/\s/g, '');
-                if (!isNotValidOrgNumber(cleanValue)) {
+                if (!isValidOrgNumber(cleanValue)) {
                     return intl.formatMessage({
                         id: 'validation.brevComponent.textField.annenMottakerOrgNummer.invalid',
                     });

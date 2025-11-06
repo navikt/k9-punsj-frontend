@@ -11,7 +11,7 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
     land: '',
@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="4" borderWidth="1" borderRadius="large">
             <RadioPanelGruppe
                 className="horizontalRadios"
                 radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
@@ -36,7 +36,6 @@ const Bosteder: React.FC = () => {
                 onChange={(event) => {
                     const target = event.target as HTMLInputElement;
                     const value = target.value as JaNeiIkkeOpplyst;
-
                     setFieldValue('metadata.harBoddIUtlandet', value);
 
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {
@@ -47,7 +46,7 @@ const Bosteder: React.FC = () => {
                         setFieldValue('bosteder', []);
                     }
                 }}
-                checked={values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA ? JaNeiIkkeOpplyst.JA : undefined}
+                checked={values.metadata.harBoddIUtlandet}
             />
 
             {values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
@@ -60,14 +59,21 @@ const Bosteder: React.FC = () => {
                                     <VerticalSpacer thirtyTwoPx />
 
                                     <div className="fom-tom-rad">
-                                        <DatoInputFormikNew
-                                            label="Fra og med"
-                                            name={`bosteder[${index}].periode.fom`}
-                                        />
+                                        <DatovelgerFormik label="Fra og med" name={`bosteder[${index}].periode.fom`} />
 
-                                        <DatoInputFormikNew
+                                        <DatovelgerFormik
                                             label="Til og med"
                                             name={`bosteder[${index}].periode.tom`}
+                                            fromDate={
+                                                values.bosteder[index].periode.fom
+                                                    ? new Date(values.bosteder[index].periode.fom)
+                                                    : undefined
+                                            }
+                                            defaultMonth={
+                                                values.bosteder[index].periode.fom
+                                                    ? new Date(values.bosteder[index].periode.fom)
+                                                    : undefined
+                                            }
                                         />
 
                                         {array.length > 1 && (

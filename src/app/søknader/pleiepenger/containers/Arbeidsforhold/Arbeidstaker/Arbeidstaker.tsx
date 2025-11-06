@@ -28,8 +28,7 @@ interface Props {
     getErrorMessage: GetErrorMessage;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
-    nyeSoknadsperioder: IPeriode[];
-    eksisterendeSoknadsperioder: IPeriode[];
+    søknadsperioder: IPeriode[];
 }
 
 const ArbeidstakerComponent: React.FC<Props> = ({
@@ -42,8 +41,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
     getErrorMessage,
     arbeidsgivere,
     harDuplikatOrgnr,
-    nyeSoknadsperioder,
-    eksisterendeSoknadsperioder,
+    søknadsperioder,
 }): JSX.Element => {
     const intl = useIntl();
 
@@ -274,8 +272,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
             </div>
 
             <ArbeidstidKalender
-                nyeSoknadsperioder={nyeSoknadsperioder}
-                eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                søknadsperioder={søknadsperioder}
                 updateSoknad={(perioder) =>
                     updateListeinfoInSoknad({
                         arbeidstidInfo: {

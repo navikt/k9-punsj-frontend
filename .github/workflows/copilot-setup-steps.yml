@@ -1,28 +1,31 @@
-name: Test
+name: Copilot Setup Steps
 
 on:
-    workflow_call:
-        secrets:
-            READER_TOKEN:
-                required: true
+    workflow_dispatch:
+    push:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
+    pull_request:
+        paths:
+            - .github/workflows/copilot-setup-steps.yml
 
 permissions:
     contents: read
+    packages: read
 
 jobs:
-    test:
-        name: Tester
+    setup:
         runs-on: ubuntu-latest
         steps:
             - name: Hente kode
               uses: actions/checkout@v5
+
             - name: Setup .yarnrc.yml
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
                   yarn config set npmScopes.navikt.npmAlwaysAuth true
-                  yarn config set npmScopes.navikt.npmAuthToken $NPM_AUTH_TOKEN
-              env:
-                  NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  yarn config set npmScopes.navikt.npmAuthToken ${{ secrets.GITHUB_TOKEN }}
+
             - name: Sette opp Node
               uses: actions/setup-node@v6
               with:
@@ -32,7 +35,3 @@ jobs:
 
             - name: Installere moduler
               run: yarn install --immutable
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-            - name: Kjøre tester
-              run: yarn test --maxWorkers=2

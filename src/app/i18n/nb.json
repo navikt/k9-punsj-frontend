@@ -243,7 +243,7 @@
 
     "gosysOppgave.feilet": "Oppretting av journalføringsoppgave i Gosys feilet",
     "ident.signatur.overskrift": "Signatur",
-    "ident.signatur.etikett": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
+    "ident.signatur.etikett": "Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig",
     "ident.identifikasjon.overskrift": "Identifikasjon",
     "ident.identifikasjon.felt": "Søkers fødselsnummer eller D-nummer:",
     "ident.identifikasjon.felt1": "Første søkers fødselsnummer eller D-nummer:",
@@ -352,7 +352,7 @@
     "skjema.opplysningerombarnet": "Opplysninger om barnet",
     "skjema.barn": "Opplysninger om barn",
     "skjema.mottakelsesdato": "Mottatt dato:",
-    "skjema.mottakelsesdato.informasjon": "Dobbeltsjekk at mottatt dato og tidspunkt er korrekt. Dette er viktig for å sikre riktig behandlingsrekkefølge. Dersom dokumentet er scannet er det allerede trukket fra to virkedager automatisk.",
+    "skjema.mottakelsesdato.informasjon": "Dobbeltsjekk at mottatt dato og tidspunkt er korrekt.",
     "skjema.perioderSomFjernet": "Perioder som er fjernet fra søknadsperioden:",
     "skjema.begrunnelseForEndring": "Begrunnelse for endring:",
     "skjema.mottatt.klokkeslett": "Mottatt klokkeslett",
@@ -626,7 +626,6 @@
     "registrering.overskrift": "Hva ønsker du å registrere?",
     "registrering.journalpostinfo": "Det finnes flere journalposter på søkeren",
 
-    "skjema.felt.signert.label": "Er dokumentet signert av søker eller, dersom søker er under 18 år gammel, av forelder/verge/fullmektig?",
     "skjema.felt.signert.ja": "Ja",
     "skjema.felt.signert.nei": "Nei",
     "skjema.felt.ident.norskIdent.label": "Søkers fødsels- / d-nummer",

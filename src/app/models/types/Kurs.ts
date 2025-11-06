@@ -2,7 +2,7 @@ import { berikMedKey } from 'app/utils/listeUtils';
 import { Periode } from './Periode';
 
 export interface Kursholder {
-    institusjonsUuid?: string;
+    institusjonsUuid?: string | null;
     holder: string;
 }
 
@@ -32,8 +32,12 @@ export class Kurs implements Required<Omit<IKurs, 'reise'>> {
     reise: Reise;
 
     constructor(kurs: IKurs) {
+        const kursperioder = kurs.kursperioder?.map((kursperiode) => ({
+            periode: new Periode(kursperiode.periode),
+            key: kursperiode.key,
+        }));
         this.kursHolder = kurs.kursHolder || null;
-        this.kursperioder = berikMedKey(kurs.kursperioder || []);
+        this.kursperioder = berikMedKey(kursperioder || []);
         this.reise = kurs.reise || { reisedager: [], reisedagerBeskrivelse: '' };
     }
 }

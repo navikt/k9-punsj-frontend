@@ -2,7 +2,7 @@ import { Formik, yupToFormErrors } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
@@ -15,13 +15,13 @@ import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 
-import { hentEksisterendePerioder, hentInstitusjoner, hentSoeknad, sendSoeknad } from '../api';
+import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
-import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
+import { ValidationError } from 'yup';
 
 interface OwnProps {
     journalpostid: string;
@@ -38,27 +38,25 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const [k9FormatErrors, setK9FormatErrors] = useState<Feil[]>([]);
     const [visForhaandsvisModal, setVisForhaandsvisModal] = useState(false);
     const [eksisterendePerioder, setEksisterendePerioder] = useState<Periode[]>([]);
-    const [institusjoner, setInstitusjoner] = useState<GodkjentOpplæringsinstitusjon[]>([]);
+
     const [kvittering, setKvittering] = useState<IOLPSoknadKvittering | undefined>(undefined);
     const [erSendtInn, setErSendtInn] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const fellesState = useSelector((state: RootStateType) => state.felles);
     const intl = useIntl();
 
-    const { mutate: hentPerioderK9, error: hentEksisterendePerioderError } = useMutation({
-        mutationFn: ({ ident, barnIdent }: { ident: string; barnIdent: string }) =>
-            hentEksisterendePerioder(ident, barnIdent),
+    const {
+        mutate: hentPerioderK9,
+        isSuccess: isSuccessPerioderK9,
+        isError: isErrorPerioderK9,
+        error: hentEksisterendePerioderError,
+    } = useMutation({
+        mutationFn: ({ ident, barnIdent, saksnummer }: { ident: string; barnIdent: string; saksnummer: string }) =>
+            hentEksisterendePerioderForSaksnummer(ident, barnIdent, saksnummer),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
-
-    const {
-        mutate: hentInstitusjonerK9,
-        error: hentInstitusjonerError,
-        isPending: hentInstitusjonerLoading,
-    } = useMutation({
-        mutationFn: () => hentInstitusjoner(),
-        onSuccess: (data) => setInstitusjoner(data),
-    });
+    const isSettledPerioderK9 = isSuccessPerioderK9 || isErrorPerioderK9;
 
     if (!id) {
         throw Error('Mangler id');
@@ -77,10 +75,10 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
             hentPerioderK9({
                 ident: soeknadRespons.soekerId,
                 barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
+                saksnummer: fellesState.journalpost?.sak?.fagsakId || '',
             });
-            hentInstitusjonerK9();
         }
-    }, [soeknadRespons, hentPerioderK9, hentInstitusjonerK9, identState.pleietrengendeId]);
+    }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);
 
     const { error: submitError, mutate: submit } = useMutation({
         mutationFn: () => sendSoeknad(id, identState.søkerId),
@@ -100,7 +98,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         return <KvitteringContainer kvittering={kvittering} />;
     }
 
-    if (isPending) {
+    if (isPending || !isSettledPerioderK9) {
         return <Loader size="large" />;
     }
 
@@ -120,18 +118,22 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     }
     return (
         <Formik
-            initialValues={initialValues(soeknadRespons)}
+            initialValues={initialValues(soeknadRespons, eksisterendePerioder)}
             validate={(values) =>
                 schema
                     .validate(
                         { ...values },
                         {
                             abortEarly: false,
-                            context: getSchemaContext(eksisterendePerioder),
+                            context: getSchemaContext(values, eksisterendePerioder),
                         },
                     )
                     .then(() => ({}))
                     .catch((err) => {
+                        if (!(err instanceof ValidationError)) {
+                            console.error(err);
+                            throw err;
+                        }
                         return yupToFormErrors(err);
                     })
             }
@@ -147,9 +149,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
                 hentEksisterendePerioderError={!!hentEksisterendePerioderError}
                 setKvittering={setKvittering}
                 kvittering={kvittering}
-                institusjoner={institusjoner}
-                hentInstitusjonerLoading={!!hentInstitusjonerLoading}
-                hentInstitusjonerError={!!hentInstitusjonerError}
                 {...props}
             />
         </Formik>

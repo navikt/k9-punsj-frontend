@@ -27,8 +27,7 @@ interface Props {
     listeelementindex: number;
     arbeidsgivere: Organisasjon[];
     harDuplikatOrgnr?: boolean;
-    nyeSoknadsperioder: IPeriode[] | Periode[];
-    eksisterendeSoknadsperioder: IPeriode[];
+    søknadsperioder: IPeriode[] | Periode[];
     name: string;
 }
 
@@ -38,8 +37,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
     listeelementindex,
     arbeidsgivere,
     harDuplikatOrgnr,
-    nyeSoknadsperioder,
-    eksisterendeSoknadsperioder,
+    søknadsperioder,
     name,
 }): JSX.Element => {
     const intl = useIntl();
@@ -271,8 +269,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
             <Field name={`${name}.arbeidstidInfo.perioder`}>
                 {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
                     <ArbeidstidKalender
-                        nyeSoknadsperioder={nyeSoknadsperioder}
-                        eksisterendeSoknadsperioder={eksisterendeSoknadsperioder}
+                        søknadsperioder={søknadsperioder}
                         updateSoknad={(perioder) => {
                             form.setFieldValue(field.name, [...perioder]);
                         }}

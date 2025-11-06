@@ -5,8 +5,8 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 interface Props {
     fieldArrayIndex: number;
@@ -22,8 +22,21 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
-                    <DatoInputFormikNew label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
-                    <DatoInputFormikNew label="Til og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`} />
+                    <DatovelgerFormik label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
+                    <DatovelgerFormik
+                        label="Til og med"
+                        name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`}
+                        fromDate={
+                            values.utenlandsopphold[fieldArrayIndex].periode.fom
+                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
+                                : undefined
+                        }
+                        defaultMonth={
+                            values.utenlandsopphold[fieldArrayIndex].periode.fom
+                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
+                                : undefined
+                        }
+                    />
                 </div>
                 {values.utenlandsopphold.length > 1 && (
                     <div className="block content-center">
