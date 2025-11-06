@@ -8,7 +8,7 @@
         "\\.\\/systemsStyles": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/header": "<rootDir>/node_modules/jest-css-modules",
         "^app/(.*)": "<rootDir>/src/app/$1",
-        "uuid": "<rootDir>/node_modules/uuid"
+        "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js"
     },
     "setupFiles": ["<rootDir>/testSetup.js"],
     "testPathIgnorePatterns": ["/node_modules/", "/dist/"],
@@ -17,7 +17,7 @@
     "transform": {
         "^.+\\.[t|j]sx?$": "babel-jest"
     },
-    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*nav.*).*$"],
+    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*(nav|uuid).*).*$"],
     "unmockedModulePathPatterns": [
         "<rootDir>/node_modules/react",
         "<rootDir>/node_modules/react-router",
