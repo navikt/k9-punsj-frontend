@@ -3,7 +3,7 @@ import React from 'react';
 import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../../utils/intlUtils';
@@ -36,8 +36,9 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
         </Alert>
 
         <div className="input-row">
-            <NewDateInput
+            <Datovelger
                 value={soknad.mottattDato}
+                selectedDay={soknad.mottattDato}
                 id="soknad-dato"
                 errorMessage={getErrorMessage('mottattDato')}
                 label={intlHelper(intl, 'skjema.mottakelsesdato')}

@@ -11,7 +11,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const Medlemskap: React.FC = () => {
     const intl = useIntl();
@@ -59,7 +59,7 @@ const Medlemskap: React.FC = () => {
                                 {values.bosteder?.map((_, bostedIndex, array) => (
                                     <div key={bostedIndex} className="mb-6">
                                         <div className="flex items-start">
-                                            <DatoInputFormikNew
+                                            <DatovelgerFormik
                                                 label={intlHelper(
                                                     intl,
                                                     'omsorgspenger.utbetaling.medlemskap.fom.tittel',
@@ -67,7 +67,7 @@ const Medlemskap: React.FC = () => {
                                                 name={`bosteder[${bostedIndex}].periode.fom`}
                                             />
 
-                                            <DatoInputFormikNew
+                                            <DatovelgerFormik
                                                 label={intlHelper(
                                                     intl,
                                                     'omsorgspenger.utbetaling.medlemskap.tom.tittel',

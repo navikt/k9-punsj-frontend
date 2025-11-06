@@ -10,7 +10,7 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const VarigEndring: React.FC = () => {
     const intl = useIntl();
@@ -31,7 +31,7 @@ const VarigEndring: React.FC = () => {
                         <>
                             <VerticalSpacer twentyPx />
 
-                            <DatoInputFormikNew
+                            <DatovelgerFormik
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                             />
