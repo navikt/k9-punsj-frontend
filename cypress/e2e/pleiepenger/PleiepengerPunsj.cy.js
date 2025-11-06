@@ -25,28 +25,16 @@ describe('Pleiepenger punsj', () => {
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('08.11.2021');
-            cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('11.11.2021');
-        });
-
-        // Det trenges for å oppdatere state (trykke noe annet sted)
-        cy.findByRole('button', { name: /Ferie/i }).click();
-
-        cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByRole('button', { name: /Legg til ny periode/i }).click();
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('exist')
+                .click()
                 .type('20.11.2021');
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('exist')
+                .click()
                 .type('25.11.2021');
         });
 
@@ -57,11 +45,11 @@ describe('Pleiepenger punsj', () => {
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
-                .clear({ force: true })
+                .click()
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
-                .clear({ force: true })
+                .click()
                 .type('11.11.2021');
 
             cy.findByRole('button', { name: /Legg til periode/i }).click();
@@ -94,11 +82,11 @@ describe('Pleiepenger punsj', () => {
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
-                .clear({ force: true })
+                .click()
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
-                .clear({ force: true })
+                .click()
                 .type('11.11.2021');
 
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
