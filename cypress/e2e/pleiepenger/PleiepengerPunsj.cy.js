@@ -34,26 +34,26 @@ describe('Pleiepenger punsj', () => {
                 .eq(0)
                 .should('have.value', '11.11.2021');
 
-            // Nå kan vi trygt legge til ny periode
             cy.findByRole('button', { name: /Legg til ny periode/i })
                 .should('be.visible')
                 .click();
 
-            // Fyll inn nye verdier i den nye perioden (eq(1))
-            // Vent på at input-feltene er enabled før vi fyller inn
-            // Sjekk at elementet er synlig, enabled og klar før hver operasjon
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('be.visible')
-                .should('not.be.disabled')
-                .clear({ force: true })
+                .should('not.be.disabled');
+
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(1)
                 .type('20.11.2021');
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('be.visible')
-                .should('not.be.disabled')
-                .clear({ force: true })
+                .should('not.be.disabled');
+
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(1)
                 .type('25.11.2021');
         });
 
