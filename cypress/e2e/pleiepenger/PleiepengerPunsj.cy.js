@@ -64,9 +64,11 @@ describe('Pleiepenger punsj', () => {
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findByLabelText(/Fra og med/i)
                 .should('be.visible')
+                .should('not.be.disabled')
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
                 .should('be.visible')
+                .should('not.be.disabled')
                 .type('11.11.2021');
 
             cy.findByRole('button', { name: /Legg til periode/i }).click();
@@ -74,10 +76,12 @@ describe('Pleiepenger punsj', () => {
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('be.visible')
+                .should('not.be.disabled')
                 .type('20.11.2021');
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('be.visible')
+                .should('not.be.disabled')
                 .type('25.11.2021');
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
