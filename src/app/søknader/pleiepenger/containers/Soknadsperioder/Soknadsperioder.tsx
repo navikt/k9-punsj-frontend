@@ -9,6 +9,7 @@ import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
 import { GetUhaandterteFeil, IPSBSoknad, IPeriode, IPunchPSBFormState } from 'app/models/types';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { berikMedKey } from 'app/utils/listeUtils';
 
 import './soknadsperioder.less';
 
@@ -66,14 +67,14 @@ const Soknadsperioder: React.FC<Props> = ({
 
     const getPerioder = () => {
         if (harLagretPerioder) {
-            return soknad.soeknadsperiode;
+            return berikMedKey(soknad.soeknadsperiode || []);
         }
 
         if (harSlettetPerioder) {
             return [];
         }
 
-        return [initialPeriode];
+        return berikMedKey([initialPeriode]);
     };
 
     return (
@@ -150,9 +151,9 @@ const Soknadsperioder: React.FC<Props> = ({
                     <Periodepaneler
                         periods={getPerioder()}
                         initialPeriode={initialPeriode}
-                        editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
+                        editSoknad={(perioder) => updateSoknad({ soeknadsperiode: berikMedKey(perioder) })}
                         editSoknadState={(perioder) => {
-                            updateSoknadState({ soeknadsperiode: perioder });
+                            updateSoknadState({ soeknadsperiode: berikMedKey(perioder) });
                         }}
                         textLeggTil="skjema.perioder.legg_til"
                         textFjern="skjema.perioder.fjern"
