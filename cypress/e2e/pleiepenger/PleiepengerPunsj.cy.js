@@ -25,15 +25,28 @@ describe('Pleiepenger punsj', () => {
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByRole('button', { name: /Legg til ny periode/i }).click();
+            // Vent på at første periode (eq(0)) har fått initialverdiene
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(0)
+                .should('have.value', '08.11.2021');
+
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(0)
+                .should('have.value', '11.11.2021');
+
+            // Nå kan vi trygt legge til ny periode
+            cy.findByRole('button', { name: /Legg til ny periode/i })
+                .should('be.visible')
+                .click();
+
+            // Fyll inn nye verdier i den nye perioden (eq(1))
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
-                .should('exist')
                 .click()
                 .type('20.11.2021');
+
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
-                .should('exist')
                 .click()
                 .type('25.11.2021');
         });
