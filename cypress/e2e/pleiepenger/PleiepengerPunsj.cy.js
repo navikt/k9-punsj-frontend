@@ -40,20 +40,20 @@ describe('Pleiepenger punsj', () => {
 
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
-                .should('be.visible')
-                .should('not.be.disabled');
+                .should('be.visible');
 
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
+                .should('not.be.disabled')
                 .type('20.11.2021');
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
-                .should('be.visible')
-                .should('not.be.disabled');
+                .should('be.visible');
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
+                .should('not.be.disabled')
                 .type('25.11.2021');
         });
 
