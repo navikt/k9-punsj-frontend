@@ -85,8 +85,15 @@ describe('Pleiepenger punsj', () => {
 
             cy.findByRole('button', { name: /Lagre/i }).click();
         });
-        cy.findByRole('button', { name: /vis mer/i }).click();
-        cy.findByText(/10 dager registrert/i).should('exist');
+
+        // Vent på at lagring er ferdig og at "vis mer" knappen er klar
+        cy.findByRole('button', { name: /vis mer/i })
+            .should('be.visible')
+            .should('not.be.disabled')
+            .click();
+
+        // Vent på at teksten "10 dager registrert" blir synlig (økt timeout for CI)
+        cy.contains(/10 dager registrert/i, { timeout: 10000 }).should('be.visible');
     });
 
     it('kan bytte bytte mellom timer og minutter og desimaler i arbeidstid', () => {
