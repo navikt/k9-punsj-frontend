@@ -40,14 +40,19 @@ describe('Pleiepenger punsj', () => {
                 .click();
 
             // Fyll inn nye verdier i den nye perioden (eq(1))
+            // Bryt opp kommandokjeden for å unngå at elementet forsvinner etter oppdatering
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
-                .click()
+                .clear();
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(1)
                 .type('20.11.2021');
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
-                .click()
+                .clear();
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(1)
                 .type('25.11.2021');
         });
 
