@@ -41,15 +41,18 @@ describe('Pleiepenger punsj', () => {
 
             // Fyll inn nye verdier i den nye perioden (eq(1))
             // Vent på at input-feltene er enabled før vi fyller inn
+            // Sjekk at elementet er synlig, enabled og klar før hver operasjon
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
+                .should('be.visible')
                 .should('not.be.disabled')
-                .type('20.11.2021');
+                .type('20.11.2021', { force: true });
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
+                .should('be.visible')
                 .should('not.be.disabled')
-                .type('25.11.2021');
+                .type('25.11.2021', { force: true });
         });
 
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
