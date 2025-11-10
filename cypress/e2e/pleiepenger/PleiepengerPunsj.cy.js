@@ -46,13 +46,15 @@ describe('Pleiepenger punsj', () => {
                 .eq(1)
                 .should('be.visible')
                 .should('not.be.disabled')
-                .type('20.11.2021', { force: true });
+                .clear({ force: true })
+                .type('20.11.2021');
 
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('be.visible')
                 .should('not.be.disabled')
-                .type('25.11.2021', { force: true });
+                .clear({ force: true })
+                .type('25.11.2021');
         });
 
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
