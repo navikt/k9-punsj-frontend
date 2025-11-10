@@ -3981,28 +3981,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.33.0, @navikt/aksel-icons@npm:^7.33.0":
-  version: 7.33.0
-  resolution: "@navikt/aksel-icons@npm:7.33.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.33.0%2F0d99c95ec46e7d8c51536896f75b60b2b771ffdd"
-  checksum: 10/cd130aebc2a55e588637aca14b0eb099b7f245e25715126a729702ccca25adf0b9f85e25ad044e57033caff4405d883989625681785b20352896e1607bba8ed2
+"@navikt/aksel-icons@npm:7.33.1, @navikt/aksel-icons@npm:^7.33.1":
+  version: 7.33.1
+  resolution: "@navikt/aksel-icons@npm:7.33.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.33.1%2F4b1aae42fe6c235f7406044bff5adfe23512d620"
+  checksum: 10/4c6c61df582ba43d476aefd6a7ad22a981d803b9d177e2034c2b3f3c131b56ff89ffad18835cdbed2bcbb9338fc08f47aaac1a728f6e36e21c88b09125396587
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.33.0":
-  version: 7.33.0
-  resolution: "@navikt/ds-css@npm:7.33.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.33.0%2F7b85136c9fa05cee3e4c0ccc191e2f3758df4069"
-  checksum: 10/c741daf4e887594c42b89f084f1235267eedfbec6a6deed43daf26d4761cab23445f7a339305a95278d8dc2e344782b4295b69c762741b7b060ebf083886de30
+"@navikt/ds-css@npm:7.33.1":
+  version: 7.33.1
+  resolution: "@navikt/ds-css@npm:7.33.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.33.1%2F9e6a45210730b38522b9d3146775694204feecf1"
+  checksum: 10/092898f5db355bbda26549ad2d69834fc201bdeb7028dabb8b313bdb3ab59dc9ca2a9f7b32ac07f732f2d9a4d87a120e6a5682e2f4a53c5bdd0f7076d8c9a719
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.33.0":
-  version: 7.33.0
-  resolution: "@navikt/ds-react@npm:7.33.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.33.0%2F50269f2d3762a9e0e510221b0a1f98f9f0946c15"
+"@navikt/ds-react@npm:7.33.1":
+  version: 7.33.1
+  resolution: "@navikt/ds-react@npm:7.33.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.33.1%2F67dd16f2c9bbf83aef0f2f7a0bf99ee2ed1d4b23"
   dependencies:
     "@floating-ui/react": "npm:0.27.8"
     "@floating-ui/react-dom": "npm:^2.1.6"
-    "@navikt/aksel-icons": "npm:^7.33.0"
-    "@navikt/ds-tokens": "npm:^7.33.0"
+    "@navikt/aksel-icons": "npm:^7.33.1"
+    "@navikt/ds-tokens": "npm:^7.33.1"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:9.7.0"
@@ -4010,21 +4010,21 @@ __metadata:
     "@types/react": ^17.0.30 || ^18 || ^19
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-  checksum: 10/706611680beb94598bf46fd401999c351d32fcff5cdc8b6554b5014507339ee69fa0ff44ac3dcd3f9091c314d00976a9508d746318e375546eb8df14fd72392f
+  checksum: 10/8f6cb174055e0d78432445b2f253e2158abd4d717b9ac6b46de3059ed4efe6f971cfd618b0845caddd75cfcd324d4b3a17cff27b9eab025047e967246471ce62
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:^7.33.0":
-  version: 7.33.0
-  resolution: "@navikt/ds-tailwind@npm:7.33.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.33.0%2Ffa97b7c31e710b3d29b2586b999bd67f69b62f99"
-  checksum: 10/70ccd35b8b7c527a15896592e9188c1422ca5404470c29f1e5cfa6a06b881bd4f12e2001b847a32b7e52d2e486618a8ec8d6cb1d354d61af7d02f536017a987d
+"@navikt/ds-tailwind@npm:^7.33.1":
+  version: 7.33.1
+  resolution: "@navikt/ds-tailwind@npm:7.33.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.33.1%2Fe8d8877a0d1464334bb7609792dd78388650c6fc"
+  checksum: 10/c9b0c2eea8da585f06866dea0cf38c99bdae3c97fd539866dce82a6cdbf27f1f5d643ce9ebbc04718296cf5148011afda7b7efb8e03d54a12ae34904b8d93326
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^7.33.0":
-  version: 7.33.0
-  resolution: "@navikt/ds-tokens@npm:7.33.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.33.0%2F10a85aa9e28008862113acf6e8da12153de256b8"
-  checksum: 10/615814e296b449cb0b7ac1a95e72a36bcd4cc0e4ec6240a0acb0f8e64140a8e756dea5b4dd183a60b33063182df70e3f0f7e718123a03ecb9ae2462aca0fa859
+"@navikt/ds-tokens@npm:^7.33.1":
+  version: 7.33.1
+  resolution: "@navikt/ds-tokens@npm:7.33.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.33.1%2F6cfc90daa4f6daf6d7e776144d05590996f80775"
+  checksum: 10/b2c3b9488e6b62d4c8c860840369f1559579679e253fd78ce40c13f8e6dcd2c5159023b6be33412a634d109caa037258e3f2bbf7b7bf8829ef36bfa86e81c124
   languageName: node
   linkType: hard
 
@@ -4925,11 +4925,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/builder-webpack5@npm:10.0.5"
+"@storybook/builder-webpack5@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/builder-webpack5@npm:10.0.6"
   dependencies:
-    "@storybook/core-webpack": "npm:10.0.5"
+    "@storybook/core-webpack": "npm:10.0.6"
     case-sensitive-paths-webpack-plugin: "npm:^2.4.0"
     cjs-module-lexer: "npm:^1.2.3"
     css-loader: "npm:^7.1.2"
@@ -4945,22 +4945,22 @@ __metadata:
     webpack-hot-middleware: "npm:^2.25.1"
     webpack-virtual-modules: "npm:^0.6.0"
   peerDependencies:
-    storybook: ^10.0.5
+    storybook: ^10.0.6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/15f3baf5a43d015487ea868ae113df8e7af2e63addfa1bc6de28168dad3c881b3e4e78cabd843a823f3b6de4f4899cc6156fd49984359da9013f0c7fa1a179be
+  checksum: 10/cb61b20cc8862db2e9107b70e01132f038fc8046e0e9ee72d1e401459f9f183868fa658eeaf5b4be4a672e093e6793be0f17ba746df759fb00cf1933a050f982
   languageName: node
   linkType: hard
 
-"@storybook/core-webpack@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/core-webpack@npm:10.0.5"
+"@storybook/core-webpack@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/core-webpack@npm:10.0.6"
   dependencies:
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
-    storybook: ^10.0.5
-  checksum: 10/523b3cbcff1dfbbd1f34c2e115ad455798e005b61bb51582afa036818cdb46bca5fb6f8eb5141c8316af4195cffb130c8421da22373e20f0c8d14ea935d7f2d5
+    storybook: ^10.0.6
+  checksum: 10/dc5bb44fde9492cc3db2b5b0c3e77de74cbbea2385db07a8fc58dff1bab394008e5a554d730ddeb009240dd2927a6bd31efc55fb4b841ed6b2ee57a2bdb4573a
   languageName: node
   linkType: hard
 
@@ -5014,11 +5014,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/preset-react-webpack@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/preset-react-webpack@npm:10.0.5"
+"@storybook/preset-react-webpack@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/preset-react-webpack@npm:10.0.6"
   dependencies:
-    "@storybook/core-webpack": "npm:10.0.5"
+    "@storybook/core-webpack": "npm:10.0.6"
     "@storybook/react-docgen-typescript-plugin": "npm:1.0.6--canary.9.0c3f3b7.0"
     "@types/semver": "npm:^7.3.4"
     magic-string: "npm:^0.30.5"
@@ -5030,11 +5030,11 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    storybook: ^10.0.5
+    storybook: ^10.0.6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/6f111d8e6c59baa2d04f6615a93b43e80811837b11e13afd99fb0a4f44b44885b3a423fa3e13139bafff84794a9bd1a813891479c15024ae3552c0b1dbc865ea
+  checksum: 10/8db18775269d2df44dcf5b90088c91f866e68612ac3651c2539788c38a5302e8afd8a9e3f35f217f4c5894cb4a7bde2cbe2bba0d9805f1438960d675442f8165
   languageName: node
   linkType: hard
 
@@ -5056,14 +5056,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-dom-shim@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/react-dom-shim@npm:10.0.5"
+"@storybook/react-dom-shim@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/react-dom-shim@npm:10.0.6"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    storybook: ^10.0.5
-  checksum: 10/2b98365eb12cbc5e046cc5080e5a34b75906afdbe0d8a2e5141adc477c8c4920aa3054b4d36abb778a1aca86b1f74b344e93ef7124b3817bee4a66aa65dcceeb
+    storybook: ^10.0.6
+  checksum: 10/253e4a37c412a4854acff63ff286687769245435f701059fe55141ffb58b538e130abf1a9feb24eb4255b6b76a775c2bf0e030c2d0db628d683f3afdf1a22923
   languageName: node
   linkType: hard
 
@@ -5078,40 +5078,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react-webpack5@npm:^10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/react-webpack5@npm:10.0.5"
+"@storybook/react-webpack5@npm:^10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/react-webpack5@npm:10.0.6"
   dependencies:
-    "@storybook/builder-webpack5": "npm:10.0.5"
-    "@storybook/preset-react-webpack": "npm:10.0.5"
-    "@storybook/react": "npm:10.0.5"
+    "@storybook/builder-webpack5": "npm:10.0.6"
+    "@storybook/preset-react-webpack": "npm:10.0.6"
+    "@storybook/react": "npm:10.0.6"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    storybook: ^10.0.5
+    storybook: ^10.0.6
     typescript: ">= 4.9.x"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/88f969b1641185fef0c227a124501128fac4feee2fb58aa63ead3fbadd3f5b5bf9ce65419d9873b33d817c31c94060157962bd0e613ed7e6d258aaeaf8d82b10
+  checksum: 10/b2c5c79f0e41b8a47136a6dc96e771f5af9cac9f3e7bff909b6a4c6892849e15492cda0e3b2121ea4b07f03023300e94ba1df52e19e21185ad4b603f25d54626
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:10.0.5, @storybook/react@npm:^10.0.5":
-  version: 10.0.5
-  resolution: "@storybook/react@npm:10.0.5"
+"@storybook/react@npm:10.0.6, @storybook/react@npm:^10.0.6":
+  version: 10.0.6
+  resolution: "@storybook/react@npm:10.0.6"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
-    "@storybook/react-dom-shim": "npm:10.0.5"
+    "@storybook/react-dom-shim": "npm:10.0.6"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-    storybook: ^10.0.5
+    storybook: ^10.0.6
     typescript: ">= 4.9.x"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/2c4181fed61d1486138c874d0c44ec6b013fdb13902e3d05482ced0f5d5f1831b87a93b40706adc37c18baeec160fed690651a727bf4b6e1714d72a7aacc1189
+  checksum: 10/13bb94ae2f276430c6cff5d12b4cc087d808d656f4badfa79b4c3e4c8b3640a56f04f7b6d0587a9a64176b8aa745c5b7e0bdceea049d305f8bc78d53bdf029d5
   languageName: node
   linkType: hard
 
@@ -10351,15 +10351,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-storybook@npm:^10.0.5":
-  version: 10.0.5
-  resolution: "eslint-plugin-storybook@npm:10.0.5"
+"eslint-plugin-storybook@npm:^10.0.6":
+  version: 10.0.6
+  resolution: "eslint-plugin-storybook@npm:10.0.6"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.8.1"
   peerDependencies:
     eslint: ">=8"
-    storybook: ^10.0.5
-  checksum: 10/77bdbcfa11b0f2cb9916ecafc48c2a0dbd578b8224cc61f6176d3f8e5ce2634a6aa4b9b34c2d56f651bc3fbe68beecac5e8f895b54772a0f60d20223b82502e4
+    storybook: ^10.0.6
+  checksum: 10/2885eb82854bc778cc2541cd04446aaa5330efd0f01d4c8393532965323a4f9848d88e5fc6e3bed1df2eb29cfa0eeddc04046096035aae04df01a1f7309557e6
   languageName: node
   linkType: hard
 
@@ -11203,9 +11203,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formik@npm:2.4.6":
-  version: 2.4.6
-  resolution: "formik@npm:2.4.6"
+"formik@npm:2.4.8":
+  version: 2.4.8
+  resolution: "formik@npm:2.4.8"
   dependencies:
     "@types/hoist-non-react-statics": "npm:^3.3.1"
     deepmerge: "npm:^2.1.1"
@@ -11217,7 +11217,7 @@ __metadata:
     tslib: "npm:^2.0.0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10/65d6845d913cfceebdbb1e34d498725965e07abd4c17f3ea9eeba77d9fab7d3b0f726fdfcae73f002b660ba56b236abc8d8aa6670a9c7cc0db27afebf6e48f4b
+  checksum: 10/47fd56f06c98e2d1aeb65d32b154051c0dcea44f71e66a0e7bb2a90956e9a104f76831938861df6af88c64041ff2aca75db4d2fa5a59049e8ae9c7a560c97ba3
   languageName: node
   linkType: hard
 
@@ -13935,10 +13935,10 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:1.19.0"
     "@jest/globals": "npm:30.2.0"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel-icons": "npm:7.33.0"
-    "@navikt/ds-css": "npm:7.33.0"
-    "@navikt/ds-react": "npm:7.33.0"
-    "@navikt/ds-tailwind": "npm:^7.33.0"
+    "@navikt/aksel-icons": "npm:7.33.1"
+    "@navikt/ds-css": "npm:7.33.1"
+    "@navikt/ds-react": "npm:7.33.1"
+    "@navikt/ds-tailwind": "npm:^7.33.1"
     "@navikt/fnrvalidator": "npm:2.1.5"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.6.1"
     "@reduxjs/toolkit": "npm:^2.10.1"
@@ -13947,8 +13947,8 @@ __metadata:
     "@storybook/addon-essentials": "npm:8.6.14"
     "@storybook/addon-interactions": "npm:8.6.14"
     "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.1"
-    "@storybook/react": "npm:^10.0.5"
-    "@storybook/react-webpack5": "npm:^10.0.5"
+    "@storybook/react": "npm:^10.0.6"
+    "@storybook/react-webpack5": "npm:^10.0.6"
     "@tanstack/react-query": "npm:5.90.7"
     "@tanstack/react-query-devtools": "npm:5.90.2"
     "@testing-library/cypress": "npm:10.1.0"
@@ -13998,8 +13998,8 @@ __metadata:
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:7.0.1"
-    eslint-plugin-storybook: "npm:^10.0.5"
-    formik: "npm:2.4.6"
+    eslint-plugin-storybook: "npm:^10.0.6"
+    formik: "npm:2.4.8"
     glob: "npm:11.0.3"
     html-webpack-harddisk-plugin: "npm:2.0.0"
     html-webpack-plugin: "npm:5.6.4"
@@ -14016,7 +14016,7 @@ __metadata:
     lint-staged: "npm:16.2.6"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.9.4"
-    msw: "npm:2.12.0"
+    msw: "npm:2.12.1"
     mustache-express: "npm:1.3.2"
     nav-frontend-core: "npm:6.0.1"
     nav-frontend-js-utils: "npm:1.0.20"
@@ -14048,7 +14048,7 @@ __metadata:
     regenerator-runtime: "npm:0.14.1"
     source-map-loader: "npm:5.0.0"
     start-server-and-test: "npm:2.1.2"
-    storybook: "npm:^10.0.5"
+    storybook: "npm:^10.0.6"
     storybook-addon-fetch-mock: "npm:^2.0.1"
     style-loader: "npm:4.0.0"
     stylelint: "npm:16.25.0"
@@ -14989,9 +14989,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:2.12.0":
-  version: 2.12.0
-  resolution: "msw@npm:2.12.0"
+"msw@npm:2.12.1":
+  version: 2.12.1
+  resolution: "msw@npm:2.12.1"
   dependencies:
     "@inquirer/confirm": "npm:^5.0.0"
     "@mswjs/interceptors": "npm:^0.40.0"
@@ -15018,7 +15018,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10/aee1906ad57097b978d8581ccb7e001103de86983048923bc86b2962c9ba37874408c327b974d77d28ed18771ac5558b21f39a09d966a070ff371175c8b4595a
+  checksum: 10/00fdc9ba057b6b4aba1261c3f270a3b330247b48f4597fcfc8a9eff4802cf446ab4ce427ef8971f4678e4c5ca5c7520aada1c1fd40dc14ef8a267b78a9c98295
   languageName: node
   linkType: hard
 
@@ -15555,14 +15555,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"on-headers@npm:~1.0.2":
-  version: 1.0.2
-  resolution: "on-headers@npm:1.0.2"
-  checksum: 10/870766c16345855e2012e9422ba1ab110c7e44ad5891a67790f84610bd70a72b67fdd71baf497295f1d1bf38dd4c92248f825d48729c53c0eae5262fb69fa171
-  languageName: node
-  linkType: hard
-
-"on-headers@npm:~1.1.0":
+"on-headers@npm:1.1.0":
   version: 1.1.0
   resolution: "on-headers@npm:1.1.0"
   checksum: 10/98aa64629f986fb8cc4517dd8bede73c980e31208cba97f4442c330959f60ced3dc6214b83420491f5111fc7c4f4343abe2ea62c85f505cf041d67850f238776
@@ -18411,9 +18404,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:^10.0.5":
-  version: 10.0.5
-  resolution: "storybook@npm:10.0.5"
+"storybook@npm:^10.0.6":
+  version: 10.0.6
+  resolution: "storybook@npm:10.0.6"
   dependencies:
     "@storybook/global": "npm:^5.0.0"
     "@storybook/icons": "npm:^1.6.0"
@@ -18433,7 +18426,7 @@ __metadata:
       optional: true
   bin:
     storybook: ./dist/bin/dispatcher.js
-  checksum: 10/56167a77a4a88cadbe1402942ce91a8b32303414ea32634665a526d271aa675946377e0a7ccdc77725a3673151144bd01e3361ee61a8cefbef386fe0657cbdfc
+  checksum: 10/7730cc1bcce71ca501bc5f0d19c3859c2c354c90daffbf806bc38e0cfa16cc297fbe58a9b364eab2851a8832a81fa101a2253cc1d95f294ffdeb0bddf8054ab9
   languageName: node
   linkType: hard
 
