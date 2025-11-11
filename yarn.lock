@@ -4894,15 +4894,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-webpack5-compiler-swc@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@storybook/addon-webpack5-compiler-swc@npm:4.0.1"
+"@storybook/addon-webpack5-compiler-swc@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@storybook/addon-webpack5-compiler-swc@npm:4.0.2"
   dependencies:
     "@swc/core": "npm:^1.13.5"
     swc-loader: "npm:^0.2.6"
   peerDependencies:
-    storybook: ^9.0.0 || ^10.0.0-0
-  checksum: 10/b9f0f156c6bc657688e3e2f39e6181f912c4fcca977f31555a36f355c7dee45e86c04dd60e665b402b378ef2d07a40e34bd49865c7b1bebce57c3300c6e8189b
+    storybook: ^9.0.0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0
+  checksum: 10/1383346b97d9f679ad830751dd1c94c8ab1c6aeb141feda60dcc7ef2ac69e97c3fb3a2a2a3f020e07598dea315760cb0c079f928f29faaf12f143d627487b0e1
   languageName: node
   linkType: hard
 
@@ -13946,7 +13946,7 @@ __metadata:
     "@sentry/react": "npm:10.23.0"
     "@storybook/addon-essentials": "npm:8.6.14"
     "@storybook/addon-interactions": "npm:8.6.14"
-    "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.1"
+    "@storybook/addon-webpack5-compiler-swc": "npm:^4.0.2"
     "@storybook/react": "npm:^10.0.6"
     "@storybook/react-webpack5": "npm:^10.0.6"
     "@tanstack/react-query": "npm:5.90.7"
