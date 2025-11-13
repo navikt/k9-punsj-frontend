@@ -25,4 +25,4 @@ env:
     OMP_UT_FEATURE_TOGGLE: 'true'
     OMP_AO_ENABLED: 'true'
     SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE: 'true'
-    OLP_ENABLED: 'false'
+    OLP_ENABLED: 'true'
