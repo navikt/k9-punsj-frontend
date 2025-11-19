@@ -3913,8 +3913,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
-    "@navikt/oasis": "npm:4.1.0"
-    "@sentry/cli": "npm:2.58.0"
+    "@navikt/oasis": "npm:4.1.1"
+    "@sentry/cli": "npm:2.58.2"
     axios: "npm:1.13.2"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.5"
@@ -3922,7 +3922,7 @@ __metadata:
     express: "npm:5.1.0"
     express-http-proxy: "npm:2.1.2"
     helmet: "npm:8.1.0"
-    jose: "npm:6.1.0"
+    jose: "npm:6.1.2"
     morgan: "npm:1.10.1"
     node-cache: "npm:5.1.2"
     openid-client: "npm:6.8.1"
@@ -4035,22 +4035,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:4.1.0":
-  version: 4.1.0
-  resolution: "@navikt/oasis@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.0%2Fed0d98fe57279240a53fe82bf518776ddce59a0a"
+"@navikt/oasis@npm:4.1.1":
+  version: 4.1.1
+  resolution: "@navikt/oasis@npm:4.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.1%2F970a0555b93c862b7c7b0919349f48fc8e7de53c"
   dependencies:
-    "@navikt/texas": "npm:^4.1.0"
+    "@navikt/texas": "npm:^4.1.1"
     "@opentelemetry/api": "npm:^1.9.0"
     jose: "npm:^6.1.0"
     prom-client: "npm:^15.1.3"
-  checksum: 10/663621e3d566cfe99460c8a3e9720858db316ba4b4d6b675369a41f12020cadfee19b6a26b5757d61b58ef2547d37fc3fb88a36fbf3795ca3a346afc6a8248ae
+  checksum: 10/46dda1d20748e8a82d78c7e4f295da69d2276d77147f15380dea39575d7e57363cf4ce1c0aabd91fdb37b5b03b652871e591b1255c1d2890d157de8a1e547314
   languageName: node
   linkType: hard
 
-"@navikt/texas@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@navikt/texas@npm:4.1.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.0%2F36e6f1a056838a6777e4e0680cb45e1a568c15d1"
-  checksum: 10/263b9f41e5ca9a121be62bf3ba4c636d31c307e409e91140eb2c10ce460f92d634119ec09c41e6138c0f39c9380c631572ad355f962c2793e023a50bc2827e26
+"@navikt/texas@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "@navikt/texas@npm:4.1.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.1%2Fa4875c9cc658d6cebf4185bb2c89a17c54f15827"
+  checksum: 10/01256adcc56fd8caac0be99338c7d11138f8dfff3593563e2e91c4ca13cab4d337f9da2005cac539d3869ba2f58d4c9848cb7f1a8724dc4d0c0d8fa45570276a
   languageName: node
   linkType: hard
 
@@ -4574,24 +4574,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-darwin@npm:2.58.0"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-darwin@npm:2.58.2":
   version: 2.58.2
   resolution: "@sentry/cli-darwin@npm:2.58.2"
   conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm64@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-linux-arm64@npm:2.58.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -4602,24 +4588,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-linux-arm@npm:2.58.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-arm@npm:2.58.2":
   version: 2.58.2
   resolution: "@sentry/cli-linux-arm@npm:2.58.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-i686@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-linux-i686@npm:2.58.0"
-  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
@@ -4630,24 +4602,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-linux-x64@npm:2.58.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-x64@npm:2.58.2":
   version: 2.58.2
   resolution: "@sentry/cli-linux-x64@npm:2.58.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-arm64@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-win32-arm64@npm:2.58.0"
-  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -4658,13 +4616,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-win32-i686@npm:2.58.0"
-  conditions: os=win32 & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-i686@npm:2.58.2":
   version: 2.58.2
   resolution: "@sentry/cli-win32-i686@npm:2.58.2"
@@ -4672,57 +4623,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli-win32-x64@npm:2.58.0"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-x64@npm:2.58.2":
   version: 2.58.2
   resolution: "@sentry/cli-win32-x64@npm:2.58.2"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:2.58.0":
-  version: 2.58.0
-  resolution: "@sentry/cli@npm:2.58.0"
-  dependencies:
-    "@sentry/cli-darwin": "npm:2.58.0"
-    "@sentry/cli-linux-arm": "npm:2.58.0"
-    "@sentry/cli-linux-arm64": "npm:2.58.0"
-    "@sentry/cli-linux-i686": "npm:2.58.0"
-    "@sentry/cli-linux-x64": "npm:2.58.0"
-    "@sentry/cli-win32-arm64": "npm:2.58.0"
-    "@sentry/cli-win32-i686": "npm:2.58.0"
-    "@sentry/cli-win32-x64": "npm:2.58.0"
-    https-proxy-agent: "npm:^5.0.0"
-    node-fetch: "npm:^2.6.7"
-    progress: "npm:^2.0.3"
-    proxy-from-env: "npm:^1.1.0"
-    which: "npm:^2.0.2"
-  dependenciesMeta:
-    "@sentry/cli-darwin":
-      optional: true
-    "@sentry/cli-linux-arm":
-      optional: true
-    "@sentry/cli-linux-arm64":
-      optional: true
-    "@sentry/cli-linux-i686":
-      optional: true
-    "@sentry/cli-linux-x64":
-      optional: true
-    "@sentry/cli-win32-arm64":
-      optional: true
-    "@sentry/cli-win32-i686":
-      optional: true
-    "@sentry/cli-win32-x64":
-      optional: true
-  bin:
-    sentry-cli: bin/sentry-cli
-  checksum: 10/a1cc61e629b67a1f06f01d55f968e3858f756d1b4d4ea4db06bc2f4fe39a014a1020670c7c4ec43c6ec85eae61a687ae333acede7f1572de681e579b4f10ea29
   languageName: node
   linkType: hard
 
@@ -13815,7 +13719,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.1.0, jose@npm:^6.1.0":
+"jose@npm:6.1.2":
+  version: 6.1.2
+  resolution: "jose@npm:6.1.2"
+  checksum: 10/f679fe9e331d2d79b894a821a92bae2ab77ef51db8e0e79c86eabf34cef85e9c1eed4fd46e012610a0bf9f0981ec99d075a57724da746adc624922a58e7c4ab0
+  languageName: node
+  linkType: hard
+
+"jose@npm:^6.1.0":
   version: 6.1.0
   resolution: "jose@npm:6.1.0"
   checksum: 10/d111bc11fdb9566370992393615097d58618ba6ed29eee5d79b3bf4c460c93a6c0a9c5829d14b40342b376df16cde7d1bef79fda65c6bf09e1158875c17ae865
