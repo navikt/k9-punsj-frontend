@@ -2,7 +2,7 @@ import React from 'react';
 import { FormikValues, useField, useFormikContext } from 'formik';
 import { set } from 'lodash';
 import { DatePickerProps } from '@navikt/ds-react';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 
 interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disabled'> {
     label: string;
@@ -17,22 +17,21 @@ const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, ...props
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
     return (
-        <NewDateInput
+        <Datovelger
             label={label}
             hideLabel={hideLabel}
-            {...field}
+            value={field.value}
+            selectedDay={field.value}
             {...props}
             onChange={(selectedDate: string) => {
                 helper.setValue(selectedDate);
                 helper.setTouched(true, true);
             }}
-            onBlur={(selectedDate: string) => {
+            onBlur={() => {
                 if (handleBlur) {
-                    handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
+                    handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, field.value));
                 } else {
-                    helper.setValue(selectedDate);
                     helper.setTouched(true, true);
-                    field.onBlur(selectedDate);
                 }
             }}
             errorMessage={meta.touched && meta.error}

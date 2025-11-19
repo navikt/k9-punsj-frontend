@@ -11,7 +11,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const Utenlandsopphold: React.FC = () => {
     const intl = useIntl();
@@ -58,7 +58,7 @@ const Utenlandsopphold: React.FC = () => {
                                 {values.utenlandsopphold?.map((_, index, array) => (
                                     <div key={index} className="mb-6">
                                         <div className="flex items-start">
-                                            <DatoInputFormikNew
+                                            <DatovelgerFormik
                                                 label={intlHelper(
                                                     intl,
                                                     'omsorgspenger.utbetaling.utenlandsopphold.fom',
@@ -66,7 +66,7 @@ const Utenlandsopphold: React.FC = () => {
                                                 name={`utenlandsopphold[${index}].periode.fom`}
                                             />
 
-                                            <DatoInputFormikNew
+                                            <DatovelgerFormik
                                                 label={intlHelper(
                                                     intl,
                                                     'omsorgspenger.utbetaling.utenlandsopphold.tom',

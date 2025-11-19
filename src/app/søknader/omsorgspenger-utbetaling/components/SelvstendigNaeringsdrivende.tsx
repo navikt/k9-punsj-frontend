@@ -18,7 +18,7 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 enum Virksomhetstyper {
     FISKE = 'Fiske',
@@ -215,12 +215,12 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                 </Label>
 
                 <div className="fom-tom-rad">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                     />
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     />
