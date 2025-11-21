@@ -1,6 +1,7 @@
 import { IPeriode } from 'app/models/types';
 import yup, {
-    datoErGyldig,
+    påkrevdDato,
+    ikkePåkrevdDato,
     datoErIkkeIHelg,
     fomDato,
     passertDato,
@@ -29,8 +30,8 @@ export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder
 
 const utenlandsperiode = yup.object().shape({
     periode: yup.object().shape({
-        fom: yup.string().label('Fra og med').test(datoErGyldig),
-        tom: yup.string().label('Til og med').test(datoErGyldig),
+        fom: yup.string().label('Fra og med').test(påkrevdDato),
+        tom: yup.string().label('Til og med').test(påkrevdDato),
     }),
     land: yup.string().required().label('Land'),
 });
@@ -43,8 +44,8 @@ const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
             fraværÅrsak: yup.string().required().label('Fraværsårsak'),
             søknadÅrsak: medSoknadAarsak ? yup.string().required().label('Søknadsårsak') : yup.string().nullable(),
             periode: yup.object().shape({
-                fom: yup.string().label('Fra og med').test(datoErGyldig),
-                tom: yup.string().label('Til og med').test(datoErGyldig),
+                fom: yup.string().label('Fra og med').test(påkrevdDato),
+                tom: yup.string().label('Til og med').test(påkrevdDato),
             }),
             faktiskTidPrDag: yup.string().required().label('Timer fravær per dag'),
             normalArbeidstidPrDag: yup.string().required().label('Normal arbeidstid per dag'),
@@ -70,10 +71,14 @@ const selvstendigNaeringsdrivende = () =>
             .label('Organisasjonsnummer'),
         info: yup.object({
             periode: yup.object({
-                fom: yup.string().label('Fra og med').test(datoErGyldig),
-                tom: yup.string().label('Til og med').test(datoErGyldig),
+                fom: yup.string().label('Fra og med').test(påkrevdDato),
+                tom: yup.string().label('Til og med').test(ikkePåkrevdDato),
             }),
-            virksomhetstyper: yup.array().of(yup.string()).required().label('Virksomhetstype'),
+            virksomhetstyper: yup
+                .array()
+                .of(yup.string())
+                .min(1, 'Virksomhetstype er påkrevd')
+                .label('Virksomhetstype'),
             landkode: yup
                 .string()
                 .when('registrertIUtlandet', {
@@ -145,7 +150,7 @@ const selvstendigNaeringsdrivende = () =>
 
 const frilanser = () =>
     yup.object({
-        startdato: yup.string().label('Startdato').test(datoErGyldig),
+        startdato: yup.string().label('Startdato').test(påkrevdDato),
         sluttdato: yup
             .string()
             .when('jobberFortsattSomFrilans', {
@@ -154,7 +159,7 @@ const frilanser = () =>
                 otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato')
-            .test(datoErGyldig),
+            .test(påkrevdDato),
         jobberFortsattSomFrilans: yup.boolean(),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
@@ -183,8 +188,8 @@ const OLPSchema = yup.object({
     }),
     lovbestemtFerie: yup.array().of(
         yup.object({
-            fom: yup.string().label('Fra og med').test(datoErGyldig),
-            tom: yup.string().label('Til og med').test(datoErGyldig),
+            fom: yup.string().label('Fra og med').test(påkrevdDato),
+            tom: yup.string().label('Til og med').test(påkrevdDato),
         }),
     ),
     kurs: yup.object({
@@ -210,9 +215,9 @@ const OLPSchema = yup.object({
                 yup.object({
                     periode: yup
                         .object({
-                            fom: fomDato.test(datoErGyldig),
+                            fom: fomDato.test(påkrevdDato),
                             tom: tomDato
-                                .test(datoErGyldig)
+                                .test(påkrevdDato)
                                 .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
                         })
                         .test({ test: periodeErIkkeKunHelg, message: 'Periode kan ikke være kun helg' }),
@@ -226,7 +231,7 @@ const OLPSchema = yup.object({
                         .string()
                         .nullable()
                         .label('Dato')
-                        .test(datoErGyldig)
+                        .test(påkrevdDato)
                         .test({ test: datoErIkkeIHelg, message: 'Reisedagen kan ikke være i helg' }),
                 ),
             reisedagerBeskrivelse: yup.string().when('reisedager', {
