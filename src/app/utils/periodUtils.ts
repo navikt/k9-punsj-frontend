@@ -528,3 +528,82 @@ export const processTilsynPeriods = (
         (a, b) => dayjs(a.periode?.fom, formats.YYYYMMDD).valueOf() - dayjs(b.periode?.fom, formats.YYYYMMDD).valueOf(),
     );
 };
+
+/**
+ * Finner minste fom (fra og med) dato fra en liste over perioder
+ * @param perioder - Liste over perioder (Periode[] eller IPeriode[])
+ * @returns Minste fom dato som dayjs objekt, eller null hvis ingen gyldige perioder
+ */
+export const getMinFomFromPeriods = (perioder: (Periode | IPeriode)[]): ReturnType<typeof initializeDate> | null => {
+    if (!perioder || perioder.length === 0) {
+        return null;
+    }
+
+    return perioder.reduce(
+        (min, periode) => {
+            if (!periode.fom) {
+                return min;
+            }
+            const periodeFom = initializeDate(periode.fom);
+            return !min || periodeFom.isBefore(min) ? periodeFom : min;
+        },
+        null as ReturnType<typeof initializeDate> | null,
+    );
+};
+
+/**
+ * Finner største tom (til og med) dato fra en liste over perioder
+ * @param perioder - Liste over perioder (Periode[] eller IPeriode[])
+ * @returns Største tom dato som dayjs objekt, eller null hvis ingen gyldige perioder
+ */
+export const getMaxTomFromPeriods = (perioder: (Periode | IPeriode)[]): ReturnType<typeof initializeDate> | null => {
+    if (!perioder || perioder.length === 0) {
+        return null;
+    }
+
+    return perioder.reduce(
+        (max, periode) => {
+            if (!periode.tom) {
+                return max;
+            }
+            const periodeTom = initializeDate(periode.tom);
+            return !max || periodeTom.isAfter(max) ? periodeTom : max;
+        },
+        null as ReturnType<typeof initializeDate> | null,
+    );
+};
+
+/**
+ * Sjekker om noen perioder går utenfor grensene for eksisterende perioder
+ * @param perioderSomSkalSjekkes - Perioder som skal sjekkes (IPeriode[])
+ * @param eksisterendePerioder - Eksisterende perioder som definerer grensene (Periode[] eller IPeriode[])
+ * @returns true hvis noen periode går utenfor grensene, false hvis alle perioder er innenfor
+ */
+export const checkPeriodsOutsideBounds = (
+    perioderSomSkalSjekkes: IPeriode[],
+    eksisterendePerioder: (Periode | IPeriode)[],
+): boolean => {
+    if (!perioderSomSkalSjekkes || perioderSomSkalSjekkes.length === 0) {
+        return false;
+    }
+
+    if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
+        return false;
+    }
+
+    const minEksisterendeFom = getMinFomFromPeriods(eksisterendePerioder);
+    const maxEksisterendeTom = getMaxTomFromPeriods(eksisterendePerioder);
+
+    if (!minEksisterendeFom || !maxEksisterendeTom) {
+        return false;
+    }
+
+    return perioderSomSkalSjekkes.some((periode) => {
+        if (!periode.fom || !periode.tom) {
+            return false;
+        }
+        const periodeFom = initializeDate(periode.fom);
+        const periodeTom = initializeDate(periode.tom);
+        return periodeFom.isBefore(minEksisterendeFom) || periodeTom.isAfter(maxEksisterendeTom);
+    });
+};
