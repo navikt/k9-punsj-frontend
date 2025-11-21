@@ -155,11 +155,10 @@ const frilanser = () =>
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: (schema) => schema.required(),
+                then: (schema) => schema.test(påkrevdDato),
                 otherwise: (schema) => schema.nullable(),
             })
-            .label('Sluttdato')
-            .test(påkrevdDato),
+            .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
         fravaersperioder: fravaersperioder({ medSoknadAarsak: false }),
     });
