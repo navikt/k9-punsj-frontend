@@ -301,7 +301,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.bruttoInntekt"
-                                className="bruttoinntekt"
+                                className="max-w-xs"
+                                size="small"
                             />
                             <VerticalSpacer sixteenPx />
                         </>
