@@ -25,28 +25,35 @@ describe('Pleiepenger punsj', () => {
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('08.11.2021');
-            cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('11.11.2021');
-        });
+            // Vent på at første periode (eq(0)) har fått initialverdiene
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(0)
+                .should('have.value', '08.11.2021');
 
-        // Det trenges for å oppdatere state (trykke noe annet sted)
-        cy.findByRole('button', { name: /Ferie/i }).click();
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(0)
+                .should('have.value', '11.11.2021');
 
-        cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByRole('button', { name: /Legg til ny periode/i }).click();
+            cy.findByRole('button', { name: /Legg til ny periode/i })
+                .should('be.visible')
+                .click();
+
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
-                .should('exist')
+                .should('be.visible');
+
+            cy.findAllByLabelText(/Fra og med/i)
+                .eq(1)
+                .should('not.be.disabled')
                 .type('20.11.2021');
+
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
-                .should('exist')
+                .should('be.visible');
+
+            cy.findAllByLabelText(/Til og med/i)
+                .eq(1)
+                .should('not.be.disabled')
                 .type('25.11.2021');
         });
 
@@ -54,25 +61,30 @@ describe('Pleiepenger punsj', () => {
         cy.findByText(/Arbeidstaker/i).click();
         cy.findByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
 
+        // Vent på at modalen er åpnet og Formik er initialisert
+        cy.get('[data-test-id="arbeidstid-periode-liste"]').should('be.visible');
+
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .clear({ force: true })
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .clear({ force: true })
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('11.11.2021');
 
             cy.findByRole('button', { name: /Legg til periode/i }).click();
 
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
-                .should('exist')
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('20.11.2021');
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
-                .should('exist')
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('25.11.2021');
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
@@ -80,8 +92,15 @@ describe('Pleiepenger punsj', () => {
 
             cy.findByRole('button', { name: /Lagre/i }).click();
         });
-        cy.findByRole('button', { name: /vis mer/i }).click();
-        cy.findByText(/10 dager registrert/i).should('exist');
+
+        // Vent på at lagring er ferdig og at "vis mer" knappen er klar
+        cy.findByRole('button', { name: /vis mer/i })
+            .should('be.visible')
+            .should('not.be.disabled')
+            .click();
+
+        // Vent på at teksten "10 dager registrert" blir synlig (økt timeout for CI)
+        cy.contains(/10 dager registrert/i, { timeout: 10000 }).should('be.visible');
     });
 
     it('kan bytte bytte mellom timer og minutter og desimaler i arbeidstid', () => {
@@ -91,14 +110,17 @@ describe('Pleiepenger punsj', () => {
 
         // cy.findByLabelText(/Velg hele søknadsperioden/i).click();
 
+        // Vent på at modalen er åpnet og Formik er initialisert
+        cy.get('[data-test-id="arbeidstid-periode-liste"]').should('be.visible');
+
         cy.get('[data-test-id="arbeidstid-periode-liste"]').within(() => {
             cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .clear({ force: true })
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('08.11.2021');
             cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .clear({ force: true })
+                .should('be.visible')
+                .should('not.be.disabled')
                 .type('11.11.2021');
 
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
