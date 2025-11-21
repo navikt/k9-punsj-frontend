@@ -77,9 +77,17 @@ export const identifikatorAnnenPart = yup.object().shape({
         }),
 });
 
-export const datoErGyldig = {
-    test: (v?: string) => {
+export const påkrevdDato = {
+    test: (v: string) => {
         if (!v) return false;
+        return dayjs(v).isValid();
+    },
+    message: 'Må ha en gyldig dato',
+};
+
+export const ikkePåkrevdDato = {
+    test: (v: string) => {
+        if (!v) return true;
         return dayjs(v).isValid();
     },
     message: 'Må ha en gyldig dato',
