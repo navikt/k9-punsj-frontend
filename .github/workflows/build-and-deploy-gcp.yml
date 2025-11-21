@@ -41,7 +41,7 @@ jobs:
             image: ${{ steps.docker-push.outputs.image }}
         steps:
             - name: Hente kode
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
 
             - name: Setup .yarnrc.yml
               run: |
