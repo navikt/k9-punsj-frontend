@@ -15,11 +15,13 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 import { erYngreEnn4år } from 'app/utils';
 import { JaNei } from 'app/models/enums';
+import { Kursperiode } from 'app/models/types/Kurs';
 
 export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder: IPeriode[]) => {
     const startdatoSN = soknad.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.periode.fom;
     return {
         eksisterendePerioder,
+        kursperioder: soknad.kurs?.kursperioder,
         erNyoppstartet: startdatoSN ? !!erYngreEnn4år(startdatoSN) : false,
         harSøkerRegnskapsfører: soknad?.metadata?.harSøkerRegnskapsfører,
     };
@@ -190,25 +192,32 @@ const OLPSchema = yup.object({
             institusjonsUuid: yup.string().nullable(),
             holder: yup
                 .string()
-                .when('$eksisterendePerioder', {
-                    is: (value: IPeriode[]) => value.length === 0,
+                .when('$kursperioder', {
+                    is: (value: Kursperiode[]) => value?.length ?? 0 > 0,
                     then: (schema) => schema.required(),
                     otherwise: (schema) => schema.nullable(),
                 })
                 .label('Navn på institusjon'),
         }),
-        kursperioder: yup.array().of(
-            yup.object({
-                periode: yup
-                    .object({
-                        fom: fomDato.test(datoErGyldig),
-                        tom: tomDato
-                            .test(datoErGyldig)
-                            .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
-                    })
-                    .test({ test: periodeErIkkeKunHelg, message: 'Periode kan ikke være kun helg' }),
-            }),
-        ),
+        kursperioder: yup
+            .array()
+            .when('$eksisterendePerioder', {
+                is: (value: IPeriode[]) => value.length === 0,
+                then: (schema) => schema.min(1, 'Kursperioder er påkrevd'),
+                otherwise: (schema) => schema.optional(),
+            })
+            .of(
+                yup.object({
+                    periode: yup
+                        .object({
+                            fom: fomDato.test(datoErGyldig),
+                            tom: tomDato
+                                .test(datoErGyldig)
+                                .test('tom-not-before-fom', 'Sluttdato kan ikke være før startdato', tomEtterFom),
+                        })
+                        .test({ test: periodeErIkkeKunHelg, message: 'Periode kan ikke være kun helg' }),
+                }),
+            ),
         reise: yup.object({
             reisedager: yup
                 .array()
