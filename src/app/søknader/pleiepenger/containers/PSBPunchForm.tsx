@@ -13,7 +13,7 @@ import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
-    hentPerioderFraK9Sak,
+    hentEksisterendePerioderForSaksnummer,
     resetPunchFormAction,
     resetSoknadAction,
     setJournalpostPaaVentResetAction,
@@ -95,7 +95,7 @@ function withHooks<P>(Component: ComponentType<IPunchFormComponentProps>) {
 
 export interface IPunchFormDispatchProps {
     getSoknad: typeof getSoknad;
-    hentPerioder: typeof hentPerioderFraK9Sak;
+    hentPerioder: typeof hentEksisterendePerioderForSaksnummer;
     resetSoknadAction: typeof resetSoknadAction;
     updateSoknad: typeof updateSoknad;
     submitSoknad: typeof submitSoknad;
@@ -227,9 +227,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const søkerId = this.props.identState.søkerId || this.props.fellesState.journalpost?.norskIdent;
         const pleietrengendeId =
             this.props.identState.pleietrengendeId || this.props.fellesState.journalpost?.sak?.pleietrengendeIdent;
-
-        if (søkerId && pleietrengendeId) {
-            this.props.hentPerioder(søkerId, pleietrengendeId);
+        const saksnummer = this.props.fellesState.journalpost?.sak?.fagsakId;
+        if (søkerId && pleietrengendeId && saksnummer) {
+            this.props.hentPerioder(søkerId, pleietrengendeId, saksnummer);
         }
     }
 
@@ -1407,8 +1407,8 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getSoknad(id)),
-    hentPerioder: (søkerId: string, pleietrengendeId: string) =>
-        dispatch(hentPerioderFraK9Sak(søkerId, pleietrengendeId)),
+    hentPerioder: (søkerId: string, pleietrengendeId: string, saksnummer: string) =>
+        dispatch(hentEksisterendePerioderForSaksnummer(søkerId, pleietrengendeId, saksnummer)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
     updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
