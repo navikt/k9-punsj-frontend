@@ -398,20 +398,26 @@ export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
     };
 }
 
-export function hentPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
+export function hentEksisterendePerioderForSaksnummer(brukerIdent: string, barnIdent: string, saksnummer: string) {
     return (dispatch: any) => {
         const requestBody: IHentPerioder = {
-            brukerIdent: norskIdent,
+            brukerIdent,
             barnIdent,
         };
 
         dispatch(hentPerioderRequestAction());
-        post(ApiPath.PSB_K9SAK_PERIODER, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, perioder) => {
-            if (response.ok) {
-                return dispatch(hentPerioderSuccessAction(perioder));
-            }
-            return dispatch(hentPerioderErrorAction(response));
-        });
+        post(
+            ApiPath.PSB_K9SAK_PERIODER + '?saksnummer=' + saksnummer,
+            {},
+            { 'X-Nav-NorskIdent': brukerIdent },
+            requestBody,
+            (response, perioder) => {
+                if (response.ok) {
+                    return dispatch(hentPerioderSuccessAction(perioder));
+                }
+                return dispatch(hentPerioderErrorAction(response));
+            },
+        );
     };
 }
 
