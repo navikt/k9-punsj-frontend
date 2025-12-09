@@ -9,6 +9,7 @@ import { ISoknadsInfo, SoknadsInfo } from './SoknadsInfo';
 import { IUtenlandsOpphold, UtenlandsOpphold } from './UtenlandsOpphold';
 import { IUttak, Uttak } from './Uttak';
 import { DeepRequired } from 'app/utils/deep-required';
+import { berikMedKey } from 'app/utils/listeUtils';
 
 export interface IPSBSoknad {
     soeknadId?: string;
@@ -161,10 +162,10 @@ export class PSBSoknad implements IPSBSoknad {
         this.tilsynsordning = new Tilsynsordning(soknad.tilsynsordning || {});
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
         this.utenlandsopphold = soknad.utenlandsopphold
-            ? soknad.utenlandsopphold.map((u) => new UtenlandsOpphold(u))
+            ? berikMedKey(soknad.utenlandsopphold.map((u) => new UtenlandsOpphold(u)))
             : undefined;
-        this.utenlandsoppholdV2 = (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map(
-            (u) => new UtenlandsOpphold(u),
+        this.utenlandsoppholdV2 = berikMedKey(
+            (soknad.utenlandsoppholdV2 || soknad.utenlandsopphold || []).map((u) => new UtenlandsOpphold(u)),
         );
         this.uttak = (soknad.uttak || []).map((t) => new Uttak(t));
         this.k9saksnummer = soknad.k9saksnummer || undefined;

@@ -20,6 +20,7 @@ import {
     IUtenlandsOpphold,
     Periodeinfo,
 } from 'app/models/types';
+import { berikMedKey } from 'app/utils/listeUtils';
 
 import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -84,25 +85,30 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         periods = [],
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
-    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(
-        periods.some((periode) => periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0)
-            ? jaValue
-            : '',
-    );
+    // Bruker objekt for å lagre state per element
+    const [visInnlagtPerioder, setVisInnlagtPerioder] = useState<{ [key: number]: string }>(() => {
+        const initialState: { [key: number]: string } = {};
+        berikMedKey(periods).forEach((periode, index) => {
+            if (periode.innleggelsesperioder && periode.innleggelsesperioder.length > 0) {
+                initialState[index] = jaValue;
+            }
+        });
+        return initialState;
+    });
     const editInfo: (
         index: number,
         periodeinfo: Partial<Periodeinfo<IUtenlandsOpphold>>,
     ) => Periodeinfo<IUtenlandsOpphold>[] = (index: number, periodeinfo: Partial<IPeriodeinfo>) => {
         const newInfo: Periodeinfo<IUtenlandsOpphold> = { ...periods[index], ...periodeinfo };
-        const newArray = periods;
+        const newArray = [...periods]; // Lager kopi av array
         newArray[index] = newInfo;
-        return newArray;
+        return berikMedKey(newArray);
     };
 
     const removeItem = (index: number) => {
-        const newArray = periods;
+        const newArray = [...periods]; // Lager kopi av array
         newArray.splice(index, 1);
-        return newArray;
+        return berikMedKey(newArray);
     };
 
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, { periode });
@@ -138,22 +144,36 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             }
             return '';
         };
+
+        // Henter verdi for radioknapp fra state
+        const getVisInnlagtPerioder = () => {
+            // Hvis det finnes innleggelsesperioder, er "Ja" valgt
+            if (periods[periodeindeks].innleggelsesperioder && periods[periodeindeks].innleggelsesperioder.length > 0) {
+                return jaValue;
+            }
+            // Hvis det finnes lagret state for dette elementet, bruk den
+            if (visInnlagtPerioder[periodeindeks]) {
+                return visInnlagtPerioder[periodeindeks];
+            }
+            return '';
+        };
         const getInnleggelsesperioder = () => {
             const innleggelsesperioder = periods[periodeindeks].innleggelsesperioder
                 ?.filter((innleggelsesperiode) => !!innleggelsesperiode.periode)
                 .map((innleggelsesperiode) => innleggelsesperiode.periode) as IPeriode[];
 
             if (innleggelsesperioder.length > 0) {
-                return innleggelsesperioder;
+                return berikMedKey(innleggelsesperioder);
             }
-            return [{ fom: '', tom: '' }];
+            return berikMedKey([{ fom: '', tom: '' }]);
         };
 
         return (
             <div className="utenlandsopphold">
                 <div className="flex items-start">
                     <PeriodInput
-                        periode={periodeinfo.periode || {}}
+                        key={periods[periodeindeks].key || `period_${periodeindeks}`}
+                        periode={periods[periodeindeks].periode || {}}
                         intl={intlShape}
                         onChange={(periode) => {
                             editSoknadState(editPeriode(periodeindeks, periode));
@@ -202,14 +222,20 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                     value: 'nei',
                                 },
                             ]}
-                            name={`arbeidsgivertype_${1}`}
+                            name={`innleggelse_${periodeindeks}`}
                             legend={`Er, eller skal, barnet være innlagt i helseinstitusjon i ${countries.getName(
                                 land,
                                 'nb',
                             )}?`}
                             onChange={(event) => {
                                 const { value } = event.target as HTMLInputElement;
-                                setVisInnlagtPerioder(value);
+
+                                // Oppdaterer state for dette elementet
+                                setVisInnlagtPerioder((prev) => ({
+                                    ...prev,
+                                    [periodeindeks]: value,
+                                }));
+
                                 if (value !== jaValue) {
                                     const editedInfo = () =>
                                         editInfo(periodeindeks, {
@@ -219,12 +245,12 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                     editSoknadState(editedInfo());
                                 }
                             }}
-                            checked={visInnlagtPerioder}
+                            checked={getVisInnlagtPerioder()}
                         />
                     </div>
                 )}
 
-                {visInnlagtPerioder === jaValue && (
+                {getVisInnlagtPerioder() === jaValue && (
                     <div className="mt-6">
                         <Heading level="3" size="small">
                             <FormattedMessage id={'skjema.utenlandsopphold.barnInnlagtPerioder.tittel'} />
@@ -313,11 +339,11 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
     return (
         <Listepaneler
             intl={intl}
-            items={periods}
+            items={berikMedKey(periods)}
             panelid={panelid}
-            initialItem={initialPeriodeinfo}
-            editSoknad={editSoknad}
-            editSoknadState={editSoknadState}
+            initialItem={berikMedKey([initialPeriodeinfo])[0]}
+            editSoknad={(newPeriods) => editSoknad(berikMedKey(newPeriods))}
+            editSoknadState={(newPeriods) => editSoknadState(berikMedKey(newPeriods))}
             getErrorMessage={errorMessageFunc}
             getUhaandterteFeil={getUhaandterteFeil}
             className={className}
