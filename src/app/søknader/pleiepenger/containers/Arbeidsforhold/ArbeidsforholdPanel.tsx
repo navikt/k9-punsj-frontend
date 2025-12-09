@@ -18,7 +18,7 @@ import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { arbeidstidInformasjon } from '../../../../components/ArbeidstidInfo';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -74,9 +74,10 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <NewDateInput
+                <Datovelger
                     id="frilanser-startdato"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
+                    selectedDay={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
                     label={intlHelper(intl, 'skjema.frilanserdato')}
                     errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.startdato')}
@@ -104,6 +105,7 @@ const ArbeidsforholdPanel = ({
                             },
                         });
                     }}
+                    onBlur={() => {}}
                 />
                 <RadioPanelGruppe
                     className="horizontalRadios"
@@ -124,9 +126,10 @@ const ArbeidsforholdPanel = ({
                 <VerticalSpacer eightPx />
 
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <NewDateInput
+                    <Datovelger
                         id="frilanser-sluttdato"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
+                        selectedDay={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
                         fromDate={limitFromDate}
@@ -153,6 +156,7 @@ const ArbeidsforholdPanel = ({
                                 },
                             });
                         }}
+                        onBlur={() => {}}
                     />
                 )}
                 {soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
@@ -499,9 +503,10 @@ const ArbeidsforholdPanel = ({
                 </div>
 
                 <div className="sn-startdatocontainer">
-                    <NewDateInput
+                    <Datovelger
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
+                        selectedDay={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         errorMessage={getErrorMessage(
                             'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder',
@@ -542,11 +547,13 @@ const ArbeidsforholdPanel = ({
                                 },
                             });
                         }}
+                        onBlur={() => {}}
                     />
 
-                    <NewDateInput
+                    <Datovelger
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
+                        selectedDay={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
@@ -584,6 +591,7 @@ const ArbeidsforholdPanel = ({
                                 },
                             });
                         }}
+                        onBlur={() => {}}
                     />
                 </div>
 
@@ -680,9 +688,10 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <NewDateInput
+                            <Datovelger
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
+                                selectedDay={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 fromDate={limitFromDate}
                                 onChange={(selectedDate: any) => {
@@ -714,6 +723,7 @@ const ArbeidsforholdPanel = ({
                                         },
                                     });
                                 }}
+                                onBlur={() => {}}
                             />
                         </div>
 

@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
 import { KorrigeringAvInntektsmeldingFormFields } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
@@ -26,7 +26,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                 <div className="input-row">
                     <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
                         {({ field }: FieldProps) => (
-                            <DatoInputFormikNew {...field} label={intlHelper(intl, 'skjema.dato')} />
+                            <DatovelgerFormik {...field} label={intlHelper(intl, 'skjema.dato')} />
                         )}
                     </Field>
                     <div className="ml-4">

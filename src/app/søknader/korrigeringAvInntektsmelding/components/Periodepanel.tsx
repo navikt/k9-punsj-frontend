@@ -1,18 +1,16 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import usePrevious from 'app/hooks/usePrevious';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 import { IPeriode } from 'app/models/types';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from '../../../hooks/useFocus';
 
 export interface IPeriodepanelerProps {
     name:
@@ -26,39 +24,18 @@ export interface IPeriodepanelerProps {
 export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil }: IPeriodepanelerProps) => {
     const intl = useIntl();
 
-    const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
-    const fomInputRef = useRef<HTMLInputElement>(null);
-    const currentListLength = values[name]?.length;
-    const previousListLength = usePrevious(currentListLength);
-
-    useFocus(currentListLength, previousListLength, fomInputRef);
+    const { values } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
 
     return (
         <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
             <FieldArray name={name}>
                 {({ push, remove }) => (
                     <>
-                        {values[name]?.map((value: IPeriode, index: number) => {
+                        {values[name]?.map((_: IPeriode, index: number) => {
                             const fieldName = `${name}.${index}`;
-                            const isLastElement =
-                                previousListLength < currentListLength && index === currentListLength - 1;
                             return (
                                 <div className="flex items-start" key={index}>
-                                    <Field name={fieldName}>
-                                        {({ meta }: FieldProps<string, FormikValues>) => (
-                                            <PeriodInput
-                                                onChange={(period) => {
-                                                    setFieldValue(fieldName, period);
-                                                }}
-                                                periode={value}
-                                                intl={intl}
-                                                errorMessage={
-                                                    meta.error ? <ErrorMessage name={fieldName} /> : undefined
-                                                }
-                                                fomInputRef={isLastElement ? fomInputRef : undefined}
-                                            />
-                                        )}
-                                    </Field>
+                                    <Periodevelger name={fieldName} />
 
                                     <Button
                                         id="slett"

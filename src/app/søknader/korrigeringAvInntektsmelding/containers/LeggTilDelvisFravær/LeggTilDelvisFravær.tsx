@@ -15,7 +15,7 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from '../../../../hooks/useFocus';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 
 import './LeggTilDelvisFravær.less';
 
@@ -67,7 +67,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                     <div className="input-row">
                                                         <Field name={`${fieldName}.dato`}>
                                                             {({ field }: FieldProps) => (
-                                                                <DatoInputFormikNew
+                                                                <DatovelgerFormik
                                                                     {...field}
                                                                     className="dateInput"
                                                                     label={intlHelper(intl, 'skjema.dato')}
