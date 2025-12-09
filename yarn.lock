@@ -2834,10 +2834,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/fnrvalidator@npm:2.1.5":
-  version: 2.1.5
-  resolution: "@navikt/fnrvalidator@npm:2.1.5::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F2.1.5%2Fe33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
-  checksum: 10/6004890b3046d957f117b8566d6b12bc254cb5417a6fa9dd800a807bbb78d6775165d8c2aba5f1c1561b499341d4e97d662589a9d708651ae59aee06411ce66d
+"@navikt/fnrvalidator@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@navikt/fnrvalidator@npm:2.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F2.2.0%2F4886b1ab78dabbca087adf379b81ba0ef27ebbd9"
+  checksum: 10/7877acc2f23aa99943c70ea3414028f8a2ce2239847cae68f80d81473b79836d8756cada273606d337b217e84b9168cac89fd6bb6d316d7532d9f17f5b7de4e7
   languageName: node
   linkType: hard
 
@@ -11493,7 +11493,7 @@ __metadata:
     "@navikt/ds-css": "npm:7.33.5"
     "@navikt/ds-react": "npm:7.33.5"
     "@navikt/ds-tailwind": "npm:7.33.5"
-    "@navikt/fnrvalidator": "npm:2.1.5"
+    "@navikt/fnrvalidator": "npm:2.2.0"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.6.1"
     "@reduxjs/toolkit": "npm:2.10.1"
     "@sentry/cli": "npm:2.58.2"
