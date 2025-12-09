@@ -1,20 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Heading } from '@navikt/ds-react';
+import { Alert, Button, Checkbox, Heading } from '@navikt/ds-react';
 import { FieldArray, Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
-// import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
-import { checkPeriodOverlap } from 'app/utils/periodUtils';
+import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
+// import { checkPeriodOverlap } from 'app/utils/periodUtils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
-// const createValidationSchema = (soknadsperioder: IPeriode[]) =>
-const createValidationSchema = () =>
+const createValidationSchema = (soknadsperioder: IPeriode[]) =>
+    // const createValidationSchema = () =>
     yup.object({
         perioder: yup
             .array()
@@ -22,8 +22,8 @@ const createValidationSchema = () =>
             .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
                 if (!periods) return true;
                 return !checkPeriodOverlap(periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[]);
-            }),
-        /*.test(
+            })
+            .test(
                 'within-soknadsperioder',
                 `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
@@ -33,7 +33,7 @@ const createValidationSchema = () =>
                         soknadsperioder,
                     );
                 },
-            ),*/
+            ),
     });
 
 interface FormValues {
@@ -50,6 +50,7 @@ interface Props {
 
 const ArbeidstidPeriodeListe = (props: Props) => {
     const formikRef = useRef<FormikProps<FormValues>>(null);
+    const [filtrerHelg, setFiltrerHelg] = useState(false);
 
     const { arbeidstidPerioder, soknadsperioder } = props;
     const { lagre, avbryt } = props;
@@ -71,7 +72,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
             const processedPeriods = processArbeidstidPeriods(
                 currentValues.perioder,
                 arbeidstidPerioder,
-                { filterWeekends: false }, // Kan endres til true hvis vi vil filtrere helger
+                { filterWeekends: filtrerHelg }, // Kan endres til true hvis vi vil filtrere helger
             );
 
             lagre(processedPeriods);
@@ -82,8 +83,8 @@ const ArbeidstidPeriodeListe = (props: Props) => {
         <Formik<FormValues>
             initialValues={initialValues}
             onSubmit={(values) => handleSaveValues(values)}
-            // validationSchema={createValidationSchema(soknadsperioder)}
-            validationSchema={createValidationSchema()}
+            validationSchema={createValidationSchema(soknadsperioder)}
+            // validationSchema={createValidationSchema()}
             innerRef={formikRef}
             enableReinitialize
         >
@@ -109,6 +110,17 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                             ) : (
                                 <div>Ingen perioder å vise</div>
                             )}
+
+                            <div className="mt-4 mb-4">
+                                <Checkbox
+                                    onChange={() => {
+                                        setFiltrerHelg(!filtrerHelg);
+                                    }}
+                                    checked={filtrerHelg}
+                                >
+                                    Filtrer helg
+                                </Checkbox>
+                            </div>
                             {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
                                 <Alert variant="error" className="mb-4">
                                     {errors.perioder}
