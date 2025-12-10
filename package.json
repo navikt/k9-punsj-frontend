@@ -156,7 +156,7 @@
         "prettier": "3.6.2",
         "react-refresh": "0.18.0",
         "regenerator-runtime": "0.14.1",
-        "storybook": "10.0.8",
+        "storybook": "10.1.4",
         "storybook-addon-fetch-mock": "2.0.1",
         "style-loader": "4.0.0",
         "stylelint": "16.25.0",
