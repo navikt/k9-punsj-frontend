@@ -120,6 +120,7 @@
     "fordeling.infotrygd": "Det finnes et vedtak tilknyttet søker og/eller pleietrengende i Infotrygd, dokumentet må derfor behandles videre der.",
     "fordeling.error.settBehandlingsÅrMutation": "Kunne ikke sjekke opplysninger. Prøv igjen senere.",
     "fordeling.error.pleietrengendeHarFagsak": "Pleietrengendende med fødselsnummer {pleietrengendeId} har allerede en fagsak {fagsakId}. Gå tilbake og velg fagsak {fagsakId}.",
+    "fordeling.error.pleietrengendeHarFagsak.olp": "Pleietrengende med fødselsnummer {pleietrengendeId} har allerede en fagsak {fagsakId}. Er du sikker på at du vil reservere et nytt saksnummer? Hvis ikke, velg fagsak {fagsakId}.",
     "fordeling.error.pleietrengendeHarFerdistiltFagsak": "Det finnes allerede en fagsak knyttet til dette barnet (ID: {pleietrengendeId}). Hvis barnet er riktig må du kopiere journalposten og koble ny journalpost til eksisterende fagsak {fagsakId}. Denne journalposten vil bli lukket etter du kopierer.",
     "fordeling.error.henteFagsakFeilet": "Henting av fagsak feilet",
     "fordeling.alert.toSøkere.ingenPleietrengende": "Du må velge pleietrengende eller fagsak for å gå videre, når journalposten gjelder to søkere.",
