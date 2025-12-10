@@ -108,10 +108,11 @@ export const isJournalførKnapperDisabled = (
 export const isRedirectVidereDisabled = (
     identState: IIdentState,
     isDokumenttypeMedPleietrengende: boolean,
+    gjelderOlp: boolean,
     barnMedFagsak?: FagsakForSelect,
 ) => {
     if (isDokumenttypeMedPleietrengende) {
-        if (barnMedFagsak) {
+        if (!gjelderOlp && !!barnMedFagsak) {
             return true;
         }
 

@@ -484,7 +484,12 @@ const Fordeling: React.FC = () => {
         }
     };
 
-    const redirectVidereDisabled = isRedirectVidereDisabled(identState, isDokumenttypeMedPleietrengende, barnMedFagsak);
+    const redirectVidereDisabled = isRedirectVidereDisabled(
+        identState,
+        isDokumenttypeMedPleietrengende,
+        gjelderOlp,
+        barnMedFagsak,
+    );
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
