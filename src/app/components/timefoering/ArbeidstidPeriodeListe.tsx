@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Alert, Button, Checkbox, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { FieldArray, Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 
@@ -50,7 +50,7 @@ interface Props {
 
 const ArbeidstidPeriodeListe = (props: Props) => {
     const formikRef = useRef<FormikProps<FormValues>>(null);
-    const [filtrerHelg, setFiltrerHelg] = useState(false);
+    // const [filtrerHelg, setFiltrerHelg] = useState(false);
 
     const { arbeidstidPerioder, soknadsperioder } = props;
     const { lagre, avbryt } = props;
@@ -72,7 +72,8 @@ const ArbeidstidPeriodeListe = (props: Props) => {
             const processedPeriods = processArbeidstidPeriods(
                 currentValues.perioder,
                 arbeidstidPerioder,
-                { filterWeekends: filtrerHelg }, // Kan endres til true hvis vi vil filtrere helger
+                { filterWeekends: false },
+                // { filterWeekends: filtrerHelg }, // Kan endres til true hvis vi vil filtrere helger
             );
 
             lagre(processedPeriods);
@@ -111,6 +112,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                                 <div>Ingen perioder å vise</div>
                             )}
 
+                            {/*
                             <div className="mt-4 mb-4">
                                 <Checkbox
                                     onChange={() => {
@@ -121,6 +123,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                                     Filtrer helg
                                 </Checkbox>
                             </div>
+                            */}
                             {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
                                 <Alert variant="error" className="mb-4">
                                     {errors.perioder}
