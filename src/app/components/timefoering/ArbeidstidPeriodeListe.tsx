@@ -125,7 +125,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                             </div>
                             */}
                             {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
-                                <Alert variant="error" className="mb-4">
+                                <Alert variant="error" size="small" className="mb-4">
                                     {errors.perioder}
                                 </Alert>
                             )}

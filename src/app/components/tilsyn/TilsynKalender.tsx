@@ -47,6 +47,7 @@ const TilsynKalender = ({
                     open={openPeriodeListe}
                     aria-label="Lengre periode modal"
                     onClose={() => setOpenPeriodeListe(false)}
+                    className="max-w-[512px]"
                 >
                     <Modal.Body>
                         <TilsynPeriodeListe

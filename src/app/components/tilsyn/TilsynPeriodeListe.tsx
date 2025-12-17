@@ -33,7 +33,10 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                 `Tilsyn må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
-                    return !validatePeriodsWithinSoknadsperioder(periods as Periodeinfo<IOmsorgstid>[], soknadsperioder);
+                    return !validatePeriodsWithinSoknadsperioder(
+                        periods as Periodeinfo<IOmsorgstid>[],
+                        soknadsperioder,
+                    );
                 },
             ),
     });
@@ -113,7 +116,7 @@ const TilsynPeriodeListe = (props: Props) => {
                             ))}
 
                             {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
-                                <Alert variant="error" className="mb-4">
+                                <Alert variant="error" size="small" className="mb-4">
                                     {errors.perioder}
                                 </Alert>
                             )}
