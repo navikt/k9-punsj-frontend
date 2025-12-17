@@ -278,6 +278,61 @@ export const checkPeriodsWithinSoknadsperioder = <T>(
 };
 
 /**
+ * Sjekker om perioder er innenfor søknadsperioder ved å validere hver enkelt dato
+ * Hver dato i perioden må være innenfor minst én søknadsperiode
+ * Dette tillater perioder som spenner over flere søknadsperioder, så lenge alle datoer er dekket
+ *
+ * @param perioder - Liste over perioder som skal valideres
+ * @param soknadsperioder - Liste over søknadsperioder som perioder må være innenfor
+ * @returns true hvis noen periode er utenfor søknadsperioder, false hvis alle perioder er innenfor
+ */
+export const validatePeriodsWithinSoknadsperioder = <T>(
+    perioder: Periodeinfo<T>[],
+    soknadsperioder: IPeriode[],
+): boolean => {
+    // Hvis ingen søknadsperioder er definert, returnerer vi false (ingen validering)
+    if (!soknadsperioder || soknadsperioder.length === 0) {
+        return false;
+    }
+
+    // Går gjennom hver periode
+    for (const periode of perioder) {
+        // Hopp over perioder uten gyldig dato
+        if (!periode.periode?.fom || !periode.periode?.tom) {
+            continue;
+        }
+
+        // Hent alle datoer i perioden
+        const dateRange = {
+            fom: dayjs(periode.periode.fom, formats.YYYYMMDD).toDate(),
+            tom: dayjs(periode.periode.tom, formats.YYYYMMDD).toDate(),
+        };
+        const datesInPeriod = getDatesInDateRange(dateRange);
+
+        // Sjekker om hver dato i perioden er innenfor minst én søknadsperiode
+        for (const date of datesInPeriod) {
+            const erInnenforEnSoknadsperiode = soknadsperioder.some((soknadsperiode) => {
+                // Hopp over søknadsperioder uten gyldig dato
+                if (!soknadsperiode.fom || !soknadsperiode.tom) {
+                    return false;
+                }
+
+                // Sjekk om datoen er innenfor denne søknadsperioden
+                return includesDate(soknadsperiode, date);
+            });
+
+            // Hvis denne datoen ikke er innenfor noen søknadsperiode, returnerer vi true (validering feilet)
+            if (!erInnenforEnSoknadsperiode) {
+                return true;
+            }
+        }
+    }
+
+    // Alle perioder er innenfor søknadsperioder
+    return false;
+};
+
+/**
  * Sjekker om perioder overlapper hverandre
  * @param perioder - Liste over perioder som skal sjekkes
  * @returns true hvis perioder overlapper, false hvis ikke

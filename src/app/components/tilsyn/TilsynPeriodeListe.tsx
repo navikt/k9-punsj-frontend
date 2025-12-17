@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
 import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
 import {
-    checkPeriodsWithinSoknadsperioder,
+    validatePeriodsWithinSoknadsperioder,
     formatSoknadsperioder,
     checkPeriodOverlap,
     processTilsynPeriods,
@@ -33,7 +33,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                 `Tilsyn må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
-                    return !checkPeriodsWithinSoknadsperioder(periods as Periodeinfo<IOmsorgstid>[], soknadsperioder);
+                    return !validatePeriodsWithinSoknadsperioder(periods as Periodeinfo<IOmsorgstid>[], soknadsperioder);
                 },
             ),
     });

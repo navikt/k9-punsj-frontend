@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
-import { checkPeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
+import { validatePeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
 // import { checkPeriodOverlap } from 'app/utils/periodUtils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
@@ -28,7 +28,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                 `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
-                    return !checkPeriodsWithinSoknadsperioder(
+                    return !validatePeriodsWithinSoknadsperioder(
                         periods as Periodeinfo<IArbeidstidPeriodeMedTimer>[],
                         soknadsperioder,
                     );

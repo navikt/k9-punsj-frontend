@@ -5,6 +5,7 @@ import {
     checkPeriodOverlap,
     processTilsynPeriods,
     filterWeekendsFromPeriodsGeneric,
+    validatePeriodsWithinSoknadsperioder,
 } from '../../app/utils/periodUtils';
 import { IPeriode } from '../../app/models/types/Periode';
 import { IArbeidstidPeriodeMedTimer, Periodeinfo, IOmsorgstid } from '../../app/models/types';
@@ -568,6 +569,190 @@ describe('periodUtils', () => {
 
                 const result = checkArbeidstidWithinSoknadsperioder(arbeidstidPerioder, soknadsperioderMedUgyldige);
                 expect(result).toBe(true); // Ingen gyldige søknadsperioder, så validering feiler
+            });
+        });
+    });
+
+    describe('validatePeriodsWithinSoknadsperioder', () => {
+        const createArbeidstidPeriode = (fom: string, tom: string): Periodeinfo<IArbeidstidPeriodeMedTimer> => ({
+            periode: { fom, tom },
+            faktiskArbeidPerDag: { timer: '8', minutter: '0' },
+            jobberNormaltPerDag: { timer: '8', minutter: '0' },
+        });
+
+        const createTilsynPeriode = (fom: string, tom: string): Periodeinfo<IOmsorgstid> => ({
+            periode: { fom, tom },
+            timer: '8',
+            minutter: '0',
+            perDagString: '',
+            tidsformat: 'timerOgMinutter' as any,
+        });
+
+        describe('når perioder er innenfor søknadsperioder', () => {
+            it('skal returnere false når periode er helt innenfor én søknadsperiode', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-30' }];
+                const perioder = [createArbeidstidPeriode('2024-10-05', '2024-10-15')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når periode spenner over to sammenhengende søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-06', tom: '2024-10-30' },
+                ];
+                const perioder = [createArbeidstidPeriode('2024-10-01', '2024-10-30')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når periode starter på første søknadsperiode og slutter på andre', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-06', tom: '2024-10-30' },
+                ];
+                const perioder = [createArbeidstidPeriode('2024-10-01', '2024-10-30')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når periode er innenfor flere ikke-sammenhengende søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-10', tom: '2024-10-15' },
+                ];
+                const perioder = [
+                    createArbeidstidPeriode('2024-10-02', '2024-10-04'),
+                    createArbeidstidPeriode('2024-10-11', '2024-10-14'),
+                ];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når tilsynperiode spenner over to sammenhengende søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-06', tom: '2024-10-30' },
+                ];
+                const perioder = [createTilsynPeriode('2024-10-01', '2024-10-30')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+        });
+
+        describe('når perioder er utenfor søknadsperioder', () => {
+            it('skal returnere true når periode har datoer utenfor søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-10', tom: '2024-10-15' },
+                ];
+                const perioder = [createArbeidstidPeriode('2024-10-01', '2024-10-20')]; // 6-9 og 16-20 er utenfor
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når periode starter før søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-10', tom: '2024-10-20' }];
+                const perioder = [createArbeidstidPeriode('2024-10-05', '2024-10-15')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når periode slutter etter søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-10', tom: '2024-10-20' }];
+                const perioder = [createArbeidstidPeriode('2024-10-15', '2024-10-25')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når periode er helt utenfor alle søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [
+                    { fom: '2024-10-01', tom: '2024-10-05' },
+                    { fom: '2024-10-10', tom: '2024-10-15' },
+                ];
+                const perioder = [createArbeidstidPeriode('2024-10-20', '2024-10-25')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
+            });
+
+            it('skal returnere true når én av flere perioder har datoer utenfor', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-15' }];
+                const perioder = [
+                    createArbeidstidPeriode('2024-10-05', '2024-10-10'), // Innenfor
+                    createArbeidstidPeriode('2024-10-10', '2024-10-20'), // Utenfor (16-20)
+                ];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
+            });
+        });
+
+        describe('edge cases', () => {
+            it('skal returnere false når ingen søknadsperioder er definert', () => {
+                const perioder = [createArbeidstidPeriode('2024-10-05', '2024-10-10')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, []);
+                expect(result).toBe(false);
+            });
+
+            it('skal returnere false når ingen perioder er definert', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-15' }];
+
+                const result = validatePeriodsWithinSoknadsperioder([], soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal hoppe over perioder uten gyldig dato', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-15' }];
+                const perioder = [
+                    createArbeidstidPeriode('2024-10-05', '2024-10-10'),
+                    {
+                        periode: { fom: '', tom: '' },
+                        faktiskArbeidPerDag: { timer: '8', minutter: '0' },
+                        jobberNormaltPerDag: { timer: '8', minutter: '0' },
+                    },
+                    createArbeidstidPeriode('2024-10-11', '2024-10-14'),
+                ];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal hoppe over søknadsperioder uten gyldig dato', () => {
+                const perioder = [createArbeidstidPeriode('2024-10-05', '2024-10-10')];
+                const soknadsperioderMedUgyldige: IPeriode[] = [
+                    { fom: '', tom: '2024-10-15' },
+                    { fom: '2024-10-01', tom: '' },
+                    { fom: '2024-10-01', tom: '2024-10-15' },
+                ];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioderMedUgyldige);
+                expect(result).toBe(false);
+            });
+
+            it('skal håndtere periode med én dag', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-15' }];
+                const perioder = [createArbeidstidPeriode('2024-10-05', '2024-10-05')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(false);
+            });
+
+            it('skal håndtere periode med én dag utenfor søknadsperioder', () => {
+                const soknadsperioder: IPeriode[] = [{ fom: '2024-10-01', tom: '2024-10-15' }];
+                const perioder = [createArbeidstidPeriode('2024-10-20', '2024-10-20')];
+
+                const result = validatePeriodsWithinSoknadsperioder(perioder, soknadsperioder);
+                expect(result).toBe(true);
             });
         });
     });
