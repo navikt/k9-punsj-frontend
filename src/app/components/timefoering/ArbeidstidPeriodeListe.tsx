@@ -9,12 +9,10 @@ import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Period
 import { arbeidstimerPeriode } from 'app/rules/yup';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
 import { validatePeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
-// import { checkPeriodOverlap } from 'app/utils/periodUtils';
 
 import ArbeidstidPeriode from './ArbeidstidPeriode';
 
 const createValidationSchema = (soknadsperioder: IPeriode[]) =>
-    // const createValidationSchema = () =>
     yup.object({
         perioder: yup
             .array()
@@ -50,7 +48,6 @@ interface Props {
 
 const ArbeidstidPeriodeListe = (props: Props) => {
     const formikRef = useRef<FormikProps<FormValues>>(null);
-    // const [filtrerHelg, setFiltrerHelg] = useState(false);
 
     const { arbeidstidPerioder, soknadsperioder } = props;
     const { lagre, avbryt } = props;
@@ -69,12 +66,9 @@ const ArbeidstidPeriodeListe = (props: Props) => {
         const currentValues = values || formikRef.current?.values;
 
         if (currentValues) {
-            const processedPeriods = processArbeidstidPeriods(
-                currentValues.perioder,
-                arbeidstidPerioder,
-                { filterWeekends: false },
-                // { filterWeekends: filtrerHelg }, // Kan endres til true hvis vi vil filtrere helger
-            );
+            const processedPeriods = processArbeidstidPeriods(currentValues.perioder, arbeidstidPerioder, {
+                filterWeekends: false,
+            });
 
             lagre(processedPeriods);
         }
@@ -85,7 +79,6 @@ const ArbeidstidPeriodeListe = (props: Props) => {
             initialValues={initialValues}
             onSubmit={(values) => handleSaveValues(values)}
             validationSchema={createValidationSchema(soknadsperioder)}
-            // validationSchema={createValidationSchema()}
             innerRef={formikRef}
             enableReinitialize
         >
@@ -112,18 +105,6 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                                 <div>Ingen perioder å vise</div>
                             )}
 
-                            {/*
-                            <div className="mt-4 mb-4">
-                                <Checkbox
-                                    onChange={() => {
-                                        setFiltrerHelg(!filtrerHelg);
-                                    }}
-                                    checked={filtrerHelg}
-                                >
-                                    Filtrer helg
-                                </Checkbox>
-                            </div>
-                            */}
                             {touched.perioder && errors.perioder && typeof errors.perioder === 'string' && (
                                 <Alert variant="error" size="small" className="mb-4">
                                     {errors.perioder}
