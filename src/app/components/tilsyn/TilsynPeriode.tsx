@@ -55,11 +55,12 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                 }}
                                 errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
                                 errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
+                                size="small"
                             />
 
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-9">
                                 <Button
-                                    icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                    icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
                                     size="small"
                                     variant="tertiary"
                                     onClick={remove}
