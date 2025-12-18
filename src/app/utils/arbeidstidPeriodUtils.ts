@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
-import { IArbeidstidPeriodeMedTimer, Periodeinfo } from 'app/models/types';
-import { formats, getDatesInDateRange, konverterPeriodeTilTimerOgMinutter } from 'app/utils';
+import { IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
+import { formats, getDatesInDateRange, konverterPeriodeTilTimerOgMinutter, includesDate, findDateIntervalsFromDates } from 'app/utils';
 
 /**
  * Grupperer sammenhengende arbeidsdager til perioder
@@ -221,4 +221,88 @@ export const processArbeidstidPeriods = (
             (a, b) =>
                 dayjs(a.periode?.fom, formats.YYYYMMDD).valueOf() - dayjs(b.periode?.fom, formats.YYYYMMDD).valueOf(),
         );
+};
+
+/**
+ * Filtrerer perioder basert på søknadsperioder
+ * Fjerner perioder som er helt utenfor søknadsperioder og kutter ned perioder som delvis overlapper
+ * Fungerer for både arbeidstidperioder og tilsynperioder
+ *
+ * @param perioder - Liste over perioder som skal filtreres (arbeidstid eller tilsyn)
+ * @param soknadsperioder - Liste over søknadsperioder som perioder må være innenfor
+ * @returns Filtrert liste over perioder som kun inneholder datoer innenfor søknadsperioder
+ */
+export const filterPeriodsBySoknadsperioder = <T>(
+    perioder: Periodeinfo<T>[],
+    soknadsperioder: IPeriode[],
+): Periodeinfo<T>[] => {
+    // Hvis ingen søknadsperioder er definert, fjern alle arbeidstidperioder
+    if (!soknadsperioder || soknadsperioder.length === 0) {
+        return [];
+    }
+
+    const filteredPeriods: Periodeinfo<T>[] = [];
+
+    for (const periode of perioder) {
+        // Hopp over perioder uten gyldig dato
+        if (!periode.periode?.fom || !periode.periode?.tom) {
+            continue;
+        }
+
+        // Hent alle datoer i perioden
+        const dateRange = {
+            fom: dayjs(periode.periode.fom, formats.YYYYMMDD).toDate(),
+            tom: dayjs(periode.periode.tom, formats.YYYYMMDD).toDate(),
+        };
+        const datesInPeriod = getDatesInDateRange(dateRange);
+
+        // Filtrer datoer som er innenfor søknadsperioder
+        const validDates = datesInPeriod.filter((date) =>
+            soknadsperioder.some((soknadsperiode) => {
+                if (!soknadsperiode.fom || !soknadsperiode.tom) {
+                    return false;
+                }
+                return includesDate(soknadsperiode, date);
+            }),
+        );
+
+        // Hvis ingen datoer er gyldige, hopp over denne perioden
+        if (validDates.length === 0) {
+            continue;
+        }
+
+        // Hvis alle datoer er gyldige, behold perioden som den er
+        if (validDates.length === datesInPeriod.length) {
+            filteredPeriods.push(periode);
+            continue;
+        }
+
+        // Hvis bare noen datoer er gyldige, del opp i nye perioder basert på gyldige datoer
+        const validIntervals = findDateIntervalsFromDates(validDates);
+
+        for (const interval of validIntervals) {
+            if (interval.length > 0) {
+                filteredPeriods.push({
+                    ...periode,
+                    periode: {
+                        fom: dayjs(interval[0]).format(formats.YYYYMMDD),
+                        tom: dayjs(interval[interval.length - 1]).format(formats.YYYYMMDD),
+                    },
+                });
+            }
+        }
+    }
+
+    return filteredPeriods;
+};
+
+/**
+ * Filtrerer arbeidstidperioder basert på søknadsperioder
+ * @deprecated Bruk filterPeriodsBySoknadsperioder i stedet
+ */
+export const filterArbeidstidPeriodsBySoknadsperioder = (
+    arbeidstidPerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[],
+    soknadsperioder: IPeriode[],
+): Periodeinfo<IArbeidstidPeriodeMedTimer>[] => {
+    return filterPeriodsBySoknadsperioder(arbeidstidPerioder, soknadsperioder);
 };
