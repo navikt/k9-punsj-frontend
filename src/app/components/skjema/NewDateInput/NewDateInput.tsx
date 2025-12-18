@@ -80,6 +80,7 @@ const NewDateInput: React.FC<Props> = ({
         onValidate: (val) => {
             setIsInvalidDate(!val.isValidDate && (!noValidateTomtFelt || !val.isEmpty));
         },
+        allowTwoDigitYear: false,
     });
 
     const previous = usePrevious(value);
