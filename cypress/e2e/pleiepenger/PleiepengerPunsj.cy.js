@@ -24,17 +24,6 @@ describe('Pleiepenger punsj', () => {
     });
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {
-        cy.get('.soknadsperiodecontainer').within(() => {
-            cy.findByLabelText(/Fra og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('08.11.2021');
-            cy.findByLabelText(/Til og med/i)
-                .should('exist')
-                .clear({ force: true })
-                .type('11.11.2021');
-        });
-
         // Det trenges for å oppdatere state (trykke noe annet sted)
         cy.findByRole('button', { name: /Ferie/i }).click();
 
@@ -43,11 +32,11 @@ describe('Pleiepenger punsj', () => {
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('exist')
-                .type('20.11.2021');
+                .type('20.11.21');
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('exist')
-                .type('25.11.2021');
+                .type('25.11.21');
         });
 
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
@@ -58,22 +47,22 @@ describe('Pleiepenger punsj', () => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
                 .clear({ force: true })
-                .type('08.11.2021');
+                .type('08.11.21');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
                 .clear({ force: true })
-                .type('11.11.2021');
+                .type('11.11.21');
 
             cy.findByRole('button', { name: /Legg til periode/i }).click();
 
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)
                 .should('exist')
-                .type('20.11.2021');
+                .type('20.11.21');
             cy.findAllByLabelText(/Til og med/i)
                 .eq(1)
                 .should('exist')
-                .type('25.11.2021');
+                .type('25.11.21');
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Timer').eq(1).clear({ force: true }).type(2, { force: true });
             cy.findAllByLabelText('Timer').eq(2).clear({ force: true }).type(7, { force: true });
