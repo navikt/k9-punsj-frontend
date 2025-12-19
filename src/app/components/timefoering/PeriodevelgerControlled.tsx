@@ -35,7 +35,6 @@ const PeriodevelgerControlled = ({ name }: PeriodevelgerControlledProps) => {
                     onBlur={() => {
                         formik.setFieldTouched(fomFieldName, true);
                     }}
-                    errorMessage={fomFieldMeta.touched && fomFieldMeta.error ? String(fomFieldMeta.error) : undefined}
                     toDate={tomField.value ? new Date(tomField.value) : undefined}
                 />
                 <DatovelgerControlled
@@ -50,7 +49,6 @@ const PeriodevelgerControlled = ({ name }: PeriodevelgerControlledProps) => {
                     onBlur={() => {
                         formik.setFieldTouched(tomFieldName, true);
                     }}
-                    errorMessage={tomFieldMeta.touched && tomFieldMeta.error ? String(tomFieldMeta.error) : undefined}
                     defaultMonth={fomField.value ? new Date(fomField.value) : undefined}
                     fromDate={fomField.value ? new Date(fomField.value) : undefined}
                 />

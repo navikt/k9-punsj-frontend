@@ -57,7 +57,6 @@ const DatovelgerControlled = ({
         defaultMonth,
         onDateChange: onDateChange,
         defaultSelected: defaultSelected,
-        allowTwoDigitYear: false,
     });
 
     // Synkroniser intern tilstand med value prop når den endres fra utsiden
