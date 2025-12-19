@@ -10,7 +10,7 @@ import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
-import Periodevelger from '../skjema/Datovelger/Periodevelger';
+import PeriodevelgerControlled from './PeriodevelgerControlled';
 
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
@@ -142,7 +142,7 @@ const ArbeidstidPeriode = (props: Props) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <Periodevelger name={`${name}.periode`} />
+                            <PeriodevelgerControlled name={`${name}.periode`} />
                             <div className="ml-4 mt-7">
                                 <Button
                                     icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}

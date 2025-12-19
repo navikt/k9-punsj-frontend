@@ -27,6 +27,10 @@ import {
 } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import {
+    filtrerPerioderVedEndringAvSoknadsperiode,
+    harSoknadsperioderBlittEndretEllerSlettet,
+} from '../utils/soknadPeriodUtils';
 
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import JournalposterSync from 'app/components/JournalposterSync';
@@ -748,10 +752,55 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
+        const navarandeSoknadRaw: IPSBSoknadUt = this.props.punchFormState.soknad as IPSBSoknadUt;
         const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
 
         if (!journalposter.includes(this.props.journalpostid)) {
             journalposter.push(this.props.journalpostid);
+        }
+
+        // Sjekk om søknadsperioder er endret eller slettet (men ikke bare lagt til nye)
+        const nyeSoknadsperioder = soknad.soeknadsperiode;
+        const eksisterendeSoknadsperioder = navarandeSoknadRaw?.soeknadsperiode || [];
+        const soknadsperioderErEndretEllerSlettet = harSoknadsperioderBlittEndretEllerSlettet(
+            eksisterendeSoknadsperioder,
+            nyeSoknadsperioder,
+        );
+
+        // Hvis perioder er endret eller slettet, filtrer arbeidstid og tilsyn perioder
+        if (soknadsperioderErEndretEllerSlettet && nyeSoknadsperioder) {
+            // Bruk aktuelle data fra lokal state først, deretter fra soknad parameter, ellers fra store
+            // Dette sikrer at vi bruker de nyeste dataene som brukeren har lagt til
+            const aktuellArbeidstid =
+                this.state.soknad.arbeidstid || soknad.arbeidstid || navarandeSoknadRaw?.arbeidstid;
+            const aktuellTilsynsordning =
+                this.state.soknad.tilsynsordning || soknad.tilsynsordning || navarandeSoknadRaw?.tilsynsordning;
+
+            const filtrertePerioder = filtrerPerioderVedEndringAvSoknadsperiode(
+                navarandeSoknadRaw,
+                nyeSoknadsperioder,
+                aktuellArbeidstid,
+                aktuellTilsynsordning,
+            );
+
+            if (filtrertePerioder) {
+                // Filtrerte perioder inneholder allerede alle eksisterende felter med oppdaterte perioder
+                if (filtrertePerioder.arbeidstid) {
+                    soknad.arbeidstid = filtrertePerioder.arbeidstid;
+                }
+                if (filtrertePerioder.tilsynsordning) {
+                    soknad.tilsynsordning = filtrertePerioder.tilsynsordning;
+                }
+
+                // Oppdater også lokal state for å trigge re-render av kalendere
+                this.updateSoknadState(
+                    {
+                        arbeidstid: soknad.arbeidstid,
+                        tilsynsordning: soknad.tilsynsordning,
+                    },
+                    false,
+                );
+            }
         }
 
         if (this.state.harForsoektAaSendeInn) {
