@@ -27,6 +27,7 @@ export interface IPeriodInputProps {
     };
     fomInputRef?: React.Ref<HTMLInputElement>;
     tomInputRef?: React.Ref<HTMLInputElement>;
+    size?: 'small' | 'medium';
 }
 
 export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
@@ -47,6 +48,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         onBlur,
         fomInputRef,
         tomInputRef,
+        size,
 
         // limitations,
     } = props;
@@ -86,6 +88,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         inputRef={fomInputRef}
                         // limitations={limitations}
                         dataTestId="fom"
+                        size={size}
                     />
                 </div>
 
@@ -103,6 +106,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                         dataTestId="tom"
                         fromDate={fromDateValue}
                         defaultMonth={fromDateValue}
+                        size={size}
                     />
                 </div>
             </HStack>

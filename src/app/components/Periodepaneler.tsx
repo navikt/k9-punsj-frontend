@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
@@ -44,13 +45,42 @@ export const Periodepaneler: React.FC<Props> = ({
 }: Props) => {
     const intl = useIntl();
 
+    // Lagrer berikede perioder lokalt
+    const [localPeriods, setLocalPeriods] = React.useState<IPeriode[]>([]);
+
+    // Synkroniser med innkommende periods og berik med __clientId ved behov
+    React.useEffect(() => {
+        // Sjekk om periods har endret seg (i lengde eller innhold)
+        const needsUpdate =
+            periods.length !== localPeriods.length ||
+            periods.some((p, i) => p.fom !== localPeriods[i]?.fom || p.tom !== localPeriods[i]?.tom);
+
+        if (needsUpdate) {
+            // Berik perioder, behold eksisterende __clientId
+            const enriched = periods.map((p: any, i) => {
+                // Hvis periode allerede har __clientId - behold den
+                if (p.__clientId) return p;
+                // Hvis det finnes tilsvarende lokal periode - bruk dens __clientId
+                if (localPeriods[i] && p.fom === localPeriods[i].fom && p.tom === localPeriods[i].tom) {
+                    return { ...p, __clientId: (localPeriods[i] as any).__clientId };
+                }
+                // Ellers generer ny
+                return { ...p, __clientId: uuidv4() };
+            });
+            setLocalPeriods(enriched);
+        }
+    }, [periods]);
+
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
         periodeinfo: Partial<IPeriode>,
     ) => {
-        const newInfo: IPeriode = { ...periods[index], ...periodeinfo };
-        const newArray = [...(periods || [])];
-        newArray[index] = newInfo;
+        const existing = localPeriods[index] as any;
+        // Behold __clientId ved oppdatering
+        const newInfo = { ...localPeriods[index], ...periodeinfo, __clientId: existing?.__clientId };
+        const newArray = [...localPeriods];
+        newArray[index] = newInfo as IPeriode;
+        setLocalPeriods(newArray);
 
         return newArray;
     };
@@ -58,23 +88,27 @@ export const Periodepaneler: React.FC<Props> = ({
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
-        const newArray = [...(periods || [])];
-        newArray.push(initialPeriode);
+        const newArray = [...localPeriods];
+        // Legger til __clientId ved opprettelse
+        const newPeriod = { ...initialPeriode, __clientId: uuidv4() };
+        newArray.push(newPeriod as IPeriode);
+        setLocalPeriods(newArray);
 
         return newArray;
     };
 
     const removeItem = (index: number) => {
-        const newArray = [...(periods || [])];
+        const newArray = [...localPeriods];
         newArray.splice(index, 1);
+        setLocalPeriods(newArray);
 
         return newArray;
     };
 
     return (
         <Box padding="4" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="small" className="periodepanel">
-            {periods.map((p, i) => (
-                <div className="flex items-start" key={i} data-testid={`periodpaneler_${i}`}>
+            {localPeriods.map((p, i) => (
+                <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
                     <PeriodInput
                         periode={p || {}}
                         intl={intl}
