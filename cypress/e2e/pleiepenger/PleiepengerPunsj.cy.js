@@ -12,8 +12,6 @@ describe('Pleiepenger punsj', () => {
     });
 
     it('kan sende inn søknad om pleiepenger', () => {
-        // cy.soknadperioderInput('08.11.2021', '11.11.2021');
-
         cy.sendInnSoknad();
 
         cy.findByText(
@@ -24,9 +22,6 @@ describe('Pleiepenger punsj', () => {
     });
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {
-        // Det trenges for å oppdatere state (trykke noe annet sted)
-        cy.findByRole('button', { name: /Ferie/i }).click();
-
         cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByRole('button', { name: /Legg til ny periode/i }).click();
             cy.findAllByLabelText(/Fra og med/i)
@@ -84,11 +79,11 @@ describe('Pleiepenger punsj', () => {
             cy.findByLabelText(/Fra og med/i)
                 .should('exist')
                 .clear({ force: true })
-                .type('08.11.2021');
+                .type('08.11.21');
             cy.findByLabelText(/Til og med/i)
                 .should('exist')
                 .clear({ force: true })
-                .type('11.11.2021');
+                .type('11.11.21');
 
             cy.findAllByLabelText('Timer').eq(0).clear({ force: true }).type(7, { force: true });
             cy.findAllByLabelText('Minutter').eq(0).clear({ force: true }).type(30, { force: true });
