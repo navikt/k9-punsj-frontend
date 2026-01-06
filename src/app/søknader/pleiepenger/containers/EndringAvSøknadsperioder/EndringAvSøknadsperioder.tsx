@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import CustomAlertstripeAdvarsel from 'app/components/customAlertstripeAdvarsel/CustomAlertstripeAdvarsel';
 import { initializeDate, slåSammenSammenhengendePerioder } from 'app/utils';
@@ -69,9 +69,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
             ),
         );
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
-                initializeDate(periode.tom).isSameOrAfter(initializeDate(eksisterendePeriode.tom)),
-            ),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.tom === eksisterendePeriode.tom),
         );
 
         const begrunnelsesfelt = (
