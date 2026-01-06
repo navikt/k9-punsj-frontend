@@ -59,9 +59,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
          */
 
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = komplettePerioder.some((periode) =>
-            formaterteEksisterendePerioder.some((eksisterendePeriode) =>
-                initializeDate(periode.fom).isSameOrBefore(initializeDate(eksisterendePeriode.fom)),
-            ),
+            formaterteEksisterendePerioder.some((eksisterendePeriode) => periode.fom === eksisterendePeriode.fom),
         );
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = komplettePerioder.some((periode) =>
             formaterteEksisterendePerioder.some(
@@ -135,9 +133,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
             onOpenChange={onClick}
             data-testid="accordionItem-endringAvSøknadsperioderpanel"
         >
-            <Accordion.Header>
-                <FormattedMessage id="skjema.endringAvSøknadsperioder" />
-            </Accordion.Header>
+            <Accordion.Header>Endre/fjerne søknadsperiode</Accordion.Header>
 
             <Accordion.Content>
                 <Label size="small">
