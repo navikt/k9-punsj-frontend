@@ -87,8 +87,18 @@ const mockHandlersTest = {
             søknader: [],
         }),
     ),
-    infoPleiepenger: http.post(ApiPath.PSB_K9SAK_PERIODER, () => HttpResponse.json([])),
-    infoPils: http.post(ApiPath.PLS_K9SAK_PERIODER, () => HttpResponse.json([])),
+    infoPleiepenger: http.post(ApiPath.PSB_K9SAK_PERIODER, () =>
+        HttpResponse.json([
+            { fom: '2021-10-01', tom: '2021-10-15' },
+            { fom: '2021-12-01', tom: '2021-12-20' },
+        ]),
+    ),
+    infoPils: http.post(ApiPath.PLS_K9SAK_PERIODER, () =>
+        HttpResponse.json([
+            { fom: '2021-10-01', tom: '2021-10-15' },
+            { fom: '2021-12-01', tom: '2021-12-20' },
+        ]),
+    ),
 
     eksisterendePleiepengesoknad: http.get(
         ApiPath.PSB_SOKNAD_GET.replace('{id}', '0416e1a2-8d80-48b1-a56e-ab4f4b4821fe'),
