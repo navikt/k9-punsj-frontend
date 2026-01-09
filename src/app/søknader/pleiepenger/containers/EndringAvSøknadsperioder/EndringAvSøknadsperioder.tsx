@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
-import { initializeDate, getDatesInDateRange } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import { formats } from 'app/utils/formatUtils';
-import dayjs from 'dayjs';
+import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOverlapUtils';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
@@ -44,102 +42,25 @@ const EndringAvSøknadsperioder = (props: Props) => {
 
     const alleTrekkKravPerioderFeilmelding = () => getErrorMessage('alleTrekkKravPerioderFeilmelding') || null;
 
-    const formatPeriodeForDisplay = (periode: IPeriode): string => {
-        const fom = dayjs(periode.fom, formats.YYYYMMDD).format('DD.MM.YYYY');
-        const tom = dayjs(periode.tom, formats.YYYYMMDD).format('DD.MM.YYYY');
-        return `${fom} - ${tom}`;
-    };
-
-    const addPeriodeIfNotExists = (array: IPeriode[], periode: IPeriode): void => {
-        const exists = array.some((p) => p.fom === periode.fom && p.tom === periode.tom);
-        if (!exists) {
-            array.push(periode);
-        }
-    };
-
-    const checkOverlapType = (
-        periodeToRemove: IPeriode,
-        eksisterendePeriode: IPeriode,
-    ): 'start' | 'middle' | 'end' | 'whole' | null => {
-        // Get all dates from both periods
-        const removeDates = getDatesInDateRange({
-            fom: initializeDate(periodeToRemove.fom, formats.YYYYMMDD).toDate(),
-            tom: initializeDate(periodeToRemove.tom, formats.YYYYMMDD).toDate(),
-        });
-        const eksisterendeDates = getDatesInDateRange({
-            fom: initializeDate(eksisterendePeriode.fom, formats.YYYYMMDD).toDate(),
-            tom: initializeDate(eksisterendePeriode.tom, formats.YYYYMMDD).toDate(),
-        });
-
-        // Find overlapping dates
-        const overlappingDates = removeDates.filter((removeDate) =>
-            eksisterendeDates.some((eksisterendeDate) => dayjs(removeDate).isSame(eksisterendeDate, 'day')),
-        );
-
-        if (overlappingDates.length === 0) {
-            return null;
-        }
-
-        const eksisterendeStart = dayjs(eksisterendePeriode.fom, formats.YYYYMMDD);
-        const eksisterendeEnd = dayjs(eksisterendePeriode.tom, formats.YYYYMMDD);
-        const firstOverlap = dayjs(overlappingDates[0]);
-        const lastOverlap = dayjs(overlappingDates[overlappingDates.length - 1]);
-
-        // Check if overlap is in the middle (doesn't touch start or end)
-        const touchesStart = firstOverlap.isSame(eksisterendeStart, 'day');
-        const touchesEnd = lastOverlap.isSame(eksisterendeEnd, 'day');
-
-        // If it touches both start and end, the entire period is being removed
-        if (touchesStart && touchesEnd) {
-            return 'whole';
-        }
-        if (!touchesStart && !touchesEnd) {
-            return 'middle';
-        }
-        if (touchesStart && !touchesEnd) {
-            return 'start';
-        }
-        if (!touchesStart && touchesEnd) {
-            return 'end';
-        }
-        return null;
-    };
-
     const getAlertstriper = () => {
-        const komplettePerioder = selectedPeriods.filter((periode) => periode.fom && periode.tom);
-        if (komplettePerioder.length === 0) {
-            return null;
-        }
-
         /*
          * Merk: Vi tillater trekk av periode som ikke finnes -- siden dette ikke gir noen negative konsekvenser,
          * Fra k9 format validator
          */
 
-        const affectedByStart: IPeriode[] = [];
-        const affectedByMiddle: IPeriode[] = [];
-        const affectedByEnd: IPeriode[] = [];
-        const completelyRemoved: IPeriode[] = [];
-
-        komplettePerioder.forEach((periodeToRemove) => {
-            eksisterendePerioder.forEach((eksisterendePeriode) => {
-                const overlapType = checkOverlapType(periodeToRemove, eksisterendePeriode);
-                if (overlapType === 'whole') {
-                    addPeriodeIfNotExists(completelyRemoved, eksisterendePeriode);
-                } else if (overlapType === 'start') {
-                    addPeriodeIfNotExists(affectedByStart, eksisterendePeriode);
-                } else if (overlapType === 'middle') {
-                    addPeriodeIfNotExists(affectedByMiddle, eksisterendePeriode);
-                } else if (overlapType === 'end') {
-                    addPeriodeIfNotExists(affectedByEnd, eksisterendePeriode);
-                }
-            });
-        });
+        const { completelyRemoved, affectedByStart, affectedByMiddle, affectedByEnd } = findPeriodOverlaps(
+            selectedPeriods,
+            eksisterendePerioder,
+        );
 
         const hasCompletelyRemovedPeriods = completelyRemoved.length > 0;
         const hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode = affectedByStart.length > 0;
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = affectedByMiddle.length > 0;
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = affectedByEnd.length > 0;
+
+        if (!hasCompletelyRemovedPeriods && !hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && !hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode) {
+            return null;
+        }
 
         const begrunnelsesfelt = (
             <div className="endringAvSøknadsperioder__begrunnelse">
