@@ -159,6 +159,7 @@ const ArbeidstidKalender = ({
                     open={true}
                     onClose={() => setVisArbeidstidLengrePerioder(false)}
                     aria-label="Periode med jobb modal"
+                    className="max-w-[550px] min-w-[550px]"
                 >
                     <Modal.Body data-test-id="arbeidstid-periode-liste">
                         <ArbeidstidPeriodeListe

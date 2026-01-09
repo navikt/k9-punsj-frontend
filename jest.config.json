@@ -17,7 +17,7 @@
     "transform": {
         "^.+\\.[t|j]sx?$": "babel-jest"
     },
-    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*(nav|uuid).*).*$"],
+    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat).*).*$"],
     "unmockedModulePathPatterns": [
         "<rootDir>/node_modules/react",
         "<rootDir>/node_modules/react-router",

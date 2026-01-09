@@ -35,7 +35,7 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
               run: yarn build
-            - uses: actions/upload-artifact@v5
+            - uses: actions/upload-artifact@v6
               with:
                   name: dist
                   path: dist/

@@ -226,14 +226,15 @@ export const formatSoknadsperioder = (soknadsperioder: IPeriode[]): string => {
 };
 
 /**
- * Sjekker om perioder er innenfor søknadsperioder
- * Hver periode må være helt innenfor én søknadsperiode
+ * Sjekker om perioder er innenfor søknadsperioder ved å validere hver enkelt dato
+ * Hver dato i perioden må være innenfor minst én søknadsperiode
+ * Dette tillater perioder som spenner over flere søknadsperioder, så lenge alle datoer er dekket
  *
  * @param perioder - Liste over perioder som skal valideres
  * @param soknadsperioder - Liste over søknadsperioder som perioder må være innenfor
  * @returns true hvis noen periode er utenfor søknadsperioder, false hvis alle perioder er innenfor
  */
-export const checkPeriodsWithinSoknadsperioder = <T>(
+export const validatePeriodsWithinSoknadsperioder = <T>(
     perioder: Periodeinfo<T>[],
     soknadsperioder: IPeriode[],
 ): boolean => {
@@ -249,27 +250,29 @@ export const checkPeriodsWithinSoknadsperioder = <T>(
             continue;
         }
 
-        const periodeStart = dayjs(periode.periode.fom, formats.YYYYMMDD);
-        const periodeEnd = dayjs(periode.periode.tom, formats.YYYYMMDD);
+        // Hent alle datoer i perioden
+        const dateRange = {
+            fom: dayjs(periode.periode.fom, formats.YYYYMMDD).toDate(),
+            tom: dayjs(periode.periode.tom, formats.YYYYMMDD).toDate(),
+        };
+        const datesInPeriod = getDatesInDateRange(dateRange);
 
-        // Sjekker om perioden er helt innenfor minst én søknadsperiode
-        const erInnenforEnSoknadsperiode = soknadsperioder.some((soknadsperiode) => {
-            // Hopp over søknadsperioder uten gyldig dato
-            if (!soknadsperiode.fom || !soknadsperiode.tom) {
-                return false;
+        // Sjekker om hver dato i perioden er innenfor minst én søknadsperiode
+        for (const date of datesInPeriod) {
+            const erInnenforEnSoknadsperiode = soknadsperioder.some((soknadsperiode) => {
+                // Hopp over søknadsperioder uten gyldig dato
+                if (!soknadsperiode.fom || !soknadsperiode.tom) {
+                    return false;
+                }
+
+                // Sjekk om datoen er innenfor denne søknadsperioden
+                return includesDate(soknadsperiode, date);
+            });
+
+            // Hvis denne datoen ikke er innenfor noen søknadsperiode, returnerer vi true (validering feilet)
+            if (!erInnenforEnSoknadsperiode) {
+                return true;
             }
-
-            const soknadsStart = dayjs(soknadsperiode.fom, formats.YYYYMMDD);
-            const soknadsEnd = dayjs(soknadsperiode.tom, formats.YYYYMMDD);
-
-            // Perioden må være helt innenfor søknadsperioden
-            // Starter på eller etter start av søknadsperiode og slutter på eller før slutt av søknadsperiode
-            return periodeStart.isSameOrAfter(soknadsStart) && periodeEnd.isSameOrBefore(soknadsEnd);
-        });
-
-        // Hvis denne perioden ikke er innenfor noen søknadsperiode, returnerer vi true (validering feilet)
-        if (!erInnenforEnSoknadsperiode) {
-            return true;
         }
     }
 

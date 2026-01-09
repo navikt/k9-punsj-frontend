@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-import { PeriodInput } from '../period-input/PeriodInput';
+import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
@@ -20,13 +20,10 @@ interface Props {
 }
 
 const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
-    const intl = useIntl();
-
     const formik = useFormikContext();
 
-    const [timerField] = useField(`${name}.timer`);
-    const [minutterField] = useField(`${name}.minutter`);
-    const [, periodeFomMeta] = useField(`${name}.periode.fom`);
+    const [timerField, timerFieldMeta] = useField(`${name}.timer`);
+    const [minutterField, minutterFieldMeta] = useField(`${name}.minutter`);
     const [tidsformatField] = useField(`${name}.tidsformat`);
     const [desimalerField] = useField(`${name}.perDagString`);
 
@@ -43,23 +40,15 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
 
     return (
         <Field name={name}>
-            {({ field, meta }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
+            {({ field }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodInput
-                                periode={field.value.periode ?? {}}
-                                intl={intl}
-                                onChange={(v) => {
-                                    formik.setFieldValue(`${name}.periode`, v);
-                                }}
-                                errorMessageFom={periodeFomMeta.touched && meta.error?.periode?.fom}
-                                errorMessageTom={periodeFomMeta.touched && meta.error?.periode?.tom}
-                            />
+                            <PeriodevelgerControlled name={`${name}.periode`} />
 
-                            <div className="ml-4 mt-10">
+                            <div className="ml-4 mt-7">
                                 <Button
-                                    icon={<TrashIcon fontSize="2rem" color="#C30000" title="slett" />}
+                                    icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
                                     size="small"
                                     variant="tertiary"
                                     onClick={remove}
@@ -120,7 +109,12 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                                         onChangeMinutter={(v) => formik.setFieldValue(`${name}.minutter`, v)}
                                         timer={field.value.timer ?? ''}
                                         minutter={field.value.minutter ?? ''}
-                                        error={meta.touched && (meta.error?.timer || meta.error?.minutter)}
+                                        error={
+                                            (timerFieldMeta.touched && timerFieldMeta.error) ||
+                                            (minutterFieldMeta.touched && minutterFieldMeta.error)
+                                                ? String(timerFieldMeta.error || minutterFieldMeta.error)
+                                                : undefined
+                                        }
                                         onBlur={() => {
                                             formik.setFieldTouched(`${name}.timer`);
                                             formik.setFieldTouched(`${name}.minutter`);
