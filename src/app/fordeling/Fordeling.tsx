@@ -140,6 +140,7 @@ const Fordeling: React.FC = () => {
     const { fagsak, dokumenttype } = fordelingState;
 
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
+    const gjelderOlp = dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER;
     const isDokumenttypeMedPleietrengende = !!dokumenttype && dokumenttyperMedPleietrengende.includes(dokumenttype);
     const isSakstyperFraJpSakMedPleietrengende =
         !!journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
@@ -434,6 +435,7 @@ const Fordeling: React.FC = () => {
         isDokumenttypeMedAnnenPart,
         isDokumenttypeMedFosterbarn,
         isFagsakMedValgtBehandlingsår,
+        gjelderOlp,
         fagsak,
         behandlingsAar,
         barnMedFagsak,
@@ -482,7 +484,12 @@ const Fordeling: React.FC = () => {
         }
     };
 
-    const redirectVidereDisabled = isRedirectVidereDisabled(identState, isDokumenttypeMedPleietrengende, barnMedFagsak);
+    const redirectVidereDisabled = isRedirectVidereDisabled(
+        identState,
+        isDokumenttypeMedPleietrengende,
+        gjelderOlp,
+        barnMedFagsak,
+    );
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
         if (type === FordelingDokumenttype.ANNET) {
@@ -754,7 +761,7 @@ const Fordeling: React.FC = () => {
                                     data-test-id="pleietrengendeHarFagsak"
                                 >
                                     <FormattedMessage
-                                        id="fordeling.error.pleietrengendeHarFagsak"
+                                        id={`fordeling.error.pleietrengendeHarFagsak${gjelderOlp ? '.olp' : ''}`}
                                         values={{
                                             pleietrengendeId: barnMedFagsak.pleietrengende?.identitetsnummer,
                                             fagsakId: barnMedFagsak.fagsakId,

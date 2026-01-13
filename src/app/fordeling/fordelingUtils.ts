@@ -26,6 +26,7 @@ export const isJournalførKnapperDisabled = (
     isDokumenttypeMedAnnenPart: boolean,
     isDokumenttypeMedFosterbarn: boolean,
     isFagsakMedValgtBehandlingsår: boolean,
+    gjelderOlp: boolean,
     fagsak?: Fagsak,
     behandlingsÅr?: string,
     barnMedFagsak?: FagsakForSelect,
@@ -39,7 +40,7 @@ export const isJournalførKnapperDisabled = (
             return fagsak === undefined;
         }
 
-        if (barnMedFagsak) {
+        if (!gjelderOlp && !!barnMedFagsak) {
             return true;
         }
 
@@ -107,10 +108,11 @@ export const isJournalførKnapperDisabled = (
 export const isRedirectVidereDisabled = (
     identState: IIdentState,
     isDokumenttypeMedPleietrengende: boolean,
+    gjelderOlp: boolean,
     barnMedFagsak?: FagsakForSelect,
 ) => {
     if (isDokumenttypeMedPleietrengende) {
-        if (barnMedFagsak) {
+        if (!gjelderOlp && !!barnMedFagsak) {
             return true;
         }
 
