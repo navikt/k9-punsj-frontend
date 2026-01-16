@@ -2948,7 +2948,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:4.1.1"
-    "@sentry/cli": "npm:3.0.1"
+    "@sentry/cli": "npm:3.1.0"
     axios: "npm:1.13.2"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.5"
@@ -3709,24 +3709,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-darwin@npm:3.0.1"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-darwin@npm:3.1.0":
   version: 3.1.0
   resolution: "@sentry/cli-darwin@npm:3.1.0"
   conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm64@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-linux-arm64@npm:3.0.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -3737,24 +3723,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-linux-arm@npm:3.0.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-arm@npm:3.1.0":
   version: 3.1.0
   resolution: "@sentry/cli-linux-arm@npm:3.1.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-i686@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-linux-i686@npm:3.0.1"
-  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
@@ -3765,24 +3737,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-linux-x64@npm:3.0.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-x64@npm:3.1.0":
   version: 3.1.0
   resolution: "@sentry/cli-linux-x64@npm:3.1.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-arm64@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-win32-arm64@npm:3.0.1"
-  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -3793,13 +3751,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-win32-i686@npm:3.0.1"
-  conditions: os=win32 & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-i686@npm:3.1.0":
   version: 3.1.0
   resolution: "@sentry/cli-win32-i686@npm:3.1.0"
@@ -3807,56 +3758,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli-win32-x64@npm:3.0.1"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-x64@npm:3.1.0":
   version: 3.1.0
   resolution: "@sentry/cli-win32-x64@npm:3.1.0"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@sentry/cli@npm:3.0.1"
-  dependencies:
-    "@sentry/cli-darwin": "npm:3.0.1"
-    "@sentry/cli-linux-arm": "npm:3.0.1"
-    "@sentry/cli-linux-arm64": "npm:3.0.1"
-    "@sentry/cli-linux-i686": "npm:3.0.1"
-    "@sentry/cli-linux-x64": "npm:3.0.1"
-    "@sentry/cli-win32-arm64": "npm:3.0.1"
-    "@sentry/cli-win32-i686": "npm:3.0.1"
-    "@sentry/cli-win32-x64": "npm:3.0.1"
-    progress: "npm:^2.0.3"
-    proxy-from-env: "npm:^1.1.0"
-    undici: "npm:^6.22.0"
-    which: "npm:^2.0.2"
-  dependenciesMeta:
-    "@sentry/cli-darwin":
-      optional: true
-    "@sentry/cli-linux-arm":
-      optional: true
-    "@sentry/cli-linux-arm64":
-      optional: true
-    "@sentry/cli-linux-i686":
-      optional: true
-    "@sentry/cli-linux-x64":
-      optional: true
-    "@sentry/cli-win32-arm64":
-      optional: true
-    "@sentry/cli-win32-i686":
-      optional: true
-    "@sentry/cli-win32-x64":
-      optional: true
-  bin:
-    sentry-cli: bin/sentry-cli
-  checksum: 10/91cf4f4b94410a933abf029aebf7e3e5c541683e3966806e56a6feeaee05952219139a4a8a309645bbfb86d5bc50b5b06300a9419c785bf6ed451df21a344181
   languageName: node
   linkType: hard
 
