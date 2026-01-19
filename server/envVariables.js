@@ -35,4 +35,8 @@ export const envVariables = () => [
         key: 'OMP_AO_ENABLED',
         value: process.env.OMP_AO_ENABLED,
     },
+    {
+        key: 'PSB_TILLAT_BARN_MED_FAGSAK_VIDERE',
+        value: process.env.PSB_TILLAT_BARN_MED_FAGSAK_VIDERE,
+    },
 ];

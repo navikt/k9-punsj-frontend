@@ -59,7 +59,7 @@
     },
     "scripts": {
         "dev": "yarn run dev-env-variables node --trace-deprecation src/build/scripts/start-dev.mjs",
-        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true",
+        "dev-env-variables": "cross-env OMP_MA_FEATURE_TOGGLE=true OMP_KS_ENABLED=true PLS_ENABLED=true OMP_UT_FEATURE_TOGGLE=true SEND_BREV_OG_LUKK_OPPGAVE_FEATURE_TOGGLE=true OLP_ENABLED=true OMP_AO_ENABLED=true POSTMOTTAK_TOGGLE=true PSB_TILLAT_BARN_MED_FAGSAK_VIDERE=true",
         "start:e2e": "yarn run dev-env-variables MSW_MODE=test node src/build/scripts/start-dev.mjs",
         "start-express": "node ./server.js",
         "build": "cross-env NODE_ENV=production SENTRY_RELEASE=$(git rev-parse --short HEAD) node ./src/build/scripts/production-build.mjs",
