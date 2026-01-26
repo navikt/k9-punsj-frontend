@@ -365,7 +365,43 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
+    it('Test velg barn fra liste som finnes i en fagsak - PSB_TILLAT_BARN_MED_FAGSAK_VIDERE = true', () => {
+        cy.window().then((window) => {
+            window.appSettings = {
+                ...window.appSettings,
+                PSB_TILLAT_BARN_MED_FAGSAK_VIDERE: 'true'
+            };
+        });
+        
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn3FraApi))
+            .should('have.value', barn3FraApi.identitetsnummer);
+
+        cy.get('.journalpostpanel').within(() => {
+            cy.findByText(/Barnets ID/i).should('exist');
+            cy.findByText(barn3FraApi.identitetsnummer).should('exist');
+        });
+        cy.get('[data-test-id="pleietrengendeHarFagsak"]')
+            .should('exist')
+            .should('contain', fagsakMedBarn.fagsakId)
+            .should('contain', barn3FraApi.identitetsnummer);
+
+        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
+        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
+    });
+
     it('Test velg barn fra liste som finnes i en fagsak', () => {
+        cy.window().then((window) => {
+            window.appSettings = {
+                ...window.appSettings,
+                PSB_TILLAT_BARN_MED_FAGSAK_VIDERE: 'false'
+            };
+        });
+        
+        cy.findByLabelText('Velg hvilket barn det gjelder')
+            .select(getBarnInfoForSelect(barn1FraApi))
+            .should('have.value', barn1FraApi.identitetsnummer);
+
         cy.findByLabelText('Velg hvilket barn det gjelder')
             .select(getBarnInfoForSelect(barn3FraApi))
             .should('have.value', barn3FraApi.identitetsnummer);
