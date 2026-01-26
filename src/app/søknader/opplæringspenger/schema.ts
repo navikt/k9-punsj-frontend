@@ -44,16 +44,6 @@ const hentTillattePerioder = (context: any): IPeriode[] => {
 const periodeErInnenforAnnenPeriode = lagPeriodeInnenforTest(hentTillattePerioder);
 const datoInnenforPeriode = lagDatoInnenforTest(hentTillattePerioder);
 
-const utenlandsperiode = yup.object().shape({
-    periode: yup
-        .object()
-        .shape({
-            fom: yup.string().label('Fra og med').test(påkrevdDato),
-            tom: yup.string().label('Til og med').test(påkrevdDato),
-        })
-        .test(periodeErInnenforAnnenPeriode),
-    land: yup.string().required().label('Land'),
-});
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
@@ -203,15 +193,29 @@ const OLPSchema = yup.object({
     }),
     bosteder: yup.array().when('metadata.harBoddIUtlandet', {
         is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
-        then: (schema) => schema.of(utenlandsperiode),
+        then: (schema) => schema.of(yup.object().shape({
+    periode: yup
+        .object()
+        .shape({
+            fom: yup.string().label('Fra og med').test(påkrevdDato),
+            tom: yup.string().label('Til og med').test(påkrevdDato),
+        }),
+    land: yup.string().required().label('Land')})),
     }),
     utenlandsopphold: yup.array().when('metadata.harUtenlandsopphold', {
         is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
-        then: (schema) => schema.of(utenlandsperiode),
+        then: (schema) => schema.of(yup.object().shape({
+    periode: yup
+        .object()
+        .shape({
+            fom: yup.string().label('Fra og med').test(påkrevdDato),
+            tom: yup.string().label('Til og med').test(påkrevdDato),
+        }).test(periodeErInnenforAnnenPeriode),
+    land: yup.string().required().label('Land')})),
     }),
     lovbestemtFerie: yup.array().of(
-        yup
-            .object({
+            yup
+                .object({
                 fom: yup.string().label('Fra og med').test(påkrevdDato),
                 tom: yup.string().label('Til og med').test(påkrevdDato),
             })

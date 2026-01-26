@@ -63,9 +63,6 @@ const Bosteder: React.FC = () => {
                                     <div className="fom-tom-rad">
                                         <Periodevelger
                                             name={`bosteder[${index}].periode`}
-                                            fromDate={fromDate}
-                                            toDate={toDate}
-                                            disabled={disabled}
                                         />
 
                                         {array.length > 1 && (
