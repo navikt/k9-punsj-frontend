@@ -1,22 +1,27 @@
-import { IPeriode } from 'app/models/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
 import minMax from 'dayjs/plugin/minMax';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import { IPeriode } from 'app/models/types';
 
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
 dayjs.extend(minMax);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
+/**
+ * Henter tidligste fom-dato fra en liste med perioder
+ */
 export const getMinDatoFraSøknadsperioder = (søknadsperioder?: IPeriode[]): string | undefined => {
     if (!søknadsperioder || søknadsperioder.length === 0) {
         return undefined;
     }
 
     const dates = søknadsperioder
-        .filter((periode) => periode.fom) // filter out null or undefined fom
+        .filter((periode) => periode.fom)
         .map((periode) => dayjs(periode.fom as string, ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD.MM.YYYY']))
         .filter((date) => date.isValid());
 
@@ -25,14 +30,12 @@ export const getMinDatoFraSøknadsperioder = (søknadsperioder?: IPeriode[]): st
     }
 
     const minDate = dayjs.min(dates);
-
-    if (!minDate) {
-        return undefined;
-    }
-
-    return minDate.format('YYYY-MM-DD');
+    return minDate ? minDate.format('YYYY-MM-DD') : undefined;
 };
 
+/**
+ * Henter seneste tom-dato fra en liste med perioder
+ */
 export const getMaxDatoFraSøknadsperioder = (søknadsperioder?: IPeriode[]): string | undefined => {
     if (!søknadsperioder || søknadsperioder.length === 0) {
         return undefined;
@@ -40,7 +43,6 @@ export const getMaxDatoFraSøknadsperioder = (søknadsperioder?: IPeriode[]): st
 
     const dates = søknadsperioder
         .filter((periode) => periode.tom)
-        // filter out null or undefined fom
         .map((periode) => dayjs(periode.tom as string, ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD.MM.YYYY']))
         .filter((date) => date.isValid());
 
@@ -49,12 +51,7 @@ export const getMaxDatoFraSøknadsperioder = (søknadsperioder?: IPeriode[]): st
     }
 
     const maxDate = dayjs.max(dates);
-
-    if (!maxDate) {
-        return undefined;
-    }
-
-    return maxDate.format('YYYY-MM-DD');
+    return maxDate ? maxDate.format('YYYY-MM-DD') : undefined;
 };
 
 /**

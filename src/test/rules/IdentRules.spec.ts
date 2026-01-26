@@ -1,4 +1,4 @@
-import { IdentRules } from '../../app/rules/IdentRules';
+import { IdentRules } from '../../app/validation/IdentRules';
 
 const gyldigeFnr = [
     '29010000074',

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useMemo } from 'react';
 import { useFormikContext } from 'formik';
 import { Periode } from 'app/models/types/Periode';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import { beregnMinMaxDato, lagDisabledDatoerFunksjon } from 'app/rules/yup';
+import { beregnMinMaxDato, lagDisabledDatoerFunksjon } from 'app/utils/date/periodUtils';
 import { IPeriode } from 'app/models/types';
 import { DatePickerProps } from '@navikt/ds-react';
 

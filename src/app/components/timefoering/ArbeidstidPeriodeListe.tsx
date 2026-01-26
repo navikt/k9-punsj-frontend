@@ -6,7 +6,7 @@ import { FieldArray, Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 
 import { ArbeidstidPeriodeMedTimer, IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo } from 'app/models/types';
-import { arbeidstimerPeriode } from 'app/rules/yup';
+import { arbeidstimerPeriode } from 'app/validation/yup';
 import { processArbeidstidPeriods } from 'app/utils/arbeidstidPeriodUtils';
 import { validatePeriodsWithinSoknadsperioder, formatSoknadsperioder, checkPeriodOverlap } from 'app/utils/periodUtils';
 

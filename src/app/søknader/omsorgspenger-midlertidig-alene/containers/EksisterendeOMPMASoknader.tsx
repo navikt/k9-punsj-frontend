@@ -8,7 +8,7 @@ import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 import { areBothDatesDefined, generateDateString } from 'app/components/skjema/skjemaUtils';
 import { TimeFormat } from 'app/models/enums';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';

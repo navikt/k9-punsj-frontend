@@ -11,7 +11,7 @@ import yup, {
     tomEtterFom,
     lagPeriodeInnenforTest,
     lagDatoInnenforTest,
-} from 'app/rules/yup';
+} from 'app/validation/yup';
 
 import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';

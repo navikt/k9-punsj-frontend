@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 
 import { TimeFormat } from 'app/models/enums';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';

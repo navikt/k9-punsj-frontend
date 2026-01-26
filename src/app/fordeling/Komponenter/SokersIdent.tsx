@@ -7,7 +7,7 @@ import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
 import { IJournalpost, Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { erYngreEnn18år } from 'app/utils/validationHelpers';

@@ -1,4 +1,4 @@
-import { IdentRules } from 'app/rules/IdentRules';
+import { IdentRules } from 'app/validation/IdentRules';
 import { RegisterOptions } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { IOpprettJournalpostForm } from './types';

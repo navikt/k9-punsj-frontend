@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button } from '@navikt/ds-react';
 
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { setAnnenPartAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
 

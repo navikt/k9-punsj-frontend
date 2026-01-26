@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { findEksisterendeSoknader } from 'app/state/actions';
 import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';

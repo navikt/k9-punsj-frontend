@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import * as yup from 'yup';
 
 import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
-import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
+import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/validation/yup';
 import {
     validatePeriodsWithinSoknadsperioder,
     formatSoknadsperioder,

@@ -1,4 +1,4 @@
-import yup, { identifikator, passertKlokkeslettPaaMottattDato } from 'app/rules/yup';
+import yup, { identifikator, passertKlokkeslettPaaMottattDato } from 'app/validation/yup';
 
 function erIkkeFremITid(dato: string) {
     const naa = new Date();

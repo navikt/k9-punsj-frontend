@@ -6,6 +6,15 @@ import { formats, Tidsformat } from 'app/utils';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IPeriode } from 'app/models/types';
 import dayjs from 'dayjs';
+import {
+    datoErInnenforPerioder,
+    formaterPerioder,
+    beregnMinMaxDato,
+    lagDisabledDatoerFunksjon,
+} from 'app/utils/date/periodUtils';
+
+// Re-export date utils for backwards compatibility
+export { datoErInnenforPerioder, formaterPerioder, beregnMinMaxDato, lagDisabledDatoerFunksjon };
 
 const yupLocale = {
     mixed: {
@@ -99,16 +108,6 @@ export const datoErIkkeIHelg = (v?: string) => {
     return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
 };
 
-// Helper: Sjekker om en dato er innenfor minst én periode
-export const datoErInnenforPerioder = (dato: string, perioder: IPeriode[]): boolean => {
-    const d = dayjs(dato);
-    return perioder.some((p) => d.isSameOrAfter(dayjs(p.fom)) && d.isSameOrBefore(dayjs(p.tom)));
-};
-
-// Helper: Formaterer perioder til lesbar tekst
-export const formaterPerioder = (perioder: IPeriode[]): string =>
-    perioder.map((p) => `${dayjs(p.fom).format('DD.MM.YYYY')} - ${dayjs(p.tom).format('DD.MM.YYYY')}`).join(', ');
-
 /**
  * Oppretter en yup-test som sjekker at en periode (fom/tom) er innenfor tillatte perioder.
  * @param hentPerioder - Funksjon som henter tillatte perioder fra context
@@ -152,43 +151,6 @@ export const lagDatoInnenforTest = (hentPerioder: (context: any) => IPeriode[]) 
         return true;
     },
 });
-
-/**
- * Beregner min og max dato fra en liste med perioder
- * @param perioder - Liste med perioder
- * @returns Objekt med fromDate (tidligste fom) og toDate (seneste tom)
- */
-export const beregnMinMaxDato = (perioder: IPeriode[]): { fromDate?: Date; toDate?: Date } => {
-    const gyldigePerioder = perioder.filter((p) => p?.fom && p?.tom);
-    if (gyldigePerioder.length === 0) return {};
-
-    const fomDatoer = gyldigePerioder.map((p) => dayjs(p.fom));
-    const tomDatoer = gyldigePerioder.map((p) => dayjs(p.tom));
-
-    return {
-        fromDate: dayjs.min(fomDatoer)?.toDate(),
-        toDate: dayjs.max(tomDatoer)?.toDate(),
-    };
-};
-
-/**
- * Oppretter en matcher-funksjon som kan brukes i disabled-prop i DatePicker
- * for å deaktivere datoer som ikke er innenfor tillatte perioder.
- * @param perioder - Liste med tillatte perioder
- * @returns Funksjon som returnerer true for datoer som skal være disabled
- */
-export const lagDisabledDatoerFunksjon = (perioder: IPeriode[]): ((date: Date) => boolean) | undefined => {
-    const gyldigePerioder = perioder.filter((p) => p?.fom && p?.tom);
-    if (gyldigePerioder.length === 0) return undefined;
-
-    return (date: Date) => {
-        const d = dayjs(date);
-        const erInnenforEnPeriode = gyldigePerioder.some(
-            (p) => d.isSameOrAfter(dayjs(p.fom), 'day') && d.isSameOrBefore(dayjs(p.tom), 'day'),
-        );
-        return !erInnenforEnPeriode;
-    };
-};
 
 export const periodeErIkkeKunHelg = ({ fom, tom }: { fom?: string; tom?: string }) => {
     if (!fom || !tom) return false;
