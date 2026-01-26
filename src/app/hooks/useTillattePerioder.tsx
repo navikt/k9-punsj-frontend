@@ -1,43 +1,42 @@
 import React, { createContext, useContext, useMemo } from 'react';
-import { useFormikContext } from 'formik';
-import { Periode } from 'app/models/types/Periode';
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { beregnMinMaxDato, lagDisabledDatoerFunksjon } from 'app/utils/date/periodUtils';
 import { IPeriode } from 'app/models/types';
 import { DatePickerProps } from '@navikt/ds-react';
 
 interface TillattePeriodeContextValue {
-    eksisterendePerioder: Periode[];
+    tillattePerioder: IPeriode[];
 }
 
 const TillattePeriodeContext = createContext<TillattePeriodeContextValue>({
-    eksisterendePerioder: [],
+    tillattePerioder: [],
 });
 
 interface TillattePeriodeProviderProps {
-    eksisterendePerioder: Periode[];
+    tillattePerioder: IPeriode[];
     children: React.ReactNode;
 }
 
+/**
+ * Provider som gir tilgang til tillatte perioder for datovelgere.
+ * Hver form er ansvarlig for å beregne hvilke perioder som er tillatt.
+ */
 export const TillattePeriodeProvider: React.FC<TillattePeriodeProviderProps> = ({
-    eksisterendePerioder,
+    tillattePerioder,
     children,
 }) => {
-    const value = useMemo(() => ({ eksisterendePerioder }), [eksisterendePerioder]);
+    const value = useMemo(
+        () => ({ tillattePerioder: tillattePerioder.filter((p) => p?.fom && p?.tom) }),
+        [tillattePerioder],
+    );
     return <TillattePeriodeContext.Provider value={value}>{children}</TillattePeriodeContext.Provider>;
 };
 
 /**
- * Hook som returnerer alle tillatte perioder (eksisterende + kursperioder)
+ * Hook som returnerer alle tillatte perioder
  */
 export const useTillattePerioder = (): IPeriode[] => {
-    const { eksisterendePerioder } = useContext(TillattePeriodeContext);
-    const { values } = useFormikContext<OLPSoknad>();
-
-    return useMemo(() => {
-        const kursperioder = values.kurs?.kursperioder?.map((k) => k.periode) || [];
-        return [...eksisterendePerioder, ...kursperioder].filter((p) => p?.fom && p?.tom);
-    }, [eksisterendePerioder, values.kurs?.kursperioder]);
+    const { tillattePerioder } = useContext(TillattePeriodeContext);
+    return tillattePerioder;
 };
 
 interface DatoRestriksjonerResult {
@@ -56,7 +55,7 @@ export const useDatoRestriksjoner = (): DatoRestriksjonerResult => {
     return useMemo(() => {
         const { fromDate, toDate } = beregnMinMaxDato(tillattePerioder);
         const disabledFn = lagDisabledDatoerFunksjon(tillattePerioder);
-        
+
         // DatePicker krever Matcher[] - wrapp funksjonen i en array
         const disabled: DatePickerProps['disabled'] = disabledFn ? [disabledFn] : undefined;
 

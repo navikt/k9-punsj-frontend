@@ -7,7 +7,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
-import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 interface Props {
     fieldArrayIndex: number;

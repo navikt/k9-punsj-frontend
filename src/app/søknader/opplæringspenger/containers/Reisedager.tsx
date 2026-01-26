@@ -8,7 +8,7 @@ import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import { JaNei } from 'app/models/enums/JaNei';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
-import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 const Reisedager = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();

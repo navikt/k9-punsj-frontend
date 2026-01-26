@@ -7,7 +7,7 @@ import { Box, Button, Label } from '@navikt/ds-react';
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
-import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 const initialPeriode = { fom: '', tom: '' };
 

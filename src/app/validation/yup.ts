@@ -9,12 +9,7 @@ import dayjs from 'dayjs';
 import {
     datoErInnenforPerioder,
     formaterPerioder,
-    beregnMinMaxDato,
-    lagDisabledDatoerFunksjon,
 } from 'app/utils/date/periodUtils';
-
-// Re-export date utils for backwards compatibility
-export { datoErInnenforPerioder, formaterPerioder, beregnMinMaxDato, lagDisabledDatoerFunksjon };
 
 const yupLocale = {
     mixed: {

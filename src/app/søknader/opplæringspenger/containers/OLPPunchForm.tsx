@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormikErrors, getIn, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
@@ -36,7 +36,7 @@ import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import Reisedager from './Reisedager';
 import RelasjonTilBarnet from './RelasjonTilBarnet';
-import { TillattePeriodeProvider } from '../context/TillattePeriodeContext';
+import { TillattePeriodeProvider } from 'app/hooks/useTillattePerioder';
 
 interface OwnProps {
     journalpostid: string;
@@ -247,8 +247,14 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         }
     };
 
+    // Beregn tillatte perioder for datovelgere (eksisterende + kursperioder)
+    const tillattePerioder = useMemo(
+        () => [...eksisterendePerioder, ...values.kurs.kursperioder.map((p) => p.periode)],
+        [eksisterendePerioder, values.kurs.kursperioder],
+    );
+
     return (
-        <TillattePeriodeProvider eksisterendePerioder={eksisterendePerioder}>
+        <TillattePeriodeProvider tillattePerioder={tillattePerioder}>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer thirtyTwoPx />

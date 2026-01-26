@@ -11,7 +11,7 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
-import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
