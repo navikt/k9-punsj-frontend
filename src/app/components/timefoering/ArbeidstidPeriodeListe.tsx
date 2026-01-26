@@ -23,7 +23,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
             })
             .test(
                 'within-soknadsperioder',
-                `Arbeidstid må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
+                `Arbeidstid må være innenfor søknadsperioder. Gyldig intervall: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
                     return !validatePeriodsWithinSoknadsperioder(

@@ -365,10 +365,8 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     <Button
                         className="send-knapp"
                         onClick={() => {
-                            if (!harForsoektAaSendeInn) {
-                                setHarForsoektAaSendeInn(true);
-                                setTouched(setNestedObjectValues(values, true));
-                            }
+                            setTouched(setNestedObjectValues(values, true));
+                            setHarForsoektAaSendeInn(true);
                             validateForm(values).then((v) => {
                                 if (Object.keys(v).length) {
                                     // Hvis det er valideringsfeil i frontend skal disse vises før vi prøver å validere mot backend.

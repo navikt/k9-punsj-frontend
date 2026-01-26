@@ -26,7 +26,6 @@ export interface IOLPSoknadBackend {
     opptjeningAktivitet?: OpptjeningAktivitet;
     soekerId: string;
     soeknadId: string;
-    soeknadsperiode?: Periode[] | null;
     soknadsinfo?: SoknadsInfo;
     trekkKravPerioder?: Periode[];
     utenlandsopphold?: UtenlandsOpphold[];

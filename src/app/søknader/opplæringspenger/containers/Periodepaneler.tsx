@@ -6,7 +6,7 @@ import { Box, Button, Label } from '@navikt/ds-react';
 
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -33,13 +33,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
                                     <div className="flex gap-4">
-                                        <DatovelgerFormik label="Fra og med" name={`${fieldName}.${index}.fom`} />
-                                        <DatovelgerFormik
-                                            label="Til og med"
-                                            name={`${fieldName}.${index}.tom`}
-                                            fromDate={period.fom ? new Date(period.fom) : undefined}
-                                            defaultMonth={period.fom ? new Date(period.fom) : undefined}
-                                        />
+                                        <Periodevelger name={`${fieldName}.${index}`} />
                                         <div className="block content-center">
                                             <Button
                                                 variant="tertiary"
