@@ -1,14 +1,30 @@
 import React from 'react';
-import { ErrorMessage } from '@navikt/ds-react';
+import { ErrorMessage, DatePickerProps} from '@navikt/ds-react';
 import DatovelgerFormik from './DatovelgerFormik';
 import { useField } from 'formik';
 
-const Periodevelger = ({ name }: { name: string }) => {
+interface Props {
+    name: string;
+    /** Begrens fra-dato (tidligste tillatte dato) */
+    fromDate?: Date;
+    /** Begrens til-dato (seneste tillatte dato) */
+    toDate?: Date;
+    /** Funksjon eller matcher for å deaktivere spesifikke datoer */
+    disabled?: DatePickerProps['disabled'];
+}
+
+const Periodevelger = ({ name, fromDate, toDate, disabled }: Props) => {
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
     const [, fomFieldMeta] = useField(fomFieldName);
     const [, tomFieldMeta] = useField(tomFieldName);
+
+    // Beregn effektive grenser for fom-feltet
+    const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
+
+    // Beregn effektive grenser for tom-feltet
+    const tomFromDate = fomFieldMeta.value ? new Date(fomFieldMeta.value) : fromDate;
 
     return (
         <div className="flex flex-col gap-2">
@@ -17,16 +33,20 @@ const Periodevelger = ({ name }: { name: string }) => {
                     id={fomFieldName}
                     name={fomFieldName}
                     label="Fra og med"
-                    toDate={tomFieldMeta.value ? new Date(tomFieldMeta.value) : undefined}
+                    fromDate={fromDate}
+                    toDate={fomToDate}
                     visFeilmelding={false}
+                    disabled={disabled}
                 />
                 <DatovelgerFormik
                     id={tomFieldName}
                     name={tomFieldName}
                     label="Til og med"
                     defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
-                    fromDate={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
+                    fromDate={tomFromDate}
+                    toDate={toDate}
                     visFeilmelding={false}
+                    disabled={disabled}
                 />
             </div>
             <div>

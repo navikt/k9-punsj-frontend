@@ -36,6 +36,7 @@ import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import Reisedager from './Reisedager';
 import RelasjonTilBarnet from './RelasjonTilBarnet';
+import { TillattePeriodeProvider } from '../context/TillattePeriodeContext';
 
 interface OwnProps {
     journalpostid: string;
@@ -247,7 +248,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
     };
 
     return (
-        <>
+        <TillattePeriodeProvider eksisterendePerioder={eksisterendePerioder}>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VerticalSpacer thirtyTwoPx />
@@ -432,6 +433,6 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     }}
                 />
             )}
-        </>
+        </TillattePeriodeProvider>
     );
 };

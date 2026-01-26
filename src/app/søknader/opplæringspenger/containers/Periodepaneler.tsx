@@ -7,6 +7,7 @@ import { Box, Button, Label } from '@navikt/ds-react';
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -21,6 +22,7 @@ export interface IPeriodepanelerProps {
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const { periods, kanHaFlere, fieldName, label } = props;
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
         <Box padding="4" borderRadius="large" className="periodepanel">
@@ -33,7 +35,12 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
                                     <div className="flex gap-4">
-                                        <Periodevelger name={`${fieldName}.${index}`} />
+                                        <Periodevelger
+                                            name={`${fieldName}.${index}`}
+                                            fromDate={fromDate}
+                                            toDate={toDate}
+                                            disabled={disabled}
+                                        />
                                         <div className="block content-center">
                                             <Button
                                                 variant="tertiary"

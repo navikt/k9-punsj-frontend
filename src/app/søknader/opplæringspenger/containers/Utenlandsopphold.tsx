@@ -7,6 +7,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
 
 interface Props {
     fieldArrayIndex: number;
@@ -15,6 +16,7 @@ interface Props {
 
 const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Props) => {
     const { values } = useFormikContext<OLPSoknad>();
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
         <div>
@@ -22,7 +24,12 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
-                    <Periodevelger name={`utenlandsopphold[${fieldArrayIndex}].periode`} />
+                    <Periodevelger
+                        name={`utenlandsopphold[${fieldArrayIndex}].periode`}
+                        fromDate={fromDate}
+                        toDate={toDate}
+                        disabled={disabled}
+                    />
                 </div>
                 {values.utenlandsopphold.length > 1 && (
                     <div className="block content-center">

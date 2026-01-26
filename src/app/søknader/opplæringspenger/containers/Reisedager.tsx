@@ -8,9 +8,11 @@ import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import { JaNei } from 'app/models/enums/JaNei';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import { useDatoRestriksjoner } from '../context/TillattePeriodeContext';
 
 const Reisedager = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     const toggleReisedager = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.checked ? JaNei.JA : JaNei.NEI;
@@ -44,6 +46,9 @@ const Reisedager = () => {
                                                 label="Reisedag (dato)"
                                                 hideLabel={true}
                                                 name={`kurs.reise.reisedager.${reisedagIndex}`}
+                                                fromDate={fromDate}
+                                                toDate={toDate}
+                                                disabled={disabled}
                                             />
                                             {values.kurs.reise.reisedager?.length > 1 && (
                                                 <Button

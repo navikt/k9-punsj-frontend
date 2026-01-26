@@ -2,7 +2,7 @@ import React from 'react';
 import Datovelger, { DatovelgerProps } from './Datovelger';
 import { useField } from 'formik';
 
-type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaultMonth' | 'label'> & {
+type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaultMonth' | 'label' | 'disabled'> & {
     name: string;
     className?: string;
     id?: string;
@@ -18,6 +18,7 @@ const DatovelgerFormik = ({
     defaultMonth,
     className,
     id,
+    disabled,
     // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
     visFeilmelding = true,
 }: Props) => {
@@ -46,6 +47,7 @@ const DatovelgerFormik = ({
             defaultMonth={defaultMonth}
             className={className}
             id={id}
+            disabled={disabled}
         />
     );
 };

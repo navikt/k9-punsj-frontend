@@ -153,6 +153,43 @@ export const lagDatoInnenforTest = (hentPerioder: (context: any) => IPeriode[]) 
     },
 });
 
+/**
+ * Beregner min og max dato fra en liste med perioder
+ * @param perioder - Liste med perioder
+ * @returns Objekt med fromDate (tidligste fom) og toDate (seneste tom)
+ */
+export const beregnMinMaxDato = (perioder: IPeriode[]): { fromDate?: Date; toDate?: Date } => {
+    const gyldigePerioder = perioder.filter((p) => p?.fom && p?.tom);
+    if (gyldigePerioder.length === 0) return {};
+
+    const fomDatoer = gyldigePerioder.map((p) => dayjs(p.fom));
+    const tomDatoer = gyldigePerioder.map((p) => dayjs(p.tom));
+
+    return {
+        fromDate: dayjs.min(fomDatoer)?.toDate(),
+        toDate: dayjs.max(tomDatoer)?.toDate(),
+    };
+};
+
+/**
+ * Oppretter en matcher-funksjon som kan brukes i disabled-prop i DatePicker
+ * for å deaktivere datoer som ikke er innenfor tillatte perioder.
+ * @param perioder - Liste med tillatte perioder
+ * @returns Funksjon som returnerer true for datoer som skal være disabled
+ */
+export const lagDisabledDatoerFunksjon = (perioder: IPeriode[]): ((date: Date) => boolean) | undefined => {
+    const gyldigePerioder = perioder.filter((p) => p?.fom && p?.tom);
+    if (gyldigePerioder.length === 0) return undefined;
+
+    return (date: Date) => {
+        const d = dayjs(date);
+        const erInnenforEnPeriode = gyldigePerioder.some(
+            (p) => d.isSameOrAfter(dayjs(p.fom), 'day') && d.isSameOrBefore(dayjs(p.tom), 'day'),
+        );
+        return !erInnenforEnPeriode;
+    };
+};
+
 export const periodeErIkkeKunHelg = ({ fom, tom }: { fom?: string; tom?: string }) => {
     if (!fom || !tom) return false;
     const totalDays = dayjs(tom).diff(dayjs(fom), 'day');
