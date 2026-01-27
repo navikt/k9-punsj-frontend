@@ -53,6 +53,7 @@ import { hentBarn } from 'app/state/reducers/HentBarn';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
+    getEnvironmentVariable,
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from 'app/utils';
@@ -141,6 +142,10 @@ const Fordeling: React.FC = () => {
 
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
     const gjelderOlp = dokumenttype === FordelingDokumenttype.OPPLAERINGSPENGER;
+    // Tillater å gå videre, hvis barn med fagsak PSB. (trenges for split)
+    const tillatPSBMBarnMedFagsakVidere =
+        getEnvironmentVariable('PSB_TILLAT_BARN_MED_FAGSAK_VIDERE') === 'true' &&
+        dokumenttype === FordelingDokumenttype.PLEIEPENGER;
     const isDokumenttypeMedPleietrengende = !!dokumenttype && dokumenttyperMedPleietrengende.includes(dokumenttype);
     const isSakstyperFraJpSakMedPleietrengende =
         !!journalpost.sak?.sakstype && sakstyperMedPleietrengende.includes(journalpost.sak?.sakstype);
@@ -436,6 +441,7 @@ const Fordeling: React.FC = () => {
         isDokumenttypeMedFosterbarn,
         isFagsakMedValgtBehandlingsår,
         gjelderOlp,
+        tillatPSBMBarnMedFagsakVidere,
         fagsak,
         behandlingsAar,
         barnMedFagsak,
@@ -488,6 +494,7 @@ const Fordeling: React.FC = () => {
         identState,
         isDokumenttypeMedPleietrengende,
         gjelderOlp,
+        tillatPSBMBarnMedFagsakVidere,
         barnMedFagsak,
     );
 
@@ -761,7 +768,7 @@ const Fordeling: React.FC = () => {
                                     data-test-id="pleietrengendeHarFagsak"
                                 >
                                     <FormattedMessage
-                                        id={`fordeling.error.pleietrengendeHarFagsak${gjelderOlp ? '.olp' : ''}`}
+                                        id={`fordeling.error.pleietrengendeHarFagsak${gjelderOlp || tillatPSBMBarnMedFagsakVidere ? '.tillatGåVidere' : ''}`}
                                         values={{
                                             pleietrengendeId: barnMedFagsak.pleietrengende?.identitetsnummer,
                                             fagsakId: barnMedFagsak.fagsakId,

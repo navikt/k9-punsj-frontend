@@ -17,6 +17,7 @@ export interface EnvVariables {
     OLP_ENABLED: string;
     OMP_AO_ENABLED: string;
     POSTMOTTAK_TOGGLE: string;
+    PSB_TILLAT_BARN_MED_FAGSAK_VIDERE: string;
 }
 
 export default async function setEnvVariables(): Promise<void> {
@@ -35,6 +36,7 @@ export default async function setEnvVariables(): Promise<void> {
         OLP_ENABLED: envVariables.OLP_ENABLED,
         OMP_AO_ENABLED: envVariables.OMP_AO_ENABLED,
         POSTMOTTAK_TOGGLE: envVariables.POSTMOTTAK_TOGGLE,
+        PSB_TILLAT_BARN_MED_FAGSAK_VIDERE: envVariables.PSB_TILLAT_BARN_MED_FAGSAK_VIDERE,
     };
     (window as any).appSettings = JSON.parse(JSON.stringify(appSettings));
 }
