@@ -11,7 +11,6 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
-import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
@@ -23,7 +22,6 @@ const Bosteder: React.FC = () => {
     const intl = useIntl();
 
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
-    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
         <Box padding="4" borderWidth="1" borderRadius="large">
