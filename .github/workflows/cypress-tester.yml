@@ -46,7 +46,7 @@ jobs:
               run: npx cypress install
 
             - name: Start E2E-server
-              uses: cypress-io/github-action@v6
+              uses: cypress-io/github-action@v7
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
               with:
