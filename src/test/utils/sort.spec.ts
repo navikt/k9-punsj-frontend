@@ -1,5 +1,4 @@
-import initializeDate from '../../app/utils/date-utils/src/initialize';
-import dateSorter, { dateStringSorter } from '../../app/utils/date-utils/src/sort';
+import { initializeDate, dateSorter, dateStringSorter } from '../../app/utils/date/dateUtils';
 
 describe('Sort tests', () => {
     it('should sort dates', () => {

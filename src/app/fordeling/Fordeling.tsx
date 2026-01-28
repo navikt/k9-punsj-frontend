@@ -25,7 +25,7 @@ import {
 } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,

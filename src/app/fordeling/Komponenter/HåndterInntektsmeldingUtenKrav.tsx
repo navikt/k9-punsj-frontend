@@ -11,7 +11,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { IJournalpost } from 'app/models/types';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { setJournalpostPaaVentResetAction } from 'app/state/actions';
 import {

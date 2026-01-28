@@ -1,16 +1,22 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { format, isValid } from 'date-fns';
-import initializeDate from './initialize';
-import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import { initializeDate } from './dateUtils';
 
-dayjs.extend(utc);
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+
+// ============================================================================
+// Constants and Types
+// ============================================================================
 
 const prettyDateFormat = 'DD.MM.YYYY';
 
 export const INVALID_DATE_VALUE = 'Invalid date';
 export const INPUT_DATE_STRING_FORMAT: InputDateString = 'DD.MM.YYYY';
+export const ISO_DATE_STRING_FORMAT: ISODateString = 'YYYY-MM-DD';
+export const ISO_DATE_STRING_FORMAT_date_fns: ISODateString = 'yyyy-MM-dd';
 
 const ALLOWED_INPUT_FORMATS = [
     INPUT_DATE_STRING_FORMAT,
@@ -29,11 +35,12 @@ export type ISODateString = string;
 /** DD-MM-YYYY */
 export type InputDateString = string;
 
-/** Type used when input date is invalid  */
+/** Type used when input date is invalid */
 export type INVALID_DATE_TYPE = 'Invalid date';
 
-export const ISO_DATE_STRING_FORMAT: ISODateString = 'YYYY-MM-DD';
-export const ISO_DATE_STRING_FORMAT_date_fns: ISODateString = 'yyyy-MM-dd';
+// ============================================================================
+// Formatting and Conversion
+// ============================================================================
 
 const stringToUTCDate = (dateString: string | undefined, dateFormat: string): Date | undefined => {
     if (dateString !== undefined && dateString.trim && dateString.trim().length === 10) {

@@ -1,4 +1,4 @@
-import yup, { barn, datoYYYYMMDD, passertDato, passertKlokkeslettPaaMottattDato } from 'app/rules/yup';
+import yup, { barn, datoYYYYMMDD, passertDato, passertKlokkeslettPaaMottattDato } from 'app/validation/yup';
 
 const OMPAOSchema = yup.object({
     metadata: yup.object({

@@ -6,7 +6,7 @@ import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import { finnFagsaker } from 'app/api/api';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import Fagsak from 'app/types/Fagsak';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 
 import './sendBrevIAvsluttetSak.less';

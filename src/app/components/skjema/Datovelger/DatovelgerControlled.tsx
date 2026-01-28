@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
-import { dateToISODateString, ISODateStringToUTCDate, isISODateString } from 'app/utils/date-utils/src/format';
+import { dateToISODateString, ISODateStringToUTCDate, isISODateString } from 'app/utils/date/dateFormat';
 
 export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {

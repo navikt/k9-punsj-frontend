@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { getValidationErrors, identifikatorAnnenPart } from 'app/rules/yup';
+import { getValidationErrors, identifikatorAnnenPart } from 'app/validation/yup';
 import { Person } from 'app/models/types';
 import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { IIdentState } from 'app/models/types/IdentState';
 
 interface Props {

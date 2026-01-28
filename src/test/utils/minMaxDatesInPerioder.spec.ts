@@ -1,7 +1,7 @@
 import {
     getMinDatoFraSøknadsperioder,
     getMaxDatoFraSøknadsperioder,
-} from '../../app/utils/date-utils/src/minMaxDatesInPerioder';
+} from '../../app/utils/date/periodUtils';
 
 describe('getMinDatoFraSøknadsperioder', () => {
     it('should return undefined if søknadsperioder is undefined', () => {

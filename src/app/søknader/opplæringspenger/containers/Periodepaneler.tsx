@@ -6,7 +6,8 @@ import { Box, Button, Label } from '@navikt/ds-react';
 
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 const initialPeriode = { fom: '', tom: '' };
 
@@ -21,6 +22,7 @@ export interface IPeriodepanelerProps {
 
 export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (props: IPeriodepanelerProps) => {
     const { periods, kanHaFlere, fieldName, label } = props;
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
         <Box padding="4" borderRadius="large" className="periodepanel">
@@ -33,12 +35,11 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
                                     <div className="flex gap-4">
-                                        <DatovelgerFormik label="Fra og med" name={`${fieldName}.${index}.fom`} />
-                                        <DatovelgerFormik
-                                            label="Til og med"
-                                            name={`${fieldName}.${index}.tom`}
-                                            fromDate={period.fom ? new Date(period.fom) : undefined}
-                                            defaultMonth={period.fom ? new Date(period.fom) : undefined}
+                                        <Periodevelger
+                                            name={`${fieldName}.${index}`}
+                                            fromDate={fromDate}
+                                            toDate={toDate}
+                                            disabled={disabled}
                                         />
                                         <div className="block content-center">
                                             <Button

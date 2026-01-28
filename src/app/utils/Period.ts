@@ -1,7 +1,5 @@
-import { prettifyDateString } from './date-utils/src/format';
-import initializeDate from './date-utils/src/initialize';
-import { isSameOrBefore } from './date-utils/src/isSameOrBefore';
-import isValid from './date-utils/src/isValid';
+import { prettifyDateString } from './date/dateFormat';
+import { initializeDate, isValidDate, isSameOrBeforeDate } from './date/dateUtils';
 
 class Period {
     fom: string;
@@ -82,7 +80,7 @@ class Period {
         const list = [];
         for (
             let currentDate = fomDayjs;
-            isSameOrBefore(currentDate, tomDayjs);
+            isSameOrBeforeDate(currentDate, tomDayjs);
             currentDate = currentDate.add(1, 'day')
         ) {
             list.push(currentDate.format('YYYY-MM-DD'));
@@ -92,7 +90,7 @@ class Period {
     }
 
     isValid() {
-        return isValid(this.fom) && isValid(this.tom);
+        return isValidDate(this.fom) && isValidDate(this.tom);
     }
 
     asInternationalPeriod() {

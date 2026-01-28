@@ -10,7 +10,7 @@ import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
