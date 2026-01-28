@@ -108,3 +108,4 @@ jobs:
         with:
             team: k9saksbehandling
             image: ${{ needs.deploy.outputs.image }}
+            reset-db: true
