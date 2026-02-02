@@ -8,7 +8,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 
 import { findEksisterendeSoknader } from 'app/state/actions';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../../state/actions/JournalposterPerIdentActions';

@@ -1,13 +1,13 @@
 import React from 'react';
 import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
-import { dateToISODateString, ISODateStringToUTCDate } from 'app/utils/date-utils/src/format';
+import { dateToISODateString, ISODateStringToUTCDate } from 'app/utils/date/dateFormat';
 
-export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
+export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className' | 'disabled'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
         onChange: (value: string) => void;
         errorMessage?: React.ReactNode | string;
         selectedDay: string;
-        disabled?: boolean;
+        inputDisabled?: boolean;
         onBlur: () => void;
         value: string;
     };
@@ -19,6 +19,7 @@ const Datovelger = ({
     className,
     errorMessage,
     selectedDay,
+    inputDisabled,
     disabled,
     onBlur,
     value,
@@ -59,7 +60,8 @@ const Datovelger = ({
                 {...(datepickerProps as any)}
                 showWeekNumber={true}
                 mode="single"
-                inputDisabled={disabled}
+                inputDisabled={inputDisabled}
+                disabled={disabled}
                 onSelect={onBlur}
                 dropdownCaption={true}
                 fromDate={fromDate || fromDateDefault}
@@ -75,7 +77,7 @@ const Datovelger = ({
                         inputProps.onBlur?.(e);
                     }}
                     error={errorMessage}
-                    disabled={disabled}
+                    disabled={inputDisabled}
                     size={size}
                     id={id}
                 />

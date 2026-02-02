@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from 'app/state/actions';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from 'app/state/actions/JournalposterPerIdentActions';

@@ -6,7 +6,7 @@ import { getPersonInfo } from 'app/api/api';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { Person } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { FormattedMessage } from 'react-intl';
 
 interface Props {

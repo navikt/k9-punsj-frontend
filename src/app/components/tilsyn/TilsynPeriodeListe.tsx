@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import * as yup from 'yup';
 
 import { IOmsorgstid, IPeriode, PeriodeMedTimerMinutter, Periodeinfo } from 'app/models/types';
-import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/rules/yup';
+import { periodeMedTimerOgMinutter as periodeMedTimerOgMinutterSchema } from 'app/validation/yup';
 import {
     validatePeriodsWithinSoknadsperioder,
     formatSoknadsperioder,
@@ -30,7 +30,7 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
             })
             .test(
                 'within-soknadsperioder',
-                `Tilsyn må være innenfor søknadsperioder. Gyldig interval: [${formatSoknadsperioder(soknadsperioder)}]`,
+                `Tilsyn må være innenfor søknadsperioder. Gyldig intervall: [${formatSoknadsperioder(soknadsperioder)}]`,
                 (periods) => {
                     if (!periods) return true;
                     return !validatePeriodsWithinSoknadsperioder(

@@ -4,7 +4,12 @@ import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
 import { formats, Tidsformat } from 'app/utils';
 import { IIdentState } from 'app/models/types/IdentState';
+import { IPeriode } from 'app/models/types';
 import dayjs from 'dayjs';
+import {
+    datoErInnenforPerioder,
+    formaterPerioder,
+} from 'app/utils/date/periodUtils';
 
 const yupLocale = {
     mixed: {
@@ -97,6 +102,50 @@ export const datoErIkkeIHelg = (v?: string) => {
     if (!v) return false;
     return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
 };
+
+/**
+ * Oppretter en yup-test som sjekker at en periode (fom/tom) er innenfor tillatte perioder.
+ * @param hentPerioder - Funksjon som henter tillatte perioder fra context
+ */
+export const lagPeriodeInnenforTest = (hentPerioder: (context: any) => IPeriode[]) => ({
+    name: 'periode-innenfor',
+    test: function (this: yup.TestContext, value: { fom?: string; tom?: string } | undefined) {
+        if (!value?.fom || !value?.tom) return true;
+        const allePerioder = hentPerioder(this.options.context);
+        if (allePerioder.length === 0) return true;
+
+        let currentDate = dayjs(value.fom);
+        const tomDate = dayjs(value.tom);
+        while (currentDate.isSameOrBefore(tomDate)) {
+            if (!datoErInnenforPerioder(currentDate.format('YYYY-MM-DD'), allePerioder)) {
+                return this.createError({
+                    message: `Perioden må være innenfor: ${formaterPerioder(allePerioder)}`,
+                });
+            }
+            currentDate = currentDate.add(1, 'day');
+        }
+        return true;
+    },
+});
+
+/**
+ * Oppretter en yup-test som sjekker at en enkeltdato er innenfor tillatte perioder.
+ * @param hentPerioder - Funksjon som henter tillatte perioder fra context
+ */
+export const lagDatoInnenforTest = (hentPerioder: (context: any) => IPeriode[]) => ({
+    name: 'dato-innenfor',
+    test: function (this: yup.TestContext, value: string | undefined) {
+        if (!value) return true;
+        const allePerioder = hentPerioder(this.options.context);
+        if (allePerioder.length === 0) return true;
+        if (!datoErInnenforPerioder(value, allePerioder)) {
+            return this.createError({
+                message: `Datoen må være innenfor: ${formaterPerioder(allePerioder)}`,
+            });
+        }
+        return true;
+    },
+});
 
 export const periodeErIkkeKunHelg = ({ fom, tom }: { fom?: string; tom?: string }) => {
     if (!fom || !tom) return false;
