@@ -1397,8 +1397,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 {!!punchFormState.submitSoknadConflict && (
                     <Alert variant="error">
-                        {punchFormState.submitSoknadConflict.feil ||
-                            punchFormState.submitSoknadConflict.message ||
+                        {punchFormState.submitSoknadConflict.message ||
+                            punchFormState.submitSoknadConflict.feil ||
                             intlHelper(intl, 'skjema.feil.konflikt')}
                     </Alert>
                 )}
