@@ -1,6 +1,6 @@
 import { String } from 'typescript-string-operations';
 
-import { IError } from 'app/models/types';
+import { IError, K9ErrorDetail } from 'app/models/types';
 import { ROUTES } from 'app/constants/routes';
 
 import { canStringBeParsedToJSON } from './formatUtils';
@@ -143,7 +143,37 @@ export function put(
     });
 }
 
+// TODO Depricate
 export function convertResponseToError(response: Partial<Response>): IError {
     const { status, statusText, url } = response;
     return { status, statusText, url };
+}
+
+export const parseProblemDetail = (data: any): K9ErrorDetail | undefined => {
+    if (!data?.detail) return undefined;
+
+    if (typeof data.detail === 'string') {
+        try {
+            return JSON.parse(data.detail);
+        } catch {
+            return undefined;
+        }
+    }
+
+    return data.detail;
+};
+
+export function convertResponseToErrorNew(response: Partial<Response>, responseData?: any): IError {
+    const { status, statusText, url } = response;
+
+    const detail = parseProblemDetail(responseData);
+
+    return {
+        status,
+        statusText,
+        url,
+        message: detail?.feilmelding || responseData?.title || statusText || 'Ukjent feil',
+        feil: detail?.type,
+        raw: responseData,
+    };
 }

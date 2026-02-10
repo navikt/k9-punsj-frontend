@@ -2,7 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
-import { convertResponseToError, get, post, put } from 'app/utils';
+import { convertResponseToError, convertResponseToErrorNew, get, post, put } from 'app/utils';
 
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IPSBSoknadKvittering } from '../../models/types/PSBSoknadKvittering';
@@ -367,7 +367,7 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
                     case 409:
                         return dispatch(submitSoknadConflictAction(responseData));
                     default:
-                        return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
+                        return dispatch(submitSoknadErrorAction(convertResponseToErrorNew(response, responseData)));
                 }
             },
         );
