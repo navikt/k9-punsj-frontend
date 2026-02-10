@@ -3017,19 +3017,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
-    "@navikt/oasis": "npm:4.1.2"
-    "@sentry/cli": "npm:3.1.0"
-    axios: "npm:1.13.4"
+    "@navikt/oasis": "npm:4.1.4"
+    "@sentry/cli": "npm:3.2.0"
+    axios: "npm:1.13.5"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
-    dotenv: "npm:17.2.3"
+    dotenv: "npm:17.2.4"
     express: "npm:5.2.1"
     express-http-proxy: "npm:2.1.2"
     helmet: "npm:8.1.0"
     jose: "npm:6.1.3"
     morgan: "npm:1.10.1"
     node-cache: "npm:5.1.2"
-    openid-client: "npm:6.8.1"
+    openid-client: "npm:6.8.2"
     winston: "npm:3.19.0"
   languageName: unknown
   linkType: soft
@@ -3151,22 +3151,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/oasis@npm:4.1.2":
-  version: 4.1.2
-  resolution: "@navikt/oasis@npm:4.1.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.2%2F71dd8c0ce6b1e944771e742fb6db0e2898e4bb43"
+"@navikt/oasis@npm:4.1.4":
+  version: 4.1.4
+  resolution: "@navikt/oasis@npm:4.1.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Foasis%2F4.1.4%2F0d9c93820b9b6d93b1bd9da134feb95461ad8a47"
   dependencies:
-    "@navikt/texas": "npm:^4.1.2"
+    "@navikt/texas": "npm:^4.1.4"
     "@opentelemetry/api": "npm:^1.9.0"
     jose: "npm:^6.1.3"
     prom-client: "npm:^15.1.3"
-  checksum: 10/d7478b672fe2c58fc7c6fc1d25dea80a2d2b29efb892ee579abf3a1487063450704f474bcab730aa8ab24638f1ffb4abf6c994008429e474eb62a147df0c3a64
+  checksum: 10/1f0a9df3aa1b79d17a4076579a140eae607f45d8974072330b3faee3f80706560945aee7ad84f8aac7429e7dc719bdcb4c96774395d1f6cd75d422bfdce0b534
   languageName: node
   linkType: hard
 
-"@navikt/texas@npm:^4.1.2":
-  version: 4.1.2
-  resolution: "@navikt/texas@npm:4.1.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.2%2F1186a3e4a52af4b774eb768a5081821f02f28605"
-  checksum: 10/607468af641d2ee4390bf9f05f0c0c6ea6a3883de3e3a0740290686996793e185ec3d2ed814316b8860d2e23197c3bfa688a9b27adc86bd138330f1de6ed6123
+"@navikt/texas@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "@navikt/texas@npm:4.1.4::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ftexas%2F4.1.4%2F1725aca0fa0b803e0048212c3e202d24c10f3c3b"
+  checksum: 10/43a3e9a840e16893d919a5aa4e02c093d8b3b2263e5900de951e079b4788708e1d172ee1eadceac092e03b27a46b6bde088d64ebba5e98ed23c977b08d82bb0a
   languageName: node
   linkType: hard
 
@@ -3827,24 +3827,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-darwin@npm:3.1.0"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-darwin@npm:3.2.0":
   version: 3.2.0
   resolution: "@sentry/cli-darwin@npm:3.2.0"
   conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm64@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-linux-arm64@npm:3.1.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -3855,24 +3841,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-linux-arm@npm:3.1.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-arm@npm:3.2.0":
   version: 3.2.0
   resolution: "@sentry/cli-linux-arm@npm:3.2.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-i686@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-linux-i686@npm:3.1.0"
-  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
@@ -3883,24 +3855,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-linux-x64@npm:3.1.0"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-x64@npm:3.2.0":
   version: 3.2.0
   resolution: "@sentry/cli-linux-x64@npm:3.2.0"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-arm64@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-win32-arm64@npm:3.1.0"
-  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -3911,13 +3869,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-win32-i686@npm:3.1.0"
-  conditions: os=win32 & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-i686@npm:3.2.0":
   version: 3.2.0
   resolution: "@sentry/cli-win32-i686@npm:3.2.0"
@@ -3925,56 +3876,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli-win32-x64@npm:3.1.0"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-x64@npm:3.2.0":
   version: 3.2.0
   resolution: "@sentry/cli-win32-x64@npm:3.2.0"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@sentry/cli@npm:3.1.0"
-  dependencies:
-    "@sentry/cli-darwin": "npm:3.1.0"
-    "@sentry/cli-linux-arm": "npm:3.1.0"
-    "@sentry/cli-linux-arm64": "npm:3.1.0"
-    "@sentry/cli-linux-i686": "npm:3.1.0"
-    "@sentry/cli-linux-x64": "npm:3.1.0"
-    "@sentry/cli-win32-arm64": "npm:3.1.0"
-    "@sentry/cli-win32-i686": "npm:3.1.0"
-    "@sentry/cli-win32-x64": "npm:3.1.0"
-    progress: "npm:^2.0.3"
-    proxy-from-env: "npm:^1.1.0"
-    undici: "npm:^6.22.0"
-    which: "npm:^2.0.2"
-  dependenciesMeta:
-    "@sentry/cli-darwin":
-      optional: true
-    "@sentry/cli-linux-arm":
-      optional: true
-    "@sentry/cli-linux-arm64":
-      optional: true
-    "@sentry/cli-linux-i686":
-      optional: true
-    "@sentry/cli-linux-x64":
-      optional: true
-    "@sentry/cli-win32-arm64":
-      optional: true
-    "@sentry/cli-win32-i686":
-      optional: true
-    "@sentry/cli-win32-x64":
-      optional: true
-  bin:
-    sentry-cli: bin/sentry-cli
-  checksum: 10/d795e957fb75cef218f67a74e9d174343b570f9756fa6a8b0e3ac8049fc79571b95fc6c62ac5cb800e41f26b8802aaf28f32194ebefc40898c85f708e4f71bbf
   languageName: node
   linkType: hard
 
@@ -6556,14 +6461,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.13.4":
-  version: 1.13.4
-  resolution: "axios@npm:1.13.4"
+"axios@npm:1.13.5":
+  version: 1.13.5
+  resolution: "axios@npm:1.13.5"
   dependencies:
-    follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.4"
+    follow-redirects: "npm:^1.15.11"
+    form-data: "npm:^4.0.5"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10/54b7ef71c64837f9d52475832337f520cf6fa85c94612e03a3a2aad7082804a2544741267122696662147e90e6d2746601346984cf531ae715ecdb56d586a04c
+  checksum: 10/db726d09902565ef9a0632893530028310e2ec2b95b727114eca1b101450b00014133dfc3871cffc87983fb922bca7e4874d7e2826d1550a377a157cdf3f05b6
   languageName: node
   linkType: hard
 
@@ -8496,13 +8401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:17.2.3":
-  version: 17.2.3
-  resolution: "dotenv@npm:17.2.3"
-  checksum: 10/f8b78626ebfff6e44420f634773375c9651808b3e1a33df6d4cc19120968eea53e100f59f04ec35f2a20b2beb334b6aba4f24040b2f8ad61773f158ac042a636
-  languageName: node
-  linkType: hard
-
 "dotenv@npm:17.2.4":
   version: 17.2.4
   resolution: "dotenv@npm:17.2.4"
@@ -9903,7 +9801,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.6":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.11, follow-redirects@npm:^1.15.6":
   version: 1.15.11
   resolution: "follow-redirects@npm:1.15.11"
   peerDependenciesMeta:
@@ -9952,7 +9850,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.4, form-data@npm:~4.0.4":
+"form-data@npm:^4.0.4, form-data@npm:^4.0.5, form-data@npm:~4.0.4":
   version: 4.0.5
   resolution: "form-data@npm:4.0.5"
   dependencies:
@@ -12053,13 +11951,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.1.0":
-  version: 6.1.2
-  resolution: "jose@npm:6.1.2"
-  checksum: 10/f679fe9e331d2d79b894a821a92bae2ab77ef51db8e0e79c86eabf34cef85e9c1eed4fd46e012610a0bf9f0981ec99d075a57724da746adc624922a58e7c4ab0
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -13591,10 +13482,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.8.2":
-  version: 3.8.3
-  resolution: "oauth4webapi@npm:3.8.3"
-  checksum: 10/8cd3209bef3f556d083da509c79a53880fd401be36c4bba18fecb3bc89f588baee4310eeb489a34e349d4a420cea52a934e61d483b828020eeefa28a109a7cf0
+"oauth4webapi@npm:^3.8.4":
+  version: 3.8.4
+  resolution: "oauth4webapi@npm:3.8.4"
+  checksum: 10/254a8c17e1c150f727cffc262d5e56d7d42e27474011a1a8cb9b7192d96747a10a7ab9ecddac02f2dd035f6580c456fb46f266d2e982bef16fb2857be3982b6e
   languageName: node
   linkType: hard
 
@@ -13774,13 +13665,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openid-client@npm:6.8.1":
-  version: 6.8.1
-  resolution: "openid-client@npm:6.8.1"
+"openid-client@npm:6.8.2":
+  version: 6.8.2
+  resolution: "openid-client@npm:6.8.2"
   dependencies:
-    jose: "npm:^6.1.0"
-    oauth4webapi: "npm:^3.8.2"
-  checksum: 10/94d18d39f8e9d4a194acdba85793a1e39a0f6fe50fdf2bdea4aa57409da629a8966a3673738510c5e9f6a32715259e26fb6e56e83b1b8d2de31346353aa437ad
+    jose: "npm:^6.1.3"
+    oauth4webapi: "npm:^3.8.4"
+  checksum: 10/5d30ff2419c4847d0037c43cf136dd7189b16399aaee98faaad5bcea105c4e1e4e43d2dac1141ea77049b446b50d1b26f2bb882f717b3e38a5f996645abfc1d0
   languageName: node
   linkType: hard
 
