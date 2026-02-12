@@ -2,7 +2,14 @@ import { ApiPath } from 'app/apiConfig';
 import { PunchFormActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
-import { convertResponseToError, get, post, put } from 'app/utils';
+import {
+    convertProblemDetailToError,
+    convertResponseToError,
+    get,
+    getValidationErrorsFromProblemDetail,
+    post,
+    put,
+} from 'app/utils';
 
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IPSBSoknadKvittering } from '../../models/types/PSBSoknadKvittering';
@@ -359,15 +366,22 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
             { 'X-Nav-NorskIdent': norskIdent },
             requestBody,
             (response, responseData) => {
+                const error = convertProblemDetailToError(response, responseData);
                 switch (response.status) {
                     case 202:
                         return dispatch(submitSoknadSuccessAction(responseData, response.headers.get('Location')));
-                    case 400:
-                        return dispatch(submitSoknadUncompleteAction(responseData.feil));
+                    case 400: {
+                        const errors = getValidationErrorsFromProblemDetail<IInputError>(responseData);
+                        if (errors.length > 0) {
+                            return dispatch(submitSoknadUncompleteAction(errors));
+                        }
+
+                        return dispatch(submitSoknadErrorAction(error));
+                    }
                     case 409:
-                        return dispatch(submitSoknadConflictAction(responseData));
+                        return dispatch(submitSoknadConflictAction(error));
                     default:
-                        return dispatch(submitSoknadErrorAction(convertResponseToError(response)));
+                        return dispatch(submitSoknadErrorAction(error));
                 }
             },
         );

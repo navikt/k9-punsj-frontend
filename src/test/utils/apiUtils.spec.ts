@@ -1,5 +1,14 @@
 import { ApiPath } from '../../app/apiConfig';
-import { apiUrl, convertResponseToError, get, post, put } from '../../app/utils/apiUtils';
+import {
+    apiUrl,
+    convertProblemDetailToError,
+    convertResponseToError,
+    get,
+    getProblemDetailArrayProperty,
+    parseProblemDetail,
+    post,
+    put,
+} from '../../app/utils/apiUtils';
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
@@ -181,5 +190,84 @@ describe('convertResponseToError', () => {
             status,
             statusText,
         });
+    });
+});
+
+describe('parseProblemDetail', () => {
+    it('Returns undefined for non object values', () => {
+        expect(parseProblemDetail(undefined)).toBeUndefined();
+        expect(parseProblemDetail('error')).toBeUndefined();
+        expect(parseProblemDetail(123)).toBeUndefined();
+    });
+
+    it('Returns problem detail for object values', () => {
+        const problemDetail = { type: '/problem-details/test', detail: 'Noe gikk galt' };
+        expect(parseProblemDetail(problemDetail)).toEqual(problemDetail);
+    });
+});
+
+describe('getProblemDetailArrayProperty', () => {
+    it('Reads array property from top level', () => {
+        const problemDetail = parseProblemDetail({
+            type: '/problem-details/innsending-validering-feil',
+            feil: [{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }],
+        });
+
+        expect(getProblemDetailArrayProperty(problemDetail, 'feil')).toEqual([
+            { felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' },
+        ]);
+    });
+
+    it('Reads array property from properties', () => {
+        const problemDetail = parseProblemDetail({
+            type: '/problem-details/innsending-validering-feil',
+            properties: {
+                feil: [{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }],
+            },
+        });
+
+        expect(getProblemDetailArrayProperty(problemDetail, 'feil')).toEqual([
+            { felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' },
+        ]);
+    });
+});
+
+describe('convertProblemDetailToError', () => {
+    it('Builds error from top level ProblemDetail fields', () => {
+        const error = convertProblemDetailToError(
+            { status: 500, statusText: 'Internal Server Error', url: '/api/test' },
+            {
+                type: '/problem-details/innsending-feil',
+                title: 'Feil ved innsending av søknad',
+                detail: 'Detaljert melding',
+            },
+        );
+
+        expect(error).toEqual(
+            expect.objectContaining({
+                status: 500,
+                statusText: 'Internal Server Error',
+                url: '/api/test',
+                message: 'Detaljert melding',
+                feil: '/problem-details/innsending-feil',
+            }),
+        );
+    });
+
+    it('Uses title when detail is missing', () => {
+        const error = convertProblemDetailToError(
+            { status: 400, statusText: 'Bad Request', url: '/api/test' },
+            {
+                type: '/problem-details/innsending-validering-feil',
+                title: 'Ugyldig søknad for innsending',
+            },
+        );
+
+        expect(error).toEqual(
+            expect.objectContaining({
+                message: 'Ugyldig søknad for innsending',
+                feil: '/problem-details/innsending-validering-feil',
+            }),
+        );
     });
 });

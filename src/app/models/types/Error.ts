@@ -5,6 +5,13 @@ export interface IError {
     message?: string;
     exceptionId?: string;
     feil?: string;
+    raw?: any;
+}
+
+export interface K9ErrorDetail {
+    feilmelding?: string;
+    feilkode?: string | null;
+    type?: string;
 }
 
 export type GetUhaandterteFeil = (kode: string) => (string | undefined)[];

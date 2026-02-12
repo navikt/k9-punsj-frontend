@@ -10,7 +10,7 @@ import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Select, Tag, Text
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
-import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
+import { IError, IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
     hentEksisterendePerioderForSaksnummer,
@@ -737,6 +737,16 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             : undefined;
     };
 
+    private getSubmitErrorMessage(error?: IError): React.ReactNode {
+        if (!error) return null;
+
+        if (error.message) {
+            return error.message;
+        }
+
+        return <FormattedMessage id="skjema.feil.ikke_sendt" />;
+    }
+
     private updateSoknadState = (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState((prevState) => ({
@@ -1382,15 +1392,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 )}
 
                 {!!punchFormState.submitSoknadError && (
-                    <Alert variant="error">
-                        <FormattedMessage id="skjema.feil.ikke_sendt" />
-                    </Alert>
+                    <Alert variant="error">{this.getSubmitErrorMessage(punchFormState.submitSoknadError)}</Alert>
                 )}
 
                 {!!punchFormState.submitSoknadConflict && (
                     <Alert variant="error">
-                        {punchFormState.submitSoknadConflict.feil ||
-                            punchFormState.submitSoknadConflict.message ||
+                        {punchFormState.submitSoknadConflict.message ||
+                            punchFormState.submitSoknadConflict.feil ||
                             intlHelper(intl, 'skjema.feil.konflikt')}
                     </Alert>
                 )}

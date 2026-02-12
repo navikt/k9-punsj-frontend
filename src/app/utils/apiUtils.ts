@@ -143,7 +143,79 @@ export function put(
     });
 }
 
+// TODO Depricate
 export function convertResponseToError(response: Partial<Response>): IError {
     const { status, statusText, url } = response;
     return { status, statusText, url };
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;
+
+const normalizeText = (value: unknown): string | undefined => {
+    if (typeof value !== 'string') return undefined;
+    const normalized = value.trim();
+    return normalized.length > 0 ? normalized : undefined;
+};
+
+export interface ProblemDetailPayload {
+    type?: string;
+    title?: string;
+    status?: number;
+    detail?: unknown;
+    instance?: string;
+    correlationId?: string;
+    properties?: Record<string, unknown>;
+    [key: string]: unknown;
+}
+
+export const parseProblemDetail = (data: unknown): ProblemDetailPayload | undefined => {
+    if (!isRecord(data)) return undefined;
+    return data as ProblemDetailPayload;
+};
+
+const getProblemDetailValue = (problemDetail: ProblemDetailPayload | undefined, key: string): unknown => {
+    if (!problemDetail) return undefined;
+    const topLevelValue = problemDetail[key];
+    if (topLevelValue !== undefined) return topLevelValue;
+
+    if (isRecord(problemDetail.properties)) {
+        return problemDetail.properties[key];
+    }
+
+    return undefined;
+};
+
+export const getProblemDetailArrayProperty = <T = unknown>(
+    problemDetail: ProblemDetailPayload | undefined,
+    key: string,
+): T[] => {
+    const value = getProblemDetailValue(problemDetail, key);
+    return Array.isArray(value) ? (value as T[]) : [];
+};
+
+export const getValidationErrorsFromProblemDetail = <T = unknown>(responseData?: unknown): T[] => {
+    const problemDetail = parseProblemDetail(responseData);
+    return getProblemDetailArrayProperty<T>(problemDetail, 'feil');
+};
+
+export function convertProblemDetailToError(response: Partial<Response>, responseData?: unknown): IError {
+    const { status, statusText, url } = response;
+
+    const problemDetail = parseProblemDetail(responseData);
+    const message =
+        normalizeText(problemDetail?.detail) ||
+        normalizeText(problemDetail?.title) ||
+        statusText ||
+        'Ukjent feil';
+
+    const problemType = normalizeText(problemDetail?.type);
+
+    return {
+        status,
+        statusText,
+        url,
+        message,
+        feil: problemType,
+        raw: responseData,
+    };
 }
