@@ -1,3 +1,66 @@
+.punch_mappemodal_knapperad {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.punch_mappemodal_knapperad .knapp1.navds-button {
+  margin-right: 0.5rem;
+}
+
+.punch_mappemodal_knapperad .knapp2.navds-button {
+  margin-left: 0.5rem;
+}
+
+.read-modal {
+  margin-bottom: 1rem;
+}
+
+.read-modal ul {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+
+.read-modal .row {
+  border-bottom: 1px solid #00000026;
+}
+
+.read-modal .alertstripe {
+  margin: 0 0 1rem;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.read-modal .alertstripe .alertstripe__tekst {
+  max-width: unset;
+}
+
+.read-modal .col {
+  margin: 0 0.5rem;
+}
+
+.read-modal .col:first-child {
+  padding-right: 0.5rem;
+  padding-left: 0;
+  margin: 0;
+}
+
+.read-modal .col:last-child {
+  margin-right: 0 !important;
+}
+
+.read-modal.enkel .col:first-child {
+  flex-grow: 1;
+}
+
+.read-modal.enkel .col:last-child {
+  flex-grow: 2;
+}
+
+.read-modal .periodeliste {
+  padding-left: 1rem;
+  margin: 0;
+}
+
 .punch {
   max-width: 100%;
   margin: 0;
@@ -10,6 +73,10 @@
 
 .punch h1 {
   width: 100%;
+}
+
+.punch .bold-label label {
+  font-weight: bold;
 }
 
 .punch .input-row {
@@ -176,6 +243,14 @@
   width: 100%;
 }
 
+.punch .panels-wrapper .punch_form.navds-box .listepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel {
+  background-color: #eaeaea;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
 .punch .panels-wrapper .punch_form.navds-box .frilanserpanel,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel {
   background-color: #eaeaea;
@@ -184,7 +259,7 @@
 
 .punch .panels-wrapper .punch_form.navds-box .frilanserpanel .listepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .listepanel {
-  margin: 0.5rem 0 0 -1rem;
+  margin: 0.5rem 0 1rem -1rem;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .frilanserpanel .frilanser-startdato,
@@ -244,7 +319,7 @@
 
 .punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .listepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .listepanel {
-  margin: 0.5rem 0 0 -1rem;
+  margin: 0.5rem 0 1rem -1rem;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .sn-startdatocontainer,
@@ -317,16 +392,6 @@
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon {
   margin-right: 0.5rem;
 }
-
-/* stylelint-disable no-descending-specificity */
-.punch .panels-wrapper .punch_form.navds-box .listepanel,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel {
-  background-color: #eaeaea;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 5px;
-}
-/* stylelint-enable no-descending-specificity */
 
 .punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .container,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .container {
@@ -419,11 +484,6 @@
   color: #6a6a6a;
 }
 
-/* stylelint-disable-next-line no-descending-specificity */
-.punch .bold-label label {
-  font-weight: bold;
-}
-
 .ReactModal__Content {
   width: 50%;
   border: 1px solid #0067c5;
@@ -439,6 +499,10 @@
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
+}
+
+.read-modal ul p {
+  margin: 0;
 }
 
 .flex-container {
@@ -458,75 +522,6 @@
   width: 100%;
 }
 
-.punch_mappemodal_knapperad {
-  margin-top: 1rem;
-  display: flex;
-}
-
-/* stylelint-disable-next-line no-descending-specificity */
-.punch_mappemodal_knapperad .knapp1.navds-button {
-  margin-right: 0.5rem;
-}
-
-.punch_mappemodal_knapperad .knapp2.navds-button {
-  margin-left: 0.5rem;
-}
-
-.read-modal {
-  margin-bottom: 1rem;
-}
-
-.read-modal ul {
-  margin: 0;
-  padding-inline-start: 20px;
-}
-
-.read-modal ul p {
-  margin: 0;
-}
-
-.read-modal .row {
-  border-bottom: 1px solid #00000026;
-}
-
-/* stylelint-disable no-descending-specificity */
-.read-modal .col:first-child {
-  padding-right: 0.5rem;
-  padding-left: 0;
-  margin: 0;
-}
-
-.read-modal .alertstripe {
-  margin: 0 0 1rem;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.read-modal .alertstripe .alertstripe__tekst {
-  max-width: unset;
-}
-
-.read-modal .col {
-  margin: 0 0.5rem;
-}
-
-.read-modal .col:last-child {
-  margin-right: 0 !important;
-}
-
-.read-modal.enkel .col:first-child {
-  flex-grow: 1;
-}
-
-.read-modal.enkel .col:last-child {
-  flex-grow: 2;
-}
-/* stylelint-enable no-descending-specificity */
-
-.read-modal .periodeliste {
-  padding-left: 1rem;
-  margin: 0;
-}
 
 .validertSoknadOppsummeringContainerKnapper {
   display: flex;
