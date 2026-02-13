@@ -25,10 +25,6 @@
         text-decoration-line: underline;
         color: #0067c5;
         cursor: pointer;
-
-        .leggtilcircle {
-            margin-right: 0.5rem;
-        }
     }
 
     .soknadsperiodecontainer {

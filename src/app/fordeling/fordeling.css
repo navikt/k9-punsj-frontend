@@ -40,14 +40,6 @@
     max-width: unset;
 }
 
-.fordeling-page .fordeling-page__sjekk-til-K9-journalpost-stottes-ikke .alertstripe {
-    margin-left: 0;
-}
-
-.fordeling-page .fordeling-page__gosysGjelderKategorier > .alertstripe {
-    margin-left: 0;
-}
-
 .fordeling-page .punkliste {
     margin: 0;
     padding: 0 0 0 1.25rem;

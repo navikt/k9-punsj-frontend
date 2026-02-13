@@ -143,10 +143,6 @@
   padding-left: 0;
 }
 
-.calendarGrid--grid .calendarGrid__date_label {
-  display: none;
-}
-
 .calendarGrid--grid .calendarGrid__date__full {
   display: none;
 }
@@ -296,8 +292,4 @@
     padding-bottom: 0;
     border-bottom: none;
   }
-}
-
-.calendarGrid .dagContent {
-  font-weight: bold;
 }

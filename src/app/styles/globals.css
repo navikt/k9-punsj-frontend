@@ -38,16 +38,8 @@ body {
     }
 }
 
-.margin-top-1 {
-    @apply mt-4;
-}
-
 .venstrestilt {
     margin-right: 50%;
-}
-
-.lengre-periode-modal {
-    @apply w-[570px];
 }
 
 .fom-tom-rad {
