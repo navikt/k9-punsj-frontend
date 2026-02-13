@@ -346,32 +346,7 @@
 }
 
 .punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp {
-  font-family: 'Source Sans Pro', Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1.375rem;
-  font-weight: 400;
-  background: none;
-  border: none;
-  padding: 0;
-  display: inline-flex;
-  margin: 1rem 0 0;
-  color: #0067c5;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon {
-  margin-right: 0.5rem;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .periodepanel,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel {
-  background-color: #eaeaea;
-  margin: 1rem 0;
-}
-
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp,
 .punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode {
   font-family: 'Source Sans Pro', Arial, sans-serif;
@@ -388,17 +363,17 @@
   cursor: pointer;
 }
 
+.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
 .punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon {
   margin-right: 0.5rem;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .container,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .container {
-  text-align: left;
-  padding-top: 0;
-  padding-left: 0;
-  margin-left: 0;
+.punch .panels-wrapper .punch_form.navds-box .periodepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel {
+  background-color: #eaeaea;
+  margin: 1rem 0;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .col,
