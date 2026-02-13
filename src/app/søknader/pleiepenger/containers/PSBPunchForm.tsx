@@ -63,6 +63,7 @@ import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
+import { getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
@@ -632,110 +633,23 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return false;
     };
 
-    private getUhåndterteFeil = (attribute: string): (string | undefined)[] => {
-        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
+    private resolveUnhandledErrors = (attribute: string): (string | undefined)[] =>
+        getUnhandledErrors({
+            attribute,
+            inputErrors: this.getManglerFromStore(),
+            feilmeldingStier: this.state.feilmeldingStier,
         });
 
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
-        }
-        return [];
-    };
-
-    private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett } = this.state.soknad;
-
-        const erFremITid = (dato: string) => new Date() < new Date(dato);
-
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
-        }
-
-        if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute === 'klokkeslett' && klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute.includes('endringAvSøknadsperioder.perioder') && indeks !== undefined) {
-            const newAttr = `ytelse.trekkKravPerioder[${indeks}]`;
-
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        if (attribute === 'alleTrekkKravPerioderFeilmelding') {
-            const newAttr = `ytelse.trekkKravPerioder.perioder`;
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        const regex = /\[\d+\]/;
-        if (attribute.includes('ytelse.søknadsperiode') && regex.test(attribute) && indeks !== undefined) {
-            const newAttr = `ytelse.søknadsperiode[${indeks}]`;
-
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        if (attribute === 'ytelse.uttak.perioder') {
-            const newAttr = `ytelse.søknadsperiode.perioder`;
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        if (errorMsg) {
-            if (errorMsg.startsWith('Mangler søknadsperiode')) {
-                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode');
-            }
-            if (attribute === 'nattevåk' || attribute === 'beredskap' || attribute === 'lovbestemtFerie') {
-                return errorMsg;
-            }
-        }
-
-        return errorMsg
-            ? intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
-              )
-            : undefined;
-    };
+    private getErrorMessage = (attribute: string, indeks?: number) =>
+        getPSBErrorMessage({
+            attribute,
+            indeks,
+            inputErrors: this.getManglerFromStore(),
+            mottattDato: this.state.soknad.mottattDato,
+            klokkeslett: this.state.soknad.klokkeslett,
+            erFremITidKlokkeslett: this.erFremITidKlokkeslett,
+            intl: this.props.intl,
+        });
 
     private getSubmitErrorMessage(error?: IError): React.ReactNode {
         if (!error) return null;
@@ -908,7 +822,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 className="beredskapsperioder"
                 panelClassName="beredskapspanel"
                 getErrorMessage={this.getErrorMessage}
-                getUhaandterteFeil={this.getUhåndterteFeil}
+                getUhaandterteFeil={this.resolveUnhandledErrors}
                 feilkodeprefiks="ytelse.beredskap"
                 kanHaFlere
                 medSlettKnapp={false}
@@ -928,7 +842,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 className="nattevaaksperioder"
                 panelClassName="nattevaakspanel"
                 getErrorMessage={this.getErrorMessage}
-                getUhaandterteFeil={this.getUhåndterteFeil}
+                getUhaandterteFeil={this.resolveUnhandledErrors}
                 feilkodeprefiks="ytelse.nattevåk"
                 kanHaFlere
                 medSlettKnapp={false}
@@ -948,7 +862,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
-                    getUhaandterteFeil={this.getUhåndterteFeil}
+                    getUhaandterteFeil={this.resolveUnhandledErrors}
                     soknad={soknad}
                     punchFormState={punchFormState}
                 />
@@ -1037,7 +951,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     className="utenlandsopphold"
                                     panelClassName="utenlandsoppholdpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1072,7 +986,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
                                     doNotShowBorders
@@ -1110,7 +1024,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                         )
                                                     }
                                                     getErrorMessage={() => undefined}
-                                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
                                                 />
@@ -1131,7 +1045,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         updateSoknad={this.updateSoknad}
                         updateSoknadState={this.updateSoknadState}
                         getErrorMessage={this.getErrorMessage}
-                        getUhaandterteFeil={this.getUhåndterteFeil}
+                        getUhaandterteFeil={this.resolveUnhandledErrors}
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
@@ -1302,7 +1216,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     className="bosteder"
                                     panelClassName="bostederpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1348,7 +1262,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer twentyPx />
 
-                {this.getUhåndterteFeil('')
+                {this.resolveUnhandledErrors('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
                         <Feilmelding key={feilmelding} feil={feilmelding} />

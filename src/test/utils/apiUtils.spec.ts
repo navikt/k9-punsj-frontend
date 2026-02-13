@@ -5,6 +5,7 @@ import {
     convertResponseToError,
     get,
     getProblemDetailArrayProperty,
+    getValidationErrorsFromProblemDetail,
     parseProblemDetail,
     post,
     put,
@@ -229,6 +230,30 @@ describe('getProblemDetailArrayProperty', () => {
         expect(getProblemDetailArrayProperty(problemDetail, 'feil')).toEqual([
             { felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' },
         ]);
+    });
+});
+
+describe('getValidationErrorsFromProblemDetail', () => {
+    it('Reads validation errors from top level feil', () => {
+        const errors = getValidationErrorsFromProblemDetail({
+            feil: [{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }],
+        });
+
+        expect(errors).toEqual([{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }]);
+    });
+
+    it('Reads validation errors from properties.feil', () => {
+        const errors = getValidationErrorsFromProblemDetail({
+            properties: {
+                feil: [{ felt: 'ytelse.arbeidstid', feilmelding: 'Ugyldig verdi' }],
+            },
+        });
+
+        expect(errors).toEqual([{ felt: 'ytelse.arbeidstid', feilmelding: 'Ugyldig verdi' }]);
+    });
+
+    it('Returns empty array when feil is missing', () => {
+        expect(getValidationErrorsFromProblemDetail({ detail: 'Feil uten valideringsliste' })).toEqual([]);
     });
 });
 

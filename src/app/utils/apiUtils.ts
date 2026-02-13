@@ -1,6 +1,6 @@
 import { String } from 'typescript-string-operations';
 
-import { IError } from 'app/models/types';
+import { ApiProblemDetail, IError } from 'app/models/types';
 import { ROUTES } from 'app/constants/routes';
 
 import { canStringBeParsedToJSON } from './formatUtils';
@@ -157,23 +157,18 @@ const normalizeText = (value: unknown): string | undefined => {
     return normalized.length > 0 ? normalized : undefined;
 };
 
-export interface ProblemDetailPayload {
-    type?: string;
-    title?: string;
-    status?: number;
-    detail?: unknown;
-    instance?: string;
-    correlationId?: string;
-    properties?: Record<string, unknown>;
-    [key: string]: unknown;
-}
-
-export const parseProblemDetail = (data: unknown): ProblemDetailPayload | undefined => {
+/**
+ * Safely narrows unknown response data to a ProblemDetail like object.
+ *
+ * @param data response body from API
+ * @returns ProblemDetail when body is object shaped, otherwise undefined
+ */
+export const parseProblemDetail = (data: unknown): ApiProblemDetail | undefined => {
     if (!isRecord(data)) return undefined;
-    return data as ProblemDetailPayload;
+    return data as ApiProblemDetail;
 };
 
-const getProblemDetailValue = (problemDetail: ProblemDetailPayload | undefined, key: string): unknown => {
+const getProblemDetailValue = (problemDetail: ApiProblemDetail | undefined, key: string): unknown => {
     if (!problemDetail) return undefined;
     const topLevelValue = problemDetail[key];
     if (topLevelValue !== undefined) return topLevelValue;
@@ -185,19 +180,41 @@ const getProblemDetailValue = (problemDetail: ProblemDetailPayload | undefined, 
     return undefined;
 };
 
+/**
+ * Reads array property from ProblemDetail.
+ * Supports both top level fields and `properties` fields.
+ *
+ * @param problemDetail parsed ProblemDetail
+ * @param key property name to read
+ * @returns array value for the key or empty array
+ */
 export const getProblemDetailArrayProperty = <T = unknown>(
-    problemDetail: ProblemDetailPayload | undefined,
+    problemDetail: ApiProblemDetail | undefined,
     key: string,
 ): T[] => {
     const value = getProblemDetailValue(problemDetail, key);
     return Array.isArray(value) ? (value as T[]) : [];
 };
 
+/**
+ * Extracts validation error list from ProblemDetail.
+ * Reads `feil` from top level or from `properties.feil`.
+ *
+ * @param responseData raw API response body
+ * @returns validation errors, empty array when missing
+ */
 export const getValidationErrorsFromProblemDetail = <T = unknown>(responseData?: unknown): T[] => {
     const problemDetail = parseProblemDetail(responseData);
     return getProblemDetailArrayProperty<T>(problemDetail, 'feil');
 };
 
+/**
+ * Converts ProblemDetail response to internal `IError` shape for store usage.
+ *
+ * @param response fetch response metadata
+ * @param responseData raw API response body
+ * @returns normalized error payload
+ */
 export function convertProblemDetailToError(response: Partial<Response>, responseData?: unknown): IError {
     const { status, statusText, url } = response;
 
