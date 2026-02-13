@@ -72,6 +72,7 @@ body {
 
 .slett-knapp-med-icon-for-input {
     @apply ml-4 text-red-600 decoration-red-600 p-0 !important;
+
     margin-top: 3.2rem;
 }
 
@@ -79,6 +80,7 @@ body {
 .slett-knapp-med-icon-for-input:focus,
 .slett-knapp-med-icon-for-input:active {
     @apply bg-transparent text-red-600  decoration-red-600 !important;
+
     background-color: transparent !important;
     color: #dc2626 !important;
     text-decoration-color: #dc2626 !important;
@@ -92,6 +94,7 @@ body {
 .slett-knapp-med-icon:focus,
 .slett-knapp-med-icon:active {
     @apply bg-transparent text-red-600 underline decoration-red-600 !important;
+
     background-color: transparent !important;
     color: #dc2626 !important;
     text-decoration: underline !important;
@@ -115,6 +118,7 @@ body {
 /* Tilpassede scrollbar-stiler med Aksel-farger */
 .custom-scrollbar {
     @apply overflow-y-auto;
+
     scrollbar-width: thin;
     scrollbar-color: var(--a-gray-400) var(--a-gray-100);
 }
@@ -140,6 +144,7 @@ body {
 .custom-button-internal-header {
     color: white !important;
     background-color: grey !important;
+
     &:hover {
         background-color: darkgray !important;
     }
