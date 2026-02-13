@@ -7,3 +7,4 @@
 - Migrerte `src/app/components/pdf/pdfVisning.less` til `src/app/components/pdf/pdfVisning.css` og oppdaterte import i `src/app/components/pdf/PdfVisning.tsx`.
 - Migrerte `src/app/components/soknadKvittering/visningAvPerioderSoknadKvittering.less` til `src/app/components/soknadKvittering/visningAvPerioderSoknadKvittering.css`, oppdaterte importer i kvitteringskomponentene og rettet `lessClassForAdjustment` slik at justeringsklassen faktisk brukes i `classNames`.
 - Migrerte `src/app/components/calendar/calendarGrid.less` til `src/app/components/calendar/calendarGrid.css` og oppdaterte import i `src/app/components/calendar/CalendarGrid.tsx`.
+- Migrerte `src/app/components/punchPage.less` til `src/app/components/punchPage.css` og oppdaterte import i `src/app/components/JournalpostOgPdfVisning.tsx`.
