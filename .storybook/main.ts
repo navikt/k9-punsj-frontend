@@ -1,7 +1,13 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import path, { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -15,9 +21,6 @@ const storybookConfig: StorybookConfig = {
     stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
     addons: [
         getAbsolutePath('@storybook/addon-webpack5-compiler-swc'),
-        getAbsolutePath('@storybook/addon-essentials'),
-        getAbsolutePath('@storybook/addon-interactions'),
-        'storybook-addon-fetch-mock',
     ],
     framework: {
         name: getAbsolutePath('@storybook/react-webpack5'),
