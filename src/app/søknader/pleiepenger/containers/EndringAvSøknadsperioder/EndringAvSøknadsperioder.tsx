@@ -7,7 +7,7 @@ import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 
-import './endringAvSøknadsperioder.less';
+import './endringAvSøknadsperioder.css';
 
 interface Props {
     isOpen: boolean;

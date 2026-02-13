@@ -10,7 +10,7 @@ import { initializeDate } from 'app/utils';
 import { GetUhaandterteFeil, IPSBSoknad, IPeriode, IPunchPSBFormState } from 'app/models/types';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 
-import './soknadsperioder.less';
+import './soknadsperioder.css';
 
 interface Props {
     soknad: IPSBSoknad;

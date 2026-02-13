@@ -10,7 +10,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOverlapUtils';
 import { Periodepaneler } from '../Periodepaneler';
 
-import './endringAvSøknadsperioder.less';
+import './endringAvSøknadsperioder.css';
 
 interface EndringAvSøknadsperioderProps {
     isOpen: boolean;

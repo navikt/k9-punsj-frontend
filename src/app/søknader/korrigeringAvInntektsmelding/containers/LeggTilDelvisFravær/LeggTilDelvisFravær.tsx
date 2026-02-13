@@ -17,7 +17,7 @@ import {
 import useFocus from '../../../../hooks/useFocus';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
-import './LeggTilDelvisFravær.less';
+import './LeggTilDelvisFravær.css';
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();

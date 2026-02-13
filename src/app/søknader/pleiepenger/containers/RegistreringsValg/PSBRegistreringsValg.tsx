@@ -12,7 +12,7 @@ import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } 
 import EksisterendeSoknader from '../EksisterendePSBSoknader';
 import { Dispatch } from 'redux';
 
-import './pSBRegistreringsValg.less';
+import './pSBRegistreringsValg.css';
 
 interface Props {
     journalpostid: string;

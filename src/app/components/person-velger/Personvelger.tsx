@@ -9,7 +9,7 @@ import { Person } from 'app/models/types';
 import { Personvalg } from 'app/models/types/Personvalg';
 
 import PersonLinje from './PersonLinje';
-import './personvelger.less';
+import './personvelger.css';
 
 interface OwnProps {
     handleBlur?: (callback: () => any) => void;
