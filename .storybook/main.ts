@@ -18,7 +18,7 @@ function getAbsolutePath(value: string): any {
 }
 
 const storybookConfig: StorybookConfig = {
-    stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+    stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
     addons: [
         getAbsolutePath('@storybook/addon-webpack5-compiler-swc'),
     ],
