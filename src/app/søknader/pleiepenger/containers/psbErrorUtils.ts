@@ -77,21 +77,11 @@ const shouldUseRawMessage = (errorMessage: string): boolean => {
     return !/^[A-Za-z0-9_.-]+$/.test(errorMessage);
 };
 
-/**
- * Returns errors that belong to the current field path and are not already
- * handled by a more specific field mapping.
- *
- * @param params function parameters
- * @param params.attribute current field path in the form
- * @param params.inputErrors validation errors from store
- * @param params.feilmeldingStier field paths already handled elsewhere in the UI
- * @returns list of unhandled errors formatted for display
- */
-export const getUnhandledErrors = ({
+function resolveUnhandledErrorEntries({
     attribute,
     inputErrors,
     feilmeldingStier,
-}: GetUnhandledErrorsParams): (string | undefined)[] => {
+}: GetUnhandledErrorsParams): IInputError[] {
     const normalizedAttribute = normalizePath(attribute) || '';
     const normalizedHandledPaths = new Set(
         [...feilmeldingStier]
@@ -115,12 +105,52 @@ export const getUnhandledErrors = ({
         return false;
     });
 
-    if (unhandledErrors && unhandledErrors.length > 0) {
+    return unhandledErrors || [];
+}
+
+/**
+ * Returns errors that belong to the current field path and are not already
+ * handled by a more specific field mapping.
+ *
+ * @param params function parameters
+ * @param params.attribute current field path in the form
+ * @param params.inputErrors validation errors from store
+ * @param params.feilmeldingStier field paths already handled elsewhere in the UI
+ * @returns list of unhandled errors formatted for display
+ */
+export const getUnhandledErrors = ({
+    attribute,
+    inputErrors,
+    feilmeldingStier,
+}: GetUnhandledErrorsParams): (string | undefined)[] => {
+    const unhandledErrors = resolveUnhandledErrorEntries({
+        attribute,
+        inputErrors,
+        feilmeldingStier,
+    });
+
+    if (unhandledErrors.length > 0) {
         return unhandledErrors
             .map((error) => error.feilmelding || error.felt)
             .filter((errorMessage): errorMessage is string => !!errorMessage);
     }
     return [];
+};
+
+/**
+ * Returns unhandled input errors for the current field path.
+ * Keeps original `felt` and `feilmelding` so callers can add richer UI behavior.
+ */
+export const getUnhandledErrorEntries = ({
+    attribute,
+    inputErrors,
+    feilmeldingStier,
+}: GetUnhandledErrorsParams): IInputError[] => {
+    return resolveUnhandledErrorEntries({
+        attribute,
+        inputErrors,
+        feilmeldingStier,
+    });
 };
 
 /**

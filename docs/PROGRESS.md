@@ -5,6 +5,8 @@
 - Erstattet nederste valideringsliste i PSB med `ErrorSummary` fra Aksel for konsistent feilvisning.
 - Fjernet separat `Alert` for `inputErrors` i PSB for å unngå dobbel feilkommunikasjon.
 - La inn fallback i PSB slik at `validateSoknadError.message` vises i `ErrorSummary` når backend ikke returnerer feltlisten `feil`.
+- La til `href` i PSB `ErrorSummary` der feilsti kan mappes til konkret felt.
+- Innførte stabile input-id-er for periodefelt og landfelt i PSB slik at feillenker peker til riktig kontroll.
 - Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
 
 ## 12.02.2026

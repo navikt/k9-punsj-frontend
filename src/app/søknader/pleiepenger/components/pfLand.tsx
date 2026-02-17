@@ -8,6 +8,7 @@ import {
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { createLandInputId } from '../utils/errorAnchorUtils';
 
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { IOppholdsLand } from 'app/models/types/PSBSoknad';
@@ -29,6 +30,7 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         return (
             <div className="countryselect">
                 <CountrySelect
+                    id={createLandInputId(feilprefiks, feltindeks, `index-${periodeindex}`)}
                     label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
                     unselectedoption="Velg land"
                     selectedcountry={land || ''}

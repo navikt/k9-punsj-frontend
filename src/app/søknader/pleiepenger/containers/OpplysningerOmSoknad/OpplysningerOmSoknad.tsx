@@ -50,6 +50,7 @@ const OpplysningerOmSoknad: React.FC<Props> = ({
 
             <div>
                 <TextField
+                    id="soknad-klokkeslett"
                     value={soknad.klokkeslett || ''}
                     type="time"
                     className="klokkeslett"

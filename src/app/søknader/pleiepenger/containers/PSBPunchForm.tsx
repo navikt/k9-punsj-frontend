@@ -61,7 +61,7 @@ import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
-import { getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
+import { getPSBErrorMessage, getUnhandledErrorEntries, getUnhandledErrors } from './psbErrorUtils';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
@@ -74,6 +74,13 @@ import { IFellesState } from 'app/state/reducers/FellesReducer';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import {
+    createLandInputId,
+    createPeriodInputIds,
+    parsePeriodFeltPath,
+    periodKeyFromPeriode,
+    resolvePeriodInputPart,
+} from '../utils/errorAnchorUtils';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -649,6 +656,95 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
     };
 
+    private resolveUnhandledErrorEntries = (attribute: string): IInputError[] => {
+        this.registerFeilmeldingsti(attribute);
+
+        return getUnhandledErrorEntries({
+            attribute,
+            inputErrors: this.getManglerFromStore(),
+            feilmeldingStier: this.state.feilmeldingStier,
+        });
+    };
+
+    private getPerioderForFeilstiPrefix = (prefix: string): IPeriode[] | undefined => {
+        switch (prefix) {
+            case 'ytelse.søknadsperiode':
+            case 'ytelse.uttak':
+                return this.state.soknad.soeknadsperiode;
+            case 'ytelse.lovbestemtFerie':
+                return this.state.soknad.lovbestemtFerie;
+            case 'endringAvSøknadsperioder':
+                return this.state.soknad.trekkKravPerioder;
+            case 'ytelse.bosteder':
+                return this.state.soknad.bosteder
+                    ?.map((bosted) => bosted.periode)
+                    .filter((periode): periode is IPeriode => !!periode);
+            case 'ytelse.utenlandsopphold': {
+                const utenlandsopphold =
+                    this.state.soknad.utenlandsoppholdV2?.length > 0
+                        ? this.state.soknad.utenlandsoppholdV2
+                        : this.state.soknad.utenlandsopphold;
+                return utenlandsopphold
+                    ?.map((periodeinfo) => periodeinfo.periode)
+                    .filter((periode): periode is IPeriode => !!periode);
+            }
+            default:
+                return undefined;
+        }
+    };
+
+    private resolvePeriodenokkelForFeilsti = (prefix: string, periodKey: string): string => {
+        if (!/^\d+$/.test(periodKey)) {
+            return periodKey;
+        }
+
+        const perioder = this.getPerioderForFeilstiPrefix(prefix);
+        if (!perioder) {
+            return periodKey;
+        }
+
+        const periode = perioder[Number(periodKey)];
+        return periodKeyFromPeriode(periode) || periodKey;
+    };
+
+    private getValidationErrorHref = (error: IInputError): string | undefined => {
+        const felt = error.felt?.trim();
+        if (!felt) {
+            return undefined;
+        }
+
+        if (felt === 'mottattDato') {
+            return '#soknad-dato';
+        }
+
+        if (felt === 'klokkeslett') {
+            return '#soknad-klokkeslett';
+        }
+
+        const normalizedFelt =
+            felt.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+
+        const parsedPeriodPath = parsePeriodFeltPath(normalizedFelt);
+        if (!parsedPeriodPath) {
+            return undefined;
+        }
+
+        const { prefix, periodKey, suffix } = parsedPeriodPath;
+        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodKey);
+        const normalizedSuffix = suffix?.toLowerCase();
+
+        if (normalizedSuffix === 'land') {
+            return `#${createLandInputId(prefix, resolvedPeriodKey)}`;
+        }
+
+        const periodInputIds = createPeriodInputIds(prefix, resolvedPeriodKey);
+        const periodPart = resolvePeriodInputPart(suffix, error.feilmelding);
+
+        return `#${periodPart === 'tom' ? periodInputIds.tomId : periodInputIds.fomId}`;
+    };
+
     private getErrorMessage = (attribute: string, indeks?: number) => {
         this.registerFeilmeldingsti(attribute);
 
@@ -674,24 +770,39 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private renderValidationSummary = (): React.ReactNode => {
-        const unhandledValidationErrors = this.resolveUnhandledErrors('').filter(
-            (message): message is string => !!message,
-        );
-        const validationSummaryErrors =
-            unhandledValidationErrors.length > 0
-                ? unhandledValidationErrors
-                : this.props.punchFormState.validateSoknadError?.message
-                  ? [this.props.punchFormState.validateSoknadError.message]
-                  : [];
+        const unhandledValidationErrors = this.resolveUnhandledErrorEntries('');
+        const validationSummaryItems = unhandledValidationErrors
+            .map((error) => {
+                const message = error.feilmelding || error.felt;
+                if (!message) {
+                    return undefined;
+                }
 
-        if (validationSummaryErrors.length === 0) {
+                return {
+                    message,
+                    href: this.getValidationErrorHref(error),
+                };
+            })
+            .filter(
+                (summaryItem): summaryItem is { message: string; href?: string } => !!summaryItem && !!summaryItem.message,
+            );
+
+        if (validationSummaryItems.length === 0 && this.props.punchFormState.validateSoknadError?.message) {
+            validationSummaryItems.push({
+                message: this.props.punchFormState.validateSoknadError.message,
+            });
+        }
+
+        if (validationSummaryItems.length === 0) {
             return null;
         }
 
         return (
             <ErrorSummary heading={<FormattedMessage id="skjema.feil.validering" />}>
-                {validationSummaryErrors.map((feilmelding, index) => (
-                    <ErrorSummary.Item key={`${index}-${feilmelding}`}>{feilmelding}</ErrorSummary.Item>
+                {validationSummaryItems.map((item, index) => (
+                    <ErrorSummary.Item key={`${index}-${item.href || 'no-href'}-${item.message}`} href={item.href}>
+                        {item.message}
+                    </ErrorSummary.Item>
                 ))}
             </ErrorSummary>
         );

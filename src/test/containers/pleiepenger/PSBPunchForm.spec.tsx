@@ -24,6 +24,7 @@ import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState'
 import { ISignaturState } from '../../../app/models/types/SignaturState';
 import userEvent from '@testing-library/user-event';
 import { Tidsformat } from '../../../app/utils/timeUtils';
+import { createPeriodInputIds } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -518,6 +519,44 @@ describe('PunchForm', () => {
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
         expect(await screen.findByText('Søknaden inneholder valideringsfeil')).toBeDefined();
+    });
+
+    it('Lenker ErrorSummary til søknadsperiodefelt for uttak-valideringsfeil', async () => {
+        const validateSoknad = jest.fn();
+        const periodKey = '../2029-02-15';
+        const { fomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        soeknadsperiode: [{ fom: '', tom: '2029-02-15' }],
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.uttak.perioder.['../2029-02-15']",
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Fra og med (FOM) må være satt.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'Fra og med (FOM) må være satt.',
+        });
+        expect(summaryLink).toHaveAttribute('href', `#${fomId}`);
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {
