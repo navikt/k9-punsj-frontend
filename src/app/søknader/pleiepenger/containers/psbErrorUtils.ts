@@ -19,6 +19,64 @@ interface GetPSBErrorMessageParams {
     intl: IntlShape;
 }
 
+const normalizePath = (path?: string): string | undefined => {
+    if (!path) return undefined;
+
+    return path
+        .trim()
+        .replace(/\.?\[(?:'[^']*'|"[^"]*"|[^[\]]+)\]/g, '[*]')
+        .replace(/^\.+|\.+$/g, '');
+};
+
+const splitNormalizedPath = (path?: string): string[] => {
+    const normalizedPath = normalizePath(path);
+    return normalizedPath ? normalizedPath.split('.').filter(Boolean) : [];
+};
+
+const pathMatches = (errorPath: string | undefined, attribute: string, mode: 'exact' | 'prefix' = 'exact'): boolean => {
+    const normalizedErrorPath = normalizePath(errorPath);
+    const normalizedAttribute = normalizePath(attribute);
+
+    if (!normalizedErrorPath || !normalizedAttribute) {
+        return false;
+    }
+
+    if (mode === 'exact') {
+        return normalizedErrorPath === normalizedAttribute;
+    }
+
+    return (
+        normalizedErrorPath === normalizedAttribute ||
+        normalizedErrorPath.startsWith(`${normalizedAttribute}.`) ||
+        normalizedErrorPath.startsWith(`${normalizedAttribute}[`)
+    );
+};
+
+const filterMessagesByPath = (
+    inputErrors: IInputError[] | undefined,
+    attribute: string,
+    mode: 'exact' | 'prefix' = 'exact',
+): string[] => {
+    return (
+        inputErrors
+            ?.filter((error) => pathMatches(error.felt, attribute, mode))
+            .map((error) => error.feilmelding)
+            .filter((errorMessage): errorMessage is string => !!errorMessage) ?? []
+    );
+};
+
+const shouldUseRawMessage = (errorMessage: string): boolean => {
+    if (errorMessage.startsWith('skjema.feil.')) {
+        return false;
+    }
+
+    if (errorMessage === 'must not be null') {
+        return false;
+    }
+
+    return !/^[A-Za-z0-9_.-]+$/.test(errorMessage);
+};
+
 /**
  * Returns errors that belong to the current field path and are not already
  * handled by a more specific field mapping.
@@ -34,13 +92,20 @@ export const getUnhandledErrors = ({
     inputErrors,
     feilmeldingStier,
 }: GetUnhandledErrorsParams): (string | undefined)[] => {
+    const normalizedAttribute = normalizePath(attribute) || '';
+    const normalizedHandledPaths = new Set(
+        [...feilmeldingStier]
+            .map((path) => normalizePath(path))
+            .filter((path): path is string => !!path),
+    );
+
     const unhandledErrors = inputErrors?.filter((m: IInputError) => {
-        const felter = m.felt?.split('.') || [];
+        const felter = splitNormalizedPath(m.felt);
         for (let index = felter.length - 1; index >= -1; index--) {
             const felt = felter.slice(0, index + 1).join('.');
-            const andreFeilmeldingStier = new Set(feilmeldingStier);
-            andreFeilmeldingStier.delete(attribute);
-            if (attribute === felt) {
+            const andreFeilmeldingStier = new Set(normalizedHandledPaths);
+            andreFeilmeldingStier.delete(normalizedAttribute);
+            if (normalizedAttribute === felt) {
                 return true;
             }
             if (andreFeilmeldingStier.has(felt)) {
@@ -51,7 +116,9 @@ export const getUnhandledErrors = ({
     });
 
     if (unhandledErrors && unhandledErrors.length > 0) {
-        return unhandledErrors.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
+        return unhandledErrors
+            .map((error) => error.feilmelding || error.felt)
+            .filter((errorMessage): errorMessage is string => !!errorMessage);
     }
     return [];
 };
@@ -93,32 +160,35 @@ export const getPSBErrorMessage = ({
 
     if (attribute.includes('endringAvSøknadsperioder.perioder') && indeks !== undefined) {
         const newAttr = `ytelse.trekkKravPerioder[${indeks}]`;
-        return inputErrors?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]?.feilmelding;
+        return filterMessagesByPath(inputErrors, newAttr, 'prefix')[0];
     }
 
     if (attribute === 'alleTrekkKravPerioderFeilmelding') {
         const newAttr = 'ytelse.trekkKravPerioder.perioder';
-        return inputErrors?.filter((m: IInputError) => m.felt === newAttr)?.[0]?.feilmelding;
+        return filterMessagesByPath(inputErrors, newAttr)[0];
     }
 
     const regex = /\[\d+\]/;
     if (attribute.includes('ytelse.søknadsperiode') && regex.test(attribute) && indeks !== undefined) {
         const newAttr = `ytelse.søknadsperiode[${indeks}]`;
-        return inputErrors?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]?.feilmelding;
+        return filterMessagesByPath(inputErrors, newAttr, 'prefix')[0];
     }
 
     if (attribute === 'ytelse.uttak.perioder') {
         const newAttr = 'ytelse.søknadsperiode.perioder';
-        return inputErrors?.filter((m: IInputError) => m.felt === newAttr)?.[0]?.feilmelding;
+        return filterMessagesByPath(inputErrors, newAttr)[0];
     }
 
-    const errorMsg = inputErrors?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]?.feilmelding;
+    const errorMsg = filterMessagesByPath(inputErrors, attribute)[indeks || 0];
 
     if (errorMsg) {
         if (errorMsg.startsWith('Mangler søknadsperiode')) {
             return intlHelper(intl, 'skjema.feil.søknadsperiode/endringsperiode');
         }
         if (attribute === 'nattevåk' || attribute === 'beredskap' || attribute === 'lovbestemtFerie') {
+            return errorMsg;
+        }
+        if (shouldUseRawMessage(errorMsg)) {
             return errorMsg;
         }
     }

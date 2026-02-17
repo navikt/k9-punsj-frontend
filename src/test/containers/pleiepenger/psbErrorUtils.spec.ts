@@ -26,7 +26,7 @@ describe('psbErrorUtils', () => {
             feilmeldingStier: new Set(['ytelse.arbeidstid', 'ytelse.arbeidstid.perioder[0]']),
         });
 
-        expect(result).toEqual(['ytelse.arbeidstid: Root error']);
+        expect(result).toEqual(['Root error']);
     });
 
     it('returns required error key for missing mottattDato and klokkeslett', () => {
@@ -67,5 +67,41 @@ describe('psbErrorUtils', () => {
         });
 
         expect(result).toBe('skjema.feil.datoMottatt.MAA_SETTES');
+    });
+
+    it('returns direct backend message for plain text field validation error', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.opptjeningAktivitet.frilanser.startdato',
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.frilanser.startdato',
+                    feilmelding: 'Feltet kan ikke være tomt',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Feltet kan ikke være tomt');
+    });
+
+    it('matches period path with dotted bracket notation from backend', () => {
+        const result = getPSBErrorMessage({
+            attribute: "ytelse.bosteder.perioder['../2026-02-24'].land",
+            inputErrors: [
+                {
+                    felt: "ytelse.bosteder.perioder.['../2026-02-24'].land",
+                    feilmelding: 'Feltet kan ikke være tomt',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Feltet kan ikke være tomt');
     });
 });

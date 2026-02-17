@@ -75,6 +75,7 @@ import { pfTilleggsinformasjon } from '../components/pfTilleggsinformasjon';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -633,15 +634,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return false;
     };
 
-    private resolveUnhandledErrors = (attribute: string): (string | undefined)[] =>
-        getUnhandledErrors({
+    private registerFeilmeldingsti = (attribute: string) => {
+        if (!attribute || this.state.feilmeldingStier.has(attribute)) {
+            return;
+        }
+        this.state.feilmeldingStier.add(attribute);
+    };
+
+    private resolveUnhandledErrors = (attribute: string): (string | undefined)[] => {
+        this.registerFeilmeldingsti(attribute);
+
+        return getUnhandledErrors({
             attribute,
             inputErrors: this.getManglerFromStore(),
             feilmeldingStier: this.state.feilmeldingStier,
         });
+    };
 
-    private getErrorMessage = (attribute: string, indeks?: number) =>
-        getPSBErrorMessage({
+    private getErrorMessage = (attribute: string, indeks?: number) => {
+        this.registerFeilmeldingsti(attribute);
+
+        return getPSBErrorMessage({
             attribute,
             indeks,
             inputErrors: this.getManglerFromStore(),
@@ -650,6 +663,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             erFremITidKlokkeslett: this.erFremITidKlokkeslett,
             intl: this.props.intl,
         });
+    };
 
     private getSubmitErrorMessage(error?: IError): React.ReactNode {
         if (!error) return null;
@@ -1132,6 +1146,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                             perioderMedTimer={soknad.tilsynsordning.perioder}
                                         />
                                     </div>
+
+                                    <UhaanderteFeilmeldinger
+                                        getFeilmeldinger={() => this.resolveUnhandledErrors('ytelse.tilsynsordning')}
+                                    />
                                 </>
                             )}
                         </Accordion.Content>
