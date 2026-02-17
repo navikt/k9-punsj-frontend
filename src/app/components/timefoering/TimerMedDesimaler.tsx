@@ -1,8 +1,8 @@
-import { uniqueId } from 'lodash';
-import { Input } from 'nav-frontend-skjema';
-import React from 'react';
+import React, { useId } from 'react';
 
-import { ErrorMessage, Label } from '@navikt/ds-react';
+import { ErrorMessage, Label, TextField } from '@navikt/ds-react';
+
+import { sanitizeDecimalTimeInput } from './timeInputHelpers';
 
 import './timerOgMinutter.css';
 
@@ -15,7 +15,7 @@ interface OwnProps {
 }
 
 const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) => {
-    const id = uniqueId();
+    const id = useId();
 
     const timerId = `timer-${id}`;
 
@@ -29,16 +29,17 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) 
             <div className="tid-container">
                 <div className="input-row">
                     <div className="input-container">
-                        <Input
+                        <TextField
                             id={timerId}
-                            className="input text-center"
-                            bredde="XS"
+                            className="input text-center w-12"
+                            label={label}
+                            hideLabel
                             value={value}
                             onChange={(event) => {
-                                onChange(event.target.value.replaceAll(/[^\d,.]+/g, '').replace(',', '.'));
+                                onChange(sanitizeDecimalTimeInput(event.target.value));
                             }}
                             onBlur={onBlur}
-                            feil={!!error}
+                            error={!!error}
                         />
                     </div>
                 </div>
