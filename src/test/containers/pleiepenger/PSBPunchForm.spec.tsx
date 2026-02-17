@@ -186,7 +186,7 @@ const setupPunchForm = (
         identState,
         signaturState,
         journalposterState,
-        fellesState: { journalposterIAapenSoknad: [] },
+        fellesState: { dedupKey: 'test-dedup-key', journalposterIAapenSoknad: [] },
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
@@ -556,7 +556,7 @@ describe('PunchForm', () => {
         const summaryLink = await screen.findByRole('link', {
             name: 'Fra og med (FOM) må være satt.',
         });
-        expect(summaryLink).toHaveAttribute('href', `#${fomId}`);
+        expect(summaryLink.getAttribute('href')).toBe(`#${fomId}`);
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {

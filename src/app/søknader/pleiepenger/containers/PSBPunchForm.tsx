@@ -680,10 +680,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     ?.map((bosted) => bosted.periode)
                     .filter((periode): periode is IPeriode => !!periode);
             case 'ytelse.utenlandsopphold': {
+                const utenlandsoppholdV2 = this.state.soknad.utenlandsoppholdV2 || [];
                 const utenlandsopphold =
-                    this.state.soknad.utenlandsoppholdV2?.length > 0
-                        ? this.state.soknad.utenlandsoppholdV2
-                        : this.state.soknad.utenlandsopphold;
+                    utenlandsoppholdV2.length > 0 ? utenlandsoppholdV2 : this.state.soknad.utenlandsopphold;
                 return utenlandsopphold
                     ?.map((periodeinfo) => periodeinfo.periode)
                     .filter((periode): periode is IPeriode => !!periode);
@@ -771,21 +770,19 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
     private renderValidationSummary = (): React.ReactNode => {
         const unhandledValidationErrors = this.resolveUnhandledErrorEntries('');
-        const validationSummaryItems = unhandledValidationErrors
-            .map((error) => {
-                const message = error.feilmelding || error.felt;
-                if (!message) {
-                    return undefined;
-                }
+        const validationSummaryItems: Array<{ message: string; href?: string }> = [];
 
-                return {
-                    message,
-                    href: this.getValidationErrorHref(error),
-                };
-            })
-            .filter(
-                (summaryItem): summaryItem is { message: string; href?: string } => !!summaryItem && !!summaryItem.message,
-            );
+        unhandledValidationErrors.forEach((error) => {
+            const message = error.feilmelding || error.felt;
+            if (!message) {
+                return;
+            }
+
+            validationSummaryItems.push({
+                message,
+                href: this.getValidationErrorHref(error),
+            });
+        });
 
         if (validationSummaryItems.length === 0 && this.props.punchFormState.validateSoknadError?.message) {
             validationSummaryItems.push({
