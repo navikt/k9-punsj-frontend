@@ -492,8 +492,32 @@ describe('PunchForm', () => {
         });
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(await screen.findByText('Periode er utenfor søknadsperioden')).toBeDefined();
+    });
 
-        expect(screen.findByText('skjema.feil.validering')).toBeDefined();
+    it('Viser fallback melding i ErrorSummary når validering feiler uten feltfeil', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: initialSoknad,
+                    validateSoknadError: {
+                        message: 'Søknaden inneholder valideringsfeil',
+                    },
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(await screen.findByText('Søknaden inneholder valideringsfeil')).toBeDefined();
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {

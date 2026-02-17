@@ -1,5 +1,12 @@
 # Progress
 
+## 17.02.2026
+
+- Erstattet nederste valideringsliste i PSB med `ErrorSummary` fra Aksel for konsistent feilvisning.
+- Fjernet separat `Alert` for `inputErrors` i PSB for å unngå dobbel feilkommunikasjon.
+- La inn fallback i PSB slik at `validateSoknadError.message` vises i `ErrorSummary` når backend ikke returnerer feltlisten `feil`.
+- Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
+
 ## 12.02.2026
 
 - Oppdaterte PSB `valider` handling til `ProblemDetail` i frontend action, fjernet `X-Nav-NorskIdent` header og lot ikke-`400` gå via `convertProblemDetailToError`.

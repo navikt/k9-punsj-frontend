@@ -6,7 +6,7 @@ import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -25,7 +25,6 @@ import {
     validerSoknad,
     validerSoknadResetAction,
 } from 'app/state/actions';
-import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
     filtrerPerioderVedEndringAvSoknadsperiode,
@@ -37,7 +36,6 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { BeredskapNattevaak } from '../../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
@@ -675,6 +673,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return <FormattedMessage id="skjema.feil.ikke_sendt" />;
     }
 
+    private renderValidationSummary = (): React.ReactNode => {
+        const unhandledValidationErrors = this.resolveUnhandledErrors('').filter(
+            (message): message is string => !!message,
+        );
+        const validationSummaryErrors =
+            unhandledValidationErrors.length > 0
+                ? unhandledValidationErrors
+                : this.props.punchFormState.validateSoknadError?.message
+                  ? [this.props.punchFormState.validateSoknadError.message]
+                  : [];
+
+        if (validationSummaryErrors.length === 0) {
+            return null;
+        }
+
+        return (
+            <ErrorSummary heading={<FormattedMessage id="skjema.feil.validering" />}>
+                {validationSummaryErrors.map((feilmelding, index) => (
+                    <ErrorSummary.Item key={`${index}-${feilmelding}`}>{feilmelding}</ErrorSummary.Item>
+                ))}
+            </ErrorSummary>
+        );
+    };
+
     private updateSoknadState = (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => {
         this.state.soknad.journalposter!.add(this.props.journalpostid);
         this.setState((prevState) => ({
@@ -1280,11 +1302,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer twentyPx />
 
-                {this.resolveUnhandledErrors('')
-                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                    .map((feilmelding) => (
-                        <Feilmelding key={feilmelding} feil={feilmelding} />
-                    ))}
+                {this.renderValidationSummary()}
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className="loadingSpinner">
@@ -1314,12 +1332,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 {!!punchFormState.updateSoknadError && (
                     <Alert variant="error">
                         <FormattedMessage id="skjema.feil.ikke_lagret" />
-                    </Alert>
-                )}
-
-                {!!punchFormState.inputErrors?.length && (
-                    <Alert variant="error">
-                        <FormattedMessage id="skjema.feil.validering" />
                     </Alert>
                 )}
 
