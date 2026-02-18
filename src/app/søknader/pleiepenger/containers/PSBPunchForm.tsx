@@ -61,7 +61,7 @@ import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
-import { getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
+import { getInputErrorMessage, getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
@@ -744,7 +744,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     };
 
     private getValidationSummaryMessage = (error: IInputError): string | undefined => {
-        const message = error.feilmelding || error.felt;
+        const message = getInputErrorMessage(error) || error.felt;
         if (!message) {
             return undefined;
         }
@@ -840,6 +840,15 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             )
         ) {
             return '#sn-organisasjonsnummer';
+        }
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.valideringRegistrertUtlandet$/.test(
+                normalizedFelt,
+            )
+        ) {
+            // TEMPORARY: legacy backend path points to validator method, not real land input.
+            return '#sn-registrert-land';
         }
 
         const parsedPeriodPath = parsePeriodFeltPath(normalizedFelt);

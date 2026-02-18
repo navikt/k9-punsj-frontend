@@ -356,8 +356,16 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="mt-6">
                         <CountrySelect
+                            id="sn-registrert-land"
                             selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
                             label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                            // TEMPORARY: backend can report this validation on
+                            // `.valideringRegistrertUtlandet` while frontend binds it to landkode field.
+                            error={getErrorMessage(
+                                `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                    opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                                )}].landkode`,
+                            )}
                             onChange={(event) => {
                                 updateSoknad({
                                     opptjeningAktivitet: {

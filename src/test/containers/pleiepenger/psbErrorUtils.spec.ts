@@ -1,7 +1,11 @@
 import { createIntl } from 'react-intl';
 
 import { IInputError } from '../../../app/models/types';
-import { getPSBErrorMessage, getUnhandledErrors } from '../../../app/søknader/pleiepenger/containers/psbErrorUtils';
+import {
+    getInputErrorMessage,
+    getPSBErrorMessage,
+    getUnhandledErrors,
+} from '../../../app/søknader/pleiepenger/containers/psbErrorUtils';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('../../../app/utils/intlUtils');
@@ -172,5 +176,36 @@ describe('psbErrorUtils', () => {
         });
 
         expect(result).toBe('organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet');
+    });
+
+    it('extracts message from legacy Feil payload when feilmelding is empty', () => {
+        const result = getInputErrorMessage({
+            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
+            feilkode:
+                "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
+            feilmelding: '',
+        });
+
+        expect(result).toBe('landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.');
+    });
+
+    it('maps legacy valideringRegistrertUtlandet payload to landkode field path', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[2026-02-02/2026-02-20].landkode',
+            inputErrors: [
+                {
+                    felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
+                    feilkode:
+                        "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
+                    feilmelding: '',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.');
     });
 });

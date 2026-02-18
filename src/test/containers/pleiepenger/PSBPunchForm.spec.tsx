@@ -774,6 +774,53 @@ describe('PunchForm', () => {
         expect(summaryLink.getAttribute('href')).toBe('#sn-organisasjonsnummer');
     });
 
+    it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        opptjeningAktivitet: {
+                            ...initialSoknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: {
+                                virksomhetNavn: 'Test virksomhet',
+                                organisasjonsnummer: '',
+                                info: {
+                                    periode: { fom: '2026-02-02', tom: '2026-02-20' },
+                                    registrertIUtlandet: true,
+                                    landkode: '',
+                                },
+                            },
+                        },
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
+                            feilkode:
+                                "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
+                            feilmelding: '',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.',
+        });
+        expect(summaryLink.getAttribute('href')).toBe('#sn-registrert-land');
+    });
+
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 

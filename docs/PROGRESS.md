@@ -1,5 +1,11 @@
 # Progress
 
+## 18.02.2026
+
+- La til midlertidig PSB-workaround for legacy `Feil{...}` i `feilkode` når `feilmelding` er tom, inkludert parsing av melding og mapping fra `valideringRegistrertUtlandet` til konkret `landkode`-felt.
+- Knyttet `ErrorSummary`-lenke for denne feilen til `#sn-registrert-land` og viste feilen direkte på feltet for registrert land i SN-panelet.
+- La til tester for parsing, feltmapping og `ErrorSummary`-lenking for legacy-kaset.
+
 ## 17.02.2026
 
 - Erstattet nederste valideringsliste i PSB med `ErrorSummary` fra Aksel for konsistent feilvisning.

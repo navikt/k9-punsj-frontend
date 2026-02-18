@@ -19,6 +19,17 @@ interface GetPSBErrorMessageParams {
     intl: IntlShape;
 }
 
+interface LegacyFeilPayload {
+    felt?: string;
+    feilkode?: string;
+    feilmelding?: string;
+}
+
+/**
+ * TEMPORARY PSB compatibility utilities.
+ * These path and message normalizers compensate for unstable validation paths
+ * returned from backend/k9-format. Remove after backend exposes canonical field paths.
+ */
 const normalizePath = (path?: string): string | undefined => {
     if (!path) return undefined;
 
@@ -44,6 +55,68 @@ const canonicalizePath = (path?: string): string | undefined => {
 const splitNormalizedPath = (path?: string): string[] => {
     const normalizedPath = normalizePath(path);
     return normalizedPath ? normalizedPath.split('.').filter(Boolean) : [];
+};
+
+const parseLegacyFeilPayload = (feilkode: unknown): LegacyFeilPayload | undefined => {
+    if (typeof feilkode !== 'string') {
+        return undefined;
+    }
+
+    // TEMPORARY: k9-format can serialize nested validation errors into `feilkode`
+    // as a string like Feil{felt='...', feilkode='...', feilmelding='...'}.
+    const match = feilkode
+        .trim()
+        .match(/^Feil\{felt='([^']*)',\s*feilkode='([^']*)',\s*feilmelding='([\s\S]*)'\}$/);
+
+    if (!match) {
+        return undefined;
+    }
+
+    const [, felt, parsedFeilkode, feilmelding] = match;
+    return {
+        felt: felt?.trim(),
+        feilkode: parsedFeilkode?.trim(),
+        feilmelding: feilmelding?.trim(),
+    };
+};
+
+const mapLegacyNestedFelt = (felt?: string, legacyPayload?: LegacyFeilPayload): string | undefined => {
+    const normalizedFelt = felt?.trim();
+    if (!normalizedFelt) {
+        return undefined;
+    }
+
+    const nestedFelt = legacyPayload?.felt?.trim();
+    if (!nestedFelt || !nestedFelt.startsWith('.')) {
+        return normalizedFelt;
+    }
+
+    // TEMPORARY: remap nested k9-format feil payload for registrert utlandet
+    // to a concrete landkode field path so UI can bind the error to the country input.
+    if (normalizedFelt.endsWith('.valideringRegistrertUtlandet')) {
+        return normalizedFelt.replace(/\.valideringRegistrertUtlandet$/, nestedFelt);
+    }
+
+    return normalizedFelt;
+};
+
+export const getInputErrorMessage = (error?: IInputError): string | undefined => {
+    if (!error) {
+        return undefined;
+    }
+
+    const directMessage = error.feilmelding?.trim();
+    if (directMessage) {
+        return directMessage;
+    }
+
+    const legacyPayload = parseLegacyFeilPayload(error.feilkode);
+    return legacyPayload?.feilmelding || undefined;
+};
+
+const getErrorPathForMatching = (error: IInputError): string | undefined => {
+    const legacyPayload = parseLegacyFeilPayload(error.feilkode);
+    return mapLegacyNestedFelt(error.felt, legacyPayload);
 };
 
 const pathMatches = (errorPath: string | undefined, attribute: string, mode: 'exact' | 'prefix' = 'exact'): boolean => {
@@ -72,8 +145,8 @@ const filterMessagesByPath = (
 ): string[] => {
     return (
         inputErrors
-            ?.filter((error) => pathMatches(error.felt, attribute, mode))
-            .map((error) => error.feilmelding)
+            ?.filter((error) => pathMatches(getErrorPathForMatching(error), attribute, mode))
+            .map((error) => getInputErrorMessage(error))
             .filter((errorMessage): errorMessage is string => !!errorMessage) ?? []
     );
 };
@@ -95,6 +168,8 @@ function resolveUnhandledErrorEntries({
     inputErrors,
     feilmeldingStier,
 }: GetUnhandledErrorsParams): IInputError[] {
+    // TEMPORARY: heuristic deduplication for overlapping backend error paths.
+    // Remove after backend publishes canonical, non-overlapping field paths.
     const normalizedAttribute = normalizePath(attribute) || '';
     const normalizedHandledPaths = new Set(
         [...feilmeldingStier]
@@ -144,7 +219,7 @@ export const getUnhandledErrors = ({
 
     if (unhandledErrors.length > 0) {
         return unhandledErrors
-            .map((error) => error.feilmelding || error.felt)
+            .map((error) => getInputErrorMessage(error) || error.felt)
             .filter((errorMessage): errorMessage is string => !!errorMessage);
     }
     return [];
@@ -227,6 +302,8 @@ export const getPSBErrorMessage = ({
     );
     let errorMsg: string | undefined;
 
+    // TEMPORARY: backend can return either okOrganisasjonsnummer or organisasjonsnummer(.valid).
+    // Keep this remapping until backend/k9-format exposes one canonical path.
     if (snOrgnummerPathMatch) {
         const basePath = snOrgnummerPathMatch[1];
         const candidatePaths = [`${basePath}.okOrganisasjonsnummer`, `${basePath}.organisasjonsnummer.valid`, `${basePath}.organisasjonsnummer`];

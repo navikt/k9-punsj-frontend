@@ -19,6 +19,8 @@ const normaliserAnchorSegment = (value: string): string =>
         .replace(/--+/g, '-');
 
 const stripQuotes = (value?: string): string | undefined => value?.trim().replace(/^['"]|['"]$/g, '');
+// TEMPORARY: backend can emit open-ended periods as 9999-12-31 in some paths.
+// Normalize to ".." so anchors stay stable until backend contract is canonical.
 const normalizeOpenEndedPeriodKey = (value: string): string => value.replace(/\/9999-12-31$/i, '/..');
 const normalizePeriodKeyForAnchor = (periodKey?: string, fallbackKey?: string): string =>
     normalizeOpenEndedPeriodKey(stripQuotes(periodKey) || fallbackKey || 'periode')
@@ -83,6 +85,8 @@ export const parsePeriodFeltPath = (
 };
 
 export const resolvePeriodInputPart = (suffix?: string, feilmelding?: string): 'fom' | 'tom' => {
+    // TEMPORARY: infer FOM/TOM from suffix/message because backend errors do not always
+    // provide a precise field target for period-related validation messages.
     const normalizedSuffix = suffix?.toLowerCase() || '';
     if (normalizedSuffix.includes('tom') || normalizedSuffix.includes('tilogmed') || normalizedSuffix.includes('til-og-med')) {
         return 'tom';
