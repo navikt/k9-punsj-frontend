@@ -24,7 +24,7 @@ import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState'
 import { ISignaturState } from '../../../app/models/types/SignaturState';
 import userEvent from '@testing-library/user-event';
 import { Tidsformat } from '../../../app/utils/timeUtils';
-import { createPeriodInputIds } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
+import { createLandInputId, createPeriodInputIds } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -669,6 +669,78 @@ describe('PunchForm', () => {
         const medlemskapPanel = screen.getByTestId('accordionItem-medlemskappanel');
         const periodMessagesInPanel = within(medlemskapPanel).queryAllByText('Til og med (TOM) må være satt.');
         expect(periodMessagesInPanel).toHaveLength(1);
+    });
+
+    it('Lenker ErrorSummary til utenlandsopphold landfelt når backend sender 9999-12-31 i periodesti', async () => {
+        const validateSoknad = jest.fn();
+        const landId = createLandInputId('ytelse.utenlandsopphold', '2026-02-02/..');
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        utenlandsopphold: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
+                        utenlandsoppholdV2: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.utenlandsopphold.perioder['2026-02-02/9999-12-31'].land",
+                            feilkode: 'nullFeil',
+                            feilmelding: 'Feltet kan ikke være tomt',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'Utenlandsopphold: Feltet kan ikke være tomt',
+        });
+        expect(summaryLink.getAttribute('href')).toBe(`#${landId}`);
+    });
+
+    it('Viser lovbestemt ferie valideringsfeil under periodfelt ved periodesti fra backend', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        lovbestemtFerie: [{ fom: '', tom: '2026-02-25' }],
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.lovbestemtFerie.perioder.['../2026-02-25']",
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Fra og med (FOM) må være satt.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const feriePanel = screen.getByTestId('accordionItem-feriepanel');
+        const periodPanel = within(feriePanel).getByTestId('periodpaneler_0');
+        expect(within(periodPanel).getByText('Fra og med (FOM) må være satt.')).toBeDefined();
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {

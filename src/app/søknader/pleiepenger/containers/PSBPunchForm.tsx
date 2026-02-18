@@ -749,23 +749,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return undefined;
         }
 
-        const normalizedMessage = message.trim();
-        const isGenericPeriodMessage = /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(
-            normalizedMessage,
-        );
-        if (!isGenericPeriodMessage) {
-            return normalizedMessage;
-        }
-
         const felt = error.felt?.trim();
         const normalizedFelt =
             felt?.startsWith('ytelse.uttak.perioder')
                 ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
                 : felt;
+        const contextLabel = this.getValidationContextLabel(normalizedFelt);
+        const normalizedMessage = message.trim();
+        const isGenericPeriodMessage = /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(
+            normalizedMessage,
+        );
+        const isGenericRequiredFieldMessage = /^Feltet kan ikke være tomt\.?$/i.test(normalizedMessage);
+        if (!isGenericPeriodMessage) {
+            if (contextLabel && isGenericRequiredFieldMessage) {
+                return `${contextLabel}: ${normalizedMessage}`;
+            }
+            return normalizedMessage;
+        }
+
         const indexedPath = normalizedFelt ? this.parseIndexedValidationPath(normalizedFelt) : undefined;
         const periodNumber =
             indexedPath && /^\d+$/.test(indexedPath.periodIndex) ? Number(indexedPath.periodIndex) + 1 : undefined;
-        const contextLabel = this.getValidationContextLabel(normalizedFelt);
 
         if (contextLabel && periodNumber !== undefined) {
             return `${contextLabel} (periode ${periodNumber}): ${normalizedMessage}`;
@@ -789,6 +793,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
 
         return unhandledErrors;
+    };
+
+    private resolvePeriodAttributeFromIndex = (attribute: string): string => {
+        const trimmedAttribute = attribute?.trim();
+        if (!trimmedAttribute) {
+            return attribute;
+        }
+
+        const match = trimmedAttribute.match(/^(.+?)\.perioder\[(\d+)](?:\.(.+))?$/);
+        if (!match) {
+            return trimmedAttribute;
+        }
+
+        const [, prefix, periodIndex, suffix] = match;
+        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodIndex);
+        if (!resolvedPeriodKey || resolvedPeriodKey === periodIndex) {
+            return trimmedAttribute;
+        }
+
+        return `${prefix}.perioder[${resolvedPeriodKey}]${suffix ? `.${suffix}` : ''}`;
     };
 
     private getValidationErrorHref = (error: IInputError): string | undefined => {
@@ -843,8 +867,27 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private getErrorMessage = (attribute: string, indeks?: number) => {
         this.registerFeilmeldingsti(attribute);
 
-        return getPSBErrorMessage({
+        const resolvedAttribute = this.resolvePeriodAttributeFromIndex(attribute);
+        if (resolvedAttribute !== attribute) {
+            this.registerFeilmeldingsti(resolvedAttribute);
+        }
+
+        const message = getPSBErrorMessage({
             attribute,
+            indeks,
+            inputErrors: this.getManglerFromStore(),
+            mottattDato: this.state.soknad.mottattDato,
+            klokkeslett: this.state.soknad.klokkeslett,
+            erFremITidKlokkeslett: this.erFremITidKlokkeslett,
+            intl: this.props.intl,
+        });
+
+        if (message || resolvedAttribute === attribute) {
+            return message;
+        }
+
+        return getPSBErrorMessage({
+            attribute: resolvedAttribute,
             indeks,
             inputErrors: this.getManglerFromStore(),
             mottattDato: this.state.soknad.mottattDato,

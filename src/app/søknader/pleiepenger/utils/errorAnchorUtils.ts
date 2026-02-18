@@ -19,8 +19,11 @@ const normaliserAnchorSegment = (value: string): string =>
         .replace(/--+/g, '-');
 
 const stripQuotes = (value?: string): string | undefined => value?.trim().replace(/^['"]|['"]$/g, '');
+const normalizeOpenEndedPeriodKey = (value: string): string => value.replace(/\/9999-12-31$/i, '/..');
 const normalizePeriodKeyForAnchor = (periodKey?: string, fallbackKey?: string): string =>
-    (stripQuotes(periodKey) || fallbackKey || 'periode').replace(/\.\./g, 'open').replace(/\//g, '-to-');
+    normalizeOpenEndedPeriodKey(stripQuotes(periodKey) || fallbackKey || 'periode')
+        .replace(/\.\./g, 'open')
+        .replace(/\//g, '-to-');
 
 export const periodKeyFromPeriode = (periode?: IPeriode): string | undefined => {
     if (!periode) {

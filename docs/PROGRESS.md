@@ -12,6 +12,8 @@
 - Normaliserte PSB `ErrorSummary`-tekst for generiske periodefeil med feltkontekst og fjernet duplikat av periodemelding i `medlemskap`-blokken.
 - La til indekskontekst i PSB `ErrorSummary` for listeelementfeil (`periode N`) og verifiserte lenking for `ytelse.trekkKravPerioder[1].<list element>`.
 - Rettet PSB path-matching for valideringsfeil slik at riktig arrayelement velges for både indeksbaserte stier (`[1]`) og periodebaserte nøkler (`perioder['fom/tom']`) i feltfeil.
+- Normaliserte åpen sluttperiode i PSB-feilstier (`9999-12-31` -> `..`) slik at feltfeil og `ErrorSummary`-lenker treffer riktig input, inkludert `ytelse.utenlandsopphold.perioder[...] .land`.
+- Rettet PSB feltvisning for `lovbestemtFerie` når backend sender periodesti med nøkkel (`perioder['../dato']`) ved å mappe indekssti til faktisk periodenøkkel før oppslag av feltfeil.
 - Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
 
 ## 12.02.2026

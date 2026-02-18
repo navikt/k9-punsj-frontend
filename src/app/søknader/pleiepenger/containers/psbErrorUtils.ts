@@ -35,7 +35,8 @@ const canonicalizePath = (path?: string): string | undefined => {
         .trim()
         .replace(/\.?\[(?:'([^']*)'|"([^"]*)"|([^[\]]+))\]/g, (_match, singleQuoted, doubleQuoted, raw) => {
             const segment = (singleQuoted || doubleQuoted || raw || '').trim();
-            return `[${segment}]`;
+            const normalizedSegment = segment.replace(/\/9999-12-31$/i, '/..');
+            return `[${normalizedSegment}]`;
         })
         .replace(/^\.+|\.+$/g, '');
 };

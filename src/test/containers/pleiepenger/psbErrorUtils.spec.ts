@@ -137,4 +137,22 @@ describe('psbErrorUtils', () => {
 
         expect(result).toBe('Feil i bosted 2');
     });
+
+    it('matches open ended period key when backend uses 9999-12-31 sentinel', () => {
+        const result = getPSBErrorMessage({
+            attribute: "ytelse.utenlandsopphold.perioder['2026-02-02/..'].land",
+            inputErrors: [
+                {
+                    felt: "ytelse.utenlandsopphold.perioder['2026-02-02/9999-12-31'].land",
+                    feilmelding: 'Feltet kan ikke være tomt',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Feltet kan ikke være tomt');
+    });
 });
