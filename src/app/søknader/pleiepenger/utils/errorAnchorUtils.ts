@@ -1,6 +1,7 @@
 import { IPeriode } from 'app/models/types/Periode';
 
 const periodPathRegex = /^(.+?)\.perioder(?:\.)?\[(?:'([^']*)'|"([^"]*)"|([^\]]+))\](?:\.(.+))?$/;
+export const ENDRING_BEGRUNNELSE_INPUT_ID = 'endringavsoknadsperioder-begrunnelse';
 
 const replaceNorwegianChars = (value: string): string =>
     value

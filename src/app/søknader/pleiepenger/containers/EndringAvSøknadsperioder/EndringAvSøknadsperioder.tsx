@@ -6,6 +6,7 @@ import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOve
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { ENDRING_BEGRUNNELSE_INPUT_ID } from '../../utils/errorAnchorUtils';
 
 import './endringAvSøknadsperioder.less';
 
@@ -80,6 +81,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
         const begrunnelsesfelt = (
             <div className="endringAvSøknadsperioder__begrunnelse">
                 <Textarea
+                    id={ENDRING_BEGRUNNELSE_INPUT_ID}
                     label={intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse')}
                     value={soknad.begrunnelseForInnsending?.tekst || ''}
                     onChange={(event) => {
@@ -201,10 +203,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 </ErrorMessage>
 
                 {getAlertstriper()}
-
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
-                    {begrunnelseForInnsendingFeilmelding()}
-                </ErrorMessage>
             </Accordion.Content>
         </Accordion.Item>
     );

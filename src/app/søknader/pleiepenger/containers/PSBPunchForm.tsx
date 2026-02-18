@@ -75,6 +75,7 @@ import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import {
+    ENDRING_BEGRUNNELSE_INPUT_ID,
     createLandInputId,
     createPeriodInputIds,
     parsePeriodFeltPath,
@@ -829,6 +830,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return '#soknad-klokkeslett';
         }
 
+        if (felt === 'begrunnelseForInnsending' || felt === 'begrunnelseForInnsending.tekst') {
+            return `#${ENDRING_BEGRUNNELSE_INPUT_ID}`;
+        }
+
         const normalizedFelt =
             felt.startsWith('ytelse.uttak.perioder')
                 ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
@@ -935,7 +940,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 return;
             }
 
-            const dedupKey = `${error.felt || ''}::${message}`;
+            const href = this.getValidationErrorHref(error);
+            const dedupKey = `${href || error.felt || ''}::${message}`;
             if (seenSummaryItems.has(dedupKey)) {
                 return;
             }
@@ -943,7 +949,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
             validationSummaryItems.push({
                 message,
-                href: this.getValidationErrorHref(error),
+                href,
             });
         });
 

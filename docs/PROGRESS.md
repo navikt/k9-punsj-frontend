@@ -2,6 +2,10 @@
 
 ## 18.02.2026
 
+- Fjernet duplikatvisning av valideringsfeil for `begrunnelseForInnsending` i PSB endringsblokk ved å vise feilen kun på selve tekstfeltet.
+- La til stabil forankring for begrunnelsefeltet i PSB (`id`) og koblet `ErrorSummary`-lenke til feltet for `begrunnelseForInnsending` og `begrunnelseForInnsending.tekst`.
+- Oppdaterte deduplisering i PSB `ErrorSummary` slik at dupliserte feil med samme melding og samme `href` ikke vises flere ganger.
+- La til tester for både blokkduplikat og `ErrorSummary` lenking/deduplisering av begrunnelsefeil.
 - Rettet runtime-krasj i PSB kvittering når backend returnerer `begrunnelseForInnsending.tekst = null` ved å gjøre visning av begrunnelse null-sikker.
 - La til regresjonstest for PSB kvittering som verifiserer at `tekst = null` ikke kaster feil og ikke viser begrunnelsesblokken.
 - La til midlertidig PSB-workaround for legacy `Feil{...}` i `feilkode` når `feilmelding` er tom, inkludert parsing av melding og mapping fra `valideringRegistrertUtlandet` til konkret `landkode`-felt.

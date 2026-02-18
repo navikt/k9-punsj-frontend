@@ -24,7 +24,11 @@ import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState'
 import { ISignaturState } from '../../../app/models/types/SignaturState';
 import userEvent from '@testing-library/user-event';
 import { Tidsformat } from '../../../app/utils/timeUtils';
-import { createLandInputId, createPeriodInputIds } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
+import {
+    createLandInputId,
+    createPeriodInputIds,
+    ENDRING_BEGRUNNELSE_INPUT_ID,
+} from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -637,6 +641,81 @@ describe('PunchForm', () => {
             name: 'Endring av søknadsperiode (periode 2): Fra og med (FOM) må være satt.',
         });
         expect(summaryLink.getAttribute('href')).toBe(`#${fomId}`);
+    });
+
+    it('Viser ikke duplikat av begrunnelse-feil i endringsblokk', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                    },
+                    perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                    inputErrors: [
+                        {
+                            felt: 'begrunnelseForInnsending',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        const endringPanel = screen.getByTestId('accordionItem-endringAvSøknadsperioderpanel');
+        const fieldErrors = within(endringPanel).queryAllByText(
+            'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding',
+        );
+        expect(fieldErrors).toHaveLength(1);
+    });
+
+    it('Lenker ErrorSummary til begrunnelsefelt og dedupliserer samme melding', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                    },
+                    perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                    inputErrors: [
+                        {
+                            felt: 'begrunnelseForInnsending',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                        },
+                        {
+                            felt: 'begrunnelseForInnsending.tekst',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        const summaryLinks = screen.getAllByRole('link', {
+            name: 'Du må legge inn en begrunnelse for å trekke perioder.',
+        });
+        expect(summaryLinks).toHaveLength(1);
+        expect(summaryLinks[0].getAttribute('href')).toBe(`#${ENDRING_BEGRUNNELSE_INPUT_ID}`);
     });
 
     it('Viser ikke duplikat av periodemelding i medlemskap-blokk', async () => {
