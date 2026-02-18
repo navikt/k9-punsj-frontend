@@ -155,4 +155,22 @@ describe('psbErrorUtils', () => {
 
         expect(result).toBe('Feltet kan ikke være tomt');
     });
+
+    it('maps okOrganisasjonsnummer backend path to selvstendig næringsdrivende organisasjonsnummer field path', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid',
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer',
+                    feilmelding: 'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet');
+    });
 });

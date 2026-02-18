@@ -317,6 +317,7 @@ const ArbeidsforholdPanel = ({
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="flex flex-wrap mt-6">
                         <TextField
+                            id="sn-organisasjonsnummer"
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                             className="sn-organisasjonsnummer"

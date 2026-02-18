@@ -743,6 +743,37 @@ describe('PunchForm', () => {
         expect(within(periodPanel).getByText('Fra og med (FOM) må være satt.')).toBeDefined();
     });
 
+    it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for okOrganisasjonsnummer-feil', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    inputErrors: [
+                        {
+                            felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
+        });
+        expect(summaryLink.getAttribute('href')).toBe('#sn-organisasjonsnummer');
+    });
+
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 

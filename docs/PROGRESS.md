@@ -14,6 +14,7 @@
 - Rettet PSB path-matching for valideringsfeil slik at riktig arrayelement velges for både indeksbaserte stier (`[1]`) og periodebaserte nøkler (`perioder['fom/tom']`) i feltfeil.
 - Normaliserte åpen sluttperiode i PSB-feilstier (`9999-12-31` -> `..`) slik at feltfeil og `ErrorSummary`-lenker treffer riktig input, inkludert `ytelse.utenlandsopphold.perioder[...] .land`.
 - Rettet PSB feltvisning for `lovbestemtFerie` når backend sender periodesti med nøkkel (`perioder['../dato']`) ved å mappe indekssti til faktisk periodenøkkel før oppslag av feltfeil.
+- Rettet PSB mapping for `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer` slik at feltfeil vises under organisasjonsnummer-feltet og `ErrorSummary`-lenken peker til riktig input.
 - Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
 
 ## 12.02.2026

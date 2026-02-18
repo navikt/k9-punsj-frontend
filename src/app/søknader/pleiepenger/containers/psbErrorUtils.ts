@@ -222,7 +222,22 @@ export const getPSBErrorMessage = ({
         return filterMessagesByPath(inputErrors, newAttr)[0];
     }
 
-    const errorMsg = filterMessagesByPath(inputErrors, attribute)[indeks || 0];
+    const snOrgnummerPathMatch = attribute.match(
+        /^(ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+])\.organisasjonsnummer\.valid$/,
+    );
+    let errorMsg: string | undefined;
+
+    if (snOrgnummerPathMatch) {
+        const basePath = snOrgnummerPathMatch[1];
+        const candidatePaths = [`${basePath}.okOrganisasjonsnummer`, `${basePath}.organisasjonsnummer.valid`, `${basePath}.organisasjonsnummer`];
+        errorMsg = candidatePaths
+            .map((path) => filterMessagesByPath(inputErrors, path, 'prefix')[0])
+            .find((message): message is string => !!message);
+    }
+
+    if (!errorMsg) {
+        errorMsg = filterMessagesByPath(inputErrors, attribute)[indeks || 0];
+    }
 
     if (errorMsg) {
         if (errorMsg.startsWith('Mangler søknadsperiode')) {

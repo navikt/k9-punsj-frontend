@@ -834,6 +834,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
                 : felt;
 
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.(okOrganisasjonsnummer|organisasjonsnummer(?:\.valid)?)$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-organisasjonsnummer';
+        }
+
         const parsedPeriodPath = parsePeriodFeltPath(normalizedFelt);
         if (parsedPeriodPath) {
             const { prefix, periodKey, suffix } = parsedPeriodPath;
