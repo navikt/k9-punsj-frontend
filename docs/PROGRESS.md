@@ -4,6 +4,7 @@
 
 - La til midlertidig PSB-workaround for legacy `Feil{...}` i `feilkode` når `feilmelding` er tom, inkludert parsing av melding og mapping fra `valideringRegistrertUtlandet` til konkret `landkode`-felt.
 - Knyttet `ErrorSummary`-lenke for denne feilen til `#sn-registrert-land` og viste feilen direkte på feltet for registrert land i SN-panelet.
+- Fjernet duplikat av samme legacy-feil i SN sin generelle ubehandlede feilliste når den allerede er håndtert på `landkode`-felt.
 - La til tester for parsing, feltmapping og `ErrorSummary`-lenking for legacy-kaset.
 
 ## 17.02.2026

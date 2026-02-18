@@ -178,7 +178,8 @@ function resolveUnhandledErrorEntries({
     );
 
     const unhandledErrors = inputErrors?.filter((m: IInputError) => {
-        const felter = splitNormalizedPath(m.felt);
+        const matchedPath = getErrorPathForMatching(m) || m.felt;
+        const felter = splitNormalizedPath(matchedPath);
         for (let index = felter.length - 1; index >= -1; index--) {
             const felt = felter.slice(0, index + 1).join('.');
             const andreFeilmeldingStier = new Set(normalizedHandledPaths);

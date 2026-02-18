@@ -208,4 +208,26 @@ describe('psbErrorUtils', () => {
 
         expect(result).toBe('landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.');
     });
+
+    it('does not return legacy valideringRegistrertUtlandet as unhandled when mapped landkode path is already handled', () => {
+        const inputErrors: IInputError[] = [
+            {
+                felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
+                feilkode:
+                    "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
+                feilmelding: '',
+            },
+        ];
+
+        const result = getUnhandledErrors({
+            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]',
+            inputErrors,
+            feilmeldingStier: new Set([
+                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]',
+                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[2026-02-02/2026-02-20].landkode',
+            ]),
+        });
+
+        expect(result).toEqual([]);
+    });
 });
