@@ -61,7 +61,7 @@ import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
-import { getPSBErrorMessage, getUnhandledErrorEntries, getUnhandledErrors } from './psbErrorUtils';
+import { getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
@@ -656,16 +656,6 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         });
     };
 
-    private resolveUnhandledErrorEntries = (attribute: string): IInputError[] => {
-        this.registerFeilmeldingsti(attribute);
-
-        return getUnhandledErrorEntries({
-            attribute,
-            inputErrors: this.getManglerFromStore(),
-            feilmeldingStier: this.state.feilmeldingStier,
-        });
-    };
-
     private getPerioderForFeilstiPrefix = (prefix: string): IPeriode[] | undefined => {
         switch (prefix) {
             case 'ytelse.søknadsperiode':
@@ -674,6 +664,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             case 'ytelse.lovbestemtFerie':
                 return this.state.soknad.lovbestemtFerie;
             case 'endringAvSøknadsperioder':
+            case 'ytelse.trekkKravPerioder':
                 return this.state.soknad.trekkKravPerioder;
             case 'ytelse.bosteder':
                 return this.state.soknad.bosteder
@@ -706,6 +697,82 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return periodKeyFromPeriode(periode) || periodKey;
     };
 
+    private parseIndexedValidationPath = (felt: string): { prefix: string; periodIndex: string; suffix?: string } | undefined => {
+        const match = felt.match(/^(.+?)\[(\d+)](?:\.(.+))?$/);
+        if (!match) {
+            return undefined;
+        }
+        const [, prefix, periodIndex, suffix] = match;
+        return {
+            prefix,
+            periodIndex,
+            suffix: suffix?.trim() || undefined,
+        };
+    };
+
+    private getValidationContextLabel = (felt?: string): string | undefined => {
+        if (!felt) {
+            return undefined;
+        }
+
+        const normalizedFelt =
+            felt.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+
+        if (normalizedFelt.startsWith('ytelse.søknadsperiode')) {
+            return 'Søknadsperiode';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.trekkKravPerioder') || normalizedFelt.startsWith('endringAvSøknadsperioder')) {
+            return 'Endring av søknadsperiode';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.lovbestemtFerie')) {
+            return 'Ferie';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.bosteder')) {
+            return 'Medlemskap';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.utenlandsopphold')) {
+            return 'Utenlandsopphold';
+        }
+
+        return undefined;
+    };
+
+    private getValidationSummaryMessage = (error: IInputError): string | undefined => {
+        const message = error.feilmelding || error.felt;
+        if (!message) {
+            return undefined;
+        }
+
+        const normalizedMessage = message.trim();
+        const isGenericPeriodMessage = /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(
+            normalizedMessage,
+        );
+        if (!isGenericPeriodMessage) {
+            return normalizedMessage;
+        }
+
+        const contextLabel = this.getValidationContextLabel(error.felt?.trim());
+        return contextLabel ? `${contextLabel}: ${normalizedMessage}` : normalizedMessage;
+    };
+
+    private getUhaandterteFeilForBosteder = (attribute: string): (string | undefined)[] => {
+        const unhandledErrors = this.resolveUnhandledErrors(attribute);
+        const parsedPath = parsePeriodFeltPath(attribute);
+
+        // Period-level bosteder errors are already shown directly on PeriodInput, skip duplicates in block-level list.
+        if (parsedPath?.prefix === 'ytelse.bosteder' && !parsedPath.suffix) {
+            return [];
+        }
+
+        return unhandledErrors;
+    };
+
     private getValidationErrorHref = (error: IInputError): string | undefined => {
         const felt = error.felt?.trim();
         if (!felt) {
@@ -726,19 +793,30 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 : felt;
 
         const parsedPeriodPath = parsePeriodFeltPath(normalizedFelt);
-        if (!parsedPeriodPath) {
+        if (parsedPeriodPath) {
+            const { prefix, periodKey, suffix } = parsedPeriodPath;
+            const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodKey);
+            const normalizedSuffix = suffix?.toLowerCase();
+
+            if (normalizedSuffix === 'land') {
+                return `#${createLandInputId(prefix, resolvedPeriodKey)}`;
+            }
+
+            const periodInputIds = createPeriodInputIds(prefix, resolvedPeriodKey);
+            const periodPart = resolvePeriodInputPart(suffix, error.feilmelding);
+
+            return `#${periodPart === 'tom' ? periodInputIds.tomId : periodInputIds.fomId}`;
+        }
+
+        const indexedPath = this.parseIndexedValidationPath(normalizedFelt);
+        if (!indexedPath) {
             return undefined;
         }
 
-        const { prefix, periodKey, suffix } = parsedPeriodPath;
-        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodKey);
-        const normalizedSuffix = suffix?.toLowerCase();
-
-        if (normalizedSuffix === 'land') {
-            return `#${createLandInputId(prefix, resolvedPeriodKey)}`;
-        }
-
-        const periodInputIds = createPeriodInputIds(prefix, resolvedPeriodKey);
+        const { prefix, periodIndex, suffix } = indexedPath;
+        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodIndex);
+        const idPrefix = prefix === 'ytelse.trekkKravPerioder' ? 'endringAvSøknadsperioder' : prefix;
+        const periodInputIds = createPeriodInputIds(idPrefix, resolvedPeriodKey);
         const periodPart = resolvePeriodInputPart(suffix, error.feilmelding);
 
         return `#${periodPart === 'tom' ? periodInputIds.tomId : periodInputIds.fomId}`;
@@ -769,14 +847,21 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     }
 
     private renderValidationSummary = (): React.ReactNode => {
-        const unhandledValidationErrors = this.resolveUnhandledErrorEntries('');
+        const validationErrors = this.getManglerFromStore() || [];
         const validationSummaryItems: Array<{ message: string; href?: string }> = [];
+        const seenSummaryItems = new Set<string>();
 
-        unhandledValidationErrors.forEach((error) => {
-            const message = error.feilmelding || error.felt;
+        validationErrors.forEach((error) => {
+            const message = this.getValidationSummaryMessage(error);
             if (!message) {
                 return;
             }
+
+            const dedupKey = `${error.felt || ''}::${message}`;
+            if (seenSummaryItems.has(dedupKey)) {
+                return;
+            }
+            seenSummaryItems.add(dedupKey);
 
             validationSummaryItems.push({
                 message,
@@ -1364,7 +1449,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     className="bosteder"
                                     panelClassName="bostederpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.resolveUnhandledErrors}
+                                    getUhaandterteFeil={this.getUhaandterteFeilForBosteder}
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}

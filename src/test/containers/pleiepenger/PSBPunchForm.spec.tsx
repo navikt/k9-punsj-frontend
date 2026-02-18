@@ -554,9 +554,118 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
         const summaryLink = await screen.findByRole('link', {
-            name: 'Fra og med (FOM) må være satt.',
+            name: 'Søknadsperiode: Fra og med (FOM) må være satt.',
         });
         expect(summaryLink.getAttribute('href')).toBe(`#${fomId}`);
+    });
+
+    it('Lenker ErrorSummary til TOM-felt ved søknadsperiode list-element-feil', async () => {
+        const validateSoknad = jest.fn();
+        const periodKey = '2026-02-02/..';
+        const { tomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        soeknadsperiode: [{ fom: '2026-02-02', tom: '' }],
+                    },
+                    inputErrors: [
+                        {
+                            felt: 'ytelse.søknadsperiode[0].<list element>',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Til og med (TOM) må være satt.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'Søknadsperiode: Til og med (TOM) må være satt.',
+        });
+        expect(summaryLink.getAttribute('href')).toBe(`#${tomId}`);
+    });
+
+    it('Lenker ErrorSummary til trekkKrav-perioder via endringAvSøknadsperioder-id', async () => {
+        const validateSoknad = jest.fn();
+        const periodKey = '../2026-02-11';
+        const { fomId } = createPeriodInputIds('endringAvSøknadsperioder', periodKey);
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        trekkKravPerioder: [{ fom: '', tom: '2026-02-11' }],
+                    },
+                    perioder: [{ fom: '2026-01-01', tom: '2026-01-31' }],
+                    inputErrors: [
+                        {
+                            felt: 'ytelse.trekkKravPerioder[0].<list element>',
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Fra og med (FOM) må være satt.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'Endring av søknadsperiode: Fra og med (FOM) må være satt.',
+        });
+        expect(summaryLink.getAttribute('href')).toBe(`#${fomId}`);
+    });
+
+    it('Viser ikke duplikat av periodemelding i medlemskap-blokk', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        bosteder: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.bosteder.perioder.['2026-02-02/..']",
+                            feilkode: 'påkrevd',
+                            feilmelding: 'Til og med (TOM) må være satt.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        const medlemskapPanel = screen.getByTestId('accordionItem-medlemskappanel');
+        const periodMessagesInPanel = within(medlemskapPanel).queryAllByText('Til og med (TOM) må være satt.');
+        expect(periodMessagesInPanel).toHaveLength(1);
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {

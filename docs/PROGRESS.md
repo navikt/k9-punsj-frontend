@@ -7,6 +7,9 @@
 - La inn fallback i PSB slik at `validateSoknadError.message` vises i `ErrorSummary` når backend ikke returnerer feltlisten `feil`.
 - La til `href` i PSB `ErrorSummary` der feilsti kan mappes til konkret felt.
 - Innførte stabile input-id-er for periodefelt og landfelt i PSB slik at feillenker peker til riktig kontroll.
+- Endret PSB `ErrorSummary` til å vise hele backend-listen av valideringsfeil i stedet for kun `unhandled` feil.
+- La til `href`-mapping for valideringsstier med listeelementformat (`ytelse.søknadsperiode[0].<list element>` og `ytelse.trekkKravPerioder[0].<list element>`).
+- Normaliserte PSB `ErrorSummary`-tekst for generiske periodefeil med feltkontekst og fjernet duplikat av periodemelding i `medlemskap`-blokken.
 - Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
 
 ## 12.02.2026
