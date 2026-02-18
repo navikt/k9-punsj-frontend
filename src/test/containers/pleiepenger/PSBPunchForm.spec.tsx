@@ -592,7 +592,7 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
         const summaryLink = await screen.findByRole('link', {
-            name: 'Søknadsperiode: Til og med (TOM) må være satt.',
+            name: 'Søknadsperiode (periode 1): Til og med (TOM) må være satt.',
         });
         expect(summaryLink.getAttribute('href')).toBe(`#${tomId}`);
     });
@@ -607,12 +607,15 @@ describe('PunchForm', () => {
                 {
                     soknad: {
                         ...initialSoknad,
-                        trekkKravPerioder: [{ fom: '', tom: '2026-02-11' }],
+                        trekkKravPerioder: [
+                            { fom: '2026-01-01', tom: '2026-01-10' },
+                            { fom: '', tom: '2026-02-11' },
+                        ],
                     },
                     perioder: [{ fom: '2026-01-01', tom: '2026-01-31' }],
                     inputErrors: [
                         {
-                            felt: 'ytelse.trekkKravPerioder[0].<list element>',
+                            felt: 'ytelse.trekkKravPerioder[1].<list element>',
                             feilkode: 'påkrevd',
                             feilmelding: 'Fra og med (FOM) må være satt.',
                         },
@@ -631,7 +634,7 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
         const summaryLink = await screen.findByRole('link', {
-            name: 'Endring av søknadsperiode: Fra og med (FOM) må være satt.',
+            name: 'Endring av søknadsperiode (periode 2): Fra og med (FOM) må være satt.',
         });
         expect(summaryLink.getAttribute('href')).toBe(`#${fomId}`);
     });

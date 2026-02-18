@@ -28,14 +28,26 @@ const normalizePath = (path?: string): string | undefined => {
         .replace(/^\.+|\.+$/g, '');
 };
 
+const canonicalizePath = (path?: string): string | undefined => {
+    if (!path) return undefined;
+
+    return path
+        .trim()
+        .replace(/\.?\[(?:'([^']*)'|"([^"]*)"|([^[\]]+))\]/g, (_match, singleQuoted, doubleQuoted, raw) => {
+            const segment = (singleQuoted || doubleQuoted || raw || '').trim();
+            return `[${segment}]`;
+        })
+        .replace(/^\.+|\.+$/g, '');
+};
+
 const splitNormalizedPath = (path?: string): string[] => {
     const normalizedPath = normalizePath(path);
     return normalizedPath ? normalizedPath.split('.').filter(Boolean) : [];
 };
 
 const pathMatches = (errorPath: string | undefined, attribute: string, mode: 'exact' | 'prefix' = 'exact'): boolean => {
-    const normalizedErrorPath = normalizePath(errorPath);
-    const normalizedAttribute = normalizePath(attribute);
+    const normalizedErrorPath = canonicalizePath(errorPath);
+    const normalizedAttribute = canonicalizePath(attribute);
 
     if (!normalizedErrorPath || !normalizedAttribute) {
         return false;

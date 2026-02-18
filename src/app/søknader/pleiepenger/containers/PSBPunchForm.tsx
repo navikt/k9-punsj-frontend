@@ -757,8 +757,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return normalizedMessage;
         }
 
-        const contextLabel = this.getValidationContextLabel(error.felt?.trim());
-        return contextLabel ? `${contextLabel}: ${normalizedMessage}` : normalizedMessage;
+        const felt = error.felt?.trim();
+        const normalizedFelt =
+            felt?.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+        const indexedPath = normalizedFelt ? this.parseIndexedValidationPath(normalizedFelt) : undefined;
+        const periodNumber =
+            indexedPath && /^\d+$/.test(indexedPath.periodIndex) ? Number(indexedPath.periodIndex) + 1 : undefined;
+        const contextLabel = this.getValidationContextLabel(normalizedFelt);
+
+        if (contextLabel && periodNumber !== undefined) {
+            return `${contextLabel} (periode ${periodNumber}): ${normalizedMessage}`;
+        }
+        if (contextLabel) {
+            return `${contextLabel}: ${normalizedMessage}`;
+        }
+        if (periodNumber !== undefined) {
+            return `Periode ${periodNumber}: ${normalizedMessage}`;
+        }
+        return normalizedMessage;
     };
 
     private getUhaandterteFeilForBosteder = (attribute: string): (string | undefined)[] => {

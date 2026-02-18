@@ -104,4 +104,37 @@ describe('psbErrorUtils', () => {
 
         expect(result).toBe('Feltet kan ikke være tomt');
     });
+
+    it('maps endringAvSøknadsperioder to correct trekkKravPerioder index when multiple errors exist', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'endringAvSøknadsperioder.perioder[1].periode.fom',
+            indeks: 1,
+            inputErrors: [
+                { felt: 'ytelse.trekkKravPerioder[0].<list element>', feilmelding: 'Feil i periode 1' },
+                { felt: 'ytelse.trekkKravPerioder[1].<list element>', feilmelding: 'Feil i periode 2' },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Feil i periode 2');
+    });
+
+    it('maps bosteder period message to correct period key when multiple errors exist', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.bosteder.perioder[2026-02-02/..]',
+            inputErrors: [
+                { felt: "ytelse.bosteder.perioder.['2026-01-01/..']", feilmelding: 'Feil i bosted 1' },
+                { felt: "ytelse.bosteder.perioder.['2026-02-02/..']", feilmelding: 'Feil i bosted 2' },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Feil i bosted 2');
+    });
 });

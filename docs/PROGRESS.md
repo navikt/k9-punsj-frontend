@@ -10,6 +10,8 @@
 - Endret PSB `ErrorSummary` til å vise hele backend-listen av valideringsfeil i stedet for kun `unhandled` feil.
 - La til `href`-mapping for valideringsstier med listeelementformat (`ytelse.søknadsperiode[0].<list element>` og `ytelse.trekkKravPerioder[0].<list element>`).
 - Normaliserte PSB `ErrorSummary`-tekst for generiske periodefeil med feltkontekst og fjernet duplikat av periodemelding i `medlemskap`-blokken.
+- La til indekskontekst i PSB `ErrorSummary` for listeelementfeil (`periode N`) og verifiserte lenking for `ytelse.trekkKravPerioder[1].<list element>`.
+- Rettet PSB path-matching for valideringsfeil slik at riktig arrayelement velges for både indeksbaserte stier (`[1]`) og periodebaserte nøkler (`perioder['fom/tom']`) i feltfeil.
 - Oppdaterte PSB formtester for ny `ErrorSummary` visning og fallback-scenario.
 
 ## 12.02.2026
