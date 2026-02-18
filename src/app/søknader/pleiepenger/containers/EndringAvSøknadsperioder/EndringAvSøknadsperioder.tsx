@@ -19,6 +19,21 @@ interface Props {
     eksisterendePerioder?: IPeriode[];
 }
 
+export const buildEndringAvSoknadsperioderUpdate = (
+    perioder: IPeriode[],
+): Partial<Pick<IPSBSoknad, 'trekkKravPerioder' | 'begrunnelseForInnsending'>> => {
+    if (perioder.length === 0) {
+        return {
+            trekkKravPerioder: [],
+            begrunnelseForInnsending: undefined,
+        };
+    }
+
+    return {
+        trekkKravPerioder: perioder,
+    };
+};
+
 const EndringAvSøknadsperioder = (props: Props) => {
     const intl = useIntl();
 
@@ -170,9 +185,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 <Periodepaneler
                     periods={soknad.trekkKravPerioder || []}
                     initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
+                    editSoknad={(perioder) => updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder))}
                     editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                        updateSoknadState(buildEndringAvSoknadsperioderUpdate(perioder), showStatus);
                         setSelectedPeriods(perioder);
                     }}
                     textLeggTil="skjema.perioder.legg_til"

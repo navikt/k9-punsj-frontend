@@ -6,6 +6,9 @@
 - Knyttet `ErrorSummary`-lenke for denne feilen til `#sn-registrert-land` og viste feilen direkte på feltet for registrert land i SN-panelet.
 - Fjernet duplikat av samme legacy-feil i SN sin generelle ubehandlede feilliste når den allerede er håndtert på `landkode`-felt.
 - La til tester for parsing, feltmapping og `ErrorSummary`-lenking for legacy-kaset.
+- Ryddet PSB endringspanel slik at `begrunnelseForInnsending` nullstilles når alle `trekkKravPerioder` fjernes, for å unngå at gammel begrunnelse sendes videre uten endringsperioder.
+- La til en enhetstest for payload-bygging i PSB endringspanel for scenario med tom periodliste.
+- Fjernet default-init av `begrunnelseForInnsending` (`{ tekst: '' }`) i PSB-modellene (`PSBSoknad`, `PSBSoknadUt`) for å unngå at tom begrunnelse dukker opp igjen i payload automatisk.
 
 ## 17.02.2026
 
