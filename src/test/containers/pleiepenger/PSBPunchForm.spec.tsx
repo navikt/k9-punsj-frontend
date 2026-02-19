@@ -884,6 +884,111 @@ describe('PunchForm', () => {
         expect(summaryLink.getAttribute('href')).toBe('#sn-organisasjonsnummer');
     });
 
+    it('Viser bruttoinntekt-feil på feltet og lenker ErrorSummary til bruttoinntekt-feltet', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        opptjeningAktivitet: {
+                            ...initialSoknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: {
+                                virksomhetNavn: 'Test virksomhet',
+                                organisasjonsnummer: '910909088',
+                                info: {
+                                    periode: { fom: '2026-02-02', tom: '' },
+                                    registrertIUtlandet: false,
+                                    virksomhetstyper: ['ANNEN'],
+                                    bruttoInntekt: '-16',
+                                },
+                            },
+                        },
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].bruttoInntekt",
+                            feilkode: 'ugyldigVerdi',
+                            feilmelding: 'bruttoInntekt [-16] må være >= 0.00',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const bruttoInntektInput = await screen.findByLabelText('skjema.sn.bruttoinntekt');
+        expect(bruttoInntektInput).toHaveAttribute('aria-invalid', 'true');
+
+        const summaryLink = await screen.findByRole('link', {
+            name: 'bruttoInntekt [-16] må være >= 0.00',
+        });
+        expect(summaryLink.getAttribute('href')).toBe('#sn-bruttoinntekt');
+    });
+
+    it('Viser virksomhetstyper-feil på feltet, dedupliserer duplikater og lenker ErrorSummary til feltgruppen', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        opptjeningAktivitet: {
+                            ...initialSoknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: {
+                                virksomhetNavn: 'Test virksomhet',
+                                organisasjonsnummer: '910909088',
+                                info: {
+                                    periode: { fom: '2026-02-02', tom: null },
+                                    registrertIUtlandet: false,
+                                    virksomhetstyper: [],
+                                },
+                            },
+                        },
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
+                            feilkode: 'nullFeil',
+                            feilmelding: 'Feltet kan ikke være tomt',
+                        },
+                        {
+                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
+                            feilkode: 'tomFeil',
+                            feilmelding: 'Feltet kan ikke være tomt',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLinks = await screen.findAllByRole('link', {
+            name: 'Feltet kan ikke være tomt',
+        });
+        expect(summaryLinks).toHaveLength(1);
+        expect(summaryLinks[0].getAttribute('href')).toBe('#sn-virksomhetstyper');
+
+        const arbeidsforholdPanel = screen.getByTestId('accordionItem-arbeidsforholdPanel');
+        expect(within(arbeidsforholdPanel).getByText('Feltet kan ikke være tomt')).toBeDefined();
+    });
+
     it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
         const validateSoknad = jest.fn();
 

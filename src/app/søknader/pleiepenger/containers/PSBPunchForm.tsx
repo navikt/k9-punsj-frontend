@@ -848,6 +848,22 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
 
         if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.bruttoInntekt$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-bruttoinntekt';
+        }
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.virksomhetstyper$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-virksomhetstyper';
+        }
+
+        if (
             /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.valideringRegistrertUtlandet$/.test(
                 normalizedFelt,
             )

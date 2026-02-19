@@ -219,22 +219,24 @@ const ArbeidsforholdPanel = ({
         const arbeid = soknad.arbeidstid;
         return (
             <div className="infoContainer">
-                <CheckboksPanelGruppe
-                    className="virksomhetstypercheckbox"
-                    legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
-                    feil={getErrorMessage(
-                        `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
-                            opptjening?.selvstendigNaeringsdrivende?.info?.periode,
-                        )}].virksomhetstyper`,
-                    )}
-                    checkboxes={Object.values(Virksomhetstyper).map((v) => ({
-                        label: v,
-                        value: v,
-                        onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                        checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
-                    }))}
-                    onChange={() => undefined}
-                />
+                <div id="sn-virksomhetstyper">
+                    <CheckboksPanelGruppe
+                        className="virksomhetstypercheckbox"
+                        legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                        feil={getErrorMessage(
+                            `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                            )}].virksomhetstyper`,
+                        )}
+                        checkboxes={Object.values(Virksomhetstyper).map((v) => ({
+                            label: v,
+                            value: v,
+                            onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                        }))}
+                        onChange={() => undefined}
+                    />
+                </div>
                 <div className="generelleopplysiniger">
                     <div className="flex flex-wrap">
                         <TextField
@@ -568,9 +570,16 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <TextField
+                            id="sn-bruttoinntekt"
                             label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                            type="number"
                             className="bruttoinntekt"
                             value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
+                            error={getErrorMessage(
+                                `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                    opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                                )}].bruttoInntekt`,
+                            )}
                             onChange={(event: any) =>
                                 updateSoknadState(
                                     {
