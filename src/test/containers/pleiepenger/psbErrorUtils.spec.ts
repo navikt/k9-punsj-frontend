@@ -178,6 +178,44 @@ describe('psbErrorUtils', () => {
         expect(result).toBe('organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet');
     });
 
+    it('maps organisasjonsnummer.verdi backend path to selvstendig næringsdrivende organisasjonsnummer field path', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid',
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.verdi',
+                    feilmelding: "'123456dfgj' matcher ikke tillatt pattern '^\\\\d+$'",
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe("'123456dfgj' matcher ikke tillatt pattern '^\\\\d+$'");
+    });
+
+    it('does not return organisasjonsnummer.verdi as unhandled when organisasjonsnummer.valid path is already handled', () => {
+        const inputErrors: IInputError[] = [
+            {
+                felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.verdi',
+                feilmelding: "'123456dfgj' matcher ikke tillatt pattern '^\\\\d+$'",
+            },
+        ];
+
+        const result = getUnhandledErrors({
+            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]',
+            inputErrors,
+            feilmeldingStier: new Set([
+                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0]',
+                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid',
+            ]),
+        });
+
+        expect(result).toEqual([]);
+    });
+
     it('extracts message from legacy Feil payload when feilmelding is empty', () => {
         const result = getInputErrorMessage({
             felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",

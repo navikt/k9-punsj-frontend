@@ -30,11 +30,21 @@ interface LegacyFeilPayload {
  * These path and message normalizers compensate for unstable validation paths
  * returned from backend/k9-format. Remove after backend exposes canonical field paths.
  */
+const canonicalizeSnOrgnummerPath = (path: string): string =>
+    path
+        .replace(
+            /^(ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+])\.okOrganisasjonsnummer$/,
+            '$1.organisasjonsnummer',
+        )
+        .replace(
+            /^(ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+])\.organisasjonsnummer\.(valid|verdi)$/,
+            '$1.organisasjonsnummer',
+        );
+
 const normalizePath = (path?: string): string | undefined => {
     if (!path) return undefined;
 
-    return path
-        .trim()
+    return canonicalizeSnOrgnummerPath(path.trim())
         .replace(/\.?\[(?:'[^']*'|"[^"]*"|[^[\]]+)\]/g, '[*]')
         .replace(/^\.+|\.+$/g, '');
 };
@@ -42,8 +52,7 @@ const normalizePath = (path?: string): string | undefined => {
 const canonicalizePath = (path?: string): string | undefined => {
     if (!path) return undefined;
 
-    return path
-        .trim()
+    return canonicalizeSnOrgnummerPath(path.trim())
         .replace(/\.?\[(?:'([^']*)'|"([^"]*)"|([^[\]]+))\]/g, (_match, singleQuoted, doubleQuoted, raw) => {
             const segment = (singleQuoted || doubleQuoted || raw || '').trim();
             const normalizedSegment = segment.replace(/\/9999-12-31$/i, '/..');
@@ -307,7 +316,12 @@ export const getPSBErrorMessage = ({
     // Keep this remapping until backend/k9-format exposes one canonical path.
     if (snOrgnummerPathMatch) {
         const basePath = snOrgnummerPathMatch[1];
-        const candidatePaths = [`${basePath}.okOrganisasjonsnummer`, `${basePath}.organisasjonsnummer.valid`, `${basePath}.organisasjonsnummer`];
+        const candidatePaths = [
+            `${basePath}.okOrganisasjonsnummer`,
+            `${basePath}.organisasjonsnummer.valid`,
+            `${basePath}.organisasjonsnummer.verdi`,
+            `${basePath}.organisasjonsnummer`,
+        ];
         errorMsg = candidatePaths
             .map((path) => filterMessagesByPath(inputErrors, path, 'prefix')[0])
             .find((message): message is string => !!message);

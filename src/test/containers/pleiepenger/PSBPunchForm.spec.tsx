@@ -853,6 +853,37 @@ describe('PunchForm', () => {
         expect(summaryLink.getAttribute('href')).toBe('#sn-organisasjonsnummer');
     });
 
+    it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for organisasjonsnummer.verdi-feil', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    inputErrors: [
+                        {
+                            felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.verdi',
+                            feilkode: 'påkrevd',
+                            feilmelding: "'123456dfgj' matcher ikke tillatt pattern '^\\d+$'",
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const sendKnapp = screen.getByTestId('sendKnapp');
+        await act(async () => {
+            fireEvent.click(sendKnapp);
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        const summaryLink = await screen.findByRole('link', {
+            name: "'123456dfgj' matcher ikke tillatt pattern '^\\d+$'",
+        });
+        expect(summaryLink.getAttribute('href')).toBe('#sn-organisasjonsnummer');
+    });
+
     it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
         const validateSoknad = jest.fn();
 

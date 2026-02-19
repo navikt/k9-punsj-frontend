@@ -840,7 +840,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 : felt;
 
         if (
-            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.(okOrganisasjonsnummer|organisasjonsnummer(?:\.valid)?)$/.test(
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.(okOrganisasjonsnummer|organisasjonsnummer(?:\.(?:valid|verdi))?)$/.test(
                 normalizedFelt,
             )
         ) {
