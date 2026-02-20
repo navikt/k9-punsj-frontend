@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, TextField } from '@navikt/ds-react';
 
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { IOMPAOSoknad } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
@@ -50,13 +50,9 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                 </div>
             </div>
 
-            <RadioPanelGruppeFormik
+            <LegacyJaNeiIkkeRelevantRadioGroupFormik
                 legend={intlHelper(intl, 'ident.signatur.etikett')}
                 name="metadata.signatur"
-                options={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                    label: intlHelper(intl, jn),
-                    value: jn,
-                }))}
             />
 
             {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (

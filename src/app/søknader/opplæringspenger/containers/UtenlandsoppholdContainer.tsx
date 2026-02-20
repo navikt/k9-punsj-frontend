@@ -5,7 +5,7 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
-import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
+import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Utenlandsopphold from './Utenlandsopphold';
@@ -35,18 +35,11 @@ const UtenlandsoppholdContainer = () => {
                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>
 
-            <LegacyRadioGroup
+            <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
-                radios={[
-                    { label: 'Ja', value: JaNeiIkkeOpplyst.JA },
-                    { label: 'Nei', value: JaNeiIkkeOpplyst.NEI },
-                    { label: 'Ikke opplyst', value: JaNeiIkkeOpplyst.IKKE_OPPLYST },
-                ]}
                 name="metadata.harUtenlandsopphold"
                 legend="Skal søker reise til utlandet i perioden det søkes for?"
-                onChange={(event) =>
-                    updateUtenlandsopphold((event.target as HTMLInputElement).value as JaNeiIkkeOpplyst)
-                }
+                onChange={(_, value) => updateUtenlandsopphold(value)}
                 checked={values.metadata.harUtenlandsopphold}
             />
             {values.metadata.harUtenlandsopphold === JaNeiIkkeOpplyst.JA && (

@@ -4,3 +4,7 @@ export { default as LegacyRadioGroup } from './RadioGroup';
 export type { LegacyRadioGroupOption, LegacyRadioGroupProps } from './RadioGroup';
 export { default as LegacyJaNeiRadioGroup } from './JaNeiRadioGroup';
 export type { LegacyJaNeiRadioGroupProps } from './JaNeiRadioGroup';
+export { default as LegacyJaNeiIkkeOpplystRadioGroup } from './JaNeiIkkeOpplystRadioGroup';
+export type { LegacyJaNeiIkkeOpplystRadioGroupProps } from './JaNeiIkkeOpplystRadioGroup';
+export { default as LegacyJaNeiIkkeRelevantRadioGroup } from './JaNeiIkkeRelevantRadioGroup';
+export type { LegacyJaNeiIkkeRelevantRadioGroupProps } from './JaNeiIkkeRelevantRadioGroup';
