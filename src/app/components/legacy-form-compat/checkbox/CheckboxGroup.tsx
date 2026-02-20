@@ -18,7 +18,10 @@ export interface LegacyCheckboxGroupOption
 }
 
 export interface LegacyCheckboxGroupProps
-    extends Omit<React.ComponentProps<typeof AkselCheckboxGroup>, 'children' | 'defaultValue' | 'error' | 'onChange'> {
+    extends Omit<
+        React.ComponentProps<typeof AkselCheckboxGroup>,
+        'children' | 'defaultValue' | 'error' | 'legend' | 'onChange' | 'checked' | 'defaultChecked'
+    > {
     name?: string;
     checkboxes: LegacyCheckboxGroupOption[];
     checked?: string[];

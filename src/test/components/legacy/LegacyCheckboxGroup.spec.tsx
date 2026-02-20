@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
+import { LegacyCheckboxGroup } from '../../../app/components/legacy-form-compat/checkbox';
 
 describe('LegacyCheckboxGroup', () => {
     it('toggles multiple values in controlled mode', async () => {
