@@ -9,7 +9,7 @@ interface OwnProps extends Omit<LegacyCheckboxProps, 'checked'> {
     valueIsBoolean?: boolean;
 }
 
-const CheckboksPanelFormik = ({ name, type, value, valueIsBoolean, ...props }: OwnProps) => {
+const LegacyCheckboxFormik = ({ name, type, value, valueIsBoolean, ...props }: OwnProps) => {
     const [field, , helpers] = useField({ name, type, value });
 
     const booleanToggle = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -26,4 +26,4 @@ const CheckboksPanelFormik = ({ name, type, value, valueIsBoolean, ...props }: O
     );
 };
 
-export default CheckboksPanelFormik;
+export default LegacyCheckboxFormik;

@@ -20,7 +20,7 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
     visComponent = true,
     handleDokumenttype,
 }: Props) => {
-    // Kompatibilitetslag for migrering fra nav-frontend-skjema.
+    // Kompatibilitetslag for migrering fra eldre skjemakomponenter.
     // Beholder eksisterende visuelt uttrykk og oppførsel i kopiflyten, men bruker Aksel under panseret.
     const intl = useIntl();
 

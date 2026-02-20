@@ -5,8 +5,8 @@ import { Checkbox as AkselCheckbox } from '@navikt/ds-react';
 
 import './checkbox.css';
 
-// Compatibility wrapper for migration from nav-frontend-skjema to Aksel.
-// Keeps legacy CheckboksPanel visuals while using the new design system internals.
+// Kompatibilitetslag for migrering fra eldre skjemakomponenter til Aksel.
+// Beholder legacy-visning for CheckboksPanel, men bruker ny designsystemimplementasjon.
 export interface LegacyCheckboxProps
     extends Omit<React.ComponentProps<typeof AkselCheckbox>, 'children' | 'description'> {
     label: React.ReactNode;

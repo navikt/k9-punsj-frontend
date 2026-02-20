@@ -1,8 +1,6 @@
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-
-// eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -21,7 +19,7 @@ const webpackConfig = {
         publicPath: '/dist',
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json', '.jsx', '.less'],
+        extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
         alias: {
             app: path.resolve(__dirname, './../../app'),
         },
@@ -36,27 +34,6 @@ const webpackConfig = {
                         loader: 'babel-loader',
                         options: {
                             plugins: [isDevelopment && 'react-refresh/babel'].filter(Boolean),
-                        },
-                    },
-                ],
-            },
-            {
-                test: /\.less$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
-                    'css-loader',
-                    'postcss-loader',
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            lessOptions: {
-                                globalVars: {
-                                    coreModulePath: '"~"',
-                                    nodeModulesPath: '"~"',
-                                },
-                            },
                         },
                     },
                 ],

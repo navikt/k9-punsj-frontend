@@ -3,7 +3,7 @@ import React from 'react';
 import { useField, useFormikContext } from 'formik';
 import { Box, ErrorMessage, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import CheckboksPanelFormik from 'app/components/formikInput/CheckboksPanelFormik';
+import LegacyCheckboxFormik from 'app/components/formikInput/LegacyCheckboxFormik';
 import ArbeidstakerContainer from '../components/ArbeidstakerContainer';
 import Frilanser from '../components/Frilanser';
 import SelvstendigNaeringsdrivende from '../components/SelvstendigNaeringsdrivende';
@@ -32,7 +32,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
 
             <VerticalSpacer eightPx />
 
-            <CheckboksPanelFormik
+            <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.arbeidstaker"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.skjematyper.AT')}
                 valueIsBoolean
@@ -42,7 +42,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
 
             {field.value.arbeidstaker && <ArbeidstakerContainer søknadsperiodeFraSak={søknadsperiodeFraSak} />}
 
-            <CheckboksPanelFormik
+            <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.selvstendigNaeringsdrivende"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.selvstendig.tittel')}
                 valueIsBoolean
@@ -52,7 +52,7 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
 
             {field.value.selvstendigNaeringsdrivende && <SelvstendigNaeringsdrivende />}
 
-            <CheckboksPanelFormik
+            <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.frilanser"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.tittel')}
                 valueIsBoolean

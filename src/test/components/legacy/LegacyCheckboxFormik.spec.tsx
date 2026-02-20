@@ -4,9 +4,9 @@ import { Form, Formik } from 'formik';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import CheckboksPanelFormik from '../../../app/components/formikInput/CheckboksPanelFormik';
+import LegacyCheckboxFormik from '../../../app/components/formikInput/LegacyCheckboxFormik';
 
-describe('CheckboksPanelFormik', () => {
+describe('LegacyCheckboxFormik', () => {
     it('updates boolean value with valueIsBoolean', async () => {
         const user = userEvent.setup();
 
@@ -14,7 +14,7 @@ describe('CheckboksPanelFormik', () => {
             <Formik initialValues={{ arbeidstaker: false }} onSubmit={() => undefined}>
                 {({ values }) => (
                     <Form>
-                        <CheckboksPanelFormik name="arbeidstaker" label="Arbeidstaker" valueIsBoolean />
+                        <LegacyCheckboxFormik name="arbeidstaker" label="Arbeidstaker" valueIsBoolean />
                         <div data-testid="value">{String(values.arbeidstaker)}</div>
                     </Form>
                 )}

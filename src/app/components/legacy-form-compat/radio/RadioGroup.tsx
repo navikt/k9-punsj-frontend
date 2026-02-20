@@ -6,8 +6,8 @@ import { RadioGroup as AkselRadioGroup } from '@navikt/ds-react';
 import LegacyRadio, { LegacyRadioProps } from './Radio';
 import './radioGroup.css';
 
-// Compatibility wrapper for migration from nav-frontend-skjema to Aksel.
-// Keeps legacy RadioPanelGruppe behavior and visuals during the transition.
+// Kompatibilitetslag for migrering fra eldre skjemakomponenter til Aksel.
+// Beholder legacy-oppførsel og visning for RadioPanelGruppe i overgangsperioden.
 export interface LegacyRadioGroupOption
     extends Omit<LegacyRadioProps, 'checked' | 'defaultChecked' | 'name' | 'onChange' | 'className'> {
     value: string;
