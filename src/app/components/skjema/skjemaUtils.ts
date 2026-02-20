@@ -23,10 +23,9 @@ export const generateDateString = (periode: IPeriode | IPeriode[] | null): strin
 };
 
 export const periodeSpenn = (periode: IPeriode | undefined): string => {
-    if (periode && typeof periode.fom === 'string' && typeof periode.tom === 'string') {
-        return `'${Object.values(periode)
-            .map((dato) => `${dato}` || '..')
-            .join('/')}'`;
+    if (periode && typeof periode.fom === 'string' && periode.fom) {
+        const tom = typeof periode.tom === 'string' && periode.tom ? periode.tom : '..';
+        return `'${periode.fom}/${tom}'`;
     }
     return '';
 };

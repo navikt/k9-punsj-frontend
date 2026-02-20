@@ -389,23 +389,28 @@ export function submitSoknad(norskIdent: string, soeknadId: string) {
 }
 
 export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
-    const norskIdent: string = !soknad.soeknadId ? '' : soknad.soeknadId;
-
     return (dispatch: any) => {
         dispatch(validerSoknadRequestAction());
         post(
             ApiPath.PSB_SOKNAD_VALIDER,
             { id: soknad.soeknadId },
-            { 'X-Nav-NorskIdent': norskIdent },
+            undefined,
             soknad,
-            (response, data) => {
+            (response, responseData) => {
+                const error = convertProblemDetailToError(response, responseData);
                 switch (response.status) {
                     case 202:
-                        return dispatch(validerSoknadSuccessAction(data, erMellomlagring));
-                    case 400:
-                        return dispatch(validerSoknadUncompleteAction(data.feil));
+                        return dispatch(validerSoknadSuccessAction(responseData, erMellomlagring));
+                    case 400: {
+                        const errors = getValidationErrorsFromProblemDetail<IInputError>(responseData);
+                        if (errors.length > 0) {
+                            return dispatch(validerSoknadUncompleteAction(errors));
+                        }
+
+                        return dispatch(validerSoknadErrorAction(error));
+                    }
                     default:
-                        return dispatch(validerSoknadErrorAction(convertResponseToError(response)));
+                        return dispatch(validerSoknadErrorAction(error));
                 }
             },
         );

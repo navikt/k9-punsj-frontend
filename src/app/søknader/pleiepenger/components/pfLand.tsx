@@ -7,6 +7,8 @@ import {
 } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { createLandInputId } from '../utils/errorAnchorUtils';
 
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { IOppholdsLand } from 'app/models/types/PSBSoknad';
@@ -23,9 +25,12 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         intl: IntlShape,
     ) => {
         const { land } = periodeinfo;
+        const feltindeks = periodeSpenn(periodeinfo.periode);
+
         return (
             <div className="countryselect">
                 <CountrySelect
+                    id={createLandInputId(feilprefiks, feltindeks, `index-${periodeindex}`)}
                     label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
                     unselectedoption="Velg land"
                     selectedcountry={land || ''}
@@ -34,7 +39,7 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                         updatePeriodeinfoInSoknad({ land: event.target.value });
                     }}
                     onBlur={(event) => updatePeriodeinfoInSoknad({ land: event.target.value })}
-                    // feil={getErrorMessage(`${feilprefiks}.land`)}
+                    error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].land`)}
                 />
             </div>
         );

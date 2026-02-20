@@ -10,6 +10,7 @@ export * from 'app/models/types/EksisterendeSoknaderState';
 export * from 'app/models/types/SoknaderSokState';
 export * from 'app/models/types/Periode';
 export * from 'app/models/types/Periodeinfo';
+export * from 'app/models/types/ProblemDetail';
 export * from 'app/models/types/PunchPSBFormState';
 export * from 'app/models/types/PunchState';
 export * from 'app/models/types/SelvstendigNaerinsdrivende';

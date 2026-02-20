@@ -420,4 +420,14 @@ describe('SoknadKvittering', () => {
         // Ikke viser tilleggsopplysninger
         expect(screen.queryByTestId('tilleggsopplysninger')).not.toBeInTheDocument();
     });
+
+    it('Viser ikke begrunnelse for endring når begrunnelse tekst er null', () => {
+        const responseWithNullBegrunnelse: IPSBSoknadKvittering = {
+            ...minimalResponse,
+            begrunnelseForInnsending: { tekst: null as unknown as string },
+        };
+
+        expect(() => setupSoknadKvittering(responseWithNullBegrunnelse)).not.toThrow();
+        expect(screen.queryByTestId('begrunnelseForEndring')).not.toBeInTheDocument();
+    });
 });

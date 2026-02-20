@@ -173,7 +173,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                             </BodyShort>
                         )}
 
-                        {begrunnelseForInnsending?.tekst.length > 0 && (
+                        {begrunnelseForInnsending?.tekst?.length > 0 && (
                             <BodyShort size="small" data-testid="begrunnelseForEndring">
                                 <FormattedMessage
                                     id="skjema.kvittering.begrunnelseForEndring"
