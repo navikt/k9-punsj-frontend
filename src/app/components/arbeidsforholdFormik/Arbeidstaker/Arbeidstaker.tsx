@@ -123,28 +123,6 @@ const ArbeidstakerComponent: React.FC<Props> = ({
     return (
         <Fieldset className="arbeidstaker-panel" legend="" hideLegend>
             <div className="flex flex-wrap">
-                {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
-                        {({ field, form }: FieldProps<boolean>) => (
-                            <RadioPanelGruppeFormik
-                                legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                                checked={selectedType}
-                                name={field.name}
-                                options={[
-                                    {
-                                        label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'),
-                                        value: 'o',
-                                    },
-                                    {
-                                        label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'),
-                                        value: 'p',
-                                    },
-                                ]}
-                                onChange={(event) =>
-                                    updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)
-                                }
-                            />
-                        )}
-                    </Field> */}
                 <LegacyRadioGroup
                     className="horizontalRadios"
                     radios={[
