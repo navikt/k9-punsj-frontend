@@ -5,6 +5,13 @@
     position: relative;
 }
 
+.legacy-radio-panel__standalone-group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
 .legacy-radio-panel__control.navds-radio {
     width: 100%;
 }
