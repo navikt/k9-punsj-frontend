@@ -7,6 +7,7 @@ import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
@@ -52,11 +53,10 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
                             {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
+                                <LegacyJaNeiRadioGroupFormik
                                     legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
                                     description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
                                     name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                                     onChange={(e, value) => form.setFieldValue(field.name, value)}
                                 />
                             )}
@@ -97,16 +97,12 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                             <>
                                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erFiskerPåBladB">
                                     {({ field, form }: FieldProps<boolean>) => (
-                                        <RadioPanelGruppeFormik
+                                        <LegacyJaNeiRadioGroupFormik
                                             legend={intlHelper(
                                                 intl,
                                                 'skjema.arbeid.sn.virksomhetstype.erFiskerPåBladB',
                                             )}
                                             name={field.name}
-                                            options={Object.values(JaNei).map((v) => ({
-                                                value: v,
-                                                label: capitalize(v),
-                                            }))}
                                             checked={field.value ? JaNei.JA : JaNei.NEI}
                                             onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA)}
                                         />
@@ -129,11 +125,10 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
 
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
-                        <RadioPanelGruppeFormik
+                        <LegacyJaNeiRadioGroupFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
                             checked={field.value ? JaNei.NEI : JaNei.JA}
                             name={field.name}
-                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                             onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.NEI)}
                         />
                     )}
@@ -174,11 +169,10 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                     <>
                         <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.harSøkerRegnskapsfører">
                             {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
+                                <LegacyJaNeiRadioGroupFormik
                                     legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
                                     checked={field.value ? JaNei.JA : JaNei.NEI}
                                     name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                                     onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA)}
                                 />
                             )}

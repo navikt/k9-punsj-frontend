@@ -13,6 +13,7 @@ export interface LegacyRadioGroupOption
     value: string;
     className?: string;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
+    'data-test-id'?: string;
 }
 
 export interface LegacyRadioGroupProps

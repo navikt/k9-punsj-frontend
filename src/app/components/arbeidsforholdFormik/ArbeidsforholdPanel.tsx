@@ -5,7 +5,7 @@ import { CheckboksPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -18,7 +18,6 @@ import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsd
 import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from '../../models/types/OLPSoknad';
-import { capitalize } from '../../utils/utils';
 import VerticalSpacer from '../VerticalSpacer';
 import { CountrySelect } from '../country-select/CountrySelect';
 import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
@@ -90,11 +89,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
                 {({ field, form }: FieldProps<boolean>) => (
-                    <RadioPanelGruppeFormik
+                    <LegacyJaNeiRadioGroupFormik
                         legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
                         checked={field.value ? 'ja' : 'nei'}
                         name={field.name}
-                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                         onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
                     />
                 )}
@@ -179,11 +177,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.registrertIUtlandet">
                     {({ field, form }: FieldProps<boolean>) => (
-                        <RadioPanelGruppeFormik
+                        <LegacyJaNeiRadioGroupFormik
                             legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
                             checked={field.value ? JaNei.NEI : JaNei.JA}
                             name={field.name}
-                            options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                             onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA ? false : true)}
                         />
                     )}
@@ -221,11 +218,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <VerticalSpacer sixteenPx />
 
-                <RadioPanelGruppeFormik
+                <LegacyJaNeiRadioGroupFormik
                     legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
                     checked={values.metadata.harSøkerRegnskapsfører === JaNei.JA ? JaNei.JA : JaNei.NEI}
                     name="metadata.harSøkerRegnskapsfører"
-                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                     onChange={(e, value) => {
                         setFieldValue('metadata.harSøkerRegnskapsfører', value);
                         setFieldValue('opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn', '');
@@ -313,11 +309,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         <>
                             <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
                                 {({ field, form }: FieldProps<boolean>) => (
-                                    <RadioPanelGruppeFormik
+                                    <LegacyJaNeiRadioGroupFormik
                                         legend={intlHelper(intl, 'skjema.sn.varigendring')}
                                         checked={field.value ? 'ja' : 'nei'}
                                         name={field.name}
-                                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                                         onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
                                     />
                                 )}

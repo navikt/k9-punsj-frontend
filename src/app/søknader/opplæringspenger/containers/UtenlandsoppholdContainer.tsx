@@ -5,10 +5,10 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Utenlandsopphold from './Utenlandsopphold';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { UtenlandsOpphold } from 'app/models/types';
 import { Periode } from 'app/models/types/Periode';
@@ -35,7 +35,7 @@ const UtenlandsoppholdContainer = () => {
                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>
 
-            <RadioPanelGruppe
+            <LegacyRadioGroup
                 className="horizontalRadios"
                 radios={[
                     { label: 'Ja', value: JaNeiIkkeOpplyst.JA },

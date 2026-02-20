@@ -1,16 +1,14 @@
 import React from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import RadioFormik from 'app/components/formikInput/RadioFormik';
 import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
-import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
@@ -37,11 +35,10 @@ export default function Frilanser() {
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
                             {({ field, form }: FieldProps<boolean>) => (
-                                <RadioPanelGruppeFormik
+                                <LegacyJaNeiRadioGroupFormik
                                     legend={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager')}
                                     description={intlHelper(intl, 'skjema.harSoekerDekketOmsorgsdager.hjelp')}
                                     name={field.name}
-                                    options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                                     onChange={(e, value) => form.setFieldValue(field.name, value)}
                                 />
                             )}

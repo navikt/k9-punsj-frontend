@@ -3,6 +3,7 @@ import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -194,7 +195,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                     )}
                 {land && (
                     <div className="mt-8">
-                        <RadioPanelGruppe
+                        <LegacyRadioGroup
                             className="horizontalRadios "
                             radios={[
                                 {
