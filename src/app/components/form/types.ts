@@ -35,6 +35,35 @@ export interface FormTextareaProps<T extends FieldValues> extends Omit<FormField
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
+export interface FormRadioGroupOption {
+    value: string;
+    label: ReactNode;
+    disabled?: boolean;
+}
+
+export interface FormCheckboxGroupOption {
+    value: string;
+    label: ReactNode;
+    description?: string;
+    disabled?: boolean;
+}
+
+export interface FormRadioGroupProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'label' | 'onChange'> {
+    legend: ReactNode;
+    options: FormRadioGroupOption[];
+    description?: ReactNode;
+    hideLegend?: boolean;
+    onChange?: (value: string) => void;
+}
+
+export interface FormCheckboxGroupProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'label' | 'onChange'> {
+    legend: ReactNode;
+    options: FormCheckboxGroupOption[];
+    description?: ReactNode;
+    hideLegend?: boolean;
+    onChange?: (checkedValues: string[]) => void;
+}
+
 export interface FormLegacyRadioGroupProps<T extends FieldValues>
     extends Omit<FormFieldProps<T>, 'label' | 'onChange'> {
     legend: ReactNode;
