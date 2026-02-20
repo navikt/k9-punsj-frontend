@@ -490,6 +490,10 @@
   width: 100%;
 }
 
+.flex-container .legacy-checkbox-panel {
+  width: 100%;
+}
+
 
 .validertSoknadOppsummeringContainerKnapper {
   display: flex;

@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { set } from 'lodash';
-import { CheckboksPanel, CheckboksPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
+import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -227,7 +227,7 @@ const ArbeidsforholdPanel = ({
         return (
             <div className="infoContainer">
                 <div id="sn-virksomhetstyper">
-                    <CheckboksPanelGruppe
+                    <LegacyCheckboxGroup
                         className="virksomhetstypercheckbox"
                         legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                         checkboxes={Object.values(Virksomhetstyper).map((v) => ({
@@ -241,7 +241,6 @@ const ArbeidsforholdPanel = ({
                                 opptjening?.selvstendigNaeringsdrivende?.info?.periode,
                             )}].virksomhetstyper`,
                         )}
-                        onChange={() => undefined}
                     />
                 </div>
 
@@ -854,7 +853,7 @@ const ArbeidsforholdPanel = ({
             </Accordion.Header>
 
             <Accordion.Content>
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
                     value={Arbeidsforhold.ARBEIDSTAKER}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
@@ -875,7 +874,7 @@ const ArbeidsforholdPanel = ({
                     />
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                     value={Arbeidsforhold.FRILANSER}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
@@ -890,7 +889,7 @@ const ArbeidsforholdPanel = ({
                     </Box>
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                     value={Arbeidsforhold.SELVSTENDIG}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}

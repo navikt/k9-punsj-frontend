@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Field, FieldProps, useFormikContext } from 'formik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box } from '@navikt/ds-react';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
@@ -393,7 +393,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
             </Accordion.Header>
 
             <Accordion.Content>
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
                     value={Arbeidsforhold.ARBEIDSTAKER}
                     onChange={(e) => {
@@ -417,7 +417,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     />
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                     value={Arbeidsforhold.FRILANSER}
                     onChange={(e) => {
@@ -442,7 +442,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     </Box>
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                     value={Arbeidsforhold.SELVSTENDIG}
                     onChange={(e) => {

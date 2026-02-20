@@ -1,8 +1,8 @@
 import React, { ComponentType } from 'react';
 import classNames from 'classnames';
-import { CheckboksPanel } from 'nav-frontend-skjema';
 
 import { Alert, Button, HelpText, Modal, Tag, Loader, Heading } from '@navikt/ds-react';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import { IInputError, ISignaturState } from 'app/models/types';
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
@@ -412,7 +412,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="medisinskeopplysningercheckbox"
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={soknad.harMedisinskeOpplysninger}
@@ -425,7 +425,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 <VerticalSpacer eightPx />
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="opplysningerikkepunsjetcheckbox"
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                         checked={soknad.harInfoSomIkkeKanPunsjes}

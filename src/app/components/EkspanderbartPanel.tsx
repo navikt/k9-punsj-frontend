@@ -1,6 +1,6 @@
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import * as React from 'react';
 
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 
 interface EkspanderbartPanelProps {
@@ -12,7 +12,7 @@ interface EkspanderbartPanelProps {
 
 const EkspanderbartPanel: React.FC<EkspanderbartPanelProps> = ({ children, togglePanel, isPanelOpen, label }) => (
     <>
-        <CheckboksPanel label={label} onChange={togglePanel} checked={isPanelOpen} />
+        <LegacyCheckbox label={label} onChange={togglePanel} checked={isPanelOpen} />
         <VerticalSpacer eightPx />
         {isPanelOpen && children}
     </>

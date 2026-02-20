@@ -5,7 +5,7 @@ import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { JaNei } from 'app/models/enums/JaNei';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
@@ -28,7 +28,7 @@ const Reisedager = () => {
     };
     return (
         <>
-            <CheckboksPanel
+            <LegacyCheckbox
                 checked={values.metadata.skalOppgiReise === JaNei.JA}
                 onChange={toggleReisedager}
                 label="Det er oppgitt informasjon om reisedager"
