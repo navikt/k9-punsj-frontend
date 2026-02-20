@@ -989,6 +989,90 @@ describe('PunchForm', () => {
         expect(within(arbeidsforholdPanel).getByText('Feltet kan ikke være tomt')).toBeDefined();
     });
 
+    it('Viser frilanser arbeidstid-feil under kalenderseksjonen', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
+                        opptjeningAktivitet: {
+                            ...initialSoknad.opptjeningAktivitet,
+                            frilanser: {
+                                startdato: '2026-02-16',
+                                sluttdato: null,
+                                jobberFortsattSomFrilans: true,
+                            },
+                        },
+                        arbeidstid: {
+                            ...initialSoknad.arbeidstid,
+                            frilanserArbeidstidInfo: {
+                                perioder: [],
+                            },
+                        },
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.arbeidstid.frilanserArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
+                            feilkode: 'ugyldigVerdi',
+                            feilmelding: 'Må være lavere eller lik 24 timer.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const frilanserValidationErrors = await screen.findByTestId('frilanser-arbeidstid-validation-errors');
+        expect(within(frilanserValidationErrors).getByText('Må være lavere eller lik 24 timer.')).toBeDefined();
+    });
+
+    it('Viser selvstendig arbeidstid-feil under kalenderseksjonen', async () => {
+        const validateSoknad = jest.fn();
+
+        await act(async () => {
+            setupPunchForm(
+                {
+                    soknad: {
+                        ...initialSoknad,
+                        soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
+                        opptjeningAktivitet: {
+                            ...initialSoknad.opptjeningAktivitet,
+                            selvstendigNaeringsdrivende: {
+                                virksomhetNavn: 'Test virksomhet',
+                                organisasjonsnummer: '910909088',
+                                info: {
+                                    periode: { fom: '2026-02-16', tom: '2026-02-16' },
+                                    registrertIUtlandet: false,
+                                    virksomhetstyper: ['ANNEN'],
+                                },
+                            },
+                        },
+                        arbeidstid: {
+                            ...initialSoknad.arbeidstid,
+                            selvstendigNæringsdrivendeArbeidstidInfo: {
+                                perioder: [],
+                            },
+                        },
+                    },
+                    inputErrors: [
+                        {
+                            felt: "ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
+                            feilkode: 'ugyldigVerdi',
+                            feilmelding: 'Må være lavere eller lik 24 timer.',
+                        },
+                    ],
+                },
+                { validateSoknad },
+            );
+        });
+
+        const selvstendigValidationErrors = await screen.findByTestId('selvstendig-arbeidstid-validation-errors');
+        expect(within(selvstendigValidationErrors).getByText('Må være lavere eller lik 24 timer.')).toBeDefined();
+    });
+
     it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
         const validateSoknad = jest.fn();
 

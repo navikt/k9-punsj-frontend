@@ -173,6 +173,16 @@ const ArbeidsforholdPanel = ({
                             }
                             arbeidstidInfo={soknad.arbeidstid?.frilanserArbeidstidInfo}
                         />
+
+                        <div data-testid="frilanser-arbeidstid-validation-errors">
+                            <UhaanderteFeilmeldinger
+                                getFeilmeldinger={() =>
+                                    (getUhaandterteFeil &&
+                                        getUhaandterteFeil('ytelse.arbeidstid.frilanserArbeidstidInfo')) ||
+                                    []
+                                }
+                            />
+                        </div>
                     </>
                 )}
             </>
@@ -834,6 +844,16 @@ const ArbeidsforholdPanel = ({
                     }
                     arbeidstidInfo={soknad.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
                 />
+
+                <div data-testid="selvstendig-arbeidstid-validation-errors">
+                    <UhaanderteFeilmeldinger
+                        getFeilmeldinger={() =>
+                            (getUhaandterteFeil &&
+                                getUhaandterteFeil('ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo')) ||
+                            []
+                        }
+                    />
+                </div>
 
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>
