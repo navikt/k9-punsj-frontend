@@ -60,7 +60,7 @@ import {
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 
 import AnnenPart from './Komponenter/AnnenPart';
-import DokumentTypeVelger from './Komponenter/DokumentTypeVelgerV2';
+import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
 import Fosterbarn from './Komponenter/Fosterbarn';
 import FagsakSelect from './Komponenter/FagsakSelect';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';

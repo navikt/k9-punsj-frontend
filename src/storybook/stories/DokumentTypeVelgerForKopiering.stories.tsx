@@ -5,31 +5,22 @@ import { IntlProvider } from 'react-intl';
 
 import messages from 'app/i18n/nb.json';
 import { FordelingDokumenttype } from 'app/models/enums';
-import DokumentTypeVelgerV2 from 'app/fordeling/Komponenter/DokumentTypeVelgerV2';
+import DokumentTypeVelgerForKopiering from 'app/fordeling/Komponenter/DokumentTypeVelgerForKopiering';
 
 import '@navikt/ds-css/dist/index.css';
 import '../../app/styles/globals.css';
-
-const defaultAppSettings: Record<string, string> = {
-    OMP_KS_ENABLED: 'true',
-    OMP_AO_ENABLED: 'true',
-    OMP_MA_FEATURE_TOGGLE: 'true',
-    PLS_ENABLED: 'true',
-    OMP_UT_FEATURE_TOGGLE: 'true',
-    OLP_ENABLED: 'true',
-};
 
 const applyAppSettings = (overrides?: Record<string, string>) => {
     const globalWindow = window as Window & { appSettings?: Record<string, string> };
     globalWindow.appSettings = {
         ...(globalWindow.appSettings ?? {}),
-        ...defaultAppSettings,
+        OLP_ENABLED: 'true',
         ...(overrides ?? {}),
     };
 };
 
 const renderInteractive = (
-    args: React.ComponentProps<typeof DokumentTypeVelgerV2>,
+    args: React.ComponentProps<typeof DokumentTypeVelgerForKopiering>,
     appSettingsOverrides?: Record<string, string>,
 ) => {
     applyAppSettings(appSettingsOverrides);
@@ -41,7 +32,7 @@ const renderInteractive = (
 
     return (
         <div style={{ maxWidth: '560px' }}>
-            <DokumentTypeVelgerV2
+            <DokumentTypeVelgerForKopiering
                 {...args}
                 valgtDokumentType={valgtDokumentType}
                 handleDokumenttype={(type) => {
@@ -53,9 +44,9 @@ const renderInteractive = (
     );
 };
 
-const meta: Meta<typeof DokumentTypeVelgerV2> = {
-    title: 'Fordeling/DokumentTypeVelgerV2',
-    component: DokumentTypeVelgerV2,
+const meta: Meta<typeof DokumentTypeVelgerForKopiering> = {
+    title: 'Fordeling/DokumentTypeVelgerForKopiering',
+    component: DokumentTypeVelgerForKopiering,
     decorators: [
         (Story) => (
             <IntlProvider messages={messages} locale="nb">
@@ -67,14 +58,14 @@ const meta: Meta<typeof DokumentTypeVelgerV2> = {
     ],
     args: {
         valgtDokumentType: FordelingDokumenttype.PLEIEPENGER,
-        disableRadios: false,
+        visComponent: true,
         handleDokumenttype: () => undefined,
     },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof DokumentTypeVelgerV2>;
+type Story = StoryObj<typeof DokumentTypeVelgerForKopiering>;
 
 export const Default: Story = {
     render: (args) => renderInteractive(args),
@@ -87,14 +78,13 @@ export const OmsorgspengerSelected: Story = {
     render: (args) => renderInteractive(args),
 };
 
-export const Disabled: Story = {
-    args: {
-        valgtDokumentType: FordelingDokumenttype.PLEIEPENGER,
-        disableRadios: true,
-    },
-    render: (args) => renderInteractive(args),
-};
-
 export const NoOlp: Story = {
     render: (args) => renderInteractive(args, { OLP_ENABLED: 'false' }),
+};
+
+export const Hidden: Story = {
+    args: {
+        visComponent: false,
+    },
+    render: (args) => renderInteractive(args),
 };
