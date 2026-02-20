@@ -17,6 +17,8 @@ interface Props {
 const DokumentTypeVelger: React.FC<Props> = ({ valgtDokumentType, disableRadios, handleDokumenttype }: Props) => {
     const intl = useIntl();
 
+    // Deprecated: legacy utrullingsbryter.
+    // Beholdes for bakoverkompatibilitet så lenge gamle feature toggles finnes.
     const toggleFordelingDokumentType = (type: string): boolean => {
         switch (type) {
             case FordelingDokumenttype.OMSORGSPENGER_KS:
