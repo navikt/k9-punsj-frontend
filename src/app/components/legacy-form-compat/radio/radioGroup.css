@@ -13,5 +13,5 @@
 }
 
 .legacy-radio-group--vertikal .legacy-radio-group__item {
-    width: 100%;
+    width: auto;
 }
