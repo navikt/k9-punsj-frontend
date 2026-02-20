@@ -1,3 +1,4 @@
+// TODO Remove after all forms are migrated to ApiProblemDetail.
 export interface IError {
     status?: number;
     statusText?: string;

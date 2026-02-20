@@ -21,6 +21,7 @@ import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
+import { createPeriodInputIds } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -120,6 +121,7 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
             }
         };
         const feltIndeks = periodeSpenn(periodeinfo.periode);
+        const periodInputIds = createPeriodInputIds(feilkodeprefiks, feltIndeks, `index-${periodeindeks}`);
         return (
             <>
                 <div className="flex items-start">
@@ -134,6 +136,8 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
                         }}
                         errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
+                        inputIdFom={periodInputIds.fomId}
+                        inputIdTom={periodInputIds.tomId}
                     />
 
                     <Button

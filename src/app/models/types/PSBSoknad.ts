@@ -141,7 +141,7 @@ export class PSBSoknad implements IPSBSoknad {
     constructor(soknad: IPSBSoknad) {
         this.arbeidstid = new Arbeidstid(soknad.arbeidstid || {});
         this.barn = new Barn(soknad.barn || {});
-        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || undefined;
         this.beredskap = (soknad.beredskap || []).map((b) => new Tilleggsinformasjon(b));
         this.bosteder = soknad.bosteder ? soknad.bosteder.map((m) => new UtenlandsOpphold(m)) : undefined;
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;

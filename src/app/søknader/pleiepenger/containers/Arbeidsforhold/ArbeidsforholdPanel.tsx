@@ -173,6 +173,16 @@ const ArbeidsforholdPanel = ({
                             }
                             arbeidstidInfo={soknad.arbeidstid?.frilanserArbeidstidInfo}
                         />
+
+                        <div data-testid="frilanser-arbeidstid-validation-errors">
+                            <UhaanderteFeilmeldinger
+                                getFeilmeldinger={() =>
+                                    (getUhaandterteFeil &&
+                                        getUhaandterteFeil('ytelse.arbeidstid.frilanserArbeidstidInfo')) ||
+                                    []
+                                }
+                            />
+                        </div>
                     </>
                 )}
             </>
@@ -219,22 +229,24 @@ const ArbeidsforholdPanel = ({
 
         return (
             <div className="infoContainer">
-                <CheckboksPanelGruppe
-                    className="virksomhetstypercheckbox"
-                    legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
-                    checkboxes={Object.values(Virksomhetstyper).map((v) => ({
-                        label: v,
-                        value: v,
-                        onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                        checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
-                    }))}
-                    feil={getErrorMessage(
-                        `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
-                            opptjening?.selvstendigNaeringsdrivende?.info?.periode,
-                        )}].virksomhetstyper`,
-                    )}
-                    onChange={() => undefined}
-                />
+                <div id="sn-virksomhetstyper">
+                    <CheckboksPanelGruppe
+                        className="virksomhetstypercheckbox"
+                        legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
+                        checkboxes={Object.values(Virksomhetstyper).map((v) => ({
+                            label: v,
+                            value: v,
+                            onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                        }))}
+                        feil={getErrorMessage(
+                            `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                            )}].virksomhetstyper`,
+                        )}
+                        onChange={() => undefined}
+                    />
+                </div>
 
                 <div className="generelleopplysiniger ">
                     <div className="flex flex-wrap">
@@ -317,6 +329,7 @@ const ArbeidsforholdPanel = ({
                 {!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="flex flex-wrap mt-6">
                         <TextField
+                            id="sn-organisasjonsnummer"
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             value={opptjening.selvstendigNaeringsdrivende?.organisasjonsnummer || ''}
                             className="sn-organisasjonsnummer"
@@ -355,8 +368,16 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <div className="mt-6">
                         <CountrySelect
+                            id="sn-registrert-land"
                             selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
                             label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                            // TEMPORARY: backend can report this validation on
+                            // `.valideringRegistrertUtlandet` while frontend binds it to landkode field.
+                            error={getErrorMessage(
+                                `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                    opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                                )}].landkode`,
+                            )}
                             onChange={(event) => {
                                 updateSoknad({
                                     opptjeningAktivitet: {
@@ -591,9 +612,16 @@ const ArbeidsforholdPanel = ({
                     erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <div className="flex flex-wrap">
                             <TextField
+                                id="sn-bruttoinntekt"
                                 label={intlHelper(intl, 'skjema.sn.bruttoinntekt')}
+                                type="number"
                                 className="bruttoinntekt"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.bruttoInntekt || ''}
+                                error={getErrorMessage(
+                                    `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(
+                                        opptjening?.selvstendigNaeringsdrivende?.info?.periode,
+                                    )}].bruttoInntekt`,
+                                )}
                                 onChange={(event: any) =>
                                     updateSoknadState(
                                         {
@@ -816,6 +844,16 @@ const ArbeidsforholdPanel = ({
                     }
                     arbeidstidInfo={soknad.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
                 />
+
+                <div data-testid="selvstendig-arbeidstid-validation-errors">
+                    <UhaanderteFeilmeldinger
+                        getFeilmeldinger={() =>
+                            (getUhaandterteFeil &&
+                                getUhaandterteFeil('ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo')) ||
+                            []
+                        }
+                    />
+                </div>
 
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>

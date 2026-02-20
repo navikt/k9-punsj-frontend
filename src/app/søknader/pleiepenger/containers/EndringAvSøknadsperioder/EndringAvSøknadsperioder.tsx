@@ -6,6 +6,7 @@ import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOve
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { ENDRING_BEGRUNNELSE_INPUT_ID } from '../../utils/errorAnchorUtils';
 
 import './endringAvSøknadsperioder.css';
 
@@ -18,6 +19,21 @@ interface Props {
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     eksisterendePerioder?: IPeriode[];
 }
+
+export const buildEndringAvSoknadsperioderUpdate = (
+    perioder: IPeriode[],
+): Partial<Pick<IPSBSoknad, 'trekkKravPerioder' | 'begrunnelseForInnsending'>> => {
+    if (perioder.length === 0) {
+        return {
+            trekkKravPerioder: [],
+            begrunnelseForInnsending: undefined,
+        };
+    }
+
+    return {
+        trekkKravPerioder: perioder,
+    };
+};
 
 const EndringAvSøknadsperioder = (props: Props) => {
     const intl = useIntl();
@@ -65,6 +81,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
         const begrunnelsesfelt = (
             <div className="endringAvSøknadsperioder__begrunnelse">
                 <Textarea
+                    id={ENDRING_BEGRUNNELSE_INPUT_ID}
                     label={intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse')}
                     value={soknad.begrunnelseForInnsending?.tekst || ''}
                     onChange={(event) => {
@@ -170,9 +187,9 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 <Periodepaneler
                     periods={soknad.trekkKravPerioder || []}
                     initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad({ trekkKravPerioder: perioder })}
+                    editSoknad={(perioder) => updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder))}
                     editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState({ trekkKravPerioder: perioder }, showStatus);
+                        updateSoknadState(buildEndringAvSoknadsperioderUpdate(perioder), showStatus);
                         setSelectedPeriods(perioder);
                     }}
                     textLeggTil="skjema.perioder.legg_til"
@@ -186,10 +203,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 </ErrorMessage>
 
                 {getAlertstriper()}
-
-                <ErrorMessage size="small" className="endringAvSøknadsperioder__feilmelding" aria-hidden="true">
-                    {begrunnelseForInnsendingFeilmelding()}
-                </ErrorMessage>
             </Accordion.Content>
         </Accordion.Item>
     );

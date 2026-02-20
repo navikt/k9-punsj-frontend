@@ -25,6 +25,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { createPeriodInputIds } from '../../utils/errorAnchorUtils';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -126,6 +127,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             }
         };
         const feltIndeks = periodeSpenn(periodeinfo.periode);
+        const periodInputIds = createPeriodInputIds(feilkodeprefiks, feltIndeks, `index-${periodeindeks}`);
         const land = periods[periodeindeks].land || '';
         const getCheckedÅrsak = () => {
             const period = periods[periodeindeks];
@@ -163,6 +165,8 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         }}
                         errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
+                        inputIdFom={periodInputIds.fomId}
+                        inputIdTom={periodInputIds.tomId}
                     />
 
                     <Button
