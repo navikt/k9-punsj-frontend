@@ -1,5 +1,4 @@
 import countries from 'i18n-iso-countries';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 
@@ -212,8 +211,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                 land,
                                 'nb',
                             )}?`}
-                            onChange={(event) => {
-                                const { value } = event.target as HTMLInputElement;
+                            onChange={(_, value) => {
                                 setVisInnlagtPerioder(value);
                                 if (value !== jaValue) {
                                     const editedInfo = () =>
@@ -260,7 +258,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             doNotShowBorders
                         />
 
-                        <RadioPanelGruppe
+                        <LegacyRadioGroup
                             radios={[
                                 {
                                     label: intl.formatMessage({
@@ -282,8 +280,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             name={`innleggelseÅrsak${periodeindeks}`}
                             legend={intl.formatMessage({ id: 'skjema.utenlandsopphold.utgifterTilInnleggelse' })}
                             checked={getCheckedÅrsak()}
-                            onChange={(event) => {
-                                const { value } = event.target as HTMLInputElement;
+                            onChange={(_, value) => {
                                 const formattedValue = value === 'null' ? null : value;
                                 const { innleggelsesperioder } = periods[periodeindeks];
                                 const hasInnleggelsesperioder =

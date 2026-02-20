@@ -8,7 +8,7 @@ import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
@@ -68,7 +68,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
 
                 <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper">
                     {({ field, form }: FieldProps<boolean>) => (
-                        <RadioPanelGruppeFormik
+                        <LegacyRadioGroupFormik
                             legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.virksomhetstyper"
                             options={Object.values(Virksomhetstyper).map((v) => ({

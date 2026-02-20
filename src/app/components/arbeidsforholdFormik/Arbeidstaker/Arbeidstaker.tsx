@@ -2,9 +2,9 @@ import React, { useEffect, useReducer } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Field, FieldProps, useFormikContext } from 'formik';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { Checkbox, Fieldset } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
@@ -145,7 +145,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                             />
                         )}
                     </Field> */}
-                <RadioPanelGruppe
+                <LegacyRadioGroup
                     className="horizontalRadios"
                     radios={[
                         {
@@ -159,7 +159,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     ]}
                     name={`arbeidsgivertype_${1}_${listeelementindex}`}
                     legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                    onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
+                    onChange={(_, value) => updateOrgOrPers(value as OrgOrPers)}
                     checked={selectedType}
                 />
             </div>

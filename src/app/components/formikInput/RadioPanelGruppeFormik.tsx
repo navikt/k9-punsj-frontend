@@ -1,14 +1,14 @@
 import classNames from 'classnames';
 import { useField } from 'formik';
-import { RadioPanelGruppe, RadioPanelGruppeProps } from 'nav-frontend-skjema';
 import React from 'react';
+import { LegacyRadioGroup, LegacyRadioGroupOption, LegacyRadioGroupProps } from 'app/components/legacy-form-compat/radio';
 
 import './radioPanelGruppeFormik.css';
 
-interface OwnProps extends Partial<RadioPanelGruppeProps> {
+interface OwnProps extends Partial<LegacyRadioGroupProps> {
     name: string;
-    options: { label: string; value: string }[];
-    retning?: string;
+    options: LegacyRadioGroupOption[];
+    retning?: 'horisontal' | 'vertikal';
 }
 
 const RadioPanelGruppeFormik = ({ name, options, legend, retning = 'horisontal', ...props }: OwnProps) => {
@@ -20,11 +20,12 @@ const RadioPanelGruppeFormik = ({ name, options, legend, retning = 'horisontal',
                 'radioinput--vertikal': retning === 'vertikal',
             })}
         >
-            <RadioPanelGruppe
+            <LegacyRadioGroup
                 legend={legend}
                 feil={meta.touched && meta.error}
                 radios={options}
                 checked={field.value}
+                retning={retning}
                 {...field}
                 {...props}
             />
