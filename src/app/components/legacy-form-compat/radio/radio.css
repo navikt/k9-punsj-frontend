@@ -1,0 +1,89 @@
+.legacy-radio-panel {
+    background-color: #fff;
+    border: 1px solid #6a6a6a;
+    border-radius: 0.25rem;
+    position: relative;
+}
+
+.legacy-radio-panel__control.navds-radio {
+    width: 100%;
+}
+
+.legacy-radio-panel__control .navds-radio__input {
+    left: 0.25rem;
+}
+
+.legacy-radio-panel__control .navds-radio__label {
+    color: #262626;
+    display: block;
+    padding: 1rem 1rem 1rem 3rem;
+}
+
+.legacy-radio-panel__control .navds-radio__label::before {
+    background-color: #fff;
+    box-shadow: 0 0 0 1px #6a6a6a;
+    height: 1.5rem;
+    left: 1rem;
+    margin: 0;
+    position: absolute;
+    top: 1rem;
+    width: 1.5rem;
+}
+
+.legacy-radio-panel--disabled {
+    background-color: #f1f1f1;
+    box-shadow: none;
+}
+
+.legacy-radio-panel--disabled .navds-radio__label,
+.legacy-radio-panel--disabled .navds-radio__input,
+.legacy-radio-panel--disabled:hover .navds-radio__label {
+    color: #262626;
+    cursor: not-allowed;
+}
+
+.legacy-radio-panel--disabled .navds-radio__label::before,
+.legacy-radio-panel--disabled:hover .navds-radio__label::before {
+    background-color: #f1f1f1;
+    box-shadow: 0 0 0 1px #6a6a6a;
+}
+
+.legacy-radio-panel--disabled .navds-radio__input:checked + .navds-radio__label::before {
+    background-color: #f1f1f1;
+    box-shadow: 0 0 0 2px #6a6a6a, inset 0 0 0 3px #fff, inset 0 0 0 12px #6a6a6a;
+}
+
+.legacy-radio-panel__control .navds-radio__input:checked + .navds-radio__label::before {
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #0067c5, inset 0 0 0 3px #fff, inset 0 0 0 12px #0067c5;
+}
+
+.legacy-radio-panel--checked {
+    background-color: #cce1ff;
+    border-color: transparent;
+}
+
+.legacy-radio-panel:focus-within {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px #00347d;
+}
+
+.legacy-radio-panel:hover:not(.legacy-radio-panel--disabled) {
+    border-color: #0067c5;
+    box-shadow: #6a6a6a 0 2px 1px 0;
+}
+
+.legacy-radio-panel:hover:not(.legacy-radio-panel--disabled) .navds-radio__label {
+    color: #0067c5;
+}
+
+.legacy-radio-panel:hover:not(.legacy-radio-panel--checked, .legacy-radio-panel--disabled)
+    .navds-radio__label::before {
+    background-color: #99c3ff;
+    box-shadow: 0 0 0 1px transparent;
+}
+
+.legacy-radio-panel--error:not(.legacy-radio-panel--checked, .legacy-radio-panel--disabled, :focus-within) {
+    border-color: #c30000;
+    box-shadow: 0 0 0 1px #c30000;
+}
