@@ -2,12 +2,19 @@ import React, { ReactElement } from 'react';
 
 import { FieldValues } from 'react-hook-form';
 
-import { FormTextareaProps, FormTextFieldProps, FormSelectProps, FormFieldProps } from './types';
+import {
+    FormTextareaProps,
+    FormTextFieldProps,
+    FormSelectProps,
+    FormFieldProps,
+    FormLegacyRadioGroupProps,
+} from './types';
 import { PunsjFormProvider, PunsjFormProviderProps } from './FormProvider';
 import { FormTextarea } from './FormTextarea';
 import { FormTextField } from './FormTextField';
 import { FormCheckbox } from './FormCheckbox';
 import { FormSelect } from './FormSelect';
+import { FormLegacyRadioGroup } from './FormLegacyRadioGroup';
 
 export interface TypedFormComponents<T extends FieldValues> {
     TypedFormProvider: (props: PunsjFormProviderProps<T>) => ReactElement;
@@ -15,6 +22,7 @@ export interface TypedFormComponents<T extends FieldValues> {
     TypedFormTextField: (props: FormTextFieldProps<T>) => ReactElement;
     TypedFormCheckbox: (props: FormFieldProps<T>) => ReactElement;
     TypedFormSelect: (props: FormSelectProps<T>) => ReactElement;
+    TypedFormLegacyRadioGroup: (props: FormLegacyRadioGroupProps<T>) => ReactElement;
 }
 
 export function getTypedFormComponents<T extends FieldValues>(): TypedFormComponents<T> {
@@ -24,5 +32,6 @@ export function getTypedFormComponents<T extends FieldValues>(): TypedFormCompon
         TypedFormTextField: (props: FormTextFieldProps<T>) => <FormTextField<T> {...props} />,
         TypedFormCheckbox: (props: FormFieldProps<T>) => <FormCheckbox<T> {...props} />,
         TypedFormSelect: (props: FormSelectProps<T>) => <FormSelect<T> {...props} />,
+        TypedFormLegacyRadioGroup: (props: FormLegacyRadioGroupProps<T>) => <FormLegacyRadioGroup<T> {...props} />,
     };
 }
