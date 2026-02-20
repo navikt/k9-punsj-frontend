@@ -1,6 +1,7 @@
 import { ReactNode, ChangeEvent } from 'react';
 import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
+import { LegacyCheckboxGroupOption } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyRadioGroupOption } from 'app/components/legacy-form-compat/radio';
 
 export interface FormFieldProps<T extends FieldValues> {
@@ -41,4 +42,13 @@ export interface FormLegacyRadioGroupProps<T extends FieldValues>
     description?: ReactNode;
     retning?: 'horisontal' | 'vertikal';
     onChange?: (event: ChangeEvent<HTMLInputElement>, value: string) => void;
+}
+
+export interface FormLegacyCheckboxGroupProps<T extends FieldValues>
+    extends Omit<FormFieldProps<T>, 'label' | 'onChange'> {
+    legend: ReactNode;
+    options: LegacyCheckboxGroupOption[];
+    description?: ReactNode;
+    hideLegend?: boolean;
+    onChange?: (event: ChangeEvent<HTMLInputElement>, value: string, checkedValues: string[]) => void;
 }
