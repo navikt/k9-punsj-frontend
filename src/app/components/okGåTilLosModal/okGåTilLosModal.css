@@ -2,15 +2,6 @@
     width: fit-content;
 }
 
-.sett-paa-vent,
-.ferdigstillJournalpost {
-    padding: 0 2rem;
-
-    .knapper {
-        display: flex;
-    }
-}
-
 .ok-gaa-til-los {
     display: flex;
     align-items: center;
@@ -33,9 +24,4 @@
     .okknapp-gå-to-los {
         margin: 0 1rem;
     }
-}
-
-.infoFeil {
-    margin: 0 1rem;
-    font-size: 18px;
 }

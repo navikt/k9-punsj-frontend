@@ -13,7 +13,7 @@ import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRules } from './useValidationRules';
 
-import './opprettJournalpost.less';
+import './opprettJournalpost.css';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormSelect, TypedFormTextarea } =
     getTypedFormComponents<IOpprettJournalpostForm>();

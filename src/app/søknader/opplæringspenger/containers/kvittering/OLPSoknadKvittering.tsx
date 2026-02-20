@@ -20,7 +20,7 @@ import { formatDato, sjekkPropertyEksistererOgIkkeErNull } from 'app/utils/utils
 
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import VisningAvKursperioderSoknadKvittering from './VisningAvKursperioderSoknadKvittering';
-import './soknadKvittering.less';
+import './soknadKvittering.css';
 import { ISoknadKvitteringBosteder, ISoknadKvitteringLovbestemtFerie } from 'app/models/types/KvitteringTyper';
 
 const sjekkHvisPerioderEksisterer = (property: string, object: any) =>

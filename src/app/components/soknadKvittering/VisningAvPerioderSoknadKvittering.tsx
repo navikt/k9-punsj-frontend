@@ -11,7 +11,7 @@ import {
     ISoknadKvitteringUtenlandsopphold,
 } from 'app/models/types/KvitteringTyper';
 
-import './visningAvPerioderSoknadKvittering.less';
+import './visningAvPerioderSoknadKvittering.css';
 
 interface Props {
     perioder:
@@ -32,7 +32,7 @@ const VisningAvPerioderSoknadKvittering: React.FC<Props> = ({
 }) => {
     return (
         <div>
-            <div className={classNames('visningAvPerioderSoknadKvitteringContainer', !!lessClassForAdjustment)}>
+            <div className={classNames('visningAvPerioderSoknadKvitteringContainer', lessClassForAdjustment)}>
                 {tittel.map((t, index) => (
                     <h4 key={index}>
                         <FormattedMessage id={t} />
@@ -49,7 +49,7 @@ const VisningAvPerioderSoknadKvittering: React.FC<Props> = ({
                 .map(([periode, props]) => (
                     <div
                         key={periode}
-                        className={classNames('visningAvPerioderSoknadKvitteringContainer', !!lessClassForAdjustment)}
+                        className={classNames('visningAvPerioderSoknadKvitteringContainer', lessClassForAdjustment)}
                     >
                         <p>{periodToFormattedString(periode)}</p>
 

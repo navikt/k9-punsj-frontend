@@ -12,7 +12,7 @@ import { GetUhaandterteFeil, IPeriode } from '../../../models/types';
 import { IPLSSoknad } from '../types/PLSSoknad';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
 
-import './soknadsperioder.less';
+import './soknadsperioder.css';
 
 interface Props {
     soknad: IPLSSoknad;

@@ -11,7 +11,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { ApiPath } from '../../apiConfig';
 import { IDokument } from '../../models/types';
 import { apiUrl, setDokQuery } from '../../utils';
-import './pdfVisning.less';
+import './pdfVisning.css';
 
 const dokumentnr = (dok: string | null, dokumenter: IDokumentMedJournalpost[] = []): number => {
     let doknr: number;

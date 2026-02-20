@@ -3,7 +3,7 @@ import { useField } from 'formik';
 import { RadioPanelGruppe, RadioPanelGruppeProps } from 'nav-frontend-skjema';
 import React from 'react';
 
-import './radioPanelGruppeFormik.less';
+import './radioPanelGruppeFormik.css';
 
 interface OwnProps extends Partial<RadioPanelGruppeProps> {
     name: string;

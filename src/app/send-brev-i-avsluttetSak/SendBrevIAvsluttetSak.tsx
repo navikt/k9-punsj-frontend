@@ -9,7 +9,7 @@ import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/validation';
 import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
 
-import './sendBrevIAvsluttetSak.less';
+import './sendBrevIAvsluttetSak.css';
 
 const SendBrevIAvsluttetSak = () => {
     const [søkerId, setSøkerId] = useState('');

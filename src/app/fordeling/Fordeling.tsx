@@ -79,7 +79,7 @@ import {
     isRedirectVidereDisabled,
 } from './fordelingUtils';
 
-import './fordeling.less';
+import './fordeling.css';
 
 // TODO Sjekke alle useEffect
 

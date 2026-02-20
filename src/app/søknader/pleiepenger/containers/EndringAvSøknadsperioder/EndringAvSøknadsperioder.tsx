@@ -8,7 +8,7 @@ import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
 import { ENDRING_BEGRUNNELSE_INPUT_ID } from '../../utils/errorAnchorUtils';
 
-import './endringAvSøknadsperioder.less';
+import './endringAvSøknadsperioder.css';
 
 interface Props {
     isOpen: boolean;

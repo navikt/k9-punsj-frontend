@@ -7,7 +7,7 @@ import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import { getEnvironmentVariable } from '../../utils';
 import { initializeDate } from '../../utils/timeUtils';
 
-import './okGåTilLosModal.less';
+import './okGåTilLosModal.css';
 
 interface Props {
     meldingId: string;

@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { dateToISODate, getDatesInDateRange, getDatesInMonth, isDateInDates, isWeekend } from '../../utils/timeUtils';
 import CalendarGridDate from './CalendarGridDate';
-import './calendarGrid.less';
+import './calendarGrid.css';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(utc);

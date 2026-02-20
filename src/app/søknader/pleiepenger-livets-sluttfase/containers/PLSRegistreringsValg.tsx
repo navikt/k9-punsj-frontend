@@ -15,7 +15,7 @@ import { createPLSSoknad, resetPLSSoknadidAction } from '../state/actions/Eksist
 import { IEksisterendePLSSoknaderState } from '../types/EksisterendePLSSoknaderState';
 import { EksisterendePLSSoknader } from './EksisterendePLSSoknader';
 
-import './plsRegistreringsValg.less';
+import './plsRegistreringsValg.css';
 
 export interface IPLSRegistreringsValgComponentProps {
     journalpostid: string;

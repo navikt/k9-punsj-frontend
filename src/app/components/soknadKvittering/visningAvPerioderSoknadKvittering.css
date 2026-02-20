@@ -1,0 +1,22 @@
+.visningAvPerioderSoknadKvitteringContainer {
+    display: flex;
+    align-items: center;
+}
+
+.visningAvPerioderSoknadKvitteringContainer h4,
+.visningAvPerioderSoknadKvitteringContainer p {
+    width: 12rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    box-sizing: border-box;
+}
+
+.visningAvPerioderSoknadBeredskap :nth-child(2) {
+    flex-grow: 1;
+    overflow: visible;
+    overflow-wrap: break-word;
+}
+
+.visningAvPerioderOmsorgstilbud :nth-child(2) {
+    width: 30rem;
+}

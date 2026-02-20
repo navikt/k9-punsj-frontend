@@ -1,13 +1,3 @@
-.buttonRow {
-    margin-top: 1.5625rem;
-}
-
-.previewLink {
-    float: right;
-    border: none;
-    padding-right: 0;
-}
-
 .brev {
     max-width: 31.875rem;
     background-color: #eaeaea;
@@ -35,9 +25,4 @@
 .sendBrevButton {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
-}
-
-.modalContainer {
-    width: 24.6875rem;
-    max-width: 60vw;
 }

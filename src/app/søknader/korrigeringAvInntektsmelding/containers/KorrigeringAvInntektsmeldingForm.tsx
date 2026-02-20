@@ -27,7 +27,7 @@ import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
 import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 
-import './KorrigeringAvInntektsmeldingForm.less';
+import './KorrigeringAvInntektsmeldingForm.css';
 
 interface Props {
     søkerId: string;

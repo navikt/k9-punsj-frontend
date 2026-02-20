@@ -10,7 +10,7 @@ import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/Journalpost
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import './punchPage.less';
+import './punchPage.css';
 
 export interface Props {
     journalposter: string[];

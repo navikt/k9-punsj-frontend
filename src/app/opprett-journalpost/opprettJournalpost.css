@@ -5,6 +5,7 @@
     .formContainer {
         margin-top: 2.5rem;
     }
+
     .navds-alert,
     .input {
         margin-top: 1rem;
@@ -30,11 +31,12 @@
         }
 
         .navds-loader {
-            align-self: 'flex-start';
+            align-self: flex-start;
             margin-left: 0.5rem;
             margin-top: 2rem;
         }
     }
+
     .notatContainer {
         margin-top: 2rem;
     }

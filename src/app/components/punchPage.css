@@ -1,0 +1,532 @@
+.punch_mappemodal_knapperad {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.punch_mappemodal_knapperad .knapp1.navds-button {
+  margin-right: 0.5rem;
+}
+
+.punch_mappemodal_knapperad .knapp2.navds-button {
+  margin-left: 0.5rem;
+}
+
+.read-modal {
+  margin-bottom: 1rem;
+}
+
+.read-modal ul {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+
+.read-modal .row {
+  border-bottom: 1px solid #00000026;
+}
+
+.read-modal .alertstripe {
+  margin: 0 0 1rem;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.read-modal .alertstripe .alertstripe__tekst {
+  max-width: unset;
+}
+
+.read-modal .col {
+  margin: 0 0.5rem;
+}
+
+.read-modal .col:first-child {
+  padding-right: 0.5rem;
+  padding-left: 0;
+  margin: 0;
+}
+
+.read-modal .col:last-child {
+  margin-right: 0 !important;
+}
+
+.read-modal.enkel .col:first-child {
+  flex-grow: 1;
+}
+
+.read-modal.enkel .col:last-child {
+  flex-grow: 2;
+}
+
+.read-modal .periodeliste {
+  padding-left: 1rem;
+  margin: 0;
+}
+
+.punch {
+  max-width: 100%;
+  margin: 0;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.punch h1 {
+  width: 100%;
+}
+
+.punch .bold-label label {
+  font-weight: bold;
+}
+
+.punch .input-row {
+  display: inline-flex;
+  width: 100%;
+  margin: 0.5rem 0 1rem;
+}
+
+.punch .input-row .right {
+  margin-left: 30px;
+}
+
+.punch .panels-wrapper {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
+  min-height: 100px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box {
+  margin-right: 0.5rem;
+  flex-basis: 100%;
+  overflow-y: auto;
+  border-color: #a0a0a0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .container,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .container {
+  text-align: left;
+  padding-top: 0;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box::-webkit-scrollbar,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box::-webkit-scrollbar-track,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box::-webkit-scrollbar-track {
+  border-radius: 2px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box::-webkit-scrollbar-thumb,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box::-webkit-scrollbar-thumb {
+  background: #a0a0a0;
+  border-radius: 2px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box::-webkit-scrollbar-thumb:hover,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box::-webkit-scrollbar-thumb:hover {
+  background: #6a6a6a;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .submit-knapper,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .submit-knapper {
+  display: flex;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .submit-knapper .vent-knapp,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .submit-knapper .vent-knapp {
+  margin-left: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ident-page h2:first-child,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page h2:first-child {
+  margin-top: 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ident-page .knapp-usignert,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapp-usignert,
+.punch .panels-wrapper .punch_form.navds-box .ident-page .knapp-tilbake,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapp-tilbake {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ident-page .knapperad,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapperad {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ident-page .alertstripe--advarsel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .alertstripe--advarsel {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .knapperad .knapp1.navds-button,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .knapperad .knapp1.navds-button {
+  margin-right: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidstider,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidstider {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidstider .arbeidstid-hjelpetext,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidstider .arbeidstid-hjelpetext {
+  margin-left: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .punchform__paneler,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .punchform__paneler {
+  margin-bottom: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ident-soker-2,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-soker-2,
+.punch .panels-wrapper .punch_form.navds-box .inputs-barn .skjemaelement,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .inputs-barn .skjemaelement,
+.punch .panels-wrapper .punch_form.navds-box .inputs-soknad .skjemaelement,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .inputs-soknad .skjemaelement {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .klokkeslett,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .klokkeslett {
+  margin-left: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidstidInfo,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidstidInfo {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .countryselect,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .countryselect {
+  padding-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .ikkeregistrert,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ikkeregistrert {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper {
+  margin: -0.5rem;
+  width: calc(100% + 1rem);
+  max-width: calc(100% + 1rem);
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper .col,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper .col {
+  padding: 0.5rem;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper .col .knapp,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper .col .knapp {
+  width: 100%;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel {
+  background-color: #eaeaea;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .frilanserpanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel {
+  background-color: #eaeaea;
+  margin: 1rem 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .frilanserpanel .listepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .listepanel {
+  margin: 0.5rem 0 1rem -1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .frilanserpanel .frilanser-startdato,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .frilanser-startdato {
+  margin-bottom: 20px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .frilanserpanel .frilanser-info,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .frilanser-info {
+  margin-top: 20px;
+  font-weight: bold;
+  margin-bottom: auto;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .sn-alertstripe,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .sn-alertstripe {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel {
+  background-color: #eaeaea;
+  padding-top: 0;
+  margin: 1rem 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .infoContainer,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .infoContainer {
+  padding: 1rem 0 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .generelleopplysiniger,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .generelleopplysiniger {
+  margin-top: 1.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .generelleopplysiniger .virksomhetsNavn,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .generelleopplysiniger .virksomhetsNavn {
+  margin-bottom: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .sn-regskasførernavn,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .sn-regskasførernavn,
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .sn-regskasførertlf,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .sn-regskasførertlf,
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .bruttoinntekt,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .bruttoinntekt,
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .endringdato,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .endringdato {
+  margin-top: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .endringinntekt,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .endringinntekt {
+  margin: 0.5rem 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .listepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .listepanel {
+  margin: 0.5rem 0 1rem -1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .sn-startdatocontainer,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .sn-startdatocontainer {
+  display: flex;
+  margin: 5px 0 10px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .selvstendigpanel .sn-startdatocontainer .tom,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .selvstendigpanel .sn-startdatocontainer .tom {
+  margin-left: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .utenlandsoppholdpanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .utenlandsoppholdpanel {
+  background-color: #eaeaea;
+  margin-top: 20px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepaneler,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler {
+  margin: 1rem 0;
+  border-radius: 5px;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp,
+.punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.375rem;
+  font-weight: 400;
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+  margin: 1rem 0 0;
+  color: #0067c5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
+.punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon {
+  margin-right: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .periodepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel {
+  background-color: #eaeaea;
+  margin: 1rem 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .col,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .col {
+  padding: 0 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer label,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer label {
+  font-weight: bold;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .skjemaelement,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .skjemaelement {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person {
+  display: inline-flex;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person .timer-normalt,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person .timer-normalt {
+  margin-left: 0.3rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .leggtillisteelementknapp,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .leggtillisteelementknapp {
+  margin: 0 1rem 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .listepaneler,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .listepaneler {
+  background-color: #eaeaea;
+  margin: 0.5rem 0 0 -1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .listepanel.beredskapspanel .tilleggsinfo,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.beredskapspanel .tilleggsinfo,
+.punch .panels-wrapper .punch_form.navds-box .listepanel.nattevaakspanel .tilleggsinfo,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.nattevaakspanel .tilleggsinfo {
+  margin: 1rem 1rem 0 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .beskrivelseAvOmsorgsrollen,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .beskrivelseAvOmsorgsrollen {
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .sendknapp-wrapper,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .sendknapp-wrapper {
+  margin-bottom: 0;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .fullfortmelding,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .fullfortmelding {
+  margin-left: 0;
+  margin-top: 1rem;
+}
+
+.punch .panels-wrapper .punch_form.navds-box .skjema__feilomrade--harFeil,
+.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .skjema__feilomrade--harFeil {
+  background-color: rgb(243 227 227 / 60%);
+  box-shadow: 0 0 0 8px rgb(243 227 227 / 60%);
+}
+
+.punch .panels-wrapper .omsorgspenger_punch_form {
+  border: none;
+}
+
+.punch .punch_mappetabell tbody tr:hover {
+  background-color: #d8f9ff;
+  cursor: pointer;
+}
+
+.punch .punch_mappetabell th {
+  padding-top: 0;
+}
+
+.punch .punch_mappetabell_tom_soknad {
+  text-align: center !important;
+  color: #6a6a6a;
+}
+
+.ReactModal__Content {
+  width: 50%;
+  border: 1px solid #0067c5;
+  box-sizing: border-box;
+}
+
+.modal_content {
+  padding: 2rem 2.5rem;
+}
+
+.modal_content p {
+  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.read-modal ul p {
+  margin: 0;
+}
+
+.flex-container {
+  display: inline-flex;
+  width: 100%;
+}
+
+.flex-container .hjelpetext {
+  margin: 1rem;
+}
+
+.flex-container .hjelpetext :last-child {
+  max-width: 30rem;
+}
+
+.flex-container .inputPanel {
+  width: 100%;
+}
+
+
+.validertSoknadOppsummeringContainerKnapper {
+  display: flex;
+  place-content: center center;
+}
+
+.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappVidere.navds-button,
+.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
+  margin: 1rem 0.5rem 0;
+}
+
+.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
+  margin-top: 0.9rem;
+}
+
+.loadingSpinner {
+  position: relative;
+  margin-bottom: -4rem;
+  padding-bottom: 3rem;
+}
+
+.validertSoknadOppsummeringContainer:first-child > div {
+  border: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.punchPage__knapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.punchPage__knapper button {
+  margin: 0 1rem 1rem 0;
+}
+
+.utregnetArbeidstid__container {
+  display: grid;
+  grid-template-columns: repeat(2, 243px);
+}

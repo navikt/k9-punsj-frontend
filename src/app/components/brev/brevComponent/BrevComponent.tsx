@@ -21,7 +21,7 @@ import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } 
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRulesBrev } from '../useValidationRules';
 
-import './brevComponent.less';
+import './brevComponent.css';
 
 const { TypedFormProvider, TypedFormTextField, TypedFormTextarea, TypedFormSelect } =
     getTypedFormComponents<IBrevForm>();

@@ -20,7 +20,7 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 
-import './virksomhetPanel.less';
+import './virksomhetPanel.css';
 
 interface Props {
     søkerId: string;

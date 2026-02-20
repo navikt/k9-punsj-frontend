@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Detail, ErrorMessage, Label, TextField } from '@navikt/ds-react';
 
-import './timerOgMinutter.less';
+import './timerOgMinutter.css';
 
 interface OwnProps {
     label: string;
