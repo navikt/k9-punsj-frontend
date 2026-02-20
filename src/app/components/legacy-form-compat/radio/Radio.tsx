@@ -5,6 +5,8 @@ import { Radio as AkselRadio, RadioGroup as AkselRadioGroup } from '@navikt/ds-r
 
 import './radio.css';
 
+// Compatibility wrapper for migration from nav-frontend-skjema to Aksel.
+// Keeps legacy RadioPanel visuals while using the new design system internals.
 export interface LegacyRadioProps extends Omit<React.ComponentProps<typeof AkselRadio>, 'children' | 'description'> {
     label: React.ReactNode;
     radioRef?: (element: HTMLInputElement | null) => void;
