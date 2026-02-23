@@ -53,6 +53,9 @@ const LegacyRadioGroup = ({
     }, [defaultChecked, isControlled]);
 
     const selectedValue = isControlled ? checked : internalChecked;
+    // Aksel RadioGroup tolker `value={undefined}` som ukontrollert input.
+    // Vi holder den kontrollert med tom streng når ingen verdi er valgt ennå.
+    const groupValue = selectedValue ?? '';
     const hasGroupError = !!feil;
     const groupError = typeof feil === 'boolean' ? undefined : feil;
     const isHorizontalClass = className?.split(' ').includes('horizontalRadios');
@@ -67,7 +70,7 @@ const LegacyRadioGroup = ({
                 'legacy-radio-group--horisontal': resolvedRetning === 'horisontal',
                 'legacy-radio-group--vertikal': resolvedRetning === 'vertikal',
             })}
-            value={selectedValue}
+            value={groupValue}
             error={groupError}
         >
             {radios.map((radio) => {
