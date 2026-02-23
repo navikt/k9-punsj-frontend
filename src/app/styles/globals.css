@@ -3,7 +3,13 @@
 @import url('tailwindcss/utilities');
 
 body {
-    @apply bg-white font-sans m-0;
+    @apply bg-white m-0;
+
+    color: #262626;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4286;
 }
 
 .fit-window-height {
