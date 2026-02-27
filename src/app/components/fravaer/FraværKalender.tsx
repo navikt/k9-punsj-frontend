@@ -23,12 +23,15 @@ interface Props {
 const FraværKalender = ({ arbeidstidInfo, søknadsperioder, updateSoknad }: Props) => {
     const perioder = (arbeidstidInfo?.perioder ?? []) as IArbeidstidPeriodeMedTimer[];
 
-    const lagreTimer = ({ fraværTimerPerDag, jobberNormaltTimerPerDag, selectedDates = [] }: FraværTidPayload) => {
+    const lagreTimer = ({ tidsformat, fraværTimerPerDag, jobberNormaltTimerPerDag, fraværPerDag, jobberNormaltPerDag, selectedDates = [] }: FraværTidPayload) => {
         const eksisterende = removeDatesFromPeriods(perioder, selectedDates) as IArbeidstidPeriodeMedTimer[];
         const nye: IArbeidstidPeriodeMedTimer[] = selectedDates.map((day) => ({
             periode: new Periode({ fom: dayjs(day).format(formats.YYYYMMDD), tom: dayjs(day).format(formats.YYYYMMDD) }),
+            tidsformat,
             fraværTimerPerDag,
             jobberNormaltTimerPerDag,
+            fraværPerDag,
+            jobberNormaltPerDag,
         }));
         updateSoknad([...eksisterende, ...nye]);
     };
@@ -45,7 +48,7 @@ const FraværKalender = ({ arbeidstidInfo, søknadsperioder, updateSoknad }: Pro
             <KalenderMedModal
                 gyldigePerioder={søknadsperioder}
                 kalenderdager={perioder
-                    .filter((p) => p.fraværTimerPerDag !== undefined || p.jobberNormaltTimerPerDag !== undefined)
+                    .filter((p) => p.fraværTimerPerDag !== undefined || p.fraværPerDag !== undefined || p.jobberNormaltTimerPerDag !== undefined || p.jobberNormaltPerDag !== undefined)
                     .flatMap(fraværPeriodeTilKalenderdag)}
                 tidModal={<FraværTid heading="Registrer fravær" lagre={lagreTimer} />}
                 periodeListeModal={(close) => (

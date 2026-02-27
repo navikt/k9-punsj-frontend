@@ -12,6 +12,7 @@ import {
     checkPeriodOverlap,
     processTilsynPeriods,
 } from 'app/utils/periodUtils';
+import { Tidsformat } from 'app/utils';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import FraværPeriode from './FraværPeriode';
@@ -47,10 +48,14 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
             ),
     });
 
+
 const emptyPeriode: Periodeinfo<IArbeidstidPeriodeMedTimer> = {
     periode: { fom: '', tom: '' },
     fraværTimerPerDag: '',
     jobberNormaltTimerPerDag: '',
+    fraværPerDag: { timer: '', minutter: '' },
+    jobberNormaltPerDag: { timer: '', minutter: '' },
+    tidsformat: Tidsformat.TimerOgMin,
 };
 
 interface FormValues {
