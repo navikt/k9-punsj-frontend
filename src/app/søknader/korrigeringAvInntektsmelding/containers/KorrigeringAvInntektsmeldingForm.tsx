@@ -54,6 +54,7 @@ const getInitialPeriode = () => ({ fom: '', tom: '' });
 
 const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId, journalposter }: Props) => {
     const intl = useIntl();
+    const harGyldigSoeknadId = søknadId.trim().length > 0;
 
     const [state, dispatch] = useReducer(korrigeringAvInntektsmeldingReducer, initialFormState);
 
@@ -71,6 +72,10 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
         dispatch({ type: ActionType.SET_ÅPNE_PANELER, åpnePaneler: { ...åpnePaneler, ...panel } });
 
     const oppdaterKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
+        if (!harGyldigSoeknadId) {
+            return;
+        }
+
         const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
 
         updateOMSKorrigering(korrigering);
@@ -78,6 +83,15 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
 
     const validerKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) => {
         dispatch({ type: ActionType.VALIDER_KORRIGERING_START });
+
+        if (!harGyldigSoeknadId) {
+            dispatch({
+                type: ActionType.SET_FORM_ERROR,
+                formError: intlHelper(intl, 'omsorgspenger.korrigeringAvInntektsmelding.innsendingError'),
+            });
+            dispatch({ type: ActionType.VALIDER_KORRIGERING_ERROR });
+            return;
+        }
 
         const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
 
@@ -149,6 +163,10 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                 actions.setSubmitting(false);
             }}
             validate={(values) => {
+                if (!harGyldigSoeknadId) {
+                    return Promise.resolve({});
+                }
+
                 oppdaterKorrigering(values);
 
                 const korrigering = new OMSKorrigering(values, søknadId, søkerId, journalposter);
