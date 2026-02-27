@@ -6,10 +6,10 @@ import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { Checkbox, Fieldset } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import FraværKalender from 'app/components/fravaer/FraværKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import usePrevious from 'app/hooks/usePrevious';
-import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from 'app/models/types';
+import { IPeriode, Periode } from 'app/models/types';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -266,17 +266,13 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     )}
                 </div>
             </div>
-            <Field name={`${name}.arbeidstidInfo.perioder`}>
-                {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                    <ArbeidstidKalender
-                        søknadsperioder={søknadsperioder}
-                        updateSoknad={(perioder) => {
-                            form.setFieldValue(field.name, [...perioder]);
-                        }}
-                        arbeidstidInfo={arbeidstidInfo}
-                    />
-                )}
-            </Field>
+            <FraværKalender
+                søknadsperioder={søknadsperioder}
+                updateSoknad={(perioder) => {
+                    setFieldValue(`${name}.arbeidstidInfo.perioder`, [...perioder]);
+                }}
+                arbeidstidInfo={arbeidstidInfo}
+            />
         </Fieldset>
     );
 };

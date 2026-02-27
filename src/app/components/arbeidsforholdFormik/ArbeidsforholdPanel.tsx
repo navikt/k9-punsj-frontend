@@ -4,7 +4,7 @@ import { Field, FieldProps, useFormikContext } from 'formik';
 import { CheckboksPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box } from '@navikt/ds-react';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import FraværKalender from 'app/components/fravaer/FraværKalender';
 import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
@@ -13,7 +13,7 @@ import { SelvstendigNaeringsdrivendeOpptjening } from 'app/models/types';
 import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
-import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types/Periode';
+import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -128,17 +128,13 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         </Alert>
                     </div>
 
-                    <Field name="arbeidstid.frilanserArbeidstidInfo.perioder">
-                        {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                            <ArbeidstidKalender
-                                søknadsperioder={søknadsperioder}
-                                updateSoknad={(perioder) => {
-                                    form.setFieldValue(field.name, [...perioder]);
-                                }}
-                                arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo}
-                            />
-                        )}
-                    </Field>
+                    <FraværKalender
+                        søknadsperioder={søknadsperioder}
+                        updateSoknad={(perioder) => {
+                            setFieldValue('arbeidstid.frilanserArbeidstidInfo.perioder', [...perioder]);
+                        }}
+                        arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo}
+                    />
                 </>
             )}
         </div>
@@ -365,17 +361,13 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <VerticalSpacer sixteenPx />
 
-                <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
-                    {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                        <ArbeidstidKalender
-                            søknadsperioder={søknadsperioder}
-                            updateSoknad={(perioder) => {
-                                form.setFieldValue(field.name, [...perioder]);
-                            }}
-                            arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
-                        />
-                    )}
-                </Field>
+                <FraværKalender
+                    søknadsperioder={søknadsperioder}
+                    updateSoknad={(perioder) => {
+                        setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder', [...perioder]);
+                    }}
+                    arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
+                />
 
                 {/* <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>

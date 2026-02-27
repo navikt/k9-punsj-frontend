@@ -106,6 +106,7 @@ export interface IArbeidstidPeriodeMedTimer {
     periode?: IPeriode;
     faktiskArbeidTimerPerDag?: string;
     jobberNormaltTimerPerDag?: string;
+    fraværTimerPerDag?: string;
     jobberNormaltPerDag?: ITimerOgMinutterString;
     faktiskArbeidPerDag?: ITimerOgMinutterString;
     tidsformat?: Tidsformat;
@@ -118,6 +119,8 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
 
     jobberNormaltTimerPerDag: string;
 
+    fraværTimerPerDag: string;
+
     jobberNormaltPerDag: ITimerOgMinutterString;
 
     faktiskArbeidPerDag: ITimerOgMinutterString;
@@ -128,6 +131,7 @@ export class ArbeidstidPeriodeMedTimer implements Required<Periodeinfo<IArbeidst
         this.periode = new Periode(pmf.periode || {});
         this.faktiskArbeidTimerPerDag = pmf.faktiskArbeidTimerPerDag || '';
         this.jobberNormaltTimerPerDag = pmf.jobberNormaltTimerPerDag || '';
+        this.fraværTimerPerDag = pmf.fraværTimerPerDag || '';
         this.jobberNormaltPerDag = pmf.jobberNormaltPerDag || {
             timer: '',
             minutter: '',
