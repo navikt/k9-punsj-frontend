@@ -43,16 +43,20 @@ const FraværPeriode = ({ name, remove }: Props) => {
         formik.setFieldValue(`${name}.fraværTimerPerDag`, timerOgMinutterTilTimerMedDesimaler({ timer, minutter }));
     };
 
+    const toDesimal = (timer: string, minutter: string) =>
+        timer !== '' || minutter !== '' ? timerOgMinutterTilTimerMedDesimaler({ timer, minutter }) : '';
+
+    const toTimerMin = (desimal: string) =>
+        desimal !== '' ? timerMedDesimalerTilTimerOgMinutter(Number(desimal)) : (['', ''] as [string, string]);
+
     const handleToggle = (v: Tidsformat) => {
         formik.setFieldValue(`${name}.tidsformat`, v);
         if (v === Tidsformat.Desimaler) {
-            formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`,
-                timerOgMinutterTilTimerMedDesimaler({ timer: normalTimerField.value, minutter: normalMinField.value }));
-            formik.setFieldValue(`${name}.fraværTimerPerDag`,
-                timerOgMinutterTilTimerMedDesimaler({ timer: fraværTimerField.value, minutter: fraværMinField.value }));
+            formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, toDesimal(normalTimerField.value, normalMinField.value));
+            formik.setFieldValue(`${name}.fraværTimerPerDag`, toDesimal(fraværTimerField.value, fraværMinField.value));
         } else {
-            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(normalDeciField.value));
-            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(fraværDeciField.value));
+            const [nt, nm] = toTimerMin(normalDeciField.value);
+            const [ft, fm] = toTimerMin(fraværDeciField.value);
             formik.setFieldValue(`${name}.jobberNormaltPerDag`, { timer: nt, minutter: nm });
             formik.setFieldValue(`${name}.fraværPerDag`, { timer: ft, minutter: fm });
         }

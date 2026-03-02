@@ -27,8 +27,6 @@ const createValidationSchema = (soknadsperioder: IPeriode[]) =>
                         fom: yup.string().required('Fra og med er påkrevd'),
                         tom: yup.string().required('Til og med er påkrevd'),
                     }),
-                    jobberNormaltTimerPerDag: yup.string().required('Normal arbeidstid er påkrevd'),
-                    fraværTimerPerDag: yup.string().required('Faktisk fravær er påkrevd'),
                 }),
             )
             .test('no-overlap', 'Perioder kan ikke overlappe hverandre', (periods) => {
@@ -74,11 +72,24 @@ const FraværPeriodeListe = ({ perioder, soknadsperioder, lagre, avbryt }: Props
 
     const initialValues: FormValues = { perioder: [emptyPeriode] };
 
+    const emptyToZero = (v: string | undefined) => (v === '' || v === undefined ? '0' : v);
+
     const handleSave = (values?: FormValues) => {
         const current = values || formikRef.current?.values;
         if (!current) return;
+        const normalized = current.perioder.map((p) => ({
+            ...p,
+            fraværTimerPerDag: emptyToZero(p.fraværTimerPerDag),
+            jobberNormaltTimerPerDag: emptyToZero(p.jobberNormaltTimerPerDag),
+            fraværPerDag: p.fraværPerDag
+                ? { timer: emptyToZero(p.fraværPerDag.timer as string), minutter: emptyToZero(p.fraværPerDag.minutter as string) }
+                : p.fraværPerDag,
+            jobberNormaltPerDag: p.jobberNormaltPerDag
+                ? { timer: emptyToZero(p.jobberNormaltPerDag.timer as string), minutter: emptyToZero(p.jobberNormaltPerDag.minutter as string) }
+                : p.jobberNormaltPerDag,
+        }));
         const processed = processTilsynPeriods(
-            current.perioder as any,
+            normalized as any,
             perioder as any,
         ) as Periodeinfo<IArbeidstidPeriodeMedTimer>[];
         lagre(processed);
