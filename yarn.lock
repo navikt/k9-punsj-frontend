@@ -2580,22 +2580,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@isaacs/balanced-match@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "@isaacs/balanced-match@npm:4.0.1"
-  checksum: 10/102fbc6d2c0d5edf8f6dbf2b3feb21695a21bc850f11bc47c4f06aa83bd8884fde3fe9d6d797d619901d96865fdcb4569ac2a54c937992c48885c5e3d9967fe8
-  languageName: node
-  linkType: hard
-
-"@isaacs/brace-expansion@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@isaacs/brace-expansion@npm:5.0.1"
-  dependencies:
-    "@isaacs/balanced-match": "npm:^4.0.1"
-  checksum: 10/aec226065bc4285436a27379e08cc35bf94ef59f5098ac1c026495c9ba4ab33d851964082d3648d56d63eb90f2642867bd15a3e1b810b98beb1a8c14efce6a94
-  languageName: node
-  linkType: hard
-
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -3040,7 +3024,7 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:4.1.4"
-    "@sentry/cli": "npm:3.2.0"
+    "@sentry/cli": "npm:3.2.1"
     axios: "npm:1.13.5"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
@@ -3837,74 +3821,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-darwin@npm:3.2.0"
+"@sentry/cli-darwin@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-darwin@npm:3.2.1"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-linux-arm64@npm:3.2.0"
+"@sentry/cli-linux-arm64@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-linux-arm64@npm:3.2.1"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-linux-arm@npm:3.2.0"
+"@sentry/cli-linux-arm@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-linux-arm@npm:3.2.1"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-linux-i686@npm:3.2.0"
+"@sentry/cli-linux-i686@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-linux-i686@npm:3.2.1"
   conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-linux-x64@npm:3.2.0"
+"@sentry/cli-linux-x64@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-linux-x64@npm:3.2.1"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-win32-arm64@npm:3.2.0"
+"@sentry/cli-win32-arm64@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-win32-arm64@npm:3.2.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-win32-i686@npm:3.2.0"
+"@sentry/cli-win32-i686@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-win32-i686@npm:3.2.1"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli-win32-x64@npm:3.2.0"
+"@sentry/cli-win32-x64@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli-win32-x64@npm:3.2.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@sentry/cli@npm:3.2.0"
+"@sentry/cli@npm:3.2.1":
+  version: 3.2.1
+  resolution: "@sentry/cli@npm:3.2.1"
   dependencies:
-    "@sentry/cli-darwin": "npm:3.2.0"
-    "@sentry/cli-linux-arm": "npm:3.2.0"
-    "@sentry/cli-linux-arm64": "npm:3.2.0"
-    "@sentry/cli-linux-i686": "npm:3.2.0"
-    "@sentry/cli-linux-x64": "npm:3.2.0"
-    "@sentry/cli-win32-arm64": "npm:3.2.0"
-    "@sentry/cli-win32-i686": "npm:3.2.0"
-    "@sentry/cli-win32-x64": "npm:3.2.0"
+    "@sentry/cli-darwin": "npm:3.2.1"
+    "@sentry/cli-linux-arm": "npm:3.2.1"
+    "@sentry/cli-linux-arm64": "npm:3.2.1"
+    "@sentry/cli-linux-i686": "npm:3.2.1"
+    "@sentry/cli-linux-x64": "npm:3.2.1"
+    "@sentry/cli-win32-arm64": "npm:3.2.1"
+    "@sentry/cli-win32-i686": "npm:3.2.1"
+    "@sentry/cli-win32-x64": "npm:3.2.1"
     progress: "npm:^2.0.3"
     proxy-from-env: "npm:^1.1.0"
     undici: "npm:^6.22.0"
@@ -3928,7 +3912,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/f0de910cacc8ee99cfc3ac55074fbe689d939fe6189e95fc766ead7d65a2f04a162095609b1ded4b35afa4ac38022365b633c0f12b478c49c13df92ef8b88964
+  checksum: 10/7060ed2863621bf8186dd9e0f7b2422dd272067d46476ef04ba8414aa7ca3ae2151c2a7deb40f2d6184fda90fbd90ef0f7bc2f8c1f4fae230856813a81fd59e3
   languageName: node
   linkType: hard
 
@@ -6320,11 +6304,11 @@ __metadata:
   linkType: hard
 
 "baseline-browser-mapping@npm:latest":
-  version: 2.9.19
-  resolution: "baseline-browser-mapping@npm:2.9.19"
+  version: 2.10.0
+  resolution: "baseline-browser-mapping@npm:2.10.0"
   bin:
-    baseline-browser-mapping: dist/cli.js
-  checksum: 10/8d7bbb7fe3d1ad50e04b127c819ba6d059c01ed0d2a7a5fc3327e23a8c42855fa3a8b510550c1fe1e37916147e6a390243566d3ef85bf6130c8ddfe5cc3db530
+    baseline-browser-mapping: dist/cli.cjs
+  checksum: 10/8145e076e4299f04c7a412e6ea63803e330153cd89c47b5303f9b56b58078f4c3d5a5b5332c1069da889e76facacca4d43f8940375f7e73ce0a4d96214332953
   languageName: node
   linkType: hard
 
@@ -9769,14 +9753,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:13.0.1":
-  version: 13.0.1
-  resolution: "glob@npm:13.0.1"
+"glob@npm:13.0.6":
+  version: 13.0.6
+  resolution: "glob@npm:13.0.6"
   dependencies:
-    minimatch: "npm:^10.1.2"
-    minipass: "npm:^7.1.2"
-    path-scurry: "npm:^2.0.0"
-  checksum: 10/465e8cc269ab88d7415a3906cdc0f4543a2ae54df99207204af5bc28a944396d8d893822f546a8056a78ec714e608ab4f3502532c4d6b9cc5e113adf0fe5109e
+    minimatch: "npm:^10.2.2"
+    minipass: "npm:^7.1.3"
+    path-scurry: "npm:^2.0.2"
+  checksum: 10/201ad69e5f0aa74e1d8c00a481581f8b8c804b6a4fbfabeeb8541f5d756932800331daeba99b58fb9e4cd67e12ba5a7eba5b82fb476691588418060b84353214
   languageName: node
   linkType: hard
 
@@ -11762,7 +11746,7 @@ __metadata:
     "@navikt/fnrvalidator": "npm:2.2.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.6.2"
     "@reduxjs/toolkit": "npm:2.11.2"
-    "@sentry/cli": "npm:3.2.0"
+    "@sentry/cli": "npm:3.2.1"
     "@sentry/react": "npm:10.39.0"
     "@storybook/addon-webpack5-compiler-swc": "npm:4.0.2"
     "@storybook/react": "npm:10.2.10"
@@ -12570,12 +12554,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.1.2":
-  version: 10.1.2
-  resolution: "minimatch@npm:10.1.2"
+"minimatch@npm:^10.2.2":
+  version: 10.2.4
+  resolution: "minimatch@npm:10.2.4"
   dependencies:
-    "@isaacs/brace-expansion": "npm:^5.0.1"
-  checksum: 10/6f0ef975463739207144e411bdd54f7205ce38770b162fa3bc4c9be4987a16cb20d0962a82f26c2372598cfba90faa97b327239d303b529b774f17681c163b46
+    brace-expansion: "npm:^5.0.2"
+  checksum: 10/aea4874e521c55bb60744685bbffe3d152e5460f84efac3ea936e6bbe2ceba7deb93345fec3f9bb17f7b6946776073a64d40ae32bf5f298ad690308121068a1f
   languageName: node
   linkType: hard
 
@@ -12668,6 +12652,13 @@ __metadata:
   version: 7.1.2
   resolution: "minipass@npm:7.1.2"
   checksum: 10/c25f0ee8196d8e6036661104bacd743785b2599a21de5c516b32b3fa2b83113ac89a2358465bc04956baab37ffb956ae43be679b2262bf7be15fce467ccd7950
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^7.1.3":
+  version: 7.1.3
+  resolution: "minipass@npm:7.1.3"
+  checksum: 10/175e4d5e20980c3cd316ae82d2c031c42f6c746467d8b1905b51060a0ba4461441a0c25bb67c025fd9617f9a3873e152c7b543c6b5ac83a1846be8ade80dffd6
   languageName: node
   linkType: hard
 
@@ -13458,13 +13449,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "path-scurry@npm:2.0.1"
+"path-scurry@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "path-scurry@npm:2.0.2"
   dependencies:
     lru-cache: "npm:^11.0.0"
     minipass: "npm:^7.1.2"
-  checksum: 10/1e9c74e9ccf94d7c16056a5cb2dba9fa23eec1bc221ab15c44765486b9b9975b4cd9a4d55da15b96eadf67d5202e9a2f1cec9023fbb35fe7d9ccd0ff1891f88b
+  checksum: 10/2b4257422bcb870a4c2d205b3acdbb213a72f5e2250f61c80f79c9d014d010f82bdf8584441612c8e1fa4eb098678f5704a66fa8377d72646bad4be38e57a2c3
   languageName: node
   linkType: hard
 
