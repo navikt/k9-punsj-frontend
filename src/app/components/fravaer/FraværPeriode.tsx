@@ -4,8 +4,8 @@ import { Button, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { useField, useFormikContext } from 'formik';
 
-import { IPeriode } from 'app/models/types/Periode';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 import PeriodevelgerControlled from 'app/components/timefoering/PeriodevelgerControlled';
 import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
@@ -14,11 +14,11 @@ import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningAr
 
 interface Props {
     name: string;
-    soknadsperioder: IPeriode[];
     remove: () => void;
 }
 
 const FraværPeriode = ({ name, remove }: Props) => {
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
     const formik = useFormikContext();
     const submitted = formik.submitCount > 0;
     const [tidsformatField] = useField(`${name}.tidsformat`);
@@ -61,7 +61,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
     return (
         <div className="mt-4">
             <div className="flex items-start">
-                <PeriodevelgerControlled name={`${name}.periode`} />
+                <PeriodevelgerControlled name={`${name}.periode`} fromDate={fromDate} toDate={toDate} disabled={disabled} />
                 <div className="ml-4 mt-7">
                     <Button
                         icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}

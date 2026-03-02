@@ -1,14 +1,17 @@
 import React from 'react';
-import { ErrorMessage } from '@navikt/ds-react';
+import { DatePickerProps, ErrorMessage } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 import DatovelgerControlled from '../skjema/Datovelger/DatovelgerControlled';
 import { uniqueId } from 'lodash';
 
 interface PeriodevelgerControlledProps {
     name: string;
+    fromDate?: Date;
+    toDate?: Date;
+    disabled?: DatePickerProps['disabled'];
 }
 
-const PeriodevelgerControlled = ({ name }: PeriodevelgerControlledProps) => {
+const PeriodevelgerControlled = ({ name, fromDate, toDate, disabled }: PeriodevelgerControlledProps) => {
     const formik = useFormikContext();
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
@@ -35,7 +38,9 @@ const PeriodevelgerControlled = ({ name }: PeriodevelgerControlledProps) => {
                     onBlur={() => {
                         formik.setFieldTouched(fomFieldName, true);
                     }}
-                    toDate={tomField.value ? new Date(tomField.value) : undefined}
+                    fromDate={fromDate}
+                    toDate={tomField.value ? new Date(tomField.value) : toDate}
+                    disabledDates={disabled}
                 />
                 <DatovelgerControlled
                     id={tomId}
@@ -50,7 +55,9 @@ const PeriodevelgerControlled = ({ name }: PeriodevelgerControlledProps) => {
                         formik.setFieldTouched(tomFieldName, true);
                     }}
                     defaultMonth={fomField.value ? new Date(fomField.value) : undefined}
-                    fromDate={fomField.value ? new Date(fomField.value) : undefined}
+                    fromDate={fomField.value ? new Date(fomField.value) : fromDate}
+                    toDate={toDate}
+                    disabledDates={disabled}
                 />
             </div>
             <div>

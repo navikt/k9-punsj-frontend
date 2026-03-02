@@ -410,6 +410,7 @@
     "skjema.arbeid.arbeidstaker.orgnr": "Organisasjonsnummer",
     "skjema.arbeid.arbeidstaker.ident": "Fødselsnummer til arbeidsgiver",
     "skjema.arbeid.registrerArbeidstidLengrePeriode": "Registrer arbeidstid for en lengre periode",
+    "skjema.fravaer.registrerFraværLengrePeriode": "Registrer fravær for en lengre periode",
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
 
     "skjema.arbeid.arbeidstidKalender.header": "Arbeidstid i søknadsperioden",

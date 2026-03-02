@@ -8,6 +8,7 @@ export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | '
         errorMessage?: React.ReactNode | string;
         selectedDay: string;
         disabled?: boolean;
+        disabledDates?: DatePickerProps['disabled'];
         onBlur: () => void;
         value: string;
     };
@@ -20,6 +21,7 @@ const DatovelgerControlled = ({
     errorMessage,
     selectedDay,
     disabled,
+    disabledDates,
     onBlur,
     value,
     fromDate,
@@ -90,6 +92,7 @@ const DatovelgerControlled = ({
                 dropdownCaption={true}
                 fromDate={fromDate || fromDateDefault}
                 toDate={toDate || toDateDefault}
+                disabled={disabledDates}
                 size={size}
             >
                 <DatePicker.Input

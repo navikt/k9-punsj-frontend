@@ -60,6 +60,7 @@ const FraværKalender = ({ arbeidstidInfo, søknadsperioder, updateSoknad }: Pro
                     />
                 )}
                 slettPeriode={slettDager}
+                lengrePeriodeIntlId="skjema.fravaer.registrerFraværLengrePeriode"
                 modalLabel="Periode med fravær modal"
             />
         </>

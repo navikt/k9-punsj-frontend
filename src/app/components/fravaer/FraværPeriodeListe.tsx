@@ -104,7 +104,6 @@ const FraværPeriodeListe = ({ perioder, soknadsperioder, lagre, avbryt }: Props
                                 <div className="mb-8" key={index}>
                                     <FraværPeriode
                                         name={`perioder.${index}`}
-                                        soknadsperioder={soknadsperioder}
                                         remove={() => arrayHelpers.remove(index)}
                                     />
                                 </div>
