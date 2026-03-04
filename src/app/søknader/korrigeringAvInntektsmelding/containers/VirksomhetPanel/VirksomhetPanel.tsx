@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Box, Fieldset, Heading, Link, Select, TextField } from '@navikt/ds-react';
+import { Box, Fieldset, Heading, Label, Link, Select, TextField } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -98,11 +98,14 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
                 </Heading>
             }
+            className="mb-6"
         >
             <Box className="listepanel virksomhetPanel">
+                <Label>Årstallet korrigeringen gjelder for</Label>
                 <TextField
-                    className="w-12"
+                    className="w-18 mt-2"
                     label="Årstallet korrigeringen gjelder for"
+                    hideLabel
                     onChange={(event) => {
                         const targetValue = event.target.value;
                         if (targetValue.length === 4) {

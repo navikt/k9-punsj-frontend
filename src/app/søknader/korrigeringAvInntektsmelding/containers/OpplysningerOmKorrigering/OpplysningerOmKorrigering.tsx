@@ -11,12 +11,10 @@ const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
 
     return (
-        <>
-            <div className="mb-4">
-                <Heading level="3" size="small">
-                    <FormattedMessage id="skjema.opplysningeromkorrigering" />
-                </Heading>
-            </div>
+        <div className="mb-6">
+            <Heading level="3" size="small" className="mb-2">
+                <FormattedMessage id="skjema.opplysningeromkorrigering" />
+            </Heading>
 
             <Box background="bg-subtle" padding="4" borderRadius="medium">
                 <Heading level="4" size="xsmall">
@@ -42,7 +40,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     </div>
                 </div>
             </Box>
-        </>
+        </div>
     );
 };
 

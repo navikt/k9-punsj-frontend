@@ -194,7 +194,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 </Heading>
                             </div>
 
-                            <Alert size="small" variant="info" className="korrigering__headerInfo">
+                            <Alert size="small" variant="info" className="mb-4">
                                 <Heading size="small" level="2">
                                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
                                 </Heading>
@@ -209,13 +209,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 </List>
                             </Alert>
 
-                            <div className="korrigering__opplysningerOmKorrigeringContainer">
-                                <OpplysningerOmKorrigering />
-                            </div>
+                            <OpplysningerOmKorrigering />
 
-                            <div className="korrigering__virksomhetpanelContainer">
-                                <VirksomhetPanel søkerId={søkerId} />
-                            </div>
+                            <VirksomhetPanel søkerId={søkerId} />
 
                             <TrekkPerioder
                                 isPanelOpen={åpnePaneler.trekkperioderPanel}
@@ -231,20 +227,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                     }
                                 }}
                             />
-
-                            {/* <LeggTilHelePerioder
-                                    isPanelOpen={åpnePaneler.leggTilHelePerioderPanel}
-                                    togglePanel={() => {
-                                        const toggledPanel = !åpnePaneler.leggTilHelePerioderPanel;
-                                        togglePaneler({ leggTilHelePerioderPanel: toggledPanel });
-                                        if (!toggledPanel) {
-                                            setFieldValue(
-                                                KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav,
-                                                [getInitialPeriode()]
-                                            );
-                                        }
-                                    }}
-                                /> */}
 
                             <LeggTilDelvisFravær
                                 isPanelOpen={åpnePaneler.leggTilDelvisFravær}
