@@ -30,6 +30,9 @@ const korrigeringAvInntektsmeldingReducer = (state: State, action: Action): Stat
         case ActionType.SET_ÅPNE_PANELER: {
             return { ...state, åpnePaneler: action.åpnePaneler || state.åpnePaneler };
         }
+        case ActionType.SET_HAS_SUBMITTED: {
+            return { ...state, hasSubmitted: true };
+        }
         case ActionType.VALIDER_KORRIGERING_START: {
             return { ...state, isLoading: true, hasSubmitted: true };
         }

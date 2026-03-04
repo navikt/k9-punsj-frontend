@@ -19,6 +19,7 @@ import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { arbeidsforholdIdFieldId, virksomhetFieldId } from '../formFieldIds';
 
 import './virksomhetPanel.css';
 
@@ -83,8 +84,9 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
         if (arbeidsgivereMedId && arbeidsgivereMedId.length > 0) {
             const arbeidsforholdIDerForValgtArbeidsgiver = finnArbeidsforholdIdForValgtArbeidsgiver();
             if (arbeidsforholdIDerForValgtArbeidsgiver.length > 0 && !value) {
-                return (
-                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.validering.arbeidsforholdID" />
+                return intlHelper(
+                    intl,
+                    'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.validering.arbeidsforholdID',
                 );
             }
         }
@@ -128,6 +130,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field, meta }: FieldProps) => (
                         <Select
+                            id={virksomhetFieldId}
                             className="w-64 mt-4"
                             label={intlHelper(
                                 intl,
@@ -167,6 +170,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                 >
                     {({ field, meta }: FieldProps) => (
                         <Select
+                            id={arbeidsforholdIdFieldId}
                             className="w-64 mt-4"
                             label={intlHelper(
                                 intl,
