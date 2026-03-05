@@ -7,10 +7,11 @@ module.exports = {
             rules: {
                 'selector-class-pattern': null,
                 'at-rule-no-deprecated': null,
+                'no-invalid-position-at-import-rule': null,
                 'at-rule-no-unknown': [
                     true,
                     {
-                        ignoreAtRules: ['apply', 'tailwind', 'screen', 'layer'],
+                        ignoreAtRules: ['apply', 'tailwind', 'screen', 'layer', 'config', 'reference'],
                     },
                 ],
             },

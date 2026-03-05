@@ -107,7 +107,7 @@ const BehandlingAvJournaførtJp: React.FC = () => {
                 )}
             </div>
 
-            <div className="flex space-x-4">
+            <div className="flex gap-4">
                 <Button
                     size="small"
                     disabled={!punchPath}
