@@ -56,7 +56,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
             />
 
             {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
-                <Alert size="small" variant="warning">
+                <Alert size="small" variant="warning" className="mt-4">
                     <FormattedMessage id="skjema.usignert.info" />
                 </Alert>
             )}
