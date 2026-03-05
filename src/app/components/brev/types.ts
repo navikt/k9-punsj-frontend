@@ -61,7 +61,7 @@ export interface IBrev {
     dokumentMal: string;
     dokumentdata: IBrevDokumentdata;
     journalpostId?: string;
-    saksnummer?: string;
+    saksnummer: string;
 }
 
 export enum IBrevMottakerType {

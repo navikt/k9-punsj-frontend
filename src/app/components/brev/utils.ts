@@ -43,7 +43,7 @@ export const createBrev = (
     dokumentMal,
     dokumentdata,
     journalpostId,
-    saksnummer: fagsakId,
+    saksnummer: fagsakId || 'GENERELL_SAK',
 });
 
 interface ErrType {
