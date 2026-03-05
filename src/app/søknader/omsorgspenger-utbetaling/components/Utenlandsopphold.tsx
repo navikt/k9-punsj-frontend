@@ -6,7 +6,7 @@ import { TrashIcon, PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyJaNeiIkkeOpplystRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeOpplystRadioGroupFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -17,12 +17,6 @@ const Utenlandsopphold: React.FC = () => {
     const intl = useIntl();
 
     const { values, setFieldValue } = useFormikContext<IOMPUTSoknad>();
-
-    const options = [
-        { value: JaNeiIkkeOpplyst.JA, label: intlHelper(intl, 'ja') },
-        { value: JaNeiIkkeOpplyst.NEI, label: intlHelper(intl, 'nei') },
-        { value: JaNeiIkkeOpplyst.IKKE_OPPLYST, label: intlHelper(intl, 'ikkeOpplyst') },
-    ];
 
     useEffect(() => {
         if (values.utenlandsopphold.length && values.metadata.utenlandsopphold !== 'ja') {
@@ -41,10 +35,9 @@ const Utenlandsopphold: React.FC = () => {
 
             <VerticalSpacer twentyPx />
 
-            <RadioPanelGruppeFormik
+            <LegacyJaNeiIkkeOpplystRadioGroupFormik
                 legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
                 name="metadata.utenlandsopphold"
-                options={options}
             />
 
             <VerticalSpacer twentyPx />

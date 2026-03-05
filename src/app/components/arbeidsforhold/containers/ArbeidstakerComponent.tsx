@@ -1,9 +1,9 @@
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useEffect, useReducer } from 'react';
 import { IntlShape } from 'react-intl';
 
 import { Checkbox, Fieldset, Select, TextField } from '@navikt/ds-react';
 
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { UpdateListeinfoInSoknad, UpdateListeinfoInSoknadState } from 'app/components/Listepaneler';
@@ -118,7 +118,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
     return (
         <Fieldset className="arbeidstaker-panel" legend="">
             <div className="flex flex-wrap">
-                <RadioPanelGruppe
+                <LegacyRadioGroup
                     className="horizontalRadios"
                     radios={[
                         {
@@ -132,7 +132,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     ]}
                     name={`arbeidsgivertype_${1}_${listeelementindex}`}
                     legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                    onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
+                    onChange={(_, value) => updateOrgOrPers(value as OrgOrPers)}
                     checked={selectedType}
                 />
             </div>

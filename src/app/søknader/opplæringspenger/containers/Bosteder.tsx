@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { useIntl } from 'react-intl';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -25,17 +25,11 @@ const Bosteder: React.FC = () => {
 
     return (
         <Box padding="4" borderWidth="1" borderRadius="large">
-            <RadioPanelGruppe
+            <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
-                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
-                    label: intlHelper(intl, jn),
-                    value: jn,
-                }))}
                 name="metadata.harBoddIUtlandet"
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                onChange={(event) => {
-                    const target = event.target as HTMLInputElement;
-                    const value = target.value as JaNeiIkkeOpplyst;
+                onChange={(_, value) => {
                     setFieldValue('metadata.harBoddIUtlandet', value);
 
                     if (value === JaNeiIkkeOpplyst.JA && values.bosteder.length === 0) {

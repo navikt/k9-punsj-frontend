@@ -2,9 +2,9 @@ import React, { useEffect, useReducer } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Field, FieldProps, useFormikContext } from 'formik';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { Checkbox, Fieldset } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
@@ -123,29 +123,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
     return (
         <Fieldset className="arbeidstaker-panel" legend="" hideLegend>
             <div className="flex flex-wrap">
-                {/* <Field name={`arbeidsgivertype_${1}_${listeelementindex}`}>
-                        {({ field, form }: FieldProps<boolean>) => (
-                            <RadioPanelGruppeFormik
-                                legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                                checked={selectedType}
-                                name={field.name}
-                                options={[
-                                    {
-                                        label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.org'),
-                                        value: 'o',
-                                    },
-                                    {
-                                        label: intlHelper(intl, 'skjema.arbeid.arbeidstaker.pers'),
-                                        value: 'p',
-                                    },
-                                ]}
-                                onChange={(event) =>
-                                    updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)
-                                }
-                            />
-                        )}
-                    </Field> */}
-                <RadioPanelGruppe
+                <LegacyRadioGroup
                     className="horizontalRadios"
                     radios={[
                         {
@@ -159,7 +137,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     ]}
                     name={`arbeidsgivertype_${1}_${listeelementindex}`}
                     legend={intlHelper(intl, 'skjema.arbeid.arbeidstaker.type')}
-                    onChange={(event) => updateOrgOrPers((event.target as HTMLInputElement).value as OrgOrPers)}
+                    onChange={(_, value) => updateOrgOrPers(value as OrgOrPers)}
                     checked={selectedType}
                 />
             </div>

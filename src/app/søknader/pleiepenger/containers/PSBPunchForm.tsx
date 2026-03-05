@@ -1,12 +1,13 @@
 import React, { ComponentType } from 'react';
 
 import { set } from 'lodash';
-import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
+import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -1239,19 +1240,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                                    label: intlHelper(intl, jnv),
-                                    value: jnv,
-                                }))}
                                 name="utlandjaneiikeeopplyst"
                                 legend={<FormattedMessage id="skjema.utenlandsopphold.label" />}
-                                onChange={(event) =>
-                                    this.updateUtenlandsopphold(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.updateUtenlandsopphold(value)}
                                 checked={this.utenlandsOppholdCheckedValue()}
                             />
 
@@ -1299,7 +1292,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id="skjema.ferie.leggtil" />}
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
@@ -1328,7 +1321,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 eksisterendePerioder?.length > 0 &&
                                 !punchFormState.hentPerioderError && (
                                     <>
-                                        <CheckboksPanel
+                                        <LegacyCheckbox
                                             label={<FormattedMessage id="skjema.ferie.fjern" />}
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
@@ -1426,7 +1419,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id="skjema.omsorgstilbud.checkboks" />}
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
                                 checked={!!this.state.iTilsynsordning}
@@ -1480,7 +1473,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id={BeredskapNattevaak.BEREDSKAP} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)
@@ -1494,7 +1487,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                             <VerticalSpacer eightPx />
 
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id={BeredskapNattevaak.NATTEVAAK} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)
@@ -1518,19 +1511,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
-                                    label: intlHelper(intl, jn),
-                                    value: jn,
-                                }))}
                                 name="medlemskapjanei"
                                 legend={<FormattedMessage id="skjema.medlemskap.harbodd" />}
-                                onChange={(event) =>
-                                    this.handleMedlemskapChange(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.handleMedlemskapChange(value)}
                                 checked={this.medlemskapCheckedValue()}
                             />
 
@@ -1566,7 +1551,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 </p>
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="medisinskeopplysningercheckbox"
                         label={<FormattedMessage id="skjema.medisinskeopplysninger" />}
                         checked={soknad.harMedisinskeOpplysninger}
@@ -1581,7 +1566,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <VerticalSpacer eightPx />
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="opplysningerikkepunsjetcheckbox"
                         label={<FormattedMessage id="skjema.opplysningerikkepunsjet" />}
                         checked={soknad.harInfoSomIkkeKanPunsjes}

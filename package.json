@@ -16,7 +16,6 @@
         "@reduxjs/toolkit": "2.11.2",
         "@sentry/react": "10.39.0",
         "@tanstack/react-query": "5.90.21",
-        "@tanstack/react-query-devtools": "5.91.3",
         "classnames": "2.5.1",
         "css-minimizer-webpack-plugin": "7.0.4",
         "date-fns": "4.1.0",
@@ -28,15 +27,6 @@
         "lodash": "4.17.23",
         "mini-css-extract-plugin": "2.10.0",
         "mustache-express": "1.3.2",
-        "nav-frontend-core": "6.0.1",
-        "nav-frontend-js-utils": "1.0.20",
-        "nav-frontend-lenker": "2.0.2",
-        "nav-frontend-lenker-style": "2.0.2",
-        "nav-frontend-paneler-style": "2.0.2",
-        "nav-frontend-skjema": "4.0.6",
-        "nav-frontend-skjema-style": "3.0.3",
-        "nav-frontend-typografi": "4.0.2",
-        "nav-frontend-typografi-style": "2.0.2",
         "object-hash": "3.0.0",
         "prop-types": "15.8.1",
         "re-resizable": "6.11.2",
@@ -76,7 +66,7 @@
         "docker-down": "docker-compose -f dev/docker-compose.yml down",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
-        "lint:css": "stylelint 'src/**/*.{css,less}'"
+        "lint:css": "stylelint 'src/**/*.css'"
     },
     "devDependencies": {
         "@babel/cli": "7.28.6",
@@ -143,14 +133,10 @@
         "jest-environment-jsdom": "30.2.0",
         "jest-extended": "7.0.0",
         "jest-mock": "30.2.0",
-        "less": "4.5.1",
-        "less-loader": "12.3.1",
         "lint-staged": "16.2.7",
         "msw": "2.12.10",
-        "nav-frontend-skjema-style": "3.0.3",
         "postcss": "8.5.6",
         "postcss-import": "16.1.1",
-        "postcss-less": "6.0.0",
         "postcss-loader": "8.2.1",
         "prettier": "3.8.1",
         "react-refresh": "0.18.0",
@@ -176,8 +162,8 @@
     ],
     "lint-staged": {
         "src/app/**/*.ts?(x)": "eslint --cache --fix",
-        "*.(le|c)ss": "stylelint --fix",
-        "src/app/**/*.{ts,tsx,js,jsx,css,less}": "prettier --write"
+        "*.css": "stylelint --fix",
+        "src/app/**/*.{ts,tsx,js,jsx,css}": "prettier --write"
     },
     "workspaces": [
         "server"

@@ -6,8 +6,8 @@ import { CheckboxGroup as AkselCheckboxGroup } from '@navikt/ds-react';
 import LegacyCheckbox, { LegacyCheckboxProps } from './Checkbox';
 import './checkboxGroup.css';
 
-// Compatibility wrapper for migration from nav-frontend-skjema to Aksel.
-// Keeps legacy CheckboksPanelGruppe behavior and visuals during the transition.
+// Kompatibilitetslag for migrering fra eldre skjemakomponenter til Aksel.
+// Beholder legacy-oppførsel og visning for CheckboksPanelGruppe i overgangsperioden.
 export interface LegacyCheckboxGroupOption
     extends Omit<LegacyCheckboxProps, 'checked' | 'defaultChecked' | 'name' | 'onChange' | 'className'> {
     value: string;

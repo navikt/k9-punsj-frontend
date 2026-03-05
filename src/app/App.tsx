@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Sentry from '@sentry/react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Provider } from 'react-redux';
 import {
     Navigate,
@@ -119,7 +118,6 @@ export const App: React.FC = () => {
         <Sentry.ErrorBoundary onError={logError}>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
-                    <ReactQueryDevtools initialIsOpen={false} />
                     <ApplicationWrapper locale={locale}>
                         <SentryRoutes>
                             <Route

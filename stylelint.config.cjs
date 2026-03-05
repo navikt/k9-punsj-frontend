@@ -15,13 +15,5 @@ module.exports = {
                 ],
             },
         },
-        {
-            files: ['**/*.less'],
-            customSyntax: 'postcss-less',
-            rules: {
-                'selector-class-pattern': null,
-                'no-descending-specificity': null,
-            },
-        },
     ],
 };

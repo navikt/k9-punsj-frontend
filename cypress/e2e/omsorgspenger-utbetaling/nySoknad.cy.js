@@ -38,7 +38,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
     });
     it('Kan sende inn søknad for frilanser', () => {
         cy.contains(/Frilanser/i).click();
-        cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).within(() => {
+        cy.findByRole('group', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByLabelText('Når startet søker som frilanser?').type('01.01.2019');
@@ -63,7 +63,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
 
     it('Kan sende inn søknad for selvstendig næringsdrivende', () => {
         cy.contains(/Selvstendig næringsdrivende/i).click();
-        cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).within(() => {
+        cy.findByRole('group', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByText(/Fiske/i).click();

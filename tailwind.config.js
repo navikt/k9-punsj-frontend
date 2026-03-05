@@ -4,7 +4,7 @@ module.exports = {
     corePlugins: {
         // https://tailwindcss.com/docs/preflight
         // denne er disablet fordi:
-        // 1. preflight.css i tailwind har selectors med høy specificity som overskriver styles i "nav-frontend-*-styles"-pakker
+        // 1. preflight.css i tailwind har selectors med høy specificity som overskriver en del eksisterende legacy-stiler
         // 2. den fjerner en del default css-attributter (f.eks default margins) som kan gjøre visningen rar
         preflight: false,
     },

@@ -37,9 +37,36 @@
     color: #fff;
 }
 
+.legacy-checkbox-panel--disabled {
+    background-color: #f1f1f1;
+    box-shadow: none;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__label,
+.legacy-checkbox-panel--disabled .navds-checkbox__input,
+.legacy-checkbox-panel--disabled:hover .navds-checkbox__label {
+    color: #262626;
+    cursor: not-allowed;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__label::before,
+.legacy-checkbox-panel--disabled:hover .navds-checkbox__label::before {
+    background-color: #f1f1f1;
+    box-shadow: 0 0 0 1px #6a6a6a;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__icon {
+    color: #fff;
+}
+
 .legacy-checkbox-panel__control .navds-checkbox__input:checked + .navds-checkbox__label::before {
     background-color: #0067c5;
     box-shadow: 0 0 0 1px #0067c5;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__input:checked + .navds-checkbox__label::before {
+    background-color: #6a6a6a;
+    box-shadow: 0 0 0 1px #6a6a6a;
 }
 
 .legacy-checkbox-panel--checked {
@@ -66,33 +93,6 @@
     + .navds-checkbox__label::before {
     background-color: #99c3ff;
     box-shadow: 0 0 0 1px transparent;
-}
-
-.legacy-checkbox-panel--disabled {
-    background-color: #f1f1f1;
-    box-shadow: none;
-}
-
-.legacy-checkbox-panel--disabled .navds-checkbox__label,
-.legacy-checkbox-panel--disabled .navds-checkbox__input,
-.legacy-checkbox-panel--disabled:hover .navds-checkbox__label {
-    color: #262626;
-    cursor: not-allowed;
-}
-
-.legacy-checkbox-panel--disabled .navds-checkbox__label::before,
-.legacy-checkbox-panel--disabled:hover .navds-checkbox__label::before {
-    background-color: #f1f1f1;
-    box-shadow: 0 0 0 1px #6a6a6a;
-}
-
-.legacy-checkbox-panel--disabled .navds-checkbox__input:checked + .navds-checkbox__label::before {
-    background-color: #6a6a6a;
-    box-shadow: 0 0 0 1px #6a6a6a;
-}
-
-.legacy-checkbox-panel--disabled .navds-checkbox__icon {
-    color: #fff;
 }
 
 .legacy-checkbox-panel--error:not(.legacy-checkbox-panel--checked, .legacy-checkbox-panel--disabled, :focus-within) {

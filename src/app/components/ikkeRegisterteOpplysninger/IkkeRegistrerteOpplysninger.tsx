@@ -1,9 +1,9 @@
 import { Field, FieldProps, FormikValues } from 'formik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
 import { HelpText } from '@navikt/ds-react';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import intlHelper from 'app/utils/intlUtils';
 
@@ -20,7 +20,7 @@ const IkkeRegistrerteOpplysninger = ({ intl }: OwnProps) => (
             <Field name="harMedisinskeOpplysninger">
                 {({ field }: FieldProps<FormikValues>) => (
                     <>
-                        <CheckboksPanel
+                        <LegacyCheckbox
                             id="medisinskeopplysningercheckbox"
                             label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                             checked={!!field.value}
@@ -39,7 +39,7 @@ const IkkeRegistrerteOpplysninger = ({ intl }: OwnProps) => (
             <Field name="harInfoSomIkkeKanPunsjes">
                 {({ field }: FieldProps<FormikValues>) => (
                     <>
-                        <CheckboksPanel
+                        <LegacyCheckbox
                             id="opplysningerikkepunsjetcheckbox"
                             label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                             checked={!!field.value}
