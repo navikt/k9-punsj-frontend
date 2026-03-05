@@ -102,7 +102,7 @@ export const EksisterendeOLPSoknader: React.FC<Props> = ({ søkerId, pleietrenge
 
         return (
             <>
-                <Heading size="medium" level="2">
+                <Heading size="medium" level="2" className="mb-4">
                     <FormattedMessage id="tabell.overskrift" />
                 </Heading>
 
