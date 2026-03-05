@@ -282,7 +282,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 )}
             </div>
 
-            <div className="mt-8 flex space-x-6">
+            <div className="mt-8 flex gap-6">
                 <Button
                     variant="secondary"
                     size="small"
