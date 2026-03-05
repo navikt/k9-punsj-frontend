@@ -1,16 +1,31 @@
 import { IPeriode } from 'app/models/types';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
-import { ValideringResponse } from 'app/models/types/ValideringResponse';
+import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { initializeDate } from 'app/utils';
 
-import { KorrigeringAvInntektsmeldingFormValues } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import {
+    KorrigeringAvInntektsmeldingFormFields,
+    KorrigeringAvInntektsmeldingFormValues,
+} from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 
-interface FormErrors {
-    OpplysningerOmKorrigering: string;
+export interface FormErrors {
+    OpplysningerOmKorrigering: {
+        dato: string;
+        klokkeslett: string;
+    };
     Trekkperioder: string[];
     PerioderMedRefusjonskrav: string[];
     DagerMedDelvisFravær: DatoMedTimetall[];
     Virksomhet: string;
+    ArbeidsforholdId?: string;
+}
+
+interface FravaersperiodeTarget {
+    field:
+        | KorrigeringAvInntektsmeldingFormFields.Trekkperioder
+        | KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav
+        | KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær;
+    index: number;
 }
 
 const getPeriodRange = (fom: string, tom: string) => {
@@ -42,24 +57,132 @@ const getPeriodeFeil = (value: IPeriode, response: ValideringResponse) => {
     return harMatchendeFeil ? response?.feil[feilIndex]?.feilmelding : null;
 };
 
+const getTommeErrors = (): FormErrors => ({
+    OpplysningerOmKorrigering: { dato: '', klokkeslett: '' },
+    Trekkperioder: [],
+    PerioderMedRefusjonskrav: [],
+    DagerMedDelvisFravær: [],
+    Virksomhet: '',
+});
+
+const getFravaersperiodeTargets = (values: KorrigeringAvInntektsmeldingFormValues): FravaersperiodeTarget[] => {
+    const targets: FravaersperiodeTarget[] = [];
+
+    values.Trekkperioder.forEach((value, index) => {
+        if (value.fom) {
+            targets.push({ field: KorrigeringAvInntektsmeldingFormFields.Trekkperioder, index });
+        }
+    });
+
+    values.PerioderMedRefusjonskrav.forEach((value, index) => {
+        if (value.fom) {
+            targets.push({ field: KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav, index });
+        }
+    });
+
+    values.DagerMedDelvisFravær.forEach((value, index) => {
+        if (value.dato || value.timer) {
+            targets.push({ field: KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær, index });
+        }
+    });
+
+    return targets;
+};
+
+const setPeriodError = (errors: FormErrors, target: FravaersperiodeTarget, feilmelding: string) => {
+    switch (target.field) {
+        case KorrigeringAvInntektsmeldingFormFields.Trekkperioder:
+            errors.Trekkperioder[target.index] = feilmelding;
+            break;
+        case KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav:
+            errors.PerioderMedRefusjonskrav[target.index] = feilmelding;
+            break;
+        case KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær:
+            errors.DagerMedDelvisFravær[target.index].dato = feilmelding;
+            break;
+    }
+};
+
+const mapServerValidationFeil = (
+    values: KorrigeringAvInntektsmeldingFormValues,
+    response: ValideringResponse,
+    errors: FormErrors,
+) => {
+    const fravaersperiodeTargets = getFravaersperiodeTargets(values);
+
+    response.feil.forEach((feil: Feil) => {
+        if (!feil.feilmelding) {
+            return;
+        }
+
+        if (feil.felt === 'mottattDato') {
+            errors.OpplysningerOmKorrigering.dato = feil.feilmelding;
+            return;
+        }
+
+        if (feil.felt === 'klokkeslett') {
+            errors.OpplysningerOmKorrigering.klokkeslett = feil.feilmelding;
+            return;
+        }
+
+        if (feil.felt === 'arbeidsforholdId') {
+            errors.ArbeidsforholdId = feil.feilmelding;
+            return;
+        }
+
+        if (feil.felt === 'organisasjonsnummer') {
+            errors.Virksomhet = feil.feilmelding;
+            return;
+        }
+
+        const indexMatch = feil.felt?.match(/^ytelse\.fraværsperioderKorrigeringIm\[(\d+)]$/);
+        if (indexMatch) {
+            if (feil.feilkode === 'ikkeSpesifisertOrgNr') {
+                errors.Virksomhet = feil.feilmelding;
+                return;
+            }
+
+            const target = fravaersperiodeTargets[Number(indexMatch[1])];
+            if (target) {
+                setPeriodError(errors, target, feil.feilmelding);
+                return;
+            }
+        }
+
+        if (feil.felt === 'søknad' && feil.feilkode === 'mottattDato' && !errors.OpplysningerOmKorrigering.dato) {
+            errors.OpplysningerOmKorrigering.dato = feil.feilmelding;
+            return;
+        }
+
+        if (
+            feil.felt === 'søknad' &&
+            feil.feilkode === 'klokkeslett' &&
+            !errors.OpplysningerOmKorrigering.klokkeslett
+        ) {
+            errors.OpplysningerOmKorrigering.klokkeslett = feil.feilmelding;
+        }
+    });
+};
+
 const harFormFeil = (errors: FormErrors) =>
-    errors.OpplysningerOmKorrigering ||
+    errors.OpplysningerOmKorrigering.dato ||
+    errors.OpplysningerOmKorrigering.klokkeslett ||
     errors.Trekkperioder.some((error) => !!error) ||
     errors.PerioderMedRefusjonskrav.some((error) => !!error) ||
     errors.DagerMedDelvisFravær.some((error) => !!error.dato || !!error.timer) ||
-    errors.Virksomhet;
+    errors.Virksomhet ||
+    errors.ArbeidsforholdId;
 
-export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data: ValideringResponse) => {
-    const valideringIBackendFeilet = !!data.feil;
-    const errors: FormErrors = {
-        OpplysningerOmKorrigering: '',
-        Trekkperioder: [],
-        PerioderMedRefusjonskrav: [],
-        DagerMedDelvisFravær: [],
-        Virksomhet: '',
-    };
+export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, data?: ValideringResponse) => {
+    const valideringIBackendFeilet = !!data?.feil?.length;
+    const errors: FormErrors = getTommeErrors();
     if (!values.OpplysningerOmKorrigering.dato || !values.OpplysningerOmKorrigering.klokkeslett) {
-        errors.OpplysningerOmKorrigering = 'Du må fylle inn dato og klokkeslett';
+        if (!values.OpplysningerOmKorrigering.dato) {
+            errors.OpplysningerOmKorrigering.dato = 'Du må fylle inn dato';
+        }
+        if (!values.OpplysningerOmKorrigering.klokkeslett) {
+            errors.OpplysningerOmKorrigering.klokkeslett = 'Du må fylle inn klokkeslett';
+        }
     }
     if (!values.Virksomhet) {
         errors.Virksomhet = 'Du må velge en virksomhet';
@@ -111,6 +234,9 @@ export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, da
             }
         }
     });
+    if (valideringIBackendFeilet && data) {
+        mapServerValidationFeil(values, data, errors);
+    }
     if (!harFormFeil(errors)) {
         return {};
     }

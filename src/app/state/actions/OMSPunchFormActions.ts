@@ -26,8 +26,18 @@ async function postPromise<BodyType>(
     }
 }
 
-export function validerOMSKorrigering(korrigering: OMSKorrigering) {
-    const norskIdent: string = !korrigering.soeknadId ? '' : korrigering.soeknadId;
+const manglerSoeknadIdResponse = (): Promise<Response> =>
+    Promise.resolve({
+        status: 400,
+        json: async () => ({ feil: [] }),
+    } as Response);
+
+export function validerOMSKorrigering(korrigering: OMSKorrigering): Promise<Response> {
+    if (!korrigering.soeknadId?.trim()) {
+        return manglerSoeknadIdResponse();
+    }
+
+    const norskIdent: string = korrigering.soekerId?.trim() || '';
     return postPromise(
         ApiPath.OMS_SOKNAD_VALIDER,
         { id: korrigering.soeknadId },
@@ -64,8 +74,12 @@ export function submitOMSKorrigering(
     post(ApiPath.OMS_SOKNAD_SUBMIT, { id: soeknadId }, { 'X-Nav-NorskIdent': norskIdent }, requestBody, callback);
 }
 
-export function updateOMSKorrigering(korrigering: OMSKorrigering) {
-    put(ApiPath.OMS_SOKNAD_UPDATE, { id: korrigering.soeknadId }, korrigering);
+export function updateOMSKorrigering(korrigering: OMSKorrigering): Promise<Response> {
+    if (!korrigering.soeknadId?.trim()) {
+        return manglerSoeknadIdResponse();
+    }
+
+    return put(ApiPath.OMS_SOKNAD_UPDATE, { id: korrigering.soeknadId }, korrigering);
 }
 
 export function hentArbeidsgivereMedId(søkerId: string, årstallForKorrigering: string) {

@@ -16,6 +16,7 @@ import {
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from '../../../../hooks/useFocus';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import { delvisFravaerDatoFieldId, delvisFravaerTimerFieldId } from '../formFieldIds';
 
 import './LeggTilDelvisFravær.css';
 
@@ -66,11 +67,13 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                 <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="input-row">
                                                         <Field name={`${fieldName}.dato`}>
-                                                            {({ field }: FieldProps) => (
+                                                            {({ field, meta }: FieldProps) => (
                                                                 <DatoInputFormikNew
                                                                     {...field}
                                                                     className="dateInput"
+                                                                    id={delvisFravaerDatoFieldId(index)}
                                                                     label={intlHelper(intl, 'skjema.dato')}
+                                                                    error={meta.touched && meta.error}
                                                                 />
                                                             )}
                                                         </Field>
@@ -80,6 +83,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                 {({ field, meta }: FieldProps) => (
                                                                     <TextField
                                                                         {...field}
+                                                                        id={delvisFravaerTimerFieldId(index)}
                                                                         label={
                                                                             <FormattedMessage id="skjema.perioder.timer" />
                                                                         }
