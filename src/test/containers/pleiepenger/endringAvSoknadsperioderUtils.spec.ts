@@ -4,8 +4,9 @@ import { buildEndringAvSoknadsperioderUpdate } from '../../../app/søknader/plei
 describe('buildEndringAvSoknadsperioderUpdate', () => {
     it('beholder kun trekkKravPerioder når listen ikke er tom', () => {
         const perioder: IPeriode[] = [{ fom: '2026-02-02', tom: '2026-02-20' }];
+        const eksisterendePerioder: IPeriode[] = [{ fom: '2026-02-01', tom: '2026-02-28' }];
 
-        expect(buildEndringAvSoknadsperioderUpdate(perioder)).toEqual({
+        expect(buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder)).toEqual({
             trekkKravPerioder: perioder,
         });
     });
@@ -13,6 +14,16 @@ describe('buildEndringAvSoknadsperioderUpdate', () => {
     it('nullstiller begrunnelseForInnsending når alle trekkKravPerioder er fjernet', () => {
         expect(buildEndringAvSoknadsperioderUpdate([])).toEqual({
             trekkKravPerioder: [],
+            begrunnelseForInnsending: undefined,
+        });
+    });
+
+    it('nullstiller begrunnelseForInnsending når periodene ikke lenger overlapper eksisterende perioder', () => {
+        const perioder: IPeriode[] = [{ fom: '2026-03-01', tom: '2026-03-10' }];
+        const eksisterendePerioder: IPeriode[] = [{ fom: '2026-02-01', tom: '2026-02-28' }];
+
+        expect(buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder)).toEqual({
+            trekkKravPerioder: perioder,
             begrunnelseForInnsending: undefined,
         });
     });

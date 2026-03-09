@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOverlapUtils';
+import { findPeriodOverlaps, formatPeriodeForDisplay, hasOverlapWarnings } from 'app/utils/periodOverlapUtils';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
@@ -22,10 +22,18 @@ interface Props {
 
 export const buildEndringAvSoknadsperioderUpdate = (
     perioder: IPeriode[],
+    eksisterendePerioder: IPeriode[] = [],
 ): Partial<Pick<IPSBSoknad, 'trekkKravPerioder' | 'begrunnelseForInnsending'>> => {
     if (perioder.length === 0) {
         return {
             trekkKravPerioder: [],
+            begrunnelseForInnsending: undefined,
+        };
+    }
+
+    if (!hasOverlapWarnings(findPeriodOverlaps(perioder, eksisterendePerioder))) {
+        return {
+            trekkKravPerioder: perioder,
             begrunnelseForInnsending: undefined,
         };
     }
@@ -74,7 +82,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = affectedByMiddle.length > 0;
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = affectedByEnd.length > 0;
 
-        if (!hasCompletelyRemovedPeriods && !hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && !hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode) {
+        if (!hasOverlapWarnings({ completelyRemoved, affectedByStart, affectedByMiddle, affectedByEnd })) {
             return null;
         }
 
@@ -163,9 +171,14 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 <Periodepaneler
                     periods={soknad.trekkKravPerioder || []}
                     initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder))}
+                    editSoknad={(perioder) =>
+                        updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder))
+                    }
                     editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState(buildEndringAvSoknadsperioderUpdate(perioder), showStatus);
+                        updateSoknadState(
+                            buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder),
+                            showStatus,
+                        );
                         setSelectedPeriods(perioder);
                     }}
                     textLeggTil="skjema.perioder.legg_til"
