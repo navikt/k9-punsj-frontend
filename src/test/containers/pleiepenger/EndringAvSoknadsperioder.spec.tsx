@@ -2,7 +2,8 @@ import React from 'react';
 import { Accordion } from '@navikt/ds-react';
 import { renderWithIntl } from '../../testUtils';
 import EndringAvSøknadsperioder from '../../../app/søknader/pleiepenger/containers/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
-import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
+import { IPSBSoknad, PSBSoknad } from '../../../app/models/types/PSBSoknad';
+import { IPeriode } from '../../../app/models/types/Periode';
 
 const baseSoknad: IPSBSoknad = {
     soekerId: '123',
@@ -15,14 +16,14 @@ const baseSoknad: IPSBSoknad = {
     opptjeningAktivitet: {},
 };
 
-const renderComponent = (trekkKravPerioder: IPSBSoknad['trekkKravPerioder'], eksisterendePerioder: IPSBSoknad['soeknadsperiode']) =>
+const renderComponent = (trekkKravPerioder: IPeriode[] | undefined, eksisterendePerioder: IPeriode[]) =>
     renderWithIntl(
         <Accordion>
             <EndringAvSøknadsperioder
                 isOpen
                 onClick={jest.fn()}
                 getErrorMessage={() => undefined}
-                soknad={{ ...baseSoknad, trekkKravPerioder }}
+                soknad={new PSBSoknad({ ...baseSoknad, trekkKravPerioder })}
                 updateSoknad={jest.fn()}
                 updateSoknadState={jest.fn()}
                 eksisterendePerioder={eksisterendePerioder}
