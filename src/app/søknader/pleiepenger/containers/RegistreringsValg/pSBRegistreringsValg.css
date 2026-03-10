@@ -1,0 +1,13 @@
+.registrering-page {
+    & button {
+        margin-top: 0.5rem;
+    }
+
+    & p {
+        font-weight: bold;
+    }
+
+    .knapperad .knapp1.navds-button {
+        margin-right: 1rem;
+    }
+}

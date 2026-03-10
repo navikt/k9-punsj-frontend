@@ -10,7 +10,7 @@ import { Alert, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
 import { TimeFormat } from 'app/models/enums';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { datetime } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
@@ -102,7 +102,7 @@ export const EksisterendeOLPSoknader: React.FC<Props> = ({ søkerId, pleietrenge
 
         return (
             <>
-                <Heading size="medium" level="2">
+                <Heading size="medium" level="2" className="mb-4">
                     <FormattedMessage id="tabell.overskrift" />
                 </Heading>
 

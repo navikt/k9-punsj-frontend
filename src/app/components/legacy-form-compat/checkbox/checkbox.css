@@ -1,0 +1,111 @@
+.legacy-checkbox-panel {
+    background-color: #fff;
+    border: 1px solid #6a6a6a;
+    border-radius: 0.25rem;
+    position: relative;
+}
+
+.legacy-checkbox-panel__control.navds-checkbox {
+    margin: 0;
+    width: 100%;
+}
+
+.legacy-checkbox-panel__control .navds-checkbox__label {
+    color: #262626;
+    align-items: flex-start;
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    width: 100%;
+}
+
+.legacy-checkbox-panel__control .navds-checkbox__label::before {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #6a6a6a;
+    margin: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.legacy-checkbox-panel__control .navds-checkbox__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.legacy-checkbox-panel__control .navds-checkbox__icon {
+    color: #fff;
+}
+
+.legacy-checkbox-panel--disabled {
+    background-color: #f1f1f1;
+    box-shadow: none;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__label,
+.legacy-checkbox-panel--disabled .navds-checkbox__input,
+.legacy-checkbox-panel--disabled:hover .navds-checkbox__label {
+    color: #262626;
+    cursor: not-allowed;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__label::before,
+.legacy-checkbox-panel--disabled:hover .navds-checkbox__label::before {
+    background-color: #f1f1f1;
+    box-shadow: 0 0 0 1px #6a6a6a;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__icon {
+    color: #fff;
+}
+
+.legacy-checkbox-panel__control .navds-checkbox__input:checked + .navds-checkbox__label::before {
+    background-color: #0067c5;
+    box-shadow: 0 0 0 1px #0067c5;
+}
+
+.legacy-checkbox-panel--disabled .navds-checkbox__input:checked + .navds-checkbox__label::before {
+    background-color: #6a6a6a;
+    box-shadow: 0 0 0 1px #6a6a6a;
+}
+
+.legacy-checkbox-panel--checked {
+    background-color: #cce1ff;
+    border-color: transparent;
+}
+
+.legacy-checkbox-panel:focus-within {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px #00347d;
+}
+
+.legacy-checkbox-panel:hover:not(.legacy-checkbox-panel--disabled) {
+    border-color: #0067c5;
+    box-shadow: #6a6a6a 0 2px 1px 0;
+}
+
+.legacy-checkbox-panel:hover:not(.legacy-checkbox-panel--disabled) .navds-checkbox__label {
+    color: #0067c5;
+}
+
+.legacy-checkbox-panel:hover:not(.legacy-checkbox-panel--checked, .legacy-checkbox-panel--disabled)
+    .navds-checkbox__input:not(:checked)
+    + .navds-checkbox__label::before {
+    background-color: #99c3ff;
+    box-shadow: 0 0 0 1px transparent;
+}
+
+.legacy-checkbox-panel--error:not(.legacy-checkbox-panel--checked, .legacy-checkbox-panel--disabled, :focus-within) {
+    border-color: #c30000;
+    box-shadow: 0 0 0 1px #c30000;
+}
+
+.legacy-checkbox-panel__label-text {
+    display: block;
+}
+
+.legacy-checkbox-panel__subtext {
+    color: #262626;
+    display: block;
+    margin-top: 0.5rem;
+}

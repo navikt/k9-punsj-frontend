@@ -1,6 +1,6 @@
 import { IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 
 export const checkIfFagsakMedValgtBehandlingsår = (

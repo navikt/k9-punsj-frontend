@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Checkbox, Select } from '@navikt/ds-react';
 
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Person } from 'app/models/types/Person';

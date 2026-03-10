@@ -1,11 +1,12 @@
 import React, { ComponentType } from 'react';
 
-import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
+import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import {
     IInputError,
@@ -890,19 +891,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                                    label: intlHelper(intl, jnv),
-                                    value: jnv,
-                                }))}
                                 name="utlandjaneiikeeopplyst"
                                 legend={intlHelper(intl, 'skjema.utenlandsopphold.label')}
-                                onChange={(event) =>
-                                    this.updateUtenlandsopphold(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.updateUtenlandsopphold(value)}
                                 checked={
                                     this.state.soknad.utenlandsopphold?.length
                                         ? JaNeiIkkeOpplyst.JA
@@ -946,7 +939,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         <Accordion.Content>
                             <VerticalSpacer eightPx />
 
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
                                 value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
@@ -974,7 +967,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                 eksisterendePerioder?.length > 0 &&
                                 !punchFormState.hentPerioderError && (
                                     <>
-                                        <CheckboksPanel
+                                        <LegacyCheckbox
                                             label={intlHelper(intl, 'skjema.ferie.fjern')}
                                             value="skjema.ferie.fjern"
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
@@ -1036,19 +1029,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
-                                    label: intlHelper(intl, jn),
-                                    value: jn,
-                                }))}
                                 name="medlemskapjanei"
                                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
-                                onChange={(event) =>
-                                    this.handleMedlemskapChange(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.handleMedlemskapChange(value)}
                                 checked={soknad.bosteder.length ? JaNeiIkkeOpplyst.JA : this.state.harBoddIUtlandet}
                             />
                             {!!soknad.bosteder.length && (
@@ -1083,7 +1068,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 </p>
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="medisinskeopplysningercheckbox"
                         label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                         checked={!!soknad.harMedisinskeOpplysninger}
@@ -1098,7 +1083,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 <VerticalSpacer eightPx />
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="opplysningerikkepunsjetcheckbox"
                         label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                         checked={!!soknad.harInfoSomIkkeKanPunsjes}

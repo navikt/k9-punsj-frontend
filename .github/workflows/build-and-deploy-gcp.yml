@@ -58,7 +58,7 @@ jobs:
                   registry-url: 'https://npm.pkg.github.com'
                   scope: '@navikt'
 
-            - uses: actions/download-artifact@v7
+            - uses: actions/download-artifact@v8
               with:
                   name: dist
                   path: ./dist
@@ -80,7 +80,11 @@ jobs:
                   team: k9saksbehandling
                   project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
                   identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-
+                  pull: true
+                  build_args: |
+                    CACHEBUST=${{ github.run_id }}
+                  cache_from: type=gha
+                  cache_to: type=gha,mode=max
             - name: Sett image for nais deploy
               run: |
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_OUTPUT

@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 
 import { IPeriode } from 'app/models/types';
-import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/rules/yup';
+import yup, { barn, passertDato, passertKlokkeslettPaaMottattDato, periode, utenlandsperiode } from 'app/validation/yup';
 import { erYngreEnn4år } from 'app/utils';
 
 import nb from '../../i18n/nb.json';

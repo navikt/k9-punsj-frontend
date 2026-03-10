@@ -1,16 +1,17 @@
 import React, { ComponentType } from 'react';
 
 import { set } from 'lodash';
-import { CheckboksPanel, RadioPanelGruppe } from 'nav-frontend-skjema';
 
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
+import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
-import { IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
+import { IError, IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
     hentEksisterendePerioderForSaksnummer,
@@ -25,7 +26,6 @@ import {
     validerSoknad,
     validerSoknadResetAction,
 } from 'app/state/actions';
-import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import {
     filtrerPerioderVedEndringAvSoknadsperiode,
@@ -37,7 +37,6 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { BeredskapNattevaak } from '../../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
@@ -63,6 +62,7 @@ import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
 import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
+import { getInputErrorMessage, getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
 import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
@@ -74,6 +74,15 @@ import { pfTilleggsinformasjon } from '../components/pfTilleggsinformasjon';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import {
+    ENDRING_BEGRUNNELSE_INPUT_ID,
+    createLandInputId,
+    createPeriodInputIds,
+    parsePeriodFeltPath,
+    periodKeyFromPeriode,
+    resolvePeriodInputPart,
+} from '../utils/errorAnchorUtils';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -632,109 +641,354 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return false;
     };
 
-    private getUhåndterteFeil = (attribute: string): (string | undefined)[] => {
-        const uhaandterteFeilmeldinger = this.getManglerFromStore()?.filter((m: IInputError) => {
-            const felter = m.felt?.split('.') || [];
-            for (let index = felter.length - 1; index >= -1; index--) {
-                const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
-                andreFeilmeldingStier.delete(attribute);
-                if (attribute === felt) {
-                    return true;
-                }
-                if (andreFeilmeldingStier.has(felt)) {
-                    return false;
-                }
-            }
-            return false;
-        });
-
-        if (uhaandterteFeilmeldinger && uhaandterteFeilmeldinger?.length > 0) {
-            return uhaandterteFeilmeldinger.map((error) => `${error.felt}: ${error.feilmelding}`).filter(Boolean);
+    private registerFeilmeldingsti = (attribute: string) => {
+        if (!attribute || this.state.feilmeldingStier.has(attribute)) {
+            return;
         }
-        return [];
+        this.state.feilmeldingStier.add(attribute);
+    };
+
+    private resolveUnhandledErrors = (attribute: string): (string | undefined)[] => {
+        this.registerFeilmeldingsti(attribute);
+
+        return getUnhandledErrors({
+            attribute,
+            inputErrors: this.getManglerFromStore(),
+            feilmeldingStier: this.state.feilmeldingStier,
+        });
+    };
+
+    private getPerioderForFeilstiPrefix = (prefix: string): IPeriode[] | undefined => {
+        switch (prefix) {
+            case 'ytelse.søknadsperiode':
+            case 'ytelse.uttak':
+                return this.state.soknad.soeknadsperiode;
+            case 'ytelse.lovbestemtFerie':
+                return this.state.soknad.lovbestemtFerie;
+            case 'endringAvSøknadsperioder':
+            case 'ytelse.trekkKravPerioder':
+                return this.state.soknad.trekkKravPerioder;
+            case 'ytelse.bosteder':
+                return this.state.soknad.bosteder
+                    ?.map((bosted) => bosted.periode)
+                    .filter((periode): periode is IPeriode => !!periode);
+            case 'ytelse.utenlandsopphold': {
+                const utenlandsoppholdV2 = this.state.soknad.utenlandsoppholdV2 || [];
+                const utenlandsopphold =
+                    utenlandsoppholdV2.length > 0 ? utenlandsoppholdV2 : this.state.soknad.utenlandsopphold;
+                return utenlandsopphold
+                    ?.map((periodeinfo) => periodeinfo.periode)
+                    .filter((periode): periode is IPeriode => !!periode);
+            }
+            default:
+                return undefined;
+        }
+    };
+
+    private resolvePeriodenokkelForFeilsti = (prefix: string, periodKey: string): string => {
+        if (!/^\d+$/.test(periodKey)) {
+            return periodKey;
+        }
+
+        const perioder = this.getPerioderForFeilstiPrefix(prefix);
+        if (!perioder) {
+            return periodKey;
+        }
+
+        const periode = perioder[Number(periodKey)];
+        return periodKeyFromPeriode(periode) || periodKey;
+    };
+
+    private parseIndexedValidationPath = (felt: string): { prefix: string; periodIndex: string; suffix?: string } | undefined => {
+        const match = felt.match(/^(.+?)\[(\d+)](?:\.(.+))?$/);
+        if (!match) {
+            return undefined;
+        }
+        const [, prefix, periodIndex, suffix] = match;
+        return {
+            prefix,
+            periodIndex,
+            suffix: suffix?.trim() || undefined,
+        };
+    };
+
+    private getValidationContextLabel = (felt?: string): string | undefined => {
+        if (!felt) {
+            return undefined;
+        }
+
+        const normalizedFelt =
+            felt.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+
+        if (normalizedFelt.startsWith('ytelse.søknadsperiode')) {
+            return 'Søknadsperiode';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.trekkKravPerioder') || normalizedFelt.startsWith('endringAvSøknadsperioder')) {
+            return 'Endring av søknadsperiode';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.lovbestemtFerie')) {
+            return 'Ferie';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.bosteder')) {
+            return 'Medlemskap';
+        }
+
+        if (normalizedFelt.startsWith('ytelse.utenlandsopphold')) {
+            return 'Utenlandsopphold';
+        }
+
+        return undefined;
+    };
+
+    private getValidationSummaryMessage = (error: IInputError): string | undefined => {
+        const message = getInputErrorMessage(error) || error.felt;
+        if (!message) {
+            return undefined;
+        }
+
+        const felt = error.felt?.trim();
+        const normalizedFelt =
+            felt?.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+        const contextLabel = this.getValidationContextLabel(normalizedFelt);
+        const normalizedMessage = message.trim();
+        const isGenericPeriodMessage = /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(
+            normalizedMessage,
+        );
+        const isGenericRequiredFieldMessage = /^Feltet kan ikke være tomt\.?$/i.test(normalizedMessage);
+        if (!isGenericPeriodMessage) {
+            if (contextLabel && isGenericRequiredFieldMessage) {
+                return `${contextLabel}: ${normalizedMessage}`;
+            }
+            return normalizedMessage;
+        }
+
+        const indexedPath = normalizedFelt ? this.parseIndexedValidationPath(normalizedFelt) : undefined;
+        const periodNumber =
+            indexedPath && /^\d+$/.test(indexedPath.periodIndex) ? Number(indexedPath.periodIndex) + 1 : undefined;
+
+        if (contextLabel && periodNumber !== undefined) {
+            return `${contextLabel} (periode ${periodNumber}): ${normalizedMessage}`;
+        }
+        if (contextLabel) {
+            return `${contextLabel}: ${normalizedMessage}`;
+        }
+        if (periodNumber !== undefined) {
+            return `Periode ${periodNumber}: ${normalizedMessage}`;
+        }
+        return normalizedMessage;
+    };
+
+    private getUhaandterteFeilForBosteder = (attribute: string): (string | undefined)[] => {
+        const unhandledErrors = this.resolveUnhandledErrors(attribute);
+        const parsedPath = parsePeriodFeltPath(attribute);
+
+        // Period-level bosteder errors are already shown directly on PeriodInput, skip duplicates in block-level list.
+        if (parsedPath?.prefix === 'ytelse.bosteder' && !parsedPath.suffix) {
+            return [];
+        }
+
+        return unhandledErrors;
+    };
+
+    private resolvePeriodAttributeFromIndex = (attribute: string): string => {
+        const trimmedAttribute = attribute?.trim();
+        if (!trimmedAttribute) {
+            return attribute;
+        }
+
+        const match = trimmedAttribute.match(/^(.+?)\.perioder\[(\d+)](?:\.(.+))?$/);
+        if (!match) {
+            return trimmedAttribute;
+        }
+
+        const [, prefix, periodIndex, suffix] = match;
+        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodIndex);
+        if (!resolvedPeriodKey || resolvedPeriodKey === periodIndex) {
+            return trimmedAttribute;
+        }
+
+        return `${prefix}.perioder[${resolvedPeriodKey}]${suffix ? `.${suffix}` : ''}`;
+    };
+
+    private getValidationErrorHref = (error: IInputError): string | undefined => {
+        const felt = error.felt?.trim();
+        if (!felt) {
+            return undefined;
+        }
+
+        if (felt === 'mottattDato') {
+            return '#soknad-dato';
+        }
+
+        if (felt === 'klokkeslett') {
+            return '#soknad-klokkeslett';
+        }
+
+        if (felt === 'begrunnelseForInnsending' || felt === 'begrunnelseForInnsending.tekst') {
+            return `#${ENDRING_BEGRUNNELSE_INPUT_ID}`;
+        }
+
+        const normalizedFelt =
+            felt.startsWith('ytelse.uttak.perioder')
+                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+                : felt;
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.(okOrganisasjonsnummer|organisasjonsnummer(?:\.(?:valid|verdi))?)$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-organisasjonsnummer';
+        }
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.bruttoInntekt$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-bruttoinntekt';
+        }
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.virksomhetstyper$/.test(
+                normalizedFelt,
+            )
+        ) {
+            return '#sn-virksomhetstyper';
+        }
+
+        if (
+            /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.perioder(?:\.)?\[[^\]]+]\.valideringRegistrertUtlandet$/.test(
+                normalizedFelt,
+            )
+        ) {
+            // TEMPORARY: legacy backend path points to validator method, not real land input.
+            return '#sn-registrert-land';
+        }
+
+        const parsedPeriodPath = parsePeriodFeltPath(normalizedFelt);
+        if (parsedPeriodPath) {
+            const { prefix, periodKey, suffix } = parsedPeriodPath;
+            const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodKey);
+            const normalizedSuffix = suffix?.toLowerCase();
+
+            if (normalizedSuffix === 'land') {
+                return `#${createLandInputId(prefix, resolvedPeriodKey)}`;
+            }
+
+            const periodInputIds = createPeriodInputIds(prefix, resolvedPeriodKey);
+            const periodPart = resolvePeriodInputPart(suffix, error.feilmelding);
+
+            return `#${periodPart === 'tom' ? periodInputIds.tomId : periodInputIds.fomId}`;
+        }
+
+        const indexedPath = this.parseIndexedValidationPath(normalizedFelt);
+        if (!indexedPath) {
+            return undefined;
+        }
+
+        const { prefix, periodIndex, suffix } = indexedPath;
+        const resolvedPeriodKey = this.resolvePeriodenokkelForFeilsti(prefix, periodIndex);
+        const idPrefix = prefix === 'ytelse.trekkKravPerioder' ? 'endringAvSøknadsperioder' : prefix;
+        const periodInputIds = createPeriodInputIds(idPrefix, resolvedPeriodKey);
+        const periodPart = resolvePeriodInputPart(suffix, error.feilmelding);
+
+        return `#${periodPart === 'tom' ? periodInputIds.tomId : periodInputIds.fomId}`;
     };
 
     private getErrorMessage = (attribute: string, indeks?: number) => {
-        const { mottattDato, klokkeslett } = this.state.soknad;
+        this.registerFeilmeldingsti(attribute);
 
-        const erFremITid = (dato: string) => new Date() < new Date(dato);
+        const resolvedAttribute = this.resolvePeriodAttributeFromIndex(attribute);
+        if (resolvedAttribute !== attribute) {
+            this.registerFeilmeldingsti(resolvedAttribute);
+        }
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        const message = getPSBErrorMessage({
+            attribute,
+            indeks,
+            inputErrors: this.getManglerFromStore(),
+            mottattDato: this.state.soknad.mottattDato,
+            klokkeslett: this.state.soknad.klokkeslett,
+            erFremITidKlokkeslett: this.erFremITidKlokkeslett,
+            intl: this.props.intl,
+        });
+
+        if (message || resolvedAttribute === attribute) {
+            return message;
+        }
+
+        return getPSBErrorMessage({
+            attribute: resolvedAttribute,
+            indeks,
+            inputErrors: this.getManglerFromStore(),
+            mottattDato: this.state.soknad.mottattDato,
+            klokkeslett: this.state.soknad.klokkeslett,
+            erFremITidKlokkeslett: this.erFremITidKlokkeslett,
+            intl: this.props.intl,
+        });
+    };
+
+    private getSubmitErrorMessage(error?: IError): React.ReactNode {
+        if (!error) return null;
+
+        if (error.message) {
+            return error.message;
+        }
+
+        return <FormattedMessage id="skjema.feil.ikke_sendt" />;
+    }
+
+    private renderValidationSummary = (): React.ReactNode => {
+        const validationErrors = this.getManglerFromStore() || [];
+        const validationSummaryItems: Array<{ message: string; href?: string }> = [];
+        const seenSummaryItems = new Set<string>();
+
+        validationErrors.forEach((error) => {
+            const message = this.getValidationSummaryMessage(error);
+            if (!message) {
+                return;
             }
-        }
 
-        if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute === 'klokkeslett' && klokkeslett && this.erFremITidKlokkeslett(klokkeslett!)) {
-            return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
-        }
-
-        if (attribute.includes('endringAvSøknadsperioder.perioder') && indeks !== undefined) {
-            const newAttr = `ytelse.trekkKravPerioder[${indeks}]`;
-
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        if (attribute === 'alleTrekkKravPerioderFeilmelding') {
-            const newAttr = `ytelse.trekkKravPerioder.perioder`;
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        const regex = /\[\d+\]/;
-        if (attribute.includes('ytelse.søknadsperiode') && regex.test(attribute) && indeks !== undefined) {
-            const newAttr = `ytelse.søknadsperiode[${indeks}]`;
-
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt?.includes(newAttr))?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        if (attribute === 'ytelse.uttak.perioder') {
-            const newAttr = `ytelse.søknadsperiode.perioder`;
-            const feilmelding = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === newAttr)?.[0]
-                ?.feilmelding;
-            return feilmelding;
-        }
-
-        const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
-            ?.feilmelding;
-
-        if (errorMsg) {
-            if (errorMsg.startsWith('Mangler søknadsperiode')) {
-                return intlHelper(this.props.intl, 'skjema.feil.søknadsperiode/endringsperiode');
+            const href = this.getValidationErrorHref(error);
+            const dedupKey = `${href || error.felt || ''}::${message}`;
+            if (seenSummaryItems.has(dedupKey)) {
+                return;
             }
-            if (attribute === 'nattevåk' || attribute === 'beredskap' || attribute === 'lovbestemtFerie') {
-                return errorMsg;
-            }
+            seenSummaryItems.add(dedupKey);
+
+            validationSummaryItems.push({
+                message,
+                href,
+            });
+        });
+
+        if (validationSummaryItems.length === 0 && this.props.punchFormState.validateSoknadError?.message) {
+            validationSummaryItems.push({
+                message: this.props.punchFormState.validateSoknadError.message,
+            });
         }
 
-        return errorMsg
-            ? intlHelper(
-                  this.props.intl,
-                  `skjema.feil.${attribute}.${errorMsg}`
-                      .replace(/\[\d+]/g, '[]')
-                      .replace(
-                          /^skjema\.feil\..+\.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.FRA_OG_MED_MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.fraOgMed\.MAA_SETTES$/, 'skjema.feil.fraOgMed.MAA_SETTES')
-                      .replace(
-                          /^skjema\.feil\..+\.fraOgMed\.MAA_VAERE_FOER_TIL_OG_MED$/,
-                          'skjema.feil.fraOgMed.MAA_VAERE_FOER_TIL_OG_MED',
-                      )
-                      .replace(/^skjema\.feil\..+\.tilOgMed\.MAA_SETTES$/, 'skjema.feil.tilOgMed.MAA_SETTES')
-                      .replace(/^skjema.feil.mottattDato.must not be null$/, 'skjema.feil.datoMottatt.MAA_SETTES'),
-              )
-            : undefined;
+        if (validationSummaryItems.length === 0) {
+            return null;
+        }
+
+        return (
+            <ErrorSummary heading={<FormattedMessage id="skjema.feil.validering" />}>
+                {validationSummaryItems.map((item, index) => (
+                    <ErrorSummary.Item key={`${index}-${item.href || 'no-href'}-${item.message}`} href={item.href}>
+                        {item.message}
+                    </ErrorSummary.Item>
+                ))}
+            </ErrorSummary>
+        );
     };
 
     private updateSoknadState = (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => {
@@ -898,7 +1152,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 className="beredskapsperioder"
                 panelClassName="beredskapspanel"
                 getErrorMessage={this.getErrorMessage}
-                getUhaandterteFeil={this.getUhåndterteFeil}
+                getUhaandterteFeil={this.resolveUnhandledErrors}
                 feilkodeprefiks="ytelse.beredskap"
                 kanHaFlere
                 medSlettKnapp={false}
@@ -918,7 +1172,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 className="nattevaaksperioder"
                 panelClassName="nattevaakspanel"
                 getErrorMessage={this.getErrorMessage}
-                getUhaandterteFeil={this.getUhåndterteFeil}
+                getUhaandterteFeil={this.resolveUnhandledErrors}
                 feilkodeprefiks="ytelse.nattevåk"
                 kanHaFlere
                 medSlettKnapp={false}
@@ -938,7 +1192,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     updateSoknad={this.updateSoknad}
                     initialPeriode={this.initialPeriode}
                     getErrorMessage={this.getErrorMessage}
-                    getUhaandterteFeil={this.getUhåndterteFeil}
+                    getUhaandterteFeil={this.resolveUnhandledErrors}
                     soknad={soknad}
                     punchFormState={punchFormState}
                 />
@@ -986,19 +1240,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jnv) => ({
-                                    label: intlHelper(intl, jnv),
-                                    value: jnv,
-                                }))}
                                 name="utlandjaneiikeeopplyst"
                                 legend={<FormattedMessage id="skjema.utenlandsopphold.label" />}
-                                onChange={(event) =>
-                                    this.updateUtenlandsopphold(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.updateUtenlandsopphold(value)}
                                 checked={this.utenlandsOppholdCheckedValue()}
                             />
 
@@ -1027,7 +1273,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     className="utenlandsopphold"
                                     panelClassName="utenlandsoppholdpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1046,7 +1292,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id="skjema.ferie.leggtil" />}
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
@@ -1062,7 +1308,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
                                     doNotShowBorders
@@ -1075,7 +1321,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 eksisterendePerioder?.length > 0 &&
                                 !punchFormState.hentPerioderError && (
                                     <>
-                                        <CheckboksPanel
+                                        <LegacyCheckbox
                                             label={<FormattedMessage id="skjema.ferie.fjern" />}
                                             onChange={(e) => this.updateIkkeSkalHaFerie(e.target.checked)}
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
@@ -1100,7 +1346,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                         )
                                                     }
                                                     getErrorMessage={() => undefined}
-                                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                                    getUhaandterteFeil={this.resolveUnhandledErrors}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
                                                 />
@@ -1121,7 +1367,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         updateSoknad={this.updateSoknad}
                         updateSoknadState={this.updateSoknadState}
                         getErrorMessage={this.getErrorMessage}
-                        getUhaandterteFeil={this.getUhåndterteFeil}
+                        getUhaandterteFeil={this.resolveUnhandledErrors}
                         handleFrilanserChange={this.handleFrilanserChange}
                         updateVirksomhetstyper={this.updateVirksomhetstyper}
                     />
@@ -1173,7 +1419,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id="skjema.omsorgstilbud.checkboks" />}
                                 onChange={(e) => this.updateOmsorgstilbud(e.target.checked)}
                                 checked={!!this.state.iTilsynsordning}
@@ -1208,6 +1454,10 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                             perioderMedTimer={soknad.tilsynsordning.perioder}
                                         />
                                     </div>
+
+                                    <UhaanderteFeilmeldinger
+                                        getFeilmeldinger={() => this.resolveUnhandledErrors('ytelse.tilsynsordning')}
+                                    />
                                 </>
                             )}
                         </Accordion.Content>
@@ -1223,7 +1473,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id={BeredskapNattevaak.BEREDSKAP} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.BEREDSKAP, e.target.checked)
@@ -1237,7 +1487,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                             <VerticalSpacer eightPx />
 
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 label={<FormattedMessage id={BeredskapNattevaak.NATTEVAAK} />}
                                 onChange={(e) =>
                                     this.handleBeredskapNattevåkChange(BeredskapNattevaak.NATTEVAAK, e.target.checked)
@@ -1261,19 +1511,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <RadioPanelGruppe
+                            <LegacyJaNeiIkkeOpplystRadioGroup
                                 className="horizontalRadios"
-                                radios={Object.values(JaNeiIkkeOpplyst).map((jn) => ({
-                                    label: intlHelper(intl, jn),
-                                    value: jn,
-                                }))}
                                 name="medlemskapjanei"
                                 legend={<FormattedMessage id="skjema.medlemskap.harbodd" />}
-                                onChange={(event) =>
-                                    this.handleMedlemskapChange(
-                                        (event.target as HTMLInputElement).value as JaNeiIkkeOpplyst,
-                                    )
-                                }
+                                onChange={(_, value) => this.handleMedlemskapChange(value)}
                                 checked={this.medlemskapCheckedValue()}
                             />
 
@@ -1292,7 +1534,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     className="bosteder"
                                     panelClassName="bostederpanel"
                                     getErrorMessage={this.getErrorMessage}
-                                    getUhaandterteFeil={this.getUhåndterteFeil}
+                                    getUhaandterteFeil={this.getUhaandterteFeilForBosteder}
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
@@ -1309,7 +1551,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 </p>
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="medisinskeopplysningercheckbox"
                         label={<FormattedMessage id="skjema.medisinskeopplysninger" />}
                         checked={soknad.harMedisinskeOpplysninger}
@@ -1324,7 +1566,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <VerticalSpacer eightPx />
 
                 <div className="flex-container">
-                    <CheckboksPanel
+                    <LegacyCheckbox
                         id="opplysningerikkepunsjetcheckbox"
                         label={<FormattedMessage id="skjema.opplysningerikkepunsjet" />}
                         checked={soknad.harInfoSomIkkeKanPunsjes}
@@ -1338,11 +1580,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer twentyPx />
 
-                {this.getUhåndterteFeil('')
-                    .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
-                    .map((feilmelding) => (
-                        <Feilmelding key={feilmelding} feil={feilmelding} />
-                    ))}
+                {this.renderValidationSummary()}
 
                 {punchFormState.isAwaitingValidateResponse && (
                     <div className="loadingSpinner">
@@ -1375,22 +1613,14 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                     </Alert>
                 )}
 
-                {!!punchFormState.inputErrors?.length && (
-                    <Alert variant="error">
-                        <FormattedMessage id="skjema.feil.validering" />
-                    </Alert>
-                )}
-
                 {!!punchFormState.submitSoknadError && (
-                    <Alert variant="error">
-                        <FormattedMessage id="skjema.feil.ikke_sendt" />
-                    </Alert>
+                    <Alert variant="error">{this.getSubmitErrorMessage(punchFormState.submitSoknadError)}</Alert>
                 )}
 
                 {!!punchFormState.submitSoknadConflict && (
                     <Alert variant="error">
-                        {punchFormState.submitSoknadConflict.feil ||
-                            punchFormState.submitSoknadConflict.message ||
+                        {punchFormState.submitSoknadConflict.message ||
+                            punchFormState.submitSoknadConflict.feil ||
                             intlHelper(intl, 'skjema.feil.konflikt')}
                     </Alert>
                 )}

@@ -1,0 +1,43 @@
+.opprettJournalpost {
+    margin: 4.5rem 2.5rem;
+    max-width: 25rem;
+
+    .formContainer {
+        margin-top: 2.5rem;
+    }
+
+    .navds-alert,
+    .input {
+        margin-top: 1rem;
+    }
+
+    .fnrInput {
+        width: 15rem;
+        min-width: 15rem;
+    }
+
+    .alertstripe {
+        margin-left: 0;
+        width: 100%;
+        max-width: 26.25rem;
+    }
+
+    .fagsakSelectContainer {
+        display: flex;
+
+        .fagsakSelectOpprettJp {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .navds-loader {
+            align-self: flex-start;
+            margin-left: 0.5rem;
+            margin-top: 2rem;
+        }
+    }
+
+    .notatContainer {
+        margin-top: 2rem;
+    }
+}

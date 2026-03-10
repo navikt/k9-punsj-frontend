@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import intlHelper from '../../../../utils/intlUtils';
@@ -60,18 +60,12 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
             </div>
         </div>
 
-        <RadioPanelGruppe
+        <LegacyJaNeiIkkeRelevantRadioGroup
             className="horizontalRadios"
-            radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                label: intlHelper(intl, jn),
-                value: jn,
-            }))}
             name="signatur"
             legend={intlHelper(intl, 'ident.signatur.etikett')}
             checked={signert || undefined}
-            onChange={(event) =>
-                setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
-            }
+            onChange={(_, value) => setSignaturAction(value || null)}
         />
 
         {signert === JaNeiIkkeRelevant.NEI && (

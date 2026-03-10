@@ -7,7 +7,7 @@ import {
     INVALID_DATE_VALUE,
     isISODateString,
     ISODateStringToUTCDate,
-} from 'app/utils/date-utils/src/format';
+} from 'app/utils/date/dateFormat';
 
 import './newDateInput.css';
 

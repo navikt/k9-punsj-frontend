@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
-import { timerOgMinutter } from 'app/rules/yup';
+import { timerOgMinutter } from 'app/validation/yup';
 
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Person } from 'app/models/types';
 import { BodyShort, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
-import { prettifyDateString } from 'app/utils/date-utils/src/format';
+import { prettifyDateString } from 'app/utils/date/dateFormat';
 
 interface Props {
     loading: boolean;

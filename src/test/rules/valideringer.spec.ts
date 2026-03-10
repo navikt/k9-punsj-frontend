@@ -1,4 +1,4 @@
-import { IFeltValidator, påkrevd, validerSkjema } from '../../app/rules/valideringer';
+import { IFeltValidator, påkrevd, validerSkjema } from '../../app/validation/valideringer';
 import { testIntl } from '../testUtils';
 
 jest.mock('app/utils/envUtils');

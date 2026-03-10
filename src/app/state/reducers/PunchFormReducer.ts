@@ -73,6 +73,7 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: true,
                 submitSoknadError: undefined,
+                submitSoknadConflict: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_SUCCESS:
@@ -81,6 +82,7 @@ export function PunchFormReducer(
                 innsentSoknad: action.innsentSoknad,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
+                submitSoknadConflict: undefined,
                 inputErrors: undefined,
                 isComplete: true,
                 linkTilBehandlingIK9: action.linkTilBehandlingIK9,
@@ -91,6 +93,7 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: undefined,
+                submitSoknadConflict: undefined,
                 inputErrors: action.errors,
             };
 
@@ -99,12 +102,15 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
                 submitSoknadError: action.error,
+                submitSoknadConflict: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_SUBMIT_CONFLICT:
             return {
                 ...punchFormState,
                 isAwaitingSubmitResponse: false,
+                submitSoknadError: undefined,
+                inputErrors: undefined,
                 submitSoknadConflict: action.error,
             };
 

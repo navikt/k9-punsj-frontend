@@ -158,7 +158,7 @@ export class PSBSoknadUt implements IPSBSoknadUt {
         this.harInfoSomIkkeKanPunsjes = !!soknad.harInfoSomIkkeKanPunsjes || false;
         this.harMedisinskeOpplysninger = !!soknad.harMedisinskeOpplysninger || false;
         this.trekkKravPerioder = getTrekkKravPerioder(soknad);
-        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || { tekst: '' };
+        this.begrunnelseForInnsending = soknad.begrunnelseForInnsending || undefined;
         this.k9saksnummer = soknad.k9saksnummer;
     }
 }

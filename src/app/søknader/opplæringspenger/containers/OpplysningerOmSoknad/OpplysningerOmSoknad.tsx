@@ -7,8 +7,8 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import intlHelper from 'app/utils/intlUtils';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import DatoVelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 const OpplysningerOmSoknad: React.FC = () => {
     const intl = useIntl();
@@ -33,17 +33,13 @@ const OpplysningerOmSoknad: React.FC = () => {
                         type="time"
                     />
                 </div>
-                <RadioPanelGruppe
+                <LegacyJaNeiIkkeRelevantRadioGroup
                     className="horizontalRadios"
-                    radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
                     name="signatur"
                     legend={intlHelper(intl, 'ident.signatur.etikett')}
-                    checked={signert}
-                    onChange={(event) => {
-                        setSignert((event.target as HTMLInputElement).value as JaNeiIkkeRelevant);
+                    checked={signert || undefined}
+                    onChange={(_, value) => {
+                        setSignert(value);
                     }}
                 />
                 {signert === JaNeiIkkeRelevant.NEI && (

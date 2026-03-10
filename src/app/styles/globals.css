@@ -1,9 +1,14 @@
-@import url('tailwindcss/base');
-@import url('tailwindcss/components');
-@import url('tailwindcss/utilities');
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 body {
-    @apply bg-white font-sans m-0;
+    @apply bg-white m-0;
+
+    color: #262626;
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4286;
 }
 
 .fit-window-height {
@@ -18,7 +23,9 @@ body {
     @apply my-2;
 
     legend {
-        @apply mb-2 !important;
+        @apply mb-2;
+
+        margin-bottom: 0.5rem !important;
     }
 
     .inputPanelGruppe__inner {
@@ -38,16 +45,8 @@ body {
     }
 }
 
-.margin-top-1 {
-    @apply mt-4;
-}
-
 .venstrestilt {
     margin-right: 50%;
-}
-
-.lengre-periode-modal {
-    @apply w-[570px];
 }
 
 .fom-tom-rad {
@@ -67,31 +66,44 @@ body {
 }
 
 .slett {
-    @apply text-red-600 !important;
+    @apply text-red-600;
+
+    color: #dc2626 !important;
 }
 
 .slett-knapp-med-icon-for-input {
-    @apply ml-4 text-red-600 decoration-red-600 p-0 !important;
+    @apply ml-4 text-red-600 decoration-red-600 p-0;
+
     margin-top: 3.2rem;
+    margin-left: 1rem !important;
+    color: #dc2626 !important;
+    text-decoration-color: #dc2626 !important;
+    padding: 0 !important;
 }
 
 .slett-knapp-med-icon-for-input:hover,
 .slett-knapp-med-icon-for-input:focus,
 .slett-knapp-med-icon-for-input:active {
-    @apply bg-transparent text-red-600  decoration-red-600 !important;
+    @apply bg-transparent text-red-600 decoration-red-600;
+
     background-color: transparent !important;
     color: #dc2626 !important;
     text-decoration-color: #dc2626 !important;
 }
 
 .slett-knapp-med-icon {
-    @apply text-red-600 underline decoration-red-600 !important;
+    @apply text-red-600 underline decoration-red-600;
+
+    color: #dc2626 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #dc2626 !important;
 }
 
 .slett-knapp-med-icon:hover,
 .slett-knapp-med-icon:focus,
 .slett-knapp-med-icon:active {
-    @apply bg-transparent text-red-600 underline decoration-red-600 !important;
+    @apply bg-transparent text-red-600 underline decoration-red-600;
+
     background-color: transparent !important;
     color: #dc2626 !important;
     text-decoration: underline !important;
@@ -115,6 +127,7 @@ body {
 /* Tilpassede scrollbar-stiler med Aksel-farger */
 .custom-scrollbar {
     @apply overflow-y-auto;
+
     scrollbar-width: thin;
     scrollbar-color: var(--a-gray-400) var(--a-gray-100);
 }
@@ -140,6 +153,7 @@ body {
 .custom-button-internal-header {
     color: white !important;
     background-color: grey !important;
+
     &:hover {
         background-color: darkgray !important;
     }

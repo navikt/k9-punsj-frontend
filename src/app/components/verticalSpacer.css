@@ -1,3 +1,5 @@
+@reference '../styles/globals.css';
+
 /* VerticalSpacer komponent med Tailwind klasser */
 
 .fourPx {

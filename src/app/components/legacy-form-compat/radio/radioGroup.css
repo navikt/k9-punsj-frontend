@@ -1,0 +1,17 @@
+.legacy-radio-group .navds-radio-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legacy-radio-group--horisontal .navds-radio-buttons {
+    flex-direction: row;
+}
+
+.legacy-radio-group--horisontal .legacy-radio-group__item {
+    flex: 1 1 0;
+}
+
+.legacy-radio-group--vertikal .legacy-radio-group__item {
+    width: auto;
+}

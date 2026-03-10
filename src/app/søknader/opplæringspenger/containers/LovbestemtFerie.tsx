@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import React from 'react';
 import { useIntl } from 'react-intl';
 
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
@@ -24,7 +24,7 @@ const LovbestemtFerie = () => {
     return (
         <>
             <VerticalSpacer eightPx />
-            <CheckboksPanel
+            <LegacyCheckbox
                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
                 onChange={(e) => updateSkalHaFerie(e.target.checked)}
                 checked={!!values.lovbestemtFerie.length}

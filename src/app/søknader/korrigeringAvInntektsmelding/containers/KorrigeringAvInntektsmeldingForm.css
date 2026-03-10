@@ -1,0 +1,34 @@
+.korrigering-legend {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+h4.korrigering-legend {
+    font-size: 1.125rem;
+}
+
+.korrigering {
+    .listepanel {
+        .korrigering-legend {
+            margin-top: 0.5rem;
+            margin-left: 0.875rem;
+        }
+    }
+
+    &__feilmelding {
+        margin-top: 1.5rem;
+    }
+
+    &__opplysningerOmKorrigeringContainer {
+        margin: 1.875rem 0 1.5rem;
+    }
+
+    &__infostripe.alertstripe {
+        margin-top: 0;
+    }
+
+    &__skjemagruppe legend {
+        margin-bottom: 0.75rem;
+    }
+}

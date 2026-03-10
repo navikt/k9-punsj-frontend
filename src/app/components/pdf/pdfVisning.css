@@ -1,0 +1,93 @@
+.punch_pdf_wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.punch_pdf_wrapper .navds-button:hover {
+    background-color: white;
+}
+
+.punch_pdf.navds-box {
+    padding: 3px;
+    margin-left: 0.5rem;
+    background-color: #a0a0a0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.punch_pdf.navds-box .fleredokumenter {
+    display: flex;
+}
+
+.punch_pdf.navds-box .fleredokumenter > div {
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.punch_pdf.navds-box .fleredokumenter > div span {
+    margin: auto;
+}
+
+.punch_pdf.navds-box .fleredokumenter .navds-toggle-group {
+    display: block;
+}
+
+.punch_pdf.navds-box iframe {
+    border-width: 0;
+    flex-basis: 100%;
+}
+
+.punch_pdf.navds-box .knapperad {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+
+.punch_pdf.navds-box .knapperad .navds-button {
+    flex-grow: 1;
+    margin-top: 3px;
+}
+
+.punch_pdf.navds-box .knapperad .navds-button.knapp1 {
+    margin-right: calc(3px / 2);
+}
+
+.punch_pdf.navds-box .knapperad .navds-button.knapp2 {
+    margin-left: calc(3px / 2);
+}
+
+.punch_pdf.navds-box .button_open.navds-button {
+    width: 100%;
+    padding: 0;
+    height: 100%;
+    display: none;
+}
+
+.punch_pdf_wrapper.pdf_closed {
+    width: 54px !important;
+    min-width: 54px !important;
+    transition:
+        width 0.2s,
+        min-width 0.2s;
+}
+
+.punch_pdf_wrapper.pdf_closed .navds-box div {
+    cursor: default !important;
+}
+
+.punch_pdf_wrapper.pdf_closed iframe,
+.punch_pdf_wrapper.pdf_closed .navds-box .knapperad {
+    display: none;
+}
+
+.punch_pdf_wrapper.pdf_closed .navds-box .button_open.navds-button {
+    display: block;
+}
+
+.punch_pdf_wrapper.pdf_closed .navds-box .fleredokumenter {
+    display: none;
+}

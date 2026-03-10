@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import { timerOgMinutter } from 'app/rules/yup';
+import { timerOgMinutter } from 'app/validation/yup';
 import {
     Tidsformat,
     konverterPeriodeTilTimerOgMinutter,

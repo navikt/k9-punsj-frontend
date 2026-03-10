@@ -10,7 +10,7 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { fraværÅrsak, søknadÅrsak } from '../konstanter';
 
-import './fravaersperiode.less';
+import './fravaersperiode.css';
 
 interface Props {
     antallFravaersperioder: number;

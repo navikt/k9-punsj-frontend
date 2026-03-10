@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
 import KopierLukkJpModal from '../KopierModal';

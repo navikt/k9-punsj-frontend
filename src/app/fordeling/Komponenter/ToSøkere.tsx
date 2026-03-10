@@ -10,7 +10,7 @@ import { IIdentState } from 'app/models/types/IdentState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { visFeilmeldingForAnnenIdentVidJournalKopi } from './FordelingFeilmeldinger';
 import { getPersonInfo } from 'app/api/api';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 
 interface Props {

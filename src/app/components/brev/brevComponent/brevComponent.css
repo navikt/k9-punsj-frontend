@@ -1,0 +1,28 @@
+.brev {
+    max-width: 31.875rem;
+    background-color: #eaeaea;
+    border-radius: 0.3125rem;
+    padding: 1.25rem 1.375rem 2rem;
+    margin-top: 1.25rem;
+}
+
+.textareaContainer {
+    position: relative;
+}
+
+.språkEtikett {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.brevStatusContainer {
+    .navds-alert {
+        margin-top: 1.875rem;
+    }
+}
+
+.sendBrevButton {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}

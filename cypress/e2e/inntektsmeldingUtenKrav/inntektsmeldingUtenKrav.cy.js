@@ -1,4 +1,5 @@
 import initialState from '../../state/PleiepengerPunsjInitialState';
+import { ApiPath } from '../../../src/app/apiConfig';
 
 describe('Håndtering av inntektsmelding uten krav', () => {
     it('skal vise radioknapper basert på innsendingstype', () => {
@@ -62,6 +63,40 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
 
         cy.findByText('Avbryt').should('exist').click();
+    });
+
+    it('skal sende brev med GENERELL_SAK når journalposten ikke har fagsak', () => {
+        cy.visit('/journalpost/202', {
+            onBeforeLoad: (window) => {
+                window.__initialState__ = initialState;
+            },
+        });
+
+        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Ja').should('exist').click();
+        cy.findByText('Send brev til søker, arbeidsgiver eller tredjepart').should('exist').click();
+        cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Tittel').should('exist').type('Tittel');
+        cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
+
+        cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
+            expect(req.body).to.have.property('saksnummer').to.equal('GENERELL_SAK');
+            expect(req.body).to.have.property('journalpostId');
+
+            req.reply({
+                statusCode: 200,
+                body: { success: true },
+            });
+        }).as('sendBrev');
+
+        cy.findByText('Send brev').should('exist').click();
+        cy.findByText('Er du sikker på at du vil sende brevet?').should('exist');
+        cy.findByRole('button', { name: /Fortsett/i }).click();
+
+        cy.wait('@sendBrev').then((interception) => {
+            expect(interception.response.statusCode).to.equal(200);
+        });
     });
 
     it('skal vise infoboks dersom brev er fylt ut men ikke sendt', () => {

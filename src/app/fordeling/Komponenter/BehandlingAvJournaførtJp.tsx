@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
 import { Alert, Button } from '@navikt/ds-react';
-import { RadioGruppe, RadioPanel } from 'nav-frontend-skjema';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Sakstype } from 'app/models/enums';
@@ -76,28 +76,24 @@ const BehandlingAvJournaførtJp: React.FC = () => {
                 )}
 
                 {!!søknadstype && (
-                    <RadioGruppe legend={intlHelper(intl, 'fordeling.overskrift')}>
-                        <div className="max-w-sm mb-2.5">
-                            <RadioPanel
-                                label={intlHelper(intl, `fordeling.sakstype.${søknadstype}`)}
-                                value={sakstype}
-                                onChange={() => {
-                                    setSakstype(søknadstype);
-                                }}
-                                checked={sakstype === søknadstype}
-                            />
-                        </div>
-                        <div className="max-w-sm mb-2.5">
-                            <RadioPanel
-                                label={intlHelper(intl, `fordeling.sakstype.${Sakstype.SEND_BREV}`)}
-                                value={Sakstype.SEND_BREV}
-                                onChange={() => {
-                                    setSakstype(Sakstype.SEND_BREV);
-                                }}
-                                checked={sakstype === Sakstype.SEND_BREV}
-                            />
-                        </div>
-                    </RadioGruppe>
+                    <LegacyRadioGroup
+                        name="behandling-av-journalfort-jp"
+                        legend={intlHelper(intl, 'fordeling.overskrift')}
+                        checked={sakstype}
+                        radios={[
+                            {
+                                label: intlHelper(intl, `fordeling.sakstype.${søknadstype}`),
+                                value: søknadstype,
+                                className: 'max-w-sm mb-2.5',
+                            },
+                            {
+                                label: intlHelper(intl, `fordeling.sakstype.${Sakstype.SEND_BREV}`),
+                                value: Sakstype.SEND_BREV,
+                                className: 'max-w-sm mb-2.5',
+                            },
+                        ]}
+                        onChange={(_, value) => setSakstype(value as Sakstype)}
+                    />
                 )}
 
                 <VerticalSpacer eightPx />
@@ -111,7 +107,7 @@ const BehandlingAvJournaførtJp: React.FC = () => {
                 )}
             </div>
 
-            <div className="flex space-x-4">
+            <div className="flex gap-4">
                 <Button
                     size="small"
                     disabled={!punchPath}

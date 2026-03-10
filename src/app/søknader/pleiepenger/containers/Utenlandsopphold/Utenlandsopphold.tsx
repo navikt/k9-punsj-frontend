@@ -1,8 +1,8 @@
 import countries from 'i18n-iso-countries';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -25,6 +25,7 @@ import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { createPeriodInputIds } from '../../utils/errorAnchorUtils';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -126,6 +127,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             }
         };
         const feltIndeks = periodeSpenn(periodeinfo.periode);
+        const periodInputIds = createPeriodInputIds(feilkodeprefiks, feltIndeks, `index-${periodeindeks}`);
         const land = periods[periodeindeks].land || '';
         const getCheckedÅrsak = () => {
             const period = periods[periodeindeks];
@@ -163,6 +165,8 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                         }}
                         errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
                         initialValues={initialValues}
+                        inputIdFom={periodInputIds.fomId}
+                        inputIdTom={periodInputIds.tomId}
                     />
 
                     <Button
@@ -190,7 +194,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                     )}
                 {land && (
                     <div className="mt-8">
-                        <RadioPanelGruppe
+                        <LegacyRadioGroup
                             className="horizontalRadios "
                             radios={[
                                 {
@@ -207,8 +211,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                                 land,
                                 'nb',
                             )}?`}
-                            onChange={(event) => {
-                                const { value } = event.target as HTMLInputElement;
+                            onChange={(_, value) => {
                                 setVisInnlagtPerioder(value);
                                 if (value !== jaValue) {
                                     const editedInfo = () =>
@@ -255,7 +258,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             doNotShowBorders
                         />
 
-                        <RadioPanelGruppe
+                        <LegacyRadioGroup
                             radios={[
                                 {
                                     label: intl.formatMessage({
@@ -277,8 +280,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             name={`innleggelseÅrsak${periodeindeks}`}
                             legend={intl.formatMessage({ id: 'skjema.utenlandsopphold.utgifterTilInnleggelse' })}
                             checked={getCheckedÅrsak()}
-                            onChange={(event) => {
-                                const { value } = event.target as HTMLInputElement;
+                            onChange={(_, value) => {
                                 const formattedValue = value === 'null' ? null : value;
                                 const { innleggelsesperioder } = periods[periodeindeks];
                                 const hasInnleggelsesperioder =

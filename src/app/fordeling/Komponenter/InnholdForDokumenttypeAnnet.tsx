@@ -6,7 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { IFordelingState, IJournalpost } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import {
     hentGjelderKategorierFraGosys,
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,

@@ -3,7 +3,7 @@ import React from 'react';
 import intlHelper from 'app/utils/intlUtils';
 import { Field, FieldProps } from 'formik';
 import { Box } from '@navikt/ds-react';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import { Periode } from 'app/models/types';
 import { useIntl } from 'react-intl';
 
@@ -24,7 +24,7 @@ const NySoeknadEllerKorrigering: React.FC<Props> = ({ eksisterendePerioder }: Pr
             <Box padding="4" borderWidth="1" borderRadius="small">
                 <Field name="erKorrigering">
                     {({ field, form }: FieldProps<boolean>) => (
-                        <RadioPanelGruppeFormik
+                        <LegacyRadioGroupFormik
                             legend={intlHelper(intl, 'omsorgspenger.utbetaling.nySoeknadEllerKorrigering.spm')}
                             name={field.name}
                             options={[

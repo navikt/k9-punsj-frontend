@@ -13,7 +13,7 @@ import Organisasjon from 'app/models/types/Organisasjon';
 import {
     getMaxDatoFraSøknadsperioder,
     getMinDatoFraSøknadsperioder,
-} from 'app/utils/date-utils/src/minMaxDatesInPerioder';
+} from 'app/utils/date/periodUtils';
 import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';

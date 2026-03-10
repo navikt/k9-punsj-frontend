@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Field, FieldProps, FormikValues } from 'formik';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 
+import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
@@ -64,18 +64,12 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
                     </div>
                 </div>
 
-                <RadioPanelGruppe
+                <LegacyJaNeiIkkeRelevantRadioGroup
                     className="horizontalRadios"
-                    radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
                     name="signatur"
                     legend={intlHelper(intl, 'ident.signatur.etikett')}
                     checked={signert || undefined}
-                    onChange={(event) =>
-                        setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
-                    }
+                    onChange={(_, value) => setSignaturAction(value || null)}
                 />
 
                 {signert === JaNeiIkkeRelevant.NEI && (

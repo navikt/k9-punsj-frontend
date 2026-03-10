@@ -5,12 +5,14 @@ import { Box, Button } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { JaNei } from 'app/models/enums/JaNei';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 const Reisedager = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     const toggleReisedager = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.checked ? JaNei.JA : JaNei.NEI;
@@ -26,7 +28,7 @@ const Reisedager = () => {
     };
     return (
         <>
-            <CheckboksPanel
+            <LegacyCheckbox
                 checked={values.metadata.skalOppgiReise === JaNei.JA}
                 onChange={toggleReisedager}
                 label="Det er oppgitt informasjon om reisedager"
@@ -44,6 +46,9 @@ const Reisedager = () => {
                                                 label="Reisedag (dato)"
                                                 hideLabel={true}
                                                 name={`kurs.reise.reisedager.${reisedagIndex}`}
+                                                fromDate={fromDate}
+                                                toDate={toDate}
+                                                disabled={disabled}
                                             />
                                             {values.kurs.reise.reisedager?.length > 1 && (
                                                 <Button

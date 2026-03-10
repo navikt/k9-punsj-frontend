@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Button } from '@navikt/ds-react';
 
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { setAnnenPartAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
 
@@ -174,19 +174,22 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     const sendBrevDisabled =
         !fellesState.journalpost?.sak?.sakstype &&
         (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER);
+    const visSendBrevInfo = sendBrevDisabled;
 
     return (
         <>
             <div className="p-4">
-                <Alert variant="info" data-test-id="infoJournalpostAlleredeBehandlet">
-                    <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
-                </Alert>
-
-                {!fellesState.journalpost?.sak?.sakstype && (
-                    <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandlet">
-                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
+                <div className="space-y-4">
+                    <Alert variant="info" data-test-id="infoJournalpostAlleredeBehandlet">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                     </Alert>
-                )}
+
+                    {visSendBrevInfo && (
+                        <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandlet">
+                            <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
+                        </Alert>
+                    )}
+                </div>
                 <DokumentTypeVelgerForKopiering
                     handleDokumenttype={(type: FordelingDokumenttype) => {
                         const prevDokumentType = fordelingState.dokumenttype;
@@ -279,7 +282,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 )}
             </div>
 
-            <div className="mt-8 flex space-x-6">
+            <div className="mt-8 flex gap-6">
                 <Button
                     variant="secondary"
                     size="small"

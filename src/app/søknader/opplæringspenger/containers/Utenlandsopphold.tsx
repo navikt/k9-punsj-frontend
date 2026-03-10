@@ -2,11 +2,12 @@ import React from 'react';
 
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
+import { Button, ErrorMessage } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 interface Props {
     fieldArrayIndex: number;
@@ -15,6 +16,7 @@ interface Props {
 
 const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Props) => {
     const { values } = useFormikContext<OLPSoknad>();
+    const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
         <div>
@@ -22,20 +24,11 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
-                    <DatovelgerFormik label="Fra og med" name={`utenlandsopphold[${fieldArrayIndex}].periode.fom`} />
-                    <DatovelgerFormik
-                        label="Til og med"
-                        name={`utenlandsopphold[${fieldArrayIndex}].periode.tom`}
-                        fromDate={
-                            values.utenlandsopphold[fieldArrayIndex].periode.fom
-                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
-                                : undefined
-                        }
-                        defaultMonth={
-                            values.utenlandsopphold[fieldArrayIndex].periode.fom
-                                ? new Date(values.utenlandsopphold[fieldArrayIndex].periode.fom)
-                                : undefined
-                        }
+                    <Periodevelger
+                        name={`utenlandsopphold[${fieldArrayIndex}].periode`}
+                        fromDate={fromDate}
+                        toDate={toDate}
+                        disabled={disabled}
                     />
                 </div>
                 {values.utenlandsopphold.length > 1 && (
@@ -55,10 +48,17 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <VerticalSpacer sixteenPx />
 
-            <div style={{ maxWidth: '25%' }}>
+            <div style={{ maxWidth: '50%' }}>
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
-                    {({ field }: FieldProps<string>) => (
+                    {({ field, meta }: FieldProps<string>) => (
+                        <>
                         <CountrySelect label {...field} selectedcountry={field.value} unselectedoption="Velg land" />
+                        {meta.touched && meta.error && (
+                            <ErrorMessage role="alert" showIcon>
+                                {meta.error}
+                            </ErrorMessage>
+                        )}
+                        </>
                     )}
                 </Field>
             </div>

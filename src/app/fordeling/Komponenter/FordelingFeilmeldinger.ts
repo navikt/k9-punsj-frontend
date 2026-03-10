@@ -1,4 +1,4 @@
-import { IdentRules } from 'app/rules';
+import { IdentRules } from 'app/validation';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 import { IIdentState } from 'app/models/types/IdentState';

@@ -1,0 +1,9 @@
+.legacy-checkbox-group .navds-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legacy-checkbox-group__item {
+    width: 100%;
+}

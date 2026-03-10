@@ -7,7 +7,7 @@ import { Virksomhetstyper } from '../../models/enums/Virksomhetstyper';
 import { formatDato, landkodeTilNavn, periodToFormattedString, sjekkPropertyEksistererOgIkkeErNull } from '../../utils';
 import { SelvstendigNaeringsdrivendeAktivitet } from 'app/models/types/KvitteringTyper';
 
-import './visningAvPerioderSoknadKvittering.less';
+import './visningAvPerioderSoknadKvittering.css';
 interface IOwnProps {
     intl: any;
     perioder: SelvstendigNaeringsdrivendeAktivitet[];
