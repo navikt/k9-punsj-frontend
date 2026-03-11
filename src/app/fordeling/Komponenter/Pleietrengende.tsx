@@ -16,6 +16,7 @@ export interface Props {
     identState: IIdentState;
     fellesState: IFellesState;
     toSokereIJournalpost: boolean;
+    allowSokerAsPleietrengende?: boolean;
     skalHenteBarn?: boolean;
     visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
@@ -29,6 +30,7 @@ const Pleietrengende: React.FC<Props> = ({
     identState,
     fellesState,
     toSokereIJournalpost,
+    allowSokerAsPleietrengende,
     visPleietrengende,
     skalHenteBarn,
     jpErFerdigstiltOgUtenPleietrengende,
@@ -116,6 +118,8 @@ const Pleietrengende: React.FC<Props> = ({
     };
 
     const isPleitrengendeFnrErSammeSomSøker = søkerId === pleietrengendeId;
+    const visFeilForLikPleietrengendeOgSøker =
+        isPleitrengendeFnrErSammeSomSøker && !allowSokerAsPleietrengende;
     const visPleietrengendeSelect = !!hentBarnSuccess && !!barn && barn.length > 0;
     const visPleitrengendeTextInput =
         gjelderAnnenPleietrengende ||
@@ -181,7 +185,7 @@ const Pleietrengende: React.FC<Props> = ({
                         errorPersonsInfo={pleietrengendeInfoError}
                         person={pleietrengendeInfo}
                         errorValidationMessage={
-                            isPleitrengendeFnrErSammeSomSøker ||
+                            visFeilForLikPleietrengendeOgSøker ||
                             (pleietrengendeId && IdentRules.erUgyldigIdent(pleietrengendeId))
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
