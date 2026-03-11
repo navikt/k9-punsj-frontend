@@ -85,9 +85,8 @@ const selvstendigNaeringsdrivende = () =>
             periode: yup
                 .object({
                     fom: yup.string().label('Fra og med').test(påkrevdDato),
-                    tom: yup.string().label('Til og med').test(ikkePåkrevdDato),
-                })
-                .test(periodeErInnenforAnnenPeriode),
+                    tom: yup.string().label('Til og med').test(ikkePåkrevdDato)
+                }),
             virksomhetstyper: yup
                 .array()
                 .of(yup.string())
