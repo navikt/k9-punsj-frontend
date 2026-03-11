@@ -164,12 +164,12 @@ const selvstendigNaeringsdrivende = () =>
 
 const frilanser = () =>
     yup.object({
-        startdato: yup.string().label('Startdato').test(påkrevdDato).test(datoInnenforPeriode),
+        startdato: yup.string().label('Startdato').test(påkrevdDato),
         sluttdato: yup
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: (schema) => schema.test(påkrevdDato).test(datoInnenforPeriode),
+                then: (schema) => schema.test(påkrevdDato),
                 otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato'),
