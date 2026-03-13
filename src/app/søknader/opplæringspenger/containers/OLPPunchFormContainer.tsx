@@ -44,6 +44,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const fellesState = useSelector((state: RootStateType) => state.felles);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const intl = useIntl();
 
     const {
@@ -75,7 +76,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
             hentPerioderK9({
                 ident: soeknadRespons.soekerId,
                 barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
-                saksnummer: fellesState.journalpost?.sak?.fagsakId || '',
+                saksnummer: fordelingState.fagsak?.fagsakId || fellesState.journalpost?.sak?.fagsakId || '',
             });
         }
     }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);
