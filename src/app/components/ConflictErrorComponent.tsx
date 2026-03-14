@@ -43,7 +43,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
 
     return (
         <div className="flex justify-center py-4" data-testid="conflict-error-alert">
-            <Alert size="small" variant={variant} className="text-left w-[376px]">
+            <Alert size="small" variant={variant} className="text-left w-94">
                 <FormattedMessage
                     id={ingenJp ? 'startPage.feil.ikkeStøttet.lukkDebugg.ingenJp' : textId}
                     values={{ status: lukkDebuggJpStatus, jp: journalpostid }}

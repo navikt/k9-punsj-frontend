@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
@@ -73,7 +72,9 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     if (journalpostNotFound) {
         return (
             <div data-testid="journalpostNotFound">
-                <FeilmeldingPanel messageId="startPage.feil.journalpost" />
+                <Alert size="small" variant="error">
+                    <FormattedMessage id="startPage.feil.journalpost" />
+                </Alert>
             </div>
         );
     }
@@ -81,7 +82,9 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     if (journalpostForbidden) {
         return (
             <div data-testid="journalpostForbidden">
-                <FeilmeldingPanel messageId="startPage.feil.ikketilgang" />
+                <Alert size="small" variant="error">
+                    <FormattedMessage id="startPage.feil.ikketilgang" />
+                </Alert>
             </div>
         );
     }
@@ -104,7 +107,11 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (journalpostRequestError) {
-        return <FeilmeldingPanel messageId="startPage.feil.internalServerError" />;
+        return (
+            <Alert size="small" variant="error">
+                <FormattedMessage id="startPage.feil.internalServerError" />
+            </Alert>
+        );
     }
 
     if (!journalpost) {
