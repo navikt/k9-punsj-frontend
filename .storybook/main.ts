@@ -32,17 +32,14 @@ const storybookConfig: StorybookConfig = {
             app: path.resolve(__dirname, '../src/app'),
         };
 
-        // Находим существующее правило для CSS файлов
         const cssRule = config.module!.rules!.find(
             (rule) => rule && typeof rule === 'object' && rule.test && rule.test.toString().includes('.css'),
         );
 
-        // Удаляем существующее правило для CSS
         if (cssRule) {
             config.module!.rules = config.module!.rules!.filter((rule) => rule !== cssRule);
         }
 
-        // Добавляем новое правило для CSS
         config.module!.rules!.push({
             test: /\.css$/,
             use: [
