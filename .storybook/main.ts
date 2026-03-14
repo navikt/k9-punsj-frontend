@@ -42,34 +42,27 @@ const storybookConfig: StorybookConfig = {
             config.module!.rules = config.module!.rules!.filter((rule) => rule !== cssRule);
         }
 
-        // Добавляем новые правила
-        config.module!.rules!.push(
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            postcssOptions: {
-                                plugins: [tailwindcssPostcss, autoprefixer],
-                            },
+        // Добавляем новое правило для CSS
+        config.module!.rules!.push({
+            test: /\.css$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            plugins: [tailwindcssPostcss, autoprefixer],
                         },
                     },
-                ],
-                include: [
-                    path.resolve(__dirname, '../src'),
-                    path.resolve(__dirname, '../node_modules/@navikt/ds-css'),
-                    path.resolve(__dirname, './'),
-                ],
-            },
-            {
-                test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader'],
-                include: path.resolve(__dirname, '../src'),
-            },
-        );
+                },
+            ],
+            include: [
+                path.resolve(__dirname, '../src'),
+                path.resolve(__dirname, '../node_modules/@navikt/ds-css'),
+                path.resolve(__dirname, './'),
+            ],
+        });
 
         return config;
     },
