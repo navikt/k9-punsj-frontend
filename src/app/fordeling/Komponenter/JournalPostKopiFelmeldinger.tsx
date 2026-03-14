@@ -12,7 +12,7 @@ const JournalPostKopiFelmeldinger: React.FC<Props> = ({ fellesState }) => {
         fellesState;
 
     return (
-        <>
+        <div className="space-y-4">
             {kopierJournalpostConflict && (
                 <Alert size="small" variant="info" data-test-id="kopierJournalpostConflict">
                     <FormattedMessage id="ident.identifikasjon.kopiAvJournalpostEksisterer" />
@@ -36,7 +36,7 @@ const JournalPostKopiFelmeldinger: React.FC<Props> = ({ fellesState }) => {
                     <FormattedMessage id="ident.identifikasjon.kopiAvJournalFeil" />
                 </Alert>
             )}
-        </>
+        </div>
     );
 };
 

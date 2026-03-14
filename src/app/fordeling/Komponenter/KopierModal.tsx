@@ -66,7 +66,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
             </Modal.Header>
 
             <Modal.Body>
-                <>
+                <div className="space-y-4">
                     <div>
                         <FormattedMessage
                             id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.info"
@@ -91,7 +91,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
                             </Alert>
                         </div>
                     )}
-                </>
+                </div>
             </Modal.Body>
 
             <Modal.Footer>
