@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
 import mustacheExpress from 'mustache-express';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import { envVariables } from '@k9-punsj-frontend/server/envVariables.js';
 import { createMockPdfBytes } from '../../mocks/mockPdf.js';
-
-dotenv.config();
 
 // __dirname is not defined in ES module scope, so we need to derive it
 const __filename = fileURLToPath(import.meta.url);

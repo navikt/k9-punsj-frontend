@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import logger from './log.js';
 
 const envVar = ({ name, required = true }) => {
