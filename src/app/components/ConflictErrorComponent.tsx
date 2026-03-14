@@ -1,5 +1,5 @@
 import { Alert, AlertProps, Button, Loader } from '@navikt/ds-react';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -56,7 +56,7 @@ export const ConflictErrorComponent: React.FC<Props> = ({
                         icon={pendingLukkDebuggJp ? <Loader size="medium" /> : undefined}
                         onClick={() => {
                             if (goToLos) {
-                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                redirectToLos();
                             } else {
                                 handleLukkDebugg();
                             }

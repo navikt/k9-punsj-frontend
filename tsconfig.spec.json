@@ -1,4 +1,4 @@
 {
     "extends": "./tsconfig.json",
-    "include": ["**/*.spec.ts", "**/*.spec.tsx"]
+    "include": ["**/*.spec.ts", "**/*.spec.tsx", "src/test/jest-dom.d.ts"]
 }

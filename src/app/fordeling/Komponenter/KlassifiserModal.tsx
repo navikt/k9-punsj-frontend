@@ -24,10 +24,10 @@ import {
 import { RootStateType } from 'app/state/RootState';
 import {
     finnForkortelseForDokumenttype,
-    getEnvironmentVariable,
     getForkortelseFraFordelingDokumenttype,
     getPathFraDokumenttype,
     initializeDate,
+    redirectToLos,
 } from 'app/utils';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
@@ -386,7 +386,7 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
                     <Button
                         size="small"
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                         disabled={disabledButtonsLoading}
                         data-test-id="klassifiserModalGåTilLos"
