@@ -49,7 +49,7 @@ export const formattereTimerForArbeidstakerPerioder = (perioder: IOLPSoknadKvitt
 };
 
 export const genererSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
+    Object.entries(perioder).reduce<ISoknadKvitteringLovbestemtFerie>((acc, [key, value]) => {
         if (value.skalHaFerie) {
             acc[key] = value;
         }
@@ -57,7 +57,7 @@ export const genererSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =
     }, {});
 
 export const genererIkkeSkalHaFerie = (perioder: ISoknadKvitteringLovbestemtFerie) =>
-    Object.entries(perioder).reduce((acc, [key, value]) => {
+    Object.entries(perioder).reduce<ISoknadKvitteringLovbestemtFerie>((acc, [key, value]) => {
         if (!value.skalHaFerie) {
             acc[key] = value;
         }

@@ -7,7 +7,12 @@ import { legacy_createStore as createStore } from 'redux';
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { RootStateType, rootReducer } from '../app/state/RootState';
 
-export const testIntl = createIntl({ locale: 'nb', defaultLocale: 'nb', messages: {} });
+export const testIntl = createIntl({
+    locale: 'nb',
+    defaultLocale: 'nb',
+    messages: {},
+    onError: () => undefined,
+});
 
 export const renderWithIntl = (component: ReactNode) => render(<IntlProvider locale="nb">{component}</IntlProvider>);
 
