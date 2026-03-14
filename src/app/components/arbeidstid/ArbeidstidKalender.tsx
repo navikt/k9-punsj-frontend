@@ -11,7 +11,7 @@ import {
     Periode,
     Periodeinfo,
 } from 'app/models/types';
-import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
+import { ArbeidstidInfo, IArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
 import VerticalSpacer from '../VerticalSpacer';
@@ -21,7 +21,7 @@ import ArbeidstidPeriodeListe from '../timefoering/ArbeidstidPeriodeListe';
 import FaktiskOgNormalTid from '../timefoering/FaktiskOgNormalTid';
 
 export interface ArbeidstidKalenderProps {
-    arbeidstidInfo: ArbeidstidInfo;
+    arbeidstidInfo?: ArbeidstidInfo | IArbeidstidInfo | null;
     updateSoknad: (v: IArbeidstidPeriodeMedTimer[]) => void;
     updateSoknadState?: (v: IArbeidstidPeriodeMedTimer[]) => void;
     søknadsperioder: IPeriode[];
@@ -51,27 +51,22 @@ const ArbeidstidKalender = ({
     updateSoknadState,
     søknadsperioder = [],
 }: ArbeidstidKalenderProps) => {
+    const normalisertArbeidstidInfo = React.useMemo(() => new ArbeidstidInfo(arbeidstidInfo || {}), [arbeidstidInfo]);
     const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
     // Holder en kopi av perioder som vises i modalen
     const [perioderForModal, setPerioderForModal] = useState<IArbeidstidPeriodeMedTimer[]>([]);
 
     // Oppdaterer perioderForModal når arbeidstidInfo endres
     useEffect(() => {
-        if (arbeidstidInfo && arbeidstidInfo.perioder) {
-            // Kopier alle perioder fra arbeidstidInfo
-            const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-            setPerioderForModal(perioder);
-        }
-    }, [arbeidstidInfo, arbeidstidInfo.perioder]);
+        const perioder = normalisertArbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
+        setPerioderForModal(perioder);
+    }, [normalisertArbeidstidInfo]);
 
     const toggleVisArbeidstidLengrePerioder = () => {
         // Sikrer at vi har oppdaterte perioder når modalen åpnes
         if (!visArbeidstidLengrePerioder) {
-            // Når modalen åpnes, oppdaterer vi perioderForModal med de nyeste data fra arbeidstidInfo
-            if (arbeidstidInfo && arbeidstidInfo.perioder) {
-                const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-                setPerioderForModal(perioder);
-            }
+            const perioder = normalisertArbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
+            setPerioderForModal(perioder);
         }
         setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
     };
@@ -106,7 +101,7 @@ const ArbeidstidKalender = ({
         selectedDates: Date[],
     ) => {
         const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
-            arbeidstidInfo.perioder,
+            normalisertArbeidstidInfo.perioder,
             selectedDates,
         ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
 
@@ -179,10 +174,10 @@ const ArbeidstidKalender = ({
                 <TidsbrukKalenderContainer
                     gyldigePerioder={søknadsperioder}
                     ModalContent={<FaktiskOgNormalTidWrapper heading="Registrer arbeidstid" lagre={lagreTimer} />}
-                    kalenderdager={arbeidstidInfo.perioder
+                    kalenderdager={normalisertArbeidstidInfo.perioder
                         .map((periode) => new ArbeidstidPeriodeMedTimer(periode))
                         .flatMap((periode) => arbeidstidPeriodeTilKalenderdag(periode))}
-                    slettPeriode={slettDager(arbeidstidInfo.perioder)}
+                    slettPeriode={slettDager(normalisertArbeidstidInfo.perioder)}
                     dateContentRenderer={DateContent}
                 />
             )}
