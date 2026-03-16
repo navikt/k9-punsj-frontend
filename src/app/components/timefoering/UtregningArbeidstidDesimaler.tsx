@@ -6,11 +6,13 @@ import intlHelper from 'app/utils/intlUtils';
 interface IUtregningArbeidstidProps {
     arbeidstid: string;
     normalArbeidstid?: string;
+    prosentLabel?: string;
 }
 
 const UtregningArbeidstidDesimaler = ({
     arbeidstid,
     normalArbeidstid,
+    prosentLabel,
 }: IUtregningArbeidstidProps): JSX.Element | null => {
     const intl = useIntl();
     const convert = (tid: string) => Number(tid.replace(',', '.'));
@@ -37,7 +39,7 @@ const UtregningArbeidstidDesimaler = ({
             {skalViseProsent && (
                 <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${tallTilString(
                     Number(prosentArbeid),
-                )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
+                )}% ${prosentLabel ?? intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
             )}
         </div>
     );

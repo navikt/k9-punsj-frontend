@@ -150,14 +150,15 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             }}
                         />
                         <div className="mt-1">
-                            <UtregningArbeidstidDesimaler arbeidstid={fraværDesimaler} normalArbeidstid={normalDesimaler} />
+                            <UtregningArbeidstidDesimaler arbeidstid={fraværDesimaler} normalArbeidstid={normalDesimaler} prosentLabel="fravær" />
                         </div>
                     </div>
                 </div>
             )}
 
-            <div className="mt-6">
+            <div className="mt-6 flex gap-3">
                 <Button size="small" onClick={handleLagre}>Lagre</Button>
+                <Button size="small" variant="secondary" onClick={toggleModal}>Avbryt</Button>
             </div>
         </div>
     );
