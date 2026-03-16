@@ -105,4 +105,5 @@ These instructions apply to agents working in this repository.
 - Review diffs per changed file before committing.
 - Use dry conventional commit prefixes such as `feat:`, `fix:`, `docs:`, `chore:` and `refactor:`.
 - Do not add AI attribution in commit messages.
-- Never push directly unless the user explicitly asks.
+- Never push directly in local or IDE sessions unless the user explicitly asks.
+- In GitHub coding agent sessions, creating or updating the Copilot pull request counts as explicit permission to commit and push to that pull request branch.

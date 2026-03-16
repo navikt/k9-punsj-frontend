@@ -26,6 +26,7 @@ This file supplements the repository `AGENTS.md`.
 - Run the most relevant checks for the changed area when possible, and say clearly if they were not run.
 - Do not include personopplysninger, secrets, tokens or sensitive internal data in prompts, examples, fixtures or screenshots.
 - Treat Copilot as an implementation aid, not as a replacement for engineering judgment, tests or code review.
+- In GitHub coding agent sessions, creating or updating the Copilot pull request counts as explicit permission to commit and push to that pull request branch.
 
 ## Writing
 
