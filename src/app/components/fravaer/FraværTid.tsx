@@ -50,23 +50,25 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
         }
     };
 
+    const emptyToZero = (v: string) => v || '0';
+
     const handleLagre = () => {
         if (tidsformat === Tidsformat.TimerOgMin) {
             lagre({
                 tidsformat,
-                fraværPerDag: { timer: fraværTimer, minutter: fraværMinutter },
-                jobberNormaltPerDag: { timer: normalTimer, minutter: normalMinutter },
-                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: fraværTimer, minutter: fraværMinutter }),
-                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: normalTimer, minutter: normalMinutter }),
+                fraværPerDag: { timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) },
+                jobberNormaltPerDag: { timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) },
+                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) }),
+                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) }),
                 selectedDates,
             });
         } else {
-            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(fraværDesimaler));
-            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(normalDesimaler));
+            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(emptyToZero(fraværDesimaler)));
+            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(emptyToZero(normalDesimaler)));
             lagre({
                 tidsformat,
-                fraværTimerPerDag: fraværDesimaler,
-                jobberNormaltTimerPerDag: normalDesimaler,
+                fraværTimerPerDag: emptyToZero(fraværDesimaler),
+                jobberNormaltTimerPerDag: emptyToZero(normalDesimaler),
                 fraværPerDag: { timer: ft, minutter: fm },
                 jobberNormaltPerDag: { timer: nt, minutter: nm },
                 selectedDates,
