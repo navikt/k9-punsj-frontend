@@ -116,6 +116,7 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             <UtregningArbeidstid
                                 arbeidstid={{ timer: fraværTimer, minutter: fraværMinutter }}
                                 normalArbeidstid={{ timer: normalTimer, minutter: normalMinutter }}
+                                prosentLabel="fravær"
                             />
                         </div>
                     </div>

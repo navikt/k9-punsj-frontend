@@ -16,11 +16,12 @@ interface IUtregningArbeidstidProps {
         timer?: string;
         minutter: string;
     };
+    prosentLabel?: string;
 }
 
 dayjs.extend(duration);
 
-const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeidstidProps): JSX.Element | null => {
+const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid, prosentLabel }: IUtregningArbeidstidProps): JSX.Element | null => {
     const intl = useIntl();
     const arbeidstidSekunder =
         timerTilSekunder(Number.parseInt(arbeidstid.timer, 10)) +
@@ -60,7 +61,7 @@ const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeids
             {skalViseProsent && (
                 <div>{`(${intlHelper(intl, 'skjema.arbeid.arbeidstaker.tilsvarer')} ${tallTilString(
                     Number(prosentArbeid),
-                )}% ${intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
+                )}% ${prosentLabel ?? intlHelper(intl, 'skjema.arbeid.arbeidstaker.arbeid')})`}</div>
             )}
         </div>
     );

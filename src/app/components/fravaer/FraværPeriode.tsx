@@ -113,6 +113,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                             <UtregningArbeidstid
                                 arbeidstid={{ timer: fraværTimerField.value ?? '', minutter: fraværMinField.value ?? '' }}
                                 normalArbeidstid={{ timer: normalTimerField.value ?? '', minutter: normalMinField.value ?? '' }}
+                                prosentLabel="fravær"
                             />
                         </div>
                     </div>
