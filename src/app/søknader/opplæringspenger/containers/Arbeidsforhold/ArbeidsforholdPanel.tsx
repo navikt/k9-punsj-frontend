@@ -17,14 +17,14 @@ import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import intlHelper from 'app/utils/intlUtils';
 
-import { OLPSoknad } from '../../models/types/OLPSoknad';
-import VerticalSpacer from '../VerticalSpacer';
-import { CountrySelect } from '../country-select/CountrySelect';
-import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
-import TextAreaFormik from '../formikInput/TextAreaFormik';
-import TextFieldFormik from '../formikInput/TextFieldFormik';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import VerticalSpacer from '../../../../components/VerticalSpacer';
+import { CountrySelect } from '../../../../components/country-select/CountrySelect';
+import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
+import TextAreaFormik from '../../../../components/formikInput/TextAreaFormik';
+import TextFieldFormik from '../../../../components/formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatovelgerFormik from '../skjema/Datovelger/DatovelgerFormik';
+import DatovelgerFormik from '../../../../components/skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
