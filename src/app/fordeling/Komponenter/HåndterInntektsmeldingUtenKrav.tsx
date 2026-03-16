@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react';
 
 import { Alert, Button } from '@navikt/ds-react';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import BrevContainer from 'app/components/brev/BrevContainer';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
@@ -126,7 +126,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
         <>
             <VerticalSpacer fourtyPx />
 
-            <RadioPanelGruppe
+            <LegacyRadioGroup
                 name="inntektsmeldingUtenKrav"
                 radios={[
                     {
@@ -144,7 +144,7 @@ const HåndterInntektsmeldingUtenKrav: React.FC<Props> = ({ journalpost, søkerI
                 ]}
                 legend="Hva ønsker du å gjøre med dokumentet?"
                 checked={håndterInntektsmeldingUtenKravValg}
-                onChange={(event) => handleInntektsmeldingUtenKrav((event.target as HTMLInputElement).value)}
+                onChange={(_, value) => handleInntektsmeldingUtenKrav(value)}
             />
 
             <BrevContainer>

@@ -10,10 +10,11 @@ interface OwnProps extends Omit<DatePickerProps, 'value' | 'onChange' | 'disable
     hideLabel?: boolean;
     disabled?: boolean;
     size?: 'small' | 'medium';
+    error?: React.ReactNode | string;
     handleBlur?: (callback: () => void, values: any) => void;
 }
 
-const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, ...props }: OwnProps) => {
+const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, error, ...props }: OwnProps) => {
     const [field, meta, helper] = useField(name);
     const { values } = useFormikContext<FormikValues>();
     return (
@@ -35,7 +36,7 @@ const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, ...props
                     field.onBlur(selectedDate);
                 }
             }}
-            errorMessage={meta.touched && meta.error}
+            errorMessage={(meta.touched && meta.error) || error}
             size={size}
         />
     );

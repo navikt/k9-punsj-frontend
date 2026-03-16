@@ -1,66 +1,3 @@
-.punch_mappemodal_knapperad {
-  margin-top: 1rem;
-  display: flex;
-}
-
-.punch_mappemodal_knapperad .knapp1.navds-button {
-  margin-right: 0.5rem;
-}
-
-.punch_mappemodal_knapperad .knapp2.navds-button {
-  margin-left: 0.5rem;
-}
-
-.read-modal {
-  margin-bottom: 1rem;
-}
-
-.read-modal ul {
-  margin: 0;
-  padding-inline-start: 20px;
-}
-
-.read-modal .row {
-  border-bottom: 1px solid #00000026;
-}
-
-.read-modal .alertstripe {
-  margin: 0 0 1rem;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.read-modal .alertstripe .alertstripe__tekst {
-  max-width: unset;
-}
-
-.read-modal .col {
-  margin: 0 0.5rem;
-}
-
-.read-modal .col:first-child {
-  padding-right: 0.5rem;
-  padding-left: 0;
-  margin: 0;
-}
-
-.read-modal .col:last-child {
-  margin-right: 0 !important;
-}
-
-.read-modal.enkel .col:first-child {
-  flex-grow: 1;
-}
-
-.read-modal.enkel .col:last-child {
-  flex-grow: 2;
-}
-
-.read-modal .periodeliste {
-  padding-left: 1rem;
-  margin: 0;
-}
-
 .punch {
   max-width: 100%;
   margin: 0;
@@ -143,28 +80,6 @@
   margin-left: 1rem;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .ident-page h2:first-child,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page h2:first-child {
-  margin-top: 0;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .ident-page .knapp-usignert,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapp-usignert,
-.punch .panels-wrapper .punch_form.navds-box .ident-page .knapp-tilbake,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapp-tilbake {
-  margin-top: 1rem;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .ident-page .knapperad,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .knapperad {
-  margin-top: 1rem;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .ident-page .alertstripe--advarsel,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-page .alertstripe--advarsel {
-  margin-top: 1rem;
-}
-
 .punch .panels-wrapper .punch_form.navds-box .knapperad .knapp1.navds-button,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .knapperad .knapp1.navds-button {
   margin-right: 1rem;
@@ -178,20 +93,6 @@
 .punch .panels-wrapper .punch_form.navds-box .arbeidstider .arbeidstid-hjelpetext,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidstider .arbeidstid-hjelpetext {
   margin-left: 0.5rem;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .punchform__paneler,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .punchform__paneler {
-  margin-bottom: 0.5rem;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .ident-soker-2,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .ident-soker-2,
-.punch .panels-wrapper .punch_form.navds-box .inputs-barn .skjemaelement,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .inputs-barn .skjemaelement,
-.punch .panels-wrapper .punch_form.navds-box .inputs-soknad .skjemaelement,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .inputs-soknad .skjemaelement {
-  margin-top: 1rem;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .klokkeslett,
@@ -217,25 +118,6 @@
   font-weight: 600;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper {
-  margin: -0.5rem;
-  width: calc(100% + 1rem);
-  max-width: calc(100% + 1rem);
-}
-
-.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper .col,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper .col {
-  padding: 0.5rem;
-  flex-grow: 1;
-  flex-basis: 0;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .arbeidsknapper .col .knapp,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .arbeidsknapper .col .knapp {
-  width: 100%;
-}
-
 .punch .panels-wrapper .punch_form.navds-box .listepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel {
   background-color: #eaeaea;
@@ -258,13 +140,6 @@
 .punch .panels-wrapper .punch_form.navds-box .frilanserpanel .frilanser-startdato,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .frilanser-startdato {
   margin-bottom: 20px;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .frilanserpanel .frilanser-info,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .frilanserpanel .frilanser-info {
-  margin-top: 20px;
-  font-weight: bold;
-  margin-bottom: auto;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .sn-alertstripe,
@@ -384,16 +259,6 @@
   margin-top: 1rem;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person {
-  display: inline-flex;
-}
-
-.punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person .timer-normalt,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .org-person .timer-normalt {
-  margin-left: 0.3rem;
-}
-
 .punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .leggtillisteelementknapp,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepanel.arbeidstakerpanel .leggtillisteelementknapp {
   margin: 0 1rem 1rem;
@@ -428,12 +293,6 @@
   margin-top: 1rem;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .skjema__feilomrade--harFeil,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .skjema__feilomrade--harFeil {
-  background-color: rgb(243 227 227 / 60%);
-  box-shadow: 0 0 0 8px rgb(243 227 227 / 60%);
-}
-
 .punch .panels-wrapper .omsorgspenger_punch_form {
   border: none;
 }
@@ -458,21 +317,6 @@
   box-sizing: border-box;
 }
 
-.modal_content {
-  padding: 2rem 2.5rem;
-}
-
-.modal_content p {
-  font-family: 'Source Sans Pro', Arial, sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-}
-
-.read-modal ul p {
-  margin: 0;
-}
-
 .flex-container {
   display: inline-flex;
   width: 100%;
@@ -490,20 +334,10 @@
   width: 100%;
 }
 
-
-.validertSoknadOppsummeringContainerKnapper {
-  display: flex;
-  place-content: center center;
+.flex-container .legacy-checkbox-panel {
+  width: 100%;
 }
 
-.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappVidere.navds-button,
-.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
-  margin: 1rem 0.5rem 0;
-}
-
-.validertSoknadOppsummeringContainerKnapper .validertSoknadOppsummeringContainer_knappTilbake.navds-button {
-  margin-top: 0.9rem;
-}
 
 .loadingSpinner {
   position: relative;

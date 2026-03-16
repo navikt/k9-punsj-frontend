@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import classNames from 'classnames';
 import { Field, FieldProps, FormikProps, FormikValues } from 'formik';
-import { CheckboksPanel } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { Dispatch } from 'redux';
 
 import { Alert, Loader, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
+import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
 import { IInputError } from 'app/models/types';
@@ -227,7 +227,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 <Field name="harMedisinskeOpplysninger">
                     {({ field }: FieldProps<FormikValues>) => (
                         <>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 id="medisinskeopplysningercheckbox"
                                 label={intlHelper(intl, 'skjema.medisinskeopplysninger')}
                                 checked={!!values.harMedisinskeOpplysninger}
@@ -250,7 +250,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                 <Field name="harInfoSomIkkeKanPunsjes">
                     {({ field }: FieldProps<FormikValues>) => (
                         <>
-                            <CheckboksPanel
+                            <LegacyCheckbox
                                 id="opplysningerikkepunsjetcheckbox"
                                 label={intlHelper(intl, 'skjema.opplysningerikkepunsjet')}
                                 checked={!!values.harInfoSomIkkeKanPunsjes}

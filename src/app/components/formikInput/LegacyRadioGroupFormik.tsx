@@ -8,7 +8,7 @@ import {
     LegacyRadioGroupProps,
 } from 'app/components/legacy-form-compat/radio';
 
-import './radioPanelGruppeFormik.css';
+import './legacyRadioGroupFormik.css';
 
 interface OwnProps extends Partial<LegacyRadioGroupProps> {
     name: string;

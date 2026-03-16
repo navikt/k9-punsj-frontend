@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router';
@@ -31,6 +31,7 @@ import {
 } from 'app/utils';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
+import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
 import KlassifiseringInfo from './KlassifiseringInfo';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
@@ -47,6 +48,7 @@ interface Props {
 
 const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<any>();
 
     const fagsak = useSelector((state: RootStateType) => state.fordelingState.fagsak);
     const identState = useSelector((state: RootStateType) => state.identState);
@@ -76,6 +78,9 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const getJournalpost = useMutation({
         mutationFn: () => getJournalpostEtterKopiering(journalpost.journalpostId),
         // mutationFn: () => getJournalpostEtterKopiering('206'), // For testing 403 svar
+        onSuccess: (data) => {
+            dispatch(setJournalpostAction(data));
+        },
     });
 
     const kopierJournalpost = useMutation({

@@ -13,6 +13,7 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from '../../../hooks/useFocus';
+import { refusjonskravFieldId, trekkperiodeFieldId } from '../containers/formFieldIds';
 
 export interface IPeriodepanelerProps {
     name:
@@ -52,6 +53,11 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                                 }}
                                                 periode={value}
                                                 intl={intl}
+                                                inputIdFom={
+                                                    name === KorrigeringAvInntektsmeldingFormFields.Trekkperioder
+                                                        ? trekkperiodeFieldId(index)
+                                                        : refusjonskravFieldId(index)
+                                                }
                                                 errorMessage={
                                                     meta.error ? <ErrorMessage name={fieldName} /> : undefined
                                                 }

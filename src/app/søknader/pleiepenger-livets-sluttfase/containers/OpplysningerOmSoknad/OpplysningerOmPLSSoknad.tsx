@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
 
+import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
@@ -61,18 +61,12 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
             </div>
         </div>
 
-        <RadioPanelGruppe
+        <LegacyJaNeiIkkeRelevantRadioGroup
             className="horizontalRadios"
-            radios={Object.values(JaNeiIkkeRelevant).map((jn) => ({
-                label: <FormattedMessage id={`${jn}`} />,
-                value: jn,
-            }))}
             name="signatur"
             legend={<FormattedMessage id="ident.signatur.etikett" />}
             checked={signert || undefined}
-            onChange={(event) =>
-                setSignaturAction(((event.target as HTMLInputElement).value as JaNeiIkkeRelevant) || null)
-            }
+            onChange={(_, value) => setSignaturAction(value || null)}
         />
 
         {signert === JaNeiIkkeRelevant.NEI && (

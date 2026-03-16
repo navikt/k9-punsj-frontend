@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Field, FieldProps } from 'formik';
-import { capitalize } from 'lodash';
 import { useIntl } from 'react-intl';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import RadioPanelGruppeFormik from 'app/components/formikInput/RadioPanelGruppeFormik';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
@@ -19,11 +18,10 @@ const VarigEndring: React.FC = () => {
         <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.erVarigEndring">
             {({ field, form }: FieldProps<boolean>) => (
                 <>
-                    <RadioPanelGruppeFormik
+                    <LegacyJaNeiRadioGroupFormik
                         legend={intlHelper(intl, 'skjema.sn.varigendring')}
                         checked={field.value ? JaNei.JA : JaNei.NEI}
                         name={field.name}
-                        options={Object.values(JaNei).map((v) => ({ value: v, label: capitalize(v) }))}
                         onChange={(e, value) => form.setFieldValue(field.name, value === 'ja')}
                     />
 

@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 
 import { Alert } from '@navikt/ds-react';
 import { getPersonInfo } from 'app/api/api';
+import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import FnrTextField from 'app/components/fnr-text-field/FnrTextField';
 import { FordelingDokumenttype, JaNei, dokumenttyperForPsbOmsOlp } from 'app/models/enums';
@@ -11,7 +12,6 @@ import { IdentRules } from 'app/validation';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { erYngreEnn18år } from 'app/utils/validationHelpers';
-import { RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 interface ISokersIdentProps {
@@ -122,15 +122,9 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
     return (
         <>
             <VerticalSpacer sixteenPx />
-            <RadioPanelGruppe
+            <LegacyJaNeiRadioGroup
                 className="horizontalRadios"
                 name="identsjekk"
-                radios={Object.values(JaNei).map((jn) => ({
-                    label: intlHelper(intl, jn),
-                    value: jn,
-                    disabled: jn === JaNei.NEI && disableRadios,
-                    'data-test-id': `bekreftSøker-${jn}`,
-                }))}
                 legend={
                     <FormattedMessage
                         id="ident.identifikasjon.sjekkident"
@@ -138,9 +132,11 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                     />
                 }
                 checked={riktigIdentIJournalposten}
-                onChange={(event) => {
-                    setErSøkerIdBekreftet((event.target as HTMLInputElement).value === JaNei.JA);
-                    handleIdentRadioChange((event.target as HTMLInputElement).value as JaNei);
+                disabledNei={disableRadios}
+                dataTestIdPrefix="bekreftSøker"
+                onChange={(_, value) => {
+                    setErSøkerIdBekreftet(value === JaNei.JA);
+                    handleIdentRadioChange(value);
                 }}
             />
 

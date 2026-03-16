@@ -5,7 +5,7 @@ import { FieldValues, useController, useFormContext } from 'react-hook-form';
 import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 import { FormLegacyRadioGroupProps } from './types';
-import '../formikInput/radioPanelGruppeFormik.css';
+import '../formikInput/legacyRadioGroupFormik.css';
 
 export function FormLegacyRadioGroup<T extends FieldValues>({
     name,

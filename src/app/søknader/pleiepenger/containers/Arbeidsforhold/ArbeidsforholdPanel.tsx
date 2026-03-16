@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { set } from 'lodash';
-import { CheckboksPanel, CheckboksPanelGruppe, RadioPanelGruppe } from 'nav-frontend-skjema';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
+import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
+import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
@@ -105,19 +106,15 @@ const ArbeidsforholdPanel = ({
                         });
                     }}
                 />
-                <RadioPanelGruppe
+                <LegacyJaNeiRadioGroup
                     className="horizontalRadios"
                     name="fortsattFrilanser"
-                    radios={Object.values(JaNei).map((jn) => ({
-                        label: intlHelper(intl, jn),
-                        value: jn,
-                    }))}
                     legend={intlHelper(intl, 'skjema.fortsattfrilanser')}
                     checked={
                         opptjening.frilanser && opptjening.frilanser.jobberFortsattSomFrilans ? JaNei.JA : JaNei.NEI
                     }
-                    onChange={(event) => {
-                        handleFrilanserChange((event.target as HTMLInputElement).value as JaNei);
+                    onChange={(_, value) => {
+                        handleFrilanserChange(value);
                     }}
                 />
 
@@ -230,7 +227,7 @@ const ArbeidsforholdPanel = ({
         return (
             <div className="infoContainer">
                 <div id="sn-virksomhetstyper">
-                    <CheckboksPanelGruppe
+                    <LegacyCheckboxGroup
                         className="virksomhetstypercheckbox"
                         legend={intlHelper(intl, 'skjema.arbeid.sn.type')}
                         checkboxes={Object.values(Virksomhetstyper).map((v) => ({
@@ -244,7 +241,6 @@ const ArbeidsforholdPanel = ({
                                 opptjening?.selvstendigNaeringsdrivende?.info?.periode,
                             )}].virksomhetstyper`,
                         )}
-                        onChange={() => undefined}
                     />
                 </div>
 
@@ -284,18 +280,14 @@ const ArbeidsforholdPanel = ({
                 </div>
 
                 <div className="mt-4">
-                    <RadioPanelGruppe
+                    <LegacyJaNeiRadioGroup
                         className="horizontalRadios"
                         name="virksomhetRegistrertINorge"
-                        radios={Object.values(JaNei).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
                         legend={intlHelper(intl, 'skjema.sn.registrertINorge')}
                         checked={
                             opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet ? JaNei.NEI : JaNei.JA
                         }
-                        onChange={(event) => {
+                        onChange={(_, value) => {
                             updateSoknad({
                                 opptjeningAktivitet: {
                                     ...opptjening,
@@ -303,8 +295,7 @@ const ArbeidsforholdPanel = ({
                                         ...opptjening.selvstendigNaeringsdrivende,
                                         info: {
                                             ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            registrertIUtlandet:
-                                                ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+                                            registrertIUtlandet: value !== JaNei.JA,
                                         },
                                     },
                                 },
@@ -316,8 +307,7 @@ const ArbeidsforholdPanel = ({
                                         ...opptjening.selvstendigNaeringsdrivende,
                                         info: {
                                             ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            registrertIUtlandet:
-                                                ((event.target as HTMLInputElement).value as JaNei) !== JaNei.JA,
+                                            registrertIUtlandet: value !== JaNei.JA,
                                         },
                                     },
                                 },
@@ -409,13 +399,9 @@ const ArbeidsforholdPanel = ({
                 )}
 
                 <div className="mt-6">
-                    <RadioPanelGruppe
+                    <LegacyJaNeiRadioGroup
                         className="horizontalRadios"
                         name="harRegnskapsfører"
-                        radios={Object.values(JaNei).map((jn) => ({
-                            label: intlHelper(intl, jn),
-                            value: jn,
-                        }))}
                         legend={intlHelper(intl, 'skjema.arbeid.sn.regnskapsfører')}
                         checked={
                             !!harRegnskapsfører ||
@@ -424,8 +410,8 @@ const ArbeidsforholdPanel = ({
                                 ? JaNei.JA
                                 : JaNei.NEI
                         }
-                        onChange={(event) => {
-                            handleRegnskapsførerChange((event.target as HTMLInputElement).value as JaNei);
+                        onChange={(_, value) => {
+                            handleRegnskapsførerChange(value);
                         }}
                     />
                 </div>
@@ -660,18 +646,14 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erEldreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <div className="mt-6">
-                            <RadioPanelGruppe
+                            <LegacyJaNeiRadioGroup
                                 className="horizontalRadios"
                                 name="varigEndringradios"
-                                radios={Object.values(JaNei).map((jn) => ({
-                                    label: intlHelper(intl, jn),
-                                    value: jn,
-                                }))}
                                 legend={intlHelper(intl, 'skjema.sn.varigendring')}
                                 checked={
                                     opptjening.selvstendigNaeringsdrivende?.info.erVarigEndring ? JaNei.JA : JaNei.NEI
                                 }
-                                onChange={(event) => {
+                                onChange={(_, value) => {
                                     updateSoknad({
                                         opptjeningAktivitet: {
                                             ...opptjening,
@@ -679,9 +661,7 @@ const ArbeidsforholdPanel = ({
                                                 ...opptjening.selvstendigNaeringsdrivende,
                                                 info: {
                                                     ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                    erVarigEndring:
-                                                        ((event.target as HTMLInputElement).value as JaNei) ===
-                                                        JaNei.JA,
+                                                    erVarigEndring: value === JaNei.JA,
                                                 },
                                             },
                                         },
@@ -693,9 +673,7 @@ const ArbeidsforholdPanel = ({
                                                 ...opptjening.selvstendigNaeringsdrivende,
                                                 info: {
                                                     ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                    erVarigEndring:
-                                                        ((event.target as HTMLInputElement).value as JaNei) ===
-                                                        JaNei.JA,
+                                                    erVarigEndring: value === JaNei.JA,
                                                 },
                                             },
                                         },
@@ -875,7 +853,7 @@ const ArbeidsforholdPanel = ({
             </Accordion.Header>
 
             <Accordion.Content>
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
                     value={Arbeidsforhold.ARBEIDSTAKER}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.ARBEIDSTAKER, e.target.checked)}
@@ -896,7 +874,7 @@ const ArbeidsforholdPanel = ({
                     />
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.FRILANSER)}
                     value={Arbeidsforhold.FRILANSER}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.FRILANSER, e.target.checked)}
@@ -911,7 +889,7 @@ const ArbeidsforholdPanel = ({
                     </Box>
                 )}
 
-                <CheckboksPanel
+                <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.SELVSTENDIG)}
                     value={Arbeidsforhold.SELVSTENDIG}
                     onChange={(e) => handleArbeidsforholdChange(Arbeidsforhold.SELVSTENDIG, e.target.checked)}

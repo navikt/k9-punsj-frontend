@@ -55,14 +55,16 @@
     box-shadow: 0 0 0 1px #6a6a6a;
 }
 
-.legacy-radio-panel--disabled .navds-radio__input:checked + .navds-radio__label::before {
-    background-color: #f1f1f1;
-    box-shadow: 0 0 0 2px #6a6a6a, inset 0 0 0 3px #fff, inset 0 0 0 12px #6a6a6a;
+.legacy-radio-panel--checked .navds-radio__input + .navds-radio__label::before,
+.legacy-radio-panel__control .navds-radio__input:checked + .navds-radio__label::before {
+    background-color: #fff !important;
+    box-shadow: 0 0 0 2px #0067c5, inset 0 0 0 3px #fff, inset 0 0 0 12px #0067c5 !important;
 }
 
-.legacy-radio-panel__control .navds-radio__input:checked + .navds-radio__label::before {
-    background-color: #fff;
-    box-shadow: 0 0 0 2px #0067c5, inset 0 0 0 3px #fff, inset 0 0 0 12px #0067c5;
+.legacy-radio-panel--disabled .navds-radio__input:checked + .navds-radio__label::before,
+.legacy-radio-panel--disabled.legacy-radio-panel--checked .navds-radio__input + .navds-radio__label::before {
+    background-color: #f1f1f1 !important;
+    box-shadow: 0 0 0 2px #6a6a6a, inset 0 0 0 3px #fff, inset 0 0 0 12px #6a6a6a !important;
 }
 
 .legacy-radio-panel--checked {
@@ -85,7 +87,8 @@
 }
 
 .legacy-radio-panel:hover:not(.legacy-radio-panel--checked, .legacy-radio-panel--disabled)
-    .navds-radio__label::before {
+    .navds-radio__input:not(:checked)
+    + .navds-radio__label::before {
     background-color: #99c3ff;
     box-shadow: 0 0 0 1px transparent;
 }
