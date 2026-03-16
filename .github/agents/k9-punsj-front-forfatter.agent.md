@@ -1,5 +1,5 @@
 ---
-name: frontend-forfatter-agent
+name: k9-punsj-front-forfatter-agent
 description: Norwegian copy and UI text reviewer for k9-punsj-frontend, with focus on klarspråk, react-intl text, placeholders, and repo specific writing conventions
 tools:
   - execute
@@ -40,9 +40,9 @@ yarn lint
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-aksel-agent` | Component context, labels, hjelpetekst, UI structure |
-| `@frontend-auth-agent` | Sensitive auth wording, login and logout flow text |
-| `@frontend-security-agent` | Avoiding leakage of sensitive data in messages, alerts, and help text |
+| `@k9-punsj-front-aksel-agent` | Component context, labels, hjelpetekst, UI structure |
+| `@k9-punsj-front-auth-agent` | Sensitive auth wording, login and logout flow text |
+| `@k9-punsj-front-security-agent` | Avoiding leakage of sensitive data in messages, alerts, and help text |
 
 ## Repo text context
 

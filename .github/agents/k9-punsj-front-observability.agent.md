@@ -1,5 +1,5 @@
 ---
-name: frontend-observability-agent
+name: k9-punsj-front-observability-agent
 description: Observability reviewer for k9-punsj-frontend, with focus on Faro, Sentry, Nais telemetry, structured logging, and deploy time release setup
 tools:
   - execute
@@ -27,7 +27,7 @@ tools:
 > Beholdt innhold handler om Faro, Sentry, Nais observability config, frontend runtime config og strukturert logging i Node serveren.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, namespace, deploy workflow og observability referanser først.
 
-Observability reviewer for `k9-punsj-frontend`. Focus on frontend telemetry, Sentry error reporting and release wiring, Nais observability config, structured server logging, and deploy time observability behavior. Coordinate with `@frontend-nais-agent`, `@frontend-security-agent`, and `@frontend-auth-agent` when platform, security, or auth related monitoring details need deeper review.
+Observability reviewer for `k9-punsj-frontend`. Focus on frontend telemetry, Sentry error reporting and release wiring, Nais observability config, structured server logging, and deploy time observability behavior. Coordinate with `@k9-punsj-front-nais-agent`, `@k9-punsj-front-security-agent`, and `@k9-punsj-front-auth-agent` when platform, security, or auth related monitoring details need deeper review.
 
 ## Commands
 
@@ -53,9 +53,9 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-nais-agent` | Nais observability config, runtime config mount, deploy workflows |
-| `@frontend-security-agent` | Sensitive data leakage in logs, traces, errors, screenshots |
-| `@frontend-auth-agent` | Auth failures, login callback issues, OBO related diagnostics |
+| `@k9-punsj-front-nais-agent` | Nais observability config, runtime config mount, deploy workflows |
+| `@k9-punsj-front-security-agent` | Sensitive data leakage in logs, traces, errors, screenshots |
+| `@k9-punsj-front-auth-agent` | Auth failures, login callback issues, OBO related diagnostics |
 
 ## Repo observability context
 

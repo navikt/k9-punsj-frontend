@@ -1,5 +1,5 @@
 ---
-name: frontend-security-agent
+name: k9-punsj-front-security-agent
 description: Security reviewer for Nav frontend applications on Nais, with focus on threat modeling, secrets, workflows, dependencies, and client-side risks
 tools:
   - execute
@@ -33,7 +33,7 @@ tools:
 > Beholdt innhold handler om frontend, Nais, workflows, avhengigheter og klientside sikkerhet.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, nyttige filer, namespace, app navn og workflow referanser først.
 
-Security reviewer for Nav frontend applications. Focus on threat modeling, compliance, dependency risk, workflow safety, and client-side security. Coordinate with `@frontend-auth-agent`, `@frontend-nais-agent`, and `@frontend-observability-agent` for deeper implementation details when those agents are available.
+Security reviewer for Nav frontend applications. Focus on threat modeling, compliance, dependency risk, workflow safety, and client-side security. Coordinate with `@k9-punsj-front-auth-agent`, `@k9-punsj-front-nais-agent`, and `@k9-punsj-front-observability-agent` for deeper implementation details when those agents are available.
 
 ## Commands
 
@@ -59,9 +59,9 @@ git log -p --all -S 'token' -- '*.ts' '*.tsx' '*.js' '*.jsx' | head -100
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-auth-agent` | Token handling, auth flows, JWT usage, frontend auth boundaries |
-| `@frontend-nais-agent` | Nais manifests, secrets, access policies, deployment security |
-| `@frontend-observability-agent` | Alerts, anomaly detection, security relevant monitoring |
+| `@k9-punsj-front-auth-agent` | Token handling, auth flows, JWT usage, frontend auth boundaries |
+| `@k9-punsj-front-nais-agent` | Nais manifests, secrets, access policies, deployment security |
+| `@k9-punsj-front-observability-agent` | Alerts, anomaly detection, security relevant monitoring |
 
 ## Security focus for this repo
 

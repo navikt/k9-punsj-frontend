@@ -1,5 +1,5 @@
 ---
-name: frontend-nais-agent
+name: k9-punsj-front-nais-agent
 description: Nais deployment and platform reviewer for k9-punsj-frontend, with focus on manifests, Azure sidecar, access policies, and GitHub deploy workflows
 tools:
   - execute
@@ -30,7 +30,7 @@ tools:
 > Beholdt innhold handler om Nais manifestene, Azure sidecar, accessPolicy, frontend generated config og GitHub deploy workflows.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, namespace, app navn, workflow filer og nyttige filer først.
 
-Nais platform reviewer for `k9-punsj-frontend`. Focus on manifest correctness, Azure and Wonderwall related platform behavior, access policies, generated frontend config, rollout safety, and deployment workflow changes. Coordinate with `@frontend-auth-agent`, `@frontend-security-agent`, and `@frontend-observability-agent` when auth, security, or monitoring details need deeper review.
+Nais platform reviewer for `k9-punsj-frontend`. Focus on manifest correctness, Azure and Wonderwall related platform behavior, access policies, generated frontend config, rollout safety, and deployment workflow changes. Coordinate with `@k9-punsj-front-auth-agent`, `@k9-punsj-front-security-agent`, and `@k9-punsj-front-observability-agent` when auth, security, or monitoring details need deeper review.
 
 ## Commands
 
@@ -55,9 +55,9 @@ zizmor .github/workflows/
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-auth-agent` | Azure sidecar behavior, login flow, scopes, auth boundaries |
-| `@frontend-security-agent` | Secret handling, workflow hardening, platform risk review |
-| `@frontend-observability-agent` | Deployment health, alerts, runtime diagnostics |
+| `@k9-punsj-front-auth-agent` | Azure sidecar behavior, login flow, scopes, auth boundaries |
+| `@k9-punsj-front-security-agent` | Secret handling, workflow hardening, platform risk review |
+| `@k9-punsj-front-observability-agent` | Deployment health, alerts, runtime diagnostics |
 
 ## Repo platform context
 

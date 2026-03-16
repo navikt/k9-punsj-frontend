@@ -1,5 +1,5 @@
 ---
-name: frontend-auth-agent
+name: k9-punsj-front-auth-agent
 description: Authentication and authorization reviewer for Nav frontend applications on Nais, with focus on Azure AD, Wonderwall login flow, OBO forwarding, and auth boundaries
 tools:
   - execute
@@ -27,7 +27,7 @@ tools:
 > Beholdt innhold handler om frontend, Node server, Azure via Nais, Wonderwall og OBO videreformidling.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, nyttige filer, namespace, app navn og auth flyt referanser først.
 
-Authentication and authorization reviewer for Nav frontend applications. Focus on Azure AD on Nais, Wonderwall mediated login and logout, server side token validation, OBO token forwarding, and browser safe auth patterns. Coordinate with `@frontend-security-agent`, `@frontend-nais-agent`, and `@frontend-observability-agent` when deeper platform, threat, or monitoring details are needed.
+Authentication and authorization reviewer for Nav frontend applications. Focus on Azure AD on Nais, Wonderwall mediated login and logout, server side token validation, OBO token forwarding, and browser safe auth patterns. Coordinate with `@k9-punsj-front-security-agent`, `@k9-punsj-front-nais-agent`, and `@k9-punsj-front-observability-agent` when deeper platform, threat, or monitoring details are needed.
 
 ## Commands
 
@@ -56,9 +56,9 @@ kubectl exec -it <pod> -n <namespace> -- env | grep -E 'AZURE|TOKEN_X|IDPORTEN'
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-security-agent` | Threat modeling, secret handling, workflow safety, wider security review |
-| `@frontend-nais-agent` | Nais manifests, sidecars, access policies, platform config |
-| `@frontend-observability-agent` | Auth failure monitoring, alerts, and production diagnostics |
+| `@k9-punsj-front-security-agent` | Threat modeling, secret handling, workflow safety, wider security review |
+| `@k9-punsj-front-nais-agent` | Nais manifests, sidecars, access policies, platform config |
+| `@k9-punsj-front-observability-agent` | Auth failure monitoring, alerts, and production diagnostics |
 
 ## Repo auth context
 

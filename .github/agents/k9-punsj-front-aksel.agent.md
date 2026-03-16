@@ -1,5 +1,5 @@
 ---
-name: frontend-aksel-agent
+name: k9-punsj-front-aksel-agent
 description: Aksel and frontend UI reviewer for k9-punsj-frontend, with focus on ds-react v7, layout primitives, accessibility, and the repo's Aksel plus Tailwind mix
 tools:
   - execute
@@ -36,7 +36,7 @@ tools:
 > Beholdt innhold handler om layout primitives, tilgjengelighet og samspillet mellom Aksel, Tailwind og lokal CSS i dette repoet, med hensyn til at fremtidig v8 migrering er sannsynlig.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, nyttige filer, versjonsforutsetninger og styling referanser først.
 
-Aksel and frontend UI reviewer for `k9-punsj-frontend`. Focus on accessible UI patterns, correct use of Aksel components and layout primitives, spacing and styling consistency, and pragmatic coexistence with Tailwind utilities and local CSS. Coordinate with `@frontend-forfatter-agent`, `@frontend-observability-agent`, and `@frontend-security-agent` when copy, telemetry, or security concerns overlap with UI changes.
+Aksel and frontend UI reviewer for `k9-punsj-frontend`. Focus on accessible UI patterns, correct use of Aksel components and layout primitives, spacing and styling consistency, and pragmatic coexistence with Tailwind utilities and local CSS. Coordinate with `@k9-punsj-front-forfatter-agent`, `@k9-punsj-front-observability-agent`, and `@k9-punsj-front-security-agent` when copy, telemetry, or security concerns overlap with UI changes.
 
 ## Commands
 
@@ -58,9 +58,9 @@ rg -n "style=\\{\\{|backgroundColor:|color:|margin:|padding:" src
 
 | Agent | Use for |
 | --- | --- |
-| `@frontend-forfatter-agent` | Norwegian UI copy, labels, hjelpetekst, feilmeldinger |
-| `@frontend-observability-agent` | Error boundary UX, telemetry impact from UI changes |
-| `@frontend-security-agent` | Safe rendering, file upload, rich text, XSS sensitive UI cases |
+| `@k9-punsj-front-forfatter-agent` | Norwegian UI copy, labels, hjelpetekst, feilmeldinger |
+| `@k9-punsj-front-observability-agent` | Error boundary UX, telemetry impact from UI changes |
+| `@k9-punsj-front-security-agent` | Safe rendering, file upload, rich text, XSS sensitive UI cases |
 
 ## Repo UI context
 
@@ -129,7 +129,7 @@ rg -n "style=\\{\\{|backgroundColor:|color:|margin:|padding:" src
 
 ### Content and forms
 
-- UI text is mostly Norwegian and often sourced through `react-intl`. Coordinate with `@frontend-forfatter-agent` for wording changes when the task is copy heavy.
+- UI text is mostly Norwegian and often sourced through `react-intl`. Coordinate with `@k9-punsj-front-forfatter-agent` for wording changes when the task is copy heavy.
 - Preserve validation, error, and helper text structure when changing field layouts.
 - Do not rename `react-intl` ids or text keys casually when the task is only visual.
 
