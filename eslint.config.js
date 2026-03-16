@@ -22,7 +22,7 @@ export default [
             'import/resolver': {
                 typescript: {},
                 node: {
-                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
+                    extensions: ['.js', '.jsx', '.ts', '.tsx'],
                     moduleDirectory: ['node_modules', 'src/'],
                 },
             },
