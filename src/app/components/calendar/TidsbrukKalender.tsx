@@ -221,7 +221,7 @@ export const TidsbrukKalender = forwardRef<HTMLDivElement, OwnProps>(
                                     aria-label="Modal"
                                 >
                                     <Modal.Body>
-                                        {React.cloneElement(ModalContent, {
+                                        {visModal && React.cloneElement(ModalContent, {
                                             selectedDates,
                                             toggleModal,
                                             clearSelectedDates,

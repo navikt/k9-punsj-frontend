@@ -35,11 +35,7 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
     const [fraværMinutter, setFraværMinutter] = useState('');
     const [fraværDesimaler, setFraværDesimaler] = useState('');
 
-    const [submitted, setSubmitted] = useState(false);
     const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
-
-    const normalError = !normalTimer && !normalMinutter ? 'Fyll ut normal arbeidstid' : '';
-    const fraværError = !fraværTimer && !fraværMinutter ? 'Fyll ut fravær' : '';
 
     const handleToggle = (v: Tidsformat) => {
         setTidsformat(v);
@@ -56,21 +52,23 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
 
     const handleLagre = () => {
         if (tidsformat === Tidsformat.TimerOgMin) {
-            if (normalError || fraværError) {
-                setSubmitted(true);
-                return;
-            }
             lagre({
                 tidsformat,
                 fraværPerDag: { timer: fraværTimer, minutter: fraværMinutter },
                 jobberNormaltPerDag: { timer: normalTimer, minutter: normalMinutter },
+                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: fraværTimer, minutter: fraværMinutter }),
+                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: normalTimer, minutter: normalMinutter }),
                 selectedDates,
             });
         } else {
+            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(fraværDesimaler));
+            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(normalDesimaler));
             lagre({
                 tidsformat,
                 fraværTimerPerDag: fraværDesimaler,
                 jobberNormaltTimerPerDag: normalDesimaler,
+                fraværPerDag: { timer: ft, minutter: fm },
+                jobberNormaltPerDag: { timer: nt, minutter: nm },
                 selectedDates,
             });
         }
@@ -97,8 +95,7 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             minutter={normalMinutter}
                             onChangeTimer={setNormalTimer}
                             onChangeMinutter={setNormalMinutter}
-                            onBlur={() => setSubmitted(true)}
-                            error={submitted ? normalError : undefined}
+                            onBlur={() => {}}
                         />
                         <div className="mt-1">
                             <UtregningArbeidstid arbeidstid={{ timer: normalTimer, minutter: normalMinutter }} />
@@ -111,8 +108,7 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             minutter={fraværMinutter}
                             onChangeTimer={setFraværTimer}
                             onChangeMinutter={setFraværMinutter}
-                            onBlur={() => setSubmitted(true)}
-                            error={submitted ? fraværError : undefined}
+                            onBlur={() => {}}
                         />
                         <div className="mt-1">
                             <UtregningArbeidstid
