@@ -11,7 +11,7 @@ description: Pre commit and pre PR security review for k9-punsj-frontend with fo
 
 Use this skill before commit, pull request, or merge when the change affects frontend data flow, auth, workflows, dependencies, runtime config, or logging.
 
-For broader threat modeling or architecture decisions, use `@frontend-security-agent`.
+For broader threat modeling or architecture decisions, use `@k9-punsj-front-security-agent`.
 
 ## Automated checks
 

@@ -5,6 +5,7 @@ These instructions apply to agents working in this repository.
 ## Repository overview
 
 - This repository contains the frontend for `k9-punsj`.
+- Related backend context often lives in the companion repository `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
 - Main stack: React 18, TypeScript, Redux Toolkit, React Query, Yarn 4 and Webpack.
 - UI work should use Aksel components, typography and design tokens by default.
 - Keep personal notes, machine specific paths and editor specific workflow outside the repository.
@@ -42,7 +43,7 @@ These instructions apply to agents working in this repository.
 - Run lint with `yarn lint`.
 - Run CSS lint with `yarn lint:css`.
 - Run TypeScript checks with `yarn tsc --noEmit`.
-- Run Cypress headless tests with `yarn cypress:headless` when end to end coverage is needed.
+- Run Cypress end to end tests with `yarn test:e2e` when end to end coverage is needed.
 
 ## Testing expectations
 

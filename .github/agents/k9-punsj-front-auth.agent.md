@@ -68,6 +68,7 @@ kubectl exec -it <pod> -n <namespace> -- env | grep -E 'AZURE|TOKEN_X|IDPORTEN'
 - `server/src/reverse-proxy.js` exchanges the incoming user token for an OBO token before forwarding to downstream APIs.
 - `src/app/utils/apiUtils.ts` opens the login flow on `401`, waits for `authComplete`, and retries the request.
 - `sessionStorage` is used for locale, not for auth token storage. Keep it that way unless there is a very explicit reason to change it.
+- If auth behavior depends on downstream API contracts or backend token exchange details, inspect the companion backend repo `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
 
 ## Review boundaries
 

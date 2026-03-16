@@ -66,6 +66,7 @@ Your role is to:
 - `react-intl` is used for much of the user facing text.
 - The repo uses Nais, Azure sidecar and a Node based reverse proxy to reach downstream services.
 - Observability is based on Faro, Sentry, Nais runtime config, and structured server logging.
+- When frontend behavior depends on backend contracts, mock flows, or endpoint behavior, inspect the companion backend repo `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
 
 ## Related agents
 
