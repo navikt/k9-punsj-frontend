@@ -120,6 +120,7 @@ Repoet har delt konfigurasjon for Copilot og AI-agenter.
 - Generelle repo regler ligger i [AGENTS.md](AGENTS.md).
 - Copilot-spesifikke instrukser ligger i [`.github/copilot-instructions.md`](.github/copilot-instructions.md).
 - Tilpassede repo-agenter ligger i [`.github/agents/`](.github/agents).
+- Konkrete taskfiler for Copilot kan legges i [`copilot-tasks/`](copilot-tasks), og [template-task.md](copilot-tasks/template-task.md) kan brukes som startpunkt.
 - Gjenbrukbare prompts ligger i [`.github/prompts/`](.github/prompts).
 - Repo-spesifikke skills ligger i [`.github/skills/`](.github/skills).
 - Lokal VS Code MCP-konfigurasjon ligger i [`.vscode/mcp.json`](.vscode/mcp.json).

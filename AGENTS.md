@@ -23,6 +23,8 @@ These instructions apply to agents working in this repository.
 - Ask before major architectural changes, data model changes or changes with unclear product impact.
 - Prefer the smallest change that solves the actual problem.
 - After finishing a task, report notable issues, tradeoffs and alternatives.
+- Use `copilot-tasks/` for concrete repo local Copilot task files.
+- Use `.github/prompts/` for stable reusable prompts that should stay as shared repo assets.
 
 ## Agent boundaries
 
