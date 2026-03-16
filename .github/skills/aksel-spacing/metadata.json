@@ -1,0 +1,14 @@
+{
+  "domain": "frontend",
+  "tags": ["aksel", "spacing", "layout", "responsive", "design-system"],
+  "examples": [
+    {
+      "prompt": "Clean up spacing in this Aksel form and use layout primitives",
+      "scenario": "Aksel spacing cleanup"
+    },
+    {
+      "prompt": "Make this page layout responsive with Box, VStack and HGrid",
+      "scenario": "Responsive Aksel layout"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "domain": "frontend",
+  "tags": ["security", "review", "trivy", "zizmor", "auth", "telemetry"],
+  "examples": [
+    {
+      "prompt": "Run a security review on these frontend changes before I open a PR",
+      "scenario": "Pre PR security review"
+    },
+    {
+      "prompt": "Check whether this auth and workflow change is safe to merge",
+      "scenario": "Security review for auth and CI changes"
+    }
+  ]
+}
