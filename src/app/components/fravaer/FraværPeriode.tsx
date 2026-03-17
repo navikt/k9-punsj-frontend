@@ -154,6 +154,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                             <UtregningArbeidstidDesimaler
                                 arbeidstid={fraværDeciField.value ?? ''}
                                 normalArbeidstid={normalDeciField.value ?? ''}
+                                prosentLabel="fravær"
                             />
                         </div>
                     </div>
