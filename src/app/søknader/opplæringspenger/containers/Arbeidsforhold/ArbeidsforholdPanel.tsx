@@ -122,7 +122,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         <hr />
                         <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
                         <Alert size="small" variant="info">
-                            {intlHelper(intl, 'skjema.arbeidstid.info')}
+                            {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                         </Alert>
                     </div>
 
@@ -350,7 +350,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
 
                     <Alert size="small" variant="info">
-                        {intlHelper(intl, 'skjema.arbeidstid.info')}
+                        {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                     </Alert>
                 </div>
 
