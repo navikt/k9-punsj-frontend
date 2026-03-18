@@ -14,4 +14,5 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Presiserte regler for lokal bruk versus GitHub cloud, inkludert branch, PR og push-flyt.
 - Strammet inn Copilot-guidance og reduserte overlapp mellom `AGENTS.md` og `.github/copilot-instructions.md`.
 - Ryddet opp i etterfolgende review-tilbakemeldinger for språkregler, taskfil-scope og dokumentasjonskonsistens.
+- Presiserte at ASCII-regelen bare gjelder commit-meldinger, mens norsk dokumentasjon, prompts og taskfiler skal bruke vanlig skrivemåte.
 - La til `docs/CHANGELOG.md` som logg for merkbare repo- og oppsettendringer.

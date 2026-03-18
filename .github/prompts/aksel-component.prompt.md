@@ -4,9 +4,9 @@ description: Create or update a React component in k9-punsj-frontend using Aksel
 ---
 
 > Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Basert pa upstream prompten `aksel-component.prompt.md` fra `navikt/copilot`:
+> Basert på upstream prompten `aksel-component.prompt.md` fra `navikt/copilot`:
 > `https://raw.githubusercontent.com/navikt/copilot/main/.github/prompts/aksel-component.prompt.md`
-> Hvis prompten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, UI regler og komponentmonstre forst.
+> Hvis prompten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, UI regler og komponentmønstre først.
 
 You are working in `k9-punsj-frontend`.
 

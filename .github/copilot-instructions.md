@@ -35,4 +35,4 @@ This file supplements the repository `AGENTS.md`.
 
 - Use Norwegian for code comments by default. English is acceptable when it is clearer or more idiomatic for the code.
 - Use Norwegian for commit messages by default, but keep them ASCII only and avoid `æ`, `ø` and `å`.
-- Repository documentation may be Norwegian. Use English for new agent authored technical documentation and prompts unless the task explicitly requires another language, and do not change the language of existing docs unless asked.
+- Repository documentation, prompts and task files may be English or Norwegian. Follow the established language of the touched document or repo area, use normal Norwegian spelling with `æ`, `ø` and `å` when writing Norwegian, and do not change the language of existing docs unless asked.
