@@ -48,7 +48,7 @@ Use `.github/prompts/` for stable reusable prompts that should stay as shared re
 
 - First update the `Plan` section in this file with a short numbered plan before changing code.
 - Keep the plan short and practical, normally `3` to `6` steps.
-- Implement the task according to that plan and keep the change scoped to this file.
+- Implement the task according to that plan and keep the change scoped to the task and allowed files above.
 - Keep `Progress notes` short and factual while working.
 - Before finishing, update `Outcome` with changed files, validation result, and any remaining risks or follow ups.
 - Do not move, rename, or delete this task file as part of execution. The user handles task lifecycle manually.
