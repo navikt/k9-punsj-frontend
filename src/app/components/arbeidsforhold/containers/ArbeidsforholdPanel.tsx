@@ -73,6 +73,7 @@ const ArbeidsforholdPanel = ({
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => set({ ...(arbeid || {}) }, path, perioder);
 
         return (
             <>
@@ -162,11 +163,13 @@ const ArbeidsforholdPanel = ({
                         <ArbeidstidKalender
                             søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
-                                updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
+                                updateSoknad({
+                                    arbeidstid: oppdatertArbeidstid('frilanserArbeidstidInfo.perioder', perioder),
+                                });
                             }}
                             updateSoknadState={(perioder) =>
                                 updateSoknadState({
-                                    arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder),
+                                    arbeidstid: oppdatertArbeidstid('frilanserArbeidstidInfo.perioder', perioder),
                                 })
                             }
                             arbeidstidInfo={arbeid?.frilanserArbeidstidInfo}
@@ -224,6 +227,7 @@ const ArbeidsforholdPanel = ({
     const selvstendigperioder = () => {
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => set({ ...(arbeid || {}) }, path, perioder);
         return (
             <div className="infoContainer">
                 <div id="sn-virksomhetstyper">
@@ -768,12 +772,18 @@ const ArbeidsforholdPanel = ({
                     søknadsperioder={søknadsperioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
-                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
+                            arbeidstid: oppdatertArbeidstid(
+                                'selvstendigNæringsdrivendeArbeidstidInfo.perioder',
+                                perioder,
+                            ),
                         });
                     }}
                     updateSoknadState={(perioder) =>
                         updateSoknadState({
-                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
+                            arbeidstid: oppdatertArbeidstid(
+                                'selvstendigNæringsdrivendeArbeidstidInfo.perioder',
+                                perioder,
+                            ),
                         })
                     }
                     arbeidstidInfo={arbeid?.selvstendigNæringsdrivendeArbeidstidInfo}

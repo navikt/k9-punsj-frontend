@@ -29,8 +29,6 @@ const TidsbrukKalenderÅr = ({
         setEkspandert(!ekspandert);
     };
 
-    const ref = React.useRef<HTMLDivElement>(null);
-
     return (
         <ExpansionCard open={ekspandert} onToggle={toggleEkspandert} aria-labelledby="tidsbruk-kalender-år">
             <ExpansionCard.Header>
@@ -44,14 +42,13 @@ const TidsbrukKalenderÅr = ({
                             return date.getMonth() === periode[0].fom.getMonth();
                         });
                         return (
-                            <div ref={ref} key={periode?.[0].fom.toString()}>
+                            <div key={periode?.[0].fom.toString()}>
                                 <TidsbrukKalender
                                     gyldigePerioder={periode}
                                     ModalContent={ModalContent}
                                     dateContentRenderer={dateContentRenderer}
                                     kalenderdager={filteredKalenderdager}
                                     slettPeriode={slettPeriode}
-                                    ref={ref}
                                 />
                             </div>
                         );

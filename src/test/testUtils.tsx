@@ -1,28 +1,28 @@
 import { render } from '@testing-library/react';
+import { createIntl } from 'react-intl';
 import React, { ReactNode } from 'react';
-import { IntlShape } from 'react-intl';
 import { Provider } from 'react-redux';
 import { legacy_createStore as createStore } from 'redux';
 
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { RootStateType, rootReducer } from '../app/state/RootState';
 
-// @ts-ignore
-export const testIntl: IntlShape = {
-    formatMessage(descriptor: { id: string }): string {
-        return descriptor.id;
-    },
-};
+export const testIntl = createIntl({
+    locale: 'nb',
+    defaultLocale: 'nb',
+    messages: {},
+    onError: () => undefined,
+});
 
 export const renderWithIntl = (component: ReactNode) => render(<IntlProvider locale="nb">{component}</IntlProvider>);
 
 interface IReduxTestProvider {
-    initialState?: RootStateType;
+    initialState?: Partial<RootStateType>;
     children: React.ReactNode;
 }
 
 export const ReduxTestProvider: React.FunctionComponent<IReduxTestProvider> = ({ initialState, children }) => {
-    const store = createStore(rootReducer, initialState);
+    const store = createStore(rootReducer, initialState as any);
 
     return <Provider store={store}>{children}</Provider>;
 };

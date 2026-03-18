@@ -6,10 +6,7 @@ import { formats, Tidsformat } from 'app/utils';
 import { IIdentState } from 'app/models/types/IdentState';
 import { IPeriode } from 'app/models/types';
 import dayjs from 'dayjs';
-import {
-    datoErInnenforPerioder,
-    formaterPerioder,
-} from 'app/utils/date/periodUtils';
+import { datoErInnenforPerioder, formaterPerioder } from 'app/utils/date/periodUtils';
 
 const yupLocale = {
     mixed: {
@@ -182,7 +179,7 @@ export const timerOgMinutter = yup.object({
     minutter,
 });
 
-export const tomEtterFom = function (value: string) {
+export const tomEtterFom = function (this: yup.TestContext, value: string) {
     const { fom } = this.parent;
     if (!fom || !value) return true; // Skip validation if either date is missing
     return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));

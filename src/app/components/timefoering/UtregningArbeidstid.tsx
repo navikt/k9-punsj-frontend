@@ -9,12 +9,12 @@ import { minutterTilSekunder, timerTilSekunder } from 'app/utils/numberUtils';
 
 interface IUtregningArbeidstidProps {
     arbeidstid: {
-        timer: string;
-        minutter: string;
+        timer?: string;
+        minutter?: string;
     };
     normalArbeidstid?: {
         timer?: string;
-        minutter: string;
+        minutter?: string;
     };
 }
 
@@ -23,11 +23,11 @@ dayjs.extend(duration);
 const UtregningArbeidstid = ({ arbeidstid, normalArbeidstid }: IUtregningArbeidstidProps): JSX.Element | null => {
     const intl = useIntl();
     const arbeidstidSekunder =
-        timerTilSekunder(Number.parseInt(arbeidstid.timer, 10)) +
-        minutterTilSekunder(Number.parseInt(arbeidstid.minutter, 10));
+        timerTilSekunder(Number.parseInt(arbeidstid.timer ?? '0', 10)) +
+        minutterTilSekunder(Number.parseInt(arbeidstid.minutter ?? '0', 10));
     const normalArbeidstidSekunder =
-        timerTilSekunder(Number.parseInt(normalArbeidstid?.timer, 10)) +
-        minutterTilSekunder(Number.parseInt(normalArbeidstid?.minutter, 10));
+        timerTilSekunder(Number.parseInt(normalArbeidstid?.timer ?? '0', 10)) +
+        minutterTilSekunder(Number.parseInt(normalArbeidstid?.minutter ?? '0', 10));
     const tallTilString = (tall?: number) =>
         tall &&
         tall.toLocaleString(undefined, {
