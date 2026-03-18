@@ -8,6 +8,11 @@ const barn3FraApi = barnFraApi.barn[2];
 const fnrBarnIkkeFraList = '02021477330';
 const annenSøkerFnr = '02918496664';
 const fnrAnnenPart = '02021477330';
+const kopierTilAnnenSøkerTekst = 'Kopier journalpost til annen søker';
+const infoOmKopiTekst = 'Det opprettes en ny oppgave i LOS. Original journalpost endres ikke.';
+const ugyldigIdentTekst = 'Dette er ikke et gyldig fødsels- eller D-nummer eller søker sin fødselsnummer.';
+const korrigerPartsforholdTekst =
+    'Du korrigerer partsforholdet på en journalført journalpost. Kopien opprettes med annen søker som søker og nåværende søker som pleietrengende. Original journalpost endres ikke.';
 
 describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, () => {
     it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
@@ -56,7 +61,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
     it('Test Pleiepenger', () => {
         cy.contains('Pleiepenger').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.findByLabelText('Velg hvilket barn det gjelder')
             .select(getBarnInfoForSelect(barn3FraApi))
@@ -77,9 +82,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
@@ -97,7 +100,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
         cy.contains('Omsorgspenger/omsorgsdager').click();
         cy.contains('Ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.findByLabelText('Velg hvilket barn det gjelder')
             .select(getBarnInfoForSelect(barn3FraApi))
@@ -118,9 +121,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
@@ -138,7 +139,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
         cy.contains('Omsorgspenger/omsorgsdager').click();
         cy.contains('Ekstra omsorgsdager når du er alene om omsorgen').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.findByLabelText('Velg hvilket barn det gjelder')
             .select(getBarnInfoForSelect(barn3FraApi))
@@ -159,9 +160,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
@@ -180,7 +179,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.contains('Ekstra omsorgsdager når du er midlertidig alene om omsorgen').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('be.disabled');
 
@@ -190,16 +189,14 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('not.be.disabled');
 
         // Clear annen søker
-        cy.get('[data-test-id="toSokereCheckbox"]').check();
+        cy.get('[data-test-id="toSokereCheckbox"]').click();
     });
 
     it('Test Omsorgspenger: direkte utbetaling av omsorgspenger', () => {
@@ -207,7 +204,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.contains('Omsorgspenger: direkte utbetaling av omsorgspenger').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('be.disabled');
 
@@ -217,16 +214,14 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('not.be.disabled');
 
         // Clear annen søker
-        cy.get('[data-test-id="toSokereCheckbox"]').check();
+        cy.get('[data-test-id="toSokereCheckbox"]').click();
     });
 
     it('Test Korrigering av inntektsmelding omsorgspenger AG', () => {
@@ -234,7 +229,7 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.contains('Korrigering av inntektsmelding omsorgspenger AG').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('be.disabled');
 
@@ -244,22 +239,20 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('not.be.disabled');
 
         // Clear annen søker
-        cy.get('[data-test-id="toSokereCheckbox"]').check();
+        cy.get('[data-test-id="toSokereCheckbox"]').click();
     });
 
     it('Test Pleiepenger i livets sluttfase', () => {
         cy.contains('Pleiepenger i livets sluttfase').click();
 
-        cy.contains('Kopier journalposten til annen søker (gjelder kun for to søkere i journalposten)').should('exist');
+        cy.contains(kopierTilAnnenSøkerTekst).should('exist');
 
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('be.disabled');
 
@@ -269,12 +262,16 @@ describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, (
 
         cy.get('[data-test-id="toSokereCheckbox"]').check();
 
-        cy.contains('Du skal kopiere journalposten til annen søker. Det vil da opprettes en ny oppgave i LOS.').should(
-            'exist',
-        );
+        cy.contains(infoOmKopiTekst).should('exist');
 
         cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
 
+        cy.get('[data-test-id="kopierJournalpostBtn"]').should('not.be.disabled');
+
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').clear().type(norskIdent);
+
+        cy.contains(ugyldigIdentTekst).should('not.exist');
+        cy.contains(korrigerPartsforholdTekst).should('exist');
         cy.get('[data-test-id="kopierJournalpostBtn"]').should('not.be.disabled');
 
         // Clear annen søker

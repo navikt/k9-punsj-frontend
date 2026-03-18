@@ -85,9 +85,8 @@ const selvstendigNaeringsdrivende = () =>
             periode: yup
                 .object({
                     fom: yup.string().label('Fra og med').test(påkrevdDato),
-                    tom: yup.string().label('Til og med').test(ikkePåkrevdDato),
-                })
-                .test(periodeErInnenforAnnenPeriode),
+                    tom: yup.string().label('Til og med').test(ikkePåkrevdDato)
+                }),
             virksomhetstyper: yup
                 .array()
                 .of(yup.string())
@@ -164,12 +163,12 @@ const selvstendigNaeringsdrivende = () =>
 
 const frilanser = () =>
     yup.object({
-        startdato: yup.string().label('Startdato').test(påkrevdDato).test(datoInnenforPeriode),
+        startdato: yup.string().label('Startdato').test(påkrevdDato),
         sluttdato: yup
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: (schema) => schema.test(påkrevdDato).test(datoInnenforPeriode),
+                then: (schema) => schema.test(påkrevdDato),
                 otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato'),
