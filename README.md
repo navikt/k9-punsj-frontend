@@ -115,7 +115,7 @@ Dette repoet bruker GitHub Copilot til å generere kode.
 
 ## Copilot og agenter
 
-Repoet har delt konfigurasjon for Copilot og AI-agenter.
+Repoet inneholder konfigurasjon for Copilot og AI-agenter.
 
 - Generelle repo regler ligger i [AGENTS.md](AGENTS.md).
 - Copilot-spesifikke instrukser ligger i [`.github/copilot-instructions.md`](.github/copilot-instructions.md).
