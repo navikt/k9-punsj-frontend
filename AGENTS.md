@@ -58,6 +58,9 @@ These instructions apply to agents working in this repository.
 - Run the most relevant checks for the changed files or behavior before completion.
 - If local checks cannot be run, state that clearly and explain why.
 - Summarize changed files and likely impact when handing work back.
+- Update `docs/CHANGELOG.md` for noticeable repo changes, setup changes or workflow changes that are useful for future contributors.
+- Keep changelog entries short and factual, and add the newest date first.
+- Skip tiny edits or purely local changes unless the task explicitly calls for a changelog update.
 
 ## Code and architecture
 
