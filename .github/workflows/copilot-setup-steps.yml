@@ -9,13 +9,12 @@ on:
         paths:
             - .github/workflows/copilot-setup-steps.yml
 
-permissions:
-    contents: read
-    packages: read
-
 jobs:
-    setup:
+    copilot-setup-steps:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: read
         steps:
             - name: Hente kode
               uses: actions/checkout@v6

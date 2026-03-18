@@ -1,1 +1,5 @@
 @import url('../../../opplæringspenger/containers/EndringAvSøknadsperioder/endringAvSøknadsperioder.css');
+
+.endringAvSøknadsperioder__begrunnelse {
+    margin-top: 1.5rem;
+}

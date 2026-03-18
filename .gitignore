@@ -20,7 +20,8 @@ lib/
 dist/*
 !dist/mockServiceWorker.js
 lerna-debug.log
-.vscode
+.vscode/*
+!.vscode/mcp.json
 .consumed-idents.json
 .yarnrc
 ssh.exe.stackdump
