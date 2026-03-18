@@ -22,10 +22,16 @@ These instructions apply to agents working in this repository.
 - Use a risk based approach tied to production impact, data, security or architecture.
 - Small and low risk tasks can move ahead without questions.
 - Ask before major architectural changes, data model changes or changes with unclear product impact.
+- For local or IDE Copilot work, do not implement code changes on `master` by default.
+- If the current branch is `master`, ask the user to create or switch to a feature branch first unless the user explicitly wants to work on `master`.
+- In local or IDE sessions, branch creation and branch switching belong to the user.
 - Prefer the smallest change that solves the actual problem.
 - After finishing a task, report notable issues, tradeoffs and alternatives.
 - Use `copilot-tasks/` for concrete repo local Copilot task files.
 - Use `.github/prompts/` for stable reusable prompts that should stay as shared repo assets.
+- When working from `copilot-tasks/*.md`, first update the task file with a short plan before changing code.
+- Keep `Progress notes` and `Outcome` in the task file short, factual, and aligned with the actual work.
+- Do not move, rename, or delete task files as part of execution unless the user explicitly asks.
 
 ## Agent boundaries
 
@@ -58,6 +64,9 @@ These instructions apply to agents working in this repository.
 - Run the most relevant checks for the changed files or behavior before completion.
 - If local checks cannot be run, state that clearly and explain why.
 - Summarize changed files and likely impact when handing work back.
+- When useful, propose pull request text that follows `.github/pull_request_template.md`.
+- Keep pull request text short, factual, and scoped to the actual change.
+- Do not include local workflow details, private filesystem paths, or AI attribution in pull request text.
 - Update `docs/CHANGELOG.md` for noticeable repo changes, setup changes or workflow changes that are useful for future contributors.
 - Keep changelog entries short and factual, and add the newest date first.
 - Skip tiny edits or purely local changes unless the task explicitly calls for a changelog update.
@@ -109,4 +118,5 @@ These instructions apply to agents working in this repository.
 - Use dry conventional commit prefixes such as `feat:`, `fix:`, `docs:`, `chore:` and `refactor:`.
 - Do not add AI attribution in commit messages.
 - Never push directly in local or IDE sessions unless the user explicitly asks.
+- In local or IDE sessions, do not assume branch creation or branch switching has already happened. If needed, stop before code changes and ask the user to create or switch branch, unless the user explicitly wants to stay on `master`.
 - In GitHub coding agent sessions, creating or updating the Copilot pull request counts as explicit permission to commit and push to that pull request branch.

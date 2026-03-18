@@ -10,6 +10,8 @@ This file supplements the repository `AGENTS.md`.
 - Keep suggestions and code changes concise and scoped to the task.
 - Avoid unrelated refactors or broad cleanup outside the requested scope.
 - Reuse existing domain concepts, naming and code paths before introducing new abstractions.
+- For local or IDE Copilot work, do not start code changes on `master` by default. Ask the user to create or switch to a feature branch first unless the user explicitly wants to work on `master`.
+- When following a `copilot-tasks/*.md` file, first update its `Plan` section, then implement the task, and finish by updating `Outcome`.
 - Do not add new dependencies, frameworks or build tooling unless the task requires it.
 - Do not change CI workflows, deployment configuration or environment setup unless the task explicitly calls for it.
 
@@ -24,6 +26,7 @@ This file supplements the repository `AGENTS.md`.
 
 - Add or update the smallest relevant test when a code change affects behavior or regression risk.
 - Run the most relevant checks for the changed area when possible, and say clearly if they were not run.
+- When asked for a pull request summary or description, follow `.github/pull_request_template.md` and keep the text short and factual.
 - For noticeable repo or setup changes, add a short factual entry to `docs/CHANGELOG.md` when relevant.
 - Do not include personopplysninger, secrets, tokens or sensitive internal data in prompts, examples, fixtures or screenshots.
 - Treat Copilot as an implementation aid, not as a replacement for engineering judgment, tests or code review.

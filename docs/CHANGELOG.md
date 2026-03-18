@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+## 2026-03-18
+
+- La til en kort utviklerguide i `docs/copilot-workflow.md` som forklarer praktiske arbeidsformer for Copilot, bruk av taskfiler, agents og hvordan GitHub cloud-flyten fungerer i dette repoet.
+
 ## 2026-03-17
 
 - Presiserte git-reglene for Copilot slik at lokal bruk og GitHub coding agent ikke får motstridende push-forventninger.
