@@ -18,11 +18,11 @@ tools:
 # Accessibility agent
 
 > Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Basert pa upstream agenten `accessibility.agent.md` fra `navikt/copilot`:
+> Basert på upstream agenten `accessibility.agent.md` fra `navikt/copilot`:
 > `https://raw.githubusercontent.com/navikt/copilot/main/.github/agents/accessibility.agent.md`
-> Innholdet er strammet inn for dette repoet, med vekt pa Aksel, eksisterende frontend-monstre, dagens testoppsett og samspillet med den bredere `k9-punsj-front-aksel-agent`.
-> Generiske anbefalinger om nye UU-verktok og bred Playwright eller Lighthouse-bruk er tonet ned, siden repoet i dag bygger pa Jest, Testing Library og Cypress.
-> Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, testveiledning, relaterte agenter og komponentmonstre forst.
+> Innholdet er strammet inn for dette repoet, med vekt på Aksel, eksisterende frontend-mønstre, dagens testoppsett og samspillet med den bredere `k9-punsj-front-aksel-agent`.
+> Generiske anbefalinger om nye UU-verktøy og bred Playwright eller Lighthouse-bruk er tonet ned, siden repoet i dag bygger på Jest, Testing Library og Cypress.
+> Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, testveiledning, relaterte agenter og komponentmønstre først.
 
 Accessibility reviewer for `k9-punsj-frontend`. Focus on WCAG aligned UI changes, keyboard and focus flow, semantic HTML, labels, screen reader clarity, and safe handling of forms, modals, tables, and dynamic content. Coordinate with `@k9-punsj-front-aksel-agent`, `@k9-punsj-front-forfatter-agent`, and `@k9-punsj-front-security-agent` when accessibility overlaps with broader UI, copy, or security decisions.
 

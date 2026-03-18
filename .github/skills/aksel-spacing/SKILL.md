@@ -6,8 +6,8 @@ description: Responsive layout and spacing patterns for k9-punsj-frontend using 
 # Aksel spacing skill
 
 > Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Generiske eksempler er strammet inn for a passe repoets Aksel, Tailwind og lokale stylingregler.
-> Hvis skillen skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, versjonsforutsetninger og stylingregler forst.
+> Generiske eksempler er strammet inn for å passe repoets Aksel, Tailwind og lokale stylingregler.
+> Hvis skillen skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, versjonsforutsetninger og stylingregler først.
 
 Use this skill when the task is about layout, spacing, responsive structure, or spacing cleanup in `k9-punsj-frontend`.
 

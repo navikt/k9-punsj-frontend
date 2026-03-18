@@ -6,8 +6,8 @@ description: Pre commit and pre PR security review for k9-punsj-frontend with fo
 # Security review skill
 
 > Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Backend tunge eksempler for Kotlin, SQL og generiske tjenestemonstrer er fjernet med vilje.
-> Hvis skillen skal gjenbrukes i et annet repo, oppdater hotspots, auth flyt, deploy kontekst og sikkerhetsregler forst.
+> Backend tunge eksempler for Kotlin, SQL og generiske tjenestemønstre er fjernet med vilje.
+> Hvis skillen skal gjenbrukes i et annet repo, oppdater hotspots, auth flyt, deploy kontekst og sikkerhetsregler først.
 
 Use this skill before commit, pull request, or merge when the change affects frontend data flow, auth, workflows, dependencies, runtime config, or logging.
 

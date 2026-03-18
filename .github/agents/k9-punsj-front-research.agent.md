@@ -26,10 +26,10 @@ tools:
 # Research agent
 
 > Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Basert pa upstream agenten `research.agent.md` fra `navikt/copilot`:
+> Basert på upstream agenten `research.agent.md` fra `navikt/copilot`:
 > `https://raw.githubusercontent.com/navikt/copilot/main/.github/agents/research.agent.md`
-> Backend og plattformgeneriske eksempler er strammet inn for a passe dette frontend repoet.
-> Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, nyttige filer, relaterte agenter og domeneordforrad forst.
+> Backend og plattformgeneriske eksempler er strammet inn for å passe dette frontend repoet.
+> Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, nyttige filer, relaterte agenter og domeneordforråd først.
 
 Research specialist for `k9-punsj-frontend`. Focus on understanding code paths, tracing data flow, identifying existing patterns, and gathering the right repo context before implementation or review. Coordinate with `@k9-punsj-front-aksel-agent`, `@k9-punsj-front-forfatter-agent`, `@k9-punsj-front-auth-agent`, `@k9-punsj-front-nais-agent`, `@k9-punsj-front-observability-agent`, and `@k9-punsj-front-security-agent` when a narrower specialist should take over.
 

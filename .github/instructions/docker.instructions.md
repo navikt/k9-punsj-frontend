@@ -14,7 +14,7 @@ Docker-endringer i dette repoet skal følge den etablerte container-flyten: appl
 
 ## Repo Docker context
 
-- Repoet har én hoved-[Dockerfile](/Users/aleksei/utvikling/k9-punsj-frontend/Dockerfile).
+- Repoet har én hoved-`Dockerfile`.
 - Produksjonsbildet bygges i GitHub Actions med `nais/docker-build-push`.
 - Dagens Dockerfile bruker en distroless Node runtime og kjører som non-root.
 - Build-artifakter som `dist/`, `server.js` og runtime-filer kopieres inn i bildet etter at build er gjort utenfor Dockerfile.

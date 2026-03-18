@@ -40,7 +40,7 @@ Examples:
 ```text
 chore: legg til repo skills for copilot
 docs: oppdater readme for arbeidsflyt og copilot
-fix(forms): håndter tom soeknadId ved korrigering
+fix(forms): handter tom soeknadId ved korrigering
 chore(nais): oppdater deployflyt for preprod
 ```
 
@@ -71,7 +71,7 @@ chore(nais): oppdater deployflyt for preprod
 Use scope only when it genuinely adds clarity:
 
 ```text
-fix(auth): håndter utlop ved tokenfornyelse
+fix(auth): handter utlop ved tokenfornyelse
 docs(readme): oppdater lokal utviklingsflyt
 chore(copilot): legg til repo instrukser for utvalgte filer
 ```
