@@ -27,9 +27,8 @@ This file supplements the repository `AGENTS.md`.
 - Add or update the smallest relevant test when a code change affects behavior or regression risk.
 - Run the most relevant checks for the changed area when possible, and say clearly if they were not run.
 - When asked for a pull request summary or description, follow `.github/pull_request_template.md` and keep the text short and factual.
-- For noticeable repo or setup changes, add a short factual entry to `docs/CHANGELOG.md` when relevant.
+- For noticeable repo or setup changes, add a short factual entry to `docs/CHANGELOG.md` under the current `Unreleased` section when relevant.
 - Do not include personopplysninger, secrets, tokens or sensitive internal data in prompts, examples, fixtures or screenshots.
-- Treat Copilot as an implementation aid, not as a replacement for engineering judgment, tests or code review.
 - In GitHub coding agent sessions, creating or updating the Copilot pull request counts as explicit permission to commit and push to that pull request branch.
 
 ## Writing
