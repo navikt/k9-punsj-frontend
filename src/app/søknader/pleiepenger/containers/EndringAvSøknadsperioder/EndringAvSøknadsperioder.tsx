@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { Accordion, Alert, ErrorMessage, Label, Textarea } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
-import { findPeriodOverlaps, formatPeriodeForDisplay } from 'app/utils/periodOverlapUtils';
+import { findPeriodOverlaps, formatPeriodeForDisplay, hasOverlapWarnings } from 'app/utils/periodOverlapUtils';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
@@ -22,10 +22,18 @@ interface Props {
 
 export const buildEndringAvSoknadsperioderUpdate = (
     perioder: IPeriode[],
+    eksisterendePerioder: IPeriode[] = [],
 ): Partial<Pick<IPSBSoknad, 'trekkKravPerioder' | 'begrunnelseForInnsending'>> => {
     if (perioder.length === 0) {
         return {
             trekkKravPerioder: [],
+            begrunnelseForInnsending: undefined,
+        };
+    }
+
+    if (!hasOverlapWarnings(findPeriodOverlaps(perioder, eksisterendePerioder))) {
+        return {
+            trekkKravPerioder: perioder,
             begrunnelseForInnsending: undefined,
         };
     }
@@ -74,7 +82,7 @@ const EndringAvSøknadsperioder = (props: Props) => {
         const hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode = affectedByMiddle.length > 0;
         const hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode = affectedByEnd.length > 0;
 
-        if (!hasCompletelyRemovedPeriods && !hasPeriodeSomSkalFjernesIStartenAvSøknadsperiode && !hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && !hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode) {
+        if (!hasOverlapWarnings({ completelyRemoved, affectedByStart, affectedByMiddle, affectedByEnd })) {
             return null;
         }
 
@@ -124,14 +132,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
                         Du vil fjerne en periode i <b>starten</b> av eksisterende søknadsperiode. Dette vil føre til
                         nytt skjæringstidspunkt i behandlingen, og vil endre tidspunktet vi regner rett til ytelse fra.
                         Utfallet i behandlingen kan bli avslag selv om det tidligere var innvilget.
-                        <div className="mt-2">
-                            <b>Berørte perioder:</b>
-                            <ul className="mt-1 mb-2">
-                                {affectedByStart.map((periode, index) => (
-                                    <li key={index}>{formatPeriodeForDisplay(periode)}</li>
-                                ))}
-                            </ul>
-                        </div>
                     </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesIMidtenAvSøknadsperiode && (
@@ -140,14 +140,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
                         nye skjæringstidspunkt i behandlingen, og vi vil regne rett til ytelse fra flere ulike
                         tidspunkt. Utfallet i behandlingen kan bli avslag for en eller flere perioder som tidligere var
                         innvilget.
-                        <div className="mt-2">
-                            <b>Berørte perioder:</b>
-                            <ul className="mt-1 mb-2">
-                                {affectedByMiddle.map((periode, index) => (
-                                    <li key={index}>{formatPeriodeForDisplay(periode)}</li>
-                                ))}
-                            </ul>
-                        </div>
                     </Alert>
                 )}
                 {hasPeriodeSomSkalFjernesISluttenAvSøknadsperiode && (
@@ -155,14 +147,6 @@ const EndringAvSøknadsperioder = (props: Props) => {
                         Du vil fjerne en periode i <b>slutten</b> av en eksisterende søknadsperiode. Vilkår for perioden
                         du fjerner vil ikke bli vurdert. Dette vil ikke påvirke resultatet i saken for andre perioder
                         enn den du fjerner.
-                        <div className="mt-2">
-                            <b>Berørte perioder:</b>
-                            <ul className="mt-1 mb-2">
-                                {affectedByEnd.map((periode, index) => (
-                                    <li key={index}>{formatPeriodeForDisplay(periode)}</li>
-                                ))}
-                            </ul>
-                        </div>
                     </Alert>
                 )}
                 {hasAnyAlerts && begrunnelsesfelt}
@@ -187,9 +171,14 @@ const EndringAvSøknadsperioder = (props: Props) => {
                 <Periodepaneler
                     periods={soknad.trekkKravPerioder || []}
                     initialPeriode={{ fom: '', tom: '' }}
-                    editSoknad={(perioder) => updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder))}
+                    editSoknad={(perioder) =>
+                        updateSoknad(buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder))
+                    }
                     editSoknadState={(perioder, showStatus) => {
-                        updateSoknadState(buildEndringAvSoknadsperioderUpdate(perioder), showStatus);
+                        updateSoknadState(
+                            buildEndringAvSoknadsperioderUpdate(perioder, eksisterendePerioder),
+                            showStatus,
+                        );
                         setSelectedPeriods(perioder);
                     }}
                     textLeggTil="skjema.perioder.legg_til"

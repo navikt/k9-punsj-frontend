@@ -12,6 +12,17 @@ export interface PeriodOverlapResult {
     affectedByEnd: IPeriode[];
 }
 
+export const hasOverlapWarnings = ({
+    completelyRemoved,
+    affectedByStart,
+    affectedByMiddle,
+    affectedByEnd,
+}: PeriodOverlapResult): boolean =>
+    completelyRemoved.length > 0 ||
+    affectedByStart.length > 0 ||
+    affectedByMiddle.length > 0 ||
+    affectedByEnd.length > 0;
+
 /**
  * Formats a period for display in DD.MM.YYYY - DD.MM.YYYY format
  */
