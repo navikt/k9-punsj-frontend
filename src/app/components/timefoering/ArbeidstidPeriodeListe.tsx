@@ -86,7 +86,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                 <FieldArray
                     name="perioder"
                     render={(arrayHelpers) => (
-                        <div>
+                        <div data-test-id="arbeidstid-periode-liste">
                             <Heading level="1" size="medium">
                                 Periode med jobb
                             </Heading>
