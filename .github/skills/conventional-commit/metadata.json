@@ -1,0 +1,14 @@
+{
+  "domain": "repo-workflow",
+  "tags": ["git", "commit", "conventional-commits", "workflow", "copilot"],
+  "examples": [
+    {
+      "prompt": "Suggest a commit message for these staged Copilot setup changes",
+      "scenario": "Repo tooling and Copilot setup"
+    },
+    {
+      "prompt": "Write a dry Norwegian conventional commit for this README and workflow update",
+      "scenario": "Documentation and CI changes"
+    }
+  ]
+}
