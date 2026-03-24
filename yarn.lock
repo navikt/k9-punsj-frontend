@@ -4183,6 +4183,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/react-dom-shim@npm:10.2.19":
+  version: 10.2.19
+  resolution: "@storybook/react-dom-shim@npm:10.2.19"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    storybook: ^10.2.19
+  checksum: 10/20e59022b776f17444d95bc97c982648a5610a3731a59a0df0ad3c0bc521620ad90349e36377ade3b13327e79b2949ded5413f15e710ce3f1860cdf22fdd2fa4
+  languageName: node
+  linkType: hard
+
 "@storybook/react-webpack5@npm:10.2.15":
   version: 10.2.15
   resolution: "@storybook/react-webpack5@npm:10.2.15"
@@ -4218,6 +4229,25 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/f345d9f2d1def0665fc489fdbd4546cc475f7ea58c76148078b37b8db3dadba4eab1fe354d31e2649d75ba10b83f07f388f1888ba26490d703a445f5bbe9f490
+  languageName: node
+  linkType: hard
+
+"@storybook/react@npm:10.2.19":
+  version: 10.2.19
+  resolution: "@storybook/react@npm:10.2.19"
+  dependencies:
+    "@storybook/global": "npm:^5.0.0"
+    "@storybook/react-dom-shim": "npm:10.2.19"
+    react-docgen: "npm:^8.0.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    storybook: ^10.2.19
+    typescript: ">= 4.9.x"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/c938e1d0c90e39d340bbcb865958cc4c3b0b2555e62c066a8f6586e2cabe9bd0db23f90331b60f25b7ec853958f25b1c47a6b50311f2f8fa8038600311ee717a
   languageName: node
   linkType: hard
 
@@ -12043,7 +12073,7 @@ __metadata:
     "@sentry/cli": "npm:3.3.3"
     "@sentry/react": "npm:10.43.0"
     "@storybook/addon-webpack5-compiler-swc": "npm:4.0.2"
-    "@storybook/react": "npm:10.2.15"
+    "@storybook/react": "npm:10.2.19"
     "@storybook/react-webpack5": "npm:10.2.15"
     "@tailwindcss/postcss": "npm:4.2.1"
     "@tanstack/react-query": "npm:5.90.21"
