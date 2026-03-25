@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Heading } from '@navikt/ds-react';
 import {
     ArbeidstidPeriodeMedTimer,
     IArbeidstidPeriodeMedTimer,
     IPeriode,
     ITimerOgMinutterString,
     Periode,
-    Periodeinfo,
 } from 'app/models/types';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { formats, removeDatesFromPeriods } from 'app/utils';
 import { arbeidstidPeriodeTilKalenderdag } from 'app/utils/mappingUtils';
-import VerticalSpacer from '../VerticalSpacer';
-import DateContent from '../calendar/DateContent';
-import TidsbrukKalenderContainer from '../calendar/TidsbrukKalenderContainer';
+import KalenderMedModal from '../calendar/KalenderMedModal';
 import ArbeidstidPeriodeListe from '../timefoering/ArbeidstidPeriodeListe';
 import FaktiskOgNormalTid from '../timefoering/FaktiskOgNormalTid';
 
@@ -27,165 +24,71 @@ export interface ArbeidstidKalenderProps {
     søknadsperioder: IPeriode[];
 }
 
-// Wrapper-komponent for FaktiskOgNormalTid
-const FaktiskOgNormalTidWrapper = (props: {
-    heading: string;
-    lagre: (
-        params: { faktiskArbeidPerDag: ITimerOgMinutterString; jobberNormaltPerDag: ITimerOgMinutterString },
-        selectedDates: Date[],
-    ) => void;
-    toggleModal?: () => void;
-    selectedDates?: Date[];
-    clearSelectedDates?: () => void;
-}) => (
-    <FaktiskOgNormalTid
-        {...props}
-        toggleModal={props.toggleModal || (() => {})}
-        selectedDates={props.selectedDates || []}
-    />
-);
-
 const ArbeidstidKalender = ({
     arbeidstidInfo,
     updateSoknad,
     updateSoknadState,
     søknadsperioder = [],
 }: ArbeidstidKalenderProps) => {
-    const [visArbeidstidLengrePerioder, setVisArbeidstidLengrePerioder] = useState(false);
-    // Holder en kopi av perioder som vises i modalen
-    const [perioderForModal, setPerioderForModal] = useState<IArbeidstidPeriodeMedTimer[]>([]);
-
-    // Oppdaterer perioderForModal når arbeidstidInfo endres
-    useEffect(() => {
-        if (arbeidstidInfo && arbeidstidInfo.perioder) {
-            // Kopier alle perioder fra arbeidstidInfo
-            const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-            setPerioderForModal(perioder);
-        }
-    }, [arbeidstidInfo, arbeidstidInfo.perioder]);
-
-    const toggleVisArbeidstidLengrePerioder = () => {
-        // Sikrer at vi har oppdaterte perioder når modalen åpnes
-        if (!visArbeidstidLengrePerioder) {
-            // Når modalen åpnes, oppdaterer vi perioderForModal med de nyeste data fra arbeidstidInfo
-            if (arbeidstidInfo && arbeidstidInfo.perioder) {
-                const perioder = arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p));
-                setPerioderForModal(perioder);
-            }
-        }
-        setVisArbeidstidLengrePerioder(!visArbeidstidLengrePerioder);
+    const save = (perioder: IArbeidstidPeriodeMedTimer[]) => {
+        updateSoknad(perioder);
+        updateSoknadState?.(perioder);
     };
 
-    const slettDager =
-        (opprinneligePerioder: Periodeinfo<IArbeidstidPeriodeMedTimer>[]) => (selectedDates?: Date[]) => {
-            if (!selectedDates) {
-                return;
-            }
-
-            const perioderFiltert = removeDatesFromPeriods(opprinneligePerioder, selectedDates).map(
-                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
-            );
-
-            updateSoknad(perioderFiltert);
-            if (updateSoknadState) {
-                updateSoknadState(perioderFiltert);
-            }
-
-            // Oppdaterer også perioder for modal
-            setPerioderForModal(perioderFiltert);
-        };
-
     const lagreTimer = (
-        {
-            faktiskArbeidPerDag,
-            jobberNormaltPerDag,
-        }: {
-            faktiskArbeidPerDag: ITimerOgMinutterString;
-            jobberNormaltPerDag: ITimerOgMinutterString;
-        },
+        { faktiskArbeidPerDag, jobberNormaltPerDag }: { faktiskArbeidPerDag: ITimerOgMinutterString; jobberNormaltPerDag: ITimerOgMinutterString },
         selectedDates: Date[],
     ) => {
-        const eksisterendePerioderUtenSelectedDates = removeDatesFromPeriods(
-            arbeidstidInfo.perioder,
-            selectedDates,
-        ).map((v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v));
-
-        const payload = selectedDates.map((day: Date) => ({
-            periode: new Periode({
-                fom: dayjs(day).format(formats.YYYYMMDD),
-                tom: dayjs(day).format(formats.YYYYMMDD),
-            }),
+        const eksisterende = removeDatesFromPeriods(arbeidstidInfo.perioder, selectedDates).map(
+            (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
+        );
+        const nye = selectedDates.map((day) => ({
+            periode: new Periode({ fom: dayjs(day).format(formats.YYYYMMDD), tom: dayjs(day).format(formats.YYYYMMDD) }),
             faktiskArbeidPerDag,
             jobberNormaltPerDag,
         }));
-
-        const nyePerioder = [...eksisterendePerioderUtenSelectedDates, ...payload];
-
-        updateSoknad(nyePerioder);
-        if (updateSoknadState) {
-            updateSoknadState(nyePerioder);
-        }
-
-        setPerioderForModal(nyePerioder);
+        save([...eksisterende, ...nye]);
     };
 
-    const lagrePerioder = (nyePerioder: IArbeidstidPeriodeMedTimer[]) => {
-        // Ved lagring erstatter vi alle periodene med de nye fra modalvinduet
-        updateSoknad(nyePerioder);
-        if (updateSoknadState) {
-            updateSoknadState(nyePerioder);
-        }
-
-        // Oppdaterer også perioder for modal
-        setPerioderForModal(nyePerioder);
+    const slettDager = (selectedDates?: Date[]) => {
+        if (!selectedDates) return;
+        save(
+            removeDatesFromPeriods(arbeidstidInfo.perioder, selectedDates).map(
+                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
+            ),
+        );
     };
 
     return (
         <div className="mt-6">
-            <div className="mb-4">
-                <Heading size="xsmall">
-                    <FormattedMessage id="skjema.arbeid.arbeidstidKalender.header" />
-                </Heading>
-            </div>
+            <Heading size="xsmall" className="mb-4">
+                <FormattedMessage id="skjema.arbeid.arbeidstidKalender.header" />
+            </Heading>
 
-            <Button variant="secondary" onClick={toggleVisArbeidstidLengrePerioder}>
-                <FormattedMessage id="skjema.arbeid.registrerArbeidstidLengrePeriode" />
-            </Button>
-
-            <VerticalSpacer twentyPx />
-
-            {visArbeidstidLengrePerioder && (
-                <Modal
-                    open={true}
-                    onClose={() => setVisArbeidstidLengrePerioder(false)}
-                    aria-label="Periode med jobb modal"
-                    className="max-w-[550px] min-w-[550px]"
-                >
-                    <Modal.Body data-test-id="arbeidstid-periode-liste">
-                        <ArbeidstidPeriodeListe
-                            arbeidstidPerioder={perioderForModal}
-                            soknadsperioder={søknadsperioder}
-                            lagre={(periodeInfo) => {
-                                lagrePerioder(periodeInfo);
-                                toggleVisArbeidstidLengrePerioder();
-                            }}
-                            avbryt={toggleVisArbeidstidLengrePerioder}
-                        />
-                    </Modal.Body>
-                </Modal>
-            )}
-
-            {!!søknadsperioder.length && (
-                <TidsbrukKalenderContainer
-                    gyldigePerioder={søknadsperioder}
-                    ModalContent={<FaktiskOgNormalTidWrapper heading="Registrer arbeidstid" lagre={lagreTimer} />}
-                    kalenderdager={arbeidstidInfo.perioder
-                        .map((periode) => new ArbeidstidPeriodeMedTimer(periode))
-                        .flatMap((periode) => arbeidstidPeriodeTilKalenderdag(periode))}
-                    slettPeriode={slettDager(arbeidstidInfo.perioder)}
-                    dateContentRenderer={DateContent}
-                />
-            )}
+            <KalenderMedModal
+                gyldigePerioder={søknadsperioder}
+                kalenderdager={arbeidstidInfo.perioder
+                    .map((p) => new ArbeidstidPeriodeMedTimer(p))
+                    .flatMap(arbeidstidPeriodeTilKalenderdag)}
+                tidModal={
+                    <FaktiskOgNormalTid
+                        heading="Registrer arbeidstid"
+                        lagre={lagreTimer}
+                        toggleModal={() => {}}
+                        selectedDates={[]}
+                    />
+                }
+                periodeListeModal={(close) => (
+                    <ArbeidstidPeriodeListe
+                        arbeidstidPerioder={arbeidstidInfo.perioder.map((p) => new ArbeidstidPeriodeMedTimer(p))}
+                        soknadsperioder={søknadsperioder}
+                        lagre={(periodeInfo) => { save(periodeInfo); close(); }}
+                        avbryt={close}
+                    />
+                )}
+                slettPeriode={slettDager}
+                modalLabel="Periode med jobb modal"
+            />
         </div>
     );
 };

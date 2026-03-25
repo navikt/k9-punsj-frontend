@@ -1,0 +1,167 @@
+import React, { useState } from 'react';
+
+import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
+
+import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
+import { ITimerOgMinutterString } from 'app/models/types';
+import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
+import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
+import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
+
+export interface FraværTidPayload {
+    tidsformat: Tidsformat;
+    fraværTimerPerDag?: string;
+    jobberNormaltTimerPerDag?: string;
+    fraværPerDag?: ITimerOgMinutterString;
+    jobberNormaltPerDag?: ITimerOgMinutterString;
+    selectedDates?: Date[];
+}
+
+interface Props {
+    heading: string;
+    selectedDates?: Date[];
+    lagre: (payload: FraværTidPayload) => void;
+    clearSelectedDates?: () => void;
+    toggleModal?: () => void;
+}
+
+const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => {}, toggleModal = () => {} }: Props) => {
+    const [normalTimer, setNormalTimer] = useState('');
+    const [normalMinutter, setNormalMinutter] = useState('');
+    const [normalDesimaler, setNormalDesimaler] = useState('');
+
+    const [fraværTimer, setFraværTimer] = useState('');
+    const [fraværMinutter, setFraværMinutter] = useState('');
+    const [fraværDesimaler, setFraværDesimaler] = useState('');
+
+    const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
+
+    const handleToggle = (v: Tidsformat) => {
+        setTidsformat(v);
+        if (v === Tidsformat.Desimaler) {
+            setNormalDesimaler(timerOgMinutterTilTimerMedDesimaler({ timer: normalTimer, minutter: normalMinutter }));
+            setFraværDesimaler(timerOgMinutterTilTimerMedDesimaler({ timer: fraværTimer, minutter: fraværMinutter }));
+        } else {
+            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(normalDesimaler));
+            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(fraværDesimaler));
+            setNormalTimer(nt); setNormalMinutter(nm);
+            setFraværTimer(ft); setFraværMinutter(fm);
+        }
+    };
+
+    const emptyToZero = (v: string) => v || '0';
+
+    const handleLagre = () => {
+        if (tidsformat === Tidsformat.TimerOgMin) {
+            lagre({
+                tidsformat,
+                fraværPerDag: { timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) },
+                jobberNormaltPerDag: { timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) },
+                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) }),
+                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) }),
+                selectedDates,
+            });
+        } else {
+            const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(emptyToZero(fraværDesimaler)));
+            const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(emptyToZero(normalDesimaler)));
+            lagre({
+                tidsformat,
+                fraværTimerPerDag: emptyToZero(fraværDesimaler),
+                jobberNormaltTimerPerDag: emptyToZero(normalDesimaler),
+                fraværPerDag: { timer: ft, minutter: fm },
+                jobberNormaltPerDag: { timer: nt, minutter: nm },
+                selectedDates,
+            });
+        }
+        toggleModal();
+        clearSelectedDates();
+    };
+
+    return (
+        <div className="ml-4 mt-4">
+            <Heading size="small">{heading}</Heading>
+            <div className="mt-6">
+                <ToggleGroup label="Hvordan vil du oppgi tid?" size="small" value={tidsformat} onChange={handleToggle}>
+                    <ToggleGroup.Item value={Tidsformat.TimerOgMin}>Timer og minutter</ToggleGroup.Item>
+                    <ToggleGroup.Item value={Tidsformat.Desimaler}>Desimaltall</ToggleGroup.Item>
+                </ToggleGroup>
+            </div>
+
+            {tidsformat === Tidsformat.TimerOgMin && (
+                <div className="mt-6 flex gap-8">
+                    <div>
+                        <TimerOgMinutter
+                            label="Normal arbeidstid"
+                            timer={normalTimer}
+                            minutter={normalMinutter}
+                            onChangeTimer={setNormalTimer}
+                            onChangeMinutter={setNormalMinutter}
+                            onBlur={() => {}}
+                        />
+                        <div className="mt-1">
+                            <UtregningArbeidstid arbeidstid={{ timer: normalTimer, minutter: normalMinutter }} />
+                        </div>
+                    </div>
+                    <div>
+                        <TimerOgMinutter
+                            label="Fravær"
+                            timer={fraværTimer}
+                            minutter={fraværMinutter}
+                            onChangeTimer={setFraværTimer}
+                            onChangeMinutter={setFraværMinutter}
+                            onBlur={() => {}}
+                        />
+                        <div className="mt-1">
+                            <UtregningArbeidstid
+                                arbeidstid={{ timer: fraværTimer, minutter: fraværMinutter }}
+                                normalArbeidstid={{ timer: normalTimer, minutter: normalMinutter }}
+                                prosentLabel="fravær"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {tidsformat === Tidsformat.Desimaler && (
+                <div className="mt-6 flex gap-8">
+                    <div>
+                        <TimerMedDesimaler
+                            label="Normal arbeidstid i timer"
+                            value={normalDesimaler}
+                            onChange={(v) => {
+                                setNormalDesimaler(v);
+                                const [t, m] = timerMedDesimalerTilTimerOgMinutter(Number(v));
+                                setNormalTimer(t); setNormalMinutter(m);
+                            }}
+                        />
+                        <div className="mt-1">
+                            <UtregningArbeidstidDesimaler arbeidstid={normalDesimaler} />
+                        </div>
+                    </div>
+                    <div>
+                        <TimerMedDesimaler
+                            label="Fravær i timer"
+                            value={fraværDesimaler}
+                            onChange={(v) => {
+                                setFraværDesimaler(v);
+                                const [t, m] = timerMedDesimalerTilTimerOgMinutter(Number(v));
+                                setFraværTimer(t); setFraværMinutter(m);
+                            }}
+                        />
+                        <div className="mt-1">
+                            <UtregningArbeidstidDesimaler arbeidstid={fraværDesimaler} normalArbeidstid={normalDesimaler} prosentLabel="fravær" />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="mt-6 flex gap-3">
+                <Button size="small" onClick={handleLagre}>Lagre</Button>
+                <Button size="small" variant="secondary" onClick={toggleModal}>Avbryt</Button>
+            </div>
+        </div>
+    );
+};
+
+export default FraværTid;

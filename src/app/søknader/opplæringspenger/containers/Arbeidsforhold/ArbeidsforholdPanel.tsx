@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box } from '@navikt/ds-react';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import FraværKalender from 'app/components/fravaer/FraværKalender';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -13,18 +13,18 @@ import { SelvstendigNaeringsdrivendeOpptjening } from 'app/models/types';
 import { Arbeidstaker } from 'app/models/types/Arbeidstaker';
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
-import { IArbeidstidPeriodeMedTimer, IPeriode } from 'app/models/types/Periode';
+import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import intlHelper from 'app/utils/intlUtils';
 
-import { OLPSoknad } from '../../models/types/OLPSoknad';
-import VerticalSpacer from '../VerticalSpacer';
-import { CountrySelect } from '../country-select/CountrySelect';
-import CheckboxGroupFormik from '../formikInput/CheckboxGroupFormik';
-import TextAreaFormik from '../formikInput/TextAreaFormik';
-import TextFieldFormik from '../formikInput/TextFieldFormik';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import VerticalSpacer from '../../../../components/VerticalSpacer';
+import { CountrySelect } from '../../../../components/country-select/CountrySelect';
+import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
+import TextAreaFormik from '../../../../components/formikInput/TextAreaFormik';
+import TextFieldFormik from '../../../../components/formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatovelgerFormik from '../skjema/Datovelger/DatovelgerFormik';
+import DatovelgerFormik from '../../../../components/skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -122,21 +122,17 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         <hr />
                         <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
                         <Alert size="small" variant="info">
-                            {intlHelper(intl, 'skjema.arbeidstid.info')}
+                            {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                         </Alert>
                     </div>
 
-                    <Field name="arbeidstid.frilanserArbeidstidInfo.perioder">
-                        {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                            <ArbeidstidKalender
-                                søknadsperioder={søknadsperioder}
-                                updateSoknad={(perioder) => {
-                                    form.setFieldValue(field.name, [...perioder]);
-                                }}
-                                arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo}
-                            />
-                        )}
-                    </Field>
+                    <FraværKalender
+                        søknadsperioder={søknadsperioder}
+                        updateSoknad={(perioder) => {
+                            setFieldValue('arbeidstid.frilanserArbeidstidInfo.perioder', [...perioder]);
+                        }}
+                        arbeidstidInfo={values.arbeidstid?.frilanserArbeidstidInfo}
+                    />
                 </>
             )}
         </div>
@@ -354,23 +350,19 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
 
                     <Alert size="small" variant="info">
-                        {intlHelper(intl, 'skjema.arbeidstid.info')}
+                        {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                     </Alert>
                 </div>
 
                 <VerticalSpacer sixteenPx />
 
-                <Field name="arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder">
-                    {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                        <ArbeidstidKalender
-                            søknadsperioder={søknadsperioder}
-                            updateSoknad={(perioder) => {
-                                form.setFieldValue(field.name, [...perioder]);
-                            }}
-                            arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
-                        />
-                    )}
-                </Field>
+                <FraværKalender
+                    søknadsperioder={søknadsperioder}
+                    updateSoknad={(perioder) => {
+                        setFieldValue('arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder', [...perioder]);
+                    }}
+                    arbeidstidInfo={values.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}
+                />
 
                 {/* <UhaanderteFeilmeldinger
                     getFeilmeldinger={() =>

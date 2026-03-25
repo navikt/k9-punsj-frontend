@@ -38,12 +38,15 @@ const endreLandkodeTilLandnavnIPerioder = (perioder: ISoknadKvitteringBosteder) 
 export const formattereTimerForArbeidstakerPerioder = (perioder: IOLPSoknadKvitteringArbeidstidInfo) => {
     const kopiAvPerioder = JSON.parse(JSON.stringify(perioder));
     Object.keys(perioder).forEach((periode) => {
-        kopiAvPerioder[periode].jobberNormaltTimerPerDag = kopiAvPerioder[periode].jobberNormaltTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].jobberNormaltTimerPerDag)
-            : '0';
-        kopiAvPerioder[periode].faktiskArbeidTimerPerDag = kopiAvPerioder[periode].faktiskArbeidTimerPerDag
-            ? formatereTekstMedTimerOgMinutter(kopiAvPerioder[periode].faktiskArbeidTimerPerDag)
-            : '0';
+        const normalt = kopiAvPerioder[periode].jobberNormaltTimerPerDag;
+        const faktisk = kopiAvPerioder[periode].faktiskArbeidTimerPerDag;
+        kopiAvPerioder[periode].jobberNormaltTimerPerDag = normalt ? formatereTekstMedTimerOgMinutter(normalt) : '0';
+        kopiAvPerioder[periode].fraværTimerPerDag =
+            normalt && faktisk
+                ? formatereTekstMedTimerOgMinutter(
+                      dayjs.duration(normalt).subtract(dayjs.duration(faktisk)).toISOString(),
+                  )
+                : '0';
     });
     return kopiAvPerioder;
 };
@@ -277,9 +280,9 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                             tittel={[
                                                 'skjema.periode.overskrift',
                                                 'skjema.arbeid.arbeidstaker.timernormalt',
-                                                'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                                'skjema.arbeid.arbeidstaker.fraværPerDag',
                                             ]}
-                                            properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                                            properties={['jobberNormaltTimerPerDag', 'fraværTimerPerDag']}
                                         />
                                     </>
                                 );
@@ -320,9 +323,9 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                     tittel={[
                                         'skjema.periode.overskrift',
                                         'skjema.arbeid.arbeidstaker.timernormalt',
-                                        'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                        'skjema.arbeid.arbeidstaker.fraværPerDag',
                                     ]}
-                                    properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                                    properties={['jobberNormaltTimerPerDag', 'fraværTimerPerDag']}
                                 />
                             )}
                         </div>
@@ -350,9 +353,9 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                     tittel={[
                                         'skjema.periode.overskrift',
                                         'skjema.arbeid.arbeidstaker.timernormalt',
-                                        'skjema.arbeid.arbeidstaker.timerfaktisk',
+                                        'skjema.arbeid.arbeidstaker.fraværPerDag',
                                     ]}
-                                    properties={['jobberNormaltTimerPerDag', 'faktiskArbeidTimerPerDag']}
+                                    properties={['jobberNormaltTimerPerDag', 'fraværTimerPerDag']}
                                 />
                             )}
                         </div>

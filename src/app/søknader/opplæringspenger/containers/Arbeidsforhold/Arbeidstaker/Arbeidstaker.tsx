@@ -1,15 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
 import { useIntl } from 'react-intl';
 
-import { Field, FieldProps, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { Checkbox, Fieldset } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import FraværKalender from 'app/components/fravaer/FraværKalender';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
+import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import usePrevious from 'app/hooks/usePrevious';
-import { IArbeidstidPeriodeMedTimer, IPeriode, Periode } from 'app/models/types';
+import { IPeriode, Periode } from 'app/models/types';
 import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
 import { Arbeidstaker, OrgOrPers } from 'app/models/types/Arbeidstaker';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -18,7 +19,6 @@ import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
 import pfArbeidstakerReducer from './pfArbeidstakerReducer';
-import TextFieldFormik from '../../formikInput/TextFieldFormik';
 import ActionType from './actionTypes';
 
 interface Props {
@@ -244,17 +244,13 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     )}
                 </div>
             </div>
-            <Field name={`${name}.arbeidstidInfo.perioder`}>
-                {({ field, form }: FieldProps<IArbeidstidPeriodeMedTimer[]>) => (
-                    <ArbeidstidKalender
-                        søknadsperioder={søknadsperioder}
-                        updateSoknad={(perioder) => {
-                            form.setFieldValue(field.name, [...perioder]);
-                        }}
-                        arbeidstidInfo={arbeidstidInfo}
-                    />
-                )}
-            </Field>
+            <FraværKalender
+                søknadsperioder={søknadsperioder}
+                updateSoknad={(perioder) => {
+                    setFieldValue(`${name}.arbeidstidInfo.perioder`, [...perioder]);
+                }}
+                arbeidstidInfo={arbeidstidInfo}
+            />
         </Fieldset>
     );
 };
