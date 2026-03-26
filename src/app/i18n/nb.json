@@ -904,7 +904,7 @@
     "opprettJournalpost.textField.søkerIdentitetsnummer.label": "Søkers fødselsnummer",
     "opprettJournalpost.select.fagsakId.label": "Velg fagsak",
     "opprettJournalpost.select.fagsakId.option.velg": "Velg",
-    "opprettJournalpost.select.fagsakId.option": "{fagsakId} (K9 {sakstype}) {reservert}",
+    "opprettJournalpost.select.fagsakId.option": "{fagsakId} (K9 {sakstype}{behandlingsår}) {reservert}",
     "opprettJournalpost.alert.hentFagsaker.ingenFagsak": "Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.",
     "opprettJournalpost.alert.hentFagsaker.error": "Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.",
     "opprettJournalpost.textField.tittel.label": "Tittel",
