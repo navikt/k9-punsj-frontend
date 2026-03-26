@@ -66,6 +66,7 @@ Fagsak-modellen har et `behandlingsår`-felt som brukes for omsorgspenger (OMS/O
 - Changed files:
   - `src/app/opprett-journalpost/OpprettJournalpost.tsx`
   - `src/app/i18n/nb.json`
+  - `src/mocks/handlers.ts` — rettet `behandlingsAar` til `behandlingsår` i mock for `/api/k9-punsj/saker/hent`
   - `copilot-tasks/show-year-in-opprett-journalpost-fagsak-select.md`
 - Validation: `yarn lint` og `yarn tsc --noEmit` kjørt uten feil.
 - Remaining risks or follow ups: Ingen.
