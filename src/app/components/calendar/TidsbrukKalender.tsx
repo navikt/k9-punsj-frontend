@@ -217,7 +217,7 @@ export const TidsbrukKalender = ({
                         </div>
                         <Provider rootElement={kalenderRef.current || undefined}>
                             <Modal
-                                className="venstrestilt max-w-112.5 exempt-from-click-outside"
+                                className="venstrestilt max-w-[28.125rem] exempt-from-click-outside"
                                 open={visModal}
                                 onClose={() => {
                                     setVisModal(false);
@@ -226,7 +226,7 @@ export const TidsbrukKalender = ({
                                 aria-label="Modal"
                             >
                                 <Modal.Body>
-                                    {React.cloneElement(ModalContent, {
+                                    {visModal && React.cloneElement(ModalContent, {
                                         selectedDates,
                                         toggleModal,
                                         clearSelectedDates,

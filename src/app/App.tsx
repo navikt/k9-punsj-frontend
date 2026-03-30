@@ -90,11 +90,12 @@ const prepare = async () => {
     return Promise.resolve();
 };
 
-const middleware = [logger];
-
 const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleware),
+    middleware: (getDefaultMiddleware) => {
+        const defaultMiddleware = getDefaultMiddleware();
+        return process.env.NODE_ENV !== 'production' ? defaultMiddleware.concat(logger) : defaultMiddleware;
+    },
     // @ts-ignore
     preloadedState: window.Cypress ? window.__initialState__ : undefined,
     devTools: process.env.NODE_ENV !== 'production',

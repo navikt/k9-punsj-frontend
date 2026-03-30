@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import classNames from 'classnames';
 import React, { forwardRef, useId } from 'react';
 
 import { Radio as AkselRadio, RadioGroup as AkselRadioGroup } from '@navikt/ds-react';
@@ -51,7 +51,7 @@ const LegacyRadio = forwardRef<HTMLInputElement, LegacyRadioProps>(
 
     const radio = (
         <div
-            className={clsx('legacy-radio-panel', className, {
+            className={classNames('legacy-radio-panel', className, {
                 'legacy-radio-panel--checked': !!checked && !disabled,
                 'legacy-radio-panel--disabled': !!disabled,
                 'legacy-radio-panel--error': hasError,

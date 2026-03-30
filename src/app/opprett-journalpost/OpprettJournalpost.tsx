@@ -150,13 +150,14 @@ const OpprettJournalpost: React.FC = () => {
                                 )}
                             </option>
 
-                            {fagsaker.map(({ fagsakId, sakstype, reservert }) => (
+                            {fagsaker.map(({ fagsakId, sakstype, reservert, behandlingsår }) => (
                                 <option key={fagsakId} value={fagsakId}>
                                     <FormattedMessage
                                         id="opprettJournalpost.select.fagsakId.option"
                                         values={{
                                             fagsakId,
                                             sakstype: finnVisningsnavnForSakstype(sakstype),
+                                            behandlingsår: behandlingsår ? ` ${behandlingsår}` : '',
                                             reservert: reservert ? '(reservert)' : '',
                                         }}
                                     />
