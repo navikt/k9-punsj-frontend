@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import classNames from 'classnames';
 import React, { forwardRef, useId } from 'react';
 
 import { Checkbox as AkselCheckbox } from '@navikt/ds-react';
@@ -62,7 +62,7 @@ const LegacyCheckbox = forwardRef<HTMLInputElement, LegacyCheckboxProps>(
 
         return (
             <div
-                className={clsx('legacy-checkbox-panel', className, {
+                className={classNames('legacy-checkbox-panel', className, {
                     'legacy-checkbox-panel--checked': resolvedChecked && !disabled,
                     'legacy-checkbox-panel--disabled': !!disabled,
                     'legacy-checkbox-panel--error': hasError,

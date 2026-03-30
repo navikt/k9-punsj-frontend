@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import classNames from 'classnames';
 import React from 'react';
 
 import { CheckboxGroup as AkselCheckboxGroup } from '@navikt/ds-react';
@@ -66,7 +66,7 @@ const LegacyCheckboxGroup = ({
             {...groupProps}
             disabled={disabled}
             legend={legend ?? ''}
-            className={clsx('legacy-checkbox-group', className)}
+            className={classNames('legacy-checkbox-group', className)}
             value={selectedValues}
             error={groupError}
         >
@@ -97,7 +97,7 @@ const LegacyCheckboxGroup = ({
                         subtext={subtext}
                         checked={optionCheckedValue ?? isChecked}
                         defaultChecked={optionDefaultCheckedValue}
-                        className={clsx('legacy-checkbox-group__item', optionClassName)}
+                        className={classNames('legacy-checkbox-group__item', optionClassName)}
                         feil={hasOptionError}
                         disabled={disabled || checkboxProps.disabled}
                         onChange={(event) => {
