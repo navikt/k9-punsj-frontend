@@ -4,6 +4,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Package cleanup (2026-03-30)
+
+- Fjernet ni ubrukte eller redundante devDependencies fra rotmanifestet, blant annet gamle typepakker og ubrukt Jest, Babel og webpack-relatert tooling.
+- Verifiserte cleanupen med grønn `yarn lint` og grønn `yarn test --maxWorkers=2`.
+
 ### Opprett journalpost (2026-03-30)
 
 - Viser `behandlingsår` i fagsak-valgene på `Opprett journalpost` når verdien finnes på fagsaken.
