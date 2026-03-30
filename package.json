@@ -106,7 +106,7 @@
         "css-loader": "7.1.4",
         "cypress": "15.13.0",
         "cypress-wait-until": "3.0.2",
-        "eslint": "9.39.4",
+        "eslint": "10.1.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-import-resolver-node": "0.3.9",
         "eslint-import-resolver-typescript": "4.4.4",
