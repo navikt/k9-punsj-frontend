@@ -8,6 +8,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Pinned eksterne GitHub Actions og reusable workflows i `.github/workflows/**` til konkrete commit SHA-er, blant annet `actions/*`, `cypress-io/github-action`, `nais/*` og `navikt/sif-gha-workflows` sin `trivy`-workflow.
 - Fjernet flytende referanser som `@main` og brede versjonstaggar fra workflowene, slik at CI-oppsettet ikke automatisk følger nye upstream-endringer.
+- Justerte `trivy`-workflowen til SHA for daværende `main` i `navikt/sif-gha-workflows`, slik at pinningen beholder samme oppførsel som før og ikke låser repoet til en eldre `v1`-variant.
 
 ### Dependency remediation (2026-03-30)
 
