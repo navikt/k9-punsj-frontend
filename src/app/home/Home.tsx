@@ -142,7 +142,7 @@ export const Home: React.FC = () => {
                     />
                 )}
 
-                {journalpostRequestError?.message && (
+                {journalpostRequestError && (
                     <Alert size="small" variant="error">
                         <FormattedMessage id="søk.jp.internalServerError" />
                     </Alert>

@@ -8,11 +8,17 @@ import { decodeJwt } from 'jose';
 
 import * as headers from './src/headers.js';
 import logger from './src/log.js';
+import { loadServerEnv } from './src/load-env.js';
+
+import { envVariables } from './envVariables.js';
+
+loadServerEnv();
 
 // for debugging during development
-import config from './src/config.js';
-import reverseProxy from './src/reverse-proxy.js';
-import { envVariables } from './envVariables.js';
+const [{ default: config }, { default: reverseProxy }] = await Promise.all([
+    import('./src/config.js'),
+    import('./src/reverse-proxy.js'),
+]);
 
 const server = express();
 const { port } = config.server;

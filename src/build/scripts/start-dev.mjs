@@ -1,11 +1,13 @@
 import webpack from 'webpack';
-// eslint-disable-next-line import/default
 import WebpackDevServer from 'webpack-dev-server';
-import { config } from 'dotenv';
-import webpackConfig from '../webpack/webpack.config.dev.mjs';
-import configureDevServer from '../webpack/devserver.config.mjs';
+import { loadRootEnv } from './load-env.mjs';
 
-config();
+loadRootEnv();
+
+const [{ default: webpackConfig }, { default: configureDevServer }] = await Promise.all([
+    import('../webpack/webpack.config.dev.mjs'),
+    import('../webpack/devserver.config.mjs'),
+]);
 
 const compiler = webpack(webpackConfig);
 const server = new WebpackDevServer(configureDevServer({}), compiler);

@@ -5,6 +5,10 @@ export default {
             selvstendigNaeringsdrivende: true,
             frilanser: true,
         },
+        medlemskap: 'ja',
+        utenlandsopphold: 'nei',
+        signatur: 'ja',
+        harSoekerDekketOmsorgsdager: 'nei',
     },
     barn: [
         {
@@ -25,6 +29,7 @@ export default {
     mottattDato: '2020-10-12',
     journalposter: ['201'],
     klokkeslett: '12:53',
+    erKorrigering: false,
     opptjeningAktivitet: {
         arbeidstaker: [
             {
@@ -45,12 +50,13 @@ export default {
                     tom: '2022-06-23',
                 },
                 virksomhetstyper: ['Fiske'],
+                erFiskerPåBladB: false,
                 landkode: '',
                 regnskapsførerNavn: 'hallo hansen',
                 regnskapsførerTlf: '93247666',
                 harSøkerRegnskapsfører: false,
                 registrertIUtlandet: false,
-                bruttoInntekt: 100000,
+                bruttoInntekt: '100000',
                 erNyoppstartet: false,
                 erVarigEndring: false,
                 endringInntekt: '',
@@ -72,6 +78,7 @@ export default {
                 tom: '2022-06-23',
             },
             søknadÅrsak: 'NYOPPSTARTET_HOS_ARBEIDSGIVER',
+            normalArbeidstidPrDag: '7,5',
         },
         {
             aktivitetsFravær: 'SELVSTENDIG_VIRKSOMHET',
@@ -83,6 +90,7 @@ export default {
                 tom: '2022-06-16',
             },
             søknadÅrsak: 'ARBEIDSGIVER_KONKURS',
+            normalArbeidstidPrDag: '7,5',
         },
         {
             aktivitetsFravær: 'FRILANSER',
@@ -94,6 +102,17 @@ export default {
                 tom: '2022-06-23',
             },
             søknadÅrsak: 'KONFLIKT_MED_ARBEIDSGIVER',
+            normalArbeidstidPrDag: '7,5',
         },
     ],
+    bosteder: [
+        {
+            periode: {
+                fom: '2022-01-01',
+                tom: '2022-01-31',
+            },
+            land: 'SWE',
+        },
+    ],
+    utenlandsopphold: [],
 };

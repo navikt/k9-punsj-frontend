@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import FeilmeldingPanel from '../components/FeilmeldingPanel';
 import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
@@ -18,6 +17,14 @@ import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 interface Props {
     renderOnLoadComplete: () => React.ReactNode;
 }
+
+const renderErrorAlert = (messageId: string, testId?: string) => (
+    <div className="mt-6 mx-auto w-full max-w-3xl" data-testid={testId}>
+        <Alert size="small" variant="error">
+            <FormattedMessage id={messageId} />
+        </Alert>
+    </div>
+);
 
 const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => {
     const { journalpostid } = useParams<{ journalpostid: string }>();
@@ -71,19 +78,11 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (journalpostNotFound) {
-        return (
-            <div data-testid="journalpostNotFound">
-                <FeilmeldingPanel messageId="startPage.feil.journalpost" />
-            </div>
-        );
+        return renderErrorAlert('startPage.feil.journalpost', 'journalpostNotFound');
     }
 
     if (journalpostForbidden) {
-        return (
-            <div data-testid="journalpostForbidden">
-                <FeilmeldingPanel messageId="startPage.feil.ikketilgang" />
-            </div>
-        );
+        return renderErrorAlert('startPage.feil.ikketilgang', 'journalpostForbidden');
     }
 
     if (lukkOppgaveDone) {
@@ -104,7 +103,7 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (journalpostRequestError) {
-        return <FeilmeldingPanel messageId="startPage.feil.internalServerError" />;
+        return renderErrorAlert('startPage.feil.internalServerError');
     }
 
     if (!journalpost) {
@@ -112,11 +111,7 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
     }
 
     if (!journalpost.dokumenter.length) {
-        return (
-            <Alert size="small" variant="error">
-                <FormattedMessage id="startPage.feil.ingendokumenter" />
-            </Alert>
-        );
+        return renderErrorAlert('startPage.feil.ingendokumenter');
     }
 
     return renderOnLoadComplete();

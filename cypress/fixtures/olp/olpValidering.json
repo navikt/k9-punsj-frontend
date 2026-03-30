@@ -1,0 +1,94 @@
+{
+  "søknadId": "0e8e1fa6-7229-4b4f-b15d-8888d332646c",
+  "versjon": "1.0.0",
+  "mottattDato": "2025-12-08T13:36:00.000Z",
+  "søker": {
+    "norskIdentitetsnummer": "02446816023"
+  },
+  "språk": "nb",
+  "journalposter": [
+    {
+      "journalpostId": "454054856",
+      "inneholderInformasjonSomIkkeKanPunsjes": false,
+      "inneholderMedisinskeOpplysninger": false
+    }
+  ],
+  "begrunnelseForInnsending": {
+    "tekst": ""
+  },
+  "ytelse": {
+    "type": "OLP",
+    "barn": {
+      "norskIdentitetsnummer": "49510788523",
+      "fødselsdato": null
+    },
+    "søknadsperiode": [
+      "2026-03-10/2026-03-20"
+    ],
+    "trekkKravPerioder": [],
+    "opptjeningAktivitet": {
+      "selvstendigNæringsdrivende": [
+        {
+          "organisasjonsnummer": "",
+          "virksomhetNavn": "ererreer",
+          "perioder": {
+            "2026-03-08/2026-03-20": {
+              "virksomhetstyper": [
+                "FISKE"
+              ],
+              "regnskapsførerNavn": "",
+              "regnskapsførerTlf": "",
+              "erVarigEndring": false,
+              "endringDato": "",
+              "endringBegrunnelse": "",
+              "bruttoInntekt": 111,
+              "erNyoppstartet": false,
+              "registrertIUtlandet": true,
+              "landkode": "DZA"
+            }
+          }
+        }
+      ],
+      "frilanser": null
+    },
+    "dataBruktTilUtledning": null,
+    "bosteder": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "utenlandsopphold": {
+      "perioder": {},
+      "perioderSomSkalSlettes": {}
+    },
+    "lovbestemtFerie": {
+      "perioder": {}
+    },
+    "arbeidstid": {
+      "arbeidstakerList": [],
+      "frilanserArbeidstidInfo": null,
+      "selvstendigNæringsdrivendeArbeidstidInfo": {
+        "perioder": {}
+      }
+    },
+    "uttak": {
+      "perioder": {}
+    },
+    "omsorg": {
+      "relasjonTilBarnet": "Far",
+      "beskrivelseAvOmsorgsrollen": ""
+    },
+    "kurs": {
+      "kursholder": {
+        "navn": "Bufetat Nord",
+        "institusjonsidentifikator": "84f3ddac-e7a1-49ad-83b0-0c07c40fae16"
+      },
+      "kursperioder": [
+        "2026-03-10/2026-03-20"
+      ],
+      "reise": {
+        "reisedager": [],
+        "reisedagerBeskrivelse": ""
+      }
+    }
+  }
+}
