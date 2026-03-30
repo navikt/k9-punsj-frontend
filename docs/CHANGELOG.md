@@ -4,6 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Dependency remediation (2026-03-30)
+
+- La til målrettede `resolutions` for `ajv`, `minimatch`, `path-to-regexp`, `picomatch`, `serialize-javascript`, `svgo`, `terser-webpack-plugin` og `yaml`, slik at dagens security alerts kan ryddes uten major-løft for React eller Aksel.
+- Fjernet stale eller overflødige manifest-oppføringer, blant annet gamle router- og logger-typer, `baseline-browser-mapping`, `jest-extended` og `eject`-scriptet. `redux-logger` ble beholdt kun for ikke-produksjonsmiljøer.
+- Byttet legacy form compat-komponentene fra udeklarert `clsx` til eksisterende `classnames`, og verifiserte endringen med grønn `yarn lint`, grønn `yarn test --maxWorkers=2`, grønn `yarn build` og grønn `yarn build-storybook`.
+
 ### Package cleanup (2026-03-30)
 
 - Fjernet ni ubrukte eller redundante devDependencies fra rotmanifestet, blant annet gamle typepakker og ubrukt Jest, Babel og webpack-relatert tooling.

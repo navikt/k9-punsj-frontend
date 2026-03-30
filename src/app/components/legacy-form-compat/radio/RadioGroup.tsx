@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import classNames from 'classnames';
 import React from 'react';
 
 import { RadioGroup as AkselRadioGroup } from '@navikt/ds-react';
@@ -66,7 +66,7 @@ const LegacyRadioGroup = ({
             {...groupProps}
             name={name}
             legend={legend ?? ''}
-            className={clsx('legacy-radio-group', className, {
+            className={classNames('legacy-radio-group', className, {
                 'legacy-radio-group--horisontal': resolvedRetning === 'horisontal',
                 'legacy-radio-group--vertikal': resolvedRetning === 'vertikal',
             })}
@@ -92,7 +92,7 @@ const LegacyRadioGroup = ({
                         {...radioProps}
                         key={`${name}-${value}`}
                         internalInGroup
-                        className={clsx('legacy-radio-group__item', optionClassName)}
+                        className={classNames('legacy-radio-group__item', optionClassName)}
                         name={name}
                         value={value}
                         label={label}
