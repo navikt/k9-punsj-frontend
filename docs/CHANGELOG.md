@@ -4,6 +4,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Workflow action pinning (2026-03-30)
+
+- Pinned eksterne GitHub Actions og reusable workflows i `.github/workflows/**` til konkrete commit SHA-er, blant annet `actions/*`, `cypress-io/github-action`, `nais/*` og `navikt/sif-gha-workflows` sin `trivy`-workflow.
+- Fjernet flytende referanser som `@main` og brede versjonstaggar fra workflowene, slik at CI-oppsettet ikke automatisk følger nye upstream-endringer.
+
 ### Dependency remediation (2026-03-30)
 
 - La til målrettede `resolutions` for `ajv`, `minimatch`, `path-to-regexp`, `picomatch`, `serialize-javascript`, `svgo`, `terser-webpack-plugin` og `yaml`, slik at dagens security alerts kan ryddes uten major-løft for React eller Aksel.
