@@ -255,7 +255,7 @@ let handlers = [
                     sakstype: 'OMP',
                     pleietrengende: null,
                     gyldigPeriode: null,
-                    behandlingsAar: '2022',
+                    behandlingsår: '2022',
                 },
             ],
             { status: 200 },

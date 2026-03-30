@@ -4,6 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Opprett journalpost (2026-03-30)
+
+- Viser `behandlingsår` i fagsak-valgene på `Opprett journalpost` når verdien finnes på fagsaken.
+- Bruker `behandlingsår` fra API som kilde i stedet for å utlede år i frontend.
+- Oppdaterte mocken for `api/k9-punsj/saker/hent` slik at feltet samsvarer med frontend-kontrakten.
+
 ### Copilot setup (2026-03-16 to 2026-03-18)
 
 - La til repo-oppsett med `AGENTS.md` og `.github/copilot-instructions.md`.
