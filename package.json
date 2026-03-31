@@ -136,7 +136,7 @@
         "stylelint-config-standard": "40.0.0",
         "stylelint-config-tailwindcss": "1.0.1",
         "terser-webpack-plugin": "5.4.0",
-        "typescript": "5.9.3",
+        "typescript": "6.0.2",
         "typescript-eslint": "8.57.2",
         "webpack": "5.105.4",
         "webpack-dev-server": "5.2.3"
