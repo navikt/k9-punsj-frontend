@@ -98,7 +98,7 @@ jobs:
                   VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@8bc1e77fac91f0f630ce1ed41137aa33243d3476 # main at 2026-03-30
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@27702f68512ea3171f9a206133c297c28b8da2be # main at 2026-03-30
         permissions:
             contents: write
             security-events: write
