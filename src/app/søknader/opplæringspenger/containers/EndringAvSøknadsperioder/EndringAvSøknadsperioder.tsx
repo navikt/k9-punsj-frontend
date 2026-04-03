@@ -24,13 +24,17 @@ const EndringAvSøknadsperioder = (props: EndringAvSøknadsperioderProps): JSX.E
     const { isOpen, onClick, eksisterendePerioder } = props;
 
     const { values, errors } = useFormikContext<OLPSoknad>();
+    const begrunnelseForInnsendingError =
+        typeof errors.begrunnelseForInnsending === 'object' && errors.begrunnelseForInnsending !== null
+            ? errors.begrunnelseForInnsending.tekst
+            : undefined;
 
     if (!eksisterendePerioder || eksisterendePerioder.length === 0) {
         return null;
     }
 
     const begrunnelseForInnsendingFeilmelding = () =>
-        errors['begrunnelseForInnsending.tekst']
+        begrunnelseForInnsendingError
             ? intlHelper(intl, 'skjema.felt.endringAvSøknadsperioder.begrunnelse.feilmelding')
             : null;
 

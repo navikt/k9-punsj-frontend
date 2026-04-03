@@ -23,7 +23,7 @@ const CountrySelectWrapper = ({ periodeinfo }: Props) => {
                         selectedcountry={land || ''}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        feil={meta.touched && meta.error}
+                        error={meta.touched && meta.error}
                     />
                 )}
             </Field>

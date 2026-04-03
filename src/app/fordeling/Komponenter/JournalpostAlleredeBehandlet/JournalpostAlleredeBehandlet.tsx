@@ -15,7 +15,7 @@ import {
     resetBarnAction,
 } from 'app/state/reducers/FellesReducer';
 import { hentBarn } from 'app/state/reducers/HentBarn';
-import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
+import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
@@ -159,7 +159,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
     };
 
     const handleGåToLOS = () => {
-        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+        redirectToLos();
     };
 
     const handleGåToSendBrev = () => {

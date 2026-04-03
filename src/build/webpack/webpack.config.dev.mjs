@@ -1,15 +1,11 @@
 import webpack from 'webpack';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { config as dotenvConfig } from 'dotenv';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-// eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import webpackConfig from './webpack.config.global.mjs';
-
-dotenvConfig();
 
 webpackConfig.mode = 'development';
 

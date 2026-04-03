@@ -136,6 +136,11 @@ export function getJournalpostErrorAction(error: IError): IGetJournalpostErrorAc
     return { type: Actiontypes.JOURNALPOST_REQUEST_ERROR, error };
 }
 
+const getNetworkError = (error: unknown): IError => ({
+    statusText: 'Nettverksfeil',
+    message: error instanceof Error ? error.message : 'Nettverksfeil',
+});
+
 export function getJournalpostNotFoundAction(): IGetJournalpostNotFoundAction {
     return { type: Actiontypes.JOURNALPOST_NOT_FOUND };
 }
@@ -175,7 +180,7 @@ export function getJournalpost(journalpostid: string) {
                         getJournalpostErrorAction({ ...convertResponseToError(response), message: data?.message }),
                     );
             }
-        });
+        }).catch((error: unknown) => dispatch(getJournalpostErrorAction(getNetworkError(error))));
     };
 }
 
@@ -289,6 +294,10 @@ export default function FellesReducer(
                 ...state,
                 journalpost: action.journalpost,
                 isJournalpostLoading: false,
+                journalpostNotFound: undefined,
+                journalpostForbidden: undefined,
+                journalpostConflict: undefined,
+                journalpostConflictError: undefined,
                 journalpostRequestError: undefined,
             };
 
@@ -297,6 +306,10 @@ export default function FellesReducer(
                 ...state,
                 journalpost: undefined,
                 isJournalpostLoading: true,
+                journalpostNotFound: undefined,
+                journalpostForbidden: undefined,
+                journalpostConflict: undefined,
+                journalpostConflictError: undefined,
                 journalpostRequestError: undefined,
             };
 
@@ -305,6 +318,10 @@ export default function FellesReducer(
                 ...state,
                 journalpost: undefined,
                 isJournalpostLoading: false,
+                journalpostNotFound: undefined,
+                journalpostForbidden: undefined,
+                journalpostConflict: undefined,
+                journalpostConflictError: undefined,
                 journalpostRequestError: action.error,
             };
 
@@ -313,6 +330,10 @@ export default function FellesReducer(
                 ...state,
                 journalpost: undefined,
                 isJournalpostLoading: false,
+                journalpostForbidden: undefined,
+                journalpostConflict: undefined,
+                journalpostConflictError: undefined,
+                journalpostRequestError: undefined,
                 journalpostNotFound: true,
             };
 
@@ -321,6 +342,10 @@ export default function FellesReducer(
                 ...state,
                 journalpost: undefined,
                 isJournalpostLoading: false,
+                journalpostNotFound: undefined,
+                journalpostConflict: undefined,
+                journalpostConflictError: undefined,
+                journalpostRequestError: undefined,
                 journalpostForbidden: true,
             };
 
@@ -329,6 +354,9 @@ export default function FellesReducer(
                 ...state,
                 journalpost: undefined,
                 isJournalpostLoading: false,
+                journalpostNotFound: undefined,
+                journalpostForbidden: undefined,
+                journalpostRequestError: undefined,
                 journalpostConflict: true,
                 journalpostConflictError: action.response,
             };

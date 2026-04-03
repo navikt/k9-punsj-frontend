@@ -7,7 +7,7 @@ import { finnFagsaker } from 'app/api/api';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/validation';
-import { finnVisningsnavnForSakstype, getEnvironmentVariable } from 'app/utils';
+import { finnVisningsnavnForSakstype, redirectToLos } from 'app/utils';
 
 import './sendBrevIAvsluttetSak.css';
 
@@ -71,7 +71,7 @@ const SendBrevIAvsluttetSak = () => {
     useEffect(() => {
         if (visLosModal) {
             setTimeout(() => {
-                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                redirectToLos();
             }, 3000);
         }
     }, [visLosModal]);

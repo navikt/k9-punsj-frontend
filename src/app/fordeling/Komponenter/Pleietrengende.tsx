@@ -149,7 +149,6 @@ const Pleietrengende: React.FC<Props> = ({
                         }}
                         value={pleietrengendeId}
                         disabled={gjelderAnnenPleietrengende}
-                        defaultValue={pleietrengendeId}
                     >
                         <option key="default" value="" label="Velg barn" aria-label="Tomt valg" />
 

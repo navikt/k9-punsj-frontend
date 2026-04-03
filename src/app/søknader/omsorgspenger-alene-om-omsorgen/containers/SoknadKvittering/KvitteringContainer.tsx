@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 import { IOMPAOSoknadKvittering } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import OMPAOSoknadKvittering from './OMPAOSoknadKvittering';
@@ -34,7 +34,7 @@ const KvitteringContainer: React.FC<Props> = ({ kvittering }: Props) => {
             <div className="my-8">
                 <Button
                     onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        redirectToLos();
                     }}
                 >
                     <FormattedMessage id="tilbaketilLOS" />

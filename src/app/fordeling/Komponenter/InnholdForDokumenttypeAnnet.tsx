@@ -118,7 +118,7 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
                 error={identErrorMessage}
             />
             {under18WarningMessage && (
-                <Alert size="small" variant="warning">
+                <Alert size="small" variant="warning" className="mt-4">
                     {under18WarningMessage}
                 </Alert>
             )}
