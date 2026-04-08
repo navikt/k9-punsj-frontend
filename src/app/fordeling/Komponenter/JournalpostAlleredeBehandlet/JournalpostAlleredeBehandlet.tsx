@@ -16,6 +16,10 @@ import {
 } from 'app/state/reducers/FellesReducer';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
+import {
+    erUavklartSakstypeForBrev,
+    utledSakstypeForBehandletJournalpostBrev,
+} from 'app/components/brev/brevSakstypeUtils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
@@ -177,10 +181,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_UT &&
         fordelingState.dokumenttype !== FordelingDokumenttype.KORRIGERING_IM;
 
-    const sendBrevDisabled =
-        !fellesState.journalpost?.sak?.sakstype &&
-        (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER);
-    const visSendBrevInfo = sendBrevDisabled;
+    const journalpostSakstype = fellesState.journalpost?.sak?.sakstype;
+    const sendBrevSakstype = utledSakstypeForBehandletJournalpostBrev({
+        journalpostSakstype,
+        dokumenttype: fordelingState.dokumenttype,
+    });
+    const sendBrevDisabled = !sendBrevSakstype;
+    const visSendBrevInfo = erUavklartSakstypeForBrev(journalpostSakstype);
 
     return (
         <>

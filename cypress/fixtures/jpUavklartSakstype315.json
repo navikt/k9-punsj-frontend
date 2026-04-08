@@ -1,0 +1,32 @@
+{
+    "journalpostId": "315",
+    "norskIdent": "02446816023",
+    "dokumenter": [
+        {
+            "dokumentId": "454531868"
+        }
+    ],
+    "venter": null,
+    "punsjInnsendingType": {
+        "kode": "UKJENT",
+        "navn": "Ukjent",
+        "erScanning": true
+    },
+    "kanSendeInn": false,
+    "erSaksbehandler": true,
+    "journalpostStatus": "MOTTATT",
+    "kanOpprettesJournalføringsoppgave": true,
+    "kanKopieres": true,
+    "erFerdigstilt": false,
+    "gosysoppgaveId": null,
+    "sak": {
+        "reservertSaksnummer": false,
+        "fagsakId": null,
+        "gyldigPeriode": null,
+        "pleietrengendeIdent": null,
+        "relatertPersonIdent": null,
+        "barnIdenter": null,
+        "sakstype": "-",
+        "behandlingsÅr": null
+    }
+}

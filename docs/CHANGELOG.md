@@ -4,6 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Send brev for handled journalpost (2026-04-08)
+
+- Strammet inn `Send brev` for ferdig håndterte journalposter med uavklart `sakstype`, slik at brukeren må velge en konkret ytelsestype før brevflyten kan åpnes videre.
+- Viser nå tydelig warning når journalposten mangler avklart ytelsestype, og stopper direkte navigasjon til brevflyten når verken journalpost eller valgt dokumenttype gir en gyldig `sakstype`.
+- La til egen mock-journalpost og målrettet Cypress-dekning for handled journalpost med `sakstype = '-'`, slik at scenariet kan verifiseres visuelt i testmodus.
+
 ### Workflow action pinning (2026-03-30)
 
 - Pinned eksterne GitHub Actions og reusable workflows i `.github/workflows/**` til konkrete commit SHA-er, blant annet `actions/*`, `cypress-io/github-action`, `nais/*` og `navikt/sif-gha-workflows` sin `trivy`-workflow.

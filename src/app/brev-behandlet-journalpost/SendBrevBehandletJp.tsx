@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 
 import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
-import { getForkortelseFraFordelingDokumenttype } from 'app/utils';
+import { utledSakstypeForBehandletJournalpostBrev } from 'app/components/brev/brevSakstypeUtils';
 
 const SendBrevBehandletJp: React.FC = () => {
     const navigate = useNavigate();
@@ -30,15 +30,32 @@ const SendBrevBehandletJp: React.FC = () => {
     }
 
     const { journalpostId, sak, norskIdent } = journalpost;
+    const tilbakePath = location.pathname.replace(ROUTES.BREV_BEHANDLET_JP, '');
+    const sakstype = utledSakstypeForBehandletJournalpostBrev({
+        journalpostSakstype: sak?.sakstype,
+        dokumenttype: fordelingState.dokumenttype,
+    });
 
-    const forkortelseFraFordelingDokumenttype = fordelingState.dokumenttype
-        ? getForkortelseFraFordelingDokumenttype(fordelingState.dokumenttype)
-        : undefined;
-
-    const sakstype = sak?.sakstype || forkortelseFraFordelingDokumenttype;
-
-    if (!norskIdent || !sakstype) {
+    if (!norskIdent) {
         return null;
+    }
+
+    if (!sakstype) {
+        return (
+            <Box margin="4" className="space-y-4">
+                <Heading size="small" level="1">
+                    <FormattedMessage id="sendBrevBehandletJournalpost.header" />
+                </Heading>
+
+                <Alert variant="warning">
+                    <FormattedMessage id="sendBrevBehandletJournalpost.uavklartSakstype" />
+                </Alert>
+
+                <Button size="small" variant="secondary" onClick={() => navigate(tilbakePath)}>
+                    <FormattedMessage id="brevComponent.btn.tilbake" />
+                </Button>
+            </Box>
+        );
     }
 
     return (
