@@ -9,6 +9,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Strammet inn `Send brev` for ferdig håndterte journalposter med uavklart `sakstype`, slik at brukeren må velge en konkret ytelsestype før brevflyten kan åpnes videre.
 - Viser nå tydelig warning når journalposten mangler avklart ytelsestype, og stopper direkte navigasjon til brevflyten når verken journalpost eller valgt dokumenttype gir en gyldig `sakstype`.
 - La til egen mock-journalpost og målrettet Cypress-dekning for handled journalpost med `sakstype = '-'`, slik at scenariet kan verifiseres visuelt i testmodus.
+- Finjusterte oppfølgingen med mer presis warning-tekst, flyttet warning nærmere handlingene på skjermen, rettet spacing i kopieringsvelgeren og gjorde mock-journalposten mer konsistent ved å sette `erFerdigstilt = true` for handled-scenariet.
 
 ### Workflow action pinning (2026-03-30)
 
