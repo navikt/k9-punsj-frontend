@@ -80,7 +80,7 @@
         "@sentry/cli": "3.3.3",
         "@storybook/addon-webpack5-compiler-swc": "4.0.3",
         "@storybook/react": "10.3.3",
-        "@storybook/react-webpack5": "10.3.3",
+        "@storybook/react-webpack5": "10.3.4",
         "@tailwindcss/postcss": "4.2.2",
         "@testing-library/cypress": "10.1.0",
         "@testing-library/dom": "10.4.1",
