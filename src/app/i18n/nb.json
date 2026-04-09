@@ -235,7 +235,7 @@
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.1": "Må være inngående journalpost",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.2": "Kan ikke være kopi av en annen journalpost",
     "fordeling.journalpostAlleredeBehandlet.kanIkkeKopieres.info.3": "Kan ikke være inntektsmelding uten søknad",
-    "fordeling.journalpostAlleredeBehandlet.sendBrevInfo": "Ytelsestypen på journalposten er ikke avklart. Før brev kan sendes må du velge ytelsestype som samsvarer med dokumentet. Hvis dokumentet ikke tilhører en ytelse som støttes i Punsj, skal brev ikke sendes herfra.",
+    "fordeling.journalpostAlleredeBehandlet.sendBrevInfo": "Ytelsestypen på journalposten er ikke avklart. Hvis du må sende brev, må du først velge ytelsestype som samsvarer med dokumentet. Hvis dokumentet ikke tilhører en ytelse som støttes i Punsj, skal brev ikke sendes herfra.",
     "fordeling.journalpostAlleredeBehandlet.korrigerPartsforhold.warning": "Du korrigerer partsforholdet på en journalført journalpost. Kopien opprettes med annen søker som søker og nåværende søker som pleietrengende. Original journalpost endres ikke.",
 
     "fosterbarn.btn.slett": "Slett",

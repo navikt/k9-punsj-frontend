@@ -26,7 +26,7 @@ export const utledSakstypeForBehandletJournalpostBrev = ({
     journalpostSakstype?: string | null;
     dokumenttype?: FordelingDokumenttype;
 }): string | undefined => {
-    if (!erUavklartSakstypeForBrev(journalpostSakstype)) {
+    if (journalpostSakstype && !erUavklartSakstypeForBrev(journalpostSakstype)) {
         return journalpostSakstype;
     }
 

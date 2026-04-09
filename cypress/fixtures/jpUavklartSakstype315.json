@@ -17,7 +17,7 @@
     "journalpostStatus": "MOTTATT",
     "kanOpprettesJournalføringsoppgave": true,
     "kanKopieres": true,
-    "erFerdigstilt": false,
+    "erFerdigstilt": true,
     "gosysoppgaveId": null,
     "sak": {
         "reservertSaksnummer": false,
