@@ -72,7 +72,10 @@ const ArbeidsforholdPanel = ({
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
-        const oppdatertArbeidstid = (path: string, perioder: unknown) => set(cloneDeep(arbeid || {}), path, perioder);
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => {
+            const arbeidKopi = arbeid ? cloneDeep(arbeid) : {};
+            return set(arbeidKopi, path, perioder);
+        };
 
         return (
             <>
@@ -226,7 +229,10 @@ const ArbeidsforholdPanel = ({
     const selvstendigperioder = () => {
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
-        const oppdatertArbeidstid = (path: string, perioder: unknown) => set(cloneDeep(arbeid || {}), path, perioder);
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => {
+            const arbeidKopi = arbeid ? cloneDeep(arbeid) : {};
+            return set(arbeidKopi, path, perioder);
+        };
 
         return (
             <div className="infoContainer">
