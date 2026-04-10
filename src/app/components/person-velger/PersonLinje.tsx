@@ -1,5 +1,5 @@
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { get, set } from 'lodash';
+import { cloneDeep, get, set } from 'lodash';
 import React from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
@@ -25,7 +25,7 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
             handleBlur(
                 undefined,
                 set(
-                    values,
+                    cloneDeep(values),
                     name,
                     get(values, name).filter((barn: Personvalg, barnIndex: number) => barnIndex !== index),
                 ),

@@ -8,7 +8,7 @@ import { Alert, Box, Button, Heading, Loader } from '@navikt/ds-react';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
 import { hentBarn } from 'app/state/reducers/HentBarn';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import { useNavigate, useParams } from 'react-router';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
@@ -99,7 +99,7 @@ const OMPMAPunchFormContainer = (props: Props) => {
                 <div className="my-8">
                     <Button
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                     >
                         <FormattedMessage id="tilbaketilLOS" />

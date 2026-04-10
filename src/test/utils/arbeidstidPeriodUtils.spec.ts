@@ -7,6 +7,7 @@ import {
     filterPeriodsBySoknadsperioder,
 } from '../../app/utils/arbeidstidPeriodUtils';
 import { IArbeidstidPeriodeMedTimer, IPeriode, Periodeinfo, IOmsorgstid } from '../../app/models/types';
+import { Tidsformat } from '../../app/utils/timeUtils';
 
 describe('arbeidstidPeriodUtils', () => {
     describe('groupConsecutiveWorkDays', () => {
@@ -455,7 +456,7 @@ describe('arbeidstidPeriodUtils', () => {
                     periode: { fom: '2024-01-01', tom: '2024-01-05' },
                     faktiskArbeidPerDag: { timer: '8', minutter: '0' },
                     jobberNormaltPerDag: { timer: '8', minutter: '0' },
-                    tidsformat: 1, // Desimaler
+                    tidsformat: Tidsformat.Desimaler,
                     faktiskArbeidTimerPerDag: '8.5',
                     jobberNormaltTimerPerDag: '8.0',
                 },
@@ -607,7 +608,7 @@ describe('arbeidstidPeriodUtils', () => {
                 periode: { fom: '2024-01-05', tom: '2024-01-15' },
                 faktiskArbeidPerDag: { timer: '7.5', minutter: '30' },
                 jobberNormaltPerDag: { timer: '8', minutter: '0' },
-                tidsformat: 1,
+                tidsformat: Tidsformat.Desimaler,
                 faktiskArbeidTimerPerDag: '7.5',
                 jobberNormaltTimerPerDag: '8.0',
             };
@@ -618,7 +619,7 @@ describe('arbeidstidPeriodUtils', () => {
             expect(result).toHaveLength(1);
             expect(result[0].faktiskArbeidPerDag).toEqual({ timer: '7.5', minutter: '30' });
             expect(result[0].jobberNormaltPerDag).toEqual({ timer: '8', minutter: '0' });
-            expect(result[0].tidsformat).toBe(1);
+            expect(result[0].tidsformat).toBe(Tidsformat.Desimaler);
             expect(result[0].faktiskArbeidTimerPerDag).toBe('7.5');
             expect(result[0].jobberNormaltTimerPerDag).toBe('8.0');
         });

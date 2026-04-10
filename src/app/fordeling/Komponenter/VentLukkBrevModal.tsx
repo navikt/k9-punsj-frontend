@@ -7,7 +7,7 @@ import { Alert, Button, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
 
 import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
 import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, getEnvironmentVariable, initializeDate } from 'app/utils';
+import { finnForkortelseForDokumenttype, initializeDate, redirectToLos } from 'app/utils';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
 
@@ -76,7 +76,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     <Button
                         type="button"
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                         size="small"
                         data-test-id="brevModalGåTilLos"
@@ -159,7 +159,7 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     <Button
                         type="button"
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                         size="small"
                         data-test-id="brevModalGåTilLos"

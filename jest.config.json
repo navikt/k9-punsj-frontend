@@ -1,7 +1,7 @@
 {
-    "moduleFileExtensions": ["js", "json", "jsx", "ts", "tsx", "node", "less", "d.ts"],
+    "moduleFileExtensions": ["js", "json", "jsx", "ts", "tsx", "node", "d.ts"],
     "moduleNameMapper": {
-        "\\.(css|jpg|png|svg|less)$": "<rootDir>/node_modules/jest-css-modules",
+        "\\.(css|jpg|png|svg)$": "<rootDir>/node_modules/jest-css-modules",
         "nav-(.*)-style": "<rootDir>/node_modules/jest-css-modules",
         "@navikt/ds-css": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/userContent": "<rootDir>/node_modules/jest-css-modules",

@@ -6,6 +6,7 @@ import { ApiPath } from 'app/apiConfig';
 import mockHandlersOMPAO from './mockHandlersOMPAO';
 import mockHandlersOMPKS from './mockHandlersOMPKS';
 import mockHandlersOMPMA from './mockHandlersOMPMA';
+import mockHandlersOLP from './mockHandlersOLP';
 import mockHandlersOMPUT from './mockHandlersOMPUT';
 import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
 import mockHandlersTest from './mockHandlersTest';
@@ -531,6 +532,7 @@ if (process.env.MSW_MODE === 'test') {
         .concat(Object.values(mockHandlersOMPMA))
         .concat(Object.values(mockHandlersOMPAO))
         .concat(Object.values(mockHandlersOMPKS))
+        .concat(Object.values(mockHandlersOLP))
         .concat(Object.values(mockHandlersOMPUTKorrigering))
         .concat(Object.values(mockHandlersTest));
 }

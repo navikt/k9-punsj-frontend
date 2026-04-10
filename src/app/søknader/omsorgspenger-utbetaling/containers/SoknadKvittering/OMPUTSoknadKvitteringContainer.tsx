@@ -7,7 +7,7 @@ import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
 import { IOMPUTSoknadKvittering } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import OMPUTSoknadKvittering from './OMPUTSoknadKvittering';
 
@@ -35,7 +35,7 @@ const OMPUTSoknadKvitteringContainer: React.FC<Props> = ({ kvittering }) => {
             <div className="my-8">
                 <Button
                     onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        redirectToLos();
                     }}
                 >
                     <FormattedMessage id="tilbaketilLOS" />

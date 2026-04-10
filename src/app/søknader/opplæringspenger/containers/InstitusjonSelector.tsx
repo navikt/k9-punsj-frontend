@@ -4,11 +4,15 @@ import { useMutation } from '@tanstack/react-query';
 
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 
-import { ComboboxOption } from '@navikt/ds-react/esm/form/combobox/types';
 import { GodkjentOpplæringsinstitusjon } from 'app/models/types/GodkjentOpplæringsinstitusjon';
 import './institusjonSelector.css';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { hentInstitusjoner } from '../api';
+
+type ComboboxOption = {
+    label: string;
+    value: string;
+};
 
 interface InstitusjonSelectorProps {
     label: string;
@@ -39,7 +43,7 @@ const InstitusjonSelector = ({ label, name, isAnnetSelected }: InstitusjonSelect
 
     useEffect(() => {
         hentInstitusjonerK9();
-    }, []);
+    }, [hentInstitusjonerK9]);
 
     const findInstitusjonsNavn = (institusjonUuid: string) =>
         institusjoner?.find((institusjon) => institusjon.uuid === institusjonUuid)?.navn || '';

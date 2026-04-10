@@ -169,7 +169,7 @@ describe('convertResponseToError', () => {
         const url = 'http://testurl.test/';
         const status = 404;
         const statusText = 'Not found';
-        const respons: Response = {
+        const respons: Partial<Response> = {
             url,
             status,
             statusText,

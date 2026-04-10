@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { set } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
@@ -72,6 +72,10 @@ const ArbeidsforholdPanel = ({
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => {
+            const arbeidKopi = arbeid ? cloneDeep(arbeid) : {};
+            return set(arbeidKopi, path, perioder);
+        };
 
         return (
             <>
@@ -161,11 +165,13 @@ const ArbeidsforholdPanel = ({
                         <ArbeidstidKalender
                             søknadsperioder={søknadsperioder}
                             updateSoknad={(perioder) => {
-                                updateSoknad({ arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder) });
+                                updateSoknad({
+                                    arbeidstid: oppdatertArbeidstid('frilanserArbeidstidInfo.perioder', perioder),
+                                });
                             }}
                             updateSoknadState={(perioder) =>
                                 updateSoknadState({
-                                    arbeidstid: set(arbeid, 'frilanserArbeidstidInfo.perioder', perioder),
+                                    arbeidstid: oppdatertArbeidstid('frilanserArbeidstidInfo.perioder', perioder),
                                 })
                             }
                             arbeidstidInfo={soknad.arbeidstid?.frilanserArbeidstidInfo}
@@ -223,6 +229,10 @@ const ArbeidsforholdPanel = ({
     const selvstendigperioder = () => {
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => {
+            const arbeidKopi = arbeid ? cloneDeep(arbeid) : {};
+            return set(arbeidKopi, path, perioder);
+        };
 
         return (
             <div className="infoContainer">
@@ -812,12 +822,18 @@ const ArbeidsforholdPanel = ({
                     søknadsperioder={søknadsperioder}
                     updateSoknad={(perioder) => {
                         updateSoknad({
-                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
+                            arbeidstid: oppdatertArbeidstid(
+                                'selvstendigNæringsdrivendeArbeidstidInfo.perioder',
+                                perioder,
+                            ),
                         });
                     }}
                     updateSoknadState={(perioder) =>
                         updateSoknadState({
-                            arbeidstid: set(arbeid, 'selvstendigNæringsdrivendeArbeidstidInfo.perioder', perioder),
+                            arbeidstid: oppdatertArbeidstid(
+                                'selvstendigNæringsdrivendeArbeidstidInfo.perioder',
+                                perioder,
+                            ),
                         })
                     }
                     arbeidstidInfo={soknad.arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo}

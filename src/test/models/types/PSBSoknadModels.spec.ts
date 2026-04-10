@@ -5,6 +5,7 @@ const minimalPsbSoknad = (): IPSBSoknad => ({
     soekerId: '01017012345',
     barn: { norskIdent: '02017012345', foedselsdato: '' },
     journalposter: new Set<string>(),
+    soeknadsperiode: [],
     opptjeningAktivitet: {},
     harInfoSomIkkeKanPunsjes: false,
     harMedisinskeOpplysninger: false,

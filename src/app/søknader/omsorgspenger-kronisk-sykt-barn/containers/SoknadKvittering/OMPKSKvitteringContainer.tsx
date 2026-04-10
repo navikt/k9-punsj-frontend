@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootStateType } from 'app/state/RootState';
 import { Alert, Box, Button, Heading } from '@navikt/ds-react';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import { FormattedMessage } from 'react-intl';
 import OMPKSSoknadKvittering from './OMPKSSoknadKvittering';
 
@@ -21,7 +21,7 @@ export const OMPKSKvitteringContainer = () => {
             <div className="my-8">
                 <Button
                     onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        redirectToLos();
                     }}
                 >
                     <FormattedMessage id="tilbaketilLOS" />

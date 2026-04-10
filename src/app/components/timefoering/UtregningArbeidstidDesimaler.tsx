@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import intlHelper from 'app/utils/intlUtils';
 
 interface IUtregningArbeidstidProps {
-    arbeidstid: string;
+    arbeidstid?: string;
     normalArbeidstid?: string;
     prosentLabel?: string;
 }

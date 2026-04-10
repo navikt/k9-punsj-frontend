@@ -7,15 +7,19 @@ import { erYngreEnn4år } from 'app/utils';
 import nb from '../../i18n/nb.json';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
 
-export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPeriode[]) => ({
-    ...soknad.metadata.arbeidsforhold,
-    registrertIUtlandet: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
-    medlemskap: soknad?.metadata?.medlemskap,
-    utenlandsopphold: soknad?.metadata?.utenlandsopphold,
-    erNyoppstartet: !!erYngreEnn4år(get(soknad, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom')),
-    erKorrigering: soknad?.erKorrigering,
-    eksisterendePerioder,
-});
+export const getSchemaContext = (soknad: IOMPUTSoknad, eksisterendePerioder: IPeriode[]) => {
+    const oppstartsdato = get(soknad, 'opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom');
+
+    return {
+        ...soknad.metadata.arbeidsforhold,
+        registrertIUtlandet: soknad?.opptjeningAktivitet?.selvstendigNaeringsdrivende?.info?.registrertIUtlandet,
+        medlemskap: soknad?.metadata?.medlemskap,
+        utenlandsopphold: soknad?.metadata?.utenlandsopphold,
+        erNyoppstartet: !!(oppstartsdato && erYngreEnn4år(oppstartsdato)),
+        erKorrigering: soknad?.erKorrigering,
+        eksisterendePerioder,
+    };
+};
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(

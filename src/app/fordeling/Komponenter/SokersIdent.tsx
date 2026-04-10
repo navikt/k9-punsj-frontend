@@ -153,7 +153,7 @@ const SokersIdent: React.FC<ISokersIdentProps> = ({
                         onChange={(event) => handleSøkersIdentChange(event)}
                     />
                     {under18WarningMessage && (
-                        <Alert size="small" variant="warning">
+                        <Alert size="small" variant="warning" className="mt-4">
                             {under18WarningMessage}
                         </Alert>
                     )}

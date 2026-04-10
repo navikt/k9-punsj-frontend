@@ -19,7 +19,7 @@ interface Props {
     søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
 
-    getUhaandterteFeil: (kode: string) => (string | undefined)[];
+    getUhaandterteFeil?: (kode: string) => (string | undefined)[];
 }
 
 const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaandterteFeil }: Props): JSX.Element => {

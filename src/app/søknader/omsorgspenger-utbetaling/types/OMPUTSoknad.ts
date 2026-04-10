@@ -52,21 +52,33 @@ export type Arbeidsforhold = {
     selvstendigNaeringsdrivende: boolean;
     frilanser: boolean;
 };
-interface IOpptjeningAktivitet {
+export interface IOpptjeningAktivitet {
     arbeidstaker: Arbeidstaker[];
     selvstendigNaeringsdrivende: SelvstendigNaeringsdrivende;
     frilanser: Frilanser;
 }
 
-export interface IOMPUTSoknad extends SoeknadType {
-    metadata: {
-        arbeidsforhold: Arbeidsforhold;
-        medlemskap: string;
-        utenlandsopphold: string;
-        signatur: string;
-        harSoekerDekketOmsorgsdager: string;
-        eksisterendeFagsak?: Fagsak;
+type OMPUTMetadata = {
+    arbeidsforhold: Arbeidsforhold;
+    medlemskap: string;
+    utenlandsopphold: string;
+    signatur: string;
+    harSoekerDekketOmsorgsdager: string;
+    eksisterendeFagsak?: Fagsak;
+};
+
+export type IOMPUTBackendOpptjeningAktivitet = {
+    arbeidstaker?: Omit<Arbeidstaker, 'fravaersperioder'>[];
+    selvstendigNaeringsdrivende?: Partial<Omit<SelvstendigNaeringsdrivende, 'fravaersperioder' | 'info'>> & {
+        info: Partial<Omit<SelvstendigNaeringsdrivende['info'], 'virksomhetstyper'>> & {
+            virksomhetstyper: string[];
+        };
     };
+    frilanser?: Partial<Omit<Frilanser, 'fravaersperioder'>>;
+};
+
+export interface IOMPUTSoknad extends SoeknadType {
+    metadata: OMPUTMetadata;
     opptjeningAktivitet: IOpptjeningAktivitet;
     bosteder: PeriodeMedUtenlandsopphold[];
     utenlandsopphold: PeriodeMedUtenlandsopphold[];
@@ -74,14 +86,12 @@ export interface IOMPUTSoknad extends SoeknadType {
     barn: PersonEnkel[];
 }
 
-export interface IOMPUTSoknadBackend
-    extends Omit<IOMPUTSoknad, 'opptjeningAktivitet' | 'bosteder' | 'utenlandsopphold'> {
-    fravaersperioder: FravaersperiodeType[];
-    opptjeningAktivitet: {
-        arbeidstaker: Omit<Arbeidstaker, 'fravaersperioder'>[];
-        selvstendigNaeringsdrivende: Omit<SelvstendigNaeringsdrivende, 'fravaersperioder'>;
-        frilanser: Omit<Frilanser, 'fravaersperioder'>;
-    };
+export interface IOMPUTSoknadBackend extends SoeknadType {
+    metadata?: Partial<OMPUTMetadata> & Record<string, unknown>;
+    barn: PersonEnkel[];
+    fravaersperioder?: FravaersperiodeType[];
+    opptjeningAktivitet?: IOMPUTBackendOpptjeningAktivitet;
     bosteder?: PeriodeMedUtenlandsopphold[];
     utenlandsopphold?: PeriodeMedUtenlandsopphold[];
+    erKorrigering?: boolean;
 }

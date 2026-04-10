@@ -10,7 +10,7 @@ import { lukkJournalpostEtterKopiering } from 'app/api/api';
 import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 import { RootStateType } from 'app/state/RootState';
-import { getEnvironmentVariable, getForkortelseFraFordelingDokumenttype } from 'app/utils';
+import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
 
 interface Props {
     søkerId: string;
@@ -66,7 +66,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
             </Modal.Header>
 
             <Modal.Body>
-                <>
+                <div className="space-y-4">
                     <div>
                         <FormattedMessage
                             id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.info"
@@ -91,7 +91,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
                             </Alert>
                         </div>
                     )}
-                </>
+                </div>
             </Modal.Body>
 
             <Modal.Footer>
@@ -101,7 +101,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
                             size="small"
                             disabled={disabled}
                             onClick={() => {
-                                window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                                redirectToLos();
                             }}
                             data-test-id="kopierTilbakeTilLosBtn"
                         >

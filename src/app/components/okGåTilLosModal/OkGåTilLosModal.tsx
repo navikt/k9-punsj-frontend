@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Modal } from '@navikt/ds-react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 
-import { getEnvironmentVariable } from '../../utils';
+import { redirectToLos } from '../../utils';
 import { initializeDate } from '../../utils/timeUtils';
 
 import './okGåTilLosModal.css';
@@ -48,7 +48,7 @@ const OkGåTilLosModal = ({ meldingId, onClose }: Props) => {
                         className="okknapp-gå-to-los"
                         size="small"
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                         data-test-id="okGåTilLosModalOKBtn"
                     >

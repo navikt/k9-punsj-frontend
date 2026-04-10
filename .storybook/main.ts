@@ -32,44 +32,34 @@ const storybookConfig: StorybookConfig = {
             app: path.resolve(__dirname, '../src/app'),
         };
 
-        // Находим существующее правило для CSS файлов
         const cssRule = config.module!.rules!.find(
             (rule) => rule && typeof rule === 'object' && rule.test && rule.test.toString().includes('.css'),
         );
 
-        // Удаляем существующее правило для CSS
         if (cssRule) {
             config.module!.rules = config.module!.rules!.filter((rule) => rule !== cssRule);
         }
 
-        // Добавляем новые правила
-        config.module!.rules!.push(
-            {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            postcssOptions: {
-                                plugins: [tailwindcssPostcss, autoprefixer],
-                            },
+        config.module!.rules!.push({
+            test: /\.css$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        postcssOptions: {
+                            plugins: [tailwindcssPostcss, autoprefixer],
                         },
                     },
-                ],
-                include: [
-                    path.resolve(__dirname, '../src'),
-                    path.resolve(__dirname, '../node_modules/@navikt/ds-css'),
-                    path.resolve(__dirname, './'),
-                ],
-            },
-            {
-                test: /\.less$/,
-                use: ['style-loader', 'css-loader', 'less-loader'],
-                include: path.resolve(__dirname, '../src'),
-            },
-        );
+                },
+            ],
+            include: [
+                path.resolve(__dirname, '../src'),
+                path.resolve(__dirname, '../node_modules/@navikt/ds-css'),
+                path.resolve(__dirname, './'),
+            ],
+        });
 
         return config;
     },

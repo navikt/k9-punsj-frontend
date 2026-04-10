@@ -1,0 +1,233 @@
+[
+  {
+    "uuid": "95a3b805-416a-4839-bffe-5c344f79b886",
+    "navn": "Ahus (Akershus universitetssykehus)",
+    "orgnr": "983971636",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "beffc539-1bc6-4756-a357-952eeea96ab3",
+    "navn": "Barnas Fysioterapisenter i Bergen",
+    "orgnr": "893140832",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "8f5f155a-80e7-4731-ac9f-004eb6cec773",
+    "navn": "Barnas språksenter",
+    "orgnr": "997856384",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2025-11-27"
+      }
+    ]
+  },
+  {
+    "uuid": "0045c3fb-d324-446e-b5d6-f9d9d5101114",
+    "navn": "Beitostølen Helsesportsenter",
+    "orgnr": "971436875",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "dcfbb629-37d1-43a6-baef-98eede81d59c",
+    "navn": "Bufetat Midt",
+    "orgnr": "986129103",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "84f3ddac-e7a1-49ad-83b0-0c07c40fae16",
+    "navn": "Bufetat Nord",
+    "orgnr": null,
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "c94a347d-f3cf-4a90-93ad-58fb2eda6a98",
+    "navn": "Bufetat Sør",
+    "orgnr": "986129219",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "f0cc0c03-a18b-4858-994a-abe158254fea",
+    "navn": "Bufetat Vest",
+    "orgnr": null,
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "5aab5d74-8e5a-480c-a894-a2cf9c559a13",
+    "navn": "Bufetat Øst",
+    "orgnr": "886129262",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "d79a4cd9-06bb-45b3-867a-4a45a5876c98",
+    "navn": "Bærum sykehus",
+    "orgnr": "988348848",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "091b28a0-dd7c-453e-a727-e35e342c333a",
+    "navn": "Capio Anoreksi Senter",
+    "orgnr": "980524493",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "9d263dec-c029-4ce4-97dc-ea3a35693844",
+    "navn": "CatoSenteret",
+    "orgnr": "979757751",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "94242865-6801-444d-91c1-249a87be3b03",
+    "navn": "Doman International",
+    "orgnr": null,
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2025-11-27"
+      }
+    ]
+  },
+  {
+    "uuid": "62aaa1bf-0a74-41d8-a985-74d0b15874a5",
+    "navn": "Drammen sykehus",
+    "orgnr": "988744816",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "1222d613-43dd-4504-bec2-69071799ca89",
+    "navn": "Evjeklinikken",
+    "orgnr": "921008104",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "b55a9c62-e4df-42e0-8950-a66477d03337",
+    "navn": "Family Hope Center",
+    "orgnr": null,
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2025-11-27"
+      }
+    ]
+  },
+  {
+    "uuid": "a0db35fc-dd61-4f6e-919e-0d1e071fd143",
+    "navn": "Finnmarkssykehuset HF",
+    "orgnr": "983974880",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "a12f00e1-dda9-48c6-95b6-36406306b160",
+    "navn": "Frambu kompetansesenter for sjeldne diagnoser",
+    "orgnr": "971434767",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "e68584ed-0f89-4b20-90dd-29b531dcea4f",
+    "navn": "Geilomo barnesykehus",
+    "orgnr": "974728230",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "820531e8-bb76-4594-8269-247abe4d80e0",
+    "navn": "Haukeland universitetssykehus",
+    "orgnr": "974557746",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  },
+  {
+    "uuid": "badecbee-d75c-41a0-a6b5-cfc5a64a3f01",
+    "navn": "Helse Bergen HF",
+    "orgnr": "983974724",
+    "perioder": [
+      {
+        "fom": "2025-01-01",
+        "tom": "2026-12-31"
+      }
+    ]
+  }
+]

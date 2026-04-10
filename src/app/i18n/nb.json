@@ -140,7 +140,7 @@
     "fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.1": "Må være inngående journalpost",
     "fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.2": "Kan ikke være kopi av en annen journalpost",
     "fordeling.kopiereJournalpostTilSammeSøker.kanIkkeKopiere.info.3": "Kan ikke være inntektsmelding uten søknad",
-    "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.tittel": " Vil du kopiere og lukke journalposten?",
+    "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.tittel": "Vil du kopiere og lukke journalposten?",
     "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.info": " Den nye Journalposten vil bli kopiert og journalført mot eksisterende fagsak {fagsakId} for pleietrengende med id: {pleietrengendeId}. Denne journalposten vil bli lukket.",
     "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.success": "Journalposten ble lukket",
     "fordeling.kopiereJournalpostTilSammeSøker.kopierModal.error": "Error ved lukking av journalpost. Prøv igjen eller gå til LOS.",

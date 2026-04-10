@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { Alert, Button } from '@navikt/ds-react';
 
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import { ROUTES } from 'app/constants/routes';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
@@ -37,7 +37,7 @@ export default function KvitteringContainer({ kvittering }: OwnProps) {
             <div className="punchPage__knapper mt-8">
                 <Button
                     onClick={() => {
-                        window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                        redirectToLos();
                     }}
                 >
                     {intlHelper(intl, 'tilbaketilLOS')}

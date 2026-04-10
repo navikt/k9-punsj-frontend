@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 
-import { set } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -1436,14 +1436,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                             eksisterendeSoknadsperioder={eksisterendePerioder}
                                             updateSoknad={(perioder) => {
                                                 this.updateSoknad({
-                                                    tilsynsordning: set(soknad.tilsynsordning, 'perioder', perioder),
+                                                    tilsynsordning: set(
+                                                        cloneDeep(soknad.tilsynsordning || {}),
+                                                        'perioder',
+                                                        perioder,
+                                                    ),
                                                 });
                                             }}
                                             updateSoknadState={(perioder) =>
                                                 this.updateSoknadState(
                                                     {
                                                         tilsynsordning: set(
-                                                            soknad.tilsynsordning,
+                                                            cloneDeep(soknad.tilsynsordning || {}),
                                                             'perioder',
                                                             perioder,
                                                         ),

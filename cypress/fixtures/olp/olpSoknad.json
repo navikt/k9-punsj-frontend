@@ -1,0 +1,93 @@
+{
+  "soeknadId": "0e8e1fa6-7229-4b4f-b15d-8888d332646c",
+  "soekerId": "02446816023",
+  "journalposter": [
+    "454054856"
+  ],
+  "mottattDato": "2025-12-08",
+  "klokkeslett": "13:36",
+  "barn": {
+    "norskIdent": "49510788523",
+    "foedselsdato": null
+  },
+  "soeknadsperiode": null,
+  "trekkKravPerioder": [],
+  "opptjeningAktivitet": {
+    "selvstendigNaeringsdrivende": {
+      "organisasjonsnummer": "",
+      "virksomhetNavn": "ererreer",
+      "info": {
+        "periode": {
+          "fom": "2026-03-08",
+          "tom": "2026-03-20"
+        },
+        "virksomhetstyper": [
+          "Fiske"
+        ],
+        "registrertIUtlandet": true,
+        "landkode": "DZA",
+        "regnskapsførerNavn": "",
+        "regnskapsførerTlf": "",
+        "bruttoInntekt": 111,
+        "erNyoppstartet": false,
+        "erVarigEndring": false,
+        "endringInntekt": null,
+        "endringDato": null,
+        "endringBegrunnelse": null,
+        "erFiskerPåBladB": null
+      }
+    },
+    "frilanser": null,
+    "arbeidstaker": []
+  },
+  "soknadsinfo": {
+    "samtidigHjemme": null,
+    "harMedsoeker": null
+  },
+  "bosteder": [],
+  "utenlandsopphold": [],
+  "lovbestemtFerie": [],
+  "arbeidstid": {
+    "arbeidstakerList": [],
+    "frilanserArbeidstidInfo": null,
+    "selvstendigNæringsdrivendeArbeidstidInfo": {
+      "perioder": []
+    }
+  },
+  "uttak": null,
+  "omsorg": {
+    "relasjonTilBarnet": "Far",
+    "samtykketOmsorgForBarnet": false,
+    "beskrivelseAvOmsorgsrollen": ""
+  },
+  "kurs": {
+    "kursHolder": {
+      "holder": "Bufetat Nord",
+      "institusjonsUuid": "84f3ddac-e7a1-49ad-83b0-0c07c40fae16"
+    },
+    "kursperioder": [
+      {
+        "periode": {
+          "fom": "2026-03-10",
+          "tom": "2026-03-20"
+        }
+      }
+    ],
+    "reise": {
+      "reisedager": [],
+      "reisedagerBeskrivelse": ""
+    }
+  },
+  "begrunnelseForInnsending": {
+    "tekst": ""
+  },
+  "metadata": {
+    "skalOppgiReise": "nei",
+    "harBoddIUtlandet": "ikkeOpplyst",
+    "harUtenlandsopphold": "nei",
+    "nyttInstitusjonsopphold": true,
+    "harSøkerRegnskapsfører": "nei",
+    "harValgtAnnenInstitusjon": []
+  },
+  "k9saksnummer": null
+}

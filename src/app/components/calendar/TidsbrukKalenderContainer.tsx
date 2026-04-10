@@ -17,6 +17,11 @@ interface OwnProps {
     slettPeriode: (dates?: Date[]) => void;
 }
 
+type PeriodeMedDatoer = IPeriode & {
+    fom: string;
+    tom: string;
+};
+
 const TidsbrukKalenderContainer = ({
     gyldigePerioder,
     kalenderdager,
@@ -24,11 +29,13 @@ const TidsbrukKalenderContainer = ({
     dateContentRenderer,
     slettPeriode,
 }: OwnProps) => {
+    const harGyldigeDatoer = (periode: IPeriode): periode is PeriodeMedDatoer => !!periode.fom && !!periode.tom;
+
     const dateRanges = useMemo(
         () =>
             gyldigePerioder
-                .filter((periode) => periode.fom && periode.tom)
-                .map((periode) => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) })),
+                .filter(harGyldigeDatoer)
+                .map((periode): DateRange => ({ fom: new Date(periode.fom), tom: new Date(periode.tom) })),
         [gyldigePerioder],
     );
     const months = useMemo(

@@ -174,10 +174,10 @@ const FagsakSelect = ({
             </Select>
             {valgtFagsak && (
                 <div className="fagsakSelectedInfo">
-                    <BodyShort as="p">{getFagsakInfo(valgtFagsak)}</BodyShort>
+                    <BodyShort as="div">{getFagsakInfo(valgtFagsak)}</BodyShort>
                     {!valgtFagsak.reservert && (
                         <Link href={getLenkeTilK9Sak(valgtFagsak.fagsakId)} target="_blank">
-                            <BodyShort as="p">
+                            <BodyShort as="span">
                                 <FormattedMessage id="fordeling.fagsakSelect.lenke.seFagsak" />
                             </BodyShort>
                             <ExternalLinkIcon title="åpne fagsak i k9sak" />

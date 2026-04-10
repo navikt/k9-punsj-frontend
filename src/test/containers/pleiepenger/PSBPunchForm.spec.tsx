@@ -832,7 +832,8 @@ describe('PunchForm', () => {
                         {
                             felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer',
                             feilkode: 'påkrevd',
-                            feilmelding: 'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
+                            feilmelding:
+                                'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
                         },
                     ],
                 },
@@ -1002,7 +1003,7 @@ describe('PunchForm', () => {
                             ...initialSoknad.opptjeningAktivitet,
                             frilanser: {
                                 startdato: '2026-02-16',
-                                sluttdato: null,
+                                sluttdato: undefined,
                                 jobberFortsattSomFrilans: true,
                             },
                         },

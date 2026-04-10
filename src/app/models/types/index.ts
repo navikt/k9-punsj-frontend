@@ -12,7 +12,6 @@ export * from 'app/models/types/Periode';
 export * from 'app/models/types/Periodeinfo';
 export * from 'app/models/types/ProblemDetail';
 export * from 'app/models/types/PunchPSBFormState';
-export * from 'app/models/types/PunchState';
 export * from 'app/models/types/SelvstendigNaerinsdrivende';
 export * from 'app/models/types/SelvstendigNaeringsdrivendeOpptjening';
 export * from 'app/models/types/UtenlandsOpphold';

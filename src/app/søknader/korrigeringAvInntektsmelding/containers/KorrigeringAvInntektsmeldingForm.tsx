@@ -10,7 +10,7 @@ import {
     updateOMSKorrigering,
     validerOMSKorrigering,
 } from 'app/state/actions/OMSPunchFormActions';
-import { getEnvironmentVariable } from 'app/utils';
+import { redirectToLos } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import {
@@ -335,7 +335,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                 <div className="my-8">
                     <Button
                         onClick={() => {
-                            window.location.href = getEnvironmentVariable('K9_LOS_URL');
+                            redirectToLos();
                         }}
                     >
                         <FormattedMessage id="tilbaketilLOS" />
