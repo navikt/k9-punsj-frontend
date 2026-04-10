@@ -2,7 +2,21 @@ import { spawn } from 'node:child_process';
 
 const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 const readyUrl = process.env.E2E_READY_URL ?? 'http://127.0.0.1:8080/health/isReady';
-const readyTimeoutMs = Number(process.env.E2E_READY_TIMEOUT_MS ?? 60000);
+const defaultReadyTimeoutMs = 60000;
+const parseReadyTimeoutMs = (value) => {
+    if (value === undefined) {
+        return defaultReadyTimeoutMs;
+    }
+
+    const parsedValue = Number(value);
+
+    if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+        throw new Error('Expected E2E_READY_TIMEOUT_MS to be a positive number of milliseconds');
+    }
+
+    return parsedValue;
+};
+const readyTimeoutMs = parseReadyTimeoutMs(process.env.E2E_READY_TIMEOUT_MS);
 const pollIntervalMs = 1000;
 
 const [, , cypressScript, ...forwardedArgs] = process.argv;
