@@ -72,10 +72,12 @@ const DokumentTypeVelgerForKopiering: React.FC<Props> = ({
     ];
 
     return (
-        <div className="space-y-2 mt-6">
-            <Heading size="xsmall" level="3">
-                <FormattedMessage id="fordeling.detteGjelder" />
-            </Heading>
+        <div className="mt-6">
+            <div className="mb-4">
+                <Heading size="xsmall" level="3">
+                    <FormattedMessage id="fordeling.detteGjelder" />
+                </Heading>
+            </div>
             <LegacyRadioGroup
                 name="fordeling-dokumenttype-velger-for-kopiering"
                 legend=""

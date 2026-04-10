@@ -16,6 +16,10 @@ import {
 } from 'app/state/reducers/FellesReducer';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
+import {
+    erUavklartSakstypeForBrev,
+    utledSakstypeForBehandletJournalpostBrev,
+} from 'app/components/brev/brevSakstypeUtils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
@@ -38,8 +42,8 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const dispatch = useDispatch<Dispatch<any>>();
 
-    const setIdentAction = (søkerId: string, pleietrengendeId?: string, annenSokerIdent?: string) =>
-        dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent));
+    const setIdentAction = (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) =>
+        dispatch(setIdentFellesAction(søkerId, pleietrengendeId ?? undefined, annenSokerIdent ?? undefined));
     const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
     const setDokumenttype = (dokumenttype?: FordelingDokumenttype) => dispatch(setDokumenttypeAction(dokumenttype));
     const resetBarn = () => dispatch(resetBarnAction());
@@ -177,10 +181,13 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         fordelingState.dokumenttype !== FordelingDokumenttype.OMSORGSPENGER_UT &&
         fordelingState.dokumenttype !== FordelingDokumenttype.KORRIGERING_IM;
 
-    const sendBrevDisabled =
-        !fellesState.journalpost?.sak?.sakstype &&
-        (!fordelingState.dokumenttype || fordelingState.dokumenttype === FordelingDokumenttype.OMSORGSPENGER);
-    const visSendBrevInfo = sendBrevDisabled;
+    const journalpostSakstype = fellesState.journalpost?.sak?.sakstype;
+    const sendBrevSakstype = utledSakstypeForBehandletJournalpostBrev({
+        journalpostSakstype,
+        dokumenttype: fordelingState.dokumenttype,
+    });
+    const sendBrevDisabled = !sendBrevSakstype;
+    const visSendBrevInfo = erUavklartSakstypeForBrev(journalpostSakstype);
 
     return (
         <>
@@ -189,12 +196,6 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                     <Alert variant="info" data-test-id="infoJournalpostAlleredeBehandlet">
                         <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.kanIkkeSendeInn.info" />
                     </Alert>
-
-                    {visSendBrevInfo && (
-                        <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandlet">
-                            <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
-                        </Alert>
-                    )}
                 </div>
                 <DokumentTypeVelgerForKopiering
                     handleDokumenttype={(type: FordelingDokumenttype) => {
@@ -276,6 +277,12 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
                 </div>
 
                 <JournalPostKopiFelmeldinger fellesState={fellesState} />
+
+                {visSendBrevInfo && (
+                    <Alert variant="warning" data-test-id="infoJournalpostAlleredeBehandletSendBrev" className="mt-6">
+                        <FormattedMessage id="fordeling.journalpostAlleredeBehandlet.sendBrevInfo" />
+                    </Alert>
+                )}
 
                 {visKanIkkeKopiere && (
                     <Alert variant="warning">
