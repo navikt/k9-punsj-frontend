@@ -4,6 +4,13 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Package maintenance follow up (2026-04-10)
+
+- Lot `axios@1.15.0` vente foreløpig, fordi repoets `npmMinimalAgeGate: 7d` i `.yarnrc.yml` blokkerer den versjonen frem til minst 2026-04-15, og vi ønsket ikke å omgå den policyen i samme pass.
+- Fjernet ubrukt direkte `axios` fra `server/package.json` etter at gjennomgang av repoet og git-historikken ikke viste noen faktisk bruk i `server/**` eller `src/**`. Dermed forsvinner den direkte server-avhengigheten i stedet for å bli bumpet uten grunn.
+- Fjernet også ubrukte direkte server-avhengigheter `@sentry/cli`, `node-cache` og `openid-client`, siden de ikke brukes i dagens serverkode eller scripts.
+- Fjernet stale `eslintConfig` med `plugin:storybook/recommended`, fjernet `eslint-plugin-storybook` og den redundante direkte `@typescript-eslint/eslint-plugin`-avhengigheten, siden repoet nå styres av `eslint.config.js` og `typescript-eslint`.
+
 ### TypeScript config and Tailwind cleanup (2026-04-10)
 
 - Fjernet deprecated `baseUrl` fra `tsconfig.json` og lot aliasen `app/*` peke eksplisitt til `./src/app/*`, slik at TypeScript 5.9 ikke varsler om oppsett som slutter å fungere i TypeScript 7.
