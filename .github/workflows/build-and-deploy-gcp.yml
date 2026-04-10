@@ -73,7 +73,7 @@ jobs:
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - uses: nais/docker-build-push@078e460885ed0424b60d45ce9220b4be1748be9d # v0
+            - uses: nais/docker-build-push@45d352fb62fb52ccb5ff6cba22c047fa02b35321 # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -98,7 +98,7 @@ jobs:
                   VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@8bc1e77fac91f0f630ce1ed41137aa33243d3476 # main at 2026-03-30
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@e0823e0e6488b36d84793d8dd07a78d0ec22b8d3 # main at 2026-03-30
         permissions:
             contents: write
             security-events: write
