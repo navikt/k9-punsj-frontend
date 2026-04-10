@@ -36,6 +36,7 @@ export const TidsbrukKalender = ({
     const [visKalender, setVisKalender] = useState<boolean>(false);
     const [visModal, setVisModal] = useState<boolean>(false);
     const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
+    const førsteGyldigePeriode = gyldigePerioder[0];
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
@@ -101,8 +102,12 @@ export const TidsbrukKalender = ({
         [gyldigePerioder],
     );
     const disabledDates = useMemo(() => {
+        if (!førsteGyldigePeriode) {
+            return [];
+        }
+
         const datoer = gyldigePerioder.flatMap((gyldigPeriode) => getDatesInDateRange(gyldigPeriode));
-        return getDatesInMonth(gyldigePerioder[0].fom)
+        return getDatesInMonth(førsteGyldigePeriode.fom)
             .map((date) => {
                 if (!isDateInDates(date, datoer) || (disableWeekends && isWeekend(date))) {
                     return date;
@@ -110,7 +115,7 @@ export const TidsbrukKalender = ({
                 return false;
             })
             .filter((v) => v instanceof Date) as Date[];
-    }, [gyldigePerioder, disableWeekends]);
+    }, [førsteGyldigePeriode, gyldigePerioder, disableWeekends]);
 
     const toggleDay = (date: Date) => {
         if (selectedDates.some((v) => dayjs(v).isSame(date))) {
@@ -159,9 +164,13 @@ export const TidsbrukKalender = ({
     const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
     const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
 
+    if (!førsteGyldigePeriode) {
+        return null;
+    }
+
     const tittel = (
         <>
-            <Heading size="xsmall">{tittelRenderer(gyldigePerioder[0].fom)}</Heading>
+            <Heading size="xsmall">{tittelRenderer(førsteGyldigePeriode.fom)}</Heading>
             {kalenderdagerIGyldigePerioder?.length ? (
                 <BodyShort>{`${kalenderdagerIGyldigePerioder?.length} dager registrert`}</BodyShort>
             ) : (
@@ -174,7 +183,7 @@ export const TidsbrukKalender = ({
         <ExpansionCard
             open={visKalender}
             onToggle={toggleKalender}
-            aria-labelledby={gyldigePerioder[0].fom.toISOString()}
+            aria-labelledby={førsteGyldigePeriode.fom.toISOString()}
             ref={kalenderRef}
             className="mt-3"
         >
@@ -186,7 +195,7 @@ export const TidsbrukKalender = ({
                     <div className="exempt-from-click-outside">
                         <CalendarGrid
                             onDateClick={(date) => (shiftKeydown ? selectRange(date) : toggleDay(date))}
-                            month={gyldigePerioder[0]}
+                            month={førsteGyldigePeriode}
                             disabledDates={disabledDates as Date[]}
                             disableWeekends={disableWeekends}
                             dateContentRenderer={dateContentRenderer}

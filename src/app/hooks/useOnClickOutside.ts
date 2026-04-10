@@ -1,6 +1,12 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
 const useOnClickOutside = <T extends HTMLElement>(ref: RefObject<T | null>, onClick: (event: MouseEvent) => void) => {
+    const onClickRef = useRef(onClick);
+
+    useEffect(() => {
+        onClickRef.current = onClick;
+    }, [onClick]);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target;
@@ -9,7 +15,7 @@ const useOnClickOutside = <T extends HTMLElement>(ref: RefObject<T | null>, onCl
                 return;
             }
 
-            onClick(event);
+            onClickRef.current(event);
         };
 
         document.addEventListener('click', handleClickOutside);
@@ -17,7 +23,7 @@ const useOnClickOutside = <T extends HTMLElement>(ref: RefObject<T | null>, onCl
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, [ref, onClick]);
+    }, [ref]);
 };
 
 export default useOnClickOutside;

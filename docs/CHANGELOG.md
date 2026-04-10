@@ -7,7 +7,9 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### TypeScript config and Tailwind cleanup (2026-04-10)
 
 - Fjernet deprecated `baseUrl` fra `tsconfig.json` og lot aliasen `app/*` peke eksplisitt til `./src/app/*`, slik at TypeScript 5.9 ikke varsler om oppsett som slutter å fungere i TypeScript 7.
+- La tilbake en Cypress-spesifikk `baseUrl` i `cypress/tsconfig.json`, slik at e2e-spesifikasjonene fortsatt kan løse `app/*` uten å reintrodusere deprecated oppsett i hovedkonfigurasjonen.
 - Byttet `max-w-[28.125rem]` til kanonisk Tailwind klasse `max-w-112.5` i `TidsbrukKalender`.
+- Fulgte opp reviewfunn med guard for tomme kalenderperioder, stabil `useOnClickOutside`-listener, tryggere immutability rundt `lodash/set` i skjemaoppdateringer og mer typesikker oppbygging av test-store i `src/test/testUtils.tsx`.
 
 ### Send brev for handled journalpost (2026-04-08)
 

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { BodyShort, Box, Heading, Label, Select, Textarea } from '@navikt/ds-react';
+import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -43,7 +44,7 @@ const AnnenForelder = ({ handleBlur }: Props) => {
             setFieldValue('annenForelder.periode.tom', '');
             handleBlur(
                 () => setFieldTouched('annenForelder.periode.tom'),
-                set({ ...values }, 'annenForelder.periode.tom', ''),
+                set(cloneDeep(values), 'annenForelder.periode.tom', ''),
             );
         }
     }, [tilOgMedErIkkeOppgitt, values.annenForelder.periode.tom]);

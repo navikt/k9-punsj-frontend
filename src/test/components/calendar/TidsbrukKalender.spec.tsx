@@ -36,6 +36,20 @@ const åpneKalender = async () => {
 const hentRegistrerTidKnapp = () => screen.getByText('Registrer tid').closest('button') as HTMLButtonElement;
 
 describe('TidsbrukKalender', () => {
+    it('renders nothing when gyldigePerioder is empty', () => {
+        const { container } = renderWithIntl(
+            <TidsbrukKalender
+                gyldigePerioder={[]}
+                ModalContent={<TestModalContent />}
+                slettPeriode={() => undefined}
+                dateContentRenderer={() => null}
+                tittelRenderer={() => 'Test month'}
+            />,
+        );
+
+        expect(container).toBeEmptyDOMElement();
+    });
+
     it('clears selected dates on escape and outside click', async () => {
         renderKalender();
         await åpneKalender();

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { set } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
@@ -72,7 +72,7 @@ const ArbeidsforholdPanel = ({
     const frilanserperioder = () => {
         const arbeid = soknad.arbeidstid;
         const opptjening = soknad.opptjeningAktivitet;
-        const oppdatertArbeidstid = (path: string, perioder: unknown) => set({ ...(arbeid || {}) }, path, perioder);
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => set(cloneDeep(arbeid || {}), path, perioder);
 
         return (
             <>
@@ -226,7 +226,7 @@ const ArbeidsforholdPanel = ({
     const selvstendigperioder = () => {
         const opptjening = soknad.opptjeningAktivitet;
         const arbeid = soknad.arbeidstid;
-        const oppdatertArbeidstid = (path: string, perioder: unknown) => set({ ...(arbeid || {}) }, path, perioder);
+        const oppdatertArbeidstid = (path: string, perioder: unknown) => set(cloneDeep(arbeid || {}), path, perioder);
 
         return (
             <div className="infoContainer">

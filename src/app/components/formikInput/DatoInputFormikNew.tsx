@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormikValues, useField, useFormikContext } from 'formik';
-import { set } from 'lodash';
+import { cloneDeep, set } from 'lodash';
 import { DatePickerProps } from '@navikt/ds-react';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 
@@ -29,7 +29,7 @@ const DatoInputFormikNew = ({ label, name, size, handleBlur, hideLabel, error, .
             }}
             onBlur={(selectedDate: string) => {
                 if (handleBlur) {
-                    handleBlur(() => helper.setTouched(true, true), set({ ...values }, name, selectedDate));
+                    handleBlur(() => helper.setTouched(true, true), set(cloneDeep(values), name, selectedDate));
                 } else {
                     helper.setValue(selectedDate);
                     helper.setTouched(true, true);
