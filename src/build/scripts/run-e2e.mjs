@@ -112,12 +112,22 @@ const run = async () => {
     process.once('SIGINT', () => void handleSignal('SIGINT'));
     process.once('SIGTERM', () => void handleSignal('SIGTERM'));
 
+    const startProcessReady = new Promise((resolve, reject) => {
+        startProcess.once('error', (err) =>
+            reject(new Error(`Failed to start dev server: ${err.message}`)),
+        );
+        waitForReady(startProcess).then(resolve, reject);
+    });
+
     try {
-        await waitForReady(startProcess);
+        await startProcessReady;
 
         const cypressProcess = spawnYarnScript(cypressScript, forwardedArgs);
-        const exitCode = await new Promise((resolve) => {
+        const exitCode = await new Promise((resolve, reject) => {
             cypressProcess.once('exit', (code) => resolve(code ?? 1));
+            cypressProcess.once('error', (err) =>
+                reject(new Error(`Failed to spawn Cypress: ${err.message}`)),
+            );
         });
 
         process.exitCode = exitCode;
