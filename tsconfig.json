@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "paths": {
-            "app/*": ["app/*"]
+            "app/*": ["./src/app/*"]
         },
         "outDir": "build/dist",
         "module": "esnext",
@@ -19,7 +19,6 @@
         "strictNullChecks": true,
         "skipLibCheck": true,
         "noUnusedLocals": false,
-        "baseUrl": "./src",
         "typeRoots": ["./node_modules/@types", "./src/@types"],
         "resolveJsonModule": true,
         "types": ["node"]

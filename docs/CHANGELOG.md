@@ -4,6 +4,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### TypeScript config and Tailwind cleanup (2026-04-10)
+
+- Fjernet deprecated `baseUrl` fra `tsconfig.json` og lot aliasen `app/*` peke eksplisitt til `./src/app/*`, slik at TypeScript 5.9 ikke varsler om oppsett som slutter å fungere i TypeScript 7.
+- Byttet `max-w-[28.125rem]` til kanonisk Tailwind klasse `max-w-112.5` i `TidsbrukKalender`.
+
 ### Send brev for handled journalpost (2026-04-08)
 
 - Strammet inn `Send brev` for ferdig håndterte journalposter med uavklart `sakstype`, slik at brukeren må velge en konkret ytelsestype før brevflyten kan åpnes videre.
