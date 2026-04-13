@@ -11,6 +11,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Fjernet også ubrukte direkte server-avhengigheter `@sentry/cli`, `node-cache` og `openid-client`, siden de ikke brukes i dagens serverkode eller scripts.
 - Fjernet stale `eslintConfig` med `plugin:storybook/recommended`, fjernet `eslint-plugin-storybook` og den redundante direkte `@typescript-eslint/eslint-plugin`-avhengigheten, siden repoet nå styres av `eslint.config.js` og `typescript-eslint`.
 - Erstattet `start-server-and-test` for lokale `test:e2e` og `test:e2eUI` med et lite repo-lokalt Node-script som starter `start:e2e`, venter på `/health/isReady`, kjører Cypress og stopper dev-serveren etterpå.
+- La tilbake `@sentry/cli` i `server/package.json` etter at prod-deploy viste at `yarn sentry-release` fortsatt kjøres etter `yarn workspaces focus @k9-punsj-frontend/server --production`. Avhengigheten er dermed fortsatt nødvendig i dagens deployflyt, selv om den ikke brukes av serverkoden direkte.
 
 ### TypeScript config and Tailwind cleanup (2026-04-10)
 
