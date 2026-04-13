@@ -2,15 +2,17 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-## Unreleased
-
 ### Package maintenance follow up (2026-04-10)
 
 - Lot `axios@1.15.0` vente foreløpig, fordi repoets `npmMinimalAgeGate: 7d` i `.yarnrc.yml` blokkerer den versjonen frem til minst 2026-04-15, og vi ønsket ikke å omgå den policyen i samme pass.
+- Løftet direkte `lodash` og pinned `lodash-es` fra `4.17.23` til `4.18.1` etter at begge versjonene var eldre enn repoets `npmMinimalAgeGate: 7d`, slik at de kjente advisories for `_.template`, `_.unset` og `_.omit` ikke lenger treffer repoets manifest.
+- Løftet `react-hook-form` fra `7.72.0` til `7.72.1` som et lite patch-pass etter at versjonen hadde passert repoets `npmMinimalAgeGate: 7d`.
+- Løftet `react-router` og `react-router-dom` fra `7.13.2` til `7.14.0` som et lite maintenance-pass etter at minor-versjonen hadde passert repoets `npmMinimalAgeGate: 7d`.
 - Fjernet ubrukt direkte `axios` fra `server/package.json` etter at gjennomgang av repoet og git-historikken ikke viste noen faktisk bruk i `server/**` eller `src/**`. Dermed forsvinner den direkte server-avhengigheten i stedet for å bli bumpet uten grunn.
 - Fjernet også ubrukte direkte server-avhengigheter `@sentry/cli`, `node-cache` og `openid-client`, siden de ikke brukes i dagens serverkode eller scripts.
 - Fjernet stale `eslintConfig` med `plugin:storybook/recommended`, fjernet `eslint-plugin-storybook` og den redundante direkte `@typescript-eslint/eslint-plugin`-avhengigheten, siden repoet nå styres av `eslint.config.js` og `typescript-eslint`.
 - Erstattet `start-server-and-test` for lokale `test:e2e` og `test:e2eUI` med et lite repo-lokalt Node-script som starter `start:e2e`, venter på `/health/isReady`, kjører Cypress og stopper dev-serveren etterpå.
+- La tilbake `@sentry/cli` i `server/package.json` etter at prod-deploy viste at `yarn sentry-release` fortsatt kjøres etter `yarn workspaces focus @k9-punsj-frontend/server --production`. Avhengigheten er dermed fortsatt nødvendig i dagens deployflyt, selv om den ikke brukes av serverkoden direkte.
 
 ### TypeScript config and Tailwind cleanup (2026-04-10)
 
