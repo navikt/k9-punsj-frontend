@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Faro custom events for manual journalpost flow (2026-04-13)
+
+- La til en liten `Faro` helper for manuelle frontend-events, som første steg mot produktmåling i stedet for bare teknisk observability.
+- Sender nå et første trygt custom `Faro` event når brukeren åpner `Opprett journalpost`, slik at vi kan verifisere at custom `Faro` events er synlige i dev og kan brukes i egne Grafana-panels senere.
+- La til en smal enhetstest for helperen, inkludert guard når `telemetryCollectorURL` mangler og verifisering av forventet payload for det første eventet.
+
 ### Package maintenance follow up (2026-04-10)
 
 - Lot `axios@1.15.0` vente foreløpig, fordi repoets `npmMinimalAgeGate: 7d` i `.yarnrc.yml` blokkerer den versjonen frem til minst 2026-04-15, og vi ønsket ikke å omgå den policyen i samme pass.

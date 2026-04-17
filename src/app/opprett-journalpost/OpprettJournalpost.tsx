@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -12,6 +12,7 @@ import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRules } from './useValidationRules';
+import { trackManualJournalpostFlowStarted } from 'app/utils/faroEvents';
 
 import './opprettJournalpost.css';
 
@@ -37,6 +38,10 @@ const OpprettJournalpost: React.FC = () => {
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
 
     const { søkerIdentitetsnummerValidator, fagsakIdValidator, tittelValidator, notatValidator } = useValidationRules();
+
+    useEffect(() => {
+        trackManualJournalpostFlowStarted();
+    }, []);
 
     const methods = useForm<IOpprettJournalpostForm>({
         defaultValues: defaultValues,
