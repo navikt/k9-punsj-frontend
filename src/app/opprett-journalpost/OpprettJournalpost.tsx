@@ -9,10 +9,10 @@ import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
 import Fagsak from 'app/types/Fagsak';
 import { finnVisningsnavnForSakstype, post } from 'app/utils';
-import { IOpprettJournalpostForm, OpprettJournalpostFormKeys } from './types';
+import { IOpprettJournalpostForm, IOpprettJournalpostResponse, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRules } from './useValidationRules';
-import { trackManualJournalpostFlowStarted } from 'app/utils/faroEvents';
+import { setManualJournalpostFlowSource, trackManualJournalpostFlowStarted } from 'app/utils/faroEvents';
 
 import './opprettJournalpost.css';
 
@@ -104,9 +104,10 @@ const OpprettJournalpost: React.FC = () => {
     const onSubmit = async (values: IOpprettJournalpostForm) => {
         setOpprettJpError('');
         return new Promise<void>((resolve) => {
-            post(ApiPath.OPPRETT_NOTAT, undefined, undefined, values, (response, data) => {
+            post(ApiPath.OPPRETT_NOTAT, undefined, undefined, values, (response, data: IOpprettJournalpostResponse) => {
                 if (response.status === 201) {
                     setOpprettetJournalpostId(data.journalpostId);
+                    setManualJournalpostFlowSource(data.journalpostId);
                     resolve();
                 } else {
                     reset(values, { keepValues: true, keepErrors: true, keepDirty: true, keepTouched: true });

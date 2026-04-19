@@ -6,6 +6,8 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - La til en liten `Faro` helper for manuelle frontend-events, som første steg mot produktmåling i stedet for bare teknisk observability.
 - Sender nå et første trygt custom `Faro` event når brukeren åpner `Opprett journalpost`, slik at vi kan verifisere at custom `Faro` events er synlige i dev og kan brukes i egne Grafana-panels senere.
+- Lagrer nå hvilke journalposter som blir opprettet manuelt i sesjonen, slik at videre punsjflyt kan kobles tilbake til `Opprett journalpost` uten å sende persondata eller interne payload-verdier til analytics.
+- Sender nå `Faro` submit-events for `PSB` basert på kvitteringen fra backend, men med bevisst smal taksonomi. Foreløpig måles bare `arbeidstid`, `trekk_av_periode`, `periode` og samlet `annet`, slik at vi kan teste hypotesen uten å sende unødvendig detaljgrad til analytics.
 - La til en smal enhetstest for helperen, inkludert guard når `telemetryCollectorURL` mangler og verifisering av forventet payload for det første eventet.
 
 ### Package maintenance follow up (2026-04-10)
