@@ -39,9 +39,22 @@ import '@navikt/ds-css';
 import './styles/globals.css';
 
 const environment = window.location.hostname;
+type WindowWithNaisReady = Window & {
+    __naisReady?: Promise<unknown>;
+};
+
+const waitForNaisConfig = async (): Promise<void> => {
+    const naisReady = (window as WindowWithNaisReady).__naisReady;
+
+    if (naisReady) {
+        await naisReady;
+    }
+};
 
 const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
+        await waitForNaisConfig();
+
         if (window.nais?.app && window.nais?.telemetryCollectorURL) {
             initializeFaro({
                 url: window.nais?.telemetryCollectorURL,

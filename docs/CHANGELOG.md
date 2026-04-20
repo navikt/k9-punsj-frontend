@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Faro initialization waits for nais config (2026-04-20)
+
+- Venter nå eksplisitt på at `nais.js` skal lastes ferdig før `initializeFaro(...)` kjøres i frontend.
+- Gjør frontend-observability mer stabil ved direkte inngang i appen, der `window.nais` tidligere kunne være utilgjengelig akkurat når appen startet.
+
 ### Faro custom events for manual journalpost flow (2026-04-13)
 
 - La til en liten `Faro` helper for manuelle frontend-events, som første steg mot produktmåling i stedet for bare teknisk observability.
