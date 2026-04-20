@@ -65,9 +65,19 @@ const readManualJournalpostSourceIds = (): string[] => {
             return [];
         }
 
-        return parsedValue.filter(
-            (value): value is string => typeof value === 'string' && normalizeJournalpostId(value).length > 0,
-        );
+        return parsedValue.reduce<string[]>((journalpostIds, value) => {
+            if (typeof value !== 'string') {
+                return journalpostIds;
+            }
+
+            const normalizedValue = normalizeJournalpostId(value);
+
+            if (normalizedValue.length > 0) {
+                journalpostIds.push(normalizedValue);
+            }
+
+            return journalpostIds;
+        }, []);
     } catch {
         return [];
     }

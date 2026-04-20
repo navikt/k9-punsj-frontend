@@ -99,7 +99,7 @@ describe('faroEvents', () => {
             },
             trekkKravPerioder: ['2026-04-13/2026-04-14'],
         },
-        begrunnelseForInnsending: { tekst: 'test' },
+        begrunnelseForInnsending: { tekst: '' },
     };
 
     beforeEach(() => {
@@ -151,6 +151,14 @@ describe('faroEvents', () => {
 
         expect(clearManualJournalpostFlowSource(journalpostId)).toBeTruthy();
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal lese journalpostIder fra sessionStorage med trimmet format', () => {
+        window.sessionStorage.setItem('manualJournalpostSourceIds', JSON.stringify(['  jp-123  ']));
+
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+        expect(clearManualJournalpostFlowSource(journalpostId)).toBeTruthy();
+        expect(window.sessionStorage.getItem('manualJournalpostSourceIds')).toBeNull();
     });
 
     it('Skal mappe PSB-kvittering til forventede feltgrupper', () => {

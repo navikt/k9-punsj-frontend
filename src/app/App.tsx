@@ -39,12 +39,9 @@ import '@navikt/ds-css';
 import './styles/globals.css';
 
 const environment = window.location.hostname;
-type WindowWithNaisReady = Window & {
-    __naisReady?: Promise<unknown>;
-};
 
 const waitForNaisConfig = async (): Promise<void> => {
-    const naisReady = (window as WindowWithNaisReady).__naisReady;
+    const naisReady = window.__naisReady;
 
     if (naisReady) {
         await naisReady;
