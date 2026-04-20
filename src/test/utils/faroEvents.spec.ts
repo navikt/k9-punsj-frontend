@@ -115,6 +115,18 @@ describe('faroEvents', () => {
         expect(pushEventMock).not.toHaveBeenCalled();
     });
 
+    it('Skal videresende Faro-event options til SDK-et', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        const result = pushFaroEvent('test_event', { source: 'test' }, { skipDedupe: true });
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith('test_event', { source: 'test' }, undefined, { skipDedupe: true });
+    });
+
     it('Skal sende custom Faro-event for manuelt opprettet journalpost med trygge attributter', () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
@@ -128,7 +140,7 @@ describe('faroEvents', () => {
             source: 'opprett_journalpost',
             route: '/opprett-journalpost',
             phase: 'page_opened',
-        });
+        }, undefined, { skipDedupe: true });
     });
 
     it('Skal lagre og rydde manuelt opprettet journalpost som kilde for senere punsjflyt', () => {
@@ -164,7 +176,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
-        });
+        }, undefined, { skipDedupe: true });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -184,13 +196,13 @@ describe('faroEvents', () => {
             sakstype: 'PSB',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        });
+        }, undefined, { skipDedupe: true });
         expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
             field_group: PSB_FIELD_GROUPS.ARBEIDSTID,
-        });
+        }, undefined, { skipDedupe: true });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 

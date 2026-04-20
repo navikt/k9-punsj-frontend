@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Faro analytics skips SDK dedupe for manual punsj events (2026-04-20)
+
+- Lar nå manuelle `Faro`-events for `Opprett journalpost` og `PSB`-submit gå med `skipDedupe`, slik at gjentatte men legitime analytics-hendelser ikke lettere faller bort i frontend-SDK-et.
+- Holder custom analytics-sporet smalt, men gjør det tryggere å sammenligne flere manuelle journalpost-innsendinger over tid i Grafana.
+
 ### Faro initialization waits for nais config (2026-04-20)
 
 - Venter nå eksplisitt på at `nais.js` skal lastes ferdig før `initializeFaro(...)` kjøres i frontend.

@@ -20,6 +20,9 @@ export const PSB_FIELD_GROUPS = {
 
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
+type FaroEventOptions = {
+    skipDedupe?: boolean;
+};
 
 const PSB_FIELD_GROUP_ORDER: PsbFieldGroup[] = [
     PSB_FIELD_GROUPS.ARBEIDSTID,
@@ -131,13 +134,13 @@ const hasAnnetPsbInnhold = (innsentSoknad: IPSBSoknadKvittering): boolean => {
     );
 };
 
-export const pushFaroEvent = (name: string, attributes?: EventAttributes): boolean => {
+export const pushFaroEvent = (name: string, attributes?: EventAttributes, options?: FaroEventOptions): boolean => {
     if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL) {
         return false;
     }
 
     try {
-        faro.api.pushEvent(name, attributes);
+        faro.api.pushEvent(name, attributes, undefined, options);
         return true;
     } catch {
         return false;
@@ -149,7 +152,7 @@ export const trackManualJournalpostFlowStarted = (): boolean =>
         source: OPPRETT_JOURNALPOST_SOURCE,
         route: ROUTES.OPPRETT_JOURNALPOST,
         phase: 'page_opened',
-    });
+    }, { skipDedupe: true });
 
 export const setManualJournalpostFlowSource = (journalpostId: string): boolean => {
     const normalizedJournalpostId = normalizeJournalpostId(journalpostId);
@@ -221,7 +224,7 @@ export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean =
     return pushFaroEvent(PUNSJ_STARTED_EVENT, {
         source,
         sakstype: 'PSB',
-    });
+    }, { skipDedupe: true });
 };
 
 export const trackPsbSubmitFromJournalpost = (
@@ -244,13 +247,13 @@ export const trackPsbSubmitFromJournalpost = (
         ...sharedAttributes,
         used_field_groups: fieldGroups.join(',') || 'none',
         used_field_group_count: String(fieldGroups.length),
-    });
+    }, { skipDedupe: true });
 
     fieldGroups.forEach((fieldGroup) => {
         pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             ...sharedAttributes,
             field_group: fieldGroup,
-        });
+        }, { skipDedupe: true });
     });
 
     clearManualJournalpostFlowSource(journalpostId);
