@@ -2,6 +2,7 @@ import { faro } from '@grafana/faro-web-sdk';
 import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
+    PUNSJ_STARTED_EVENT,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
     clearManualJournalpostFlowSource,
@@ -10,6 +11,7 @@ import {
     pushFaroEvent,
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
+    trackPsbStartedFromJournalpost,
     trackPsbSubmitFromJournalpost,
 } from '../../app/utils/faroEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
@@ -146,6 +148,24 @@ describe('faroEvents', () => {
             PSB_FIELD_GROUPS.PERIODE,
             PSB_FIELD_GROUPS.ANNET,
         ]);
+    });
+
+    it('Skal sende PSB start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackPsbStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PSB',
+        });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
     it('Skal sende PSB submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {

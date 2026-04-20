@@ -3,6 +3,7 @@ import { ROUTES } from 'app/constants/routes';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
 
 export const MANUAL_JOURNALPOST_FLOW_STARTED_EVENT = 'manual_journalpost_flow_started';
+export const PUNSJ_STARTED_EVENT = 'punsj_started';
 export const PUNSJ_SUBMIT_SNAPSHOT_EVENT = 'punsj_submit_snapshot';
 export const PUNSJ_SUBMIT_FIELD_GROUP_EVENT = 'punsj_submit_field_group';
 
@@ -208,6 +209,19 @@ export const getPsbSubmittedFieldGroups = (innsentSoknad: IPSBSoknadKvittering):
     }
 
     return PSB_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
+};
+
+export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean => {
+    const source = getPunsjSourceForJournalpost(journalpostId);
+
+    if (source === UNKNOWN_SOURCE) {
+        return false;
+    }
+
+    return pushFaroEvent(PUNSJ_STARTED_EVENT, {
+        source,
+        sakstype: 'PSB',
+    });
 };
 
 export const trackPsbSubmitFromJournalpost = (

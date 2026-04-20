@@ -83,7 +83,7 @@ import {
     periodKeyFromPeriode,
     resolvePeriodInputPart,
 } from '../utils/errorAnchorUtils';
-import { trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -224,6 +224,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidMount() {
         const { id } = this.props;
         this.props.getSoknad(id);
+        trackPsbStartedFromJournalpost(this.props.journalpostid);
         this.setState((prevState) => {
             const updatedFeilmeldingStier = new Set(prevState.feilmeldingStier); // Create a copy of the previous state
 
