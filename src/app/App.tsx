@@ -40,8 +40,18 @@ import './styles/globals.css';
 
 const environment = window.location.hostname;
 
+const waitForNaisConfig = async (): Promise<void> => {
+    const naisReady = window.__naisReady;
+
+    if (naisReady) {
+        await naisReady;
+    }
+};
+
 const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
+        await waitForNaisConfig();
+
         if (window.nais?.app && window.nais?.telemetryCollectorURL) {
             initializeFaro({
                 url: window.nais?.telemetryCollectorURL,

@@ -83,6 +83,7 @@ import {
     periodKeyFromPeriode,
     resolvePeriodInputPart,
 } from '../utils/errorAnchorUtils';
+import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -223,6 +224,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     componentDidMount() {
         const { id } = this.props;
         this.props.getSoknad(id);
+        trackPsbStartedFromJournalpost(this.props.journalpostid);
         this.setState((prevState) => {
             const updatedFeilmeldingStier = new Set(prevState.feilmeldingStier); // Create a copy of the previous state
 
@@ -246,15 +248,21 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
     }
 
-    componentDidUpdate() {
-        const { soknad } = this.props.punchFormState;
+    componentDidUpdate(prevProps: IPunchFormProps) {
+        const { punchFormState, journalpostid } = this.props;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
+        if (!prevProps.punchFormState.isComplete && isComplete && innsentSoknad) {
+            trackPsbSubmitFromJournalpost(journalpostid, innsentSoknad);
+        }
+
         // this.props.updateJournalposter(this.state.soknad.journalposter);
         if (soknad && !this.state.isFetched) {
             this.setState({
-                soknad: new PSBSoknad(this.props.punchFormState.soknad as IPSBSoknad),
+                soknad: new PSBSoknad(punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
-                iTilsynsordning: !!this.props.punchFormState.soknad?.tilsynsordning?.perioder?.length,
-                aapnePaneler: this.getÅpnePanelerVedStart(this.props.punchFormState.soknad as IPSBSoknad),
+                iTilsynsordning: !!punchFormState.soknad?.tilsynsordning?.perioder?.length,
+                aapnePaneler: this.getÅpnePanelerVedStart(punchFormState.soknad as IPSBSoknad),
             });
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });

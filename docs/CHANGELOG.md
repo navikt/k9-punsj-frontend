@@ -2,6 +2,24 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Faro analytics skips SDK dedupe for manual punsj events (2026-04-20)
+
+- Lar nå manuelle `Faro`-events for `Opprett journalpost` og `PSB`-submit gå med `skipDedupe`, slik at gjentatte men legitime analytics-hendelser ikke lettere faller bort i frontend-SDK-et.
+- Holder custom analytics-sporet smalt, men gjør det tryggere å sammenligne flere manuelle journalpost-innsendinger over tid i Grafana.
+
+### Faro initialization waits for nais config (2026-04-20)
+
+- Venter nå eksplisitt på at `nais.js` skal lastes ferdig før `initializeFaro(...)` kjøres i frontend.
+- Gjør frontend-observability mer stabil ved direkte inngang i appen, der `window.nais` tidligere kunne være utilgjengelig akkurat når appen startet.
+
+### Faro custom events for manual journalpost flow (2026-04-13)
+
+- La til en liten `Faro` helper for manuelle frontend-events, som første steg mot produktmåling i stedet for bare teknisk observability.
+- Sender nå et første trygt custom `Faro` event når brukeren åpner `Opprett journalpost`, slik at vi kan verifisere at custom `Faro` events er synlige i dev og kan brukes i egne Grafana-panels senere.
+- Lagrer nå hvilke journalposter som blir opprettet manuelt i sesjonen, slik at videre punsjflyt kan kobles tilbake til `Opprett journalpost` uten å sende persondata eller interne payload-verdier til analytics.
+- Sender nå `Faro` submit-events for `PSB` basert på kvitteringen fra backend, men med bevisst smal taksonomi. Foreløpig måles bare `arbeidstid`, `trekk_av_periode`, `periode` og samlet `annet`, slik at vi kan teste hypotesen uten å sende unødvendig detaljgrad til analytics.
+- La til en smal enhetstest for helperen, inkludert guard når `telemetryCollectorURL` mangler og verifisering av forventet payload for det første eventet.
+
 ### Package maintenance follow up (2026-04-10)
 
 - Lot `axios@1.15.0` vente foreløpig, fordi repoets `npmMinimalAgeGate: 7d` i `.yarnrc.yml` blokkerer den versjonen frem til minst 2026-04-15, og vi ønsket ikke å omgå den policyen i samme pass.
