@@ -1250,12 +1250,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     hentPerioder: (søkerId: string, pleietrengendeId: string) =>
         dispatch(hentPLSPerioderFraK9Sak(søkerId, pleietrengendeId)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
-    validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring: boolean) =>
+    validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring?: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
     resetAllStateAction: () => dispatch(resetAllStateAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+    setIdentAction: (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),
