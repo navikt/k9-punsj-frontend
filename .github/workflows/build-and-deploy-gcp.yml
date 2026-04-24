@@ -109,8 +109,8 @@ jobs:
             team: k9saksbehandling
             image: ${{ needs.deploy.outputs.image }}
 
-  sif-code-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@main
+    sif-code-scan:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+        - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@main
