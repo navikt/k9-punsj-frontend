@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### PLS manual journalpost analytics (2026-04-24)
+
+- Sender nå samme type `Faro` start- og submit-måling for `PLS` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `PLS` submit-kvitteringen til trygge feltgrupper for `arbeidstid`, `trekk_av_periode`, `periode`, `ferie`, `utenlandsopphold`, `bosted` og `opptjening`.
+
 ### PSB manual journalpost analytics field groups (2026-04-24)
 
 - Deler nå `PSB` submit-analytics for manuelt opprettede journalposter i flere trygge feltgrupper, blant annet `tilsyn`, `beredskap`, `nattevaak`, `ferie`, `utenlandsopphold`, `bosted`, `uttak`, `omsorg` og `opptjening`.

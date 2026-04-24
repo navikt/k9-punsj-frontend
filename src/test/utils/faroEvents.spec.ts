@@ -3,18 +3,23 @@ import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
+    PLS_FIELD_GROUPS,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
     clearManualJournalpostFlowSource,
+    getPlsSubmittedFieldGroups,
     getPsbSubmittedFieldGroups,
     getPunsjSourceForJournalpost,
     pushFaroEvent,
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
+    trackPlsStartedFromJournalpost,
+    trackPlsSubmitFromJournalpost,
     trackPsbStartedFromJournalpost,
     trackPsbSubmitFromJournalpost,
 } from '../../app/utils/faroEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
+import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 jest.mock('@grafana/faro-web-sdk', () => ({
     faro: {
@@ -99,6 +104,59 @@ describe('faroEvents', () => {
                     startdato: '2026-01-01',
                     sluttdato: null,
                     jobberFortsattSomFrilans: true,
+                },
+            },
+            trekkKravPerioder: ['2026-04-13/2026-04-14'],
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
+    const plsKvittering: IPLSSoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        ytelse: {
+            type: 'PLS',
+            søknadsperiode: ['2026-04-01/2026-04-10'],
+            pleietrengende: {
+                norskIdentitetsnummer: '12345678910',
+            },
+            arbeidstid: {
+                arbeidstakerList: [
+                    {
+                        norskIdentitetsnummer: null,
+                        organisasjonsnummer: '123456789',
+                        arbeidstidInfo: {
+                            perioder: {
+                                '2026-04-01/2026-04-02': {
+                                    jobberNormaltTimerPerDag: 'PT7H30M',
+                                    faktiskArbeidTimerPerDag: 'PT4H',
+                                },
+                            },
+                        },
+                    },
+                ],
+                frilanserArbeidstidInfo: null,
+                selvstendigNæringsdrivendeArbeidstidInfo: null,
+            },
+            opptjeningAktivitet: {
+                frilanser: {
+                    startdato: '2026-01-01',
+                    sluttdato: null,
+                    jobberFortsattSomFrilans: true,
+                },
+            },
+            lovbestemtFerie: {
+                perioder: {
+                    '2026-04-10/2026-04-10': { skalHaFerie: 'true' },
+                },
+            },
+            bosteder: {
+                perioder: {
+                    '2026-04-01/2026-04-03': { land: 'SWE' },
+                },
+            },
+            utenlandsopphold: {
+                perioder: {
+                    '2026-04-04/2026-04-05': { land: 'DNK' },
                 },
             },
             trekkKravPerioder: ['2026-04-13/2026-04-14'],
@@ -210,6 +268,38 @@ describe('faroEvents', () => {
         })).toEqual([]);
     });
 
+    it('Skal mappe PLS-kvittering til forventede feltgrupper', () => {
+        expect(getPlsSubmittedFieldGroups(plsKvittering)).toEqual([
+            PLS_FIELD_GROUPS.ARBEIDSTID,
+            PLS_FIELD_GROUPS.TREKK_AV_PERIODE,
+            PLS_FIELD_GROUPS.PERIODE,
+            PLS_FIELD_GROUPS.FERIE,
+            PLS_FIELD_GROUPS.UTENLANDSOPPHOLD,
+            PLS_FIELD_GROUPS.BOSTED,
+            PLS_FIELD_GROUPS.OPPTJENING,
+        ]);
+    });
+
+    it('Skal ikke mappe tomme PLS-seksjoner til feltgrupper', () => {
+        expect(getPlsSubmittedFieldGroups({
+            ...plsKvittering,
+            ytelse: {
+                ...plsKvittering.ytelse,
+                søknadsperiode: [],
+                arbeidstid: {
+                    arbeidstakerList: [],
+                    frilanserArbeidstidInfo: null,
+                    selvstendigNæringsdrivendeArbeidstidInfo: null,
+                },
+                opptjeningAktivitet: {},
+                lovbestemtFerie: { perioder: {} },
+                bosteder: { perioder: {} },
+                utenlandsopphold: { perioder: {} },
+                trekkKravPerioder: [],
+            },
+        })).toEqual([]);
+    });
+
     it('Skal sende PSB start-event for manuell journalpostflyt', () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
@@ -256,6 +346,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende PSB submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende PLS start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackPlsStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PLS',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende PLS submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
+
+        expect(fieldGroups).toEqual(getPlsSubmittedFieldGroups(plsKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PLS',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PLS',
+            field_group: PLS_FIELD_GROUPS.ARBEIDSTID,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende PLS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();

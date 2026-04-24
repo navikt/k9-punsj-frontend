@@ -1,6 +1,8 @@
 import { EventAttributes, faro } from '@grafana/faro-web-sdk';
 import { ROUTES } from 'app/constants/routes';
+import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
+import { IPLSSoknadKvittering } from 'app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 export const MANUAL_JOURNALPOST_FLOW_STARTED_EVENT = 'manual_journalpost_flow_started';
 export const PUNSJ_STARTED_EVENT = 'punsj_started';
@@ -27,10 +29,36 @@ export const PSB_FIELD_GROUPS = {
     ANNET: 'annet',
 } as const;
 
+export const PLS_FIELD_GROUPS = {
+    ARBEIDSTID: 'arbeidstid',
+    TREKK_AV_PERIODE: 'trekk_av_periode',
+    PERIODE: 'periode',
+    FERIE: 'ferie',
+    UTENLANDSOPPHOLD: 'utenlandsopphold',
+    BOSTED: 'bosted',
+    OPPTJENING: 'opptjening',
+} as const;
+
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
+type PlsFieldGroup = (typeof PLS_FIELD_GROUPS)[keyof typeof PLS_FIELD_GROUPS];
 type FaroEventOptions = {
     skipDedupe?: boolean;
+};
+
+type KvitteringWithArbeidstid = {
+    ytelse: {
+        arbeidstid: ISoknadKvitteringArbeidstid;
+    };
+};
+
+type KvitteringWithOpptjeningAktivitet = {
+    ytelse: {
+        opptjeningAktivitet: {
+            selvstendigNæringsdrivende?: unknown[];
+            frilanser?: unknown;
+        };
+    };
 };
 
 const PSB_FIELD_GROUP_ORDER: PsbFieldGroup[] = [
@@ -47,6 +75,16 @@ const PSB_FIELD_GROUP_ORDER: PsbFieldGroup[] = [
     PSB_FIELD_GROUPS.OMSORG,
     PSB_FIELD_GROUPS.OPPTJENING,
     PSB_FIELD_GROUPS.ANNET,
+];
+
+const PLS_FIELD_GROUP_ORDER: PlsFieldGroup[] = [
+    PLS_FIELD_GROUPS.ARBEIDSTID,
+    PLS_FIELD_GROUPS.TREKK_AV_PERIODE,
+    PLS_FIELD_GROUPS.PERIODE,
+    PLS_FIELD_GROUPS.FERIE,
+    PLS_FIELD_GROUPS.UTENLANDSOPPHOLD,
+    PLS_FIELD_GROUPS.BOSTED,
+    PLS_FIELD_GROUPS.OPPTJENING,
 ];
 
 const getSessionStorage = (): Storage | undefined => {
@@ -123,7 +161,7 @@ const writeManualJournalpostSourceIds = (journalpostIds: string[]): boolean => {
 
 const hasRecordEntries = (value?: Record<string, unknown> | null): boolean => !!value && Object.keys(value).length > 0;
 
-const hasArbeidstidPerioder = (innsentSoknad: IPSBSoknadKvittering): boolean => {
+const hasArbeidstidPerioder = (innsentSoknad: KvitteringWithArbeidstid): boolean => {
     const { arbeidstid } = innsentSoknad.ytelse;
 
     const arbeidstakerHarArbeidstid = arbeidstid.arbeidstakerList.some((arbeidstaker) =>
@@ -145,7 +183,7 @@ const hasOmsorgsinformasjon = (innsentSoknad: IPSBSoknadKvittering): boolean => 
     );
 };
 
-const hasOpptjeningAktivitet = (innsentSoknad: IPSBSoknadKvittering): boolean => {
+const hasOpptjeningAktivitet = (innsentSoknad: KvitteringWithOpptjeningAktivitet): boolean => {
     const { opptjeningAktivitet } = innsentSoknad.ytelse;
 
     return !!opptjeningAktivitet.frilanser || (opptjeningAktivitet.selvstendigNæringsdrivende?.length || 0) > 0;
@@ -274,6 +312,88 @@ export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean =
         source,
         sakstype: 'PSB',
     }, { skipDedupe: true });
+};
+
+export const getPlsSubmittedFieldGroups = (innsentSoknad: IPLSSoknadKvittering): PlsFieldGroup[] => {
+    const fieldGroups = new Set<PlsFieldGroup>();
+    const { ytelse } = innsentSoknad;
+
+    if (hasArbeidstidPerioder(innsentSoknad)) {
+        fieldGroups.add(PLS_FIELD_GROUPS.ARBEIDSTID);
+    }
+
+    if (ytelse.trekkKravPerioder.length > 0) {
+        fieldGroups.add(PLS_FIELD_GROUPS.TREKK_AV_PERIODE);
+    }
+
+    if (ytelse.søknadsperiode.length > 0) {
+        fieldGroups.add(PLS_FIELD_GROUPS.PERIODE);
+    }
+
+    if (hasRecordEntries(ytelse.lovbestemtFerie.perioder)) {
+        fieldGroups.add(PLS_FIELD_GROUPS.FERIE);
+    }
+
+    if (hasRecordEntries(ytelse.utenlandsopphold.perioder)) {
+        fieldGroups.add(PLS_FIELD_GROUPS.UTENLANDSOPPHOLD);
+    }
+
+    if (hasRecordEntries(ytelse.bosteder.perioder)) {
+        fieldGroups.add(PLS_FIELD_GROUPS.BOSTED);
+    }
+
+    if (hasOpptjeningAktivitet(innsentSoknad)) {
+        fieldGroups.add(PLS_FIELD_GROUPS.OPPTJENING);
+    }
+
+    return PLS_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
+};
+
+export const trackPlsStartedFromJournalpost = (journalpostId: string): boolean => {
+    const source = getPunsjSourceForJournalpost(journalpostId);
+
+    if (source === UNKNOWN_SOURCE) {
+        return false;
+    }
+
+    return pushFaroEvent(PUNSJ_STARTED_EVENT, {
+        source,
+        sakstype: 'PLS',
+    }, { skipDedupe: true });
+};
+
+export const trackPlsSubmitFromJournalpost = (
+    journalpostId: string,
+    innsentSoknad: IPLSSoknadKvittering,
+): PlsFieldGroup[] => {
+    const source = getPunsjSourceForJournalpost(journalpostId);
+
+    if (source === UNKNOWN_SOURCE) {
+        return [];
+    }
+
+    const fieldGroups = getPlsSubmittedFieldGroups(innsentSoknad);
+    const sharedAttributes = {
+        source,
+        sakstype: 'PLS',
+    };
+
+    pushFaroEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        ...sharedAttributes,
+        used_field_groups: fieldGroups.join(',') || 'none',
+        used_field_group_count: String(fieldGroups.length),
+    }, { skipDedupe: true });
+
+    fieldGroups.forEach((fieldGroup) => {
+        pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            ...sharedAttributes,
+            field_group: fieldGroup,
+        }, { skipDedupe: true });
+    });
+
+    clearManualJournalpostFlowSource(journalpostId);
+
+    return fieldGroups;
 };
 
 export const trackPsbSubmitFromJournalpost = (

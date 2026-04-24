@@ -68,6 +68,7 @@ import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
@@ -193,15 +194,28 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.props.getSoknad(id);
         }
 
+        trackPlsStartedFromJournalpost(this.props.journalpostid);
+
         if (søkersIdent && pleietrengendeIdent) {
             this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
         }
     }
 
     componentDidUpdate(prevProps: Readonly<IPunchPLSFormProps>): void {
-        const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
-            this.props;
-        const { soknad } = punchFormState;
+        const {
+            punchFormState,
+            journalpostid,
+            søkersIdent,
+            pleietrengendeIdent,
+            identState,
+            setIdentAction,
+            hentPerioder,
+        } = this.props;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
+        if (!prevProps.punchFormState.isComplete && isComplete && innsentSoknad) {
+            trackPlsSubmitFromJournalpost(journalpostid, innsentSoknad);
+        }
 
         if (soknad && !this.state.isFetched) {
             this.setState({
