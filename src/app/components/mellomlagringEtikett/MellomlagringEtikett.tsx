@@ -9,7 +9,7 @@ interface Props {
 }
 
 const MellomlagringEtikett: React.FC<Props> = ({ lagret, lagrer, error }) => {
-    const className = 'absolute top-[60px] left-4 z-5';
+    const className = 'absolute top-15 left-4 z-5';
 
     if (lagret) {
         return (

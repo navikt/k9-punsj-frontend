@@ -783,7 +783,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
 
         const { punchFormState } = this.props;
-        const className = 'absolute top-[60px] left-4 z-5';
+        const className = 'absolute top-15 left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
