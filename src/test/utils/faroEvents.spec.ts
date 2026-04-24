@@ -6,6 +6,7 @@ import {
     OLP_FIELD_GROUPS,
     OMPKS_FIELD_GROUPS,
     OMPMA_FIELD_GROUPS,
+    OMPUT_FIELD_GROUPS,
     PLS_FIELD_GROUPS,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
@@ -13,6 +14,7 @@ import {
     getOlpSubmittedFieldGroups,
     getOmpksSubmittedFieldGroups,
     getOmpmaSubmittedFieldGroups,
+    getOmputSubmittedFieldGroups,
     getPlsSubmittedFieldGroups,
     getPsbSubmittedFieldGroups,
     getPunsjSourceForJournalpost,
@@ -25,6 +27,8 @@ import {
     trackOmpksSubmitFromJournalpost,
     trackOmpmaStartedFromJournalpost,
     trackOmpmaSubmitFromJournalpost,
+    trackOmputStartedFromJournalpost,
+    trackOmputSubmitFromJournalpost,
     trackPlsStartedFromJournalpost,
     trackPlsSubmitFromJournalpost,
     trackPsbStartedFromJournalpost,
@@ -33,6 +37,7 @@ import {
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
 import { IOMPMASoknadKvittering } from '../../app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
+import { IOMPUTSoknadKvittering } from '../../app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
@@ -296,6 +301,57 @@ describe('faroEvents', () => {
         },
         begrunnelseForInnsending: { tekst: '' },
     };
+    const omputKvittering: IOMPUTSoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        språk: 'nb',
+        søker: {
+            norskIdentitetsnummer: '12345678910',
+        },
+        søknadId: '',
+        versjon: '1',
+        ytelse: {
+            type: 'OMPUT',
+            aktivitet: {
+                frilanser: {
+                    startdato: '2026-01-01',
+                    sluttdato: null,
+                    jobberFortsattSomFrilans: true,
+                },
+                selvstendigNæringsdrivende: {
+                    perioder: {},
+                    organisasjonsnummer: '',
+                    virksomhetNavn: '',
+                },
+            },
+            fraværsperioder: [
+                {
+                    aktivitetFravær: ['ARBEIDSTAKER'],
+                    arbeidsgiverOrgNr: '123456789',
+                    duration: 'PT7H30M',
+                    delvisFravær: {
+                        fravær: 'PT4H',
+                        normalarbeidstid: 'PT7H30M',
+                    },
+                    periode: '2026-04-01/2026-04-02',
+                    søknadÅrsak: 'ARBEIDSGIVER_KONKURS',
+                    årsak: 'ORDINÆRT_FRAVÆR',
+                },
+                {
+                    aktivitetFravær: ['FRILANSER', 'SELVSTENDIG_VIRKSOMHET'],
+                    duration: 'PT7H30M',
+                    delvisFravær: {
+                        fravær: 'PT4H',
+                        normalarbeidstid: 'PT7H30M',
+                    },
+                    periode: '2026-04-03/2026-04-04',
+                    søknadÅrsak: 'ARBEIDSGIVER_KONKURS',
+                    årsak: 'ORDINÆRT_FRAVÆR',
+                },
+            ],
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
 
     beforeEach(() => {
         pushEventMock.mockClear();
@@ -459,6 +515,14 @@ describe('faroEvents', () => {
             OLP_FIELD_GROUPS.UTTAK,
             OLP_FIELD_GROUPS.OMSORG,
             OLP_FIELD_GROUPS.OPPTJENING,
+        ]);
+    });
+
+    it('Skal mappe OMPUT-kvittering til forventede feltgrupper', () => {
+        expect(getOmputSubmittedFieldGroups(omputKvittering)).toEqual([
+            OMPUT_FIELD_GROUPS.ARBEIDSTAKER,
+            OMPUT_FIELD_GROUPS.FRILANSER,
+            OMPUT_FIELD_GROUPS.SELVSTENDIG,
         ]);
     });
 
@@ -712,6 +776,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende OLP submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende OMPUT start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackOmputStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPUT',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende OMPUT submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
+
+        expect(fieldGroups).toEqual(getOmputSubmittedFieldGroups(omputKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPUT',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPUT',
+            field_group: OMPUT_FIELD_GROUPS.FRILANSER,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende OMPUT submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();

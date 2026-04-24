@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OMPUT manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPUT` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPUT` submit-kvitteringen til trygge feltgrupper for `arbeidstaker`, `frilanser` og `selvstendig`.
+
 ### OLP manual journalpost analytics (2026-04-24)
 
 - Sender nå `Faro` start- og submit-måling for `OLP` når flyten kommer fra manuelt opprettet journalpost.
