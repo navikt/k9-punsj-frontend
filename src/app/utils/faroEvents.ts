@@ -2,6 +2,7 @@ import { EventAttributes, faro } from '@grafana/faro-web-sdk';
 import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
+import { IOMPKSSoknadKvittering } from 'app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
 import { IPLSSoknadKvittering } from 'app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 export const MANUAL_JOURNALPOST_FLOW_STARTED_EVENT = 'manual_journalpost_flow_started';
@@ -39,9 +40,15 @@ export const PLS_FIELD_GROUPS = {
     OPPTJENING: 'opptjening',
 } as const;
 
+export const OMPKS_FIELD_GROUPS = {
+    KRONISK_ELLER_FUNKSJONSHEMMING: 'kronisk_eller_funksjonshemming',
+} as const;
+
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
 type PlsFieldGroup = (typeof PLS_FIELD_GROUPS)[keyof typeof PLS_FIELD_GROUPS];
+type OmpksFieldGroup = (typeof OMPKS_FIELD_GROUPS)[keyof typeof OMPKS_FIELD_GROUPS];
+type PunsjFieldGroup = PsbFieldGroup | PlsFieldGroup | OmpksFieldGroup;
 type FaroEventOptions = {
     skipDedupe?: boolean;
 };
@@ -86,6 +93,8 @@ const PLS_FIELD_GROUP_ORDER: PlsFieldGroup[] = [
     PLS_FIELD_GROUPS.BOSTED,
     PLS_FIELD_GROUPS.OPPTJENING,
 ];
+
+const OMPKS_FIELD_GROUP_ORDER: OmpksFieldGroup[] = [OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING];
 
 const getSessionStorage = (): Storage | undefined => {
     if (typeof window === 'undefined') {
@@ -301,7 +310,7 @@ export const getPsbSubmittedFieldGroups = (innsentSoknad: IPSBSoknadKvittering):
     return PSB_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
 };
 
-export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean => {
+const trackPunsjStartedFromJournalpost = (journalpostId: string, sakstype: string): boolean => {
     const source = getPunsjSourceForJournalpost(journalpostId);
 
     if (source === UNKNOWN_SOURCE) {
@@ -310,9 +319,46 @@ export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean =
 
     return pushFaroEvent(PUNSJ_STARTED_EVENT, {
         source,
-        sakstype: 'PSB',
+        sakstype,
     }, { skipDedupe: true });
 };
+
+const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
+    journalpostId: string,
+    sakstype: string,
+    fieldGroups: FieldGroup[],
+): FieldGroup[] => {
+    const source = getPunsjSourceForJournalpost(journalpostId);
+
+    if (source === UNKNOWN_SOURCE) {
+        return [];
+    }
+
+    const sharedAttributes = {
+        source,
+        sakstype,
+    };
+
+    pushFaroEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        ...sharedAttributes,
+        used_field_groups: fieldGroups.join(',') || 'none',
+        used_field_group_count: String(fieldGroups.length),
+    }, { skipDedupe: true });
+
+    fieldGroups.forEach((fieldGroup) => {
+        pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            ...sharedAttributes,
+            field_group: fieldGroup,
+        }, { skipDedupe: true });
+    });
+
+    clearManualJournalpostFlowSource(journalpostId);
+
+    return fieldGroups;
+};
+
+export const trackPsbStartedFromJournalpost = (journalpostId: string): boolean =>
+    trackPunsjStartedFromJournalpost(journalpostId, 'PSB');
 
 export const getPlsSubmittedFieldGroups = (innsentSoknad: IPLSSoknadKvittering): PlsFieldGroup[] => {
     const fieldGroups = new Set<PlsFieldGroup>();
@@ -350,82 +396,45 @@ export const getPlsSubmittedFieldGroups = (innsentSoknad: IPLSSoknadKvittering):
 };
 
 export const trackPlsStartedFromJournalpost = (journalpostId: string): boolean => {
-    const source = getPunsjSourceForJournalpost(journalpostId);
-
-    if (source === UNKNOWN_SOURCE) {
-        return false;
-    }
-
-    return pushFaroEvent(PUNSJ_STARTED_EVENT, {
-        source,
-        sakstype: 'PLS',
-    }, { skipDedupe: true });
+    return trackPunsjStartedFromJournalpost(journalpostId, 'PLS');
 };
 
 export const trackPlsSubmitFromJournalpost = (
     journalpostId: string,
     innsentSoknad: IPLSSoknadKvittering,
 ): PlsFieldGroup[] => {
-    const source = getPunsjSourceForJournalpost(journalpostId);
+    const fieldGroups = getPlsSubmittedFieldGroups(innsentSoknad);
 
-    if (source === UNKNOWN_SOURCE) {
-        return [];
+    return trackPunsjSubmitFromJournalpost(journalpostId, 'PLS', fieldGroups);
+};
+
+export const getOmpksSubmittedFieldGroups = (innsentSoknad: IOMPKSSoknadKvittering): OmpksFieldGroup[] => {
+    const fieldGroups = new Set<OmpksFieldGroup>();
+
+    if (typeof innsentSoknad.ytelse.kroniskEllerFunksjonshemming === 'boolean') {
+        fieldGroups.add(OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING);
     }
 
-    const fieldGroups = getPlsSubmittedFieldGroups(innsentSoknad);
-    const sharedAttributes = {
-        source,
-        sakstype: 'PLS',
-    };
+    return OMPKS_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
+};
 
-    pushFaroEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
-        ...sharedAttributes,
-        used_field_groups: fieldGroups.join(',') || 'none',
-        used_field_group_count: String(fieldGroups.length),
-    }, { skipDedupe: true });
+export const trackOmpksStartedFromJournalpost = (journalpostId: string): boolean =>
+    trackPunsjStartedFromJournalpost(journalpostId, 'OMPKS');
 
-    fieldGroups.forEach((fieldGroup) => {
-        pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
-            ...sharedAttributes,
-            field_group: fieldGroup,
-        }, { skipDedupe: true });
-    });
+export const trackOmpksSubmitFromJournalpost = (
+    journalpostId: string,
+    innsentSoknad: IOMPKSSoknadKvittering,
+): OmpksFieldGroup[] => {
+    const fieldGroups = getOmpksSubmittedFieldGroups(innsentSoknad);
 
-    clearManualJournalpostFlowSource(journalpostId);
-
-    return fieldGroups;
+    return trackPunsjSubmitFromJournalpost(journalpostId, 'OMPKS', fieldGroups);
 };
 
 export const trackPsbSubmitFromJournalpost = (
     journalpostId: string,
     innsentSoknad: IPSBSoknadKvittering,
 ): PsbFieldGroup[] => {
-    const source = getPunsjSourceForJournalpost(journalpostId);
-
-    if (source === UNKNOWN_SOURCE) {
-        return [];
-    }
-
     const fieldGroups = getPsbSubmittedFieldGroups(innsentSoknad);
-    const sharedAttributes = {
-        source,
-        sakstype: 'PSB',
-    };
 
-    pushFaroEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
-        ...sharedAttributes,
-        used_field_groups: fieldGroups.join(',') || 'none',
-        used_field_group_count: String(fieldGroups.length),
-    }, { skipDedupe: true });
-
-    fieldGroups.forEach((fieldGroup) => {
-        pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
-            ...sharedAttributes,
-            field_group: fieldGroup,
-        }, { skipDedupe: true });
-    });
-
-    clearManualJournalpostFlowSource(journalpostId);
-
-    return fieldGroups;
+    return trackPunsjSubmitFromJournalpost(journalpostId, 'PSB', fieldGroups);
 };

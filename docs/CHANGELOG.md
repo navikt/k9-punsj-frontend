@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OMPKS manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPKS` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPKS` submit-kvitteringen til den trygge feltgruppen `kronisk_eller_funksjonshemming`.
+
 ### PLS manual journalpost analytics (2026-04-24)
 
 - Sender nå samme type `Faro` start- og submit-måling for `PLS` når flyten kommer fra manuelt opprettet journalpost.

@@ -44,6 +44,7 @@ import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPK
 import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
+import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
@@ -124,6 +125,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
     componentDidMount() {
         const { id } = this.props;
         this.props.getSoknad(id);
+        trackOmpksStartedFromJournalpost(this.props.journalpostid);
 
         this.setState((prevState) => {
             const updatedFeilmeldingStier = new Set(prevState.feilmeldingStier); // Create a copy of the previous state
@@ -139,8 +141,13 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
         });
     }
 
-    componentDidUpdate() {
-        const { soknad } = this.props.punchFormState;
+    componentDidUpdate(prevProps: Readonly<IPunchOMPKSFormProps>) {
+        const { journalpostid, punchFormState } = this.props;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
+        if (!prevProps.punchFormState.isComplete && isComplete && innsentSoknad) {
+            trackOmpksSubmitFromJournalpost(journalpostid, innsentSoknad);
+        }
 
         if (soknad && !this.state.isFetched) {
             const barn: Partial<IOMPKSSoknad> = {

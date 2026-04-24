@@ -3,22 +3,27 @@ import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
+    OMPKS_FIELD_GROUPS,
     PLS_FIELD_GROUPS,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
     clearManualJournalpostFlowSource,
+    getOmpksSubmittedFieldGroups,
     getPlsSubmittedFieldGroups,
     getPsbSubmittedFieldGroups,
     getPunsjSourceForJournalpost,
     pushFaroEvent,
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
+    trackOmpksStartedFromJournalpost,
+    trackOmpksSubmitFromJournalpost,
     trackPlsStartedFromJournalpost,
     trackPlsSubmitFromJournalpost,
     trackPsbStartedFromJournalpost,
     trackPsbSubmitFromJournalpost,
 } from '../../app/utils/faroEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
+import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 jest.mock('@grafana/faro-web-sdk', () => ({
@@ -163,6 +168,19 @@ describe('faroEvents', () => {
         },
         begrunnelseForInnsending: { tekst: '' },
     };
+    const ompksKvittering: IOMPKSSoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        ytelse: {
+            type: 'OMPKS',
+            barn: {
+                norskIdentitetsnummer: '12345678910',
+                fødselsdato: null,
+            },
+            kroniskEllerFunksjonshemming: true,
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
 
     beforeEach(() => {
         pushEventMock.mockClear();
@@ -300,6 +318,12 @@ describe('faroEvents', () => {
         })).toEqual([]);
     });
 
+    it('Skal mappe OMPKS-kvittering til forventede feltgrupper', () => {
+        expect(getOmpksSubmittedFieldGroups(ompksKvittering)).toEqual([
+            OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING,
+        ]);
+    });
+
     it('Skal sende PSB start-event for manuell journalpostflyt', () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
@@ -397,6 +421,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende PLS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende OMPKS start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackOmpksStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPKS',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende OMPKS submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
+
+        expect(fieldGroups).toEqual(getOmpksSubmittedFieldGroups(ompksKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPKS',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPKS',
+            field_group: OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende OMPKS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();
