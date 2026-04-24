@@ -1,10 +1,12 @@
 import { faro } from '@grafana/faro-web-sdk';
+import Ytelse from '../../app/models/types/Ytelse';
 import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
     OLP_FIELD_GROUPS,
     OMPKS_FIELD_GROUPS,
+    OMPAO_FIELD_GROUPS,
     OMPMA_FIELD_GROUPS,
     OMPUT_FIELD_GROUPS,
     PLS_FIELD_GROUPS,
@@ -13,6 +15,7 @@ import {
     clearManualJournalpostFlowSource,
     getOlpSubmittedFieldGroups,
     getOmpksSubmittedFieldGroups,
+    getOmpaoSubmittedFieldGroups,
     getOmpmaSubmittedFieldGroups,
     getOmputSubmittedFieldGroups,
     getPlsSubmittedFieldGroups,
@@ -25,6 +28,8 @@ import {
     trackOlpSubmitFromJournalpost,
     trackOmpksStartedFromJournalpost,
     trackOmpksSubmitFromJournalpost,
+    trackOmpaoStartedFromJournalpost,
+    trackOmpaoSubmitFromJournalpost,
     trackOmpmaStartedFromJournalpost,
     trackOmpmaSubmitFromJournalpost,
     trackOmputStartedFromJournalpost,
@@ -36,6 +41,7 @@ import {
 } from '../../app/utils/faroEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
+import { IOMPAOSoknadKvittering } from '../../app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
 import { IOMPMASoknadKvittering } from '../../app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
 import { IOMPUTSoknadKvittering } from '../../app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
 import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
@@ -352,6 +358,25 @@ describe('faroEvents', () => {
         },
         begrunnelseForInnsending: { tekst: '' },
     };
+    const ompaoKvittering: IOMPAOSoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        språk: 'nb',
+        søker: {
+            norskIdentitetsnummer: '12345678910',
+        },
+        søknadId: '',
+        versjon: '1',
+        ytelse: {
+            type: Ytelse.OMSORGSPENGER_UTVIDETRETT_ALENE_OMSORG,
+            barn: {
+                norskIdentitetsnummer: '12345678910',
+                foedselsdato: '2020-01-01',
+            },
+            periode: '2026-04-01/2026-04-10',
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
 
     beforeEach(() => {
         pushEventMock.mockClear();
@@ -523,6 +548,13 @@ describe('faroEvents', () => {
             OMPUT_FIELD_GROUPS.ARBEIDSTAKER,
             OMPUT_FIELD_GROUPS.FRILANSER,
             OMPUT_FIELD_GROUPS.SELVSTENDIG,
+        ]);
+    });
+
+    it('Skal mappe OMPAO-kvittering til forventede feltgrupper', () => {
+        expect(getOmpaoSubmittedFieldGroups(ompaoKvittering)).toEqual([
+            OMPAO_FIELD_GROUPS.BARN,
+            OMPAO_FIELD_GROUPS.PERIODE,
         ]);
     });
 
@@ -827,6 +859,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende OMPUT submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende OMPAO start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackOmpaoStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPAO',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende OMPAO submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
+
+        expect(fieldGroups).toEqual(getOmpaoSubmittedFieldGroups(ompaoKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPAO',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPAO',
+            field_group: OMPAO_FIELD_GROUPS.PERIODE,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende OMPAO submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();

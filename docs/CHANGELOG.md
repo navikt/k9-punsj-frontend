@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OMPAO manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPAO` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPAO` submit-kvitteringen til trygge feltgrupper for `barn` og `periode`.
+
 ### OMPUT manual journalpost analytics (2026-04-24)
 
 - Sender nå `Faro` start- og submit-måling for `OMPUT` når flyten kommer fra manuelt opprettet journalpost.

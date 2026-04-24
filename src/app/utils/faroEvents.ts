@@ -3,6 +3,7 @@ import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from 'app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
+import { IOMPAOSoknadKvittering } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
 import { IOMPMASoknadKvittering } from 'app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
 import { aktivitetsFravær } from 'app/søknader/omsorgspenger-utbetaling/konstanter';
 import { IOMPUTSoknadKvittering } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknadKvittering';
@@ -73,6 +74,11 @@ export const OMPUT_FIELD_GROUPS = {
     SELVSTENDIG: 'selvstendig',
 } as const;
 
+export const OMPAO_FIELD_GROUPS = {
+    BARN: 'barn',
+    PERIODE: 'periode',
+} as const;
+
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
 type PlsFieldGroup = (typeof PLS_FIELD_GROUPS)[keyof typeof PLS_FIELD_GROUPS];
@@ -80,7 +86,15 @@ type OmpksFieldGroup = (typeof OMPKS_FIELD_GROUPS)[keyof typeof OMPKS_FIELD_GROU
 type OmpmaFieldGroup = (typeof OMPMA_FIELD_GROUPS)[keyof typeof OMPMA_FIELD_GROUPS];
 type OlpFieldGroup = (typeof OLP_FIELD_GROUPS)[keyof typeof OLP_FIELD_GROUPS];
 type OmputFieldGroup = (typeof OMPUT_FIELD_GROUPS)[keyof typeof OMPUT_FIELD_GROUPS];
-type PunsjFieldGroup = PsbFieldGroup | PlsFieldGroup | OmpksFieldGroup | OmpmaFieldGroup | OlpFieldGroup | OmputFieldGroup;
+type OmpaoFieldGroup = (typeof OMPAO_FIELD_GROUPS)[keyof typeof OMPAO_FIELD_GROUPS];
+type PunsjFieldGroup =
+    | PsbFieldGroup
+    | PlsFieldGroup
+    | OmpksFieldGroup
+    | OmpmaFieldGroup
+    | OlpFieldGroup
+    | OmputFieldGroup
+    | OmpaoFieldGroup;
 type FaroEventOptions = {
     skipDedupe?: boolean;
 };
@@ -160,6 +174,11 @@ const OMPUT_FIELD_GROUP_ORDER: OmputFieldGroup[] = [
     OMPUT_FIELD_GROUPS.ARBEIDSTAKER,
     OMPUT_FIELD_GROUPS.FRILANSER,
     OMPUT_FIELD_GROUPS.SELVSTENDIG,
+];
+
+const OMPAO_FIELD_GROUP_ORDER: OmpaoFieldGroup[] = [
+    OMPAO_FIELD_GROUPS.BARN,
+    OMPAO_FIELD_GROUPS.PERIODE,
 ];
 
 const getSessionStorage = (): Storage | undefined => {
@@ -616,6 +635,33 @@ export const trackOmputSubmitFromJournalpost = (
     const fieldGroups = getOmputSubmittedFieldGroups(innsentSoknad);
 
     return trackPunsjSubmitFromJournalpost(journalpostId, 'OMPUT', fieldGroups);
+};
+
+export const getOmpaoSubmittedFieldGroups = (innsentSoknad: IOMPAOSoknadKvittering): OmpaoFieldGroup[] => {
+    const fieldGroups = new Set<OmpaoFieldGroup>();
+    const { ytelse } = innsentSoknad;
+
+    if (ytelse.barn) {
+        fieldGroups.add(OMPAO_FIELD_GROUPS.BARN);
+    }
+
+    if (ytelse.periode) {
+        fieldGroups.add(OMPAO_FIELD_GROUPS.PERIODE);
+    }
+
+    return OMPAO_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
+};
+
+export const trackOmpaoStartedFromJournalpost = (journalpostId: string): boolean =>
+    trackPunsjStartedFromJournalpost(journalpostId, 'OMPAO');
+
+export const trackOmpaoSubmitFromJournalpost = (
+    journalpostId: string,
+    innsentSoknad: IOMPAOSoknadKvittering,
+): OmpaoFieldGroup[] => {
+    const fieldGroups = getOmpaoSubmittedFieldGroups(innsentSoknad);
+
+    return trackPunsjSubmitFromJournalpost(journalpostId, 'OMPAO', fieldGroups);
 };
 
 export const trackPsbSubmitFromJournalpost = (
