@@ -19,6 +19,7 @@ import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { OMPMAPunchForm } from './OMPMAPunchForm';
 import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
 import { Dispatch } from 'redux';
+import { trackOmpmaStartedFromJournalpost, trackOmpmaSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
     soeknadId: soknad?.soeknadId || '',
@@ -73,6 +74,16 @@ const OMPMAPunchFormContainer = (props: Props) => {
     useEffect(() => {
         dispatch(getOMPMASoknad(id));
     }, [id]);
+
+    useEffect(() => {
+        trackOmpmaStartedFromJournalpost(props.journalpostid);
+    }, [props.journalpostid]);
+
+    useEffect(() => {
+        if (punchFormState.isComplete && punchFormState.innsentSoknad) {
+            trackOmpmaSubmitFromJournalpost(props.journalpostid, punchFormState.innsentSoknad);
+        }
+    }, [props.journalpostid, punchFormState.isComplete, punchFormState.innsentSoknad]);
 
     useEffect(() => {
         if (soknad?.soekerId || identState.søkerId || journalpost?.norskIdent) {

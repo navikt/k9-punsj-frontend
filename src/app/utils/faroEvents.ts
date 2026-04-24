@@ -3,6 +3,7 @@ import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from 'app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
+import { IOMPMASoknadKvittering } from 'app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
 import { IPLSSoknadKvittering } from 'app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 export const MANUAL_JOURNALPOST_FLOW_STARTED_EVENT = 'manual_journalpost_flow_started';
@@ -44,11 +45,17 @@ export const OMPKS_FIELD_GROUPS = {
     KRONISK_ELLER_FUNKSJONSHEMMING: 'kronisk_eller_funksjonshemming',
 } as const;
 
+export const OMPMA_FIELD_GROUPS = {
+    BARN: 'barn',
+    ANNEN_FORELDER: 'annen_forelder',
+} as const;
+
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
 type PlsFieldGroup = (typeof PLS_FIELD_GROUPS)[keyof typeof PLS_FIELD_GROUPS];
 type OmpksFieldGroup = (typeof OMPKS_FIELD_GROUPS)[keyof typeof OMPKS_FIELD_GROUPS];
-type PunsjFieldGroup = PsbFieldGroup | PlsFieldGroup | OmpksFieldGroup;
+type OmpmaFieldGroup = (typeof OMPMA_FIELD_GROUPS)[keyof typeof OMPMA_FIELD_GROUPS];
+type PunsjFieldGroup = PsbFieldGroup | PlsFieldGroup | OmpksFieldGroup | OmpmaFieldGroup;
 type FaroEventOptions = {
     skipDedupe?: boolean;
 };
@@ -95,6 +102,11 @@ const PLS_FIELD_GROUP_ORDER: PlsFieldGroup[] = [
 ];
 
 const OMPKS_FIELD_GROUP_ORDER: OmpksFieldGroup[] = [OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING];
+
+const OMPMA_FIELD_GROUP_ORDER: OmpmaFieldGroup[] = [
+    OMPMA_FIELD_GROUPS.BARN,
+    OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
+];
 
 const getSessionStorage = (): Storage | undefined => {
     if (typeof window === 'undefined') {
@@ -428,6 +440,33 @@ export const trackOmpksSubmitFromJournalpost = (
     const fieldGroups = getOmpksSubmittedFieldGroups(innsentSoknad);
 
     return trackPunsjSubmitFromJournalpost(journalpostId, 'OMPKS', fieldGroups);
+};
+
+export const getOmpmaSubmittedFieldGroups = (innsentSoknad: IOMPMASoknadKvittering): OmpmaFieldGroup[] => {
+    const fieldGroups = new Set<OmpmaFieldGroup>();
+    const { ytelse } = innsentSoknad;
+
+    if (ytelse.barn.length > 0) {
+        fieldGroups.add(OMPMA_FIELD_GROUPS.BARN);
+    }
+
+    if (ytelse.annenForelder) {
+        fieldGroups.add(OMPMA_FIELD_GROUPS.ANNEN_FORELDER);
+    }
+
+    return OMPMA_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));
+};
+
+export const trackOmpmaStartedFromJournalpost = (journalpostId: string): boolean =>
+    trackPunsjStartedFromJournalpost(journalpostId, 'OMPMA');
+
+export const trackOmpmaSubmitFromJournalpost = (
+    journalpostId: string,
+    innsentSoknad: IOMPMASoknadKvittering,
+): OmpmaFieldGroup[] => {
+    const fieldGroups = getOmpmaSubmittedFieldGroups(innsentSoknad);
+
+    return trackPunsjSubmitFromJournalpost(journalpostId, 'OMPMA', fieldGroups);
 };
 
 export const trackPsbSubmitFromJournalpost = (

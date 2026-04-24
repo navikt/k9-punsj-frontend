@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OMPMA manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPMA` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPMA` submit-kvitteringen til trygge feltgrupper for `barn` og `annen_forelder`.
+
 ### OMPKS manual journalpost analytics (2026-04-24)
 
 - Sender nå `Faro` start- og submit-måling for `OMPKS` når flyten kommer fra manuelt opprettet journalpost.

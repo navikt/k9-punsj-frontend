@@ -4,11 +4,13 @@ import {
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
     OMPKS_FIELD_GROUPS,
+    OMPMA_FIELD_GROUPS,
     PLS_FIELD_GROUPS,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
     clearManualJournalpostFlowSource,
     getOmpksSubmittedFieldGroups,
+    getOmpmaSubmittedFieldGroups,
     getPlsSubmittedFieldGroups,
     getPsbSubmittedFieldGroups,
     getPunsjSourceForJournalpost,
@@ -17,6 +19,8 @@ import {
     trackManualJournalpostFlowStarted,
     trackOmpksStartedFromJournalpost,
     trackOmpksSubmitFromJournalpost,
+    trackOmpmaStartedFromJournalpost,
+    trackOmpmaSubmitFromJournalpost,
     trackPlsStartedFromJournalpost,
     trackPlsSubmitFromJournalpost,
     trackPsbStartedFromJournalpost,
@@ -24,6 +28,7 @@ import {
 } from '../../app/utils/faroEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
+import { IOMPMASoknadKvittering } from '../../app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 jest.mock('@grafana/faro-web-sdk', () => ({
@@ -181,6 +186,25 @@ describe('faroEvents', () => {
         },
         begrunnelseForInnsending: { tekst: '' },
     };
+    const ompmaKvittering: IOMPMASoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        ytelse: {
+            type: 'OMPMA',
+            barn: [
+                {
+                    norskIdentitetsnummer: '12345678910',
+                },
+            ],
+            annenForelder: {
+                norskIdentitetsnummer: '10987654321',
+                situasjon: 'INNLAGT_I_HELSEINSTITUSJON',
+                situasjonBeskrivelse: '',
+                periode: '2026-04-01/2026-04-10',
+            },
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
 
     beforeEach(() => {
         pushEventMock.mockClear();
@@ -321,6 +345,13 @@ describe('faroEvents', () => {
     it('Skal mappe OMPKS-kvittering til forventede feltgrupper', () => {
         expect(getOmpksSubmittedFieldGroups(ompksKvittering)).toEqual([
             OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING,
+        ]);
+    });
+
+    it('Skal mappe OMPMA-kvittering til forventede feltgrupper', () => {
+        expect(getOmpmaSubmittedFieldGroups(ompmaKvittering)).toEqual([
+            OMPMA_FIELD_GROUPS.BARN,
+            OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
         ]);
     });
 
@@ -472,6 +503,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende OMPKS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende OMPMA start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackOmpmaStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPMA',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende OMPMA submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
+
+        expect(fieldGroups).toEqual(getOmpmaSubmittedFieldGroups(ompmaKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPMA',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPMA',
+            field_group: OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende OMPMA submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();
