@@ -15,6 +15,15 @@ export const PSB_FIELD_GROUPS = {
     ARBEIDSTID: 'arbeidstid',
     TREKK_AV_PERIODE: 'trekk_av_periode',
     PERIODE: 'periode',
+    TILSYN: 'tilsyn',
+    BEREDSKAP: 'beredskap',
+    NATTEVAAK: 'nattevaak',
+    FERIE: 'ferie',
+    UTENLANDSOPPHOLD: 'utenlandsopphold',
+    BOSTED: 'bosted',
+    UTTAK: 'uttak',
+    OMSORG: 'omsorg',
+    OPPTJENING: 'opptjening',
     ANNET: 'annet',
 } as const;
 
@@ -28,6 +37,15 @@ const PSB_FIELD_GROUP_ORDER: PsbFieldGroup[] = [
     PSB_FIELD_GROUPS.ARBEIDSTID,
     PSB_FIELD_GROUPS.TREKK_AV_PERIODE,
     PSB_FIELD_GROUPS.PERIODE,
+    PSB_FIELD_GROUPS.TILSYN,
+    PSB_FIELD_GROUPS.BEREDSKAP,
+    PSB_FIELD_GROUPS.NATTEVAAK,
+    PSB_FIELD_GROUPS.FERIE,
+    PSB_FIELD_GROUPS.UTENLANDSOPPHOLD,
+    PSB_FIELD_GROUPS.BOSTED,
+    PSB_FIELD_GROUPS.UTTAK,
+    PSB_FIELD_GROUPS.OMSORG,
+    PSB_FIELD_GROUPS.OPPTJENING,
     PSB_FIELD_GROUPS.ANNET,
 ];
 
@@ -127,21 +145,10 @@ const hasOmsorgsinformasjon = (innsentSoknad: IPSBSoknadKvittering): boolean => 
     );
 };
 
-const hasAnnetPsbInnhold = (innsentSoknad: IPSBSoknadKvittering): boolean => {
-    const { ytelse } = innsentSoknad;
+const hasOpptjeningAktivitet = (innsentSoknad: IPSBSoknadKvittering): boolean => {
+    const { opptjeningAktivitet } = innsentSoknad.ytelse;
 
-    return (
-        hasRecordEntries(ytelse.tilsynsordning.perioder) ||
-        hasRecordEntries(ytelse.beredskap.perioder) ||
-        hasRecordEntries(ytelse.nattevåk.perioder) ||
-        hasRecordEntries(ytelse.lovbestemtFerie.perioder) ||
-        hasRecordEntries(ytelse.utenlandsopphold.perioder) ||
-        hasRecordEntries(ytelse.bosteder.perioder) ||
-        hasRecordEntries(ytelse.uttak.perioder) ||
-        hasOmsorgsinformasjon(innsentSoknad) ||
-        !!ytelse.opptjeningAktivitet.frilanser ||
-        (ytelse.opptjeningAktivitet.selvstendigNæringsdrivende?.length || 0) > 0
-    );
+    return !!opptjeningAktivitet.frilanser || (opptjeningAktivitet.selvstendigNæringsdrivende?.length || 0) > 0;
 };
 
 export const pushFaroEvent = (name: string, attributes?: EventAttributes, options?: FaroEventOptions): boolean => {
@@ -217,8 +224,40 @@ export const getPsbSubmittedFieldGroups = (innsentSoknad: IPSBSoknadKvittering):
         fieldGroups.add(PSB_FIELD_GROUPS.PERIODE);
     }
 
-    if (hasAnnetPsbInnhold(innsentSoknad)) {
-        fieldGroups.add(PSB_FIELD_GROUPS.ANNET);
+    if (hasRecordEntries(ytelse.tilsynsordning.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.TILSYN);
+    }
+
+    if (hasRecordEntries(ytelse.beredskap.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.BEREDSKAP);
+    }
+
+    if (hasRecordEntries(ytelse.nattevåk.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.NATTEVAAK);
+    }
+
+    if (hasRecordEntries(ytelse.lovbestemtFerie.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.FERIE);
+    }
+
+    if (hasRecordEntries(ytelse.utenlandsopphold.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.UTENLANDSOPPHOLD);
+    }
+
+    if (hasRecordEntries(ytelse.bosteder.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.BOSTED);
+    }
+
+    if (hasRecordEntries(ytelse.uttak.perioder)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.UTTAK);
+    }
+
+    if (hasOmsorgsinformasjon(innsentSoknad)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.OMSORG);
+    }
+
+    if (hasOpptjeningAktivitet(innsentSoknad)) {
+        fieldGroups.add(PSB_FIELD_GROUPS.OPPTJENING);
     }
 
     return PSB_FIELD_GROUP_ORDER.filter((fieldGroup) => fieldGroups.has(fieldGroup));

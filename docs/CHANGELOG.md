@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### PSB manual journalpost analytics field groups (2026-04-24)
+
+- Deler nå `PSB` submit-analytics for manuelt opprettede journalposter i flere trygge feltgrupper, blant annet `tilsyn`, `beredskap`, `nattevaak`, `ferie`, `utenlandsopphold`, `bosted`, `uttak`, `omsorg` og `opptjening`.
+- Beholder samme `Faro` eventmodell og source-gating mot manuell `Opprett journalpost`.
+
 ### Faro analytics skips SDK dedupe for manual punsj events (2026-04-20)
 
 - Lar nå manuelle `Faro`-events for `Opprett journalpost` og `PSB`-submit gå med `skipDedupe`, slik at gjentatte men legitime analytics-hendelser ikke lettere faller bort i frontend-SDK-et.

@@ -52,7 +52,11 @@ describe('faroEvents', () => {
                     '2026-04-06/2026-04-07': { tilleggsinformasjon: 'beredskap' },
                 },
             },
-            nattevåk: { perioder: {} },
+            nattevåk: {
+                perioder: {
+                    '2026-04-07/2026-04-08': { tilleggsinformasjon: 'nattevåk' },
+                },
+            },
             tilsynsordning: {
                 perioder: {
                     '2026-04-08/2026-04-09': { etablertTilsynTimerPerDag: 'PT5H' },
@@ -166,8 +170,44 @@ describe('faroEvents', () => {
             PSB_FIELD_GROUPS.ARBEIDSTID,
             PSB_FIELD_GROUPS.TREKK_AV_PERIODE,
             PSB_FIELD_GROUPS.PERIODE,
-            PSB_FIELD_GROUPS.ANNET,
+            PSB_FIELD_GROUPS.TILSYN,
+            PSB_FIELD_GROUPS.BEREDSKAP,
+            PSB_FIELD_GROUPS.NATTEVAAK,
+            PSB_FIELD_GROUPS.FERIE,
+            PSB_FIELD_GROUPS.UTENLANDSOPPHOLD,
+            PSB_FIELD_GROUPS.BOSTED,
+            PSB_FIELD_GROUPS.UTTAK,
+            PSB_FIELD_GROUPS.OMSORG,
+            PSB_FIELD_GROUPS.OPPTJENING,
         ]);
+    });
+
+    it('Skal ikke mappe tomme PSB-seksjoner til annet', () => {
+        expect(getPsbSubmittedFieldGroups({
+            ...psbKvittering,
+            ytelse: {
+                ...psbKvittering.ytelse,
+                søknadsperiode: [],
+                bosteder: { perioder: {} },
+                utenlandsopphold: { perioder: {} },
+                beredskap: { perioder: {} },
+                nattevåk: { perioder: {} },
+                tilsynsordning: { perioder: {} },
+                lovbestemtFerie: { perioder: {} },
+                arbeidstid: {
+                    arbeidstakerList: [],
+                    frilanserArbeidstidInfo: null,
+                    selvstendigNæringsdrivendeArbeidstidInfo: null,
+                },
+                uttak: { perioder: {} },
+                omsorg: {
+                    relasjonTilBarnet: null,
+                    beskrivelseAvOmsorgsrollen: '',
+                },
+                opptjeningAktivitet: {},
+                trekkKravPerioder: [],
+            },
+        })).toEqual([]);
     });
 
     it('Skal sende PSB start-event for manuell journalpostflyt', () => {
