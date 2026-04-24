@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OLP manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OLP` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OLP` submit-kvitteringen til trygge feltgrupper for `arbeidstid`, `trekk_av_periode`, `periode`, `kurs`, `reise`, `ferie`, `utenlandsopphold`, `bosted`, `uttak`, `omsorg` og `opptjening`.
+
 ### OMPMA manual journalpost analytics (2026-04-24)
 
 - Sender nå `Faro` start- og submit-måling for `OMPMA` når flyten kommer fra manuelt opprettet journalpost.

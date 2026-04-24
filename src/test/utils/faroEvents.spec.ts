@@ -3,12 +3,14 @@ import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
+    OLP_FIELD_GROUPS,
     OMPKS_FIELD_GROUPS,
     OMPMA_FIELD_GROUPS,
     PLS_FIELD_GROUPS,
     PSB_FIELD_GROUPS,
     MANUAL_JOURNALPOST_FLOW_STARTED_EVENT,
     clearManualJournalpostFlowSource,
+    getOlpSubmittedFieldGroups,
     getOmpksSubmittedFieldGroups,
     getOmpmaSubmittedFieldGroups,
     getPlsSubmittedFieldGroups,
@@ -17,6 +19,8 @@ import {
     pushFaroEvent,
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
+    trackOlpStartedFromJournalpost,
+    trackOlpSubmitFromJournalpost,
     trackOmpksStartedFromJournalpost,
     trackOmpksSubmitFromJournalpost,
     trackOmpmaStartedFromJournalpost,
@@ -29,6 +33,7 @@ import {
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
 import { IOMPMASoknadKvittering } from '../../app/søknader/omsorgspenger-midlertidig-alene/types/OMPMASoknadKvittering';
+import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
 jest.mock('@grafana/faro-web-sdk', () => ({
@@ -205,6 +210,92 @@ describe('faroEvents', () => {
         },
         begrunnelseForInnsending: { tekst: '' },
     };
+    const olpKvittering: IOLPSoknadKvittering = {
+        journalposter: [],
+        mottattDato: '2026-04-17T10:00:00.000Z',
+        språk: 'nb',
+        søker: {
+            norskIdentitetsnummer: '12345678910',
+        },
+        søknadId: '',
+        versjon: '1',
+        ytelse: {
+            type: 'OLP',
+            barn: {
+                norskIdentitetsnummer: '12345678910',
+                fødselsdato: null,
+            },
+            søknadsperiode: ['2026-04-01/2026-04-10'],
+            trekkKravPerioder: ['2026-04-11/2026-04-12'],
+            opptjeningAktivitet: {
+                frilanser: {
+                    startdato: '2026-01-01',
+                    sluttdato: null,
+                    jobberFortsattSomFrilans: true,
+                },
+                selvstendigNæringsdrivende: [],
+            },
+            dataBruktTilUtledning: null,
+            bosteder: {
+                perioder: {
+                    '2026-04-01/2026-04-03': { land: 'SWE' },
+                },
+                perioderSomSkalSlettes: {},
+            },
+            utenlandsopphold: {
+                perioder: {
+                    '2026-04-04/2026-04-05': { land: 'DNK' },
+                },
+                perioderSomSkalSlettes: {},
+            },
+            lovbestemtFerie: {
+                perioder: {
+                    '2026-04-10/2026-04-10': { skalHaFerie: 'true' },
+                },
+            },
+            arbeidstid: {
+                arbeidstakerList: [
+                    {
+                        norskIdentitetsnummer: null,
+                        organisasjonsnummer: '123456789',
+                        arbeidstidInfo: {
+                            perioder: {
+                                '2026-04-01/2026-04-02': {
+                                    jobberNormaltTimerPerDag: 'PT7H30M',
+                                    faktiskArbeidTimerPerDag: 'PT4H',
+                                },
+                            },
+                        },
+                    },
+                ],
+                frilanserArbeidstidInfo: null,
+                selvstendigNæringsdrivendeArbeidstidInfo: {
+                    perioder: {},
+                },
+            },
+            uttak: {
+                perioder: {
+                    '2026-04-11/2026-04-12': { timerPleieAvBarnetPerDag: 'PT6H' },
+                },
+            },
+            omsorg: {
+                relasjonTilBarnet: 'MOR',
+                beskrivelseAvOmsorgsrollen: '',
+            },
+            kurs: {
+                kursholder: {
+                    navn: '',
+                    institusjonsidentifikator: 'institusjon-1',
+                },
+                kursperioder: ['2026-04-01/2026-04-10'],
+                reise: {
+                    reisedager: ['2026-04-03'],
+                    reisedagerBeskrivelse: '',
+                },
+            },
+        },
+        begrunnelseForInnsending: { tekst: '' },
+    };
 
     beforeEach(() => {
         pushEventMock.mockClear();
@@ -352,6 +443,22 @@ describe('faroEvents', () => {
         expect(getOmpmaSubmittedFieldGroups(ompmaKvittering)).toEqual([
             OMPMA_FIELD_GROUPS.BARN,
             OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
+        ]);
+    });
+
+    it('Skal mappe OLP-kvittering til forventede feltgrupper', () => {
+        expect(getOlpSubmittedFieldGroups(olpKvittering)).toEqual([
+            OLP_FIELD_GROUPS.ARBEIDSTID,
+            OLP_FIELD_GROUPS.TREKK_AV_PERIODE,
+            OLP_FIELD_GROUPS.PERIODE,
+            OLP_FIELD_GROUPS.KURS,
+            OLP_FIELD_GROUPS.REISE,
+            OLP_FIELD_GROUPS.FERIE,
+            OLP_FIELD_GROUPS.UTENLANDSOPPHOLD,
+            OLP_FIELD_GROUPS.BOSTED,
+            OLP_FIELD_GROUPS.UTTAK,
+            OLP_FIELD_GROUPS.OMSORG,
+            OLP_FIELD_GROUPS.OPPTJENING,
         ]);
     });
 
@@ -554,6 +661,57 @@ describe('faroEvents', () => {
 
     it('Skal ikke sende OMPMA submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
+
+        expect(fieldGroups).toEqual([]);
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal sende OLP start-event for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const result = trackOlpStartedFromJournalpost(journalpostId);
+
+        expect(result).toBeTruthy();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OLP',
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
+    });
+
+    it('Skal sende OLP submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+
+        setManualJournalpostFlowSource(journalpostId);
+
+        const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
+
+        expect(fieldGroups).toEqual(getOlpSubmittedFieldGroups(olpKvittering));
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OLP',
+            used_field_groups: fieldGroups.join(','),
+            used_field_group_count: String(fieldGroups.length),
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OLP',
+            field_group: OLP_FIELD_GROUPS.KURS,
+        }, undefined, { skipDedupe: true });
+        expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
+    });
+
+    it('Skal ikke sende OLP submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+        const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
 
         expect(fieldGroups).toEqual([]);
         expect(pushEventMock).not.toHaveBeenCalled();
