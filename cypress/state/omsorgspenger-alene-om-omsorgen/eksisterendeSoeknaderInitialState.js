@@ -18,7 +18,7 @@ export const initialState = {
         dedupKey: '01H3EMPK7QGQDGQ5SEV33Q362D',
         journalpost: {
             journalpostId: '200',
-            norskIdent: '29099000129',
+            norskIdent: '17420373147',
             dokumenter: [
                 {
                     dokumentId: '470164680',
@@ -40,17 +40,17 @@ export const initialState = {
             {
                 fornavn: 'Geir-Paco',
                 etternavn: 'Gundersen',
-                identitetsnummer: '02021477330',
+                identitetsnummer: '24420167209',
             },
             {
                 fornavn: 'Hallo',
                 etternavn: 'Hansen',
-                identitetsnummer: '03091477490',
+                identitetsnummer: '18410162721',
             },
             {
                 fornavn: 'Tom',
                 etternavn: 'Tanks',
-                identitetsnummer: '09081478047',
+                identitetsnummer: '24420167209',
             },
         ],
         isAwaitingHentBarnResponse: false,
@@ -58,8 +58,8 @@ export const initialState = {
         harHentBarnResponse: true,
     },
     identState: {
-        søkerId: '29099000129',
-        pleietrengendeId: '02021477330',
+        søkerId: '17420373147',
+        pleietrengendeId: '24420167209',
         annenPart: '',
         annenSokerIdent: null,
     },

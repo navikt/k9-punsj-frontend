@@ -4,7 +4,7 @@ import { ApiPath } from 'app/apiConfig';
 const mockHandlersOMPKS = {
     tomMappe: http.get(ApiPath.OMP_KS_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_AO',
             søknader: [],
         }),
@@ -12,16 +12,16 @@ const mockHandlersOMPKS = {
 
     mappeMedSøknad: http.get(ApiPath.OMP_KS_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_AO',
             søknader: [
                 {
-                    søker: '29099000129',
+                    søker: '17420373147',
                     fagsakTypeKode: 'OMP_KS',
                     søknader: [
                         {
                             soeknadId: 'ea35427a-066d-4f30-9602-e8aa99e2e76c',
-                            soekerId: '29099000129',
+                            soekerId: '17420373147',
                             mottattDato: '2025-06-19',
                             klokkeslett: '10:23',
                             barn: {
@@ -36,7 +36,7 @@ const mockHandlersOMPKS = {
                         },
                         {
                             soeknadId: 'c65ca07d-3198-4c57-9301-1824040b7fc2',
-                            soekerId: '29099000129',
+                            soekerId: '17420373147',
                             mottattDato: '2025-06-19',
                             klokkeslett: '10:24',
                             barn: {
@@ -59,7 +59,7 @@ const mockHandlersOMPKS = {
         HttpResponse.json(
             {
                 soeknadId: '067d9abe-c5e4-4cb8-8491-6f0f67fbef61',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 mottattDato: '2025-07-08',
                 klokkeslett: '11:11',
                 barn: {
@@ -79,11 +79,11 @@ const mockHandlersOMPKS = {
     soknad: http.get(ApiPath.OMP_KS_SOKNAD_GET.replace('{id}', '067d9abe-c5e4-4cb8-8491-6f0f67fbef61'), () =>
         HttpResponse.json({
             soeknadId: '067d9abe-c5e4-4cb8-8491-6f0f67fbef61',
-            soekerId: '29099000129',
+            soekerId: '17420373147',
             mottattDato: '2020-10-12',
             klokkeslett: '12:53',
             barn: {
-                norskIdent: '02021477330',
+                norskIdent: '24420167209',
                 foedselsdato: null,
             },
             journalposter: ['200'],

@@ -57,7 +57,7 @@ let handlers = [
         HttpResponse.json(
             {
                 journalpostId: '202',
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 punsjInnsendingType: {
@@ -80,7 +80,7 @@ let handlers = [
             {
                 journalpostId: '203',
                 erFerdigstilt: true,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -106,7 +106,7 @@ let handlers = [
             {
                 journalpostId: '204',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -132,7 +132,7 @@ let handlers = [
             {
                 journalpostId: '205',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -157,7 +157,7 @@ let handlers = [
             {
                 journalpostId: '207',
                 erFerdigstilt: true,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -183,7 +183,7 @@ let handlers = [
             {
                 journalpostId: '206',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -208,7 +208,7 @@ let handlers = [
             {
                 journalpostId: '216',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -245,7 +245,7 @@ let handlers = [
                 {
                     fagsakId: 'DEF456',
                     sakstype: 'PPN',
-                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '18410162721', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -304,7 +304,7 @@ let handlers = [
             {
                 journalpostId: '203',
                 erFerdigstilt: true,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -330,7 +330,7 @@ let handlers = [
             {
                 journalpostId: '204',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -356,7 +356,7 @@ let handlers = [
             {
                 journalpostId: '205',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -381,7 +381,7 @@ let handlers = [
             {
                 journalpostId: '207',
                 erFerdigstilt: true,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -407,7 +407,7 @@ let handlers = [
             {
                 journalpostId: '206',
                 erFerdigstilt: false,
-                norskIdent: '29099000129',
+                norskIdent: '17420373147',
                 dokumenter: [{ dokumentId: '470164680' }, { dokumentId: '470164681' }],
                 venter: null,
                 kanSendeInn: true,
@@ -434,7 +434,7 @@ let handlers = [
                 {
                     fagsakId: 'ABC123',
                     sakstype: 'PSB',
-                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '18410162721', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -443,7 +443,7 @@ let handlers = [
                 {
                     fagsakId: 'DEF456',
                     sakstype: 'PPN',
-                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '03091477490', fødselsdato: '1970-08-15' },
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '18410162721', fødselsdato: '1970-08-15' },
                     gyldigPeriode: {
                         fom: '2022-08-01',
                         tom: '2022-08-15',
@@ -500,7 +500,7 @@ let handlers = [
                 etternavn: 'KAKE',
                 fornavn: 'TUNGSINDIG',
                 fødselsdato: '1981-12-18',
-                identitetsnummer: '18128103429',
+                identitetsnummer: '18410162721',
                 mellomnavn: null,
                 sammensattNavn: 'TUNGSINDIG KAKE',
             },

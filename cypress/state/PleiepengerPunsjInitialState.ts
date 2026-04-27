@@ -9,12 +9,12 @@ export const PleiepengerPunsjInitialState = {
             perioder: [],
             soknad: {
                 soeknadId: '3be63d45-a543-4314-b6bf-9c68ab8e9838',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 journalposter: ['200'],
                 mottattDato: '2020-10-12',
                 klokkeslett: '12:53',
                 barn: {
-                    norskIdent: '16017725002',
+                    norskIdent: '17420373147',
                     foedselsdato: null,
                 },
                 soeknadsperiode: null,
@@ -38,8 +38,8 @@ export const PleiepengerPunsjInitialState = {
         },
         punchState: {
             step: 1,
-            søkerId: '29099000129',
-            pleietrengendeId: '16017725002',
+            søkerId: '17420373147',
+            pleietrengendeId: '17420373147',
         },
         signaturState: {
             signert: null,
@@ -116,7 +116,7 @@ export const PleiepengerPunsjInitialState = {
         dedupKey: '01FMCYSMNFKNKMVX53Y3XQ35ZE',
         journalpost: {
             journalpostId: '200',
-            norskIdent: '29099000129',
+            norskIdent: '17420373147',
             dokumenter: [
                 {
                     dokumentId: '470164680',
@@ -143,8 +143,8 @@ export const PleiepengerPunsjInitialState = {
         isJournalposterLoading: false,
     },
     identState: {
-        søkerId: '29099000129',
-        pleietrengendeId: '16017725002',
+        søkerId: '17420373147',
+        pleietrengendeId: '17420373147',
         annenSokerIdent: null,
     },
     opprettIGosys: {
