@@ -43,7 +43,7 @@
         "tailwindcss": "4.2.2",
         "typescript-string-operations": "1.6.1",
         "ulid": "3.0.2",
-        "uuid": "13.0.0",
+        "uuid": "14.0.0",
         "yup": "1.7.1"
     },
     "scripts": {
