@@ -3,7 +3,7 @@ import { IdentRules } from '../../app/validation/IdentRules';
 const gyldigIdent = '18410162721';
 const gyldigDnrOgHnr = '53488838241';
 const identMedFeilLengde = '123';
-const identMedFeilKontrollnumre = '11111111111';
+const identMedFeilKontrollnumre = `${gyldigIdent.slice(0, -1)}0`;
 
 describe('IdentRules', () => {
     describe('IdentRules.isIdentValid', () => {
