@@ -75,7 +75,7 @@ const EksisterendeSoknaderInitialState = {
     },
     identState: {
         søkerId: '17420373147',
-        pleietrengendeId: '17420373147',
+        pleietrengendeId: '18410162721',
         barn: [],
         annenSokerIdent: null,
     },

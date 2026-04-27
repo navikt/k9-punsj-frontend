@@ -15,8 +15,8 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText(/Barnets ID/i).should('exist');
 
             cy.findByText(/200/i).should('exist');
-            cy.findByText(/17420373147/i).should('exist');
-            cy.findByText(/17420373147/i).should('exist');
+            cy.findByText(initialState.identState.søkerId).should('exist');
+            cy.findByText(initialState.identState.pleietrengendeId).should('exist');
         });
     });
 
