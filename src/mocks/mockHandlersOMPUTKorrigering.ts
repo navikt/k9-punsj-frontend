@@ -7,7 +7,7 @@ const mockHandlersOMPUTKorrigering = {
         HttpResponse.json(
             {
                 soeknadId: 'f01b947c-cfa8-4c1d-9aa4-7216e7fdb58f',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 mottattDato: '2025-07-08',
                 klokkeslett: '13:21',
                 barn: [],
@@ -29,7 +29,7 @@ const mockHandlersOMPUTKorrigering = {
     soknad: http.get(ApiPath.OMS_SOKNAD_GET.replace('{id}', 'f01b947c-cfa8-4c1d-9aa4-7216e7fdb58f'), () =>
         HttpResponse.json({
             soeknadId: 'f01b947c-cfa8-4c1d-9aa4-7216e7fdb58f',
-            soekerId: '29099000129',
+            soekerId: '17420373147',
             mottattDato: '2025-07-08',
             klokkeslett: '13:21',
             barn: [],
@@ -55,7 +55,7 @@ const mockHandlersOMPUTKorrigering = {
                 versjon: '1.1.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_UT',

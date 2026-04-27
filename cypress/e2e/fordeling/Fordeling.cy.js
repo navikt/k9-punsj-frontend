@@ -21,7 +21,7 @@ describe('Fordeling', () => {
         cy.findByText(/Har ikke tilhørende fagsak/i).click();
         cy.findByLabelText(/Velg hvilket barn det gjelder/i)
             .should('exist')
-            .select('Hallo Hansen - 03091477490');
+            .select('Hallo Hansen - 18410162721');
         cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Lukk oppgave i LOS/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
@@ -66,7 +66,7 @@ describe('Fordeling', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er midlertidig alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
-        /* cy.findByLabelText(/Fødselsnummer annen part/i).type(29099000129);
+        /* cy.findByLabelText(/Fødselsnummer annen part/i).type(17420373147);
          cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - ekstra omsorgsdager/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();
@@ -77,7 +77,7 @@ describe('Fordeling', () => {
         cy.contains('Omsorgspenger/omsorgsdager').should('exist').click();
         cy.findByText(/Ekstra omsorgsdager når du er alene om omsorgen/i).click();
         cy.findByText(/Ja/i).click();
-        /* cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 02021477330');
+        /* cy.findByLabelText(/Velg hvilket barn det gjelder/i).select('Geir-Paco Gundersen - 24420167209');
          cy.findByRole('button', { name: /Videre/i }).click();
         cy.findByText(/Registrer søknad - alene om omsorgen/i).click();
         cy.findByRole('button', { name: /bekreft/i }).click();

@@ -24,7 +24,7 @@ export const initialState = {
         dedupKey: '01GEEK0M0Y7NJS26KZBMQ5NCXN',
         journalpost: {
             journalpostId: '200',
-            norskIdent: '29099000129',
+            norskIdent: '17420373147',
             dokumenter: [
                 {
                     dokumentId: '470164680',
@@ -44,7 +44,7 @@ export const initialState = {
         isJournalpostLoading: false,
     },
     identState: {
-        søkerId: '29099000129',
+        søkerId: '17420373147',
         pleietrengendeId: '',
         annenPart: '',
         annenSokerIdent: null,

@@ -12,20 +12,20 @@ export default {
     },
     barn: [
         {
-            norskIdent: '02021477330',
+            norskIdent: '24420167209',
             foedselsdato: null,
         },
         {
-            norskIdent: '03091477490',
+            norskIdent: '18410162721',
             foedselsdato: null,
         },
         {
-            norskIdent: '09081478047',
+            norskIdent: '24420167209',
             foedselsdato: null,
         },
     ],
     soeknadId: 'afac9218-acce-4d82-808b-6c76467d28e4',
-    soekerId: '29099000129',
+    soekerId: '17420373147',
     mottattDato: '2020-10-12',
     journalposter: ['201'],
     klokkeslett: '12:53',

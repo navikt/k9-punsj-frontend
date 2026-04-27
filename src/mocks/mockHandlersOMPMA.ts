@@ -4,7 +4,7 @@ import { ApiPath } from 'app/apiConfig';
 const mockHandlersOMPMA = {
     tomMappe: http.get(ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_MA',
             søknader: [],
         }),
@@ -12,30 +12,30 @@ const mockHandlersOMPMA = {
 
     mappeMedSøknad: http.get(ApiPath.OMP_MA_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_MA',
             søknader: [
                 {
                     soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
-                    soekerId: '29099000129',
+                    soekerId: '17420373147',
                     mottattDato: '2020-10-12',
                     klokkeslett: '12:53',
                     barn: [
                         {
-                            norskIdent: '02021477330',
+                            norskIdent: '24420167209',
                             foedselsdato: null,
                         },
                         {
-                            norskIdent: '03091477490',
+                            norskIdent: '18410162721',
                             foedselsdato: null,
                         },
                         {
-                            norskIdent: '09081478047',
+                            norskIdent: '24420167209',
                             foedselsdato: null,
                         },
                     ],
                     annenForelder: {
-                        norskIdent: '13079438906',
+                        norskIdent: '24420167209',
                         situasjonType: 'UTØVER_VERNEPLIKT',
                         situasjonBeskrivelse: 'asdasdasgfdfdfdf',
                         periode: {
@@ -56,7 +56,7 @@ const mockHandlersOMPMA = {
         HttpResponse.json(
             {
                 soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 mottattDato: '2020-10-12',
                 klokkeslett: '12:53',
                 barn: [],
@@ -78,7 +78,7 @@ const mockHandlersOMPMA = {
     soknad: http.get(ApiPath.OMP_MA_SOKNAD_GET.replace('{id}', 'db054295-f1bd-45d2-b0fe-0d032ce25295'), () =>
         HttpResponse.json({
             soeknadId: 'db054295-f1bd-45d2-b0fe-0d032ce25295',
-            soekerId: '29099000129',
+            soekerId: '17420373147',
             mottattDato: '2020-10-12',
             klokkeslett: '12:53',
             barn: [],
@@ -103,26 +103,26 @@ const mockHandlersOMPMA = {
                 versjon: '1.0.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_UTV_MA',
                     barn: [
                         {
-                            norskIdentitetsnummer: '02021477330',
+                            norskIdentitetsnummer: '24420167209',
                             fødselsdato: null,
                         },
                         {
-                            norskIdentitetsnummer: '03091477490',
+                            norskIdentitetsnummer: '18410162721',
                             fødselsdato: null,
                         },
                         {
-                            norskIdentitetsnummer: '09081478047',
+                            norskIdentitetsnummer: '24420167209',
                             fødselsdato: null,
                         },
                     ],
                     annenForelder: {
-                        norskIdentitetsnummer: '13079438906',
+                        norskIdentitetsnummer: '24420167209',
                         situasjon: 'INNLAGT_I_HELSEINSTITUSJON',
                         situasjonBeskrivelse: 'jhkhjkhjkhjhjkhjk',
                         periode: '2023-05-10/2023-05-11',
@@ -154,26 +154,26 @@ const mockHandlersOMPMA = {
                 versjon: '1.0.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_UTV_MA',
                     barn: [
                         {
-                            norskIdentitetsnummer: '02021477330',
+                            norskIdentitetsnummer: '24420167209',
                             fødselsdato: null,
                         },
                         {
-                            norskIdentitetsnummer: '03091477490',
+                            norskIdentitetsnummer: '18410162721',
                             fødselsdato: null,
                         },
                         {
-                            norskIdentitetsnummer: '09081478047',
+                            norskIdentitetsnummer: '24420167209',
                             fødselsdato: null,
                         },
                     ],
                     annenForelder: {
-                        norskIdentitetsnummer: '13079438906',
+                        norskIdentitetsnummer: '24420167209',
                         situasjon: 'INNLAGT_I_HELSEINSTITUSJON',
                         situasjonBeskrivelse: 'jhkhjkhjkhjhjkhjk',
                         periode: '2023-05-10/2023-05-11',

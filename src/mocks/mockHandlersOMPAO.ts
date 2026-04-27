@@ -4,7 +4,7 @@ import { ApiPath } from 'app/apiConfig';
 const mockHandlersOMPAO = {
     tomMappe: http.get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_AO',
             søknader: [],
         }),
@@ -12,16 +12,16 @@ const mockHandlersOMPAO = {
 
     mappeMedSøknad: http.get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_AO',
             søknader: [
                 {
                     soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
-                    soekerId: '29099000129',
+                    soekerId: '17420373147',
                     mottattDato: '2020-10-12',
                     klokkeslett: '12:53',
                     barn: {
-                        norskIdent: '02021477330',
+                        norskIdent: '24420167209',
                         foedselsdato: null,
                     },
                     journalposter: ['200'],
@@ -44,11 +44,11 @@ const mockHandlersOMPAO = {
         HttpResponse.json(
             {
                 soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 mottattDato: '2020-10-12',
                 klokkeslett: '12:53',
                 barn: {
-                    norskIdent: '02021477330',
+                    norskIdent: '24420167209',
                     foedselsdato: null,
                 },
                 journalposter: ['200'],
@@ -65,11 +65,11 @@ const mockHandlersOMPAO = {
     soknad: http.get(ApiPath.OMP_AO_SOKNAD_GET.replace('{id}', '9356c863-ab88-41eb-89ec-3ca8cd555537'), () =>
         HttpResponse.json({
             soeknadId: '9356c863-ab88-41eb-89ec-3ca8cd555537',
-            soekerId: '29099000129',
+            soekerId: '17420373147',
             mottattDato: '2020-10-12',
             klokkeslett: '12:53',
             barn: {
-                norskIdent: '02021477330',
+                norskIdent: '24420167209',
                 foedselsdato: null,
             },
             journalposter: ['200'],
@@ -94,7 +94,7 @@ const mockHandlersOMPAO = {
                 versjon: '1.1.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_AO',
@@ -143,7 +143,7 @@ const mockHandlersOMPAO = {
                 versjon: '1.1.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_AO_UT',

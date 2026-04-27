@@ -15,8 +15,8 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.findByText(/Barnets ID/i).should('exist');
 
             cy.findByText(/200/i).should('exist');
-            cy.findByText(/29099000129/i).should('exist');
-            cy.findByText(/16017725002/i).should('exist');
+            cy.findByText(/17420373147/i).should('exist');
+            cy.findByText(/17420373147/i).should('exist');
         });
     });
 
@@ -58,7 +58,7 @@ describe('Eksisterende søknader pleiepenger', () => {
             worker.use(
                 http.get(ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND, () =>
                     HttpResponse.json({
-                        søker: '29099000129',
+                        søker: '17420373147',
                         fagsakTypeKode: 'PSB',
                         søknader: [pleiepengerSoknadSomKanSendesInn],
                     }),
@@ -70,7 +70,7 @@ describe('Eksisterende søknader pleiepenger', () => {
             cy.waitUntil(() => cy.contains(/Mottakelsesdato/i));
             cy.contains(/Mottakelsesdato/i);
             cy.findByText('12.10.2020').should('exist');
-            cy.findByText('16017725002').should('exist');
+            cy.findByText('17420373147').should('exist');
             cy.findByText('200').should('exist');
             cy.findByText('08.11.2021 - 11.11.2021').should('exist');
             cy.findByRole('button', { name: /fortsett/i })

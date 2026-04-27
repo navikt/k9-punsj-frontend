@@ -47,7 +47,7 @@ const EksisterendeSoknaderInitialState = {
         dedupKey: '01FMAT4RR8K7A7C0PSPBDKM566',
         journalpost: {
             journalpostId: '200',
-            norskIdent: '29099000129',
+            norskIdent: '17420373147',
             dokumenter: [
                 {
                     dokumentId: '470164680',
@@ -74,8 +74,8 @@ const EksisterendeSoknaderInitialState = {
         isJournalposterLoading: false,
     },
     identState: {
-        søkerId: '29099000129',
-        pleietrengendeId: '16017725002',
+        søkerId: '17420373147',
+        pleietrengendeId: '17420373147',
         barn: [],
         annenSokerIdent: null,
     },

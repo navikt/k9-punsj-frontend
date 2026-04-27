@@ -5,7 +5,7 @@ import { ApiPath } from 'app/apiConfig';
 const mockHandlersOMPUT = {
     tomMappe: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP',
             søknader: [],
         }),
@@ -13,12 +13,12 @@ const mockHandlersOMPUT = {
 
     mappeMedSøknad: http.get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP',
             søknader: [
                 {
                     soeknadId: '4e177e4d-922d-4205-a3e9-d3278da2abf7',
-                    soekerId: '29099000129',
+                    soekerId: '17420373147',
                     mottattDato: '10.03.2022',
                     klokkeslett: null,
                     barn: [],
@@ -126,7 +126,7 @@ const mockHandlersOMPUT = {
         HttpResponse.json(
             {
                 soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
-                soekerId: '29099000129',
+                soekerId: '17420373147',
                 mottattDato: null,
                 klokkeslett: null,
                 barn: [],
@@ -146,7 +146,7 @@ const mockHandlersOMPUT = {
     soknad: http.get(ApiPath.OMP_UT_SOKNAD_GET.replace('{id}', 'bc12baac-0f0c-427e-a059-b9fbf9a3adff'), () =>
         HttpResponse.json({
             soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
-            soekerId: '29099000129',
+            soekerId: '17420373147',
             mottattDato: '2020-10-12',
             klokkeslett: '12:53',
             barn: [],
@@ -195,7 +195,7 @@ const mockHandlersOMPUT = {
                 versjon: '1.1.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_UT',
@@ -244,7 +244,7 @@ const mockHandlersOMPUT = {
                 versjon: '1.1.0',
                 mottattDato: '2020-10-12T10:53:00.000Z',
                 søker: {
-                    norskIdentitetsnummer: '29099000129',
+                    norskIdentitetsnummer: '17420373147',
                 },
                 ytelse: {
                     type: 'OMP_UT',

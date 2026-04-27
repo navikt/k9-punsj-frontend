@@ -79,14 +79,14 @@ const mockHandlersTest = {
     opprettePILS: http.post(ApiPath.PLS_SOKNAD_CREATE, () => HttpResponse.json(pilsSoknad, { status: 201 })),
     hentMappe: http.get(ApiPath.PSB_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'PSB',
             søknader: [],
         }),
     ),
     hentMappePils: http.get(ApiPath.PLS_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'PPN',
             søknader: [],
         }),
@@ -153,7 +153,7 @@ const mockHandlersTest = {
      */
     hentOmsorgspengerKroniskSyktBarnMappe: http.get(ApiPath.OMP_KS_EKSISTERENDE_SOKNADER_FIND, () =>
         HttpResponse.json({
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_KS',
             søknader: [],
         }),
