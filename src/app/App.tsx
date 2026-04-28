@@ -1,7 +1,15 @@
-import * as React from 'react';
+import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+import { configureStore } from '@reduxjs/toolkit';
 import * as Sentry from '@sentry/react';
-import { createRoot } from 'react-dom/client';
+import {
+    breadcrumbsIntegration,
+    reactRouterV6BrowserTracingIntegration,
+    withSentryReactRouterV6Routing,
+} from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import {
     Navigate,
@@ -12,28 +20,20 @@ import {
     useLocation,
     useNavigationType,
 } from 'react-router-dom';
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
-import { TracingInstrumentation } from '@grafana/faro-web-tracing';
-import {
-    withSentryReactRouterV6Routing,
-    breadcrumbsIntegration,
-    reactRouterV6BrowserTracingIntegration,
-} from '@sentry/react';
-import { configureStore } from '@reduxjs/toolkit';
-import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
+import logger from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
+import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
+import { ROUTES } from './constants/routes';
 import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
 import withEnvVariables from './containers/withAppSettings';
+import { Home } from './home/Home';
 import { Locale } from './models/types';
 import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
-import logger from 'redux-logger';
 import { getLocaleFromSessionStorage } from './utils';
 import { logError } from './utils/logUtils';
-import { ROUTES } from './constants/routes';
-import { Home } from './home/Home';
 
 import '@navikt/ds-css';
 import './styles/globals.css';
@@ -55,8 +55,31 @@ const prepare = async () => {
         if (window.nais?.app && window.nais?.telemetryCollectorURL) {
             initializeFaro({
                 url: window.nais?.telemetryCollectorURL,
-                app: window.nais?.app,
-                instrumentations: [...getWebInstrumentations({ captureConsole: true }), new TracingInstrumentation()],
+                app: {
+                    ...window.nais.app,
+                    version: process.env.SENTRY_RELEASE || 'local',
+                },
+                instrumentations: [
+                    ...getWebInstrumentations({ captureConsole: true }),
+                    new TracingInstrumentation({
+                        instrumentationOptions: {
+                            propagateTraceHeaderCorsUrls: [/https:\/\/[^/]+\.nav\.no\/.*/],
+                        },
+                    }),
+                ],
+                beforeSend: (item) => {
+                    // Strip query parametere fra URL for å unngå PII-lekkasjer (fnr, tokens m.m.)
+                    if (item.meta?.page?.url) {
+                        try {
+                            const url = new URL(item.meta.page.url);
+                            url.search = '';
+                            item.meta.page.url = url.toString();
+                        } catch {
+                            /* ignore */
+                        }
+                    }
+                    return item;
+                },
             });
         }
         Sentry.init({
