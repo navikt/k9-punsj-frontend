@@ -13,7 +13,7 @@ import JournalposterSync from 'app/components/JournalposterSync';
 import { ROUTES } from 'app/constants/routes';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -84,15 +84,26 @@ export interface IPunchOMPKSFormComponentState {
 }
 
 type IPunchOMPKSFormProps = IPunchOMPKSFormComponentProps &
-    WrappedComponentProps &
+    IntlProps &
     IPunchOMPKSFormStateProps &
     IPunchOMPKSFormDispatchProps;
 
-function withHooks<P>(Component: ComponentType<IPunchOMPKSFormComponentProps>) {
-    return (props: P) => {
+type IntlProps = {
+    intl: IntlShape;
+};
+
+function withHooks<P extends IPunchOMPKSFormComponentProps>(Component: ComponentType<P>) {
+    return (props: Omit<P, keyof IPunchOMPKSFormComponentProps>) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
-        return <Component {...props} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
+        return <Component {...(props as P)} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
+    };
+}
+
+function withIntl<P extends IntlProps>(Component: ComponentType<P>) {
+    return (props: Omit<P, keyof IntlProps>) => {
+        const intl = useIntl();
+        return <Component {...(props as P)} intl={intl} />;
     };
 }
 
@@ -599,7 +610,7 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export const OMPKSPunchForm = withHooks(
-    injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent)),
+    withIntl(connect(mapStateToProps, mapDispatchToProps)(PunchOMPKSFormComponent)),
 );
 
 export default connect(mapStateToProps)(OMPKSSoknadKvittering);

@@ -5,7 +5,7 @@ export async function logApiError(response: Response) {
     }
 }
 
-export function logError(error: Error) {
+export function logError(error: unknown) {
     // eslint-disable-next-line no-console
     console.error(error);
 }
