@@ -163,26 +163,10 @@
     },
     "packageManager": "yarn@4.12.0",
     "resolutions": {
-        "ajv@npm:^6.12.5": "6.14.0",
-        "on-headers": "1.1.0",
         "js-yaml": "4.1.1",
         "glob": "13.0.6",
         "qs": "6.14.2",
-        "tar": "7.5.13",
-        "lodash": "4.18.1",
-        "lodash-es": "4.18.1",
-        "minimatch@npm:^9.0.5": "9.0.9",
         "path-to-regexp@npm:^8.0.0": "8.4.0",
-        "path-to-regexp@npm:~0.1.12": "0.1.13",
-        "picomatch@npm:^2.0.4": "2.3.2",
-        "picomatch@npm:^2.2.1": "2.3.2",
-        "picomatch@npm:^2.3.1": "2.3.2",
-        "picomatch@npm:^4.0.2": "4.0.4",
-        "picomatch@npm:^4.0.3": "4.0.4",
-        "serialize-javascript@npm:^7.0.3": "7.0.5",
-        "serialize-javascript@npm:^7.0.4": "7.0.5",
-        "svgo@npm:^4.0.0": "4.0.1",
-        "systeminformation": "5.31.0",
-        "yaml@npm:^2.8.2": "2.8.3"
+        "systeminformation": "5.31.0"
     }
 }
