@@ -4,7 +4,7 @@ import { expect } from '@jest/globals';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 
-import { IntlProvider, IntlShape, WrappedComponentProps, createIntl } from 'react-intl';
+import { IntlProvider, IntlShape, createIntl } from 'react-intl';
 import { useSelector, useDispatch } from 'react-redux';
 
 import intlHelper from '../../../app/utils/intlUtils';
@@ -128,7 +128,7 @@ const setupPunchForm = (
     punchFormStateSetup?: Partial<IPunchPSBFormState>,
     punchFormDispatchPropsSetup?: Partial<IPunchFormDispatchProps>,
 ) => {
-    const wrappedComponentProps: WrappedComponentProps = {
+    const wrappedComponentProps: { intl: IntlShape } = {
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
     };
 

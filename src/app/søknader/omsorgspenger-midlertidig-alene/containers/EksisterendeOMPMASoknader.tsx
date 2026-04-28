@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -48,8 +48,7 @@ export interface IEksisterendeOMPMASoknaderComponentProps {
     kanStarteNyRegistrering?: boolean;
 }
 
-type IEksisterendeOMPMASoknaderProps = WrappedComponentProps &
-    IEksisterendeOMPMASoknaderComponentProps &
+type IEksisterendeOMPMASoknaderProps = IEksisterendeOMPMASoknaderComponentProps &
     IEksisterendeOMPMASoknaderStateProps &
     IEksisterendeOMPMASoknaderDispatchProps;
 
@@ -252,6 +251,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
-export const EksisterendeOMPMASoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPMASoknaderComponent),
-);
+export const EksisterendeOMPMASoknader = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(EksisterendeOMPMASoknaderComponent);

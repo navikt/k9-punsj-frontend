@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage, WrappedComponentProps, injectIntl, useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -50,8 +50,7 @@ export interface IEksisterendeOMPKSSoknaderComponentProps {
     kanStarteNyRegistrering?: boolean;
 }
 
-type IEksisterendeOMPKSSoknaderProps = WrappedComponentProps &
-    IEksisterendeOMPKSSoknaderComponentProps &
+type IEksisterendeOMPKSSoknaderProps = IEksisterendeOMPKSSoknaderComponentProps &
     IEksisterendeOMPKSSoknaderStateProps &
     IEksisterendeOMPKSSoknaderDispatchProps;
 
@@ -255,6 +254,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     resetAllAction: () => dispatch(resetAllStateAction()),
 });
 
-export const EksisterendeOMPKSSoknader = injectIntl(
-    connect(mapStateToProps, mapDispatchToProps)(EksisterendeOMPKSSoknaderComponent),
-);
+export const EksisterendeOMPKSSoknader = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(EksisterendeOMPKSSoknaderComponent);
