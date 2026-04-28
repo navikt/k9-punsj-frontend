@@ -128,10 +128,10 @@
         "postcss": "8.5.9",
         "postcss-import": "16.1.1",
         "postcss-loader": "8.2.1",
-        "prettier": "3.8.1",
+        "prettier": "3.8.3",
         "react-refresh": "0.18.0",
         "regenerator-runtime": "0.14.1",
-        "storybook": "10.3.3",
+        "storybook": "10.3.5",
         "style-loader": "4.0.0",
         "stylelint": "17.6.0",
         "stylelint-config-standard": "40.0.0",
@@ -139,7 +139,7 @@
         "terser-webpack-plugin": "5.4.0",
         "typescript": "5.9.3",
         "typescript-eslint": "8.58.1",
-        "webpack": "5.106.0",
+        "webpack": "5.106.2",
         "webpack-dev-server": "5.2.3"
     },
     "browserslist": [
@@ -182,7 +182,6 @@
         "serialize-javascript@npm:^7.0.3": "7.0.5",
         "serialize-javascript@npm:^7.0.4": "7.0.5",
         "svgo@npm:^4.0.0": "4.0.1",
-        "webpack": "5.106.0",
         "systeminformation": "5.31.0",
         "terser-webpack-plugin@npm:^5.3.14": "5.4.0",
         "yaml@npm:^2.8.2": "2.8.3"
