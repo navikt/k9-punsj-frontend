@@ -454,7 +454,7 @@ describe('faroEvents', () => {
         ]);
     });
 
-    it('Skal ikke mappe tomme PSB-seksjoner til annet', () => {
+    it('Skal ikke gi feltgrupper for tomme PSB-seksjoner', () => {
         expect(getPsbSubmittedFieldGroups({
             ...psbKvittering,
             ytelse: {
