@@ -8,7 +8,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
                 window.__initialState__ = initialState;
             },
         });
-        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
@@ -21,7 +21,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
                 window.__initialState__ = initialState;
             },
         });
-        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
@@ -41,7 +41,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
                 window.__initialState__ = initialState;
             },
         });
-        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
@@ -54,7 +54,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByLabelText('Tittel').should('not.exist');
         cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
-        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18410162721');
         cy.findByLabelText('Send til tredjepart').should('exist');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
         cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
@@ -72,11 +72,11 @@ describe('Håndtering av inntektsmelding uten krav', () => {
             },
         });
 
-        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Send brev til søker, arbeidsgiver eller tredjepart').should('exist').click();
         cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
-        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18410162721');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
         cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
 
@@ -105,7 +105,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
                 window.__initialState__ = initialState;
             },
         });
-        cy.findByText('Stemmer det at søkers fødselsnummer er 29099000129?').should('exist');
+        cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
         cy.findByText('Opprett journalføringsoppgave i Gosys').should('exist');
@@ -118,7 +118,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
         cy.findByLabelText('Tittel').should('not.exist');
         cy.findByLabelText('Velg mal').should('exist').select('Fritekst generelt brev');
         cy.findByLabelText('Tittel').should('exist');
-        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18128103429');
+        cy.findByLabelText('Velg mottaker').should('exist').select('TUNGSINDIG KAKE - 18410162721');
         cy.findByLabelText('Tittel').should('exist').type('Tittel');
         cy.findByLabelText('Innhold i brev').should('exist').type('Fritekst her');
         cy.findByText('Send brev').should('exist').click();

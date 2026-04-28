@@ -39,3 +39,8 @@ jobs:
               with:
                   name: dist
                   path: dist/
+    sif-code-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@2ef2d3091cf65f3a3bb617c5f6d692369528a5e4 # v1

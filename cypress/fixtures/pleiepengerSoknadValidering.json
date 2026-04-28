@@ -3,12 +3,12 @@
     "versjon": "1.0.0",
     "mottattDato": "2020-10-12T10:53:00.000Z",
     "søker": {
-        "norskIdentitetsnummer": "29099000129"
+        "norskIdentitetsnummer": "17420373147"
     },
     "ytelse": {
         "type": "PLEIEPENGER_SYKT_BARN",
         "barn": {
-            "norskIdentitetsnummer": "16017725002",
+            "norskIdentitetsnummer": "17420373147",
             "fødselsdato": null
         },
         "søknadsperiode": ["2021-11-08/2021-11-11"],

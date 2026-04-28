@@ -8,7 +8,7 @@ export const initialState = {
         },
         punchState: {
             step: 0,
-            søkerId: '29099000129',
+            søkerId: '17420373147',
             pleietrengendeId: null,
         },
         signaturState: {
@@ -25,7 +25,7 @@ export const initialState = {
         },
         punchState: {
             step: 0,
-            søkerId: '29099000129',
+            søkerId: '17420373147',
             pleietrengendeId: null,
         },
         signaturState: {
@@ -42,7 +42,7 @@ export const initialState = {
         },
         punchState: {
             step: 0,
-            søkerId: '29099000129',
+            søkerId: '17420373147',
             pleietrengendeId: null,
         },
         signaturState: {
@@ -59,7 +59,7 @@ export const initialState = {
         },
         punchState: {
             step: 0,
-            søkerId: '29099000129',
+            søkerId: '17420373147',
             pleietrengendeId: null,
         },
         signaturState: {
@@ -143,7 +143,7 @@ export const initialState = {
         dedupKey: '01H026FTAHKCX8ADAB5F9CKJ7H',
         journalpost: {
             journalpostId: '205',
-            norskIdent: '29099000129',
+            norskIdent: '17420373147',
             dokumenter: [
                 {
                     dokumentId: '470164680',
@@ -168,7 +168,7 @@ export const initialState = {
         isJournalposterLoading: false,
     },
     identState: {
-        søkerId: '29099000129',
+        søkerId: '17420373147',
         pleietrengendeId: '',
         annenPart: '07827599802',
         annenSokerIdent: null,
@@ -198,7 +198,7 @@ export const initialState = {
     },
     eksisterendeOMPMASoknaderState: {
         eksisterendeSoknaderSvar: {
-            søker: '29099000129',
+            søker: '17420373147',
             fagsakTypeKode: 'OMP_MA',
             søknader: [],
         },

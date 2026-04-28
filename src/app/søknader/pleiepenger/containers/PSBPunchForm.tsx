@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 
 import { cloneDeep, set } from 'lodash';
 
-import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
@@ -99,11 +99,22 @@ export interface IPunchFormStateProps {
     fellesState: IFellesState;
 }
 
-function withHooks<P>(Component: ComponentType<IPunchFormComponentProps>) {
-    return (props: P) => {
+type IntlProps = {
+    intl: IntlShape;
+};
+
+function withHooks<P extends IPunchFormComponentProps>(Component: ComponentType<P>) {
+    return (props: Omit<P, keyof IPunchFormComponentProps>) => {
         const { id, journalpostid } = useParams();
         const navigate = useNavigate();
-        return <Component {...props} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
+        return <Component {...(props as P)} id={id!} journalpostid={journalpostid!} navigate={navigate} />;
+    };
+}
+
+function withIntl<P extends IntlProps>(Component: ComponentType<P>) {
+    return (props: Omit<P, keyof IntlProps>) => {
+        const intl = useIntl();
+        return <Component {...(props as P)} intl={intl} />;
     };
 }
 
@@ -152,7 +163,7 @@ export interface IPunchFormComponentState {
 }
 
 type IPunchFormProps = IPunchFormComponentProps &
-    WrappedComponentProps &
+    IntlProps &
     IPunchFormStateProps &
     IPunchFormDispatchProps;
 
@@ -1717,4 +1728,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
 
-export const PSBPunchForm = withHooks(injectIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));
+export const PSBPunchForm = withHooks(withIntl(connect(mapStateToProps, mapDispatchToProps)(PunchFormComponent)));

@@ -28,7 +28,7 @@
         "sakstype": "PSB",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "2017-09-11"
         },
         "gyldigPeriode": {
@@ -145,7 +145,7 @@
         "sakstype": "OMP_KS",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "2017-09-11"
         },
         "gyldigPeriode": {
@@ -161,7 +161,7 @@
         "sakstype": "OMP_KS",
         "pleietrengende": {
             "navn": "JUSTERBAR HALS",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "2017-09-11"
         },
         "gyldigPeriode": {
@@ -201,7 +201,7 @@
         "sakstype": "OMP_AO",
         "pleietrengende": {
             "navn": "Alex Smith",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "2018-09-11"
         },
         "gyldigPeriode": {
@@ -217,7 +217,7 @@
         "sakstype": "OMP_AO",
         "pleietrengende": {
             "navn": "Alex Smith",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "2018-09-11"
         },
         "gyldigPeriode": {
@@ -251,7 +251,7 @@
         "behandlingsår": null,
         "relatertPerson": {
             "navn": "Alex Smith",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "1980-09-11"
         }
     },
@@ -267,7 +267,7 @@
         "behandlingsår": null,
         "relatertPerson": {
             "navn": "Alex Smith",
-            "identitetsnummer": "09081478047",
+            "identitetsnummer": "24420167209",
             "fødselsdato": "1980-09-11"
         }
     }
