@@ -22,6 +22,7 @@ import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { ValidationError } from 'yup';
+import { trackOlpStartedFromJournalpost, trackOlpSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface OwnProps {
     journalpostid: string;
@@ -79,6 +80,16 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
             });
         }
     }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);
+
+    useEffect(() => {
+        trackOlpStartedFromJournalpost(props.journalpostid);
+    }, [props.journalpostid]);
+
+    useEffect(() => {
+        if (erSendtInn && kvittering) {
+            trackOlpSubmitFromJournalpost(props.journalpostid, kvittering);
+        }
+    }, [erSendtInn, kvittering, props.journalpostid]);
 
     const { error: submitError, mutate: submit } = useMutation({
         mutationFn: () => sendSoeknad(id, identState.søkerId),

@@ -2,6 +2,41 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OMPAO manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPAO` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPAO` submit-kvitteringen til trygge feltgrupper for `barn` og `periode`.
+
+### OMPUT manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPUT` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPUT` submit-kvitteringen til trygge feltgrupper for `arbeidstaker`, `frilanser` og `selvstendig`.
+
+### OLP manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OLP` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OLP` submit-kvitteringen til trygge feltgrupper for `arbeidstid`, `trekk_av_periode`, `periode`, `kurs`, `reise`, `ferie`, `utenlandsopphold`, `bosted`, `uttak`, `omsorg` og `opptjening`.
+
+### OMPMA manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPMA` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPMA` submit-kvitteringen til trygge feltgrupper for `barn` og `annen_forelder`.
+
+### OMPKS manual journalpost analytics (2026-04-24)
+
+- Sender nå `Faro` start- og submit-måling for `OMPKS` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `OMPKS` submit-kvitteringen til den trygge feltgruppen `kronisk_eller_funksjonshemming`.
+
+### PLS manual journalpost analytics (2026-04-24)
+
+- Sender nå samme type `Faro` start- og submit-måling for `PLS` når flyten kommer fra manuelt opprettet journalpost.
+- Mapper `PLS` submit-kvitteringen til trygge feltgrupper for `arbeidstid`, `trekk_av_periode`, `periode`, `ferie`, `utenlandsopphold`, `bosted` og `opptjening`.
+
+### PSB manual journalpost analytics field groups (2026-04-24)
+
+- Deler nå `PSB` submit-analytics for manuelt opprettede journalposter i flere trygge feltgrupper, blant annet `tilsyn`, `beredskap`, `nattevaak`, `ferie`, `utenlandsopphold`, `bosted`, `uttak`, `omsorg` og `opptjening`.
+- Beholder samme `Faro` eventmodell og source-gating mot manuell `Opprett journalpost`.
+
 ### Faro analytics skips SDK dedupe for manual punsj events (2026-04-20)
 
 - Lar nå manuelle `Faro`-events for `Opprett journalpost` og `PSB`-submit gå med `skipDedupe`, slik at gjentatte men legitime analytics-hendelser ikke lettere faller bort i frontend-SDK-et.

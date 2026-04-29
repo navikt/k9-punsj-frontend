@@ -68,6 +68,7 @@ import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
@@ -204,15 +205,28 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.props.getSoknad(id);
         }
 
+        trackPlsStartedFromJournalpost(this.props.journalpostid);
+
         if (søkersIdent && pleietrengendeIdent) {
             this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
         }
     }
 
     componentDidUpdate(prevProps: Readonly<IPunchPLSFormProps>): void {
-        const { punchFormState, søkersIdent, pleietrengendeIdent, identState, setIdentAction, hentPerioder } =
-            this.props;
-        const { soknad } = punchFormState;
+        const {
+            punchFormState,
+            journalpostid,
+            søkersIdent,
+            pleietrengendeIdent,
+            identState,
+            setIdentAction,
+            hentPerioder,
+        } = this.props;
+        const { soknad, innsentSoknad, isComplete } = punchFormState;
+
+        if (!prevProps.punchFormState.isComplete && isComplete && innsentSoknad) {
+            trackPlsSubmitFromJournalpost(journalpostid, innsentSoknad);
+        }
 
         if (soknad && !this.state.isFetched) {
             this.setState({
@@ -780,7 +794,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         }
 
         const { punchFormState } = this.props;
-        const className = 'absolute top-[60px] left-4 z-5';
+        const className = 'absolute top-15 left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (
@@ -1247,12 +1261,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     hentPerioder: (søkerId: string, pleietrengendeId: string) =>
         dispatch(hentPLSPerioderFraK9Sak(søkerId, pleietrengendeId)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
-    validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring: boolean) =>
+    validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring?: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitPLSSoknad(ident, soeknadid)),
     resetSoknadAction: () => dispatch(resetPLSSoknadAction()),
     resetAllStateAction: () => dispatch(resetAllStateAction()),
-    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
+    setIdentAction: (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendePLSSoknadAction()),
     validerSoknadReset: () => dispatch(validerPLSSoknadResetAction()),

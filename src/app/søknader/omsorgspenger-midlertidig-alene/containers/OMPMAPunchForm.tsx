@@ -157,7 +157,7 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             return null;
         }
 
-        const className = 'absolute top-[60px] left-4 z-5';
+        const className = 'absolute top-15 left-4 z-5';
 
         if (punchFormState.isAwaitingUpdateResponse) {
             return (

@@ -24,6 +24,7 @@ import OMPUTPunchForm from './OMPUTPunchForm';
 import OMPUTSoknadKvitteringContainer from './SoknadKvittering/OMPUTSoknadKvitteringContainer';
 import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { Dispatch } from 'redux';
+import { trackOmputStartedFromJournalpost, trackOmputSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface Props {
     journalpostid: string;
@@ -77,6 +78,16 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
             });
         }
     }, [soeknadRespons, dispatch, hentPerioderK9, fagsak]);
+
+    useEffect(() => {
+        trackOmputStartedFromJournalpost(journalpostid);
+    }, [journalpostid]);
+
+    useEffect(() => {
+        if (erSendtInn && kvittering) {
+            trackOmputSubmitFromJournalpost(journalpostid, kvittering);
+        }
+    }, [erSendtInn, journalpostid, kvittering]);
 
     const { error: submitError, mutate: submit } = useMutation({
         mutationFn: () => sendSoeknad(id, identState.søkerId),

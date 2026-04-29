@@ -19,6 +19,7 @@ import OMPAOPunchForm from './OMPAOPunchForm';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
 import { Dispatch } from 'redux';
+import { trackOmpaoStartedFromJournalpost, trackOmpaoSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface Props {
     journalpostid: string;
@@ -55,6 +56,16 @@ const OMPAOPunchFormContainer = (props: Props) => {
             dispatch(setIdentFellesAction(soeknadRespons.soekerId, soeknadRespons.barn.norskIdent));
         }
     }, [soeknadRespons, dispatch]);
+
+    useEffect(() => {
+        trackOmpaoStartedFromJournalpost(props.journalpostid);
+    }, [props.journalpostid]);
+
+    useEffect(() => {
+        if (erSendtInn && kvittering) {
+            trackOmpaoSubmitFromJournalpost(props.journalpostid, kvittering);
+        }
+    }, [erSendtInn, kvittering, props.journalpostid]);
 
     const { error: submitError, mutate: submit } = useMutation({
         mutationFn: () => sendSoeknad(id, identState.søkerId),
