@@ -52,7 +52,7 @@ jobs:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - name: Sette opp Node
-              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version: 20.x
                   registry-url: 'https://npm.pkg.github.com'
@@ -73,7 +73,7 @@ jobs:
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - uses: nais/docker-build-push@078e460885ed0424b60d45ce9220b4be1748be9d # v0
+            - uses: nais/docker-build-push@be85229e81c0293c265c646c084f05317fb6e0d2 # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -91,14 +91,14 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod gcp
-              uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # v2
+              uses: nais/deploy/actions/deploy@2f28259ff29ea37915f5a0c9e2a8e3542c429df7 # v2
               env:
                   CLUSTER: prod-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
                   VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@8bc1e77fac91f0f630ce1ed41137aa33243d3476 # main at 2026-03-30
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@2ef2d3091cf65f3a3bb617c5f6d692369528a5e4 # main at 2026-03-30
         permissions:
             contents: write
             security-events: write
