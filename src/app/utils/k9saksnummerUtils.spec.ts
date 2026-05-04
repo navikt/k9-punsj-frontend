@@ -1,4 +1,28 @@
+import { DokumenttypeForkortelse } from 'app/models/enums';
+import Fagsak from 'app/types/Fagsak';
+
 import { normalizeK9saksnummer, resolveK9saksnummer } from './k9saksnummerUtils';
+
+type FordelingK9saksnummerSource = NonNullable<Parameters<typeof resolveK9saksnummer>[0]>;
+type JournalpostK9saksnummerSource = NonNullable<Parameters<typeof resolveK9saksnummer>[1]>;
+
+const createFagsak = (fagsakId: string): Fagsak => ({
+    fagsakId,
+    sakstype: DokumenttypeForkortelse.PSB,
+    gyldigPeriode: { fom: '', tom: '' },
+});
+
+const createFordelingSource = (fagsakId: string): FordelingK9saksnummerSource => ({
+    fagsak: createFagsak(fagsakId),
+});
+
+const createJournalpostSource = (
+    fagsakId: string,
+    erFerdigstilt?: boolean,
+): JournalpostK9saksnummerSource => ({
+    erFerdigstilt,
+    sak: createFagsak(fagsakId),
+});
 
 describe('k9saksnummerUtils', () => {
     describe('normalizeK9saksnummer', () => {
@@ -17,8 +41,8 @@ describe('k9saksnummerUtils', () => {
         it('uses fordeling fagsak before journalpost sak', () => {
             expect(
                 resolveK9saksnummer(
-                    { fagsak: { fagsakId: 'FORDELING', sakstype: 'PSB' } as any },
-                    { erFerdigstilt: false, sak: { fagsakId: 'JOURNALPOST', sakstype: 'PSB' } as any },
+                    createFordelingSource('FORDELING'),
+                    createJournalpostSource('JOURNALPOST', false),
                 ),
             ).toBe('FORDELING');
         });
@@ -26,16 +50,14 @@ describe('k9saksnummerUtils', () => {
         it('uses journalpost sak before fordeling fagsak for ferdigstilt journalpost', () => {
             expect(
                 resolveK9saksnummer(
-                    { fagsak: { fagsakId: 'FORDELING', sakstype: 'PSB' } as any },
-                    { erFerdigstilt: true, sak: { fagsakId: 'JOURNALPOST', sakstype: 'PSB' } as any },
+                    createFordelingSource('FORDELING'),
+                    createJournalpostSource('JOURNALPOST', true),
                 ),
             ).toBe('JOURNALPOST');
         });
 
         it('falls back to journalpost sak when fordeling fagsak is missing', () => {
-            expect(resolveK9saksnummer(undefined, { sak: { fagsakId: 'JOURNALPOST', sakstype: 'PSB' } as any })).toBe(
-                'JOURNALPOST',
-            );
+            expect(resolveK9saksnummer(undefined, createJournalpostSource('JOURNALPOST'))).toBe('JOURNALPOST');
         });
 
         it('falls back to søknad k9saksnummer when state sources are missing', () => {
@@ -45,8 +67,8 @@ describe('k9saksnummerUtils', () => {
         it('ignores blank values when resolving', () => {
             expect(
                 resolveK9saksnummer(
-                    { fagsak: { fagsakId: '   ', sakstype: 'PSB' } as any },
-                    { sak: { fagsakId: ' JOURNALPOST ', sakstype: 'PSB' } as any },
+                    createFordelingSource('   '),
+                    createJournalpostSource(' JOURNALPOST '),
                 ),
             ).toBe('JOURNALPOST');
         });
