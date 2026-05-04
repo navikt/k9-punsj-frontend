@@ -18,6 +18,7 @@ export interface IOLPSoknadBackend {
     begrunnelseForInnsending?: BegrunnelseForInnsending;
     bosteder?: Bosteder[];
     journalposter: string[];
+    k9saksnummer?: string;
     klokkeslett?: string;
     kurs?: Kurs;
     lovbestemtFerie?: Periode[];

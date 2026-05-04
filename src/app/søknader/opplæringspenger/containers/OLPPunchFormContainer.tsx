@@ -47,7 +47,6 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const dispatch = useDispatch();
     const fellesState = useSelector((state: RootStateType) => state.felles);
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = resolveK9saksnummer(fordelingState, fellesState.journalpost);
     const intl = useIntl();
 
     const {
@@ -73,6 +72,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         queryKey: [id],
         queryFn: () => hentSoeknad(identState.søkerId, id),
     });
+    const k9saksnummer = resolveK9saksnummer(fordelingState, fellesState.journalpost, soeknadRespons);
 
     useEffect(() => {
         if (soeknadRespons) {

@@ -6,6 +6,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Stopper create søknad-kall når `k9saksnummer` mangler eller er blankt, i stedet for å sende en request som backend ikke kan decode.
 - Leser `k9saksnummer` fra `fordelingState.fagsak` først og bruker `journalpost.sak` som fallback etter journalføring eller reload.
+- Prioriterer `journalpost.sak` når journalposten er ferdigstilt, og bruker `søknad.k9saksnummer` som fallback i OLP og PSB punch ved reload.
 - Bruker samme resolver i OLP kursperiodeoppslag og i eksisterende-søknad-tabellenes fagsak-sammenligning.
 
 ### OMPAO manual journalpost analytics (2026-04-24)
