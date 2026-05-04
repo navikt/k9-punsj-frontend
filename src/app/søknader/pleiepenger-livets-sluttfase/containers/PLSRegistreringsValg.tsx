@@ -8,6 +8,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 import { IdentRules } from 'app/validation';
 import { findEksisterendeSoknader } from 'app/state/actions';
+import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from '../../../state/actions/JournalposterPerIdentActions';
@@ -44,7 +45,8 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
     const location = useLocation();
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const k9saksnummer = resolveK9saksnummer(fordelingState, journalpost);
 
     const {
         journalpostid,
@@ -82,10 +84,10 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
-        if (søknader?.length === 0) {
+        if (søknader?.length === 0 && k9saksnummer) {
             createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [createSoknad, journalpostid, søkerId, pleietrengendeId, søknader?.length]);
+    }, [createSoknad, journalpostid, k9saksnummer, søkerId, pleietrengendeId, søknader?.length]);
 
     useEffect(() => {
         if (eksisterendeSoknaderSvar && isSoknadCreated && soknadid) {
@@ -116,6 +118,11 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                 pleietrengendeId={pleietrengendeId}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
+            {!k9saksnummer && (
+                <Alert size="small" variant="warning">
+                    {manglerK9saksnummerMessage}
+                </Alert>
+            )}
             <div className="knapperad">
                 <Button
                     variant="secondary"
@@ -131,7 +138,7 @@ export const PLSRegistreringsValgComponent: React.FunctionComponent<IPLSRegistre
                         onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp knapp2"
                         size="small"
-                        disabled={isEksisterendeSoknaderLoading}
+                        disabled={isEksisterendeSoknaderLoading || !k9saksnummer}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

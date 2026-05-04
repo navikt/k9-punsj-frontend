@@ -3,6 +3,7 @@ import { UseMutationResult, useMutation } from '@tanstack/react-query';
 import { ApiPath } from 'app/apiConfig';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
+import { manglerK9saksnummerMessage, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IOMPAOSoknad } from './types/OMPAOSoknad';
 import { IOMPAOSoknadKvittering } from './types/OMPAOSoknadKvittering';
@@ -59,19 +60,25 @@ export const opprettSoeknad = (
     journalpostId: string,
     ident: string,
     pleietrengendeId: string,
-    k9saksnummer?: string,
-): Promise<IOMPAOSoknad> =>
-    post(ApiPath.OMP_AO_SOKNAD_CREATE, undefined, undefined, {
+    k9saksnummer: string,
+): Promise<IOMPAOSoknad> => {
+    const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+    if (!resolvedK9saksnummer) {
+        throw Error(manglerK9saksnummerMessage);
+    }
+
+    return post(ApiPath.OMP_AO_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
         barnIdent: pleietrengendeId,
-        k9saksnummer,
+        k9saksnummer: resolvedK9saksnummer,
     }).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under opprettelse av søknad.');
         }
         return response.json();
     });
+};
 
 export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPAOSoknadSvar> =>
     get(ApiPath.OMP_AO_EKSISTERENDE_SOKNADER_FIND, undefined, { 'X-Nav-NorskIdent': ident }).then((response) => {

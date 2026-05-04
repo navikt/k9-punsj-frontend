@@ -13,6 +13,7 @@ import { TimeFormat } from 'app/models/enums';
 import { IdentRules } from 'app/validation';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
 import { hentAlleJournalposterPerIdent } from 'app/api/api';
@@ -88,7 +89,7 @@ const EksisterendeOMPAOSoknader: React.FC<Props> = (props) => {
     const gaaVidereMedSoeknad = (soknad: IOMPAOSoknad) => {
         navigate(`../${ROUTES.PUNCH.replace(':id', soknad.soeknadId)}`);
     };
-    const fagsakId = fellesState.journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+    const fagsakId = resolveK9saksnummer(fordelingState, fellesState.journalpost);
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];

@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+import { createManglerK9saksnummerError, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { EksisterendeOMPMASoknaderActionKeys } from '../../types/EksisterendeOMPMASoknaderActionKeys';
 import { IOMPMASoknad } from '../../types/OMPMASoknad';
@@ -62,7 +63,7 @@ interface IOpprettMASoknad {
     norskIdent: string;
     annenPart: string;
     barn: string[];
-    k9saksnummer?: string;
+    k9saksnummer: string;
 }
 
 type IMapperOMPMAActionTypes =
@@ -174,13 +175,19 @@ export function createOMPMASoknad(journalpostid: string, søkerId: string, annen
     return (dispatch: any) => {
         dispatch(createOMPMASoknadRequestAction());
 
+        const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+        if (!resolvedK9saksnummer) {
+            dispatch(createOMPMASoknadErrorAction(createManglerK9saksnummerError()));
+            return;
+        }
+
         const requestBody: IOpprettMASoknad = {
             journalpostId: journalpostid,
             norskIdent: søkerId,
             annenPart,
             // 07.05.2022 barn kan fjernes etter backend tillater opprettelse av søknad uten
             barn: [],
-            k9saksnummer,
+            k9saksnummer: resolvedK9saksnummer,
         };
 
         post(ApiPath.OMP_MA_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

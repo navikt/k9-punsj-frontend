@@ -51,7 +51,7 @@ export interface IOpprettSoknad {
     norskIdent: string;
     journalpostId: string;
     pleietrengendeIdent: string | null;
-    k9saksnummer?: string;
+    k9saksnummer: string;
 }
 
 export interface IKopierJournalpost {

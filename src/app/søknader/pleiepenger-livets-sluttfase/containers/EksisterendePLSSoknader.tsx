@@ -11,6 +11,7 @@ import { RootStateType } from 'app/state/RootState';
 import { ROUTES } from 'app/constants/routes';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { IJournalposterPerIdentState } from 'app/models/types/Journalpost/JournalposterPerIdentState';
 import DokumentIdList from 'app/components/dokumentId-list/DokumentIdList';
@@ -127,7 +128,7 @@ export const EksisterendePLSSoknaderComponent: React.FC<Props> = (props: Props) 
         }
     };
 
-    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+    const fagsakId = resolveK9saksnummer(fordelingState, journalpost);
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];

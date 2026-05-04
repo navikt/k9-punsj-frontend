@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';
 import api, { hentEksisterendeSoeknader } from '../api';
@@ -31,7 +32,8 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     const { søkerId, pleietrengendeId } = identState;
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const k9saksnummer = resolveK9saksnummer(fordelingState, journalpost);
 
     // Redirect tilbake ved side reload
     useEffect(() => {
@@ -45,7 +47,12 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
         error: opprettSoknadError,
         mutate: opprettSoknad,
     } = useMutation({
-        mutationFn: () => api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer),
+        mutationFn: () => {
+            if (!k9saksnummer) {
+                throw Error(manglerK9saksnummerMessage);
+            }
+            return api.opprettSoeknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
+        },
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad?.soeknadId)}`);
         },
@@ -59,10 +66,10 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         const soknader = eksisterendeSoeknader?.søknader;
-        if (soknader?.length === 0) {
+        if (soknader?.length === 0 && k9saksnummer) {
             opprettSoknad();
         }
-    }, [eksisterendeSoeknader?.søknader, opprettSoknad]);
+    }, [eksisterendeSoeknader?.søknader, k9saksnummer, opprettSoknad]);
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -76,7 +83,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
         const soknader = eksisterendeSoeknader?.søknader;
         if (soknader?.length) {
             return !soknader?.some((soknad) =>
-                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid),
+                Array.from(soknad?.journalposter || []).some((jpId) => jpId === journalpostid),
             );
         }
         return true;
@@ -85,6 +92,11 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
     return (
         <div className="registrering-page">
             <EksisterendeOLPSoknader søkerId={søkerId} pleietrengendeId={pleietrengendeId} />
+            {!k9saksnummer && (
+                <Alert size="small" variant="warning">
+                    {manglerK9saksnummerMessage}
+                </Alert>
+            )}
 
             <div className="knapperad">
                 <Button
@@ -102,6 +114,7 @@ export const RegistreringsValgComponent: React.FunctionComponent<IOLPRegistrerin
                         onClick={() => opprettSoknad()}
                         className="knapp knapp2"
                         size="small"
+                        disabled={!k9saksnummer}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

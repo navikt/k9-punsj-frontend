@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { IPSBSoknad } from 'app/models/types';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import { apiUrl, get, initializeDate, post, put } from 'app/utils';
+import { manglerK9saksnummerMessage, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 async function postPromise<BodyType>(
     path: string,
@@ -52,10 +53,16 @@ export function createOMSKorrigering(
     callback: (response: Response, data: any) => void,
     k9saksnummer?: string,
 ): void {
+    const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+    if (!resolvedK9saksnummer) {
+        callback({ ok: false, status: 400, statusText: manglerK9saksnummerMessage } as Response, undefined);
+        return;
+    }
+
     const requestBody = {
         journalpostId: journalpostid,
         norskIdent: søkerId,
-        k9saksnummer,
+        k9saksnummer: resolvedK9saksnummer,
     };
 
     post(ApiPath.OMS_SOKNAD_CREATE, undefined, undefined, requestBody, callback);

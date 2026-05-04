@@ -8,6 +8,7 @@ import { ROUTES } from 'app/constants/routes';
 import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { createSoknad, findEksisterendeSoknader, resetSoknadidAction } from 'app/state/actions';
+import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { hentAlleJournalposterForIdent as hentAlleJournalposterPerIdentAction } from 'app/state/actions/JournalposterPerIdentActions';
 import EksisterendeSoknader from '../EksisterendePSBSoknader';
 import { Dispatch } from 'redux';
@@ -36,9 +37,10 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
     const getAlleJournalposter = (norskIdent: string) => dispatch(hentAlleJournalposterPerIdentAction(norskIdent));
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
     const eksisterendeSoknaderState = useSelector((state: RootStateType) => state.eksisterendeSoknaderState);
     const identState = useSelector((state: RootStateType) => state.identState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+    const k9saksnummer = resolveK9saksnummer(fordelingState, journalpost);
 
     const { søkerId, pleietrengendeId } = identState;
     const {
@@ -67,10 +69,10 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
-        if (!isEksisterendeSoknaderLoading && søknader?.length === 0) {
+        if (!isEksisterendeSoknaderLoading && søknader?.length === 0 && k9saksnummer) {
             createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [isEksisterendeSoknaderLoading, søknader]);
+    }, [isEksisterendeSoknaderLoading, journalpostid, k9saksnummer, pleietrengendeId, søkerId, søknader]);
 
     useEffect(() => {
         if (isSoknadCreated && soknadid) {
@@ -103,6 +105,11 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
                 fagsakId={k9saksnummer || ''}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
+            {!k9saksnummer && (
+                <Alert size="small" variant="warning">
+                    {manglerK9saksnummerMessage}
+                </Alert>
+            )}
             <div className="knapperad">
                 <Button
                     variant="secondary"
@@ -118,7 +125,7 @@ export const PSBRegistreringsValg: React.FC<Props> = ({ journalpostid }: Props) 
                         onClick={() => createNewSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp2"
                         size="small"
-                        disabled={isEksisterendeSoknaderLoading}
+                        disabled={isEksisterendeSoknaderLoading || !k9saksnummer}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

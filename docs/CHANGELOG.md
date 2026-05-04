@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### K9 saksnummer for create requests (2026-05-04)
+
+- Stopper create søknad-kall når `k9saksnummer` mangler eller er blankt, i stedet for å sende en request som backend ikke kan decode.
+- Leser `k9saksnummer` fra `fordelingState.fagsak` først og bruker `journalpost.sak` som fallback etter journalføring eller reload.
+- Bruker samme resolver i OLP kursperiodeoppslag og i eksisterende-søknad-tabellenes fagsak-sammenligning.
+
 ### OMPAO manual journalpost analytics (2026-04-24)
 
 - Sender nå `Faro` start- og submit-måling for `OMPAO` når flyten kommer fra manuelt opprettet journalpost.
