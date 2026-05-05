@@ -14,6 +14,7 @@ import { RootStateType } from 'app/state/RootState';
 import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
@@ -45,6 +46,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const fellesState = useSelector((state: RootStateType) => state.felles);
+    const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
     const intl = useIntl();
 
     const {
@@ -70,16 +72,17 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         queryKey: [id],
         queryFn: () => hentSoeknad(identState.søkerId, id),
     });
+    const k9saksnummer = resolveK9saksnummer(fordelingState, fellesState.journalpost, soeknadRespons);
 
     useEffect(() => {
         if (soeknadRespons) {
             hentPerioderK9({
                 ident: soeknadRespons.soekerId,
                 barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
-                saksnummer: fellesState.journalpost?.sak?.fagsakId || '',
+                saksnummer: k9saksnummer || '',
             });
         }
-    }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId]);
+    }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId, k9saksnummer]);
 
     useEffect(() => {
         trackOlpStartedFromJournalpost(props.journalpostid);

@@ -8,6 +8,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { ROUTES } from 'app/constants/routes';
 
 import { findEksisterendeSoknader } from 'app/state/actions';
+import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { IdentRules } from 'app/validation';
 import { IIdentState } from '../../../models/types/IdentState';
 import { RootStateType } from '../../../state/RootState';
@@ -43,7 +44,8 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
     const location = useLocation();
 
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
-    const k9saksnummer = fordelingState.fagsak?.fagsakId;
+    const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
+    const k9saksnummer = resolveK9saksnummer(fordelingState, journalpost);
 
     const {
         journalpostid,
@@ -81,10 +83,10 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
-        if (søknader?.length === 0) {
+        if (søknader?.length === 0 && k9saksnummer) {
             createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer);
         }
-    }, [createSoknad, journalpostid, pleietrengendeId, søkerId, søknader]);
+    }, [createSoknad, journalpostid, k9saksnummer, pleietrengendeId, søkerId, søknader]);
 
     useEffect(() => {
         if (isSoknadCreated && soknadid) {
@@ -116,6 +118,11 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
                 pleietrengendeId={pleietrengendeId}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
+            {!k9saksnummer && (
+                <Alert size="small" variant="warning">
+                    {manglerK9saksnummerMessage}
+                </Alert>
+            )}
 
             <div className="knapperad">
                 <Button
@@ -132,7 +139,7 @@ export const RegistreringsValgComponent: React.FC<IOMPKSRegistreringsValgProps> 
                         onClick={() => createSoknad(journalpostid, søkerId, pleietrengendeId, k9saksnummer)}
                         className="knapp knapp2"
                         size="small"
-                        disabled={isEksisterendeSoknaderLoading}
+                        disabled={isEksisterendeSoknaderLoading || !k9saksnummer}
                     >
                         <FormattedMessage id="ident.knapp.nyregistrering" />
                     </Button>

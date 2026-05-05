@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { IPeriode, Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
+import { manglerK9saksnummerMessage, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IOMPUTSoknadBackend } from './types/OMPUTSoknad';
 import { IOMPUTSoknadKvittering } from './types/OMPUTSoknadKvittering';
@@ -70,18 +71,24 @@ export const sendSoeknad = async (
 export const opprettSoeknad = (
     journalpostId: string,
     ident: string,
-    k9saksnummer?: string,
-): Promise<IOMPUTSoknadBackend> =>
-    post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
+    k9saksnummer: string,
+): Promise<IOMPUTSoknadBackend> => {
+    const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+    if (!resolvedK9saksnummer) {
+        throw Error(manglerK9saksnummerMessage);
+    }
+
+    return post(ApiPath.OMP_UT_SOKNAD_CREATE, undefined, undefined, {
         journalpostId,
         norskIdent: ident,
-        k9saksnummer,
+        k9saksnummer: resolvedK9saksnummer,
     }).then((response) => {
         if (!response.ok) {
             throw Error('Det oppstod en feil under opprettelse av søknad.');
         }
         return response.json();
     });
+};
 
 export const hentEksisterendeSoeknader = (ident: string): Promise<IOMPUTSoknadSvar> =>
     get(ApiPath.OMP_UT_EKSISTERENDE_SOKNADER_FIND, undefined, { 'X-Nav-NorskIdent': ident }).then((response) => {

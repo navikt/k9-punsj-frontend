@@ -27,6 +27,7 @@ import {
     validerSoknadResetAction,
 } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import {
     filtrerPerioderVedEndringAvSoknadsperiode,
     harSoknadsperioderBlittEndretEllerSlettet,
@@ -168,6 +169,8 @@ type IPunchFormProps = IPunchFormComponentProps &
     IPunchFormDispatchProps;
 
 export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
+    private harHentetPerioder = false;
+
     private initialPeriode: IPeriode = { fom: '', tom: '' };
 
     private initialArbeidstaker = new Arbeidstaker({
@@ -249,14 +252,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return { feilmeldingStier: updatedFeilmeldingStier }; // Update state with the modified Set
         });
 
-        // henter Søker og Pleietrengende identer fra jp etter sideoppdatering, fordi identState kan være tom
-        const søkerId = this.props.identState.søkerId || this.props.fellesState.journalpost?.norskIdent;
-        const pleietrengendeId =
-            this.props.identState.pleietrengendeId || this.props.fellesState.journalpost?.sak?.pleietrengendeIdent;
-        const saksnummer = this.props.fellesState.journalpost?.sak?.fagsakId;
-        if (søkerId && pleietrengendeId && saksnummer) {
-            this.props.hentPerioder(søkerId, pleietrengendeId, saksnummer);
-        }
+        this.hentPerioderHvisMulig();
     }
 
     componentDidUpdate(prevProps: IPunchFormProps) {
@@ -269,6 +265,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         // this.props.updateJournalposter(this.state.soknad.journalposter);
         if (soknad && !this.state.isFetched) {
+            this.hentPerioderHvisMulig(soknad);
             this.setState({
                 soknad: new PSBSoknad(punchFormState.soknad as IPSBSoknad),
                 isFetched: true,
@@ -278,6 +275,26 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             if (!soknad.barn || !soknad.barn.norskIdent || soknad.barn.norskIdent === '') {
                 this.updateSoknad({ barn: { norskIdent: this.props.identState.pleietrengendeId || '' } });
             }
+        }
+    }
+
+    private hentPerioderHvisMulig(soknad?: Partial<IPSBSoknad>) {
+        if (this.harHentetPerioder) {
+            return;
+        }
+
+        // henter Søker og Pleietrengende identer fra jp eller søknad etter sideoppdatering, fordi identState kan være tom
+        const søkerId =
+            this.props.identState.søkerId || this.props.fellesState.journalpost?.norskIdent || soknad?.soekerId;
+        const pleietrengendeId =
+            this.props.identState.pleietrengendeId ||
+            this.props.fellesState.journalpost?.sak?.pleietrengendeIdent ||
+            soknad?.barn?.norskIdent;
+        const saksnummer = resolveK9saksnummer(undefined, this.props.fellesState.journalpost, soknad);
+
+        if (søkerId && pleietrengendeId && saksnummer) {
+            this.harHentetPerioder = true;
+            this.props.hentPerioder(søkerId, pleietrengendeId, saksnummer);
         }
     }
 

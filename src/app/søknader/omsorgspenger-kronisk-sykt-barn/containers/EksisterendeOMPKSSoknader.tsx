@@ -10,6 +10,7 @@ import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { datetime, dokumenterPreviewUtils } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { ROUTES } from 'app/constants/routes';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 
@@ -122,7 +123,7 @@ export const EksisterendeOMPKSSoknaderComponent: React.FunctionComponent<IEksist
         }
     };
 
-    const fagsakId = journalpost?.sak?.fagsakId || fordelingState?.fagsak?.fagsakId;
+    const fagsakId = resolveK9saksnummer(fordelingState, journalpost);
 
     const showSoknader = () => {
         const modaler: Array<JSX.Element> = [];

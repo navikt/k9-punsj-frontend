@@ -7,6 +7,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { ROUTES } from 'app/constants/routes';
+import { IJournalpost } from 'app/models/types';
+import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IFordelingState } from '../../../models/types/FordelingState';
 import { IIdentState } from '../../../models/types/IdentState';
@@ -20,6 +22,7 @@ export interface IOMPUTRegistreringsValgComponentProps {
 export interface IEksisterendeOMPUTSoknaderStateProps {
     identState: IIdentState;
     fordelingState: IFordelingState;
+    journalpost?: IJournalpost;
 }
 
 type IOMPUTRegistreringsValgProps = IOMPUTRegistreringsValgComponentProps & IEksisterendeOMPUTSoknaderStateProps;
@@ -30,10 +33,9 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { journalpostid, identState, fordelingState } = props;
+    const { journalpostid, identState, fordelingState, journalpost } = props;
     const { søkerId, pleietrengendeId } = identState;
-    const { fagsak } = fordelingState;
-    const k9saksnummer = fagsak?.fagsakId;
+    const k9saksnummer = resolveK9saksnummer(fordelingState, journalpost);
 
     // Redirect tilbake ved side reload
     useEffect(() => {
@@ -47,7 +49,12 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
         error: opprettSoknadError,
         mutate: opprettSoknad,
     } = useMutation({
-        mutationFn: () => api.opprettSoeknad(journalpostid, søkerId, k9saksnummer),
+        mutationFn: () => {
+            if (!k9saksnummer) {
+                throw Error(manglerK9saksnummerMessage);
+            }
+            return api.opprettSoeknad(journalpostid, søkerId, k9saksnummer);
+        },
         onSuccess: (soeknad) => {
             navigate(`../${ROUTES.PUNCH.replace(':id', soeknad.soeknadId)}`);
         },
@@ -65,10 +72,10 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
     // Starte søknad automatisk hvis ingen søknader finnes
     useEffect(() => {
         const soknader = eksisterendeSoeknader?.søknader;
-        if (soknader?.length === 0) {
+        if (soknader?.length === 0 && k9saksnummer) {
             opprettSoknad();
         }
-    }, [eksisterendeSoeknader?.søknader, opprettSoknad]);
+    }, [eksisterendeSoeknader?.søknader, k9saksnummer, opprettSoknad]);
 
     if (opprettSoknadError instanceof Error) {
         return (
@@ -82,7 +89,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
         const soknader = eksisterendeSoeknader?.søknader;
         if (soknader?.length) {
             return !soknader?.some((soknad) =>
-                Array.from(soknad?.journalposter || []).some((journalpost) => journalpost === journalpostid),
+                Array.from(soknad?.journalposter || []).some((jpId) => jpId === journalpostid),
             );
         }
         return true;
@@ -95,6 +102,11 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
                 pleietrengendeId={pleietrengendeId}
                 kanStarteNyRegistrering={kanStarteNyRegistrering()}
             />
+            {!k9saksnummer && (
+                <Alert size="small" variant="warning">
+                    {manglerK9saksnummerMessage}
+                </Alert>
+            )}
 
             <div className="knapperad">
                 <Button
@@ -111,7 +123,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
                         onClick={() => opprettSoknad()}
                         className="knapp knapp2"
                         size="small"
-                        disabled={isEksisterendeSoknaderLoading}
+                        disabled={isEksisterendeSoknaderLoading || !k9saksnummer}
                     >
                         {oppretterSoknad ? <Loader /> : <FormattedMessage id="ident.knapp.nyregistrering" />}
                     </Button>
@@ -123,6 +135,7 @@ export const RegistreringsValgComponent: React.FC<IOMPUTRegistreringsValgProps> 
 const mapStateToProps = (state: RootStateType): IEksisterendeOMPUTSoknaderStateProps => ({
     identState: state.identState,
     fordelingState: state.fordelingState,
+    journalpost: state.felles.journalpost,
 });
 
 export const OMPUTRegistreringsValg = connect(mapStateToProps)(RegistreringsValgComponent);

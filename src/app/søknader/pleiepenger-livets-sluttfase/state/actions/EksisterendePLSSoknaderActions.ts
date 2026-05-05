@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+import { createManglerK9saksnummerError, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IOpprettSoknad } from '../../../../models/types/RequestBodies';
 import { EksisterendePLSSoknaderActionKeys } from '../../types/EksisterendePLSSoknaderActionKeys';
@@ -188,11 +189,17 @@ export function createPLSSoknad(
     return (dispatch: any) => {
         dispatch(createPLSSoknadRequestAction());
 
+        const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+        if (!resolvedK9saksnummer) {
+            dispatch(createPLSSoknadErrorAction(createManglerK9saksnummerError()));
+            return;
+        }
+
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent,
-            k9saksnummer,
+            k9saksnummer: resolvedK9saksnummer,
         };
 
         post(ApiPath.PLS_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

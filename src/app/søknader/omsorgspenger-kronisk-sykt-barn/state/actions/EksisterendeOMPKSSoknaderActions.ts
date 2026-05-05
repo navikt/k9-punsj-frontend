@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+import { createManglerK9saksnummerError, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IOpprettSoknad } from '../../../../models/types/RequestBodies';
 import { EksisterendeOMPKSSoknaderActionKeys } from '../../types/EksisterendeOMPKSSoknaderActionKeys';
@@ -172,11 +173,17 @@ export function createOMPKSSoknad(
     return (dispatch: any) => {
         dispatch(createOMPKSSoknadRequestAction());
 
+        const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+        if (!resolvedK9saksnummer) {
+            dispatch(createOMPKSSoknadErrorAction(createManglerK9saksnummerError()));
+            return;
+        }
+
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
-            k9saksnummer,
+            k9saksnummer: resolvedK9saksnummer,
         };
 
         post(ApiPath.OMP_KS_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {

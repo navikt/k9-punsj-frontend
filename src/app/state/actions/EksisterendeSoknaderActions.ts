@@ -2,6 +2,7 @@ import { ApiPath } from 'app/apiConfig';
 import { EksisterendeSoknaderActionKeys } from 'app/models/enums';
 import { IError } from 'app/models/types';
 import { convertResponseToError, get, post } from 'app/utils';
+import { createManglerK9saksnummerError, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
 import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IOpprettSoknad } from '../../models/types/RequestBodies';
@@ -159,11 +160,17 @@ export function createSoknad(journalpostid: string, søkerId: string, barnIdent:
     return (dispatch: any) => {
         dispatch(createSoknadRequestAction());
 
+        const resolvedK9saksnummer = normalizeK9saksnummer(k9saksnummer);
+        if (!resolvedK9saksnummer) {
+            dispatch(createSoknadErrorAction(createManglerK9saksnummerError()));
+            return;
+        }
+
         const requestBody: IOpprettSoknad = {
             journalpostId: journalpostid,
             norskIdent: søkerId,
             pleietrengendeIdent: barnIdent,
-            k9saksnummer,
+            k9saksnummer: resolvedK9saksnummer,
         };
 
         post(ApiPath.PSB_SOKNAD_CREATE, undefined, undefined, requestBody, (response, soknad) => {
