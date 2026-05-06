@@ -14,9 +14,9 @@ TLDR er å opprette en GitHub PAT med kun `read:packages`-tilgang, enable SSO, o
 
 ```yaml
 npmRegistries:
-  https://npm.pkg.github.com:
-    npmAlwaysAuth: true
-    npmAuthToken: <token>
+    https://npm.pkg.github.com:
+        npmAlwaysAuth: true
+        npmAuthToken: <token>
 ```
 
 Merk at dette _ikke_ skal sjekkes inn i versjonskontroll.
@@ -28,44 +28,27 @@ yarn install --immutable
 yarn dev
 ```
 
-## Lokal utvikling (innlogging & k9-punsj)
+## Lokal utvikling med backend
 
-1. `cd dev`
-2. `docker login ghcr.io -u x-access-token (GitHub personal access token med kun read-rettigheter som passord)`
-3. `docker-compose pull`
-4. `docker-compose up`
-5. Start opp klassen [K9PunsjApplicationWithMocks](https://github.com/navikt/k9-punsj/blob/master/app/src/test/kotlin/no/nav/k9punsj/K9PunsjApplicationWithMocks.kt) i [k9-punsj](https://github.com/navikt/k9-punsj)
-    - Om du får feil lignende `Process [/var/folders/***/embedded-pg/***/bin/initdb, -A, trust, -U, postgres, -D, /var/folders/h/***, -E, UTF-8] failed` følg løsning med å sette environment variabler beskrevet i [her](https://github.com/zonkyio/embedded-postgres/issues/11#issuecomment-533468269)
+Start Docker-tjenestene fra rot av repo:
 
-### Journalpostnumre for lokal utvikling
-
-Man kan taste inn hvilket nummer som helst som journalpostID. Noen journalpostnummer har egne responser.
-
-```text
-- 200: Gir journalpost med PDF dokument knyttet til PSB-sak
-- 404: Finnes ikke
-- 403: Ikke tilgang
-- 409: IkkeStøttet
-- 500: AbacError
-- 420: Journalpost knyttet til OLP-sak
-- 7523521: Ferdigstilt med saksnummer
-- 463687943: Finnes informasjon i Infotrygd.
-- 45537868838: Journalpost støttes ikke.
+```bash
+yarn docker-up
 ```
+
+Start deretter [K9PunsjApplicationWithMocks](https://github.com/navikt/k9-punsj/blob/master/app/src/test/kotlin/no/nav/k9punsj/K9PunsjApplicationWithMocks.kt) i [k9-punsj](https://github.com/navikt/k9-punsj).
+
+Fullstendig oppsett med docker-innlogging, stopp-kommando og journalpostnumre for lokale mock-responser finner du i [dev/README.md](dev/README.md).
 
 ## UI-utvikling uten backend
 
-Når du bare trenger frontend og mockdata, kan du jobbe uten å starte backend-repoet.
+Når du bare trenger frontend og mockdata, kan du jobbe uten å starte backend-repoet:
 
 ```bash
 yarn test:e2eUI
 ```
 
-Starter appen lokalt på `http://localhost:8080` med MSW-baserte testmocker og uten proxy til lokal backend, og åpner Cypress UI slik at du kan kjøre eller debugge scenarier visuelt mens du jobber i frontend.
-
-Mockdata for denne modusen ligger hovedsakelig i [src/mocks/mockHandlersTest.ts](src/mocks/mockHandlersTest.ts) og [cypress/fixtures](cypress/fixtures).
-
-I mockmodus finnes det egne journalpost-scenarier for blant annet `300`, `301`, `302`, `303`, `304`, `305`, `310`, `311`, `312`, `314` og `320`. Disse er koblet til egne fixtures i testoppsettet. `200` og andre journalpostnummer som ikke er listet her går som hovedregel mot standard mockdata, mens `206` brukes som et eget `403`-scenario.
+Starter appen på `http://localhost:8080` med MSW-baserte testmocker og åpner Cypress UI for visuell debugging. Mockdata og scenarioliste ligger i [dev/README.md](dev/README.md).
 
 ## Nyttige kommandoer
 
@@ -111,7 +94,7 @@ Interne henvendelser kan sendes via Slack i kanalen #sif_saksbehandling.
 
 ## Kode generert av GitHub Copilot
 
-Dette repoet bruker GitHub Copilot til å generere kode.
+Dette repoet bruker GitHub Copilot aktivt til å generere og forbedre kode.
 
 ## Copilot og agenter
 
@@ -127,4 +110,3 @@ Repoet inneholder konfigurasjon for Copilot og AI-agenter.
 - Lokal VS Code MCP-konfigurasjon ligger i [`.vscode/mcp.json`](.vscode/mcp.json).
 
 ![k9-punsj-frontend](logo.png)
-![7aa5dd7e-33d3-49b4-b23b-ab2b637fbe1a](https://github.com/navikt/k9-punsj-frontend/assets/25080417/4dab2369-6493-4abb-a613-a5f409ecfd57)
