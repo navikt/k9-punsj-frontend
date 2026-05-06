@@ -2,6 +2,14 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### README-grenser oppdatert (2026-05-06)
+
+- Rot-README er gjort kortere og tydeligere som contributor-entrypoint.
+- Detaljert lokal dev-oppsett (docker-oppsett, journalpost-tabeller, mock-scenarioliste) er flyttet til `dev/README.md`.
+- Mock-scenariotabellen i `dev/README.md` utvidet med spesifikke sakstyper og scenario-beskrivelser fra fixtures.
+- PAT-scope-ordlyd harmonisert til `read:packages` i begge filer.
+- Overflødig ekstern bilde-URL fjernet fra rot-README; `logo.png` beholdt.
+
 ### K9 saksnummer for create requests (2026-05-04)
 
 - Stopper create søknad-kall når `k9saksnummer` mangler eller er blankt, i stedet for å sende en request som backend ikke kan decode.
