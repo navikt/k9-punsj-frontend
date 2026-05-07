@@ -1,15 +1,15 @@
-import { act, render, screen } from '@testing-library/react';
+import { TextField } from '@navikt/ds-react';
+import { render, screen } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 import * as React from 'react';
-import { TextField } from '@navikt/ds-react';
 import { IntlShape } from 'react-intl';
 
-import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import {
     IPeriodeinfopanelerProps,
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
 } from '../../../app/components/periodeinfoPaneler/PeriodeinfoPaneler';
+import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
@@ -81,18 +81,14 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
 };
 
 describe('Periodepaneler', () => {
-    it('Viser listepaneler', async () => {
-        await act(async () => {
-            setupPeriodepaneler();
-        });
+    it('Viser listepaneler', () => {
+        setupPeriodepaneler();
 
         expect(screen.getByTestId('listepanel')).toBeInTheDocument();
     });
 
-    it('Viser perioder som listeelementer', async () => {
-        await act(async () => {
-            setupPeriodepaneler();
-        });
+    it('Viser perioder som listeelementer', () => {
+        setupPeriodepaneler();
 
         const listItems = screen.getAllByTestId('listepaneler');
 
