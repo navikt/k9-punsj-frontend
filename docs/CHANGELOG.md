@@ -5,7 +5,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
-- Flyttet ferdige Copilot taskfiler ut av roten i `copilot-tasks/`, slik at bare aktive eller neste oppgaver ligger igjen sammen med `template-task.md`.
+- La til en arkivplassering for ferdige Copilot-taskfiler i `copilot-tasks/completed/`, mens `template-task.md` fortsatt ligger i roten sammen med øvrige taskfiler.
 
 ### Package cooldown guidance (2026-05-07)
 
