@@ -1,19 +1,19 @@
 import React, { useRef } from 'react';
 
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button } from '@navikt/ds-react';
 import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Button } from '@navikt/ds-react';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import { PeriodInput } from 'app/components/period-input/PeriodInput';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
+import useFocus from '../../../hooks/useFocus';
+import { refusjonskravFieldId, trekkperiodeFieldId } from '../containers/formFieldIds';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from '../../../hooks/useFocus';
-import { refusjonskravFieldId, trekkperiodeFieldId } from '../containers/formFieldIds';
 
 export interface IPeriodepanelerProps {
     name:
@@ -42,7 +42,9 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                         {values[name]?.map((value: IPeriode, index: number) => {
                             const fieldName = `${name}.${index}`;
                             const isLastElement =
-                                previousListLength < currentListLength && index === currentListLength - 1;
+                                previousListLength !== undefined &&
+                                previousListLength < currentListLength &&
+                                index === currentListLength - 1;
                             return (
                                 <div className="flex items-start" key={index}>
                                     <Field name={fieldName}>

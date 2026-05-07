@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const useFocus = (
     currentListLength: number,
-    previousListLength: number,
+    previousListLength: number | undefined,
     inputRef?: React.RefObject<HTMLInputElement | null>,
 ): void => {
     const focusInput = () => {
@@ -11,7 +11,7 @@ const useFocus = (
         }
     };
     useEffect(() => {
-        if (previousListLength < currentListLength) {
+        if (previousListLength !== undefined && previousListLength < currentListLength) {
             focusInput();
         }
     }, [previousListLength, currentListLength]);

@@ -11,10 +11,15 @@ import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateI
 import DateRange from '../../models/types/DateRange';
 import CalendarGrid from './CalendarGrid';
 
+export interface ModalContentProps {
+    selectedDates?: Date[];
+    toggleModal?: () => void;
+    clearSelectedDates?: () => void;
+}
+
 interface OwnProps {
     gyldigePerioder: DateRange[];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ModalContent: React.ReactElement<any>;
+    ModalContent: React.ReactElement<ModalContentProps>;
     slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
@@ -237,7 +242,7 @@ export const TidsbrukKalender = ({
                             >
                                 <Modal.Body>
                                     {visModal &&
-                                        React.cloneElement(ModalContent, {
+                                        React.cloneElement<ModalContentProps>(ModalContent, {
                                             selectedDates,
                                             toggleModal,
                                             clearSelectedDates,
