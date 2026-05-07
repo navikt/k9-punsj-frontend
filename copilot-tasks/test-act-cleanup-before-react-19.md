@@ -95,7 +95,7 @@ Suggested starter prompt for chat:
     - `src/test/containers/pleiepenger/Periodepaneler.spec.tsx` — removed `act` import; removed `await act(async () => { setup() })` render wrappers from both tests; tests changed from `async` to sync.
     - `src/test/containers/pleiepenger/PSBPunchForm.spec.tsx` — `act` remains in the import because two modal-opening tests still need it; removed all other unnecessary `await act(async () => {...})` wrappers around `setupPunchForm()` render calls (~30 instances), `fireEvent.click()` calls (~15 instances), and `userEvent` interactions (2 instances). Kept `await act(async () => {...})` on the two `fireEvent.click` calls that open modals, because Aksel's `Modal` drives state via `MutationObserver` and genuinely triggers async React updates that need flushing.
 - Validation:
-    - `yarn test --testPathPatterns="PSBPunchForm|Periodepaneler|PdfVisning" --maxWorkers=2`: 49 tests pass, no act warnings.
+    - `yarn test --testPathPattern="PSBPunchForm|Periodepaneler|PdfVisning" --maxWorkers=2`: 49 tests pass, no act warnings.
     - `yarn lint`: no errors.
     - `yarn tsc --noEmit`: no errors.
 - Remaining risks or follow ups:
