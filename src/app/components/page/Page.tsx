@@ -9,21 +9,18 @@ interface IPageProps {
     children: React.ReactNode;
 }
 
-class Page extends React.Component<IPageProps> {
-    componentDidMount() {
+const Page = ({ className, title, topContentRenderer, children }: IPageProps) => {
+    React.useEffect(() => {
         window.scrollTo(0, 0);
-    }
+    }, []);
 
-    render() {
-        const { className, title, topContentRenderer, children } = this.props;
-        return (
-            <>
-                <DocumentTitle title={title} />
-                {topContentRenderer && topContentRenderer()}
-                <div className={className}>{children}</div>
-            </>
-        );
-    }
-}
+    return (
+        <>
+            <DocumentTitle title={title} />
+            {topContentRenderer && topContentRenderer()}
+            <div className={className}>{children}</div>
+        </>
+    );
+};
 
 export default Page;

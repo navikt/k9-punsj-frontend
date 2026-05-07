@@ -4,31 +4,31 @@ import { expect } from '@jest/globals';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 
-import { IntlProvider, IntlShape, createIntl } from 'react-intl';
-import { useSelector, useDispatch } from 'react-redux';
+import { createIntl, IntlProvider, IntlShape } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
-import intlHelper from '../../../app/utils/intlUtils';
 import {
     IPunchFormComponentProps,
     IPunchFormDispatchProps,
     IPunchFormStateProps,
     PunchFormComponent,
 } from '../../../app/søknader/pleiepenger/containers/PSBPunchForm';
+import intlHelper from '../../../app/utils/intlUtils';
 
+import userEvent from '@testing-library/user-event';
 import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
-import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
+import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState';
 import { ISignaturState } from '../../../app/models/types/SignaturState';
-import userEvent from '@testing-library/user-event';
-import { Tidsformat } from '../../../app/utils/timeUtils';
 import {
     createLandInputId,
     createPeriodInputIds,
     ENDRING_BEGRUNNELSE_INPUT_ID,
 } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
+import { Tidsformat } from '../../../app/utils/timeUtils';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -222,35 +222,27 @@ const setupPunchForm = (
 };
 
 describe('PunchForm', () => {
-    it('Viser skjema', async () => {
-        await act(async () => {
-            setupPunchForm();
-        });
+    it('Viser skjema', () => {
+        setupPunchForm();
 
         expect(screen.getAllByTestId(/accordionItem-/)).toHaveLength(7);
     });
 
-    it('Henter søknadsinformasjon', async () => {
+    it('Henter søknadsinformasjon', () => {
         const getSoknad = jest.fn();
-        await act(async () => {
-            setupPunchForm({}, { getSoknad });
-        });
+        setupPunchForm({}, { getSoknad });
         expect(getSoknad).toHaveBeenCalledTimes(1);
         expect(getSoknad).toHaveBeenCalledWith(soknadId);
     });
 
-    it('Viser spinner når søknaden lastes inn', async () => {
-        await act(async () => {
-            setupPunchForm({ isSoknadLoading: true });
-        });
+    it('Viser spinner når søknaden lastes inn', () => {
+        setupPunchForm({ isSoknadLoading: true });
 
         expect(screen.getByText(/Venter/i)).toBeDefined();
     });
 
-    it('Viser feilmelding når søknaden ikke er funnet', async () => {
-        await act(async () => {
-            setupPunchForm({ error: { status: 404 } });
-        });
+    it('Viser feilmelding når søknaden ikke er funnet', () => {
+        setupPunchForm({ error: { status: 404 } });
 
         expect(screen.getByText('Feil')).toBeDefined();
         expect(screen.getByText('skjema.feil.ikke_funnet')).toBeDefined();
@@ -261,16 +253,12 @@ describe('PunchForm', () => {
         const updateSoknad = jest.fn();
         const newDato = '11.02.2020';
 
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
-        });
+        setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
 
         const dateInput = screen.getByTestId('mottattDato');
 
-        await act(async () => {
-            await userEvent.type(dateInput, newDato);
-            await userEvent.tab();
-        });
+        await userEvent.type(dateInput, newDato);
+        await userEvent.tab();
 
         // screen.debug(dateInput);
         // console.log(updateSoknad.mock);
@@ -282,35 +270,29 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer felt når mottakelsesdato endres', async () => {
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad });
-        });
+        setupPunchForm({ soknad: initialSoknad });
 
         const dateInput = screen.getByTestId('mottattDato') as HTMLInputElement;
 
         const newDato = '01.12.2024';
 
-        await act(async () => {
-            await userEvent.clear(dateInput);
-            await userEvent.type(dateInput, newDato);
-            await userEvent.tab();
-        });
+        await userEvent.clear(dateInput);
+        await userEvent.type(dateInput, newDato);
+        await userEvent.tab();
 
         expect(dateInput.value).toEqual(newDato);
     });
 
-    it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', async () => {
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad }, {});
-            (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
-                callback({
-                    PLEIEPENGER_SYKT_BARN: {
-                        punchFormState: {},
-                    },
-                    felles: { journalposterIAapenSoknad: [] },
-                }),
-            );
-        });
+    it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
+        setupPunchForm({ soknad: initialSoknad }, {});
+        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+            callback({
+                PLEIEPENGER_SYKT_BARN: {
+                    punchFormState: {},
+                },
+                felles: { journalposterIAapenSoknad: [] },
+            }),
+        );
 
         const søknadsperioder = screen.getByTestId('søknadsperioder');
 
@@ -323,20 +305,16 @@ describe('PunchForm', () => {
         expect(periodepaneler).toHaveLength(1);
     });
 
-    it('Skjuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', async () => {
+    it('Skjuler knapp for å legge til søknadsperiode når det finnes en søknadsperiode fra før', () => {
         const soknad = { ...initialSoknad, soeknadsperiode: [{ fom: '', tom: '' }] };
 
-        await act(async () => {
-            setupPunchForm({ soknad }, {});
-        });
+        setupPunchForm({ soknad }, {});
 
         expect(screen.queryByTestId('leggtilsoknadsperiode')).toBeNull();
     });
 
-    it('Viser checkboks for tilsyn (omsorgstilbud)', async () => {
-        await act(async () => {
-            setupPunchForm();
-        });
+    it('Viser checkboks for tilsyn (omsorgstilbud)', () => {
+        setupPunchForm();
 
         expect(screen.getByTestId('omsorgstilbud-checkboks')).toBeDefined();
     });
@@ -359,19 +337,15 @@ describe('PunchForm', () => {
                 ],
             },
         };
-        await act(async () => {
-            setupPunchForm({ soknad });
-        });
+        setupPunchForm({ soknad });
 
         const omsorgstilbudCheckboks = screen.getByTestId('omsorgstilbud-checkboks') as HTMLInputElement;
 
         expect(omsorgstilbudCheckboks.checked).toBeTruthy();
     });
 
-    it('Viser ikke perioder når tilsyn er undefined', async () => {
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad });
-        });
+    it('Viser ikke perioder når tilsyn er undefined', () => {
+        setupPunchForm({ soknad: initialSoknad });
 
         const omsorgstilbudCheckboks = screen.getByTestId('omsorgstilbud-checkboks') as HTMLInputElement;
         expect(omsorgstilbudCheckboks.checked).toBeFalsy();
@@ -399,18 +373,14 @@ describe('PunchForm', () => {
                 },
             ],
         };
-        await act(async () => {
-            setupPunchForm({ soknad });
-        });
+        setupPunchForm({ soknad });
 
         expect(screen.getByTestId('beredskapsperioder')).toBeDefined();
         expect(screen.getByTestId('nattevaaksperioder')).toBeDefined();
     });
 
-    it('Viser ikke beredskap eller nattevåk hvis undefined', async () => {
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad });
-        });
+    it('Viser ikke beredskap eller nattevåk hvis undefined', () => {
+        setupPunchForm({ soknad: initialSoknad });
 
         expect(screen.queryByTestId('beredskapsperioder')).toBeNull();
         expect(screen.queryByTestId('.nattevaaksperioder')).toBeNull();
@@ -419,38 +389,34 @@ describe('PunchForm', () => {
     it('Fjerner tilsynsordning når avhuking på tilsyn fjernes', async () => {
         const updateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        tilsynsordning: {
-                            perioder: [
-                                {
-                                    periode: {
-                                        fom: '2020-12-06',
-                                        tom: '2021-01-15',
-                                    },
-                                    timer: '5',
-                                    minutter: '0',
-                                    perDagString: '5 timer',
-                                    tidsformat: Tidsformat.TimerOgMin,
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    tilsynsordning: {
+                        perioder: [
+                            {
+                                periode: {
+                                    fom: '2020-12-06',
+                                    tom: '2021-01-15',
                                 },
-                            ],
-                        },
+                                timer: '5',
+                                minutter: '0',
+                                perDagString: '5 timer',
+                                tidsformat: Tidsformat.TimerOgMin,
+                            },
+                        ],
                     },
                 },
-                { updateSoknad },
-            );
-        });
+            },
+            { updateSoknad },
+        );
 
         const omsorgstilbudCheckboks = screen.getByTestId('omsorgstilbud-checkboks') as HTMLInputElement;
 
         expect(omsorgstilbudCheckboks.checked).toBeTruthy();
 
-        await act(async () => {
-            fireEvent.click(omsorgstilbudCheckboks);
-        });
+        fireEvent.click(omsorgstilbudCheckboks);
 
         expect(omsorgstilbudCheckboks.checked).toBeFalsy();
     });
@@ -458,15 +424,11 @@ describe('PunchForm', () => {
     it('Validerer søknad når saksbehandler trykker på "Send inn"', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
-        });
+        setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
@@ -474,27 +436,23 @@ describe('PunchForm', () => {
     it('Viser melding om valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: initialSoknad,
-                    inputErrors: [
-                        {
-                            felt: 'lovbestemtFerie',
-                            feilkode: 'ugyldigPreiode',
-                            feilmelding: 'Periode er utenfor søknadsperioden',
-                        },
-                    ],
-                },
-                { validateSoknad },
-            );
-        });
+        setupPunchForm(
+            {
+                soknad: initialSoknad,
+                inputErrors: [
+                    {
+                        felt: 'lovbestemtFerie',
+                        feilkode: 'ugyldigPreiode',
+                        feilmelding: 'Periode er utenfor søknadsperioden',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
         expect(await screen.findByText('Periode er utenfor søknadsperioden')).toBeDefined();
@@ -503,23 +461,19 @@ describe('PunchForm', () => {
     it('Viser fallback melding i ErrorSummary når validering feiler uten feltfeil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: initialSoknad,
-                    validateSoknadError: {
-                        message: 'Søknaden inneholder valideringsfeil',
-                    },
+        setupPunchForm(
+            {
+                soknad: initialSoknad,
+                validateSoknadError: {
+                    message: 'Søknaden inneholder valideringsfeil',
                 },
-                { validateSoknad },
-            );
-        });
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
         expect(await screen.findByText('Søknaden inneholder valideringsfeil')).toBeDefined();
@@ -530,30 +484,26 @@ describe('PunchForm', () => {
         const periodKey = '../2029-02-15';
         const { fomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        soeknadsperiode: [{ fom: '', tom: '2029-02-15' }],
-                    },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.uttak.perioder.['../2029-02-15']",
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Fra og med (FOM) må være satt.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    soeknadsperiode: [{ fom: '', tom: '2029-02-15' }],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.uttak.perioder.['../2029-02-15']",
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Fra og med (FOM) må være satt.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -568,30 +518,26 @@ describe('PunchForm', () => {
         const periodKey = '2026-02-02/..';
         const { tomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        soeknadsperiode: [{ fom: '2026-02-02', tom: '' }],
-                    },
-                    inputErrors: [
-                        {
-                            felt: 'ytelse.søknadsperiode[0].<list element>',
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Til og med (TOM) må være satt.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    soeknadsperiode: [{ fom: '2026-02-02', tom: '' }],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: 'ytelse.søknadsperiode[0].<list element>',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Til og med (TOM) må være satt.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -606,34 +552,30 @@ describe('PunchForm', () => {
         const periodKey = '../2026-02-11';
         const { fomId } = createPeriodInputIds('endringAvSøknadsperioder', periodKey);
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        trekkKravPerioder: [
-                            { fom: '2026-01-01', tom: '2026-01-10' },
-                            { fom: '', tom: '2026-02-11' },
-                        ],
-                    },
-                    perioder: [{ fom: '2026-01-01', tom: '2026-01-31' }],
-                    inputErrors: [
-                        {
-                            felt: 'ytelse.trekkKravPerioder[1].<list element>',
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Fra og med (FOM) må være satt.',
-                        },
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    trekkKravPerioder: [
+                        { fom: '2026-01-01', tom: '2026-01-10' },
+                        { fom: '', tom: '2026-02-11' },
                     ],
                 },
-                { validateSoknad },
-            );
-        });
+                perioder: [{ fom: '2026-01-01', tom: '2026-01-31' }],
+                inputErrors: [
+                    {
+                        felt: 'ytelse.trekkKravPerioder[1].<list element>',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Fra og med (FOM) må være satt.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -646,30 +588,26 @@ describe('PunchForm', () => {
     it('Viser ikke duplikat av begrunnelse-feil i endringsblokk', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
-                    },
-                    perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
-                    inputErrors: [
-                        {
-                            felt: 'begrunnelseForInnsending',
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
                 },
-                { validateSoknad },
-            );
-        });
+                perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                inputErrors: [
+                    {
+                        felt: 'begrunnelseForInnsending',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         const endringPanel = screen.getByTestId('accordionItem-endringAvSøknadsperioderpanel');
         const fieldErrors = within(endringPanel).queryAllByText(
@@ -681,35 +619,31 @@ describe('PunchForm', () => {
     it('Lenker ErrorSummary til begrunnelsefelt og dedupliserer samme melding', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
-                    },
-                    perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
-                    inputErrors: [
-                        {
-                            felt: 'begrunnelseForInnsending',
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
-                        },
-                        {
-                            felt: 'begrunnelseForInnsending.tekst',
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    trekkKravPerioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
                 },
-                { validateSoknad },
-            );
-        });
+                perioder: [{ fom: '2026-02-01', tom: '2026-02-10' }],
+                inputErrors: [
+                    {
+                        felt: 'begrunnelseForInnsending',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                    },
+                    {
+                        felt: 'begrunnelseForInnsending.tekst',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Du må legge inn en begrunnelse for å trekke perioder.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         const summaryLinks = screen.getAllByRole('link', {
             name: 'Du må legge inn en begrunnelse for å trekke perioder.',
@@ -721,29 +655,25 @@ describe('PunchForm', () => {
     it('Viser ikke duplikat av periodemelding i medlemskap-blokk', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        bosteder: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
-                    },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.bosteder.perioder.['2026-02-02/..']",
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Til og med (TOM) må være satt.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    bosteder: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.bosteder.perioder.['2026-02-02/..']",
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Til og med (TOM) må være satt.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         const medlemskapPanel = screen.getByTestId('accordionItem-medlemskappanel');
         const periodMessagesInPanel = within(medlemskapPanel).queryAllByText('Til og med (TOM) må være satt.');
@@ -754,31 +684,27 @@ describe('PunchForm', () => {
         const validateSoknad = jest.fn();
         const landId = createLandInputId('ytelse.utenlandsopphold', '2026-02-02/..');
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        utenlandsopphold: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
-                        utenlandsoppholdV2: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
-                    },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.utenlandsopphold.perioder['2026-02-02/9999-12-31'].land",
-                            feilkode: 'nullFeil',
-                            feilmelding: 'Feltet kan ikke være tomt',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    utenlandsopphold: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
+                    utenlandsoppholdV2: [{ periode: { fom: '2026-02-02', tom: '' }, land: '' }],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.utenlandsopphold.perioder['2026-02-02/9999-12-31'].land",
+                        feilkode: 'nullFeil',
+                        feilmelding: 'Feltet kan ikke være tomt',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -791,29 +717,25 @@ describe('PunchForm', () => {
     it('Viser lovbestemt ferie valideringsfeil under periodfelt ved periodesti fra backend', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        lovbestemtFerie: [{ fom: '', tom: '2026-02-25' }],
-                    },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.lovbestemtFerie.perioder.['../2026-02-25']",
-                            feilkode: 'påkrevd',
-                            feilmelding: 'Fra og med (FOM) må være satt.',
-                        },
-                    ],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    lovbestemtFerie: [{ fom: '', tom: '2026-02-25' }],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.lovbestemtFerie.perioder.['../2026-02-25']",
+                        feilkode: 'påkrevd',
+                        feilmelding: 'Fra og med (FOM) må være satt.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -825,26 +747,21 @@ describe('PunchForm', () => {
     it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for okOrganisasjonsnummer-feil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    inputErrors: [
-                        {
-                            felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer',
-                            feilkode: 'påkrevd',
-                            feilmelding:
-                                'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
-                        },
-                    ],
-                },
-                { validateSoknad },
-            );
-        });
+        setupPunchForm(
+            {
+                inputErrors: [
+                    {
+                        felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].okOrganisasjonsnummer',
+                        feilkode: 'påkrevd',
+                        feilmelding: 'organisasjonsnummer må være satt med mindre virksomhet er registrert i utlandet',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -857,25 +774,21 @@ describe('PunchForm', () => {
     it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for organisasjonsnummer.verdi-feil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    inputErrors: [
-                        {
-                            felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.verdi',
-                            feilkode: 'påkrevd',
-                            feilmelding: "'123456dfgj' matcher ikke tillatt pattern '^\\d+$'",
-                        },
-                    ],
-                },
-                { validateSoknad },
-            );
-        });
+        setupPunchForm(
+            {
+                inputErrors: [
+                    {
+                        felt: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.verdi',
+                        feilkode: 'påkrevd',
+                        feilmelding: "'123456dfgj' matcher ikke tillatt pattern '^\\d+$'",
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -888,41 +801,37 @@ describe('PunchForm', () => {
     it('Viser bruttoinntekt-feil på feltet og lenker ErrorSummary til bruttoinntekt-feltet', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        opptjeningAktivitet: {
-                            ...initialSoknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: {
-                                virksomhetNavn: 'Test virksomhet',
-                                organisasjonsnummer: '910909088',
-                                info: {
-                                    periode: { fom: '2026-02-02', tom: '' },
-                                    registrertIUtlandet: false,
-                                    virksomhetstyper: ['ANNEN'],
-                                    bruttoInntekt: '-16',
-                                },
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        selvstendigNaeringsdrivende: {
+                            virksomhetNavn: 'Test virksomhet',
+                            organisasjonsnummer: '910909088',
+                            info: {
+                                periode: { fom: '2026-02-02', tom: '' },
+                                registrertIUtlandet: false,
+                                virksomhetstyper: ['ANNEN'],
+                                bruttoInntekt: '-16',
                             },
                         },
                     },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].bruttoInntekt",
-                            feilkode: 'ugyldigVerdi',
-                            feilmelding: 'bruttoInntekt [-16] må være >= 0.00',
-                        },
-                    ],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].bruttoInntekt",
+                        feilkode: 'ugyldigVerdi',
+                        feilmelding: 'bruttoInntekt [-16] må være >= 0.00',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -938,45 +847,41 @@ describe('PunchForm', () => {
     it('Viser virksomhetstyper-feil på feltet, dedupliserer duplikater og lenker ErrorSummary til feltgruppen', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        opptjeningAktivitet: {
-                            ...initialSoknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: {
-                                virksomhetNavn: 'Test virksomhet',
-                                organisasjonsnummer: '910909088',
-                                info: {
-                                    periode: { fom: '2026-02-02', tom: null },
-                                    registrertIUtlandet: false,
-                                    virksomhetstyper: [],
-                                },
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        selvstendigNaeringsdrivende: {
+                            virksomhetNavn: 'Test virksomhet',
+                            organisasjonsnummer: '910909088',
+                            info: {
+                                periode: { fom: '2026-02-02', tom: null },
+                                registrertIUtlandet: false,
+                                virksomhetstyper: [],
                             },
                         },
                     },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
-                            feilkode: 'nullFeil',
-                            feilmelding: 'Feltet kan ikke være tomt',
-                        },
-                        {
-                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
-                            feilkode: 'tomFeil',
-                            feilmelding: 'Feltet kan ikke være tomt',
-                        },
-                    ],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
+                        feilkode: 'nullFeil',
+                        feilmelding: 'Feltet kan ikke være tomt',
+                    },
+                    {
+                        felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/..'].virksomhetstyper",
+                        feilkode: 'tomFeil',
+                        feilmelding: 'Feltet kan ikke være tomt',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -993,38 +898,36 @@ describe('PunchForm', () => {
     it('Viser frilanser arbeidstid-feil under kalenderseksjonen', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
-                        opptjeningAktivitet: {
-                            ...initialSoknad.opptjeningAktivitet,
-                            frilanser: {
-                                startdato: '2026-02-16',
-                                sluttdato: undefined,
-                                jobberFortsattSomFrilans: true,
-                            },
-                        },
-                        arbeidstid: {
-                            ...initialSoknad.arbeidstid,
-                            frilanserArbeidstidInfo: {
-                                perioder: [],
-                            },
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        frilanser: {
+                            startdato: '2026-02-16',
+                            sluttdato: undefined,
+                            jobberFortsattSomFrilans: true,
                         },
                     },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.arbeidstid.frilanserArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
-                            feilkode: 'ugyldigVerdi',
-                            feilmelding: 'Må være lavere eller lik 24 timer.',
+                    arbeidstid: {
+                        ...initialSoknad.arbeidstid,
+                        frilanserArbeidstidInfo: {
+                            perioder: [],
                         },
-                    ],
+                    },
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.arbeidstid.frilanserArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
+                        feilkode: 'ugyldigVerdi',
+                        feilmelding: 'Må være lavere eller lik 24 timer.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const frilanserValidationErrors = await screen.findByTestId('frilanser-arbeidstid-validation-errors');
         expect(within(frilanserValidationErrors).getByText('Må være lavere eller lik 24 timer.')).toBeDefined();
@@ -1033,42 +936,40 @@ describe('PunchForm', () => {
     it('Viser selvstendig arbeidstid-feil under kalenderseksjonen', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
-                        opptjeningAktivitet: {
-                            ...initialSoknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: {
-                                virksomhetNavn: 'Test virksomhet',
-                                organisasjonsnummer: '910909088',
-                                info: {
-                                    periode: { fom: '2026-02-16', tom: '2026-02-16' },
-                                    registrertIUtlandet: false,
-                                    virksomhetstyper: ['ANNEN'],
-                                },
-                            },
-                        },
-                        arbeidstid: {
-                            ...initialSoknad.arbeidstid,
-                            selvstendigNæringsdrivendeArbeidstidInfo: {
-                                perioder: [],
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    soeknadsperiode: [{ fom: '2026-02-16', tom: '2026-02-16' }],
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        selvstendigNaeringsdrivende: {
+                            virksomhetNavn: 'Test virksomhet',
+                            organisasjonsnummer: '910909088',
+                            info: {
+                                periode: { fom: '2026-02-16', tom: '2026-02-16' },
+                                registrertIUtlandet: false,
+                                virksomhetstyper: ['ANNEN'],
                             },
                         },
                     },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
-                            feilkode: 'ugyldigVerdi',
-                            feilmelding: 'Må være lavere eller lik 24 timer.',
+                    arbeidstid: {
+                        ...initialSoknad.arbeidstid,
+                        selvstendigNæringsdrivendeArbeidstidInfo: {
+                            perioder: [],
                         },
-                    ],
+                    },
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo.perioder['2026-02-16/2026-02-16'].jobberNormaltTimerPerDag",
+                        feilkode: 'ugyldigVerdi',
+                        feilmelding: 'Må være lavere eller lik 24 timer.',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const selvstendigValidationErrors = await screen.findByTestId('selvstendig-arbeidstid-validation-errors');
         expect(within(selvstendigValidationErrors).getByText('Må være lavere eller lik 24 timer.')).toBeDefined();
@@ -1077,41 +978,37 @@ describe('PunchForm', () => {
     it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad: {
-                        ...initialSoknad,
-                        opptjeningAktivitet: {
-                            ...initialSoknad.opptjeningAktivitet,
-                            selvstendigNaeringsdrivende: {
-                                virksomhetNavn: 'Test virksomhet',
-                                organisasjonsnummer: '',
-                                info: {
-                                    periode: { fom: '2026-02-02', tom: '2026-02-20' },
-                                    registrertIUtlandet: true,
-                                    landkode: '',
-                                },
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        selvstendigNaeringsdrivende: {
+                            virksomhetNavn: 'Test virksomhet',
+                            organisasjonsnummer: '',
+                            info: {
+                                periode: { fom: '2026-02-02', tom: '2026-02-20' },
+                                registrertIUtlandet: true,
+                                landkode: '',
                             },
                         },
                     },
-                    inputErrors: [
-                        {
-                            felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
-                            feilkode:
-                                "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
-                            feilmelding: '',
-                        },
-                    ],
                 },
-                { validateSoknad },
-            );
-        });
+                inputErrors: [
+                    {
+                        felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
+                        feilkode:
+                            "Feil{felt='.landkode', feilkode='påkrevd', feilmelding='landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.'}",
+                        feilmelding: '',
+                    },
+                ],
+            },
+            { validateSoknad },
+        );
 
         const sendKnapp = screen.getByTestId('sendKnapp');
-        await act(async () => {
-            fireEvent.click(sendKnapp);
-        });
+        fireEvent.click(sendKnapp);
 
         expect(validateSoknad).toHaveBeenCalledTimes(1);
 
@@ -1124,9 +1021,7 @@ describe('PunchForm', () => {
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad, validertSoknad, isValid: true }, { validateSoknad });
-        });
+        setupPunchForm({ soknad: initialSoknad, validertSoknad, isValid: true }, { validateSoknad });
 
         const sendKnapp = screen.getByTestId('sendKnapp');
 
@@ -1149,9 +1044,7 @@ describe('PunchForm', () => {
 
     it('Viser modal når saksbehandler trykker på "Sett på vent" og det er ingen valideringsfeil', async () => {
         const validateSoknad = jest.fn();
-        await act(async () => {
-            setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
-        });
+        setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
 
         const ventKnapp = screen.getByTestId('ventKnapp');
 
@@ -1162,21 +1055,19 @@ describe('PunchForm', () => {
         expect(screen.getByTestId('settpaaventmodal')).toBeDefined();
     });
 
-    it('Viser advarsel om overlappende periode', async () => {
+    it('Viser advarsel om overlappende periode', () => {
         const soknad = {
             ...initialSoknad,
             soeknadsperiode: [{ fom: '2021-02-23', tom: '2021-08-23' }],
         };
 
-        await act(async () => {
-            setupPunchForm(
-                {
-                    soknad,
-                    perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
-                },
-                {},
-            );
-        });
+        setupPunchForm(
+            {
+                soknad,
+                perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }],
+            },
+            {},
+        );
 
         // TODO: Fix this test
 
@@ -1189,12 +1080,10 @@ describe('PunchForm', () => {
         // expect(screen.queryByText('skjema.soknadsperiode.overlapper')).not.toBeNull();
     });
 
-    it('Viser legg till ferie', async () => {
+    it('Viser legg till ferie', () => {
         const soknad = { ...initialSoknad };
 
-        await act(async () => {
-            setupPunchForm({ soknad }, {});
-        });
+        setupPunchForm({ soknad }, {});
 
         expect(screen.getByTestId('accordionItem-feriepanel')).toBeDefined();
 
@@ -1203,12 +1092,10 @@ describe('PunchForm', () => {
         expect(feriepanelCheckbox).toBeDefined();
     });
 
-    it('Viser legg till ferie og slettade perioder dersom det finns periode', async () => {
+    it('Viser legg till ferie og slettade perioder dersom det finns periode', () => {
         const soknad = { ...initialSoknad };
 
-        await act(async () => {
-            setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        });
+        setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
         const feriepanel = screen.getByTestId('accordionItem-feriepanel');
 
@@ -1218,15 +1105,13 @@ describe('PunchForm', () => {
         expect(getByText('skjema.ferie.fjern')).toBeDefined();
     });
 
-    it('Viser ferieperioder dersom det finnes', async () => {
+    it('Viser ferieperioder dersom det finnes', () => {
         const soknad = {
             ...initialSoknad,
             lovbestemtFerie: [{ fom: '2021-01-30', tom: '2021-04-15' }],
         };
 
-        await act(async () => {
-            setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        });
+        setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
         const feriepanel = screen.getByTestId('accordionItem-feriepanel');
 
@@ -1239,15 +1124,13 @@ describe('PunchForm', () => {
         expect(tom.value).toEqual('15.04.2021');
     });
 
-    it('Viser slettade ferieperioder dersom det finnes', async () => {
+    it('Viser slettade ferieperioder dersom det finnes', () => {
         const soknad = {
             ...initialSoknad,
             lovbestemtFerieSomSkalSlettes: [{ fom: '2021-01-30', tom: '2021-04-15' }],
         };
 
-        await act(async () => {
-            setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
-        });
+        setupPunchForm({ soknad, perioder: [{ fom: '2021-01-30', tom: '2021-04-15' }] }, {});
 
         const feriepanel = screen.getByTestId('accordionItem-feriepanel');
 
