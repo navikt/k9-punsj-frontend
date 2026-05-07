@@ -12,11 +12,13 @@ import { IPLSSoknadKvittering } from 'app/søknader/pleiepenger-livets-sluttfase
 
 export const MANUAL_JOURNALPOST_FLOW_STARTED_EVENT = 'manual_journalpost_flow_started';
 export const PUNSJ_STARTED_EVENT = 'punsj_started';
+export const PUNSJ_SUBMIT_COMPLETED_EVENT = 'punsj_submit_completed';
 export const PUNSJ_SUBMIT_SNAPSHOT_EVENT = 'punsj_submit_snapshot';
 export const PUNSJ_SUBMIT_FIELD_GROUP_EVENT = 'punsj_submit_field_group';
 
 const OPPRETT_JOURNALPOST_SOURCE = 'opprett_journalpost';
 const UNKNOWN_SOURCE = 'unknown';
+const OTHER_SOURCE = 'other';
 const MANUAL_JOURNALPOST_SOURCE_SESSION_KEY = 'manualJournalpostSourceIds';
 
 export const PSB_FIELD_GROUPS = {
@@ -80,6 +82,7 @@ export const OMPAO_FIELD_GROUPS = {
 } as const;
 
 type PunsjSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof UNKNOWN_SOURCE;
+type PunsjSubmitSource = typeof OPPRETT_JOURNALPOST_SOURCE | typeof OTHER_SOURCE;
 type PsbFieldGroup = (typeof PSB_FIELD_GROUPS)[keyof typeof PSB_FIELD_GROUPS];
 type PlsFieldGroup = (typeof PLS_FIELD_GROUPS)[keyof typeof PLS_FIELD_GROUPS];
 type OmpksFieldGroup = (typeof OMPKS_FIELD_GROUPS)[keyof typeof OMPKS_FIELD_GROUPS];
@@ -413,6 +416,12 @@ const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
     fieldGroups: FieldGroup[],
 ): FieldGroup[] => {
     const source = getPunsjSourceForJournalpost(journalpostId);
+    const submitSource: PunsjSubmitSource = source === UNKNOWN_SOURCE ? OTHER_SOURCE : source;
+
+    pushFaroEvent(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+        source: submitSource,
+        sakstype,
+    }, { skipDedupe: true });
 
     if (source === UNKNOWN_SOURCE) {
         return [];
