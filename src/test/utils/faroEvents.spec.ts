@@ -2,6 +2,7 @@ import { faro } from '@grafana/faro-web-sdk';
 import Ytelse from '../../app/models/types/Ytelse';
 import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
+    PUNSJ_SUBMIT_COMPLETED_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
     PUNSJ_STARTED_EVENT,
     OLP_FIELD_GROUPS,
@@ -58,6 +59,13 @@ jest.mock('@grafana/faro-web-sdk', () => ({
 describe('faroEvents', () => {
     const pushEventMock = faro.api.pushEvent as jest.Mock;
     const journalpostId = 'jp-123';
+
+    const enableFaro = () => {
+        window.nais = {
+            telemetryCollectorURL: 'https://collector.example/collect',
+            app: { name: 'k9-punsj-frontend', version: 'test' },
+        };
+    };
     const psbKvittering: IPSBSoknadKvittering = {
         journalposter: [],
         mottattDato: '2026-04-17T10:00:00.000Z',
@@ -587,13 +595,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
 
         expect(fieldGroups).toEqual(getPsbSubmittedFieldGroups(psbKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PSB',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
@@ -602,11 +614,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende PSB submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende PSB submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'PSB',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende PLS start-event for manuell journalpostflyt', () => {
@@ -638,13 +656,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
 
         expect(fieldGroups).toEqual(getPlsSubmittedFieldGroups(plsKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'PLS',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
@@ -653,11 +675,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende PLS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende PLS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'PLS',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende OMPKS start-event for manuell journalpostflyt', () => {
@@ -689,13 +717,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
 
         expect(fieldGroups).toEqual(getOmpksSubmittedFieldGroups(ompksKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPKS',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
@@ -704,11 +736,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende OMPKS submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende OMPKS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'OMPKS',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende OMPMA start-event for manuell journalpostflyt', () => {
@@ -740,13 +778,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
 
         expect(fieldGroups).toEqual(getOmpmaSubmittedFieldGroups(ompmaKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPMA',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
@@ -755,11 +797,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende OMPMA submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende OMPMA submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'OMPMA',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende OLP start-event for manuell journalpostflyt', () => {
@@ -791,13 +839,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
 
         expect(fieldGroups).toEqual(getOlpSubmittedFieldGroups(olpKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OLP',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
@@ -806,11 +858,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende OLP submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende OLP submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'OLP',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende OMPUT start-event for manuell journalpostflyt', () => {
@@ -842,13 +900,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
 
         expect(fieldGroups).toEqual(getOmputSubmittedFieldGroups(omputKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPUT',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
@@ -857,11 +919,17 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende OMPUT submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende OMPUT submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'OMPUT',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
     it('Skal sende OMPAO start-event for manuell journalpostflyt', () => {
@@ -893,13 +961,17 @@ describe('faroEvents', () => {
         const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
 
         expect(fieldGroups).toEqual(getOmpaoSubmittedFieldGroups(ompaoKvittering));
-        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+        expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'opprett_journalpost',
+            sakstype: 'OMPAO',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
         }, undefined, { skipDedupe: true });
-        expect(pushEventMock).toHaveBeenCalledTimes(1 + fieldGroups.length);
+        expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
@@ -908,10 +980,16 @@ describe('faroEvents', () => {
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
-    it('Skal ikke sende OMPAO submit-events når journalposten ikke kommer fra manuell opprettelse', () => {
+    it('Skal sende OMPAO submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
+        enableFaro();
+
         const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
 
         expect(fieldGroups).toEqual([]);
-        expect(pushEventMock).not.toHaveBeenCalled();
+        expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+            source: 'other',
+            sakstype: 'OMPAO',
+        }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 });

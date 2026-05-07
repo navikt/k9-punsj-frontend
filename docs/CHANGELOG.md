@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Punsj submit analytics for alle flyter (2026-05-07)
+
+- Sender nå et trygt `Faro` volume-event for hver fullførte punsj-innsending, med `source=opprett_journalpost` eller `source=other` og `sakstype`.
+- Beholder detaljerte snapshot- og feltgruppe-events bare for manuelt opprettede journalposter.
+
 ### README-grenser oppdatert (2026-05-06)
 
 - Rot-README er gjort kortere og tydeligere som contributor-entrypoint.
