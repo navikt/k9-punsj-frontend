@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { TrashIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
-import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -13,7 +13,8 @@ import CalendarGrid from './CalendarGrid';
 
 interface OwnProps {
     gyldigePerioder: DateRange[];
-    ModalContent: React.ReactElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ModalContent: React.ReactElement<any>;
     slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
@@ -235,11 +236,12 @@ export const TidsbrukKalender = ({
                                 aria-label="Modal"
                             >
                                 <Modal.Body>
-                                    {visModal && React.cloneElement(ModalContent, {
-                                        selectedDates,
-                                        toggleModal,
-                                        clearSelectedDates,
-                                    })}
+                                    {visModal &&
+                                        React.cloneElement(ModalContent, {
+                                            selectedDates,
+                                            toggleModal,
+                                            clearSelectedDates,
+                                        })}
                                 </Modal.Body>
                             </Modal>
                         </Provider>

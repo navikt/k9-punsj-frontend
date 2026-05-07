@@ -2,6 +2,16 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Copilot task archive folder (2026-05-07)
+
+- Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
+- Flyttet ferdige Copilot taskfiler ut av roten i `copilot-tasks/`, slik at bare aktive eller neste oppgaver ligger igjen sammen med `template-task.md`.
+
+### Package cooldown guidance (2026-05-07)
+
+- Presiserte i `AGENTS.md` at repoets 7 dagers cooldown for npm-oppdateringer skal respekteres under package maintenance.
+- Presiserte at en tilsynelatende manglende fersk versjon i Yarn under cooldown ikke skal tolkes som at pakken mangler, og at man i stedet skal velge nyeste eldre stabile versjon som allerede er utenfor cooldown-vinduet.
+
 ### Punsj submit analytics for alle flyter (2026-05-07)
 
 - Sender nå et trygt `Faro` volume-event for hver fullførte punsj-innsending, med `source=opprett_journalpost` eller `source=other` og `sakstype`.
