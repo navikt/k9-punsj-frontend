@@ -79,7 +79,7 @@ Suggested starter prompt for chat:
 
 1. Clean up `PdfVisning.spec.tsx`: replace `act(() => { el.click() })` with `fireEvent.click(el)`, remove `act` import.
 2. Clean up `Periodepaneler.spec.tsx`: remove `await act(async () => { setupPeriodepaneler() })` render wrappers, remove `act` import.
-3. Clean up `PSBPunchForm.spec.tsx`: remove all unnecessary `await act(async () => {...})` wrappers around `setupPunchForm()` render calls, `fireEvent.click()` calls, and `userEvent` interactions; remove `act` from imports. RTL 13+ wraps `render` and `fireEvent` in `act` internally, and `@testing-library/user-event` v14 manages `act` internally.
+3. Clean up `PSBPunchForm.spec.tsx`: remove unnecessary `await act(async () => {...})` wrappers around `setupPunchForm()` render calls, `fireEvent.click()` calls, and `userEvent` interactions, but keep `act` imported and used in the modal-opening tests that still require it. RTL 13+ wraps `render` and `fireEvent` in `act` internally, and `@testing-library/user-event` v14 manages `act` internally for standard interactions.
 4. Run `yarn test --testPathPattern=PSBPunchForm|Periodepaneler|PdfVisning --maxWorkers=2`, `yarn lint`, and `yarn tsc --noEmit` to validate.
 
 ## Progress notes
