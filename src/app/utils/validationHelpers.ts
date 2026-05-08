@@ -55,17 +55,13 @@ export const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues, co
         schema.validateSync(soknad, { abortEarly: false, context });
         return [];
     } catch (error) {
-        if (!error.inner) {
+        if (!(error instanceof yup.ValidationError) || !error.inner) {
             return [];
         }
-        const errors = error.inner?.map(
-            ({ message, params: { path } }: { message: string; params: { path: string } }) => {
-                return {
-                    message: capitalize(message),
-                    path,
-                };
-            },
-        );
+        const errors = error.inner?.map((ve) => ({
+            message: capitalize(ve.message),
+            path: ve.path ?? '',
+        }));
         return errors;
     }
 };

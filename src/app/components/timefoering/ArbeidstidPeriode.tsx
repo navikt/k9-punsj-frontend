@@ -1,16 +1,21 @@
 import React from 'react';
 
-import { Field, useField, useFormikContext } from 'formik';
-import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
+import { Field, useField, useFormikContext } from 'formik';
 
 import { IPeriode } from 'app/models/types';
-import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
+import {
+    Tidsformat,
+    isTidsformat,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
+import PeriodevelgerControlled from './PeriodevelgerControlled';
 import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
-import PeriodevelgerControlled from './PeriodevelgerControlled';
 
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
@@ -173,7 +178,8 @@ const ArbeidstidPeriode = (props: Props) => {
                                 label="Hvordan vil du oppgi arbeidstid?"
                                 defaultValue={Tidsformat.TimerOgMin}
                                 size="small"
-                                onChange={(v: Tidsformat) => {
+                                onChange={(v: string) => {
+                                    if (!isTidsformat(v)) return;
                                     formik.setFieldValue(`${name}.tidsformat`, v);
                                     if (v === Tidsformat.Desimaler) {
                                         const normalDesimaler = timerOgMinutterTilTimerMedDesimaler({

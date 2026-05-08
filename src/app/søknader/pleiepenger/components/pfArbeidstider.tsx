@@ -3,12 +3,12 @@ import { useIntl } from 'react-intl';
 
 import { HelpText, TextField } from '@navikt/ds-react';
 
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
@@ -22,8 +22,8 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IArbeidstidPeriodeMedTimer>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IArbeidstidPeriodeMedTimer>,
-        feilprefiks: string,
-        getErrorMessage: GetErrorMessage,
+        feilprefiks?: string,
+        getErrorMessage?: GetErrorMessage,
     ) => {
         const intl = useIntl();
         const { jobberNormaltTimerPerDag, faktiskArbeidTimerPerDag, periode } = periodeinfo;
@@ -46,7 +46,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     jobberNormaltTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
-                            error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
+                            error={getErrorMessage?.(`${feilprefiks}.perioder[${feltindeks}].jobberNormaltTimerPerDag`)}
                         />
                         <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.normaletimer')}
@@ -65,7 +65,7 @@ export function pfArbeidstider(): PeriodeinfoComponent<IArbeidstidPeriodeMedTime
                                     faktiskArbeidTimerPerDag: event.target.value.replace(/\s/g, ''),
                                 });
                             }}
-                            error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
+                            error={getErrorMessage?.(`${feilprefiks}.perioder[${feltindeks}].faktiskArbeidTimerPerDag`)}
                         />
                         <HelpText className="arbeidstid-hjelpetext" placement="right" tabIndex={-1}>
                             {intlHelper(intl, 'skjema.arbeidstid.hjelpetekst.faktisketimer')}

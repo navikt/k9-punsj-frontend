@@ -1,16 +1,21 @@
 import React from 'react';
 
-import { Button, ToggleGroup } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, ToggleGroup } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 
-import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
-import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 import PeriodevelgerControlled from 'app/components/timefoering/PeriodevelgerControlled';
-import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
+import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
+import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
+import {
+    Tidsformat,
+    isTidsformat,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
 
 interface Props {
     name: string;
@@ -34,7 +39,10 @@ const FraværPeriode = ({ name, remove }: Props) => {
     const setNormalTimerMin = (timer: string, minutter: string) => {
         formik.setFieldValue(`${name}.jobberNormaltPerDag.timer`, timer);
         formik.setFieldValue(`${name}.jobberNormaltPerDag.minutter`, minutter);
-        formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, timerOgMinutterTilTimerMedDesimaler({ timer, minutter }));
+        formik.setFieldValue(
+            `${name}.jobberNormaltTimerPerDag`,
+            timerOgMinutterTilTimerMedDesimaler({ timer, minutter }),
+        );
     };
 
     const setFraværTimerMin = (timer: string, minutter: string) => {
@@ -49,10 +57,14 @@ const FraværPeriode = ({ name, remove }: Props) => {
     const toTimerMin = (desimal: string) =>
         desimal !== '' ? timerMedDesimalerTilTimerOgMinutter(Number(desimal)) : (['', ''] as [string, string]);
 
-    const handleToggle = (v: Tidsformat) => {
+    const handleToggle = (v: string) => {
+        if (!isTidsformat(v)) return;
         formik.setFieldValue(`${name}.tidsformat`, v);
         if (v === Tidsformat.Desimaler) {
-            formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, toDesimal(normalTimerField.value, normalMinField.value));
+            formik.setFieldValue(
+                `${name}.jobberNormaltTimerPerDag`,
+                toDesimal(normalTimerField.value, normalMinField.value),
+            );
             formik.setFieldValue(`${name}.fraværTimerPerDag`, toDesimal(fraværTimerField.value, fraværMinField.value));
         } else {
             const [nt, nm] = toTimerMin(normalDeciField.value);
@@ -65,7 +77,12 @@ const FraværPeriode = ({ name, remove }: Props) => {
     return (
         <div className="mt-4">
             <div className="flex items-start">
-                <PeriodevelgerControlled name={`${name}.periode`} fromDate={fromDate} toDate={toDate} disabled={disabled} />
+                <PeriodevelgerControlled
+                    name={`${name}.periode`}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabled={disabled}
+                />
                 <div className="ml-4 mt-7">
                     <Button
                         icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
@@ -92,11 +109,22 @@ const FraværPeriode = ({ name, remove }: Props) => {
                             minutter={normalMinField.value ?? ''}
                             onChangeTimer={(v) => setNormalTimerMin(v, normalMinField.value ?? '')}
                             onChangeMinutter={(v) => setNormalTimerMin(normalTimerField.value ?? '', v)}
-                            onBlur={() => { formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`); }}
-                            error={(submitted || normalDeciMeta.touched) && normalDeciMeta.error ? normalDeciMeta.error : undefined}
+                            onBlur={() => {
+                                formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`);
+                            }}
+                            error={
+                                (submitted || normalDeciMeta.touched) && normalDeciMeta.error
+                                    ? normalDeciMeta.error
+                                    : undefined
+                            }
                         />
                         <div className="mt-1">
-                            <UtregningArbeidstid arbeidstid={{ timer: normalTimerField.value ?? '', minutter: normalMinField.value ?? '' }} />
+                            <UtregningArbeidstid
+                                arbeidstid={{
+                                    timer: normalTimerField.value ?? '',
+                                    minutter: normalMinField.value ?? '',
+                                }}
+                            />
                         </div>
                     </div>
                     <div>
@@ -106,13 +134,25 @@ const FraværPeriode = ({ name, remove }: Props) => {
                             minutter={fraværMinField.value ?? ''}
                             onChangeTimer={(v) => setFraværTimerMin(v, fraværMinField.value ?? '')}
                             onChangeMinutter={(v) => setFraværTimerMin(fraværTimerField.value ?? '', v)}
-                            onBlur={() => { formik.setFieldTouched(`${name}.fraværTimerPerDag`); }}
-                            error={(submitted || fraværDeciMeta.touched) && fraværDeciMeta.error ? fraværDeciMeta.error : undefined}
+                            onBlur={() => {
+                                formik.setFieldTouched(`${name}.fraværTimerPerDag`);
+                            }}
+                            error={
+                                (submitted || fraværDeciMeta.touched) && fraværDeciMeta.error
+                                    ? fraværDeciMeta.error
+                                    : undefined
+                            }
                         />
                         <div className="mt-1">
                             <UtregningArbeidstid
-                                arbeidstid={{ timer: fraværTimerField.value ?? '', minutter: fraværMinField.value ?? '' }}
-                                normalArbeidstid={{ timer: normalTimerField.value ?? '', minutter: normalMinField.value ?? '' }}
+                                arbeidstid={{
+                                    timer: fraværTimerField.value ?? '',
+                                    minutter: fraværMinField.value ?? '',
+                                }}
+                                normalArbeidstid={{
+                                    timer: normalTimerField.value ?? '',
+                                    minutter: normalMinField.value ?? '',
+                                }}
                                 prosentLabel="fravær"
                             />
                         </div>
@@ -132,7 +172,11 @@ const FraværPeriode = ({ name, remove }: Props) => {
                                 formik.setFieldValue(`${name}.jobberNormaltPerDag`, { timer: t, minutter: m });
                             }}
                             onBlur={() => formik.setFieldTouched(`${name}.jobberNormaltTimerPerDag`)}
-                            error={(submitted || normalDeciMeta.touched) && normalDeciMeta.error ? normalDeciMeta.error : ''}
+                            error={
+                                (submitted || normalDeciMeta.touched) && normalDeciMeta.error
+                                    ? normalDeciMeta.error
+                                    : ''
+                            }
                         />
                         <div className="mt-1">
                             <UtregningArbeidstidDesimaler arbeidstid={normalDeciField.value ?? ''} />
@@ -148,7 +192,11 @@ const FraværPeriode = ({ name, remove }: Props) => {
                                 formik.setFieldValue(`${name}.fraværPerDag`, { timer: t, minutter: m });
                             }}
                             onBlur={() => formik.setFieldTouched(`${name}.fraværTimerPerDag`)}
-                            error={(submitted || fraværDeciMeta.touched) && fraværDeciMeta.error ? fraværDeciMeta.error : ''}
+                            error={
+                                (submitted || fraværDeciMeta.touched) && fraværDeciMeta.error
+                                    ? fraværDeciMeta.error
+                                    : ''
+                            }
                         />
                         <div className="mt-1">
                             <UtregningArbeidstidDesimaler

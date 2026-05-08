@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Fieldset, Heading } from '@navikt/ds-react';
 import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Fieldset, Box, Button, Heading } from '@navikt/ds-react';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
@@ -154,7 +154,7 @@ const Arbeidstakerperioder = ({
                             updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
                                 editSoknad(editItem(currentItemIndex, info))
                             }
-                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
+                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus?: boolean) =>
                                 editSoknadState(editItem(currentItemIndex, info), showStatus)
                             }
                             feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}

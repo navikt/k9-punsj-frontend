@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { Field, FieldProps, FormikProps, FormikValues } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
 import { Dispatch } from 'redux';
+import * as yup from 'yup';
 
-import { Alert, Loader, Button, ErrorSummary, Heading, HelpText, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
@@ -16,15 +16,18 @@ import { setSignaturAction } from 'app/state/actions';
 import { capitalize } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import JournalposterSync from 'app/components/JournalposterSync';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import JournalposterSync from 'app/components/JournalposterSync';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
 
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
+import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
+import OpplysningerOmOMPMASoknad from '../components/OpplysningerOmOMPMASoknad';
 import {
     setJournalpostPaaVentResetAction,
     settJournalpostPaaVent,
@@ -35,9 +38,6 @@ import {
 } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad, OMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
-import OpplysningerOmOMPMASoknad from '../components/OpplysningerOmOMPMASoknad';
-import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
-import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 
 interface Props {
     journalpostid: string;
@@ -53,12 +53,13 @@ const feilFraYup = (schema: yup.AnyObjectSchema, soknad: FormikValues) => {
         // TODO: Fiks denne
         return [];
     } catch (error) {
-        const errors = error.inner.map(
-            ({ message, params: { path } }: { message: string; params: { path: string } }) => ({
-                message: capitalize(message),
-                path,
-            }),
-        );
+        if (!(error instanceof yup.ValidationError) || !error.inner) {
+            return [];
+        }
+        const errors = error.inner.map((ve) => ({
+            message: capitalize(ve.message),
+            path: ve.path ?? '',
+        }));
         return errors;
     }
 };

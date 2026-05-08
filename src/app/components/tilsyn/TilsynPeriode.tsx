@@ -1,16 +1,21 @@
 import React from 'react';
 
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
 import { Field, FieldProps, useField, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
-import { Button, Checkbox, ToggleGroup } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
 
-import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
-import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
-import TimerOgMinutter from '../timefoering/TimerOgMinutter';
-import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
+import {
+    Tidsformat,
+    isTidsformat,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
+import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
+import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface Props {
     name: string;
@@ -72,7 +77,8 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                             <ToggleGroup
                                 label={<FormattedMessage id="tilsyn.periode.hvordanDuVillOppgiSpm.toggle.label" />}
                                 size="small"
-                                onChange={(v: Tidsformat) => {
+                                onChange={(v: string) => {
+                                    if (!isTidsformat(v)) return;
                                     formik.setFieldValue(`${name}.tidsformat`, v);
                                     switch (v) {
                                         case Tidsformat.Desimaler: {

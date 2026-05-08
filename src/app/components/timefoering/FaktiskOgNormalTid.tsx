@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
-import { timerOgMinutter } from 'app/validation/yup';
 import {
     Tidsformat,
+    isTidsformat,
     konverterPeriodeTilTimerOgMinutter,
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
+import { timerOgMinutter } from 'app/validation/yup';
 
-import TimerOgMinutter from './TimerOgMinutter';
 import TimerMedDesimaler from './TimerMedDesimaler';
+import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
 
 interface OwnProps {
@@ -78,7 +79,8 @@ const FaktiskOgNormalTid = ({
                     label="Hvordan vil du oppgi arbeidstid?"
                     defaultValue={Tidsformat.TimerOgMin}
                     size="small"
-                    onChange={(v: Tidsformat) => {
+                    onChange={(v: string) => {
+                        if (!isTidsformat(v)) return;
                         setTidsformat(v);
                         if (v === Tidsformat.Desimaler) {
                             const normalt = timerOgMinutterTilTimerMedDesimaler({

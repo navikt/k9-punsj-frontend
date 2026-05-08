@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/nb';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import utc from 'dayjs/plugin/utc';
 import { capitalize } from 'lodash';
@@ -28,6 +28,7 @@ export enum Tidsformat {
     Desimaler = 'desimaler',
 }
 
+export const isTidsformat = (v: string): v is Tidsformat => Object.values(Tidsformat).includes(v as Tidsformat);
 export const initializeDate = (date?: string | Date | null, format?: string | string[]): dayjs.Dayjs => {
     if (date) {
         return dayjs(date, format).utc(true);

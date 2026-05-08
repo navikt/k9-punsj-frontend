@@ -1,15 +1,17 @@
 import React from 'react';
 import { IntlShape, useIntl } from 'react-intl';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import { TrashIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
 import {
     ListeComponent,
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
 } from 'app/components/Listepaneler';
+import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
@@ -17,11 +19,9 @@ import {
     IPeriodeinfoExtension,
     Periodeinfo,
 } from 'app/models/types';
+import { createPeriodInputIds } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
 import { IPeriode } from '../../models/types/Periode';
 import intlHelper from '../../utils/intlUtils';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { Button } from '@navikt/ds-react';
-import { createPeriodInputIds } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
 export type UpdatePeriodeinfoInSoknadState<T> = (info: Partial<Periodeinfo<T>>, showStatus?: boolean) => any;
@@ -107,9 +107,9 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
         periodeindeks: number,
         updatePeriodeinfoInSoknad: UpdateListeinfoInSoknad<IPeriodeinfo>,
         updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
-        feilkodeprefiksMedIndeks: string,
-        getErrorMessage: GetErrorMessage,
-        intlShape: IntlShape,
+        feilkodeprefiksMedIndeks?: string,
+        getErrorMessage?: GetErrorMessage,
+        intlShape?: IntlShape,
     ) => {
         const removePeriode = () => {
             const newArray: IPeriodeinfo[] = removeItem(periodeindeks);
@@ -127,14 +127,16 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
                 <div className="flex items-start">
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
-                        intl={intlShape}
+                        intl={intlShape!}
                         onChange={(periode) => {
                             editSoknadState(editPeriode(periodeindeks, periode));
                         }}
                         onBlur={(periode) => {
                             editSoknad(editPeriode(periodeindeks, periode));
                         }}
-                        errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
+                        errorMessage={getErrorMessage?.(
+                            `${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`,
+                        )}
                         initialValues={initialValues}
                         inputIdFom={periodInputIds.fomId}
                         inputIdTom={periodInputIds.tomId}
