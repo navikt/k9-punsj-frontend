@@ -91,6 +91,17 @@ describe('PeriodInput', () => {
         await testDateChange(inputIdFom, newFraOgMed, newFraOgMedFormatted, onChange, onBlur);
     });
 
+    it('should call onChange once when a complete date is typed', async () => {
+        const onChange = jest.fn();
+
+        setupPeriodInput({ periode: {}, onChange });
+
+        await userEvent.type(screen.getByTestId(inputIdFom), '01.03.2020');
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith({ fom: '2020-03-01', tom: '' });
+    });
+
     it('should call onChange and onBlur with a new tom date', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';

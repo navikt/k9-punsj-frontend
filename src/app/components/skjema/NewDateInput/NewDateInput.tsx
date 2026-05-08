@@ -58,6 +58,7 @@ const NewDateInput: React.FC<Props> = ({
     const [isInvalidDate, setIsInvalidDate] = useState(false);
     const previousValueRef = useRef<string | undefined>(undefined);
     const isInternalUpdateRef = useRef(false);
+    const lastPropagatedDateRef = useRef<string | undefined>(undefined);
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
@@ -66,15 +67,20 @@ const NewDateInput: React.FC<Props> = ({
 
     const onDateChange = (date?: Date) => {
         const hasSyncedExternalValue = previousValueRef.current !== undefined;
-        if (hasSyncedExternalValue) {
-            isInternalUpdateRef.current = true;
-        }
+        const lastKnownValue = hasSyncedExternalValue ? previousValueRef.current : value;
 
         const isoDateString = date ? dateToISODateString(date) : '';
-        if (isoDateString && isoDateString !== value) {
-            onChange(isoDateString);
-        }
-        if (noValidateTomtFelt && hasSyncedExternalValue && isoDateString !== value) {
+        const shouldPropagateDateChange =
+            isoDateString !== lastKnownValue &&
+            isoDateString !== lastPropagatedDateRef.current &&
+            (isoDateString || (noValidateTomtFelt && hasSyncedExternalValue));
+
+        if (shouldPropagateDateChange) {
+            if (hasSyncedExternalValue) {
+                isInternalUpdateRef.current = true;
+            }
+            lastPropagatedDateRef.current = isoDateString;
+            previousValueRef.current = isoDateString;
             onChange(isoDateString);
         }
     };
@@ -98,6 +104,7 @@ const NewDateInput: React.FC<Props> = ({
         }
 
         if (previousValueRef.current !== value) {
+            lastPropagatedDateRef.current = undefined;
             if (isISODateString(value)) {
                 setSelected(ISODateStringToUTCDate(value));
             } else {
