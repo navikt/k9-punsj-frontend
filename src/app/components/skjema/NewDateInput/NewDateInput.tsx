@@ -97,12 +97,12 @@ const NewDateInput: React.FC<Props> = ({
 
     const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
         const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
+        const committedValue = previous ?? value ?? '';
 
         if (
             (isoDateString || noValidateTomtFelt) &&
             isoDateString !== INVALID_DATE_VALUE &&
-            isISODateString(value) &&
-            previous !== isoDateString &&
+            committedValue !== isoDateString &&
             !!onBlur
         ) {
             onBlur(isoDateString);

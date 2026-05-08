@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { expect } from '@jest/globals';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 
 import { createIntl, IntlProvider, IntlShape } from 'react-intl';
@@ -260,13 +260,10 @@ describe('PunchForm', () => {
         await userEvent.type(dateInput, newDato);
         await userEvent.tab();
 
-        // screen.debug(dateInput);
-        // console.log(updateSoknad.mock);
-
-        // expect(updateSoknad).toHaveBeenCalledTimes(1);
-        // expect(updateSoknad).toHaveBeenCalledWith(expect.objectContaining({ mottattDato: '2020-02-11' }));
-
-        // TODO: Fix this test
+        await waitFor(() => {
+            expect(updateSoknad).toHaveBeenCalledTimes(1);
+            expect(updateSoknad).toHaveBeenCalledWith(expect.objectContaining({ mottattDato: '2020-02-11' }));
+        });
     });
 
     it('Oppdaterer felt når mottakelsesdato endres', async () => {
