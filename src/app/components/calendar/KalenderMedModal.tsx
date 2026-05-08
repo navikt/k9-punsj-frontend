@@ -6,14 +6,15 @@ import { FormattedMessage } from 'react-intl';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
 
-import DateContent from './DateContent';
-import TidsbrukKalenderContainer from './TidsbrukKalenderContainer';
 import VerticalSpacer from '../VerticalSpacer';
+import DateContent from './DateContent';
+import type { ModalContentProps } from './TidsbrukKalender';
+import TidsbrukKalenderContainer from './TidsbrukKalenderContainer';
 
 interface Props {
     gyldigePerioder: IPeriode[];
     kalenderdager: KalenderDag[];
-    tidModal: React.ReactElement;
+    tidModal: React.ReactElement<ModalContentProps>;
     periodeListeModal: (close: () => void) => React.ReactNode;
     slettPeriode: (dates?: Date[]) => void;
     lengrePeriodeIntlId?: string;

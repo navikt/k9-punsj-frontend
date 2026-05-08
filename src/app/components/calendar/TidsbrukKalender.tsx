@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { TrashIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
-import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
 
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
@@ -11,9 +11,15 @@ import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateI
 import DateRange from '../../models/types/DateRange';
 import CalendarGrid from './CalendarGrid';
 
+export interface ModalContentProps {
+    selectedDates?: Date[];
+    toggleModal?: () => void;
+    clearSelectedDates?: () => void;
+}
+
 interface OwnProps {
     gyldigePerioder: DateRange[];
-    ModalContent: React.ReactElement;
+    ModalContent: React.ReactElement<ModalContentProps>;
     slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
@@ -235,11 +241,12 @@ export const TidsbrukKalender = ({
                                 aria-label="Modal"
                             >
                                 <Modal.Body>
-                                    {visModal && React.cloneElement(ModalContent, {
-                                        selectedDates,
-                                        toggleModal,
-                                        clearSelectedDates,
-                                    })}
+                                    {visModal &&
+                                        React.cloneElement<ModalContentProps>(ModalContent, {
+                                            selectedDates,
+                                            toggleModal,
+                                            clearSelectedDates,
+                                        })}
                                 </Modal.Body>
                             </Modal>
                         </Provider>

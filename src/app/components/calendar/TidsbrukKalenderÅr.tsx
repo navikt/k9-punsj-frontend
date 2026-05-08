@@ -5,13 +5,13 @@ import { ExpansionCard, Heading } from '@navikt/ds-react';
 import { KalenderDag } from 'app/models/KalenderDag';
 import DateRange from 'app/models/types/DateRange';
 
-import TidsbrukKalender from './TidsbrukKalender';
+import TidsbrukKalender, { type ModalContentProps } from './TidsbrukKalender';
 
 type Props = {
     aar: number;
     perioder: DateRange[][];
     kalenderdager: KalenderDag[];
-    ModalContent: React.ReactElement;
+    ModalContent: React.ReactElement<ModalContentProps>;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
     slettPeriode: (dates?: Date[]) => void;
 };

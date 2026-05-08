@@ -91,6 +91,17 @@ describe('PeriodInput', () => {
         await testDateChange(inputIdFom, newFraOgMed, newFraOgMedFormatted, onChange, onBlur);
     });
 
+    it('should call onChange once when a complete date is typed', async () => {
+        const onChange = jest.fn();
+
+        setupPeriodInput({ periode: {}, onChange });
+
+        await userEvent.type(screen.getByTestId(inputIdFom), '01.03.2020');
+
+        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith({ fom: '2020-03-01', tom: '' });
+    });
+
     it('should call onChange and onBlur with a new tom date', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';
@@ -102,5 +113,47 @@ describe('PeriodInput', () => {
         setupPeriodInput({ periode: { fom, tom }, onChange, onBlur });
 
         await testDateChange(inputIdTom, newTilOgMed, newTilOgMedFormatted, onChange, onBlur);
+    });
+
+    it('should update displayed values when periode props change after mount', async () => {
+        const { rerender } = setupPeriodInput({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
+
+        expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
+        expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
+
+        rerender(
+            <PeriodInput
+                periode={{ fom: '2020-03-01', tom: '2020-04-01' }}
+                intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
+                onChange={jest.fn()}
+                onBlur={jest.fn()}
+                inputIdFom={inputIdFom}
+                inputIdTom={inputIdTom}
+            />,
+        );
+
+        expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.03.2020');
+        expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.04.2020');
+    });
+
+    it('should clear displayed values when periode props are reset after mount', async () => {
+        const { rerender } = setupPeriodInput({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
+
+        expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
+        expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
+
+        rerender(
+            <PeriodInput
+                periode={{ fom: '', tom: '' }}
+                intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
+                onChange={jest.fn()}
+                onBlur={jest.fn()}
+                inputIdFom={inputIdFom}
+                inputIdTom={inputIdTom}
+            />,
+        );
+
+        expect(await screen.findByTestId(inputIdFom)).toHaveValue('');
+        expect(await screen.findByTestId(inputIdTom)).toHaveValue('');
     });
 });

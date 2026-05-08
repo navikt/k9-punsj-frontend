@@ -7,12 +7,13 @@ import { IPeriode } from 'app/models/types';
 import DateRange from 'app/models/types/DateRange';
 import { getMonthsInDateRange } from 'app/utils';
 
+import { type ModalContentProps } from './TidsbrukKalender';
 import TidsbrukKalenderÅr from './TidsbrukKalenderÅr';
 
 interface OwnProps {
     gyldigePerioder: IPeriode[];
     kalenderdager: KalenderDag[];
-    ModalContent: React.ReactElement;
+    ModalContent: React.ReactElement<ModalContentProps>;
     dateContentRenderer: (kalenderdager: KalenderDag[]) => (date: Date, isDisabled?: boolean) => React.ReactNode;
     slettPeriode: (dates?: Date[]) => void;
 }

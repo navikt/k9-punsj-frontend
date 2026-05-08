@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
 import usePrevious from 'app/hooks/usePrevious';
 import {
@@ -55,8 +55,10 @@ const NewDateInput: React.FC<Props> = ({
     size,
     defaultMonth,
 }) => {
-    const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
+    const previousValueRef = useRef<string | undefined>(undefined);
+    const isInternalUpdateRef = useRef(false);
+    const lastPropagatedDateRef = useRef<string | undefined>(undefined);
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
@@ -64,11 +66,21 @@ const NewDateInput: React.FC<Props> = ({
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
+        const hasSyncedExternalValue = previousValueRef.current !== undefined;
+        const lastKnownValue = hasSyncedExternalValue ? previousValueRef.current : value;
+
         const isoDateString = date ? dateToISODateString(date) : '';
-        if (isoDateString && isoDateString !== value) {
-            onChange(isoDateString);
-        }
-        if (noValidateTomtFelt && isoDateString !== value) {
+        const shouldPropagateDateChange =
+            isoDateString !== lastKnownValue &&
+            isoDateString !== lastPropagatedDateRef.current &&
+            (isoDateString || (noValidateTomtFelt && hasSyncedExternalValue));
+
+        if (shouldPropagateDateChange) {
+            if (hasSyncedExternalValue) {
+                isInternalUpdateRef.current = true;
+            }
+            lastPropagatedDateRef.current = isoDateString;
+            previousValueRef.current = isoDateString;
             onChange(isoDateString);
         }
     };
@@ -85,24 +97,31 @@ const NewDateInput: React.FC<Props> = ({
     const previous = usePrevious(value);
 
     useEffect(() => {
-        if (previous !== value && firstOpen) {
-            setFirstOpen(false);
+        if (isInternalUpdateRef.current) {
+            isInternalUpdateRef.current = false;
+            previousValueRef.current = value;
+            return;
+        }
+
+        if (previousValueRef.current !== value) {
+            lastPropagatedDateRef.current = undefined;
             if (isISODateString(value)) {
                 setSelected(ISODateStringToUTCDate(value));
             } else {
                 setSelected(undefined);
             }
+            previousValueRef.current = value;
         }
-    }, [firstOpen, value, previous, setSelected]);
+    }, [value, setSelected]);
 
     const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
         const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
+        const committedValue = previous ?? value ?? '';
 
         if (
             (isoDateString || noValidateTomtFelt) &&
             isoDateString !== INVALID_DATE_VALUE &&
-            isISODateString(value) &&
-            previous !== isoDateString &&
+            committedValue !== isoDateString &&
             !!onBlur
         ) {
             onBlur(isoDateString);

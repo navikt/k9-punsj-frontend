@@ -16,6 +16,8 @@ These instructions apply to agents working in this repository.
 - Small low risk tasks can move ahead without questions. Ask before major architecture, data model or unclear product changes.
 - For local or IDE Copilot work, do not change `master` by default. Ask the user to create or switch to a feature branch first unless the user explicitly wants `master`. Branch creation and switching belong to the user in local or IDE sessions.
 - Use `copilot-tasks/` for concrete repo task files and `.github/prompts/` for stable reusable prompts.
+- Keep active or next-up Copilot task files in `copilot-tasks/`.
+- Move completed Copilot task files to `copilot-tasks/completed/` when the user explicitly asks to archive or clean up finished tasks.
 - When following `copilot-tasks/*.md`, update `Plan` first, keep `Progress notes` and `Outcome` short and factual, and do not move, rename or delete task files unless the user explicitly asks.
 - Prefer the smallest change that solves the actual problem.
 - State uncertainty instead of guessing, challenge issues directly and think through edge cases before implementing.
@@ -41,6 +43,13 @@ These instructions apply to agents working in this repository.
 - Run CSS lint with `yarn lint:css`.
 - Run TypeScript checks with `yarn tsc --noEmit`.
 - Run Cypress end to end tests with `yarn test:e2e` when end to end coverage is needed.
+
+## Package updates
+
+- The repo uses a 7 day package cooldown for npm updates. Respect it when evaluating or applying dependency bumps.
+- If Yarn or the registry flow appears to hide a just released version during that cooldown, do not assume the package or version is missing.
+- For package maintenance tasks, prefer the newest allowed stable version that is already older than the cooldown window instead of forcing the freshest release.
+- When in doubt, inspect available versions first, document that the latest release is still inside the cooldown window, and then choose the first older allowed version deliberately.
 
 ## Test setup
 
