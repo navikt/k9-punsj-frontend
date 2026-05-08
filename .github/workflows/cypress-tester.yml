@@ -31,7 +31,7 @@ jobs:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
             - name: Sette opp Node
-              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version: 20.x
                   registry-url: https://npm.pkg.github.com/
@@ -46,7 +46,7 @@ jobs:
               run: npx cypress install
 
             - name: Start E2E-server
-              uses: cypress-io/github-action@4c06c48f3ffea349b7189aa06dfcda47a9fa7b92 # v7.1.8
+              uses: cypress-io/github-action@dace029018fcdf86e0df89a31bc3cfa5b32570d8 # v7.3.0
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
               with:
