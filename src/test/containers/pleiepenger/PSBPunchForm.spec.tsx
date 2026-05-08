@@ -280,6 +280,17 @@ describe('PunchForm', () => {
         expect(dateInput.value).toEqual(newDato);
     });
 
+    it('Viser lagret mottakelsesdato når søknaden har mottattDato', async () => {
+        setupPunchForm({
+            soknad: {
+                ...initialSoknad,
+                mottattDato: '2026-05-01',
+            },
+        });
+
+        expect(await screen.findByTestId('mottattDato')).toHaveValue('01.05.2026');
+    });
+
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         setupPunchForm({ soknad: initialSoknad }, {});
         (useSelector as unknown as jest.Mock).mockImplementation((callback) =>

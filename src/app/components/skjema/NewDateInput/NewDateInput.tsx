@@ -65,13 +65,16 @@ const NewDateInput: React.FC<Props> = ({
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
-        isInternalUpdateRef.current = true;
+        const hasSyncedExternalValue = previousValueRef.current !== undefined;
+        if (hasSyncedExternalValue) {
+            isInternalUpdateRef.current = true;
+        }
 
         const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
             onChange(isoDateString);
         }
-        if (noValidateTomtFelt && isoDateString !== value) {
+        if (noValidateTomtFelt && hasSyncedExternalValue && isoDateString !== value) {
             onChange(isoDateString);
         }
     };
