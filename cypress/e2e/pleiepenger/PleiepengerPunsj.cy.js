@@ -1,3 +1,4 @@
+import { ApiPath } from 'app/apiConfig';
 import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Pleiepenger punsj', () => {
@@ -19,6 +20,33 @@ describe('Pleiepenger punsj', () => {
         ).should('exist');
         cy.findByText('Oppsummering').should('exist');
         cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
+    });
+
+    it('lagrer oppdatert mottatt dato på blur', () => {
+        const nyMottattDato = '14.03.2020';
+        let oppdatertSoknad;
+
+        cy.window().then((win) => {
+            const { worker, http, HttpResponse } = win.msw;
+            worker.use(
+                http.put(ApiPath.PSB_SOKNAD_UPDATE, async ({ request }) => {
+                    oppdatertSoknad = await request.json();
+                    return HttpResponse.json(oppdatertSoknad, { status: 200 });
+                }),
+            );
+        });
+
+        cy.findByTestId('mottattDato')
+            .should('exist')
+            .clear({ force: true })
+            .type(nyMottattDato)
+            .blur();
+
+        cy.wrap(null).should(() => {
+            expect(oppdatertSoknad).to.not.equal(undefined);
+            expect(oppdatertSoknad).to.have.property('mottattDato', '2020-03-14');
+        });
+        cy.findByTestId('mottattDato').should('have.value', nyMottattDato);
     });
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {

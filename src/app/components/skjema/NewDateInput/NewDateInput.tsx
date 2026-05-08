@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
 import usePrevious from 'app/hooks/usePrevious';
 import {
@@ -55,8 +55,9 @@ const NewDateInput: React.FC<Props> = ({
     size,
     defaultMonth,
 }) => {
-    const [firstOpen, setFirstOpen] = React.useState(true);
     const [isInvalidDate, setIsInvalidDate] = useState(false);
+    const previousValueRef = useRef<string | undefined>(undefined);
+    const isInternalUpdateRef = useRef(false);
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
@@ -64,6 +65,8 @@ const NewDateInput: React.FC<Props> = ({
     const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
 
     const onDateChange = (date?: Date) => {
+        isInternalUpdateRef.current = true;
+
         const isoDateString = date ? dateToISODateString(date) : '';
         if (isoDateString && isoDateString !== value) {
             onChange(isoDateString);
@@ -85,15 +88,21 @@ const NewDateInput: React.FC<Props> = ({
     const previous = usePrevious(value);
 
     useEffect(() => {
-        if (previous !== value && firstOpen) {
-            setFirstOpen(false);
+        if (isInternalUpdateRef.current) {
+            isInternalUpdateRef.current = false;
+            previousValueRef.current = value;
+            return;
+        }
+
+        if (previousValueRef.current !== value) {
             if (isISODateString(value)) {
                 setSelected(ISODateStringToUTCDate(value));
             } else {
                 setSelected(undefined);
             }
+            previousValueRef.current = value;
         }
-    }, [firstOpen, value, previous, setSelected]);
+    }, [value, setSelected]);
 
     const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
         const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
