@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Patch remediation for postcss og ip-address (2026-05-11)
+
+- Løftet `postcss` til `8.5.13` og la inn targeted resolutions for `postcss` og `ip-address@npm:^10.0.1` for å lukke den tillatte patch-delen av package security-oppfølgingen.
+- Oppdaterte `yarn.lock` slik at lokal audit ikke lenger viser `postcss` eller `ip-address`, mens `fast-uri` og Babel-sporet fortsatt venter på at 7 dagers cooldown skal passere.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
