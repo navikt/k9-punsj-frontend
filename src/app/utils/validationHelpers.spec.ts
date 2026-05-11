@@ -1,6 +1,33 @@
-import { erYngreEnn18år } from './validationHelpers';
+import * as yup from 'yup';
+
+import { erYngreEnn18år, feilFraYup } from './validationHelpers';
 
 describe('validationHelpers', () => {
+    describe('feilFraYup', () => {
+        it('returns capitalized message and path for validation errors', () => {
+            const schema = yup.object({
+                navn: yup.string().required('må fylles ut'),
+            });
+
+            expect(feilFraYup(schema, { navn: '' })).toEqual([
+                {
+                    message: 'Må fylles ut',
+                    path: 'navn',
+                },
+            ]);
+        });
+
+        it('returns empty array for non ValidationError exceptions', () => {
+            const schema = yup.object({
+                navn: yup.string().test('throws', '', () => {
+                    throw new Error('unexpected failure');
+                }),
+            });
+
+            expect(feilFraYup(schema, { navn: 'abc' })).toEqual([]);
+        });
+    });
+
     describe('erYngreEnn18år', () => {
         it('returns true for person younger than 18', () => {
             const today = new Date();
