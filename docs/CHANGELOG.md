@@ -2,6 +2,30 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Patch remediation for postcss og ip-address (2026-05-11)
+
+- Løftet `postcss` til `8.5.13` og la inn targeted resolutions for `postcss` og `ip-address@npm:^10.0.1` for å lukke den tillatte patch-delen av package security-oppfølgingen.
+- Oppdaterte `yarn.lock` slik at lokal audit ikke lenger viser `postcss` eller `ip-address`, mens `fast-uri` og Babel-sporet fortsatt venter på at 7 dagers cooldown skal passere.
+
+### Tillatte patch updates for direkte dependencies (2026-05-11)
+
+- Løftet `@tanstack/react-query` til `5.100.9`, `@babel/preset-env` til `7.29.3`, `@eslint/js` til `10.0.1` og `@types/react` til `19.2.14`, fordi disse patch-versjonene allerede var utenfor repoets 7 dagers cooldown.
+- Ryddet samtidig tre `no-useless-assignment`-feil i `src/app/api/api.ts` som ble synlige etter `@eslint/js`-oppdateringen, uten å endre feilflyten funksjonelt.
+
+### Nærmeste tillatte minor updates (2026-05-11)
+
+- Løftet `react-hook-form` til `7.75.0`, `msw` til `2.14.2` og `stylelint` til `17.10.0`, fordi dette var de nærmeste minor-versjonene som allerede lå utenfor repoets 7 dagers cooldown.
+- Oppdaterte `yarn.lock` med den tilhørende transitive halen, særlig rundt `msw`, uten å blande inn andre minor- eller major-løft fra backloggen.
+
+### Resolutions ryddet og løftet (2026-05-11)
+
+- Fjernet `follow-redirects` fra `resolutions`, fordi dependency graphen nå naturlig resolver pakken til `1.16.0` uten override.
+- Beholdt `glob` og `js-yaml` som targeted overrides for å unngå at eldre transitive grener kommer tilbake i lockfile, og løftet samtidig `qs` til `6.15.1`, `ip-address` til `10.2.0`, `path-to-regexp` til `8.4.2` og `systeminformation` til `5.31.5`.
+
+### Browserslist data oppdatert (2026-05-11)
+
+- Oppdaterte `caniuse-lite` og `baseline-browser-mapping` i `yarn.lock` med `update-browserslist-db`, slik at `Browserslist`-warningen om gammel browserdata forsvant uten endringer i repoets målbrowserliste.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
