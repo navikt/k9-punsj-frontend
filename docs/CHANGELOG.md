@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### TypeScript 6 standalone batch for PdfVisning og Personvelger (2026-05-11)
+
+- Fullførte en liten oppfølgingsbatch for `TypeScript 6` ved å rydde typingen i `PdfVisning` og `Personvelger` uten å blande inn større spor som union narrowing, `Formik` eller `Yup`.
+- Arkiverte den tilhørende Copilot-taskfilen i `copilot-tasks/completed/`.
+
 ### TypeScript 6 useReducer batch og kortere Copilot taskfiler (2026-05-11)
 
 - Fullførte neste forberedende `TypeScript 6`-batch ved å gjøre de tre `pfArbeidstakerReducer`-variantene kompatible med strengere `useReducer`-typing uten endringer i runtime-flyt.
