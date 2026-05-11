@@ -12,6 +12,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Løftet `@tanstack/react-query` til `5.100.9`, `@babel/preset-env` til `7.29.3`, `@eslint/js` til `10.0.1` og `@types/react` til `19.2.14`, fordi disse patch-versjonene allerede var utenfor repoets 7 dagers cooldown.
 - Ryddet samtidig tre `no-useless-assignment`-feil i `src/app/api/api.ts` som ble synlige etter `@eslint/js`-oppdateringen, uten å endre feilflyten funksjonelt.
 
+### Nærmeste tillatte minor updates (2026-05-11)
+
+- Løftet `react-hook-form` til `7.75.0`, `msw` til `2.14.2` og `stylelint` til `17.10.0`, fordi dette var de nærmeste minor-versjonene som allerede lå utenfor repoets 7 dagers cooldown.
+- Oppdaterte `yarn.lock` med den tilhørende transitive halen, særlig rundt `msw`, uten å blande inn andre minor- eller major-løft fra backloggen.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
