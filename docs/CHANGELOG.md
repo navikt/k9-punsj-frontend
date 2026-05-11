@@ -22,6 +22,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Fjernet `follow-redirects` fra `resolutions`, fordi dependency graphen nå naturlig resolver pakken til `1.16.0` uten override.
 - Beholdt `glob` og `js-yaml` som targeted overrides for å unngå at eldre transitive grener kommer tilbake i lockfile, og løftet samtidig `qs` til `6.15.1`, `ip-address` til `10.2.0`, `path-to-regexp` til `8.4.2` og `systeminformation` til `5.31.5`.
 
+### Browserslist data oppdatert (2026-05-11)
+
+- Oppdaterte `caniuse-lite` og `baseline-browser-mapping` i `yarn.lock` med `update-browserslist-db`, slik at `Browserslist`-warningen om gammel browserdata forsvant uten endringer i repoets målbrowserliste.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
