@@ -19,6 +19,8 @@ These instructions apply to agents working in this repository.
 - Keep active or next-up Copilot task files in `copilot-tasks/`.
 - Move completed Copilot task files to `copilot-tasks/completed/` when the user explicitly asks to archive or clean up finished tasks.
 - When following `copilot-tasks/*.md`, update `Plan` first, keep `Progress notes` and `Outcome` short and factual, and do not move, rename or delete task files unless the user explicitly asks.
+- Keep Copilot task files minimal. Prefer short `Goal`, `Scope`, `Validation`, and `Prompt` sections. Avoid long rationale, repeated file lists, or long execution reports inside the task file.
+- In `Prompt for Copilot`, write the full copy paste prompt, not just notes about what a prompt should contain.
 - Prefer the smallest change that solves the actual problem.
 - State uncertainty instead of guessing, challenge issues directly and think through edge cases before implementing.
 - When decisions matter, present options with clear pros and cons.

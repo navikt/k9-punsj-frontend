@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### TypeScript 6 useReducer batch og kortere Copilot taskfiler (2026-05-11)
+
+- Fullførte neste forberedende `TypeScript 6`-batch ved å gjøre de tre `pfArbeidstakerReducer`-variantene kompatible med strengere `useReducer`-typing uten endringer i runtime-flyt.
+- Strammet inn `copilot-tasks/template-task.md` og `AGENTS.md` slik at repo-taskfiler skal være korte, operative og inneholde en ferdig copy paste prompt i stedet for lange beskrivelser.
+
 ### Patch remediation for postcss og ip-address (2026-05-11)
 
 - Løftet `postcss` til `8.5.13` og la inn targeted resolutions for `postcss` og `ip-address@npm:^10.0.1` for å lukke den tillatte patch-delen av package security-oppfølgingen.
