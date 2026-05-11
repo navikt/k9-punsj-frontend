@@ -17,6 +17,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Løftet `react-hook-form` til `7.75.0`, `msw` til `2.14.2` og `stylelint` til `17.10.0`, fordi dette var de nærmeste minor-versjonene som allerede lå utenfor repoets 7 dagers cooldown.
 - Oppdaterte `yarn.lock` med den tilhørende transitive halen, særlig rundt `msw`, uten å blande inn andre minor- eller major-løft fra backloggen.
 
+### Resolutions ryddet og løftet (2026-05-11)
+
+- Fjernet `follow-redirects` fra `resolutions`, fordi dependency graphen nå naturlig resolver pakken til `1.16.0` uten override.
+- Beholdt `glob` og `js-yaml` som targeted overrides for å unngå at eldre transitive grener kommer tilbake i lockfile, og løftet samtidig `qs` til `6.15.1`, `ip-address` til `10.2.0`, `path-to-regexp` til `8.4.2` og `systeminformation` til `5.31.5`.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
