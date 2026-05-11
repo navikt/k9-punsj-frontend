@@ -126,6 +126,6 @@ export const previewMessage = async (
 
         throw new Error(response.statusText);
     } catch (error) {
-        return error.message as string;
+        return error instanceof Error ? error.message : String(error);
     }
 };

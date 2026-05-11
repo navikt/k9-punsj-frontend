@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { IntlShape } from 'react-intl';
 import { Textarea } from '@navikt/ds-react';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import intlHelper from 'app/utils/intlUtils';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage, ITilleggsinformasjon } from 'app/models/types';
 import { Periodeinfo } from 'app/models/types/Periodeinfo';
+import intlHelper from 'app/utils/intlUtils';
+import { IntlShape } from 'react-intl';
 
 export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITilleggsinformasjon> {
     return (
@@ -18,16 +18,16 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<ITilleggsinformasjon>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<ITilleggsinformasjon>,
-        feilprefiks: string,
-        getErrorMessage: GetErrorMessage,
-        intl: IntlShape,
+        feilprefiks?: string,
+        getErrorMessage?: GetErrorMessage,
+        intl?: IntlShape,
     ) => {
         const { tilleggsinformasjon, periode } = periodeinfo;
         const feltindeks = periodeSpenn(periode);
         return (
             <div className="tilleggsinfo">
                 <Textarea
-                    label={intlHelper(intl, `skjema.${path}.tilleggsinfo`)}
+                    label={intlHelper(intl!, `skjema.${path}.tilleggsinfo`)}
                     value={tilleggsinformasjon || ''}
                     onChange={(event) => {
                         updatePeriodeinfoInSoknadState({ tilleggsinformasjon: event.target.value }, false);
@@ -37,7 +37,7 @@ export function pfTilleggsinformasjon(path: string): PeriodeinfoComponent<ITille
                             tilleggsinformasjon: event.target.value,
                         })
                     }
-                    error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].tilleggsinformasjon`)}
+                    error={getErrorMessage?.(`${feilprefiks}.perioder[${feltindeks}].tilleggsinformasjon`)}
                 />
             </div>
         );

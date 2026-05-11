@@ -2,16 +2,16 @@ import countries from 'i18n-iso-countries';
 import React, { useState } from 'react';
 import { FormattedMessage, IntlShape } from 'react-intl';
 
-import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     ListeComponent,
     Listepaneler,
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
 } from 'app/components/Listepaneler';
+import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
+import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
     GetErrorMessage,
     GetUhaandterteFeil,
@@ -21,10 +21,10 @@ import {
     Periodeinfo,
 } from 'app/models/types';
 
-import { Button, Heading } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { IPeriode } from '../../../../models/types/Periode';
+import { Button, Heading } from '@navikt/ds-react';
 import { Periodepaneler } from '../../../../components/Periodepaneler';
+import { IPeriode } from '../../../../models/types/Periode';
 import { createPeriodInputIds } from '../../utils/errorAnchorUtils';
 
 export type UpdatePeriodeinfoInSoknad<T> = (info: Partial<Periodeinfo<T>>) => any;
@@ -113,9 +113,9 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         periodeindeks: number,
         updatePeriodeinfoInSoknad: UpdateListeinfoInSoknad<IPeriodeinfo>,
         updatePeriodeinfoInSoknadState: UpdateListeinfoInSoknadState<IPeriodeinfo>,
-        feilkodeprefiksMedIndeks: string,
-        getErrorMessage: GetErrorMessage,
-        intlShape: IntlShape,
+        feilkodeprefiksMedIndeks?: string,
+        getErrorMessage?: GetErrorMessage,
+        intlShape?: IntlShape,
     ) => {
         const removePeriode = () => {
             const newArray: Periodeinfo<IUtenlandsOpphold>[] = removeItem(periodeindeks);
@@ -156,14 +156,16 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                 <div className="flex items-start">
                     <PeriodInput
                         periode={periodeinfo.periode || {}}
-                        intl={intlShape}
+                        intl={intlShape!}
                         onChange={(periode) => {
                             editSoknadState(editPeriode(periodeindeks, periode));
                         }}
                         onBlur={(periode) => {
                             editSoknad(editPeriode(periodeindeks, periode));
                         }}
-                        errorMessage={getErrorMessage(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
+                        errorMessage={getErrorMessage?.(
+                            `${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`,
+                        )}
                         initialValues={initialValues}
                         inputIdFom={periodInputIds.fomId}
                         inputIdTom={periodInputIds.tomId}

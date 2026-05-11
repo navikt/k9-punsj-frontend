@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Heading } from '@navikt/ds-react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { Box, Button, Heading } from '@navikt/ds-react';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { IPeriode } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 
-import {
-    getMaxDatoFraSøknadsperioder,
-    getMinDatoFraSøknadsperioder,
-} from 'app/utils/date/periodUtils';
+import { getMaxDatoFraSøknadsperioder, getMinDatoFraSøknadsperioder } from 'app/utils/date/periodUtils';
 import { finnArbeidsgivere } from '../../../../api/api';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad } from '../../../../models/types/PSBSoknad';
@@ -164,7 +161,7 @@ const Arbeidstakerperioder = ({
                             updateListeinfoInSoknad={(info: Partial<ItemInfo>) =>
                                 editSoknad(editItem(currentItemIndex, info))
                             }
-                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus: boolean) =>
+                            updateListeinfoInSoknadState={(info: Partial<ItemInfo>, showStatus?: boolean) =>
                                 editSoknadState(editItem(currentItemIndex, info), showStatus)
                             }
                             feilkodeprefiks={`ytelse.arbeidstid.arbeidstakerList[${currentItemIndex}]`}

@@ -1,12 +1,12 @@
 import * as yup from 'yup';
 
+import { IPeriode } from 'app/models/types';
+import { IIdentState } from 'app/models/types/IdentState';
+import { formats, Tidsformat } from 'app/utils';
+import { datoErInnenforPerioder, formaterPerioder } from 'app/utils/date/periodUtils';
+import dayjs from 'dayjs';
 import { IdentRules } from './IdentRules';
 import { erIkkeFremITid, gyldigDato, klokkeslettErFremITid } from './valideringer';
-import { formats, Tidsformat } from 'app/utils';
-import { IIdentState } from 'app/models/types/IdentState';
-import { IPeriode } from 'app/models/types';
-import dayjs from 'dayjs';
-import { datoErInnenforPerioder, formaterPerioder } from 'app/utils/date/periodUtils';
 
 const yupLocale = {
     mixed: {
@@ -243,7 +243,10 @@ export const validate = (validator: yup.AnySchema, value: any): boolean | string
 
         return false;
     } catch (e) {
-        return e.errors[0];
+        if (e instanceof yup.ValidationError) {
+            return e.errors[0];
+        }
+        throw e;
     }
 };
 

@@ -4,12 +4,17 @@ import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
 import { timerOgMinutter } from 'app/validation/yup';
 
-import TimerOgMinutter from '../timefoering/TimerOgMinutter';
-import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
-import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import { IOmsorgstid } from 'app/models/types';
+import {
+    Tidsformat,
+    isTidsformat,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
+import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 export interface ITilsynTidPayload extends IOmsorgstid {
     selectedDates?: Date[];
@@ -70,7 +75,8 @@ const TilsynTid = (props: OwnProps) => {
                 <ToggleGroup
                     label="Hvordan vil du oppgi tid i omsorgstilbud?"
                     size="small"
-                    onChange={(v: Tidsformat) => {
+                    onChange={(v: string) => {
+                        if (!isTidsformat(v)) return;
                         setTidsformat(v);
                         switch (v) {
                             case Tidsformat.Desimaler:

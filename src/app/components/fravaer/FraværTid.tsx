@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 
 import { Button, Heading, ToggleGroup } from '@navikt/ds-react';
 
-import { Tidsformat, timerMedDesimalerTilTimerOgMinutter, timerOgMinutterTilTimerMedDesimaler } from 'app/utils';
-import { ITimerOgMinutterString } from 'app/models/types';
-import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
+import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
+import { ITimerOgMinutterString } from 'app/models/types';
+import {
+    Tidsformat,
+    isTidsformat,
+    timerMedDesimalerTilTimerOgMinutter,
+    timerOgMinutterTilTimerMedDesimaler,
+} from 'app/utils';
 
 export interface FraværTidPayload {
     tidsformat: Tidsformat;
@@ -37,7 +42,8 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
 
     const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
 
-    const handleToggle = (v: Tidsformat) => {
+    const handleToggle = (v: string) => {
+        if (!isTidsformat(v)) return;
         setTidsformat(v);
         if (v === Tidsformat.Desimaler) {
             setNormalDesimaler(timerOgMinutterTilTimerMedDesimaler({ timer: normalTimer, minutter: normalMinutter }));
@@ -45,8 +51,10 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
         } else {
             const [nt, nm] = timerMedDesimalerTilTimerOgMinutter(Number(normalDesimaler));
             const [ft, fm] = timerMedDesimalerTilTimerOgMinutter(Number(fraværDesimaler));
-            setNormalTimer(nt); setNormalMinutter(nm);
-            setFraværTimer(ft); setFraværMinutter(fm);
+            setNormalTimer(nt);
+            setNormalMinutter(nm);
+            setFraværTimer(ft);
+            setFraværMinutter(fm);
         }
     };
 
@@ -58,8 +66,14 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                 tidsformat,
                 fraværPerDag: { timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) },
                 jobberNormaltPerDag: { timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) },
-                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(fraværTimer), minutter: emptyToZero(fraværMinutter) }),
-                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({ timer: emptyToZero(normalTimer), minutter: emptyToZero(normalMinutter) }),
+                fraværTimerPerDag: timerOgMinutterTilTimerMedDesimaler({
+                    timer: emptyToZero(fraværTimer),
+                    minutter: emptyToZero(fraværMinutter),
+                }),
+                jobberNormaltTimerPerDag: timerOgMinutterTilTimerMedDesimaler({
+                    timer: emptyToZero(normalTimer),
+                    minutter: emptyToZero(normalMinutter),
+                }),
                 selectedDates,
             });
         } else {
@@ -132,7 +146,8 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             onChange={(v) => {
                                 setNormalDesimaler(v);
                                 const [t, m] = timerMedDesimalerTilTimerOgMinutter(Number(v));
-                                setNormalTimer(t); setNormalMinutter(m);
+                                setNormalTimer(t);
+                                setNormalMinutter(m);
                             }}
                         />
                         <div className="mt-1">
@@ -146,19 +161,28 @@ const FraværTid = ({ heading, selectedDates, lagre, clearSelectedDates = () => 
                             onChange={(v) => {
                                 setFraværDesimaler(v);
                                 const [t, m] = timerMedDesimalerTilTimerOgMinutter(Number(v));
-                                setFraværTimer(t); setFraværMinutter(m);
+                                setFraværTimer(t);
+                                setFraværMinutter(m);
                             }}
                         />
                         <div className="mt-1">
-                            <UtregningArbeidstidDesimaler arbeidstid={fraværDesimaler} normalArbeidstid={normalDesimaler} prosentLabel="fravær" />
+                            <UtregningArbeidstidDesimaler
+                                arbeidstid={fraværDesimaler}
+                                normalArbeidstid={normalDesimaler}
+                                prosentLabel="fravær"
+                            />
                         </div>
                     </div>
                 </div>
             )}
 
             <div className="mt-6 flex gap-3">
-                <Button size="small" onClick={handleLagre}>Lagre</Button>
-                <Button size="small" variant="secondary" onClick={toggleModal}>Avbryt</Button>
+                <Button size="small" onClick={handleLagre}>
+                    Lagre
+                </Button>
+                <Button size="small" variant="secondary" onClick={toggleModal}>
+                    Avbryt
+                </Button>
             </div>
         </div>
     );

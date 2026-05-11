@@ -1,13 +1,13 @@
-import React from 'react';
-import { IntlShape } from 'react-intl';
 import {
     PeriodeinfoComponent,
     UpdatePeriodeinfoInSoknad,
     UpdatePeriodeinfoInSoknadState,
 } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
+import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { GetErrorMessage } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
-import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
+import React from 'react';
+import { IntlShape } from 'react-intl';
 import { createLandInputId } from '../utils/errorAnchorUtils';
 
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -20,9 +20,9 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         periodeindex: number,
         updatePeriodeinfoInSoknad: UpdatePeriodeinfoInSoknad<IOppholdsLand>,
         updatePeriodeinfoInSoknadState: UpdatePeriodeinfoInSoknadState<IOppholdsLand>,
-        feilprefiks: string,
-        getErrorMessage: GetErrorMessage,
-        intl: IntlShape,
+        feilprefiks?: string,
+        getErrorMessage?: GetErrorMessage,
+        intl?: IntlShape,
     ) => {
         const { land } = periodeinfo;
         const feltindeks = periodeSpenn(periodeinfo.periode);
@@ -31,7 +31,7 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
             <div className="countryselect">
                 <CountrySelect
                     id={createLandInputId(feilprefiks, feltindeks, `index-${periodeindex}`)}
-                    label={intlHelper(intl, 'skjema.utenlandsopphold.land')}
+                    label={intlHelper(intl!, 'skjema.utenlandsopphold.land')}
                     unselectedoption="Velg land"
                     selectedcountry={land || ''}
                     onChange={(event) => {
@@ -39,7 +39,7 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
                         updatePeriodeinfoInSoknad({ land: event.target.value });
                     }}
                     onBlur={(event) => updatePeriodeinfoInSoknad({ land: event.target.value })}
-                    error={getErrorMessage(`${feilprefiks}.perioder[${feltindeks}].land`)}
+                    error={getErrorMessage?.(`${feilprefiks}.perioder[${feltindeks}].land`)}
                 />
             </div>
         );
