@@ -23,7 +23,7 @@ jobs:
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sette opp Node
-              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   node-version: 20.x
                   registry-url: 'https://npm.pkg.github.com'
@@ -35,7 +35,7 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Bygge kode
               run: yarn build
-            - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: dist
                   path: dist/
@@ -43,4 +43,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-            - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@2ef2d3091cf65f3a3bb617c5f6d692369528a5e4 # v1
+            - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@97a944ba12c0db588a29cfeed8a7dcb22e087d3f # v1
