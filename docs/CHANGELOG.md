@@ -7,6 +7,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Løftet `postcss` til `8.5.13` og la inn targeted resolutions for `postcss` og `ip-address@npm:^10.0.1` for å lukke den tillatte patch-delen av package security-oppfølgingen.
 - Oppdaterte `yarn.lock` slik at lokal audit ikke lenger viser `postcss` eller `ip-address`, mens `fast-uri` og Babel-sporet fortsatt venter på at 7 dagers cooldown skal passere.
 
+### Tillatte patch updates for direkte dependencies (2026-05-11)
+
+- Løftet `@tanstack/react-query` til `5.100.9`, `@babel/preset-env` til `7.29.3`, `@eslint/js` til `10.0.1` og `@types/react` til `19.2.14`, fordi disse patch-versjonene allerede var utenfor repoets 7 dagers cooldown.
+- Ryddet samtidig tre `no-useless-assignment`-feil i `src/app/api/api.ts` som ble synlige etter `@eslint/js`-oppdateringen, uten å endre feilflyten funksjonelt.
+
 ### Copilot task archive folder (2026-05-07)
 
 - Opprettet `copilot-tasks/completed/` for ferdige repo-taskfiler.
