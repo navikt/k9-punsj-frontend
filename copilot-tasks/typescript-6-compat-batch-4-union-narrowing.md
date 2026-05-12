@@ -5,7 +5,7 @@ Keep task files short. Put long reasoning in local notes, not here.
 ## Task
 
 - Title: Prepare the fourth TypeScript 6 compatibility batch for union narrowing
-- Branch: `refactor/typescript-6-compat-batch-3-standalone`
+- Branch: `refactor/typescript-6-compat-batch-4-union-narrowing`
 - Suggested agent: `default Copilot coding agent`
 - Prompt language: `English`
 

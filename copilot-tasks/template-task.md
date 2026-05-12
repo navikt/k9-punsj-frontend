@@ -6,6 +6,8 @@ Keep task files short. Put long reasoning in local notes, not here.
 
 - Title:
 - Branch:
+  - refresh this for every new task
+  - this is a desired branch hint, GitHub cloud may still create its own `copilot/...` branch
 - Suggested agent:
 - Prompt language:
 
