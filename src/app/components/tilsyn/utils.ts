@@ -60,7 +60,7 @@ export const tilsynSlettDager = (props: ISlettDagerProps) => {
     }
 
     const perioderFiltert = removeDatesFromPeriods(perioderMedTimer, selectedDates)
-        .filter((v): v is Periodeinfo<IOmsorgstid> => !!v)
+        .filter((v): v is Periodeinfo<IOmsorgstid> => v !== false)
         .map((v) => new PeriodeMedTimerMinutter(v));
 
     updateSoknad(perioderFiltert);
