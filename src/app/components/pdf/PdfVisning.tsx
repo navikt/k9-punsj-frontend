@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
-import { Button, Box, ToggleGroup } from '@navikt/ds-react';
+import { Box, Button, ToggleGroup } from '@navikt/ds-react';
 
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 
@@ -51,15 +51,14 @@ const PdfVisning: React.FunctionComponent<IPdfVisningProps> = ({ journalpostDoku
         journalpostid,
         dokumentId: dokument.dokumentId,
     });
-    const dokumenter: IDokumentMedJournalpost[] = journalpostDokumenter?.reduce(
-        (prev, current) => [
-            ...prev,
-            // TODO Fix this eslint error
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            ...current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)),
-        ],
-        [],
-    );
+    const dokumenter: IDokumentMedJournalpost[] =
+        journalpostDokumenter?.reduce<IDokumentMedJournalpost[]>(
+            (prev, current) => [
+                ...prev,
+                ...(current.dokumenter?.map((dokument) => mapDokument(dokument, current.journalpostid)) ?? []),
+            ],
+            [],
+        ) ?? [];
 
     const dokumentnummer = useMemo<number>(() => dokumentnr(dok, dokumenter), [dokumenter, dok]);
     const dokument = dokumenter[dokumentnummer - 1];

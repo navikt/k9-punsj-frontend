@@ -24,7 +24,10 @@ const Personvelger = ({ handleBlur, name, sokersIdent, populerMedBarn }: OwnProp
 
     useEffect(() => {
         if (populerMedBarn && sokersIdent) {
-            hentBarn(sokersIdent).then((response: Response) => {
+            hentBarn(sokersIdent).then((response) => {
+                if (response instanceof Error) {
+                    return;
+                }
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.barn?.length) {
