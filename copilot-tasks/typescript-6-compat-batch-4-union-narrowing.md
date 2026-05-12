@@ -54,14 +54,22 @@ Suggested starter prompt:
 
 ## Plan
 
-- 3 to 6 short steps.
+- Identify TS6 union narrowing errors from `removeDatesFromPeriods` in both files.
+- Add type-guard `.filter()` at each call site to narrow out `false` from the union.
+- Validate with both TS5 and TS6.
 
 ## Progress notes
 
-- Short factual notes only.
+- All three call sites fixed with `(v): v is T => !!v` type-guard filters.
+- Both `yarn tsc` and TS6 pass with no errors in the target files.
 
 ## Outcome
 
 - Changed files:
+  - `src/app/components/arbeidstid/ArbeidstidKalender.tsx` (2 sites)
+  - `src/app/components/tilsyn/utils.ts` (1 site)
 - Validation:
+  - `yarn tsc --noEmit -p tsconfig.json` — pass (no errors in target files)
+  - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json` — pass (no errors in target files)
 - Remaining follow ups:
+  - None for these files. Other TS6 errors remain in other files (Redux, Formik, Yup).

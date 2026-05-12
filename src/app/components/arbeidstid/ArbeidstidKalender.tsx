@@ -41,9 +41,9 @@ const ArbeidstidKalender = ({
         { faktiskArbeidPerDag, jobberNormaltPerDag }: { faktiskArbeidPerDag: ITimerOgMinutterString; jobberNormaltPerDag: ITimerOgMinutterString },
         selectedDates: Date[],
     ) => {
-        const eksisterende = removeDatesFromPeriods(normalisertArbeidstidInfo.perioder, selectedDates).map(
-            (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
-        );
+        const eksisterende = removeDatesFromPeriods(normalisertArbeidstidInfo.perioder, selectedDates)
+            .filter((v): v is IArbeidstidPeriodeMedTimer => !!v)
+            .map((v) => new ArbeidstidPeriodeMedTimer(v));
         const nye = selectedDates.map((day) => ({
             periode: new Periode({ fom: dayjs(day).format(formats.YYYYMMDD), tom: dayjs(day).format(formats.YYYYMMDD) }),
             faktiskArbeidPerDag,
@@ -55,9 +55,9 @@ const ArbeidstidKalender = ({
     const slettDager = (selectedDates?: Date[]) => {
         if (!selectedDates) return;
         save(
-            removeDatesFromPeriods(normalisertArbeidstidInfo.perioder, selectedDates).map(
-                (v: IArbeidstidPeriodeMedTimer) => new ArbeidstidPeriodeMedTimer(v),
-            ),
+            removeDatesFromPeriods(normalisertArbeidstidInfo.perioder, selectedDates)
+                .filter((v): v is IArbeidstidPeriodeMedTimer => !!v)
+                .map((v) => new ArbeidstidPeriodeMedTimer(v)),
         );
     };
 
