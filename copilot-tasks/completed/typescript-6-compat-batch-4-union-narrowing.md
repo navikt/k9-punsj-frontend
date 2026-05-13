@@ -60,7 +60,7 @@ Suggested starter prompt:
 
 ## Progress notes
 
-- All three call sites fixed with `(v): v is T => !!v` type-guard filters.
+- All three call sites fixed with explicit `(v): v is T => v !== false` type-guard filters.
 - Both `yarn tsc` and TS6 pass with no errors in the target files.
 
 ## Outcome
@@ -69,7 +69,8 @@ Suggested starter prompt:
   - `src/app/components/arbeidstid/ArbeidstidKalender.tsx` (2 sites)
   - `src/app/components/tilsyn/utils.ts` (1 site)
 - Validation:
-  - `yarn tsc --noEmit -p tsconfig.json` — pass (no errors in target files)
-  - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json` — pass (no errors in target files)
+  - `yarn tsc --noEmit -p tsconfig.json` — pass (exit 0, no errors)
+  - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json` — pass (no errors in target files; remaining errors are out-of-scope Redux/Formik/Yup)
+  - `yarn jest src/test/components/arbeidstid/ArbeidstidKalender.spec.tsx` — 1 test passed
 - Remaining follow ups:
   - None for these files. Other TS6 errors remain in other files (Redux, Formik, Yup).
