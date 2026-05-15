@@ -5,7 +5,8 @@
         "baseUrl": "..",
         "ignoreDeprecations": "6.0",
         "paths": {
-            "app/*": ["src/app/*"]
+            "app/*": ["src/app/*"],
+            "mocks/*": ["src/mocks/*"]
         },
         "types": ["cypress"]
     },
