@@ -31,7 +31,8 @@ interface IReduxTestProvider {
 export const ReduxTestProvider: React.FunctionComponent<IReduxTestProvider> = ({ initialState, children }) => {
     const defaultState = createStore(rootReducer).getState();
     const preloadedState = merge({}, defaultState, initialState) as RootStateType;
-    const store = createStore(rootReducer as typeof rootReducer, preloadedState as never);
+    // Use type assertion to bypass TypeScript 6 stricter preloaded state checking
+    const store = createStore(rootReducer, preloadedState as any);
 
     return <Provider store={store}>{children}</Provider>;
 };
