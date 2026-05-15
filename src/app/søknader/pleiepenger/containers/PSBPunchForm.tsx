@@ -5,7 +5,18 @@ import { cloneDeep, set } from 'lodash';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Accordion, Alert, Button, Checkbox, ErrorSummary, HelpText, Loader, Select, Tag, TextField } from '@navikt/ds-react';
+import {
+    Accordion,
+    Alert,
+    Button,
+    Checkbox,
+    ErrorSummary,
+    HelpText,
+    Loader,
+    Select,
+    Tag,
+    TextField,
+} from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 
@@ -33,12 +44,22 @@ import {
     harSoknadsperioderBlittEndretEllerSlettet,
 } from '../utils/soknadPeriodUtils';
 
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import JournalposterSync from 'app/components/JournalposterSync';
+import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ROUTES } from 'app/constants/routes';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { IFellesState } from 'app/state/reducers/FellesReducer';
+import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
+import { Periodepaneler } from '../../../components/Periodepaneler';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import OkGåTilLosModal from '../../../components/okGåTilLosModal/OkGåTilLosModal';
+import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
+import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
 import { BeredskapNattevaak } from '../../../models/enums/BeredskapNattevaak';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
@@ -57,25 +78,8 @@ import { SelvstendigNaeringsdrivendeOpptjening } from '../../../models/types/Sel
 import { IUtenlandsOpphold } from '../../../models/types/UtenlandsOpphold';
 import { RootStateType } from '../../../state/RootState';
 import { initializeDate } from '../../../utils/timeUtils';
-import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
-import OkGåTilLosModal from '../../../components/okGåTilLosModal/OkGåTilLosModal';
-import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
-import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
-import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
-import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
-import { getInputErrorMessage, getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
-import { PeriodeinfoPaneler } from '../../../components/periodeinfoPaneler/PeriodeinfoPaneler';
-import { Periodepaneler } from '../../../components/Periodepaneler';
-import SettPaaVentModal from '../../../components/settPåVentModal/SettPåVentModal';
-import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
-import PSBKvitteringContainer from './SoknadKvittering/SoknadKvitteringContainer';
-import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
 import { pfLand } from '../components/pfLand';
 import { pfTilleggsinformasjon } from '../components/pfTilleggsinformasjon';
-import { IFellesState } from 'app/state/reducers/FellesReducer';
-import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
-import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
-import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import {
     ENDRING_BEGRUNNELSE_INPUT_ID,
     createLandInputId,
@@ -84,7 +88,14 @@ import {
     periodKeyFromPeriode,
     resolvePeriodInputPart,
 } from '../utils/errorAnchorUtils';
-import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
+import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
+import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
+import PSBSoknadKvittering from './SoknadKvittering/SoknadKvittering';
+import PSBKvitteringContainer from './SoknadKvittering/SoknadKvitteringContainer';
+import Soknadsperioder from './Soknadsperioder/Soknadsperioder';
+import { Utenlandsopphold } from './Utenlandsopphold/Utenlandsopphold';
+import { getInputErrorMessage, getPSBErrorMessage, getUnhandledErrors } from './psbErrorUtils';
 
 export interface IPunchFormComponentProps {
     journalpostid: string;
@@ -120,18 +131,20 @@ function withIntl<P extends IntlProps>(Component: ComponentType<P>) {
 }
 
 export interface IPunchFormDispatchProps {
-    getSoknad: typeof getSoknad;
-    hentPerioder: typeof hentEksisterendePerioderForSaksnummer;
-    resetSoknadAction: typeof resetSoknadAction;
-    updateSoknad: typeof updateSoknad;
-    submitSoknad: typeof submitSoknad;
-    resetPunchFormAction: typeof resetPunchFormAction;
-    resetAllStateAction: typeof resetAllStateAction;
-    setSignaturAction: typeof setSignaturAction;
-    settJournalpostPaaVent: typeof settJournalpostPaaVent;
-    settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
-    validateSoknad: typeof validerSoknad;
-    validerSoknadReset: typeof validerSoknadResetAction;
+    getSoknad: (id: string) => void;
+    hentPerioder: (søkerId: string, pleietrengendeId: string, saksnummer: string) => void;
+    resetSoknadAction: () => void;
+    undoChoiceOfEksisterendeSoknadAction: () => void;
+    updateSoknad: (soknad: Partial<IPSBSoknadUt>) => void;
+    submitSoknad: (ident: string, soeknadid: string) => void;
+    resetPunchFormAction: () => void;
+    resetAllStateAction: () => void;
+    setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
+    settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => void;
+    settPaaventResetAction: () => void;
+    setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) => void;
+    validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring?: boolean) => void;
+    validerSoknadReset: () => void;
 }
 
 export interface IPunchFormComponentState {
@@ -163,10 +176,7 @@ export interface IPunchFormComponentState {
     harForsoektAaSendeInn: boolean;
 }
 
-type IPunchFormProps = IPunchFormComponentProps &
-    IntlProps &
-    IPunchFormStateProps &
-    IPunchFormDispatchProps;
+type IPunchFormProps = IPunchFormComponentProps & IntlProps & IPunchFormStateProps & IPunchFormDispatchProps;
 
 export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
     private harHentetPerioder = false;
@@ -735,7 +745,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         return periodKeyFromPeriode(periode) || periodKey;
     };
 
-    private parseIndexedValidationPath = (felt: string): { prefix: string; periodIndex: string; suffix?: string } | undefined => {
+    private parseIndexedValidationPath = (
+        felt: string,
+    ): { prefix: string; periodIndex: string; suffix?: string } | undefined => {
         const match = felt.match(/^(.+?)\[(\d+)](?:\.(.+))?$/);
         if (!match) {
             return undefined;
@@ -753,16 +765,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return undefined;
         }
 
-        const normalizedFelt =
-            felt.startsWith('ytelse.uttak.perioder')
-                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
-                : felt;
+        const normalizedFelt = felt.startsWith('ytelse.uttak.perioder')
+            ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+            : felt;
 
         if (normalizedFelt.startsWith('ytelse.søknadsperiode')) {
             return 'Søknadsperiode';
         }
 
-        if (normalizedFelt.startsWith('ytelse.trekkKravPerioder') || normalizedFelt.startsWith('endringAvSøknadsperioder')) {
+        if (
+            normalizedFelt.startsWith('ytelse.trekkKravPerioder') ||
+            normalizedFelt.startsWith('endringAvSøknadsperioder')
+        ) {
             return 'Endring av søknadsperiode';
         }
 
@@ -788,15 +802,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         }
 
         const felt = error.felt?.trim();
-        const normalizedFelt =
-            felt?.startsWith('ytelse.uttak.perioder')
-                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
-                : felt;
+        const normalizedFelt = felt?.startsWith('ytelse.uttak.perioder')
+            ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+            : felt;
         const contextLabel = this.getValidationContextLabel(normalizedFelt);
         const normalizedMessage = message.trim();
-        const isGenericPeriodMessage = /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(
-            normalizedMessage,
-        );
+        const isGenericPeriodMessage =
+            /^(Fra og med \(FOM\) må være satt\.?|Til og med \(TOM\) må være satt\.?)$/i.test(normalizedMessage);
         const isGenericRequiredFieldMessage = /^Feltet kan ikke være tomt\.?$/i.test(normalizedMessage);
         if (!isGenericPeriodMessage) {
             if (contextLabel && isGenericRequiredFieldMessage) {
@@ -871,10 +883,9 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return `#${ENDRING_BEGRUNNELSE_INPUT_ID}`;
         }
 
-        const normalizedFelt =
-            felt.startsWith('ytelse.uttak.perioder')
-                ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
-                : felt;
+        const normalizedFelt = felt.startsWith('ytelse.uttak.perioder')
+            ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
+            : felt;
 
         if (
             /^ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+]\.(okOrganisasjonsnummer|organisasjonsnummer(?:\.(?:valid|verdi))?)$/.test(
@@ -1724,7 +1735,7 @@ const mapStateToProps = (state: RootStateType): IPunchFormStateProps => ({
     fellesState: state.felles,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: any): IPunchFormDispatchProps => ({
     getSoknad: (id: string) => dispatch(getSoknad(id)),
     hentPerioder: (søkerId: string, pleietrengendeId: string, saksnummer: string) =>
         dispatch(hentEksisterendePerioderForSaksnummer(søkerId, pleietrengendeId, saksnummer)),
@@ -1740,7 +1751,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
     setIdentAction: (søkerId: string, pleietrengendeId: string | null, annenSokerIdent: string | null) =>
         dispatch(setIdentFellesAction(søkerId, pleietrengendeId, annenSokerIdent)),
-    validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring: boolean) =>
+    validateSoknad: (soknad: IPSBSoknadUt, erMellomlagring?: boolean) =>
         dispatch(validerSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () => dispatch(validerSoknadResetAction()),
 });
