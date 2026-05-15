@@ -9,7 +9,7 @@ import {
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
 } from '../../../app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+import { IPeriodeinfoExtension, Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
@@ -66,7 +66,7 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         periods: testperioder,
         initialPeriodeinfo: initialperiodetest,
         panelid: (index: number) => `testperiode_${index}`,
-        component: testkomponent,
+        component: testkomponent as unknown as PeriodeinfoComponent<IPeriodeinfoExtension>,
         editSoknad: jest.fn(),
         editSoknadState: jest.fn(),
         kanHaFlere: true,
