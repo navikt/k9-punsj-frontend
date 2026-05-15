@@ -17,28 +17,28 @@ Keep task files short. Put long reasoning in local notes, not here.
 ## Scope
 
 - Allowed files:
-  - `src/app/søknader/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer.tsx`
-  - `src/app/søknader/omsorgspenger-midlertidig-alene/containers/OMPMAPunchForm.tsx`
-  - a tiny nearby type-only helper or local test only if it is strictly needed
-  - `copilot-tasks/typescript-6-compat-batch-5-formik-generics.md`
+    - `src/app/søknader/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer.tsx`
+    - `src/app/søknader/omsorgspenger-midlertidig-alene/containers/OMPMAPunchForm.tsx`
+    - a tiny nearby type-only helper or local test only if it is strictly needed
+    - `copilot-tasks/typescript-6-compat-batch-5-formik-generics.md`
 - Out of scope:
-  - Redux state or action changes
-  - `Yup` schema cleanup
-  - `connect(...)` and HOC typing in other flows
-  - `package.json` and `yarn.lock`
+    - Redux state or action changes
+    - `Yup` schema cleanup
+    - `connect(...)` and HOC typing in other flows
+    - `package.json` and `yarn.lock`
 - Constraints:
-  - keep the change scoped
-  - preserve runtime behavior
-  - avoid broad casts and `any`
-  - align the form value type instead of weakening the prop contract
+    - keep the change scoped
+    - preserve runtime behavior
+    - avoid broad casts and `any`
+    - align the form value type instead of weakening the prop contract
 
 ## Validation
 
 - Commands:
-  - `yarn tsc --noEmit -p tsconfig.json`
-  - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json`
+    - `yarn tsc --noEmit -p tsconfig.json`
+    - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json`
 - Skip or limitation note:
-  - there may be no focused existing test for this exact `OMPMA` container, so note that explicitly if no local test is run
+    - there may be no focused existing test for this exact `OMPMA` container, so note that explicitly if no local test is run
 
 ## Prompt for Copilot
 
@@ -52,14 +52,25 @@ Suggested starter prompt:
 
 ## Plan
 
-- 3 to 6 short steps.
+1. Annotate `initialValues` return type as `IOMPMASoknad` in `OMPMAPunchFormContainer.tsx`
+2. Fix `new Set([])` → `new Set<string>()` to satisfy `Set<string>` field
+3. Add `<Formik<IOMPMASoknad>>` generic to ensure type flows correctly
+4. Remove unused `FormikValues` import if no longer needed
+5. Run `yarn tsc --noEmit` and TS 6 validation
 
 ## Progress notes
 
-- Short factual notes only.
+- `initialValues` lacked return type annotation → inferred `Set<never>` for `journalposter` and loose union for `barn`
+- `handleSubmit` used `as IOMPMASoknadUt` cast which failed once `FormikValues` was removed; replaced with proper `Set→Array` conversion
+- No changes needed in `OMPMAPunchForm.tsx` — it already expects `FormikProps<IOMPMASoknad>`
 
 ## Outcome
 
 - Changed files:
+    - `src/app/søknader/omsorgspenger-midlertidig-alene/containers/OMPMAPunchFormContainer.tsx`
+    - `copilot-tasks/typescript-6-compat-batch-5-formik-generics.md`
 - Validation:
+    - `yarn tsc --noEmit -p tsconfig.json` — 0 errors
+    - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json` — 0 errors in OMPMA files (23 pre-existing errors elsewhere)
 - Remaining follow ups:
+    - The 23 remaining TS6 errors are in other flows (covered by future batches)
