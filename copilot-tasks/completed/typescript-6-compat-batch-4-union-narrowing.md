@@ -5,7 +5,7 @@ Keep task files short. Put long reasoning in local notes, not here.
 ## Task
 
 - Title: Prepare the fourth TypeScript 6 compatibility batch for union narrowing
-- Branch: `refactor/typescript-6-compat-batch-3-standalone`
+- Branch: `refactor/typescript-6-compat-batch-4-union-narrowing`
 - Suggested agent: `default Copilot coding agent`
 - Prompt language: `English`
 
@@ -54,14 +54,23 @@ Suggested starter prompt:
 
 ## Plan
 
-- 3 to 6 short steps.
+- Identify TS6 union narrowing errors from `removeDatesFromPeriods` in both files.
+- Add type-guard `.filter()` at each call site to narrow out `false` from the union.
+- Validate with both TS5 and TS6.
 
 ## Progress notes
 
-- Short factual notes only.
+- All three call sites fixed with explicit `(v): v is T => v !== false` type-guard filters.
+- Both `yarn tsc` and TS6 pass with no errors in the target files.
 
 ## Outcome
 
 - Changed files:
+  - `src/app/components/arbeidstid/ArbeidstidKalender.tsx` (2 sites)
+  - `src/app/components/tilsyn/utils.ts` (1 site)
 - Validation:
+  - `yarn tsc --noEmit -p tsconfig.json` — pass (exit 0, no errors)
+  - `yarn dlx -p typescript@6.0.3 tsc --noEmit --pretty false -p tsconfig.json` — pass (no errors in target files; remaining errors are out-of-scope Redux/Formik/Yup)
+  - `yarn jest src/test/components/arbeidstid/ArbeidstidKalender.spec.tsx` — 1 test passed
 - Remaining follow ups:
+  - None for these files. Other TS6 errors remain in other files (Redux, Formik, Yup).

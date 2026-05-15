@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### TypeScript 6 union narrowing batch (2026-05-12)
+
+- La til eksplisitte type-guard-filtre etter `removeDatesFromPeriods` i `ArbeidstidKalender.tsx` og `tilsyn/utils.ts` for å fikse TS6 union narrowing-feil.
+
 ### TypeScript 6 standalone batch for PdfVisning og Personvelger (2026-05-11)
 
 - Fullførte en liten oppfølgingsbatch for `TypeScript 6` ved å rydde typingen i `PdfVisning` og `Personvelger` uten å blande inn større spor som union narrowing, `Formik` eller `Yup`.
