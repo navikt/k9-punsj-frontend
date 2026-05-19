@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Distroless runtime moved to Debian 13 (2026-05-19)
+
+- Løftet produksjonsbildet fra `gcr.io/distroless/nodejs22-debian12:nonroot` til `gcr.io/distroless/nodejs22-debian13:nonroot` for å få med nyere `openssl`- og `glibc`-fikser i runtime-imaget som Trivy scanner etter deploy.
+
 ### TypeScript 6.0.3 compiler upgrade (2026-05-15)
 
 - Løftet `typescript` til `6.0.3` etter å ha ryddet de siste repo-spesifikke TS6-kompatibilitetsfeilene i validering, søknadsflyter og testoppsett.
