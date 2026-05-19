@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { createIntl } from 'react-intl';
-import React, { ReactNode } from 'react';
-import { Provider } from 'react-redux';
-import { legacy_createStore as createStore, Reducer } from 'redux';
 import merge from 'lodash/merge';
+import React, { ReactNode } from 'react';
+import { createIntl } from 'react-intl';
+import { Provider } from 'react-redux';
+import { legacy_createStore as createStore } from 'redux';
 
 import IntlProvider from '../app/components/intl-provider/IntlProvider';
 import { RootStateType, rootReducer } from '../app/state/RootState';
@@ -28,13 +28,11 @@ interface IReduxTestProvider {
     children: React.ReactNode;
 }
 
-type RootAction = Parameters<typeof rootReducer>[1];
-const testRootReducer: Reducer<RootStateType, RootAction, Partial<RootStateType>> = rootReducer;
-
 export const ReduxTestProvider: React.FunctionComponent<IReduxTestProvider> = ({ initialState, children }) => {
-    const defaultState = createStore(testRootReducer).getState();
+    const defaultState = createStore(rootReducer).getState();
     const preloadedState = merge({}, defaultState, initialState) as RootStateType;
-    const store = createStore(testRootReducer, preloadedState);
+    // Use type assertion to bypass TypeScript 6 stricter preloaded state checking
+    const store = createStore(rootReducer, preloadedState as any);
 
     return <Provider store={store}>{children}</Provider>;
 };

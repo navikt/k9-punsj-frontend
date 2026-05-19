@@ -1,8 +1,14 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "../src",
+        "rootDir": "..",
+        "baseUrl": "..",
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "app/*": ["src/app/*"],
+            "mocks/*": ["src/mocks/*"]
+        },
         "types": ["cypress"]
     },
-    "include": ["../src/**/*", "../cypress"]
+    "include": ["../cypress/**/*"]
 }

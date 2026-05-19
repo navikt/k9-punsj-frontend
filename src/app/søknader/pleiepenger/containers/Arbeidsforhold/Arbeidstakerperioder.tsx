@@ -22,7 +22,7 @@ interface Props {
     soknad: IPSBSoknad;
     søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
-    updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
+    updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
     getUhaandterteFeil: (kode: string) => (string | undefined)[];

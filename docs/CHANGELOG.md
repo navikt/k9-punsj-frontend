@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### TypeScript 6.0.3 compiler upgrade (2026-05-15)
+
+- Løftet `typescript` til `6.0.3` etter å ha ryddet de siste repo-spesifikke TS6-kompatibilitetsfeilene i validering, søknadsflyter og testoppsett.
+
 ### TypeScript 6 union narrowing batch (2026-05-12)
 
 - La til eksplisitte type-guard-filtre etter `removeDatesFromPeriods` i `ArbeidstidKalender.tsx` og `tilsyn/utils.ts` for å fikse TS6 union narrowing-feil.

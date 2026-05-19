@@ -1,25 +1,25 @@
 import React from 'react';
 
-import { cloneDeep, set } from 'lodash';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
+import { cloneDeep, set } from 'lodash';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { arbeidstidInformasjon } from '../../../../components/ArbeidstidInfo';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import { Arbeidstaker } from '../../../../models/types/Arbeidstaker';
 import { IPSBSoknad, PSBSoknad } from '../../../../models/types/PSBSoknad';
 import { IPeriode } from '../../../../models/types/Periode';
-import { arbeidstidInformasjon } from '../../../../components/ArbeidstidInfo';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -40,7 +40,7 @@ interface Props {
     soknad: PSBSoknad;
     søknadsperioder: IPeriode[];
     initialArbeidstaker: Arbeidstaker;
-    updateSoknad: (soknad: Partial<IPSBSoknad>) => (dispatch: any) => Promise<Response>;
+    updateSoknad: (soknad: Partial<IPSBSoknad>) => void;
     updateSoknadState: (soknad: Partial<IPSBSoknad>, showStatus?: boolean) => void;
     getErrorMessage: (attribute: string, indeks?: number) => string | undefined;
     getUhaandterteFeil: (kode: string) => (string | undefined)[];
@@ -244,7 +244,9 @@ const ArbeidsforholdPanel = ({
                             label: v,
                             value: v,
                             onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some(
+                                (vt) => vt === v,
+                            ),
                         }))}
                         feil={getErrorMessage(
                             `ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[${periodeSpenn(

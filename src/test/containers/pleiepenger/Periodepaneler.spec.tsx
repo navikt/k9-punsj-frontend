@@ -9,13 +9,13 @@ import {
     PeriodeinfoComponent,
     PeriodeinfoPaneler,
 } from '../../../app/components/periodeinfoPaneler/PeriodeinfoPaneler';
-import { Periodeinfo } from '../../../app/models/types/Periodeinfo';
+import { IPeriodeinfoExtension, Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import intlHelper from '../../../app/utils/intlUtils';
 
 jest.mock('react-intl');
 jest.mock('app/utils/intlUtils');
 
-interface ITestperiodeinfo {
+interface ITestperiodeinfo extends IPeriodeinfoExtension {
     test: string;
 }
 
@@ -38,23 +38,26 @@ const testperioder: Testperiodeinfo[] = [testperiode0, testperiode1, testperiode
 
 const testinputid = (periodeindex: number) => `testperiode_${periodeindex}_testinput`;
 
-const testkomponent: PeriodeinfoComponent<ITestperiodeinfo> = (
-    info: Testperiodeinfo,
+const testkomponent: PeriodeinfoComponent<IPeriodeinfoExtension> = (
+    info: Periodeinfo<IPeriodeinfoExtension>,
     periodeindex: number,
-    updatePeriodeinfoInSoknad: (info: Partial<Testperiodeinfo>) => any,
-    updatePeriodeinfoInSoknadState: (info: Partial<Testperiodeinfo>, showStatus: boolean) => any,
+    updatePeriodeinfoInSoknad: (info: Partial<Periodeinfo<IPeriodeinfoExtension>>) => any,
+    updatePeriodeinfoInSoknadState: (info: Partial<Periodeinfo<IPeriodeinfoExtension>>, showStatus: boolean) => any,
     feilkodeprefiksMedIndeks?: string,
-) => (
-    <TextField
-        label=""
-        id={testinputid(periodeindex)}
-        className="testinput"
-        value={info.test}
-        onChange={(event) => updatePeriodeinfoInSoknadState({ test: event.target.value }, false)}
-        onBlur={(event) => updatePeriodeinfoInSoknad({ test: event.target.value })}
-        error={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
-    />
-);
+) => {
+    const testInfo = info as Testperiodeinfo;
+    return (
+        <TextField
+            label=""
+            id={testinputid(periodeindex)}
+            className="testinput"
+            value={testInfo.test}
+            onChange={(event) => updatePeriodeinfoInSoknadState({ test: event.target.value }, false)}
+            onBlur={(event) => updatePeriodeinfoInSoknad({ test: event.target.value })}
+            error={feilkodeprefiksMedIndeks ? `Feilmelding med kode ${feilkodeprefiksMedIndeks}` : undefined}
+        />
+    );
+};
 
 const initialperiodetest: Testperiodeinfo = {
     periode: { fom: '2020-04-01', tom: '2020-04-30' },

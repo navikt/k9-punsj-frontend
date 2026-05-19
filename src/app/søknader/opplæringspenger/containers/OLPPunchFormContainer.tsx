@@ -1,29 +1,29 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Formik, yupToFormErrors } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
+import { ROUTES } from 'app/constants/routes';
 import { Periode } from 'app/models/types';
 import { IIdentState } from 'app/models/types/IdentState';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
-import intlHelper from 'app/utils/intlUtils';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { ROUTES } from 'app/constants/routes';
+import intlHelper from 'app/utils/intlUtils';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
+import { trackOlpStartedFromJournalpost, trackOlpSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { ValidationError } from 'yup';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { OLPPunchForm } from './OLPPunchForm';
 import KvitteringContainer from './kvittering/KvitteringContainer';
-import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
-import { ValidationError } from 'yup';
-import { trackOlpStartedFromJournalpost, trackOlpSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface OwnProps {
     journalpostid: string;
@@ -169,7 +169,7 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
     );
 };
 
-const mapStateToProps = (state: RootStateType): Partial<IPunchOLPFormStateProps> => ({
+const mapStateToProps = (state: RootStateType): IPunchOLPFormStateProps => ({
     identState: state.identState,
 });
 

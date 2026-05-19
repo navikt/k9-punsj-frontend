@@ -1,31 +1,31 @@
 import React, { useEffect } from 'react';
 
-import { Formik, FormikValues } from 'formik';
+import { Alert, Box, Button, Heading, Loader } from '@navikt/ds-react';
+import { Formik } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Alert, Box, Button, Heading, Loader } from '@navikt/ds-react';
 
+import { ROUTES } from 'app/constants/routes';
 import { Personvalg } from 'app/models/types/Personvalg';
 import { RootStateType } from 'app/state/RootState';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { redirectToLos } from 'app/utils';
+import { trackOmpmaStartedFromJournalpost, trackOmpmaSubmitFromJournalpost } from 'app/utils/faroEvents';
 import { useNavigate, useParams } from 'react-router';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { ROUTES } from 'app/constants/routes';
+import { Dispatch } from 'redux';
+import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
 import schema from '../schema';
 import { getOMPMASoknad, validerOMPMASoknad } from '../state/actions/OMPMAPunchFormActions';
 import { IOMPMASoknad } from '../types/OMPMASoknad';
 import { IOMPMASoknadUt } from '../types/OMPMASoknadUt';
 import { OMPMAPunchForm } from './OMPMAPunchForm';
-import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';
-import { Dispatch } from 'redux';
-import { trackOmpmaStartedFromJournalpost, trackOmpmaSubmitFromJournalpost } from 'app/utils/faroEvents';
 
-const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined) => ({
+const initialValues = (soknad: Partial<IOMPMASoknad> | undefined, barn: Personvalg[] | undefined): IOMPMASoknad => ({
     soeknadId: soknad?.soeknadId || '',
     soekerId: soknad?.soekerId || '',
     mottattDato: soknad?.mottattDato || '',
-    journalposter: soknad?.journalposter || new Set([]),
+    journalposter: soknad?.journalposter || new Set<string>(),
     klokkeslett: soknad?.klokkeslett || '',
     barn: soknad?.barn?.length ? soknad.barn : barn || [],
     annenForelder: {
@@ -91,8 +91,12 @@ const OMPMAPunchFormContainer = (props: Props) => {
         }
     }, [soknad?.soekerId]);
 
-    const handleSubmit = async (soknadFormik: FormikValues) => {
-        dispatch(validerOMPMASoknad(soknadFormik as IOMPMASoknadUt, false));
+    const handleSubmit = async (soknadFormik: IOMPMASoknad) => {
+        const soknadUt: IOMPMASoknadUt = {
+            ...soknadFormik,
+            journalposter: Array.from(soknadFormik.journalposter),
+        };
+        dispatch(validerOMPMASoknad(soknadUt, false));
     };
 
     const handleStartButtonClick = () => {
@@ -151,7 +155,7 @@ const OMPMAPunchFormContainer = (props: Props) => {
     }
 
     return (
-        <Formik
+        <Formik<IOMPMASoknad>
             initialValues={initialValues(
                 punchFormState.soknad,
                 barn?.map((barnet) => ({

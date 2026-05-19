@@ -80,7 +80,7 @@ export const identifikatorAnnenPart = yup.object().shape({
 });
 
 export const påkrevdDato = {
-    test: (v: string) => {
+    test: (v: string | null | undefined) => {
         if (!v) return false;
         return dayjs(v).isValid();
     },
@@ -88,14 +88,14 @@ export const påkrevdDato = {
 };
 
 export const ikkePåkrevdDato = {
-    test: (v: string) => {
+    test: (v: string | null | undefined) => {
         if (!v) return true;
         return dayjs(v).isValid();
     },
     message: 'Må ha en gyldig dato',
 };
 
-export const datoErIkkeIHelg = (v?: string) => {
+export const datoErIkkeIHelg = (v?: string | null) => {
     if (!v) return false;
     return dayjs(v).day() !== 0 && dayjs(v).day() !== 6;
 };
@@ -131,7 +131,7 @@ export const lagPeriodeInnenforTest = (hentPerioder: (context: any) => IPeriode[
  */
 export const lagDatoInnenforTest = (hentPerioder: (context: any) => IPeriode[]) => ({
     name: 'dato-innenfor',
-    test: function (this: yup.TestContext, value: string | undefined) {
+    test: function (this: yup.TestContext, value: string | null | undefined) {
         if (!value) return true;
         const allePerioder = hentPerioder(this.options.context);
         if (allePerioder.length === 0) return true;
@@ -179,7 +179,7 @@ export const timerOgMinutter = yup.object({
     minutter,
 });
 
-export const tomEtterFom = function (this: yup.TestContext, value: string) {
+export const tomEtterFom = function (this: yup.TestContext, value: string | undefined) {
     const { fom } = this.parent;
     if (!fom || !value) return true; // Skip validation if either date is missing
     return dayjs(value, formats.YYYYMMDD).isSameOrAfter(dayjs(fom, formats.YYYYMMDD));

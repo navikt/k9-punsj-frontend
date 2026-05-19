@@ -1,25 +1,27 @@
-import React, { ComponentType } from 'react';
 import classNames from 'classnames';
+import React, { ComponentType } from 'react';
 
-import { Alert, Button, HelpText, Modal, Tag, Loader, Heading } from '@navikt/ds-react';
+import { Alert, Button, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
+import JournalposterSync from 'app/components/JournalposterSync';
 import { IInputError, ISignaturState } from 'app/models/types';
-import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
+import { setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
-import JournalposterSync from 'app/components/JournalposterSync';
 
-import { ROUTES } from 'app/constants/routes';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import Feilmelding from '../../../components/Feilmelding';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
+import { ROUTES } from 'app/constants/routes';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
+import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import Feilmelding from '../../../components/Feilmelding';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
@@ -30,21 +32,19 @@ import {
     getOMPKSSoknad,
     resetOMPKSSoknadAction,
     resetPunchOMPKSFormAction,
+    setJournalpostPaaVentResetAction,
+    settJournalpostPaaVent,
     submitOMPKSSoknad,
     updateOMPKSSoknad,
     validerOMPKSSoknad,
     validerOMPKSSoknadResetAction,
-    setJournalpostPaaVentResetAction,
-    settJournalpostPaaVent,
 } from '../state/actions/OMPKSPunchFormActions';
 import { IOMPKSSoknad, OMPKSSoknad } from '../types/OMPKSSoknad';
 import { IOMPKSSoknadUt, OMPKSSoknadUt } from '../types/OMPKSSoknadUt';
 import { IPunchOMPKSFormState } from '../types/PunchOMPKSFormState';
 import OpplysningerOmOMPKSSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad';
-import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
 import { OMPKSKvitteringContainer } from './SoknadKvittering/OMPKSKvitteringContainer';
-import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
-import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { OMPKSSoknadKvittering } from './SoknadKvittering/OMPKSSoknadKvittering';
 
 export interface IPunchOMPKSFormComponentProps {
     journalpostid: string;
@@ -61,17 +61,18 @@ export interface IPunchOMPKSFormStateProps {
 }
 
 export interface IPunchOMPKSFormDispatchProps {
-    getSoknad: typeof getOMPKSSoknad;
-    resetSoknadAction: typeof resetOMPKSSoknadAction;
-    updateSoknad: typeof updateOMPKSSoknad;
-    submitSoknad: typeof submitOMPKSSoknad;
-    resetPunchFormAction: typeof resetPunchFormAction;
-    resetAllStateAction: typeof resetAllStateAction;
-    setSignaturAction: typeof setSignaturAction;
-    settJournalpostPaaVent: typeof settJournalpostPaaVent;
-    settPaaventResetAction: typeof setJournalpostPaaVentResetAction;
-    validateSoknad: typeof validerOMPKSSoknad;
-    validerSoknadReset: typeof validerOMPKSSoknadResetAction;
+    getSoknad: (id: string) => void;
+    resetSoknadAction: () => void;
+    undoChoiceOfEksisterendeSoknadAction: () => void;
+    updateSoknad: (soknad: Partial<IOMPKSSoknadUt>) => void;
+    submitSoknad: (ident: string, soeknadid: string) => void;
+    resetPunchFormAction: () => void;
+    resetAllStateAction: () => void;
+    setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
+    settJournalpostPaaVent: (journalpostid: string, soeknadid: string) => void;
+    settPaaventResetAction: () => void;
+    validateSoknad: (soknad: IOMPKSSoknadUt, erMellomlagring?: boolean) => void;
+    validerSoknadReset: () => void;
 }
 
 export interface IPunchOMPKSFormComponentState {
@@ -599,7 +600,7 @@ const mapStateToProps = (state: RootStateType): IPunchOMPKSFormStateProps => ({
     kopierJournalpostSuccess: state.felles.kopierJournalpostSuccess,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: any): IPunchOMPKSFormDispatchProps => ({
     getSoknad: (id: string) => dispatch(getOMPKSSoknad(id)),
     resetSoknadAction: () => dispatch(resetOMPKSSoknadAction()),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeOMPKSSoknadAction()),
@@ -611,7 +612,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     settJournalpostPaaVent: (journalpostid: string, soeknadid: string) =>
         dispatch(settJournalpostPaaVent(journalpostid, soeknadid)),
     settPaaventResetAction: () => dispatch(setJournalpostPaaVentResetAction()),
-    validateSoknad: (soknad: IOMPKSSoknadUt, erMellomlagring: boolean) =>
+    validateSoknad: (soknad: IOMPKSSoknadUt, erMellomlagring?: boolean) =>
         dispatch(validerOMPKSSoknad(soknad, erMellomlagring)),
     validerSoknadReset: () => dispatch(validerOMPKSSoknadResetAction()),
 });
