@@ -165,6 +165,7 @@
     "resolutions": {
         "js-yaml": "4.1.1",
         "postcss": "8.5.14",
+        "protobufjs": "8.2.0",
         "qs": "6.15.1",
         "systeminformation": "5.31.6",
         "uuid@npm:^8.3.2": "14.0.0"
