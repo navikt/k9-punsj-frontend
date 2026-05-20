@@ -5,7 +5,7 @@
     align-items: stretch;
 }
 
-.punch_pdf_wrapper :is(.navds-button, .aksel-button):hover {
+.punch_pdf_wrapper .aksel-button:hover {
     background-color: white;
 }
 
@@ -32,7 +32,7 @@
     margin: auto;
 }
 
-.punch_pdf .fleredokumenter :is(.navds-toggle-group, .aksel-toggle-group) {
+.punch_pdf .fleredokumenter .aksel-toggle-group {
     display: block;
 }
 
@@ -49,7 +49,7 @@
     align-content: space-between;
 }
 
-.punch_pdf .knapperad :is(.navds-button, .aksel-button) {
+.punch_pdf .knapperad .aksel-button {
     flex-grow: 1;
     margin-top: 3px;
 }
