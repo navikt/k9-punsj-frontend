@@ -137,7 +137,8 @@ Suggested starter prompt for chat:
 
 ## Outcome
 
-- Changed files: 65 files changed (833 insertions, 396 deletions) including `package.json`, `yarn.lock`, `src/app/index.html`, and source files across `src/app/` touching Box props, spacing tokens, and hardcoded class names.
+- Status: completed. This task now serves as the historical record for the first Aksel v8 pass.
+- Changed files: the initial Copilot batch completed the dependency lift, light-only root setup, codemod-driven spacing and `Box` updates, and the first hardcoded `navds-*` replacements. The branch later continued with manual follow-up fixes for visual regressions in journalpost flow, legacy compat controls, top panel spacing, and datepicker bounds.
 - Validation:
     - `yarn tsc --noEmit`: 6 pre-existing errors in test files (jest-dom matcher types unrelated to Aksel). Zero Aksel-related type errors.
     - `yarn lint`: clean
@@ -146,7 +147,6 @@ Suggested starter prompt for chat:
     - `yarn build`: success
     - `yarn build-storybook`: success
 - Remaining risks or follow ups:
-    - **Batch 2 – CSS overrides**: ~20 `.navds-*` selectors remain in CSS files (`pdfVisning.css`, `opprettJournalpost.css`, `sendBrevIAvsluttetSak.css`, `pSBRegistreringsValg.css`, `soknadsperioder.css`, `LeggTilDelvisFravær.css`, `institusjonSelector.css`). These are now dead selectors (Aksel v8 uses `.aksel-*` classes). They don't cause build errors but the overrides no longer apply visually. Needs manual review and rewrite in batch 2.
-    - **Batch 2 – token codemod**: The `v8-tokens` codemod was not run in this batch. It would rename CSS custom properties used in local CSS from `--a-*` to `--ax-*`. This is safe to defer since the old tokens still resolve (via Aksel CSS layers fallback) but should be cleaned up.
-    - **Batch 2 – variant props**: Optional codemods for `v8-button-variant`, `v8-tag-variant`, etc. were not run. Current `variant` props still work in v8 but will be deprecated in future versions.
-    - **Pre-existing**: Jest 30 type errors for `@testing-library/jest-dom` matchers in 2 test files are unrelated.
+    - Next work continues in `copilot-tasks/aksel-v8-upgrade-batch-2-visual-cleanup.md`.
+    - Remaining `.navds-*` CSS override cleanup is intentionally deferred to batch 2.
+    - `yarn tsc --noEmit` still has pre-existing `@testing-library/jest-dom` matcher type errors in test code.
