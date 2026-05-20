@@ -30,7 +30,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -38,7 +38,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
     });
     it('Kan sende inn søknad for frilanser', () => {
         cy.contains(/Frilanser/i).click();
-        cy.findByRole('group', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
+        cy.findByRole('radiogroup', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByLabelText('Når startet søker som frilanser?').type('01.01.2019');
@@ -54,7 +54,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -63,16 +63,16 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
 
     it('Kan sende inn søknad for selvstendig næringsdrivende', () => {
         cy.contains(/Selvstendig næringsdrivende/i).click();
-        cy.findByRole('group', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
+        cy.findByRole('radiogroup', { name: /Har søker dekket 10 omsorgsdager\?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByText(/Fiske/i).click();
-        cy.findByRole('group', { name: /Er søker fisker på blad B?/i }).within(() => {
+        cy.findByRole('radiogroup', { name: /Er søker fisker på blad B?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByLabelText(/Hva heter virksomheten?/i).type('Bobbys Burger');
         cy.findByLabelText(/Organisasjonsnummer/i).type('974761076');
-        cy.findByRole('group', { name: /Har søker regnskapsfører?/i }).within(() => {
+        cy.findByRole('radiogroup', { name: /Har søker regnskapsfører?/i }).within(() => {
             cy.findByText('Ja').click();
         });
         cy.findByLabelText(/Navn på regnskapsfører/i).type('Geir-Per Enoksen');
@@ -89,7 +89,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 

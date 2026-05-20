@@ -16,11 +16,10 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
     const { values } = useFormikContext<IOMPAOSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="mt-4">
+        <Box padding="space-16" borderWidth="1" borderRadius="2" className="mt-4">
             <Alert variant="info" className="alert">
                 <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
             </Alert>
-
             <div className="input-row">
                 <Field name="mottattDato">
                     {({ field, meta, form }: FieldProps<string, FormikValues>) => (
@@ -49,12 +48,10 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                     </Field>
                 </div>
             </div>
-
             <LegacyJaNeiIkkeRelevantRadioGroupFormik
                 legend={intlHelper(intl, 'ident.signatur.etikett')}
                 name="metadata.signatur"
             />
-
             {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
                 <Alert size="small" variant="warning" className="mt-4">
                     <FormattedMessage id="skjema.usignert.info" />

@@ -139,7 +139,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     <p>{formaterSøknadsperioder()}</p>
                 </div>
             )}
-
             {mottattDato && (
                 <div data-testid="mottatt-dato" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -148,7 +147,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small" data-testid="mottakelsesdato">
                             <FormattedMessage
                                 id="skjema.kvittering.mottakelsesdato"
@@ -187,7 +186,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     </VStack>
                 </div>
             )}
-
             {visUtenlandsopphold && (
                 <div data-testid="utenlandsopphold" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -199,7 +197,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     {formaterUtenlandsopphold(ytelse.utenlandsopphold?.perioder, intl)}
                 </div>
             )}
-
             {visFerie && (
                 <div data-testid="ferie" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -214,7 +211,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     />
                 </div>
             )}
-
             {visFerieSomSkalSLettes && (
                 <div data-testid="ferieSomSkalSlettes" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -229,7 +225,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     />
                 </div>
             )}
-
             {visOpplysningerOmSoker && (
                 <div data-testid="opplysningerOmSoker" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -253,7 +248,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     </BodyShort>
                 </div>
             )}
-
             {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
                 <div className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -390,7 +384,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
                 </div>
             )}
-
             {visOmsorgstilbud && (
                 <div data-testid="visOmsorgstilbud">
                     <Heading size="xsmall" level="3">
@@ -407,7 +400,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     />
                 </div>
             )}
-
             {(visNattevak || visBeredskap) && (
                 <div data-testid="beredskapnettevaak" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -447,7 +439,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     )}
                 </div>
             )}
-
             {visMedlemskap && (
                 <div data-testid="medlemskap" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -463,7 +454,6 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
                     />
                 </div>
             )}
-
             {!!journalposter && journalposter.length > 0 && (
                 <div data-testid="tilleggsopplysninger">
                     <Heading size="small" level="3">
@@ -472,7 +462,7 @@ const PSBSoknadKvittering: React.FC<Props> = ({ innsendtSøknad }) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

@@ -78,7 +78,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     <BodyShort size="small">{formaterSøknadsperioder()}</BodyShort>
                 </div>
             )}
-
             {visOpplysningerOmSoknad && (
                 <div data-testid="opplysningerOmSoknad" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -87,7 +86,7 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small" data-testid="mottakelsesdato">
                             <FormattedMessage
                                 id="skjema.kvittering.mottakelsesdato"
@@ -126,7 +125,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     </VStack>
                 </div>
             )}
-
             {visUtenlandsopphold && (
                 <div data-testid="utenlandsopphold" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -142,7 +140,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     />
                 </div>
             )}
-
             {visFerie && (
                 <div data-testid="ferie" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -157,7 +154,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     />
                 </div>
             )}
-
             {visFerieSomSkalSlettes && (
                 <div data-testid="ferieSomSkalSlettes" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -172,7 +168,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     />
                 </div>
             )}
-
             {(visArbeidsforhold || visFrilanserArbeidstidInfo || visSelvstendigNæringsdrivendeInfo) && (
                 <div data-testid="arbeid" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -309,7 +304,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     )}
                 </div>
             )}
-
             {visMedlemskap && (
                 <div data-testid="medlemskap" className="mb-4">
                     <Heading size="xsmall" level="3">
@@ -325,7 +319,6 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
                     />
                 </div>
             )}
-
             {!!journalposter && journalposter.length > 0 && (
                 <div data-testid="tilleggsopplysninger">
                     <Heading size="small" level="3">
@@ -334,7 +327,7 @@ const PLSSoknadKvittering: React.FC<Props> = ({ response }: Props) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

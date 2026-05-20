@@ -50,7 +50,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage id="skjema.soknadskvittering.opprettetKopi.innhold" />
                         </BodyShort>
@@ -68,7 +68,6 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                     </VStack>
                 </div>
             )}
-
             {visOpplysningerOmSoknad && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
@@ -88,7 +87,6 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                     </BodyShort>
                 </div>
             )}
-
             <div className="mb-4">
                 <Heading size="small" level="3">
                     <FormattedMessage id="skjema.kvittering.barn" />
@@ -96,7 +94,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
 
                 <div className="h-px bg-gray-300 mb-4" />
 
-                <VStack gap="4">
+                <VStack gap="space-16">
                     {ytelse.barn?.map((barn) => (
                         <BodyShort size="small" spacing key={barn.norskIdentitetsnummer} as="p">
                             <FormattedMessage
@@ -110,7 +108,6 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                     ))}
                 </VStack>
             </div>
-
             <div className="mb-4">
                 <Heading size="small" level="3">
                     <FormattedMessage id={PunchFormPaneler.ANNEN_FORELDER} />
@@ -118,7 +115,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
 
                 <div className="h-px bg-gray-300 mb-4" />
 
-                <VStack gap="4">
+                <VStack gap="space-16">
                     <BodyShort size="small">
                         <FormattedMessage
                             id="skjema.kvittering.identitetsnummer"
@@ -160,7 +157,6 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
                     </BodyShort>
                 </VStack>
             </div>
-
             {!!journalposter && journalposter.length > 0 && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
@@ -169,7 +165,7 @@ const OMPMASoknadKvittering: React.FC<Props> = ({ response, kopierJournalpostSuc
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

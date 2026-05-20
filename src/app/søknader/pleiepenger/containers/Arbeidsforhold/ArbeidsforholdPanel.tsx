@@ -869,7 +869,6 @@ const ArbeidsforholdPanel = ({
             <Accordion.Header>
                 <FormattedMessage id={PunchFormPaneler.ARBEID} />
             </Accordion.Header>
-
             <Accordion.Content>
                 <LegacyCheckbox
                     label={intlHelper(intl, Arbeidsforhold.ARBEIDSTAKER)}
@@ -902,7 +901,7 @@ const ArbeidsforholdPanel = ({
                 <VerticalSpacer eightPx />
 
                 {!!soknad.opptjeningAktivitet.frilanser && (
-                    <Box padding="4" borderRadius="small" className="frilanserpanel">
+                    <Box padding="space-16" borderRadius="2" className="frilanserpanel">
                         {frilanserperioder()}
                     </Box>
                 )}
@@ -920,7 +919,7 @@ const ArbeidsforholdPanel = ({
                             <FormattedMessage id="skjema.sn.info" />
                         </Alert>
 
-                        <Box padding="4" borderRadius="small" className="selvstendigpanel">
+                        <Box padding="space-16" borderRadius="2" className="selvstendigpanel">
                             {selvstendigperioder()}
                         </Box>
                     </>

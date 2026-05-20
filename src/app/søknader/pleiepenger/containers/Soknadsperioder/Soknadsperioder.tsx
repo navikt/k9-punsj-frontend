@@ -78,9 +78,9 @@ const Soknadsperioder: React.FC<Props> = ({
 
     return (
         <Box
-            padding="4"
+            padding="space-16"
             borderWidth="1"
-            borderRadius="small"
+            borderRadius="2"
             className="eksiterendesoknaderpanel"
             data-testid="søknadsperioder"
         >
@@ -89,13 +89,11 @@ const Soknadsperioder: React.FC<Props> = ({
                     <FormattedMessage id={'skjema.soknadsperiode'} />
                 </Heading>
             </div>
-
             {punchFormState.hentPerioderError && (
                 <p>
                     <FormattedMessage id={'skjema.eksisterende.feil'} />
                 </p>
             )}
-
             {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
                 <>
                     <Alert size="small" variant="info">
@@ -138,13 +136,11 @@ const Soknadsperioder: React.FC<Props> = ({
                     )}
                 </>
             )}
-
             {finnesIkkeEksisterendePerioder && (
                 <Alert size="small" variant="info">
                     <FormattedMessage id={'skjema.eksisterende.ingen'} />
                 </Alert>
             )}
-
             {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
                 <div className="soknadsperiodecontainer">
                     <Periodepaneler
@@ -165,7 +161,6 @@ const Soknadsperioder: React.FC<Props> = ({
                     />
                 </div>
             )}
-
             {overlappendeSoknadsperiode() && (
                 <Alert size="small" variant="warning">
                     <FormattedMessage id={'skjema.soknadsperiode.overlapper'} />

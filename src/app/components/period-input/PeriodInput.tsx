@@ -75,7 +75,7 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
 
     return (
         <Fieldset error={errorMessage} className={className} legend={undefined}>
-            <HStack wrap gap="4" justify="center">
+            <HStack wrap gap="space-16" justify="center">
                 <div data-testid="datePickerInputFom">
                     <NewDateInput
                         value={periode.fom || initialValues?.fom || ''}

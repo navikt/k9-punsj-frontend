@@ -43,12 +43,11 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
     const eldreEnn4År = erEldreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
 
     return (
-        <Box padding="4" background="bg-subtle" className="mb-2" borderRadius="small">
+        <Box padding="space-16" background="neutral-soft" className="mb-2" borderRadius="2">
             <Heading size="small" level="5">
                 <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.tittel'} />
             </Heading>
-
-            <Box padding="4">
+            <Box padding="space-16">
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">

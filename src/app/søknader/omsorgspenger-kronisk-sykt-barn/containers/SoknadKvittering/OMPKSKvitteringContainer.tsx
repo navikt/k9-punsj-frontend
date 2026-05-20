@@ -17,7 +17,6 @@ export const OMPKSKvitteringContainer = () => {
             <Alert size="small" variant="info" className="fullfortmelding">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
-
             <div className="my-8">
                 <Button
                     onClick={() => {
@@ -27,9 +26,8 @@ export const OMPKSKvitteringContainer = () => {
                     <FormattedMessage id="tilbaketilLOS" />
                 </Button>
             </div>
-
             {innsentSoknad && (
-                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                <Box padding="space-24" borderWidth="1" borderRadius="4" borderColor="info">
                     <div className="mb-6">
                         <Heading size="medium" level="2">
                             <FormattedMessage id="skjema.kvittering.oppsummering" />

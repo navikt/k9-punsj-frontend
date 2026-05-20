@@ -19,7 +19,7 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
     const fraværPerDagFormatted = formatereTekstMedTimerOgMinutter(periode?.delvisFravær?.fravær) || '0';
 
     return (
-        <Box padding="4" background="bg-subtle">
+        <Box padding="space-16" background="neutral-soft">
             <div className="mb-4">
                 <BodyShort size="small">
                     <FormattedMessage
@@ -31,7 +31,6 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
                     />
                 </BodyShort>
             </div>
-
             <BodyShort size="small">
                 <FormattedMessage
                     id="omsorgspenger.utbetaling.kvittering.fravaersperiode.timernormalt"
@@ -41,7 +40,6 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
                     }}
                 />
             </BodyShort>
-
             <BodyShort size="small">
                 <FormattedMessage
                     id="omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværPerDag"
@@ -51,7 +49,6 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
                     }}
                 />
             </BodyShort>
-
             {periode.søknadÅrsak && (
                 <BodyShort size="small">
                     <FormattedMessage
@@ -66,7 +63,6 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
                     />
                 </BodyShort>
             )}
-
             <BodyShort size="small">
                 <FormattedMessage
                     id="omsorgspenger.utbetaling.kvittering.fravaersperiode.fraværsårsak"
@@ -79,7 +75,6 @@ const OMPUTFravaersperiodeKvittering: React.FC<Props> = ({ periode }) => {
                     }}
                 />
             </BodyShort>
-
             {periode.arbeidsgiverOrgNr && (
                 <BodyShort size="small">
                     <FormattedMessage

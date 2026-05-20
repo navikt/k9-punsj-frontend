@@ -56,7 +56,7 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
 
                         return (
                             <Box
-                                padding="4"
+                                padding="space-16"
                                 className={classNames('listepanel', 'arbeidstakerpanel')}
                                 id={panelid}
                                 key={panelid}
@@ -83,7 +83,6 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
                                         </Button>
                                     </div>
                                 )}
-
                                 <ArbeidstakerComponent
                                     søkerId={soekerId}
                                     arbeidstaker={currentItem as Arbeidstaker}
@@ -93,7 +92,6 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
                                     søknadsperioder={søknadsperioder}
                                     name={`${arrayHelpers.name}.${currentItemIndex}`}
                                 />
-
                                 <UhaanderteFeilmeldinger
                                     getFeilmeldinger={() =>
                                         (getUhaandterteFeil &&

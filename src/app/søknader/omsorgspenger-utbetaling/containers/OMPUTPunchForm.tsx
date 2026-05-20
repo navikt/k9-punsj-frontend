@@ -186,34 +186,22 @@ const OMPUTPunchForm: React.FC<Props> = ({
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
-
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-
             <VerticalSpacer sixteenPx />
-
             <OpplysningerOmOMPUTSoknad />
-
             <VerticalSpacer sixteenPx />
-
-            <Box padding="4" borderWidth="1" borderRadius="small">
+            <Box padding="space-16" borderWidth="1" borderRadius="2">
                 <Heading size="small" spacing>
                     <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.fosterbarn.header'} />
                 </Heading>
                 <Personvelger name="barn" />
             </Box>
-
             <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
-
             <VerticalSpacer sixteenPx />
-
             <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
-
             <VerticalSpacer fourtyPx />
-
             <ArbeidsforholdVelger søknadsperiodeFraSak={søknadsperiodeFraSak} />
-
             <VerticalSpacer fourtyPx />
-
             {!values.erKorrigering && (
                 <>
                     <Medlemskap />
@@ -223,11 +211,8 @@ const OMPUTPunchForm: React.FC<Props> = ({
                     <Utenlandsopphold />
                 </>
             )}
-
             <IkkeRegistrerteOpplysninger intl={intl} />
-
             <VerticalSpacer twentyPx />
-
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading={intlHelper(intl, 'omsorgspenger.utbetaling.punchForm.errorSummary.header')}>
                     {k9FormatErrors.map((feil) => (
@@ -244,7 +229,6 @@ const OMPUTPunchForm: React.FC<Props> = ({
                     )}
                 </ErrorSummary>
             )}
-
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -277,25 +261,20 @@ const OMPUTPunchForm: React.FC<Props> = ({
                     </Button>
                 </p>
             </div>
-
             <VerticalSpacer sixteenPx />
-
             {mellomlagringError instanceof Error && (
                 <Alert size="small" variant="error">
                     <FormattedMessage id={`skjema.feil.ikke_lagret`} />
                 </Alert>
             )}
-
             {submitError instanceof Error && (
                 <Alert size="small" variant="error">
                     <FormattedMessage id={submitError.message} />
                 </Alert>
             )}
-
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
-
             {visForhaandsvisModal && (
                 <ForhåndsvisSøknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
@@ -308,7 +287,6 @@ const OMPUTPunchForm: React.FC<Props> = ({
                     <OMPUTSoknadKvittering kvittering={kvittering} />
                 </ForhåndsvisSøknadModal>
             )}
-
             {visErDuSikkerModal && (
                 <ErDuSikkerModal
                     melding="modal.erdusikker.sendinn"

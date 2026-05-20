@@ -16,8 +16,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
             <Heading level="3" size="small" className="mb-2">
                 <FormattedMessage id="skjema.opplysningeromkorrigering" />
             </Heading>
-
-            <Box background="bg-subtle" padding="4" borderRadius="medium">
+            <Box background="neutral-soft" padding="space-16" borderRadius="4">
                 <Heading level="4" size="xsmall">
                     <FormattedMessage id="skjema.opplysningeromkorrigering.spm" />
                 </Heading>

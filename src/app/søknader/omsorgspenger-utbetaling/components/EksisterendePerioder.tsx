@@ -16,8 +16,7 @@ const EksisterendePerioder: React.FC<Props> = ({ eksisterendePerioder }: Props) 
         return (
             <>
                 <VerticalSpacer sixteenPx />
-
-                <Box padding="4" borderWidth="1" borderRadius="small">
+                <Box padding="space-16" borderWidth="1" borderRadius="2">
                     <Heading size="small">
                         <FormattedMessage id={'omsorgspenger.utbetaling.eksisterendePerioder.tittel'} />
                     </Heading>

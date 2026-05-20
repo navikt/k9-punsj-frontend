@@ -25,12 +25,11 @@ export default function Frilanser() {
     } = values;
 
     return (
-        <Box padding="4" background="bg-subtle" borderRadius="small">
+        <Box padding="space-16" background="neutral-soft" borderRadius="2">
             <Heading size="small" level="5">
                 <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
             </Heading>
-
-            <Box padding="4">
+            <Box padding="space-16">
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">

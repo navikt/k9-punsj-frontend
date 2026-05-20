@@ -20,10 +20,8 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
             <Heading size="small">
                 <FormattedMessage id="omsorgspenger.utbetaling.punchForm.header" />
             </Heading>
-
             <VerticalSpacer sixteenPx />
-
-            <Box padding="4" borderWidth="1" borderRadius="small">
+            <Box padding="space-16" borderWidth="1" borderRadius="2">
                 <Alert variant="info" className="alert">
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>

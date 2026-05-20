@@ -34,7 +34,7 @@ const Reisedager = () => {
                 label="Det er oppgitt informasjon om reisedager"
             />
             {values.metadata.skalOppgiReise === JaNei.JA && (
-                <Box padding="4" borderRadius="large" className="bg-bg-subtle">
+                <Box padding="space-16" borderRadius="8" className="bg-bg-subtle">
                     <FieldArray
                         name={`kurs.reise.reisedager`}
                         render={({ push, remove }) => (

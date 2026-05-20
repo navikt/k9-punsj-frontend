@@ -17,7 +17,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
     });
     it('Kan sende inn korrigering for arbeidstaker', () => {
         cy.contains(/Eksisterende perioder/i).click();
-        cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
+        cy.findByRole('radiogroup', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
             cy.findByText('Korrigering').click(),
         );
         cy.contains(/Arbeidstaker/i).click();
@@ -36,7 +36,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -45,11 +45,11 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
 
     it('Kan sende inn søknad for frilanser', () => {
         cy.contains(/Eksisterende perioder/i);
-        cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
+        cy.findByRole('radiogroup', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
             cy.findByText('Korrigering').click(),
         );
         cy.contains(/Frilanser/i).click();
-        cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
+        cy.findByRole('radiogroup', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
         cy.findByLabelText('Når startet søker som frilanser?').type('01.01.2019');
         cy.findByLabelText('Når sluttet søker som frilanser?').type('10.10.2022');
         cy.findAllByRole('combobox').eq(0).select(fraværÅrsak.ORDINÆRT_FRAVÆR);
@@ -65,7 +65,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -74,16 +74,16 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
 
     it('Kan sende inn søknad for selvstendig næringsdrivende', () => {
         cy.contains(/Eksisterende perioder/i);
-        cy.findByRole('group', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
+        cy.findByRole('radiogroup', { name: /Er dette en ny søknad eller en korrigering?/i }).within(() =>
             cy.findByText('Korrigering').click(),
         );
         cy.contains(/Selvstendig næringsdrivende/i).click();
-        cy.findByRole('group', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
+        cy.findByRole('radiogroup', { name: 'Har søker dekket 10 omsorgsdager?' }).should('not.exist');
         cy.findByText(/Fiske/i).click();
-        cy.findByRole('group', { name: /Er søker fisker på blad B?/i }).should('not.exist');
+        cy.findByRole('radiogroup', { name: /Er søker fisker på blad B?/i }).should('not.exist');
         cy.findByLabelText(/Hva heter virksomheten?/i).should('not.exist');
         cy.findByLabelText(/Organisasjonsnummer/i).type('974761076');
-        cy.findByRole('group', { name: /Har søker regnskapsfører?/i }).should('not.exist');
+        cy.findByRole('radiogroup', { name: /Har søker regnskapsfører?/i }).should('not.exist');
         cy.findByLabelText(/Navn på regnskapsfører/i).should('not.exist');
         cy.findByLabelText(/Telefonnummer til regnskapsfører/i).should('not.exist');
         cy.findByLabelText(/Startdato/i).type('01.10.2015');
@@ -100,7 +100,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 

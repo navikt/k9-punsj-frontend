@@ -41,7 +41,7 @@ export const OMPKSSoknadKvittering: React.FC<Props> = ({ response, kopierJournal
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage id="skjema.soknadskvittering.opprettetKopi.innhold" />
                         </BodyShort>
@@ -59,7 +59,6 @@ export const OMPKSSoknadKvittering: React.FC<Props> = ({ response, kopierJournal
                     </VStack>
                 </div>
             )}
-
             {visOpplysningerOmSoknad && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
@@ -79,7 +78,6 @@ export const OMPKSSoknadKvittering: React.FC<Props> = ({ response, kopierJournal
                     </BodyShort>
                 </div>
             )}
-
             {!!journalposter && journalposter.length > 0 && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
@@ -88,7 +86,7 @@ export const OMPKSSoknadKvittering: React.FC<Props> = ({ response, kopierJournal
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

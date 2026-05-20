@@ -107,7 +107,7 @@ export const Periodepaneler: React.FC<Props> = ({
     };
 
     return (
-        <Box padding="4" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="small" className="periodepanel">
+        <Box padding="space-16" borderWidth={doNotShowBorders ? undefined : '1'} borderRadius="2" className="periodepanel">
             {localPeriods.map((p, i) => {
                 const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
                 const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
@@ -154,13 +154,11 @@ export const Periodepaneler: React.FC<Props> = ({
                     </div>
                 );
             })}
-
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
                 />
             )}
-
             {kanHaFlere && (
                 <div className="flex flex-wrap">
                     <Button
@@ -179,6 +177,7 @@ export const Periodepaneler: React.FC<Props> = ({
                         }}
                         icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                         size="small"
+                        variant="tertiary"
                     >
                         <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
                     </Button>

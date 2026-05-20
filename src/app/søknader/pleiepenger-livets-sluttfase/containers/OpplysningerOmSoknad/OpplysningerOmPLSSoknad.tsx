@@ -25,7 +25,7 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
     getErrorMessage,
     setSignaturAction,
 }) => (
-    <Box padding="4" borderWidth="1" borderRadius="small">
+    <Box padding="space-16" borderWidth="1" borderRadius="2">
         <div className="mb-4">
             <Heading size="small" level="3">
                 <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />

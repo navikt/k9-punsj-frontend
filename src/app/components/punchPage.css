@@ -33,6 +33,58 @@
   min-height: 100px;
 }
 
+.punch .panels-wrapper .punch_form,
+.punch .panels-wrapper .omsorgspenger_punch_form {
+  margin-right: 0.5rem;
+  flex-basis: 100%;
+  overflow-y: auto;
+  border-color: #a0a0a0;
+}
+
+.punch .panels-wrapper .punch_form .container,
+.punch .panels-wrapper .omsorgspenger_punch_form .container {
+  text-align: left;
+  padding-top: 0;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.punch .panels-wrapper .punch_form::-webkit-scrollbar,
+.punch .panels-wrapper .omsorgspenger_punch_form::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form::-webkit-scrollbar-track,
+.punch .panels-wrapper .omsorgspenger_punch_form::-webkit-scrollbar-track {
+  border-radius: 2px;
+}
+
+.punch .panels-wrapper .punch_form::-webkit-scrollbar-thumb,
+.punch .panels-wrapper .omsorgspenger_punch_form::-webkit-scrollbar-thumb {
+  background: #a0a0a0;
+  border-radius: 2px;
+}
+
+.punch .panels-wrapper .punch_form::-webkit-scrollbar-thumb:hover,
+.punch .panels-wrapper .omsorgspenger_punch_form::-webkit-scrollbar-thumb:hover {
+  background: #6a6a6a;
+}
+
+.punch .panels-wrapper .punch_form .submit-knapper,
+.punch .panels-wrapper .omsorgspenger_punch_form .submit-knapper {
+  display: flex;
+}
+
+.punch .panels-wrapper .punch_form .submit-knapper .vent-knapp,
+.punch .panels-wrapper .omsorgspenger_punch_form .submit-knapper .vent-knapp {
+  margin-left: 1rem;
+}
+
+.punch .panels-wrapper .punch_form .knapperad .knapp1,
+.punch .panels-wrapper .omsorgspenger_punch_form .knapperad .knapp1 {
+  margin-right: 1rem;
+}
+
 .punch .panels-wrapper .punch_form.navds-box,
 .punch .panels-wrapper .omsorgspenger_punch_form.navds-box {
   margin-right: 0.5rem;
@@ -207,16 +259,16 @@
   margin-top: 20px;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .listepaneler,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler {
+.punch .panels-wrapper .punch_form .listepaneler,
+.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler {
   margin: 1rem 0;
   border-radius: 5px;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp,
-.punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode {
+.punch .panels-wrapper .punch_form .listepaneler .leggtillisteelementknapp,
+.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler .leggtillisteelementknapp,
+.punch .panels-wrapper .punch_form .periodepanel .leggtilperiode,
+.punch .panels-wrapper .omsorgspenger_punch_form .periodepanel .leggtilperiode {
   font-family: 'Source Sans Pro', Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.375rem;
@@ -231,15 +283,15 @@
   cursor: pointer;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
-.punch .panels-wrapper .punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel .leggtilperiode .leggtilperiodeIcon {
+.punch .panels-wrapper .punch_form .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
+.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
+.punch .panels-wrapper .punch_form .periodepanel .leggtilperiode .leggtilperiodeIcon,
+.punch .panels-wrapper .omsorgspenger_punch_form .periodepanel .leggtilperiode .leggtilperiodeIcon {
   margin-right: 0.5rem;
 }
 
-.punch .panels-wrapper .punch_form.navds-box .periodepanel,
-.punch .panels-wrapper .omsorgspenger_punch_form.navds-box .periodepanel {
+.punch .panels-wrapper .punch_form .periodepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form .periodepanel {
   background-color: #eaeaea;
   margin: 1rem 0;
 }

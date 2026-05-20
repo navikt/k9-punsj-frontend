@@ -26,7 +26,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
     signert,
     soknad,
 }: Props) => (
-    <Box padding="4" borderWidth="1" borderRadius="small" className="opplysningerOmOMPKSSoknad">
+    <Box padding="space-16" borderWidth="1" borderRadius="2" className="opplysningerOmOMPKSSoknad">
         <Heading size="medium" level="3">
             <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
         </Heading>

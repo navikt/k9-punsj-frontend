@@ -35,15 +35,14 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
         journalpost?.sak?.behandlingsår && dokumenttyperMedBehandlingsårValg.includes(fordelingState.dokumenttype!);
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="journalpostpanel">
+        <Box padding="space-16" borderWidth="1" borderRadius="2" className="journalpostpanel">
             <div>
                 <LabelValue
                     labelTextId="journalpost.id"
                     value={journalposter?.join(', ') || journalpost?.journalpostId}
                 />
             </div>
-
-            <HStack gap="5">
+            <HStack gap="space-20">
                 <LabelValue
                     labelTextId="journalpost.norskIdent"
                     value={søkerId || journalpost?.norskIdent || intlHelper(intl, 'journalpost.norskIdent.ikkeOppgitt')}
@@ -59,7 +58,6 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
                     </div>
                 )}
             </HStack>
-
             {visSakstype && (
                 <div>
                     <LabelValue
@@ -70,7 +68,6 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
                     />
                 </div>
             )}
-
             {visPleietrengendeId && (
                 <div>
                     <LabelValue
@@ -88,13 +85,11 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
                     />
                 </div>
             )}
-
             {visAnnenPart && (
                 <div>
                     <LabelValue labelTextId="journalpost.annenPart" value={annenPart} />
                 </div>
             )}
-
             {visFagsakId && (
                 <div>
                     <LabelValue
@@ -107,7 +102,6 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
                     />
                 </div>
             )}
-
             {visBehandlingsår && (
                 <div>
                     <LabelValue labelTextId="journalpost.behandlingsÅr" value={journalpost?.sak?.behandlingsår} />

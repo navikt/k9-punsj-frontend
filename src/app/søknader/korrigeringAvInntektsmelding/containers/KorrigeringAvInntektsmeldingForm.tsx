@@ -331,7 +331,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                 <Alert size="small" variant="info" className="fullfortmelding">
                     <FormattedMessage id="skjema.sentInn" />
                 </Alert>
-
                 <div className="my-8">
                     <Button
                         onClick={() => {
@@ -341,14 +340,12 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                         <FormattedMessage id="tilbaketilLOS" />
                     </Button>
                 </div>
-
                 <div className="mb-6">
                     <Heading size="small" level="3">
                         <FormattedMessage id="skjema.kvittering.oppsummering" />
                     </Heading>
                 </div>
-
-                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                <Box padding="space-24" borderWidth="1" borderRadius="4" borderColor="info">
                     <OMSKvittering feltverdier={innsendteFormverdier} />
                 </Box>
             </>
@@ -388,9 +385,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             oppdaterKorrigering={oppdaterKorrigering}
                             validerKorrigering={validerKorrigering}
                         />
-
                         <Form className="korrigering">
-                            <Box padding="4">
+                            <Box padding="space-16">
                                 <div className="mb-4">
                                     <Heading size="medium" level="2">
                                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
@@ -493,7 +489,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
                             </Button>
                         </Form>
-
                         {visBekreftelsemodal && (
                             <Modal
                                 key="validertSoknadModal"
@@ -534,7 +529,6 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 </Modal.Footer>
                             </Modal>
                         )}
-
                         {visErDuSikkerModal && (
                             <ErDuSikkerModal
                                 modalKey="modalerdusikkersendinn"

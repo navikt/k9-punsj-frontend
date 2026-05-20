@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 .legacy-radio-panel {
     background-color: #fff;
     border: 1px solid #6a6a6a;
@@ -12,21 +13,23 @@
     min-width: 0;
 }
 
-.legacy-radio-panel__control.navds-radio {
+.legacy-radio-panel__control:is(.navds-radio, .aksel-radio) {
+    margin: 0;
     width: 100%;
 }
 
-.legacy-radio-panel__control .navds-radio__input {
+/* Legacy navds fallback */
+.legacy-radio-panel__control.navds-radio .navds-radio__input {
     left: 0.25rem;
 }
 
-.legacy-radio-panel__control .navds-radio__label {
+.legacy-radio-panel__control.navds-radio .navds-radio__label {
     color: #262626;
     display: block;
     padding: 1rem 1rem 1rem 3rem;
 }
 
-.legacy-radio-panel__control .navds-radio__label::before {
+.legacy-radio-panel__control.navds-radio .navds-radio__label::before {
     background-color: #fff;
     box-shadow: 0 0 0 1px #6a6a6a;
     height: 1.5rem;
@@ -37,14 +40,68 @@
     width: 1.5rem;
 }
 
+.legacy-radio-panel__control.navds-radio .navds-radio__input:checked + .navds-radio__label::before {
+    background-color: #fff !important;
+    box-shadow: 0 0 0 2px #0067c5, inset 0 0 0 3px #fff, inset 0 0 0 12px #0067c5 !important;
+}
+
+.legacy-radio-panel__control.navds-radio:not(.aksel-radio) .navds-radio__input:not(:checked):hover + .navds-radio__label::before {
+    background-color: #99c3ff;
+    box-shadow: 0 0 0 1px transparent;
+}
+
+/* Aksel v8 render */
+.legacy-radio-panel__control.aksel-radio {
+    display: block;
+    padding: 0;
+    gap: 0;
+}
+
+.legacy-radio-panel__control.aksel-radio::after {
+    content: none;
+}
+
+.legacy-radio-panel__control.aksel-radio > .aksel-radio__input {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    margin: 0;
+    background-color: #fff;
+    border-color: #6a6a6a;
+}
+
+.legacy-radio-panel__control.aksel-radio > .aksel-radio__input:hover:not(:disabled, :checked) {
+    background-color: #99c3ff;
+    border-color: transparent;
+}
+
+.legacy-radio-panel__control.aksel-radio > .aksel-radio__input:checked {
+    background-color: #fff;
+    border-color: #0067c5;
+}
+
+.legacy-radio-panel__control.aksel-radio > .aksel-radio__label {
+    color: #262626;
+    display: block;
+    padding: 1rem 1rem 1rem 3rem;
+}
+
+.legacy-radio-panel__control.aksel-radio > .aksel-radio__label::before {
+    content: none;
+}
+
 .legacy-radio-panel--disabled {
     background-color: #f1f1f1;
     box-shadow: none;
 }
 
-.legacy-radio-panel--disabled .navds-radio__label,
-.legacy-radio-panel--disabled .navds-radio__input,
-.legacy-radio-panel--disabled:hover .navds-radio__label {
+.legacy-radio-panel--disabled .legacy-radio-panel__control.aksel-radio {
+    opacity: 1;
+}
+
+.legacy-radio-panel--disabled :is(.navds-radio__label, .aksel-radio__label),
+.legacy-radio-panel--disabled :is(.navds-radio__input, .aksel-radio__input),
+.legacy-radio-panel--disabled:hover :is(.navds-radio__label, .aksel-radio__label) {
     color: #262626;
     cursor: not-allowed;
 }
@@ -55,14 +112,16 @@
     box-shadow: 0 0 0 1px #6a6a6a;
 }
 
-.legacy-radio-panel--checked .navds-radio__input + .navds-radio__label::before,
-.legacy-radio-panel__control .navds-radio__input:checked + .navds-radio__label::before {
-    background-color: #fff !important;
-    box-shadow: 0 0 0 2px #0067c5, inset 0 0 0 3px #fff, inset 0 0 0 12px #0067c5 !important;
+.legacy-radio-panel--disabled .legacy-radio-panel__control.aksel-radio > .aksel-radio__input {
+    background-color: #f1f1f1;
+    border-color: #6a6a6a;
 }
 
-.legacy-radio-panel--disabled .navds-radio__input:checked + .navds-radio__label::before,
-.legacy-radio-panel--disabled.legacy-radio-panel--checked .navds-radio__input + .navds-radio__label::before {
+.legacy-radio-panel--disabled .legacy-radio-panel__control.aksel-radio > .aksel-radio__input:checked {
+    border-color: #6a6a6a;
+}
+
+.legacy-radio-panel--disabled .navds-radio__input:checked + .navds-radio__label::before {
     background-color: #f1f1f1 !important;
     box-shadow: 0 0 0 2px #6a6a6a, inset 0 0 0 3px #fff, inset 0 0 0 12px #6a6a6a !important;
 }
@@ -82,18 +141,12 @@
     box-shadow: #6a6a6a 0 2px 1px 0;
 }
 
-.legacy-radio-panel:hover:not(.legacy-radio-panel--disabled) .navds-radio__label {
+.legacy-radio-panel:hover:not(.legacy-radio-panel--disabled) :is(.navds-radio__label, .aksel-radio__label) {
     color: #0067c5;
-}
-
-.legacy-radio-panel:hover:not(.legacy-radio-panel--checked, .legacy-radio-panel--disabled)
-    .navds-radio__input:not(:checked)
-    + .navds-radio__label::before {
-    background-color: #99c3ff;
-    box-shadow: 0 0 0 1px transparent;
 }
 
 .legacy-radio-panel--error:not(.legacy-radio-panel--checked, .legacy-radio-panel--disabled, :focus-within) {
     border-color: #c30000;
     box-shadow: 0 0 0 1px #c30000;
 }
+/* stylelint-enable no-descending-specificity */

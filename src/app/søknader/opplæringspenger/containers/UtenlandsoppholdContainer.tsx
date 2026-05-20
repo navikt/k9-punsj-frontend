@@ -30,11 +30,10 @@ const UtenlandsoppholdContainer = () => {
     };
 
     return (
-        <Box padding="4" borderRadius="large" className="bg-bg-subtle">
+        <Box padding="space-16" borderRadius="8" className="bg-bg-subtle">
             <Heading size="small" level="5">
                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>
-
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harUtenlandsopphold"

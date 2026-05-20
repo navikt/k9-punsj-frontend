@@ -35,7 +35,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
     useFocus(currentListLength, previousListLength, fomInputRef);
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="periodepanel">
+        <Box padding="space-16" borderWidth="1" borderRadius="2" className="periodepanel">
             <FieldArray name={name}>
                 {({ push, remove }) => (
                     <>

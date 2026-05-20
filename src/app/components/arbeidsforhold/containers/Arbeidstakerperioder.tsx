@@ -118,7 +118,7 @@ const Arbeidstakerperioder = ({
 
                 return (
                     <Box
-                        padding="4"
+                        padding="space-16"
                         className={classNames('listepanel', 'arbeidstakerpanel')}
                         id={panelid}
                         key={panelid}
@@ -145,7 +145,6 @@ const Arbeidstakerperioder = ({
                                 </Button>
                             </div>
                         )}
-
                         <ArbeidstakerComponent
                             søkerId={soknad.soekerId}
                             arbeidstaker={currentItem as Arbeidstaker}
@@ -163,7 +162,6 @@ const Arbeidstakerperioder = ({
                             arbeidsgivere={arbeidsgivere}
                             harDuplikatOrgnr={getHarDuplikatOrgnr()}
                         />
-
                         <UhaanderteFeilmeldinger
                             getFeilmeldinger={() =>
                                 (getUhaandterteFeil &&
@@ -174,7 +172,6 @@ const Arbeidstakerperioder = ({
                     </Box>
                 );
             })}
-
             <Button
                 id="leggtillisteelementknapp"
                 className="leggtillisteelementknapp"

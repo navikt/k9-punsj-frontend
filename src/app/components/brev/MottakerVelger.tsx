@@ -1,17 +1,17 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
+import { BodyShort, ErrorMessage as ErrorMesageDs, Label, Loader, VStack } from '@navikt/ds-react';
 import { useFormContext, UseFormSetError } from 'react-hook-form';
-import { BodyShort, VStack, Loader, ErrorMessage as ErrorMesageDs } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
-import { Person } from 'app/models/types';
-import Organisasjon from 'app/models/types/Organisasjon';
 import { ApiPath } from 'app/apiConfig';
-import { get } from 'app/utils/apiUtils';
-import { BrevFormKeys, IBrevForm } from './types';
-import VerticalSpacer from '../VerticalSpacer';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
+import { Person } from 'app/models/types';
+import ArbeidsgiverResponse from 'app/models/types/ArbeidsgiverResponse';
+import Organisasjon from 'app/models/types/Organisasjon';
+import { get } from 'app/utils/apiUtils';
+import VerticalSpacer from '../VerticalSpacer';
+import { BrevFormKeys, IBrevForm } from './types';
 import { useValidationRulesBrev } from './useValidationRules';
 
 const { TypedFormSelect, TypedFormCheckbox, TypedFormTextField } = getTypedFormComponents<IBrevForm>();
@@ -115,7 +115,6 @@ const MottakerVelger: React.FC<Props> = ({
     return (
         <>
             <VerticalSpacer sixteenPx />
-
             <TypedFormSelect
                 name={BrevFormKeys.mottaker}
                 label={<FormattedMessage id="brevComponent.mottakerVelger.select.mottaker.label" />}
@@ -141,16 +140,13 @@ const MottakerVelger: React.FC<Props> = ({
                     </option>
                 ))}
             </TypedFormSelect>
-
             <VerticalSpacer sixteenPx />
-
             <TypedFormCheckbox
                 name={BrevFormKeys.velgAnnenMottaker}
                 size="small"
                 label={<FormattedMessage id="brevComponent.mottakerVelger.checkbox.velgAnnenMottaker.label" />}
                 onChange={handleVelgAnnenMottakerOnChange}
             />
-
             {velgAnnenMottaker && (
                 <div className="flex mt-4">
                     <TypedFormTextField
@@ -171,12 +167,12 @@ const MottakerVelger: React.FC<Props> = ({
                     />
 
                     {(orgInfo !== undefined || errorOrgInfo || orgInfoPending) && (
-                        <VStack gap="2" className="ml-7">
+                        <VStack gap="space-8" className="ml-7">
                             {(orgInfo || orgInfoPending) && (
                                 <BodyShort>
-                                    <span className="navds-form-field__label navds-label navds-label--small">
+                                    <Label size="small" as="span">
                                         <FormattedMessage id="brevComponent.mottakerVelger.annenMottaker.navn" />
-                                    </span>
+                                    </Label>
                                 </BodyShort>
                             )}
 

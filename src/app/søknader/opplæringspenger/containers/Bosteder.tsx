@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="large">
+        <Box padding="space-16" borderWidth="1" borderRadius="8">
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harBoddIUtlandet"
@@ -42,7 +42,6 @@ const Bosteder: React.FC = () => {
                 }}
                 checked={values.metadata.harBoddIUtlandet}
             />
-
             {values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
                 <FieldArray
                     name="bosteder"

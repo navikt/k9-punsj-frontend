@@ -29,22 +29,18 @@ const Medlemskap: React.FC = () => {
     }, [values.metadata.medlemskap]);
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="space-16" borderWidth="1" borderRadius="2">
             <Heading size="small" level="5">
                 <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.tittel" />
             </Heading>
-
             <VerticalSpacer twentyPx />
-
             <LegacyJaNeiIkkeOpplystRadioGroupFormik
                 legend={intlHelper(intl, 'skjema.medlemskap.harbodd')}
                 name="metadata.medlemskap"
             />
-
             <VerticalSpacer twentyPx />
-
             {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <Box padding="4" borderRadius="small" style={{ backgroundColor: '#eaeaea' }}>
+                <Box padding="space-16" borderRadius="2" style={{ backgroundColor: '#eaeaea' }}>
                     <FieldArray
                         name="bosteder"
                         render={(arrayHelpers) => (

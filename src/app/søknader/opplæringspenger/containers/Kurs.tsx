@@ -54,7 +54,7 @@ const Kurs = ({
     };
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="large">
+        <Box padding="space-16" borderWidth="1" borderRadius="8">
             <Heading size="small" level="5">
                 Søknadsperiode og institusjon
             </Heading>
@@ -63,10 +63,9 @@ const Kurs = ({
                     <FormattedMessage id="skjema.eksisterende.feil" />
                 </Alert>
             )}
-
             {eksisterendePerioder.length > 0 ? (
                 <Box className="bg-bg-subtle rounded-lg p-4 mt-[8px]">
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <Label size="medium">Eksisterende søknadsperioder</Label>
                         {eksisterendePerioder.map((p) => (
                             <div key={`${p.fom}_${p.tom}`} className="flex items-center gap-4">
@@ -87,7 +86,7 @@ const Kurs = ({
             )}
             <VerticalSpacer sixteenPx />
             {values.metadata.nyttInstitusjonsopphold && (
-                <Box padding="4" background="bg-subtle" borderRadius="large">
+                <Box padding="space-16" background="neutral-soft" borderRadius="8">
                     <div className="flex flex-col gap-4">
                         <InstitusjonSelector
                             label="På hvilken helseinstitusjon eller kompetansesenter foregår opplæringen?"

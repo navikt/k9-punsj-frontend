@@ -108,28 +108,20 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
     return (
         <>
             <JournalposterSync journalposter={values.journalposter} />
-
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-
             <Heading size="medium">
                 <FormattedMessage id={'skjema.ompao.tittel'} />
             </Heading>
-
             <OpplysningerOmOMPAOSoknad />
-
-            <Box padding="4" borderWidth="1" borderRadius="small" className="my-12">
+            <Box padding="space-16" borderWidth="1" borderRadius="2" className="my-12">
                 <DatoInputFormikNew
                     label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
                     name={`${fieldNames.periode}.fom`}
                 />
             </Box>
-
             <VerticalSpacer fourtyPx />
-
             <IkkeRegistrerteOpplysninger intl={intl} />
-
             <VerticalSpacer twentyPx />
-
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading={intlHelper(intl, 'skjema.ompao.dateInput.errorSummaryHeading')}>
                     {k9FormatErrors.map((feil) => (
@@ -142,7 +134,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                     ))}
                 </ErrorSummary>
             )}
-
             <div className="submit-knapper">
                 <p className="sendknapp-wrapper">
                     <Button
@@ -178,25 +169,20 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                     </Button>
                 </p>
             </div>
-
             <VerticalSpacer sixteenPx />
-
             {mellomlagringError instanceof Error && (
                 <Alert size="small" variant="error">
                     <FormattedMessage id={'skjema.feil.ikke_lagret'} />
                 </Alert>
             )}
-
             {submitError instanceof Error && (
                 <Alert size="small" variant="error">
                     <FormattedMessage id={submitError.message} />
                 </Alert>
             )}
-
             {visVentModal && (
                 <VentModal journalpostId={journalpostid} soeknadId={values.soeknadId} visModalFn={setVisVentModal} />
             )}
-
             {visForhaandsvisModal && (
                 <ForhåndsvisSøknadModal
                     avbryt={() => setVisForhaandsvisModal(false)}
@@ -209,7 +195,6 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                     <OMPAOSoknadKvittering kvittering={kvittering} />
                 </ForhåndsvisSøknadModal>
             )}
-
             {visErDuSikkerModal && (
                 <ErDuSikkerModal
                     modalKey="erdusikkermodal"
