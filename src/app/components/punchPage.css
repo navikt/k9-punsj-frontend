@@ -80,6 +80,18 @@
   margin-left: 1rem;
 }
 
+.punch .panels-wrapper .punch_form .klokkeslett,
+.punch .panels-wrapper .omsorgspenger_punch_form .klokkeslett {
+  margin-left: 0.5rem;
+}
+
+.punch .panels-wrapper .punch_form .opplysninger-om-soknaden-panel .input-row,
+.punch .panels-wrapper .omsorgspenger_punch_form .opplysninger-om-soknaden-panel .input-row,
+.punch .panels-wrapper .punch_form .opplysninger-om-soknaden-panel .horizontalRadios,
+.punch .panels-wrapper .omsorgspenger_punch_form .opplysninger-om-soknaden-panel .horizontalRadios {
+  margin: 0;
+}
+
 .punch .panels-wrapper .punch_form .knapperad .knapp1,
 .punch .panels-wrapper .omsorgspenger_punch_form .knapperad .knapp1 {
   margin-right: 1rem;
@@ -294,6 +306,14 @@
 .punch .panels-wrapper .omsorgspenger_punch_form .periodepanel {
   background-color: #eaeaea;
   margin: 1rem 0;
+}
+
+.punch .panels-wrapper .punch_form .soknadsperiode-panel .soknadsperiodecontainer,
+.punch .panels-wrapper .omsorgspenger_punch_form .soknadsperiode-panel .soknadsperiodecontainer,
+.punch .panels-wrapper .punch_form .soknadsperiode-panel .periodepanel,
+.punch .panels-wrapper .omsorgspenger_punch_form .soknadsperiode-panel .periodepanel {
+  margin: 0;
+  width: 100%;
 }
 
 .punch .panels-wrapper .punch_form.navds-box .listepanel.arbeidstakerpanel .infoContainer .col,

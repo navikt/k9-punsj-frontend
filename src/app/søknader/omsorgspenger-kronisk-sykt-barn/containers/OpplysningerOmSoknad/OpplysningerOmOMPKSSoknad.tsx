@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormattedMessage, IntlShape } from 'react-intl';
-import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
@@ -26,53 +26,59 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
     signert,
     soknad,
 }: Props) => (
-    <Box padding="space-16" borderWidth="1" borderRadius="2" className="opplysningerOmOMPKSSoknad">
-        <Heading size="medium" level="3">
-            <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-        </Heading>
+    <Box
+        padding="space-16"
+        borderWidth="1"
+        borderRadius="2"
+        className="opplysninger-om-soknaden-panel opplysningerOmOMPKSSoknad"
+    >
+        <VStack gap="space-16">
+            <Heading size="small" level="3">
+                <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+            </Heading>
 
-        <Alert size="small" variant="info">
-            <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
-        </Alert>
-
-        <div className="input-row">
-            <NewDateInput
-                value={soknad.mottattDato}
-                id="soknad-dato"
-                errorMessage={getErrorMessage('mottattDato')}
-                label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
-                    mottattDato: selectedDate,
-                }))}
-            />
-            <div>
-                <TextField
-                    value={soknad.klokkeslett || ''}
-                    type="time"
-                    className="klokkeslett"
-                    label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                    {...changeAndBlurUpdatesSoknad((event: any) => ({
-                        klokkeslett: event.target.value,
-                    }))}
-                    error={getErrorMessage('klokkeslett')}
-                    // size="small"
-                />
-            </div>
-        </div>
-
-        <LegacyJaNeiIkkeRelevantRadioGroup
-            className="horizontalRadios"
-            name="signatur"
-            legend={intlHelper(intl, 'ident.signatur.etikett')}
-            checked={signert || undefined}
-            onChange={(_, value) => setSignaturAction(value || null)}
-        />
-
-        {signert === JaNeiIkkeRelevant.NEI && (
-            <Alert size="small" variant="warning">
-                <FormattedMessage id={'skjema.usignert.info'} />
+            <Alert size="small" variant="info">
+                <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
             </Alert>
-        )}
+
+            <div className="input-row">
+                <NewDateInput
+                    value={soknad.mottattDato}
+                    id="soknad-dato"
+                    errorMessage={getErrorMessage('mottattDato')}
+                    label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                    {...changeAndBlurUpdatesSoknad((selectedDate: any) => ({
+                        mottattDato: selectedDate,
+                    }))}
+                />
+                <div>
+                    <TextField
+                        value={soknad.klokkeslett || ''}
+                        type="time"
+                        className="klokkeslett"
+                        label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                        {...changeAndBlurUpdatesSoknad((event: any) => ({
+                            klokkeslett: event.target.value,
+                        }))}
+                        error={getErrorMessage('klokkeslett')}
+                    />
+                </div>
+            </div>
+
+            <LegacyJaNeiIkkeRelevantRadioGroup
+                className="horizontalRadios"
+                name="signatur"
+                legend={intlHelper(intl, 'ident.signatur.etikett')}
+                checked={signert || undefined}
+                onChange={(_, value) => setSignaturAction(value || null)}
+            />
+
+            {signert === JaNeiIkkeRelevant.NEI && (
+                <Alert size="small" variant="warning">
+                    <FormattedMessage id={'skjema.usignert.info'} />
+                </Alert>
+            )}
+        </VStack>
     </Box>
 );
 export default OpplysningerOmOMPKSSoknad;
