@@ -110,14 +110,18 @@ body {
     text-decoration-color: #dc2626 !important;
 }
 
+.journalpost-modal {
+    --left-panel-width-fallback: 40vw;
+}
+
 .journalpost-modal dialog::backdrop {
-    width: var(--left-panel-width, 40%);
+    width: var(--left-panel-width, var(--left-panel-width-fallback));
 }
 
 .journalpost-modal :is(.navds-modal, .aksel-modal) {
-    left: calc(var(--left-panel-width, 40vw) / 2);
+    left: calc(var(--left-panel-width, var(--left-panel-width-fallback)) / 2);
     margin: 0 !important;
-    max-width: calc(var(--left-panel-width, 40vw) - 2rem);
+    max-width: calc(var(--left-panel-width, var(--left-panel-width-fallback)) - 2rem);
     transform: translate(-50%, -50%);
 }
 
