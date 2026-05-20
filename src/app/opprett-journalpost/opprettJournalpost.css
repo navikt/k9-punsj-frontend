@@ -6,7 +6,7 @@
         margin-top: 2.5rem;
     }
 
-    .navds-alert,
+    .aksel-alert,
     .input {
         margin-top: 1rem;
     }
@@ -30,7 +30,7 @@
             width: 100%;
         }
 
-        .navds-loader {
+        .aksel-loader {
             align-self: flex-start;
             margin-left: 0.5rem;
             margin-top: 2rem;

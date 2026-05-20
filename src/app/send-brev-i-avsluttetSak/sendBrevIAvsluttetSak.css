@@ -19,17 +19,17 @@
     .fagsagSelectContainer {
         display: flex;
 
-        .navds-loader {
+        .aksel-loader {
             margin-top: 3.3125rem;
             margin-left: 0.5rem;
         }
     }
 
-    .navds-alert {
+    .aksel-alert {
         margin-top: 1rem;
     }
 
-    .navds-error-message {
+    .aksel-error-message {
         margin-top: 0.5rem;
     }
 }
@@ -47,7 +47,7 @@
         }
     }
 
-    h3.navds-heading--xsmall {
+    h3.aksel-heading--xsmall {
         font-weight: 400;
         margin: 0 0 0 2.5rem;
         position: relative;
