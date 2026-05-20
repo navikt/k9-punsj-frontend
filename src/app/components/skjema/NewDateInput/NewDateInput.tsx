@@ -8,6 +8,7 @@ import {
     isISODateString,
     ISODateStringToUTCDate,
 } from 'app/utils/date/dateFormat';
+import { offsetDateByYears } from 'app/utils/date/dateUtils';
 
 import './newDateInput.css';
 
@@ -62,8 +63,8 @@ const NewDateInput: React.FC<Props> = ({
 
     const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
-    const fromDateDefault = new Date().setFullYear(new Date().getFullYear() - 5);
-    const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
+    const fromDateDefault = offsetDateByYears(new Date(), -5);
+    const toDateDefault = offsetDateByYears(new Date(), 5);
 
     const onDateChange = (date?: Date) => {
         const hasSyncedExternalValue = previousValueRef.current !== undefined;
