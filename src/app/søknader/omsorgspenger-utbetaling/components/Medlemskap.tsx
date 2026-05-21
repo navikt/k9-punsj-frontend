@@ -40,7 +40,7 @@ const Medlemskap: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="2" style={{ backgroundColor: '#eaeaea' }}>
+                <Box padding="space-16" borderRadius="2" background="neutral-soft">
                     <FieldArray
                         name="bosteder"
                         render={(arrayHelpers) => (

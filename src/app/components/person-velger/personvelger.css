@@ -2,7 +2,7 @@
     display: grid;
     row-gap: 1rem;
     padding: 1rem;
-    background-color: #eaeaea;
+    background-color: var(--ax-bg-neutral-soft);
     border-radius: 0.25rem;
 
     .personlinje {

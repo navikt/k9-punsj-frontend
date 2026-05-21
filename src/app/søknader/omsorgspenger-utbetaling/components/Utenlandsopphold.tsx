@@ -39,7 +39,7 @@ const Utenlandsopphold: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="2" style={{ backgroundColor: '#eaeaea' }}>
+                <Box padding="space-16" borderRadius="2" background="neutral-soft">
                     <FieldArray
                         name="utenlandsopphold"
                         render={(arrayHelpers) => (

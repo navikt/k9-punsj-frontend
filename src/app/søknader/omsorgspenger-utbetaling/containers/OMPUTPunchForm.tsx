@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useMutation } from '@tanstack/react-query';
 
-import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, VStack } from '@navikt/ds-react';
 
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
@@ -187,30 +187,30 @@ const OMPUTPunchForm: React.FC<Props> = ({
         <>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VerticalSpacer sixteenPx />
-            <OpplysningerOmOMPUTSoknad />
-            <VerticalSpacer sixteenPx />
-            <Box padding="space-16" borderWidth="1" borderRadius="2">
-                <Heading size="small" spacing>
-                    <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.fosterbarn.header'} />
-                </Heading>
-                <Personvelger name="barn" />
-            </Box>
-            <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
-            <VerticalSpacer sixteenPx />
-            <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
-            <VerticalSpacer fourtyPx />
-            <ArbeidsforholdVelger søknadsperiodeFraSak={søknadsperiodeFraSak} />
-            <VerticalSpacer fourtyPx />
-            {!values.erKorrigering && (
-                <>
-                    <Medlemskap />
+            <VStack gap="space-16" className="mt-4">
+                <OpplysningerOmOMPUTSoknad />
 
-                    <VerticalSpacer fourtyPx />
+                <Box padding="space-16" borderWidth="1" borderRadius="2">
+                    <Heading size="small" spacing>
+                        <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.fosterbarn.header'} />
+                    </Heading>
+                    <Personvelger name="barn" />
+                </Box>
 
-                    <Utenlandsopphold />
-                </>
-            )}
+                <EksisterendePerioder eksisterendePerioder={eksisterendePerioder} />
+
+                <NySoeknadEllerKorrigering eksisterendePerioder={eksisterendePerioder} />
+
+                <ArbeidsforholdVelger søknadsperiodeFraSak={søknadsperiodeFraSak} />
+
+                {!values.erKorrigering && (
+                    <>
+                        <Medlemskap />
+                        <Utenlandsopphold />
+                    </>
+                )}
+            </VStack>
+            <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
