@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ErrorMessage, Field, FieldProps } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Heading, TextField } from '@navikt/ds-react';
+import { Box, Fieldset, Heading, TextField } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
 import { KorrigeringAvInntektsmeldingFormFields } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -12,12 +12,16 @@ const OpplysningerOmKorrigering: React.FC = () => {
     const intl = useIntl();
 
     return (
-        <div className="mb-6">
-            <Heading level="3" size="small" className="mb-2">
-                <FormattedMessage id="skjema.opplysningeromkorrigering" />
-            </Heading>
-            <Box background="neutral-soft" padding="space-16" borderRadius="4">
-                <Heading level="4" size="xsmall">
+        <Fieldset
+            legend={
+                <Heading level="3" size="small">
+                    <FormattedMessage id="skjema.opplysningeromkorrigering" />
+                </Heading>
+            }
+            className="korrigering__seksjon"
+        >
+            <Box className="listepanel opplysningerOmKorrigeringPanel">
+                <Heading level="4" size="xsmall" className="mb-4">
                     <FormattedMessage id="skjema.opplysningeromkorrigering.spm" />
                 </Heading>
 
@@ -54,7 +58,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                     </div>
                 </div>
             </Box>
-        </div>
+        </Fieldset>
     );
 };
 

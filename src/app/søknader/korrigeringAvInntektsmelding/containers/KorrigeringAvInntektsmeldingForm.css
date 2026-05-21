@@ -9,11 +9,41 @@ h4.korrigering-legend {
 }
 
 .korrigering {
+    --korrigering-panel-background: var(--a-gray-200);
+
     .listepanel {
+        background-color: var(--korrigering-panel-background);
+
         .korrigering-legend {
             margin-top: 0.5rem;
             margin-left: 0.875rem;
         }
+    }
+
+    &__seksjon > legend {
+        margin-bottom: 0.5rem;
+    }
+
+    &__seksjon + &__seksjon {
+        margin-top: 1.5rem;
+    }
+
+    &__toggleSection {
+        margin-top: 1.5rem;
+    }
+
+    &__toggleSection--compact {
+        margin-top: 1rem;
+    }
+
+    .opplysningerOmKorrigeringPanel {
+        padding: 1.875rem 1.875rem 1rem !important;
+    }
+
+    .periodepanel,
+    .delvisFravaer__inputContainer,
+    &__panelsurface {
+        background-color: var(--korrigering-panel-background);
     }
 
     &__feilmelding {
