@@ -35,7 +35,6 @@ export const Periodepaneler: React.FC<Props> = ({
     textLeggTil,
     textFjern,
     feilkodeprefiks,
-    doNotShowBorders,
 
     editSoknad,
     editSoknadState,
