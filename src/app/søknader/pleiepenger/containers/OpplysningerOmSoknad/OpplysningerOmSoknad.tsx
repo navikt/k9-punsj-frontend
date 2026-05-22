@@ -25,7 +25,7 @@ const OpplysningerOmSoknad: React.FC<Props> = ({
     getErrorMessage,
     setSignaturAction,
 }) => (
-    <Box padding="space-16" borderWidth="1" borderRadius="2" className="opplysninger-om-soknaden-panel">
+    <Box padding="space-16" borderWidth="1" borderRadius="8" className="opplysninger-om-soknaden-panel">
         <VStack gap="space-16">
             <Heading size="small" level="3">
                 <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />

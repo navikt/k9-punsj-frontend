@@ -79,7 +79,7 @@ const Soknadsperioder: React.FC<Props> = ({
         <Box
             padding="space-16"
             borderWidth="1"
-            borderRadius="2"
+            borderRadius="8"
             className="eksiterendesoknaderpanel soknadsperiode-panel"
             data-testid="søknadsperioder"
         >

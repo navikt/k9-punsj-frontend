@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Heading } from '@navikt/ds-react';
-import classNames from 'classnames';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -119,7 +118,9 @@ const Arbeidstakerperioder = ({
                 return (
                     <Box
                         padding="space-16"
-                        className={classNames('listepanel', 'arbeidstakerpanel')}
+                        borderRadius="8"
+                        background="neutral-soft"
+                        className="arbeidstakerpanel"
                         id={panelid}
                         key={panelid}
                     >

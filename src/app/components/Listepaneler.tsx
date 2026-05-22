@@ -110,6 +110,9 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                     const panelid = props.panelid(itemIndex);
                     return (
                         <Box
+                            padding="space-16"
+                            borderRadius="8"
+                            background="neutral-soft"
                             className={classNames('listepanel', props.panelClassName, !component ? 'kunperiode' : '')}
                             id={panelid}
                             key={panelid}

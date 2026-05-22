@@ -35,7 +35,7 @@ export const JournalpostPanel: React.FC<Props> = ({ journalposter }: Props) => {
         journalpost?.sak?.behandlingsår && dokumenttyperMedBehandlingsårValg.includes(fordelingState.dokumenttype!);
 
     return (
-        <Box padding="space-16" borderWidth="1" borderRadius="2" className="journalpostpanel">
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="journalpostpanel">
             <div>
                 <LabelValue
                     labelTextId="journalpost.id"

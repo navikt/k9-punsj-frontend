@@ -136,10 +136,7 @@
 
 .punch .panels-wrapper .punch_form .listepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .listepanel {
-    background-color: #eaeaea;
     margin-bottom: 1rem;
-    padding: 1rem;
-    border-radius: 5px;
 }
 
 .punch .panels-wrapper .punch_form .frilanserpanel,
@@ -155,6 +152,11 @@
 .punch .panels-wrapper .punch_form .frilanserpanel .frilanser-startdato,
 .punch .panels-wrapper .omsorgspenger_punch_form .frilanserpanel .frilanser-startdato {
     margin-bottom: 20px;
+}
+
+.punch .panels-wrapper .punch_form .frilanserpanel .frilanser-sluttdato,
+.punch .panels-wrapper .omsorgspenger_punch_form .frilanserpanel .frilanser-sluttdato {
+    margin-top: 1rem;
 }
 
 .punch .panels-wrapper .punch_form .sn-alertstripe,
@@ -217,7 +219,6 @@
 
 .punch .panels-wrapper .punch_form .utenlandsoppholdpanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .utenlandsoppholdpanel {
-    background-color: #eaeaea;
     margin-top: 20px;
 }
 
@@ -254,7 +255,6 @@
 
 .punch .panels-wrapper .punch_form .periodepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .periodepanel {
-    background-color: #eaeaea;
     margin: 1rem 0;
 }
 
