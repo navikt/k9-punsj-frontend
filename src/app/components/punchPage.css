@@ -110,6 +110,15 @@
 .punch .panels-wrapper .punch_form .arbeidstidInfo,
 .punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo {
     margin-top: 1rem;
+    display: grid;
+    row-gap: 1rem;
+}
+
+.punch .panels-wrapper .punch_form .arbeidstidInfo h3,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo h3,
+.punch .panels-wrapper .punch_form .arbeidstidInfo hr,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo hr {
+    margin: 0;
 }
 
 .punch .panels-wrapper .punch_form .countryselect,

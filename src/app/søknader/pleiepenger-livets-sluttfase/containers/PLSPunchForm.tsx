@@ -999,8 +999,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                             checked={!!soknad.lovbestemtFerieSomSkalSlettes.length}
                                         />
                                         {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
-                                            <>
-                                                <Alert size="small" variant="info">
+                                            <div className="mt-4">
+                                                <Alert size="small" variant="info" className="mb-4">
                                                     <FormattedMessage id="skjema.ferie.fjern.info" />
                                                 </Alert>
 
@@ -1021,7 +1021,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
                                                 />
-                                            </>
+                                            </div>
                                         )}
                                     </>
                                 )}
