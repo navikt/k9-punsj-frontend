@@ -119,7 +119,7 @@ const OMPMAPunchFormContainer = (props: Props) => {
                         <FormattedMessage id="tilbaketilLOS" />
                     </Button>
                 </div>
-                <Box padding="space-24" borderWidth="1" borderRadius="4" borderColor="info">
+                <Box padding="space-24" borderWidth="1" borderRadius="8" borderColor="info">
                     <div className="mb-6">
                         <Heading size="medium" level="2">
                             <FormattedMessage id="skjema.kvittering.oppsummering" />

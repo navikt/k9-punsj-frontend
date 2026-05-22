@@ -3,7 +3,7 @@
     row-gap: 1rem;
     padding: 1rem;
     background-color: var(--ax-bg-neutral-soft);
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
 
     .personlinje {
         display: grid;
