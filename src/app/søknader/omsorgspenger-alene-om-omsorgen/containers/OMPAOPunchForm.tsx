@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, VStack } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
@@ -109,16 +109,23 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
         <>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <Heading size="medium">
-                <FormattedMessage id={'skjema.ompao.tittel'} />
-            </Heading>
-            <OpplysningerOmOMPAOSoknad />
-            <Box padding="space-16" borderWidth="1" borderRadius="2" className="my-12">
-                <DatoInputFormikNew
-                    label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
-                    name={`${fieldNames.periode}.fom`}
-                />
-            </Box>
+            <VStack gap="space-24">
+                <Heading size="medium">
+                    <FormattedMessage id={'skjema.ompao.tittel'} />
+                </Heading>
+                <OpplysningerOmOMPAOSoknad />
+                <Box padding="space-16" borderWidth="1" borderRadius="8">
+                    <VStack gap="space-16">
+                        <Heading size="small" level="3">
+                            <FormattedMessage id="skjema.soknadsperiode" />
+                        </Heading>
+                        <DatoInputFormikNew
+                            label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
+                            name={`${fieldNames.periode}.fom`}
+                        />
+                    </VStack>
+                </Box>
+            </VStack>
             <VerticalSpacer fourtyPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />

@@ -9,7 +9,7 @@ const FormPanel: React.FC<Props> = ({ children }) => (
     <Box
         padding="space-24"
         borderWidth="1"
-        borderRadius="4"
+        borderRadius="8"
         borderColor="neutral"
         className="flex-1 custom-scrollbar"
     >
