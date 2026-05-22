@@ -59,7 +59,6 @@ export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
                     </BodyShort>
                 </div>
             )}
-
             <div className="mb-4">
                 <Heading size="small" level="3">
                     <FormattedMessage id={PunchFormPaneler.ARBEID} />
@@ -109,7 +108,6 @@ export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
                     </>
                 )}
             </div>
-
             {!!journalposter && journalposter.length > 0 && (
                 <div className="mb-4">
                     <Heading size="small" level="3">
@@ -118,7 +116,7 @@ export const OMPUTSoknadKvittering: React.FC<Props> = ({ kvittering }) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

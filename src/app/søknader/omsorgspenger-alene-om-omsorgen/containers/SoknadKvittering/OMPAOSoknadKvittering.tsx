@@ -56,7 +56,6 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
                     </BodyShort>
                 </div>
             )}
-
             {periode && (
                 <div className="mb-4">
                     <BodyShort size="small">
@@ -67,7 +66,6 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
                     </BodyShort>
                 </div>
             )}
-
             {barn?.norskIdentitetsnummer && (
                 <div className="mb-4">
                     <BodyShort size="small">
@@ -78,7 +76,6 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
                     </BodyShort>
                 </div>
             )}
-
             {!!journalposter && journalposter.length > 0 && (
                 <>
                     <Heading size="small" level="3">
@@ -87,7 +84,7 @@ const OMPAOSoknadKvittering: React.FC<Props> = ({ kvittering }: Props) => {
 
                     <div className="h-px bg-gray-300 mb-4" />
 
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         <BodyShort size="small">
                             <FormattedMessage
                                 id="skjema.kvittering.medisinskeopplysninger"

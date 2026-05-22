@@ -1,4 +1,4 @@
-.legacy-checkbox-group .navds-checkboxes {
+.legacy-checkbox-group :is(.navds-checkboxes, .aksel-checkboxes) {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

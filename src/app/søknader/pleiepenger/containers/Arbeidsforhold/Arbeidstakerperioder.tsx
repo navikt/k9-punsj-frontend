@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
-import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
@@ -126,8 +125,10 @@ const Arbeidstakerperioder = ({
 
                 return (
                     <Box
-                        borderRadius="small"
-                        className={classNames('listepanel', 'arbeidstakerpanel')}
+                        padding="space-16"
+                        borderRadius="8"
+                        background="neutral-soft"
+                        className="arbeidstakerpanel"
                         id={panelid}
                         key={panelid}
                     >
@@ -153,7 +154,6 @@ const Arbeidstakerperioder = ({
                                 </Button>
                             </div>
                         )}
-
                         <ArbeidstakerComponent
                             søkerId={soekerId}
                             arbeidstaker={currentItem as Arbeidstaker}
@@ -170,7 +170,6 @@ const Arbeidstakerperioder = ({
                             harDuplikatOrgnr={getHarDuplikatOrgnr()}
                             søknadsperioder={søknadsperioder}
                         />
-
                         <UhaanderteFeilmeldinger
                             getFeilmeldinger={() =>
                                 (getUhaandterteFeil &&
@@ -181,7 +180,6 @@ const Arbeidstakerperioder = ({
                     </Box>
                 );
             })}
-
             <Button
                 id="leggtillisteelementknapp"
                 className="leggtillisteelementknapp"

@@ -68,7 +68,7 @@ export const JournalpostOgPdfVisning = (props: Props) => {
           })
         : [];
     const left = () => (
-        <Box ref={leftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="4">
+        <Box ref={leftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="space-16">
             <div className="max-w-screen-lg">
                 <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
             </div>

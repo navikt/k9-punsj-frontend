@@ -10,8 +10,7 @@
         }
     }
 
-    &__inputContainer.navds-panel {
-        background-color: #eaeaea;
+    &__inputContainer {
         padding: 1rem 0 0;
     }
 

@@ -2,15 +2,15 @@
     display: grid;
     row-gap: 1rem;
     padding: 1rem;
-    background-color: #eaeaea;
-    border-radius: 0.25rem;
+    background-color: var(--ax-bg-neutral-soft);
+    border-radius: 0.5rem;
 
     .personlinje {
         display: grid;
         column-gap: 1rem;
         grid-template-columns: 2fr 3fr 1fr;
 
-        .navds-text-field__label {
+        .aksel-form-field__label {
             opacity: 1;
         }
 
@@ -24,7 +24,7 @@
             margin: 1.25rem -0.8125rem 0 0;
         }
 
-        .navds-checkbox {
+        .aksel-checkbox {
             align-self: end;
             margin-bottom: 0.5rem;
         }

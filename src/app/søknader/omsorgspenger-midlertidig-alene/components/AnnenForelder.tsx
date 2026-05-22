@@ -54,8 +54,7 @@ const AnnenForelder = ({ handleBlur }: Props) => {
             <Heading size="xsmall" spacing>
                 <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.tittel" />
             </Heading>
-
-            <Box padding="4" borderWidth="1" borderRadius="medium">
+            <Box padding="space-16" borderRadius="8" background="neutral-soft">
                 <Label size="small">
                     <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.fnr.label" />
                 </Label>

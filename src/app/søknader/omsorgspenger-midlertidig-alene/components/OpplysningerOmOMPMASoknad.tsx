@@ -25,10 +25,8 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
             <Heading size="small">
                 <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.tittel'} />
             </Heading>
-
             <VerticalSpacer sixteenPx />
-
-            <Box padding="4" borderWidth="1" borderRadius="small">
+            <Box padding="space-16" borderWidth="1" borderRadius="8">
                 <Alert variant="info" className="mt-4">
                     <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
                 </Alert>

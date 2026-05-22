@@ -30,11 +30,10 @@ const UtenlandsoppholdContainer = () => {
     };
 
     return (
-        <Box padding="4" borderRadius="large" className="bg-bg-subtle">
+        <Box padding="space-16" borderRadius="8">
             <Heading size="small" level="5">
                 <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
             </Heading>
-
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harUtenlandsopphold"
@@ -43,27 +42,29 @@ const UtenlandsoppholdContainer = () => {
                 checked={values.metadata.harUtenlandsopphold}
             />
             {values.metadata.harUtenlandsopphold === JaNeiIkkeOpplyst.JA && (
-                <FieldArray
-                    name="utenlandsopphold"
-                    render={(arrayHelpers) => (
-                        <>
-                            {values.utenlandsopphold?.map((_, index) => (
-                                <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
-                            ))}
+                <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-4">
+                    <FieldArray
+                        name="utenlandsopphold"
+                        render={(arrayHelpers) => (
+                            <>
+                                {values.utenlandsopphold?.map((_, index) => (
+                                    <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
+                                ))}
 
-                            <VerticalSpacer sixteenPx />
+                                <VerticalSpacer sixteenPx />
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<PlusCircleIcon />}
-                            >
-                                <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
-                            </Button>
-                        </>
-                    )}
-                />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                    icon={<PlusCircleIcon />}
+                                >
+                                    <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
+                                </Button>
+                            </>
+                        )}
+                    />
+                </Box>
             )}
         </Box>
     );

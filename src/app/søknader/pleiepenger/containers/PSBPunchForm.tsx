@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import {
     Accordion,
     Alert,
+    Box,
     Button,
     Checkbox,
     ErrorSummary,
@@ -1375,8 +1376,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                         />
 
                                         {!!soknad.lovbestemtFerieSomSkalSlettes.length && (
-                                            <>
-                                                <Alert size="small" variant="info">
+                                            <div className="mt-4">
+                                                <Alert size="small" variant="info" className="mb-4">
                                                     <FormattedMessage id="skjema.ferie.fjern.info" />
                                                 </Alert>
 
@@ -1397,7 +1398,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
                                                 />
-                                            </>
+                                            </div>
                                         )}
                                     </>
                                 )}
@@ -1477,7 +1478,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 <>
                                     <VerticalSpacer twentyPx />
 
-                                    <div className="listepanel">
+                                    <Box padding="space-16" borderRadius="8" background="neutral-soft" className="listepanel">
                                         <TilsynKalender
                                             nyeSoknadsperioder={soknad.soeknadsperiode}
                                             eksisterendeSoknadsperioder={eksisterendePerioder}
@@ -1504,7 +1505,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                             }
                                             perioderMedTimer={soknad.tilsynsordning.perioder}
                                         />
-                                    </div>
+                                    </Box>
 
                                     <UhaanderteFeilmeldinger
                                         getFeilmeldinger={() => this.resolveUnhandledErrors('ytelse.tilsynsordning')}

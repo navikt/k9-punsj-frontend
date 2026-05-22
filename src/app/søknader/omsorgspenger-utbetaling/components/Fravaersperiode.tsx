@@ -68,7 +68,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
     ];
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small" className="fravaersperiode-container">
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="fravaersperiode-container">
             {minstToPerioder && (
                 <div className="flex items-center justify-between mb-4">
                     <Heading size="xsmall" level="5">
@@ -88,7 +88,6 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
                     </Button>
                 </div>
             )}
-
             <div className="flex items-start">
                 <SelectFormik
                     label="Fraværsårsak"
@@ -107,19 +106,14 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
                     />
                 )}
             </div>
-
             <VerticalSpacer twentyPx />
-
             <VerticalSpacer twentyPx />
-
             <div className="flex items-start">
                 <DatoInputFormikNew label="Fra og med" name={`${name}.periode.fom`} size="small" />
 
                 <DatoInputFormikNew label="Til og med" name={`${name}.periode.tom`} className="ml-4" size="small" />
             </div>
-
             <VerticalSpacer twentyPx />
-
             <div className="timer-container">
                 <TextFieldFormik
                     className="timer-arbeidet"
@@ -135,7 +129,6 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
                     name={`${name}.faktiskTidPrDag`}
                 />
             </div>
-
             <VerticalSpacer twentyPx />
         </Box>
     );

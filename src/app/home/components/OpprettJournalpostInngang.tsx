@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { BodyLong, Heading } from '@navikt/ds-react';
 
 const OpprettJournalpostInngang = () => {
     return (
@@ -16,13 +16,9 @@ const OpprettJournalpostInngang = () => {
             </BodyLong>
 
             <div className="mt-12">
-                <Link
-                    className="navds-button navds-button--primary navds-button--medium"
-                    to="/opprett-journalpost"
-                    data-testid="opprett-journalpost-inngang"
-                >
+                <Button as={Link} to="/opprett-journalpost" data-testid="opprett-journalpost-inngang">
                     <FormattedMessage id="opprettJournalpostInngang.link" />
-                </Link>
+                </Button>
             </div>
         </div>
     );

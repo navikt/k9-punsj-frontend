@@ -100,9 +100,13 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
                 </Heading>
             }
-            className="mb-6"
+            className="korrigering__seksjon"
         >
-            <Box className="listepanel virksomhetPanel">
+            <Box
+                borderRadius="8"
+                background="neutral-soft"
+                className="korrigering__panelsurface listepanel virksomhetPanel"
+            >
                 <Label>Årstallet korrigeringen gjelder for</Label>
                 <TextField
                     className="w-18 mt-2"

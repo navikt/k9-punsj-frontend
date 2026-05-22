@@ -17,7 +17,7 @@ jest.mock('app/utils', () => ({
 }));
 
 const minimalKorrigering = (overrides: Partial<OMSKorrigering> = {}): OMSKorrigering =>
-    ({
+    (({
         mottattDato: '2026-02-27',
         klokkeslett: '10:00',
         soeknadId: 'e917ec68-66ce-4ce3-a8d2-f3d883f67103',
@@ -26,8 +26,8 @@ const minimalKorrigering = (overrides: Partial<OMSKorrigering> = {}): OMSKorrige
         organisasjonsnummer: '999263550',
         arbeidsforholdId: null,
         fravaersperioder: [],
-        ...overrides,
-    }) as OMSKorrigering;
+        ...overrides
+    }) as OMSKorrigering);
 
 describe('OMSPunchFormActions', () => {
     beforeEach(() => {

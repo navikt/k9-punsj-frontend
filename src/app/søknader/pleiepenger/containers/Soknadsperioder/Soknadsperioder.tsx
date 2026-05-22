@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Box, Button, Heading } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, VStack } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { CalendarIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
 import { initializeDate } from 'app/utils';
 import { GetUhaandterteFeil, IPSBSoknad, IPeriode, IPunchPSBFormState } from 'app/models/types';
@@ -78,99 +77,90 @@ const Soknadsperioder: React.FC<Props> = ({
 
     return (
         <Box
-            padding="4"
+            padding="space-16"
             borderWidth="1"
-            borderRadius="small"
-            className="eksiterendesoknaderpanel"
+            borderRadius="8"
+            className="eksiterendesoknaderpanel soknadsperiode-panel"
             data-testid="søknadsperioder"
         >
-            <div className="mb-4">
+            <VStack gap="space-16">
                 <Heading size="small" level="3">
                     <FormattedMessage id={'skjema.soknadsperiode'} />
                 </Heading>
-            </div>
+                {punchFormState.hentPerioderError && (
+                    <p>
+                        <FormattedMessage id={'skjema.eksisterende.feil'} />
+                    </p>
+                )}
+                {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
+                    <VStack gap="space-16">
+                        <Alert size="small" variant="info">
+                            <FormattedMessage id={'skjema.generellinfo'} />
+                        </Alert>
 
-            {punchFormState.hentPerioderError && (
-                <p>
-                    <FormattedMessage id={'skjema.eksisterende.feil'} />
-                </p>
-            )}
-
-            {!punchFormState.hentPerioderError && !!punchFormState.perioder?.length && (
-                <>
-                    <Alert size="small" variant="info">
-                        <FormattedMessage id={'skjema.generellinfo'} />
-                    </Alert>
-
-                    <div className="mb-2 mt-4">
                         <Heading size="xsmall" level="4">
                             <FormattedMessage id={'skjema.eksisterende'} />
                         </Heading>
+
+                        {punchFormState.perioder.map((p) => (
+                            <div key={`${p.fom}_${p.tom}`} className="datocontainer">
+                                <CalendarIcon title="calendar" fontSize="2rem" />
+
+                                <div className="periode">{generateDateString(p)}</div>
+                            </div>
+                        ))}
+
+                        {visLeggTilPerioder && (
+                            <div className="knappecontainer">
+                                <Button
+                                    id="leggtilsoknadsperiode"
+                                    className="leggtilsoknadsperiode"
+                                    type="button"
+                                    onClick={() => {
+                                        setVisLeggTilPerioder(false);
+                                        updateSoknadState({ soeknadsperiode: [initialPeriode] });
+                                    }}
+                                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                                    size="small"
+                                    data-testid="leggtilsoknadsperiode"
+                                >
+                                    <FormattedMessage id={'skjema.soknadsperiode.leggtil'} />
+                                </Button>
+                            </div>
+                        )}
+                    </VStack>
+                )}
+                {finnesIkkeEksisterendePerioder && (
+                    <Alert size="small" variant="info">
+                        <FormattedMessage id={'skjema.eksisterende.ingen'} />
+                    </Alert>
+                )}
+                {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
+                    <div className="soknadsperiodecontainer">
+                        <Periodepaneler
+                            periods={getPerioder()}
+                            initialPeriode={initialPeriode}
+                            editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
+                            editSoknadState={(perioder) => {
+                                updateSoknadState({ soeknadsperiode: perioder });
+                            }}
+                            textLeggTil="skjema.perioder.legg_til"
+                            textFjern="skjema.perioder.fjern"
+                            feilkodeprefiks="ytelse.søknadsperiode"
+                            getErrorMessage={getErrorMessage}
+                            getUhaandterteFeil={getUhaandterteFeil}
+                            kanHaFlere
+                            onRemove={() => setHarSlettetPerioder(true)}
+                            doNotShowBorders
+                        />
                     </div>
-
-                    {punchFormState.perioder.map((p) => (
-                        <div key={`${p.fom}_${p.tom}`} className="datocontainer">
-                            <CalendarIcon title="calendar" fontSize="2rem" />
-
-                            <div className="periode">{generateDateString(p)}</div>
-                        </div>
-                    ))}
-
-                    <VerticalSpacer eightPx />
-
-                    {visLeggTilPerioder && (
-                        <div className="knappecontainer">
-                            <Button
-                                id="leggtilsoknadsperiode"
-                                className="leggtilsoknadsperiode"
-                                type="button"
-                                onClick={() => {
-                                    setVisLeggTilPerioder(false);
-                                    updateSoknadState({ soeknadsperiode: [initialPeriode] });
-                                }}
-                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
-                                size="small"
-                                data-testid="leggtilsoknadsperiode"
-                            >
-                                <FormattedMessage id={'skjema.soknadsperiode.leggtil'} />
-                            </Button>
-                        </div>
-                    )}
-                </>
-            )}
-
-            {finnesIkkeEksisterendePerioder && (
-                <Alert size="small" variant="info">
-                    <FormattedMessage id={'skjema.eksisterende.ingen'} />
-                </Alert>
-            )}
-
-            {(!visLeggTilPerioder || finnesIkkeEksisterendePerioder) && (
-                <div className="soknadsperiodecontainer">
-                    <Periodepaneler
-                        periods={getPerioder()}
-                        initialPeriode={initialPeriode}
-                        editSoknad={(perioder) => updateSoknad({ soeknadsperiode: perioder })}
-                        editSoknadState={(perioder) => {
-                            updateSoknadState({ soeknadsperiode: perioder });
-                        }}
-                        textLeggTil="skjema.perioder.legg_til"
-                        textFjern="skjema.perioder.fjern"
-                        feilkodeprefiks="ytelse.søknadsperiode"
-                        getErrorMessage={getErrorMessage}
-                        getUhaandterteFeil={getUhaandterteFeil}
-                        kanHaFlere
-                        onRemove={() => setHarSlettetPerioder(true)}
-                        doNotShowBorders
-                    />
-                </div>
-            )}
-
-            {overlappendeSoknadsperiode() && (
-                <Alert size="small" variant="warning">
-                    <FormattedMessage id={'skjema.soknadsperiode.overlapper'} />
-                </Alert>
-            )}
+                )}
+                {overlappendeSoknadsperiode() && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id={'skjema.soknadsperiode.overlapper'} />
+                    </Alert>
+                )}
+            </VStack>
         </Box>
     );
 };

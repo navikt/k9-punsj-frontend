@@ -25,7 +25,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
     const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
-        <Box padding="4" borderRadius="large" className="periodepanel">
+        <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-4">
             <Label size="small">{label}</Label>
             <FieldArray
                 name={fieldName}

@@ -45,6 +45,7 @@ const FaktiskOgNormalTid = ({
     const [normaltDesimaler, setNormaltDesimaler] = useState('');
 
     const [tidsformat, setTidsformat] = useState<Tidsformat>(Tidsformat.TimerOgMin);
+    const inputGridClassName = 'mt-6 grid gap-6 md:min-w-[31rem] md:grid-cols-2';
 
     const payload = {
         faktiskArbeidPerDag: { timer: faktiskTimer || '0', minutter: faktiskMinutter || '0' },
@@ -72,7 +73,7 @@ const FaktiskOgNormalTid = ({
     }, [normaltTimer, faktiskTimer, faktiskMinutter, normaltMinutter]);
 
     return (
-        <div className="ml-4 mt-7">
+        <div className="mt-7 px-4">
             {heading && <Heading size="medium">{heading}</Heading>}
             <div className="mt-6">
                 <ToggleGroup
@@ -114,8 +115,8 @@ const FaktiskOgNormalTid = ({
             </div>
 
             {tidsformat === Tidsformat.TimerOgMin && (
-                <div className="flex gap-4 mt-6">
-                    <div>
+                <div className={inputGridClassName}>
+                    <div className="min-w-0">
                         <TimerOgMinutter
                             label="Normal arbeidstid"
                             onChangeTimer={setNormaltTimer}
@@ -129,7 +130,7 @@ const FaktiskOgNormalTid = ({
                             <UtregningArbeidstid arbeidstid={{ timer: normaltTimer, minutter: normaltMinutter }} />
                         </div>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                         <TimerOgMinutter
                             label="Faktisk arbeidstid"
                             onChangeTimer={setFaktiskTimer}
@@ -149,36 +150,34 @@ const FaktiskOgNormalTid = ({
                 </div>
             )}
             {tidsformat === Tidsformat.Desimaler && (
-                <div className="ml-4 mt-7 mb-4">
-                    <div className="flex gap-8 mt-6">
-                        <div>
-                            <TimerMedDesimaler
-                                label="Normal arbeidstid"
-                                onChange={(v) => setNormaltDesimaler(v)}
-                                value={normaltDesimaler}
-                            />
-                            <div className="mt-1">
-                                <UtregningArbeidstidDesimaler arbeidstid={normaltDesimaler} />
-                            </div>
+                <div className={inputGridClassName}>
+                    <div className="min-w-0">
+                        <TimerMedDesimaler
+                            label="Normal arbeidstid"
+                            onChange={(v) => setNormaltDesimaler(v)}
+                            value={normaltDesimaler}
+                        />
+                        <div className="mt-1 mb-10">
+                            <UtregningArbeidstidDesimaler arbeidstid={normaltDesimaler} />
                         </div>
-                        <div>
-                            <TimerMedDesimaler
-                                label="Faktisk arbeidstid"
-                                onChange={(v) => setFaktiskDesimaler(v)}
-                                value={faktiskDesimaler}
+                    </div>
+                    <div className="min-w-0">
+                        <TimerMedDesimaler
+                            label="Faktisk arbeidstid"
+                            onChange={(v) => setFaktiskDesimaler(v)}
+                            value={faktiskDesimaler}
+                        />
+                        <div className="mt-1 mb-10">
+                            <UtregningArbeidstidDesimaler
+                                arbeidstid={faktiskDesimaler}
+                                normalArbeidstid={normaltDesimaler}
                             />
-                            <div className="mt-1">
-                                <UtregningArbeidstidDesimaler
-                                    arbeidstid={faktiskDesimaler}
-                                    normalArbeidstid={normaltDesimaler}
-                                />
-                            </div>
                         </div>
                     </div>
                 </div>
             )}
             {lagre && (
-                <div className="flex">
+                <div className="flex gap-4">
                     <Button
                         className="flex-grow"
                         onClick={() => {

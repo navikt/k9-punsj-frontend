@@ -7,8 +7,7 @@ import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
-import RadioFormik from 'app/components/formikInput/RadioFormik';
-import RadioGroupFormik from 'app/components/formikInput/RadioGroupFormik';
+import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
@@ -25,12 +24,11 @@ export default function Frilanser() {
     } = values;
 
     return (
-        <Box padding="4" background="bg-subtle" borderRadius="small">
+        <Box padding="space-16" background="neutral-soft" borderRadius="8">
             <Heading size="small" level="5">
                 <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
             </Heading>
-
-            <Box padding="4">
+            <Box padding="space-16">
                 {!values.erKorrigering && (
                     <>
                         <Field name="metadata.harSoekerDekketOmsorgsdager">
@@ -56,29 +54,13 @@ export default function Frilanser() {
                 <VerticalSpacer twentyPx />
 
                 <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
-                    {({ field, form }: FieldProps<string>) => (
-                        <RadioGroupFormik
+                    {({ field, form }: FieldProps<boolean>) => (
+                        <LegacyJaNeiRadioGroupFormik
                             legend={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.jobberFortsatt.spm')}
-                            size="small"
                             name={field.name}
-                            value={field.value ? 'ja' : 'nei'}
-                        >
-                            <RadioFormik
-                                name={field.name}
-                                value="ja"
-                                onChange={() => form.setFieldValue(field.name, true)}
-                            >
-                                <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.ja" />
-                            </RadioFormik>
-
-                            <RadioFormik
-                                name={field.name}
-                                value="nei"
-                                onChange={() => form.setFieldValue(field.name, false)}
-                            >
-                                <FormattedMessage id="omsorgspenger.utbetaling.frilanser.jobberFortsatt.nei" />
-                            </RadioFormik>
-                        </RadioGroupFormik>
+                            checked={field.value ? JaNei.JA : JaNei.NEI}
+                            onChange={(e, value) => form.setFieldValue(field.name, value === JaNei.JA)}
+                        />
                     )}
                 </Field>
 

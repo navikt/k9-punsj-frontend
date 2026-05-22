@@ -43,3 +43,9 @@ export function dateStringSorter(date1: string, date2: string) {
     const date2AsDayjs = initializeDate(date2);
     return dateSorter(date1AsDayjs, date2AsDayjs);
 }
+
+export function offsetDateByYears(date: Date, years: number): Date {
+    const nextDate = new Date(date);
+    nextDate.setFullYear(nextDate.getFullYear() + years);
+    return nextDate;
+}

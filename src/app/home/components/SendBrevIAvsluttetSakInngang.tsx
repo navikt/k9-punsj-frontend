@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { BodyLong, Heading } from '@navikt/ds-react';
 
 const SendBrevIAvsluttetSakInngang = () => {
     return (
@@ -16,13 +16,9 @@ const SendBrevIAvsluttetSakInngang = () => {
             </BodyLong>
 
             <div className="mt-12">
-                <Link
-                    className="navds-button navds-button--primary navds-button--medium"
-                    to="/brev-avsluttet-sak"
-                    data-testid="brev-avsluttet-sak-inngang"
-                >
+                <Button as={Link} to="/brev-avsluttet-sak" data-testid="brev-avsluttet-sak-inngang">
                     <FormattedMessage id="sendBrevIAvsluttetSakInngang.link" />
-                </Link>
+                </Button>
             </div>
         </div>
     );

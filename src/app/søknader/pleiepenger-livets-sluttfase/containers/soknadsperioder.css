@@ -1,6 +1,6 @@
 @import url('../../shared/styles/soknadsperioderBase.css');
 
-.eksiterendesoknaderpanel.navds-panel {
+.eksiterendesoknaderpanel {
     h4 {
         margin-bottom: 0.5rem;
     }

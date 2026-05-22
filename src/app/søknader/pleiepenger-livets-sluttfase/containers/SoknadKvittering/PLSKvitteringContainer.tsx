@@ -16,7 +16,6 @@ const PLSKvitteringContainer = () => {
             <Alert size="small" variant="info" className="mt-4">
                 <FormattedMessage id="skjema.sentInn" />
             </Alert>
-
             <div className="my-8">
                 <Button
                     onClick={() => {
@@ -26,15 +25,13 @@ const PLSKvitteringContainer = () => {
                     <FormattedMessage id="tilbaketilLOS" />
                 </Button>
             </div>
-
             <div className="mb-6">
                 <Heading size="medium" level="2">
                     <FormattedMessage id="skjema.kvittering.oppsummering" />
                 </Heading>
             </div>
-
             {!!punchFormState.innsentSoknad && (
-                <Box padding="6" borderWidth="1" borderRadius="medium" borderColor="border-info">
+                <Box padding="space-24" borderWidth="1" borderRadius="4" borderColor="info">
                     <PLSSoknadKvittering response={punchFormState.innsentSoknad} />
                 </Box>
             )}

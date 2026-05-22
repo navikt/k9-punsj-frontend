@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
 import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { IOMPUTSoknad } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknad';
@@ -16,15 +15,13 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
 
     return (
-        <>
-            <Heading size="small">
-                <FormattedMessage id="omsorgspenger.utbetaling.punchForm.header" />
-            </Heading>
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="opplysninger-om-soknaden-panel">
+            <VStack gap="space-16">
+                <Heading size="small" level="3">
+                    <FormattedMessage id="skjema.opplysningeromsoknad" />
+                </Heading>
 
-            <VerticalSpacer sixteenPx />
-
-            <Box padding="4" borderWidth="1" borderRadius="small">
-                <Alert variant="info" className="alert">
+                <Alert size="small" variant="info">
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
 
@@ -65,12 +62,12 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 )}
 
                 {values.metadata.signatur === JaNeiIkkeRelevant.NEI && (
-                    <Alert size="small" variant="warning" className="mt-4">
+                    <Alert size="small" variant="warning">
                         <FormattedMessage id="skjema.usignert.info" />
                     </Alert>
                 )}
-            </Box>
-        </>
+            </VStack>
+        </Box>
     );
 };
 

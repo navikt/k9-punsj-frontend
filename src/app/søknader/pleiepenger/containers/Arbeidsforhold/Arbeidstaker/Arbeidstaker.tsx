@@ -136,7 +136,6 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     checked={selectedType}
                 />
             </div>
-
             {selectedType === 'o' && (
                 <>
                     {harArbeidsgivere && (
@@ -249,7 +248,6 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     )}
                 </>
             )}
-
             <div className="flex flex-wrap">
                 <div className="input-row">
                     {selectedType === 'p' && (
@@ -270,7 +268,6 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     )}
                 </div>
             </div>
-
             <ArbeidstidKalender
                 søknadsperioder={søknadsperioder}
                 updateSoknad={(perioder) =>

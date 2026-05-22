@@ -23,45 +23,34 @@ const ArbeidsforholdVelger = ({ søknadsperiodeFraSak }: Props) => {
     const { values } = useFormikContext<IOMPUTSoknad>();
 
     return (
-        <Box padding="4" borderWidth="1" borderRadius="small">
+        <Box padding="space-16" borderWidth="1" borderRadius="8">
             <Heading size="small">
                 <FormattedMessage
                     id={`omsorgspenger.utbetaling.arbeidsforhold${values.erKorrigering ? '.erKorrigering' : ''}`}
                 />
             </Heading>
-
             <VerticalSpacer eightPx />
-
             <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.arbeidstaker"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.skjematyper.AT')}
                 valueIsBoolean
             />
-
             <VerticalSpacer eightPx />
-
             {field.value.arbeidstaker && <ArbeidstakerContainer søknadsperiodeFraSak={søknadsperiodeFraSak} />}
-
             <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.selvstendigNaeringsdrivende"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.selvstendig.tittel')}
                 valueIsBoolean
             />
-
             <VerticalSpacer eightPx />
-
             {field.value.selvstendigNaeringsdrivende && <SelvstendigNaeringsdrivende />}
-
             <LegacyCheckboxFormik
                 name="metadata.arbeidsforhold.frilanser"
                 label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.tittel')}
                 valueIsBoolean
             />
-
             <VerticalSpacer eightPx />
-
             {field.value.frilanser && <Frilanser />}
-
             {meta.touched && !values.erKorrigering && Object.values(field.value).every((v) => !v) && (
                 <ErrorMessage>
                     <FormattedMessage id={'omsorgspenger.utbetaling.arbeidsforhold.valgsValidering'} />

@@ -42,15 +42,13 @@ const SendBrevBehandletJp: React.FC = () => {
 
     if (!sakstype) {
         return (
-            <Box margin="4" className="space-y-4">
+            <Box margin="space-16" className="space-y-4">
                 <Heading size="small" level="1">
                     <FormattedMessage id="sendBrevBehandletJournalpost.header" />
                 </Heading>
-
                 <Alert variant="warning">
                     <FormattedMessage id="sendBrevBehandletJournalpost.uavklartSakstype" />
                 </Alert>
-
                 <Button size="small" variant="secondary" onClick={() => navigate(tilbakePath)}>
                     <FormattedMessage id="brevComponent.btn.tilbake" />
                 </Button>
@@ -59,11 +57,10 @@ const SendBrevBehandletJp: React.FC = () => {
     }
 
     return (
-        <Box margin="4">
+        <Box margin="space-16">
             <Heading size="small" level="1">
                 <FormattedMessage id="sendBrevBehandletJournalpost.header" />
             </Heading>
-
             <BrevComponent
                 søkerId={norskIdent}
                 sakstype={sakstype}

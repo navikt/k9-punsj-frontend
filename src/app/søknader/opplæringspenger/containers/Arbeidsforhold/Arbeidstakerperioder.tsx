@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { Fieldset, Heading, Box, Button } from '@navikt/ds-react';
@@ -56,8 +55,10 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
 
                         return (
                             <Box
-                                padding="4"
-                                className={classNames('listepanel', 'arbeidstakerpanel')}
+                                padding="space-16"
+                                borderRadius="8"
+                                background="neutral-soft"
+                                className="arbeidstakerpanel"
                                 id={panelid}
                                 key={panelid}
                             >
@@ -83,7 +84,6 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
                                         </Button>
                                     </div>
                                 )}
-
                                 <ArbeidstakerComponent
                                     søkerId={soekerId}
                                     arbeidstaker={currentItem as Arbeidstaker}
@@ -93,7 +93,6 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
                                     søknadsperioder={søknadsperioder}
                                     name={`${arrayHelpers.name}.${currentItemIndex}`}
                                 />
-
                                 <UhaanderteFeilmeldinger
                                     getFeilmeldinger={() =>
                                         (getUhaandterteFeil &&

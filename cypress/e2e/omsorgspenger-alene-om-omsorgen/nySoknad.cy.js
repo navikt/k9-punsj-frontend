@@ -18,7 +18,7 @@ describe('Alene om omsorgen - ny søknad', () => {
         cy.findByLabelText('Søker er alene om omsorgen fra og med').type('01.10.2022').blur()
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.navds-modal').within(() => {
+        cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');

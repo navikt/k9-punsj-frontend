@@ -107,7 +107,7 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
     );
 
     return (
-        <div>
+        <div className="fordeling-page__innholdForDokumenttypeAnnet">
             <TextField
                 label={intlHelper(intl, 'ident.identifikasjon.felt')}
                 onChange={handleSøkerIdChange}

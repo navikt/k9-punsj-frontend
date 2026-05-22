@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
 import { dateToISODateString, ISODateStringToUTCDate, isISODateString } from 'app/utils/date/dateFormat';
+import { offsetDateByYears } from 'app/utils/date/dateUtils';
 
 export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
@@ -30,8 +31,8 @@ const DatovelgerControlled = ({
     size = 'small',
     id,
 }: DatovelgerControlledProps) => {
-    const fromDateDefault = new Date().setFullYear(new Date().getFullYear() - 5);
-    const toDateDefault = new Date().setFullYear(new Date().getFullYear() + 5);
+    const fromDateDefault = offsetDateByYears(new Date(), -5);
+    const toDateDefault = offsetDateByYears(new Date(), 5);
 
     const defaultSelected = selectedDay ? ISODateStringToUTCDate(selectedDay) : undefined;
 
@@ -114,4 +115,3 @@ const DatovelgerControlled = ({
 };
 
 export default DatovelgerControlled;
-

@@ -7,10 +7,10 @@ interface Props {
 
 const FormPanel: React.FC<Props> = ({ children }) => (
     <Box
-        padding="6"
+        padding="space-24"
         borderWidth="1"
-        borderRadius="medium"
-        borderColor="border-default"
+        borderRadius="8"
+        borderColor="neutral"
         className="flex-1 custom-scrollbar"
     >
         {children}

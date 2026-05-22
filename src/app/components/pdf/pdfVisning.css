@@ -5,11 +5,11 @@
     align-items: stretch;
 }
 
-.punch_pdf_wrapper .navds-button:hover {
+.punch_pdf_wrapper .aksel-button:hover {
     background-color: white;
 }
 
-.punch_pdf.navds-box {
+.punch_pdf {
     padding: 3px;
     margin-left: 0.5rem;
     background-color: #a0a0a0;
@@ -19,48 +19,50 @@
     align-items: stretch;
 }
 
-.punch_pdf.navds-box .fleredokumenter {
+.punch_pdf .fleredokumenter {
     display: flex;
 }
 
-.punch_pdf.navds-box .fleredokumenter > div {
+.punch_pdf .fleredokumenter > div {
     background-color: #fff;
     border-radius: 2px;
 }
 
-.punch_pdf.navds-box .fleredokumenter > div span {
+.punch_pdf .fleredokumenter > div span {
     margin: auto;
 }
 
-.punch_pdf.navds-box .fleredokumenter .navds-toggle-group {
+.punch_pdf .fleredokumenter .aksel-toggle-group {
     display: block;
 }
 
-.punch_pdf.navds-box iframe {
+.punch_pdf iframe {
     border-width: 0;
-    flex-basis: 100%;
+    width: 100%;
+    min-height: 0;
+    flex: 1 1 auto;
 }
 
-.punch_pdf.navds-box .knapperad {
+.punch_pdf .knapperad {
     display: flex;
     flex-direction: row;
     align-content: space-between;
 }
 
-.punch_pdf.navds-box .knapperad .navds-button {
+.punch_pdf .knapperad .aksel-button {
     flex-grow: 1;
     margin-top: 3px;
 }
 
-.punch_pdf.navds-box .knapperad .navds-button.knapp1 {
+.punch_pdf .knapperad .knapp1 {
     margin-right: calc(3px / 2);
 }
 
-.punch_pdf.navds-box .knapperad .navds-button.knapp2 {
+.punch_pdf .knapperad .knapp2 {
     margin-left: calc(3px / 2);
 }
 
-.punch_pdf.navds-box .button_open.navds-button {
+.punch_pdf .button_open {
     width: 100%;
     padding: 0;
     height: 100%;
@@ -75,19 +77,19 @@
         min-width 0.2s;
 }
 
-.punch_pdf_wrapper.pdf_closed .navds-box div {
+.punch_pdf_wrapper.pdf_closed .punch_pdf div {
     cursor: default !important;
 }
 
 .punch_pdf_wrapper.pdf_closed iframe,
-.punch_pdf_wrapper.pdf_closed .navds-box .knapperad {
+.punch_pdf_wrapper.pdf_closed .punch_pdf .knapperad {
     display: none;
 }
 
-.punch_pdf_wrapper.pdf_closed .navds-box .button_open.navds-button {
+.punch_pdf_wrapper.pdf_closed .punch_pdf .button_open {
     display: block;
 }
 
-.punch_pdf_wrapper.pdf_closed .navds-box .fleredokumenter {
+.punch_pdf_wrapper.pdf_closed .punch_pdf .fleredokumenter {
     display: none;
 }

@@ -1,11 +1,12 @@
-.legacy-radio-group .navds-radio-buttons {
+.legacy-radio-group :is(.navds-radio-buttons, .aksel-radio-buttons) {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.legacy-radio-group--horisontal .navds-radio-buttons {
+.legacy-radio-group--horisontal :is(.navds-radio-buttons, .aksel-radio-buttons) {
     flex-direction: row;
+    align-items: stretch;
 }
 
 .legacy-radio-group--horisontal .legacy-radio-group__item {

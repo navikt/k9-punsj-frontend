@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Box } from '@navikt/ds-react';
 import SelectFormik from 'app/components/formikInput/SelectFormik';
 import { FormikValues, useFormikContext } from 'formik';
 import { RelasjonTilBarnet as RelasjonTilBarnetEnum } from 'app/models/enums/RelasjonTilBarnet';
@@ -14,7 +15,7 @@ const RelasjonTilBarnet = () => {
     }, [values.omsorg.relasjonTilBarnet]);
 
     return (
-        <div className="flex flex-col gap-4 bg-bg-subtle p-4 rounded-md">
+        <Box padding="space-16" borderRadius="8" background="neutral-soft" className="flex flex-col gap-4">
             <SelectFormik
                 className="max-w-[200px]"
                 value={values.omsorg.relasjonTilBarnet}
@@ -30,7 +31,7 @@ const RelasjonTilBarnet = () => {
                     name="omsorg.beskrivelseAvOmsorgsrollen"
                 />
             )}
-        </div>
+        </Box>
     );
 };
 

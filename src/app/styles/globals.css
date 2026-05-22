@@ -110,15 +110,49 @@ body {
     text-decoration-color: #dc2626 !important;
 }
 
+.journalpost-modal {
+    --left-panel-width-fallback: 40vw;
+}
+
 .journalpost-modal dialog::backdrop {
-    width: var(--left-panel-width, 40%);
+    width: var(--left-panel-width, var(--left-panel-width-fallback));
 }
 
-.journalpost-modal .navds-modal {
-    margin-left: 5% !important;
+.journalpost-modal :is(.navds-modal, .aksel-modal) {
+    left: calc(var(--left-panel-width, var(--left-panel-width-fallback)) / 2);
+    margin: 0 !important;
+    max-width: calc(var(--left-panel-width, var(--left-panel-width-fallback)) - 2rem);
+    transform: translate(-50%, -50%);
 }
 
-.pleietrengende-select .navds-select__container {
+.journalpost-modal :is(.navds-modal, .aksel-modal):not(.aksel-modal--polyfilled) {
+    top: 50%;
+}
+
+.journalpost-modal .aksel-modal--polyfilled {
+    top: 50%;
+}
+
+.journalpost-modal .aksel-modal[open] {
+    animation: journalpost-modal-fade-in 0.7s cubic-bezier(0.15, 1, 0.3, 1);
+}
+
+@keyframes journalpost-modal-fade-in {
+    0% {
+        opacity: 0.0001;
+        transform: translate(-50%, calc(-50% + 4px));
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+    }
+}
+
+.pleietrengende-select .aksel-select__container {
     max-width: none;
     width: auto;
     min-width: 20rem;

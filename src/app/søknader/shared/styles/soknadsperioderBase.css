@@ -10,7 +10,6 @@
 
     .knappecontainer {
         display: inline-flex;
-        margin-top: 0.5rem;
     }
 
     .leggtilsoknadsperiode {
@@ -29,7 +28,7 @@
 
     .soknadsperiodecontainer {
         display: flex;
-        margin: 20px 0 10px;
+        margin: 0;
     }
 
     .tom {
