@@ -18,7 +18,13 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box padding="space-16" borderWidth="1" borderRadius="2" className="listepanel">
+            <Box
+                padding="space-16"
+                borderWidth="1"
+                borderRadius="8"
+                background="neutral-soft"
+                className="korrigering__panelsurface listepanel"
+            >
                 <Fieldset
                     legend={
                         <h4 className="korrigering-legend">

@@ -20,7 +20,11 @@ const OpplysningerOmKorrigering: React.FC = () => {
             }
             className="korrigering__seksjon"
         >
-            <Box className="listepanel opplysningerOmKorrigeringPanel">
+            <Box
+                borderRadius="8"
+                background="neutral-soft"
+                className="korrigering__panelsurface listepanel opplysningerOmKorrigeringPanel"
+            >
                 <Heading level="4" size="xsmall" className="mb-4">
                     <FormattedMessage id="skjema.opplysningeromkorrigering.spm" />
                 </Heading>
