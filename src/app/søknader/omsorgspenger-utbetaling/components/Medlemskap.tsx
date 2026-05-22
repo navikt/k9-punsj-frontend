@@ -29,7 +29,7 @@ const Medlemskap: React.FC = () => {
     }, [values.metadata.medlemskap]);
 
     return (
-        <Box padding="space-16" borderWidth="1" borderRadius="2">
+        <Box padding="space-16" borderWidth="1" borderRadius="8">
             <Heading size="small" level="5">
                 <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.tittel" />
             </Heading>
@@ -40,7 +40,7 @@ const Medlemskap: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="2" background="neutral-soft">
+                <Box padding="space-16" borderRadius="8" background="neutral-soft">
                     <FieldArray
                         name="bosteder"
                         render={(arrayHelpers) => (

@@ -15,7 +15,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
     const { values } = useFormikContext<IOMPUTSoknad>();
 
     return (
-        <Box padding="space-16" borderWidth="1" borderRadius="2" className="opplysninger-om-soknaden-panel">
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="opplysninger-om-soknaden-panel">
             <VStack gap="space-16">
                 <Heading size="small" level="3">
                     <FormattedMessage id="skjema.opplysningeromsoknad" />

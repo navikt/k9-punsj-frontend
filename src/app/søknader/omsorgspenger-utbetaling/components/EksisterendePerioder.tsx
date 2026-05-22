@@ -13,7 +13,7 @@ interface Props {
 const EksisterendePerioder: React.FC<Props> = ({ eksisterendePerioder }: Props) => {
     if (eksisterendePerioder.length) {
         return (
-            <Box padding="space-16" borderWidth="1" borderRadius="2">
+            <Box padding="space-16" borderWidth="1" borderRadius="8">
                 <Heading size="small">
                     <FormattedMessage id={'omsorgspenger.utbetaling.eksisterendePerioder.tittel'} />
                 </Heading>

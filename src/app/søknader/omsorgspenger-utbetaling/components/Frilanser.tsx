@@ -24,7 +24,7 @@ export default function Frilanser() {
     } = values;
 
     return (
-        <Box padding="space-16" background="neutral-soft" borderRadius="2">
+        <Box padding="space-16" background="neutral-soft" borderRadius="8">
             <Heading size="small" level="5">
                 <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
             </Heading>

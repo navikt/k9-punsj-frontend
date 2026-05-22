@@ -43,7 +43,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
     const eldreEnn4År = erEldreEnn4år(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom || '');
 
     return (
-        <Box padding="space-16" background="neutral-soft" className="mb-2" borderRadius="2">
+        <Box padding="space-16" background="neutral-soft" className="mb-2" borderRadius="8">
             <Heading size="small" level="5">
                 <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.tittel'} />
             </Heading>

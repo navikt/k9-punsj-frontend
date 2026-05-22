@@ -45,7 +45,7 @@ const OMPUTSoknadKvitteringContainer: React.FC<Props> = ({ kvittering }) => {
                     <FormattedMessage id="skjema.kvittering.oppsummering" />
                 </Heading>
             </div>
-            <Box padding="space-24" borderWidth="1" borderRadius="4" borderColor="info">
+            <Box padding="space-24" borderWidth="1" borderRadius="8" borderColor="info">
                 <OMPUTSoknadKvittering kvittering={kvittering} />
             </Box>
         </>

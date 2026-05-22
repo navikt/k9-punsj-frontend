@@ -68,7 +68,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
     ];
 
     return (
-        <Box padding="space-16" borderWidth="1" borderRadius="2" className="fravaersperiode-container">
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="fravaersperiode-container">
             {minstToPerioder && (
                 <div className="flex items-center justify-between mb-4">
                     <Heading size="xsmall" level="5">

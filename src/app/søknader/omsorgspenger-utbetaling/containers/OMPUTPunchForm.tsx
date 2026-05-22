@@ -190,7 +190,7 @@ const OMPUTPunchForm: React.FC<Props> = ({
             <VStack gap="space-16" className="mt-4">
                 <OpplysningerOmOMPUTSoknad />
 
-                <Box padding="space-16" borderWidth="1" borderRadius="2">
+                <Box padding="space-16" borderWidth="1" borderRadius="8">
                     <Heading size="small" spacing>
                         <FormattedMessage id={'omsorgspenger.utbetaling.punchForm.fosterbarn.header'} />
                     </Heading>

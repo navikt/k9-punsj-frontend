@@ -21,7 +21,7 @@ const NySoeknadEllerKorrigering: React.FC<Props> = ({ eksisterendePerioder }: Pr
 
     if (eksisterendePerioder.length) {
         return (
-            <Box padding="space-16" borderWidth="1" borderRadius="2">
+            <Box padding="space-16" borderWidth="1" borderRadius="8">
                 <Field name="erKorrigering">
                     {({ field, form }: FieldProps<boolean>) => (
                         <LegacyRadioGroupFormik

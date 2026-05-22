@@ -68,7 +68,7 @@ const Arbeidstaker = ({
     return (
         <Field name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}]`}>
             {({ field: { value, name }, form }: FieldProps<ArbeidstakerType>) => (
-                <Box padding="space-16" background="neutral-soft" borderRadius="2" className="mb-2">
+                <Box padding="space-16" background="neutral-soft" borderRadius="8" className="mb-2">
                     <div>
                         {harMinstToArbeidsforhold && (
                             <div className="flex justify-between items-center mb-4">
