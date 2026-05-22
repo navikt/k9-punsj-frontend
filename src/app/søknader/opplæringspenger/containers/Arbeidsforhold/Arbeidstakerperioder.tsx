@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import classNames from 'classnames';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { Fieldset, Heading, Box, Button } from '@navikt/ds-react';
@@ -57,7 +56,9 @@ const Arbeidstakerperioder = ({ initialArbeidstaker, søknadsperioder, getUhaand
                         return (
                             <Box
                                 padding="space-16"
-                                className={classNames('listepanel', 'arbeidstakerpanel')}
+                                borderRadius="8"
+                                background="neutral-soft"
+                                className="arbeidstakerpanel"
                                 id={panelid}
                                 key={panelid}
                             >

@@ -144,7 +144,6 @@
 
 .punch .panels-wrapper .punch_form .frilanserpanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .frilanserpanel {
-    background-color: #eaeaea;
     margin: 1rem 0;
 }
 
@@ -165,7 +164,6 @@
 
 .punch .panels-wrapper .punch_form .selvstendigpanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .selvstendigpanel {
-    background-color: #eaeaea;
     padding-top: 0;
     margin: 1rem 0;
 }
@@ -268,29 +266,28 @@
     width: 100%;
 }
 
-.punch .panels-wrapper .punch_form .listepanel.arbeidstakerpanel .infoContainer .col,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepanel.arbeidstakerpanel .infoContainer .col {
+.punch .panels-wrapper .punch_form .arbeidstakerpanel .infoContainer .col,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .infoContainer .col {
     padding: 0 0.5rem;
 }
 
-.punch .panels-wrapper .punch_form .listepanel.arbeidstakerpanel .infoContainer label,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepanel.arbeidstakerpanel .infoContainer label {
+.punch .panels-wrapper .punch_form .arbeidstakerpanel .infoContainer label,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .infoContainer label {
     font-weight: bold;
 }
 
-.punch .panels-wrapper .punch_form .listepanel.arbeidstakerpanel .infoContainer .skjemaelement,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepanel.arbeidstakerpanel .infoContainer .skjemaelement {
+.punch .panels-wrapper .punch_form .arbeidstakerpanel .infoContainer .skjemaelement,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .infoContainer .skjemaelement {
     margin-top: 1rem;
 }
 
-.punch .panels-wrapper .punch_form .listepanel.arbeidstakerpanel .leggtillisteelementknapp,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepanel.arbeidstakerpanel .leggtillisteelementknapp {
+.punch .panels-wrapper .punch_form .arbeidstakerpanel .leggtillisteelementknapp,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .leggtillisteelementknapp {
     margin: 0 1rem 1rem;
 }
 
-.punch .panels-wrapper .punch_form .listepanel.arbeidstakerpanel .listepaneler,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepanel.arbeidstakerpanel .listepaneler {
-    background-color: #eaeaea;
+.punch .panels-wrapper .punch_form .arbeidstakerpanel .listepaneler,
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .listepaneler {
     margin: 0.5rem 0 0 -1rem;
 }
 

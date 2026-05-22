@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="space-16" borderWidth="1" borderRadius="8">
+        <Box padding="space-16" borderRadius="8">
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harBoddIUtlandet"
@@ -43,70 +43,72 @@ const Bosteder: React.FC = () => {
                 checked={values.metadata.harBoddIUtlandet}
             />
             {values.metadata.harBoddIUtlandet === JaNeiIkkeOpplyst.JA && (
-                <FieldArray
-                    name="bosteder"
-                    render={(arrayHelpers) => (
-                        <>
-                            {values.bosteder?.map((_, index, array) => (
-                                <div key={index}>
-                                    <VerticalSpacer thirtyTwoPx />
+                <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-4">
+                    <FieldArray
+                        name="bosteder"
+                        render={(arrayHelpers) => (
+                            <>
+                                {values.bosteder?.map((_, index, array) => (
+                                    <div key={index}>
+                                        <VerticalSpacer thirtyTwoPx />
 
-                                    <div className="fom-tom-rad">
-                                        <Periodevelger
-                                            name={`bosteder[${index}].periode`}
-                                        />
+                                        <div className="fom-tom-rad">
+                                            <Periodevelger
+                                                name={`bosteder[${index}].periode`}
+                                            />
 
-                                        {array.length > 1 && (
-                                            <Button
-                                                variant="tertiary"
-                                                size="small"
-                                                className="slett-knapp-med-icon-for-input !mt-10"
-                                                onClick={() => arrayHelpers.remove(index)}
-                                                style={{ float: 'right' }}
-                                                icon={<TrashIcon title="slett periode" />}
-                                            >
-                                                Fjern periode
-                                            </Button>
-                                        )}
-                                    </div>
-
-                                    <VerticalSpacer sixteenPx />
-
-                                    <div style={{ maxWidth: '50%' }}>
-                                        <Field name={`bosteder[${index}].land`}>
-                                            {({ field, meta: bostederMeta }: FieldProps<string>) => (
-                                                <>
-                                                <CountrySelect
-                                                    label
-                                                    selectedcountry={field.value}
-                                                    unselectedoption="Velg land"
-                                                    {...field}
-                                                    />
-                                                    {bostederMeta.touched && bostederMeta.error && (
-                                                        <ErrorMessage role="alert" showIcon>
-                                                            {bostederMeta.error}
-                                                        </ErrorMessage>
-                                                    )}
-                                                    </>
+                                            {array.length > 1 && (
+                                                <Button
+                                                    variant="tertiary"
+                                                    size="small"
+                                                    className="slett-knapp-med-icon-for-input !mt-10"
+                                                    onClick={() => arrayHelpers.remove(index)}
+                                                    style={{ float: 'right' }}
+                                                    icon={<TrashIcon title="slett periode" />}
+                                                >
+                                                    Fjern periode
+                                                </Button>
                                             )}
-                                        </Field>
+                                        </div>
+
+                                        <VerticalSpacer sixteenPx />
+
+                                        <div style={{ maxWidth: '50%' }}>
+                                            <Field name={`bosteder[${index}].land`}>
+                                                {({ field, meta: bostederMeta }: FieldProps<string>) => (
+                                                    <>
+                                                    <CountrySelect
+                                                        label
+                                                        selectedcountry={field.value}
+                                                        unselectedoption="Velg land"
+                                                        {...field}
+                                                        />
+                                                        {bostederMeta.touched && bostederMeta.error && (
+                                                            <ErrorMessage role="alert" showIcon>
+                                                                {bostederMeta.error}
+                                                            </ErrorMessage>
+                                                        )}
+                                                        </>
+                                                )}
+                                            </Field>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
 
-                            <VerticalSpacer sixteenPx />
+                                <VerticalSpacer sixteenPx />
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
-                                icon={<PlusCircleIcon title="legg til periode" />}
-                            >
-                                Legg til periode
-                            </Button>
-                        </>
-                    )}
-                />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
+                                    icon={<PlusCircleIcon title="legg til periode" />}
+                                >
+                                    Legg til periode
+                                </Button>
+                            </>
+                        )}
+                    />
+                </Box>
             )}
         </Box>
     );

@@ -64,7 +64,7 @@ const Kurs = ({
                 </Alert>
             )}
             {eksisterendePerioder.length > 0 ? (
-                <Box className="bg-bg-subtle rounded-lg p-4 mt-[8px]">
+                <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-[8px]">
                     <VStack gap="space-16">
                         <Label size="medium">Eksisterende søknadsperioder</Label>
                         {eksisterendePerioder.map((p) => (
