@@ -3108,7 +3108,6 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:4.1.4"
-    "@sentry/cli": "npm:3.4.1"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
     dotenv: "npm:17.4.2"
@@ -4171,24 +4170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-darwin@npm:3.4.1"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-darwin@npm:3.4.2":
   version: 3.4.2
   resolution: "@sentry/cli-darwin@npm:3.4.2"
   conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm64@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-linux-arm64@npm:3.4.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -4199,24 +4184,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-linux-arm@npm:3.4.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-arm@npm:3.4.2":
   version: 3.4.2
   resolution: "@sentry/cli-linux-arm@npm:3.4.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-i686@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-linux-i686@npm:3.4.1"
-  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
@@ -4227,24 +4198,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-linux-x64@npm:3.4.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-linux-x64@npm:3.4.2":
   version: 3.4.2
   resolution: "@sentry/cli-linux-x64@npm:3.4.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-arm64@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-win32-arm64@npm:3.4.1"
-  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -4255,13 +4212,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-win32-i686@npm:3.4.1"
-  conditions: os=win32 & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-i686@npm:3.4.2":
   version: 3.4.2
   resolution: "@sentry/cli-win32-i686@npm:3.4.2"
@@ -4269,56 +4219,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli-win32-x64@npm:3.4.1"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
 "@sentry/cli-win32-x64@npm:3.4.2":
   version: 3.4.2
   resolution: "@sentry/cli-win32-x64@npm:3.4.2"
   conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@sentry/cli@npm:3.4.1"
-  dependencies:
-    "@sentry/cli-darwin": "npm:3.4.1"
-    "@sentry/cli-linux-arm": "npm:3.4.1"
-    "@sentry/cli-linux-arm64": "npm:3.4.1"
-    "@sentry/cli-linux-i686": "npm:3.4.1"
-    "@sentry/cli-linux-x64": "npm:3.4.1"
-    "@sentry/cli-win32-arm64": "npm:3.4.1"
-    "@sentry/cli-win32-i686": "npm:3.4.1"
-    "@sentry/cli-win32-x64": "npm:3.4.1"
-    progress: "npm:^2.0.3"
-    proxy-from-env: "npm:^1.1.0"
-    undici: "npm:^6.22.0"
-    which: "npm:^2.0.2"
-  dependenciesMeta:
-    "@sentry/cli-darwin":
-      optional: true
-    "@sentry/cli-linux-arm":
-      optional: true
-    "@sentry/cli-linux-arm64":
-      optional: true
-    "@sentry/cli-linux-i686":
-      optional: true
-    "@sentry/cli-linux-x64":
-      optional: true
-    "@sentry/cli-win32-arm64":
-      optional: true
-    "@sentry/cli-win32-i686":
-      optional: true
-    "@sentry/cli-win32-x64":
-      optional: true
-  bin:
-    sentry-cli: bin/sentry-cli
-  checksum: 10/2474f855d26289a09797d3cb6e78b5f61ff77d390f2d1c46fb248fcdede79af2002fec8890ec3db4c463a12a0228d0382781167903027c38fee5a7784978341e
   languageName: node
   linkType: hard
 
@@ -12667,7 +12571,6 @@ __metadata:
     postcss-import: "npm:16.1.1"
     postcss-loader: "npm:8.2.1"
     prettier: "npm:3.8.3"
-    prop-types: "npm:15.8.1"
     re-resizable: "npm:6.11.2"
     react: "npm:19.2.6"
     react-dom: "npm:19.2.6"
@@ -15111,7 +15014,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
