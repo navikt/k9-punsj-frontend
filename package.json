@@ -42,7 +42,6 @@
         "source-map-loader": "5.0.0",
         "tailwindcss": "4.3.0",
         "typescript-string-operations": "1.6.1",
-        "ulid": "3.0.2",
         "uuid": "14.0.0",
         "yup": "1.7.1"
     },

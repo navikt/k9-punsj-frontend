@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
 import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { useMutation } from '@tanstack/react-query';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
 import { Dispatch } from 'redux';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
-import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 import { RootStateType } from 'app/state/RootState';
 import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
+import JournalPostKopiFelmeldinger from './JournalPostKopiFelmeldinger';
 
 interface Props {
     søkerId: string;
     pleietrengendeId: string;
     journalpostId: string;
-    dedupkey: string;
     fagsakId: string;
 
     lukkModal: () => void;
 }
 
-const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey, fagsakId, lukkModal }: Props) => {
+const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, fagsakId, lukkModal }: Props) => {
     const [kopierLoading, setKopierLoading] = useState(false);
 
     const dispatch = useDispatch<Dispatch<any>>();
@@ -46,7 +45,7 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, dedupkey
     const handleKopier = () => {
         setKopierLoading(true);
 
-        dispatch(kopierJournalpostRedux(dedupkey, søkerId, journalpostId, ytelseForKopiering, pleietrengendeId));
+        dispatch(kopierJournalpostRedux(søkerId, journalpostId, ytelseForKopiering, pleietrengendeId));
 
         setKopierLoading(false);
     };

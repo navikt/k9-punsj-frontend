@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 import { Alert, Button } from '@navikt/ds-react';
-import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import Fagsak from 'app/types/Fagsak';
+import { IdentRules } from 'app/validation';
+import { FormattedMessage } from 'react-intl';
+import { useSelector } from 'react-redux';
 import KopierLukkJpModal from '../KopierModal';
 
 interface Props {
@@ -22,7 +22,6 @@ const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Pr
     const fellesState = useSelector((state: RootStateType) => state.felles);
 
     const journalpost = fellesState.journalpost;
-    const dedupkey = fellesState.dedupKey;
 
     const erInntektsmeldingUtenKrav =
         journalpost?.punsjInnsendingType?.kode === PunsjInnsendingType.INNTEKTSMELDING_UTGÅTT;
@@ -91,7 +90,6 @@ const KopiereJournalpostTilSammeSøker: React.FC<Props> = ({ barnMedFagsak }: Pr
                     søkerId={søkerId}
                     pleietrengendeId={identState.pleietrengendeId}
                     journalpostId={journalpost?.journalpostId}
-                    dedupkey={dedupkey}
                     fagsakId={barnMedFagsak.fagsakId}
                     lukkModal={() => setVisModal(false)}
                 />
