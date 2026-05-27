@@ -74,7 +74,7 @@ Suggested starter prompt:
 - Confirm `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
 - Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
 - Build a direct dependency and devDependency candidate list for minor updates and precheck publish timestamps.
-- Exclude `msw` from this pass and keep it pinned at `2.14.2` without retries.
+- Revisit `msw` only after the related Cypress instability is fixed and validate with full e2e before keeping any bump.
 - Apply only minor-level updates that are stable and older than cutoff.
 - Run full validation (`peer requirements`, `lint`, `tsc`, `test`, `build`, and `test:e2e` when runtime-critical packages are changed).
 - Update `Outcome` with exact versions selected, skipped cooldown versions, validation results, and remaining risks.
@@ -93,6 +93,7 @@ Suggested starter prompt:
     - `stylelint`: latest `17.12.0` (2026-05-20T10:45:18Z) -> used `17.11.1` (2026-05-14)
 - `msw@2.14.6` passed the 7 day age gate but regressed Cypress startup in this repo by causing `Failed to fetch` during `/envVariables` bootstrap in `SendBrevIAvsluttetSak`, so the patch pass deliberately kept `msw` at `2.14.2`.
 - Minor pass ran with the same cutoff discipline and explicit `msw` pin. `msw` stayed on `2.14.2` and was not retried.
+- After stabilizing the affected e2e path, `msw@2.14.6` was retested and passed full `yarn test:e2e`, including `SendBrevIAvsluttetSak`.
 
 ## Outcome
 
@@ -132,11 +133,10 @@ Suggested starter prompt:
         - `@types/node` `25.7.0` -> `25.9.1`
         - `cypress` `15.14.2` -> `15.15.0`
         - `eslint-import-resolver-node` `0.3.10` -> `0.4.0`
+        - `msw` `2.14.2` -> `2.14.6`
         - `storybook` `10.3.6` -> `10.4.0`
         - `stylelint` `17.11.1` -> `17.12.0`
         - `webpack` `5.106.2` -> `5.107.0`
-    - explicit hold:
-        - `msw` kept at `2.14.2` per regression guard.
 - Major pass:
     - Not started (stopped before majors).
 - Validation:
@@ -145,11 +145,9 @@ Suggested starter prompt:
     - `yarn tsc --noEmit`: exit 0
     - `yarn test --maxWorkers=2`: exit 0, 62 suites passed
     - `yarn build`: exit 0
-    - `yarn test:e2e`: first attempt was blocked by missing local Cypress binary after the `cypress` minor bump, then `yarn cypress install` fixed the binary setup. A follow-up full rerun finished green with `29/29` spec files passed and `372/372` tests passed.
+    - `yarn test:e2e`: first attempt was blocked by missing local Cypress binary after the `cypress` minor bump, then `yarn cypress install` fixed the binary setup. A follow-up full rerun finished green with `29/29` spec files passed and `372/372` tests passed. A later rerun with `msw@2.14.6` also finished green with `29/29` spec files passed and `374` passing tests plus `1` pending.
 - Skipped versions still inside cooldown:
     - Minor pass used only stable versions older than cutoff; latest versions inside cooldown were intentionally skipped.
-    - `msw` was intentionally skipped and pinned to `2.14.2` despite available versions.
 - Remaining follow ups:
-    - `msw@2.14.6` should stay out of the weekly patch pass until the Cypress bootstrap regression is understood or the repo hardens `/envVariables` loading in e2e.
-    - `SendBrevIAvsluttetSak` also had a separate spec-level flake around async `fagsak` lookup and conditional form mounting. Keep package regressions and spec instability as two different failure classes when evaluating future runs.
-    - Stop point reached after green minor validation. Do not continue to majors without explicit approval.
+    - `SendBrevIAvsluttetSak` had both package-level and spec-level instability during the maintenance pass. Keep those failure classes separate if the spec starts flaking again in future runs.
+    - Stop point reached before majors.
