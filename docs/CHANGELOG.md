@@ -5,8 +5,8 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### Weekly patch maintenance pass (2026-05-27)
 
 - Løftet flere direkte patch-avhengigheter og `resolutions`, blant annet `react-router`, `react-intl`, `postcss`, `qs` og `protobufjs`, etter repoets 7 dagers cooldown-regel.
-- Holdt `msw` igjen på `2.14.2` selv om en nyere patch var gammel nok, fordi `2.14.6` ga Cypress-regresjon med `Failed to fetch` under `/envVariables` bootstrap i `SendBrevIAvsluttetSak`.
-- Tok deretter et kontrollert minor-pass for utvalgte runtime- og tooling-pakker, blant annet `@reduxjs/toolkit`, `@sentry/react`, `date-fns`, `react-hook-form`, `react-redux`, `cypress`, `storybook` og `webpack`, og verifiserte passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2`, grønn `yarn build` og grønn `yarn test:e2e`.
+- Tok deretter et kontrollert minor-pass for utvalgte runtime- og tooling-pakker, blant annet `@reduxjs/toolkit`, `@sentry/react`, `date-fns`, `react-hook-form`, `react-redux`, `cypress`, `msw`, `storybook` og `webpack`, og verifiserte passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2`, grønn `yarn build` og grønn `yarn test:e2e`.
+- Retestet `msw` etter e2e-stabilisering og beholdt oppdateringen til `2.14.6` etter at full Cypress-kjøring gikk grønt, inkludert `SendBrevIAvsluttetSak`.
 
 ### Weekly package maintenance task file (2026-05-27)
 
