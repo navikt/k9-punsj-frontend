@@ -149,10 +149,8 @@ describe('Send brev i avsluttet sak', () => {
             }).should('exist');
         });
 
-        // Flaky with the current async fagsak lookup mock path. Keep this case out of the
-        // end to end suite until it is covered more deterministically.
-        it.skip('skal vise feil ved henting av fagsaker', () => {
-            skrivSøkerFnr(TEST_DATA.fnrWithError);
+        it('skal vise feil ved henting av fagsaker', () => {
+            settSøkerFnrDirekte(TEST_DATA.fnrWithError);
             cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.', {
                 timeout: 10000,
             }).should('exist');
