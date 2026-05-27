@@ -151,5 +151,5 @@ Suggested starter prompt:
     - `msw` was intentionally skipped and pinned to `2.14.2` despite available versions.
 - Remaining follow ups:
     - `msw@2.14.6` should stay out of the weekly patch pass until the Cypress bootstrap regression is understood or the repo hardens `/envVariables` loading in e2e.
-    - The earlier `SendBrevIAvsluttetSak` failure did not reproduce in the follow-up narrow rerun or the full green rerun, so treat it as an unstable run signal unless it appears again.
+    - `SendBrevIAvsluttetSak` also had a separate spec-level flake around async `fagsak` lookup and conditional form mounting. Keep package regressions and spec instability as two different failure classes when evaluating future runs.
     - Stop point reached after green minor validation. Do not continue to majors without explicit approval.
