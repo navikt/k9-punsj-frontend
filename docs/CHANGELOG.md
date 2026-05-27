@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Faro 2.7.0 bump after cooldown (2026-05-27)
+
+- Løftet `@grafana/faro-web-sdk` og `@grafana/faro-web-tracing` fra `2.6.3` til `2.7.0` etter at begge versjonene passerte repoets 7 dagers cooldown-vindu.
+
 ### Sentry release script ESM fix (2026-05-27)
 
 - Byttet `src/build/scripts/sentry-release.js` til default-import fra `@sentry/cli`, fordi repoet kjører ESM mens `@sentry/cli` eksponerer `SentryCli` fra en CommonJS-pakke. Dette fjerner CI-feilen i `yarn sentry-release` på Node 20.
