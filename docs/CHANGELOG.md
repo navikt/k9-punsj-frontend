@@ -2,6 +2,16 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly patch maintenance pass (2026-05-27)
+
+- Løftet flere direkte patch-avhengigheter og `resolutions`, blant annet `react-router`, `react-intl`, `postcss`, `qs` og `protobufjs`, etter repoets 7 dagers cooldown-regel.
+- Tok deretter et kontrollert minor-pass for utvalgte runtime- og tooling-pakker, blant annet `@reduxjs/toolkit`, `@sentry/react`, `date-fns`, `react-hook-form`, `react-redux`, `cypress`, `msw`, `storybook` og `webpack`, og verifiserte passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2`, grønn `yarn build` og grønn `yarn test:e2e`.
+- Retestet `msw` etter e2e-stabilisering og beholdt oppdateringen til `2.14.6` etter at full Cypress-kjøring gikk grønt, inkludert `SendBrevIAvsluttetSak`.
+
+### Weekly package maintenance task file (2026-05-27)
+
+- La til `copilot-tasks/weekly-package-maintenance.md` som en gjenbrukbar weekly task for dependency maintenance med eksplisitt 7 dagers cooldown precheck, bevisst gjennomgang av `resolutions`, og stage gates mellom patch, minor og eventuell major.
+
 ### Distroless runtime moved to Debian 13 (2026-05-19)
 
 - Løftet produksjonsbildet fra `gcr.io/distroless/nodejs22-debian12:nonroot` til `gcr.io/distroless/nodejs22-debian13:nonroot` for å få med nyere `openssl`- og `glibc`-fikser i runtime-imaget som Trivy scanner etter deploy.

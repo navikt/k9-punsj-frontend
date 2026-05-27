@@ -38,7 +38,6 @@ describe('FellesReducer.getJournalpost', () => {
 describe('FellesReducer', () => {
     it('clears previous journalpost status flags on new load', () => {
         const previousState = {
-            dedupKey: 'dedup-key',
             journalpostNotFound: true,
             journalpostForbidden: true,
             journalpostConflict: true,

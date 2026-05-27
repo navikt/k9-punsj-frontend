@@ -9,9 +9,9 @@ import { Dispatch } from 'redux';
 import { finnFagsaker } from 'app/api/api';
 import FormPanel from 'app/components/FormPanel';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { ROUTES } from 'app/constants/routes';
 import HåndterInntektsmeldingUtenKrav from 'app/fordeling/Komponenter/HåndterInntektsmeldingUtenKrav';
-import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import {
     DokumenttypeForkortelse,
     FordelingDokumenttype,
@@ -25,7 +25,6 @@ import {
 } from 'app/models/enums';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { IJournalpost } from 'app/models/types';
-import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import {
     lukkJournalpostOppgave as lukkJournalpostOppgaveAction,
@@ -50,6 +49,7 @@ import {
 } from 'app/state/actions/IdentActions';
 import { resetBarnAction } from 'app/state/reducers/FellesReducer';
 import { hentBarn } from 'app/state/reducers/HentBarn';
+import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import {
     finnForkortelseForDokumenttype,
     getDokumenttypeFraForkortelse,
@@ -57,12 +57,12 @@ import {
     getPathFraDokumenttype,
     getPathFraForkortelse,
 } from 'app/utils';
-import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
+import { IdentRules } from 'app/validation';
 
 import AnnenPart from './Komponenter/AnnenPart';
 import DokumentTypeVelger from './Komponenter/DokumentTypeVelger';
-import Fosterbarn from './Komponenter/Fosterbarn';
 import FagsakSelect from './Komponenter/FagsakSelect';
+import Fosterbarn from './Komponenter/Fosterbarn';
 import InnholdForDokumenttypeAnnet from './Komponenter/InnholdForDokumenttypeAnnet';
 import JournalpostAlleredeBehandlet from './Komponenter/JournalpostAlleredeBehandlet/JournalpostAlleredeBehandlet';
 import KlassifiserModal from './Komponenter/KlassifiserModal';
@@ -137,7 +137,6 @@ const Fordeling: React.FC = () => {
 
     const harFagsaker = fagsaker?.length > 0;
 
-    const { dedupKey } = fellesState;
     const { fagsak, dokumenttype } = fordelingState;
 
     const gjelderPsbOmsOlp = !!dokumenttype && dokumenttyperForPsbOmsOlp.includes(dokumenttype);
@@ -932,7 +931,6 @@ const Fordeling: React.FC = () => {
 
                         {visKlassifiserModal && (
                             <KlassifiserModal
-                                dedupkey={dedupKey}
                                 toSøkere={toSokereIJournalpost}
                                 fortsett={fortsettEtterKlassifiseringModal}
                                 behandlingsAar={behandlingsAar}

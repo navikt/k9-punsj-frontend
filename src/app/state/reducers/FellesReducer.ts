@@ -1,11 +1,11 @@
-import { ulid } from 'ulid';
-
+import { DokumenttypeForkortelse } from 'app/models/enums';
 import { ApiPath } from '../../apiConfig';
 import { IError, IJournalpost } from '../../models/types';
 import { IBarn } from '../../models/types/Barn';
 import { IJournalpostConflictResponse } from '../../models/types/Journalpost/IJournalpostConflictResponse';
 import { IKopierJournalpost } from '../../models/types/RequestBodies';
 import { convertResponseToError, get, post } from '../../utils';
+import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
 import {
     ActiontypesHentBarn,
     IHentBarnErrorAction,
@@ -13,11 +13,8 @@ import {
     IHentBarnRequestAction,
     IHentBarnSuccessAction,
 } from './HentBarn';
-import { IResetStateAction, RESET_ALL } from '../actions/GlobalActions';
-import { DokumenttypeForkortelse } from 'app/models/enums';
 
 export interface IFellesState {
-    dedupKey: string;
     journalpost?: IJournalpost;
     journalposterIAapenSoknad?: string[];
     isJournalpostLoading?: boolean;
@@ -40,7 +37,6 @@ export interface IFellesState {
 }
 
 enum Actiontypes {
-    RESET_DEDUP_KEY = 'FELLES/RESET_DEDUP_KEY',
     JOURNALPOST_SET = 'FELLES/PUNCH_JOURNALPOST_SET',
     JOURNALPOST_LOAD = 'FELLES/PUNCH_JOURNALPOST_LOAD',
     JOURNALPOST_REQUEST_ERROR = 'FELLES/PUNCH_JOURNALPOST_REQUEST_ERROR',
@@ -57,10 +53,6 @@ enum Actiontypes {
     RESET_BARN = 'FELLES/RESET_BARN',
     RESET_FELLES = 'FELLES/RESET_FELLES',
     SET_JOURNALPOSTER_AAPEN_SOKNAD = 'FELLES/SET_JOURNALPOSTER_AAPEN_SOKNAD',
-}
-
-interface IResetDedupKeyAction {
-    type: Actiontypes.RESET_DEDUP_KEY;
 }
 
 interface ISetJournalpostAction {
@@ -120,10 +112,6 @@ interface ISetJournalposterIAapenSoknad {
 interface IResetBarnAction {
     type: Actiontypes.RESET_BARN;
 }
-
-export const resetDedupKey = (): IResetDedupKeyAction => ({
-    type: Actiontypes.RESET_DEDUP_KEY,
-});
 
 export function setJournalpostAction(journalpost: IJournalpost): ISetJournalpostAction {
     return { type: Actiontypes.JOURNALPOST_SET, journalpost };
@@ -237,7 +225,6 @@ type IJournalpostActionTypes =
  * Og i KopierModal for å kopiere journalpost til samme søker og barn
  */
 export const kopierJournalpostRedux = (
-    dedupKey: string,
     kopierTilIdent: string,
     journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
@@ -247,7 +234,6 @@ export const kopierJournalpostRedux = (
 ) => {
     return (dispatch: any) => {
         const requestBody: IKopierJournalpost = {
-            dedupKey,
             til: kopierTilIdent,
             barn: barnIdent,
             ytelse: ytelse,
@@ -273,22 +259,15 @@ export const kopierJournalpostRedux = (
 };
 
 const initialState: IFellesState = {
-    dedupKey: ulid(),
     journalpost: undefined,
     journalposterIAapenSoknad: [],
 };
 
 export default function FellesReducer(
     state: IFellesState = initialState,
-    action: IResetDedupKeyAction | IJournalpostActionTypes,
+    action: IJournalpostActionTypes,
 ): IFellesState {
     switch (action.type) {
-        case Actiontypes.RESET_DEDUP_KEY:
-            return {
-                ...state,
-                dedupKey: ulid(),
-            };
-
         case Actiontypes.JOURNALPOST_SET:
             return {
                 ...state,

@@ -1,11 +1,11 @@
 import { ApiPath } from 'app/apiConfig';
+import sakstyper from 'app/constants/sakstyper';
 import { DokumenttypeForkortelse } from 'app/models/enums';
 import { IJournalpost, IPeriode, Person } from 'app/models/types';
+import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
+import { IKopierJournalpost } from 'app/models/types/RequestBodies';
 import Fagsak, { FagsakForSelect } from 'app/types/Fagsak';
 import { get, post } from 'app/utils';
-import { IAlleJournalposterPerIdent } from 'app/models/types/Journalpost/JournalposterPerIdentState';
-import sakstyper from 'app/constants/sakstyper';
-import { IKopierJournalpost } from 'app/models/types/RequestBodies';
 import { ArbeidsgivereResponse } from '../models/types/ArbeidsgivereResponse';
 
 export const finnArbeidsgivere = (
@@ -138,7 +138,6 @@ export const hentAlleJournalposterPerIdent = (norskIdent: string): Promise<IAlle
  * TODO: Endre navn, legge til andre parametere for andre ytelser
  */
 export const kopierJournalpostNotRedux = (
-    dedupKey: string,
     kopierTilIdent: string,
     journalPostID: string,
     ytelse?: DokumenttypeForkortelse,
@@ -147,7 +146,6 @@ export const kopierJournalpostNotRedux = (
     annenPart?: string,
 ): Promise<void> => {
     const requestBody: IKopierJournalpost = {
-        dedupKey,
         til: kopierTilIdent,
         barn: barnIdent,
         ytelse: ytelse,

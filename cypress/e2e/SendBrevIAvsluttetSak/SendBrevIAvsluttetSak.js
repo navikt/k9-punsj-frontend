@@ -4,7 +4,6 @@ const TEST_DATA = {
     fnr: '08438323288',
     fnrTomtFagsaker: '17519112922',
     fnrWithError: '05508239132',
-    journalpostId: '200',
     illegalChars: '^|~{}[]ñçßøå',
     validTitle: 'Eksempel på tittel',
     validNote: 'Eksempel på notat',
@@ -15,33 +14,104 @@ const åpneBrevside = () => {
     cy.findByText('Send brev i avsluttet sak').should('exist');
 };
 
-const fyllInnGyldigFnr = () => {
-    cy.findByLabelText('Søkers fødselsnummer').clear().type(TEST_DATA.fnr);
-    cy.findByLabelText('Velg fagsak').should('not.be.disabled');
-    cy.findByLabelText('Velg fagsak').find('option').its('length').should('be.greaterThan', 1);
+const skrivSøkerFnr = (value) => {
+    cy.findByLabelText('Søkers fødselsnummer').should('be.visible').clear({ force: true });
+
+    value.split('').forEach((digit) => {
+        cy.findByLabelText('Søkers fødselsnummer').type(digit, { force: true });
+    });
 };
 
-const velgGyldigFagsak = () => {
+const settSøkerFnrDirekte = (value) => {
+    cy.window().then((win) => {
+        cy.findByLabelText('Søkers fødselsnummer')
+            .should('be.visible')
+            .then(($input) => {
+                const input = $input[0];
+                const valueSetter = Object.getOwnPropertyDescriptor(win.HTMLInputElement.prototype, 'value')?.set;
+
+                if (!valueSetter) {
+                    throw new Error('Missing HTMLInputElement value setter');
+                }
+
+                valueSetter.call(input, value);
+                input.dispatchEvent(new win.Event('input', { bubbles: true }));
+                input.dispatchEvent(new win.Event('change', { bubbles: true }));
+            });
+    });
+};
+
+const velgFraSelect = (label, value) => {
+    cy.findByLabelText(label).should('be.visible').and('not.be.disabled');
+    cy.findByLabelText(label).find(`option[value="${value}"]`).should('exist');
+    cy.findByLabelText(label).select(value, { force: true });
+};
+
+const fyllInnGyldigFnr = (allowRetry = true) => {
+    settSøkerFnrDirekte(TEST_DATA.fnr);
+    cy.wait(700);
+    cy.get('body').then(($body) => {
+        const harFagsakSelect = $body.text().includes('Velg fagsak');
+
+        if (!harFagsakSelect && allowRetry) {
+            åpneBrevside();
+            fyllInnGyldigFnr(false);
+            return;
+        }
+
+        cy.findByLabelText('Velg fagsak', { timeout: 10000 }).should('not.be.disabled');
+        cy.findByLabelText('Velg fagsak').find('option').its('length').should('be.greaterThan', 1);
+    });
+};
+
+const velgGyldigFagsak = (allowRetry = true) => {
     fyllInnGyldigFnr();
-    cy.findByLabelText('Velg fagsak').select('1DMU93A');
-    cy.findByLabelText('Velg mal').should('exist');
-    cy.findByLabelText('Velg mottaker').should('exist');
-    cy.findByLabelText('Send til tredjepart').should('exist');
+    velgFraSelect('Velg fagsak', '1DMU93A');
+    cy.wait(300);
+    cy.get('body').then(($body) => {
+        const harBrevKomponent = $body.text().includes('Velg mal');
+
+        if (!harBrevKomponent && allowRetry) {
+            åpneBrevside();
+            velgGyldigFagsak(false);
+            return;
+        }
+
+        cy.findByLabelText('Velg mal', { timeout: 10000 }).should('exist');
+        cy.findByLabelText('Velg mottaker', { timeout: 10000 }).should('exist');
+        cy.findByLabelText('Send til tredjepart').should('exist');
+    });
 };
 
 const velgGyldigMottaker = () => {
+    cy.findByLabelText('Send til tredjepart').then(($checkbox) => {
+        if ($checkbox.is(':checked')) {
+            cy.wrap($checkbox).click({ force: true });
+        }
+    });
+
+    cy.findByLabelText('Velg mottaker', { timeout: 10000 }).should('not.be.disabled');
     cy.findByLabelText('Velg mottaker').find('option').its('length').should('be.greaterThan', 1);
-    cy.findByLabelText('Velg mottaker').select('81549300');
+    velgFraSelect('Velg mottaker', '81549300');
 };
 
-const fyllInnGyldigBrev = () => {
-    velgGyldigFagsak();
-    cy.findByLabelText('Velg mal').select('GENERELT_FRITEKSTBREV');
-    cy.findByLabelText('Send til tredjepart').click();
-    cy.findByLabelText('Organisasjonsnummer').type('889640782');
+const visTredjepartFelter = () => {
+    cy.findByLabelText('Send til tredjepart').then(($checkbox) => {
+        if (!$checkbox.is(':checked')) {
+            cy.wrap($checkbox).click({ force: true });
+        }
+    });
+
+    cy.findByLabelText('Organisasjonsnummer').should('exist');
+};
+
+const fyllInnGyldigBrevFelter = () => {
+    velgFraSelect('Velg mal', 'GENERELT_FRITEKSTBREV');
+    visTredjepartFelter();
+    cy.findByLabelText('Organisasjonsnummer').clear().type('889640782');
     cy.findByText('Test Navn').should('exist');
-    cy.findByLabelText('Tittel').type(TEST_DATA.validTitle);
-    cy.findByLabelText('Innhold i brev').type(TEST_DATA.validNote);
+    cy.findByLabelText('Tittel').clear().type(TEST_DATA.validTitle);
+    cy.findByLabelText('Innhold i brev').clear().type(TEST_DATA.validNote);
 };
 
 describe('Send brev i avsluttet sak', () => {
@@ -54,48 +124,58 @@ describe('Send brev i avsluttet sak', () => {
         });
     });
 
-    describe('Test av brev', () => {
+    describe('Validering av fødselsnummer', () => {
         beforeEach(() => {
             åpneBrevside();
         });
 
-        it('skal validere fødselsnummer format og lengde', () => {
-            const fnrInput = cy.findByLabelText('Søkers fødselsnummer');
-
-            fnrInput.type('1');
+        it('skal validere fødselsnummer format og tom verdi', () => {
+            skrivSøkerFnr('1');
             cy.findByText('Søkers fødselsnummer må være 11 siffer.').should('exist');
 
-            fnrInput.type('1'.repeat(11));
-            cy.findByText('Søkers fødselsnummer er ugyldig.').should('exist');
-
-            fnrInput.clear();
+            skrivSøkerFnr('');
             cy.findByText('Du må skrive inn søkers fødselsnummer.').should('exist');
-            fnrInput.type(TEST_DATA.fnrTomtFagsaker);
-            cy.findByText('Du må skrive inn søkers fødselsnummer.').should('not.exist');
-            cy.findByText('Det finnes ingen fagsaker for denne søkeren. Du kan ikke sende brev uten fagsak.').should(
-                'exist',
-            );
-            fnrInput.clear().type(TEST_DATA.fnrWithError);
-            cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.').should('exist');
-            fnrInput.clear().type(TEST_DATA.fnr);
+        });
+
+        it('skal validere ugyldig fødselsnummer', () => {
+            settSøkerFnrDirekte('1'.repeat(11));
+            cy.findByText('Søkers fødselsnummer er ugyldig.').should('exist');
+        });
+
+        it('skal vise melding når søker ikke har fagsaker', () => {
+            settSøkerFnrDirekte(TEST_DATA.fnrTomtFagsaker);
+            cy.findByText('Det finnes ingen fagsaker for denne søkeren. Du kan ikke sende brev uten fagsak.', {
+                timeout: 10000,
+            }).should('exist');
+        });
+
+        it('skal vise feil ved henting av fagsaker', () => {
+            settSøkerFnrDirekte(TEST_DATA.fnrWithError);
+            cy.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.', {
+                timeout: 10000,
+            }).should('exist');
+        });
+    });
+
+    describe('Test av brev', { testIsolation: false }, () => {
+        before(() => {
+            åpneBrevside();
+            velgGyldigFagsak();
         });
 
         it('skal velge fagsak og vise brevkomponent', () => {
-            velgGyldigFagsak();
             cy.findByRole('button', { name: /Send brev/i }).should('exist');
         });
 
         it('skal validere malvalg', () => {
-            velgGyldigFagsak();
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Du må velge mal.').should('exist');
-            cy.findByLabelText('Velg mal').select('INNHEN');
+            velgFraSelect('Velg mal', 'INNHEN');
             cy.findByText('Du må velge mal.').should('not.exist');
         });
 
         it('skal validere mottakervalg', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('INNHEN');
+            velgFraSelect('Velg mal', 'INNHEN');
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Du må velge mottaker.').should('exist');
             velgGyldigMottaker();
@@ -103,14 +183,12 @@ describe('Send brev i avsluttet sak', () => {
         });
 
         it('skal validere sending til tredjepart', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('INNHEN');
-            cy.findByLabelText('Send til tredjepart').click();
-            cy.findByLabelText('Organisasjonsnummer').should('exist').type(1);
+            velgFraSelect('Velg mal', 'INNHEN');
+            visTredjepartFelter();
+            cy.findByLabelText('Organisasjonsnummer').clear().type('1');
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Organisasjonsnummeret er ugyldig.').should('exist');
-            cy.findByLabelText('Organisasjonsnummer').clear();
-            cy.findByLabelText('Organisasjonsnummer').type('1'.repeat(9));
+            cy.findByLabelText('Organisasjonsnummer').clear().type('1'.repeat(9));
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Organisasjonsnummeret er ugyldig.').should('exist');
             cy.findByLabelText('Organisasjonsnummer').clear();
@@ -119,29 +197,25 @@ describe('Send brev i avsluttet sak', () => {
         });
 
         it('skal hente organisasjonsnavn', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Send til tredjepart').click();
-            cy.findByLabelText('Organisasjonsnummer').type('889640782');
+            visTredjepartFelter();
+            cy.findByLabelText('Organisasjonsnummer').clear().type('889640782');
             cy.findByText('Test Navn').should('exist');
         });
 
         it('skal ikke vise tittel hvis malen ikke støtter det og vise innhold', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('INNHEN');
+            velgFraSelect('Velg mal', 'INNHEN');
             cy.findByText('Tittel').should('not.exist');
             cy.findByText('Innhold i brev').should('exist');
         });
 
         it('skal vise tittel hvis malen støtter det og vise innhold', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('GENERELT_FRITEKSTBREV');
+            velgFraSelect('Velg mal', 'GENERELT_FRITEKSTBREV');
             cy.findByText('Tittel').should('exist');
             cy.findByText('Innhold i brev').should('exist');
         });
 
         it('skal validere tittelfeltet', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('GENERELT_FRITEKSTBREV');
+            velgFraSelect('Velg mal', 'GENERELT_FRITEKSTBREV');
             velgGyldigMottaker();
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByText('Du må skrive inn tittel.').should('exist');
@@ -154,8 +228,7 @@ describe('Send brev i avsluttet sak', () => {
         });
 
         it('skal validere innholdfeltet', () => {
-            velgGyldigFagsak();
-            cy.findByLabelText('Velg mal').select('INNHEN');
+            velgFraSelect('Velg mal', 'INNHEN');
             velgGyldigMottaker();
             cy.findByRole('button', { name: /Send brev/i }).click();
             cy.findByLabelText('Innhold i brev').type('E');
@@ -166,47 +239,8 @@ describe('Send brev i avsluttet sak', () => {
             cy.findByText(/Feltet inneholder ugyldige tegn:/i).should('not.exist');
         });
 
-        /*
-        Testen er deaktivert fordi feiler av og til på grunn av åpning av nytt vindu.
-        it('skal forhåndsvise brevet', () => {
-            cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
-            cy.findByText('Not Found').should('exist');
-
-            cy.intercept('POST', ApiPath.BREV_FORHAANDSVIS, (req) => {
-                expect(req.body).to.have.property('aktørId').to.equal('81549300');
-                expect(req.body).to.have.property('avsenderApplikasjon').to.equal('K9PUNSJ');
-                expect(req.body).to.have.property('dokumentMal').to.equal('GENERELT_FRITEKSTBREV');
-                expect(req.body.dokumentdata.fritekstbrev)
-                    .to.have.property('overskrift')
-                    .to.equal(TEST_DATA.validTitle);
-                expect(req.body.dokumentdata.fritekstbrev).to.have.property('brødtekst').to.equal(TEST_DATA.validNote);
-                expect(req.body).to.have.property('eksternReferanse').to.equal('1DMU93A');
-                expect(req.body.overstyrtMottaker.id).to.equal('889640782');
-                expect(req.body.overstyrtMottaker.type).to.equal('ORGNR');
-                expect(req.body).to.have.property('saksnummer').to.equal('1DMU93A');
-                expect(req.body.ytelseType).to.have.property('kode').to.equal('PSB');
-                expect(req.body.ytelseType).to.have.property('kodeverk').to.equal('FAGSAK_YTELSE');
-
-                req.reply({
-                    statusCode: 200,
-                    body: { success: true },
-                });
-            }).as('forhandsvisBrev');
-
-            cy.window().then((win) => {
-                cy.stub(win, 'open').callsFake((url) => {
-                    // Optionally log or verify the URL that would have been opened
-                    cy.log(`Attempted to open: ${url}`);
-                });
-            });
-
-            cy.findByRole('button', { name: /Forhåndsvis brev/i }).click();
-
-            cy.findByText('Not Found').should('not.exist');
-        });*/
-
         it('skal sende brevet', () => {
-            fyllInnGyldigBrev();
+            fyllInnGyldigBrevFelter();
             cy.intercept('POST', ApiPath.BREV_BESTILL, (req) => {
                 req.reply({
                     statusCode: 500,

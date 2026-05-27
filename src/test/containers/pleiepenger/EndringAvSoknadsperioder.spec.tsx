@@ -1,9 +1,9 @@
-import React from 'react';
 import { Accordion } from '@navikt/ds-react';
-import { renderWithIntl } from '../../testUtils';
-import EndringAvSøknadsperioder from '../../../app/søknader/pleiepenger/containers/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import React from 'react';
 import { IPSBSoknad, PSBSoknad } from '../../../app/models/types/PSBSoknad';
 import { IPeriode } from '../../../app/models/types/Periode';
+import EndringAvSøknadsperioder from '../../../app/søknader/pleiepenger/containers/EndringAvSøknadsperioder/EndringAvSøknadsperioder';
+import { renderWithIntl } from '../../testUtils';
 
 const baseSoknad: IPSBSoknad = {
     soekerId: '123',
@@ -19,6 +19,10 @@ const baseSoknad: IPSBSoknad = {
 const renderComponent = (trekkKravPerioder: IPeriode[] | undefined, eksisterendePerioder: IPeriode[]) =>
     renderWithIntl(
         <Accordion>
+            <Accordion.Item>
+                <Accordion.Header>Ekstra testpanel</Accordion.Header>
+                <Accordion.Content>Innhold</Accordion.Content>
+            </Accordion.Item>
             <EndringAvSøknadsperioder
                 isOpen
                 onClick={jest.fn()}

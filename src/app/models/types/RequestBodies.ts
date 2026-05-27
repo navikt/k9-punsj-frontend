@@ -55,7 +55,6 @@ export interface IOpprettSoknad {
 }
 
 export interface IKopierJournalpost {
-    dedupKey: string;
     til: string;
     barn?: string;
     ytelse?: DokumenttypeForkortelse;

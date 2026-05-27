@@ -16,7 +16,6 @@ describe('Pleietrengende', () => {
                     annenPart: '',
                 }}
                 fellesState={{
-                    dedupKey: 'dedup-key',
                     hentBarnSuccess: true,
                     barn: [
                         {
