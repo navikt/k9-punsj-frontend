@@ -1,4 +1,6 @@
-import { SentryCli } from '@sentry/cli';
+import sentryCliPkg from '@sentry/cli';
+
+const { SentryCli } = sentryCliPkg;
 
 async function opprettReleaseTilSentry() {
     const release = process.env.SENTRY_RELEASE;

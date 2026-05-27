@@ -2,6 +2,18 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### tmp security override for CVE-2026-44705 (2026-05-27)
+
+- La inn targeted `resolutions` for `tmp` til `0.2.7`, fordi lockfile fortsatt holdt `0.2.5` mens et nytt path traversal-problem i `prefix` og `postfix` ble publisert samme dag. Dette er en bevisst security exception til repoets normale 7 dagers cooldown.
+
+### Faro 2.7.0 bump after cooldown (2026-05-27)
+
+- Løftet `@grafana/faro-web-sdk` og `@grafana/faro-web-tracing` fra `2.6.3` til `2.7.0` etter at begge versjonene passerte repoets 7 dagers cooldown-vindu.
+
+### Sentry release script ESM fix (2026-05-27)
+
+- Byttet `src/build/scripts/sentry-release.js` til default-import fra `@sentry/cli`, fordi repoet kjører ESM mens `@sentry/cli` eksponerer `SentryCli` fra en CommonJS-pakke. Dette fjerner CI-feilen i `yarn sentry-release` på Node 20.
+
 ### Weekly patch maintenance pass (2026-05-27)
 
 - Løftet flere direkte patch-avhengigheter og `resolutions`, blant annet `react-router`, `react-intl`, `postcss`, `qs` og `protobufjs`, etter repoets 7 dagers cooldown-regel.
