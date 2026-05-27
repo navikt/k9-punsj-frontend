@@ -2,6 +2,15 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly patch maintenance pass (2026-05-27)
+
+- Løftet flere direkte patch-avhengigheter og `resolutions`, blant annet `react-router`, `react-intl`, `postcss`, `qs` og `protobufjs`, etter repoets 7 dagers cooldown-regel.
+- Holdt `msw` igjen på `2.14.2` selv om en nyere patch var gammel nok, fordi `2.14.6` ga Cypress-regresjon med `Failed to fetch` under `/envVariables` bootstrap i `SendBrevIAvsluttetSak`.
+
+### Weekly package maintenance task file (2026-05-27)
+
+- La til `copilot-tasks/weekly-package-maintenance.md` som en gjenbrukbar weekly task for dependency maintenance med eksplisitt 7 dagers cooldown precheck, bevisst gjennomgang av `resolutions`, og stage gates mellom patch, minor og eventuell major.
+
 ### Distroless runtime moved to Debian 13 (2026-05-19)
 
 - Løftet produksjonsbildet fra `gcr.io/distroless/nodejs22-debian12:nonroot` til `gcr.io/distroless/nodejs22-debian13:nonroot` for å få med nyere `openssl`- og `glibc`-fikser i runtime-imaget som Trivy scanner etter deploy.
