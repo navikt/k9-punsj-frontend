@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { legacy_createStore as createStore } from 'redux';
 
 import { Home } from 'app/home/Home';
@@ -12,7 +12,6 @@ describe('Home', () => {
     it('shows generic error alert when journalpost request error has no message', () => {
         const store = createStore(() => ({
             felles: {
-                dedupKey: 'dedup-key',
                 journalpostRequestError: {
                     statusText: 'Nettverksfeil',
                 },

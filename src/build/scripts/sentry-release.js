@@ -1,4 +1,10 @@
-import { SentryCli } from '@sentry/cli';
+import * as sentryCliPkg from '@sentry/cli';
+
+const SentryCli = sentryCliPkg.SentryCli ?? sentryCliPkg.default?.SentryCli ?? sentryCliPkg.default;
+
+if (typeof SentryCli !== 'function') {
+    throw new Error('Unable to resolve SentryCli constructor from @sentry/cli');
+}
 
 async function opprettReleaseTilSentry() {
     const release = process.env.SENTRY_RELEASE;

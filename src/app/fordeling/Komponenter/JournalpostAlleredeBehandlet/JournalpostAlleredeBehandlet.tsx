@@ -1,13 +1,17 @@
+import { Alert, Button } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Dispatch } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Alert, Button } from '@navikt/ds-react';
+import { Dispatch } from 'redux';
 
-import { IdentRules } from 'app/validation';
 import { RootStateType } from 'app/state/RootState';
 import { setAnnenPartAction, setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { IdentRules } from 'app/validation';
 
+import {
+    erUavklartSakstypeForBrev,
+    utledSakstypeForBehandletJournalpostBrev,
+} from 'app/components/brev/brevSakstypeUtils';
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import {
     getJournalpostKopiereErrorResetAction,
@@ -16,22 +20,18 @@ import {
 } from 'app/state/reducers/FellesReducer';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
-import {
-    erUavklartSakstypeForBrev,
-    utledSakstypeForBehandletJournalpostBrev,
-} from 'app/components/brev/brevSakstypeUtils';
 
 import JournalPostKopiFelmeldinger from '../JournalPostKopiFelmeldinger';
 import Pleietrengende from '../Pleietrengende';
 
+import { ROUTES } from 'app/constants/routes';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { setDokumenttypeAction } from 'app/state/actions';
-import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
-import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
-import AnnenPart from '../AnnenPart';
-import ToSøkere from '../ToSøkere';
 import { useNavigate } from 'react-router';
-import { ROUTES } from 'app/constants/routes';
+import AnnenPart from '../AnnenPart';
+import DokumentTypeVelgerForKopiering from '../DokumentTypeVelgerForKopiering';
+import ToSøkere from '../ToSøkere';
+import ValgAvBehandlingsÅr from '../ValgAvBehandlingsÅr';
 
 const JournalpostAlleredeBehandlet: React.FC = () => {
     const [visKanIkkeKopiere, setVisKanIkkeKopiere] = useState(false);
@@ -56,7 +56,7 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
 
     const prevPleietrengendeIdRef = useRef<string | null>(null);
 
-    const { dedupKey, journalpost, kopierJournalpostSuccess, kopierJournalpostError } = fellesState;
+    const { journalpost, kopierJournalpostSuccess, kopierJournalpostError } = fellesState;
     const { søkerId, pleietrengendeId, annenSokerIdent } = identState;
 
     const erInntektsmeldingUtenKrav =
@@ -150,7 +150,6 @@ const JournalpostAlleredeBehandlet: React.FC = () => {
         ) {
             dispatch(
                 kopierJournalpostRedux(
-                    dedupKey,
                     toSokereIJournalpost ? annenSokerIdent! : søkerId,
                     journalpost?.journalpostId,
                     ytelseForKopiering,

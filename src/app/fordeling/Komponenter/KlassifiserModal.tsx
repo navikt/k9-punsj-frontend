@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
 import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { useMutation } from '@tanstack/react-query';
 import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import {
@@ -13,7 +13,8 @@ import {
     postBehandlingsAar,
     settJournalpostPaaVentUtenSøknadId,
 } from 'app/api/api';
-import Fagsak from 'app/types/Fagsak';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import BrevContainer from 'app/components/brev/BrevContainer';
 import {
     dokumenttyperMedBehandlingsår,
     dokumenttyperMedBehandlingsårValg,
@@ -21,7 +22,11 @@ import {
     dokumentyperMedFosterbarn,
     FordelingDokumenttype,
 } from 'app/models/enums';
+import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
+import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
+import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
 import { RootStateType } from 'app/state/RootState';
+import Fagsak from 'app/types/Fagsak';
 import {
     finnForkortelseForDokumenttype,
     getForkortelseFraFordelingDokumenttype,
@@ -29,15 +34,9 @@ import {
     initializeDate,
     redirectToLos,
 } from 'app/utils';
-import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
-import { IJournalpost } from 'app/models/types/Journalpost/Journalpost';
-import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
 import KlassifiseringInfo from './KlassifiseringInfo';
-import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
-import BrevContainer from 'app/components/brev/BrevContainer';
 
 interface Props {
-    dedupkey: string;
     toSøkere: boolean;
     fortsett?: boolean;
     behandlingsAar?: string;
@@ -46,7 +45,7 @@ interface Props {
     setFagsak: (sak: Fagsak) => void;
 }
 
-const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
+const KlassifiserModal = ({ toSøkere, fortsett, behandlingsAar, lukkModal, setFagsak }: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
 
@@ -86,7 +85,6 @@ const KlassifiserModal = ({ dedupkey, toSøkere, fortsett, behandlingsAar, lukkM
     const kopierJournalpost = useMutation({
         mutationFn: () =>
             kopierJournalpostNotRedux(
-                dedupkey,
                 identState.annenSokerIdent!,
                 journalpost.journalpostId,
                 ytelseForKopiering,

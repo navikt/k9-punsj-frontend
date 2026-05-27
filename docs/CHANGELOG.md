@@ -2,6 +2,28 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### tmp security override for CVE-2026-44705 (2026-05-27)
+
+- La inn targeted `resolutions` for `tmp` til `0.2.7`, fordi lockfile fortsatt holdt `0.2.5` mens et nytt path traversal-problem i `prefix` og `postfix` ble publisert samme dag. Dette er en bevisst security exception til repoets normale 7 dagers cooldown.
+
+### Faro 2.7.0 bump after cooldown (2026-05-27)
+
+- Løftet `@grafana/faro-web-sdk` og `@grafana/faro-web-tracing` fra `2.6.3` til `2.7.0` etter at begge versjonene passerte repoets 7 dagers cooldown-vindu.
+
+### Sentry release script ESM fix (2026-05-27)
+
+- Byttet `src/build/scripts/sentry-release.js` til default-import fra `@sentry/cli`, fordi repoet kjører ESM mens `@sentry/cli` eksponerer `SentryCli` fra en CommonJS-pakke. Dette fjerner CI-feilen i `yarn sentry-release` på Node 20.
+
+### Weekly patch maintenance pass (2026-05-27)
+
+- Løftet flere direkte patch-avhengigheter og `resolutions`, blant annet `react-router`, `react-intl`, `postcss`, `qs` og `protobufjs`, etter repoets 7 dagers cooldown-regel.
+- Tok deretter et kontrollert minor-pass for utvalgte runtime- og tooling-pakker, blant annet `@reduxjs/toolkit`, `@sentry/react`, `date-fns`, `react-hook-form`, `react-redux`, `cypress`, `msw`, `storybook` og `webpack`, og verifiserte passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2`, grønn `yarn build` og grønn `yarn test:e2e`.
+- Retestet `msw` etter e2e-stabilisering og beholdt oppdateringen til `2.14.6` etter at full Cypress-kjøring gikk grønt, inkludert `SendBrevIAvsluttetSak`.
+
+### Weekly package maintenance task file (2026-05-27)
+
+- La til `copilot-tasks/weekly-package-maintenance.md` som en gjenbrukbar weekly task for dependency maintenance med eksplisitt 7 dagers cooldown precheck, bevisst gjennomgang av `resolutions`, og stage gates mellom patch, minor og eventuell major.
+
 ### Distroless runtime moved to Debian 13 (2026-05-19)
 
 - Løftet produksjonsbildet fra `gcr.io/distroless/nodejs22-debian12:nonroot` til `gcr.io/distroless/nodejs22-debian13:nonroot` for å få med nyere `openssl`- og `glibc`-fikser i runtime-imaget som Trivy scanner etter deploy.

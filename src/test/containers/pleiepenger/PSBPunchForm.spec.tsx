@@ -192,7 +192,7 @@ const setupPunchForm = (
         identState,
         signaturState,
         journalposterState,
-        fellesState: { dedupKey: 'test-dedup-key', journalposterIAapenSoknad: [] },
+        fellesState: { journalposterIAapenSoknad: [] },
     };
 
     const punchFormComponentProps: IPunchFormComponentProps = {
