@@ -76,4 +76,34 @@ describe('DatovelgerFormik', () => {
         );
         expect(screen.getByTestId('touched').textContent).toBe('true');
     });
+
+    it('supports nested field names in the legacy handleBlur callback', async () => {
+        const user = userEvent.setup();
+        const handleBlur = jest.fn((callback: () => void) => callback());
+
+        render(
+            <Formik initialValues={{ opptjeningAktivitet: { frilanser: { startdato: '' } } }} onSubmit={() => undefined}>
+                <Form>
+                    <DatovelgerFormik
+                        name="opptjeningAktivitet.frilanser.startdato"
+                        label="Startdato"
+                        handleBlur={handleBlur}
+                        dataTestId="nested-formik-date"
+                    />
+                </Form>
+            </Formik>,
+        );
+
+        await user.click(screen.getByTestId('nested-formik-date-change'));
+        await user.click(screen.getByTestId('nested-formik-date-blur'));
+
+        expect(handleBlur).toHaveBeenCalledWith(
+            expect.any(Function),
+            expect.objectContaining({
+                opptjeningAktivitet: expect.objectContaining({
+                    frilanser: expect.objectContaining({ startdato: '2020-03-01' }),
+                }),
+            }),
+        );
+    });
 });
