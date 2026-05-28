@@ -13,6 +13,7 @@ export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | '
         value: string;
         inputRef?: React.Ref<HTMLInputElement>;
         dataTestId?: string;
+        noValidateTomtFelt?: boolean;
     };
 
 const DatovelgerControlled = ({
@@ -34,6 +35,7 @@ const DatovelgerControlled = ({
     id,
     inputRef,
     dataTestId,
+    noValidateTomtFelt,
 }: DatovelgerControlledProps) => {
     return (
         <DatovelgerBase
@@ -54,6 +56,7 @@ const DatovelgerControlled = ({
             id={id}
             inputRef={inputRef}
             dataTestId={dataTestId}
+            noValidateTomtFelt={noValidateTomtFelt}
         />
     );
 };

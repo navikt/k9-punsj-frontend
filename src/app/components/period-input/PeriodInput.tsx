@@ -5,7 +5,7 @@ import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 
 import { IPeriode } from '../../models/types/Periode';
-import NewDateInput from '../skjema/NewDateInput/NewDateInput';
+import DatovelgerControlled from '../skjema/Datovelger/DatovelgerControlled';
 
 export interface IPeriodInputProps {
     intl: IntlShape;
@@ -77,12 +77,12 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
         <Fieldset error={errorMessage} className={className} legend={undefined}>
             <HStack wrap gap="space-16" justify="center">
                 <div data-testid="datePickerInputFom">
-                    <NewDateInput
+                    <DatovelgerControlled
                         value={periode.fom || initialValues?.fom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, true)}
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
                         id={inputIdFom}
-                        inputDisabled={disabled || disabledFom}
+                        disabled={disabled || disabledFom}
                         errorMessage={errorMessageFom}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         inputRef={fomInputRef}
@@ -93,12 +93,12 @@ export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: I
                 </div>
 
                 <div data-testid="datePickerInputTom">
-                    <NewDateInput
+                    <DatovelgerControlled
                         value={periode.tom || initialValues?.tom || ''}
                         onChange={(selectedDate) => handleOnChange(selectedDate, false)}
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
                         id={inputIdTom}
-                        inputDisabled={disabled || disabledTom}
+                        disabled={disabled || disabledTom}
                         errorMessage={errorMessageTom}
                         inputRef={tomInputRef}
                         // limitations={limitations}

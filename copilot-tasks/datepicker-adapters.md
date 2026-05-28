@@ -124,6 +124,9 @@ Suggested starter prompt for chat:
 - Added `FormDateInput` plus typed exports for the RHF form layer.
 - Added interactive Storybook stories for controlled, Formik, and RHF adapters.
 - Added targeted tests for controlled typing, blur commit, RHF wiring, and kept `PeriodInput` regression coverage green.
+- Started the first app-level migration wave away from `NewDateInput` by moving direct usages onto `DatovelgerControlled`.
+- Rewired `DatoInputFormikNew` to `DatovelgerControlled` internally so older Formik screens stop depending on `NewDateInput` directly.
+- Rechecked the PSB blur regression and kept `PleiepengerPunsj.cy.js` green after the usage migration.
 
 ## Outcome
 
@@ -135,19 +138,31 @@ Suggested starter prompt for chat:
   - `src/app/components/skjema/Datovelger/Periodevelger.tsx`
   - `src/app/components/skjema/NewDateInput/NewDateInput.tsx`
   - `src/app/components/form/FormDateInput.tsx`
+  - `src/app/components/formikInput/DatoInputFormikNew.tsx`
+  - `src/app/components/period-input/PeriodInput.tsx`
+  - `src/app/components/arbeidsforhold/containers/ArbeidsforholdPanel.tsx`
   - `src/app/components/form/index.ts`
   - `src/app/components/form/types.ts`
   - `src/app/components/form/getTypedFormComponents.tsx`
   - `src/app/søknader/opplæringspenger/containers/Reisedager.tsx`
+  - `src/app/søknader/pleiepenger/containers/OpplysningerOmSoknad/OpplysningerOmSoknad.tsx`
+  - `src/app/søknader/pleiepenger-livets-sluttfase/containers/OpplysningerOmSoknad/OpplysningerOmPLSSoknad.tsx`
+  - `src/app/søknader/omsorgspenger-kronisk-sykt-barn/containers/OpplysningerOmSoknad/OpplysningerOmOMPKSSoknad.tsx`
+  - `src/app/søknader/omsorgspenger-utbetaling/containers/OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad.tsx`
+  - `src/app/søknader/omsorgspenger-alene-om-omsorgen/containers/OpplysningerOmSoknad/OpplysningerOmOMPAOSoknad.tsx`
+  - `src/app/søknader/pleiepenger/containers/Arbeidsforhold/ArbeidsforholdPanel.tsx`
   - `src/storybook/stories/DateInputAdapters.stories.tsx`
   - `src/test/components/skjema/DatovelgerControlled.spec.tsx`
   - `src/test/components/form/FormDateInput.spec.tsx`
+  - `src/test/components/skjema/NewDateInput.spec.tsx`
 - Validation:
   - `yarn tsc --noEmit` green
   - `yarn lint` green
   - `yarn test --maxWorkers=2 src/test/components/form/FormDateInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/period-input/PeriodInput.spec.tsx` green
   - `yarn build-storybook` green
+  - `yarn test --runInBand src/test/components/period-input/PeriodInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/skjema/NewDateInput.spec.tsx` green
+  - `yarn test:e2e --spec cypress/e2e/pleiepenger/PleiepengerPunsj.cy.js` green
 - Remaining risks or follow ups:
-  - This pass does not migrate real app call sites yet.
-  - `NewDateInput` and `DatoInputFormikNew` are still widely used and should be the first phase 2 migration targets.
-  - We should verify a few real business flows manually before broad replacement, especially PSB and the older Formik-heavy flows.
+  - `NewDateInput` is no longer used directly from `src/app/**`, but it still exists as a transitional wrapper and regression target.
+  - `DatoInputFormikNew` still exists as a legacy Formik entry point and should be either collapsed into `DatovelgerFormik` or removed after the broader form migration settles.
+  - The long term direction is still to prefer RHF primitives like `FormDateInput` and let the Formik adapter become removable later.
