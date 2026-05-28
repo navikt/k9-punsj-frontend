@@ -4,7 +4,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ToggleGroup } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 
-import PeriodevelgerControlled from 'app/components/timefoering/PeriodevelgerControlled';
+import PeriodevelgerFormik from 'app/components/timefoering/PeriodevelgerFormik';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
 import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
@@ -77,7 +77,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
     return (
         <div className="mt-4">
             <div className="flex items-start">
-                <PeriodevelgerControlled
+                <PeriodevelgerFormik
                     name={`${name}.periode`}
                     fromDate={fromDate}
                     toDate={toDate}

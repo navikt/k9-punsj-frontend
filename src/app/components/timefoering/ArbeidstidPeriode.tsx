@@ -11,7 +11,7 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerControlled from './PeriodevelgerControlled';
+import PeriodevelgerFormik from './PeriodevelgerFormik';
 import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
@@ -147,7 +147,7 @@ const ArbeidstidPeriode = (props: Props) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodevelgerControlled name={`${name}.periode`} />
+                            <PeriodevelgerFormik name={`${name}.periode`} />
                             <div className="ml-4 mt-7">
                                 <Button
                                     icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}

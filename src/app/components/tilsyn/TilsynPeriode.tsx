@@ -14,7 +14,7 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
+import PeriodevelgerFormik from '../timefoering/PeriodevelgerFormik';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface Props {
@@ -49,7 +49,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
                 return (
                     <div className="mt-4">
                         <div className="flex items-start">
-                            <PeriodevelgerControlled name={`${name}.periode`} />
+                            <PeriodevelgerFormik name={`${name}.periode`} />
 
                             <div className="ml-4 mt-7">
                                 <Button
