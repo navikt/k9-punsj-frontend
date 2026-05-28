@@ -91,7 +91,7 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod gcp
-              uses: nais/deploy/actions/deploy@1b32d71ce5c97174c039ac739b10220dab5a001f # v2
+              uses: nais/deploy/actions/deploy@d57354b433c8d6847ab092467d9fe976a3d008aa # v2
               env:
                   CLUSTER: prod-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
