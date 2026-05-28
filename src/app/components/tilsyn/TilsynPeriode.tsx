@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
 import {
     Tidsformat,
@@ -14,7 +15,6 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerFormik from '../timefoering/PeriodevelgerFormik';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface Props {

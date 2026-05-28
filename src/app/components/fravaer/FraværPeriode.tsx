@@ -4,12 +4,12 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ToggleGroup } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 
-import PeriodevelgerFormik from 'app/components/timefoering/PeriodevelgerFormik';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
 import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import {
     Tidsformat,
     isTidsformat,

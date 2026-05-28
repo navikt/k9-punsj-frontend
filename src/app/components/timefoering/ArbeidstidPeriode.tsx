@@ -11,11 +11,11 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerFormik from './PeriodevelgerFormik';
 import TimerMedDesimaler from './TimerMedDesimaler';
 import TimerOgMinutter from './TimerOgMinutter';
 import UtregningArbeidstid from './UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from './UtregningArbeidstidDesimaler';
+import PeriodevelgerFormik from '../skjema/Datovelger/PeriodevelgerFormik';
 
 const ArbeidstidPeriodeDesimaler = ({ name }: { name: string }) => {
     const formik = useFormikContext();
