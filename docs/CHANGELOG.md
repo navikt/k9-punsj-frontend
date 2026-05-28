@@ -4,12 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Date input adapter foundation (2026-05-28)
 
-- La inn en delt `DatovelgerBase` for date input med felles controlled sync, blur-commit og valideringshåndtering, og lot `DatovelgerControlled`, `DatovelgerFormik` og `NewDateInput` bruke samme grunnsemantikk i stedet for parallelle implementasjoner.
+- La inn en delt `DatovelgerBase` for date input med felles controlled sync, blur-commit og valideringshåndtering, og lot `DatovelgerControlled` og `DatovelgerFormik` bruke samme grunnsemantikk i stedet for parallelle implementasjoner.
 - La til `FormDateInput` i `src/app/components/form` som første offisielle RHF date primitive, samt typed export i form-laget.
 - La til interaktive Storybook-historier for controlled, Formik og RHF date adapters, og målrettede tester for change, blur commit og ekstern value-sync. Selve app-migreringen av eksisterende usages er bevisst holdt til et senere pass.
 - Fullførte deretter første usage-migrering bort fra `NewDateInput` og `DatoInputFormikNew` i appen ved å flytte controlled skjermer over på `DatovelgerControlled`, flytte Formik-skjermene over på `DatovelgerFormik`, og fjerne de to gamle wrapperne som egne app-entrypoints.
 - Justerte også default `size` tilbake til `medium` i date adapter-laget for å matche Aksel sin standard og unngå at skjermer som PSB uforvarende ble rendret med mindre inputs etter migreringen.
-- Lot `NewDateInput` bli stående som eksplisitt deprecated regression target foreløpig, og la til en smal Formik-adaptertest for legacy `handleBlur`-kontrakten uten å gjøre testen avhengig av intern blur-semantikk i `ds-react`.
+- Fjernet til slutt den gamle `NewDateInput`-wrapperen og dens tilhørende regression test etter at app-usages var migrert og period/date-layeret var ryddet videre.
 
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 
