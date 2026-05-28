@@ -55,6 +55,7 @@ const NewDateInput: React.FC<Props> = ({
     dataTestId,
     size,
     defaultMonth,
+    description,
 }) => {
     const [isInvalidDate, setIsInvalidDate] = useState(false);
     const previousValueRef = useRef<string | undefined>(undefined);
@@ -89,9 +90,9 @@ const NewDateInput: React.FC<Props> = ({
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
         locale,
         defaultMonth,
-        onDateChange: onDateChange,
-        onValidate: (val) => {
-            setIsInvalidDate(!val.isValidDate && (!noValidateTomtFelt || !val.isEmpty));
+        onDateChange,
+        onValidate: (validation) => {
+            setIsInvalidDate(!validation.isValidDate && (!noValidateTomtFelt || !validation.isEmpty));
         },
     });
 
@@ -115,15 +116,15 @@ const NewDateInput: React.FC<Props> = ({
         }
     }, [value, setSelected]);
 
-    const onInputBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
-        const isoDateString = evt.target.value ? InputDateStringToISODateString(evt.target.value) : '';
+    const onInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        const isoDateString = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
         const committedValue = previous ?? value ?? '';
 
         if (
             (isoDateString || noValidateTomtFelt) &&
             isoDateString !== INVALID_DATE_VALUE &&
             committedValue !== isoDateString &&
-            !!onBlur
+            onBlur
         ) {
             onBlur(isoDateString);
         }
@@ -132,7 +133,7 @@ const NewDateInput: React.FC<Props> = ({
     const onSelect = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
 
-        if (isoDateString !== value && !!onBlur) {
+        if (isoDateString !== value && onBlur) {
             onBlur(isoDateString);
         }
     };
@@ -155,6 +156,7 @@ const NewDateInput: React.FC<Props> = ({
                     hideLabel={hideLabel}
                     id={id}
                     label={label}
+                    description={description}
                     error={error}
                     disabled={inputDisabled || disabled}
                     onBlur={onInputBlur}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { DatePickerProps } from '@navikt/ds-react';
 import Datovelger, { DatovelgerProps } from './Datovelger';
 import { useField } from 'formik';
 
@@ -7,6 +8,7 @@ type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaul
     className?: string;
     id?: string;
     visFeilmelding?: boolean;
+    disabledDates?: DatePickerProps['disabled'];
 };
 
 const DatovelgerFormik = ({
@@ -19,6 +21,7 @@ const DatovelgerFormik = ({
     className,
     id,
     disabled,
+    disabledDates,
     // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
     visFeilmelding = true,
 }: Props) => {
@@ -48,6 +51,7 @@ const DatovelgerFormik = ({
             className={className}
             id={id}
             disabled={disabled}
+            disabledDates={disabledDates}
         />
     );
 };

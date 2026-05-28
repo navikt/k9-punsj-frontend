@@ -111,14 +111,43 @@ Suggested starter prompt for chat:
 
 ## Plan
 
-- To be filled in before implementation starts.
+- Add one shared date base for controlled input semantics and external value sync.
+- Rewire the existing controlled, Formik, and deprecated date paths onto that shared base without broad usage migration.
+- Add one RHF first date primitive in `components/form`.
+- Add small interactive Storybook stories for controlled, Formik, and RHF adapters.
+- Add targeted tests for change, blur commit, and external sync behavior.
 
 ## Progress notes
 
-- Keep short factual notes while working.
+- Added `DatovelgerBase` as the shared controlled core for date input semantics.
+- Rewired `Datovelger`, `DatovelgerControlled`, and `NewDateInput` to the shared base.
+- Added `FormDateInput` plus typed exports for the RHF form layer.
+- Added interactive Storybook stories for controlled, Formik, and RHF adapters.
+- Added targeted tests for controlled typing, blur commit, RHF wiring, and kept `PeriodInput` regression coverage green.
 
 ## Outcome
 
 - Changed files:
+  - `src/app/components/skjema/Datovelger/DatovelgerBase.tsx`
+  - `src/app/components/skjema/Datovelger/Datovelger.tsx`
+  - `src/app/components/skjema/Datovelger/DatovelgerControlled.tsx`
+  - `src/app/components/skjema/Datovelger/DatovelgerFormik.tsx`
+  - `src/app/components/skjema/Datovelger/Periodevelger.tsx`
+  - `src/app/components/skjema/NewDateInput/NewDateInput.tsx`
+  - `src/app/components/form/FormDateInput.tsx`
+  - `src/app/components/form/index.ts`
+  - `src/app/components/form/types.ts`
+  - `src/app/components/form/getTypedFormComponents.tsx`
+  - `src/app/søknader/opplæringspenger/containers/Reisedager.tsx`
+  - `src/storybook/stories/DateInputAdapters.stories.tsx`
+  - `src/test/components/skjema/DatovelgerControlled.spec.tsx`
+  - `src/test/components/form/FormDateInput.spec.tsx`
 - Validation:
+  - `yarn tsc --noEmit` green
+  - `yarn lint` green
+  - `yarn test --maxWorkers=2 src/test/components/form/FormDateInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/period-input/PeriodInput.spec.tsx` green
+  - `yarn build-storybook` green
 - Remaining risks or follow ups:
+  - This pass does not migrate real app call sites yet.
+  - `NewDateInput` and `DatoInputFormikNew` are still widely used and should be the first phase 2 migration targets.
+  - We should verify a few real business flows manually before broad replacement, especially PSB and the older Formik-heavy flows.

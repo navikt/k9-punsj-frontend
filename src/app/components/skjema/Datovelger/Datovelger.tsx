@@ -1,20 +1,23 @@
 import React from 'react';
-import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
-import { dateToISODateString, ISODateStringToUTCDate } from 'app/utils/date/dateFormat';
-import { offsetDateByYears } from 'app/utils/date/dateUtils';
+import { DateInputProps, DatePickerProps } from '@navikt/ds-react';
+import DatovelgerBase from './DatovelgerBase';
 
-export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className' | 'disabled'> &
+export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
         onChange: (value: string) => void;
         errorMessage?: React.ReactNode | string;
         selectedDay: string;
         inputDisabled?: boolean;
+        disabled?: boolean;
+        disabledDates?: DatePickerProps['disabled'];
         onBlur: () => void;
         value: string;
+        dataTestId?: string;
     };
 
 const Datovelger = ({
     label,
+    description,
     onChange,
     hideLabel,
     className,
@@ -22,6 +25,7 @@ const Datovelger = ({
     selectedDay,
     inputDisabled,
     disabled,
+    disabledDates,
     onBlur,
     value,
     fromDate,
@@ -29,61 +33,27 @@ const Datovelger = ({
     defaultMonth,
     size = 'small',
     id,
+    dataTestId,
 }: DatovelgerProps) => {
-    const fromDateDefault = offsetDateByYears(new Date(), -5);
-    const toDateDefault = offsetDateByYears(new Date(), 5);
-
-    const defaultSelected = selectedDay ? ISODateStringToUTCDate(selectedDay) : undefined;
-
-    // kalles både når man velger en dato i kalender og når man skriver inn en dato
-    const onDateChange = (date?: Date) => {
-        // skal kunne være gyldig dato eller tom
-        if (!date) {
-            onChange('');
-            return;
-        }
-
-        const isoDateString = dateToISODateString(date);
-        if (isoDateString && isoDateString !== value) {
-            onChange(isoDateString);
-        }
-    };
-
-    const { datepickerProps, inputProps } = useDatepicker({
-        defaultMonth,
-        onDateChange: onDateChange,
-        defaultSelected: defaultSelected,
-    });
-
     return (
-        <div className={className}>
-            <DatePicker
-                {...(datepickerProps as any)}
-                showWeekNumber={true}
-                mode="single"
-                inputDisabled={inputDisabled}
-                disabled={disabled}
-                onSelect={onBlur}
-                dropdownCaption={true}
-                fromDate={fromDate || fromDateDefault}
-                toDate={toDate || toDateDefault}
-                size={size}
-            >
-                <DatePicker.Input
-                    {...inputProps}
-                    hideLabel={hideLabel}
-                    label={label}
-                    onBlur={(e) => {
-                        onBlur();
-                        inputProps.onBlur?.(e);
-                    }}
-                    error={errorMessage}
-                    disabled={inputDisabled}
-                    size={size}
-                    id={id}
-                />
-            </DatePicker>
-        </div>
+        <DatovelgerBase
+            label={label}
+            description={description}
+            onChange={onChange}
+            onCommit={() => onBlur()}
+            hideLabel={hideLabel}
+            className={className}
+            errorMessage={errorMessage}
+            value={value || selectedDay || ''}
+            inputDisabled={inputDisabled || disabled}
+            disabledDates={disabledDates}
+            fromDate={fromDate}
+            toDate={toDate}
+            defaultMonth={defaultMonth}
+            size={size}
+            id={id}
+            dataTestId={dataTestId}
+        />
     );
 };
 

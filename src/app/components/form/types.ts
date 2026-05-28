@@ -1,4 +1,5 @@
 import { ReactNode, ChangeEvent } from 'react';
+import { DatePickerProps } from '@navikt/ds-react';
 import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
 import { LegacyCheckboxGroupOption } from 'app/components/legacy-form-compat/checkbox';
@@ -33,6 +34,15 @@ export interface FormSelectProps<T extends FieldValues> extends FormFieldProps<T
 export interface FormTextareaProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
     maxLength?: number;
     onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+export interface FormDateInputProps<T extends FieldValues> extends Omit<FormFieldProps<T>, 'onChange'> {
+    description?: ReactNode;
+    hideLabel?: boolean;
+    defaultMonth?: Date;
+    fromDate?: Date;
+    toDate?: Date;
+    disabledDates?: DatePickerProps['disabled'];
 }
 
 export interface FormRadioGroupOption {

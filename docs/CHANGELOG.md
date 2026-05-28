@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Date input adapter foundation (2026-05-28)
+
+- La inn en delt `DatovelgerBase` for date input med felles controlled sync, blur-commit og valideringshåndtering, og rewiret `Datovelger`, `DatovelgerControlled` og `NewDateInput` over på samme base i stedet for å la parallelle semantikker leve videre.
+- La til `FormDateInput` i `src/app/components/form` som første offisielle RHF date primitive, samt typed export i form-laget.
+- La til interaktive Storybook-historier for controlled, Formik og RHF date adapters, og målrettede tester for change, blur commit og ekstern value-sync. Selve app-migreringen av eksisterende usages er bevisst holdt til et senere pass.
+
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 
 - La inn targeted `resolutions` for `tmp` til `0.2.7`, fordi lockfile fortsatt holdt `0.2.5` mens et nytt path traversal-problem i `prefix` og `postfix` ble publisert samme dag. Dette er en bevisst security exception til repoets normale 7 dagers cooldown.

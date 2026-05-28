@@ -36,7 +36,7 @@ const Periodevelger = ({ name, fromDate, toDate, disabled }: Props) => {
                     fromDate={fromDate}
                     toDate={fomToDate}
                     visFeilmelding={false}
-                    disabled={disabled}
+                    disabledDates={disabled}
                 />
                 <DatovelgerFormik
                     id={tomFieldName}
@@ -46,7 +46,7 @@ const Periodevelger = ({ name, fromDate, toDate, disabled }: Props) => {
                     fromDate={tomFromDate}
                     toDate={toDate}
                     visFeilmelding={false}
-                    disabled={disabled}
+                    disabledDates={disabled}
                 />
             </div>
             <div>
