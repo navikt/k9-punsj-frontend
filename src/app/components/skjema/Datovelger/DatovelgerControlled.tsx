@@ -31,7 +31,7 @@ const DatovelgerControlled = ({
     fromDate,
     toDate,
     defaultMonth,
-    size = 'small',
+    size = 'medium',
     id,
     inputRef,
     dataTestId,

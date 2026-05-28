@@ -54,4 +54,25 @@ describe('FormDateInput', () => {
 
         expect(screen.getByText('Velg mottatt dato')).toBeInTheDocument();
     });
+
+    it('supports react hook form setFocus by forwarding the input ref', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <TypedFormProvider formProps={{ defaultValues: { mottattDato: '' } }}>
+                {(methods: UseFormReturn<TestForm>) => (
+                    <>
+                        <TypedFormDateInput name="mottattDato" label="Mottatt dato" data-testid="rhf-date-input" />
+                        <button type="button" onClick={() => methods.setFocus('mottattDato')}>
+                            Focus date
+                        </button>
+                    </>
+                )}
+            </TypedFormProvider>,
+        );
+
+        await user.click(screen.getByRole('button', { name: 'Focus date' }));
+
+        expect(screen.getByTestId('rhf-date-input')).toHaveFocus();
+    });
 });

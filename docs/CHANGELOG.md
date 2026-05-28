@@ -8,6 +8,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til `FormDateInput` i `src/app/components/form` som første offisielle RHF date primitive, samt typed export i form-laget.
 - La til interaktive Storybook-historier for controlled, Formik og RHF date adapters, og målrettede tester for change, blur commit og ekstern value-sync. Selve app-migreringen av eksisterende usages er bevisst holdt til et senere pass.
 - Startet deretter første usage-migrering bort fra `NewDateInput` i appen ved å flytte `PeriodInput`, flere `Opplysninger om søknaden`-skjermer og de store `ArbeidsforholdPanel`-variantene over på `DatovelgerControlled`, mens `DatoInputFormikNew` nå bruker samme controlled adapter internt som et overgangslag for eldre Formik-flyt.
+- Justerte også default `size` tilbake til `medium` i date adapter-laget for å matche Aksel sin standard og unngå at skjermer som PSB uforvarende ble rendret med mindre inputs etter migreringen.
 
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 

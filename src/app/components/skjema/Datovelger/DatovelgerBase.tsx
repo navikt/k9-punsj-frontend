@@ -40,7 +40,7 @@ const DatovelgerBase = ({
     inputRef,
     dataTestId,
     noValidateTomtFelt = true,
-    size = 'small',
+    size = 'medium',
     id,
 }: DatovelgerBaseProps) => {
     const [isInvalidDate, setIsInvalidDate] = useState(false);

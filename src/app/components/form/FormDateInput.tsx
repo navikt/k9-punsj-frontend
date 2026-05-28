@@ -34,6 +34,7 @@ export function FormDateInput<T extends FieldValues>({
             className={className}
             disabled={disabled}
             disabledDates={disabledDates}
+            inputRef={field.ref}
             value={typeof field.value === 'string' ? field.value : ''}
             onChange={(value) => field.onChange(value)}
             onBlur={() => field.onBlur()}
