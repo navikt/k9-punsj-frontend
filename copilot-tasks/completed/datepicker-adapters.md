@@ -10,7 +10,7 @@
 ## Goal
 
 - Reduce the current date input sprawl to one shared base implementation plus three thin adapters: Formik, controlled, and React Hook Form.
-- Keep this task focused on the date layer itself, not on app wide migration of every existing usage.
+- Complete the initial app migration away from `NewDateInput` and `DatoInputFormikNew` without broad RHF conversion.
 
 ## Context
 
@@ -50,8 +50,8 @@
     - `src/test/**` for targeted date input tests
     - `src/storybook/stories/**` for small date stories
     - `copilot-tasks/datepicker-adapters.md` for `Plan`, `Progress notes`, and `Outcome`
-- Out of scope:
-    - broad migration of all existing call sites across the app
+-- Out of scope:
+    - broad migration of all existing call sites across the app beyond the current date wrapper cleanup
     - React 19 work
     - Aksel v8 migration
     - Redux architecture changes
@@ -120,25 +120,23 @@ Suggested starter prompt for chat:
 ## Progress notes
 
 - Added `DatovelgerBase` as the shared controlled core for date input semantics.
-- Rewired `Datovelger`, `DatovelgerControlled`, and `NewDateInput` to the shared base.
+- Rewired the controlled, Formik, and legacy date paths onto the shared base.
 - Added `FormDateInput` plus typed exports for the RHF form layer.
-- Added interactive Storybook stories for controlled, Formik, and RHF adapters.
-- Added targeted tests for controlled typing, blur commit, RHF wiring, and kept `PeriodInput` regression coverage green.
-- Started the first app-level migration wave away from `NewDateInput` by moving direct usages onto `DatovelgerControlled`.
-- Rewired `DatoInputFormikNew` to `DatovelgerControlled` internally so older Formik screens stop depending on `NewDateInput` directly.
-- Rechecked the PSB blur regression and kept `PleiepengerPunsj.cy.js` green after the usage migration.
+- Added interactive Storybook stories for controlled, Formik, RHF, and period date adapters.
+- Added targeted tests for controlled typing, blur commit, RHF wiring, legacy `NewDateInput`, and Formik adapter behavior.
+- Migrated direct app usages away from `NewDateInput` and `DatoInputFormikNew`.
+- Removed `DatoInputFormikNew` and the old `Datovelger` wrapper after the usage cleanup.
+- Rechecked PSB and added focused Cypress coverage for Formik date updates in `OMPAO` and `OMPUT`.
 
 ## Outcome
 
 - Changed files:
   - `src/app/components/skjema/Datovelger/DatovelgerBase.tsx`
-  - `src/app/components/skjema/Datovelger/Datovelger.tsx`
   - `src/app/components/skjema/Datovelger/DatovelgerControlled.tsx`
   - `src/app/components/skjema/Datovelger/DatovelgerFormik.tsx`
   - `src/app/components/skjema/Datovelger/Periodevelger.tsx`
   - `src/app/components/skjema/NewDateInput/NewDateInput.tsx`
   - `src/app/components/form/FormDateInput.tsx`
-  - `src/app/components/formikInput/DatoInputFormikNew.tsx`
   - `src/app/components/period-input/PeriodInput.tsx`
   - `src/app/components/arbeidsforhold/containers/ArbeidsforholdPanel.tsx`
   - `src/app/components/form/index.ts`
@@ -153,16 +151,20 @@ Suggested starter prompt for chat:
   - `src/app/søknader/pleiepenger/containers/Arbeidsforhold/ArbeidsforholdPanel.tsx`
   - `src/storybook/stories/DateInputAdapters.stories.tsx`
   - `src/test/components/skjema/DatovelgerControlled.spec.tsx`
+  - `src/test/components/skjema/DatovelgerFormik.spec.tsx`
   - `src/test/components/form/FormDateInput.spec.tsx`
   - `src/test/components/skjema/NewDateInput.spec.tsx`
+  - `cypress/e2e/omsorgspenger-alene-om-omsorgen/nySoknad.cy.js`
+  - `cypress/e2e/omsorgspenger-utbetaling/nySoknad.cy.js`
 - Validation:
   - `yarn tsc --noEmit` green
   - `yarn lint` green
   - `yarn test --maxWorkers=2 src/test/components/form/FormDateInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/period-input/PeriodInput.spec.tsx` green
   - `yarn build-storybook` green
-  - `yarn test --runInBand src/test/components/period-input/PeriodInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/skjema/NewDateInput.spec.tsx` green
+  - `yarn test --runInBand src/test/components/period-input/PeriodInput.spec.tsx src/test/components/skjema/DatovelgerControlled.spec.tsx src/test/components/skjema/DatovelgerFormik.spec.tsx src/test/components/skjema/NewDateInput.spec.tsx` green
   - `yarn test:e2e --spec cypress/e2e/pleiepenger/PleiepengerPunsj.cy.js` green
+  - `yarn test:e2e --spec cypress/e2e/omsorgspenger-alene-om-omsorgen/nySoknad.cy.js` green
+  - `yarn test:e2e --spec cypress/e2e/omsorgspenger-utbetaling/nySoknad.cy.js` green
 - Remaining risks or follow ups:
-  - `NewDateInput` is no longer used directly from `src/app/**`, but it still exists as a transitional wrapper and regression target.
-  - `DatoInputFormikNew` still exists as a legacy Formik entry point and should be either collapsed into `DatovelgerFormik` or removed after the broader form migration settles.
+  - `NewDateInput` is no longer used directly from `src/app/**`, but it still exists as a transitional wrapper and regression target until the manual verification pass is done.
   - The long term direction is still to prefer RHF primitives like `FormDateInput` and let the Formik adapter become removable later.
