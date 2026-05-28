@@ -6,7 +6,7 @@ import { Button, ErrorMessage } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 interface Props {
@@ -24,7 +24,7 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
-                    <Periodevelger
+                    <PeriodevelgerFormik
                         name={`utenlandsopphold[${fieldArrayIndex}].periode`}
                         fromDate={fromDate}
                         toDate={toDate}

@@ -838,7 +838,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const unhandledErrors = this.resolveUnhandledErrors(attribute);
         const parsedPath = parsePeriodFeltPath(attribute);
 
-        // Period-level bosteder errors are already shown directly on PeriodInput, skip duplicates in block-level list.
+        // Period-level bosteder errors are already shown directly on PeriodevelgerControlled, skip duplicates in block-level list.
         if (parsedPath?.prefix === 'ytelse.bosteder' && !parsedPath.suffix) {
             return [];
         }

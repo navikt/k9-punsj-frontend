@@ -5,7 +5,7 @@ import { Box, Button } from '@navikt/ds-react';
 import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import usePrevious from 'app/hooks/usePrevious';
 import { IPeriode } from 'app/models/types';
 import useFocus from '../../../hooks/useFocus';
@@ -55,7 +55,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                 <div className="flex items-start" key={index}>
                                     <Field name={fieldName}>
                                         {({ meta }: FieldProps<string, FormikValues>) => (
-                                            <PeriodInput
+                                            <PeriodevelgerControlled
                                                 onChange={(period) => {
                                                     setFieldValue(fieldName, period);
                                                 }}

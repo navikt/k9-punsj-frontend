@@ -9,7 +9,7 @@ import {
     UpdateListeinfoInSoknadState,
 } from 'app/components/Listepaneler';
 import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -154,7 +154,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         return (
             <div className="utenlandsopphold">
                 <div className="flex items-start">
-                    <PeriodInput
+                    <PeriodevelgerControlled
                         periode={periodeinfo.periode || {}}
                         intl={intlShape!}
                         onChange={(periode) => {

@@ -11,7 +11,7 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
     land: '',
@@ -53,7 +53,7 @@ const Bosteder: React.FC = () => {
                                         <VerticalSpacer thirtyTwoPx />
 
                                         <div className="fom-tom-rad">
-                                            <Periodevelger
+                                            <PeriodevelgerFormik
                                                 name={`bosteder[${index}].periode`}
                                             />
 

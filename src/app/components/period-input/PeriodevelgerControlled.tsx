@@ -7,7 +7,7 @@ import { IntlShape } from 'react-intl';
 import { IPeriode } from '../../models/types/Periode';
 import DatovelgerControlled from '../skjema/Datovelger/DatovelgerControlled';
 
-export interface IPeriodInputProps {
+export interface PeriodevelgerControlledProps {
     intl: IntlShape;
     periode: IPeriode;
     onChange: (periode: IPeriode) => void;
@@ -30,7 +30,9 @@ export interface IPeriodInputProps {
     size?: 'small' | 'medium';
 }
 
-export const PeriodInput: React.FunctionComponent<IPeriodInputProps> = (props: IPeriodInputProps) => {
+export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerControlledProps> = (
+    props: PeriodevelgerControlledProps,
+) => {
     const {
         intl,
         periode,

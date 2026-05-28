@@ -3,7 +3,7 @@ import { ErrorMessage, DatePickerProps} from '@navikt/ds-react';
 import DatovelgerFormik from './DatovelgerFormik';
 import { useField } from 'formik';
 
-interface Props {
+interface PeriodevelgerFormikProps {
     name: string;
     /** Begrens fra-dato (tidligste tillatte dato) */
     fromDate?: Date;
@@ -13,7 +13,7 @@ interface Props {
     disabled?: DatePickerProps['disabled'];
 }
 
-const Periodevelger = ({ name, fromDate, toDate, disabled }: Props) => {
+const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled }: PeriodevelgerFormikProps) => {
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
@@ -70,4 +70,4 @@ const Periodevelger = ({ name, fromDate, toDate, disabled }: Props) => {
     );
 };
 
-export default Periodevelger;
+export default PeriodevelgerFormik;

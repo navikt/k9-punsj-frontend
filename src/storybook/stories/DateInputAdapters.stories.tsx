@@ -7,10 +7,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { createIntl } from 'react-intl';
 
 import { IPeriode } from 'app/models/types/Periode';
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import DatovelgerControlled from 'app/components/skjema/Datovelger/DatovelgerControlled';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 
 import '@navikt/ds-css/dist/index.css';
@@ -138,7 +138,7 @@ const ControlledPeriodHarness = () => {
 
     return (
         <VStack gap="space-16">
-            <PeriodInput
+            <PeriodevelgerControlled
                 intl={periodIntl}
                 periode={periode}
                 onChange={setPeriode}
@@ -195,7 +195,7 @@ const FormikPeriodHarness = () => (
     <Formik<PeriodStoryFormValues> initialValues={{ periode: { fom: '2026-05-17', tom: '2026-05-20' } }} onSubmit={() => undefined}>
         <Form>
             <VStack gap="space-16">
-                <Periodevelger name="periode" />
+                <PeriodevelgerFormik name="periode" />
                 <FormikPeriodDebugPanel />
             </VStack>
         </Form>

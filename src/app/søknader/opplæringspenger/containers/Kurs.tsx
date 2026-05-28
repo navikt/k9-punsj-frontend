@@ -14,7 +14,7 @@ import { JaNei } from 'app/models/enums';
 import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
@@ -124,7 +124,9 @@ const Kurs = ({
                                             <div className="mb-4" key={kursperiode.key}>
                                                 <div className="flex gap-4">
                                                     <div className="flex gap-4">
-                                                        <Periodevelger name={`kurs.kursperioder[${index}].periode`} />
+                                                        <PeriodevelgerFormik
+                                                            name={`kurs.kursperioder[${index}].periode`}
+                                                        />
                                                     </div>
                                                     {values.kurs.kursperioder.length > 1 && (
                                                         <Button

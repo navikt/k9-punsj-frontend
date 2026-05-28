@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import { createPeriodInputIds, periodKeyFromPeriode } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
@@ -113,7 +113,7 @@ export const Periodepaneler: React.FC<Props> = ({
 
                 return (
                     <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
-                        <PeriodInput
+                        <PeriodevelgerControlled
                             periode={p || {}}
                             intl={intl}
                             onChange={(periode) => {
