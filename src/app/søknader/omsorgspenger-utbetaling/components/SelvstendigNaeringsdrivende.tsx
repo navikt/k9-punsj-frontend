@@ -9,6 +9,7 @@ import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
@@ -19,7 +20,6 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 enum Virksomhetstyper {
     FISKE = 'Fiske',
@@ -208,12 +208,12 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                 </Label>
 
                 <div className="fom-tom-rad">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                     />
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     />

@@ -8,8 +8,8 @@ import set from 'lodash/set';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { OMPMASoknad } from '../types/OMPMASoknad';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const situasjonstyper = {
     INNLAGT_I_HELSEINSTITUSJON: 'INNLAGT_I_HELSEINSTITUSJON',
@@ -102,14 +102,14 @@ const AnnenForelder = ({ handleBlur }: Props) => {
 
                 <div className="flex">
                     <div className="min-w-[250px] mr-4">
-                        <DatoInputFormikNew
+                        <DatovelgerFormik
                             label="Fra og med"
                             name="annenForelder.periode.fom"
                             handleBlur={handleBlur}
                         />
                     </div>
                     <div className="min-w-[250px]">
-                        <DatoInputFormikNew
+                        <DatovelgerFormik
                             label="Til og med"
                             name="annenForelder.periode.tom"
                             disabled={values.annenForelder.periode.tilOgMedErIkkeOppgitt}

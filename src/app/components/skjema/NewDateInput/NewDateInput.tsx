@@ -34,7 +34,7 @@ type Props = Omit<DatePickerProps, 'onChange' | 'onBlur' | 'fromDate' | 'toDate'
 };
 
 /**
- * @deprecated bruk Datovelger i stedet
+ * @deprecated bruk DatovelgerControlled eller DatovelgerFormik i stedet
  */
 const NewDateInput: React.FC<Props> = ({
     label,

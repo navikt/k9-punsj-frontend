@@ -1,14 +1,28 @@
 import React from 'react';
-import { DatePickerProps } from '@navikt/ds-react';
-import Datovelger, { DatovelgerProps } from './Datovelger';
-import { useField } from 'formik';
+import { FormikValues, useField, useFormikContext } from 'formik';
+import { cloneDeep, set } from 'lodash';
+import DatovelgerControlled, { DatovelgerControlledProps } from './DatovelgerControlled';
 
-type Props = Pick<DatovelgerProps, 'toDate' | 'fromDate' | 'hideLabel' | 'defaultMonth' | 'label' | 'disabled'> & {
+export type DatovelgerFormikProps = Pick<
+    DatovelgerControlledProps,
+    | 'toDate'
+    | 'fromDate'
+    | 'hideLabel'
+    | 'defaultMonth'
+    | 'label'
+    | 'disabled'
+    | 'size'
+    | 'description'
+    | 'className'
+    | 'id'
+    | 'disabledDates'
+    | 'noValidateTomtFelt'
+    | 'dataTestId'
+> & {
     name: string;
-    className?: string;
-    id?: string;
     visFeilmelding?: boolean;
-    disabledDates?: DatePickerProps['disabled'];
+    error?: React.ReactNode | string;
+    handleBlur?: (callback: () => void, values: any) => void;
 };
 
 const DatovelgerFormik = ({
@@ -22,27 +36,42 @@ const DatovelgerFormik = ({
     id,
     disabled,
     disabledDates,
+    size,
+    description,
+    noValidateTomtFelt,
+    dataTestId,
+    error,
+    handleBlur,
     // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
     visFeilmelding = true,
-}: Props) => {
+}: DatovelgerFormikProps) => {
     const [field, meta, helper] = useField(name);
+    const { values } = useFormikContext<FormikValues>();
+
+    const externalOrFormikError = (meta.touched && meta.error) || error;
 
     const getErrorMessage = () => {
-        // Vi viser feilmelding hvis visFeilmelding er true og feltet har blitt besøkt og har en feilmelding
         if (visFeilmelding) {
-            return meta.touched && meta.error ? meta.error : undefined;
+            return externalOrFormikError;
         }
-        // Hvis vi ikke skal vise feilmelding, så må vi uansett sende inn boolean når vi har en feil
-        // for å få rød border på inputfeltet
-        return meta.touched && !!meta.error;
+        return !!externalOrFormikError;
     };
+
     return (
-        <Datovelger
+        <DatovelgerControlled
             label={label}
-            value={field.value}
-            selectedDay={field.value}
+            description={description}
+            value={field.value || ''}
             onChange={(value) => helper.setValue(value)}
-            onBlur={() => helper.setTouched(true, true)}
+            onBlur={(selectedDate) => {
+                if (handleBlur) {
+                    handleBlur(() => helper.setTouched(true, true), set(cloneDeep(values), name, selectedDate));
+                    return;
+                }
+
+                helper.setValue(selectedDate);
+                helper.setTouched(true, true);
+            }}
             errorMessage={getErrorMessage()}
             toDate={toDate}
             fromDate={fromDate}
@@ -52,6 +81,9 @@ const DatovelgerFormik = ({
             id={id}
             disabled={disabled}
             disabledDates={disabledDates}
+            size={size}
+            noValidateTomtFelt={noValidateTomtFelt}
+            dataTestId={dataTestId}
         />
     );
 };

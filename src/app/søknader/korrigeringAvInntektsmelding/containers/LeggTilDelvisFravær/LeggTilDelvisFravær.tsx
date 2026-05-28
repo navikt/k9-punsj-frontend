@@ -15,7 +15,7 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import useFocus from '../../../../hooks/useFocus';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { delvisFravaerDatoFieldId, delvisFravaerTimerFieldId } from '../formFieldIds';
 
 import './LeggTilDelvisFravær.css';
@@ -72,17 +72,12 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                             return (
                                                 <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="input-row">
-                                                        <Field name={`${fieldName}.dato`}>
-                                                            {({ field, meta }: FieldProps) => (
-                                                                <DatoInputFormikNew
-                                                                    {...field}
-                                                                    className="dateInput"
-                                                                    id={delvisFravaerDatoFieldId(index)}
-                                                                    label={intlHelper(intl, 'skjema.dato')}
-                                                                    error={meta.touched && meta.error}
-                                                                />
-                                                            )}
-                                                        </Field>
+                                                        <DatovelgerFormik
+                                                            className="dateInput"
+                                                            id={delvisFravaerDatoFieldId(index)}
+                                                            label={intlHelper(intl, 'skjema.dato')}
+                                                            name={`${fieldName}.dato`}
+                                                        />
 
                                                         <div className="ml-2">
                                                             <Field name={`${fieldName}.timer`}>

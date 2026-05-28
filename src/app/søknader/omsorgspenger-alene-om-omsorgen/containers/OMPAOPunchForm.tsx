@@ -5,8 +5,8 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading, VStack } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
@@ -119,7 +119,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                         <Heading size="small" level="3">
                             <FormattedMessage id="skjema.soknadsperiode" />
                         </Heading>
-                        <DatoInputFormikNew
+                        <DatovelgerFormik
                             label={intlHelper(intl, 'skjema.ompao.dateInput.label')}
                             name={`${fieldNames.periode}.fom`}
                         />

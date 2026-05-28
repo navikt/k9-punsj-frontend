@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { IOMPUTSoknad } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknad';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../../utils/intlUtils';
@@ -26,7 +26,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 </Alert>
 
                 <div className="input-row">
-                    <DatoInputFormikNew id="soknad-dato" label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
+                    <DatovelgerFormik id="soknad-dato" label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
 
                     <div className="ml-4">
                         <Field name="klokkeslett">

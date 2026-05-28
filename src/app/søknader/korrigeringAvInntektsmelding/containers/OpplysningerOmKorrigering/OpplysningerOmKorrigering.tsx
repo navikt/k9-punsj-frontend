@@ -3,9 +3,9 @@ import React from 'react';
 import { ErrorMessage, Field, FieldProps } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Fieldset, Heading, TextField } from '@navikt/ds-react';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { KorrigeringAvInntektsmeldingFormFields } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { klokkeslettFieldId, mottattDatoFieldId } from '../formFieldIds';
 
 const OpplysningerOmKorrigering: React.FC = () => {
@@ -30,16 +30,11 @@ const OpplysningerOmKorrigering: React.FC = () => {
                 </Heading>
 
                 <div className="input-row">
-                    <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}>
-                        {({ field, meta }: FieldProps) => (
-                            <DatoInputFormikNew
-                                {...field}
-                                id={mottattDatoFieldId}
-                                label={intlHelper(intl, 'skjema.dato')}
-                                error={meta.touched && meta.error}
-                            />
-                        )}
-                    </Field>
+                    <DatovelgerFormik
+                        id={mottattDatoFieldId}
+                        label={intlHelper(intl, 'skjema.dato')}
+                        name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}
+                    />
                     <div className="ml-4">
                         <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
                             {({ field, meta }: FieldProps) => (
