@@ -106,30 +106,4 @@ describe('DatovelgerFormik', () => {
             }),
         );
     });
-
-    it('can mark the field as touched on change for legacy Formik flows', async () => {
-        const user = userEvent.setup();
-
-        render(
-            <Formik initialValues={{ mottattDato: '' }} onSubmit={() => undefined}>
-                {({ touched }) => (
-                    <Form>
-                        <DatovelgerFormik
-                            name="mottattDato"
-                            label="Mottatt dato"
-                            touchOnChange
-                            dataTestId="formik-date"
-                        />
-                        <div data-testid="touched">{String(!!touched.mottattDato)}</div>
-                    </Form>
-                )}
-            </Formik>,
-        );
-
-        expect(screen.getByTestId('touched').textContent).toBe('false');
-
-        await user.click(screen.getByTestId('formik-date-change'));
-
-        expect(screen.getByTestId('touched').textContent).toBe('true');
-    });
 });

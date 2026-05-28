@@ -257,7 +257,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             getErrorMessage={getErrorMessage}
                             feilkodeprefiks="innleggelsesperioder"
                             kanHaFlere
-                            doNotShowBorders
                         />
 
                         <LegacyRadioGroup

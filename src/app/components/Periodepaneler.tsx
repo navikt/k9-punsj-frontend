@@ -18,7 +18,6 @@ interface Props {
     textLeggTil?: string;
     textFjern?: string;
     feilkodeprefiks?: string;
-    doNotShowBorders?: boolean;
 
     editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)

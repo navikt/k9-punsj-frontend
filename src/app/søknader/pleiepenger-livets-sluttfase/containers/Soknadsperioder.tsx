@@ -152,7 +152,6 @@ const Soknadsperioder: React.FC<Props> = ({
                             getUhaandterteFeil={getUhaandterteFeil}
                             kanHaFlere
                             onRemove={() => setHarSlettetPerioder(true)}
-                            doNotShowBorders
                         />
                     </div>
                 )}

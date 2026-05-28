@@ -22,7 +22,6 @@ export type DatovelgerFormikProps = Pick<
     name: string;
     visFeilmelding?: boolean;
     error?: React.ReactNode | string;
-    touchOnChange?: boolean;
     handleBlur?: (callback: () => void, values: any) => void;
 };
 
@@ -42,7 +41,6 @@ const DatovelgerFormik = ({
     noValidateTomtFelt,
     dataTestId,
     error,
-    touchOnChange,
     handleBlur,
     // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
     visFeilmelding = true,
@@ -64,12 +62,7 @@ const DatovelgerFormik = ({
             label={label}
             description={description}
             value={field.value || ''}
-            onChange={(value) => {
-                helper.setValue(value);
-                if (touchOnChange) {
-                    helper.setTouched(true, false);
-                }
-            }}
+            onChange={(value) => helper.setValue(value)}
             onBlur={(selectedDate) => {
                 if (handleBlur) {
                     handleBlur(() => helper.setTouched(true, true), set(cloneDeep(values), name, selectedDate));

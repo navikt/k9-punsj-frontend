@@ -11,10 +11,9 @@ interface PeriodevelgerFormikProps {
     toDate?: Date;
     /** Funksjon eller matcher for å deaktivere spesifikke datoer */
     disabled?: DatePickerProps['disabled'];
-    touchOnChange?: boolean;
 }
 
-const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled, touchOnChange }: PeriodevelgerFormikProps) => {
+const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled }: PeriodevelgerFormikProps) => {
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
@@ -38,7 +37,6 @@ const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled, touchOnChange }
                     toDate={fomToDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
-                    touchOnChange={touchOnChange}
                 />
                 <DatovelgerFormik
                     id={tomFieldName}
@@ -49,7 +47,6 @@ const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled, touchOnChange }
                     toDate={toDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
-                    touchOnChange={touchOnChange}
                 />
             </div>
             <div>
