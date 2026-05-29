@@ -79,7 +79,7 @@
         "@navikt/aksel": "^8.10.6",
         "@navikt/ds-tailwind": "8.10.6",
         "@pmmmwh/react-refresh-webpack-plugin": "0.6.2",
-        "@sentry/cli": "3.4.2",
+        "@sentry/cli": "3.4.3",
         "@storybook/addon-webpack5-compiler-swc": "4.0.3",
         "@storybook/react": "10.4.0",
         "@storybook/react-webpack5": "10.4.0",
