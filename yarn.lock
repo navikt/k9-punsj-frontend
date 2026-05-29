@@ -3191,33 +3191,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:^8.10.6":
-  version: 8.10.6
-  resolution: "@navikt/aksel@npm:8.10.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.10.6%2Ffc77bcd4de64d42cf82ed1fbd3d37dc7b6ce3dc7"
+"@navikt/aksel@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@navikt/aksel@npm:8.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.11.0%2F2841aabbbce04f19d8fa2e3d72cacfbc08a8bb22"
   dependencies:
-    "@navikt/ds-css": "npm:^8.10.6"
-    "@navikt/ds-tokens": "npm:^8.10.6"
+    "@navikt/ds-css": "npm:^8.11.0"
+    "@navikt/ds-tokens": "npm:^8.11.0"
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
     clipboardy: "npm:5.0.1"
     commander: "npm:14.0.3"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
-    figlet: "npm:1.10.0"
+    figlet: "npm:1.11.0"
     is-git-clean: "npm:1.1.0"
     jscodeshift: "npm:17.3.0"
     jscodeshift-add-imports: "npm:1.0.11"
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/4d677cb79c7cb79b7132ce18ba7bdf8c42e0f45bff695c83c50e7be5409966ccfbc5123858c74f2ddf6e3de58dcc58bbae2380ab20164a7e22ae8f03dd0e68b0
+  checksum: 10/0b2a22453dfa5bb3343abe6b49c5b66e615e922f9aa45237d2f5161b3d8f3d62ee988c276b0530b41acda6b0f104b370303859e36d2e2e6425125d1439b02cff
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:8.10.6, @navikt/ds-css@npm:^8.10.6":
+"@navikt/ds-css@npm:8.10.6":
   version: 8.10.6
   resolution: "@navikt/ds-css@npm:8.10.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.10.6%2F5a49d9b7c2bf0326289ff0a69505df89f36a3e68"
   checksum: 10/ec39c8229f536aadc59c2f7f6342ad8e35e4749b0378df7c88b82fb3b863dac396c3fd0b01e49afee0504ea84da921594d927bd2e5bdfeb49050ae6510a31afd
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-css@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@navikt/ds-css@npm:8.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.11.0%2F888861af213f1f01d1becab42fe59810b6dba2be"
+  checksum: 10/be51d5b42203c816d999a4ba8ec59df3aacbc2c3cf981c1c4aace5f2e39fc8da54cc5911db7b665d4ef834f77db5190c81e67fa74398c0e879cecbe99b0a4620
   languageName: node
   linkType: hard
 
@@ -3250,6 +3257,13 @@ __metadata:
   version: 8.10.6
   resolution: "@navikt/ds-tokens@npm:8.10.6::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.10.6%2F3070167a2ab8445b7f04935d47175c87cc0167a3"
   checksum: 10/1ea18dc621a0ac36e92753d489fadb8140e186f0820b90f4ca0cb2d57e4aa6dcf44a69e87731530490c4eda53251562ca85f8deb46571c3ecdd799a5eab1c671
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-tokens@npm:^8.11.0":
+  version: 8.11.0
+  resolution: "@navikt/ds-tokens@npm:8.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.11.0%2F247cb6dd6c04352aceea2df5f3ce9588f6cd5883"
+  checksum: 10/95dca08448e8a05426354f352da36515a373724100999883a7655a693a36fd75fd9c62d6bb21cb6ed120ff74b15081559e4564e2511e1b52269c5e2dbcc7ab1c
   languageName: node
   linkType: hard
 
@@ -9831,14 +9845,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"figlet@npm:1.10.0":
-  version: 1.10.0
-  resolution: "figlet@npm:1.10.0"
+"figlet@npm:1.11.0":
+  version: 1.11.0
+  resolution: "figlet@npm:1.11.0"
   dependencies:
     commander: "npm:^14.0.0"
   bin:
     figlet: bin/index.js
-  checksum: 10/c0ab3499b424427d71ea90e6b2fd8d5c96e00a11ba86173884e4b14c9b908e0d78a1bb9ca58520445c586aa1b85596b9938aac4ae5b3d97311b70b2a7b547f9d
+  checksum: 10/ed78dd3dcd7cd23daf43b84c53af9befc19c9e9e413ff061191d2b08413e5db1d97a9c383df7b1c488996c220e131c0e4dd8a1c8431257a3c97c761540b02025
   languageName: node
   linkType: hard
 
@@ -12615,7 +12629,7 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.7.0"
     "@jest/globals": "npm:30.4.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel": "npm:^8.10.6"
+    "@navikt/aksel": "npm:^8.11.0"
     "@navikt/aksel-icons": "npm:8.10.6"
     "@navikt/ds-css": "npm:8.10.6"
     "@navikt/ds-react": "npm:8.10.6"
