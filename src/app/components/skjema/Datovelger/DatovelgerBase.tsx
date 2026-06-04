@@ -44,6 +44,7 @@ const DatovelgerBase = ({
     id,
 }: DatovelgerBaseProps) => {
     const [isInvalidDate, setIsInvalidDate] = useState(false);
+    const [showInvalidDateError, setShowInvalidDateError] = useState(false);
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
     const lastPropagatedDateRef = useRef<string | undefined>(undefined);
@@ -52,7 +53,7 @@ const DatovelgerBase = ({
     const fromDateDefault = offsetDateByYears(new Date(), -5);
     const toDateDefault = offsetDateByYears(new Date(), 5);
     const defaultSelected = isISODateString(value) ? ISODateStringToUTCDate(value) : undefined;
-    const error = isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
+    const error = showInvalidDateError && isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
 
     const commitValue = (nextValue: string | typeof INVALID_DATE_VALUE) => {
         if (!onCommit) {
@@ -95,7 +96,12 @@ const DatovelgerBase = ({
         defaultSelected,
         onDateChange,
         onValidate: (validation) => {
-            setIsInvalidDate(!validation.isValidDate && (!noValidateTomtFelt || !validation.isEmpty));
+            const invalidDate = !validation.isValidDate && (!noValidateTomtFelt || !validation.isEmpty);
+            setIsInvalidDate(invalidDate);
+
+            if (!invalidDate) {
+                setShowInvalidDateError(false);
+            }
         },
     });
 
@@ -143,8 +149,13 @@ const DatovelgerBase = ({
                     id={id}
                     ref={inputRef}
                     data-testid={dataTestId || 'datePickerInput'}
+                    onChange={(event) => {
+                        setShowInvalidDateError(false);
+                        inputProps.onChange?.(event);
+                    }}
                     onBlur={(event) => {
                         const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
+                        setShowInvalidDateError(nextValue === INVALID_DATE_VALUE);
                         commitValue(nextValue);
                         inputProps.onBlur?.(event);
                     }}

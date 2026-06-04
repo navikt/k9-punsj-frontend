@@ -45,6 +45,27 @@ describe('DatovelgerControlled', () => {
         expect(onBlur).toHaveBeenCalledWith('2020-03-01');
     });
 
+    it('shows invalid format only after blur for a partial date', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <DatovelgerControlled
+                label="Mottatt dato"
+                value=""
+                onChange={() => undefined}
+                dataTestId="controlled-date-input"
+            />,
+        );
+
+        const input = screen.getByTestId('controlled-date-input');
+
+        await user.type(input, '1');
+        expect(screen.queryByText('Dato har ikke gyldig format')).not.toBeInTheDocument();
+
+        await user.tab();
+        expect(screen.getByText('Dato har ikke gyldig format')).toBeInTheDocument();
+    });
+
     it('commits the typed value on blur after the parent syncs the controlled value', async () => {
         const user = userEvent.setup();
         const onBlur = jest.fn();
