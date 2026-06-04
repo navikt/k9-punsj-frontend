@@ -2,12 +2,11 @@ import React, { useRef } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button } from '@navikt/ds-react';
-import { ErrorMessage, Field, FieldArray, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FieldArray, useFormikContext } from 'formik';
+import { FormattedMessage } from 'react-intl';
 
-import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import usePrevious from 'app/hooks/usePrevious';
-import { IPeriode } from 'app/models/types';
 import useFocus from '../../../hooks/useFocus';
 import { refusjonskravFieldId, trekkperiodeFieldId } from '../containers/formFieldIds';
 import {
@@ -25,9 +24,7 @@ export interface IPeriodepanelerProps {
 
 /** Variant av periodepanel som baserer seg på Formik */
 export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil }: IPeriodepanelerProps) => {
-    const intl = useIntl();
-
-    const { values, setFieldValue } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const { values } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
     const fomInputRef = useRef<HTMLInputElement>(null);
     const currentListLength = values[name]?.length;
     const previousListLength = usePrevious(currentListLength);
@@ -45,34 +42,23 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
             <FieldArray name={name}>
                 {({ push, remove }) => (
                     <>
-                        {values[name]?.map((value: IPeriode, index: number) => {
+                        {values[name]?.map((_, index: number) => {
                             const fieldName = `${name}.${index}`;
                             const isLastElement =
                                 previousListLength !== undefined &&
                                 previousListLength < currentListLength &&
                                 index === currentListLength - 1;
+                            const fomId =
+                                name === KorrigeringAvInntektsmeldingFormFields.Trekkperioder
+                                    ? trekkperiodeFieldId(index)
+                                    : refusjonskravFieldId(index);
                             return (
                                 <div className="flex items-start" key={index}>
-                                    <Field name={fieldName}>
-                                        {({ meta }: FieldProps<string, FormikValues>) => (
-                                            <PeriodevelgerControlled
-                                                onChange={(period) => {
-                                                    setFieldValue(fieldName, period);
-                                                }}
-                                                periode={value}
-                                                intl={intl}
-                                                inputIdFom={
-                                                    name === KorrigeringAvInntektsmeldingFormFields.Trekkperioder
-                                                        ? trekkperiodeFieldId(index)
-                                                        : refusjonskravFieldId(index)
-                                                }
-                                                errorMessage={
-                                                    meta.error ? <ErrorMessage name={fieldName} /> : undefined
-                                                }
-                                                fomInputRef={isLastElement ? fomInputRef : undefined}
-                                            />
-                                        )}
-                                    </Field>
+                                    <PeriodevelgerFormik
+                                        name={fieldName}
+                                        fomId={fomId}
+                                        fomInputRef={isLastElement ? fomInputRef : undefined}
+                                    />
 
                                     <Button
                                         id="slett"

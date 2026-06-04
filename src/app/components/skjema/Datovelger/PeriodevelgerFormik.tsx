@@ -11,14 +11,29 @@ interface PeriodevelgerFormikProps {
     toDate?: Date;
     /** Funksjon eller matcher for å deaktivere spesifikke datoer */
     disabled?: DatePickerProps['disabled'];
+    fomId?: string;
+    tomId?: string;
+    fomInputRef?: React.Ref<HTMLInputElement>;
+    tomInputRef?: React.Ref<HTMLInputElement>;
 }
 
-const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled }: PeriodevelgerFormikProps) => {
+const PeriodevelgerFormik = ({
+    name,
+    fromDate,
+    toDate,
+    disabled,
+    fomId,
+    tomId,
+    fomInputRef,
+    tomInputRef,
+}: PeriodevelgerFormikProps) => {
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
     const [, fomFieldMeta] = useField(fomFieldName);
     const [, tomFieldMeta] = useField(tomFieldName);
+    const effectiveFomId = fomId || fomFieldName;
+    const effectiveTomId = tomId || tomFieldName;
 
     // Beregn effektive grenser for fom-feltet
     const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
@@ -30,16 +45,17 @@ const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled }: Periodevelger
         <div className="flex flex-col gap-2">
             <div className="flex gap-4 flex-wrap">
                 <DatovelgerFormik
-                    id={fomFieldName}
+                    id={effectiveFomId}
                     name={fomFieldName}
                     label="Fra og med"
                     fromDate={fromDate}
                     toDate={fomToDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
+                    inputRef={fomInputRef}
                 />
                 <DatovelgerFormik
-                    id={tomFieldName}
+                    id={effectiveTomId}
                     name={tomFieldName}
                     label="Til og med"
                     defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
@@ -47,21 +63,22 @@ const PeriodevelgerFormik = ({ name, fromDate, toDate, disabled }: Periodevelger
                     toDate={toDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
+                    inputRef={tomInputRef}
                 />
             </div>
             <div>
                 {fomFieldMeta.touched && fomFieldMeta.error && (
-                    <ErrorMessage aria-describedby={fomFieldName} showIcon>
+                    <ErrorMessage aria-describedby={effectiveFomId} showIcon>
                         Fra og med: {fomFieldMeta.error}
                     </ErrorMessage>
                 )}
                 {tomFieldMeta.touched && tomFieldMeta.error && (
-                    <ErrorMessage aria-describedby={tomFieldName} showIcon>
+                    <ErrorMessage aria-describedby={effectiveTomId} showIcon>
                         Til og med: {tomFieldMeta.error}
                     </ErrorMessage>
                 )}
                 {(fomFieldMeta.touched || tomFieldMeta.touched) && typeof periodeFieldMeta.error === 'string' && (
-                    <ErrorMessage aria-describedby={name} showIcon={true}>
+                    <ErrorMessage aria-describedby={effectiveFomId} showIcon={true}>
                         {periodeFieldMeta.error}
                     </ErrorMessage>
                 )}

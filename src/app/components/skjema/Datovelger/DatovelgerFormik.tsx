@@ -15,6 +15,7 @@ export type DatovelgerFormikProps = Pick<
     | 'description'
     | 'className'
     | 'id'
+    | 'inputRef'
     | 'disabledDates'
     | 'noValidateTomtFelt'
     | 'dataTestId'
@@ -34,6 +35,7 @@ const DatovelgerFormik = ({
     defaultMonth,
     className,
     id,
+    inputRef,
     disabled,
     disabledDates,
     size,
@@ -79,6 +81,7 @@ const DatovelgerFormik = ({
             defaultMonth={defaultMonth}
             className={className}
             id={id}
+            inputRef={inputRef}
             disabled={disabled}
             disabledDates={disabledDates}
             size={size}
