@@ -40,6 +40,18 @@ describe('KorrigeringAvInntektsmelding Periodepanel', () => {
         expect(screen.queryByText('Til og med (TOM) må være satt.')).not.toBeInTheDocument();
     });
 
+    it('does not show the TOM error after blur when only the FOM field has been touched', async () => {
+        const user = userEvent.setup();
+
+        renderPeriodepanel();
+
+        const fomInput = screen.getByLabelText('Fra og med');
+        await user.type(fomInput, '01.03.2020');
+        await user.tab();
+
+        expect(screen.queryByText('Til og med (TOM) må være satt.')).not.toBeInTheDocument();
+    });
+
     it('shows the TOM error text after submit when only the FOM field is filled', async () => {
         const user = userEvent.setup();
 

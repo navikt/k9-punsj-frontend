@@ -1,7 +1,7 @@
 import React from 'react';
-import { ErrorMessage, DatePickerProps} from '@navikt/ds-react';
+import { ErrorMessage, DatePickerProps } from '@navikt/ds-react';
 import DatovelgerFormik from './DatovelgerFormik';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 
 interface PeriodevelgerFormikProps {
     name: string;
@@ -27,6 +27,7 @@ const PeriodevelgerFormik = ({
     fomInputRef,
     tomInputRef,
 }: PeriodevelgerFormikProps) => {
+    const { submitCount } = useFormikContext();
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
     const [, periodeFieldMeta] = useField(name);
@@ -34,6 +35,7 @@ const PeriodevelgerFormik = ({
     const [, tomFieldMeta] = useField(tomFieldName);
     const effectiveFomId = fomId || fomFieldName;
     const effectiveTomId = tomId || tomFieldName;
+    const showPeriodeError = submitCount > 0 || (fomFieldMeta.touched && tomFieldMeta.touched);
 
     // Beregn effektive grenser for fom-feltet
     const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
@@ -77,7 +79,7 @@ const PeriodevelgerFormik = ({
                         Til og med: {tomFieldMeta.error}
                     </ErrorMessage>
                 )}
-                {(fomFieldMeta.touched || tomFieldMeta.touched) && typeof periodeFieldMeta.error === 'string' && (
+                {showPeriodeError && typeof periodeFieldMeta.error === 'string' && (
                     <ErrorMessage aria-describedby={effectiveFomId} showIcon={true}>
                         {periodeFieldMeta.error}
                     </ErrorMessage>
