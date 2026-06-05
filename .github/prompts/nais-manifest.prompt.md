@@ -99,8 +99,7 @@ metadata:
   labels:
     team: team-namespace
 spec:
-  image: { { image } }
-  port: 8080
+  image: {{ image }}
 
   # Observability
   prometheus:
