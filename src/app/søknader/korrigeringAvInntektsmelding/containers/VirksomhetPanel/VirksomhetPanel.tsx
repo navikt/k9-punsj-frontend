@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Box, Fieldset, Heading, Label, Link, Select, TextField } from '@navikt/ds-react';
+import { Box, Heading, Label, Link, Select, TextField, VStack } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -112,122 +112,130 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
     };
 
     return (
-        <Fieldset
-            legend={
-                <Heading size="small" level="3">
-                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
-                </Heading>
-            }
-            className="korrigering__seksjon"
-        >
-            <Box
-                borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel virksomhetPanel"
-            >
-                <Label>Årstallet korrigeringen gjelder for</Label>
-                <TextField
-                    className="w-18 mt-2"
-                    label="Årstallet korrigeringen gjelder for"
-                    hideLabel
-                    value={årstallForKorrigering}
-                    onChange={(event) => {
-                        setÅrstallForKorrigering(event.target.value);
-                    }}
-                />
+        <div className="korrigering__seksjon">
+            <Box padding="space-16" borderWidth="1" borderRadius="8">
+                <VStack gap="space-16">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
+                    </Heading>
 
-                {hasFetchArbeidsgiverIdError && (
-                    <div className="virksomhetPanel feilmelding">
-                        <Feilmelding
-                            feil={intlHelper(
-                                intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
+                    <Box borderRadius="8" background="neutral-soft" className="virksomhetPanel">
+                        <VStack gap="space-16">
+                            <div>
+                                <Label>Årstallet korrigeringen gjelder for</Label>
+                                <TextField
+                                    className="w-18 mt-2"
+                                    label="Årstallet korrigeringen gjelder for"
+                                    hideLabel
+                                    value={årstallForKorrigering}
+                                    onChange={(event) => {
+                                        setÅrstallForKorrigering(event.target.value);
+                                    }}
+                                />
+                            </div>
+
+                            {hasFetchArbeidsgiverIdError && (
+                                <div className="virksomhetPanel feilmelding">
+                                    <Feilmelding
+                                        feil={intlHelper(
+                                            intl,
+                                            'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
+                                        )}
+                                    />
+                                </div>
                             )}
-                        />
-                    </div>
-                )}
 
-                <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
-                    {({ field, meta }: FieldProps) => (
-                        <Select
-                            id={virksomhetFieldId}
-                            className="w-64 mt-4"
-                            label={intlHelper(
-                                intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
-                            )}
-                            disabled={!arbeidsgivereMedId}
-                            {...field}
-                            error={
-                                meta.touched &&
-                                meta.error && <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
-                            }
-                        >
-                            <option disabled key="default" value="" label="">
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
-                            </option>
-
-                            {arbeidsgivereMedNavn.map((arbeidsgiver) => (
-                                <option key={arbeidsgiver.organisasjonsnummer} value={arbeidsgiver.organisasjonsnummer}>
-                                    {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
-                                </option>
-                            ))}
-                        </Select>
-                    )}
-                </Field>
-
-                <Link className="eksternLenke" href={AAREG_URL}>
-                    <span>
-                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
-                    </span>
-
-                    <ExternalLinkIcon />
-                </Link>
-
-                <Field
-                    name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
-                    validate={validateArbeidsforholdId}
-                >
-                    {({ field, meta }: FieldProps) => (
-                        <Select
-                            id={arbeidsforholdIdFieldId}
-                            className="w-64 mt-4"
-                            label={intlHelper(
-                                intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
-                            )}
-                            disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
-                            error={
-                                meta.touched &&
-                                meta.error && (
-                                    <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId} />
-                                )
-                            }
-                            {...field}
-                        >
-                            <option disabled key="default" value="" label="">
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
-                            </option>
-
-                            {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
-                                if (arbeidsforholdId === null) {
-                                    return (
-                                        <option key={`null-${index}`} value="null">
-                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.utenarbeidsforholdId" />
+                            <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
+                                {({ field, meta }: FieldProps) => (
+                                    <Select
+                                        id={virksomhetFieldId}
+                                        className="w-64"
+                                        label={intlHelper(
+                                            intl,
+                                            'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
+                                        )}
+                                        disabled={!arbeidsgivereMedId}
+                                        {...field}
+                                        error={
+                                            meta.touched &&
+                                            meta.error && (
+                                                <ErrorMessage name={KorrigeringAvInntektsmeldingFormFields.Virksomhet} />
+                                            )
+                                        }
+                                    >
+                                        <option disabled key="default" value="" label="">
+                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
                                         </option>
-                                    );
-                                }
-                                return (
-                                    <option key={arbeidsforholdId} value={arbeidsforholdId}>
-                                        {arbeidsforholdId}
-                                    </option>
-                                );
-                            })}
-                        </Select>
-                    )}
-                </Field>
+
+                                        {arbeidsgivereMedNavn.map((arbeidsgiver) => (
+                                            <option
+                                                key={arbeidsgiver.organisasjonsnummer}
+                                                value={arbeidsgiver.organisasjonsnummer}
+                                            >
+                                                {`${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Field>
+
+                            <Link className="eksternLenke" href={AAREG_URL}>
+                                <span>
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
+                                </span>
+
+                                <ExternalLinkIcon />
+                            </Link>
+
+                            <Field
+                                name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
+                                validate={validateArbeidsforholdId}
+                            >
+                                {({ field, meta }: FieldProps) => (
+                                    <Select
+                                        id={arbeidsforholdIdFieldId}
+                                        className="w-64"
+                                        label={intlHelper(
+                                            intl,
+                                            'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
+                                        )}
+                                        disabled={finnArbeidsforholdIdForValgtArbeidsgiver().length === 0}
+                                        error={
+                                            meta.touched &&
+                                            meta.error && (
+                                                <ErrorMessage
+                                                    name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
+                                                />
+                                            )
+                                        }
+                                        {...field}
+                                    >
+                                        <option disabled key="default" value="" label="">
+                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velg" />
+                                        </option>
+
+                                        {finnArbeidsforholdIdForValgtArbeidsgiver().map((arbeidsforholdId, index) => {
+                                            if (arbeidsforholdId === null) {
+                                                return (
+                                                    <option key={`null-${index}`} value="null">
+                                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.utenarbeidsforholdId" />
+                                                    </option>
+                                                );
+                                            }
+                                            return (
+                                                <option key={arbeidsforholdId} value={arbeidsforholdId}>
+                                                    {arbeidsforholdId}
+                                                </option>
+                                            );
+                                        })}
+                                    </Select>
+                                )}
+                            </Field>
+                        </VStack>
+                    </Box>
+                </VStack>
             </Box>
-        </Fieldset>
+        </div>
     );
 };
 

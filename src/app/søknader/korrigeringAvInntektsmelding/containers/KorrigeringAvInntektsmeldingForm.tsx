@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 
 import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading, List, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -13,6 +13,7 @@ import {
 import { redirectToLos } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -442,93 +443,89 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             validerKorrigering={validerKorrigering}
                         />
                         <Form className="korrigering">
-                            <Box padding="space-16">
-                                <div className="mb-4">
-                                    <Heading size="medium" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                                    </Heading>
-                                </div>
+                            <VStack gap="space-16">
+                                <Heading size="medium" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
 
-                                <Alert size="small" variant="info" className="mb-6">
-                                    <Heading size="small" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                                    </Heading>
+                                <Alert size="small" variant="info">
+                                    <VStack gap="space-12">
+                                        <Heading size="small" level="2">
+                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                        </Heading>
 
-                                    <List as="ul">
-                                        <List.Item>
-                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
-                                        </List.Item>
-                                        <List.Item>
-                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2" />
-                                        </List.Item>
-                                    </List>
+                                        <List as="ul" className="korrigering__headerInfoList">
+                                            <List.Item>
+                                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
+                                            </List.Item>
+                                            <List.Item>
+                                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2" />
+                                            </List.Item>
+                                        </List>
+                                    </VStack>
                                 </Alert>
 
-                                <div>
-                                    <OpplysningerOmKorrigering />
+                                <OpplysningerOmKorrigering />
 
-                                    <VirksomhetPanel søkerId={søkerId} />
+                                <VirksomhetPanel søkerId={søkerId} />
 
-                                    <div className="korrigering__toggleSection">
-                                        <TrekkPerioder
-                                            isPanelOpen={!!åpnePaneler.trekkperioderPanel}
-                                            togglePanel={() => {
-                                                const toggledPanel = !åpnePaneler.trekkperioderPanel;
+                                <div className="korrigering__toggleSection">
+                                    <TrekkPerioder
+                                        isPanelOpen={!!åpnePaneler.trekkperioderPanel}
+                                        togglePanel={() => {
+                                            const toggledPanel = !åpnePaneler.trekkperioderPanel;
 
-                                                togglePaneler({ trekkperioderPanel: toggledPanel });
+                                            togglePaneler({ trekkperioderPanel: toggledPanel });
 
-                                                if (!toggledPanel) {
-                                                    setFieldValue(
-                                                        KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
-                                                        [getInitialPeriode()],
-                                                    );
-                                                }
-                                            }}
-                                        />
-                                    </div>
+                                            if (!toggledPanel) {
+                                                setFieldValue(
+                                                    KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
+                                                    [getInitialPeriode()],
+                                                );
+                                            }
+                                        }}
+                                    />
+                                </div>
 
-                                    <div className="korrigering__toggleSection korrigering__toggleSection--compact">
-                                        <LeggTilDelvisFravær
-                                            isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
-                                            togglePanel={() => {
-                                                const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
+                                <div className="korrigering__toggleSection">
+                                    <LeggTilDelvisFravær
+                                        isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
+                                        togglePanel={() => {
+                                            const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
 
-                                                togglePaneler({ leggTilDelvisFravær: toggledPanel });
+                                            togglePaneler({ leggTilDelvisFravær: toggledPanel });
 
-                                                if (!toggledPanel) {
-                                                    setFieldValue(
-                                                        KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
-                                                        [
-                                                            {
-                                                                dato: '',
-                                                                timer: '',
-                                                            },
-                                                        ],
-                                                    );
-                                                }
-                                            }}
-                                        />
-                                    </div>
+                                            if (!toggledPanel) {
+                                                setFieldValue(
+                                                    KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
+                                                    [
+                                                        {
+                                                            dato: '',
+                                                            timer: '',
+                                                        },
+                                                    ],
+                                                );
+                                            }
+                                        }}
+                                    />
                                 </div>
 
                                 {hasSubmitted && errorSummaryItems.length > 0 && (
-                                    <div className="mb-6">
-                                        <ErrorSummary
-                                            heading={intlHelper(
-                                                intl,
-                                                'omsorgspenger.utbetaling.punchForm.errorSummary.header',
-                                            )}
-                                        >
-                                            {errorSummaryItems.map((item) => (
-                                                <ErrorSummary.Item
-                                                    key={`${item.href || 'no-href'}-${item.message}`}
-                                                    href={item.href}
-                                                >
-                                                    {item.message}
-                                                </ErrorSummary.Item>
-                                            ))}
-                                        </ErrorSummary>
-                                    </div>
+                                    <ErrorSummary
+                                        heading={intlHelper(
+                                            intl,
+                                            'omsorgspenger.utbetaling.punchForm.errorSummary.header',
+                                        )}
+                                    >
+                                        {errorSummaryItems.map((item) => (
+                                            <ErrorSummary.Item
+                                                key={`${item.href || 'no-href'}-${item.message}`}
+                                                href={item.href}
+                                            >
+                                                {item.message}
+                                            </ErrorSummary.Item>
+                                        ))}
+                                    </ErrorSummary>
                                 )}
 
                                 {formError && hasSubmitted && (
@@ -536,7 +533,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                         <Feilmelding feil={formError} />
                                     </div>
                                 )}
-                            </Box>
+                            </VStack>
+
+                            <VerticalSpacer twentyPx />
 
                             <Button
                                 type="button"

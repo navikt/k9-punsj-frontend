@@ -18,14 +18,13 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box padding="space-16" className="korrigering__panelsurface listepanel">
+            <Box padding="space-16">
                 <Fieldset
                     legend={
                         <h4 className="korrigering-legend">
                             <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend" />
                         </h4>
                     }
-                    className="korrigering__Fieldset"
                 >
                     <Alert size="small" variant="info" className="korrigering__infostripe">
                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info" />

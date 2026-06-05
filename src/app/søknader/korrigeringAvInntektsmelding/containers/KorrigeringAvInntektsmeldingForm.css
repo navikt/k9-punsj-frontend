@@ -9,39 +9,12 @@ h4.korrigering-legend {
 }
 
 .korrigering {
-    &__panelsurface {
-        .korrigering-legend {
-            margin-top: 0.5rem;
-            margin-left: 0.875rem;
-        }
-    }
-
-    &__seksjon > legend {
-        margin-bottom: 0.5rem;
-    }
-
-    &__seksjon + &__seksjon {
-        margin-top: 1.5rem;
-    }
-
-    &__toggleSection {
-        margin-top: 1.5rem;
-    }
-
-    &__toggleSection--compact {
-        margin-top: 1rem;
-    }
-
-    .opplysningerOmKorrigeringPanel {
-        padding: 1.875rem 1.875rem 1rem !important;
-    }
-
     &__feilmelding {
         margin-top: 1.5rem;
     }
 
-    &__opplysningerOmKorrigeringContainer {
-        margin: 1.875rem 0 1.5rem;
+    &__headerInfoList {
+        margin: 0;
     }
 
     &__infostripe.alertstripe {

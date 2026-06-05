@@ -32,12 +32,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
     useFocus(currentListLength, previousListLength, fomInputRef);
 
     return (
-        <Box
-            padding="space-16"
-            borderRadius="8"
-            background="neutral-soft"
-            className="korrigering__panelsurface periodepanel"
-        >
+        <Box padding="space-16" borderRadius="8" background="neutral-soft">
             <FieldArray name={name}>
                 {({ push, remove }) => (
                     <>

@@ -37,7 +37,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box padding="space-16" className="korrigering__panelsurface listepanel delvisFravaer">
+            <Box padding="space-16" className="delvisFravaer">
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
@@ -54,12 +54,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                 </Alert>
 
                                 <div className="soknadsperiodecontainer">
-                                    <Box
-                                        padding="space-16"
-                                        borderRadius="8"
-                                        background="neutral-soft"
-                                        className="korrigering__panelsurface periodepanel"
-                                    >
+                                    <Box padding="space-16" borderRadius="8" background="neutral-soft">
                                         {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
                                             (value: DatoMedTimetall, index: number) => {
                                                 const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
