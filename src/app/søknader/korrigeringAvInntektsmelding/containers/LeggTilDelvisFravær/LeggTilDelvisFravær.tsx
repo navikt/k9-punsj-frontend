@@ -37,12 +37,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box
-                padding="space-16"
-                borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel delvisFravaer"
-            >
+            <Box padding="space-16" className="korrigering__panelsurface listepanel delvisFravaer">
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
@@ -60,7 +55,6 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
 
                                 <Box
                                     padding="space-16"
-                                    borderWidth="1"
                                     borderRadius="8"
                                     background="neutral-soft"
                                     className="delvisFravaer__inputContainer"
