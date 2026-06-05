@@ -4,7 +4,6 @@ import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { useIntl } from 'react-intl';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, ErrorMessage } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
@@ -67,10 +66,7 @@ const Bosteder: React.FC = () => {
                                                 ) : undefined
                                             }
                                         />
-
-                                        <VerticalSpacer sixteenPx />
-
-                                        <div className="w-full max-w-sm">
+                                        <div className="mt-4 w-full max-w-sm">
                                             <Field name={`bosteder[${index}].land`}>
                                                 {({ field, meta: bostederMeta }: FieldProps<string>) => (
                                                     <>
@@ -94,16 +90,16 @@ const Bosteder: React.FC = () => {
                                     </div>
                                 ))}
 
-                                <VerticalSpacer sixteenPx />
-
-                                <Button
-                                    variant="tertiary"
-                                    size="small"
-                                    onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
-                                    icon={<PlusCircleIcon title="legg til periode" />}
-                                >
-                                    Legg til periode
-                                </Button>
+                                <div className="mt-4">
+                                    <Button
+                                        variant="tertiary"
+                                        size="small"
+                                        onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
+                                        icon={<PlusCircleIcon title="legg til periode" />}
+                                    >
+                                        Legg til periode
+                                    </Button>
+                                </div>
                             </>
                         )}
                     />

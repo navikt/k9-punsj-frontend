@@ -3,7 +3,6 @@ import React from 'react';
 import { FieldArray, useFormikContext } from 'formik';
 import { CalendarIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Alert, Box, Button, Checkbox, Heading, Label, VStack } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { Kursperiode } from 'app/models/types/Kurs';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import { Periode } from 'app/models/types/Periode';
@@ -55,130 +54,126 @@ const Kurs = ({
 
     return (
         <Box padding="space-16" borderWidth="1" borderRadius="8">
-            <Heading size="small" level="5">
-                Søknadsperiode og institusjon
-            </Heading>
-            {hentEksisterendePerioderError && (
-                <Alert size="small" variant="error">
-                    <FormattedMessage id="skjema.eksisterende.feil" />
-                </Alert>
-            )}
-            {eksisterendePerioder.length > 0 ? (
-                <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-[8px]">
-                    <VStack gap="space-16">
-                        <Label size="medium">Eksisterende søknadsperioder</Label>
-                        {eksisterendePerioder.map((p) => (
-                            <div key={`${p.fom}_${p.tom}`} className="flex items-center gap-4">
-                                <CalendarIcon title="calendar" fontSize="1.5rem" />
-                                <div className="periode">{generateDateString(p)}</div>
-                            </div>
-                        ))}
-                    </VStack>
-                </Box>
-            ) : (
-                <>
-                    <VerticalSpacer sixteenPx />
+            <VStack gap="space-16">
+                <Heading size="small" level="3">
+                    Søknadsperiode og institusjon
+                </Heading>
+                {hentEksisterendePerioderError && (
+                    <Alert size="small" variant="error">
+                        <FormattedMessage id="skjema.eksisterende.feil" />
+                    </Alert>
+                )}
+                {eksisterendePerioder.length > 0 ? (
+                    <Box padding="space-16" borderRadius="8" background="neutral-soft">
+                        <VStack gap="space-16">
+                            <Label size="medium">Eksisterende søknadsperioder</Label>
+                            {eksisterendePerioder.map((p) => (
+                                <div key={`${p.fom}_${p.tom}`} className="flex items-center gap-4">
+                                    <CalendarIcon title="calendar" fontSize="1.5rem" />
+                                    <div className="periode">{generateDateString(p)}</div>
+                                </div>
+                            ))}
+                        </VStack>
+                    </Box>
+                ) : (
                     <Alert size="small" variant="info">
                         Det finnes ingen eksisterende søknadsperioder. Legg til institusjon og perioden søker er på
                         opplæring, inkludert eventuelle reisedager.
                     </Alert>
-                </>
-            )}
-            <VerticalSpacer sixteenPx />
-            {values.metadata.nyttInstitusjonsopphold && (
-                <Box padding="space-16" background="neutral-soft" borderRadius="8">
-                    <div className="flex flex-col gap-4">
-                        <InstitusjonSelector
-                            label="På hvilken helseinstitusjon eller kompetansesenter foregår opplæringen?"
-                            name={kursholder}
-                            isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
-                        />
-                        <Checkbox
-                            size="small"
-                            checked={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
-                            onChange={() => {
-                                if (values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)) {
-                                    setFieldValue('metadata.harValgtAnnenInstitusjon', []);
-                                } else {
-                                    setFieldValue('metadata.harValgtAnnenInstitusjon', [JaNei.JA]);
-                                }
-                                setFieldValue(kursholder, {
-                                    institusjonsUuid: null,
-                                    holder: '',
-                                });
-                            }}
-                        >
-                            Annen institusjon (ikke i listen)
-                        </Checkbox>
-                        {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
-                            <>
-                                <TextFieldFormik size="small" label="Navn på institusjon" name={kursholderNavn} />
-                            </>
-                        )}
-                        <div>
-                            <FieldArray
-                                name="kurs.kursperioder"
-                                render={({ push, remove }) => (
-                                    <>
-                                        {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
-                                            <div className="mb-4" key={kursperiode.key}>
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <PeriodevelgerFormik
-                                                            name={`kurs.kursperioder[${index}].periode`}
-                                                            size="small"
-                                                        />
-                                                    </div>
-                                                    {values.kurs.kursperioder.length > 1 && (
-                                                        <Button
-                                                            variant="tertiary"
-                                                            className="slett-knapp-med-icon-for-input"
-                                                            size="small"
-                                                            icon={<TrashIcon fontSize={24} title="slett periode" />}
-                                                            onClick={() => {
-                                                                remove(index);
-                                                            }}
-                                                        />
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))}
-
-                                        <div>
-                                            <Button
-                                                className="kurs__addButton"
-                                                variant="tertiary"
-                                                size="small"
-                                                onClick={() => push(initialKursperiode())}
-                                                icon={<PlusCircleIcon title="legg til periode" />}
-                                            >
-                                                Legg til ny periode
-                                            </Button>
-                                        </div>
-                                    </>
-                                )}
+                )}
+                {values.metadata.nyttInstitusjonsopphold && (
+                    <Box padding="space-16" background="neutral-soft" borderRadius="8">
+                        <div className="flex flex-col gap-4">
+                            <InstitusjonSelector
+                                label="På hvilken helseinstitusjon eller kompetansesenter foregår opplæringen?"
+                                name={kursholder}
+                                isAnnetSelected={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
                             />
-                        </div>
-                        <div>
-                            {values.metadata.nyttInstitusjonsopphold && eksisterendePerioder.length > 0 && (
-                                <Button variant="secondary" size="small" onClick={handleAvbryt}>
-                                    Avbryt
-                                </Button>
+                            <Checkbox
+                                size="small"
+                                checked={values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)}
+                                onChange={() => {
+                                    if (values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA)) {
+                                        setFieldValue('metadata.harValgtAnnenInstitusjon', []);
+                                    } else {
+                                        setFieldValue('metadata.harValgtAnnenInstitusjon', [JaNei.JA]);
+                                    }
+                                    setFieldValue(kursholder, {
+                                        institusjonsUuid: null,
+                                        holder: '',
+                                    });
+                                }}
+                            >
+                                Annen institusjon (ikke i listen)
+                            </Checkbox>
+                            {values?.metadata?.harValgtAnnenInstitusjon?.includes(JaNei.JA) && (
+                                <TextFieldFormik size="small" label="Navn på institusjon" name={kursholderNavn} />
                             )}
+                            <div>
+                                <FieldArray
+                                    name="kurs.kursperioder"
+                                    render={({ push, remove }) => (
+                                        <>
+                                            {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
+                                                <div className={index > 0 ? 'pt-8' : ''} key={kursperiode.key}>
+                                                    <PeriodevelgerFormik
+                                                        name={`kurs.kursperioder[${index}].periode`}
+                                                        size="small"
+                                                        action={
+                                                            values.kurs.kursperioder.length > 1 ? (
+                                                                <Button
+                                                                    variant="tertiary"
+                                                                    className="slett-knapp-med-icon-for-input"
+                                                                    size="small"
+                                                                    icon={<TrashIcon title="slett periode" />}
+                                                                    onClick={() => {
+                                                                        remove(index);
+                                                                    }}
+                                                                >
+                                                                    Fjern periode
+                                                                </Button>
+                                                            ) : undefined
+                                                        }
+                                                    />
+                                                </div>
+                                            ))}
+
+                                            <div className="mt-4">
+                                                <Button
+                                                    className="kurs__addButton"
+                                                    variant="tertiary"
+                                                    size="small"
+                                                    onClick={() => push(initialKursperiode())}
+                                                    icon={<PlusCircleIcon title="legg til periode" />}
+                                                >
+                                                    Legg til ny periode
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                {values.metadata.nyttInstitusjonsopphold && eksisterendePerioder.length > 0 && (
+                                    <Button variant="secondary" size="small" onClick={handleAvbryt}>
+                                        Avbryt
+                                    </Button>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </Box>
-            )}
-            {!values.metadata.nyttInstitusjonsopphold && (
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    icon={<PlusCircleIcon title="legg til nytt institusjonsopphold" />}
-                    onClick={handleLeggTilNyttInstitusjonsopphold}
-                >
-                    Legg til nytt institusjonsopphold
-                </Button>
-            )}
+                    </Box>
+                )}
+                {!values.metadata.nyttInstitusjonsopphold && (
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        icon={<PlusCircleIcon title="legg til nytt institusjonsopphold" />}
+                        onClick={handleLeggTilNyttInstitusjonsopphold}
+                    >
+                        Legg til nytt institusjonsopphold
+                    </Button>
+                )}
+            </VStack>
         </Box>
     );
 };

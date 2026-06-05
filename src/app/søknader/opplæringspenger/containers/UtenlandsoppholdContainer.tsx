@@ -6,7 +6,6 @@ import { Box, Button } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Utenlandsopphold from './Utenlandsopphold';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
@@ -48,16 +47,16 @@ const UtenlandsoppholdContainer = () => {
                                     <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
                                 ))}
 
-                                <VerticalSpacer sixteenPx />
-
-                                <Button
-                                    variant="tertiary"
-                                    size="small"
-                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<PlusCircleIcon />}
-                                >
-                                    <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
-                                </Button>
+                                <div className="mt-4">
+                                    <Button
+                                        variant="tertiary"
+                                        size="small"
+                                        onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                        icon={<PlusCircleIcon title="legg til periode" />}
+                                    >
+                                        <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
+                                    </Button>
+                                </div>
                             </>
                         )}
                     />
