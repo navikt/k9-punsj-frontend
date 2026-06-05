@@ -430,7 +430,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     soknad={soknad}
                 />
                 <VerticalSpacer twentyPx />
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                <Heading size="small" level="3">
+                    {intlHelper(intl, 'skjema.ikkeregistrert')}
+                </Heading>
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

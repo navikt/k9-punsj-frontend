@@ -12,6 +12,7 @@ import {
     Button,
     Checkbox,
     ErrorSummary,
+    Heading,
     HelpText,
     Loader,
     Select,
@@ -1606,9 +1607,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer thirtyTwoPx />
 
-                <p className="ikkeregistrert">
+                <Heading size="small" level="3">
                     <FormattedMessage id="skjema.ikkeregistrert" />
-                </p>
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

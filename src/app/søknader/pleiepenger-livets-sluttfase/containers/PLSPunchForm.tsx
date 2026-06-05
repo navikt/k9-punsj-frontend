@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, Heading, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
@@ -1088,9 +1088,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 <VerticalSpacer thirtyTwoPx />
 
-                <p className="ikkeregistrert">
+                <Heading size="small" level="3">
                     <FormattedMessage id="skjema.ikkeregistrert" />
-                </p>
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

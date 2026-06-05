@@ -2,7 +2,7 @@ import { Field, FieldProps, FormikValues } from 'formik';
 import React from 'react';
 import { IntlShape } from 'react-intl';
 
-import { HelpText } from '@navikt/ds-react';
+import { Heading, HelpText } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import intlHelper from 'app/utils/intlUtils';
@@ -15,7 +15,10 @@ type OwnProps = {
 
 const IkkeRegistrerteOpplysninger = ({ intl }: OwnProps) => (
     <>
-        <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+        <Heading size="small" level="3">
+            {intlHelper(intl, 'skjema.ikkeregistrert')}
+        </Heading>
+        <VerticalSpacer sixteenPx />
         <div className="flex-container">
             <Field name="harMedisinskeOpplysninger">
                 {({ field }: FieldProps<FormikValues>) => (
