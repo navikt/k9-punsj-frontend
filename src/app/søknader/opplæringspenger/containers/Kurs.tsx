@@ -126,6 +126,7 @@ const Kurs = ({
                                                     <div className="flex gap-4">
                                                         <PeriodevelgerFormik
                                                             name={`kurs.kursperioder[${index}].periode`}
+                                                            size="small"
                                                         />
                                                     </div>
                                                     {values.kurs.kursperioder.length > 1 && (

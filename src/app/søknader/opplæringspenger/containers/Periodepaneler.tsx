@@ -40,6 +40,7 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                             fromDate={fromDate}
                                             toDate={toDate}
                                             disabled={disabled}
+                                            size="small"
                                         />
                                         <div className="block content-center">
                                             <Button

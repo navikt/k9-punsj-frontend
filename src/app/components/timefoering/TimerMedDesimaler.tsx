@@ -12,9 +12,10 @@ interface OwnProps {
     onBlur?: () => void;
     value: string;
     error?: string;
+    size?: 'small' | 'medium';
 }
 
-const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) => {
+const TimerMedDesimaler = ({ label, onChange, onBlur, value, error, size }: OwnProps) => {
     const id = useId();
 
     const timerId = `timer-${id}`;
@@ -34,6 +35,7 @@ const TimerMedDesimaler = ({ label, onChange, onBlur, value, error }: OwnProps) 
                             className="input text-center w-12"
                             label={label}
                             hideLabel
+                            size={size}
                             value={value}
                             onChange={(event) => {
                                 onChange(sanitizeDecimalTimeInput(event.target.value));

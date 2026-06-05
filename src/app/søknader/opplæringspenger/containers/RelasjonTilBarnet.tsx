@@ -18,6 +18,7 @@ const RelasjonTilBarnet = () => {
         <Box padding="space-16" borderRadius="8" background="neutral-soft" className="flex flex-col gap-4">
             <SelectFormik
                 className="max-w-[200px]"
+                size="small"
                 value={values.omsorg.relasjonTilBarnet}
                 label="Relasjon til barnet"
                 name="omsorg.relasjonTilBarnet"

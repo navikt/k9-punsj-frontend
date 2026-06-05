@@ -24,7 +24,7 @@ const Bosteder: React.FC = () => {
     const { values, setFieldValue } = useFormikContext<OLPSoknad>();
 
     return (
-        <Box padding="space-16" borderRadius="8">
+        <>
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harBoddIUtlandet"
@@ -49,12 +49,11 @@ const Bosteder: React.FC = () => {
                         render={(arrayHelpers) => (
                             <>
                                 {values.bosteder?.map((_, index, array) => (
-                                    <div key={index}>
-                                        <VerticalSpacer thirtyTwoPx />
-
+                                    <div key={index} className={index > 0 ? 'pt-8' : ''}>
                                         <div className="fom-tom-rad">
                                             <PeriodevelgerFormik
                                                 name={`bosteder[${index}].periode`}
+                                                size="small"
                                             />
 
                                             {array.length > 1 && (
@@ -73,22 +72,24 @@ const Bosteder: React.FC = () => {
 
                                         <VerticalSpacer sixteenPx />
 
-                                        <div style={{ maxWidth: '50%' }}>
+                                        <div className="w-full max-w-sm">
                                             <Field name={`bosteder[${index}].land`}>
                                                 {({ field, meta: bostederMeta }: FieldProps<string>) => (
                                                     <>
-                                                    <CountrySelect
-                                                        label
-                                                        selectedcountry={field.value}
-                                                        unselectedoption="Velg land"
-                                                        {...field}
+                                                        <CountrySelect
+                                                            className="w-full"
+                                                            label
+                                                            size="small"
+                                                            selectedcountry={field.value}
+                                                            unselectedoption="Velg land"
+                                                            {...field}
                                                         />
                                                         {bostederMeta.touched && bostederMeta.error && (
                                                             <ErrorMessage role="alert" showIcon>
                                                                 {bostederMeta.error}
                                                             </ErrorMessage>
                                                         )}
-                                                        </>
+                                                    </>
                                                 )}
                                             </Field>
                                         </div>
@@ -110,7 +111,7 @@ const Bosteder: React.FC = () => {
                     />
                 </Box>
             )}
-        </Box>
+        </>
     );
 };
 

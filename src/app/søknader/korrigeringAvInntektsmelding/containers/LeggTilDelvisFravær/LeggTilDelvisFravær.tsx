@@ -77,6 +77,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                             id={delvisFravaerDatoFieldId(index)}
                                                             label={intlHelper(intl, 'skjema.dato')}
                                                             name={`${fieldName}.dato`}
+                                                            size="small"
                                                         />
 
                                                         <div className="ml-2">
@@ -89,6 +90,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                             <FormattedMessage id="skjema.perioder.timer" />
                                                                         }
                                                                         className="w-12"
+                                                                        size="small"
                                                                         error={
                                                                             meta.error &&
                                                                             meta.touched && (
@@ -109,6 +111,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                 onClick={() => {
                                                                     remove(index);
                                                                 }}
+                                                                size="small"
                                                                 variant="tertiary"
                                                                 icon={<TrashIcon title="slett" />}
                                                             >

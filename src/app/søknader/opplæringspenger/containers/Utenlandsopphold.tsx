@@ -19,9 +19,7 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
     const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
-        <div>
-            <VerticalSpacer thirtyTwoPx />
-
+        <div className={fieldArrayIndex > 0 ? 'pt-8' : ''}>
             <div className="flex gap-2 justify-between">
                 <div className="flex gap-2">
                     <PeriodevelgerFormik
@@ -29,6 +27,7 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
                         fromDate={fromDate}
                         toDate={toDate}
                         disabled={disabled}
+                        size="small"
                     />
                 </div>
                 {values.utenlandsopphold.length > 1 && (
@@ -48,11 +47,18 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
             <VerticalSpacer sixteenPx />
 
-            <div style={{ maxWidth: '50%' }}>
+            <div className="w-full max-w-sm">
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
                     {({ field, meta }: FieldProps<string>) => (
                         <>
-                        <CountrySelect label {...field} selectedcountry={field.value} unselectedoption="Velg land" />
+                        <CountrySelect
+                            className="w-full"
+                            label
+                            size="small"
+                            {...field}
+                            selectedcountry={field.value}
+                            unselectedoption="Velg land"
+                        />
                         {meta.touched && meta.error && (
                             <ErrorMessage role="alert" showIcon>
                                 {meta.error}

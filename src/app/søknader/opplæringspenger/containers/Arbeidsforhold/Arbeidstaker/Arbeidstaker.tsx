@@ -145,6 +145,8 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                 <>
                     {harArbeidsgivere && (
                         <SelectFormik
+                            className="w-full max-w-lg"
+                            size="small"
                             value={selectedArbeidsgiver}
                             label="Velg hvilken arbeidsgiver det gjelder"
                             options={[{ value: '', label: '' }].concat(
@@ -196,6 +198,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                         name={`${name}.organisasjonsnummer`}
                                         className="arbeidstaker-organisasjonsnummer"
+                                        size="small"
                                         onChange={(event) => {
                                             const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
                                             setFieldValue(name, {
@@ -240,6 +243,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                             name={`${name}.norskIdent`}
                             className="arbeidstaker-norskIdent"
                             filterPattern={kunTall}
+                            size="small"
                         />
                     )}
                 </div>

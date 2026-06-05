@@ -82,6 +82,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     fromDate={fromDate}
                     toDate={toDate}
                     disabled={disabled}
+                    size="small"
                 />
                 <div className="ml-4 mt-7">
                     <Button
@@ -105,6 +106,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Normal arbeidstid"
+                            size="small"
                             timer={normalTimerField.value ?? ''}
                             minutter={normalMinField.value ?? ''}
                             onChangeTimer={(v) => setNormalTimerMin(v, normalMinField.value ?? '')}
@@ -130,6 +132,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Fravær"
+                            size="small"
                             timer={fraværTimerField.value ?? ''}
                             minutter={fraværMinField.value ?? ''}
                             onChangeTimer={(v) => setFraværTimerMin(v, fraværMinField.value ?? '')}
@@ -165,6 +168,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Normal arbeidstid"
+                            size="small"
                             value={normalDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v);
@@ -185,6 +189,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Fravær"
+                            size="small"
                             value={fraværDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.fraværTimerPerDag`, v);

@@ -23,7 +23,7 @@ const OpplysningerOmSoknad: React.FC = () => {
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
                 <div className="input-row">
-                    <DatovelgerFormik name="mottattDato" label="Mottatt dato" />
+                    <DatovelgerFormik name="mottattDato" label="Mottatt dato" size="small" />
 
                     <TextFieldFormik
                         label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}

@@ -11,6 +11,7 @@ interface PeriodevelgerFormikProps {
     toDate?: Date;
     /** Funksjon eller matcher for å deaktivere spesifikke datoer */
     disabled?: DatePickerProps['disabled'];
+    size?: 'small' | 'medium';
     fomId?: string;
     tomId?: string;
     fomInputRef?: React.Ref<HTMLInputElement>;
@@ -22,6 +23,7 @@ const PeriodevelgerFormik = ({
     fromDate,
     toDate,
     disabled,
+    size,
     fomId,
     tomId,
     fomInputRef,
@@ -54,6 +56,7 @@ const PeriodevelgerFormik = ({
                     toDate={fomToDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
+                    size={size}
                     inputRef={fomInputRef}
                 />
                 <DatovelgerFormik
@@ -65,6 +68,7 @@ const PeriodevelgerFormik = ({
                     toDate={toDate}
                     visFeilmelding={false}
                     disabledDates={disabled}
+                    size={size}
                     inputRef={tomInputRef}
                 />
             </div>

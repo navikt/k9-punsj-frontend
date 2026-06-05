@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading } from '@navikt/ds-react';
+import { Box, Button } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
@@ -30,10 +30,7 @@ const UtenlandsoppholdContainer = () => {
     };
 
     return (
-        <Box padding="space-16" borderRadius="8">
-            <Heading size="small" level="5">
-                <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.tittle" />
-            </Heading>
+        <>
             <LegacyJaNeiIkkeOpplystRadioGroup
                 className="horizontalRadios"
                 name="metadata.harUtenlandsopphold"
@@ -66,7 +63,7 @@ const UtenlandsoppholdContainer = () => {
                     />
                 </Box>
             )}
-        </Box>
+        </>
     );
 };
 

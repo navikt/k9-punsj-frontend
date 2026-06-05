@@ -85,6 +85,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
+                size="small"
             />
 
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
@@ -103,6 +104,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    size="small"
                     fromDate={
                         values.opptjeningAktivitet.frilanser?.startdato
                             ? new Date(values.opptjeningAktivitet.frilanser.startdato)
@@ -189,6 +191,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
+                            size="small"
                         />
                         {/* feil={getErrorMessage(
                                 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'
@@ -200,8 +203,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
                         {({ field, form, meta }: FieldProps<string>) => (
                             <CountrySelect
+                                className="w-full max-w-sm"
                                 selectedcountry={opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.landkode || ''}
                                 label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                                size="small"
                                 onChange={(event) => {
                                     form.setFieldValue(field.name, event.target.value);
                                     form.setFieldTouched(field.name, true);
@@ -234,6 +239,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                     label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
                                     className="regnskapsførerNavn"
+                                    size="small"
                                 />
                             </div>
 
@@ -245,6 +251,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
                                     className="sn-regskasførertlf"
                                     type="number"
+                                    size="small"
                                 />
                             </div>
                         </div>
@@ -262,6 +269,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
+                        size="small"
                     />
 
                     {/* errorMessage={getErrorMessage(
@@ -272,6 +280,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        size="small"
                         fromDate={
                             opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
                                 ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
@@ -324,6 +333,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
+                                size="small"
                             />
                         </div>
                         <VerticalSpacer sixteenPx />
@@ -333,6 +343,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
                                 className="endringinntekt"
                                 type="number"
+                                size="small"
                             />
                         </div>
                         <VerticalSpacer sixteenPx />
