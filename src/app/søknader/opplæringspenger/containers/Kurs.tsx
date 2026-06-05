@@ -122,8 +122,8 @@ const Kurs = ({
                                     <>
                                         {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
                                             <div className="mb-4" key={kursperiode.key}>
-                                                <div className="flex gap-4">
-                                                    <div className="flex gap-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-4">
                                                         <PeriodevelgerFormik
                                                             name={`kurs.kursperioder[${index}].periode`}
                                                             size="small"
@@ -132,7 +132,7 @@ const Kurs = ({
                                                     {values.kurs.kursperioder.length > 1 && (
                                                         <Button
                                                             variant="tertiary"
-                                                            className="slett-knapp-med-icon-for-input !mt-7"
+                                                            className="slett-knapp-med-icon-for-input"
                                                             size="small"
                                                             icon={<TrashIcon fontSize={24} title="slett periode" />}
                                                             onClick={() => {

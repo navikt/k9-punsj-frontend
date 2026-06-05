@@ -16,6 +16,7 @@ interface PeriodevelgerFormikProps {
     tomId?: string;
     fomInputRef?: React.Ref<HTMLInputElement>;
     tomInputRef?: React.Ref<HTMLInputElement>;
+    action?: React.ReactNode;
 }
 
 const PeriodevelgerFormik = ({
@@ -28,6 +29,7 @@ const PeriodevelgerFormik = ({
     tomId,
     fomInputRef,
     tomInputRef,
+    action,
 }: PeriodevelgerFormikProps) => {
     const { submitCount } = useFormikContext();
     const fomFieldName = `${name}.fom`;
@@ -47,30 +49,33 @@ const PeriodevelgerFormik = ({
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex gap-4 flex-wrap">
-                <DatovelgerFormik
-                    id={effectiveFomId}
-                    name={fomFieldName}
-                    label="Fra og med"
-                    fromDate={fromDate}
-                    toDate={fomToDate}
-                    visFeilmelding={false}
-                    disabledDates={disabled}
-                    size={size}
-                    inputRef={fomInputRef}
-                />
-                <DatovelgerFormik
-                    id={effectiveTomId}
-                    name={tomFieldName}
-                    label="Til og med"
-                    defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
-                    fromDate={tomFromDate}
-                    toDate={toDate}
-                    visFeilmelding={false}
-                    disabledDates={disabled}
-                    size={size}
-                    inputRef={tomInputRef}
-                />
+            <div className="flex items-end gap-4 flex-wrap">
+                <div className="flex gap-4 flex-wrap">
+                    <DatovelgerFormik
+                        id={effectiveFomId}
+                        name={fomFieldName}
+                        label="Fra og med"
+                        fromDate={fromDate}
+                        toDate={fomToDate}
+                        visFeilmelding={false}
+                        disabledDates={disabled}
+                        size={size}
+                        inputRef={fomInputRef}
+                    />
+                    <DatovelgerFormik
+                        id={effectiveTomId}
+                        name={tomFieldName}
+                        label="Til og med"
+                        defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
+                        fromDate={tomFromDate}
+                        toDate={toDate}
+                        visFeilmelding={false}
+                        disabledDates={disabled}
+                        size={size}
+                        inputRef={tomInputRef}
+                    />
+                </div>
+                {action && <div className="flex self-end">{action}</div>}
             </div>
             <div>
                 {fomFieldMeta.touched && fomFieldMeta.error && (

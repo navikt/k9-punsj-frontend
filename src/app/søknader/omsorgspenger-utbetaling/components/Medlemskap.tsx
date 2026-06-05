@@ -7,7 +7,7 @@ import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiIkkeOpplystRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeOpplystRadioGroupFormik';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -47,36 +47,22 @@ const Medlemskap: React.FC = () => {
                             <>
                                 {values.bosteder?.map((_, bostedIndex, array) => (
                                     <div key={bostedIndex} className="mb-6">
-                                        <div className="flex items-start">
-                                            <DatovelgerFormik
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.medlemskap.fom.tittel',
-                                                )}
-                                                name={`bosteder[${bostedIndex}].periode.fom`}
-                                            />
-
-                                            <DatovelgerFormik
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.medlemskap.tom.tittel',
-                                                )}
-                                                name={`bosteder[${bostedIndex}].periode.tom`}
-                                                className="ml-4"
-                                            />
-
-                                            {array.length > 1 && (
-                                                <Button
-                                                    variant="tertiary"
-                                                    className="slett-knapp-med-icon-for-input !mt-10"
-                                                    onClick={() => arrayHelpers.remove(bostedIndex)}
-                                                    icon={<TrashIcon title="slett periode" />}
-                                                    size="small"
-                                                >
-                                                    <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
-                                                </Button>
-                                            )}
-                                        </div>
+                                        <PeriodevelgerFormik
+                                            name={`bosteder[${bostedIndex}].periode`}
+                                            action={
+                                                array.length > 1 ? (
+                                                    <Button
+                                                        variant="tertiary"
+                                                        className="slett-knapp-med-icon-for-input"
+                                                        onClick={() => arrayHelpers.remove(bostedIndex)}
+                                                        icon={<TrashIcon title="slett periode" />}
+                                                        size="small"
+                                                    >
+                                                        <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
+                                                    </Button>
+                                                ) : undefined
+                                            }
+                                        />
 
                                         <VerticalSpacer sixteenPx />
 

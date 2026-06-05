@@ -117,7 +117,7 @@ export const Periodepaneler: React.FC<Props> = ({
                 const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
 
                 return (
-                    <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
+                    <div key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
                         <PeriodevelgerControlled
                             periode={p || {}}
                             intl={intl}
@@ -132,29 +132,32 @@ export const Periodepaneler: React.FC<Props> = ({
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
                             inputIdFom={periodInputIds.fomId}
                             inputIdTom={periodInputIds.tomId}
-                        />
-
-                        <Button
-                            id="slett"
-                            className={
-                                getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'
+                            action={
+                                <Button
+                                    id="slett"
+                                    className={
+                                        getErrorMessage!(feilkodeprefiks!, i)
+                                            ? 'fjern-feil '
+                                            : 'slett-knapp-med-icon-for-input'
+                                    }
+                                    type="button"
+                                    onClick={() => {
+                                        const newArray: IPeriode[] = removeItem(i);
+                                        if (editSoknadState) {
+                                            editSoknadState(newArray);
+                                        }
+                                        editSoknad(newArray);
+                                        if (onRemove) {
+                                            onRemove();
+                                        }
+                                    }}
+                                    icon={<TrashIcon title="slettPeriode" />}
+                                    variant="tertiary"
+                                >
+                                    <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                                </Button>
                             }
-                            type="button"
-                            onClick={() => {
-                                const newArray: IPeriode[] = removeItem(i);
-                                if (editSoknadState) {
-                                    editSoknadState(newArray);
-                                }
-                                editSoknad(newArray);
-                                if (onRemove) {
-                                    onRemove();
-                                }
-                            }}
-                            icon={<TrashIcon title="slettPeriode" />}
-                            variant="tertiary"
-                        >
-                            <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
-                        </Button>
+                        />
                     </div>
                 );
             })}
@@ -167,7 +170,6 @@ export const Periodepaneler: React.FC<Props> = ({
                 <div className="flex flex-wrap">
                     <Button
                         id="leggtilperiode"
-                        className="leggtilperiode"
                         type="button"
                         onClick={() => {
                             const newArray: IPeriode[] = addItem();

@@ -52,44 +52,42 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                     ? trekkperiodeFieldId(index)
                                     : refusjonskravFieldId(index);
                             return (
-                                <div className="flex items-start" key={index}>
+                                <div key={index}>
                                     <PeriodevelgerFormik
                                         name={fieldName}
                                         fomId={fomId}
                                         fomInputRef={isLastElement ? fomInputRef : undefined}
+                                        action={
+                                            <Button
+                                                id="slett"
+                                                className="slett-knapp-med-icon-for-input"
+                                                type="button"
+                                                onClick={() => {
+                                                    remove(index);
+                                                }}
+                                                icon={<TrashIcon title="slettPeriode" />}
+                                                variant="tertiary"
+                                            >
+                                                <FormattedMessage id="skjema.liste.fjern_periode" />
+                                            </Button>
+                                        }
                                     />
-
-                                    <Button
-                                        id="slett"
-                                        className="slett-knapp-med-icon-for-input"
-                                        type="button"
-                                        onClick={() => {
-                                            remove(index);
-                                        }}
-                                        icon={<TrashIcon title="slettPeriode" />}
-                                        variant="tertiary"
-                                    >
-                                        <FormattedMessage id="skjema.liste.fjern_periode" />
-                                    </Button>
                                 </div>
                             );
                         })}
 
                         <div className="flex flex-wrap">
-                            <button
+                            <Button
                                 id="leggtilperiode"
-                                className="leggtilperiode"
                                 type="button"
                                 onClick={() => {
                                     push({ fom: '', tom: '' });
                                 }}
+                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                                variant="tertiary"
                             >
-                                <div className="leggtilperiodeIcon">
-                                    <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
-                                </div>
-
                                 <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til_dag_periode'} />
-                            </button>
+                            </Button>
                         </div>
                     </>
                 )}

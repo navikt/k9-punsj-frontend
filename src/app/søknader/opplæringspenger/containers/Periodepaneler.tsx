@@ -34,15 +34,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         {periods.map((period, index) => {
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
-                                    <div className="flex gap-4">
-                                        <PeriodevelgerFormik
-                                            name={`${fieldName}.${index}`}
-                                            fromDate={fromDate}
-                                            toDate={toDate}
-                                            disabled={disabled}
-                                            size="small"
-                                        />
-                                        <div className="block content-center">
+                                    <PeriodevelgerFormik
+                                        name={`${fieldName}.${index}`}
+                                        fromDate={fromDate}
+                                        toDate={toDate}
+                                        disabled={disabled}
+                                        size="small"
+                                        action={
                                             <Button
                                                 variant="tertiary"
                                                 size="small"
@@ -52,13 +50,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                         props.onRemove();
                                                     }
                                                 }}
-                                                className="slett-knapp-med-icon-for-input !mt-10"
+                                                className="slett-knapp-med-icon-for-input"
                                                 icon={<TrashIcon title="slett periode" />}
                                             >
                                                 Fjern periode
                                             </Button>
-                                        </div>
-                                    </div>
+                                        }
+                                    />
                                 </div>
                             );
                         })}

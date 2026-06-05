@@ -20,30 +20,26 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
 
     return (
         <div className={fieldArrayIndex > 0 ? 'pt-8' : ''}>
-            <div className="flex gap-2 justify-between">
-                <div className="flex gap-2">
-                    <PeriodevelgerFormik
-                        name={`utenlandsopphold[${fieldArrayIndex}].periode`}
-                        fromDate={fromDate}
-                        toDate={toDate}
-                        disabled={disabled}
-                        size="small"
-                    />
-                </div>
-                {values.utenlandsopphold.length > 1 && (
-                    <div className="block content-center">
+            <PeriodevelgerFormik
+                name={`utenlandsopphold[${fieldArrayIndex}].periode`}
+                fromDate={fromDate}
+                toDate={toDate}
+                disabled={disabled}
+                size="small"
+                action={
+                    values.utenlandsopphold.length > 1 ? (
                         <Button
                             variant="tertiary"
                             size="small"
                             onClick={() => arrayHelpers.remove(fieldArrayIndex)}
                             icon={<TrashIcon />}
-                            className="slett-knapp-med-icon-for-input !mt-10"
+                            className="slett-knapp-med-icon-for-input"
                         >
                             Fjern periode
                         </Button>
-                    </div>
-                )}
-            </div>
+                    ) : undefined
+                }
+            />
 
             <VerticalSpacer sixteenPx />
 

@@ -34,6 +34,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                         id={mottattDatoFieldId}
                         label={intlHelper(intl, 'skjema.dato')}
                         name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.dato`}
+                        size="medium"
                     />
                     <div className="ml-4">
                         <Field name={`${KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering}.klokkeslett`}>
@@ -43,6 +44,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                                     id={klokkeslettFieldId}
                                     type="time"
                                     label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
+                                    size="medium"
                                     error={
                                         meta.touched &&
                                         meta.error && (

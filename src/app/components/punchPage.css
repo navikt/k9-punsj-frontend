@@ -240,6 +240,7 @@
     border: none;
     padding: 0;
     display: inline-flex;
+    align-items: center;
     margin: 1rem 0 0;
     color: #0067c5;
     text-decoration: underline;

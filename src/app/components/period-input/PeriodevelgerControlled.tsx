@@ -28,6 +28,7 @@ export interface PeriodevelgerControlledProps {
     fomInputRef?: React.Ref<HTMLInputElement>;
     tomInputRef?: React.Ref<HTMLInputElement>;
     size?: 'small' | 'medium';
+    action?: React.ReactNode;
 }
 
 export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerControlledProps> = (
@@ -51,6 +52,7 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
         fomInputRef,
         tomInputRef,
         size,
+        action,
 
         // limitations,
     } = props;
@@ -77,41 +79,44 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
 
     return (
         <Fieldset error={errorMessage} className={className} legend={undefined}>
-            <HStack wrap gap="space-16" justify="center">
-                <div data-testid="datePickerInputFom">
-                    <DatovelgerControlled
-                        value={periode.fom || initialValues?.fom || ''}
-                        onChange={(selectedDate) => handleOnChange(selectedDate, true)}
-                        onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
-                        id={inputIdFom}
-                        disabled={disabled || disabledFom}
-                        errorMessage={errorMessageFom}
-                        label={intlHelper(intl, 'skjema.perioder.fom')}
-                        inputRef={fomInputRef}
-                        // limitations={limitations}
-                        dataTestId="fom"
-                        size={size}
-                    />
-                </div>
+            <div className="flex items-end gap-4 flex-wrap">
+                <HStack wrap gap="space-16" justify="center">
+                    <div data-testid="datePickerInputFom">
+                        <DatovelgerControlled
+                            value={periode.fom || initialValues?.fom || ''}
+                            onChange={(selectedDate) => handleOnChange(selectedDate, true)}
+                            onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
+                            id={inputIdFom}
+                            disabled={disabled || disabledFom}
+                            errorMessage={errorMessageFom}
+                            label={intlHelper(intl, 'skjema.perioder.fom')}
+                            inputRef={fomInputRef}
+                            // limitations={limitations}
+                            dataTestId="fom"
+                            size={size}
+                        />
+                    </div>
 
-                <div data-testid="datePickerInputTom">
-                    <DatovelgerControlled
-                        value={periode.tom || initialValues?.tom || ''}
-                        onChange={(selectedDate) => handleOnChange(selectedDate, false)}
-                        onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
-                        id={inputIdTom}
-                        disabled={disabled || disabledTom}
-                        errorMessage={errorMessageTom}
-                        inputRef={tomInputRef}
-                        // limitations={limitations}
-                        label={intlHelper(intl, 'skjema.perioder.tom')}
-                        dataTestId="tom"
-                        fromDate={fromDateValue}
-                        defaultMonth={fromDateValue}
-                        size={size}
-                    />
-                </div>
-            </HStack>
+                    <div data-testid="datePickerInputTom">
+                        <DatovelgerControlled
+                            value={periode.tom || initialValues?.tom || ''}
+                            onChange={(selectedDate) => handleOnChange(selectedDate, false)}
+                            onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
+                            id={inputIdTom}
+                            disabled={disabled || disabledTom}
+                            errorMessage={errorMessageTom}
+                            inputRef={tomInputRef}
+                            // limitations={limitations}
+                            label={intlHelper(intl, 'skjema.perioder.tom')}
+                            dataTestId="tom"
+                            fromDate={fromDateValue}
+                            defaultMonth={fromDateValue}
+                            size={size}
+                        />
+                    </div>
+                </HStack>
+                {action && <div className="flex self-end">{action}</div>}
+            </div>
         </Fieldset>
     );
 };
