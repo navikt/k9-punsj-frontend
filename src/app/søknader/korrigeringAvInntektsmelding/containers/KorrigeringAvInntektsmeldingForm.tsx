@@ -434,6 +434,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     errors as Partial<FormErrors>,
                     serverValidationErrors,
                 );
+                const beggeFravaerPanelerLukket =
+                    !åpnePaneler.trekkperioderPanel && !åpnePaneler.leggTilDelvisFravær;
 
                 return (
                     <>
@@ -469,45 +471,49 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
 
                                 <VirksomhetPanel søkerId={søkerId} />
 
-                                <div className="korrigering__toggleSection">
-                                    <TrekkPerioder
-                                        isPanelOpen={!!åpnePaneler.trekkperioderPanel}
-                                        togglePanel={() => {
-                                            const toggledPanel = !åpnePaneler.trekkperioderPanel;
+                                <div
+                                    className={`korrigering__toggleSections${beggeFravaerPanelerLukket ? ' korrigering__toggleSections--compact' : ''}`}
+                                >
+                                    <div className="korrigering__toggleSection">
+                                        <TrekkPerioder
+                                            isPanelOpen={!!åpnePaneler.trekkperioderPanel}
+                                            togglePanel={() => {
+                                                const toggledPanel = !åpnePaneler.trekkperioderPanel;
 
-                                            togglePaneler({ trekkperioderPanel: toggledPanel });
+                                                togglePaneler({ trekkperioderPanel: toggledPanel });
 
-                                            if (!toggledPanel) {
-                                                setFieldValue(
-                                                    KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
-                                                    [getInitialPeriode()],
-                                                );
-                                            }
-                                        }}
-                                    />
-                                </div>
+                                                if (!toggledPanel) {
+                                                    setFieldValue(
+                                                        KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
+                                                        [getInitialPeriode()],
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    </div>
 
-                                <div className="korrigering__toggleSection">
-                                    <LeggTilDelvisFravær
-                                        isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
-                                        togglePanel={() => {
-                                            const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
+                                    <div className="korrigering__toggleSection">
+                                        <LeggTilDelvisFravær
+                                            isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
+                                            togglePanel={() => {
+                                                const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
 
-                                            togglePaneler({ leggTilDelvisFravær: toggledPanel });
+                                                togglePaneler({ leggTilDelvisFravær: toggledPanel });
 
-                                            if (!toggledPanel) {
-                                                setFieldValue(
-                                                    KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
-                                                    [
-                                                        {
-                                                            dato: '',
-                                                            timer: '',
-                                                        },
-                                                    ],
-                                                );
-                                            }
-                                        }}
-                                    />
+                                                if (!toggledPanel) {
+                                                    setFieldValue(
+                                                        KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
+                                                        [
+                                                            {
+                                                                dato: '',
+                                                                timer: '',
+                                                            },
+                                                        ],
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    </div>
                                 </div>
 
                                 {hasSubmitted && errorSummaryItems.length > 0 && (
