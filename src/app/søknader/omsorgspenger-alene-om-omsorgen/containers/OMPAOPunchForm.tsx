@@ -109,7 +109,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
         <>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VStack gap="space-24">
+            <VStack gap="space-16">
                 <Heading size="medium">
                     <FormattedMessage id={'skjema.ompao.tittel'} />
                 </Heading>
@@ -126,7 +126,7 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
                     </VStack>
                 </Box>
             </VStack>
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
             <IkkeRegistrerteOpplysninger intl={intl} />
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (

@@ -862,6 +862,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 <VerticalSpacer sixteenPx />
 
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="PLEIEPENGER_I_LIVETS_SLUTTFASE" />
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}

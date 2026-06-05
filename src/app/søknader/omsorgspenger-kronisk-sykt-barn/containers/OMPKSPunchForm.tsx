@@ -419,6 +419,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
 
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="OMSORGSPENGER_KS" />
+                </Heading>
+
                 <VerticalSpacer sixteenPx />
 
                 <OpplysningerOmOMPKSSoknad
