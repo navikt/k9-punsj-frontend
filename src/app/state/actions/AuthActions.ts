@@ -13,6 +13,7 @@ interface IAuthRedirectAction {
 interface IAuthOkAction {
     type: AuthActionKeys.OK;
     name: string;
+    harHistoriskTilgang: boolean;
 }
 interface IAuthErrorAction {
     type: AuthActionKeys.ERROR;
@@ -27,8 +28,8 @@ export const checkAuth = () => async (dispatch: any) => {
         const response = await get(ApiPath.ME, { credentials: 'include' });
 
         if (response.status === 200) {
-            const { name } = await response.json();
-            dispatch({ type: AuthActionKeys.OK, name });
+            const { name, harHistoriskTilgang } = await response.json();
+            dispatch({ type: AuthActionKeys.OK, name, harHistoriskTilgang: !!harHistoriskTilgang });
         } else {
             const error = convertResponseToError(response);
             dispatch({ type: AuthActionKeys.ERROR, error });

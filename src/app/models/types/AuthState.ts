@@ -6,4 +6,5 @@ export interface IAuthState {
     loggedIn: boolean;
     error?: IError;
     userName?: string;
+    harHistoriskTilgang?: boolean;
 }

@@ -121,8 +121,12 @@ async function startApp() {
 
         server.get('/me', (req, res) => {
             const user = decodeJwt(req.headers.authorization);
+            const historiskGruppeId = process.env.BRUKER_GRUPPE_ID_HISTORISK_SAK;
+            const groups = Array.isArray(user.groups) ? user.groups : [];
+            const harHistoriskTilgang = historiskGruppeId ? groups.includes(historiskGruppeId) : false;
             res.send({
                 name: user.name,
+                harHistoriskTilgang,
             });
         });
 

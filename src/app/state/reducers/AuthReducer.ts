@@ -30,6 +30,7 @@ export function AuthReducer(authState: IAuthState = initialState, action: IAuthA
                 redirectUrl: undefined,
                 isLoading: false,
                 userName: action.name,
+                harHistoriskTilgang: action.harHistoriskTilgang,
             };
 
         case AuthActionKeys.ERROR:
