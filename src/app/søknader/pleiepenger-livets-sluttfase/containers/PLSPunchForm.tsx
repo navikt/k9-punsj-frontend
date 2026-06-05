@@ -953,6 +953,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>
@@ -968,13 +969,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <VerticalSpacer eightPx />
-
                             <LegacyCheckbox
                                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
                                 value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
+                                className="mb-4"
                             />
 
                             {!!soknad.lovbestemtFerie.length && (
@@ -985,10 +985,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     editSoknadState={(perioder, showStatus) =>
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
+                                    textLeggTil="skjema.perioder.legg_til"
+                                    textFjern="skjema.perioder.fjern"
                                     getErrorMessage={this.getErrorMessage}
                                     getUhaandterteFeil={this.getUhaandterteFeil}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
+                                    separatePanels
                                 />
                             )}
 
@@ -1022,10 +1025,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                                             showStatus,
                                                         )
                                                     }
+                                                    textLeggTil="skjema.perioder.legg_til"
+                                                    textFjern="skjema.perioder.fjern"
                                                     getErrorMessage={() => undefined}
                                                     getUhaandterteFeil={this.getUhaandterteFeil}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
+                                                    separatePanels
                                                 />
                                             </div>
                                         )}
@@ -1086,6 +1092,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>

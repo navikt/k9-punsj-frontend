@@ -40,13 +40,19 @@ const Medlemskap: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="8" background="neutral-soft">
-                    <FieldArray
-                        name="bosteder"
-                        render={(arrayHelpers) => (
-                            <>
-                                {values.bosteder?.map((_, bostedIndex, array) => (
-                                    <div key={bostedIndex} className="mb-6">
+                <FieldArray
+                    name="bosteder"
+                    render={(arrayHelpers) => (
+                        <>
+                            {values.bosteder?.map((_, bostedIndex, array) => (
+                                <Box
+                                    key={bostedIndex}
+                                    padding="space-16"
+                                    borderRadius="8"
+                                    background="neutral-soft"
+                                    className={bostedIndex > 0 ? 'mt-4' : undefined}
+                                >
+                                    <div>
                                         <PeriodevelgerFormik
                                             name={`bosteder[${bostedIndex}].periode`}
                                             action={
@@ -54,9 +60,9 @@ const Medlemskap: React.FC = () => {
                                                     <Button
                                                         variant="tertiary"
                                                         className="slett-knapp-med-icon-for-input"
+                                                        type="button"
                                                         onClick={() => arrayHelpers.remove(bostedIndex)}
                                                         icon={<TrashIcon title="slett periode" />}
-                                                        size="small"
                                                     >
                                                         <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
                                                     </Button>
@@ -82,22 +88,22 @@ const Medlemskap: React.FC = () => {
                                             </Field>
                                         </div>
                                     </div>
-                                ))}
+                                </Box>
+                            ))}
 
-                                <VerticalSpacer sixteenPx />
-
+                            <div className="mt-4 flex flex-wrap">
                                 <Button
                                     variant="tertiary"
-                                    size="small"
+                                    type="button"
                                     onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<PlusCircleIcon />}
+                                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
                                 </Button>
-                            </>
-                        )}
-                    />
-                </Box>
+                            </div>
+                        </>
+                    )}
+                />
             )}
         </Box>
     );

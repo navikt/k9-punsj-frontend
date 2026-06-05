@@ -55,6 +55,7 @@ export interface IPeriodeinfopanelerProps {
     onRemove?: () => any;
     kanHaFlere: boolean;
     medSlettKnapp: boolean;
+    useStandardAddButton?: boolean;
     initialValues?: {
         fom: string | undefined;
         tom: string | undefined;
@@ -80,6 +81,7 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
     editSoknad,
     editSoknadState,
     kanHaFlere,
+    useStandardAddButton,
     initialValues,
 }: IPeriodeinfopanelerProps) => {
     const intl = useIntl();
@@ -190,6 +192,7 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
             textLeggTil={textLeggTil || 'skjema.perioder.legg_til'}
             kanHaFlere={kanHaFlere}
             medSlettKnapp={medSlettKnapp}
+            useStandardAddButton={useStandardAddButton}
         />
     );
 };

@@ -60,6 +60,7 @@ export interface IUtenlandsoppholdProps {
     onRemove?: () => any;
     kanHaFlere: boolean;
     medSlettKnapp: boolean;
+    useStandardAddButton?: boolean;
     initialValues?: {
         fom: string | undefined;
         tom: string | undefined;
@@ -83,6 +84,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         onRemove,
         panelClassName,
         periods = [],
+        useStandardAddButton,
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
     const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(
@@ -332,6 +334,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             textLeggTil={textLeggTil || 'skjema.perioder.legg_til'}
             kanHaFlere={kanHaFlere}
             medSlettKnapp={medSlettKnapp}
+            useStandardAddButton={useStandardAddButton}
         />
     );
 };

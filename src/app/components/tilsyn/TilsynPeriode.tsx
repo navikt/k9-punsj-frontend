@@ -48,18 +48,18 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
             {({ field }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
-                        <div className="flex items-start">
-                            <PeriodevelgerFormik name={`${name}.periode`} />
-
-                            <div className="ml-4 mt-7">
+                        <PeriodevelgerFormik
+                            name={`${name}.periode`}
+                            action={
                                 <Button
+                                    className="slett-knapp-med-icon-for-input"
                                     icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
-                                    size="small"
                                     variant="tertiary"
+                                    type="button"
                                     onClick={remove}
                                 />
-                            </div>
-                        </div>
+                            }
+                        />
 
                         {visCheckbox && soknadsperioder.length === 1 && (
                             <Checkbox
