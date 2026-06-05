@@ -27,6 +27,13 @@ interface Props {
     søkerId: string;
 }
 
+const findYearForKorrigering = (values: KorrigeringAvInntektsmeldingFormValues) =>
+    values.Trekkperioder.find((periode) => periode.fom)?.fom?.slice(0, 4) ||
+    values.PerioderMedRefusjonskrav.find((periode) => periode.fom)?.fom?.slice(0, 4) ||
+    values.DagerMedDelvisFravær.find((dag) => dag.dato)?.dato?.slice(0, 4) ||
+    values.OpplysningerOmKorrigering.dato?.slice(0, 4) ||
+    '';
+
 const VirksomhetPanel = ({ søkerId }: Props) => {
     const intl = useIntl();
 
@@ -39,7 +46,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
     const previousValgtVirksomhet = usePrevious(values.Virksomhet);
 
     useEffect(() => {
-        if (årstallForKorrigering) {
+        if (årstallForKorrigering.length === 4) {
             finnArbeidsgivere(
                 søkerId,
                 (response, data: ArbeidsgivereResponse) => {
@@ -59,7 +66,18 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     }
                 });
         }
-    }, [årstallForKorrigering]);
+    }, [søkerId, årstallForKorrigering]);
+
+    useEffect(() => {
+        if (årstallForKorrigering) {
+            return;
+        }
+
+        const derivedYear = findYearForKorrigering(values);
+        if (derivedYear) {
+            setÅrstallForKorrigering(derivedYear);
+        }
+    }, [values, årstallForKorrigering]);
 
     useEffect(() => {
         if (previousValgtVirksomhet !== undefined && values.Virksomhet !== previousValgtVirksomhet) {
@@ -112,11 +130,9 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     className="w-18 mt-2"
                     label="Årstallet korrigeringen gjelder for"
                     hideLabel
+                    value={årstallForKorrigering}
                     onChange={(event) => {
-                        const targetValue = event.target.value;
-                        if (targetValue.length === 4) {
-                            setÅrstallForKorrigering(targetValue);
-                        }
+                        setÅrstallForKorrigering(event.target.value);
                     }}
                 />
 
