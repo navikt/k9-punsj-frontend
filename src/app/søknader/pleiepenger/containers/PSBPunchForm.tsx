@@ -1345,6 +1345,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
                                 data-testid="feriepanel-checkbox"
+                                className="mb-4"
                             />
 
                             {!!soknad.lovbestemtFerie.length && (
@@ -1355,10 +1356,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     editSoknadState={(perioder, showStatus) =>
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
+                                    textFjern="skjema.perioder.fjern"
                                     getErrorMessage={this.getErrorMessage}
                                     getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
+                                    separatePanels
                                 />
                             )}
 
@@ -1396,6 +1399,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                     getUhaandterteFeil={this.resolveUnhandledErrors}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
+                                                    separatePanels
                                                 />
                                             </div>
                                         )}
@@ -1477,7 +1481,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 <>
                                     <VerticalSpacer twentyPx />
 
-                                    <Box padding="space-16" borderRadius="8" background="neutral-soft" className="listepanel">
+                                    <Box
+                                        padding="space-16"
+                                        borderRadius="8"
+                                        background="neutral-soft"
+                                        className="listepanel"
+                                    >
                                         <TilsynKalender
                                             nyeSoknadsperioder={soknad.soeknadsperiode}
                                             eksisterendeSoknadsperioder={eksisterendePerioder}

@@ -115,7 +115,7 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                         />
                     </div>
                 </HStack>
-                {action && <div className="flex self-end">{action}</div>}
+                {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
         </Fieldset>
     );

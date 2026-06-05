@@ -75,7 +75,7 @@ const PeriodevelgerFormik = ({
                         inputRef={tomInputRef}
                     />
                 </div>
-                {action && <div className="flex self-end">{action}</div>}
+                {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
                 {fomFieldMeta.touched && fomFieldMeta.error && (
