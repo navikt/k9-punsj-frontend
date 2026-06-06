@@ -55,6 +55,7 @@ const Medlemskap: React.FC = () => {
                                     <div>
                                         <PeriodevelgerFormik
                                             name={`bosteder[${bostedIndex}].periode`}
+                                            size="small"
                                             action={
                                                 array.length > 1 ? (
                                                     <Button
@@ -77,6 +78,7 @@ const Medlemskap: React.FC = () => {
                                                 {({ field }: FieldProps<string>) => (
                                                     <CountrySelect
                                                         label
+                                                        size="small"
                                                         selectedcountry={field.value}
                                                         unselectedoption={intlHelper(
                                                             intl,

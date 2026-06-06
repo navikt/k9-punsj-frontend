@@ -54,6 +54,7 @@ const Utenlandsopphold: React.FC = () => {
                                     <div>
                                         <PeriodevelgerFormik
                                             name={`utenlandsopphold[${index}].periode`}
+                                            size="small"
                                             action={
                                                 array.length > 1 ? (
                                                     <Button
@@ -76,6 +77,7 @@ const Utenlandsopphold: React.FC = () => {
                                                 {({ field }: FieldProps<string>) => (
                                                     <CountrySelect
                                                         label
+                                                        size="small"
                                                         selectedcountry={field.value}
                                                         unselectedoption={intlHelper(
                                                             intl,

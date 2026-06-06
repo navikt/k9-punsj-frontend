@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -25,9 +25,6 @@ export default function Frilanser() {
 
     return (
         <Box padding="space-16" background="neutral-soft" borderRadius="8">
-            <Heading size="small" level="5">
-                <FormattedMessage id={'omsorgspenger.utbetaling.frilanser.tittel'} />
-            </Heading>
             <Box padding="space-16">
                 {!values.erKorrigering && (
                     <>
@@ -49,6 +46,7 @@ export default function Frilanser() {
                 <DatovelgerFormik
                     label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.startDato.spm')}
                     name="opptjeningAktivitet.frilanser.startdato"
+                    size="small"
                 />
 
                 <VerticalSpacer twentyPx />
@@ -71,6 +69,7 @@ export default function Frilanser() {
                         <DatovelgerFormik
                             label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
                             name="opptjeningAktivitet.frilanser.sluttdato"
+                            size="small"
                         />
 
                         <VerticalSpacer twentyPx />
@@ -79,9 +78,7 @@ export default function Frilanser() {
 
                 <hr />
 
-                <VerticalSpacer twentyPx />
-
-                <Heading size="small">
+                <Heading size="small" className="mt-4 mb-4">
                     <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel" />
                 </Heading>
 

@@ -26,7 +26,12 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 </Alert>
 
                 <div className="input-row">
-                    <DatovelgerFormik id="soknad-dato" label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
+                    <DatovelgerFormik
+                        id="soknad-dato"
+                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                        name="mottattDato"
+                        size="small"
+                    />
 
                     <div className="ml-4">
                         <Field name="klokkeslett">
@@ -36,6 +41,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                                     type="time"
                                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                     error={meta.touched && meta.error}
+                                    size="small"
                                     {...field}
                                     onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
                                 />
