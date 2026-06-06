@@ -96,7 +96,10 @@ const FormikHarness = () => (
 );
 
 const RhfHarness = () => (
-    <TypedFormProvider formProps={{ defaultValues: { mottattDato: '2026-05-17' } }}>
+    <TypedFormProvider
+        formProps={{ defaultValues: { mottattDato: '2026-05-17' }, mode: 'onBlur' }}
+        onSubmit={() => undefined}
+    >
         {(methods: UseFormReturn<StoryFormValues>) => (
             <VStack gap="space-16">
                 <TypedFormDateInput
@@ -127,6 +130,8 @@ const RhfHarness = () => (
                     </Button>
                 </HStack>
                 <div>value: {methods.watch('mottattDato') || '(empty)'}</div>
+                <div>touched: {methods.formState.touchedFields.mottattDato ? 'yes' : 'no'}</div>
+                <div>error: {methods.formState.errors.mottattDato?.message || '(none)'}</div>
             </VStack>
         )}
     </TypedFormProvider>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { FieldValues, useController, useFormContext } from 'react-hook-form';
-
-import DatovelgerControlled from 'app/components/skjema/Datovelger/DatovelgerControlled';
+import { DatePicker } from '@navikt/ds-react';
+import { FieldValues } from 'react-hook-form';
 
 import { FormDateInputProps } from './types';
+import { useFormDateInput } from './internal/useFormDateInput';
 
 export function FormDateInput<T extends FieldValues>({
     name,
@@ -11,7 +11,8 @@ export function FormDateInput<T extends FieldValues>({
     validate,
     className,
     disabled,
-    size,
+    readOnly,
+    size = 'medium',
     hideLabel,
     description,
     defaultMonth,
@@ -20,35 +21,51 @@ export function FormDateInput<T extends FieldValues>({
     disabledDates,
     'data-testid': dataTestId,
 }: FormDateInputProps<T>) {
-    const { control } = useFormContext<T>();
-    const { field, fieldState } = useController({
+    const {
+        datepickerProps,
+        inputProps,
+        fieldRef,
+        error,
+        fromDateDefault,
+        toDateDefault,
+        handleInputBlur,
+        handleInputChange,
+        handleSelect,
+    } = useFormDateInput({
         name,
-        control,
-        rules: validate,
+        validate,
+        defaultMonth,
     });
 
     return (
-        <DatovelgerControlled
-            label={label}
-            description={description}
-            className={className}
-            disabled={disabled}
-            disabledDates={disabledDates}
-            inputRef={field.ref}
-            value={typeof field.value === 'string' ? field.value : ''}
-            onChange={(value) => field.onChange(value)}
-            onBlur={(value) => {
-                field.onChange(value);
-                field.onBlur();
-            }}
-            onInputBlur={() => field.onBlur()}
-            errorMessage={fieldState.error?.message}
-            size={size}
-            hideLabel={hideLabel}
-            defaultMonth={defaultMonth}
-            fromDate={fromDate}
-            toDate={toDate}
-            dataTestId={dataTestId}
-        />
+        <div className={className}>
+            <DatePicker
+                {...(datepickerProps as any)}
+                showWeekNumber={true}
+                mode="single"
+                inputDisabled={disabled}
+                dropdownCaption={true}
+                fromDate={fromDate || fromDateDefault}
+                toDate={toDate || toDateDefault}
+                disabled={disabledDates}
+                onSelect={handleSelect}
+                size={size}
+            >
+                <DatePicker.Input
+                    {...inputProps}
+                    hideLabel={hideLabel}
+                    label={label}
+                    description={description}
+                    error={error}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    size={size}
+                    ref={fieldRef}
+                    data-testid={dataTestId || 'datePickerInput'}
+                    onChange={handleInputChange}
+                    onBlur={handleInputBlur}
+                />
+            </DatePicker>
+        </div>
     );
 }

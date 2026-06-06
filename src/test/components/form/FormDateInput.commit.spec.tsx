@@ -6,28 +6,45 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { getTypedFormComponents } from '../../../app/components/form/getTypedFormComponents';
 
-jest.mock('../../../app/components/skjema/Datovelger/DatovelgerControlled', () => ({
-    __esModule: true,
-    default: ({
-        onBlur,
-        onInputBlur,
-        value,
-    }: {
-        onBlur?: (value: string) => void;
-        onInputBlur?: () => void;
-        value?: string;
-    }) => (
-        <div>
-            <button type="button" onClick={() => onBlur?.('2020-03-01')}>
-                Commit date
-            </button>
-            <button type="button" onClick={() => onInputBlur?.()}>
-                Blur input
-            </button>
-            <div data-testid="value">{value || ''}</div>
-        </div>
-    ),
-}));
+jest.mock('@navikt/ds-react', () => {
+    const React = require('react');
+
+    const DatePicker = Object.assign(
+        ({ children, onSelect }: { children: React.ReactNode; onSelect?: (date?: Date) => void }) => (
+            <div>
+                <button type="button" onClick={() => onSelect?.(new Date('2020-03-01T00:00:00.000Z'))}>
+                    Commit date
+                </button>
+                {children}
+            </div>
+        ),
+        {
+            Input: React.forwardRef(
+                (
+                    {
+                        onChange,
+                        onBlur,
+                        ...props
+                    }: {
+                        onChange?: React.ChangeEventHandler<HTMLInputElement>;
+                        onBlur?: React.FocusEventHandler<HTMLInputElement>;
+                        'data-testid'?: string;
+                    },
+                    ref: React.Ref<HTMLInputElement>,
+                ) => <input ref={ref} onChange={onChange} onBlur={onBlur} {...props} />,
+            ),
+        },
+    );
+
+    return {
+        DatePicker,
+        useDatepicker: () => ({
+            datepickerProps: {},
+            inputProps: {},
+            setSelected: jest.fn(),
+        }),
+    };
+});
 
 interface TestForm {
     mottattDato: string;
