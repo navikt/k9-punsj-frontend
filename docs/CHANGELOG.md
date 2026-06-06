@@ -2,27 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### RHF date input internal hook (2026-06-06)
+### Date input and punch form cleanup batch (2026-06-06)
 
-- Refaktorerte `FormDateInput` til en tynn RHF entrypoint rundt Aksel `DatePicker`, og flyttet intern commit, blur, touched, invalid date og value-sync-logikk til en egen `useFormDateInput` hook.
-- Beholdt commit-semantikken for kalenderselect i RHF ved å markere feltet som touched på commit, og oppdaterte målrettet adapter-test for dette scenariet.
-- Utvidet Storybook-historien for RHF-adapteren med synlig `touched`- og `error`-status for enklere manuell verifisering av blur-basert validering.
-
-### Punch form layout alignment batch (2026-06-06)
-
+- Samlet date input-laget rundt en delt `DatovelgerBase`, videreførte `DatovelgerControlled` og `DatovelgerFormik` på samme grunnsemantikk, og etablerte `FormDateInput` som RHF-entrypoint med en intern `useFormDateInput` hook for commit, blur, touched, invalid date og value-sync.
+- Migrerte app-usages bort fra `NewDateInput` og `DatoInputFormikNew`, fjernet de gamle wrapperne, justerte default `size` tilbake til `medium`, og oppdaterte målrettede tester og Storybook-historier for controlled, Formik og RHF, inkludert RHF commit fra kalender.
 - Justerte period action-layout på tvers av `PSB`, `PLS` og `omsorgspenger-utbetaling`, slik at `Slett periode` og `Legg til ny periode` følger samme plassering, knappestil og panelstruktur i flere periodelister og modaler.
 - Ryddet opp i seksjonsstruktur, topp-titler, overskrifter og spacing i flere punchskjemaer, blant annet `Omsorgsdager - Midlertidig alene om omsorgen`, `Alene om omsorgen` og `Opplæringspenger`, for å gjøre layouten mer konsistent med øvrige skjemaer.
-- Standardiserte overskriften `Opplysninger som ikke er blitt registrert` på tvers av relevante skjemaer og fjernet gammel global legacy-styling som tidligere styrte dette med egen klasse.
-- Justerte `omsorgspenger-utbetaling` videre med mindre form controls i relevante seksjoner, ryddet bort dupliserte deltitler i arbeidsforholdsdelene, og fjernet ekstra horisontal spacing fra Formik-varianten av legacy radio-paneler.
-
-### Date input adapter foundation (2026-05-28)
-
-- La inn en delt `DatovelgerBase` for date input med felles controlled sync, blur-commit og valideringshåndtering, og lot `DatovelgerControlled` og `DatovelgerFormik` bruke samme grunnsemantikk i stedet for parallelle implementasjoner.
-- La til `FormDateInput` i `src/app/components/form` som første offisielle RHF date primitive, samt typed export i form-laget.
-- La til interaktive Storybook-historier for controlled, Formik og RHF date adapters, og målrettede tester for change, blur commit og ekstern value-sync. Selve app-migreringen av eksisterende usages er bevisst holdt til et senere pass.
-- Fullførte deretter første usage-migrering bort fra `NewDateInput` og `DatoInputFormikNew` i appen ved å flytte controlled skjermer over på `DatovelgerControlled`, flytte Formik-skjermene over på `DatovelgerFormik`, og fjerne de to gamle wrapperne som egne app-entrypoints.
-- Justerte også default `size` tilbake til `medium` i date adapter-laget for å matche Aksel sin standard og unngå at skjermer som PSB uforvarende ble rendret med mindre inputs etter migreringen.
-- Fjernet til slutt den gamle `NewDateInput`-wrapperen og dens tilhørende regression test etter at app-usages var migrert og period/date-layeret var ryddet videre.
+- Standardiserte overskriften `Opplysninger som ikke er blitt registrert` på tvers av relevante skjemaer, fjernet gammel global legacy-styling for denne overskriften, og justerte `omsorgspenger-utbetaling` videre med mindre form controls, ryddet bort dupliserte deltitler og fjernet ekstra horisontal spacing fra Formik-varianten av legacy radio-paneler.
 
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 
