@@ -7,7 +7,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { getTypedFormComponents } from '../../../app/components/form/getTypedFormComponents';
 
 jest.mock('@navikt/ds-react', () => {
-    const React = require('react');
+    const reactModule = jest.requireActual<typeof import('react')>('react');
 
     const DatePicker = Object.assign(
         ({ children, onSelect }: { children: React.ReactNode; onSelect?: (date?: Date) => void }) => (
@@ -19,7 +19,7 @@ jest.mock('@navikt/ds-react', () => {
             </div>
         ),
         {
-            Input: React.forwardRef(
+            Input: reactModule.forwardRef(
                 (
                     {
                         onChange,

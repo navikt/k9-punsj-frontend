@@ -25,6 +25,8 @@ interface PeriodStoryFormValues {
 }
 
 const { TypedFormProvider, TypedFormDateInput } = getTypedFormComponents<StoryFormValues>();
+const { TypedFormProvider: TypedPeriodFormProvider, TypedFormPeriodInput } =
+    getTypedFormComponents<PeriodStoryFormValues>();
 const periodIntl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
 const storyDecorator = (Story: React.ComponentType) => (
@@ -207,6 +209,53 @@ const FormikPeriodHarness = () => (
     </Formik>
 );
 
+const RhfPeriodHarness = () => (
+    <TypedPeriodFormProvider
+        formProps={{ defaultValues: { periode: { fom: '2026-05-17', tom: '2026-05-20' } }, mode: 'onBlur' }}
+        onSubmit={() => undefined}
+    >
+        {(methods: UseFormReturn<PeriodStoryFormValues>) => (
+            <VStack gap="space-16">
+                <TypedFormPeriodInput
+                    name="periode"
+                    validate={{
+                        validate: (value) => {
+                            const period = value as IPeriode | undefined;
+                            return period?.fom && period?.tom ? undefined : 'Velg periode';
+                        },
+                    }}
+                    fomDataTestId="storybook-rhf-period-fom"
+                    tomDataTestId="storybook-rhf-period-tom"
+                />
+                <HStack gap="space-8">
+                    <Button
+                        type="button"
+                        size="small"
+                        variant="secondary"
+                        onClick={() => methods.setValue('periode', { fom: '2026-05-21', tom: '2026-05-27' })}
+                    >
+                        Simuler API update
+                    </Button>
+                    <Button
+                        type="button"
+                        size="small"
+                        variant="secondary"
+                        onClick={() => methods.setValue('periode', { fom: '', tom: '' })}
+                    >
+                        Tøm periode
+                    </Button>
+                    <Button type="button" size="small" onClick={() => methods.trigger('periode')}>
+                        Valider
+                    </Button>
+                </HStack>
+                <div>value: {JSON.stringify(methods.watch('periode'))}</div>
+                <div>touched: {methods.formState.touchedFields.periode ? 'yes' : 'no'}</div>
+                <div>error: {methods.formState.errors.periode?.message || '(none)'}</div>
+            </VStack>
+        )}
+    </TypedPeriodFormProvider>
+);
+
 const meta: Meta = {
     title: 'Form/Date input adapters',
     decorators: [storyDecorator],
@@ -234,4 +283,8 @@ export const ControlledPeriod: Story = {
 
 export const FormikPeriod: Story = {
     render: () => <FormikPeriodHarness />,
+};
+
+export const ReactHookFormPeriodAdapter: Story = {
+    render: () => <RhfPeriodHarness />,
 };

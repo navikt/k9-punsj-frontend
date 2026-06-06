@@ -45,6 +45,27 @@ export interface FormDateInputProps<T extends FieldValues> extends Omit<FormFiel
     disabledDates?: DatePickerProps['disabled'];
 }
 
+export interface FormPeriodInputProps<T extends FieldValues> {
+    name: Path<T>;
+    validate?: RegisterOptions<T>;
+    className?: string;
+    disabled?: boolean;
+    size?: 'small' | 'medium';
+    defaultMonth?: Date;
+    fromDate?: Date;
+    toDate?: Date;
+    disabledDates?: DatePickerProps['disabled'];
+    fomId?: string;
+    tomId?: string;
+    fomInputRef?: React.Ref<HTMLInputElement>;
+    tomInputRef?: React.Ref<HTMLInputElement>;
+    action?: ReactNode;
+    fromLabel?: ReactNode;
+    toLabel?: ReactNode;
+    fomDataTestId?: string;
+    tomDataTestId?: string;
+}
+
 export interface FormRadioGroupOption {
     value: string;
     label: ReactNode;

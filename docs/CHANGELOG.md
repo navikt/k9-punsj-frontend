@@ -4,8 +4,8 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Date input and punch form cleanup batch (2026-06-06)
 
-- Samlet og ryddet date input-laget, migrerte app-usages bort fra `NewDateInput` og `DatoInputFormikNew`, fjernet de gamle wrapperne, og etablerte `FormDateInput` som RHF-entrypoint.
-- Justerte default `size` tilbake til `medium`, og oppdaterte målrettede tester og Storybook-historier for controlled, Formik og RHF, inkludert RHF commit fra kalender.
+- Samlet og ryddet date input-laget, migrerte app-usages bort fra `NewDateInput` og `DatoInputFormikNew`, fjernet de gamle wrapperne, og etablerte `FormDateInput` og `FormPeriodInput` som RHF-entrypoints for dato og periode.
+- Justerte default `size` tilbake til `medium`, og oppdaterte målrettede tester og Storybook-historier for controlled, Formik og RHF, inkludert RHF commit fra kalender og et eget RHF periodeinput med stabil feilvisning under feltene.
 - Justerte period action-layout på tvers av `PSB`, `PLS` og `omsorgspenger-utbetaling`, slik at `Slett periode` og `Legg til ny periode` følger samme plassering, knappestil og panelstruktur i flere periodelister og modaler.
 - Ryddet opp i seksjonsstruktur, topp-titler, overskrifter og spacing i flere punchskjemaer, blant annet `Omsorgsdager - Midlertidig alene om omsorgen`, `Alene om omsorgen` og `Opplæringspenger`, for å gjøre layouten mer konsistent med øvrige skjemaer.
 - Standardiserte overskriften `Opplysninger som ikke er blitt registrert` på tvers av relevante skjemaer, fjernet gammel global legacy-styling for denne overskriften, og justerte `omsorgspenger-utbetaling` videre med mindre form controls, ryddet bort dupliserte deltitler og fjernet ekstra horisontal spacing fra Formik-varianten av legacy radio-paneler.
