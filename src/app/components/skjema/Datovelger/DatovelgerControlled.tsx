@@ -10,7 +10,6 @@ export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | '
         disabled?: boolean;
         disabledDates?: DatePickerProps['disabled'];
         onBlur?: (value: string) => void;
-        onInputBlur?: () => void;
         value: string;
         inputRef?: React.Ref<HTMLInputElement>;
         dataTestId?: string;
@@ -28,7 +27,6 @@ const DatovelgerControlled = ({
     disabled,
     disabledDates,
     onBlur,
-    onInputBlur,
     value,
     fromDate,
     toDate,
@@ -45,7 +43,6 @@ const DatovelgerControlled = ({
             description={description}
             onChange={onChange}
             onCommit={onBlur}
-            onInputBlur={onInputBlur}
             hideLabel={hideLabel}
             className={className}
             errorMessage={errorMessage}

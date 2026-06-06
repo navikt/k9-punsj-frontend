@@ -15,7 +15,6 @@ export type DatovelgerBaseProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDa
         value: string;
         onChange: (value: string) => void;
         onCommit?: (value: string) => void;
-        onInputBlur?: () => void;
         errorMessage?: React.ReactNode | string | boolean;
         inputDisabled?: boolean;
         disabledDates?: DatePickerProps['disabled'];
@@ -29,7 +28,6 @@ const DatovelgerBase = ({
     description,
     onChange,
     onCommit,
-    onInputBlur,
     hideLabel,
     className,
     errorMessage,
@@ -159,7 +157,6 @@ const DatovelgerBase = ({
                         const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
                         setShowInvalidDateError(nextValue === INVALID_DATE_VALUE);
                         commitValue(nextValue);
-                        onInputBlur?.();
                         inputProps.onBlur?.(event);
                     }}
                 />
