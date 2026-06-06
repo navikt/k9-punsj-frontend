@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### RHF date input internal hook (2026-06-06)
+
+- Refaktorerte `FormDateInput` til en tynn RHF entrypoint rundt Aksel `DatePicker`, og flyttet intern commit, blur, touched, invalid date og value-sync-logikk til en egen `useFormDateInput` hook.
+- Beholdt commit-semantikken for kalenderselect i RHF ved å markere feltet som touched på commit, og oppdaterte målrettet adapter-test for dette scenariet.
+- Utvidet Storybook-historien for RHF-adapteren med synlig `touched`- og `error`-status for enklere manuell verifisering av blur-basert validering.
+
 ### Punch form layout alignment batch (2026-06-06)
 
 - Justerte period action-layout på tvers av `PSB`, `PLS` og `omsorgspenger-utbetaling`, slik at `Slett periode` og `Legg til ny periode` følger samme plassering, knappestil og panelstruktur i flere periodelister og modaler.
