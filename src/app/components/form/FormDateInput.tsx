@@ -37,7 +37,10 @@ export function FormDateInput<T extends FieldValues>({
             inputRef={field.ref}
             value={typeof field.value === 'string' ? field.value : ''}
             onChange={(value) => field.onChange(value)}
-            onBlur={(value) => field.onChange(value)}
+            onBlur={(value) => {
+                field.onChange(value);
+                field.onBlur();
+            }}
             onInputBlur={() => field.onBlur()}
             errorMessage={fieldState.error?.message}
             size={size}

@@ -115,6 +115,10 @@ export const Periodepaneler: React.FC<Props> = ({
     const renderPeriod = (p: IPeriode, i: number) => {
         const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
         const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
+        const periodErrorPath = feilkodeprefiks ? `${feilkodeprefiks}.perioder[${i}]` : undefined;
+        const periodErrorMessage = periodErrorPath ? getErrorMessage?.(periodErrorPath, i) : undefined;
+        const periodErrorMessageFom = getErrorMessage?.(`[${i}].periode.fom`, i);
+        const periodErrorMessageTom = getErrorMessage?.(`[${i}].periode.tom`, i);
 
         return (
             <div key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
@@ -127,19 +131,15 @@ export const Periodepaneler: React.FC<Props> = ({
                         }
                     }}
                     onBlur={(periode) => editSoknad(editPeriode(i, periode))}
-                    errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
-                    errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
-                    errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
+                    errorMessage={periodErrorMessage}
+                    errorMessageFom={periodErrorMessageFom}
+                    errorMessageTom={periodErrorMessageTom}
                     inputIdFom={periodInputIds.fomId}
                     inputIdTom={periodInputIds.tomId}
                     action={
                         <Button
                             id="slett"
-                            className={
-                                getErrorMessage!(feilkodeprefiks!, i)
-                                    ? 'fjern-feil '
-                                    : 'slett-knapp-med-icon-for-input'
-                            }
+                            className={periodErrorMessage ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'}
                             type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);

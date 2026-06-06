@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Punch form layout alignment batch (2026-06-06)
+
+- Justerte period action-layout på tvers av `PSB`, `PLS` og `omsorgspenger-utbetaling`, slik at `Slett periode` og `Legg til ny periode` følger samme plassering, knappestil og panelstruktur i flere periodelister og modaler.
+- Ryddet opp i seksjonsstruktur, topp-titler, overskrifter og spacing i flere punchskjemaer, blant annet `Omsorgsdager - Midlertidig alene om omsorgen`, `Alene om omsorgen` og `Opplæringspenger`, for å gjøre layouten mer konsistent med øvrige skjemaer.
+- Standardiserte overskriften `Opplysninger som ikke er blitt registrert` på tvers av relevante skjemaer og fjernet gammel global legacy-styling som tidligere styrte dette med egen klasse.
+- Justerte `omsorgspenger-utbetaling` videre med mindre form controls i relevante seksjoner, ryddet bort dupliserte deltitler i arbeidsforholdsdelene, og fjernet ekstra horisontal spacing fra Formik-varianten av legacy radio-paneler.
+
 ### Date input adapter foundation (2026-05-28)
 
 - La inn en delt `DatovelgerBase` for date input med felles controlled sync, blur-commit og valideringshåndtering, og lot `DatovelgerControlled` og `DatovelgerFormik` bruke samme grunnsemantikk i stedet for parallelle implementasjoner.
