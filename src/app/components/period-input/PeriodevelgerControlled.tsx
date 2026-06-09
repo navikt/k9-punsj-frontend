@@ -1,6 +1,6 @@
 import React from 'react';
+import { ErrorMessage } from '@navikt/ds-react';
 
-import { Fieldset, HStack } from '@navikt/ds-react';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
 
@@ -57,56 +57,50 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
         // limitations,
     } = props;
 
-    const handleOnChange = (selectedDate: string, isFom: boolean) => {
-        const newPeriod = isFom
-            ? { fom: selectedDate, tom: periode?.tom || '' }
-            : { fom: periode?.fom || '', tom: selectedDate };
-        onChange(newPeriod);
+    const normalizedPeriode = {
+        fom: typeof periode?.fom === 'string' ? periode.fom : initialValues?.fom || '',
+        tom: typeof periode?.tom === 'string' ? periode.tom : initialValues?.tom || '',
     };
+    const isValidFromDate = normalizedPeriode.fom && new Date(normalizedPeriode.fom).toString() !== 'Invalid Date';
+    const fromDateValue = isValidFromDate ? new Date(normalizedPeriode.fom) : undefined;
+    const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
 
-    const handleOnBlur = (selectedDate: string, isFom: boolean) => {
-        if (onBlur) {
-            const newPeriod = isFom
-                ? { fom: selectedDate, tom: periode?.tom || '' }
-                : { fom: periode?.fom || '', tom: selectedDate };
-            onBlur(newPeriod);
+    const renderErrorText = (label: React.ReactNode, message?: React.ReactNode | boolean, withLabel = false) => {
+        if (!message || typeof message === 'boolean') {
+            return null;
         }
-    };
 
-    // Vi sjekker om fom er en gyldig dato
-    const isValidFromDate = periode.fom && new Date(periode.fom).toString() !== 'Invalid Date';
-    const fromDateValue = isValidFromDate ? new Date(periode.fom!) : undefined;
+        return <ErrorMessage showIcon>{withLabel && label ? <>{label}: {message}</> : message}</ErrorMessage>;
+    };
 
     return (
-        <Fieldset error={errorMessage} className={className} legend={undefined}>
+        <div className={rootClassName}>
             <div className="flex items-end gap-4 flex-wrap">
-                <HStack wrap gap="space-16" justify="center">
+                <div className="flex gap-4 flex-wrap">
+                    {/* Vi beholder to separate kalendere her fordi saksbehandlere opplevde felles range-picker som mindre praktisk i Punsj. */}
                     <div data-testid="datePickerInputFom">
                         <DatovelgerControlled
-                            value={periode.fom || initialValues?.fom || ''}
-                            onChange={(selectedDate) => handleOnChange(selectedDate, true)}
-                            onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
+                            value={normalizedPeriode.fom}
+                            onChange={(selectedDate) => onChange({ fom: selectedDate, tom: normalizedPeriode.tom || '' })}
+                            onBlur={(selectedDate) => onBlur?.({ fom: selectedDate, tom: normalizedPeriode.tom || '' })}
                             id={inputIdFom}
                             disabled={disabled || disabledFom}
-                            errorMessage={errorMessageFom}
+                            errorMessage={!!errorMessageFom}
                             label={intlHelper(intl, 'skjema.perioder.fom')}
                             inputRef={fomInputRef}
-                            // limitations={limitations}
                             dataTestId="fom"
                             size={size}
                         />
                     </div>
-
                     <div data-testid="datePickerInputTom">
                         <DatovelgerControlled
-                            value={periode.tom || initialValues?.tom || ''}
-                            onChange={(selectedDate) => handleOnChange(selectedDate, false)}
-                            onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
+                            value={normalizedPeriode.tom}
+                            onChange={(selectedDate) => onChange({ fom: normalizedPeriode.fom || '', tom: selectedDate })}
+                            onBlur={(selectedDate) => onBlur?.({ fom: normalizedPeriode.fom || '', tom: selectedDate })}
                             id={inputIdTom}
                             disabled={disabled || disabledTom}
-                            errorMessage={errorMessageTom}
+                            errorMessage={!!errorMessageTom}
                             inputRef={tomInputRef}
-                            // limitations={limitations}
                             label={intlHelper(intl, 'skjema.perioder.tom')}
                             dataTestId="tom"
                             fromDate={fromDateValue}
@@ -114,9 +108,14 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                             size={size}
                         />
                     </div>
-                </HStack>
+                </div>
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
-        </Fieldset>
+            <div>
+                {renderErrorText(intlHelper(intl, 'skjema.perioder.fom'), errorMessageFom, true)}
+                {renderErrorText(intlHelper(intl, 'skjema.perioder.tom'), errorMessageTom, true)}
+                {renderErrorText(null, errorMessage)}
+            </div>
+        </div>
     );
 };

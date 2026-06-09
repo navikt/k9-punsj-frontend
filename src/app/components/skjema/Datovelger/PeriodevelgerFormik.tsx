@@ -1,7 +1,8 @@
 import React from 'react';
-import { ErrorMessage, DatePickerProps } from '@navikt/ds-react';
-import DatovelgerFormik from './DatovelgerFormik';
+import { DatePickerProps, ErrorMessage } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
+
+import DatovelgerFormik from './DatovelgerFormik';
 
 interface PeriodevelgerFormikProps {
     name: string;
@@ -41,16 +42,14 @@ const PeriodevelgerFormik = ({
     const effectiveTomId = tomId || tomFieldName;
     const showPeriodeError = submitCount > 0 || (fomFieldMeta.touched && tomFieldMeta.touched);
 
-    // Beregn effektive grenser for fom-feltet
     const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
-
-    // Beregn effektive grenser for tom-feltet
     const tomFromDate = fomFieldMeta.value ? new Date(fomFieldMeta.value) : fromDate;
 
     return (
         <div className="flex flex-col gap-2">
             <div className="flex items-end gap-4 flex-wrap">
                 <div className="flex gap-4 flex-wrap">
+                    {/* Vi beholder to separate kalendere her fordi saksbehandlere opplevde felles range-picker som mindre praktisk i Punsj. */}
                     <DatovelgerFormik
                         id={effectiveFomId}
                         name={fomFieldName}
@@ -61,6 +60,7 @@ const PeriodevelgerFormik = ({
                         disabledDates={disabled}
                         size={size}
                         inputRef={fomInputRef}
+                        dataTestId="fom"
                     />
                     <DatovelgerFormik
                         id={effectiveTomId}
@@ -73,6 +73,7 @@ const PeriodevelgerFormik = ({
                         disabledDates={disabled}
                         size={size}
                         inputRef={tomInputRef}
+                        dataTestId="tom"
                     />
                 </div>
                 {action && <div className="flex self-stretch items-end">{action}</div>}
@@ -89,7 +90,7 @@ const PeriodevelgerFormik = ({
                     </ErrorMessage>
                 )}
                 {showPeriodeError && typeof periodeFieldMeta.error === 'string' && (
-                    <ErrorMessage aria-describedby={effectiveFomId} showIcon={true}>
+                    <ErrorMessage aria-describedby={effectiveFomId} showIcon>
                         {periodeFieldMeta.error}
                     </ErrorMessage>
                 )}
