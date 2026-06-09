@@ -70,7 +70,7 @@ export function FormPeriodInput<T extends FieldValues>({
     const tomFromDate = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : fromDate;
     const tomDefaultMonth = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : defaultMonth;
     const groupErrorMessage = typeof periodFieldState.error?.message === 'string' ? periodFieldState.error.message : undefined;
-    const showGroupError = !!groupErrorMessage && (periodFieldState.isTouched || submitCount > 0);
+    const sharedErrorId = `${fomId || tomId || String(name)}-error`;
 
     const fromField = useFormDateInput({
         name: fomName,
@@ -119,6 +119,7 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!fromErrorMessage}
                             data-testid={fomDataTestId}
+                            aria-describedby={sharedErrorId}
                             onChange={fromField.handleInputChange}
                             onBlur={(event) => {
                                 fromField.handleInputBlur(event);
@@ -153,6 +154,7 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!toErrorMessage}
                             data-testid={tomDataTestId}
+                            aria-describedby={sharedErrorId}
                             onChange={toField.handleInputChange}
                             onBlur={(event) => {
                                 toField.handleInputBlur(event);
@@ -164,8 +166,8 @@ export function FormPeriodInput<T extends FieldValues>({
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {sharedErrorMessage && (
-                    <ErrorMessage aria-describedby={fomId || tomId} showIcon>
+                {sharedErrorMessage && (periodFieldState.isTouched || submitCount > 0 || fromErrorMessage || toErrorMessage) && (
+                    <ErrorMessage id={sharedErrorId} aria-describedby={fomId || tomId} showIcon>
                         {sharedErrorMessage}
                     </ErrorMessage>
                 )}

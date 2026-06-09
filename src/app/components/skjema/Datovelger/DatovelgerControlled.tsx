@@ -14,6 +14,9 @@ export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | '
         inputRef?: React.Ref<HTMLInputElement>;
         dataTestId?: string;
         noValidateTomtFelt?: boolean;
+        renderInlineErrorMessage?: boolean;
+        errorAriaDescribedBy?: string;
+        onInlineValidationMessageChange?: (message?: string) => void;
     };
 
 const DatovelgerControlled = ({
@@ -36,6 +39,9 @@ const DatovelgerControlled = ({
     inputRef,
     dataTestId,
     noValidateTomtFelt,
+    renderInlineErrorMessage,
+    errorAriaDescribedBy,
+    onInlineValidationMessageChange,
 }: DatovelgerControlledProps) => {
     return (
         <DatovelgerBase
@@ -57,6 +63,9 @@ const DatovelgerControlled = ({
             inputRef={inputRef}
             dataTestId={dataTestId}
             noValidateTomtFelt={noValidateTomtFelt}
+            renderInlineErrorMessage={renderInlineErrorMessage}
+            errorAriaDescribedBy={errorAriaDescribedBy}
+            onInlineValidationMessageChange={onInlineValidationMessageChange}
         />
     );
 };

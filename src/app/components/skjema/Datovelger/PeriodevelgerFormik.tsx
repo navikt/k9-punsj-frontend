@@ -43,8 +43,13 @@ const PeriodevelgerFormik = ({
     const showPeriodeError = submitCount > 0 || (fomFieldMeta.touched && tomFieldMeta.touched);
     const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
     const tomFromDate = fomFieldMeta.value ? new Date(fomFieldMeta.value) : fromDate;
+    const [fomInlineValidationMessage, setFomInlineValidationMessage] = React.useState<string | undefined>(undefined);
+    const [tomInlineValidationMessage, setTomInlineValidationMessage] = React.useState<string | undefined>(undefined);
+    const sharedErrorId = `${effectiveFomId || effectiveTomId}-periode-error`;
     const sharedErrorMessage =
         (showPeriodeError && typeof periodeFieldMeta.error === 'string' && periodeFieldMeta.error) ||
+        fomInlineValidationMessage ||
+        tomInlineValidationMessage ||
         (fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' && fomFieldMeta.error) ||
         (tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' && tomFieldMeta.error) ||
         undefined;
@@ -65,6 +70,9 @@ const PeriodevelgerFormik = ({
                         size={size}
                         inputRef={fomInputRef}
                         dataTestId="fom"
+                        renderInlineErrorMessage={false}
+                        errorAriaDescribedBy={sharedErrorId}
+                        onInlineValidationMessageChange={setFomInlineValidationMessage}
                     />
                     <DatovelgerFormik
                         id={effectiveTomId}
@@ -78,13 +86,16 @@ const PeriodevelgerFormik = ({
                         size={size}
                         inputRef={tomInputRef}
                         dataTestId="tom"
+                        renderInlineErrorMessage={false}
+                        errorAriaDescribedBy={sharedErrorId}
+                        onInlineValidationMessageChange={setTomInlineValidationMessage}
                     />
                 </div>
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
                 {sharedErrorMessage && (
-                    <ErrorMessage aria-describedby={effectiveFomId || effectiveTomId} showIcon>
+                    <ErrorMessage id={sharedErrorId} aria-describedby={effectiveFomId || effectiveTomId} showIcon>
                         {sharedErrorMessage}
                     </ErrorMessage>
                 )}

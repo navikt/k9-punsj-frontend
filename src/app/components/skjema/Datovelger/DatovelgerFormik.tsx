@@ -19,6 +19,9 @@ export type DatovelgerFormikProps = Pick<
     | 'disabledDates'
     | 'noValidateTomtFelt'
     | 'dataTestId'
+    | 'renderInlineErrorMessage'
+    | 'errorAriaDescribedBy'
+    | 'onInlineValidationMessageChange'
 > & {
     name: string;
     visFeilmelding?: boolean;
@@ -44,6 +47,9 @@ const DatovelgerFormik = ({
     dataTestId,
     error,
     handleBlur,
+    renderInlineErrorMessage,
+    errorAriaDescribedBy,
+    onInlineValidationMessageChange,
     // visFeilmelding kan settes til false dersom man vil håndtere feilmelding selv
     visFeilmelding = true,
 }: DatovelgerFormikProps) => {
@@ -87,6 +93,9 @@ const DatovelgerFormik = ({
             size={size}
             noValidateTomtFelt={noValidateTomtFelt}
             dataTestId={dataTestId}
+            renderInlineErrorMessage={renderInlineErrorMessage}
+            errorAriaDescribedBy={errorAriaDescribedBy}
+            onInlineValidationMessageChange={onInlineValidationMessageChange}
         />
     );
 };

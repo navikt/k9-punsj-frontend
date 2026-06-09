@@ -21,6 +21,9 @@ export type DatovelgerBaseProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDa
         inputRef?: React.Ref<HTMLInputElement>;
         dataTestId?: string;
         noValidateTomtFelt?: boolean;
+        renderInlineErrorMessage?: boolean;
+        errorAriaDescribedBy?: string;
+        onInlineValidationMessageChange?: (message?: string) => void;
     };
 
 const DatovelgerBase = ({
@@ -40,6 +43,9 @@ const DatovelgerBase = ({
     inputRef,
     dataTestId,
     noValidateTomtFelt = true,
+    renderInlineErrorMessage = true,
+    errorAriaDescribedBy,
+    onInlineValidationMessageChange,
     size = 'medium',
     id,
 }: DatovelgerBaseProps) => {
@@ -53,7 +59,13 @@ const DatovelgerBase = ({
     const fromDateDefault = offsetDateByYears(new Date(), -5);
     const toDateDefault = offsetDateByYears(new Date(), 5);
     const defaultSelected = isISODateString(value) ? ISODateStringToUTCDate(value) : undefined;
-    const error = showInvalidDateError && isInvalidDate ? 'Dato har ikke gyldig format' : errorMessage;
+    const inlineValidationMessage = showInvalidDateError && isInvalidDate ? 'Dato har ikke gyldig format' : undefined;
+    const error = inlineValidationMessage || errorMessage;
+    const inputError = renderInlineErrorMessage ? error : !!error;
+
+    useEffect(() => {
+        onInlineValidationMessageChange?.(inlineValidationMessage);
+    }, [inlineValidationMessage, onInlineValidationMessageChange]);
 
     const commitValue = (nextValue: string | typeof INVALID_DATE_VALUE) => {
         if (!onCommit) {
@@ -143,12 +155,13 @@ const DatovelgerBase = ({
                     hideLabel={hideLabel}
                     label={label}
                     description={description}
-                    error={error}
+                    error={inputError}
                     disabled={inputDisabled}
                     size={size}
                     id={id}
                     ref={inputRef}
                     data-testid={dataTestId || 'datePickerInput'}
+                    aria-describedby={errorAriaDescribedBy}
                     onChange={(event) => {
                         setShowInvalidDateError(false);
                         inputProps.onChange?.(event);

@@ -64,7 +64,15 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
     const isValidFromDate = normalizedPeriode.fom && new Date(normalizedPeriode.fom).toString() !== 'Invalid Date';
     const fromDateValue = isValidFromDate ? new Date(normalizedPeriode.fom) : undefined;
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
-    const sharedErrorMessage = errorMessage || (typeof errorMessageFom === 'string' ? errorMessageFom : undefined) || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
+    const [fomInlineValidationMessage, setFomInlineValidationMessage] = React.useState<string | undefined>(undefined);
+    const [tomInlineValidationMessage, setTomInlineValidationMessage] = React.useState<string | undefined>(undefined);
+    const sharedErrorId = `${inputIdFom || inputIdTom || 'periode'}-error`;
+    const sharedErrorMessage =
+        errorMessage ||
+        fomInlineValidationMessage ||
+        tomInlineValidationMessage ||
+        (typeof errorMessageFom === 'string' ? errorMessageFom : undefined) ||
+        (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
 
     return (
         <div className={rootClassName}>
@@ -83,6 +91,9 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                             inputRef={fomInputRef}
                             dataTestId="fom"
                             size={size}
+                            renderInlineErrorMessage={false}
+                            errorAriaDescribedBy={sharedErrorId}
+                            onInlineValidationMessageChange={setFomInlineValidationMessage}
                         />
                     </div>
                     <div data-testid="datePickerInputTom">
@@ -99,6 +110,9 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                             fromDate={fromDateValue}
                             defaultMonth={fromDateValue}
                             size={size}
+                            renderInlineErrorMessage={false}
+                            errorAriaDescribedBy={sharedErrorId}
+                            onInlineValidationMessageChange={setTomInlineValidationMessage}
                         />
                     </div>
                 </div>
@@ -106,7 +120,7 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
             </div>
             <div>
                 {sharedErrorMessage && typeof sharedErrorMessage !== 'boolean' && (
-                    <ErrorMessage aria-describedby={inputIdFom || inputIdTom} showIcon>
+                    <ErrorMessage id={sharedErrorId} aria-describedby={inputIdFom || inputIdTom} showIcon>
                         {sharedErrorMessage}
                     </ErrorMessage>
                 )}
