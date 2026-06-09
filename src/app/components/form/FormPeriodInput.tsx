@@ -70,7 +70,9 @@ export function FormPeriodInput<T extends FieldValues>({
     const tomFromDate = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : fromDate;
     const tomDefaultMonth = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : defaultMonth;
     const groupErrorMessage = typeof periodFieldState.error?.message === 'string' ? periodFieldState.error.message : undefined;
-    const sharedErrorId = `${fomId || tomId || String(name)}-error`;
+    const fomErrorId = `${fomId || `${String(name)}-fom`}-error`;
+    const tomErrorId = `${tomId || `${String(name)}-tom`}-error`;
+    const groupErrorId = `${fomId || tomId || String(name)}-error`;
 
     const fromField = useFormDateInput({
         name: fomName,
@@ -84,7 +86,6 @@ export function FormPeriodInput<T extends FieldValues>({
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
     const fromErrorMessage = typeof fromField.error === 'string' ? fromField.error : undefined;
     const toErrorMessage = typeof toField.error === 'string' ? toField.error : undefined;
-    const sharedErrorMessage = groupErrorMessage || fromErrorMessage || toErrorMessage;
 
     return (
         <div className={rootClassName}>
@@ -119,7 +120,9 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!fromErrorMessage}
                             data-testid={fomDataTestId}
-                            aria-describedby={sharedErrorId}
+                            aria-describedby={[fromErrorMessage ? fomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                                .filter(Boolean)
+                                .join(' ')}
                             onChange={fromField.handleInputChange}
                             onBlur={(event) => {
                                 fromField.handleInputBlur(event);
@@ -154,7 +157,9 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!toErrorMessage}
                             data-testid={tomDataTestId}
-                            aria-describedby={sharedErrorId}
+                            aria-describedby={[toErrorMessage ? tomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                                .filter(Boolean)
+                                .join(' ')}
                             onChange={toField.handleInputChange}
                             onBlur={(event) => {
                                 toField.handleInputBlur(event);
@@ -166,9 +171,19 @@ export function FormPeriodInput<T extends FieldValues>({
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {sharedErrorMessage && (periodFieldState.isTouched || submitCount > 0 || fromErrorMessage || toErrorMessage) && (
-                    <ErrorMessage id={sharedErrorId} aria-describedby={fomId || tomId} showIcon>
-                        {sharedErrorMessage}
+                {fromErrorMessage && (
+                    <ErrorMessage id={fomErrorId} aria-describedby={fomId} showIcon>
+                        {fromLabel}: {fromErrorMessage}
+                    </ErrorMessage>
+                )}
+                {toErrorMessage && (
+                    <ErrorMessage id={tomErrorId} aria-describedby={tomId} showIcon>
+                        {toLabel}: {toErrorMessage}
+                    </ErrorMessage>
+                )}
+                {groupErrorMessage && (periodFieldState.isTouched || submitCount > 0) && (
+                    <ErrorMessage id={groupErrorId} aria-describedby={fomId || tomId} showIcon>
+                        {groupErrorMessage}
                     </ErrorMessage>
                 )}
             </div>

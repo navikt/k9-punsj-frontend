@@ -45,14 +45,15 @@ const PeriodevelgerFormik = ({
     const tomFromDate = fomFieldMeta.value ? new Date(fomFieldMeta.value) : fromDate;
     const [fomInlineValidationMessage, setFomInlineValidationMessage] = React.useState<string | undefined>(undefined);
     const [tomInlineValidationMessage, setTomInlineValidationMessage] = React.useState<string | undefined>(undefined);
-    const sharedErrorId = `${effectiveFomId || effectiveTomId}-periode-error`;
-    const sharedErrorMessage =
-        (showPeriodeError && typeof periodeFieldMeta.error === 'string' && periodeFieldMeta.error) ||
-        fomInlineValidationMessage ||
-        tomInlineValidationMessage ||
-        (fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' && fomFieldMeta.error) ||
-        (tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' && tomFieldMeta.error) ||
-        undefined;
+    const fomErrorId = `${effectiveFomId}-error`;
+    const tomErrorId = `${effectiveTomId}-error`;
+    const groupErrorId = `${effectiveFomId || effectiveTomId}-periode-error`;
+    const fomErrorMessage =
+        fomInlineValidationMessage || (fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' ? fomFieldMeta.error : undefined);
+    const tomErrorMessage =
+        tomInlineValidationMessage || (tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' ? tomFieldMeta.error : undefined);
+    const groupErrorMessage =
+        showPeriodeError && typeof periodeFieldMeta.error === 'string' ? periodeFieldMeta.error : undefined;
 
     return (
         <div className="flex flex-col gap-2">
@@ -71,7 +72,9 @@ const PeriodevelgerFormik = ({
                         inputRef={fomInputRef}
                         dataTestId="fom"
                         renderInlineErrorMessage={false}
-                        errorAriaDescribedBy={sharedErrorId}
+                        errorAriaDescribedBy={[fomErrorMessage ? fomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                            .filter(Boolean)
+                            .join(' ')}
                         onInlineValidationMessageChange={setFomInlineValidationMessage}
                     />
                     <DatovelgerFormik
@@ -87,16 +90,28 @@ const PeriodevelgerFormik = ({
                         inputRef={tomInputRef}
                         dataTestId="tom"
                         renderInlineErrorMessage={false}
-                        errorAriaDescribedBy={sharedErrorId}
+                        errorAriaDescribedBy={[tomErrorMessage ? tomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                            .filter(Boolean)
+                            .join(' ')}
                         onInlineValidationMessageChange={setTomInlineValidationMessage}
                     />
                 </div>
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {sharedErrorMessage && (
-                    <ErrorMessage id={sharedErrorId} aria-describedby={effectiveFomId || effectiveTomId} showIcon>
-                        {sharedErrorMessage}
+                {fomErrorMessage && (
+                    <ErrorMessage id={fomErrorId} aria-describedby={effectiveFomId} showIcon>
+                        Fra og med: {fomErrorMessage}
+                    </ErrorMessage>
+                )}
+                {tomErrorMessage && (
+                    <ErrorMessage id={tomErrorId} aria-describedby={effectiveTomId} showIcon>
+                        Til og med: {tomErrorMessage}
+                    </ErrorMessage>
+                )}
+                {groupErrorMessage && (
+                    <ErrorMessage id={groupErrorId} aria-describedby={effectiveFomId || effectiveTomId} showIcon>
+                        {groupErrorMessage}
                     </ErrorMessage>
                 )}
             </div>

@@ -66,13 +66,12 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
     const [fomInlineValidationMessage, setFomInlineValidationMessage] = React.useState<string | undefined>(undefined);
     const [tomInlineValidationMessage, setTomInlineValidationMessage] = React.useState<string | undefined>(undefined);
-    const sharedErrorId = `${inputIdFom || inputIdTom || 'periode'}-error`;
-    const sharedErrorMessage =
-        errorMessage ||
-        fomInlineValidationMessage ||
-        tomInlineValidationMessage ||
-        (typeof errorMessageFom === 'string' ? errorMessageFom : undefined) ||
-        (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
+    const fomErrorId = `${inputIdFom || 'fom'}-error`;
+    const tomErrorId = `${inputIdTom || 'tom'}-error`;
+    const groupErrorId = `${inputIdFom || inputIdTom || 'periode'}-error`;
+    const fomErrorMessage = fomInlineValidationMessage || (typeof errorMessageFom === 'string' ? errorMessageFom : undefined);
+    const tomErrorMessage = tomInlineValidationMessage || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
+    const groupErrorMessage = typeof errorMessage === 'string' ? errorMessage : undefined;
 
     return (
         <div className={rootClassName}>
@@ -92,7 +91,9 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                             dataTestId="fom"
                             size={size}
                             renderInlineErrorMessage={false}
-                            errorAriaDescribedBy={sharedErrorId}
+                            errorAriaDescribedBy={[fomErrorMessage ? fomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                                .filter(Boolean)
+                                .join(' ')}
                             onInlineValidationMessageChange={setFomInlineValidationMessage}
                         />
                     </div>
@@ -111,7 +112,9 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                             defaultMonth={fromDateValue}
                             size={size}
                             renderInlineErrorMessage={false}
-                            errorAriaDescribedBy={sharedErrorId}
+                            errorAriaDescribedBy={[tomErrorMessage ? tomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                                .filter(Boolean)
+                                .join(' ')}
                             onInlineValidationMessageChange={setTomInlineValidationMessage}
                         />
                     </div>
@@ -119,9 +122,19 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {sharedErrorMessage && typeof sharedErrorMessage !== 'boolean' && (
-                    <ErrorMessage id={sharedErrorId} aria-describedby={inputIdFom || inputIdTom} showIcon>
-                        {sharedErrorMessage}
+                {fomErrorMessage && (
+                    <ErrorMessage id={fomErrorId} aria-describedby={inputIdFom} showIcon>
+                        {intlHelper(intl, 'skjema.perioder.fom')}: {fomErrorMessage}
+                    </ErrorMessage>
+                )}
+                {tomErrorMessage && (
+                    <ErrorMessage id={tomErrorId} aria-describedby={inputIdTom} showIcon>
+                        {intlHelper(intl, 'skjema.perioder.tom')}: {tomErrorMessage}
+                    </ErrorMessage>
+                )}
+                {groupErrorMessage && (
+                    <ErrorMessage id={groupErrorId} aria-describedby={inputIdFom || inputIdTom} showIcon>
+                        {groupErrorMessage}
                     </ErrorMessage>
                 )}
             </div>

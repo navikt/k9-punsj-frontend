@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
+import { DateInputProps, DatePicker, DatePickerProps, DateValidationT, useDatepicker } from '@navikt/ds-react';
 
 import {
     dateToISODateString,
@@ -49,8 +49,8 @@ const DatovelgerBase = ({
     size = 'medium',
     id,
 }: DatovelgerBaseProps) => {
-    const [isInvalidDate, setIsInvalidDate] = useState(false);
-    const [showInvalidDateError, setShowInvalidDateError] = useState(false);
+    const [showValidationError, setShowValidationError] = useState(false);
+    const [validationState, setValidationState] = useState<DateValidationT | undefined>(undefined);
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
     const lastPropagatedDateRef = useRef<string | undefined>(undefined);
@@ -59,7 +59,19 @@ const DatovelgerBase = ({
     const fromDateDefault = offsetDateByYears(new Date(), -5);
     const toDateDefault = offsetDateByYears(new Date(), 5);
     const defaultSelected = isISODateString(value) ? ISODateStringToUTCDate(value) : undefined;
-    const inlineValidationMessage = showInvalidDateError && isInvalidDate ? 'Dato har ikke gyldig format' : undefined;
+    const getValidationMessage = (validation?: DateValidationT) => {
+        if (!validation || validation.isEmpty || validation.isValidDate) {
+            return undefined;
+        }
+
+        if (validation.isBefore || validation.isAfter || validation.isDisabled || validation.isWeekend) {
+            return 'Datoen er ikke tillatt';
+        }
+
+        return validation.isInvalid ? 'Dato har ikke gyldig format' : undefined;
+    };
+
+    const inlineValidationMessage = showValidationError ? getValidationMessage(validationState) : undefined;
     const error = inlineValidationMessage || errorMessage;
     const inputError = renderInlineErrorMessage ? error : !!error;
 
@@ -108,11 +120,10 @@ const DatovelgerBase = ({
         defaultSelected,
         onDateChange,
         onValidate: (validation) => {
-            const invalidDate = !validation.isValidDate && (!noValidateTomtFelt || !validation.isEmpty);
-            setIsInvalidDate(invalidDate);
+            setValidationState(validation);
 
-            if (!invalidDate) {
-                setShowInvalidDateError(false);
+            if (validation.isValidDate || (noValidateTomtFelt && validation.isEmpty)) {
+                setShowValidationError(false);
             }
         },
     });
@@ -163,12 +174,12 @@ const DatovelgerBase = ({
                     data-testid={dataTestId || 'datePickerInput'}
                     aria-describedby={errorAriaDescribedBy}
                     onChange={(event) => {
-                        setShowInvalidDateError(false);
+                        setShowValidationError(false);
                         inputProps.onChange?.(event);
                     }}
                     onBlur={(event) => {
                         const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
-                        setShowInvalidDateError(nextValue === INVALID_DATE_VALUE);
+                        setShowValidationError(nextValue === INVALID_DATE_VALUE || !!getValidationMessage(validationState));
                         commitValue(nextValue);
                         inputProps.onBlur?.(event);
                     }}

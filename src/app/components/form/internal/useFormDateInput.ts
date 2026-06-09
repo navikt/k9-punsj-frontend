@@ -1,5 +1,5 @@
 import { ChangeEvent, FocusEvent, useEffect, useRef, useState } from 'react';
-import { useDatepicker } from '@navikt/ds-react';
+import { DateValidationT, useDatepicker } from '@navikt/ds-react';
 import { FieldValues, Path, RegisterOptions, useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -30,12 +30,24 @@ export function useFormDateInput<T extends FieldValues>({
     });
 
     const value = typeof field.value === 'string' ? field.value : '';
-    const [isInvalidDate, setIsInvalidDate] = useState(false);
-    const [showInvalidDateError, setShowInvalidDateError] = useState(false);
+    const [showValidationError, setShowValidationError] = useState(false);
+    const [validationState, setValidationState] = useState<DateValidationT | undefined>(undefined);
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
     const lastPropagatedDateRef = useRef<string | undefined>(undefined);
     const lastCommittedDateRef = useRef<string | undefined>(value);
+
+    const getValidationMessage = (validation?: DateValidationT) => {
+        if (!validation || validation.isEmpty || validation.isValidDate) {
+            return undefined;
+        }
+
+        if (validation.isBefore || validation.isAfter || validation.isDisabled || validation.isWeekend) {
+            return 'Datoen er ikke tillatt';
+        }
+
+        return validation.isInvalid ? 'Dato har ikke gyldig format' : undefined;
+    };
 
     const commitIsoDateValue = (nextValue: string | typeof INVALID_DATE_VALUE) => {
         if (nextValue === INVALID_DATE_VALUE) {
@@ -67,11 +79,10 @@ export function useFormDateInput<T extends FieldValues>({
         defaultSelected: isISODateString(value) ? ISODateStringToUTCDate(value) : undefined,
         onDateChange,
         onValidate: (validation) => {
-            const invalidDate = !validation.isValidDate && !validation.isEmpty;
-            setIsInvalidDate(invalidDate);
+            setValidationState(validation);
 
-            if (!invalidDate) {
-                setShowInvalidDateError(false);
+            if (validation.isValidDate || validation.isEmpty) {
+                setShowValidationError(false);
             }
         },
     });
@@ -99,20 +110,21 @@ export function useFormDateInput<T extends FieldValues>({
         datepickerProps,
         inputProps,
         fieldRef: field.ref,
-        error: showInvalidDateError && isInvalidDate ? 'Dato har ikke gyldig format' : fieldState.error?.message,
+        error: (showValidationError ? getValidationMessage(validationState) : undefined) || fieldState.error?.message,
         fromDateDefault: offsetDateByYears(new Date(), -5),
         toDateDefault: offsetDateByYears(new Date(), 5),
         handleSelect: (date?: Date) => {
             const isoDateString = date ? dateToISODateString(date) : '';
+            setShowValidationError(false);
             commitIsoDateValue(isoDateString);
         },
         handleInputChange: (event: ChangeEvent<HTMLInputElement>) => {
-            setShowInvalidDateError(false);
+            setShowValidationError(false);
             inputProps.onChange?.(event);
         },
         handleInputBlur: (event: FocusEvent<HTMLInputElement>) => {
             const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
-            setShowInvalidDateError(nextValue === INVALID_DATE_VALUE);
+            setShowValidationError(nextValue === INVALID_DATE_VALUE || !!getValidationMessage(validationState));
             commitIsoDateValue(nextValue);
             inputProps.onBlur?.(event);
         },
