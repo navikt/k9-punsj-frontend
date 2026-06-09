@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { TrashIcon, PersonPlusIcon } from '@navikt/aksel-icons';
+import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiIkkeOpplystRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeOpplystRadioGroupFormik';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const Utenlandsopphold: React.FC = () => {
     const intl = useIntl();
@@ -39,43 +39,36 @@ const Utenlandsopphold: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.utenlandsopphold === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="8" background="neutral-soft">
-                    <FieldArray
-                        name="utenlandsopphold"
-                        render={(arrayHelpers) => (
-                            <>
-                                {values.utenlandsopphold?.map((_, index, array) => (
-                                    <div key={index} className="mb-6">
-                                        <div className="flex items-start">
-                                            <DatoInputFormikNew
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.utenlandsopphold.fom',
-                                                )}
-                                                name={`utenlandsopphold[${index}].periode.fom`}
-                                            />
-
-                                            <DatoInputFormikNew
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.utenlandsopphold.tom',
-                                                )}
-                                                name={`utenlandsopphold[${index}].periode.tom`}
-                                                className="ml-4"
-                                            />
-
-                                            {array.length > 1 && (
-                                                <Button
-                                                    variant="tertiary"
-                                                    size="small"
-                                                    onClick={() => arrayHelpers.remove(index)}
-                                                    className="slett-knapp-med-icon-for-input !mt-10"
-                                                    icon={<TrashIcon title="slett periode" />}
-                                                >
-                                                    <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
-                                                </Button>
-                                            )}
-                                        </div>
+                <FieldArray
+                    name="utenlandsopphold"
+                    render={(arrayHelpers) => (
+                        <>
+                            {values.utenlandsopphold?.map((_, index, array) => (
+                                <Box
+                                    key={index}
+                                    padding="space-16"
+                                    borderRadius="8"
+                                    background="neutral-soft"
+                                    className={index > 0 ? 'mt-4' : undefined}
+                                >
+                                    <div>
+                                        <PeriodevelgerFormik
+                                            name={`utenlandsopphold[${index}].periode`}
+                                            size="small"
+                                            action={
+                                                array.length > 1 ? (
+                                                    <Button
+                                                        variant="tertiary"
+                                                        type="button"
+                                                        onClick={() => arrayHelpers.remove(index)}
+                                                        className="slett-knapp-med-icon-for-input"
+                                                        icon={<TrashIcon title="slett periode" />}
+                                                    >
+                                                        <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
+                                                    </Button>
+                                                ) : undefined
+                                            }
+                                        />
 
                                         <VerticalSpacer sixteenPx />
 
@@ -84,6 +77,7 @@ const Utenlandsopphold: React.FC = () => {
                                                 {({ field }: FieldProps<string>) => (
                                                     <CountrySelect
                                                         label
+                                                        size="small"
                                                         selectedcountry={field.value}
                                                         unselectedoption={intlHelper(
                                                             intl,
@@ -95,22 +89,22 @@ const Utenlandsopphold: React.FC = () => {
                                             </Field>
                                         </div>
                                     </div>
-                                ))}
+                                </Box>
+                            ))}
 
-                                <VerticalSpacer sixteenPx />
-
+                            <div className="mt-4 flex flex-wrap">
                                 <Button
                                     variant="tertiary"
-                                    size="small"
+                                    type="button"
                                     onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<PersonPlusIcon title="legg til utenlandsopphold" />}
+                                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn" />
                                 </Button>
-                            </>
-                        )}
-                    />
-                </Box>
+                            </div>
+                        </>
+                    )}
+                />
             )}
         </Box>
     );

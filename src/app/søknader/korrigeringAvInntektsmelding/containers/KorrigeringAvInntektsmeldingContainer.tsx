@@ -10,6 +10,7 @@ import { createOMSKorrigering, hentOMSSøknad } from 'app/state/actions/OMSPunch
 import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 import { ROUTES } from 'app/constants/routes';
 import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
+import { IOMSKorrigeringSoknad } from '../types/OMSKorrigeringSoknad';
 
 const KorrigeringAvInntektsmeldingContainer: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,7 +21,7 @@ const KorrigeringAvInntektsmeldingContainer: React.FC = () => {
     const journalpost = useSelector((state: RootStateType) => state.felles.journalpost);
     const fordelingState = useSelector((state: RootStateType) => state.fordelingState);
 
-    const [soknad, setSoknad] = useState<Partial<IPSBSoknad>>({});
+    const [soknad, setSoknad] = useState<Partial<IPSBSoknad> & IOMSKorrigeringSoknad>({});
     const [opprettError, setOpprettError] = useState<string>();
 
     const { søkerId } = identState;
@@ -73,6 +74,7 @@ const KorrigeringAvInntektsmeldingContainer: React.FC = () => {
             søkerId={søkerId || soknad.soekerId || ''}
             søknadId={soknad?.soeknadId || id || ''}
             journalposter={journalposter}
+            soknad={soknad}
         />
     );
 };

@@ -4,8 +4,8 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
 import { IOMPAOSoknad } from 'app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknad';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
@@ -26,17 +26,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
                 <div className="input-row">
-                    <Field name="mottattDato">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <NewDateInput
-                                id="soknad-dato"
-                                label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                                errorMessage={meta.touched && meta.error}
-                                value={field.value}
-                                onChange={(value: string) => form.setFieldValue('mottattDato', value)}
-                            />
-                        )}
-                    </Field>
+                    <DatovelgerFormik id="soknad-dato" label={intlHelper(intl, 'skjema.mottakelsesdato')} name="mottattDato" />
 
                     <div className="ml-4">
                         <Field name="klokkeslett">

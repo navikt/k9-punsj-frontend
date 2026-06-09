@@ -9,7 +9,7 @@ import {
     UpdateListeinfoInSoknadState,
 } from 'app/components/Listepaneler';
 import { LegacyRadioGroup } from 'app/components/legacy-form-compat/radio';
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -60,6 +60,7 @@ export interface IUtenlandsoppholdProps {
     onRemove?: () => any;
     kanHaFlere: boolean;
     medSlettKnapp: boolean;
+    useStandardAddButton?: boolean;
     initialValues?: {
         fom: string | undefined;
         tom: string | undefined;
@@ -83,6 +84,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
         onRemove,
         panelClassName,
         periods = [],
+        useStandardAddButton,
     } = props;
     const { intl, component, editSoknad, editSoknadState, kanHaFlere, initialValues } = props;
     const [visInnlagtPerioder, setVisInnlagtPerioder] = useState(
@@ -153,36 +155,35 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
 
         return (
             <div className="utenlandsopphold">
-                <div className="flex items-start">
-                    <PeriodInput
-                        periode={periodeinfo.periode || {}}
-                        intl={intlShape!}
-                        onChange={(periode) => {
-                            editSoknadState(editPeriode(periodeindeks, periode));
-                        }}
-                        onBlur={(periode) => {
-                            editSoknad(editPeriode(periodeindeks, periode));
-                        }}
-                        errorMessage={getErrorMessage?.(
-                            `${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`,
-                        )}
-                        initialValues={initialValues}
-                        inputIdFom={periodInputIds.fomId}
-                        inputIdTom={periodInputIds.tomId}
-                    />
-
-                    <Button
-                        id="slett"
-                        type="button"
-                        className="slett-knapp-med-icon-for-input"
-                        onClick={removePeriode}
-                        tabIndex={0}
-                        icon={<TrashIcon title="slettPeriode" />}
-                        variant="tertiary"
-                    >
-                        <FormattedMessage id="skjema.perioder.fjern" />
-                    </Button>
-                </div>
+                <PeriodevelgerControlled
+                    periode={periodeinfo.periode || {}}
+                    intl={intlShape!}
+                    onChange={(periode) => {
+                        editSoknadState(editPeriode(periodeindeks, periode));
+                    }}
+                    onBlur={(periode) => {
+                        editSoknad(editPeriode(periodeindeks, periode));
+                    }}
+                    errorMessage={getErrorMessage?.(
+                        `${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`,
+                    )}
+                    initialValues={initialValues}
+                    inputIdFom={periodInputIds.fomId}
+                    inputIdTom={periodInputIds.tomId}
+                    action={
+                        <Button
+                            id="slett"
+                            type="button"
+                            className="slett-knapp-med-icon-for-input"
+                            onClick={removePeriode}
+                            tabIndex={0}
+                            icon={<TrashIcon title="slettPeriode" />}
+                            variant="tertiary"
+                        >
+                            <FormattedMessage id="skjema.perioder.fjern" />
+                        </Button>
+                    }
+                />
 
                 {!!component &&
                     component(
@@ -257,7 +258,6 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             getErrorMessage={getErrorMessage}
                             feilkodeprefiks="innleggelsesperioder"
                             kanHaFlere
-                            doNotShowBorders
                         />
 
                         <LegacyRadioGroup
@@ -334,6 +334,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
             textLeggTil={textLeggTil || 'skjema.perioder.legg_til'}
             kanHaFlere={kanHaFlere}
             medSlettKnapp={medSlettKnapp}
+            useStandardAddButton={useStandardAddButton}
         />
     );
 };

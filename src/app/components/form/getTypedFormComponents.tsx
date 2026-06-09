@@ -3,6 +3,8 @@ import React, { ReactElement } from 'react';
 import { FieldValues } from 'react-hook-form';
 
 import {
+    FormDateInputProps,
+    FormPeriodInputProps,
     FormTextareaProps,
     FormTextFieldProps,
     FormSelectProps,
@@ -15,6 +17,8 @@ import {
 import { PunsjFormProvider, PunsjFormProviderProps } from './FormProvider';
 import { FormTextarea } from './FormTextarea';
 import { FormTextField } from './FormTextField';
+import { FormDateInput } from './FormDateInput';
+import { FormPeriodInput } from './FormPeriodInput';
 import { FormCheckbox } from './FormCheckbox';
 import { FormCheckboxGroup } from './FormCheckboxGroup';
 import { FormRadioGroup } from './FormRadioGroup';
@@ -24,6 +28,8 @@ import { FormLegacyRadioGroup } from './FormLegacyRadioGroup';
 
 export interface TypedFormComponents<T extends FieldValues> {
     TypedFormProvider: (props: PunsjFormProviderProps<T>) => ReactElement;
+    TypedFormDateInput: (props: FormDateInputProps<T>) => ReactElement;
+    TypedFormPeriodInput: (props: FormPeriodInputProps<T>) => ReactElement;
     TypedFormTextarea: (props: FormTextareaProps<T>) => ReactElement;
     TypedFormTextField: (props: FormTextFieldProps<T>) => ReactElement;
     TypedFormCheckbox: (props: FormFieldProps<T>) => ReactElement;
@@ -37,6 +43,8 @@ export interface TypedFormComponents<T extends FieldValues> {
 export function getTypedFormComponents<T extends FieldValues>(): TypedFormComponents<T> {
     return {
         TypedFormProvider: (props: PunsjFormProviderProps<T>) => <PunsjFormProvider {...props} />,
+        TypedFormDateInput: (props: FormDateInputProps<T>) => <FormDateInput<T> {...props} />,
+        TypedFormPeriodInput: (props: FormPeriodInputProps<T>) => <FormPeriodInput<T> {...props} />,
         TypedFormTextarea: (props: FormTextareaProps<T>) => <FormTextarea<T> {...props} />,
         TypedFormTextField: (props: FormTextFieldProps<T>) => <FormTextField<T> {...props} />,
         TypedFormCheckbox: (props: FormFieldProps<T>) => <FormCheckbox<T> {...props} />,

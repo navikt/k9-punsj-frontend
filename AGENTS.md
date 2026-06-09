@@ -99,5 +99,5 @@ These instructions apply to agents working in this repository.
 - When useful, propose pull request text that follows `.github/pull_request_template.md`. Keep it short, factual and scoped to the actual change.
 - Do not include local workflow details, private filesystem paths or AI attribution in pull request text.
 - Update `docs/CHANGELOG.md` for noticeable repo changes, setup changes or workflow changes that are useful for future contributors.
-- Keep changelog entries short, factual and grouped under the current `Unreleased` section.
+- Keep changelog entries short, factual and grouped under the dated top section format already used in `docs/CHANGELOG.md`.
 - Skip tiny edits or purely local changes unless the task explicitly calls for a changelog update.

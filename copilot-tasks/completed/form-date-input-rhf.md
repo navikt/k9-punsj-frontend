@@ -9,8 +9,8 @@
 
 ## Goal
 
-- Add one official RHF first date input primitive in `src/app/components/form`.
-- Keep the implementation small, reusable, and directly connected to the shared date base instead of any Formik wrapper.
+- This scope is complete and folded into `datepicker-adapters.md`.
+- `FormDateInput` is now the RHF date primitive and should be maintained through the broader date adapter task rather than as a separate foundation task.
 
 ## Context
 
@@ -90,10 +90,22 @@ Suggested starter prompt for chat:
 
 ## Progress notes
 
-- Keep short factual notes while working.
+- `FormDateInput` was implemented as part of the broader date adapter pass.
+- RHF wiring now goes directly through the shared controlled date base.
+- Storybook coverage and targeted tests for the RHF path were added together with the shared date layer work.
 
 ## Outcome
 
 - Changed files:
+  - `src/app/components/form/FormDateInput.tsx`
+  - `src/app/components/form/index.ts`
+  - `src/app/components/form/types.ts`
+  - `src/app/components/form/getTypedFormComponents.tsx`
+  - `src/storybook/stories/DateInputAdapters.stories.tsx`
+  - `src/test/components/form/FormDateInput.spec.tsx`
 - Validation:
+  - `yarn tsc --noEmit` green
+  - `yarn build-storybook` green
+  - `yarn test --runInBand src/test/components/form/FormDateInput.spec.tsx` green
 - Remaining risks or follow ups:
+  - New RHF adoption should now happen as part of wider screen migration, not by adding more parallel date wrappers.

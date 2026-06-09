@@ -173,15 +173,17 @@ const Arbeidstakerperioder = ({
                     </Box>
                 );
             })}
-            <Button
-                id="leggtillisteelementknapp"
-                className="leggtillisteelementknapp"
-                type="button"
-                onClick={addItemHandler}
-                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
-            >
-                <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
-            </Button>
+            <div className="mt-4 flex flex-wrap">
+                <Button
+                    id="leggtillisteelementknapp"
+                    type="button"
+                    onClick={addItemHandler}
+                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                    variant="tertiary"
+                >
+                    <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
+                </Button>
+            </div>
         </Fieldset>
     );
 };

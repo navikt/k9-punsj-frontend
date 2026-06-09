@@ -225,10 +225,12 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return naa < new Date(dato);
         };
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
+        if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        }
+
+        if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
         }
 
         if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
@@ -417,6 +419,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
 
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="OMSORGSPENGER_KS" />
+                </Heading>
+
                 <VerticalSpacer sixteenPx />
 
                 <OpplysningerOmOMPKSSoknad
@@ -428,7 +434,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     soknad={soknad}
                 />
                 <VerticalSpacer twentyPx />
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                <Heading size="small" level="3">
+                    {intlHelper(intl, 'skjema.ikkeregistrert')}
+                </Heading>
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

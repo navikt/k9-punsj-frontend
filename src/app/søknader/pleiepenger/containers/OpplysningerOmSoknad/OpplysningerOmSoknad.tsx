@@ -7,7 +7,7 @@ import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-co
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PSBSoknad } from '../../../../models/types';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatovelgerControlled from 'app/components/skjema/Datovelger/DatovelgerControlled';
 
 interface Props {
     signert: JaNeiIkkeRelevant | null;
@@ -36,7 +36,7 @@ const OpplysningerOmSoknad: React.FC<Props> = ({
             </Alert>
 
             <div className="input-row">
-                <NewDateInput
+                <DatovelgerControlled
                     value={soknad.mottattDato}
                     id="soknad-dato"
                     errorMessage={getErrorMessage('mottattDato')}

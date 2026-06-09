@@ -1,3 +1,4 @@
+import { ApiPath } from 'app/apiConfig';
 import aleneOmOmsorgenHandlers from 'mocks/mockHandlersOMPAO';
 
 describe('Alene om omsorgen - ny søknad', () => {
@@ -15,13 +16,36 @@ describe('Alene om omsorgen - ny søknad', () => {
     });
     it('Kan sende inn søknad', () => {
         cy.findByText('Ikke relevant').click();
-        cy.findByLabelText('Søker er alene om omsorgen fra og med').type('01.10.2022').blur()
+        cy.findByLabelText('Søker er alene om omsorgen fra og med').type('01.10.2022').blur();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
         cy.get('.aksel-modal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
+    });
+
+    it('lagrer oppdatert søknadsperiode på blur', () => {
+        const nyFom = '01.10.2022';
+        let oppdatertSoknad;
+
+        cy.window().then((win) => {
+            const { worker, http, HttpResponse } = win.msw;
+            worker.use(
+                http.put(ApiPath.OMP_AO_SOKNAD_UPDATE, async ({ request }) => {
+                    oppdatertSoknad = await request.json();
+                    return HttpResponse.json(oppdatertSoknad, { status: 200 });
+                }),
+            );
+        });
+
+        cy.findByLabelText('Søker er alene om omsorgen fra og med').clear().type(nyFom).blur();
+
+        cy.wrap(null).should(() => {
+            expect(oppdatertSoknad).to.not.equal(undefined);
+            expect(oppdatertSoknad).to.have.nested.property('periode.fom', '2022-10-01');
+        });
+        cy.findByLabelText('Søker er alene om omsorgen fra og med').should('have.value', nyFom);
     });
 
     it('Innsending stoppes av validering', () => {

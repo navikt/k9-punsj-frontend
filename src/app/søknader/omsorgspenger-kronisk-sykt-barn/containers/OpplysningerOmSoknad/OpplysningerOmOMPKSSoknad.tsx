@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FormattedMessage, IntlShape } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatovelgerControlled from 'app/components/skjema/Datovelger/DatovelgerControlled';
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
@@ -29,7 +29,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
     <Box
         padding="space-16"
         borderWidth="1"
-        borderRadius="2"
+        borderRadius="8"
         className="opplysninger-om-soknaden-panel opplysningerOmOMPKSSoknad"
     >
         <VStack gap="space-16">
@@ -42,7 +42,7 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
             </Alert>
 
             <div className="input-row">
-                <NewDateInput
+                <DatovelgerControlled
                     value={soknad.mottattDato}
                     id="soknad-dato"
                     errorMessage={getErrorMessage('mottattDato')}
