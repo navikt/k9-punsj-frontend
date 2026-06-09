@@ -1,9 +1,38 @@
 import React from 'react';
 import { DatePicker, ErrorMessage } from '@navikt/ds-react';
-import { FieldValues } from 'react-hook-form';
+import { FieldValues, Path, useController, useFormContext } from 'react-hook-form';
 
-import { useFormDateRangeInput } from './internal/useFormDateRangeInput';
+import { IPeriode } from 'app/models/types/Periode';
+import { isISODateString, ISODateStringToUTCDate } from 'app/utils/date/dateFormat';
+
+import { useFormDateInput } from './internal/useFormDateInput';
 import { FormPeriodInputProps } from './types';
+
+const normalizePeriodValue = (value: unknown): Required<IPeriode> => {
+    if (!value || typeof value !== 'object') {
+        return { fom: '', tom: '' };
+    }
+
+    const period = value as IPeriode;
+
+    return {
+        fom: typeof period.fom === 'string' ? period.fom : '',
+        tom: typeof period.tom === 'string' ? period.tom : '',
+    };
+};
+
+const assignRef = <T,>(ref: React.Ref<T> | undefined, value: T | null) => {
+    if (!ref) {
+        return;
+    }
+
+    if (typeof ref === 'function') {
+        ref(value);
+        return;
+    }
+
+    ref.current = value;
+};
 
 export function FormPeriodInput<T extends FieldValues>({
     name,
@@ -26,72 +55,127 @@ export function FormPeriodInput<T extends FieldValues>({
     tomDataTestId = 'tom',
 }: FormPeriodInputProps<T>) {
     const {
-        datepickerProps,
-        fromInputProps,
-        toInputProps,
-        fromLabel: effectiveFromLabel,
-        toLabel: effectiveToLabel,
-        mergedFomRef,
-        mergedTomRef,
-        visualErrors,
-    } = useFormDateRangeInput({
+        control,
+        formState: { submitCount },
+    } = useFormContext<T>();
+    const { field: periodField, fieldState: periodFieldState } = useController({
         name,
-        validate,
+        control,
+        rules: validate,
+    });
+    const periodValue = normalizePeriodValue(periodField.value);
+    const fomName = `${name}.fom` as Path<T>;
+    const tomName = `${name}.tom` as Path<T>;
+    const fomToDate = isISODateString(periodValue.tom) ? ISODateStringToUTCDate(periodValue.tom) : toDate;
+    const tomFromDate = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : fromDate;
+    const tomDefaultMonth = isISODateString(periodValue.fom) ? ISODateStringToUTCDate(periodValue.fom) : defaultMonth;
+    const groupErrorMessage = typeof periodFieldState.error?.message === 'string' ? periodFieldState.error.message : undefined;
+    const showGroupError = !!groupErrorMessage && (periodFieldState.isTouched || submitCount > 0);
+
+    const fromField = useFormDateInput({
+        name: fomName,
         defaultMonth,
-        fromDate,
-        toDate,
-        disabledDates,
-        fromLabel,
-        toLabel,
-        fomInputRef,
-        tomInputRef,
+    });
+    const toField = useFormDateInput({
+        name: tomName,
+        defaultMonth: tomDefaultMonth,
     });
 
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
+    const fromErrorMessage = typeof fromField.error === 'string' ? fromField.error : undefined;
+    const toErrorMessage = typeof toField.error === 'string' ? toField.error : undefined;
 
     return (
         <div className={rootClassName}>
             <div className="flex items-end gap-4 flex-wrap">
-                <DatePicker {...(datepickerProps as any)} size={size}>
-                    <div className="flex gap-4 flex-wrap">
+                <div className="flex gap-4 flex-wrap">
+                    {/* Vi beholder to separate kalendere her fordi saksbehandlere opplevde felles range-picker som mindre praktisk i Punsj. */}
+                    <DatePicker
+                        {...(fromField.datepickerProps as any)}
+                        showWeekNumber={true}
+                        mode="single"
+                        inputDisabled={disabled}
+                        dropdownCaption={true}
+                        fromDate={fromDate || fromField.fromDateDefault}
+                        toDate={fomToDate || fromField.toDateDefault}
+                        disabled={disabledDates}
+                        onSelect={(date) => {
+                            fromField.handleSelect(date);
+                            periodField.onBlur();
+                        }}
+                        size={size}
+                    >
                         <DatePicker.Input
-                            {...fromInputProps}
+                            {...fromField.inputProps}
                             id={fomId}
-                            label={effectiveFromLabel}
+                            label={fromLabel}
                             disabled={disabled}
                             size={size}
-                            ref={mergedFomRef}
-                            error={visualErrors.showFromError}
+                            ref={(node) => {
+                                periodField.ref(node);
+                                assignRef(fromField.fieldRef, node);
+                                assignRef(fomInputRef, node);
+                            }}
+                            error={!!fromErrorMessage}
                             data-testid={fomDataTestId}
+                            onChange={fromField.handleInputChange}
+                            onBlur={(event) => {
+                                fromField.handleInputBlur(event);
+                                periodField.onBlur();
+                            }}
                         />
+                    </DatePicker>
+                    <DatePicker
+                        {...(toField.datepickerProps as any)}
+                        showWeekNumber={true}
+                        mode="single"
+                        inputDisabled={disabled}
+                        dropdownCaption={true}
+                        fromDate={tomFromDate || toField.fromDateDefault}
+                        toDate={toDate || toField.toDateDefault}
+                        disabled={disabledDates}
+                        onSelect={(date) => {
+                            toField.handleSelect(date);
+                            periodField.onBlur();
+                        }}
+                        size={size}
+                    >
                         <DatePicker.Input
-                            {...toInputProps}
+                            {...toField.inputProps}
                             id={tomId}
-                            label={effectiveToLabel}
+                            label={toLabel}
                             disabled={disabled}
                             size={size}
-                            ref={mergedTomRef}
-                            error={visualErrors.showToError}
+                            ref={(node) => {
+                                assignRef(toField.fieldRef, node);
+                                assignRef(tomInputRef, node);
+                            }}
+                            error={!!toErrorMessage}
                             data-testid={tomDataTestId}
+                            onChange={toField.handleInputChange}
+                            onBlur={(event) => {
+                                toField.handleInputBlur(event);
+                                periodField.onBlur();
+                            }}
                         />
-                    </div>
-                </DatePicker>
+                    </DatePicker>
+                </div>
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {visualErrors.showFromError && (
+                {fromErrorMessage && (
                     <ErrorMessage aria-describedby={fomId} showIcon>
-                        {effectiveFromLabel}: {visualErrors.fromErrorMessage}
+                        {fromLabel}: {fromErrorMessage}
                     </ErrorMessage>
                 )}
-                {visualErrors.showToError && (
+                {toErrorMessage && (
                     <ErrorMessage aria-describedby={tomId} showIcon>
-                        {effectiveToLabel}: {visualErrors.toErrorMessage}
+                        {toLabel}: {toErrorMessage}
                     </ErrorMessage>
                 )}
-                {visualErrors.showGroupError && (
+                {showGroupError && (
                     <ErrorMessage aria-describedby={fomId || tomId} showIcon>
-                        {visualErrors.groupErrorMessage}
+                        {groupErrorMessage}
                     </ErrorMessage>
                 )}
             </div>
