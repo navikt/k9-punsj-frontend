@@ -64,14 +64,7 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
     const isValidFromDate = normalizedPeriode.fom && new Date(normalizedPeriode.fom).toString() !== 'Invalid Date';
     const fromDateValue = isValidFromDate ? new Date(normalizedPeriode.fom) : undefined;
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
-
-    const renderErrorText = (label: React.ReactNode, message?: React.ReactNode | boolean, withLabel = false) => {
-        if (!message || typeof message === 'boolean') {
-            return null;
-        }
-
-        return <ErrorMessage showIcon>{withLabel && label ? <>{label}: {message}</> : message}</ErrorMessage>;
-    };
+    const sharedErrorMessage = errorMessage || (typeof errorMessageFom === 'string' ? errorMessageFom : undefined) || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
 
     return (
         <div className={rootClassName}>
@@ -112,9 +105,11 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {renderErrorText(intlHelper(intl, 'skjema.perioder.fom'), errorMessageFom, true)}
-                {renderErrorText(intlHelper(intl, 'skjema.perioder.tom'), errorMessageTom, true)}
-                {renderErrorText(null, errorMessage)}
+                {sharedErrorMessage && typeof sharedErrorMessage !== 'boolean' && (
+                    <ErrorMessage aria-describedby={inputIdFom || inputIdTom} showIcon>
+                        {sharedErrorMessage}
+                    </ErrorMessage>
+                )}
             </div>
         </div>
     );

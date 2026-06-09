@@ -41,9 +41,13 @@ const PeriodevelgerFormik = ({
     const effectiveFomId = fomId || fomFieldName;
     const effectiveTomId = tomId || tomFieldName;
     const showPeriodeError = submitCount > 0 || (fomFieldMeta.touched && tomFieldMeta.touched);
-
     const fomToDate = tomFieldMeta.value ? new Date(tomFieldMeta.value) : toDate;
     const tomFromDate = fomFieldMeta.value ? new Date(fomFieldMeta.value) : fromDate;
+    const sharedErrorMessage =
+        (showPeriodeError && typeof periodeFieldMeta.error === 'string' && periodeFieldMeta.error) ||
+        (fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' && fomFieldMeta.error) ||
+        (tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' && tomFieldMeta.error) ||
+        undefined;
 
     return (
         <div className="flex flex-col gap-2">
@@ -79,19 +83,9 @@ const PeriodevelgerFormik = ({
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {fomFieldMeta.touched && fomFieldMeta.error && (
-                    <ErrorMessage aria-describedby={effectiveFomId} showIcon>
-                        Fra og med: {fomFieldMeta.error}
-                    </ErrorMessage>
-                )}
-                {tomFieldMeta.touched && tomFieldMeta.error && (
-                    <ErrorMessage aria-describedby={effectiveTomId} showIcon>
-                        Til og med: {tomFieldMeta.error}
-                    </ErrorMessage>
-                )}
-                {showPeriodeError && typeof periodeFieldMeta.error === 'string' && (
-                    <ErrorMessage aria-describedby={effectiveFomId} showIcon>
-                        {periodeFieldMeta.error}
+                {sharedErrorMessage && (
+                    <ErrorMessage aria-describedby={effectiveFomId || effectiveTomId} showIcon>
+                        {sharedErrorMessage}
                     </ErrorMessage>
                 )}
             </div>

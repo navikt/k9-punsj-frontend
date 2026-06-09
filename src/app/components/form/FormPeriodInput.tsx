@@ -84,6 +84,7 @@ export function FormPeriodInput<T extends FieldValues>({
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
     const fromErrorMessage = typeof fromField.error === 'string' ? fromField.error : undefined;
     const toErrorMessage = typeof toField.error === 'string' ? toField.error : undefined;
+    const sharedErrorMessage = groupErrorMessage || fromErrorMessage || toErrorMessage;
 
     return (
         <div className={rootClassName}>
@@ -163,19 +164,9 @@ export function FormPeriodInput<T extends FieldValues>({
                 {action && <div className="flex self-stretch items-end">{action}</div>}
             </div>
             <div>
-                {fromErrorMessage && (
-                    <ErrorMessage aria-describedby={fomId} showIcon>
-                        {fromLabel}: {fromErrorMessage}
-                    </ErrorMessage>
-                )}
-                {toErrorMessage && (
-                    <ErrorMessage aria-describedby={tomId} showIcon>
-                        {toLabel}: {toErrorMessage}
-                    </ErrorMessage>
-                )}
-                {showGroupError && (
+                {sharedErrorMessage && (
                     <ErrorMessage aria-describedby={fomId || tomId} showIcon>
-                        {groupErrorMessage}
+                        {sharedErrorMessage}
                     </ErrorMessage>
                 )}
             </div>
