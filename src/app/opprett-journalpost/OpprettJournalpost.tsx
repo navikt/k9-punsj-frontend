@@ -63,7 +63,7 @@ const OpprettJournalpost: React.FC = () => {
     const hentFagsaker = (fnr: string) => {
         setIsFetchingFagsaker(true);
 
-        finnFagsaker(fnr, (response, data: Fagsak[]) => {
+        finnFagsaker(fnr, (response, data) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
                 setFetchFagsakError(false);
