@@ -106,6 +106,11 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
                 .find('option[value="ABC123"]')
                 .should('not.be.disabled');
             cy.findByTestId('opprettJournalpostFagsakSelect').find('option[value="HIST001"]').should('be.disabled');
+
+            cy.window().then((window) => {
+                const { worker } = window.msw;
+                worker.resetHandlers();
+            });
         });
 
         it('skal håndtere tomme fagsaker', () => {
