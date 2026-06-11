@@ -13,10 +13,6 @@ interface IAuthRedirectAction {
 interface IAuthOkAction {
     type: AuthActionKeys.OK;
     name: string;
-    erSaksbehandler: boolean;
-    erVeileder: boolean;
-    harBasistilgang: boolean;
-    harHistoriskTilgang: boolean;
 }
 interface IAuthErrorAction {
     type: AuthActionKeys.ERROR;
@@ -28,18 +24,11 @@ export type IAuthActionTypes = IAuthLoadAction | IAuthRedirectAction | IAuthOkAc
 export const checkAuth = () => async (dispatch: any) => {
     try {
         dispatch({ type: AuthActionKeys.LOAD });
-        const response = await get(ApiPath.USER, { credentials: 'include' });
+        const response = await get(ApiPath.ME, { credentials: 'include' });
 
         if (response.status === 200) {
-            const { name, erSaksbehandler, erVeileder, harBasistilgang, harHistoriskTilgang } = await response.json();
-            dispatch({
-                type: AuthActionKeys.OK,
-                name,
-                erSaksbehandler: Boolean(erSaksbehandler),
-                erVeileder: Boolean(erVeileder),
-                harBasistilgang: Boolean(harBasistilgang),
-                harHistoriskTilgang: Boolean(harHistoriskTilgang),
-            });
+            const { name } = await response.json();
+            dispatch({ type: AuthActionKeys.OK, name });
         } else {
             const error = convertResponseToError(response);
             dispatch({ type: AuthActionKeys.ERROR, error });

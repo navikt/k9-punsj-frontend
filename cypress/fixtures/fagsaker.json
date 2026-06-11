@@ -270,22 +270,5 @@
             "identitetsnummer": "24420167209",
             "fødselsdato": "1980-09-11"
         }
-    },
-    {
-        "reservert": false,
-        "fagsakId": "HIST001",
-        "sakstype": "PSB",
-        "pleietrengende": {
-            "navn": "JUSTERBAR HALS",
-            "identitetsnummer": "24420167209",
-            "fødselsdato": "2017-09-11"
-        },
-        "gyldigPeriode": {
-            "fom": "2019-01-01",
-            "tom": "2019-12-31"
-        },
-        "behandlingsår": null,
-        "relatertPerson": null,
-        "historisk": true
     }
 ]

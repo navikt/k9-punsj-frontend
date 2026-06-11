@@ -24,7 +24,7 @@ const SendBrevIAvsluttetSak = () => {
         setFetchFagsakerError(false);
         setIsFetchingFagsaker(true);
 
-        finnFagsaker(søkersFødselsnummer, (response, data) => {
+        finnFagsaker(søkersFødselsnummer, (response, data: Fagsak[]) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
                 setFagsaker(data);
