@@ -172,8 +172,6 @@ const FagsakSelect = ({
                         <option key={fagsakId} value={fagsakId} disabled={!!historisk && !harHistoriskTilgang}>
                             {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})${reservert ? ' (reservert)' : ''}${historisk ? ' (historisk)' : ''}`}
                         </option>
-                    ))
-                        </option>
                     ))}
             </Select>
             {valgtFagsak && (
