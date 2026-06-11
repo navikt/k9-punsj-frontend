@@ -73,6 +73,41 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
     });
 
     describe('Fagsakhåndtering', () => {
+        it('skal disable historisk fagsak uten historisk tilgang', () => {
+            cy.window().then((window) => {
+                const { worker } = window.msw;
+                worker.use(
+                    http.get(ApiPath.USER, () =>
+                        HttpResponse.json(
+                            {
+                                name: 'Test Saksbehandler',
+                                erSaksbehandler: true,
+                                erVeileder: false,
+                                harBasistilgang: true,
+                                harHistoriskTilgang: false,
+                            },
+                            { status: 200 },
+                        ),
+                    ),
+                    http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () =>
+                        HttpResponse.json(
+                            [
+                                { fagsakId: 'ABC123', sakstype: 'PSB', reservert: false, historisk: false },
+                                { fagsakId: 'HIST001', sakstype: 'PSB', reservert: false, historisk: true },
+                            ],
+                            { status: 200 },
+                        ),
+                    ),
+                );
+            });
+
+            cy.findByLabelText('Søkers fødselsnummer').clear().type(TEST_DATA.fnr);
+            cy.findByTestId('opprettJournalpostFagsakSelect')
+                .find('option[value="ABC123"]')
+                .should('not.be.disabled');
+            cy.findByTestId('opprettJournalpostFagsakSelect').find('option[value="HIST001"]').should('be.disabled');
+        });
+
         it('skal håndtere tomme fagsaker', () => {
             cy.findByLabelText('Søkers fødselsnummer').type(TEST_DATA.fnrTomtFagsaker);
             cy.findByText(
