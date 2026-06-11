@@ -73,6 +73,13 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
     });
 
     describe('Fagsakhåndtering', () => {
+        afterEach(() => {
+            cy.window().then((window) => {
+                const { worker } = window.msw;
+                worker.resetHandlers();
+            });
+        });
+
         it('skal disable historisk fagsak uten historisk tilgang', () => {
             cy.window().then((window) => {
                 const { worker } = window.msw;
@@ -106,15 +113,10 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
                 .find('option[value="ABC123"]')
                 .should('not.be.disabled');
             cy.findByTestId('opprettJournalpostFagsakSelect').find('option[value="HIST001"]').should('be.disabled');
-
-            cy.window().then((window) => {
-                const { worker } = window.msw;
-                worker.resetHandlers();
-            });
         });
 
         it('skal håndtere tomme fagsaker', () => {
-            cy.findByLabelText('Søkers fødselsnummer').type(TEST_DATA.fnrTomtFagsaker);
+            cy.findByLabelText('Søkers fødselsnummer').clear().type(TEST_DATA.fnrTomtFagsaker);
             cy.findByText(
                 'Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.',
             ).should('exist');
