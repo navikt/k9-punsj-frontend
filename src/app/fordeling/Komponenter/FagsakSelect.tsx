@@ -16,6 +16,7 @@ interface Props {
     identState: IIdentState;
     ingenInfoOmBarnIDokument?: boolean;
     valgtFagsak?: FagsakForSelect;
+    harHistoriskTilgang: boolean;
     setValgtFagsak: (fagsak: string) => void;
     setReserverSaksnummerTilNyFagsak: (reserverSaksnummerTilNyFagsak: boolean) => void;
     setIdentAction: (søkerId: string, pleietrengendeId: string, annenSokerIdent: string | null) => void;
@@ -148,6 +149,7 @@ const FagsakSelect = ({
     identState,
     ingenInfoOmBarnIDokument,
     valgtFagsak,
+    harHistoriskTilgang,
     setValgtFagsak,
     setReserverSaksnummerTilNyFagsak,
     setIdentAction,
@@ -166,9 +168,9 @@ const FagsakSelect = ({
                 <option value="">Velg</option>
                 {!ingenInfoOmBarnIDokument &&
                     !reserverSaksnummerTilNyFagsak &&
-                    fagsaker.map(({ fagsakId, sakstype, reservert }) => (
-                        <option key={fagsakId} value={fagsakId}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}) ${reservert ? '(reservert)' : ''}`}
+                    fagsaker.map(({ fagsakId, sakstype, reservert, historisk }) => (
+                        <option key={fagsakId} value={fagsakId} disabled={!!historisk && !harHistoriskTilgang}>
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})${reservert ? ' (reservert)' : ''}${historisk ? ' (historisk)' : ''}`}
                         </option>
                     ))}
             </Select>

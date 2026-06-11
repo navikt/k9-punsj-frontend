@@ -12,6 +12,19 @@ import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
 import mockHandlersTest from './mockHandlersTest';
 
 let handlers = [
+    http.get(ApiPath.USER, () =>
+        HttpResponse.json(
+            {
+                name: 'Test Saksbehandler',
+                erSaksbehandler: true,
+                erVeileder: false,
+                harBasistilgang: true,
+                harHistoriskTilgang: false,
+            },
+            { status: 200 },
+        ),
+    ),
+
     http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
             {
@@ -241,6 +254,7 @@ let handlers = [
                         fom: '2022-08-01',
                         tom: '2022-08-15',
                     },
+                    historisk: false,
                 },
                 {
                     fagsakId: 'DEF456',
@@ -250,6 +264,7 @@ let handlers = [
                         fom: '2022-08-01',
                         tom: '2022-08-15',
                     },
+                    historisk: false,
                 },
                 {
                     fagsakId: '1DMU93M',
@@ -257,6 +272,17 @@ let handlers = [
                     pleietrengende: null,
                     gyldigPeriode: null,
                     behandlingsår: '2022',
+                    historisk: false,
+                },
+                {
+                    fagsakId: 'HIST001',
+                    sakstype: 'PSB',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '15447308840', fødselsdato: '2018-03-10' },
+                    gyldigPeriode: {
+                        fom: '2019-01-01',
+                        tom: '2019-12-31',
+                    },
+                    historisk: true,
                 },
             ],
             { status: 200 },
@@ -439,6 +465,7 @@ let handlers = [
                         fom: '2022-08-01',
                         tom: '2022-08-15',
                     },
+                    historisk: false,
                 },
                 {
                     fagsakId: 'DEF456',
@@ -448,12 +475,24 @@ let handlers = [
                         fom: '2022-08-01',
                         tom: '2022-08-15',
                     },
+                    historisk: false,
                 },
                 {
                     fagsakId: '1DMU93M',
                     sakstype: 'PSB',
                     pleietrengende: null,
                     gyldigPeriode: null,
+                    historisk: false,
+                },
+                {
+                    fagsakId: 'HIST001',
+                    sakstype: 'PSB',
+                    pleietrengende: { navn: 'Test Testen', identitetsnummer: '18410162721', fødselsdato: '1970-08-15' },
+                    gyldigPeriode: {
+                        fom: '2019-01-01',
+                        tom: '2019-12-31',
+                    },
+                    historisk: true,
                 },
             ],
             { status: 200 },
