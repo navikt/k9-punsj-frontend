@@ -21,7 +21,7 @@ jobs:
         steps:
             - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
             - name: Deploye til dev
-              uses: nais/deploy/actions/deploy@c55d6073d913975d2dada508bdfefc6427d39867 # v2
+              uses: nais/deploy/actions/deploy@8a6fb62e73f837af6287d5db84a46ea96aa6c30d # v2
               env:
                   CLUSTER: ${{ github.event.inputs.environment }}-fss
                   RESOURCE: nais/${{ github.event.inputs.environment }}-fss-redirect.yml
