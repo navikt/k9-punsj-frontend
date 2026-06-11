@@ -1,3 +1,4 @@
+import { ApiPath } from 'app/apiConfig';
 import { fraværÅrsak, søknadÅrsak } from 'app/søknader/omsorgspenger-utbetaling/konstanter';
 import omsorgspengerutbetalingHandlers from 'mocks/mockHandlersOMPUT';
 
@@ -59,6 +60,30 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         });
 
         cy.contains('Tilbake til LOS').scrollIntoView().should('be.visible');
+    });
+
+    it('lagrer oppdatert frilanser startdato på blur', () => {
+        const nyStartdato = '01.01.2019';
+        let oppdatertSoknad;
+
+        cy.window().then((win) => {
+            const { worker, http, HttpResponse } = win.msw;
+            worker.use(
+                http.put(ApiPath.OMP_UT_SOKNAD_UPDATE, async ({ request }) => {
+                    oppdatertSoknad = await request.json();
+                    return HttpResponse.json(oppdatertSoknad, { status: 200 });
+                }),
+            );
+        });
+
+        cy.contains(/Frilanser/i).click();
+        cy.findByLabelText('Når startet søker som frilanser?').clear().type(nyStartdato).blur();
+
+        cy.wrap(null).should(() => {
+            expect(oppdatertSoknad).to.not.equal(undefined);
+            expect(oppdatertSoknad).to.have.nested.property('opptjeningAktivitet.frilanser.startdato', '2019-01-01');
+        });
+        cy.findByLabelText('Når startet søker som frilanser?').should('have.value', nyStartdato);
     });
 
     it('Kan sende inn søknad for selvstendig næringsdrivende', () => {

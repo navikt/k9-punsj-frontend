@@ -1,8 +1,5 @@
 import React from 'react';
 
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { capitalize } from 'lodash';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
@@ -10,16 +7,19 @@ import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { JaNei } from 'app/models/enums';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { capitalize } from 'lodash';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 enum Virksomhetstyper {
     FISKE = 'Fiske',
@@ -44,9 +44,6 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
 
     return (
         <Box padding="space-16" background="neutral-soft" className="mb-2" borderRadius="8">
-            <Heading size="small" level="5">
-                <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.tittel'} />
-            </Heading>
             <Box padding="space-16">
                 {!values.erKorrigering && (
                     <>
@@ -208,14 +205,16 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                 </Label>
 
                 <div className="fom-tom-rad">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                        size="small"
                     />
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                        size="small"
                     />
                 </div>
 
@@ -240,10 +239,8 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
 
                 <hr />
 
-                <VerticalSpacer twentyPx />
-
-                <Heading size="small">
-                    <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel'} />
+                <Heading size="small" className="mt-4 mb-4">
+                    <FormattedMessage id="omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel" />
                 </Heading>
 
                 <FieldArray

@@ -5,7 +5,7 @@ import { debounce } from 'lodash';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Button, Checkbox, ErrorSummary } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorSummary, Heading } from '@navikt/ds-react';
 import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
@@ -257,14 +257,18 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         <TillattePeriodeProvider tillattePerioder={tillattePerioder}>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VerticalSpacer thirtyTwoPx />
+            <VerticalSpacer sixteenPx />
+            <Heading size="medium" level="2">
+                <FormattedMessage id="OPPLAERINGSPENGER" />
+            </Heading>
+            <VerticalSpacer sixteenPx />
             <OpplysningerOmSoknad />
-            <VerticalSpacer thirtyTwoPx />
+            <VerticalSpacer sixteenPx />
             <Kurs
                 eksisterendePerioder={eksisterendePerioder}
                 hentEksisterendePerioderError={hentEksisterendePerioderError}
             />
-            <VerticalSpacer thirtyTwoPx />
+            <VerticalSpacer sixteenPx />
             <Checkbox
                 onChange={(e) => {
                     toggleAllePaneler(e.target.checked);
@@ -272,7 +276,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             >
                 {intlHelper(intl, 'skjema.ekspander')}
             </Checkbox>
-            <VerticalSpacer thirtyTwoPx />
+            <VerticalSpacer sixteenPx />
             <Accordion>
                 <EndringAvSøknadsperioder
                     onClick={() => handlePanelClick(PunchFormPaneler.ENDRING_AV_SØKNADSPERIODER)}

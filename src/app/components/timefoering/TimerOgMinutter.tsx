@@ -13,9 +13,19 @@ interface OwnProps {
     timer: string;
     minutter: string;
     error?: string;
+    size?: 'small' | 'medium';
 }
 
-const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer, minutter, error }: OwnProps) => {
+const TimerOgMinutter = ({
+    label,
+    onChangeTimer,
+    onChangeMinutter,
+    onBlur,
+    timer,
+    minutter,
+    error,
+    size,
+}: OwnProps) => {
     const id = uniqueId();
 
     const timerId = `timer-${id}`;
@@ -34,6 +44,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             className="input text-center w-12"
                             label="Timer"
                             hideLabel
+                            size={size}
                             value={timer}
                             onChange={(event) => {
                                 onChangeTimer(event.target.value.replaceAll(/\D+/g, ''));
@@ -54,6 +65,7 @@ const TimerOgMinutter = ({ label, onChangeTimer, onChangeMinutter, onBlur, timer
                             value={minutter}
                             label="Minutter"
                             hideLabel
+                            size={size}
                             onChange={(event) => {
                                 onChangeMinutter(event.target.value.replaceAll(/\D+/g, ''));
                             }}

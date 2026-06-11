@@ -12,6 +12,7 @@ import {
     Button,
     Checkbox,
     ErrorSummary,
+    Heading,
     HelpText,
     Loader,
     Select,
@@ -838,7 +839,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const unhandledErrors = this.resolveUnhandledErrors(attribute);
         const parsedPath = parsePeriodFeltPath(attribute);
 
-        // Period-level bosteder errors are already shown directly on PeriodInput, skip duplicates in block-level list.
+        // Period-level bosteder errors are already shown directly on PeriodevelgerControlled, skip duplicates in block-level list.
         if (parsedPath?.prefix === 'ytelse.bosteder' && !parsedPath.suffix) {
             return [];
         }
@@ -1204,6 +1205,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 feilkodeprefiks="ytelse.beredskap"
                 kanHaFlere
                 medSlettKnapp={false}
+                useStandardAddButton
             />
         );
 
@@ -1224,6 +1226,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 feilkodeprefiks="ytelse.nattevåk"
                 kanHaFlere
                 medSlettKnapp={false}
+                useStandardAddButton
             />
         );
 
@@ -1232,6 +1235,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
 
                 {this.statusetikett()}
+
+                <VerticalSpacer sixteenPx />
+
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="PLEIEPENGER" />
+                </Heading>
 
                 <VerticalSpacer sixteenPx />
 
@@ -1325,6 +1334,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>
@@ -1345,6 +1355,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
                                 data-testid="feriepanel-checkbox"
+                                className="mb-4"
                             />
 
                             {!!soknad.lovbestemtFerie.length && (
@@ -1355,11 +1366,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     editSoknadState={(perioder, showStatus) =>
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
+                                    textLeggTil="skjema.perioder.legg_til"
+                                    textFjern="skjema.perioder.fjern"
                                     getErrorMessage={this.getErrorMessage}
                                     getUhaandterteFeil={this.resolveUnhandledErrors}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
-                                    doNotShowBorders
+                                    separatePanels
                                 />
                             )}
 
@@ -1393,10 +1406,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                                             showStatus,
                                                         )
                                                     }
+                                                    textLeggTil="skjema.perioder.legg_til"
                                                     getErrorMessage={() => undefined}
                                                     getUhaandterteFeil={this.resolveUnhandledErrors}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
+                                                    separatePanels
                                                 />
                                             </div>
                                         )}
@@ -1478,7 +1493,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 <>
                                     <VerticalSpacer twentyPx />
 
-                                    <Box padding="space-16" borderRadius="8" background="neutral-soft" className="listepanel">
+                                    <Box
+                                        padding="space-16"
+                                        borderRadius="8"
+                                        background="neutral-soft"
+                                        className="listepanel"
+                                    >
                                         <TilsynKalender
                                             nyeSoknadsperioder={soknad.soeknadsperiode}
                                             eksisterendeSoknadsperioder={eksisterendePerioder}
@@ -1590,6 +1610,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>
@@ -1598,9 +1619,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 <VerticalSpacer thirtyTwoPx />
 
-                <p className="ikkeregistrert">
+                <Heading size="small" level="3">
                     <FormattedMessage id="skjema.ikkeregistrert" />
-                </p>
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

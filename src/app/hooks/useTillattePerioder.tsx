@@ -47,7 +47,7 @@ interface DatoRestriksjonerResult {
 
 /**
  * Hook som returnerer datobegrensninger basert på tillatte perioder.
- * Returnerer fromDate, toDate og disabled-array for bruk i Periodevelger og DatovelgerFormik.
+ * Returnerer fromDate, toDate og disabled-array for bruk i PeriodevelgerFormik og DatovelgerFormik.
  */
 export const useDatoRestriksjoner = (): DatoRestriksjonerResult => {
     const tillattePerioder = useTillattePerioder();

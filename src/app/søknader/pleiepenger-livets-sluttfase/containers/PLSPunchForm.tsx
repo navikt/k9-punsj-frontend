@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, Heading, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
@@ -862,6 +862,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 <VerticalSpacer sixteenPx />
 
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="PLEIEPENGER_I_LIVETS_SLUTTFASE" />
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
+
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
                     updateSoknad={this.updateSoknad}
@@ -947,6 +953,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     feilkodeprefiks="ytelse.utenlandsopphold"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>
@@ -962,13 +969,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                         </Accordion.Header>
 
                         <Accordion.Content>
-                            <VerticalSpacer eightPx />
-
                             <LegacyCheckbox
                                 label={intlHelper(intl, 'skjema.ferie.leggtil')}
                                 value="skjema.ferie.leggtil"
                                 onChange={(e) => this.updateSkalHaFerie(e.target.checked)}
                                 checked={!!soknad.lovbestemtFerie.length}
+                                className="mb-4"
                             />
 
                             {!!soknad.lovbestemtFerie.length && (
@@ -979,10 +985,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     editSoknadState={(perioder, showStatus) =>
                                         this.updateSoknadState({ lovbestemtFerie: perioder }, showStatus)
                                     }
+                                    textLeggTil="skjema.perioder.legg_til"
+                                    textFjern="skjema.perioder.fjern"
                                     getErrorMessage={this.getErrorMessage}
                                     getUhaandterteFeil={this.getUhaandterteFeil}
                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                     kanHaFlere
+                                    separatePanels
                                 />
                             )}
 
@@ -1016,10 +1025,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                                             showStatus,
                                                         )
                                                     }
+                                                    textLeggTil="skjema.perioder.legg_til"
+                                                    textFjern="skjema.perioder.fjern"
                                                     getErrorMessage={() => undefined}
                                                     getUhaandterteFeil={this.getUhaandterteFeil}
                                                     feilkodeprefiks="ytelse.lovbestemtFerie"
                                                     kanHaFlere
+                                                    separatePanels
                                                 />
                                             </div>
                                         )}
@@ -1080,6 +1092,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                                     feilkodeprefiks="ytelse.bosteder"
                                     kanHaFlere
                                     medSlettKnapp={false}
+                                    useStandardAddButton
                                 />
                             )}
                         </Accordion.Content>
@@ -1088,9 +1101,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 <VerticalSpacer thirtyTwoPx />
 
-                <p className="ikkeregistrert">
+                <Heading size="small" level="3">
                     <FormattedMessage id="skjema.ikkeregistrert" />
-                </p>
+                </Heading>
+
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox

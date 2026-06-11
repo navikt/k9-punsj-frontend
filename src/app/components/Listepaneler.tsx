@@ -40,6 +40,7 @@ export interface IListepanelerProps<T> {
     onRemove?: () => any;
     kanHaFlere: boolean;
     medSlettKnapp: boolean;
+    useStandardAddButton?: boolean;
 }
 
 type ItemInfo = any;
@@ -57,6 +58,7 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
         feilkodeprefiks,
         kanHaFlere,
         medSlettKnapp,
+        useStandardAddButton,
         getUhaandterteFeil,
         getErrorMessage,
     } = props;
@@ -169,16 +171,19 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
             )}
 
             {kanHaFlere && (
-                <Button
-                    id="leggtillisteelementknapp"
-                    data-testid="leggtillisteelementknapp"
-                    className="leggtillisteelementknapp"
-                    type="button"
-                    onClick={addItemHandler}
-                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
-                >
-                    <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
-                </Button>
+                <div className={useStandardAddButton ? 'mt-4 flex flex-wrap' : undefined}>
+                    <Button
+                        id="leggtillisteelementknapp"
+                        data-testid="leggtillisteelementknapp"
+                        className={useStandardAddButton ? undefined : 'leggtillisteelementknapp'}
+                        type="button"
+                        onClick={addItemHandler}
+                        icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                        variant={useStandardAddButton ? 'tertiary' : undefined}
+                    >
+                        <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
+                    </Button>
+                </div>
             )}
         </Fieldset>
     );

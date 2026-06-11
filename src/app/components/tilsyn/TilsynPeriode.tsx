@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import TilsynPeriodeDesimaler from 'app/components/tilsyn/TilsynPeriodeDesimaler';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import { IOmsorgstid, IPeriode, Periodeinfo } from 'app/models/types';
 import {
     Tidsformat,
@@ -14,7 +15,6 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface Props {
@@ -48,18 +48,18 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
             {({ field }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
-                        <div className="flex items-start">
-                            <PeriodevelgerControlled name={`${name}.periode`} />
-
-                            <div className="ml-4 mt-7">
+                        <PeriodevelgerFormik
+                            name={`${name}.periode`}
+                            action={
                                 <Button
+                                    className="slett-knapp-med-icon-for-input"
                                     icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
-                                    size="small"
                                     variant="tertiary"
+                                    type="button"
                                     onClick={remove}
                                 />
-                            </div>
-                        </div>
+                            }
+                        />
 
                         {visCheckbox && soknadsperioder.length === 1 && (
                             <Checkbox

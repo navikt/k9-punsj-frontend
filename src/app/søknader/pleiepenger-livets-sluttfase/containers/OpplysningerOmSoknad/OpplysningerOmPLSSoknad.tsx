@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatovelgerControlled from 'app/components/skjema/Datovelger/DatovelgerControlled';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../../models/enums/PunchFormPaneler';
 import { PLSSoknad } from '../../types/PLSSoknad';
@@ -36,7 +36,7 @@ const OpplysningerOmPLSSoknad: React.FC<Props> = ({
             </Alert>
 
             <div className="input-row">
-                <NewDateInput
+                <DatovelgerControlled
                     value={soknad.mottattDato}
                     id="soknad-dato"
                     errorMessage={getErrorMessage('mottattDato')}

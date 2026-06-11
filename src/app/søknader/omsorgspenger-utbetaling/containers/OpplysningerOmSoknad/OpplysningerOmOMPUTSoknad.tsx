@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { IOMPUTSoknad } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknad';
 import { JaNeiIkkeRelevant } from '../../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../../utils/intlUtils';
@@ -26,17 +26,12 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 </Alert>
 
                 <div className="input-row">
-                    <Field name="mottattDato">
-                        {({ field, meta, form }: FieldProps<string, FormikValues>) => (
-                            <NewDateInput
-                                id="soknad-dato"
-                                label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                                errorMessage={meta.touched && meta.error}
-                                value={field.value}
-                                onChange={(value: string) => form.setFieldValue('mottattDato', value)}
-                            />
-                        )}
-                    </Field>
+                    <DatovelgerFormik
+                        id="soknad-dato"
+                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                        name="mottattDato"
+                        size="small"
+                    />
 
                     <div className="ml-4">
                         <Field name="klokkeslett">
@@ -46,6 +41,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                                     type="time"
                                     label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                     error={meta.touched && meta.error}
+                                    size="small"
                                     {...field}
                                     onChange={(e) => form.setFieldValue('klokkeslett', e.target.value)}
                                 />

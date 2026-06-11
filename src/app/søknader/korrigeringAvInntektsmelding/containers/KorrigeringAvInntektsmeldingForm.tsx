@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 
 import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading, List, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
@@ -13,10 +13,12 @@ import {
 import { redirectToLos } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { IOMSKorrigeringFravaersperiode, IOMSKorrigeringSoknad } from '../types/OMSKorrigeringSoknad';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær/LeggTilDelvisFravær';
 import OMSKvittering from './SøknadKvittering/OMSKvittering';
 import OpplysningerOmKorrigering from './OpplysningerOmKorrigering/OpplysningerOmKorrigering';
@@ -36,6 +38,8 @@ import {
     trekkperiodeFieldId,
     virksomhetFieldId,
 } from './formFieldIds';
+import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
+import { IPeriode } from 'app/models/types';
 
 import './KorrigeringAvInntektsmeldingForm.css';
 
@@ -43,6 +47,7 @@ interface Props {
     søkerId: string;
     søknadId: string;
     journalposter: string[];
+    soknad?: IOMSKorrigeringSoknad;
 }
 
 const initialFormState = {
@@ -61,6 +66,64 @@ const initialFormState = {
 };
 
 const getInitialPeriode = () => ({ fom: '', tom: '' });
+const getInitialDagMedDelvisFravær = () => ({ dato: '', timer: '' });
+
+const mapFravaersperioderToFormValues = (fravaersperioder?: IOMSKorrigeringFravaersperiode[] | null) => {
+    const trekkperioder: IPeriode[] = [];
+    const perioderMedRefusjonskrav: IPeriode[] = [];
+    const dagerMedDelvisFravær: DatoMedTimetall[] = [];
+
+    fravaersperioder?.forEach((fravaersperiode) => {
+        const fom = fravaersperiode.periode?.fom || '';
+        const tom = fravaersperiode.periode?.tom || '';
+
+        if (!fom && !tom) {
+            return;
+        }
+
+        if (fravaersperiode.faktiskTidPrDag === '0') {
+            trekkperioder.push({ fom, tom });
+            return;
+        }
+
+        if (fravaersperiode.faktiskTidPrDag === null || fravaersperiode.faktiskTidPrDag === undefined) {
+            perioderMedRefusjonskrav.push({ fom, tom });
+            return;
+        }
+
+        dagerMedDelvisFravær.push({
+            dato: fom,
+            timer: fravaersperiode.faktiskTidPrDag,
+        });
+    });
+
+    return {
+        trekkperioder: trekkperioder.length > 0 ? trekkperioder : [getInitialPeriode()],
+        perioderMedRefusjonskrav:
+            perioderMedRefusjonskrav.length > 0 ? perioderMedRefusjonskrav : [getInitialPeriode()],
+        dagerMedDelvisFravær: dagerMedDelvisFravær.length > 0 ? dagerMedDelvisFravær : [getInitialDagMedDelvisFravær()],
+    };
+};
+
+export const buildInitialValuesFromSoknad = (
+    soknad?: IOMSKorrigeringSoknad,
+): KorrigeringAvInntektsmeldingFormValues => {
+    const mappedFravaersperioder = mapFravaersperioderToFormValues(soknad?.fravaersperioder);
+
+    return {
+        [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: {
+            dato: soknad?.mottattDato || '',
+            klokkeslett: soknad?.klokkeslett || '',
+        },
+        [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: soknad?.organisasjonsnummer || '',
+        [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: soknad?.arbeidsforholdId || '',
+        [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: mappedFravaersperioder.trekkperioder,
+        [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]:
+            mappedFravaersperioder.perioderMedRefusjonskrav,
+        [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]:
+            mappedFravaersperioder.dagerMedDelvisFravær,
+    };
+};
 
 interface ErrorSummaryItemData {
     message: string;
@@ -219,7 +282,7 @@ const FormChangeObserver = ({ hasSubmitted, oppdaterKorrigering, validerKorriger
     return null;
 };
 
-const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId, journalposter }: Props) => {
+const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId, journalposter, soknad }: Props) => {
     const intl = useIntl();
     const harGyldigSoeknadId = søknadId.trim().length > 0;
     const formikRef = useRef<FormikProps<KorrigeringAvInntektsmeldingFormValues>>(null);
@@ -355,14 +418,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
     return (
         <Formik
             innerRef={formikRef}
-            initialValues={{
-                [KorrigeringAvInntektsmeldingFormFields.OpplysningerOmKorrigering]: { dato: '', klokkeslett: '' },
-                [KorrigeringAvInntektsmeldingFormFields.Virksomhet]: '',
-                [KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId]: '',
-                [KorrigeringAvInntektsmeldingFormFields.Trekkperioder]: [getInitialPeriode()],
-                [KorrigeringAvInntektsmeldingFormFields.PerioderMedRefusjonskrav]: [getInitialPeriode()],
-                [KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]: [{ dato: '', timer: '' }],
-            }}
+            enableReinitialize={true}
+            initialValues={buildInitialValuesFromSoknad(soknad)}
             onSubmit={() => undefined}
             validate={(values) =>
                 getFormErrors(
@@ -377,6 +434,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                     errors as Partial<FormErrors>,
                     serverValidationErrors,
                 );
+                const beggeFravaerPanelerLukket =
+                    !åpnePaneler.trekkperioderPanel && !åpnePaneler.leggTilDelvisFravær;
 
                 return (
                     <>
@@ -386,33 +445,35 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             validerKorrigering={validerKorrigering}
                         />
                         <Form className="korrigering">
-                            <Box padding="space-16">
-                                <div className="mb-4">
-                                    <Heading size="medium" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                                    </Heading>
-                                </div>
+                            <VStack gap="space-16">
+                                <Heading size="medium" level="2">
+                                    <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                </Heading>
 
-                                <Alert size="small" variant="info" className="mb-6">
-                                    <Heading size="small" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
-                                    </Heading>
+                                <Alert size="small" variant="info">
+                                    <VStack gap="space-12">
+                                        <Heading size="small" level="2">
+                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                        </Heading>
 
-                                    <List as="ul">
-                                        <List.Item>
-                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
-                                        </List.Item>
-                                        <List.Item>
-                                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2" />
-                                        </List.Item>
-                                    </List>
+                                        <List as="ul" className="korrigering__headerInfoList">
+                                            <List.Item>
+                                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
+                                            </List.Item>
+                                            <List.Item>
+                                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2" />
+                                            </List.Item>
+                                        </List>
+                                    </VStack>
                                 </Alert>
 
-                                <div>
-                                    <OpplysningerOmKorrigering />
+                                <OpplysningerOmKorrigering />
 
-                                    <VirksomhetPanel søkerId={søkerId} />
+                                <VirksomhetPanel søkerId={søkerId} />
 
+                                <div
+                                    className={`korrigering__toggleSections${beggeFravaerPanelerLukket ? ' korrigering__toggleSections--compact' : ''}`}
+                                >
                                     <div className="korrigering__toggleSection">
                                         <TrekkPerioder
                                             isPanelOpen={!!åpnePaneler.trekkperioderPanel}
@@ -431,7 +492,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                         />
                                     </div>
 
-                                    <div className="korrigering__toggleSection korrigering__toggleSection--compact">
+                                    <div className="korrigering__toggleSection">
                                         <LeggTilDelvisFravær
                                             isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
                                             togglePanel={() => {
@@ -456,23 +517,21 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 </div>
 
                                 {hasSubmitted && errorSummaryItems.length > 0 && (
-                                    <div className="mb-6">
-                                        <ErrorSummary
-                                            heading={intlHelper(
-                                                intl,
-                                                'omsorgspenger.utbetaling.punchForm.errorSummary.header',
-                                            )}
-                                        >
-                                            {errorSummaryItems.map((item) => (
-                                                <ErrorSummary.Item
-                                                    key={`${item.href || 'no-href'}-${item.message}`}
-                                                    href={item.href}
-                                                >
-                                                    {item.message}
-                                                </ErrorSummary.Item>
-                                            ))}
-                                        </ErrorSummary>
-                                    </div>
+                                    <ErrorSummary
+                                        heading={intlHelper(
+                                            intl,
+                                            'omsorgspenger.utbetaling.punchForm.errorSummary.header',
+                                        )}
+                                    >
+                                        {errorSummaryItems.map((item) => (
+                                            <ErrorSummary.Item
+                                                key={`${item.href || 'no-href'}-${item.message}`}
+                                                href={item.href}
+                                            >
+                                                {item.message}
+                                            </ErrorSummary.Item>
+                                        ))}
+                                    </ErrorSummary>
                                 )}
 
                                 {formError && hasSubmitted && (
@@ -480,7 +539,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                         <Feilmelding feil={formError} />
                                     </div>
                                 )}
-                            </Box>
+                            </VStack>
+
+                            <VerticalSpacer twentyPx />
 
                             <Button
                                 type="button"

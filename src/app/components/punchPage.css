@@ -126,14 +126,6 @@
     padding-top: 1rem;
 }
 
-.punch .panels-wrapper .punch_form .ikkeregistrert,
-.punch .panels-wrapper .omsorgspenger_punch_form .ikkeregistrert {
-    font-family: 'Source Sans Pro', Arial, sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.375rem;
-    font-weight: 600;
-}
-
 .punch .panels-wrapper .punch_form .listepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .listepanel {
     margin-bottom: 1rem;
@@ -240,6 +232,7 @@
     border: none;
     padding: 0;
     display: inline-flex;
+    align-items: center;
     margin: 1rem 0 0;
     color: #0067c5;
     text-decoration: underline;

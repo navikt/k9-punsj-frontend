@@ -4,12 +4,12 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Button, ToggleGroup } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 
-import PeriodevelgerControlled from 'app/components/timefoering/PeriodevelgerControlled';
 import TimerMedDesimaler from 'app/components/timefoering/TimerMedDesimaler';
 import TimerOgMinutter from 'app/components/timefoering/TimerOgMinutter';
 import UtregningArbeidstid from 'app/components/timefoering/UtregningArbeidstid';
 import UtregningArbeidstidDesimaler from 'app/components/timefoering/UtregningArbeidstidDesimaler';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
+import PeriodevelgerFormik from 'app/components/skjema/Datovelger/PeriodevelgerFormik';
 import {
     Tidsformat,
     isTidsformat,
@@ -77,11 +77,12 @@ const FraværPeriode = ({ name, remove }: Props) => {
     return (
         <div className="mt-4">
             <div className="flex items-start">
-                <PeriodevelgerControlled
+                <PeriodevelgerFormik
                     name={`${name}.periode`}
                     fromDate={fromDate}
                     toDate={toDate}
                     disabled={disabled}
+                    size="small"
                 />
                 <div className="ml-4 mt-7">
                     <Button
@@ -105,6 +106,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Normal arbeidstid"
+                            size="small"
                             timer={normalTimerField.value ?? ''}
                             minutter={normalMinField.value ?? ''}
                             onChangeTimer={(v) => setNormalTimerMin(v, normalMinField.value ?? '')}
@@ -130,6 +132,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Fravær"
+                            size="small"
                             timer={fraværTimerField.value ?? ''}
                             minutter={fraværMinField.value ?? ''}
                             onChangeTimer={(v) => setFraværTimerMin(v, fraværMinField.value ?? '')}
@@ -165,6 +168,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Normal arbeidstid"
+                            size="small"
                             value={normalDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v);
@@ -185,6 +189,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Fravær"
+                            size="small"
                             value={fraværDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.fraværTimerPerDag`, v);
