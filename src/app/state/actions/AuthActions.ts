@@ -28,7 +28,7 @@ export type IAuthActionTypes = IAuthLoadAction | IAuthRedirectAction | IAuthOkAc
 export const checkAuth = () => async (dispatch: any) => {
     try {
         dispatch({ type: AuthActionKeys.LOAD });
-        const response = await get(ApiPath.ME, { credentials: 'include' });
+        const response = await get(ApiPath.USER, { credentials: 'include' });
 
         if (response.status === 200) {
             const { name, erSaksbehandler, erVeileder, harBasistilgang, harHistoriskTilgang } = await response.json();
