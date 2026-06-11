@@ -19,6 +19,7 @@ interface FagsakBase {
     behandlingsår?: string; // For OMS
     reservert?: boolean;
     barnIdenter?: Fosterbarn[]; // For OMS
+    historisk?: boolean;
 }
 
 // Brukes kun i Fagsak select for å vise navner
