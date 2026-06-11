@@ -12,6 +12,19 @@ import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
 import mockHandlersTest from './mockHandlersTest';
 
 let handlers = [
+    http.get(ApiPath.ME, () =>
+        HttpResponse.json(
+            {
+                name: 'Test Saksbehandler',
+                erSaksbehandler: true,
+                erVeileder: false,
+                harBasistilgang: true,
+                harHistoriskTilgang: false,
+            },
+            { status: 200 },
+        ),
+    ),
+
     http.get(ApiPath.BREV_MALER, () =>
         HttpResponse.json(
             {
