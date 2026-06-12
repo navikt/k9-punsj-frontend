@@ -168,9 +168,9 @@ const FagsakSelect = ({
                 <option value="">Velg</option>
                 {!ingenInfoOmBarnIDokument &&
                     !reserverSaksnummerTilNyFagsak &&
-                    fagsaker.map(({ fagsakId, sakstype, reservert, historisk }) => (
+                    fagsaker.map(({ fagsakId, sakstype, behandlingsår, reservert, historisk }) => (
                         <option key={fagsakId} value={fagsakId} disabled={!!historisk && !harHistoriskTilgang}>
-                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)})${reservert ? ' (reservert)' : ''}${historisk ? ' (historisk)' : ''}`}
+                            {`${fagsakId} (K9 ${finnVisningsnavnForSakstype(sakstype)}${behandlingsår ? ` ${behandlingsår}` : ''})${reservert ? ' (reservert)' : ''}${historisk ? ' (historisk)' : ''}`}
                         </option>
                     ))}
             </Select>
