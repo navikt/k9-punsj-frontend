@@ -60,7 +60,15 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.findByLabelText('Velg fagsak')
             .should('exist')
-            .select(getFagsakNavnForSelect(fagsak.fagsakId, dokumenttype))
+            .select(
+                getFagsakNavnForSelect(
+                    fagsak.fagsakId,
+                    dokumenttype,
+                    fagsak.reservert,
+                    fagsak.behandlingsår,
+                    fagsak.historisk,
+                ),
+            )
             .should('have.value', fagsak.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText(`Behandlings år: ${fagsak.behandlingsår}`).should('exist');
@@ -142,7 +150,15 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
 
         cy.findByLabelText('Velg fagsak')
             .should('exist')
-            .select(getFagsakNavnForSelect(fagsakReservert.fagsakId, dokumenttype, true))
+            .select(
+                getFagsakNavnForSelect(
+                    fagsakReservert.fagsakId,
+                    dokumenttype,
+                    fagsakReservert.reservert,
+                    fagsakReservert.behandlingsår,
+                    fagsakReservert.historisk,
+                ),
+            )
             .should('have.value', fagsakReservert.fagsakId);
         cy.get('.fagsakSelectedInfo').within(() => {
             cy.findByText(`Behandlings år: ${fagsakReservert.behandlingsår}`).should('exist');
