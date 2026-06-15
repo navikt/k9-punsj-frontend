@@ -14,6 +14,7 @@ export function AuthReducer(authState: IAuthState = initialState, action: IAuthA
                 isLoading: true,
                 loggedIn: false,
                 userName: undefined,
+                tilganger: undefined,
             };
 
         case AuthActionKeys.REDIRECT:
@@ -22,6 +23,7 @@ export function AuthReducer(authState: IAuthState = initialState, action: IAuthA
                 redirectUrl: action.redirectUrl,
                 isLoading: false,
                 userName: undefined,
+                tilganger: undefined,
             };
 
         case AuthActionKeys.OK:
@@ -30,6 +32,12 @@ export function AuthReducer(authState: IAuthState = initialState, action: IAuthA
                 redirectUrl: undefined,
                 isLoading: false,
                 userName: action.name,
+                tilganger: {
+                    erSaksbehandler: action.erSaksbehandler,
+                    erVeileder: action.erVeileder,
+                    harBasistilgang: action.harBasistilgang,
+                    harHistoriskTilgang: action.harHistoriskTilgang,
+                },
             };
 
         case AuthActionKeys.ERROR:
@@ -38,6 +46,7 @@ export function AuthReducer(authState: IAuthState = initialState, action: IAuthA
                 isLoading: false,
                 loggedIn: false,
                 userName: undefined,
+                tilganger: undefined,
             };
 
         default:

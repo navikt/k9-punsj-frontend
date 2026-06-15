@@ -4,8 +4,6 @@ import helmet from 'helmet';
 import timeout from 'connect-timeout';
 import { validateToken } from '@navikt/oasis';
 
-import { decodeJwt } from 'jose';
-
 import * as headers from './src/headers.js';
 import logger from './src/log.js';
 import { loadServerEnv } from './src/load-env.js';
@@ -119,12 +117,6 @@ async function startApp() {
             }
         });
 
-        server.get('/me', (req, res) => {
-            const user = decodeJwt(req.headers.authorization);
-            res.send({
-                name: user.name,
-            });
-        });
 
         server.get('/envVariables', (req, res) => {
             res.json(envVariables());

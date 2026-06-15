@@ -5,7 +5,7 @@ const BASE_PATHS = {
 
 export const ApiPath = {
     // generelt
-    ME: `/me`,
+    USER: `${BASE_PATHS.K9_PUNSJ}/user`,
     ENV_VARIABLES: `/envVariables`,
     LOGIN: `/oauth2/login`,
 
