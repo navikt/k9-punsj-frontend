@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Button, CopyButton, Heading, Loader } from '@navikt/ds-react';
 import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
 
 import { finnFagsaker } from 'app/api/api';
 import { ApiPath } from 'app/apiConfig';
@@ -14,7 +13,6 @@ import { IOpprettJournalpostForm, IOpprettJournalpostResponse, OpprettJournalpos
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRules } from './useValidationRules';
 import { setManualJournalpostFlowSource, trackManualJournalpostFlowStarted } from 'app/utils/faroEvents';
-import { RootStateType } from 'app/state/RootState';
 
 import './opprettJournalpost.css';
 
@@ -38,10 +36,6 @@ const OpprettJournalpost: React.FC = () => {
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [fetchFagsakError, setFetchFagsakError] = useState(false);
-    const harHistoriskTilgang = useSelector(
-        (state: RootStateType) => state.authState.tilganger?.harHistoriskTilgang ?? false,
-    );
-
     const { søkerIdentitetsnummerValidator, fagsakIdValidator, tittelValidator, notatValidator } = useValidationRules();
 
     useEffect(() => {
@@ -162,7 +156,7 @@ const OpprettJournalpost: React.FC = () => {
                             </option>
 
                             {fagsaker.map(({ fagsakId, sakstype, reservert, behandlingsår, historisk }) => (
-                                <option key={fagsakId} value={fagsakId} disabled={!!historisk && !harHistoriskTilgang}>
+                                <option key={fagsakId} value={fagsakId}>
                                     <FormattedMessage
                                         id="opprettJournalpost.select.fagsakId.option"
                                         values={{

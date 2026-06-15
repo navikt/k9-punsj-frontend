@@ -80,22 +80,12 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             });
         });
 
-        it('skal disable historisk fagsak uten historisk tilgang', () => {
+        it('skal vise historisk fagsak uten å disable den midlertidig', () => {
+            cy.visit('/opprett-journalpost');
+
             cy.window().then((window) => {
                 const { worker } = window.msw;
                 worker.use(
-                    http.get(ApiPath.USER, () =>
-                        HttpResponse.json(
-                            {
-                                name: 'Test Saksbehandler',
-                                erSaksbehandler: true,
-                                erVeileder: false,
-                                harBasistilgang: true,
-                                harHistoriskTilgang: false,
-                            },
-                            { status: 200 },
-                        ),
-                    ),
                     http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () =>
                         HttpResponse.json(
                             [
@@ -114,7 +104,7 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
                 .should('not.be.disabled');
             cy.findByTestId('opprettJournalpostFagsakSelect')
                 .find('option[value="HIST001"]')
-                .should('be.disabled')
+                .should('not.be.disabled')
                 .and('contain.text', '(historisk)');
         });
 

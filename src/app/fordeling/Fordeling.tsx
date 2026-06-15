@@ -93,10 +93,6 @@ const Fordeling: React.FC = () => {
     const identState = useSelector((state: RootStateType) => state.identState);
     const fellesState = useSelector((state: RootStateType) => state.felles);
     const opprettIGosysState = useSelector((state: RootStateType) => state.opprettIGosys);
-    const harHistoriskTilgang = useSelector(
-        (state: RootStateType) => state.authState.tilganger?.harHistoriskTilgang ?? false,
-    );
-
     const omfordel = (journalpostid: string, norskIdent: string, gosysKategori: string) =>
         dispatch(omfordelAction(journalpostid, norskIdent, gosysKategori));
     const resetBarn = () => dispatch(resetBarnAction());
@@ -720,7 +716,6 @@ const Fordeling: React.FC = () => {
                                     setBehandlingsAar={setBehandlingsAar}
                                     setAnnenPart={setAnnenPart}
                                     setFosterbarn={setFosterbarn}
-                                    harHistoriskTilgang={harHistoriskTilgang}
                                 />
                             )}
 
