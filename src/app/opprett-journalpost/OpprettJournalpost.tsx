@@ -170,7 +170,6 @@ const OpprettJournalpost: React.FC = () => {
                                             sakstype: finnVisningsnavnForSakstype(sakstype),
                                             behandlingsår: behandlingsår ? ` ${behandlingsår}` : '',
                                             reservert: reservert ? '(reservert)' : '',
-                                            historisk: historisk ? ' (historisk)' : '',
                                         }}
                                     />
                                 </option>
