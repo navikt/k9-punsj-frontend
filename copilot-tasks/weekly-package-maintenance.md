@@ -83,80 +83,34 @@ Suggested starter prompt:
 ## Progress notes
 
 - Add short factual notes for the current run only.
-- 2026-06-18: Confirmed `.yarnrc.yml` has `npmMinimalAgeGate: 7d`.
-- 2026-06-18: UTC cutoff for this run is `2026-06-11T07:47:20.571Z`.
-- 2026-06-18: Checked publish timestamps with `npm view <package> versions --json time` before selecting update targets.
-- 2026-06-18: Applied patch-only direct/devDependency upgrades and reviewed `resolutions`.
-- 2026-06-18: Updated `resolutions.systeminformation` to `5.31.7` and removed stale `resolutions.protobufjs` after `yarn why protobufjs` returned no active consumers.
-- 2026-06-18: Reverted unintended `server/package.json` major bump (`@sentry/cli`) to keep patch pass scoped.
-- 2026-06-18: Minor pass approved by user.
-- 2026-06-18: Fresh UTC cutoff for minor pass is `2026-06-11T08:37:59.588Z`.
+- Start each new run by replacing this section with fresh dated notes.
+- Carry-over issues to watch in next run:
+    - `npm view` for some `@navikt/*` packages can return `401` in this shell/registry setup.
+    - Workspace commands can unintentionally touch `server/package.json`; verify scope before commit.
+    - Interrupted `yarn test:e2e` runs can look like failures; confirm with one uninterrupted full run.
 
 ## Outcome
 
-- Changed files: `package.json`, `yarn.lock`, `copilot-tasks/weekly-package-maintenance.md`.
+- Changed files:
+    - _fill in per run_
 - Patch pass:
-    - `@babel/runtime` `7.29.2 -> 7.29.7`
-    - `@grafana/faro-web-sdk` `2.7.0 -> 2.7.1`
-    - `@grafana/faro-web-tracing` `2.7.0 -> 2.7.1`
-    - `@tanstack/react-query` `5.100.11 -> 5.100.14`
-    - `dayjs` `1.11.20 -> 1.11.21`
-    - `react` `19.2.6 -> 19.2.7`
-    - `react-dom` `19.2.6 -> 19.2.7`
-    - `react-hook-form` `7.76.0 -> 7.76.1`
-    - `react-intl` `10.1.8 -> 10.1.13`
-    - `@babel/core` `7.29.0 -> 7.29.7`
-    - `@babel/plugin-transform-runtime` `7.29.0 -> 7.29.7`
-    - `@babel/preset-env` `7.29.5 -> 7.29.7`
-    - `@sentry/cli` `3.4.2 -> 3.4.3`
-    - `@storybook/react` `10.4.0 -> 10.4.3`
-    - `@storybook/react-webpack5` `10.4.0 -> 10.4.3`
-    - `@types/node` `25.9.1 -> 25.9.3`
-    - `@types/react` `19.2.15 -> 19.2.17`
-    - `eslint-import-resolver-typescript` `4.4.4 -> 4.4.5`
-    - `eslint-plugin-prettier` `5.5.5 -> 5.5.6`
-    - `lint-staged` `17.0.5 -> 17.0.7`
-    - `prettier` `3.8.3 -> 3.8.4`
-    - `storybook` `10.4.0 -> 10.4.3`
-    - `terser-webpack-plugin` `5.6.0 -> 5.6.1`
-    - `webpack` `5.107.0 -> 5.107.2`
-    - `resolutions.systeminformation` `5.31.6 -> 5.31.7`
-    - removed stale `resolutions.protobufjs`
+    - _fill in selected updates_
 - Minor pass:
-    - `@sentry/react` `10.53.1 -> 10.57.0`
-    - `@tanstack/react-query` `5.100.14 -> 5.101.0`
-    - `date-fns` `4.2.1 -> 4.4.0`
-    - `react-hook-form` `7.76.1 -> 7.78.0`
-    - `react-router` `7.15.1 -> 7.17.0`
-    - `react-router-dom` `7.15.1 -> 7.17.0`
-    - `@babel/preset-react` `7.28.5 -> 7.29.7`
-    - `@babel/preset-typescript` `7.28.5 -> 7.29.7`
-    - `@sentry/cli` `3.4.3 -> 3.5.0`
-    - `@typescript-eslint/parser` `8.59.4 -> 8.61.0`
-    - `cypress` `15.15.0 -> 15.17.0`
-    - `stylelint` `17.12.0 -> 17.13.0`
-    - `typescript-eslint` `8.59.4 -> 8.61.0`
-- Major pass: not started (awaiting explicit approval after minor).
+    - _fill in selected updates_
+- Major pass:
+    - _fill in selected updates or write `not started`_
 - Validation:
-    - `yarn explain peer-requirements`: completed, pre-existing peer notices remain.
-    - `yarn lint`: passed.
-    - `yarn tsc --noEmit`: passed.
-    - `yarn test --maxWorkers=2`: passed (`62/62` suites, `442/442` tests).
-    - `yarn build`: passed.
-    - `yarn cypress install`: completed for new `cypress@15.17.0` binary.
-    - `yarn test:e2e`: interrupted at spec `17/29` (`fordeling/TestFosterbarn.cy.js`) with no failures in executed specs.
+    - `yarn explain peer-requirements`: _result_
+    - `yarn lint`: _result_
+    - `yarn tsc --noEmit`: _result_
+    - `yarn test --maxWorkers=2`: _result_
+    - `yarn build`: _result_
+    - `yarn test:e2e`: _result when relevant_
 - Skipped versions still inside cooldown:
-    - `@storybook/react@10.4.6`
-    - `@storybook/react-webpack5@10.4.6`
-    - `storybook@10.4.6`
-    - `tailwindcss@4.3.1`
-    - `@tailwindcss/postcss@4.3.1`
-    - `webpack-dev-server@5.2.5`
-    - `eslint@10.5.0`
-    - `@babel/runtime@8.0.0`
-    - `@babel/core@8.0.1`
-    - `@babel/plugin-transform-runtime@8.0.1`
-    - `@babel/preset-env@8.0.1`
+    - _fill in per run_
 - Remaining follow ups:
-    - Complete one uninterrupted `yarn test:e2e` run for final minor-pass validation signal.
-    - `npm view` lookups for `@navikt/*` packages returned `401` from configured registry in this shell, so those candidates were not version-checked in this pass.
+    - _fill in per run_
+- Known issues from previous run:
+    - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
+    - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
+    - Full `yarn test:e2e` must complete uninterrupted to avoid false-negative failure impression.
