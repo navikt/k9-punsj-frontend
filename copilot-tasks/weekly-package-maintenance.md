@@ -71,24 +71,75 @@ Suggested starter prompt:
 
 ## Plan
 
-- Confirm `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
+- Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
 - Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- Build the direct dependency and devDependency candidate list for the current pass.
-- Apply patch updates first, then minor updates only after explicit approval.
-- Run the relevant validation commands for the chosen packages.
-- Record the selected versions, skipped versions, and validation results.
-- Stop before majors and ask whether to continue.
+- Build the direct dependency and devDependency candidate list from `package.json` and check publish timestamps before selecting versions.
+- Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
+- Run full validation for patch pass and document results.
+- Stop and ask user whether to commit patch pass.
+- Continue to minor pass only after explicit approval, then validate and stop before majors.
+- Attempt majors only if explicitly approved after patch and minor are green.
 
 ## Progress notes
 
 - Add short factual notes for the current run only.
+- 2026-06-18: Confirmed `.yarnrc.yml` has `npmMinimalAgeGate: 7d`.
+- 2026-06-18: UTC cutoff for this run is `2026-06-11T07:47:20.571Z`.
+- 2026-06-18: Checked publish timestamps with `npm view <package> versions --json time` before selecting update targets.
+- 2026-06-18: Applied patch-only direct/devDependency upgrades and reviewed `resolutions`.
+- 2026-06-18: Updated `resolutions.systeminformation` to `5.31.7` and removed stale `resolutions.protobufjs` after `yarn why protobufjs` returned no active consumers.
+- 2026-06-18: Reverted unintended `server/package.json` major bump (`@sentry/cli`) to keep patch pass scoped.
 
 ## Outcome
 
-- Changed files:
+- Changed files: `package.json`, `yarn.lock`, `copilot-tasks/weekly-package-maintenance.md`.
 - Patch pass:
-- Minor pass:
-- Major pass:
+    - `@babel/runtime` `7.29.2 -> 7.29.7`
+    - `@grafana/faro-web-sdk` `2.7.0 -> 2.7.1`
+    - `@grafana/faro-web-tracing` `2.7.0 -> 2.7.1`
+    - `@tanstack/react-query` `5.100.11 -> 5.100.14`
+    - `dayjs` `1.11.20 -> 1.11.21`
+    - `react` `19.2.6 -> 19.2.7`
+    - `react-dom` `19.2.6 -> 19.2.7`
+    - `react-hook-form` `7.76.0 -> 7.76.1`
+    - `react-intl` `10.1.8 -> 10.1.13`
+    - `@babel/core` `7.29.0 -> 7.29.7`
+    - `@babel/plugin-transform-runtime` `7.29.0 -> 7.29.7`
+    - `@babel/preset-env` `7.29.5 -> 7.29.7`
+    - `@sentry/cli` `3.4.2 -> 3.4.3`
+    - `@storybook/react` `10.4.0 -> 10.4.3`
+    - `@storybook/react-webpack5` `10.4.0 -> 10.4.3`
+    - `@types/node` `25.9.1 -> 25.9.3`
+    - `@types/react` `19.2.15 -> 19.2.17`
+    - `eslint-import-resolver-typescript` `4.4.4 -> 4.4.5`
+    - `eslint-plugin-prettier` `5.5.5 -> 5.5.6`
+    - `lint-staged` `17.0.5 -> 17.0.7`
+    - `prettier` `3.8.3 -> 3.8.4`
+    - `storybook` `10.4.0 -> 10.4.3`
+    - `terser-webpack-plugin` `5.6.0 -> 5.6.1`
+    - `webpack` `5.107.0 -> 5.107.2`
+    - `resolutions.systeminformation` `5.31.6 -> 5.31.7`
+    - removed stale `resolutions.protobufjs`
+- Minor pass: not started (awaiting explicit approval after patch pass).
+- Major pass: not started (awaiting explicit approval after patch and minor).
 - Validation:
+    - `yarn explain peer-requirements`: completed, pre-existing peer notices remain.
+    - `yarn lint`: passed.
+    - `yarn tsc --noEmit`: passed.
+    - `yarn test --maxWorkers=2`: passed (`62/62` suites, `442/442` tests).
+    - `yarn build`: passed.
+    - `yarn test:e2e`: passed (all e2e specs completed).
 - Skipped versions still inside cooldown:
+    - `@sentry/react@10.58.0`
+    - `react-router@8.0.0`
+    - `react-router-dom@7.18.0`
+    - `tailwindcss@4.3.1`
+    - `@tailwindcss/postcss@4.3.1`
+    - `@typescript-eslint/parser@8.61.1`
+    - `typescript-eslint@8.61.1`
+    - `webpack-dev-server@5.2.5`
+    - `eslint@10.5.0`
+    - `@babel/preset-react@8.0.1`
+    - `@babel/preset-typescript@8.0.1`
 - Remaining follow ups:
+    - `npm view` lookups for `@navikt/*` packages returned `401` from configured registry in this shell, so those candidates were not version-checked in this pass.
