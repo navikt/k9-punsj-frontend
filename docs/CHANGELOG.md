@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+## Unreleased
+
+### Weekly package maintenance: patch + minor + sentry-cli alignment (2026-06-18)
+
+- Løftet et større sett direkte avhengigheter i patch- og minor-pass innenfor repoets 7 dagers cooldown-regel, inkludert blant annet `react`, `react-dom`, `react-router`, `react-router-dom`, `@sentry/react`, `@sentry/cli`, `cypress`, `storybook` og `webpack`.
+- Harmoniserte `@sentry/cli` i `server/package.json` til samme versjon som root-workspace (`3.5.0`) for konsistent deploy- og release-oppsett.
+
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 
 - La inn targeted `resolutions` for `tmp` til `0.2.7`, fordi lockfile fortsatt holdt `0.2.5` mens et nytt path traversal-problem i `prefix` og `postfix` ble publisert samme dag. Dette er en bevisst security exception til repoets normale 7 dagers cooldown.

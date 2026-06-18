@@ -71,24 +71,46 @@ Suggested starter prompt:
 
 ## Plan
 
-- Confirm `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
+- Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
 - Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- Build the direct dependency and devDependency candidate list for the current pass.
-- Apply patch updates first, then minor updates only after explicit approval.
-- Run the relevant validation commands for the chosen packages.
-- Record the selected versions, skipped versions, and validation results.
-- Stop before majors and ask whether to continue.
+- Build the direct dependency and devDependency candidate list from `package.json` and check publish timestamps before selecting versions.
+- Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
+- Run full validation for patch pass and document results.
+- Stop and ask user whether to commit patch pass.
+- Continue to minor pass only after explicit approval, then validate and stop before majors.
+- Attempt majors only if explicitly approved after patch and minor are green.
 
 ## Progress notes
 
 - Add short factual notes for the current run only.
+- Start each new run by replacing this section with fresh dated notes.
+- Carry-over issues to watch in next run:
+    - `npm view` for some `@navikt/*` packages can return `401` in this shell/registry setup.
+    - Workspace commands can unintentionally touch `server/package.json`; verify scope before commit.
+    - Interrupted `yarn test:e2e` runs can look like failures; confirm with one uninterrupted full run.
 
 ## Outcome
 
 - Changed files:
+    - _fill in per run_
 - Patch pass:
+    - _fill in selected updates_
 - Minor pass:
+    - _fill in selected updates_
 - Major pass:
+    - _fill in selected updates or write `not started`_
 - Validation:
+    - `yarn explain peer-requirements`: _result_
+    - `yarn lint`: _result_
+    - `yarn tsc --noEmit`: _result_
+    - `yarn test --maxWorkers=2`: _result_
+    - `yarn build`: _result_
+    - `yarn test:e2e`: _result when relevant_
 - Skipped versions still inside cooldown:
+    - _fill in per run_
 - Remaining follow ups:
+    - _fill in per run_
+- Known issues from previous run:
+    - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
+    - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
+    - Full `yarn test:e2e` must complete uninterrupted to avoid false-negative failure impression.
