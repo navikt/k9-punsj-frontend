@@ -89,6 +89,8 @@ Suggested starter prompt:
 - 2026-06-18: Applied patch-only direct/devDependency upgrades and reviewed `resolutions`.
 - 2026-06-18: Updated `resolutions.systeminformation` to `5.31.7` and removed stale `resolutions.protobufjs` after `yarn why protobufjs` returned no active consumers.
 - 2026-06-18: Reverted unintended `server/package.json` major bump (`@sentry/cli`) to keep patch pass scoped.
+- 2026-06-18: Minor pass approved by user.
+- 2026-06-18: Fresh UTC cutoff for minor pass is `2026-06-11T08:37:59.588Z`.
 
 ## Outcome
 
@@ -120,26 +122,41 @@ Suggested starter prompt:
     - `webpack` `5.107.0 -> 5.107.2`
     - `resolutions.systeminformation` `5.31.6 -> 5.31.7`
     - removed stale `resolutions.protobufjs`
-- Minor pass: not started (awaiting explicit approval after patch pass).
-- Major pass: not started (awaiting explicit approval after patch and minor).
+- Minor pass:
+    - `@sentry/react` `10.53.1 -> 10.57.0`
+    - `@tanstack/react-query` `5.100.14 -> 5.101.0`
+    - `date-fns` `4.2.1 -> 4.4.0`
+    - `react-hook-form` `7.76.1 -> 7.78.0`
+    - `react-router` `7.15.1 -> 7.17.0`
+    - `react-router-dom` `7.15.1 -> 7.17.0`
+    - `@babel/preset-react` `7.28.5 -> 7.29.7`
+    - `@babel/preset-typescript` `7.28.5 -> 7.29.7`
+    - `@sentry/cli` `3.4.3 -> 3.5.0`
+    - `@typescript-eslint/parser` `8.59.4 -> 8.61.0`
+    - `cypress` `15.15.0 -> 15.17.0`
+    - `stylelint` `17.12.0 -> 17.13.0`
+    - `typescript-eslint` `8.59.4 -> 8.61.0`
+- Major pass: not started (awaiting explicit approval after minor).
 - Validation:
     - `yarn explain peer-requirements`: completed, pre-existing peer notices remain.
     - `yarn lint`: passed.
     - `yarn tsc --noEmit`: passed.
     - `yarn test --maxWorkers=2`: passed (`62/62` suites, `442/442` tests).
     - `yarn build`: passed.
-    - `yarn test:e2e`: passed (all e2e specs completed).
+    - `yarn cypress install`: completed for new `cypress@15.17.0` binary.
+    - `yarn test:e2e`: interrupted at spec `17/29` (`fordeling/TestFosterbarn.cy.js`) with no failures in executed specs.
 - Skipped versions still inside cooldown:
-    - `@sentry/react@10.58.0`
-    - `react-router@8.0.0`
-    - `react-router-dom@7.18.0`
+    - `@storybook/react@10.4.6`
+    - `@storybook/react-webpack5@10.4.6`
+    - `storybook@10.4.6`
     - `tailwindcss@4.3.1`
     - `@tailwindcss/postcss@4.3.1`
-    - `@typescript-eslint/parser@8.61.1`
-    - `typescript-eslint@8.61.1`
     - `webpack-dev-server@5.2.5`
     - `eslint@10.5.0`
-    - `@babel/preset-react@8.0.1`
-    - `@babel/preset-typescript@8.0.1`
+    - `@babel/runtime@8.0.0`
+    - `@babel/core@8.0.1`
+    - `@babel/plugin-transform-runtime@8.0.1`
+    - `@babel/preset-env@8.0.1`
 - Remaining follow ups:
+    - Complete one uninterrupted `yarn test:e2e` run for final minor-pass validation signal.
     - `npm view` lookups for `@navikt/*` packages returned `401` from configured registry in this shell, so those candidates were not version-checked in this pass.
