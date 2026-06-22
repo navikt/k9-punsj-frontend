@@ -101,6 +101,7 @@ describe('FormPeriodInput', () => {
                             fomDataTestId="rhf-period-fom"
                             tomDataTestId="rhf-period-tom"
                         />
+                        <div data-testid="updated-period-value">{JSON.stringify(methods.watch('periode'))}</div>
                         <button
                             type="button"
                             onClick={() =>
@@ -122,6 +123,7 @@ describe('FormPeriodInput', () => {
 
         await user.click(screen.getByRole('button', { name: 'Update period' }));
 
+        expect(screen.getByTestId('updated-period-value').textContent).toBe('{"fom":"2020-02-01","tom":"2020-02-06"}');
         expect(screen.getByTestId('rhf-period-fom')).toHaveValue('01.02.2020');
         expect(screen.getByTestId('rhf-period-tom')).toHaveValue('06.02.2020');
     });

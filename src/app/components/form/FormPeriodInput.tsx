@@ -1,6 +1,6 @@
 import React from 'react';
 import { DatePicker, ErrorMessage } from '@navikt/ds-react';
-import { FieldValues, Path, useController, useFormContext } from 'react-hook-form';
+import { FieldValues, Path, useController, useFormContext, useWatch } from 'react-hook-form';
 
 import { IPeriode } from 'app/models/types/Periode';
 import { isISODateString, ISODateStringToUTCDate } from 'app/utils/date/dateFormat';
@@ -56,6 +56,7 @@ export function FormPeriodInput<T extends FieldValues>({
 }: FormPeriodInputProps<T>) {
     const {
         control,
+        setValue,
         formState: { submitCount },
     } = useFormContext<T>();
     const { field: periodField, fieldState: periodFieldState } = useController({
@@ -63,7 +64,11 @@ export function FormPeriodInput<T extends FieldValues>({
         control,
         rules: validate,
     });
-    const periodValue = normalizePeriodValue(periodField.value);
+    const watchedPeriodValue = useWatch({
+        control,
+        name,
+    });
+    const periodValue = normalizePeriodValue(watchedPeriodValue);
     const fomName = `${name}.fom` as Path<T>;
     const tomName = `${name}.tom` as Path<T>;
     const fomToDate = isISODateString(periodValue.tom) ? ISODateStringToUTCDate(periodValue.tom) : toDate;
@@ -86,6 +91,28 @@ export function FormPeriodInput<T extends FieldValues>({
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
     const fromErrorMessage = typeof fromField.error === 'string' ? fromField.error : undefined;
     const toErrorMessage = typeof toField.error === 'string' ? toField.error : undefined;
+    const previousPeriodKeyRef = React.useRef(`${periodValue.fom}::${periodValue.tom}`);
+
+    React.useEffect(() => {
+        const nextPeriodKey = `${periodValue.fom}::${periodValue.tom}`;
+
+        if (previousPeriodKeyRef.current === nextPeriodKey) {
+            return;
+        }
+
+        previousPeriodKeyRef.current = nextPeriodKey;
+
+        setValue(fomName, periodValue.fom as any, {
+            shouldDirty: false,
+            shouldTouch: false,
+            shouldValidate: false,
+        });
+        setValue(tomName, periodValue.tom as any, {
+            shouldDirty: false,
+            shouldTouch: false,
+            shouldValidate: false,
+        });
+    }, [fomName, periodValue.fom, periodValue.tom, setValue, tomName]);
 
     return (
         <div className={rootClassName}>

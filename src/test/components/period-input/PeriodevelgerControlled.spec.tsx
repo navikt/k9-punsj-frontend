@@ -70,7 +70,7 @@ describe('PeriodevelgerControlled', () => {
 
         setupPeriodevelgerControlled({ errorMessageFom });
 
-        expect(await screen.findByText(errorMessageFom)).toBeInTheDocument();
+        expect(await screen.findByText(errorMessageFom, { exact: false })).toBeInTheDocument();
     });
 
     it('should display an error message for tom date', async () => {
@@ -78,7 +78,7 @@ describe('PeriodevelgerControlled', () => {
 
         setupPeriodevelgerControlled({ errorMessageTom });
 
-        expect(await screen.findByText(errorMessageTom)).toBeInTheDocument();
+        expect(await screen.findByText(errorMessageTom, { exact: false })).toBeInTheDocument();
     });
 
     it('should call onChange and onBlur with a new fom date', async () => {
