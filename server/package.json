@@ -10,15 +10,15 @@
     },
     "dependencies": {
         "@navikt/oasis": "4.1.4",
-        "@sentry/cli": "^2.0.0",
+        "@sentry/cli": "3.5.0",
         "connect-timeout": "1.9.1",
         "cors": "2.8.6",
         "dotenv": "17.4.2",
         "express": "5.2.1",
         "express-http-proxy": "2.1.2",
-        "helmet": "8.1.0",
+        "helmet": "8.2.0",
         "jose": "6.2.3",
-        "morgan": "1.10.1",
+        "morgan": "1.11.0",
         "winston": "3.19.0"
     }
 }

@@ -2,6 +2,22 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Dependency security follow up with safe lockfile fixes (2026-06-18)
+
+- Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.
+- Lot `form-data` og `webpack-dev-server` stå urørt i denne runden, fordi fix-versjonene fortsatt ligger innenfor repoets 7 dagers cooldown og derfor krever en eksplisitt security exception hvis de skal tas før vinduet passerer.
+
+### Package updates follow up for missed cooldown eligible bumps (2026-06-18)
+
+- Løftet den åpne Aksel-gruppen fra `8.10.6` til `8.12.1` for `@navikt/aksel`, `@navikt/aksel-icons`, `@navikt/ds-css`, `@navikt/ds-react` og `@navikt/ds-tailwind`, fordi disse versjonene allerede var utenfor repoets 7 dagers cooldown.
+- Tok samtidig opp den åpne patch- og minor-gruppen som var blitt stående igjen, med `storybook`, `@storybook/react`, `@storybook/react-webpack5`, `helmet` og `morgan`.
+- Verifiserte follow up-passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2` og grønn `yarn build`. `yarn test:e2e` ble bevisst ikke kjørt i denne runden.
+
+### Weekly package maintenance: patch + minor + sentry-cli alignment (2026-06-18)
+
+- Løftet et større sett direkte avhengigheter i patch- og minor-pass innenfor repoets 7 dagers cooldown-regel, inkludert blant annet `react`, `react-dom`, `react-router`, `react-router-dom`, `@sentry/react`, `@sentry/cli`, `cypress`, `storybook` og `webpack`.
+- Harmoniserte `@sentry/cli` i `server/package.json` til samme versjon som root-workspace (`3.5.0`) for konsistent deploy- og release-oppsett.
+
 ### Date input and punch form cleanup batch (2026-06-06)
 
 - Samlet og ryddet date input-laget, migrerte app-usages bort fra `NewDateInput` og `DatoInputFormikNew`, fjernet de gamle wrapperne, og etablerte `FormDateInput` og `FormPeriodInput` som RHF-entrypoints for dato og periode.
