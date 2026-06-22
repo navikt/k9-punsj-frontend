@@ -24,10 +24,22 @@ jest.mock('@navikt/ds-react', () => {
                     {
                         onChange,
                         onBlur,
+                        hideLabel: _hideLabel,
+                        label: _label,
+                        description: _description,
+                        error: _error,
+                        size: _size,
+                        setAnchorRef: _setAnchorRef,
                         ...props
                     }: {
                         onChange?: React.ChangeEventHandler<HTMLInputElement>;
                         onBlur?: React.FocusEventHandler<HTMLInputElement>;
+                        hideLabel?: boolean;
+                        label?: React.ReactNode;
+                        description?: React.ReactNode;
+                        error?: React.ReactNode;
+                        size?: 'small' | 'medium';
+                        setAnchorRef?: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
                         'data-testid'?: string;
                     },
                     ref: React.Ref<HTMLInputElement>,
