@@ -4,6 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Rollback av buildkjeden etter tom landliste i PSB (2026-06-23)
+
+- Rullet tilbake `@babel/runtime`, sentrale `@babel/*` buildpakker, `webpack` og `terser-webpack-plugin` til de forrige versjonene etter at `PSB` fikk tom landliste i `utenlandsopphold` i bygd runtime.
+- Feilen slo ut ved at `i18n-iso-countries` fortsatt lastet locale-data, men mistet codedata i production bundle, slik at landfeltet bare viste `Velg land`.
+- Verifiserte rollback-sporet med grønn `yarn build`, og deploy-test viste at landlisten kom tilbake.
+
 ### Dependency security follow up with safe lockfile fixes (2026-06-18)
 
 - Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.
