@@ -2,7 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-## Unreleased
+### Felles k9sak perioder endepunkt for PSB, OLP, PLS og OMP_UT (2026-06-23)
+
+- Flyttet periodoppslagene i `PSB`, `OLP`, `PLS` og `OMP_UT` fra søknadstype-spesifikke `k9sak/info`-endepunkter til ett felles frontend path, `POST /api/k9-punsj/saker/perioder?saksnummer=...`.
+- Frontend bruker nå samme proxy-path for alle disse flytene, mens backend mottar kallene på `POST /api/saker/perioder?saksnummer=...`.
+- Fjernet de gamle route-konstantene og den utgåtte request-bodyen for periodoppslag, siden kallene nå bruker `saksnummer` som query-parameter og `X-Nav-NorskIdent` som header.
+- Oppdaterte testmocks og OMP_UT-korrigeringstesten slik at de følger det nye felles perioder-endepunktet.
 
 ### Rollback av buildkjeden etter tom landliste i PSB (2026-06-23)
 
