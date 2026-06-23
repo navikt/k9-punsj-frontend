@@ -9,9 +9,18 @@ export interface ICountry {
 }
 countries.registerLocale(nb);
 
+const alpha2CodesMap = countries.getAlpha2Codes();
+const alpha3CodesMap = countries.getAlpha3Codes();
+const nbCountryEntries = Object.entries(nb.countries);
+const nbCountrySamples = nbCountryEntries.slice(0, 5).map(([alpha2, name]) => ({
+    alpha2,
+    alpha3: countries.alpha2ToAlpha3(alpha2),
+    name,
+}));
+
 //  Kosovo = XXK i kodeverk
 const alpha3Codes = () =>
-    Object.keys(countries.getAlpha3Codes()).map((alpha3) => {
+    Object.keys(alpha3CodesMap).map((alpha3) => {
         const isKosovo = alpha3 === 'XKK'; // Kosovo var tidligere XKX i i18n-iso-countries, de endret det til XKK
         return isKosovo ? 'XXK' : alpha3;
     });
@@ -39,7 +48,21 @@ const countryList = alpha3Codes()
 // eslint-disable-next-line no-console
 console.log('[country-debug] countryUtils:init', {
     locale: getLocaleFromSessionStorage(),
-    alpha3CodeCount: Object.keys(countries.getAlpha3Codes()).length,
+    alpha2CodeCount: Object.keys(alpha2CodesMap).length,
+    alpha3CodeCount: Object.keys(alpha3CodesMap).length,
+    nbLocale: nb.locale,
+    nbCountryCount: nbCountryEntries.length,
+    nbCountrySamples,
+    directAlpha2ToAlpha3: {
+        NO: countries.alpha2ToAlpha3('NO'),
+        SE: countries.alpha2ToAlpha3('SE'),
+        XK: countries.alpha2ToAlpha3('XK'),
+    },
+    directGetName: {
+        NOR: countries.getName('NOR', getLocaleFromSessionStorage()),
+        SWE: countries.getName('SWE', getLocaleFromSessionStorage()),
+        XKK: countries.getName('XKK', getLocaleFromSessionStorage()),
+    },
     countryListCount: countryList.length,
     sampleCountries: countryList.slice(0, 5),
 });
@@ -49,7 +72,20 @@ export const getCountryList = () => {
         // eslint-disable-next-line no-console
         console.log('[country-debug] getCountryList returned empty list', {
             locale: getLocaleFromSessionStorage(),
-            alpha3CodeCount: Object.keys(countries.getAlpha3Codes()).length,
+            alpha2CodeCount: Object.keys(alpha2CodesMap).length,
+            alpha3CodeCount: Object.keys(alpha3CodesMap).length,
+            nbCountryCount: nbCountryEntries.length,
+            nbCountrySamples,
+            directAlpha2ToAlpha3: {
+                NO: countries.alpha2ToAlpha3('NO'),
+                SE: countries.alpha2ToAlpha3('SE'),
+                XK: countries.alpha2ToAlpha3('XK'),
+            },
+            directGetName: {
+                NOR: countries.getName('NOR', getLocaleFromSessionStorage()),
+                SWE: countries.getName('SWE', getLocaleFromSessionStorage()),
+                XKK: countries.getName('XKK', getLocaleFromSessionStorage()),
+            },
         });
     }
     return [...countryList];
