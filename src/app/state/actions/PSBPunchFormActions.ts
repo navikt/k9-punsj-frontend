@@ -15,7 +15,6 @@ import { IPSBSoknad } from '../../models/types/PSBSoknad';
 import { IPSBSoknadKvittering } from '../../models/types/PSBSoknadKvittering';
 import { IPSBSoknadUt } from '../../models/types/PSBSoknadUt';
 import { Periode } from '../../models/types/Periode';
-import { IHentPerioder } from '../../models/types/RequestBodies';
 import { ISendSoknad } from '../../models/types/SendSoknad';
 import { IResetStateAction } from './GlobalActions';
 
@@ -417,19 +416,14 @@ export function validerSoknad(soknad: IPSBSoknadUt, erMellomlagring?: boolean) {
     };
 }
 
-export function hentEksisterendePerioderForSaksnummer(brukerIdent: string, barnIdent: string, saksnummer: string) {
+export function hentEksisterendePerioderForSaksnummer(brukerIdent: string, _barnIdent: string, saksnummer: string) {
     return (dispatch: any) => {
-        const requestBody: IHentPerioder = {
-            brukerIdent,
-            barnIdent,
-        };
-
         dispatch(hentPerioderRequestAction());
         post(
-            ApiPath.PSB_K9SAK_PERIODER + '?saksnummer=' + saksnummer,
+            ApiPath.SAKER_PERIODER + '?saksnummer=' + saksnummer,
             {},
             { 'X-Nav-NorskIdent': brukerIdent },
-            requestBody,
+            undefined,
             (response, perioder) => {
                 if (response.ok) {
                     return dispatch(hentPerioderSuccessAction(perioder));

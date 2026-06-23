@@ -3,9 +3,7 @@ import omsorgspengerutbetalingHandlers from 'mocks/mockHandlersOMPUT';
 
 describe('Omsorgspengeutbetaling - ny søknad', () => {
     beforeEach(() => {
-        cy.visit(
-            'http://localhost:8080/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
-        );
+        cy.visit('http://localhost:8080/journalpost/200');
         cy.window().then((window) => {
             const { worker } = window.msw;
             worker.use(omsorgspengerutbetalingHandlers.soknad);
@@ -13,6 +11,12 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
             worker.use(omsorgspengerutbetalingHandlers.oppdater);
             worker.use(omsorgspengerutbetalingHandlers.valider);
             worker.use(omsorgspengerutbetalingHandlers.sendInn);
+            window.history.pushState(
+                {},
+                '',
+                '/journalpost/200/omsorgspenger-utbetaling/skjema/bc12baac-0f0c-427e-a059-b9fbf9a3adff',
+            );
+            window.dispatchEvent(new PopStateEvent('popstate'));
         });
     });
     it('Kan sende inn korrigering for arbeidstaker', () => {

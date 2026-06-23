@@ -55,11 +55,10 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         isError: isErrorPerioderK9,
         error: hentEksisterendePerioderError,
     } = useMutation({
-        mutationFn: ({ ident, barnIdent, saksnummer }: { ident: string; barnIdent: string; saksnummer: string }) =>
-            hentEksisterendePerioderForSaksnummer(ident, barnIdent, saksnummer),
+        mutationFn: ({ ident, saksnummer }: { ident: string; saksnummer: string }) =>
+            hentEksisterendePerioderForSaksnummer(ident, saksnummer),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
-    const isSettledPerioderK9 = isSuccessPerioderK9 || isErrorPerioderK9;
 
     if (!id) {
         throw Error('Mangler id');
@@ -73,16 +72,16 @@ const OLPPunchFormContainer = (props: IPunchOLPFormProps) => {
         queryFn: () => hentSoeknad(identState.søkerId, id),
     });
     const k9saksnummer = resolveK9saksnummer(fordelingState, fellesState.journalpost, soeknadRespons);
+    const isSettledPerioderK9 = !k9saksnummer || isSuccessPerioderK9 || isErrorPerioderK9;
 
     useEffect(() => {
-        if (soeknadRespons) {
+        if (soeknadRespons && k9saksnummer) {
             hentPerioderK9({
                 ident: soeknadRespons.soekerId,
-                barnIdent: soeknadRespons.barn?.norskIdent || identState.pleietrengendeId,
-                saksnummer: k9saksnummer || '',
+                saksnummer: k9saksnummer,
             });
         }
-    }, [soeknadRespons, hentPerioderK9, identState.pleietrengendeId, k9saksnummer]);
+    }, [soeknadRespons, hentPerioderK9, k9saksnummer]);
 
     useEffect(() => {
         trackOlpStartedFromJournalpost(props.journalpostid);
