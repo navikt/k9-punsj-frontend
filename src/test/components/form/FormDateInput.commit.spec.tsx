@@ -21,17 +21,7 @@ jest.mock('@navikt/ds-react', () => {
         {
             Input: reactModule.forwardRef(
                 (
-                    {
-                        onChange,
-                        onBlur,
-                        hideLabel: _hideLabel,
-                        label: _label,
-                        description: _description,
-                        error: _error,
-                        size: _size,
-                        setAnchorRef: _setAnchorRef,
-                        ...props
-                    }: {
+                    props: {
                         onChange?: React.ChangeEventHandler<HTMLInputElement>;
                         onBlur?: React.FocusEventHandler<HTMLInputElement>;
                         hideLabel?: boolean;
@@ -43,7 +33,19 @@ jest.mock('@navikt/ds-react', () => {
                         'data-testid'?: string;
                     },
                     ref: React.Ref<HTMLInputElement>,
-                ) => <input ref={ref} onChange={onChange} onBlur={onBlur} {...props} />,
+                ) => {
+                    const { onChange, onBlur } = props;
+                    const inputProps = { ...props };
+
+                    delete inputProps.hideLabel;
+                    delete inputProps.label;
+                    delete inputProps.description;
+                    delete inputProps.error;
+                    delete inputProps.size;
+                    delete inputProps.setAnchorRef;
+
+                    return <input ref={ref} onChange={onChange} onBlur={onBlur} {...inputProps} />;
+                },
             ),
         },
     );
