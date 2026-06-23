@@ -76,7 +76,7 @@
         "@babel/preset-typescript": "7.28.5",
         "@eslint/js": "10.0.1",
         "@jest/globals": "30.4.1",
-        "@navikt/aksel": "8.12.1",
+        "@navikt/aksel": "8.13.0",
         "@navikt/ds-tailwind": "8.12.1",
         "@pmmmwh/react-refresh-webpack-plugin": "0.6.2",
         "@sentry/cli": "3.5.0",
