@@ -4,6 +4,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ## Unreleased
 
+### Midlertidig rollback av buildkjeden for landlistedebug (2026-06-23)
+
+- Rullet tilbake `@babel/runtime`, sentrale `@babel/*` buildpakker, `webpack` og `terser-webpack-plugin` til versjonene fra `vis-årstall-for-fagsak-i-klassifisering` for å isolere regresjonen der `i18n-iso-countries` mister codedata i production bundle.
+- Verifiserte sporet med grønn `yarn build` på egen spike-branch for videre deploy-test i `dev`.
+
 ### Dependency security follow up with safe lockfile fixes (2026-06-18)
 
 - Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.
