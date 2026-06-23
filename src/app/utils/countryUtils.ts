@@ -34,7 +34,26 @@ const countryList = alpha3Codes()
         return a.name > b.name ? 1 : -1;
     });
 
-export const getCountryList = () => [...countryList];
+// Temporary runtime diagnostics for empty country lists in dev/prod bundles.
+// Remove after we confirm whether getAlpha3Codes() is empty at runtime.
+// eslint-disable-next-line no-console
+console.log('[country-debug] countryUtils:init', {
+    locale: getLocaleFromSessionStorage(),
+    alpha3CodeCount: Object.keys(countries.getAlpha3Codes()).length,
+    countryListCount: countryList.length,
+    sampleCountries: countryList.slice(0, 5),
+});
+
+export const getCountryList = () => {
+    if (countryList.length === 0) {
+        // eslint-disable-next-line no-console
+        console.log('[country-debug] getCountryList returned empty list', {
+            locale: getLocaleFromSessionStorage(),
+            alpha3CodeCount: Object.keys(countries.getAlpha3Codes()).length,
+        });
+    }
+    return [...countryList];
+};
 
 export const landkodeTilNavn = (landskode: string) => {
     const landNavn = getCountryList().find((country) => country.code === landskode);
