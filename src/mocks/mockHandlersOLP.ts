@@ -29,7 +29,7 @@ const mockHandlersOLP = {
 
     oppdater: http.put(ApiPath.OLP_SOKNAD_UPDATE, () => HttpResponse.json(olpSoknad)),
 
-    ingenEksisterendePerioder: http.post(ApiPath.OLP_K9_PERIODER, () => HttpResponse.json([])),
+    ingenEksisterendePerioder: http.post(ApiPath.SAKER_PERIODER, () => HttpResponse.json([])),
 
     institusjoner: http.get(ApiPath.OLP_INSTITUSJONER, () => HttpResponse.json(olpInstitusjoner)),
 

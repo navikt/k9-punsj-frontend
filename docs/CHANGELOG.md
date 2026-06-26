@@ -2,6 +2,18 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Felles k9sak perioder endepunkt for PSB, OLP, PLS og OMP_UT (2026-06-23)
+
+- Flyttet periodoppslagene i `PSB`, `OLP`, `PLS` og `OMP_UT` fra søknadstype-spesifikke `k9sak/info`-endepunkter til ett felles frontend path, `POST /api/k9-punsj/saker/perioder?saksnummer=...`.
+- Frontend bruker nå samme proxy-path for alle disse flytene, mens backend mottar kallene på `POST /api/saker/perioder?saksnummer=...`.
+- Fjernet de gamle route-konstantene og den utgåtte request-bodyen for periodoppslag, siden kallene nå bruker `saksnummer` som query-parameter og `X-Nav-NorskIdent` som header.
+- Oppdaterte testmocks og OMP_UT-korrigeringstesten slik at de følger det nye felles perioder-endepunktet.
+
+### Rollback av buildkjeden etter tom landliste i PSB (2026-06-23)
+
+- Rullet tilbake `@babel/runtime`, sentrale `@babel/*` buildpakker, `webpack` og `terser-webpack-plugin` til de forrige versjonene etter at `PSB` fikk tom landliste i `utenlandsopphold` i bygd runtime.
+- Feilen slo ut ved at `i18n-iso-countries` fortsatt lastet locale-data, men mistet codedata i production bundle, slik at landfeltet bare viste `Velg land`.
+- Verifiserte rollback-sporet med grønn `yarn build`, og deploy-test viste at landlisten kom tilbake.
 ### Dependency security follow up with safe lockfile fixes (2026-06-18)
 
 - Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.

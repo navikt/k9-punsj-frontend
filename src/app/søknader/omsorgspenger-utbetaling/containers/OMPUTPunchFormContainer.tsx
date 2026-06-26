@@ -8,15 +8,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
-import { IPeriode, Periode, PersonEnkel } from 'app/models/types';
+import { Periode, PersonEnkel } from 'app/models/types';
 
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { ROUTES } from 'app/constants/routes';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
-import { hentEksisterendePerioder, hentSoeknad, sendSoeknad } from '../api';
+import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
 import { backendTilFrontendMapping } from '../utils';
@@ -56,8 +57,8 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
     }
 
     const { mutate: hentPerioderK9 } = useMutation({
-        mutationFn: ({ soekerId, periode }: { soekerId: string; periode?: IPeriode }) =>
-            hentEksisterendePerioder(soekerId, periode),
+        mutationFn: ({ soekerId, saksnummer }: { soekerId: string; saksnummer: string }) =>
+            hentEksisterendePerioderForSaksnummer(soekerId, saksnummer),
         onSuccess: (data) => setEksisterendePerioder(data),
     });
     const {
@@ -68,16 +69,20 @@ const OMPUTPunchFormContainer: React.FC<Props> = ({ journalpostid }: Props) => {
         queryKey: [id],
         queryFn: () => hentSoeknad(identState.søkerId, id),
     });
+    const k9saksnummer = resolveK9saksnummer({ fagsak }, fellesState.journalpost, soeknadRespons);
 
     useEffect(() => {
         if (soeknadRespons) {
             dispatch(setIdentFellesAction(soeknadRespons.soekerId));
+        }
+
+        if (soeknadRespons && k9saksnummer) {
             hentPerioderK9({
                 soekerId: soeknadRespons.soekerId,
-                periode: fagsak?.gyldigPeriode || soeknadRespons.metadata?.eksisterendeFagsak?.gyldigPeriode,
+                saksnummer: k9saksnummer,
             });
         }
-    }, [soeknadRespons, dispatch, hentPerioderK9, fagsak]);
+    }, [soeknadRespons, dispatch, hentPerioderK9, k9saksnummer]);
 
     useEffect(() => {
         trackOmputStartedFromJournalpost(journalpostid);

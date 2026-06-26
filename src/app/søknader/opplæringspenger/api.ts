@@ -33,30 +33,11 @@ export const validerSoeknad = async (
     return response.json();
 };
 
-export const hentEksisterendePerioder = async (ident: string, barnIdent: string): Promise<Periode[]> => {
+export const hentEksisterendePerioderForSaksnummer = async (ident: string, saksnummer: string): Promise<Periode[]> => {
     const response = await post(
-        ApiPath.OLP_K9_PERIODER,
+        ApiPath.SAKER_PERIODER + '?saksnummer=' + saksnummer,
         {},
         { 'X-Nav-NorskIdent': ident },
-        { brukerIdent: ident, barnIdent },
-    );
-    if (!response.ok) {
-        throw Error('Kunne ikke hente eksisterende perioder');
-    }
-    return response.json();
-};
-
-export const hentEksisterendePerioderForSaksnummer = async (
-    ident: string,
-    barnIdent: string,
-    saksnummer: string,
-): Promise<Periode[]> => {
-
-    const response = await post(
-        ApiPath.OLP_K9_PERIODER  + '?saksnummer=' + saksnummer,
-        {},
-        { 'X-Nav-NorskIdent': ident },
-        { brukerIdent: ident, barnIdent },
     );
     if (!response.ok) {
         throw Error('Kunne ikke hente eksisterende perioder');
