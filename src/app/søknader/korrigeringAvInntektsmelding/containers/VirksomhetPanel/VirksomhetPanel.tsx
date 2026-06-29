@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Box, Heading, Label, Link, Select, TextField, VStack } from '@navikt/ds-react';
+import { Box, ErrorMessage as AkselErrorMessage, Heading, Label, Link, Select, TextField, VStack } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
-import Feilmelding from 'app/components/Feilmelding';
 import usePrevious from 'app/hooks/usePrevious';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -136,12 +135,12 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
 
                             {hasFetchArbeidsgiverIdError && (
                                 <div className="virksomhetPanel feilmelding">
-                                    <Feilmelding
-                                        feil={intlHelper(
+                                    <AkselErrorMessage showIcon>
+                                        {intlHelper(
                                             intl,
                                             'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
                                         )}
-                                    />
+                                    </AkselErrorMessage>
                                 </div>
                             )}
 

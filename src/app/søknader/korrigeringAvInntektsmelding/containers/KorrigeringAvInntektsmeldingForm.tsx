@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 
 import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
-import Feilmelding from 'app/components/Feilmelding';
+import { Alert, Box, Button, ErrorMessage, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
     submitOMSKorrigering,
@@ -536,7 +535,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
 
                                 {formError && hasSubmitted && (
                                     <div className="korrigering__feilmelding">
-                                        <Feilmelding feil={formError} />
+                                        <ErrorMessage showIcon>{formError}</ErrorMessage>
                                     </div>
                                 )}
                             </VStack>

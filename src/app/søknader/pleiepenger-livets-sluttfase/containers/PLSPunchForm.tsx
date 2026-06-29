@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Accordion, Alert, Button, Checkbox, Heading, HelpText, Loader, Tag } from '@navikt/ds-react';
+import { Accordion, Alert, Button, Checkbox, ErrorMessage, Heading, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
@@ -25,7 +25,6 @@ import { ROUTES } from 'app/constants/routes';
 import JournalposterSync from 'app/components/JournalposterSync';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import ArbeidsforholdPanel from '../../../components/arbeidsforhold/containers/ArbeidsforholdPanel';
-import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
@@ -1151,7 +1150,9 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
-                        <Feilmelding key={feilmelding} feil={feilmelding} />
+                        <ErrorMessage key={feilmelding} showIcon>
+                            {feilmelding}
+                        </ErrorMessage>
                     ))}
 
                 {punchFormState.isAwaitingValidateResponse && (
