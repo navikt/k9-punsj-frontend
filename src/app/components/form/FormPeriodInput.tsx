@@ -83,10 +83,16 @@ export function FormPeriodInput<T extends FieldValues>({
     const fromField = useFormDateInput({
         name: fomName,
         defaultMonth,
+        fromDate,
+        toDate: fomToDate,
+        disabledDates,
     });
     const toField = useFormDateInput({
         name: tomName,
         defaultMonth: tomDefaultMonth,
+        fromDate: tomFromDate,
+        toDate,
+        disabledDates,
     });
 
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
