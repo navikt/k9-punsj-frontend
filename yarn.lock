@@ -3469,15 +3469,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.12.1":
-  version: 8.12.1
-  resolution: "@navikt/aksel@npm:8.12.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.12.1%2F8866c3348d45d16d388d8facb14470ff64c9cddc"
+"@navikt/aksel@npm:8.13.1":
+  version: 8.13.1
+  resolution: "@navikt/aksel@npm:8.13.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.13.1%2F2c23d1d61dc2c62266cb060bc66711d32fe82aac"
   dependencies:
-    "@navikt/ds-css": "npm:^8.12.1"
-    "@navikt/ds-tokens": "npm:^8.12.1"
+    "@navikt/ds-css": "npm:^8.13.1"
+    "@navikt/ds-tokens": "npm:^8.13.1"
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
-    clipboardy: "npm:5.0.1"
+    clipboardy: "npm:5.3.1"
     commander: "npm:14.0.3"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
@@ -3488,7 +3488,7 @@ __metadata:
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/e93140363f36c99c491cfd89ca0632f76c6c37d319db21492942c16cefbacb18d7ee8af30041caca4dd8c00078822225a9281a125d6d4a73867a6745727e46f7
+  checksum: 10/a983a269b8390e710c0b2f4840998791b657fc91229a7a9eacc7ec6002dc901beea030dd7e6104daf34acd0ce5b91bc23392ff40baab8be94eeaca73e349bc6d
   languageName: node
   linkType: hard
 
@@ -3499,10 +3499,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:^8.12.1":
-  version: 8.13.0
-  resolution: "@navikt/ds-css@npm:8.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.13.0%2F6bd01f71ef525d0c170d5dd690e078d763eea421"
-  checksum: 10/5f6f50350d64c0fdf40be95f149c019183bed607d04c279bd4f60404de79ea6d1dd95d8ce6f1408c8f707760349a4c85f97b550a7a6b52bb23e8d09e3ac72ec2
+"@navikt/ds-css@npm:^8.13.1":
+  version: 8.14.0
+  resolution: "@navikt/ds-css@npm:8.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.14.0%2Ffb120945cda0247ea4c56535066d21c5c818bfdb"
+  checksum: 10/cf668964197df8f30ed8b39ec080ea80bdd8d7e0f9853ab3d1a8928384f2b90d85ea5b05035d8cd57c6a2e3bee411b89efe3ed410b77e156259fc0e3393d5da4
   languageName: node
   linkType: hard
 
@@ -3535,6 +3535,13 @@ __metadata:
   version: 8.13.0
   resolution: "@navikt/ds-tokens@npm:8.13.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.13.0%2F63a58bf567e0a95c1ced6a3d7356de06c19a2457"
   checksum: 10/1f6dd2380672eb8b0dfd7fe1deeb98b572ef34e080918674a8f5c88ff802aa8d4a6526a7ef472a873aa6e112418b096d0aaf5e943b31c5945eeffee2e0d20b11
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-tokens@npm:^8.13.1":
+  version: 8.14.0
+  resolution: "@navikt/ds-tokens@npm:8.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F8.14.0%2F0ffa6e54267bba9400b9f4cb306961244e2b6694"
+  checksum: 10/2e4e3acb08dd355c6804ffa9d22a4b8c6e0f7d6ab4eced0293d0955d9ecf71c9a2fcbb905389ac84d4add1131e7e1cd1828ff53509693c37c6e1b74b3a23b675
   languageName: node
   linkType: hard
 
@@ -7523,15 +7530,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clipboardy@npm:5.0.1":
-  version: 5.0.1
-  resolution: "clipboardy@npm:5.0.1"
+"clipboard-image@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "clipboard-image@npm:0.1.0"
   dependencies:
-    execa: "npm:^9.6.0"
+    run-jxa: "npm:^3.0.0"
+  bin:
+    clipboard-image: cli.js
+  checksum: 10/3b0fcd6ac1dfcfd76eb72598521ab9b08973d16d19d314efda33b5fd16976da49b791a1b56cfa4c0ae2151f5b82a9ea02420d17300db74723fc4f438f1bf454a
+  languageName: node
+  linkType: hard
+
+"clipboardy@npm:5.3.1":
+  version: 5.3.1
+  resolution: "clipboardy@npm:5.3.1"
+  dependencies:
+    clipboard-image: "npm:^0.1.0"
+    execa: "npm:^9.6.1"
     is-wayland: "npm:^0.1.0"
     is-wsl: "npm:^3.1.0"
     is64bit: "npm:^2.0.0"
-  checksum: 10/46b6528053ac0d577d5a647861a03ffa433dedca380aa8a400eeaa7bf671c602f09790d4d609464e17e73a3c6d326c890488f56641981052d1e2859dc0e7b3de
+    powershell-utils: "npm:^0.2.0"
+  checksum: 10/027325dd58b6f10e84704116a461212816b420b74b44fe1c6d518a358e73525273a72d8848d358ac73ee229a35309215e803ae5f1f539c5fe51564564840ebe0
   languageName: node
   linkType: hard
 
@@ -7962,6 +7982,15 @@ __metadata:
     shebang-command: "npm:^2.0.0"
     which: "npm:^2.0.1"
   checksum: 10/0d52657d7ae36eb130999dffff1168ec348687b48dd38e2ff59992ed916c88d328cf1d07ff4a4a10bc78de5e1c23f04b306d569e42f7a2293915c081e4dfee86
+  languageName: node
+  linkType: hard
+
+"crypto-random-string@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "crypto-random-string@npm:4.0.0"
+  dependencies:
+    type-fest: "npm:^1.0.1"
+  checksum: 10/cd5d7ae13803de53680aaed4c732f67209af5988cbeec5f6b29082020347c2d8849ca921b2008be7d6bd1d9d198c3c3697e7441d6d0d3da1bf51e9e4d2032149
   languageName: node
   linkType: hard
 
@@ -9223,6 +9252,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"escape-string-regexp@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "escape-string-regexp@npm:5.0.0"
+  checksum: 10/20daabe197f3cb198ec28546deebcf24b3dbb1a5a269184381b3116d12f0532e06007f4bc8da25669d6a7f8efb68db0758df4cd981f57bc5b57f521a3e12c59e
+  languageName: node
+  linkType: hard
+
 "eslint-config-prettier@npm:10.1.8":
   version: 10.1.8
   resolution: "eslint-config-prettier@npm:10.1.8"
@@ -9664,7 +9700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^9.6.0":
+"execa@npm:^9.6.1":
   version: 9.6.1
   resolution: "execa@npm:9.6.1"
   dependencies:
@@ -12749,7 +12785,7 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.7.1"
     "@jest/globals": "npm:30.4.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel": "npm:8.12.1"
+    "@navikt/aksel": "npm:8.13.1"
     "@navikt/aksel-icons": "npm:8.12.1"
     "@navikt/ds-css": "npm:8.12.1"
     "@navikt/ds-react": "npm:8.12.1"
@@ -13305,6 +13341,15 @@ __metadata:
   bin:
     lz-string: bin/bin.js
   checksum: 10/e86f0280e99a8d8cd4eef24d8601ddae15ce54e43ac9990dfcb79e1e081c255ad24424a30d78d2ad8e51a8ce82a66a930047fed4b4aa38c6f0b392ff9300edfc
+  languageName: node
+  linkType: hard
+
+"macos-version@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "macos-version@npm:6.0.0"
+  dependencies:
+    semver: "npm:^7.3.5"
+  checksum: 10/cc180e290459ec880a28da5911d7382f903fc91d433adc62d1e57fff0a55a3c6f39d34f17f55fb7aef0e7d4eedf9560b57c26e147f70407de623816013cd340e
   languageName: node
   linkType: hard
 
@@ -15123,6 +15168,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"powershell-utils@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "powershell-utils@npm:0.2.0"
+  checksum: 10/49aa144effed21a03c095d0825455e44051110006fd05cd0e41431e1f09d0e111a62fd14d6d017113cca7ac3a69d37cd5b2ae8f1c4ba2685d5562158ff66836f
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -16064,6 +16116,18 @@ __metadata:
   version: 7.1.0
   resolution: "run-applescript@npm:7.1.0"
   checksum: 10/8659fb5f2717b2b37a68cbfe5f678254cf24b5a82a6df3372b180c80c7c137dcd757a4166c3887e459f59a090ca414e8ea7ca97cf3ee5123db54b3b4006d7b7a
+  languageName: node
+  linkType: hard
+
+"run-jxa@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "run-jxa@npm:3.0.0"
+  dependencies:
+    execa: "npm:^5.1.1"
+    macos-version: "npm:^6.0.0"
+    subsume: "npm:^4.0.0"
+    type-fest: "npm:^2.0.0"
+  checksum: 10/e4557163012248631493dcfaf37668b401543b174eade2f4bea101fc828e2016b88b2033338369f8a3745404e11b6154a08f5d1b5933bd4214d85eac29398658
   languageName: node
   linkType: hard
 
@@ -17120,6 +17184,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"subsume@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "subsume@npm:4.0.0"
+  dependencies:
+    escape-string-regexp: "npm:^5.0.0"
+    unique-string: "npm:^3.0.0"
+  checksum: 10/b33bce84fb78e3ed6bb583cf75712153653bf3a3dd1c760e964f0230246523a8fa79b09482400c280490fe6e52c53edb582d0d005d04b45c69331289cfc9216f
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:^10.2.2":
   version: 10.2.2
   resolution: "supports-color@npm:10.2.2"
@@ -17710,7 +17784,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^2.19.0":
+"type-fest@npm:^1.0.1":
+  version: 1.4.0
+  resolution: "type-fest@npm:1.4.0"
+  checksum: 10/89875c247564601c2650bacad5ff80b859007fbdb6c9e43713ae3ffa3f584552eea60f33711dd762e16496a1ab4debd409822627be14097d9a17e39c49db591a
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.0.0, type-fest@npm:^2.19.0":
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10/7bf9e8fdf34f92c8bb364c0af14ca875fac7e0183f2985498b77be129dc1b3b1ad0a6b3281580f19e48c6105c037fb966ad9934520c69c6434d17fd0af4eed78
@@ -17944,6 +18025,15 @@ __metadata:
   dependencies:
     imurmurhash: "npm:^0.1.4"
   checksum: 10/b78ed9d5b01ff465f80975f17387750ed3639909ac487fa82c4ae4326759f6de87c2131c0c39eca4c68cf06c537a8d104fba1dfc8a30308f99bc505345e1eba3
+  languageName: node
+  linkType: hard
+
+"unique-string@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "unique-string@npm:3.0.0"
+  dependencies:
+    crypto-random-string: "npm:^4.0.0"
+  checksum: 10/1a1e2e7d02eab1bb10f720475da735e1990c8a5ff34edd1a3b6bc31590cb4210b7a1233d779360cc622ce11c211e43afa1628dd658f35d3e6a89964b622940df
   languageName: node
   linkType: hard
 
