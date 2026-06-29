@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 
+import OMPAOSchema from 'app/søknader/omsorgspenger-alene-om-omsorgen/schema';
 import { erYngreEnn18år, feilFraYup } from './validationHelpers';
 
 describe('validationHelpers', () => {
@@ -25,6 +26,21 @@ describe('validationHelpers', () => {
             });
 
             expect(feilFraYup(schema, { navn: 'abc' })).toEqual([]);
+        });
+
+        it('uses a human readable label for OMPAO period errors', () => {
+            expect(
+                feilFraYup(OMPAOSchema, {
+                    metadata: { signatur: 'A' },
+                    mottattDato: '2020-01-01',
+                    klokkeslett: '10:00',
+                    periode: { fom: '' },
+                    barn: { norskIdent: '12345678910' },
+                }),
+            ).toContainEqual({
+                message: 'Alene om omsorgen fra og med er et påkrevd felt.',
+                path: 'periode.fom',
+            });
         });
     });
 

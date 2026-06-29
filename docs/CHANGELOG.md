@@ -2,6 +2,18 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Date input and punch form cleanup batch (2026-06-29)
+
+- Samlet og ryddet date input-laget, migrerte app-usages bort fra `NewDateInput` og `DatoInputFormikNew`, fjernet de gamle wrapperne, og etablerte `FormDateInput` og `FormPeriodInput` som RHF-entrypoints for dato og periode.
+- Justerte default `size` tilbake til `medium`, oppdaterte målrettede tester og Storybook-historier for controlled, Formik og RHF, og beholdt separate periodekalendere samtidig som feltfeil og periodefeil vises under feltene i stedet for å utvide inputradene.
+- Justerte period action-layout på tvers av `PSB`, `PLS` og `omsorgspenger-utbetaling`, slik at `Slett periode` og `Legg til ny periode` følger samme plassering, knappestil og panelstruktur i flere periodelister og modaler.
+- Ryddet opp i seksjonsstruktur, topp-titler, overskrifter og spacing i flere punchskjemaer, blant annet `Omsorgsdager - Midlertidig alene om omsorgen`, `Alene om omsorgen` og `Opplæringspenger`, for å gjøre layouten mer konsistent med øvrige skjemaer.
+- Standardiserte overskriften `Opplysninger som ikke er blitt registrert` på tvers av relevante skjemaer, fjernet gammel global legacy-styling for denne overskriften, og justerte `omsorgspenger-utbetaling` videre med mindre form controls, ryddet bort dupliserte deltitler og fjernet ekstra horisontal spacing fra Formik-varianten av legacy radio-paneler.
+- La inn en delt styring i `DatovelgerControlled` som holder tilbake eksterne dato-feil til feltet har mistet fokus, men fortsatt viser dem umiddelbart etter submit-forsøk.
+- La også inn en liten shared hook for tekstfelt som bruker samme defer-regel for eksterne feil fram til blur eller submit-forsøk.
+- Brukte dette i legacy `Opplysninger om søknaden` for `OMPKS`, `PSB` og `PLS`, slik at både `mottattDato` og `klokkeslett` ikke lenger validerer visuelt med en gang brukeren begynner å skrive.
+- La til målrettede tester for shared date-laget og `OMPKS` sitt `klokkeslett`-felt, som verifiserer skjult ekstern feil før blur og synlig feil etter submit-lignende state.
+
 ### Felles k9sak perioder endepunkt for PSB, OLP, PLS og OMP_UT (2026-06-23)
 
 - Flyttet periodoppslagene i `PSB`, `OLP`, `PLS` og `OMP_UT` fra søknadstype-spesifikke `k9sak/info`-endepunkter til ett felles frontend path, `POST /api/k9-punsj/saker/perioder?saksnummer=...`.
@@ -14,7 +26,6 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Rullet tilbake `@babel/runtime`, sentrale `@babel/*` buildpakker, `webpack` og `terser-webpack-plugin` til de forrige versjonene etter at `PSB` fikk tom landliste i `utenlandsopphold` i bygd runtime.
 - Feilen slo ut ved at `i18n-iso-countries` fortsatt lastet locale-data, men mistet codedata i production bundle, slik at landfeltet bare viste `Velg land`.
 - Verifiserte rollback-sporet med grønn `yarn build`, og deploy-test viste at landlisten kom tilbake.
-
 ### Dependency security follow up with safe lockfile fixes (2026-06-18)
 
 - Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.

@@ -2,7 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
-import { IPeriodInputProps, PeriodInput } from '../../../app/components/period-input/PeriodInput';
+import {
+    PeriodevelgerControlled,
+    PeriodevelgerControlledProps,
+} from '../../../app/components/period-input/PeriodevelgerControlled';
 import intlHelper from '../../../app/utils/intlUtils';
 import userEvent from '@testing-library/user-event';
 
@@ -12,8 +15,8 @@ jest.mock('app/utils/intlUtils');
 const inputIdFom = 'fom';
 const inputIdTom = 'tom';
 
-const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) => {
-    const periodInputProps: IPeriodInputProps = {
+const setupPeriodevelgerControlled = (periodInputPropsPartial?: Partial<PeriodevelgerControlledProps>) => {
+    const periodInputProps: PeriodevelgerControlledProps = {
         periode: {},
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
         onChange: periodInputPropsPartial?.onChange || jest.fn(),
@@ -25,7 +28,7 @@ const setupPeriodInput = (periodInputPropsPartial?: Partial<IPeriodInputProps>) 
 
     mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    return render(<PeriodInput {...periodInputProps} />);
+    return render(<PeriodevelgerControlled {...periodInputProps} />);
 };
 
 const testDateChange = async (
@@ -45,9 +48,9 @@ const testDateChange = async (
     expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ [inputId]: newDateFormatted }));
 };
 
-describe('PeriodInput', () => {
+describe('PeriodevelgerControlled', () => {
     it('should display input fields', async () => {
-        setupPeriodInput();
+        setupPeriodevelgerControlled();
 
         expect(await screen.findByTestId(inputIdFom)).toBeInTheDocument();
         expect(await screen.findByTestId(inputIdTom)).toBeInTheDocument();
@@ -56,7 +59,7 @@ describe('PeriodInput', () => {
     it('should display the correct value in input fields', async () => {
         const fom = '2020-01-01';
         const tom = '2020-02-01';
-        setupPeriodInput({ periode: { fom, tom } });
+        setupPeriodevelgerControlled({ periode: { fom, tom } });
 
         expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
         expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
@@ -65,17 +68,17 @@ describe('PeriodInput', () => {
     it('should display an error message for fom date', async () => {
         const errorMessageFom = 'Error message for fom date';
 
-        setupPeriodInput({ errorMessageFom });
+        setupPeriodevelgerControlled({ errorMessageFom });
 
-        expect(await screen.findByText(errorMessageFom)).toBeInTheDocument();
+        expect(await screen.findByText(errorMessageFom, { exact: false })).toBeInTheDocument();
     });
 
     it('should display an error message for tom date', async () => {
         const errorMessageTom = 'Error message fom fom date';
 
-        setupPeriodInput({ errorMessageTom });
+        setupPeriodevelgerControlled({ errorMessageTom });
 
-        expect(await screen.findByText(errorMessageTom)).toBeInTheDocument();
+        expect(await screen.findByText(errorMessageTom, { exact: false })).toBeInTheDocument();
     });
 
     it('should call onChange and onBlur with a new fom date', async () => {
@@ -86,7 +89,7 @@ describe('PeriodInput', () => {
         const onChange = jest.fn();
         const onBlur = jest.fn();
 
-        setupPeriodInput({ periode: { fom, tom }, onChange, onBlur });
+        setupPeriodevelgerControlled({ periode: { fom, tom }, onChange, onBlur });
 
         await testDateChange(inputIdFom, newFraOgMed, newFraOgMedFormatted, onChange, onBlur);
     });
@@ -94,7 +97,7 @@ describe('PeriodInput', () => {
     it('should call onChange once when a complete date is typed', async () => {
         const onChange = jest.fn();
 
-        setupPeriodInput({ periode: {}, onChange });
+        setupPeriodevelgerControlled({ periode: {}, onChange });
 
         await userEvent.type(screen.getByTestId(inputIdFom), '01.03.2020');
 
@@ -110,19 +113,34 @@ describe('PeriodInput', () => {
         const onChange = jest.fn();
         const onBlur = jest.fn();
 
-        setupPeriodInput({ periode: { fom, tom }, onChange, onBlur });
+        setupPeriodevelgerControlled({ periode: { fom, tom }, onChange, onBlur });
 
         await testDateChange(inputIdTom, newTilOgMed, newTilOgMedFormatted, onChange, onBlur);
     });
 
+    it('should show inline validation when tom is before fom', async () => {
+        const onChange = jest.fn();
+        const onBlur = jest.fn();
+
+        setupPeriodevelgerControlled({ periode: { fom: '2020-03-10', tom: '' }, onChange, onBlur });
+
+        await userEvent.type(screen.getByTestId(inputIdTom), '01.03.2020');
+        await userEvent.tab();
+
+        expect(await screen.findByText('Startdato må være før sluttdato.')).toBeInTheDocument();
+        expect(screen.queryByText('Til og med: Datoen er ikke tillatt')).not.toBeInTheDocument();
+        expect(onChange).not.toHaveBeenCalledWith(expect.objectContaining({ tom: '2020-03-01' }));
+        expect(onBlur).not.toHaveBeenCalled();
+    });
+
     it('should update displayed values when periode props change after mount', async () => {
-        const { rerender } = setupPeriodInput({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
+        const { rerender } = setupPeriodevelgerControlled({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
 
         expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
         expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
 
         rerender(
-            <PeriodInput
+            <PeriodevelgerControlled
                 periode={{ fom: '2020-03-01', tom: '2020-04-01' }}
                 intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
                 onChange={jest.fn()}
@@ -137,13 +155,13 @@ describe('PeriodInput', () => {
     });
 
     it('should clear displayed values when periode props are reset after mount', async () => {
-        const { rerender } = setupPeriodInput({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
+        const { rerender } = setupPeriodevelgerControlled({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
 
         expect(await screen.findByTestId(inputIdFom)).toHaveValue('01.01.2020');
         expect(await screen.findByTestId(inputIdTom)).toHaveValue('01.02.2020');
 
         rerender(
-            <PeriodInput
+            <PeriodevelgerControlled
                 periode={{ fom: '', tom: '' }}
                 intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
                 onChange={jest.fn()}

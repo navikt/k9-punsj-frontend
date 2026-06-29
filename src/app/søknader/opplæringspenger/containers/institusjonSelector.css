@@ -1,6 +1,6 @@
 .institusjonContainer {
-    max-width: 100%;
     width: 100%;
+    max-width: 32rem;
 }
 
 .institusjonContainer .aksel-text-field__input {

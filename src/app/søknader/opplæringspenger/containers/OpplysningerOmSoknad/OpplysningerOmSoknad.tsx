@@ -7,7 +7,7 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNeiIkkeRelevant } from 'app/models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import intlHelper from 'app/utils/intlUtils';
-import DatoVelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 const OpplysningerOmSoknad: React.FC = () => {
@@ -23,7 +23,7 @@ const OpplysningerOmSoknad: React.FC = () => {
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
                 <div className="input-row">
-                    <DatoVelgerFormik name="mottattDato" label="Mottatt dato" />
+                    <DatovelgerFormik name="mottattDato" label="Mottatt dato" size="small" />
 
                     <TextFieldFormik
                         label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { FormattedMessage } from 'react-intl';
-import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Checkbox, Heading } from '@navikt/ds-react';
 import { useQuery } from '@tanstack/react-query';
-import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Button, Checkbox, Heading, Box } from '@navikt/ds-react';
+import { Field, FieldArray, FieldProps, FormikProps, useFormikContext } from 'formik';
+import { FormattedMessage } from 'react-intl';
 
 import { finnArbeidsgivere } from 'app/api/api';
+import VerticalSpacer from 'app/components/VerticalSpacer';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import Organisasjonsvelger from 'app/components/organisasjon/Organisasjonvelger';
 import Organisasjon from 'app/models/types/Organisasjon';
@@ -92,12 +93,16 @@ const Arbeidstaker = ({
                             </div>
                         )}
 
+                        <VerticalSpacer sixteenPx />
+
                         <Organisasjonsvelger
                             name={`opptjeningAktivitet.arbeidstaker[${arbeidstakerIndex}].organisasjonsnummer`}
                             disabled={gjelderAnnenOrganisasjon}
-                            className="inline-block"
+                            className="w-72"
                             organisasjoner={organisasjoner}
                         />
+
+                        <VerticalSpacer eightPx />
 
                         <Checkbox
                             onChange={() => toggleGjelderAnnenOrganisasjon(form)}
@@ -120,11 +125,9 @@ const Arbeidstaker = ({
 
                     <hr />
 
-                    <div className="mt-4 mb-4">
-                        <Heading size="small" level="5">
-                            <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
-                        </Heading>
-                    </div>
+                    <Heading size="small" level="5" className="mt-4 mb-4">
+                        <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.infoOmfraværPerioder.tittel" />
+                    </Heading>
 
                     <FieldArray
                         name={`${name}.fravaersperioder`}

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { ComponentType } from 'react';
 
-import { Alert, Button, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Button, ErrorMessage, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import JournalposterSync from 'app/components/JournalposterSync';
@@ -20,7 +20,6 @@ import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } fro
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
-import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
@@ -225,10 +224,12 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return naa < new Date(dato);
         };
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
+        if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        }
+
+        if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
         }
 
         if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
@@ -417,6 +418,10 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
 
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="OMSORGSPENGER_KS" />
+                </Heading>
+
                 <VerticalSpacer sixteenPx />
 
                 <OpplysningerOmOMPKSSoknad
@@ -425,10 +430,14 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
                     signert={signert}
+                    showFieldErrorsAfterSubmit={this.state.harForsoektAaSendeInn}
                     soknad={soknad}
                 />
                 <VerticalSpacer twentyPx />
-                <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>
+                <Heading size="small" level="3">
+                    {intlHelper(intl, 'skjema.ikkeregistrert')}
+                </Heading>
+                <VerticalSpacer sixteenPx />
 
                 <div className="flex-container">
                     <LegacyCheckbox
@@ -459,7 +468,9 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 {this.getUhaandterteFeil('')
                     .map((feilmelding, index) => nummerPrefiks(feilmelding || '', index + 1))
                     .map((feilmelding) => (
-                        <Feilmelding key={feilmelding} feil={feilmelding} />
+                        <ErrorMessage key={feilmelding} showIcon>
+                            {feilmelding}
+                        </ErrorMessage>
                     ))}
 
                 {punchFormState.isAwaitingValidateResponse && (

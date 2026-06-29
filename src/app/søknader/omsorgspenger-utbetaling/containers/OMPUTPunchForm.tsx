@@ -188,6 +188,10 @@ const OMPUTPunchForm: React.FC<Props> = ({
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VStack gap="space-16" className="mt-4">
+                <Heading size="medium" level="2">
+                    <FormattedMessage id="OMSORGSPENGER_UT" />
+                </Heading>
+
                 <OpplysningerOmOMPUTSoknad />
 
                 <Box padding="space-16" borderWidth="1" borderRadius="8">

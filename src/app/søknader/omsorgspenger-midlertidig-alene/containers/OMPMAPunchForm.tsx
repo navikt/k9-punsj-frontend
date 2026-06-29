@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import * as yup from 'yup';
 
-import { Alert, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag, VStack } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
@@ -201,28 +201,33 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
             <OpplysningerOmOMPMASoknad setSignaturAction={setSignatur} signert={signert} handleBlur={handleBlur} />
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
-            <Heading size="xsmall" spacing>
-                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.barn.tittel'} />
-            </Heading>
+            <Box padding="space-16" borderWidth="1" borderRadius="8" className="opplysninger-om-soknaden-panel">
+                <VStack gap="space-16">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id="omsorgspenger.midlertidigAlene.punchForm.barn.tittel" />
+                    </Heading>
 
-            <Personvelger
-                name="barn"
-                handleBlur={handleBlur}
-                sokersIdent={values.soekerId}
-                populerMedBarn={!values.barn.length}
-            />
+                    <Personvelger
+                        name="barn"
+                        handleBlur={handleBlur}
+                        sokersIdent={values.soekerId}
+                        populerMedBarn={!values.barn.length}
+                    />
+                </VStack>
+            </Box>
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
             <AnnenForelder handleBlur={handleBlur} />
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
-            <p className="ikkeregistrert">
-                <FormattedMessage id={'skjema.ikkeregistrert'} />
-            </p>
+            <Heading size="small" level="3">
+                <FormattedMessage id="skjema.ikkeregistrert" />
+            </Heading>
+            <VerticalSpacer sixteenPx />
 
             <div className="flex-container">
                 <Field name="harMedisinskeOpplysninger">

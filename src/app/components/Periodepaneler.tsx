@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import { PeriodevelgerControlled } from 'app/components/period-input/PeriodevelgerControlled';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import { createPeriodInputIds, periodKeyFromPeriode } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
@@ -18,7 +18,6 @@ interface Props {
     textLeggTil?: string;
     textFjern?: string;
     feilkodeprefiks?: string;
-    doNotShowBorders?: boolean;
 
     editSoknad: (periodeinfo: IPeriode[]) => any; // Funksjon som skal kalles for å sende en put-spørring med oppdatert info og oppdatere Redux-store deretter (brukes i hovedsak på onBlur)
     editSoknadState?: (periodeinfo: IPeriode[], showStatus?: boolean) => any; // Funskjon som skal kalles for å oppdatere state på PunchFormOld (må brukes på onChange)
@@ -26,6 +25,7 @@ interface Props {
     getUhaandterteFeil?: GetUhaandterteFeil;
     onAdd?: () => any;
     onRemove?: () => any;
+    separatePanels?: boolean;
 }
 
 export const Periodepaneler: React.FC<Props> = ({
@@ -42,18 +42,28 @@ export const Periodepaneler: React.FC<Props> = ({
     getUhaandterteFeil,
     onAdd,
     onRemove,
+    separatePanels = false,
 }: Props) => {
     const intl = useIntl();
 
     // Lagrer berikede perioder lokalt
     const [localPeriods, setLocalPeriods] = React.useState<IPeriode[]>([]);
+    const localPeriodsRef = React.useRef<IPeriode[]>([]);
+
+    const updateLocalPeriods = React.useCallback((nextPeriods: IPeriode[]) => {
+        localPeriodsRef.current = nextPeriods;
+        setLocalPeriods(nextPeriods);
+        return nextPeriods;
+    }, []);
 
     // Synkroniser med innkommende periods og berik med __clientId ved behov
     React.useEffect(() => {
+        const currentLocalPeriods = localPeriodsRef.current;
+
         // Sjekk om periods har endret seg (i lengde eller innhold)
         const needsUpdate =
-            periods.length !== localPeriods.length ||
-            periods.some((p, i) => p.fom !== localPeriods[i]?.fom || p.tom !== localPeriods[i]?.tom);
+            periods.length !== currentLocalPeriods.length ||
+            periods.some((p, i) => p.fom !== currentLocalPeriods[i]?.fom || p.tom !== currentLocalPeriods[i]?.tom);
 
         if (needsUpdate) {
             // Berik perioder, behold eksisterende __clientId
@@ -61,79 +71,75 @@ export const Periodepaneler: React.FC<Props> = ({
                 // Hvis periode allerede har __clientId - behold den
                 if (p.__clientId) return p;
                 // Hvis det finnes tilsvarende lokal periode - bruk dens __clientId
-                if (localPeriods[i] && p.fom === localPeriods[i].fom && p.tom === localPeriods[i].tom) {
-                    return { ...p, __clientId: (localPeriods[i] as any).__clientId };
+                if (currentLocalPeriods[i] && p.fom === currentLocalPeriods[i].fom && p.tom === currentLocalPeriods[i].tom) {
+                    return { ...p, __clientId: (currentLocalPeriods[i] as any).__clientId };
                 }
                 // Ellers generer ny
                 return { ...p, __clientId: uuidv4() };
             });
-            setLocalPeriods(enriched);
+            updateLocalPeriods(enriched);
         }
-    }, [periods]);
+    }, [periods, updateLocalPeriods]);
 
     const editInfo: (index: number, periodeinfo: Partial<IPeriode>) => IPeriode[] = (
         index: number,
         periodeinfo: Partial<IPeriode>,
     ) => {
-        const existing = localPeriods[index] as any;
+        const currentLocalPeriods = localPeriodsRef.current;
+        const existing = currentLocalPeriods[index] as any;
         // Behold __clientId ved oppdatering
-        const newInfo = { ...localPeriods[index], ...periodeinfo, __clientId: existing?.__clientId };
-        const newArray = [...localPeriods];
+        const newInfo = { ...currentLocalPeriods[index], ...periodeinfo, __clientId: existing?.__clientId || uuidv4() };
+        const newArray = [...currentLocalPeriods];
         newArray[index] = newInfo as IPeriode;
-        setLocalPeriods(newArray);
-
-        return newArray;
+        return updateLocalPeriods(newArray);
     };
 
     const editPeriode = (index: number, periode: IPeriode) => editInfo(index, periode);
 
     const addItem = () => {
-        const newArray = [...localPeriods];
+        const currentLocalPeriods = localPeriodsRef.current;
+        const newArray = [...currentLocalPeriods];
         // Legger til __clientId ved opprettelse
         const newPeriod = { ...initialPeriode, __clientId: uuidv4() };
         newArray.push(newPeriod as IPeriode);
-        setLocalPeriods(newArray);
-
-        return newArray;
+        return updateLocalPeriods(newArray);
     };
 
     const removeItem = (index: number) => {
-        const newArray = [...localPeriods];
+        const currentLocalPeriods = localPeriodsRef.current;
+        const newArray = [...currentLocalPeriods];
         newArray.splice(index, 1);
-        setLocalPeriods(newArray);
-
-        return newArray;
+        return updateLocalPeriods(newArray);
     };
 
-    return (
-        <Box padding="space-16" borderRadius="8" background="neutral-soft" className="periodepanel">
-            {localPeriods.map((p, i) => {
-                const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
-                const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
+    const renderPeriod = (p: IPeriode, i: number) => {
+        const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
+        const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
+        const periodErrorPath = feilkodeprefiks ? `${feilkodeprefiks}.perioder[${i}]` : undefined;
+        const periodErrorMessage = periodErrorPath ? getErrorMessage?.(periodErrorPath, i) : undefined;
+        const periodErrorMessageFom = getErrorMessage?.(`[${i}].periode.fom`, i);
+        const periodErrorMessageTom = getErrorMessage?.(`[${i}].periode.tom`, i);
 
-                return (
-                    <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
-                        <PeriodInput
-                            periode={p || {}}
-                            intl={intl}
-                            onChange={(periode) => {
-                                if (editSoknadState) {
-                                    editSoknadState(editPeriode(i, periode));
-                                }
-                            }}
-                            onBlur={(periode) => editSoknad(editPeriode(i, periode))}
-                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
-                            errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
-                            errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
-                            inputIdFom={periodInputIds.fomId}
-                            inputIdTom={periodInputIds.tomId}
-                        />
-
+        return (
+            <div key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
+                <PeriodevelgerControlled
+                    periode={p || {}}
+                    intl={intl}
+                    onChange={(periode) => {
+                        if (editSoknadState) {
+                            editSoknadState(editPeriode(i, periode));
+                        }
+                    }}
+                    onBlur={(periode) => editSoknad(editPeriode(i, periode))}
+                    errorMessage={periodErrorMessage}
+                    errorMessageFom={periodErrorMessageFom}
+                    errorMessageTom={periodErrorMessageTom}
+                    inputIdFom={periodInputIds.fomId}
+                    inputIdTom={periodInputIds.tomId}
+                    action={
                         <Button
                             id="slett"
-                            className={
-                                getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'
-                            }
+                            className={periodErrorMessage ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'}
                             type="button"
                             onClick={() => {
                                 const newArray: IPeriode[] = removeItem(i);
@@ -150,38 +156,68 @@ export const Periodepaneler: React.FC<Props> = ({
                         >
                             <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
                         </Button>
-                    </div>
-                );
-            })}
+                    }
+                />
+            </div>
+        );
+    };
+
+    const addButton = kanHaFlere && (
+        <div className="mt-4 flex flex-wrap">
+            <Button
+                id="leggtilperiode"
+                type="button"
+                onClick={() => {
+                    const newArray: IPeriode[] = addItem();
+                    if (editSoknadState) {
+                        editSoknadState(newArray);
+                    }
+                    editSoknad(newArray);
+                    if (onAdd) {
+                        onAdd();
+                    }
+                }}
+                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                variant="tertiary"
+            >
+                <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
+            </Button>
+        </div>
+    );
+
+    if (separatePanels) {
+        return (
+            <>
+                {localPeriods.map((p, i) => (
+                    <Box
+                        key={(p as any).__clientId || i}
+                        padding="space-16"
+                        borderRadius="8"
+                        background="neutral-soft"
+                        className={i > 0 ? 'mt-4' : undefined}
+                    >
+                        {renderPeriod(p, i)}
+                    </Box>
+                ))}
+                {feilkodeprefiks && (
+                    <UhaanderteFeilmeldinger
+                        getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                    />
+                )}
+                {addButton}
+            </>
+        );
+    }
+
+    return (
+        <Box padding="space-16" borderRadius="8" background="neutral-soft" className="periodepanel">
+            {localPeriods.map(renderPeriod)}
             {feilkodeprefiks && (
                 <UhaanderteFeilmeldinger
                     getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
                 />
             )}
-            {kanHaFlere && (
-                <div className="flex flex-wrap">
-                    <Button
-                        id="leggtilperiode"
-                        className="leggtilperiode"
-                        type="button"
-                        onClick={() => {
-                            const newArray: IPeriode[] = addItem();
-                            if (editSoknadState) {
-                                editSoknadState(newArray);
-                            }
-                            editSoknad(newArray);
-                            if (onAdd) {
-                                onAdd();
-                            }
-                        }}
-                        icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
-                        size="small"
-                        variant="tertiary"
-                    >
-                        <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
-                    </Button>
-                </div>
-            )}
+            {addButton}
         </Box>
     );
 };
