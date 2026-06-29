@@ -66,6 +66,56 @@ describe('DatovelgerControlled', () => {
         expect(screen.getByText('Dato har ikke gyldig format')).toBeInTheDocument();
     });
 
+    it('hides external error messages until blur when configured', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <DatovelgerControlled
+                label="Mottatt dato"
+                value=""
+                onChange={() => undefined}
+                errorMessage="Påkrevd"
+                showExternalErrorAfterSubmit={false}
+                dataTestId="controlled-date-input"
+            />,
+        );
+
+        expect(screen.queryByText('Påkrevd')).not.toBeInTheDocument();
+
+        await user.click(screen.getByTestId('controlled-date-input'));
+        await user.tab();
+
+        expect(screen.getByText('Påkrevd')).toBeInTheDocument();
+    });
+
+    it('shows external error messages immediately after submit-style rerender', () => {
+        const { rerender } = render(
+            <DatovelgerControlled
+                label="Mottatt dato"
+                value=""
+                onChange={() => undefined}
+                errorMessage="Påkrevd"
+                showExternalErrorAfterSubmit={false}
+                dataTestId="controlled-date-input"
+            />,
+        );
+
+        expect(screen.queryByText('Påkrevd')).not.toBeInTheDocument();
+
+        rerender(
+            <DatovelgerControlled
+                label="Mottatt dato"
+                value=""
+                onChange={() => undefined}
+                errorMessage="Påkrevd"
+                showExternalErrorAfterSubmit={true}
+                dataTestId="controlled-date-input"
+            />,
+        );
+
+        expect(screen.getByText('Påkrevd')).toBeInTheDocument();
+    });
+
     it('commits the typed value on blur after the parent syncs the controlled value', async () => {
         const user = userEvent.setup();
         const onBlur = jest.fn();

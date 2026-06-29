@@ -6,6 +6,7 @@ export type DatovelgerControlledProps = Pick<DatePickerProps, 'defaultMonth' | '
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
         onChange: (value: string) => void;
         errorMessage?: React.ReactNode | string | boolean;
+        showExternalErrorAfterSubmit?: boolean;
         selectedDay?: string;
         disabled?: boolean;
         disabledDates?: DatePickerProps['disabled'];
@@ -26,6 +27,7 @@ const DatovelgerControlled = ({
     hideLabel,
     className,
     errorMessage,
+    showExternalErrorAfterSubmit,
     selectedDay,
     disabled,
     disabledDates,
@@ -52,6 +54,7 @@ const DatovelgerControlled = ({
             hideLabel={hideLabel}
             className={className}
             errorMessage={errorMessage}
+            showExternalErrorAfterSubmit={showExternalErrorAfterSubmit}
             value={value || selectedDay || ''}
             inputDisabled={disabled}
             disabledDates={disabledDates}

@@ -896,6 +896,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
+                    showFieldErrorsAfterSubmit={this.state.harForsoektAaSendeInn}
                 />
 
                 <VerticalSpacer sixteenPx />

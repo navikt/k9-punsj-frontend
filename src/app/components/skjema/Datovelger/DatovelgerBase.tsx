@@ -16,6 +16,7 @@ export type DatovelgerBaseProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDa
         onChange: (value: string) => void;
         onCommit?: (value: string) => void;
         errorMessage?: React.ReactNode | string | boolean;
+        showExternalErrorAfterSubmit?: boolean;
         inputDisabled?: boolean;
         disabledDates?: DatePickerProps['disabled'];
         inputRef?: React.Ref<HTMLInputElement>;
@@ -34,6 +35,7 @@ const DatovelgerBase = ({
     hideLabel,
     className,
     errorMessage,
+    showExternalErrorAfterSubmit = false,
     value,
     fromDate,
     toDate,
@@ -50,6 +52,7 @@ const DatovelgerBase = ({
     id,
 }: DatovelgerBaseProps) => {
     const [showValidationError, setShowValidationError] = useState(false);
+    const [hasBeenBlurred, setHasBeenBlurred] = useState(false);
     const [validationState, setValidationState] = useState<DateValidationT | undefined>(undefined);
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
@@ -72,7 +75,8 @@ const DatovelgerBase = ({
     };
 
     const inlineValidationMessage = showValidationError ? getValidationMessage(validationState) : undefined;
-    const error = inlineValidationMessage || errorMessage;
+    const externalErrorMessage = showExternalErrorAfterSubmit || hasBeenBlurred ? errorMessage : undefined;
+    const error = inlineValidationMessage || externalErrorMessage;
     const inputError = renderInlineErrorMessage ? error : !!error;
 
     useEffect(() => {
@@ -178,6 +182,7 @@ const DatovelgerBase = ({
                         inputProps.onChange?.(event);
                     }}
                     onBlur={(event) => {
+                        setHasBeenBlurred(true);
                         const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
                         setShowValidationError(nextValue === INVALID_DATE_VALUE || !!getValidationMessage(validationState));
                         commitValue(nextValue);

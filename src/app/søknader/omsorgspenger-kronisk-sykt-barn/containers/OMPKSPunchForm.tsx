@@ -431,6 +431,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
                     signert={signert}
+                    showFieldErrorsAfterSubmit={this.state.harForsoektAaSendeInn}
                     soknad={soknad}
                 />
                 <VerticalSpacer twentyPx />
