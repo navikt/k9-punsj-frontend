@@ -1,5 +1,5 @@
 import { ChangeEvent, FocusEvent, useEffect, useRef, useState } from 'react';
-import { DateValidationT, useDatepicker } from '@navikt/ds-react';
+import { DatePickerProps, DateValidationT, useDatepicker } from '@navikt/ds-react';
 import { FieldValues, Path, RegisterOptions, useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -15,12 +15,18 @@ interface UseFormDateInputProps<T extends FieldValues> {
     name: Path<T>;
     validate?: RegisterOptions<T>;
     defaultMonth?: Date;
+    fromDate?: Date;
+    toDate?: Date;
+    disabledDates?: DatePickerProps['disabled'];
 }
 
 export function useFormDateInput<T extends FieldValues>({
     name,
     validate,
     defaultMonth,
+    fromDate,
+    toDate,
+    disabledDates,
 }: UseFormDateInputProps<T>) {
     const { control } = useFormContext<T>();
     const { field, fieldState } = useController({
@@ -32,6 +38,8 @@ export function useFormDateInput<T extends FieldValues>({
     const value = typeof field.value === 'string' ? field.value : '';
     const [showValidationError, setShowValidationError] = useState(false);
     const [validationState, setValidationState] = useState<DateValidationT | undefined>(undefined);
+    const validationStateRef = useRef<DateValidationT | undefined>(undefined);
+    const inputValueRef = useRef<string>('');
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
     const lastPropagatedDateRef = useRef<string | undefined>(undefined);
@@ -50,7 +58,7 @@ export function useFormDateInput<T extends FieldValues>({
     };
 
     const commitIsoDateValue = (nextValue: string | typeof INVALID_DATE_VALUE) => {
-        if (nextValue === INVALID_DATE_VALUE) {
+        if (nextValue === INVALID_DATE_VALUE || getValidationMessage(validationStateRef.current)) {
             field.onBlur();
             return;
         }
@@ -65,6 +73,11 @@ export function useFormDateInput<T extends FieldValues>({
 
     const onDateChange = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
+        const shouldPropagateEmptyValue = inputValueRef.current === '';
+
+        if (!isoDateString && !shouldPropagateEmptyValue) {
+            return;
+        }
 
         if (isoDateString !== value && isoDateString !== lastPropagatedDateRef.current) {
             isInternalUpdateRef.current = true;
@@ -77,8 +90,12 @@ export function useFormDateInput<T extends FieldValues>({
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
         defaultMonth,
         defaultSelected: isISODateString(value) ? ISODateStringToUTCDate(value) : undefined,
+        fromDate,
+        toDate,
+        disabled: disabledDates,
         onDateChange,
         onValidate: (validation) => {
+            validationStateRef.current = validation;
             setValidationState(validation);
 
             if (validation.isValidDate || validation.isEmpty) {
@@ -104,12 +121,16 @@ export function useFormDateInput<T extends FieldValues>({
             lastPropagatedDateRef.current = undefined;
             lastCommittedDateRef.current = value;
         }
+
+        inputValueRef.current = value;
     }, [setSelected, value]);
 
     return {
         datepickerProps,
         inputProps,
         fieldRef: field.ref,
+        inlineValidationMessage: showValidationError ? getValidationMessage(validationState) : undefined,
+        fieldErrorMessage: fieldState.error?.message,
         error: (showValidationError ? getValidationMessage(validationState) : undefined) || fieldState.error?.message,
         fromDateDefault: offsetDateByYears(new Date(), -5),
         toDateDefault: offsetDateByYears(new Date(), 5),
@@ -120,11 +141,15 @@ export function useFormDateInput<T extends FieldValues>({
         },
         handleInputChange: (event: ChangeEvent<HTMLInputElement>) => {
             setShowValidationError(false);
+            inputValueRef.current = event.target.value;
             inputProps.onChange?.(event);
         },
         handleInputBlur: (event: FocusEvent<HTMLInputElement>) => {
             const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
-            setShowValidationError(nextValue === INVALID_DATE_VALUE || !!getValidationMessage(validationState));
+            const validationMessage = getValidationMessage(validationStateRef.current);
+            setShowValidationError(
+                nextValue === INVALID_DATE_VALUE || !!validationMessage,
+            );
             commitIsoDateValue(nextValue);
             inputProps.onBlur?.(event);
         },

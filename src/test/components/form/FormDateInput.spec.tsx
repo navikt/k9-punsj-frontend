@@ -122,4 +122,27 @@ describe('FormDateInput', () => {
 
         expect(screen.getByTestId('touched').textContent).toBe('touched');
     });
+
+    it('shows date range validation on blur when the value is before fromDate', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <TypedFormProvider formProps={{ defaultValues: { mottattDato: '' }, mode: 'onBlur' }}>
+                <>
+                    <TypedFormDateInput
+                        name="mottattDato"
+                        label="Mottatt dato"
+                        fromDate={new Date('2020-03-10T00:00:00.000Z')}
+                        data-testid="rhf-date-input"
+                    />
+                    <button type="button">Next</button>
+                </>
+            </TypedFormProvider>,
+        );
+
+        await user.type(screen.getByTestId('rhf-date-input'), '01.03.2020');
+        await user.tab();
+
+        expect(await screen.findByText('Datoen er ikke tillatt')).toBeInTheDocument();
+    });
 });

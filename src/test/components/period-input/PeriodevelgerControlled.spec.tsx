@@ -118,6 +118,21 @@ describe('PeriodevelgerControlled', () => {
         await testDateChange(inputIdTom, newTilOgMed, newTilOgMedFormatted, onChange, onBlur);
     });
 
+    it('should show inline validation when tom is before fom', async () => {
+        const onChange = jest.fn();
+        const onBlur = jest.fn();
+
+        setupPeriodevelgerControlled({ periode: { fom: '2020-03-10', tom: '' }, onChange, onBlur });
+
+        await userEvent.type(screen.getByTestId(inputIdTom), '01.03.2020');
+        await userEvent.tab();
+
+        expect(await screen.findByText('Startdato må være før sluttdato.')).toBeInTheDocument();
+        expect(screen.queryByText('Til og med: Datoen er ikke tillatt')).not.toBeInTheDocument();
+        expect(onChange).not.toHaveBeenCalledWith(expect.objectContaining({ tom: '2020-03-01' }));
+        expect(onBlur).not.toHaveBeenCalled();
+    });
+
     it('should update displayed values when periode props change after mount', async () => {
         const { rerender } = setupPeriodevelgerControlled({ periode: { fom: '2020-01-01', tom: '2020-02-01' } });
 

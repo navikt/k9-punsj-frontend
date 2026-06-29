@@ -127,4 +127,27 @@ describe('FormPeriodInput', () => {
         expect(screen.getByTestId('rhf-period-fom')).toHaveValue('01.02.2020');
         expect(screen.getByTestId('rhf-period-tom')).toHaveValue('06.02.2020');
     });
+
+    it('shows the legacy style group message for inline range validation', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <TypedFormProvider formProps={{ defaultValues: { periode: { fom: '2020-03-10', tom: '' } }, mode: 'onBlur' }}>
+                <>
+                    <TypedFormPeriodInput
+                        name="periode"
+                        fomDataTestId="rhf-period-fom"
+                        tomDataTestId="rhf-period-tom"
+                    />
+                    <button type="button">Next</button>
+                </>
+            </TypedFormProvider>,
+        );
+
+        await user.type(screen.getByTestId('rhf-period-tom'), '01.03.2020');
+        await user.tab();
+
+        expect(await screen.findByText('Startdato må være før sluttdato.')).toBeInTheDocument();
+        expect(screen.queryByText('Til og med: Datoen er ikke tillatt')).not.toBeInTheDocument();
+    });
 });

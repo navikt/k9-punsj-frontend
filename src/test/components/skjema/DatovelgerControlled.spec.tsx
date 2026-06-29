@@ -166,4 +166,36 @@ describe('DatovelgerControlled', () => {
 
         expect(screen.getByTestId('controlled-date-input')).toHaveValue('01.02.2020');
     });
+
+    it('keeps the typed value visible when editing an existing date to an out of range date', async () => {
+        const user = userEvent.setup();
+        const onBlur = jest.fn();
+
+        const TestHarness = () => {
+            const [value, setValue] = React.useState('2020-03-15');
+
+            return (
+                <DatovelgerControlled
+                    label="Mottatt dato"
+                    value={value}
+                    onChange={setValue}
+                    onBlur={onBlur}
+                    fromDate={new Date('2020-03-10T00:00:00.000Z')}
+                    dataTestId="controlled-date-input"
+                />
+            );
+        };
+
+        render(<TestHarness />);
+
+        const input = screen.getByTestId('controlled-date-input');
+
+        await user.clear(input);
+        await user.type(input, '01.03.2020');
+        await user.tab();
+
+        expect(input).toHaveValue('01.03.2020');
+        expect(screen.getByText('Datoen er ikke tillatt')).toBeInTheDocument();
+        expect(onBlur).not.toHaveBeenCalled();
+    });
 });

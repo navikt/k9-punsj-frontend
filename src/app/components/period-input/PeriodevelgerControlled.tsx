@@ -6,6 +6,7 @@ import { IntlShape } from 'react-intl';
 
 import { IPeriode } from '../../models/types/Periode';
 import DatovelgerControlled from '../skjema/Datovelger/DatovelgerControlled';
+import { resolvePeriodInlineErrors } from './periodErrorUtils';
 
 export interface PeriodevelgerControlledProps {
     intl: IntlShape;
@@ -69,9 +70,18 @@ export const PeriodevelgerControlled: React.FunctionComponent<PeriodevelgerContr
     const fomErrorId = `${inputIdFom || 'fom'}-error`;
     const tomErrorId = `${inputIdTom || 'tom'}-error`;
     const groupErrorId = `${inputIdFom || inputIdTom || 'periode'}-error`;
-    const fomErrorMessage = fomInlineValidationMessage || (typeof errorMessageFom === 'string' ? errorMessageFom : undefined);
-    const tomErrorMessage = tomInlineValidationMessage || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
-    const groupErrorMessage = typeof errorMessage === 'string' ? errorMessage : undefined;
+    const resolvedErrors = resolvePeriodInlineErrors({
+        fomInlineValidationMessage,
+        tomInlineValidationMessage,
+        fomHasUpperBound: !!normalizedPeriode.tom,
+        tomHasLowerBound: !!normalizedPeriode.fom,
+        fomFieldErrorMessage: typeof errorMessageFom === 'string' ? errorMessageFom : undefined,
+        tomFieldErrorMessage: typeof errorMessageTom === 'string' ? errorMessageTom : undefined,
+        groupErrorMessage: typeof errorMessage === 'string' ? errorMessage : undefined,
+    });
+    const fomErrorMessage = resolvedErrors.fomErrorMessage;
+    const tomErrorMessage = resolvedErrors.tomErrorMessage;
+    const groupErrorMessage = resolvedErrors.groupErrorMessage;
 
     return (
         <div className={rootClassName}>

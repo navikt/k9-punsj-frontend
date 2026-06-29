@@ -54,6 +54,8 @@ const DatovelgerBase = ({
     const [showValidationError, setShowValidationError] = useState(false);
     const [hasBeenBlurred, setHasBeenBlurred] = useState(false);
     const [validationState, setValidationState] = useState<DateValidationT | undefined>(undefined);
+    const validationStateRef = useRef<DateValidationT | undefined>(undefined);
+    const inputValueRef = useRef<string>('');
     const previousValueRef = useRef<string>(value);
     const isInternalUpdateRef = useRef(false);
     const lastPropagatedDateRef = useRef<string | undefined>(undefined);
@@ -88,7 +90,7 @@ const DatovelgerBase = ({
             return;
         }
 
-        if (nextValue === INVALID_DATE_VALUE) {
+        if (nextValue === INVALID_DATE_VALUE || getValidationMessage(validationStateRef.current)) {
             return;
         }
 
@@ -106,6 +108,11 @@ const DatovelgerBase = ({
 
     const onDateChange = (date?: Date) => {
         const isoDateString = date ? dateToISODateString(date) : '';
+        const shouldPropagateEmptyValue = inputValueRef.current === '';
+
+        if (!isoDateString && !shouldPropagateEmptyValue) {
+            return;
+        }
 
         if (
             isoDateString !== value &&
@@ -122,8 +129,12 @@ const DatovelgerBase = ({
     const { datepickerProps, inputProps, setSelected } = useDatepicker({
         defaultMonth,
         defaultSelected,
+        fromDate,
+        toDate,
+        disabled: disabledDates,
         onDateChange,
         onValidate: (validation) => {
+            validationStateRef.current = validation;
             setValidationState(validation);
 
             if (validation.isValidDate || (noValidateTomtFelt && validation.isEmpty)) {
@@ -146,6 +157,8 @@ const DatovelgerBase = ({
             lastPropagatedDateRef.current = undefined;
             lastCommittedDateRef.current = value;
         }
+
+        inputValueRef.current = value;
     }, [setSelected, value]);
 
     return (
@@ -179,12 +192,16 @@ const DatovelgerBase = ({
                     aria-describedby={errorAriaDescribedBy}
                     onChange={(event) => {
                         setShowValidationError(false);
+                        inputValueRef.current = event.target.value;
                         inputProps.onChange?.(event);
                     }}
                     onBlur={(event) => {
                         setHasBeenBlurred(true);
                         const nextValue = event.target.value ? InputDateStringToISODateString(event.target.value) : '';
-                        setShowValidationError(nextValue === INVALID_DATE_VALUE || !!getValidationMessage(validationState));
+                        const validationMessage = getValidationMessage(validationStateRef.current);
+                        setShowValidationError(
+                            nextValue === INVALID_DATE_VALUE || !!validationMessage,
+                        );
                         commitValue(nextValue);
                         inputProps.onBlur?.(event);
                     }}

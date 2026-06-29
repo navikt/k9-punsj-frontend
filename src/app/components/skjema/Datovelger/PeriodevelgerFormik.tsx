@@ -3,6 +3,7 @@ import { DatePickerProps, ErrorMessage } from '@navikt/ds-react';
 import { useField, useFormikContext } from 'formik';
 
 import DatovelgerFormik from './DatovelgerFormik';
+import { resolvePeriodInlineErrors } from '../../period-input/periodErrorUtils';
 
 interface PeriodevelgerFormikProps {
     name: string;
@@ -48,12 +49,18 @@ const PeriodevelgerFormik = ({
     const fomErrorId = `${effectiveFomId}-error`;
     const tomErrorId = `${effectiveTomId}-error`;
     const groupErrorId = `${effectiveFomId || effectiveTomId}-periode-error`;
-    const fomErrorMessage =
-        fomInlineValidationMessage || (fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' ? fomFieldMeta.error : undefined);
-    const tomErrorMessage =
-        tomInlineValidationMessage || (tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' ? tomFieldMeta.error : undefined);
-    const groupErrorMessage =
-        showPeriodeError && typeof periodeFieldMeta.error === 'string' ? periodeFieldMeta.error : undefined;
+    const resolvedErrors = resolvePeriodInlineErrors({
+        fomInlineValidationMessage,
+        tomInlineValidationMessage,
+        fomHasUpperBound: !!tomFieldMeta.value,
+        tomHasLowerBound: !!fomFieldMeta.value,
+        fomFieldErrorMessage: fomFieldMeta.touched && typeof fomFieldMeta.error === 'string' ? fomFieldMeta.error : undefined,
+        tomFieldErrorMessage: tomFieldMeta.touched && typeof tomFieldMeta.error === 'string' ? tomFieldMeta.error : undefined,
+        groupErrorMessage: showPeriodeError && typeof periodeFieldMeta.error === 'string' ? periodeFieldMeta.error : undefined,
+    });
+    const fomErrorMessage = resolvedErrors.fomErrorMessage;
+    const tomErrorMessage = resolvedErrors.tomErrorMessage;
+    const groupErrorMessage = resolvedErrors.groupErrorMessage;
 
     return (
         <div className="flex flex-col gap-2">

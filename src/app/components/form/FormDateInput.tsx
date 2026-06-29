@@ -35,6 +35,9 @@ export function FormDateInput<T extends FieldValues>({
         name,
         validate,
         defaultMonth,
+        fromDate,
+        toDate,
+        disabledDates,
     });
 
     return (

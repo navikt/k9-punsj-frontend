@@ -4,6 +4,7 @@ import { FieldValues, Path, useController, useFormContext, useWatch } from 'reac
 
 import { IPeriode } from 'app/models/types/Periode';
 import { isISODateString, ISODateStringToUTCDate } from 'app/utils/date/dateFormat';
+import { resolvePeriodInlineErrors } from 'app/components/period-input/periodErrorUtils';
 
 import { useFormDateInput } from './internal/useFormDateInput';
 import { FormPeriodInputProps } from './types';
@@ -89,8 +90,18 @@ export function FormPeriodInput<T extends FieldValues>({
     });
 
     const rootClassName = className ? `flex flex-col gap-2 ${className}` : 'flex flex-col gap-2';
-    const fromErrorMessage = typeof fromField.error === 'string' ? fromField.error : undefined;
-    const toErrorMessage = typeof toField.error === 'string' ? toField.error : undefined;
+    const resolvedErrors = resolvePeriodInlineErrors({
+        fomInlineValidationMessage: fromField.inlineValidationMessage,
+        tomInlineValidationMessage: toField.inlineValidationMessage,
+        fomHasUpperBound: !!periodValue.tom,
+        tomHasLowerBound: !!periodValue.fom,
+        fomFieldErrorMessage: fromField.fieldErrorMessage,
+        tomFieldErrorMessage: toField.fieldErrorMessage,
+        groupErrorMessage,
+    });
+    const fromErrorMessage = resolvedErrors.fomErrorMessage;
+    const toErrorMessage = resolvedErrors.tomErrorMessage;
+    const resolvedGroupErrorMessage = resolvedErrors.groupErrorMessage;
     const previousPeriodKeyRef = React.useRef(`${periodValue.fom}::${periodValue.tom}`);
 
     React.useEffect(() => {
@@ -147,7 +158,7 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!fromErrorMessage}
                             data-testid={fomDataTestId}
-                            aria-describedby={[fromErrorMessage ? fomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                            aria-describedby={[fromErrorMessage ? fomErrorId : undefined, resolvedGroupErrorMessage ? groupErrorId : undefined]
                                 .filter(Boolean)
                                 .join(' ')}
                             onChange={fromField.handleInputChange}
@@ -184,7 +195,7 @@ export function FormPeriodInput<T extends FieldValues>({
                             }}
                             error={!!toErrorMessage}
                             data-testid={tomDataTestId}
-                            aria-describedby={[toErrorMessage ? tomErrorId : undefined, groupErrorMessage ? groupErrorId : undefined]
+                            aria-describedby={[toErrorMessage ? tomErrorId : undefined, resolvedGroupErrorMessage ? groupErrorId : undefined]
                                 .filter(Boolean)
                                 .join(' ')}
                             onChange={toField.handleInputChange}
@@ -208,9 +219,9 @@ export function FormPeriodInput<T extends FieldValues>({
                         {toLabel}: {toErrorMessage}
                     </ErrorMessage>
                 )}
-                {groupErrorMessage && (periodFieldState.isTouched || submitCount > 0) && (
+                {resolvedGroupErrorMessage && (periodFieldState.isTouched || submitCount > 0) && (
                     <ErrorMessage id={groupErrorId} aria-describedby={fomId || tomId} showIcon>
-                        {groupErrorMessage}
+                        {resolvedGroupErrorMessage}
                     </ErrorMessage>
                 )}
             </div>
