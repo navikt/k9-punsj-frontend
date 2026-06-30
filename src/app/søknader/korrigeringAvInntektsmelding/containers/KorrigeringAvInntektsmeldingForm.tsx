@@ -546,7 +546,9 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 extraInfo="modal.erdusikker.sendinn.extrainfo"
                                 open
                                 submitKnappText="skjema.knapp.send"
-                                onSubmit={() => sendInnKorrigering(values)}
+                                onSubmit={() => {
+                                    sendInnKorrigering(values);
+                                }}
                                 onClose={() => {
                                     dispatch({ type: ActionType.SKJUL_ER_DU_SIKKER_MODAL });
                                 }}

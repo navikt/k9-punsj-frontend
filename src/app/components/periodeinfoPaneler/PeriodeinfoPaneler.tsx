@@ -9,7 +9,7 @@ import {
     UpdateListeinfoInSoknad,
     UpdateListeinfoInSoknadState,
 } from 'app/components/Listepaneler';
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import Periodevelger from 'app/components/period-input/Periodevelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import {
@@ -124,36 +124,33 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
         const periodInputIds = createPeriodInputIds(feilkodeprefiks, feltIndeks, `index-${periodeindeks}`);
         return (
             <>
-                <div className="flex items-start">
-                    <PeriodInput
-                        periode={periodeinfo.periode || {}}
-                        intl={intlShape!}
-                        onChange={(periode) => {
-                            editSoknadState(editPeriode(periodeindeks, periode));
-                        }}
-                        onBlur={(periode) => {
-                            editSoknad(editPeriode(periodeindeks, periode));
-                        }}
-                        errorMessage={getErrorMessage?.(
-                            `${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`,
-                        )}
-                        initialValues={initialValues}
-                        inputIdFom={periodInputIds.fomId}
-                        inputIdTom={periodInputIds.tomId}
-                    />
-
-                    <Button
-                        id="slett"
-                        className="slett-knapp-med-icon-for-input"
-                        type="button"
-                        onClick={removePeriode}
-                        tabIndex={0}
-                        icon={<TrashIcon title="slett" />}
-                        variant="tertiary"
-                    >
-                        {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
-                    </Button>
-                </div>
+                <Periodevelger
+                    periode={periodeinfo.periode || {}}
+                    intl={intlShape!}
+                    onChange={(periode) => {
+                        editSoknadState(editPeriode(periodeindeks, periode));
+                    }}
+                    onBlur={(periode) => {
+                        editSoknad(editPeriode(periodeindeks, periode));
+                    }}
+                    errorMessage={getErrorMessage?.(`${periodeFeilkode || feilkodeprefiks}.perioder[${feltIndeks}]`)}
+                    initialValues={initialValues}
+                    inputIdFom={periodInputIds.fomId}
+                    inputIdTom={periodInputIds.tomId}
+                    action={
+                        <Button
+                            id="slett"
+                            className="slett-knapp-med-icon-for-input"
+                            type="button"
+                            onClick={removePeriode}
+                            tabIndex={0}
+                            icon={<TrashIcon title="slett" />}
+                            variant="tertiary"
+                        >
+                            {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
+                        </Button>
+                    }
+                />
                 {!!component &&
                     component(
                         periodeinfo,

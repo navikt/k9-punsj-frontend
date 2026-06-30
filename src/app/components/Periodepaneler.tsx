@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button } from '@navikt/ds-react';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import Periodevelger from 'app/components/period-input/Periodevelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import { createPeriodInputIds, periodKeyFromPeriode } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
@@ -112,8 +112,8 @@ export const Periodepaneler: React.FC<Props> = ({
                 const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
 
                 return (
-                    <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
-                        <PeriodInput
+                    <div key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
+                        <Periodevelger
                             periode={p || {}}
                             intl={intl}
                             onChange={(periode) => {
@@ -127,29 +127,32 @@ export const Periodepaneler: React.FC<Props> = ({
                             errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
                             inputIdFom={periodInputIds.fomId}
                             inputIdTom={periodInputIds.tomId}
-                        />
-
-                        <Button
-                            id="slett"
-                            className={
-                                getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'
+                            action={
+                                <Button
+                                    id="slett"
+                                    className={
+                                        getErrorMessage!(feilkodeprefiks!, i)
+                                            ? 'fjern-feil '
+                                            : 'slett-knapp-med-icon-for-input'
+                                    }
+                                    type="button"
+                                    onClick={() => {
+                                        const newArray: IPeriode[] = removeItem(i);
+                                        if (editSoknadState) {
+                                            editSoknadState(newArray);
+                                        }
+                                        editSoknad(newArray);
+                                        if (onRemove) {
+                                            onRemove();
+                                        }
+                                    }}
+                                    icon={<TrashIcon title="slettPeriode" />}
+                                    variant="tertiary"
+                                >
+                                    <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                                </Button>
                             }
-                            type="button"
-                            onClick={() => {
-                                const newArray: IPeriode[] = removeItem(i);
-                                if (editSoknadState) {
-                                    editSoknadState(newArray);
-                                }
-                                editSoknad(newArray);
-                                if (onRemove) {
-                                    onRemove();
-                                }
-                            }}
-                            icon={<TrashIcon title="slettPeriode" />}
-                            variant="tertiary"
-                        >
-                            <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
-                        </Button>
+                        />
                     </div>
                 );
             })}

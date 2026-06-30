@@ -85,6 +85,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
+                size="small"
             />
 
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
@@ -103,6 +104,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    size="small"
                     fromDate={
                         values.opptjeningAktivitet.frilanser?.startdato
                             ? new Date(values.opptjeningAktivitet.frilanser.startdato)
@@ -262,6 +264,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         className="fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
+                        size="small"
                     />
 
                     {/* errorMessage={getErrorMessage(
@@ -272,6 +275,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         className="tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
+                        size="small"
                         fromDate={
                             opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
                                 ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
@@ -324,6 +328,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
+                                size="small"
                             />
                         </div>
                         <VerticalSpacer sixteenPx />

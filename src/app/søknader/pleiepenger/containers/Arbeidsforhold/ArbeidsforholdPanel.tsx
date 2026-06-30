@@ -4,7 +4,7 @@ import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-re
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -79,7 +79,7 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <NewDateInput
+                <Datovelger
                     id="frilanser-startdato"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
@@ -123,7 +123,7 @@ const ArbeidsforholdPanel = ({
                 />
 
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <NewDateInput
+                    <Datovelger
                         id="frilanser-sluttdato"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
@@ -516,7 +516,7 @@ const ArbeidsforholdPanel = ({
                 </div>
 
                 <div className="sn-startdatocontainer">
-                    <NewDateInput
+                    <Datovelger
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
@@ -561,7 +561,7 @@ const ArbeidsforholdPanel = ({
                         }}
                     />
 
-                    <NewDateInput
+                    <Datovelger
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
@@ -696,7 +696,7 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <NewDateInput
+                            <Datovelger
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}

@@ -72,23 +72,18 @@ body {
 }
 
 .slett-knapp-med-icon-for-input {
-    @apply ml-4 text-red-600 decoration-red-600 p-0;
+    @apply ml-4 text-red-600 inline-flex items-center;
 
-    margin-top: 3.2rem;
     margin-left: 1rem !important;
     color: #dc2626 !important;
-    text-decoration-color: #dc2626 !important;
-    padding: 0 !important;
 }
 
 .slett-knapp-med-icon-for-input:hover,
 .slett-knapp-med-icon-for-input:focus,
 .slett-knapp-med-icon-for-input:active {
-    @apply bg-transparent text-red-600 decoration-red-600;
+    @apply text-red-600;
 
-    background-color: transparent !important;
     color: #dc2626 !important;
-    text-decoration-color: #dc2626 !important;
 }
 
 .slett-knapp-med-icon {

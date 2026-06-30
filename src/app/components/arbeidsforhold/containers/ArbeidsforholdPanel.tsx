@@ -6,6 +6,7 @@ import { Accordion, Alert, Box, TextField, Textarea } from '@navikt/ds-react';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -19,8 +20,6 @@ import { Arbeidstaker } from '../../../models/types';
 import { IPeriode } from '../../../models/types/Periode';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import NewDateInput from 'app/components/skjema/NewDateInput/NewDateInput';
-
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
     fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
@@ -80,7 +79,7 @@ const ArbeidsforholdPanel = ({
 
         return (
             <>
-                <NewDateInput
+                <Datovelger
                     id="frilanser-startdato"
                     value={soknad.opptjeningAktivitet.frilanser?.startdato || ''}
                     className="frilanser-startdato"
@@ -124,7 +123,7 @@ const ArbeidsforholdPanel = ({
                 />
 
                 {!opptjening.frilanser?.jobberFortsattSomFrilans && (
-                    <NewDateInput
+                    <Datovelger
                         id="frilanser-sluttdato"
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
@@ -484,7 +483,7 @@ const ArbeidsforholdPanel = ({
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
                 <div className="sn-startdatocontainer">
-                    <NewDateInput
+                    <Datovelger
                         className="fom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
@@ -528,11 +527,10 @@ const ArbeidsforholdPanel = ({
                             });
                         }}
                     />
-                    <NewDateInput
+                    <Datovelger
                         className="tom"
                         value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        noValidateTomtFelt={true}
                         fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
@@ -655,7 +653,7 @@ const ArbeidsforholdPanel = ({
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.erVarigEndring && (
                     <>
                         <div className="flex flex-wrap">
-                            <NewDateInput
+                            <Datovelger
                                 className="endringdato"
                                 value={opptjening.selvstendigNaeringsdrivende?.info?.endringDato || ''}
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
