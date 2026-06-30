@@ -85,11 +85,21 @@
     margin-left: 0.5rem;
 }
 
+.punch .panels-wrapper .punch_form .klokkeslett input[type='time'],
+.punch .panels-wrapper .omsorgspenger_punch_form .klokkeslett input[type='time'] {
+    height: 2rem;
+}
+
 .punch .panels-wrapper .punch_form .opplysninger-om-soknaden-panel .input-row,
 .punch .panels-wrapper .omsorgspenger_punch_form .opplysninger-om-soknaden-panel .input-row,
 .punch .panels-wrapper .punch_form .opplysninger-om-soknaden-panel .horizontalRadios,
 .punch .panels-wrapper .omsorgspenger_punch_form .opplysninger-om-soknaden-panel .horizontalRadios {
     margin: 0;
+}
+
+.punch .panels-wrapper .punch_form .opplysninger-om-soknaden-panel .input-row,
+.punch .panels-wrapper .omsorgspenger_punch_form .opplysninger-om-soknaden-panel .input-row {
+    align-items: flex-start;
 }
 
 .punch .panels-wrapper .punch_form .knapperad .knapp1,
