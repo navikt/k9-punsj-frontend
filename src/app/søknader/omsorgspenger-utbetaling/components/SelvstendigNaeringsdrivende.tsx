@@ -7,6 +7,7 @@ import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
@@ -19,7 +20,6 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 enum Virksomhetstyper {
     FISKE = 'Fiske',
@@ -208,14 +208,16 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                 </Label>
 
                 <div className="fom-tom-rad">
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                        size="small"
                     />
 
-                    <DatoInputFormikNew
+                    <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                        size="small"
                     />
                 </div>
 
