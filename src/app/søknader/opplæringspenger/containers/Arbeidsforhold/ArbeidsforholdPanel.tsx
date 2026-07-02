@@ -15,17 +15,16 @@ import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
 import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
-import { isISODateString } from 'app/utils/date/dateFormat';
 import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../../../../components/formikInput/TextAreaFormik';
 import TextFieldFormik from '../../../../components/formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatovelgerFormik from '../../../../components/skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -260,40 +259,10 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <VerticalSpacer sixteenPx />
 
-                <div className="sn-startdatocontainer">
-                    <DatovelgerFormik
-                        className="fom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                        size="small"
-                        toDate={
-                            isISODateString(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.tom)
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
-                                : undefined
-                        }
-                    />
-
-                    {/* errorMessage={getErrorMessage(
-                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
-                        )} */}
-
-                    <DatovelgerFormik
-                        className="tom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        size="small"
-                        fromDate={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                        defaultMonth={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                    />
-                </div>
+                <PeriodevelgerFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
+                    size="small"
+                />
 
                 <VerticalSpacer sixteenPx />
 

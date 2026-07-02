@@ -7,6 +7,7 @@ import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
+import Periodevelger from 'app/components/period-input/Periodevelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
@@ -482,93 +483,43 @@ const ArbeidsforholdPanel = ({
                     </div>
                 )}
                 <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
-                <div className="sn-startdatocontainer">
-                    <Datovelger
-                        className="fom"
-                        value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom || ''}
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                        errorMessage={getErrorMessage(
-                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder',
-                        )}
-                        fromDate={limitFromDate}
-                        onChange={(selectedDate: any) => {
-                            updateSoknadState(
-                                {
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                periode: {
-                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                    fom: selectedDate,
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                                false,
-                            );
-                            updateSoknad({
+                <Periodevelger
+                    periode={opptjening.selvstendigNaeringsdrivende?.info?.periode || {}}
+                    intl={intl}
+                    fromDate={limitFromDate}
+                    onChange={(periode) => {
+                        updateSoknadState(
+                            {
                                 opptjeningAktivitet: {
                                     ...opptjening,
                                     selvstendigNaeringsdrivende: {
                                         ...opptjening.selvstendigNaeringsdrivende,
                                         info: {
                                             ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            periode: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                fom: selectedDate,
-                                            },
+                                            periode,
                                         },
                                     },
                                 },
-                            });
-                        }}
-                    />
-                    <Datovelger
-                        className="tom"
-                        value={opptjening.selvstendigNaeringsdrivende?.info?.periode?.tom || ''}
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        fromDate={limitFromDate}
-                        onChange={(selectedDate: any) => {
-                            updateSoknadState(
-                                {
-                                    opptjeningAktivitet: {
-                                        ...opptjening,
-                                        selvstendigNaeringsdrivende: {
-                                            ...opptjening.selvstendigNaeringsdrivende,
-                                            info: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info,
-                                                periode: {
-                                                    ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                    tom: selectedDate,
-                                                },
-                                            },
-                                        },
+                            },
+                            false,
+                        );
+                    }}
+                    onBlur={(periode) => {
+                        updateSoknad({
+                            opptjeningAktivitet: {
+                                ...opptjening,
+                                selvstendigNaeringsdrivende: {
+                                    ...opptjening.selvstendigNaeringsdrivende,
+                                    info: {
+                                        ...opptjening.selvstendigNaeringsdrivende?.info,
+                                        periode,
                                     },
                                 },
-                                false,
-                            );
-                            updateSoknad({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            periode: {
-                                                ...opptjening.selvstendigNaeringsdrivende?.info?.periode,
-                                                tom: selectedDate,
-                                            },
-                                        },
-                                    },
-                                },
-                            });
-                        }}
-                    />
-                </div>
+                            },
+                        });
+                    }}
+                    errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder')}
+                />
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom &&
                     erYngreEnn4år(opptjening.selvstendigNaeringsdrivende?.info?.periode?.fom) && (
                         <TextField
