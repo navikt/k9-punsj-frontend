@@ -112,7 +112,10 @@ describe('Opprett journalpost', { testIsolation: false }, () => {
             cy.findByTestId('opprettJournalpostFagsakSelect')
                 .find('option[value="ABC123"]')
                 .should('not.be.disabled');
-            cy.findByTestId('opprettJournalpostFagsakSelect').find('option[value="HIST001"]').should('be.disabled');
+            cy.findByTestId('opprettJournalpostFagsakSelect')
+                .find('option[value="HIST001"]')
+                .should('be.disabled')
+                .and('contain.text', '(historisk)');
         });
 
         it('skal håndtere tomme fagsaker', () => {
