@@ -5,6 +5,7 @@ import { capitalize } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
@@ -12,7 +13,6 @@ import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiR
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
-import { isISODateString } from 'app/utils/date/dateFormat';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
@@ -208,34 +208,10 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                     <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.startDato.spm'} />
                 </Label>
 
-                <div className="fom-tom-rad">
-                    <DatovelgerFormik
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                        size="small"
-                        toDate={
-                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
-                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
-                                : undefined
-                        }
-                    />
-
-                    <DatovelgerFormik
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        size="small"
-                        fromDate={
-                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                        defaultMonth={
-                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                    />
-                </div>
+                <PeriodevelgerFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
+                    size="small"
+                />
 
                 <VerticalSpacer twentyPx />
 

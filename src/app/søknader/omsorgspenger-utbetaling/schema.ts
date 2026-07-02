@@ -131,12 +131,12 @@ const selvstendigNaeringsdrivendeKorrigering = () =>
 
 const frilanser = () =>
     yup.object({
-        startdato: yup.string().required().label('Startdato'),
+        startdato: yup.string().required('Startdato er et påkrevd felt.').label('Startdato'),
         sluttdato: yup
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: () => yup.string().required(),
+                then: (schema) => schema.required('Sluttdato er et påkrevd felt.'),
             })
             .label('Sluttdato'),
         jobberFortsattSomFrilans: yup.boolean(),
