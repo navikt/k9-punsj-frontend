@@ -71,45 +71,77 @@ Suggested starter prompt:
 
 ## Plan
 
-- Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
-- Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- Build the direct dependency and devDependency candidate list from `package.json` and check publish timestamps before selecting versions.
-- Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
-- Run full validation for patch pass and document results.
-- Stop and ask user whether to commit patch pass.
-- Continue to minor pass only after explicit approval, then validate and stop before majors.
-- Attempt majors only if explicitly approved after patch and minor are green.
+- [x] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
+- [x] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
+- [x] Build the direct dependency and devDependency candidate list from `package.json` and check publish timestamps before selecting versions.
+- [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
+- [x] Run full validation for patch pass and document results.
+- [x] Stop and ask user whether to commit patch pass.
+- [ ] Continue to minor pass only after explicit approval, then validate and stop before majors.
+- [ ] Attempt majors only if explicitly approved after patch and minor are green.
 
 ## Progress notes
 
-- Add short factual notes for the current run only.
-- Start each new run by replacing this section with fresh dated notes.
-- Carry-over issues to watch in next run:
-    - `npm view` for some `@navikt/*` packages can return `401` in this shell/registry setup.
-    - Workspace commands can unintentionally touch `server/package.json`; verify scope before commit.
-    - Interrupted `yarn test:e2e` runs can look like failures; confirm with one uninterrupted full run.
+- 2026-07-02: Verified `.yarnrc.yml` has `npmMinimalAgeGate: 7d`.
+- 2026-07-02: Computed cooldown cutoff (UTC) as `2026-06-25T12:31:38.253Z` before any install attempt.
+- 2026-07-02: Built patch candidate list with `yarn npm info <pkg> --fields versions,time --json` and selected newest stable versions older than cutoff.
+- 2026-07-02: Applied patch updates for direct deps/devDeps and `resolutions`; `webpack-dev-server@5.2.5` was rolled back to `5.2.4` due runtime regression in e2e (`require is not defined`).
+- 2026-07-02: Validation completed for patch pass. Full e2e run had 1 failing spec (`SendBrevIAvsluttetSak`), but targeted rerun of that spec passed (15/15), indicating likely intermittent failure.
 
 ## Outcome
 
 - Changed files:
-    - _fill in per run_
+    - `copilot-tasks/weekly-package-maintenance.md`
+    - `package.json`
+    - `server/package.json`
+    - `yarn.lock`
 - Patch pass:
-    - _fill in selected updates_
+    - Direct dependencies:
+        - `@babel/runtime` `7.29.2 -> 7.29.7`
+        - `@tanstack/react-query` `5.101.0 -> 5.101.1`
+        - `tailwindcss` `4.3.0 -> 4.3.1`
+        - `uuid` `14.0.0 -> 14.0.1`
+    - Dev dependencies:
+        - `@babel/core` `7.29.0 -> 7.29.7`
+        - `@babel/plugin-transform-runtime` `7.29.0 -> 7.29.7`
+        - `@babel/preset-env` `7.29.5 -> 7.29.7`
+        - `@sentry/cli` `3.5.0 -> 3.5.1` (also updated in workspace `server/package.json`)
+        - `@storybook/react` `10.4.4 -> 10.4.6`
+        - `@storybook/react-webpack5` `10.4.4 -> 10.4.6`
+        - `@tailwindcss/postcss` `4.3.0 -> 4.3.1`
+        - `@types/node` `25.9.3 -> 25.9.4`
+        - `@typescript-eslint/parser` `8.61.0 -> 8.61.1`
+        - `autoprefixer` `10.5.0 -> 10.5.2`
+        - `lint-staged` `17.0.7 -> 17.0.8`
+        - `storybook` `10.4.4 -> 10.4.6`
+        - `terser-webpack-plugin` `5.6.0 -> 5.6.1`
+        - `typescript-eslint` `8.61.0 -> 8.61.1`
+        - `webpack` `5.107.0 -> 5.107.2`
+        - `webpack-dev-server` attempted `5.2.4 -> 5.2.5`, then rolled back to `5.2.4` after e2e regression
+    - Resolutions:
+        - `qs` `6.15.2 -> 6.15.3`
+        - `systeminformation` `5.31.7 -> 5.31.11`
+        - `uuid@npm:^8.3.2` `14.0.0 -> 14.0.1`
 - Minor pass:
-    - _fill in selected updates_
+    - not started
 - Major pass:
-    - _fill in selected updates or write `not started`_
+    - not started
 - Validation:
-    - `yarn explain peer-requirements`: _result_
-    - `yarn lint`: _result_
-    - `yarn tsc --noEmit`: _result_
-    - `yarn test --maxWorkers=2`: _result_
-    - `yarn build`: _result_
-    - `yarn test:e2e`: _result when relevant_
+    - `yarn explain peer-requirements`: completed with existing peer issues/warnings (not new blockers for this pass), including `p44ced1` and Storybook peer warnings
+    - `yarn lint`: passed
+    - `yarn tsc --noEmit`: passed
+    - `yarn test --maxWorkers=2`: passed (`63/63` suites, `450/450` tests)
+    - `yarn build`: passed
+    - `yarn test:e2e`: full run ended with `1/29` failing spec (`SendBrevIAvsluttetSak`), then targeted rerun for that spec passed (`15/15`)
 - Skipped versions still inside cooldown:
-    - _fill in per run_
+    - `react-intl@10.1.14` (stayed on `10.1.13`)
+    - `postcss@8.5.16` (stayed on `8.5.15`)
+    - `prettier@3.8.5` (stayed on `3.8.4`)
+    - stepped down intentionally due cutoff (latest too new): `@tanstack/react-query@5.101.2`, `tailwindcss@4.3.2`, `@tailwindcss/postcss@4.3.2`, `@sentry/cli@3.6.0`, `webpack@5.108.3`
 - Remaining follow ups:
-    - _fill in per run_
+    - Decide whether to commit patch pass as-is.
+    - If strict green full-suite e2e is required before commit, rerun full `yarn test:e2e` once more uninterrupted to confirm whether `SendBrevIAvsluttetSak` failure was intermittent.
+    - Minor pass is pending explicit approval.
 - Known issues from previous run:
     - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
     - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
