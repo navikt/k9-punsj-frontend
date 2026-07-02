@@ -37,6 +37,8 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
     intl,
     periode,
     onChange,
+    fromDate,
+    toDate,
     disabled,
     initialValues,
     errorMessage,
@@ -67,6 +69,16 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
         isISODateString(normalizedPeriode.fom) &&
         isISODateString(normalizedPeriode.tom) &&
         normalizedPeriode.tom < normalizedPeriode.fom;
+    const effectiveToDate = isISODateString(normalizedPeriode.tom)
+        ? toDate && toDate < new Date(normalizedPeriode.tom)
+            ? toDate
+            : new Date(normalizedPeriode.tom)
+        : toDate;
+    const effectiveFromDate = isISODateString(normalizedPeriode.fom)
+        ? fromDate && fromDate > new Date(normalizedPeriode.fom)
+            ? fromDate
+            : new Date(normalizedPeriode.fom)
+        : fromDate;
     const fomErrorMessage = fomLocalError || (typeof errorMessageFom === 'string' ? errorMessageFom : undefined);
     const tomErrorMessage = tomLocalError || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
     const groupErrorMessage =
@@ -99,6 +111,8 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, true)}
                         id={inputIdFom}
                         disabled={disabled || disabledFom}
+                        fromDate={fromDate}
+                        toDate={effectiveToDate}
                         errorMessage={!!fomErrorMessage}
                         label={intlHelper(intl, 'skjema.perioder.fom')}
                         inputRef={fomInputRef}
@@ -119,11 +133,15 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
                         onBlur={(selectedDate) => handleOnBlur(selectedDate, false)}
                         id={inputIdTom}
                         disabled={disabled || disabledTom}
+                        fromDate={effectiveFromDate}
+                        toDate={toDate}
                         errorMessage={!!tomErrorMessage}
                         inputRef={tomInputRef}
                         label={intlHelper(intl, 'skjema.perioder.tom')}
                         dataTestId="tom"
-                        defaultMonth={normalizedPeriode.fom ? new Date(normalizedPeriode.fom) : undefined}
+                        defaultMonth={
+                            isISODateString(normalizedPeriode.fom) ? new Date(normalizedPeriode.fom) : undefined
+                        }
                         size={size}
                         visFeilmelding={false}
                         errorAriaDescribedBy={[

@@ -15,6 +15,7 @@ import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
 import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
+import { isISODateString } from 'app/utils/date/dateFormat';
 import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
@@ -265,6 +266,11 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         size="small"
+                        toDate={
+                            isISODateString(opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.tom)
+                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
+                                : undefined
+                        }
                     />
 
                     {/* errorMessage={getErrorMessage(

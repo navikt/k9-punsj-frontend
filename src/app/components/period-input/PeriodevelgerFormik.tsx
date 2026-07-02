@@ -56,6 +56,16 @@ const PeriodevelgerFormik = ({
     const fomValue = typeof fomFieldMeta.value === 'string' ? fomFieldMeta.value : '';
     const tomValue = typeof tomFieldMeta.value === 'string' ? tomFieldMeta.value : '';
     const hasRangeError = isISODateString(fomValue) && isISODateString(tomValue) && tomValue < fomValue;
+    const effectiveToDate = isISODateString(tomValue)
+        ? toDate && toDate < new Date(tomValue)
+            ? toDate
+            : new Date(tomValue)
+        : toDate;
+    const effectiveFromDate = isISODateString(fomValue)
+        ? fromDate && fromDate > new Date(fomValue)
+            ? fromDate
+            : new Date(fomValue)
+        : fromDate;
     const fomErrorMessage =
         fomLocalError || (showFomError && typeof fomFieldMeta.error === 'string' ? fomFieldMeta.error : undefined);
     const tomErrorMessage =
@@ -73,7 +83,7 @@ const PeriodevelgerFormik = ({
                         name={fomFieldName}
                         label="Fra og med"
                         fromDate={fromDate}
-                        toDate={toDate}
+                        toDate={effectiveToDate}
                         visFeilmelding={false}
                         disabled={disabledFom ?? disabled}
                         inputRef={fomInputRef}
@@ -92,8 +102,8 @@ const PeriodevelgerFormik = ({
                         id={inputIdTom || tomFieldName}
                         name={tomFieldName}
                         label="Til og med"
-                        defaultMonth={fomFieldMeta.value ? new Date(fomFieldMeta.value) : undefined}
-                        fromDate={fromDate}
+                        defaultMonth={isISODateString(fomValue) ? new Date(fomValue) : undefined}
+                        fromDate={effectiveFromDate}
                         toDate={toDate}
                         visFeilmelding={false}
                         disabled={disabledTom ?? disabled}

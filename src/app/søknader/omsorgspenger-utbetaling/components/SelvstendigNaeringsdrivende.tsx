@@ -12,6 +12,7 @@ import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiR
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
+import { isISODateString } from 'app/utils/date/dateFormat';
 import { erEldreEnn4år, erYngreEnn4år } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
@@ -212,12 +213,27 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
                         size="small"
+                        toDate={
+                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
+                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom)
+                                : undefined
+                        }
                     />
 
                     <DatovelgerFormik
                         name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
                         label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                         size="small"
+                        fromDate={
+                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
+                        defaultMonth={
+                            isISODateString(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                ? new Date(values.opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
+                                : undefined
+                        }
                     />
                 </div>
 
