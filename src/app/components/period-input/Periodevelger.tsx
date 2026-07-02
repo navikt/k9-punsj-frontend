@@ -1,9 +1,8 @@
 import React from 'react';
-import { ErrorMessage } from '@navikt/ds-react';
+import { DatePickerProps, ErrorMessage } from '@navikt/ds-react';
 import { isISODateString } from 'app/utils/date/dateFormat';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
-import { DatePickerProps } from '@navikt/ds-react';
 
 import { IPeriode } from '../../models/types/Periode';
 import Datovelger from '../skjema/Datovelger/Datovelger';
