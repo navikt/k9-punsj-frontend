@@ -19,6 +19,7 @@ import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';

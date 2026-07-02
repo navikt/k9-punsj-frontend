@@ -8,7 +8,6 @@ import { Box, Button, Heading, Label } from '@navikt/ds-react';
 import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
-import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import LegacyRadioGroupFormik from 'app/components/formikInput/LegacyRadioGroupFormik';
 import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
