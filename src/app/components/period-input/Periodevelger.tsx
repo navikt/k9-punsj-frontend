@@ -29,6 +29,8 @@ export interface PeriodevelgerProps {
     tomInputRef?: React.Ref<HTMLInputElement>;
     size?: 'small' | 'medium';
     action?: React.ReactNode;
+    labelFom?: string;
+    labelTom?: string;
 }
 
 const PERIOD_RANGE_ERROR_MESSAGE = 'Startdato må være før sluttdato.';
@@ -54,6 +56,8 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
     tomInputRef,
     size,
     action,
+    labelFom,
+    labelTom,
 }) => {
     const normalizedPeriode = {
         fom: typeof periode?.fom === 'string' ? periode.fom : initialValues?.fom || '',
@@ -83,6 +87,8 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
     const tomErrorMessage = tomLocalError || (typeof errorMessageTom === 'string' ? errorMessageTom : undefined);
     const groupErrorMessage =
         typeof errorMessage === 'string' ? errorMessage : hasRangeError ? PERIOD_RANGE_ERROR_MESSAGE : undefined;
+    const resolvedLabelFom = labelFom || intlHelper(intl, 'skjema.perioder.fom');
+    const resolvedLabelTom = labelTom || intlHelper(intl, 'skjema.perioder.tom');
 
     const handleOnChange = (selectedDate: string, isFom: boolean) => {
         const newPeriod = isFom
@@ -114,7 +120,7 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
                         fromDate={fromDate}
                         toDate={effectiveToDate}
                         errorMessage={!!fomErrorMessage}
-                        label={intlHelper(intl, 'skjema.perioder.fom')}
+                        label={resolvedLabelFom}
                         inputRef={fomInputRef}
                         dataTestId="fom"
                         size={size}
@@ -137,7 +143,7 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
                         toDate={toDate}
                         errorMessage={!!tomErrorMessage}
                         inputRef={tomInputRef}
-                        label={intlHelper(intl, 'skjema.perioder.tom')}
+                        label={resolvedLabelTom}
                         dataTestId="tom"
                         defaultMonth={
                             isISODateString(normalizedPeriode.fom) ? new Date(normalizedPeriode.fom) : undefined
@@ -158,12 +164,12 @@ const Periodevelger: React.FC<PeriodevelgerProps> = ({
             <div className="min-h-[1.5rem]" aria-live="polite">
                 {fomErrorMessage && (
                     <ErrorMessage id={fomErrorId} aria-describedby={inputIdFom} showIcon>
-                        {intlHelper(intl, 'skjema.perioder.fom')}: {fomErrorMessage}
+                        {resolvedLabelFom}: {fomErrorMessage}
                     </ErrorMessage>
                 )}
                 {tomErrorMessage && (
                     <ErrorMessage id={tomErrorId} aria-describedby={inputIdTom} showIcon>
-                        {intlHelper(intl, 'skjema.perioder.tom')}: {tomErrorMessage}
+                        {resolvedLabelTom}: {tomErrorMessage}
                     </ErrorMessage>
                 )}
                 {groupErrorMessage && (

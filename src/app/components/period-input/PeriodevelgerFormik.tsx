@@ -19,6 +19,8 @@ interface PeriodevelgerFormikProps {
     action?: React.ReactNode;
     onValueBlurFom?: (value: string, nextValues: FormikValues) => void;
     onValueBlurTom?: (value: string, nextValues: FormikValues) => void;
+    labelFom?: string;
+    labelTom?: string;
 }
 
 const PERIOD_RANGE_ERROR_MESSAGE = 'Startdato må være før sluttdato.';
@@ -38,6 +40,8 @@ const PeriodevelgerFormik = ({
     action,
     onValueBlurFom,
     onValueBlurTom,
+    labelFom,
+    labelTom,
 }: PeriodevelgerFormikProps) => {
     const fomFieldName = `${name}.fom`;
     const tomFieldName = `${name}.tom`;
@@ -73,6 +77,8 @@ const PeriodevelgerFormik = ({
     const groupErrorMessage =
         (showPeriodError && typeof periodeFieldMeta.error === 'string' ? periodeFieldMeta.error : undefined) ||
         (hasRangeError ? PERIOD_RANGE_ERROR_MESSAGE : undefined);
+    const resolvedLabelFom = labelFom || 'Fra og med';
+    const resolvedLabelTom = labelTom || 'Til og med';
 
     return (
         <div className="flex flex-col gap-2">
@@ -81,7 +87,7 @@ const PeriodevelgerFormik = ({
                     <DatovelgerFormik
                         id={inputIdFom || fomFieldName}
                         name={fomFieldName}
-                        label="Fra og med"
+                        label={resolvedLabelFom}
                         fromDate={fromDate}
                         toDate={effectiveToDate}
                         visFeilmelding={false}
@@ -101,7 +107,7 @@ const PeriodevelgerFormik = ({
                     <DatovelgerFormik
                         id={inputIdTom || tomFieldName}
                         name={tomFieldName}
-                        label="Til og med"
+                        label={resolvedLabelTom}
                         defaultMonth={isISODateString(fomValue) ? new Date(fomValue) : undefined}
                         fromDate={effectiveFromDate}
                         toDate={toDate}
@@ -125,12 +131,12 @@ const PeriodevelgerFormik = ({
             <div className="min-h-[1.5rem]" aria-live="polite">
                 {fomErrorMessage && (
                     <ErrorMessage id={fomErrorId} aria-describedby={inputIdFom || fomFieldName} showIcon>
-                        Fra og med: {fomErrorMessage}
+                        {resolvedLabelFom}: {fomErrorMessage}
                     </ErrorMessage>
                 )}
                 {tomErrorMessage && (
                     <ErrorMessage id={tomErrorId} aria-describedby={inputIdTom || tomFieldName} showIcon>
-                        Til og med: {tomErrorMessage}
+                        {resolvedLabelTom}: {tomErrorMessage}
                     </ErrorMessage>
                 )}
                 {groupErrorMessage && (

@@ -263,6 +263,8 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 <PeriodevelgerFormik
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
                     size="small"
+                    labelFom={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    labelTom={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                 />
 
                 <VerticalSpacer sixteenPx />

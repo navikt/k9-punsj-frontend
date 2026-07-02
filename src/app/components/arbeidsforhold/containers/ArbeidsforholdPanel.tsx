@@ -487,6 +487,8 @@ const ArbeidsforholdPanel = ({
                     periode={opptjening.selvstendigNaeringsdrivende?.info?.periode || {}}
                     intl={intl}
                     fromDate={limitFromDate}
+                    labelFom={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    labelTom={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
                     onChange={(periode) => {
                         updateSoknadState(
                             {
