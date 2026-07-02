@@ -4,13 +4,15 @@ import { isISODateString } from 'app/utils/date/dateFormat';
 import React from 'react';
 import DatovelgerFormik from '../skjema/Datovelger/DatovelgerFormik';
 
+type PeriodevelgerDisabled = boolean | DatePickerProps['disabled'];
+
 interface PeriodevelgerFormikProps {
     name: string;
     fromDate?: Date;
     toDate?: Date;
-    disabled?: DatePickerProps['disabled'];
-    disabledFom?: DatePickerProps['disabled'];
-    disabledTom?: DatePickerProps['disabled'];
+    disabled?: PeriodevelgerDisabled;
+    disabledFom?: PeriodevelgerDisabled;
+    disabledTom?: PeriodevelgerDisabled;
     inputIdFom?: string;
     inputIdTom?: string;
     fomInputRef?: React.Ref<HTMLInputElement>;

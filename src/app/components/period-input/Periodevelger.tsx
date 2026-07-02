@@ -3,6 +3,7 @@ import { ErrorMessage } from '@navikt/ds-react';
 import { isISODateString } from 'app/utils/date/dateFormat';
 import intlHelper from 'app/utils/intlUtils';
 import { IntlShape } from 'react-intl';
+import { DatePickerProps } from '@navikt/ds-react';
 
 import { IPeriode } from '../../models/types/Periode';
 import Datovelger from '../skjema/Datovelger/Datovelger';
@@ -18,6 +19,8 @@ export interface PeriodevelgerProps {
     disabled?: boolean;
     disabledFom?: boolean;
     disabledTom?: boolean;
+    fromDate?: DatePickerProps['fromDate'];
+    toDate?: DatePickerProps['toDate'];
     inputIdFom?: string;
     inputIdTom?: string;
     className?: string;

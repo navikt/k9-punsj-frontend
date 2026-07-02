@@ -11,9 +11,12 @@ import {
 } from 'app/utils/date/dateFormat';
 import { offsetDateByYears } from 'app/utils/date/dateUtils';
 
-type Props = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'disabled'> &
+type DatovelgerDisabled = boolean | DatePickerProps['disabled'];
+
+type Props = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'id'> & {
         name: string;
+        disabled?: DatovelgerDisabled;
         className?: string;
         dataTestId?: string;
         inputRef?: React.Ref<HTMLInputElement>;

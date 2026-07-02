@@ -15,7 +15,7 @@ interface Props {
     signert: JaNeiIkkeRelevant | null;
 
     setSignaturAction: (signert: JaNeiIkkeRelevant | null) => void;
-    handleBlur: (e: any) => void;
+    handleBlur: (callback: () => void, values?: FormikValues) => void;
 }
 
 const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction, handleBlur }) => {
