@@ -6,7 +6,7 @@ import { Box, Button, Label } from '@navikt/ds-react';
 
 import { IPeriode } from '../../../models/types/Periode';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 const initialPeriode = { fom: '', tom: '' };
@@ -34,14 +34,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                         {periods.map((period, index) => {
                             return (
                                 <div className="flex flex-col gap-4" key={index}>
-                                    <div className="flex gap-4">
-                                        <Periodevelger
-                                            name={`${fieldName}.${index}`}
-                                            fromDate={fromDate}
-                                            toDate={toDate}
-                                            disabled={disabled}
-                                        />
-                                        <div className="block content-center">
+                                    <PeriodevelgerFormik
+                                        name={`${fieldName}.${index}`}
+                                        fromDate={fromDate}
+                                        toDate={toDate}
+                                        disabled={disabled}
+                                        size="small"
+                                        action={
                                             <Button
                                                 variant="tertiary"
                                                 size="small"
@@ -51,13 +50,13 @@ export const Periodepaneler: React.FunctionComponent<IPeriodepanelerProps> = (pr
                                                         props.onRemove();
                                                     }
                                                 }}
-                                                className="slett-knapp-med-icon-for-input !mt-10"
+                                                className="slett-knapp-med-icon-for-input"
                                                 icon={<TrashIcon title="slett periode" />}
                                             >
                                                 Fjern periode
                                             </Button>
-                                        </div>
-                                    </div>
+                                        }
+                                    />
                                 </div>
                             );
                         })}

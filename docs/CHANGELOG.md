@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Opprydding i legacy dato og periodeadaptere (2026-06-30)
+
+- Fjernet gamle wrappers som `DatoInputFormikNew`, `NewDateInput`, `PeriodInput`, gammel `PeriodevelgerControlled` og gammel `skjema/Datovelger/Periodevelger`, og samlet aktiv bruk rundt `Datovelger`, `DatovelgerFormik`, `Periodevelger` og `PeriodevelgerFormik`.
+- Flyttet resterende skjemaer over på de aktive adapterne, inkludert berørte flyter i `pleiepenger`, `pleiepenger livets sluttfase`, `omsorgspenger kronisk sykt barn`, `omsorgspenger midlertidig alene`, `omsorgspenger utbetaling`, `opplæringspenger` og `korrigering av inntektsmelding`.
+- Stabiliserte feilvisning for dato, klokkeslett og perioder slik at feltfeil og periodemeldinger vises under feltene uten å dra layouten ut av posisjon, samtidig som submit-drevne backend-feil fortsatt vises i samme flyt.
+
 ### Felles k9sak perioder endepunkt for PSB, OLP, PLS og OMP_UT (2026-06-23)
 
 - Flyttet periodoppslagene i `PSB`, `OLP`, `PLS` og `OMP_UT` fra søknadstype-spesifikke `k9sak/info`-endepunkter til ett felles frontend path, `POST /api/k9-punsj/saker/perioder?saksnummer=...`.

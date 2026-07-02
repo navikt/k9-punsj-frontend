@@ -49,6 +49,7 @@ const Reisedager = () => {
                                                 fromDate={fromDate}
                                                 toDate={toDate}
                                                 disabled={disabled}
+                                                size="small"
                                             />
                                             {values.kurs.reise.reisedager?.length > 1 && (
                                                 <Button

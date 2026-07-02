@@ -1,21 +1,21 @@
 import React, { useRef } from 'react';
 
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Alert, Box, Button, Fieldset, TextField } from '@navikt/ds-react';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, Fieldset, TextField } from '@navikt/ds-react';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import usePrevious from 'app/hooks/usePrevious';
 import DatoMedTimetall from 'app/models/types/DatoMedTimetall';
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
 import EkspanderbartPanel from '../../../../components/EkspanderbartPanel';
+import useFocus from '../../../../hooks/useFocus';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import useFocus from '../../../../hooks/useFocus';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 import { delvisFravaerDatoFieldId, delvisFravaerTimerFieldId } from '../formFieldIds';
 
 import './LeggTilDelvisFravær.css';
@@ -72,17 +72,12 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                             return (
                                                 <div className="flex flex-wrap" key={fieldName}>
                                                     <div className="input-row">
-                                                        <Field name={`${fieldName}.dato`}>
-                                                            {({ field, meta }: FieldProps) => (
-                                                                <DatoInputFormikNew
-                                                                    {...field}
-                                                                    className="dateInput"
-                                                                    id={delvisFravaerDatoFieldId(index)}
-                                                                    label={intlHelper(intl, 'skjema.dato')}
-                                                                    error={meta.touched && meta.error}
-                                                                />
-                                                            )}
-                                                        </Field>
+                                                        <DatovelgerFormik
+                                                            name={`${fieldName}.dato`}
+                                                            className="dateInput"
+                                                            id={delvisFravaerDatoFieldId(index)}
+                                                            label={intlHelper(intl, 'skjema.dato')}
+                                                        />
 
                                                         <div className="ml-2">
                                                             <Field name={`${fieldName}.timer`}>

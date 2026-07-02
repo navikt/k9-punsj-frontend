@@ -18,13 +18,14 @@ import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsd
 import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../../../../components/formikInput/TextAreaFormik';
 import TextFieldFormik from '../../../../components/formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatovelgerFormik from '../../../../components/skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -85,6 +86,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
+                size="small"
             />
 
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
@@ -103,6 +105,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    size="small"
                     fromDate={
                         values.opptjeningAktivitet.frilanser?.startdato
                             ? new Date(values.opptjeningAktivitet.frilanser.startdato)
@@ -257,33 +260,12 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <VerticalSpacer sixteenPx />
 
-                <div className="sn-startdatocontainer">
-                    <DatovelgerFormik
-                        className="fom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                    />
-
-                    {/* errorMessage={getErrorMessage(
-                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
-                        )} */}
-
-                    <DatovelgerFormik
-                        className="tom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        fromDate={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                        defaultMonth={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                    />
-                </div>
+                <PeriodevelgerFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
+                    size="small"
+                    labelFom={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    labelTom={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                />
 
                 <VerticalSpacer sixteenPx />
 
@@ -324,6 +306,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
+                                size="small"
                             />
                         </div>
                         <VerticalSpacer sixteenPx />

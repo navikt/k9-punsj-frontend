@@ -225,10 +225,12 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
             return naa < new Date(dato);
         };
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
+        if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        }
+
+        if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
         }
 
         if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
@@ -426,6 +428,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                     setSignaturAction={this.props.setSignaturAction}
                     signert={signert}
                     soknad={soknad}
+                    showValidationErrors={this.state.harForsoektAaSendeInn}
                 />
                 <VerticalSpacer twentyPx />
                 <p className="ikkeregistrert">{intlHelper(intl, 'skjema.ikkeregistrert')}</p>

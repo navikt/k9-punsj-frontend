@@ -11,7 +11,7 @@ import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IUtenlandsOpphold, Periode, UtenlandsOpphold } from 'app/models/types';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import intlHelper from 'app/utils/intlUtils';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 
 const initialUtenlandsopphold: IUtenlandsOpphold = new UtenlandsOpphold({
     land: '',
@@ -53,22 +53,23 @@ const Bosteder: React.FC = () => {
                                         <VerticalSpacer thirtyTwoPx />
 
                                         <div className="fom-tom-rad">
-                                            <Periodevelger
+                                            <PeriodevelgerFormik
                                                 name={`bosteder[${index}].periode`}
+                                                size="small"
+                                                action={
+                                                    array.length > 1 ? (
+                                                        <Button
+                                                            variant="tertiary"
+                                                            size="small"
+                                                            className="slett-knapp-med-icon-for-input"
+                                                            onClick={() => arrayHelpers.remove(index)}
+                                                            icon={<TrashIcon title="slett periode" />}
+                                                        >
+                                                            Fjern periode
+                                                        </Button>
+                                                    ) : undefined
+                                                }
                                             />
-
-                                            {array.length > 1 && (
-                                                <Button
-                                                    variant="tertiary"
-                                                    size="small"
-                                                    className="slett-knapp-med-icon-for-input !mt-10"
-                                                    onClick={() => arrayHelpers.remove(index)}
-                                                    style={{ float: 'right' }}
-                                                    icon={<TrashIcon title="slett periode" />}
-                                                >
-                                                    Fjern periode
-                                                </Button>
-                                            )}
                                         </div>
 
                                         <VerticalSpacer sixteenPx />

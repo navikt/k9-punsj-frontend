@@ -636,10 +636,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
         }
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
+        if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        }
+
+        if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
         }
 
         if (attribute === 'mottattDato' && !!mottattDato && erFremITid(mottattDato)) {
@@ -887,6 +889,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 <OpplysningerOmPLSSoknad
                     signert={signert}
                     soknad={soknad}
+                    showValidationErrors={this.state.harForsoektAaSendeInn}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}

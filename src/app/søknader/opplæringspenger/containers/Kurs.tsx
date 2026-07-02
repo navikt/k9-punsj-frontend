@@ -14,7 +14,7 @@ import { JaNei } from 'app/models/enums';
 import { v4 as uuidv4 } from 'uuid';
 import { FormattedMessage } from 'react-intl';
 import { generateDateString } from 'app/components/skjema/skjemaUtils';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 
 const kursholder = 'kurs.kursHolder';
 const kursholderNavn = `${kursholder}.holder`;
@@ -122,22 +122,23 @@ const Kurs = ({
                                     <>
                                         {values.kurs.kursperioder.map((kursperiode: Kursperiode, index: number) => (
                                             <div className="mb-4" key={kursperiode.key}>
-                                                <div className="flex gap-4">
-                                                    <div className="flex gap-4">
-                                                        <Periodevelger name={`kurs.kursperioder[${index}].periode`} />
-                                                    </div>
-                                                    {values.kurs.kursperioder.length > 1 && (
-                                                        <Button
-                                                            variant="tertiary"
-                                                            className="slett-knapp-med-icon-for-input !mt-7"
-                                                            size="small"
-                                                            icon={<TrashIcon fontSize={24} title="slett periode" />}
-                                                            onClick={() => {
-                                                                remove(index);
-                                                            }}
-                                                        />
-                                                    )}
-                                                </div>
+                                                <PeriodevelgerFormik
+                                                    name={`kurs.kursperioder[${index}].periode`}
+                                                    size="small"
+                                                    action={
+                                                        values.kurs.kursperioder.length > 1 ? (
+                                                            <Button
+                                                                variant="tertiary"
+                                                                className="slett-knapp-med-icon-for-input"
+                                                                size="small"
+                                                                icon={<TrashIcon fontSize={24} title="slett periode" />}
+                                                                onClick={() => {
+                                                                    remove(index);
+                                                                }}
+                                                            />
+                                                        ) : undefined
+                                                    }
+                                                />
                                             </div>
                                         ))}
 

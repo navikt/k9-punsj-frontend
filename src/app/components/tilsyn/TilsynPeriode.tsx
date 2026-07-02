@@ -14,7 +14,7 @@ import {
     timerMedDesimalerTilTimerOgMinutter,
     timerOgMinutterTilTimerMedDesimaler,
 } from 'app/utils';
-import PeriodevelgerControlled from '../timefoering/PeriodevelgerControlled';
+import PeriodevelgerFormik from '../period-input/PeriodevelgerFormik';
 import TimerOgMinutter from '../timefoering/TimerOgMinutter';
 
 interface Props {
@@ -38,7 +38,7 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
 
     const nullstillPeriode = () => formik.setFieldValue(`${name}.periode`, { fom: '', tom: '' });
 
-    // TODO: Midlertidig løsning. Det ternges å fikse PeriodeInput
+    // TODO: Midlertidig løsning. Det trengs fortsatt en bedre løsning for hele søknadsperiode-valget.
     const visCheckbox = false;
 
     // TODO: Fix types i formik validering for å ungå warning meta.error?.periode?.fom
@@ -48,18 +48,17 @@ const TilsynPeriode = ({ name, remove, soknadsperioder }: Props) => {
             {({ field }: FieldProps<Periodeinfo<IOmsorgstid>>) => {
                 return (
                     <div className="mt-4">
-                        <div className="flex items-start">
-                            <PeriodevelgerControlled name={`${name}.periode`} />
-
-                            <div className="ml-4 mt-7">
+                        <PeriodevelgerFormik
+                            name={`${name}.periode`}
+                            action={
                                 <Button
                                     icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
                                     size="small"
                                     variant="tertiary"
                                     onClick={remove}
                                 />
-                            </div>
-                        </div>
+                            }
+                        />
 
                         {visCheckbox && soknadsperioder.length === 1 && (
                             <Checkbox
