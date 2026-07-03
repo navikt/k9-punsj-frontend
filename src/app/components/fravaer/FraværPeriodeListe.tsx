@@ -134,7 +134,7 @@ const FraværPeriodeListe = ({ perioder, soknadsperioder, lagre, avbryt }: Props
                                 onClick={() => arrayHelpers.push({ ...emptyPeriode })}
                                 size="small"
                             >
-                                Legg til periode
+                                Legg til ny periode
                             </Button>
 
                             <VerticalSpacer sixteenPx />

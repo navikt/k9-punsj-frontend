@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Fieldset, TextField } from '@navikt/ds-react';
+import { Alert, Box, Button, Fieldset, TextField, VStack } from '@navikt/ds-react';
 import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -40,7 +40,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             <Box
                 padding="space-16"
                 borderRadius="8"
-                background="neutral-soft"
+                borderWidth="1"
                 className="korrigering__panelsurface listepanel delvisFravaer"
             >
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
@@ -58,86 +58,85 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info" />
                                 </Alert>
 
-                                <Box
-                                    padding="space-16"
-                                    borderWidth="1"
-                                    borderRadius="8"
-                                    background="neutral-soft"
-                                    className="delvisFravaer__inputContainer"
-                                >
+                                <VStack gap="space-16">
                                     {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
                                         (value: DatoMedTimetall, index: number) => {
                                             const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
 
                                             return (
-                                                <div className="flex flex-wrap" key={fieldName}>
-                                                    <div className="input-row">
-                                                        <DatovelgerFormik
-                                                            name={`${fieldName}.dato`}
-                                                            className="dateInput"
-                                                            id={delvisFravaerDatoFieldId(index)}
-                                                            label={intlHelper(intl, 'skjema.dato')}
-                                                        />
+                                                <Box
+                                                    key={fieldName}
+                                                    padding="space-16"
+                                                    borderRadius="8"
+                                                    background="neutral-soft"
+                                                >
+                                                    <div className="flex flex-wrap">
+                                                        <div className="input-row">
+                                                            <DatovelgerFormik
+                                                                name={`${fieldName}.dato`}
+                                                                className="dateInput"
+                                                                id={delvisFravaerDatoFieldId(index)}
+                                                                label={intlHelper(intl, 'skjema.dato')}
+                                                            />
 
-                                                        <div className="ml-2">
-                                                            <Field name={`${fieldName}.timer`}>
-                                                                {({ field, meta }: FieldProps) => (
-                                                                    <TextField
-                                                                        {...field}
-                                                                        id={delvisFravaerTimerFieldId(index)}
-                                                                        label={
-                                                                            <FormattedMessage id="skjema.perioder.timer" />
-                                                                        }
-                                                                        className="w-12"
-                                                                        error={
-                                                                            meta.error &&
-                                                                            meta.touched && (
-                                                                                <ErrorMessage
-                                                                                    name={`${fieldName}.timer`}
-                                                                                />
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                )}
-                                                            </Field>
-                                                        </div>
-                                                        <div className="ml-2">
-                                                            <Button
-                                                                id="slett"
-                                                                className="slett-knapp-med-icon-for-input !mt-10"
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    remove(index);
-                                                                }}
-                                                                variant="tertiary"
-                                                                icon={<TrashIcon title="slett" />}
-                                                            >
-                                                                <FormattedMessage id="skjema.liste.fjern_dag" />
-                                                            </Button>
+                                                            <div className="ml-2">
+                                                                <Field name={`${fieldName}.timer`}>
+                                                                    {({ field, meta }: FieldProps) => (
+                                                                        <TextField
+                                                                            {...field}
+                                                                            id={delvisFravaerTimerFieldId(index)}
+                                                                            label={
+                                                                                <FormattedMessage id="skjema.perioder.timer" />
+                                                                            }
+                                                                            className="w-12"
+                                                                            error={
+                                                                                meta.error &&
+                                                                                meta.touched && (
+                                                                                    <ErrorMessage
+                                                                                        name={`${fieldName}.timer`}
+                                                                                    />
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    )}
+                                                                </Field>
+                                                            </div>
+                                                            <div className="ml-2">
+                                                                <Button
+                                                                    id="slett"
+                                                                    className="slett-knapp-med-icon-for-input !mt-10"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        remove(index);
+                                                                    }}
+                                                                    variant="tertiary"
+                                                                    icon={<TrashIcon title="slett" />}
+                                                                >
+                                                                    <FormattedMessage id="skjema.liste.fjern_dag" />
+                                                                </Button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </Box>
                                             );
                                         },
                                     )}
-                                </Box>
+                                </VStack>
                             </Fieldset>
 
                             <div className="flex flex-wrap">
-                                <button
+                                <Button
                                     id="leggTilDag"
-                                    className="leggtilperiode"
                                     type="button"
                                     onClick={() => {
                                         push({ dato: '', timer: '' });
                                     }}
+                                    icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                                    size="small"
+                                    variant="tertiary"
                                 >
-                                    <div className="leggtilperiodeIcon">
-                                        <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
-                                    </div>
-
                                     <FormattedMessage id="skjema.dag.legg_til" />
-                                </button>
+                                </Button>
                             </div>
                         </>
                     )}

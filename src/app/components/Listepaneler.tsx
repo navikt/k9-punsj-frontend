@@ -172,10 +172,12 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                 <Button
                     id="leggtillisteelementknapp"
                     data-testid="leggtillisteelementknapp"
-                    className="leggtillisteelementknapp"
+                    className="mt-4"
                     type="button"
                     onClick={addItemHandler}
                     icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                    size="small"
+                    variant="tertiary"
                 >
                     <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
                 </Button>

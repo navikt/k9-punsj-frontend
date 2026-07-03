@@ -21,7 +21,7 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
             <Box
                 padding="space-16"
                 borderRadius="8"
-                background="neutral-soft"
+                borderWidth="1"
                 className="korrigering__panelsurface listepanel"
             >
                 <Fieldset

@@ -104,7 +104,7 @@ const Bosteder: React.FC = () => {
                                     onClick={() => arrayHelpers.push(initialUtenlandsopphold)}
                                     icon={<PlusCircleIcon title="legg til periode" />}
                                 >
-                                    Legg til periode
+                                    Legg til ny periode
                                 </Button>
                             </>
                         )}

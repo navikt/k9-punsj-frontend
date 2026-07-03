@@ -238,31 +238,6 @@
     border-radius: 5px;
 }
 
-.punch .panels-wrapper .punch_form .listepaneler .leggtillisteelementknapp,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler .leggtillisteelementknapp,
-.punch .panels-wrapper .punch_form .periodepanel .leggtilperiode,
-.punch .panels-wrapper .omsorgspenger_punch_form .periodepanel .leggtilperiode {
-    font-family: 'Source Sans Pro', Arial, sans-serif;
-    font-size: 1rem;
-    line-height: 1.375rem;
-    font-weight: 400;
-    background: none;
-    border: none;
-    padding: 0;
-    display: inline-flex;
-    margin: 1rem 0 0;
-    color: #0067c5;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.punch .panels-wrapper .punch_form .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
-.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler .leggtillisteelementknapp .leggtilperiodeIcon,
-.punch .panels-wrapper .punch_form .periodepanel .leggtilperiode .leggtilperiodeIcon,
-.punch .panels-wrapper .omsorgspenger_punch_form .periodepanel .leggtilperiode .leggtilperiodeIcon {
-    margin-right: 0.5rem;
-}
-
 .punch .panels-wrapper .punch_form .periodepanel,
 .punch .panels-wrapper .omsorgspenger_punch_form .periodepanel {
     margin: 1rem 0;
@@ -289,11 +264,6 @@
 .punch .panels-wrapper .punch_form .arbeidstakerpanel .infoContainer .skjemaelement,
 .punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .infoContainer .skjemaelement {
     margin-top: 1rem;
-}
-
-.punch .panels-wrapper .punch_form .arbeidstakerpanel .leggtillisteelementknapp,
-.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .leggtillisteelementknapp {
-    margin: 0 1rem 1rem;
 }
 
 .punch .panels-wrapper .punch_form .arbeidstakerpanel .listepaneler,
