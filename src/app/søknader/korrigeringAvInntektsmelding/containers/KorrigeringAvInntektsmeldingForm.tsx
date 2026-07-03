@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useReducer, useRef, useState } from 'rea
 
 import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Button, ErrorSummary, Heading, List, Modal } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -14,6 +14,7 @@ import {
 import { redirectToLos } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
@@ -387,7 +388,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             validerKorrigering={validerKorrigering}
                         />
                         <Form className="korrigering">
-                            <Box padding="space-16">
+                            <>
                                 <div className="mb-4">
                                     <Heading size="medium" level="2">
                                         <FormattedMessage id={FordelingDokumenttype.KORRIGERING_IM} />
@@ -395,11 +396,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                 </div>
 
                                 <Alert size="small" variant="info" className="mb-6">
-                                    <Heading size="small" level="2">
-                                        <FormattedMessage id={FordelingDokumenttype.KORRIGERING_IM} />
-                                    </Heading>
-
-                                    <List as="ul">
+                                    <List as="ul" className="mt-0 mb-0">
                                         <List.Item>
                                             <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
                                         </List.Item>
@@ -409,51 +406,51 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                     </List>
                                 </Alert>
 
-                                <div>
+                                <VStack gap="space-16">
                                     <OpplysningerOmKorrigering />
 
                                     <VirksomhetPanel søkerId={søkerId} />
+                                </VStack>
 
-                                    <div className="korrigering__toggleSection">
-                                        <TrekkPerioder
-                                            isPanelOpen={!!åpnePaneler.trekkperioderPanel}
-                                            togglePanel={() => {
-                                                const toggledPanel = !åpnePaneler.trekkperioderPanel;
+                                <div className="mt-4">
+                                    <TrekkPerioder
+                                        isPanelOpen={!!åpnePaneler.trekkperioderPanel}
+                                        togglePanel={() => {
+                                            const toggledPanel = !åpnePaneler.trekkperioderPanel;
 
-                                                togglePaneler({ trekkperioderPanel: toggledPanel });
+                                            togglePaneler({ trekkperioderPanel: toggledPanel });
 
-                                                if (!toggledPanel) {
-                                                    setFieldValue(
-                                                        KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
-                                                        [getInitialPeriode()],
-                                                    );
-                                                }
-                                            }}
-                                        />
-                                    </div>
+                                            if (!toggledPanel) {
+                                                setFieldValue(
+                                                    KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
+                                                    [getInitialPeriode()],
+                                                );
+                                            }
+                                        }}
+                                    />
+                                </div>
 
-                                    <div className="korrigering__toggleSection korrigering__toggleSection--compact">
-                                        <LeggTilDelvisFravær
-                                            isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
-                                            togglePanel={() => {
-                                                const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
+                                <div className="mt-4">
+                                    <LeggTilDelvisFravær
+                                        isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
+                                        togglePanel={() => {
+                                            const toggledPanel = !åpnePaneler.leggTilDelvisFravær;
 
-                                                togglePaneler({ leggTilDelvisFravær: toggledPanel });
+                                            togglePaneler({ leggTilDelvisFravær: toggledPanel });
 
-                                                if (!toggledPanel) {
-                                                    setFieldValue(
-                                                        KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
-                                                        [
-                                                            {
-                                                                dato: '',
-                                                                timer: '',
-                                                            },
-                                                        ],
-                                                    );
-                                                }
-                                            }}
-                                        />
-                                    </div>
+                                            if (!toggledPanel) {
+                                                setFieldValue(
+                                                    KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær,
+                                                    [
+                                                        {
+                                                            dato: '',
+                                                            timer: '',
+                                                        },
+                                                    ],
+                                                );
+                                            }
+                                        }}
+                                    />
                                 </div>
 
                                 {hasSubmitted && errorSummaryItems.length > 0 && (
@@ -481,25 +478,31 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                         <Feilmelding feil={formError} />
                                     </div>
                                 )}
-                            </Box>
+                            </>
 
-                            <Button
-                                type="button"
-                                onClick={async () => {
-                                    dispatch({ type: ActionType.SET_HAS_SUBMITTED });
-                                    await setTouched(setNestedObjectValues(values, true));
-                                    const validationErrors = await validateForm();
+                            <div className="submit-knapper mt-4">
+                                <p className="sendknapp-wrapper">
+                                    <Button
+                                        className="send-knapp"
+                                        type="button"
+                                        onClick={async () => {
+                                            dispatch({ type: ActionType.SET_HAS_SUBMITTED });
+                                            await setTouched(setNestedObjectValues(values, true));
+                                            const validationErrors = await validateForm();
 
-                                    if (Object.keys(validationErrors).length > 0) {
-                                        return;
-                                    }
+                                            if (Object.keys(validationErrors).length > 0) {
+                                                return;
+                                            }
 
-                                    await validerKorrigering(values, { openConfirmationOnSuccess: true });
-                                }}
-                            >
-                                <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
-                            </Button>
+                                            await validerKorrigering(values, { openConfirmationOnSuccess: true });
+                                        }}
+                                    >
+                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.sendInn" />
+                                    </Button>
+                                </p>
+                            </div>
                         </Form>
+                        <VerticalSpacer sixteenPx />
                         {visBekreftelsemodal && (
                             <Modal
                                 key="validertSoknadModal"

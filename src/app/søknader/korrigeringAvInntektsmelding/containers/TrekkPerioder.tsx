@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Fieldset } from '@navikt/ds-react';
+import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
 
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -22,15 +22,15 @@ const TrekkPerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.
                 padding="space-16"
                 borderRadius="8"
                 borderWidth="1"
-                className="korrigering__panelsurface listepanel"
+                className="listepanel"
             >
                 <Fieldset
                     legend={
-                        <h4 className="korrigering-legend">
+                        <Heading size="small" level="3">
                             <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.legend" />
-                        </h4>
+                        </Heading>
                     }
-                    className="korrigering__Fieldset"
+                    className="korrigering__skjemagruppe"
                 >
                     <Alert size="small" variant="info" className="korrigering__infostripe">
                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.trekkPeriode.info" />

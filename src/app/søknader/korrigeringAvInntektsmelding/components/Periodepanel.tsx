@@ -32,7 +32,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
     useFocus(currentListLength, previousListLength, fomInputRef);
 
     return (
-        <div className="korrigering__panelsurface periodepanel">
+        <div className="periodepanel">
             <FieldArray name={name}>
                 {({ push, remove }) => (
                     <VStack gap="space-16">

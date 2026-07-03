@@ -1,37 +1,4 @@
-.korrigering-legend {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-h4.korrigering-legend {
-    font-size: 1.125rem;
-}
-
 .korrigering {
-    &__panelsurface {
-        .korrigering-legend {
-            margin-top: 0.5rem;
-            margin-left: 0.875rem;
-        }
-    }
-
-    &__seksjon > legend {
-        margin-bottom: 0.5rem;
-    }
-
-    &__seksjon + &__seksjon {
-        margin-top: 1.5rem;
-    }
-
-    &__toggleSection {
-        margin-top: 1.5rem;
-    }
-
-    &__toggleSection--compact {
-        margin-top: 1rem;
-    }
-
     &__feilmelding {
         margin-top: 1.5rem;
     }
