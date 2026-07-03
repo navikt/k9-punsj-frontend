@@ -77,105 +77,36 @@ Suggested starter prompt:
 
 - `Follow copilot-tasks/weekly-package-maintenance.md. First update Plan, then run the patch pass with the 7 day cooldown precheck before any install attempt.`
 
+## Carry forward notes
+
+- Keep `webpack` pinned to `5.107.0` until the PSB country-list regression is resolved. `5.107.2` and `5.108.3` can emit `i18n-iso-countries/codes.json` as an empty payload in production style bundles.
+- For future `webpack` or `webpack-dev-server` updates, do not rely only on local dev or a successful local build. Verify in Q or another production-like environment that PSB countries are shown for `utenlandsopphold`.
+- Avoid forcing transitive major jumps through broad `resolutions`. A previous `uuid@npm:^8.3.2 -> 14.0.1` override looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested.
+- Current targeted security overrides that should be revisited in later runs are `form-data@4.0.6`, `http-proxy-middleware@2.0.10`, `undici@6.27.0`, and `@opentelemetry/core@2.8.0`. Remove them once the graph naturally resolves to equal or newer safe versions.
+- Recheck whether a direct bump of `@sentry/cli` can replace the temporary `undici` override after the newer CLI version is outside the 7 day cooldown window.
+- `npm view` for some `@navikt/*` packages can return `401` from the configured registry in this shell.
+- `yarn up` scope can unintentionally modify `server/package.json`, so verify workspace diffs before commit.
+
 ## Plan
 
-- [x] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
-- [x] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- [x] Build the direct dependency and devDependency candidate list from `package.json`, then record the highest eligible patch, minor, and major per package before selecting versions.
-- [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
-- [x] Run full validation for patch pass and document results.
-- [x] Stop and ask user whether to commit patch pass.
-- [x] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
+- [ ] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
+- [ ] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
+- [ ] Build the direct dependency and devDependency candidate list from `package.json`, then record the highest eligible patch, minor, and major per package before selecting versions.
+- [ ] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
+- [ ] Run full validation for patch pass and document results.
+- [ ] Stop and ask user whether to commit patch pass.
+- [ ] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
 
 ## Progress notes
 
-- 2026-07-03: `webpack-dev-server` was reapplied from `5.2.4` to `5.2.5` as a separate follow up after clarifying that it is a dev-only package and not the confirmed PSB production bundle trigger.
-- 2026-07-03: Follow up cleanup removed `uuid@npm:^8.3.2 -> 14.0.1` from `resolutions` after confirming it forced a transitive major onto `sockjs`. Root keeps `uuid@14.0.1`, while `sockjs` now resolves its own `uuid@8.3.2`.
-- 2026-07-02: User approved next step to start minor pass.
-- 2026-07-02: Computed cooldown cutoff (UTC) as `2026-06-25T13:01:12.480Z` before minor candidate selection.
-- 2026-07-02: Minor candidate selection completed with publish-time precheck per package.
-- 2026-07-02: Applied safe minor updates in `package.json` and `yarn.lock`, then ran validation.
-- 2026-07-02: Full e2e run was interrupted by `SIGINT` at the last spec (`29/29`), so isolated run of remaining spec was executed.
-- 2026-07-02: Isolated e2e run for `cypress/e2e/sendBrevPåFagsak/sendBrevPåFagsak.js` failed (`4/7`), so minor pass is not green.
-- 2026-07-02: User accepted known failure scope for `sendBrevPåFagsak.js`; minor pass treated as accepted with known e2e deviation for weekly maintenance.
+- Add dated notes during the next run.
 
 ## Outcome
 
 - Changed files:
-    - `copilot-tasks/weekly-package-maintenance.md`
-    - `package.json`
-    - `yarn.lock`
 - Patch pass:
-    - Direct dependencies:
-        - `@babel/runtime` `7.29.2 -> 7.29.7`
-        - `@tanstack/react-query` `5.101.0 -> 5.101.1`
-        - `tailwindcss` `4.3.0 -> 4.3.1`
-        - `uuid` `14.0.0 -> 14.0.1`
-    - Dev dependencies:
-        - `@babel/core` `7.29.0 -> 7.29.7`
-        - `@babel/plugin-transform-runtime` `7.29.0 -> 7.29.7`
-        - `@babel/preset-env` `7.29.5 -> 7.29.7`
-        - `@sentry/cli` `3.5.0 -> 3.5.1` (also updated in workspace `server/package.json`)
-        - `@storybook/react` `10.4.4 -> 10.4.6`
-        - `@storybook/react-webpack5` `10.4.4 -> 10.4.6`
-        - `@tailwindcss/postcss` `4.3.0 -> 4.3.1`
-        - `@types/node` `25.9.3 -> 25.9.4`
-        - `@typescript-eslint/parser` `8.61.0 -> 8.61.1`
-        - `autoprefixer` `10.5.0 -> 10.5.2`
-        - `lint-staged` `17.0.7 -> 17.0.8`
-        - `storybook` `10.4.4 -> 10.4.6`
-        - `terser-webpack-plugin` `5.6.0 -> 5.6.1`
-        - `typescript-eslint` `8.61.0 -> 8.61.1`
-        - `webpack` `5.107.0 -> 5.107.2`
-        - `webpack-dev-server` attempted `5.2.4 -> 5.2.5`, then rolled back to `5.2.4` after e2e regression
-    - Resolutions:
-        - `qs` `6.15.2 -> 6.15.3`
-        - `systeminformation` `5.31.7 -> 5.31.11`
-        - `uuid@npm:^8.3.2` `14.0.0 -> 14.0.1`
-    - Patch commit:
-        - `95cffea7` `chore: weekly package maintenance patch pass`
 - Minor pass:
-    - Applied direct/dev dependency minor updates:
-        - `@babel/preset-react` `7.28.5 -> 7.29.7`
-        - `@babel/preset-typescript` `7.28.5 -> 7.29.7`
-        - `@typescript-eslint/parser` `8.61.1 -> 8.62.0`
-        - `typescript-eslint` `8.61.1 -> 8.62.0`
-    - Attempted and reverted due regression risk during minor pass:
-        - `@navikt/aksel-icons` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
-        - `@navikt/ds-css` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
-        - `@navikt/ds-react` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
-        - `@navikt/aksel` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
-        - `@navikt/ds-tailwind` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
-- Major pass:
-    - not started
+- Major follow ups:
 - Validation:
-    - `yarn explain peer-requirements`: completed with existing peer issues/warnings (not new blockers for this pass), including `p44ced1` and Storybook peer warnings
-    - `yarn lint`: passed
-    - `yarn tsc --noEmit`: passed
-    - `yarn test --maxWorkers=2`: passed (`63/63` suites, `450/450` tests)
-    - `yarn build`: passed
-    - `yarn test:e2e`: full run ended with `1/29` failing spec (`SendBrevIAvsluttetSak`), then targeted rerun for that spec passed (`15/15`)
-    - Minor pass re-validation:
-        - `yarn lint`: passed
-        - `yarn tsc --noEmit`: passed
-        - `yarn test --maxWorkers=2`: passed (`63/63` suites, `450/450` tests)
-        - `yarn build`: passed
-        - `yarn test:e2e`: full run was interrupted by `SIGINT` at spec `29/29`; isolated run for `sendBrevPåFagsak.js` failed (`4/7`, `4` failing)
 - Skipped versions still inside cooldown:
-    - `react-intl@10.1.14` (stayed on `10.1.13`)
-    - `postcss@8.5.16` (stayed on `8.5.15`)
-    - `prettier@3.8.5` (stayed on `3.8.4`)
-    - stepped down intentionally due cutoff (latest too new): `@tanstack/react-query@5.101.2`, `tailwindcss@4.3.2`, `@tailwindcss/postcss@4.3.2`, `@sentry/cli@3.6.0`, `webpack@5.108.3`
-- Remaining follow ups:
-    - Avoid forcing transitive major jumps through broad `resolutions`. `uuid@npm:^8.3.2 -> 14.0.1` looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested. Follow up cleanup removed that override, leaving root `uuid@14.0.1` in place and restoring `sockjs -> uuid@8.3.2`.
-    - `webpack-dev-server@5.2.5` is now reapplied as a separate dev-only check. Validate locally whether PSB countries still show through the dev server path before deciding whether to keep or revert it.
-    - Known e2e deviation accepted for this pass: `sendBrevPåFagsak.js` (`4` failing in isolated run).
-    - Keep `webpack` pinned to `5.107.0` for now. `5.107.2` and `5.108.3` can produce an empty PSB country list in production style bundles (`i18n-iso-countries/codes.json` emitted as empty payload).
-    - For future webpack updates, do not rely only on local dev or successful local build. Verify in Q and prod like environments that PSB countries are shown for `utenlandsopphold`.
-    - Investigate and stabilize `sendBrevPåFagsak.js` outside weekly dependency scope.
-    - Decide whether to continue to major updates.
-- Known issues from previous run:
-    - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
-    - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
-    - Full `yarn test:e2e` must complete uninterrupted to avoid false-negative failure impression.
-    - Local build success was not sufficient to catch the PSB country regression after webpack updates. Future validation for webpack bumps must include runtime verification of countries in Q or an equivalent production-like environment.
+- Remaining risks or follow ups:
