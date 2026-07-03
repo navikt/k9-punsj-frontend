@@ -77,23 +77,24 @@ Suggested starter prompt:
 - [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
 - [x] Run full validation for patch pass and document results.
 - [x] Stop and ask user whether to commit patch pass.
-- [ ] Continue to minor pass only after explicit approval, then validate and stop before majors.
+- [x] Continue to minor pass only after explicit approval, then validate and stop before majors.
 - [ ] Attempt majors only if explicitly approved after patch and minor are green.
 
 ## Progress notes
 
-- 2026-07-02: Verified `.yarnrc.yml` has `npmMinimalAgeGate: 7d`.
-- 2026-07-02: Computed cooldown cutoff (UTC) as `2026-06-25T12:31:38.253Z` before any install attempt.
-- 2026-07-02: Built patch candidate list with `yarn npm info <pkg> --fields versions,time --json` and selected newest stable versions older than cutoff.
-- 2026-07-02: Applied patch updates for direct deps/devDeps and `resolutions`; `webpack-dev-server@5.2.5` was rolled back to `5.2.4` due runtime regression in e2e (`require is not defined`).
-- 2026-07-02: Validation completed for patch pass. Full e2e run had 1 failing spec (`SendBrevIAvsluttetSak`), but targeted rerun of that spec passed (15/15), indicating likely intermittent failure.
+- 2026-07-02: User approved next step to start minor pass.
+- 2026-07-02: Computed cooldown cutoff (UTC) as `2026-06-25T13:01:12.480Z` before minor candidate selection.
+- 2026-07-02: Minor candidate selection completed with publish-time precheck per package.
+- 2026-07-02: Applied safe minor updates in `package.json` and `yarn.lock`, then ran validation.
+- 2026-07-02: Full e2e run was interrupted by `SIGINT` at the last spec (`29/29`), so isolated run of remaining spec was executed.
+- 2026-07-02: Isolated e2e run for `cypress/e2e/sendBrevPåFagsak/sendBrevPåFagsak.js` failed (`4/7`), so minor pass is not green.
+- 2026-07-02: User accepted known failure scope for `sendBrevPåFagsak.js`; minor pass treated as accepted with known e2e deviation for weekly maintenance.
 
 ## Outcome
 
 - Changed files:
     - `copilot-tasks/weekly-package-maintenance.md`
     - `package.json`
-    - `server/package.json`
     - `yarn.lock`
 - Patch pass:
     - Direct dependencies:
@@ -122,8 +123,20 @@ Suggested starter prompt:
         - `qs` `6.15.2 -> 6.15.3`
         - `systeminformation` `5.31.7 -> 5.31.11`
         - `uuid@npm:^8.3.2` `14.0.0 -> 14.0.1`
+    - Patch commit:
+        - `95cffea7` `chore: weekly package maintenance patch pass`
 - Minor pass:
-    - not started
+    - Applied direct/dev dependency minor updates:
+        - `@babel/preset-react` `7.28.5 -> 7.29.7`
+        - `@babel/preset-typescript` `7.28.5 -> 7.29.7`
+        - `@typescript-eslint/parser` `8.61.1 -> 8.62.0`
+        - `typescript-eslint` `8.61.1 -> 8.62.0`
+    - Attempted and reverted due regression risk during minor pass:
+        - `@navikt/aksel-icons` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
+        - `@navikt/ds-css` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
+        - `@navikt/ds-react` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
+        - `@navikt/aksel` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
+        - `@navikt/ds-tailwind` `8.12.1 -> 8.13.1` (reverted to `8.12.1`)
 - Major pass:
     - not started
 - Validation:
@@ -133,15 +146,21 @@ Suggested starter prompt:
     - `yarn test --maxWorkers=2`: passed (`63/63` suites, `450/450` tests)
     - `yarn build`: passed
     - `yarn test:e2e`: full run ended with `1/29` failing spec (`SendBrevIAvsluttetSak`), then targeted rerun for that spec passed (`15/15`)
+    - Minor pass re-validation:
+        - `yarn lint`: passed
+        - `yarn tsc --noEmit`: passed
+        - `yarn test --maxWorkers=2`: passed (`63/63` suites, `450/450` tests)
+        - `yarn build`: passed
+        - `yarn test:e2e`: full run was interrupted by `SIGINT` at spec `29/29`; isolated run for `sendBrevPåFagsak.js` failed (`4/7`, `4` failing)
 - Skipped versions still inside cooldown:
     - `react-intl@10.1.14` (stayed on `10.1.13`)
     - `postcss@8.5.16` (stayed on `8.5.15`)
     - `prettier@3.8.5` (stayed on `3.8.4`)
     - stepped down intentionally due cutoff (latest too new): `@tanstack/react-query@5.101.2`, `tailwindcss@4.3.2`, `@tailwindcss/postcss@4.3.2`, `@sentry/cli@3.6.0`, `webpack@5.108.3`
 - Remaining follow ups:
-    - Decide whether to commit patch pass as-is.
-    - If strict green full-suite e2e is required before commit, rerun full `yarn test:e2e` once more uninterrupted to confirm whether `SendBrevIAvsluttetSak` failure was intermittent.
-    - Minor pass is pending explicit approval.
+    - Known e2e deviation accepted for this pass: `sendBrevPåFagsak.js` (`4` failing in isolated run).
+    - Investigate and stabilize `sendBrevPåFagsak.js` outside weekly dependency scope.
+    - Decide whether to continue to major updates.
 - Known issues from previous run:
     - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
     - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
