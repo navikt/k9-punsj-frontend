@@ -512,7 +512,7 @@ const ArbeidsforholdPanel = ({
                 )}
 
                 <div className="mt-6">
-                    <Label size="small">
+                    <Label size="medium">
                         <FormattedMessage id="skjema.arbeid.sn.når" />
                     </Label>
                 </div>
