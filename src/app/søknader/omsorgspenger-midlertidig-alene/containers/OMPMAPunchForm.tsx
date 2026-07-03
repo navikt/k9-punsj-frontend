@@ -19,8 +19,10 @@ import intlHelper from 'app/utils/intlUtils';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import JournalposterSync from 'app/components/JournalposterSync';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { FordelingDokumenttype } from '../../../models/enums/FordelingDokumenttype';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
@@ -197,6 +199,8 @@ export const OMPMAPunchForm: React.FC<Props> = ({
 
             {statusetikett()}
 
+            <VerticalSpacer sixteenPx />
+            <PunchFormTitle titleId={FordelingDokumenttype.OMSORGSPENGER_MA} />
             <VerticalSpacer sixteenPx />
 
             <OpplysningerOmOMPMASoknad setSignaturAction={setSignatur} signert={signert} handleBlur={handleBlur} />

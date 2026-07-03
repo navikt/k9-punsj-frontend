@@ -22,7 +22,7 @@ import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
-import { Arbeidsforhold, JaNei } from 'app/models/enums';
+import { Arbeidsforhold, FordelingDokumenttype, JaNei } from 'app/models/enums';
 import { IError, IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
@@ -46,6 +46,7 @@ import {
 } from '../utils/soknadPeriodUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ROUTES } from 'app/constants/routes';
@@ -1233,6 +1234,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 {this.statusetikett()}
 
+                <VerticalSpacer sixteenPx />
+                <PunchFormTitle titleId={FordelingDokumenttype.PLEIEPENGER} />
                 <VerticalSpacer sixteenPx />
 
                 <Soknadsperioder

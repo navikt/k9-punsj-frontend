@@ -600,7 +600,6 @@
     "skjema.soknadskvittering.opprettetKopi.innhold": "Du har registrert at det er to søkere og opprettet en kopi av journalposten. Ny oppgave er tilgjengelig ved søk på annen søkers fødselsnummer.",
     "skjema.sentInn": "Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.",
 
-    "skjema.ompao.tittel": "Alene om omsorgen",
     "skjema.ompao.dateInput.label": "Søker er alene om omsorgen fra og med",
     "skjema.ompao.dateInput.errorSummaryHeading": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
 
@@ -686,7 +685,6 @@
     "omsorgsdager.overføring.punch.modal.feil.prøvigjen": "Prøv igjen senere.",
     "omsorgsdager.overføring.punch.modal.feil.detaljer": "Oppgi følgende id ved kontakt med teknisk support:",
 
-    "omsorgspenger.korrigeringAvInntektsmelding.header": "Korrigering av inntektsmelding omsorgspenger",
     "omsorgspenger.korrigeringAvInntektsmelding.header.info": "Korrigering av inntektsmelding skal benyttes til å:",
     "omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1": "Slette dager/timer arbeidsgiver melder fra de har fått for mye",
     "omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.2": "Endre dager til timer, når arbeidsgiver melder de har fått for mye",
@@ -719,8 +717,6 @@
     "omsorgspenger.midlertidigAlene.punshcForm.updateSoknadSuccess": "Lagret",
     "omsorgspenger.midlertidigAlene.punshcForm.awaitingUpdateResponse": "Lagrer...",
     "omsorgspenger.midlertidigAlene.punchForm.barn.tittel": "Barn",
-    "omsorgspenger.midlertidigAlene.punchForm.tittel": "Omsorgsdager - Midlertidig alene om omsorgen",
-
     "omsorgspenger.midlertidigAlene.situasjonstyper.INNLAGT_I_HELSEINSTITUSJON": "Innlagt i helseinstitusjon",
     "omsorgspenger.midlertidigAlene.situasjonstyper.UTØVER_VERNEPLIKT": "Utøver verneplikt",
     "omsorgspenger.midlertidigAlene.situasjonstyper.FENGSEL": "Fengsel",
@@ -736,7 +732,6 @@
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.ARBEIDSGIVER_KONKURS": "Arbeidsgiver er konkurs",
     "omsorgspenger.omsorgspengeutbetaling.søknadsårsaker.KONFLIKT_MED_ARBEIDSGIVER": "Bestridelse",
 
-    "omsorgspenger.utbetaling.punchForm.header": "Omsorgspengeutbetaling",
     "omsorgspenger.utbetaling.punchForm.errorSummary.header": "Du må fikse disse feilene før du kan sende inn punsjemeldingen.",
     "omsorgspenger.utbetaling.punchForm.fosterbarn.header": "Fosterbarn",
     "omsorgspenger.utbetaling.punchForm.eksisterendePerioder.header": "Eksisterende perioder",

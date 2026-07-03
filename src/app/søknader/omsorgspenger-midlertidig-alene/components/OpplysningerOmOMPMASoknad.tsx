@@ -2,12 +2,11 @@ import React from 'react';
 
 import { Field, FieldProps, FormikValues, useField, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+import { Alert, Box, TextField } from '@navikt/ds-react';
 
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import FieldErrorMessages from 'app/components/skjema/FieldErrorMessages';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
 
@@ -33,12 +32,8 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
 
     return (
         <>
-            <Heading size="small">
-                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.tittel'} />
-            </Heading>
-            <VerticalSpacer sixteenPx />
             <Box padding="space-16" borderWidth="1" borderRadius="8">
-                <Alert variant="info" className="mt-4">
+                <Alert variant="info">
                     <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
                 </Alert>
 

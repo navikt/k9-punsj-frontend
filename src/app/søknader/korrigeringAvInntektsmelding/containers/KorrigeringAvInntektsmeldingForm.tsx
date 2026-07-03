@@ -4,6 +4,7 @@ import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } fr
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading, List, Modal } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
     submitOMSKorrigering,
@@ -389,13 +390,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                             <Box padding="space-16">
                                 <div className="mb-4">
                                     <Heading size="medium" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                        <FormattedMessage id={FordelingDokumenttype.KORRIGERING_IM} />
                                     </Heading>
                                 </div>
 
                                 <Alert size="small" variant="info" className="mb-6">
                                     <Heading size="small" level="2">
-                                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header" />
+                                        <FormattedMessage id={FordelingDokumenttype.KORRIGERING_IM} />
                                     </Heading>
 
                                     <List as="ul">

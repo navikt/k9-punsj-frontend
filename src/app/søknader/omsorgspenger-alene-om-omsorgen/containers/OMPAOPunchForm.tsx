@@ -5,11 +5,13 @@ import { debounce } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading, VStack } from '@navikt/ds-react';
 import JournalposterSync from 'app/components/JournalposterSync';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import VentModal from 'app/components/ventModal/VentModal';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { Feil } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
@@ -109,10 +111,8 @@ const OMPAOPunchForm: React.FC<IPunchOMPAOFormProps> = ({
         <>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VStack gap="space-24">
-                <Heading size="medium">
-                    <FormattedMessage id={'skjema.ompao.tittel'} />
-                </Heading>
+            <VStack gap="space-16" className="mt-4">
+                <PunchFormTitle titleId={FordelingDokumenttype.OMSORGSPENGER_AO} />
                 <OpplysningerOmOMPAOSoknad />
                 <Box padding="space-16" borderWidth="1" borderRadius="8">
                     <VStack gap="space-16">
