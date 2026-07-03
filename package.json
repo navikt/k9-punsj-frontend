@@ -139,7 +139,7 @@
         "typescript": "6.0.3",
         "typescript-eslint": "8.62.0",
         "webpack": "5.107.0",
-        "webpack-dev-server": "5.2.4"
+        "webpack-dev-server": "5.2.5"
     },
     "browserslist": [
         ">0.2%",
@@ -167,7 +167,6 @@
         "qs": "6.15.3",
         "systeminformation": "5.31.11",
         "tmp@npm:^0.2.3": "0.2.7",
-        "tmp@npm:~0.2.4": "0.2.7",
-        "uuid@npm:^8.3.2": "14.0.1"
+        "tmp@npm:~0.2.4": "0.2.7"
     }
 }

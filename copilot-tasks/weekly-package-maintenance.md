@@ -10,7 +10,7 @@
 ## Goal
 
 - Run the weekly dependency maintenance pass without wasting time on versions blocked by Yarn's 7 day cooldown.
-- Handle updates in staged passes with explicit stop points after validation, before any commit, and before any higher risk upgrade tier.
+- Handle patch and minor updates in staged passes with explicit stop points after validation and before any commit.
 
 ## Scope
 
@@ -24,6 +24,7 @@
     - adding new dependencies without a concrete need
     - bypassing or weakening `.yarnrc.yml` `npmMinimalAgeGate: 7d`
     - auto commit or push
+    - major dependency upgrades in this task
     - broad refactors unrelated to dependency fallout
     - archiving, renaming, or deleting this task file
 - Constraints:
@@ -40,7 +41,7 @@
     - A package should normally be upgraded only once in the staged run. Do not spend the patch pass on a package if an eligible minor or major already exists outside the cooldown window.
     - In patch pass, update only packages whose highest eligible tier is patch.
     - In minor pass, update only packages whose highest eligible tier is minor.
-    - If an eligible major exists, leave the package unchanged until an explicitly approved major pass, and record that decision in `Outcome`.
+    - If an eligible major exists, leave the package unchanged in this task, and record that it requires a separate focused task.
     - Follow this exact order:
         - direct dependency and devDependency patch updates
         - existing `resolutions` patch updates or removals when the graph no longer needs an override
@@ -48,8 +49,7 @@
         - stop and ask the user whether to commit the patch pass
         - direct dependency and devDependency minor updates
         - validation
-        - stop and ask the user whether to continue to majors
-        - major updates only when patch and minor are green and each major has a small explicit blast radius
+        - stop and summarize any major candidates that should be handled separately
     - Review `resolutions` deliberately. Do not keep stale overrides only because they already exist. Do not add new overrides without a concrete transitive reason and the same 7 day date check.
     - Keep each stage narrow. Do not mix unrelated major work into the patch or minor pass.
 
@@ -71,7 +71,7 @@ Follow this task file. First update `Plan`, then work in staged passes. Read `.y
 
 Start with direct dependency and devDependency patch updates, then review existing `resolutions` for patch level bumps or safe removals, and run the full validation list. In the patch pass, only update packages whose highest eligible tier is patch. If a package already has an eligible minor or major outside the cooldown window, skip it in the patch pass and leave it for the later tier instead of updating it twice. After the patch pass, update `Outcome` with exact versions chosen, versions skipped because of the cooldown window, packages intentionally deferred to minor or major, changed files, validation results, and remaining risks, then stop and ask the user whether to commit the patch pass. Do not commit unless the user explicitly asks.
 
-Only after explicit user approval, continue with a minor pass under the same rules and run validation again. In the minor pass, update only packages whose highest eligible tier is minor. If an eligible major already exists, leave that package unchanged for the major pass and record it explicitly. After the minor pass, stop and ask whether to continue to majors. Major updates are optional and should only be attempted one by one when patch and minor are both green and the major has a small isolated blast radius. If a major looks migration heavy, document it and stop instead of forcing it into the weekly pass.
+Only after explicit user approval, continue with a minor pass under the same rules and run validation again. In the minor pass, update only packages whose highest eligible tier is minor. If an eligible major already exists, leave that package unchanged and record it as a separate follow up. After the minor pass, stop and summarize any major candidates that deserve their own focused task. Do not attempt major upgrades in this weekly pass.
 
 Suggested starter prompt:
 
@@ -85,11 +85,12 @@ Suggested starter prompt:
 - [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
 - [x] Run full validation for patch pass and document results.
 - [x] Stop and ask user whether to commit patch pass.
-- [x] Continue to minor pass only after explicit approval, then validate and stop before majors.
-- [ ] Attempt majors only if explicitly approved after patch and minor are green.
+- [x] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
 
 ## Progress notes
 
+- 2026-07-03: `webpack-dev-server` was reapplied from `5.2.4` to `5.2.5` as a separate follow up after clarifying that it is a dev-only package and not the confirmed PSB production bundle trigger.
+- 2026-07-03: Follow up cleanup removed `uuid@npm:^8.3.2 -> 14.0.1` from `resolutions` after confirming it forced a transitive major onto `sockjs`. Root keeps `uuid@14.0.1`, while `sockjs` now resolves its own `uuid@8.3.2`.
 - 2026-07-02: User approved next step to start minor pass.
 - 2026-07-02: Computed cooldown cutoff (UTC) as `2026-06-25T13:01:12.480Z` before minor candidate selection.
 - 2026-07-02: Minor candidate selection completed with publish-time precheck per package.
@@ -166,6 +167,8 @@ Suggested starter prompt:
     - `prettier@3.8.5` (stayed on `3.8.4`)
     - stepped down intentionally due cutoff (latest too new): `@tanstack/react-query@5.101.2`, `tailwindcss@4.3.2`, `@tailwindcss/postcss@4.3.2`, `@sentry/cli@3.6.0`, `webpack@5.108.3`
 - Remaining follow ups:
+    - Avoid forcing transitive major jumps through broad `resolutions`. `uuid@npm:^8.3.2 -> 14.0.1` looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested. Follow up cleanup removed that override, leaving root `uuid@14.0.1` in place and restoring `sockjs -> uuid@8.3.2`.
+    - `webpack-dev-server@5.2.5` is now reapplied as a separate dev-only check. Validate locally whether PSB countries still show through the dev server path before deciding whether to keep or revert it.
     - Known e2e deviation accepted for this pass: `sendBrevPåFagsak.js` (`4` failing in isolated run).
     - Keep `webpack` pinned to `5.107.0` for now. `5.107.2` and `5.108.3` can produce an empty PSB country list in production style bundles (`i18n-iso-countries/codes.json` emitted as empty payload).
     - For future webpack updates, do not rely only on local dev or successful local build. Verify in Q and prod like environments that PSB countries are shown for `utenlandsopphold`.

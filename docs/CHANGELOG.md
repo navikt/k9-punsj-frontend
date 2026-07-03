@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Resolution cleanup for transitive uuid major override (2026-07-03)
+
+- Fjernet `uuid@npm:^8.3.2 -> 14.0.1` fra `resolutions`, fordi overstyringen tvang `sockjs` over på en annen major enn pakken selv ba om.
+- Lot root beholde direkte `uuid@14.0.1`, mens `sockjs` igjen resolver sin egen `uuid@8.3.2`. Lokal audit etterpå viste ikke noe nytt `uuid`-varsel.
+- Lot resten av `resolutions` stå urørt i denne runden, fordi de fortsatt oppfører seg som bevisste security- eller lockfile-pins. Åpent audit-spor er fortsatt `webpack-dev-server < 5.2.5`.
+- Løftet samtidig `webpack-dev-server` fra `5.2.4` til `5.2.5` som en separat dev-server oppfølging. `webpack` ble ikke rørt i samme steg, siden PSB-regresjonen fortsatt er knyttet til production bundling på `webpack >= 5.107.2`.
+
 ### Opprydding i legacy dato og periodeadaptere (2026-06-30)
 
 - Fjernet gamle wrappers som `DatoInputFormikNew`, `NewDateInput`, `PeriodInput`, gammel `PeriodevelgerControlled` og gammel `skjema/Datovelger/Periodevelger`, og samlet aktiv bruk rundt `Datovelger`, `DatovelgerFormik`, `Periodevelger` og `PeriodevelgerFormik`.
