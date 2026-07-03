@@ -80,7 +80,7 @@ Suggested starter prompt:
 ## Carry forward notes
 
 - Keep `webpack` pinned to `5.107.0` until the PSB country-list regression is resolved. `5.107.2` and `5.108.3` can emit `i18n-iso-countries/codes.json` as an empty payload in production style bundles.
-- For future `webpack` or `webpack-dev-server` updates, do not rely only on local dev or a successful local build. Verify in Q or another production-like environment that PSB countries are shown for `utenlandsopphold`.
+- For future `webpack` updates, do not rely only on local dev or a successful local build. Verify in Q or another production-like environment that PSB countries are shown for `utenlandsopphold`, and explicitly check that the country dropdown is populated.
 - Avoid forcing transitive major jumps through broad `resolutions`. A previous `uuid@npm:^8.3.2 -> 14.0.1` override looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested.
 - Current targeted security overrides that should be revisited in later runs are `form-data@4.0.6`, `http-proxy-middleware@2.0.10`, `undici@6.27.0`, and `@opentelemetry/core@2.8.0`. Remove them once the graph naturally resolves to equal or newer safe versions.
 - Recheck whether a direct bump of `@sentry/cli` can replace the temporary `undici` override after the newer CLI version is outside the 7 day cooldown window.
