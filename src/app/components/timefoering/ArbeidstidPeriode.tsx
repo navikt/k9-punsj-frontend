@@ -150,10 +150,11 @@ const ArbeidstidPeriode = (props: Props) => {
                             name={`${name}.periode`}
                             action={
                                 <Button
-                                    icon={<TrashIcon fontSize="1.5rem" color="#C30000" title="slett" />}
-                                    size="small"
+                                    aria-label="Fjern periode"
+                                    icon={<TrashIcon title="slett periode" />}
                                     variant="tertiary"
                                     onClick={remove}
+                                    data-color="danger"
                                 />
                             }
                         />
