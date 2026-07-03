@@ -159,9 +159,12 @@ Suggested starter prompt:
     - stepped down intentionally due cutoff (latest too new): `@tanstack/react-query@5.101.2`, `tailwindcss@4.3.2`, `@tailwindcss/postcss@4.3.2`, `@sentry/cli@3.6.0`, `webpack@5.108.3`
 - Remaining follow ups:
     - Known e2e deviation accepted for this pass: `sendBrevPåFagsak.js` (`4` failing in isolated run).
+    - Keep `webpack` pinned to `5.107.0` for now. `5.107.2` and `5.108.3` can produce an empty PSB country list in production style bundles (`i18n-iso-countries/codes.json` emitted as empty payload).
+    - For future webpack updates, do not rely only on local dev or successful local build. Verify in Q and prod like environments that PSB countries are shown for `utenlandsopphold`.
     - Investigate and stabilize `sendBrevPåFagsak.js` outside weekly dependency scope.
     - Decide whether to continue to major updates.
 - Known issues from previous run:
     - `npm view` for some `@navikt/*` packages returned `401` from configured registry in this shell.
     - `yarn up` scope can unintentionally modify `server/package.json`; verify workspace diffs before commit.
     - Full `yarn test:e2e` must complete uninterrupted to avoid false-negative failure impression.
+    - Local build success was not sufficient to catch the PSB country regression after webpack updates. Future validation for webpack bumps must include runtime verification of countries in Q or an equivalent production-like environment.
