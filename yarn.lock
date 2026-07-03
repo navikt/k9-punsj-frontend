@@ -12893,7 +12893,6 @@ __metadata:
     typescript: "npm:6.0.3"
     typescript-eslint: "npm:8.62.0"
     typescript-string-operations: "npm:1.6.1"
-    uuid: "npm:14.0.1"
     webpack: "npm:5.107.0"
     webpack-dev-server: "npm:5.2.5"
     yup: "npm:1.7.1"
@@ -18180,15 +18179,6 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10/5d6949693d58cb2e636a84f3ee1c6e7b2f9c16cb1d42d0ecb386d8c025c69e327205aa1c69e2868cc06a01e5e20681fbba55a4e0ed0cce913d60334024eae798
-  languageName: node
-  linkType: hard
-
-"uuid@npm:14.0.1":
-  version: 14.0.1
-  resolution: "uuid@npm:14.0.1"
-  bin:
-    uuid: dist-node/bin/uuid
-  checksum: 10/0f978fd5b0269d7acb615342aeb131f0b8d85eeb8ec34f2915d906baa3befcc14a079a430d0f8116aec6fd20c850cbfab65d1b3d1643fa81ed373c0cf9574f18
   languageName: node
   linkType: hard
 
