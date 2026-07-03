@@ -1197,7 +1197,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 editSoknad={(beredskap) => this.updateSoknad({ beredskap })}
                 editSoknadState={(beredskap, showStatus) => this.updateSoknadState({ beredskap }, showStatus)}
                 textLeggTil="skjema.beredskap.leggtilperiode"
-                textFjern="skjema.beredskap.fjernperiode"
+                textFjern="skjema.perioder.fjern"
                 className="beredskapsperioder"
                 panelClassName="beredskapspanel"
                 getErrorMessage={this.getErrorMessage}
@@ -1217,7 +1217,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 editSoknad={(nattevaak) => this.updateSoknad({ nattevaak })}
                 editSoknadState={(nattevaak, showStatus) => this.updateSoknadState({ nattevaak }, showStatus)}
                 textLeggTil="skjema.nattevaak.leggtilperiode"
-                textFjern="skjema.nattevaak.fjernperiode"
+                textFjern="skjema.perioder.fjern"
                 className="nattevaaksperioder"
                 panelClassName="nattevaakspanel"
                 getErrorMessage={this.getErrorMessage}

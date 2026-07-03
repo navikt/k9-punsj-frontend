@@ -64,7 +64,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                                 variant="tertiary"
                                                 data-color="danger"
                                             >
-                                                <FormattedMessage id="skjema.liste.fjern_periode" />
+                                                <FormattedMessage id="skjema.perioder.fjern" />
                                             </Button>
                                         }
                                     />

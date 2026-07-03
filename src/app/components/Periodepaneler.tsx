@@ -157,7 +157,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                         variant="tertiary"
                                         data-color="danger"
                                     >
-                                        <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                                        <FormattedMessage id={textFjern || 'skjema.perioder.fjern'} />
                                     </Button>
                                 }
                             />

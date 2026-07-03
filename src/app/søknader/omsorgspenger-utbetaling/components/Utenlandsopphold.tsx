@@ -56,7 +56,7 @@ const Utenlandsopphold: React.FC = () => {
                                                     icon={<TrashIcon title="slett periode" />}
                                                     data-color="danger"
                                                 >
-                                                    <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
+                                                    <FormattedMessage id="skjema.perioder.fjern" />
                                                 </Button>
                                             ) : undefined
                                         }
