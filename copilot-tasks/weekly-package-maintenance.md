@@ -31,8 +31,16 @@
     - Before any `yarn up` or manifest edit, compute the UTC cutoff timestamp as `now - 7 days` and write it in `Progress notes`.
     - Use a deterministic command for the cutoff, for example `node -e "const cutoff=new Date(Date.now()-7*24*60*60*1000); console.log(cutoff.toISOString())"`.
     - For every direct dependency, devDependency, or `resolutions` candidate, inspect publish timestamps first with `npm view <package> time --json` or an equivalent registry command.
+    - Before changing any package, build a full eligible-version matrix per candidate:
+        - newest eligible patch in the current minor line
+        - newest eligible minor in the current major line
+        - newest eligible major
     - Choose the newest stable version older than the cutoff. Ignore prereleases unless the repo already uses one.
     - If the freshest version is inside the cooldown window, or Yarn reports `No candidates found`, treat that as expected. Step down to the nearest older stable version instead of retrying blocked versions.
+    - A package should normally be upgraded only once in the staged run. Do not spend the patch pass on a package if an eligible minor or major already exists outside the cooldown window.
+    - In patch pass, update only packages whose highest eligible tier is patch.
+    - In minor pass, update only packages whose highest eligible tier is minor.
+    - If an eligible major exists, leave the package unchanged until an explicitly approved major pass, and record that decision in `Outcome`.
     - Follow this exact order:
         - direct dependency and devDependency patch updates
         - existing `resolutions` patch updates or removals when the graph no longer needs an override
@@ -59,11 +67,11 @@
 
 ## Prompt for Copilot
 
-Follow this task file. First update `Plan`, then work in staged passes. Read `.yarnrc.yml` before doing anything else, confirm that `npmMinimalAgeGate: 7d` is active, compute the UTC cutoff timestamp for `now - 7 days`, and write that cutoff into `Progress notes`. For every package candidate, check publish timestamps first with `npm view <package> time --json` or an equivalent registry command. Do not try `@latest` first when the latest release is newer than the cutoff, and do not keep retrying versions that Yarn blocks with `No candidates found`. Pick the nearest older stable version outside the cooldown window on purpose.
+Follow this task file. First update `Plan`, then work in staged passes. Read `.yarnrc.yml` before doing anything else, confirm that `npmMinimalAgeGate: 7d` is active, compute the UTC cutoff timestamp for `now - 7 days`, and write that cutoff into `Progress notes`. For every package candidate, check publish timestamps first with `npm view <package> time --json` or an equivalent registry command. Build a full eligible-version matrix for each package before making changes: highest eligible patch, highest eligible minor, and highest eligible major outside the cooldown window. Do not try `@latest` first when the latest release is newer than the cutoff, and do not keep retrying versions that Yarn blocks with `No candidates found`. Pick the nearest older stable version outside the cooldown window on purpose.
 
-Start with direct dependency and devDependency patch updates, then review existing `resolutions` for patch level bumps or safe removals, and run the full validation list. After the patch pass, update `Outcome` with exact versions chosen, versions skipped because of the cooldown window, changed files, validation results, and remaining risks, then stop and ask the user whether to commit the patch pass. Do not commit unless the user explicitly asks.
+Start with direct dependency and devDependency patch updates, then review existing `resolutions` for patch level bumps or safe removals, and run the full validation list. In the patch pass, only update packages whose highest eligible tier is patch. If a package already has an eligible minor or major outside the cooldown window, skip it in the patch pass and leave it for the later tier instead of updating it twice. After the patch pass, update `Outcome` with exact versions chosen, versions skipped because of the cooldown window, packages intentionally deferred to minor or major, changed files, validation results, and remaining risks, then stop and ask the user whether to commit the patch pass. Do not commit unless the user explicitly asks.
 
-Only after explicit user approval, continue with a minor pass under the same rules and run validation again. After the minor pass, stop and ask whether to continue to majors. Major updates are optional and should only be attempted one by one when patch and minor are both green and the major has a small isolated blast radius. If a major looks migration heavy, document it and stop instead of forcing it into the weekly pass.
+Only after explicit user approval, continue with a minor pass under the same rules and run validation again. In the minor pass, update only packages whose highest eligible tier is minor. If an eligible major already exists, leave that package unchanged for the major pass and record it explicitly. After the minor pass, stop and ask whether to continue to majors. Major updates are optional and should only be attempted one by one when patch and minor are both green and the major has a small isolated blast radius. If a major looks migration heavy, document it and stop instead of forcing it into the weekly pass.
 
 Suggested starter prompt:
 
@@ -73,7 +81,7 @@ Suggested starter prompt:
 
 - [x] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
 - [x] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- [x] Build the direct dependency and devDependency candidate list from `package.json` and check publish timestamps before selecting versions.
+- [x] Build the direct dependency and devDependency candidate list from `package.json`, then record the highest eligible patch, minor, and major per package before selecting versions.
 - [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
 - [x] Run full validation for patch pass and document results.
 - [x] Stop and ask user whether to commit patch pass.
