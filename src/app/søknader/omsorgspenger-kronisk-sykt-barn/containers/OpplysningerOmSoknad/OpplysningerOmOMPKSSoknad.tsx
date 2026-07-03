@@ -49,88 +49,88 @@ const OpplysningerOmOMPKSSoknad: React.FC<Props> = ({
         <Box
             padding="space-16"
             borderWidth="1"
-            borderRadius="2"
-            className="opplysninger-om-soknaden-panel opplysningerOmOMPKSSoknad"
+            borderRadius="8"
+            className="opplysninger-om-soknaden-panel"
         >
             <VStack gap="space-16">
-            <Heading size="small" level="3">
-                <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
-            </Heading>
+                <Heading size="small" level="3">
+                    <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                </Heading>
 
-            <Alert size="small" variant="info">
-                <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
-            </Alert>
-
-            <div className="flex flex-col gap-2">
-                <div className="input-row">
-                    <Datovelger
-                        value={soknad.mottattDato}
-                        id="soknad-dato"
-                        errorMessage={!!mottattDatoErrorMessage}
-                        label={intlHelper(intl, 'skjema.mottakelsesdato')}
-                        visFeilmelding={false}
-                        errorAriaDescribedBy={mottattDatoErrorMessage ? mottattDatoErrorId : undefined}
-                        onErrorMessageChange={setDateLocalError}
-                        onChange={(selectedDate) => {
-                            setShowDateError(false);
-                            dateFieldHandlers.onChange(selectedDate);
-                        }}
-                        onBlur={(selectedDate) => {
-                            setShowDateError(true);
-                            dateFieldHandlers.onBlur(selectedDate);
-                        }}
-                    />
-                    <div>
-                        <TextField
-                            id="soknad-klokkeslett"
-                            value={soknad.klokkeslett || ''}
-                            type="time"
-                            className="klokkeslett"
-                            label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
-                            onChange={(event) => {
-                                setShowTimeError(false);
-                                timeFieldHandlers.onChange(event);
-                            }}
-                            onBlur={(event) => {
-                                setShowTimeError(true);
-                                timeFieldHandlers.onBlur(event);
-                            }}
-                            error={!!klokkeslettErrorMessage}
-                            aria-describedby={klokkeslettErrorMessage ? klokkeslettErrorId : undefined}
-                        />
-                    </div>
-                </div>
-                <FieldErrorMessages
-                    items={[
-                        {
-                            id: mottattDatoErrorId,
-                            label: intlHelper(intl, 'skjema.mottakelsesdato'),
-                            message: mottattDatoErrorMessage,
-                            ariaDescribedBy: 'soknad-dato',
-                        },
-                        {
-                            id: klokkeslettErrorId,
-                            label: intlHelper(intl, 'skjema.mottatt.klokkeslett'),
-                            message: klokkeslettErrorMessage,
-                            ariaDescribedBy: 'soknad-klokkeslett',
-                        },
-                    ]}
-                />
-            </div>
-
-            <LegacyJaNeiIkkeRelevantRadioGroup
-                className="horizontalRadios"
-                name="signatur"
-                legend={intlHelper(intl, 'ident.signatur.etikett')}
-                checked={signert || undefined}
-                onChange={(_, value) => setSignaturAction(value || null)}
-            />
-
-            {signert === JaNeiIkkeRelevant.NEI && (
-                <Alert size="small" variant="warning">
-                    <FormattedMessage id={'skjema.usignert.info'} />
+                <Alert size="small" variant="info">
+                    <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
                 </Alert>
-            )}
+
+                <div className="flex flex-col gap-2">
+                    <div className="input-row">
+                        <Datovelger
+                            value={soknad.mottattDato}
+                            id="soknad-dato"
+                            errorMessage={!!mottattDatoErrorMessage}
+                            label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                            visFeilmelding={false}
+                            errorAriaDescribedBy={mottattDatoErrorMessage ? mottattDatoErrorId : undefined}
+                            onErrorMessageChange={setDateLocalError}
+                            onChange={(selectedDate) => {
+                                setShowDateError(false);
+                                dateFieldHandlers.onChange(selectedDate);
+                            }}
+                            onBlur={(selectedDate) => {
+                                setShowDateError(true);
+                                dateFieldHandlers.onBlur(selectedDate);
+                            }}
+                        />
+                        <div>
+                            <TextField
+                                id="soknad-klokkeslett"
+                                value={soknad.klokkeslett || ''}
+                                type="time"
+                                className="klokkeslett"
+                                label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                onChange={(event) => {
+                                    setShowTimeError(false);
+                                    timeFieldHandlers.onChange(event);
+                                }}
+                                onBlur={(event) => {
+                                    setShowTimeError(true);
+                                    timeFieldHandlers.onBlur(event);
+                                }}
+                                error={!!klokkeslettErrorMessage}
+                                aria-describedby={klokkeslettErrorMessage ? klokkeslettErrorId : undefined}
+                            />
+                        </div>
+                    </div>
+                    <FieldErrorMessages
+                        items={[
+                            {
+                                id: mottattDatoErrorId,
+                                label: intlHelper(intl, 'skjema.mottakelsesdato'),
+                                message: mottattDatoErrorMessage,
+                                ariaDescribedBy: 'soknad-dato',
+                            },
+                            {
+                                id: klokkeslettErrorId,
+                                label: intlHelper(intl, 'skjema.mottatt.klokkeslett'),
+                                message: klokkeslettErrorMessage,
+                                ariaDescribedBy: 'soknad-klokkeslett',
+                            },
+                        ]}
+                    />
+                </div>
+
+                <LegacyJaNeiIkkeRelevantRadioGroup
+                    className="horizontalRadios"
+                    name="signatur"
+                    legend={intlHelper(intl, 'ident.signatur.etikett')}
+                    checked={signert || undefined}
+                    onChange={(_, value) => setSignaturAction(value || null)}
+                />
+
+                {signert === JaNeiIkkeRelevant.NEI && (
+                    <Alert size="small" variant="warning">
+                        <FormattedMessage id={'skjema.usignert.info'} />
+                    </Alert>
+                )}
             </VStack>
         </Box>
     );

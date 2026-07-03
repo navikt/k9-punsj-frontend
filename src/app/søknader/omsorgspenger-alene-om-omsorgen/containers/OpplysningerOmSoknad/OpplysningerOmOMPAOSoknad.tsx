@@ -32,7 +32,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                 <Heading size="small" level="3">
                     <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
                 </Heading>
-                <Alert variant="info" className="alert">
+                <Alert size="small" variant="info">
                     <FormattedMessage id="skjema.mottakelsesdato.informasjon" />
                 </Alert>
                 <div className="flex flex-col gap-2">
@@ -46,7 +46,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                             onErrorMessageChange={setDateLocalError}
                         />
 
-                        <div className="ml-4">
+                        <div>
                             <Field name="klokkeslett">
                                 {({ field, meta, form }: FieldProps<string, FormikValues>) => {
                                     const klokkeslettErrorMessage =
@@ -58,6 +58,7 @@ const OpplysningerOmOMPAOSoknad: React.FunctionComponent = () => {
                                         <TextField
                                             id="klokkeslett"
                                             type="time"
+                                            className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={

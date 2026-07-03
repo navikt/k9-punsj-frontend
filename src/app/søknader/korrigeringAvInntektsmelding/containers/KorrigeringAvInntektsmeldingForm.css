@@ -32,16 +32,8 @@ h4.korrigering-legend {
         margin-top: 1rem;
     }
 
-    .opplysningerOmKorrigeringPanel {
-        padding: 1.875rem 1.875rem 1rem !important;
-    }
-
     &__feilmelding {
         margin-top: 1.5rem;
-    }
-
-    &__opplysningerOmKorrigeringContainer {
-        margin: 1.875rem 0 1.5rem;
     }
 
     &__infostripe.alertstripe {

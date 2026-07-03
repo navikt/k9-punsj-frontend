@@ -46,7 +46,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                             onErrorMessageChange={setDateLocalError}
                         />
 
-                        <div className="ml-4">
+                        <div>
                             <Field name="klokkeslett">
                                 {({ field, meta, form }: FieldProps<string, FormikValues>) => {
                                     const klokkeslettErrorMessage =
@@ -58,6 +58,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                                         <TextField
                                             id="klokkeslett"
                                             type="time"
+                                            className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={
