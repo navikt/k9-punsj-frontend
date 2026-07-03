@@ -80,6 +80,7 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
 
                     <Button
                         variant="tertiary"
+                        size="small"
                         onClick={slettPeriode}
                         icon={<TrashIcon title="slett periode" />}
                         data-color="danger"

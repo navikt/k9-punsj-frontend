@@ -48,10 +48,12 @@ const Medlemskap: React.FC = () => {
                                 <Box key={bostedIndex} padding="space-16" borderRadius="8" background="neutral-soft">
                                     <PeriodevelgerFormik
                                         name={`bosteder[${bostedIndex}].periode`}
+                                        size="small"
                                         action={
                                             array.length > 1 ? (
                                                 <Button
                                                     variant="tertiary"
+                                                    size="small"
                                                     className="slett-knapp-med-icon-for-input"
                                                     onClick={() => arrayHelpers.remove(bostedIndex)}
                                                     icon={<TrashIcon title="slett periode" />}
@@ -70,6 +72,7 @@ const Medlemskap: React.FC = () => {
                                             {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
                                                     label
+                                                    size="small"
                                                     selectedcountry={field.value}
                                                     unselectedoption={intlHelper(
                                                         intl,

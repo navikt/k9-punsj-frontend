@@ -112,11 +112,13 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                             </>
                         )}
 
-                        <TextFieldFormik
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
-                            label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
-                            size="small"
-                        />
+                        <div className="max-w-[24rem]">
+                            <TextFieldFormik
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
+                                label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
+                                size="small"
+                            />
+                        </div>
 
                         <VerticalSpacer twentyPx />
                     </>
@@ -141,6 +143,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                             <div style={{ maxWidth: '25%' }}>
                                 <CountrySelect
                                     label
+                                    size="small"
                                     selectedcountry={field.value}
                                     unselectedoption={intlHelper(
                                         intl,

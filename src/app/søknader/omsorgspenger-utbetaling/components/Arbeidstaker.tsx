@@ -82,6 +82,7 @@ const Arbeidstaker = ({
                                 <Button
                                     id="slett"
                                     type="button"
+                                    size="small"
                                     onClick={slettArbeidsforhold}
                                     icon={<TrashIcon title="slett arbeidsforhold" />}
                                     variant="tertiary"

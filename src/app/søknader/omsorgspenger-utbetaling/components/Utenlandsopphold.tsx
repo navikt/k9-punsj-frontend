@@ -47,10 +47,12 @@ const Utenlandsopphold: React.FC = () => {
                                 <Box key={index} padding="space-16" borderRadius="8" background="neutral-soft">
                                     <PeriodevelgerFormik
                                         name={`utenlandsopphold[${index}].periode`}
+                                        size="small"
                                         action={
                                             array.length > 1 ? (
                                                 <Button
                                                     variant="tertiary"
+                                                    size="small"
                                                     onClick={() => arrayHelpers.remove(index)}
                                                     className="slett-knapp-med-icon-for-input"
                                                     icon={<TrashIcon title="slett periode" />}
@@ -69,6 +71,7 @@ const Utenlandsopphold: React.FC = () => {
                                             {({ field }: FieldProps<string>) => (
                                                 <CountrySelect
                                                     label
+                                                    size="small"
                                                     selectedcountry={field.value}
                                                     unselectedoption={intlHelper(
                                                         intl,

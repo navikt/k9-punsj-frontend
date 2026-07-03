@@ -41,6 +41,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                             id="soknad-dato"
                             name="mottattDato"
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                            size="small"
                             visFeilmelding={false}
                             errorAriaDescribedBy={mottattDatoErrorMessage ? mottattDatoErrorId : undefined}
                             onErrorMessageChange={setDateLocalError}
@@ -60,6 +61,7 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                                             type="time"
                                             className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                            size="small"
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={
                                                 klokkeslettErrorMessage ? klokkeslettErrorId : undefined
