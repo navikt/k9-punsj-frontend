@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { cloneDeep, set } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Box, TextField, Textarea } from '@navikt/ds-react';
+import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
 import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
@@ -355,36 +355,38 @@ const ArbeidsforholdPanel = ({
                     </div>
                 )}
                 {!!opptjening.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
-                    <CountrySelect
-                        selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
-                        label={intlHelper(intl, 'skjema.sn.registrertLand')}
-                        onChange={(event) => {
-                            updateSoknad({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            landkode: event.target.value,
+                    <div className="max-w-[24rem]">
+                        <CountrySelect
+                            selectedcountry={opptjening.selvstendigNaeringsdrivende.info.landkode || ''}
+                            label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                            onChange={(event) => {
+                                updateSoknad({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                landkode: event.target.value,
+                                            },
                                         },
                                     },
-                                },
-                            });
-                            updateSoknadState({
-                                opptjeningAktivitet: {
-                                    ...opptjening,
-                                    selvstendigNaeringsdrivende: {
-                                        ...opptjening.selvstendigNaeringsdrivende,
-                                        info: {
-                                            ...opptjening.selvstendigNaeringsdrivende?.info,
-                                            landkode: event.target.value,
+                                });
+                                updateSoknadState({
+                                    opptjeningAktivitet: {
+                                        ...opptjening,
+                                        selvstendigNaeringsdrivende: {
+                                            ...opptjening.selvstendigNaeringsdrivende,
+                                            info: {
+                                                ...opptjening.selvstendigNaeringsdrivende?.info,
+                                                landkode: event.target.value,
+                                            },
                                         },
                                     },
-                                },
-                            });
-                        }}
-                    />
+                                });
+                            }}
+                        />
+                    </div>
                 )}
                 <LegacyJaNeiRadioGroup
                     className="horizontalRadios"
@@ -482,7 +484,9 @@ const ArbeidsforholdPanel = ({
                         </div>
                     </div>
                 )}
-                <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+                <div className="mt-6">
+                    <Label size="medium">{intlHelper(intl, 'skjema.arbeid.sn.når')}</Label>
+                </div>
                 <Periodevelger
                     periode={opptjening.selvstendigNaeringsdrivende?.info?.periode || {}}
                     intl={intl}

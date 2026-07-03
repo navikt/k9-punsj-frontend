@@ -124,8 +124,8 @@
     row-gap: 1rem;
 }
 
-.punch .panels-wrapper .punch_form .arbeidstidInfo h3,
-.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo h3,
+.punch .panels-wrapper .punch_form .arbeidstidInfo :is(.navds-heading, .aksel-heading),
+.punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo :is(.navds-heading, .aksel-heading),
 .punch .panels-wrapper .punch_form .arbeidstidInfo hr,
 .punch .panels-wrapper .omsorgspenger_punch_form .arbeidstidInfo hr {
     margin: 0;

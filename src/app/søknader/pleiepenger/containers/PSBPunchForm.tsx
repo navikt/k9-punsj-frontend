@@ -1435,6 +1435,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                         <Accordion.Content>
                             <Select
+                                className="max-w-[200px]"
                                 value={soknad.omsorg.relasjonTilBarnet}
                                 label={<FormattedMessage id="skjema.relasjontilbarnet" />}
                                 {...this.changeAndBlurUpdatesSoknad((event) => ({

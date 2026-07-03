@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Box, Button, ErrorMessage } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
@@ -19,9 +18,7 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
     const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
-        <div>
-            <VerticalSpacer thirtyTwoPx />
-
+        <Box padding="space-16" borderRadius="8" background="neutral-soft">
             <PeriodevelgerFormik
                 name={`utenlandsopphold[${fieldArrayIndex}].periode`}
                 fromDate={fromDate}
@@ -44,23 +41,27 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
                 }
             />
 
-            <VerticalSpacer sixteenPx />
-
             <div style={{ maxWidth: '50%' }}>
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
                     {({ field, meta }: FieldProps<string>) => (
                         <>
-                        <CountrySelect label {...field} selectedcountry={field.value} unselectedoption="Velg land" />
-                        {meta.touched && meta.error && (
-                            <ErrorMessage role="alert" showIcon>
-                                {meta.error}
-                            </ErrorMessage>
-                        )}
+                            <CountrySelect
+                                label
+                                size="small"
+                                {...field}
+                                selectedcountry={field.value}
+                                unselectedoption="Velg land"
+                            />
+                            {meta.touched && meta.error && (
+                                <ErrorMessage role="alert" showIcon>
+                                    {meta.error}
+                                </ErrorMessage>
+                            )}
                         </>
                     )}
                 </Field>
             </div>
-        </div>
+        </Box>
     );
 };
 

@@ -78,6 +78,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
         <div className="mt-4">
             <PeriodevelgerFormik
                 name={`${name}.periode`}
+                size="small"
                 fromDate={fromDate}
                 toDate={toDate}
                 disabled={disabled}
@@ -86,6 +87,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                         aria-label="Fjern periode"
                         icon={<TrashIcon title="slett periode" />}
                         variant="tertiary"
+                        size="small"
                         onClick={remove}
                         data-color="danger"
                     />
@@ -104,6 +106,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Normal arbeidstid"
+                            size="small"
                             timer={normalTimerField.value ?? ''}
                             minutter={normalMinField.value ?? ''}
                             onChangeTimer={(v) => setNormalTimerMin(v, normalMinField.value ?? '')}
@@ -129,6 +132,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerOgMinutter
                             label="Fravær"
+                            size="small"
                             timer={fraværTimerField.value ?? ''}
                             minutter={fraværMinField.value ?? ''}
                             onChangeTimer={(v) => setFraværTimerMin(v, fraværMinField.value ?? '')}
@@ -164,6 +168,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Normal arbeidstid"
+                            size="small"
                             value={normalDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.jobberNormaltTimerPerDag`, v);
@@ -184,6 +189,7 @@ const FraværPeriode = ({ name, remove }: Props) => {
                     <div>
                         <TimerMedDesimaler
                             label="Fravær"
+                            size="small"
                             value={fraværDeciField.value ?? ''}
                             onChange={(v) => {
                                 formik.setFieldValue(`${name}.fraværTimerPerDag`, v);
