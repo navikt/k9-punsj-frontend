@@ -36,6 +36,7 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
                             onClick={() => arrayHelpers.remove(fieldArrayIndex)}
                             icon={<TrashIcon />}
                             className="slett-knapp-med-icon-for-input"
+                            data-color="danger"
                         >
                             Fjern periode
                         </Button>

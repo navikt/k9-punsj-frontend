@@ -155,6 +155,7 @@ export const Periodepaneler: React.FC<Props> = ({
                                         }}
                                         icon={<TrashIcon title="slettPeriode" />}
                                         variant="tertiary"
+                                        data-color="danger"
                                     >
                                         <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
                                     </Button>

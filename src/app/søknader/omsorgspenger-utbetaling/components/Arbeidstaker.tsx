@@ -81,11 +81,11 @@ const Arbeidstaker = ({
 
                                 <Button
                                     id="slett"
-                                    className="slett-knapp-med-icon"
                                     type="button"
                                     onClick={slettArbeidsforhold}
                                     icon={<TrashIcon title="slett arbeidsforhold" />}
                                     variant="tertiary"
+                                    data-color="danger"
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.punchForm.arbeidstaker.fjernAF.btn" />
                                 </Button>

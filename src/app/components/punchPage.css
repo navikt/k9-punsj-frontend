@@ -266,6 +266,11 @@
     margin-top: 1rem;
 }
 
+.punch .panels-wrapper .punch_form .listepaneler .arbeidstakerpanel + .arbeidstakerpanel,
+.punch .panels-wrapper .omsorgspenger_punch_form .listepaneler .arbeidstakerpanel + .arbeidstakerpanel {
+    margin-top: 1rem;
+}
+
 .punch .panels-wrapper .punch_form .arbeidstakerpanel .listepaneler,
 .punch .panels-wrapper .omsorgspenger_punch_form .arbeidstakerpanel .listepaneler {
     margin: 0.5rem 0 0 -1rem;

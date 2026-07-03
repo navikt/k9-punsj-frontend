@@ -111,6 +111,7 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                                                     }}
                                                                     variant="tertiary"
                                                                     icon={<TrashIcon title="slett" />}
+                                                                    data-color="danger"
                                                                 >
                                                                     <FormattedMessage id="skjema.liste.fjern_dag" />
                                                                 </Button>

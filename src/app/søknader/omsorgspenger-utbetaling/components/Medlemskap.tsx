@@ -55,6 +55,7 @@ const Medlemskap: React.FC = () => {
                                                     className="slett-knapp-med-icon-for-input"
                                                     onClick={() => arrayHelpers.remove(bostedIndex)}
                                                     icon={<TrashIcon title="slett periode" />}
+                                                    data-color="danger"
                                                 >
                                                     <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
                                                 </Button>

@@ -80,9 +80,9 @@ const Fravaersperiode = ({ name, antallFravaersperioder, index, visSoknadAarsak 
 
                     <Button
                         variant="tertiary"
-                        className="slett-knapp-med-icon"
                         onClick={slettPeriode}
                         icon={<TrashIcon title="slett periode" />}
+                        data-color="danger"
                     >
                         <FormattedMessage id="omsorgspenger.utbetaling.fravaersperiode.fjern.btn" />
                     </Button>

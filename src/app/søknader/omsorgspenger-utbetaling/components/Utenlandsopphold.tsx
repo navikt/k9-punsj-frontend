@@ -54,6 +54,7 @@ const Utenlandsopphold: React.FC = () => {
                                                     onClick={() => arrayHelpers.remove(index)}
                                                     className="slett-knapp-med-icon-for-input"
                                                     icon={<TrashIcon title="slett periode" />}
+                                                    data-color="danger"
                                                 >
                                                     <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.fjernPeriode.btn" />
                                                 </Button>

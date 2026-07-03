@@ -143,12 +143,12 @@ const Arbeidstakerperioder = ({
 
                                 <Button
                                     id="slett"
-                                    className="slett-knapp-med-icon"
                                     type="button"
                                     onClick={() => removeItemHandler(currentItemIndex)}
                                     tabIndex={0}
                                     variant="tertiary"
                                     icon={<TrashIcon title="fjernarbeidsgiver" />}
+                                    data-color="danger"
                                 >
                                     <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
                                 </Button>

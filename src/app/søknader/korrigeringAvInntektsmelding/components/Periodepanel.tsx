@@ -62,6 +62,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                                 }}
                                                 icon={<TrashIcon title="slettPeriode" />}
                                                 variant="tertiary"
+                                                data-color="danger"
                                             >
                                                 <FormattedMessage id="skjema.liste.fjern_periode" />
                                             </Button>

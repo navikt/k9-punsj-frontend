@@ -133,13 +133,13 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                                         {!!medSlettKnapp && (
                                             <Button
                                                 id="slett"
-                                                className="slett-knapp-med-icon"
                                                 data-testid="fjernlisteelementknapp"
                                                 type="button"
                                                 onClick={() => removeItemHandler(itemIndex)}
                                                 tabIndex={0}
                                                 icon={<TrashIcon title="slett" />}
                                                 variant="tertiary"
+                                                data-color="danger"
                                             >
                                                 <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
                                             </Button>

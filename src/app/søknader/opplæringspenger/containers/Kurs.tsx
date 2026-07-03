@@ -132,6 +132,7 @@ const Kurs = ({
                                                                 className="slett-knapp-med-icon-for-input"
                                                                 size="small"
                                                                 icon={<TrashIcon fontSize={24} title="slett periode" />}
+                                                                data-color="danger"
                                                                 onClick={() => {
                                                                     remove(index);
                                                                 }}
