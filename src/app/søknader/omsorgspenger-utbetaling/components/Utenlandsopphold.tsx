@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { TrashIcon, PersonPlusIcon } from '@navikt/aksel-icons';
+import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, VStack } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
@@ -82,14 +82,16 @@ const Utenlandsopphold: React.FC = () => {
                                 </Box>
                             ))}
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<PersonPlusIcon title="legg til utenlandsopphold" />}
-                            >
-                                <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn" />
-                            </Button>
+                            <div className="flex flex-wrap">
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                    icon={<PlusCircleIcon title="legg til periode" />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.utenlandsopphold.leggTilPeriode.btn" />
+                                </Button>
+                            </div>
                         </VStack>
                     )}
                 />

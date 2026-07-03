@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 
-import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
 import { FordelingDokumenttype } from 'app/models/enums';
+import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import {
     submitOMSKorrigering,
@@ -13,21 +12,21 @@ import {
 } from 'app/state/actions/OMSPunchFormActions';
 import { redirectToLos } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import { Form, Formik, FormikProps, setNestedObjectValues, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
+import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
 import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import LeggTilDelvisFravær from './LeggTilDelvisFravær/LeggTilDelvisFravær';
-import OMSKvittering from './SøknadKvittering/OMSKvittering';
 import OpplysningerOmKorrigering from './OpplysningerOmKorrigering/OpplysningerOmKorrigering';
+import OMSKvittering from './SøknadKvittering/OMSKvittering';
 import TrekkPerioder from './TrekkPerioder';
 import VirksomhetPanel from './VirksomhetPanel/VirksomhetPanel';
-import { FormErrors, getFormErrors } from './korrigeringAvFormValidering';
-import ActionType from '../state/actions/korrigeringAvInntektsmeldingActions';
-import korrigeringAvInntektsmeldingReducer from '../state/reducers/korrigeringAvInntektsmeldingReducer';
-import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import {
     arbeidsforholdIdFieldId,
     delvisFravaerDatoFieldId,
@@ -38,6 +37,7 @@ import {
     trekkperiodeFieldId,
     virksomhetFieldId,
 } from './formFieldIds';
+import { FormErrors, getFormErrors } from './korrigeringAvFormValidering';
 
 import './KorrigeringAvInntektsmeldingForm.css';
 
@@ -395,7 +395,7 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                     </Heading>
                                 </div>
 
-                                <Alert size="small" variant="info" className="mb-6">
+                                <Alert size="small" variant="info" className="mb-4">
                                     <List as="ul" className="mt-0 mb-0">
                                         <List.Item>
                                             <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.header.info.listElement.1" />
@@ -421,16 +421,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                             togglePaneler({ trekkperioderPanel: toggledPanel });
 
                                             if (!toggledPanel) {
-                                                setFieldValue(
-                                                    KorrigeringAvInntektsmeldingFormFields.Trekkperioder,
-                                                    [getInitialPeriode()],
-                                                );
+                                                setFieldValue(KorrigeringAvInntektsmeldingFormFields.Trekkperioder, [
+                                                    getInitialPeriode(),
+                                                ]);
                                             }
                                         }}
                                     />
-                                </div>
 
-                                <div className="mt-4">
                                     <LeggTilDelvisFravær
                                         isPanelOpen={!!åpnePaneler.leggTilDelvisFravær}
                                         togglePanel={() => {

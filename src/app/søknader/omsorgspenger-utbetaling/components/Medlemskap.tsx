@@ -83,14 +83,16 @@ const Medlemskap: React.FC = () => {
                                 </Box>
                             ))}
 
-                            <Button
-                                variant="tertiary"
-                                size="small"
-                                onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                icon={<PlusCircleIcon />}
-                            >
-                                <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
-                            </Button>
+                            <div className="flex flex-wrap">
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                    icon={<PlusCircleIcon title="legg til periode" />}
+                                >
+                                    <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
+                                </Button>
+                            </div>
                         </VStack>
                     )}
                 />

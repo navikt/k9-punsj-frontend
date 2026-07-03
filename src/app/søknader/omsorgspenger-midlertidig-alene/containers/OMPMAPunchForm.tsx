@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import * as yup from 'yup';
 
-import { Alert, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag, VStack } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
@@ -24,6 +24,7 @@ import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { FordelingDokumenttype } from '../../../models/enums/FordelingDokumenttype';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
+import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
 import { RootStateType } from '../../../state/RootState';
 import AnnenForelder from '../components/AnnenForelder';
 
@@ -200,29 +201,35 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             {statusetikett()}
 
             <VerticalSpacer sixteenPx />
+
             <PunchFormTitle titleId={FordelingDokumenttype.OMSORGSPENGER_MA} />
+
             <VerticalSpacer sixteenPx />
 
             <OpplysningerOmOMPMASoknad setSignaturAction={setSignatur} signert={signert} handleBlur={handleBlur} />
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
-            <Heading size="xsmall" spacing>
-                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.barn.tittel'} />
-            </Heading>
+            <Box padding="space-16" borderWidth="1" borderRadius="8">
+                <VStack gap="space-16">
+                    <Heading size="small" level="3">
+                        <FormattedMessage id={PunchFormPaneler.OPPLYSNINGER_OM_BARN} />
+                    </Heading>
 
-            <Personvelger
-                name="barn"
-                handleBlur={handleBlur}
-                sokersIdent={values.soekerId}
-                populerMedBarn={!values.barn.length}
-            />
+                    <Personvelger
+                        name="barn"
+                        handleBlur={handleBlur}
+                        sokersIdent={values.soekerId}
+                        populerMedBarn={!values.barn.length}
+                    />
+                </VStack>
+            </Box>
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
             <AnnenForelder handleBlur={handleBlur} />
 
-            <VerticalSpacer fourtyPx />
+            <VerticalSpacer sixteenPx />
 
             <p className="ikkeregistrert">
                 <FormattedMessage id={'skjema.ikkeregistrert'} />

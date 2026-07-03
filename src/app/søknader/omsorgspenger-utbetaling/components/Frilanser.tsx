@@ -87,6 +87,8 @@ export default function Frilanser() {
                     <FormattedMessage id="omsorgspenger.utbetaling.frilanser.fravaersperioder.tittel" />
                 </Heading>
 
+                <VerticalSpacer twentyPx />
+
                 <FieldArray
                     name="opptjeningAktivitet.frilanser.fravaersperioder"
                     render={(arrayHelpers) => (

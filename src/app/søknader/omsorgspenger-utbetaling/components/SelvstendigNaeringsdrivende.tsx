@@ -241,6 +241,8 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                     <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel'} />
                 </Heading>
 
+                <VerticalSpacer twentyPx />
+
                 <FieldArray
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"
                     render={(arrayHelpers) => (

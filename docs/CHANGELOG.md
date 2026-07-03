@@ -13,6 +13,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Samlet like `Fjern periode`-tekster på shared `skjema.perioder.fjern`, oppdaterte brukere som tidligere pekte til egne duplikatnøkler i `PSB`, `OMPUT` og `Korrigering av inntektsmelding`, og fjernet overflødige i18n-nøkler fra `nb.json`.
 - Justerte også ikon-only delete-knapper i periodmodals, blant annet `Periode med jobb` i `PSB`, slik at de bruker vanlig Aksel-styling og riktig størrelse i forhold til feltene. `PSB`-lignende periodrader bruker nå standard knappestørrelse, mens `OLP` beholdt `small` der selve periodefeltene også er små.
 - Ryddet videre i `Korrigering av inntektsmelding` ved å gjøre seksjonene `Trekk perioder`, `Refusjon av dag skal endres til timer` og submit-området mer like `PSB`, inkludert jevnere bunnluft, submit-spacing og en feilvisning for `Dato` og `Timer` som nå ligger i en egen reservert meldingsrad i stedet for å dytte kortlayouten ved valideringsfeil.
+- Fulgt opp samme UI-spor i `OMPMA` og `OMPUT` ved å gi `Barn` og `Annen forelder` tydeligere seksjonsrammer, rette opp add-knappplassering og ikonbruk i `Medlemskap` og `Utenlandsopphold`, samt legge inn manglende luft under `Informasjon om fraværsperioder` i frilans- og selvstendig-blokkene. Oppdaterte samtidig en berørt Cypress-selector i `PleiepengerPunsj.cy.js` til nytt knappetekstnivå.
 
 ### Resolution cleanup for transitive uuid major override (2026-07-03)
 
