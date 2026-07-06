@@ -22,7 +22,7 @@ import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
 
 import TilsynKalender from 'app/components/tilsyn/TilsynKalender';
-import { Arbeidsforhold, JaNei } from 'app/models/enums';
+import { Arbeidsforhold, FordelingDokumenttype, JaNei } from 'app/models/enums';
 import { IError, IInputError, IPunchPSBFormState, ISignaturState, SelvstendigNaerinsdrivende } from 'app/models/types';
 import {
     getSoknad,
@@ -46,6 +46,7 @@ import {
 } from '../utils/soknadPeriodUtils';
 
 import JournalposterSync from 'app/components/JournalposterSync';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { ROUTES } from 'app/constants/routes';
@@ -1196,7 +1197,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 editSoknad={(beredskap) => this.updateSoknad({ beredskap })}
                 editSoknadState={(beredskap, showStatus) => this.updateSoknadState({ beredskap }, showStatus)}
                 textLeggTil="skjema.beredskap.leggtilperiode"
-                textFjern="skjema.beredskap.fjernperiode"
+                textFjern="skjema.perioder.fjern"
                 className="beredskapsperioder"
                 panelClassName="beredskapspanel"
                 getErrorMessage={this.getErrorMessage}
@@ -1216,7 +1217,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                 editSoknad={(nattevaak) => this.updateSoknad({ nattevaak })}
                 editSoknadState={(nattevaak, showStatus) => this.updateSoknadState({ nattevaak }, showStatus)}
                 textLeggTil="skjema.nattevaak.leggtilperiode"
-                textFjern="skjema.nattevaak.fjernperiode"
+                textFjern="skjema.perioder.fjern"
                 className="nattevaaksperioder"
                 panelClassName="nattevaakspanel"
                 getErrorMessage={this.getErrorMessage}
@@ -1233,6 +1234,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                 {this.statusetikett()}
 
+                <VerticalSpacer sixteenPx />
+                <PunchFormTitle titleId={FordelingDokumenttype.PLEIEPENGER} />
                 <VerticalSpacer sixteenPx />
 
                 <Soknadsperioder
@@ -1432,6 +1435,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
                         <Accordion.Content>
                             <Select
+                                className="max-w-[200px]"
                                 value={soknad.omsorg.relasjonTilBarnet}
                                 label={<FormattedMessage id="skjema.relasjontilbarnet" />}
                                 {...this.changeAndBlurUpdatesSoknad((event) => ({

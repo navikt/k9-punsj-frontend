@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Field, FieldProps, FormikValues, useField, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Heading, TextField } from '@navikt/ds-react';
+import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
 
 import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import FieldErrorMessages from 'app/components/skjema/FieldErrorMessages';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import intlHelper from '../../../utils/intlUtils';
 
@@ -32,13 +32,13 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
             : undefined);
 
     return (
-        <>
-            <Heading size="small">
-                <FormattedMessage id={'omsorgspenger.midlertidigAlene.punchForm.tittel'} />
-            </Heading>
-            <VerticalSpacer sixteenPx />
-            <Box padding="space-16" borderWidth="1" borderRadius="8">
-                <Alert variant="info" className="mt-4">
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="opplysninger-om-soknaden-panel">
+            <VStack gap="space-16">
+                <Heading size="small" level="3">
+                    <FormattedMessage id={PunchFormPaneler.OPPLYSINGER_OM_SOKNAD} />
+                </Heading>
+
+                <Alert size="small" variant="info">
                     <FormattedMessage id={'skjema.mottakelsesdato.informasjon'} />
                 </Alert>
 
@@ -66,7 +66,7 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
                                         <TextField
                                             id="klokkeslett"
                                             type="time"
-                                            className="ml-4"
+                                            className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={
@@ -123,8 +123,8 @@ const OpplysningerOmOMPMASoknad: React.FC<Props> = ({ signert, setSignaturAction
                         <FormattedMessage id={'skjema.usignert.info'} />
                     </Alert>
                 )}
-            </Box>
-        </>
+            </VStack>
+        </Box>
     );
 };
 

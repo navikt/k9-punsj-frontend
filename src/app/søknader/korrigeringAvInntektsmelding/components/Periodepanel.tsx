@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 import { FieldArray, useFormikContext } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
@@ -32,16 +32,10 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
     useFocus(currentListLength, previousListLength, fomInputRef);
 
     return (
-        <Box
-            padding="space-16"
-            borderWidth="1"
-            borderRadius="8"
-            background="neutral-soft"
-            className="korrigering__panelsurface periodepanel"
-        >
+        <div className="periodepanel">
             <FieldArray name={name}>
                 {({ push, remove }) => (
-                    <>
+                    <VStack gap="space-16">
                         {values[name]?.map((_, index: number) => {
                             const fieldName = `${name}.${index}`;
                             const isLastElement =
@@ -49,7 +43,7 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                 previousListLength < currentListLength &&
                                 index === currentListLength - 1;
                             return (
-                                <div key={index}>
+                                <Box key={index} padding="space-16" borderRadius="8" background="neutral-soft">
                                     <PeriodevelgerFormik
                                         name={fieldName}
                                         inputIdFom={
@@ -68,34 +62,33 @@ export const Periodepanel: React.FC<IPeriodepanelerProps> = ({ name, textLeggTil
                                                 }}
                                                 icon={<TrashIcon title="slettPeriode" />}
                                                 variant="tertiary"
+                                                data-color="danger"
                                             >
-                                                <FormattedMessage id="skjema.liste.fjern_periode" />
+                                                <FormattedMessage id="skjema.perioder.fjern" />
                                             </Button>
                                         }
                                     />
-                                </div>
+                                </Box>
                             );
                         })}
 
                         <div className="flex flex-wrap">
-                            <button
+                            <Button
                                 id="leggtilperiode"
-                                className="leggtilperiode"
                                 type="button"
                                 onClick={() => {
                                     push({ fom: '', tom: '' });
                                 }}
+                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                                size="small"
+                                variant="tertiary"
                             >
-                                <div className="leggtilperiodeIcon">
-                                    <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
-                                </div>
-
                                 <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til_dag_periode'} />
-                            </button>
+                            </Button>
                         </div>
-                    </>
+                    </VStack>
                 )}
             </FieldArray>
-        </Box>
+        </div>
     );
 };

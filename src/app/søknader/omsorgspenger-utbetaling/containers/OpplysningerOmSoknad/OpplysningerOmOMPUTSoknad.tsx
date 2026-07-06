@@ -3,7 +3,7 @@ import React from 'react';
 import { Field, FieldProps, FormikValues, useField, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Alert, Box, Heading, TextField, VStack } from '@navikt/ds-react';
-import LegacyJaNeiIkkeRelevantRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeRelevantRadioGroupFormik';
+import { LegacyJaNeiIkkeRelevantRadioGroup } from 'app/components/legacy-form-compat/radio';
 import FieldErrorMessages from 'app/components/skjema/FieldErrorMessages';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import { IOMPUTSoknad } from 'app/søknader/omsorgspenger-utbetaling/types/OMPUTSoknad';
@@ -13,7 +13,7 @@ import intlHelper from '../../../../utils/intlUtils';
 const OpplysningerOmOMPUTSoknad: React.FC = () => {
     const intl = useIntl();
 
-    const { values, submitCount } = useFormikContext<IOMPUTSoknad>();
+    const { values, submitCount, setFieldValue } = useFormikContext<IOMPUTSoknad>();
     const [, mottattDatoMeta] = useField('mottattDato');
     const [dateLocalError, setDateLocalError] = React.useState<string | undefined>(undefined);
     const mottattDatoErrorId = 'soknad-dato-error';
@@ -41,12 +41,13 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                             id="soknad-dato"
                             name="mottattDato"
                             label={intlHelper(intl, 'skjema.mottakelsesdato')}
+                            size="small"
                             visFeilmelding={false}
                             errorAriaDescribedBy={mottattDatoErrorMessage ? mottattDatoErrorId : undefined}
                             onErrorMessageChange={setDateLocalError}
                         />
 
-                        <div className="ml-4">
+                        <div>
                             <Field name="klokkeslett">
                                 {({ field, meta, form }: FieldProps<string, FormikValues>) => {
                                     const klokkeslettErrorMessage =
@@ -58,7 +59,9 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                                         <TextField
                                             id="klokkeslett"
                                             type="time"
+                                            className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.klokkeslett')}
+                                            size="small"
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={
                                                 klokkeslettErrorMessage ? klokkeslettErrorId : undefined
@@ -101,9 +104,16 @@ const OpplysningerOmOMPUTSoknad: React.FC = () => {
                 </div>
 
                 {!values.erKorrigering && (
-                    <LegacyJaNeiIkkeRelevantRadioGroupFormik
+                    <LegacyJaNeiIkkeRelevantRadioGroup
+                        className="horizontalRadios"
                         legend={intlHelper(intl, 'ident.signatur.etikett')}
-                        name="metadata.signatur"
+                        name="signatur"
+                        checked={
+                            values.metadata.signatur
+                                ? (values.metadata.signatur as JaNeiIkkeRelevant)
+                                : undefined
+                        }
+                        onChange={(_, value) => setFieldValue('metadata.signatur', value || null)}
                     />
                 )}
 

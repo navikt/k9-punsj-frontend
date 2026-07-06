@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Alert, Box, Button, Fieldset, TextField } from '@navikt/ds-react';
-import { ErrorMessage, Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { Alert, Box, Button, Fieldset, Heading, TextField, VStack } from '@navikt/ds-react';
+import FieldErrorMessages from 'app/components/skjema/FieldErrorMessages';
+import { FieldArray, useField, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
@@ -18,7 +19,90 @@ import {
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import { delvisFravaerDatoFieldId, delvisFravaerTimerFieldId } from '../formFieldIds';
 
-import './LeggTilDelvisFravær.css';
+interface DelvisFravaerRadProps {
+    fieldName: string;
+    index: number;
+    onRemove: () => void;
+}
+
+const DelvisFravaerRad = ({ fieldName, index, onRemove }: DelvisFravaerRadProps) => {
+    const intl = useIntl();
+    const { submitCount } = useFormikContext<KorrigeringAvInntektsmeldingFormValues>();
+    const datoFieldName = `${fieldName}.dato`;
+    const timerFieldName = `${fieldName}.timer`;
+    const datoFieldId = delvisFravaerDatoFieldId(index);
+    const timerFieldId = delvisFravaerTimerFieldId(index);
+    const datoErrorId = `${datoFieldId}-error`;
+    const timerErrorId = `${timerFieldId}-error`;
+    const [, datoMeta] = useField(datoFieldName);
+    const [timerField, timerMeta] = useField(timerFieldName);
+    const [datoLocalError, setDatoLocalError] = React.useState<string | undefined>(undefined);
+    const datoErrorMessage =
+        datoLocalError ||
+        ((datoMeta.touched || submitCount > 0) && typeof datoMeta.error === 'string' ? datoMeta.error : undefined);
+    const timerErrorMessage =
+        (timerMeta.touched || submitCount > 0) && typeof timerMeta.error === 'string' ? timerMeta.error : undefined;
+
+    return (
+        <Box padding="space-16" borderRadius="8" background="neutral-soft">
+            <div className="flex flex-col gap-2">
+                <div className="flex items-end gap-4 flex-wrap">
+                    <div className="flex gap-4 flex-wrap">
+                        <DatovelgerFormik
+                            name={datoFieldName}
+                            className="dateInput"
+                            id={datoFieldId}
+                            label={intlHelper(intl, 'skjema.dato')}
+                            visFeilmelding={false}
+                            errorAriaDescribedBy={datoErrorMessage ? datoErrorId : undefined}
+                            onErrorMessageChange={setDatoLocalError}
+                        />
+
+                        <TextField
+                            {...timerField}
+                            id={timerFieldId}
+                            label={<FormattedMessage id="skjema.perioder.timer" />}
+                            className="w-12"
+                            error={!!timerErrorMessage}
+                            aria-describedby={timerErrorMessage ? timerErrorId : undefined}
+                        />
+                    </div>
+
+                    <div className="flex self-stretch items-end">
+                        <Button
+                            id="slett"
+                            className="slett-knapp-med-icon-for-input"
+                            type="button"
+                            onClick={onRemove}
+                            variant="tertiary"
+                            icon={<TrashIcon title="slett" />}
+                            data-color="danger"
+                        >
+                            <FormattedMessage id="skjema.liste.fjern_dag" />
+                        </Button>
+                    </div>
+                </div>
+
+                <FieldErrorMessages
+                    items={[
+                        {
+                            id: datoErrorId,
+                            label: intlHelper(intl, 'skjema.dato'),
+                            message: datoErrorMessage,
+                            ariaDescribedBy: datoFieldId,
+                        },
+                        {
+                            id: timerErrorId,
+                            label: intlHelper(intl, 'skjema.perioder.timer'),
+                            message: timerErrorMessage,
+                            ariaDescribedBy: timerFieldId,
+                        },
+                    ]}
+                />
+            </div>
+        </Box>
+    );
+};
 
 const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }): JSX.Element => {
     const intl = useIntl();
@@ -37,20 +121,15 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
             isPanelOpen={isPanelOpen}
             togglePanel={togglePanel}
         >
-            <Box
-                padding="space-16"
-                borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel delvisFravaer"
-            >
+            <Box padding="space-16" borderRadius="8" borderWidth="1" className="listepanel pb-6">
                 <FieldArray name={KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}>
                     {({ push, remove }) => (
                         <>
                             <Fieldset
                                 legend={
-                                    <h4 className="korrigering-legend">
+                                    <Heading size="small" level="3">
                                         <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.legend" />
-                                    </h4>
+                                    </Heading>
                                 }
                                 className="korrigering__skjemagruppe"
                             >
@@ -58,87 +137,42 @@ const LeggTilDelvisFravær: React.FC<PanelProps> = ({ isPanelOpen, togglePanel }
                                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilDelvisFravær.info" />
                                 </Alert>
 
-                                <Box
-                                    padding="space-16"
-                                    borderWidth="1"
-                                    borderRadius="8"
-                                    background="neutral-soft"
-                                    className="delvisFravaer__inputContainer"
-                                >
-                                    {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
-                                        (value: DatoMedTimetall, index: number) => {
-                                            const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
+                                <div className="periodepanel">
+                                    <VStack gap="space-16">
+                                        {values[KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær]?.map(
+                                            (value: DatoMedTimetall, index: number) => {
+                                                const fieldName = `${KorrigeringAvInntektsmeldingFormFields.DagerMedDelvisFravær}.${index}`;
 
-                                            return (
-                                                <div className="flex flex-wrap" key={fieldName}>
-                                                    <div className="input-row">
-                                                        <DatovelgerFormik
-                                                            name={`${fieldName}.dato`}
-                                                            className="dateInput"
-                                                            id={delvisFravaerDatoFieldId(index)}
-                                                            label={intlHelper(intl, 'skjema.dato')}
-                                                        />
+                                                return (
+                                                    <DelvisFravaerRad
+                                                        key={fieldName}
+                                                        fieldName={fieldName}
+                                                        index={index}
+                                                        onRemove={() => {
+                                                            remove(index);
+                                                        }}
+                                                    />
+                                                );
+                                            },
+                                        )}
 
-                                                        <div className="ml-2">
-                                                            <Field name={`${fieldName}.timer`}>
-                                                                {({ field, meta }: FieldProps) => (
-                                                                    <TextField
-                                                                        {...field}
-                                                                        id={delvisFravaerTimerFieldId(index)}
-                                                                        label={
-                                                                            <FormattedMessage id="skjema.perioder.timer" />
-                                                                        }
-                                                                        className="w-12"
-                                                                        error={
-                                                                            meta.error &&
-                                                                            meta.touched && (
-                                                                                <ErrorMessage
-                                                                                    name={`${fieldName}.timer`}
-                                                                                />
-                                                                            )
-                                                                        }
-                                                                    />
-                                                                )}
-                                                            </Field>
-                                                        </div>
-                                                        <div className="ml-2">
-                                                            <Button
-                                                                id="slett"
-                                                                className="slett-knapp-med-icon-for-input !mt-10"
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    remove(index);
-                                                                }}
-                                                                variant="tertiary"
-                                                                icon={<TrashIcon title="slett" />}
-                                                            >
-                                                                <FormattedMessage id="skjema.liste.fjern_dag" />
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        },
-                                    )}
-                                </Box>
+                                        <div className="flex flex-wrap">
+                                            <Button
+                                                id="leggTilDag"
+                                                type="button"
+                                                onClick={() => {
+                                                    push({ dato: '', timer: '' });
+                                                }}
+                                                icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                                                size="small"
+                                                variant="tertiary"
+                                            >
+                                                <FormattedMessage id="skjema.dag.legg_til" />
+                                            </Button>
+                                        </div>
+                                    </VStack>
+                                </div>
                             </Fieldset>
-
-                            <div className="flex flex-wrap">
-                                <button
-                                    id="leggTilDag"
-                                    className="leggtilperiode"
-                                    type="button"
-                                    onClick={() => {
-                                        push({ dato: '', timer: '' });
-                                    }}
-                                >
-                                    <div className="leggtilperiodeIcon">
-                                        <PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />
-                                    </div>
-
-                                    <FormattedMessage id="skjema.dag.legg_til" />
-                                </button>
-                            </div>
                         </>
                     )}
                 </FieldArray>

@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
-import { Arbeidsforhold, JaNei } from 'app/models/enums';
+import { Arbeidsforhold, FordelingDokumenttype, JaNei } from 'app/models/enums';
 import {
     IInputError,
     ISignaturState,
@@ -872,6 +873,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
                 {this.statusetikett()}
 
+                <VerticalSpacer sixteenPx />
+                <PunchFormTitle titleId={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE} />
                 <VerticalSpacer sixteenPx />
 
                 <Soknadsperioder

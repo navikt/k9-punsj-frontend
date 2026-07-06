@@ -9,8 +9,9 @@ import { Accordion, Alert, Button, Checkbox, ErrorSummary } from '@navikt/ds-rea
 import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import VentModal from 'app/components/ventModal/VentModal';
-import { FordelingActionKeys, JaNei } from 'app/models/enums';
+import { FordelingActionKeys, FordelingDokumenttype, JaNei } from 'app/models/enums';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { IInputError, Periode } from 'app/models/types';
@@ -257,7 +258,9 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         <TillattePeriodeProvider tillattePerioder={tillattePerioder}>
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
-            <VerticalSpacer thirtyTwoPx />
+            <VerticalSpacer sixteenPx />
+            <PunchFormTitle titleId={FordelingDokumenttype.OPPLAERINGSPENGER} />
+            <VerticalSpacer sixteenPx />
             <OpplysningerOmSoknad />
             <VerticalSpacer thirtyTwoPx />
             <Kurs

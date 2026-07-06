@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Fieldset, Heading, TextField } from '@navikt/ds-react';
+import { Box, Heading, TextField, VStack } from '@navikt/ds-react';
 import FieldErrorMessages from 'app/components/skjema/FieldErrorMessages';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import intlHelper from 'app/utils/intlUtils';
@@ -25,20 +25,13 @@ const OpplysningerOmKorrigering: React.FC = () => {
             : undefined);
 
     return (
-        <Fieldset
-            legend={
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="korrigering__seksjon opplysninger-om-soknaden-panel">
+            <VStack gap="space-16">
                 <Heading level="3" size="small">
                     <FormattedMessage id="skjema.opplysningeromkorrigering" />
                 </Heading>
-            }
-            className="korrigering__seksjon"
-        >
-            <Box
-                borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel opplysningerOmKorrigeringPanel"
-            >
-                <Heading level="4" size="xsmall" className="mb-4">
+
+                <Heading level="4" size="xsmall">
                     <FormattedMessage id="skjema.opplysningeromkorrigering.spm" />
                 </Heading>
 
@@ -52,7 +45,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                             errorAriaDescribedBy={mottattDatoErrorMessage ? mottattDatoErrorId : undefined}
                             onErrorMessageChange={setDateLocalError}
                         />
-                        <div className="ml-4">
+                        <div>
                             <Field name={klokkeslettFieldName}>
                                 {({ field, meta }: FieldProps) => {
                                     const klokkeslettErrorMessage =
@@ -65,6 +58,7 @@ const OpplysningerOmKorrigering: React.FC = () => {
                                             {...field}
                                             id={klokkeslettFieldId}
                                             type="time"
+                                            className="klokkeslett"
                                             label={intlHelper(intl, 'skjema.mottatt.tidspunkt')}
                                             error={!!klokkeslettErrorMessage}
                                             aria-describedby={
@@ -104,8 +98,8 @@ const OpplysningerOmKorrigering: React.FC = () => {
                         }}
                     </Field>
                 </div>
-            </Box>
-        </Fieldset>
+            </VStack>
+        </Box>
     );
 };
 

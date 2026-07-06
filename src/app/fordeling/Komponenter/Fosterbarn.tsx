@@ -162,6 +162,7 @@ const Fosterbarn: React.FC<Props> = ({ identState, setFosterbarnIdentState }: Pr
                             variant="tertiary"
                             icon={<TrashIcon title="slett barn" />}
                             onClick={() => removeBarn(index)}
+                            data-color="danger"
                         >
                             <FormattedMessage id="fosterbarn.btn.slett" />
                         </Button>

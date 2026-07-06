@@ -146,6 +146,7 @@ export const PeriodeinfoPaneler: React.FC<IPeriodeinfopanelerProps> = ({
                             tabIndex={0}
                             icon={<TrashIcon title="slett" />}
                             variant="tertiary"
+                            data-color="danger"
                         >
                             {intlHelper(intl, textFjern || 'skjema.perioder.fjern')}
                         </Button>

@@ -175,6 +175,7 @@ export const Utenlandsopphold: React.FunctionComponent<IUtenlandsoppholdProps> =
                             tabIndex={0}
                             icon={<TrashIcon title="slettPeriode" />}
                             variant="tertiary"
+                            data-color="danger"
                         >
                             <FormattedMessage id="skjema.perioder.fjern" />
                         </Button>

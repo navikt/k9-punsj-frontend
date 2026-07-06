@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 
+import { BodyShort, Box, Heading, Label, Select, Textarea, VStack } from '@navikt/ds-react';
 import { Field, FieldProps, FormikValues, useFormikContext } from 'formik';
-import { FormattedMessage } from 'react-intl';
-import { BodyShort, Box, Heading, Label, Select, Textarea } from '@navikt/ds-react';
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
+import { FormattedMessage } from 'react-intl';
 
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import CheckboxFormik from 'app/components/formikInput/CheckboxFormik';
 import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
+import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { OMPMASoknad } from '../types/OMPMASoknad';
 
 const situasjonstyper = {
@@ -50,71 +51,74 @@ const AnnenForelder = ({ handleBlur }: Props) => {
     }, [tilOgMedErIkkeOppgitt, values.annenForelder.periode.tom]);
 
     return (
-        <>
-            <Heading size="xsmall" spacing>
-                <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.tittel" />
-            </Heading>
-            <Box padding="space-16" borderRadius="8" background="neutral-soft">
-                <Label size="small">
-                    <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.fnr.label" />
-                </Label>
+        <Box padding="space-16" borderWidth="1" borderRadius="8">
+            <VStack gap="space-16">
+                <Heading size="small" level="3">
+                    <FormattedMessage id={PunchFormPaneler.ANNEN_FORELDER} />
+                </Heading>
 
-                <BodyShort>{values.annenForelder.norskIdent}</BodyShort>
+                <Box padding="space-16" borderRadius="8" background="neutral-soft">
+                    <Label size="small">
+                        <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.fnr.label" />
+                    </Label>
 
-                <VerticalSpacer twentyPx />
+                    <BodyShort>{values.annenForelder.norskIdent}</BodyShort>
 
-                <Field name="annenForelder.situasjonType">
-                    {({ field, meta }: FieldProps<string>) => (
-                        <Select
-                            {...field}
-                            size="small"
-                            label="Hva er situasjonen til den andre forelderen?"
-                            error={meta.touched && meta.error}
-                            onBlur={(e) => handleBlur(() => field.onBlur(e))}
-                            className="max-w-[250px]"
-                        >
-                            <option value="">Velg situasjon</option>
-                            {Object.values(situasjonstyper).map((v) => (
-                                <option value={v} key={v}>
-                                    <FormattedMessage id={`omsorgspenger.midlertidigAlene.situasjonstyper.${v}`} />
-                                </option>
-                            ))}
-                        </Select>
+                    <VerticalSpacer twentyPx />
+
+                    <Field name="annenForelder.situasjonType">
+                        {({ field, meta }: FieldProps<string>) => (
+                            <Select
+                                {...field}
+                                size="small"
+                                label="Hva er situasjonen til den andre forelderen?"
+                                error={meta.touched && meta.error}
+                                onBlur={(e) => handleBlur(() => field.onBlur(e))}
+                                className="max-w-[250px]"
+                            >
+                                <option value="">Velg situasjon</option>
+                                {Object.values(situasjonstyper).map((v) => (
+                                    <option value={v} key={v}>
+                                        <FormattedMessage id={`omsorgspenger.midlertidigAlene.situasjonstyper.${v}`} />
+                                    </option>
+                                ))}
+                            </Select>
+                        )}
+                    </Field>
+
+                    <VerticalSpacer twentyPx />
+
+                    <Field name="annenForelder.situasjonBeskrivelse">
+                        {({ field, meta }: FieldProps<string, FormikValues>) => (
+                            <Textarea
+                                {...field}
+                                size="small"
+                                label="Beskrivelse av situasjonen"
+                                error={meta.touched && meta.error}
+                                onBlur={(e) => handleBlur(() => field.onBlur(e))}
+                                className="max-w-[600px]"
+                            />
+                        )}
+                    </Field>
+
+                    <VerticalSpacer twentyPx />
+
+                    <PeriodevelgerFormik
+                        name="annenForelder.periode"
+                        size="small"
+                        disabledTom={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
+                        onValueBlurFom={(_, nextValues) => handleBlur(() => {}, nextValues)}
+                        onValueBlurTom={(_, nextValues) => handleBlur(() => {}, nextValues)}
+                    />
+
+                    {!situasjonstypeErFengselEllerVerneplikt && (
+                        <CheckboxFormik name="annenForelder.periode.tilOgMedErIkkeOppgitt" size="small">
+                            <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.periode.tilOgMedErIkkeOppgitt" />
+                        </CheckboxFormik>
                     )}
-                </Field>
-
-                <VerticalSpacer twentyPx />
-
-                <Field name="annenForelder.situasjonBeskrivelse">
-                    {({ field, meta }: FieldProps<string, FormikValues>) => (
-                        <Textarea
-                            {...field}
-                            size="small"
-                            label="Beskrivelse av situasjonen"
-                            error={meta.touched && meta.error}
-                            onBlur={(e) => handleBlur(() => field.onBlur(e))}
-                            className="max-w-[600px]"
-                        />
-                    )}
-                </Field>
-
-                <VerticalSpacer twentyPx />
-
-                <PeriodevelgerFormik
-                    name="annenForelder.periode"
-                    size="small"
-                    disabledTom={values.annenForelder.periode.tilOgMedErIkkeOppgitt}
-                    onValueBlurFom={(_, nextValues) => handleBlur(() => {}, nextValues)}
-                    onValueBlurTom={(_, nextValues) => handleBlur(() => {}, nextValues)}
-                />
-
-                {!situasjonstypeErFengselEllerVerneplikt && (
-                    <CheckboxFormik name="annenForelder.periode.tilOgMedErIkkeOppgitt" size="small">
-                        <FormattedMessage id="omsorgspenger.midlertidigAlene.annenForelder.periode.tilOgMedErIkkeOppgitt" />
-                    </CheckboxFormik>
-                )}
-            </Box>
-        </>
+                </Box>
+            </VStack>
+        </Box>
     );
 };
 

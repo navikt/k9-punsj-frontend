@@ -133,13 +133,13 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                                         {!!medSlettKnapp && (
                                             <Button
                                                 id="slett"
-                                                className="slett-knapp-med-icon"
                                                 data-testid="fjernlisteelementknapp"
                                                 type="button"
                                                 onClick={() => removeItemHandler(itemIndex)}
                                                 tabIndex={0}
                                                 icon={<TrashIcon title="slett" />}
                                                 variant="tertiary"
+                                                data-color="danger"
                                             >
                                                 <FormattedMessage id={props.textFjern || 'skjema.liste.fjern'} />
                                             </Button>
@@ -172,10 +172,12 @@ export const Listepaneler: React.FC<IListepanelerProps<ItemInfo>> = (props: ILis
                 <Button
                     id="leggtillisteelementknapp"
                     data-testid="leggtillisteelementknapp"
-                    className="leggtillisteelementknapp"
+                    className="mt-4"
                     type="button"
                     onClick={addItemHandler}
                     icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                    size="small"
+                    variant="tertiary"
                 >
                     <FormattedMessage id={textLeggTil || 'skjema.liste.legg_til'} />
                 </Button>

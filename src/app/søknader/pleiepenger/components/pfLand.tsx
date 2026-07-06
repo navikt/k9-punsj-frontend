@@ -28,7 +28,7 @@ export function pfLand(): PeriodeinfoComponent<IOppholdsLand> {
         const feltindeks = periodeSpenn(periodeinfo.periode);
 
         return (
-            <div className="countryselect">
+            <div className="countryselect max-w-[24rem]">
                 <CountrySelect
                     id={createLandInputId(feilprefiks, feltindeks, `index-${periodeindex}`)}
                     label={intlHelper(intl!, 'skjema.utenlandsopphold.land')}

@@ -43,7 +43,9 @@ const FraværKalender = ({ arbeidstidInfo, søknadsperioder, updateSoknad }: Pro
 
     return (
         <>
-            <Heading size="xsmall" className="mb-4">Fravær</Heading>
+            <Heading size="small" level="3" className="mb-4">
+                Fravær
+            </Heading>
 
             <KalenderMedModal
                 gyldigePerioder={søknadsperioder}

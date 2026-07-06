@@ -55,9 +55,9 @@ const Reisedager = () => {
                                                 <Button
                                                     variant="tertiary"
                                                     size="small"
-                                                    className="slett-knapp-med-icon"
                                                     onClick={() => remove(reisedagIndex)}
                                                     icon={<TrashIcon title="slett reisedag" />}
+                                                    data-color="danger"
                                                 >
                                                     Fjern reisedag
                                                 </Button>

@@ -2,6 +2,21 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### UI-opprydding i punchskjemaer (2026-07-03)
+
+- La inn felles toppnivå-titler i punchskjemaene basert på samme dokumenttypenavn som i `Fordeling`, blant annet for `PSB`, `PLS`, `OMPKS`, `OMPMA`, `OMPUT`, `OMPAO`, `OLP` og `Korrigering av inntektsmelding`, og strammet samtidig inn vertikal rytme rundt disse overskriftene.
+- Fjernet en ekstra ytre innrykning i `Korrigering av inntektsmelding`, slik at seksjonene flukter bedre med `PSB` i stedet for å se unødvendig innskjøvet ut i formen.
+- Strammet samtidig inn strukturen i `Korrigering av inntektsmelding` ved å la seksjonene styres av felles `VStack`-spacing i stedet for lokale `toggleSection`-marginer og andre eldre layout-hjelpere.
+- Ryddet opp i periodepanelene på tvers av skjemaene, slik at hver periode nå ligger i sin egen `neutral-soft` boks med luft mellom kortene og `Legg til ny periode` utenfor kortflaten. Dette ble brukt i shared `Periodepaneler` og fulgt opp i berørte flyter som `PSB`, `OMPUT`, `Korrigering av inntektsmelding` og øvrige periodebaserte lister.
+- Standardiserte add- og delete-knapper i punchskjemaene mot Aksel `Button`. Gamle link-lignende add-knapper og gammel `slett-knapp-med-icon` ble fjernet, delete-handlinger ble flyttet til `variant="tertiary"` med `data-color="danger"`, og resterende layoutklasse for feltlinjer ble beholdt kun for plassering.
+- Strammet inn `Opplysninger om søknaden`-panelene mot samme visuelle mønster som `PSB`, inkludert manglende seksjonstitler, ens `borderRadius`, jevnere spacing og fjerning av lokal panel-CSS som ikke lenger trengtes.
+- Samlet like `Fjern periode`-tekster på shared `skjema.perioder.fjern`, oppdaterte brukere som tidligere pekte til egne duplikatnøkler i `PSB`, `OMPUT` og `Korrigering av inntektsmelding`, og fjernet overflødige i18n-nøkler fra `nb.json`.
+- Justerte også ikon-only delete-knapper i periodmodals, blant annet `Periode med jobb` i `PSB`, slik at de bruker vanlig Aksel-styling og riktig størrelse i forhold til feltene. `PSB`-lignende periodrader bruker nå standard knappestørrelse, mens `OLP` beholdt `small` der selve periodefeltene også er små.
+- Ryddet videre i `Korrigering av inntektsmelding` ved å gjøre seksjonene `Trekk perioder`, `Refusjon av dag skal endres til timer` og submit-området mer like `PSB`, inkludert jevnere bunnluft, submit-spacing og en feilvisning for `Dato` og `Timer` som nå ligger i en egen reservert meldingsrad i stedet for å dytte kortlayouten ved valideringsfeil.
+- Fulgt opp samme UI-spor i `OMPMA` og `OMPUT` ved å gi `Barn` og `Annen forelder` tydeligere seksjonsrammer, rette opp add-knappplassering og ikonbruk i `Medlemskap` og `Utenlandsopphold`, samt legge inn manglende luft under `Informasjon om fraværsperioder` i frilans- og selvstendig-blokkene. Oppdaterte samtidig en berørt Cypress-selector i `PleiepengerPunsj.cy.js` til nytt knappetekstnivå.
+- Tok deretter et eget oppfølgingspass i `OLP`, der `ferie`, `utenlandsopphold` og `bosted` nå viser én grå kortflate per periode med mellomrom imellom og `Legg til` utenfor kortene. Samtidig ble flere felt i `arbeidsforhold`, `fravær` og omsorgsrelasjon strammet inn til mindre eller mer passende bredder der feltene tidligere ble stående for brede.
+- Harmoniserte også flere enkeltdetaljer i `PSB` og `PLS`, blant annet bredde på `Land`-felt, bredde på `Relasjon til barnet` i `PSB`, og overskriften `Når startet virksomheten?` i shared `arbeidsforhold`, slik at disse feltene følger samme visuelle rytme bedre og ikke ser større ut enn resten av skjemaet.
+
 ### Resolution cleanup for transitive uuid major override (2026-07-03)
 
 - Fjernet `uuid@npm:^8.3.2 -> 14.0.1` fra `resolutions`, fordi overstyringen tvang `sockjs` over på en annen major enn pakken selv ba om.

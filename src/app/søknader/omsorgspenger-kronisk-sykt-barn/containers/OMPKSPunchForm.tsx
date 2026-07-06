@@ -5,6 +5,7 @@ import { Alert, Button, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import JournalposterSync from 'app/components/JournalposterSync';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
@@ -22,6 +23,7 @@ import { connect } from 'react-redux';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
+import { FordelingDokumenttype } from '../../../models/enums/FordelingDokumenttype';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../models/types/Journalpost/JournalposterPerIdentState';
@@ -418,7 +420,7 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 <JournalposterSync journalposter={this.state.soknad.journalposter} />
                 {this.statusetikett()}
                 <VerticalSpacer sixteenPx />
-
+                <PunchFormTitle titleId={FordelingDokumenttype.OMSORGSPENGER_KS} />
                 <VerticalSpacer sixteenPx />
 
                 <OpplysningerOmOMPKSSoknad
