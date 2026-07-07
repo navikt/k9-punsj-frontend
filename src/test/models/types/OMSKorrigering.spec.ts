@@ -11,7 +11,7 @@ const getValidValues = (): KorrigeringAvInntektsmeldingFormValues => ({
 });
 
 describe('OMSKorrigering', () => {
-    it('omits delvis fravær rows with invalid timer input from autosave payload', () => {
+    it('utelater delvis fravær-rader med ugyldig timerinput fra autosave-payload', () => {
         const korrigering = new OMSKorrigering(
             {
                 ...getValidValues(),
@@ -25,7 +25,7 @@ describe('OMSKorrigering', () => {
         expect(korrigering.fravaersperioder).toEqual([]);
     });
 
-    it('keeps valid delvis fravær timer values and trims whitespace before serialization', () => {
+    it('beholder gyldige timerverdier for delvis fravær og trimmer whitespace før serialisering', () => {
         const korrigering = new OMSKorrigering(
             {
                 ...getValidValues(),

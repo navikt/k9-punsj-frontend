@@ -1,4 +1,4 @@
-const decimalTidPattern = /^(?=.*\d)\d*(?:[.,]\d*)?$/;
+const desimalTidPattern = /^(?=.*\d)\d*(?:[.,]\d*)?$/;
 const timerOgMinutterPattern = /^\d+:\d+$/;
 
 const fjernWhitespace = (value: string) => value.replace(/\s+/g, '');
@@ -20,7 +20,7 @@ export const normaliserDelvisFravaerTimer = (value?: string | null): string | nu
         return normalisert;
     }
 
-    if (decimalTidPattern.test(normalisert)) {
+    if (desimalTidPattern.test(normalisert)) {
         const parsed = Number(normalisert.replace(',', '.'));
         return Number.isNaN(parsed) || parsed < 0 ? null : normalisert;
     }

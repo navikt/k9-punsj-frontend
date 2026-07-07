@@ -80,7 +80,7 @@ describe('korrigeringAvFormValidering', () => {
         expect(errors.DagerMedDelvisFravær[0].dato).toBe('Delvis fravær feil');
     });
 
-    it('shows a frontend error when delvis fravær timer has an unsupported format', () => {
+    it('viser en frontend-feil når timer for delvis fravær har et ugyldig format', () => {
         const values: KorrigeringAvInntektsmeldingFormValues = {
             ...getValidValues(),
             DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '.' }],
@@ -95,7 +95,7 @@ describe('korrigeringAvFormValidering', () => {
         );
     });
 
-    it('applies the max limit for timer:minutter input in delvis fravær', () => {
+    it('bruker maksgrensen også for timer:minutter i delvis fravær', () => {
         const values: KorrigeringAvInntektsmeldingFormValues = {
             ...getValidValues(),
             DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '7:45' }],
