@@ -79,4 +79,32 @@ describe('korrigeringAvFormValidering', () => {
         expect(errors.PerioderMedRefusjonskrav[0]).toBe('Refusjonskravfeil');
         expect(errors.DagerMedDelvisFravær[0].dato).toBe('Delvis fravær feil');
     });
+
+    it('shows a frontend error when delvis fravær timer has an unsupported format', () => {
+        const values: KorrigeringAvInntektsmeldingFormValues = {
+            ...getValidValues(),
+            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '.' }],
+        };
+
+        const errors = getFormErrors(values) as {
+            DagerMedDelvisFravær: Array<{ timer: string }>;
+        };
+
+        expect(errors.DagerMedDelvisFravær[0].timer).toBe(
+            'Timer må være oppgitt som timer, desimaltimer eller timer:minutter',
+        );
+    });
+
+    it('applies the max limit for timer:minutter input in delvis fravær', () => {
+        const values: KorrigeringAvInntektsmeldingFormValues = {
+            ...getValidValues(),
+            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '7:45' }],
+        };
+
+        const errors = getFormErrors(values) as {
+            DagerMedDelvisFravær: Array<{ timer: string }>;
+        };
+
+        expect(errors.DagerMedDelvisFravær[0].timer).toBe('Delvis fravær kan ikke overstige 7 timer og 30 min');
+    });
 });

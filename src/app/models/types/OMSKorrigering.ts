@@ -1,4 +1,5 @@
 import { KorrigeringAvInntektsmeldingFormValues } from 'app/søknader/korrigeringAvInntektsmelding/types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { normaliserDelvisFravaerTimer } from 'app/søknader/korrigeringAvInntektsmelding/tidUtils';
 
 import { IPeriode } from './Periode';
 
@@ -28,10 +29,12 @@ const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => 
     }
     if (values.DagerMedDelvisFravær.length > 0 && values.DagerMedDelvisFravær[0].dato) {
         values.DagerMedDelvisFravær.forEach((dagMedDelvisFravær) => {
-            if (dagMedDelvisFravær.dato || dagMedDelvisFravær.timer) {
+            const normalisertTimer = normaliserDelvisFravaerTimer(dagMedDelvisFravær.timer);
+
+            if (dagMedDelvisFravær.dato && normalisertTimer) {
                 fraværsperioder.push({
                     periode: { fom: dagMedDelvisFravær.dato, tom: dagMedDelvisFravær.dato },
-                    faktiskTidPrDag: dagMedDelvisFravær.timer,
+                    faktiskTidPrDag: normalisertTimer,
                 });
             }
         });
