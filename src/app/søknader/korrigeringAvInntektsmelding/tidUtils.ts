@@ -1,23 +1,12 @@
-const desimalTidPattern = /^(?=.*\d)\d*(?:[.,]\d*)?$/;
-const timerOgMinutterPattern = /^\d+:\d+$/;
+const desimalTidPattern = /^\d+(?:[.,]\d+)?$/;
 
 const fjernWhitespace = (value: string) => value.replace(/\s+/g, '');
 
-export const normaliserDelvisFravaerTimer = (value?: string | null): string | null => {
-    const normalisert = fjernWhitespace(value || '');
+export const normaliserDelvisFraværTimer = (value?: string | null): string | null => {
+    const normalisert = fjernWhitespace(value ?? '');
 
     if (!normalisert) {
         return null;
-    }
-
-    if (timerOgMinutterPattern.test(normalisert)) {
-        const [timer, minutter] = normalisert.split(':').map(Number);
-
-        if (Number.isNaN(timer) || Number.isNaN(minutter) || timer < 0 || minutter < 0 || minutter > 60) {
-            return null;
-        }
-
-        return normalisert;
     }
 
     if (desimalTidPattern.test(normalisert)) {
@@ -28,16 +17,11 @@ export const normaliserDelvisFravaerTimer = (value?: string | null): string | nu
     return null;
 };
 
-export const parseDelvisFravaerTimerTilTimer = (value?: string | null): number | null => {
-    const normalisert = normaliserDelvisFravaerTimer(value);
+export const parseDelvisFraværTimerTilTimer = (value?: string | null): number | null => {
+    const normalisert = normaliserDelvisFraværTimer(value);
 
     if (!normalisert) {
         return null;
-    }
-
-    if (normalisert.includes(':')) {
-        const [timer, minutter] = normalisert.split(':').map(Number);
-        return timer + minutter / 60;
     }
 
     return Number(normalisert.replace(',', '.'));

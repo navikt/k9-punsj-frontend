@@ -7,7 +7,7 @@ import {
     KorrigeringAvInntektsmeldingFormFields,
     KorrigeringAvInntektsmeldingFormValues,
 } from '../types/KorrigeringAvInntektsmeldingFormFieldsValues';
-import { parseDelvisFravaerTimerTilTimer } from '../tidUtils';
+import { parseDelvisFraværTimerTilTimer } from '../tidUtils';
 
 export interface FormErrors {
     OpplysningerOmKorrigering: {
@@ -225,11 +225,10 @@ export const getFormErrors = (values: KorrigeringAvInntektsmeldingFormValues, da
         } else if (!value.dato && timerInput) {
             errors.DagerMedDelvisFravær[index].dato = 'Dato må være satt';
         } else if (timerInput) {
-            const timetall = parseDelvisFravaerTimerTilTimer(timerInput);
+            const timetall = parseDelvisFraværTimerTilTimer(timerInput);
 
             if (timetall === null) {
-                errors.DagerMedDelvisFravær[index].timer =
-                    'Timer må være oppgitt som timer, desimaltimer eller timer:minutter';
+                errors.DagerMedDelvisFravær[index].timer = 'Timer må være oppgitt som timer eller desimaltimer';
             } else if (timetall > 7.5) {
                 errors.DagerMedDelvisFravær[index].timer = 'Delvis fravær kan ikke overstige 7 timer og 30 min';
             }

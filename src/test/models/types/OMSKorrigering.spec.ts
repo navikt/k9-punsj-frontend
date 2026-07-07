@@ -15,7 +15,7 @@ describe('OMSKorrigering', () => {
         const korrigering = new OMSKorrigering(
             {
                 ...getValidValues(),
-                DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '.' }],
+                DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '5.' }],
             },
             'soknad-id',
             '12345678910',
@@ -25,11 +25,11 @@ describe('OMSKorrigering', () => {
         expect(korrigering.fravaersperioder).toEqual([]);
     });
 
-    it('beholder gyldige timerverdier for delvis fravær og trimmer whitespace før serialisering', () => {
+    it('beholder gyldige desimalverdier for delvis fravær og trimmer whitespace før serialisering', () => {
         const korrigering = new OMSKorrigering(
             {
                 ...getValidValues(),
-                DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: ' 5 : 30 ' }],
+                DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: ' 5,5 ' }],
             },
             'soknad-id',
             '12345678910',
@@ -39,7 +39,7 @@ describe('OMSKorrigering', () => {
         expect(korrigering.fravaersperioder).toEqual([
             {
                 periode: { fom: '2026-02-12', tom: '2026-02-12' },
-                faktiskTidPrDag: '5:30',
+                faktiskTidPrDag: '5,5',
             },
         ]);
     });

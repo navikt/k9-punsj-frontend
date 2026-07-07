@@ -83,22 +83,20 @@ describe('korrigeringAvFormValidering', () => {
     it('viser en frontend-feil når timer for delvis fravær har et ugyldig format', () => {
         const values: KorrigeringAvInntektsmeldingFormValues = {
             ...getValidValues(),
-            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '.' }],
+            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '5.' }],
         };
 
         const errors = getFormErrors(values) as {
             DagerMedDelvisFravær: Array<{ timer: string }>;
         };
 
-        expect(errors.DagerMedDelvisFravær[0].timer).toBe(
-            'Timer må være oppgitt som timer, desimaltimer eller timer:minutter',
-        );
+        expect(errors.DagerMedDelvisFravær[0].timer).toBe('Timer må være oppgitt som timer eller desimaltimer');
     });
 
-    it('bruker maksgrensen også for timer:minutter i delvis fravær', () => {
+    it('bruker maksgrensen også for desimaltimer i delvis fravær', () => {
         const values: KorrigeringAvInntektsmeldingFormValues = {
             ...getValidValues(),
-            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '7:45' }],
+            DagerMedDelvisFravær: [{ dato: '2026-02-12', timer: '7,6' }],
         };
 
         const errors = getFormErrors(values) as {
