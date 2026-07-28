@@ -3,8 +3,7 @@
 ## Task
 
 - Title: Weekly package maintenance with 7 day cooldown precheck
-- Branch: `chore/weekly-package-maintenance`
-- Suggested agent: `@k9-punsj-front-research-agent`
+- Branch: `pkgUpd`
 - Prompt language: `English`
 
 ## Goal
