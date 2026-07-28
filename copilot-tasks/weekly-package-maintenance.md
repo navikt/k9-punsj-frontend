@@ -88,24 +88,45 @@ Suggested starter prompt:
 
 ## Plan
 
-- [ ] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
-- [ ] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
-- [ ] Build the direct dependency and devDependency candidate list from `package.json`, then record the highest eligible patch, minor, and major per package before selecting versions.
-- [ ] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
-- [ ] Run full validation for patch pass and document results.
-- [ ] Stop and ask user whether to commit patch pass.
+- Run started: 2026-07-28
+
+- [x] Verify `.yarnrc.yml` still enforces `npmMinimalAgeGate: 7d`.
+- [x] Compute a fresh UTC cutoff timestamp for `now - 7 days` and record it in `Progress notes` before any install attempt.
+- [x] Build the direct dependency and devDependency candidate list from `package.json`, then record the highest eligible patch, minor, and major per package before selecting versions.
+- [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
+- [x] Run full validation for patch pass and document results.
+- [x] Stop and ask user whether to commit patch pass.
 - [ ] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
 
 ## Progress notes
 
-- Add dated notes during the next run.
+- 2026-07-28: Verified `.yarnrc.yml` contains `npmMinimalAgeGate: 7d`.
+- 2026-07-28: UTC cutoff (`now - 7 days`) set to `2026-07-21T08:21:48.025Z` before any install attempt.
+- 2026-07-28: Built cutoff-aware matrix for 118 candidates (`dependencies`, `devDependencies`, `resolutions`): `patch=7`, `minor=24`, `major=16`, `none=71`, `errors=0`.
+- 2026-07-28: Applied patch pass versions: `@tanstack/react-query 5.101.1 -> 5.101.3`, `react-intl 10.1.13 -> 10.1.18`, `tailwindcss 4.3.1 -> 4.3.3`, `@tailwindcss/postcss 4.3.1 -> 4.3.3`, `autoprefixer 10.5.2 -> 10.5.4`, `postcss 8.5.15 -> 8.5.20`.
+- 2026-07-28: Reviewed `resolutions` and removed stale `postcss` override after verifying the graph still resolves to `postcss@8.5.20` without it.
+- 2026-07-28: Validation completed for patch pass (`yarn explain peer-requirements`, `yarn lint`, `yarn tsc --noEmit`, `yarn test --maxWorkers=2`, `yarn build`).
 
 ## Outcome
 
-- Changed files:
+- Changed files: `package.json`, `yarn.lock`, `copilot-tasks/weekly-package-maintenance.md`.
 - Patch pass:
-- Minor pass:
-- Major follow ups:
+    - Updated: `@tanstack/react-query 5.101.1 -> 5.101.3`, `react-intl 10.1.13 -> 10.1.18`, `tailwindcss 4.3.1 -> 4.3.3`, `@tailwindcss/postcss 4.3.1 -> 4.3.3`, `autoprefixer 10.5.2 -> 10.5.4`, `postcss 8.5.15 -> 8.5.20`.
+    - Resolutions review: removed stale `postcss` override after verification.
+    - Deferred to minor tier by rule (highest eligible tier is minor): `@grafana/faro-web-sdk`, `@grafana/faro-web-tracing`, `@navikt/aksel-icons`, `@navikt/ds-css`, `@navikt/ds-react`, `@sentry/react`, `react-hook-form`, `react-router-dom`, `@navikt/aksel`, `@navikt/ds-tailwind`, `@sentry/cli`, `@storybook/react`, `@storybook/react-webpack5`, `@typescript-eslint/parser`, `cypress`, `lint-staged`, `msw`, `prettier`, `storybook`, `stylelint`, `typescript-eslint`, `webpack`, `@opentelemetry/core` (resolution), `systeminformation` (resolution).
+    - Deferred to separate major work by rule: `@babel/runtime`, `react-router`, `redux-logger`, `@babel/core`, `@babel/plugin-transform-runtime`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`, `@testing-library/jest-dom`, `@types/node`, `eslint`, `typescript`, `webpack-dev-server`, `http-proxy-middleware` (resolution), `js-yaml` (resolution), `undici` (resolution).
+- Minor pass: not started (waiting for explicit approval).
+- Major follow ups: 16 candidates identified; separate focused tasks required.
 - Validation:
+    - `yarn explain peer-requirements`: completed; existing peer warnings remain (for example `p44ced1` on `eslint`), no new blocker introduced in this pass.
+    - `yarn lint`: pass.
+    - `yarn tsc --noEmit`: pass.
+    - `yarn test --maxWorkers=2`: pass (`64/64` suites, `457/457` tests).
+    - `yarn build`: pass.
+    - `yarn test:e2e`: skipped in patch pass because updated packages did not touch the listed runtime-critical paths (`react`, `react-dom`, `react-router`, Aksel, webpack/dev server, auth, proxy).
 - Skipped versions still inside cooldown:
+    - `@tanstack/react-query`: `5.101.4` published `2026-07-21T13:04:07.544Z` (newer than cutoff), selected `5.101.3`.
+    - `postcss`: `8.5.23` published `2026-07-24T17:05:13.876Z` (newer than cutoff), selected `8.5.20`.
 - Remaining risks or follow ups:
+    - Keep `webpack` pinned to `5.107.0` in this run per carry-forward note.
+    - Minor pass can continue only after explicit user approval.
