@@ -28,7 +28,7 @@ jobs:
         needs: [lint, test, build]
         steps:
             - name: Hente kode
-              uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
             - name: Setup .yarnrc.yml
               run: |
                   yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
@@ -37,7 +37,7 @@ jobs:
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
             - name: Sette opp Node
-              uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6
               with:
                   node-version: 20.x
                   registry-url: https://npm.pkg.github.com/
@@ -53,7 +53,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-            - uses: nais/docker-build-push@05dbb6091b30bd84279c6d64a45ef8782fd410a5 # v0
+            - uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -70,7 +70,7 @@ jobs:
               run: echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til dev
-              uses: nais/deploy/actions/deploy@c55d6073d913975d2dada508bdfefc6427d39867 # v2
+              uses: nais/deploy/actions/deploy@fc3eae3edebabdf67f7592102ae16176d5ba3b5f # v2
               env:
                   CLUSTER: dev-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
