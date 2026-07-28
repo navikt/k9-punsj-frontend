@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Stabilisering av delvis fravær i korrigering av inntektsmelding (2026-07-07)
+
+- Fikset `Korrigering av inntektsmelding` slik at feltet `Timer` i `delvis fravær` ikke lenger sender ugyldige mellomtilstander som `.` eller andre ufullstendige desimalverdier videre til `PUT /api/omsorgspenger-soknad/oppdater`.
+- La inn lokal validering og serialiseringsguard som holder feltet til timer og desimaltimer i gyldig format, slik at ugyldig mellominput stoppes i frontend i stedet for å gi backend-feil som `Ugyldig tid`.
+- Strammet samtidig inn formatstøtten i feltet til vanlige timer- og desimaltimerverdier, og la til målrettede unit tester for payload-bygging og validering av delvis fravær.
+
 ### UI-opprydding i punchskjemaer (2026-07-03)
 
 - La inn felles toppnivå-titler i punchskjemaene basert på samme dokumenttypenavn som i `Fordeling`, blant annet for `PSB`, `PLS`, `OMPKS`, `OMPMA`, `OMPUT`, `OMPAO`, `OLP` og `Korrigering av inntektsmelding`, og strammet samtidig inn vertikal rytme rundt disse overskriftene.
