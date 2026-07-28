@@ -96,7 +96,7 @@ Suggested starter prompt:
 - [x] Execute patch pass only: direct deps, devDeps, then existing `resolutions` review.
 - [x] Run full validation for patch pass and document results.
 - [x] Stop and ask user whether to commit patch pass.
-- [ ] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
+- [x] Continue to minor pass only after explicit approval, then validate and summarize separate major follow ups.
 
 ## Progress notes
 
@@ -106,6 +106,10 @@ Suggested starter prompt:
 - 2026-07-28: Applied patch pass versions: `@tanstack/react-query 5.101.1 -> 5.101.3`, `react-intl 10.1.13 -> 10.1.18`, `tailwindcss 4.3.1 -> 4.3.3`, `@tailwindcss/postcss 4.3.1 -> 4.3.3`, `autoprefixer 10.5.2 -> 10.5.4`, `postcss 8.5.15 -> 8.5.20`.
 - 2026-07-28: Reviewed `resolutions` and removed stale `postcss` override after verifying the graph still resolves to `postcss@8.5.20` without it.
 - 2026-07-28: Validation completed for patch pass (`yarn explain peer-requirements`, `yarn lint`, `yarn tsc --noEmit`, `yarn test --maxWorkers=2`, `yarn build`).
+- 2026-07-28: Minor pass approved by user and started with fresh cutoff `2026-07-21T08:36:53.626Z`.
+- 2026-07-28: Built fresh direct+dev minor candidate set and applied allowed updates, excluding `webpack` per carry-forward constraint.
+- 2026-07-28: Minor pass alignment fix: reverted `react-router-dom` to `7.17.0` to match `react-router@7.17.0` and avoid context mismatch in tests.
+- 2026-07-28: Minor pass validation completed (`yarn explain peer-requirements`, `yarn lint`, `yarn tsc --noEmit`, `yarn test --maxWorkers=2`, `yarn build`, `yarn test:e2e`).
 
 ## Outcome
 
@@ -115,18 +119,21 @@ Suggested starter prompt:
     - Resolutions review: removed stale `postcss` override after verification.
     - Deferred to minor tier by rule (highest eligible tier is minor): `@grafana/faro-web-sdk`, `@grafana/faro-web-tracing`, `@navikt/aksel-icons`, `@navikt/ds-css`, `@navikt/ds-react`, `@sentry/react`, `react-hook-form`, `react-router-dom`, `@navikt/aksel`, `@navikt/ds-tailwind`, `@sentry/cli`, `@storybook/react`, `@storybook/react-webpack5`, `@typescript-eslint/parser`, `cypress`, `lint-staged`, `msw`, `prettier`, `storybook`, `stylelint`, `typescript-eslint`, `webpack`, `@opentelemetry/core` (resolution), `systeminformation` (resolution).
     - Deferred to separate major work by rule: `@babel/runtime`, `react-router`, `redux-logger`, `@babel/core`, `@babel/plugin-transform-runtime`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`, `@testing-library/jest-dom`, `@types/node`, `eslint`, `typescript`, `webpack-dev-server`, `http-proxy-middleware` (resolution), `js-yaml` (resolution), `undici` (resolution).
-- Minor pass: not started (waiting for explicit approval).
-- Major follow ups: 16 candidates identified; separate focused tasks required.
+- Minor pass:
+    - Updated dependencies: `@grafana/faro-web-sdk 2.7.1 -> 2.8.2`, `@grafana/faro-web-tracing 2.7.1 -> 2.8.2`, `@navikt/aksel-icons 8.12.1 -> 8.15.0`, `@navikt/ds-css 8.12.1 -> 8.15.0`, `@navikt/ds-react 8.12.1 -> 8.15.0`, `@sentry/react 10.57.0 -> 10.67.0`, `react-hook-form 7.78.0 -> 7.82.0`.
+    - Updated devDependencies: `@navikt/aksel 8.12.1 -> 8.15.0`, `@navikt/ds-tailwind 8.12.1 -> 8.15.0`, `@sentry/cli 3.5.1 -> 3.6.1`, `@storybook/react 10.4.6 -> 10.5.3`, `@storybook/react-webpack5 10.4.6 -> 10.5.3`, `@typescript-eslint/parser 8.62.0 -> 8.65.0`, `cypress 15.17.0 -> 15.18.1`, `lint-staged 17.0.8 -> 17.1.0`, `msw 2.14.6 -> 2.15.0`, `prettier 3.8.4 -> 3.9.6`, `storybook 10.4.6 -> 10.5.3`, `stylelint 17.13.0 -> 17.14.1`, `typescript-eslint 8.62.0 -> 8.65.0`.
+    - Not updated in minor pass: `react-router-dom` stayed on `7.17.0` to stay aligned with `react-router@7.17.0` (where eligible major exists and is out of scope), `webpack` stayed pinned at `5.107.0` per carry-forward note.
+- Major follow ups: 16 candidates identified; separate focused tasks required (see list below).
 - Validation:
     - `yarn explain peer-requirements`: completed; existing peer warnings remain (for example `p44ced1` on `eslint`), no new blocker introduced in this pass.
     - `yarn lint`: pass.
     - `yarn tsc --noEmit`: pass.
     - `yarn test --maxWorkers=2`: pass (`64/64` suites, `457/457` tests).
     - `yarn build`: pass.
-    - `yarn test:e2e`: skipped in patch pass because updated packages did not touch the listed runtime-critical paths (`react`, `react-dom`, `react-router`, Aksel, webpack/dev server, auth, proxy).
+    - `yarn test:e2e`: patch pass skipped by rule; minor pass executed after Cypress binary install and passed (`29/29` specs, `376/376` tests).
 - Skipped versions still inside cooldown:
     - `@tanstack/react-query`: `5.101.4` published `2026-07-21T13:04:07.544Z` (newer than cutoff), selected `5.101.3`.
     - `postcss`: `8.5.23` published `2026-07-24T17:05:13.876Z` (newer than cutoff), selected `8.5.20`.
 - Remaining risks or follow ups:
     - Keep `webpack` pinned to `5.107.0` in this run per carry-forward note.
-    - Minor pass can continue only after explicit user approval.
+    - Major follow-up candidates (separate task): `@babel/runtime@8`, `react-router@8`, `redux-logger@4`, `@babel/core@8`, `@babel/plugin-transform-runtime@8`, `@babel/preset-env@8`, `@babel/preset-react@8`, `@babel/preset-typescript@8`, `@testing-library/jest-dom@7`, `@types/node@26`, `eslint@10`, `typescript@7`, `webpack-dev-server@6`, `http-proxy-middleware@4` (resolution), `js-yaml@5` (resolution), `undici@8` (resolution).
