@@ -8,6 +8,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - `tar` løftes her kun som transitiv dependency under `node-gyp`, mens `websocket-driver` løftes for pathene via `sockjs` og `faye-websocket`.
 - Verifiserte etterpå med ny `yarn npm audit` at de to opprinnelige `critical` funnene er borte fra lockfile-grafen, og lot `tar` lande på `7.5.21` fordi `7.5.22` fra 24.07.2026 fortsatt lå innenfor repoets 7 dagers cooldown da oppdateringen ble gjort 30.07.2026.
 
+### Videre dependency alert-opprydding uten major-løft (2026-07-30)
+
+- Løftet `react-router` og `react-router-dom` fra `7.17.0` til `7.18.0`, og `webpack-dev-server` fra `5.2.5` til `5.2.6`, fordi disse versjonene lå utenfor repoets 7 dagers cooldown og lukket åpne advisories uten å kreve nye major-spor.
+- La samtidig inn målrettede `resolutions` for `body-parser`, `fast-uri`, `js-yaml`, `shell-quote` og `svgo`, og tok `brace-expansion` så langt cooldown-vinduet tillot for `1.x`- og `2.x`-pathene.
+- Verifiserte med ny `yarn npm audit` at disse advisories er borte. Åpne rester etter passet er `react-router`-advisory som først lukkes i `8.3.0`, `uuid` under `sockjs`, og `brace-expansion`-fikser som fortsatt lå innenfor cooldown-vinduet da denne runden ble gjort.
+
 ### Weekly package maintenance follow up (2026-07-30)
 
 - Løftet et kontrollert sett patch- og minor-oppdateringer i dependency-runden, blant annet rundt `Aksel`, `Faro`, `Sentry`, `react-hook-form`, `react-query`, `Storybook`, `Cypress`, `postcss` og annet frontend-tooling, uten å trekke inn egne major-spor.
