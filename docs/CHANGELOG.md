@@ -2,12 +2,26 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Kritiske security overrides for tar og websocket-driver (2026-07-30)
+
+- La inn målrettede `resolutions` for `tar@7.5.21` og `websocket-driver@0.7.5` for å lukke to åpne kritiske advisories i transitive dependencies, uten å dra inn bredere oppgraderinger i build- eller dev-server-stakken.
+- `tar` løftes her kun som transitiv dependency under `node-gyp`, mens `websocket-driver` løftes for pathene via `sockjs` og `faye-websocket`.
+- Verifiserte etterpå med ny `yarn npm audit` at de to opprinnelige `critical` funnene er borte fra lockfile-grafen, og lot `tar` lande på `7.5.21` fordi `7.5.22` fra 24.07.2026 fortsatt lå innenfor repoets 7 dagers cooldown da oppdateringen ble gjort 30.07.2026.
+
+### Videre dependency alert-opprydding uten major-løft (2026-07-30)
+
+- Løftet `react-router` og `react-router-dom` fra `7.17.0` til `7.18.0`, og `webpack-dev-server` fra `5.2.5` til `5.2.6`, fordi disse versjonene lå utenfor repoets 7 dagers cooldown og lukket åpne advisories uten å kreve nye major-spor.
+- La samtidig inn målrettede `resolutions` for `body-parser`, `fast-uri`, `js-yaml`, `shell-quote` og `svgo`, og tok `brace-expansion` så langt cooldown-vinduet tillot for `1.x`- og `2.x`-pathene.
+- Verifiserte med ny `yarn npm audit` at disse advisories er borte.
+- Lot `react-router` stoppe på `7.18.0` i denne runden. Videre løft til `8.3.0` ble ikke gjort, fordi den åpne advisoriesporet peker på `react-router@8.3.0`, mens `react-router-dom` fortsatt bare finnes på `7.x` i registry. Et slikt løft blir derfor en egen migreringsoppgave med importopprydding og kontroll av `@sentry/react`-integrasjonen, ikke en vanlig dependency-bump.
+- Åpne rester etter passet er dermed `react-router`-sporet som krever egen migrering, `uuid` under `sockjs` der det ikke finnes noen nyere `sockjs`-utgave å løfte til, og `brace-expansion`-fikser som fortsatt lå innenfor cooldown-vinduet da denne runden ble gjort.
+
 ### Weekly package maintenance follow up (2026-07-30)
 
 - Løftet et kontrollert sett patch- og minor-oppdateringer i dependency-runden, blant annet rundt `Aksel`, `Faro`, `Sentry`, `react-hook-form`, `react-query`, `Storybook`, `Cypress`, `postcss` og annet frontend-tooling, uten å trekke inn egne major-spor.
 - Tok også med den tilhørende `msw@2.15.0`-oppfølgingen ved å oppdatere generert `mockServiceWorker.js`, inkludert den nye håndteringen for `text/event-stream` i worker-filen.
 - Ryddet samtidig `copilot-tasks/weekly-package-maintenance.md` tilbake til neste kjørbare utgave og presiserte at `yarn test:e2e` skal godkjennes eksplisitt før Copilot kjører den.
-- Lot `webpack-dev-server` bli stående på `5.2.5` i denne runden. `v6` krever en egen oppfølging fordi repoet fortsatt bruker Node `20.x` som baseline i CI og lokal oppstart.
+- Lot `webpack-dev-server` bli stående på `5.2.5` i selve denne weekly-runden. `v6` krever en egen oppfølging fordi repoet fortsatt bruker Node `20.x` som baseline i CI og lokal oppstart. Pakken ble senere samme dag løftet videre til `5.2.6` i en egen dependency alert-oppfølging.
 
 ### Stabilisering av delvis fravær i korrigering av inntektsmelding (2026-07-07)
 
