@@ -2,143 +2,218 @@
 applyTo: ".github/workflows/*.{yml,yaml}"
 ---
 
-# GitHub Actions workflows
+# GitHub Actions CI/CD Standards
 
-> Merk: Denne instruksjonen er tilpasset `k9-punsj-frontend`.
-> Kilde: `https://raw.githubusercontent.com/navikt/copilot/main/.github/instructions/github-actions.instructions.md`
-> Innholdet er strammet inn for dette repoet, med vekt på dagens Node, Yarn, Nais og reusable workflow-oppsett.
-> Generiske eksempler for Gradle, pnpm, Go og et annet deploy-lop er fjernet med vilje.
-> Hvis filen gjenbrukes i et annet repo, oppdater workflow-mønstre, deployflyt, secrets og verktøyvalg først.
+Standarder for CI/CD-workflows med GitHub Actions på Nais: SHA-pinning, Nais deploy og caching.
 
-Workflow-filer i dette repoet skal følge eksisterende mønstre for Node 20, Yarn 4, GitHub Packages, reusable workflows og Nais deploy.
+## Action Pinning
 
-## Repo workflow context
+Pin all actions to full commit SHA, never just a major tag:
 
-- Flere workflows er reusable workflows med `workflow_call`, blant annet `lint.yml`, `test.yml`, `build.yml` og `cypress-tester.yml`.
-- Pull requests valideres gjennom `valid-pull-request.yml`.
-- Preprod deploy kjøres manuelt gjennom `deploy-preprod-gcp.yml`.
-- Produksjonsdeploy trigges av push til `master` gjennom `build-and-deploy-gcp.yml`.
-- Node settes opp med `actions/setup-node@v6`.
-- Dependencies installeres med `yarn install --immutable`.
-- GitHub Packages for `@navikt` settes opp eksplisitt i workflowene.
-- `zizmor .github/workflows/` er et relevant review-verktøy når workflows endres.
+```yaml
+# ✅ Correct — pinned to SHA
+- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+- uses: nais/deploy/actions/deploy@bf80eb8dba46797adb4909901e629bca8595a027 # v2
 
-## Keep existing repo patterns
+# ❌ Wrong — unpinned tag can be compromised
+- uses: actions/checkout@v4
+- uses: nais/deploy/actions/deploy@v2
+```
 
-- Følg etablerte repo-mønstre før du introduserer nye workflow-strukturer.
-- Behold reusable workflows når de allerede dekker behovet.
-- Ikke refaktorer workflow-struktur bredt når oppgaven bare gjelder et lite behavior eller en liten deploy-endring.
-- Hvis oppgaven ikke er workflow-relatert, ikke endre workflows bare for å "rydde opp".
+## Minimal Permissions
 
-## Permissions
-
-Sett eksplisitte `permissions` og hold dem så små som mulig.
+Always set explicit permissions — never rely on defaults:
 
 ```yaml
 permissions:
-  contents: read
+  contents: read       # Only read repo content
+  id-token: write      # For OIDC/Nais deploy
+
+# ❌ Wrong — overly broad permissions
+permissions: write-all
 ```
 
-For deploy-jobber på Nais er `id-token: write` vanlig når workload identity brukes:
+## Nais Deploy Workflow
+
+Standard deploy workflow for Nav apps:
 
 ```yaml
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+
 permissions:
   contents: read
   id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: mitt-team
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ needs.build.outputs.image }}
+
+  deploy-prod:
+    needs: [build, deploy-dev]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ needs.build.outputs.image }}
 ```
 
-Bruk bare ekstra rettigheter når jobben faktisk trenger dem.
-
-## Dependencies and setup
-
-Bruk repoets etablerte Node og Yarn-oppsett:
+## Caching
 
 ```yaml
-- name: Sette opp Node
-  uses: actions/setup-node@v6
+# Gradle
+- uses: actions/setup-java@v4
   with:
-    node-version: 20.x
-    registry-url: https://npm.pkg.github.com/
-    scope: '@navikt'
+    distribution: temurin
+    java-version: 21
+    cache: gradle
 
-- name: Installere moduler
-  run: yarn install --immutable
+# Node/Yarn
+- uses: actions/setup-node@v4
+  with:
+    node-version: 22
+    cache: yarn
+
+# Go
+- uses: actions/setup-go@v5
+  with:
+    go-version-file: go.mod
+    cache: true
 ```
 
-- Behold GitHub Packages-oppsett for `@navikt` når workflowen trenger dependencies.
-- Ikke bytt til `npm` eller `pnpm` i workflowene for dette repoet.
-- Når artefakter bygges i én jobb og brukes i en annen, følg eksisterende artifact-mønstre i repoet.
-
-## Deploy and Nais
-
-- Hold deploy-logikk i tråd med dagens repo-flyt:
-  - validering på pull request
-  - manuell preprod deploy
-  - automatisk produksjonsdeploy på push til `master`
-- Behold koblingen mellom workflow, `nais/k9-punsj-frontend.yml` og riktig `nais/*.yml` vars-fil.
-- Når deploy-workflows endres, vurder alltid manifest, vars-fil, image-build og deploy-steg samlet.
-- Ikke endre deploy-rekkefølge eller miljøflyt uten at oppgaven faktisk krever det.
-
-## Secrets and safety
+## Matrix Builds
 
 ```yaml
+strategy:
+  fail-fast: false
+  matrix:
+    app: [my-app, my-other-app]
+steps:
+  - run: cd apps/${{ matrix.app }} && ./gradlew build
+```
+
+## Reusable Workflows
+
+```yaml
+# .github/workflows/deploy-nais.yml (reusable)
+on:
+  workflow_call:
+    inputs:
+      cluster:
+        required: true
+        type: string
+      resource:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: ${{ inputs.cluster }}
+          RESOURCE: ${{ inputs.resource }}
+          VAR: image=${{ inputs.image }}
+```
+
+## Secrets
+
+```yaml
+# ✅ Korrekt — bruk GitHub Secrets
 env:
   API_KEY: ${{ secrets.MY_API_KEY }}
+
+# ❌ Feil — hardkodet hemmelighet
+env:
+  API_KEY: "sk-1234567890"
+
+# ❌ Feil — logg hemmeligheter
+- run: echo ${{ secrets.MY_API_KEY }}
 ```
 
-- Bruk GitHub Secrets eller repo/environment vars der det er etablert mønster.
-- Ikke hardkod hemmeligheter, tokens eller interne verdier.
-- Ikke logg secrets eller token-lignende verdier i workflow-output.
-- Vær forsiktig med shell-kommandoer som kan ekkoe miljøvariabler utilsiktet.
-
-## Security review
-
-- Sjekk `permissions`, secrets, artifact-flyt og deploy-steg når workflows endres.
-- Sjekk nye actions og scripts kritisk før de tas inn.
-- Bruk `zizmor .github/workflows/` når workflows er endret eller gjennomgås.
-- Behandle workflow-endringer som sikkerhetsrelevante, ikke bare som CI-opprydding.
-
-## Action versions
-
-- Følg etablert repo-praksis for action-versjoner når du gjør små eller mellomstore workflow-endringer.
-- Hvis oppgaven eksplisitt handler om workflow-hardening eller action-pinning, gjennomfør det som en egen bevisst endring i stedet for å blande det inn i en tilfeldig feature-endring.
-- Ikke oppgrader flere actions samtidig uten en klar grunn og en tydelig reviewflate.
-
-## Reusable workflows
+## Workflow Security
 
 ```yaml
+# Begrens concurrency — unngå parallelle deploys
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+# Timeout — unngå hengende jobs
 jobs:
-  test:
-    uses: ./.github/workflows/test.yml
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 ```
 
-- Foretrekk eksisterende reusable workflows når du trenger lint, test, build eller Cypress i en ny workflow.
-- Hold input, secrets og artifact-forventninger konsistente mellom kallende workflow og reusable workflow.
-- Spør først før du introduserer en ny reusable workflow bare for en liten variasjon.
+## Scanning
+
+```yaml
+# Vulnerability scanning med trivy
+- uses: aquasecurity/trivy-action@0.28.0
+  with:
+    scan-type: fs
+    severity: HIGH,CRITICAL
+    exit-code: 1
+
+# GitHub Actions security scanning
+- run: pipx run zizmor .github/workflows/
+```
 
 ## Boundaries
 
-### Always
+### ✅ Always
 
-- Sett eksplisitte `permissions`
-- Følg repoets Node, Yarn og GitHub Packages-mønster
-- Hold deploy-workflows i tråd med faktisk Nais-flyt i repoet
-- Sjekk secrets, shell-bruk og artifact-flyt ved workflow-endringer
-- Kjør eller vurder `zizmor` når workflows endres
+- Pin actions til SHA med kommentar for versjon
+- Sett eksplisitte `permissions` per job
+- Bruk `timeout-minutes` på alle jobs
+- Bruk `concurrency` for deploy-workflows
 
-### Ask first
+### ⚠️ Ask First
 
 - Nye secrets eller environment variables
-- Endringer i deploy-rekkefølge eller miljøflyt
+- Endringer i deploy-rekkefølge (dev → prod)
 - Nye reusable workflows
-- Store workflow-refaktorer eller bred action-hardening
 
-### Never
+### 🚫 Never
 
 - `permissions: write-all`
-- Hardkodede secrets eller logging av secrets
-- `pull_request_target` med checkout av PR-branch
-- Tilfeldig bytte av package manager eller CI-mønster i workflowene
-- Brede workflow-endringer utenfor oppgavens scope
+- Upinnede action-versjoner (`@v4`)
+- Logg secrets i workflow-output
+- `pull_request_target` med `actions/checkout` av PR-branch (code injection)
