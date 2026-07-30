@@ -3356,14 +3356,14 @@ __metadata:
   resolution: "@k9-punsj-frontend/server@workspace:server"
   dependencies:
     "@navikt/oasis": "npm:4.1.4"
-    "@sentry/cli": "npm:3.5.1"
+    "@sentry/cli": "npm:3.6.2"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
     dotenv: "npm:17.4.2"
     express: "npm:5.2.1"
     express-http-proxy: "npm:2.1.2"
-    helmet: "npm:8.2.0"
-    jose: "npm:6.2.3"
+    helmet: "npm:8.3.0"
+    jose: "npm:6.2.4"
     morgan: "npm:1.11.0"
     winston: "npm:3.19.0"
   languageName: unknown
@@ -4384,130 +4384,74 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-darwin@npm:3.5.1"
+"@sentry/cli-darwin@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-darwin@npm:3.6.2"
   conditions: os=darwin
   languageName: node
   linkType: hard
 
-"@sentry/cli-darwin@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-darwin@npm:3.6.1"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm64@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-linux-arm64@npm:3.5.1"
+"@sentry/cli-linux-arm64@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-linux-arm64@npm:3.6.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm64@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-linux-arm64@npm:3.6.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-arm@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-linux-arm@npm:3.5.1"
+"@sentry/cli-linux-arm@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-linux-arm@npm:3.6.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=arm
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-arm@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-linux-arm@npm:3.6.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-i686@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-linux-i686@npm:3.5.1"
+"@sentry/cli-linux-i686@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-linux-i686@npm:3.6.2"
   conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-i686@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-linux-i686@npm:3.6.1"
-  conditions: (os=linux | os=freebsd | os=android) & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-linux-x64@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-linux-x64@npm:3.5.1"
+"@sentry/cli-linux-x64@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-linux-x64@npm:3.6.2"
   conditions: (os=linux | os=freebsd | os=android) & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-linux-x64@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-linux-x64@npm:3.6.1"
-  conditions: (os=linux | os=freebsd | os=android) & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-arm64@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-win32-arm64@npm:3.5.1"
+"@sentry/cli-win32-arm64@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-win32-arm64@npm:3.6.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-arm64@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-win32-arm64@npm:3.6.1"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-i686@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-win32-i686@npm:3.5.1"
+"@sentry/cli-win32-i686@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-win32-i686@npm:3.6.2"
   conditions: os=win32 & (cpu=x86 | cpu=ia32)
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-i686@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-win32-i686@npm:3.6.1"
-  conditions: os=win32 & (cpu=x86 | cpu=ia32)
-  languageName: node
-  linkType: hard
-
-"@sentry/cli-win32-x64@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli-win32-x64@npm:3.5.1"
+"@sentry/cli-win32-x64@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli-win32-x64@npm:3.6.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@sentry/cli-win32-x64@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli-win32-x64@npm:3.6.1"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:3.5.1":
-  version: 3.5.1
-  resolution: "@sentry/cli@npm:3.5.1"
+"@sentry/cli@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@sentry/cli@npm:3.6.2"
   dependencies:
-    "@sentry/cli-darwin": "npm:3.5.1"
-    "@sentry/cli-linux-arm": "npm:3.5.1"
-    "@sentry/cli-linux-arm64": "npm:3.5.1"
-    "@sentry/cli-linux-i686": "npm:3.5.1"
-    "@sentry/cli-linux-x64": "npm:3.5.1"
-    "@sentry/cli-win32-arm64": "npm:3.5.1"
-    "@sentry/cli-win32-i686": "npm:3.5.1"
-    "@sentry/cli-win32-x64": "npm:3.5.1"
+    "@sentry/cli-darwin": "npm:3.6.2"
+    "@sentry/cli-linux-arm": "npm:3.6.2"
+    "@sentry/cli-linux-arm64": "npm:3.6.2"
+    "@sentry/cli-linux-i686": "npm:3.6.2"
+    "@sentry/cli-linux-x64": "npm:3.6.2"
+    "@sentry/cli-win32-arm64": "npm:3.6.2"
+    "@sentry/cli-win32-i686": "npm:3.6.2"
+    "@sentry/cli-win32-x64": "npm:3.6.2"
     progress: "npm:^2.0.3"
     proxy-from-env: "npm:^1.1.0"
     undici: "npm:^6.22.0"
@@ -4531,46 +4475,7 @@ __metadata:
       optional: true
   bin:
     sentry-cli: bin/sentry-cli
-  checksum: 10/a2d677a812ffeb17697200f1c3fad01c9787a423c522a97b45f336f4e114cb3177cc5a0c9f3d33576fd44ec8fb707a1f7c9d59252b5774a4f1902f573db43f85
-  languageName: node
-  linkType: hard
-
-"@sentry/cli@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@sentry/cli@npm:3.6.1"
-  dependencies:
-    "@sentry/cli-darwin": "npm:3.6.1"
-    "@sentry/cli-linux-arm": "npm:3.6.1"
-    "@sentry/cli-linux-arm64": "npm:3.6.1"
-    "@sentry/cli-linux-i686": "npm:3.6.1"
-    "@sentry/cli-linux-x64": "npm:3.6.1"
-    "@sentry/cli-win32-arm64": "npm:3.6.1"
-    "@sentry/cli-win32-i686": "npm:3.6.1"
-    "@sentry/cli-win32-x64": "npm:3.6.1"
-    progress: "npm:^2.0.3"
-    proxy-from-env: "npm:^1.1.0"
-    undici: "npm:^6.22.0"
-    which: "npm:^2.0.2"
-  dependenciesMeta:
-    "@sentry/cli-darwin":
-      optional: true
-    "@sentry/cli-linux-arm":
-      optional: true
-    "@sentry/cli-linux-arm64":
-      optional: true
-    "@sentry/cli-linux-i686":
-      optional: true
-    "@sentry/cli-linux-x64":
-      optional: true
-    "@sentry/cli-win32-arm64":
-      optional: true
-    "@sentry/cli-win32-i686":
-      optional: true
-    "@sentry/cli-win32-x64":
-      optional: true
-  bin:
-    sentry-cli: bin/sentry-cli
-  checksum: 10/91942c7f4a3a7e4949d9d7d781cd9f492da022a447d7132cfcdc478ab5c253cf11398bcd23aeb4fca03967e1ad4877c8c8c199f2a04f253c2de4aefd7c3085ea
+  checksum: 10/4ba3d1e9fe12425e5d523651bb088352b4daec8cbd22dcf2f66f85aef20157239b3e4d9df5418f0bda860e1ffe7212ca9c08f670ccab5704ed4f45b52ed5ff40
   languageName: node
   linkType: hard
 
@@ -5165,21 +5070,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.101.3":
-  version: 5.101.3
-  resolution: "@tanstack/query-core@npm:5.101.3"
-  checksum: 10/5cfd946efc7d3dd593f6e569655bf1d3478f7a53de8901dfc60ec0ec114c85c48ab0fcd878441e2191cf5ce2a997f99b0693c1ca75ec7951924893a132386a07
+"@tanstack/query-core@npm:5.101.4":
+  version: 5.101.4
+  resolution: "@tanstack/query-core@npm:5.101.4"
+  checksum: 10/df86031035ac9a5cf54efece85718b90e93fca62068a44a176da232b6dd49b27168840f2da18c64a0eb25d171bc3fb1aab417db4643025cd194ff887833bd73f
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:5.101.3":
-  version: 5.101.3
-  resolution: "@tanstack/react-query@npm:5.101.3"
+"@tanstack/react-query@npm:5.101.4":
+  version: 5.101.4
+  resolution: "@tanstack/react-query@npm:5.101.4"
   dependencies:
-    "@tanstack/query-core": "npm:5.101.3"
+    "@tanstack/query-core": "npm:5.101.4"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/2d1dda1cd7600976ccffc53561c994d68a881f1d28b1da11a014690b16f69f5ea662b531178c193580e7f55590f7baa46172607bda286b6ec4374d1aa8a47dfe
+  checksum: 10/926dabad8e2c2cee89c0f10456c8338474abfe75c9baea2fa0619206cfcb7b38f7edcfe9cc8903f8a5c4f018bba44a487fc19687aac8f945c6a20630dbfceb96
   languageName: node
   linkType: hard
 
@@ -8332,9 +8237,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:15.18.1":
-  version: 15.18.1
-  resolution: "cypress@npm:15.18.1"
+"cypress@npm:15.19.0":
+  version: 15.19.0
+  resolution: "cypress@npm:15.19.0"
   dependencies:
     "@cypress/request": "npm:^4.0.0"
     "@cypress/xvfb": "npm:^1.2.4"
@@ -8377,7 +8282,7 @@ __metadata:
     yauzl: "npm:^3.3.1"
   bin:
     cypress: bin/cypress
-  checksum: 10/5e79dbe760afe3102821055c1a3c841bfcd3ba2149e86f3743a8e2d6f19e0ce78be3a0dc679ffa4cc0207e17f8a7627976441529af5f8e26d3dba739a140caa4
+  checksum: 10/cb0da58d2af6f055aaeb08639fdd8c1dcc852758ee6a6409ba44242e9baa9157af5bbc72f16d2c094e25633b1d963e71e62c8f28fe6283b51c646951be6cac07
   languageName: node
   linkType: hard
 
@@ -8948,17 +8853,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.21.4":
-  version: 5.24.1
-  resolution: "enhanced-resolve@npm:5.24.1"
-  dependencies:
-    graceful-fs: "npm:^4.2.4"
-    tapable: "npm:^2.3.3"
-  checksum: 10/161f52840ad84390ad5b9ac611692b0b45dd12a673455df697bb824a6fef47490ee7dadbe9fd7f003d9a576be8741092b7c0d9e8147e8fb47dbad698f2de2a9b
-  languageName: node
-  linkType: hard
-
-"enhanced-resolve@npm:^5.24.1":
+"enhanced-resolve@npm:^5.22.2, enhanced-resolve@npm:^5.24.1":
   version: 5.24.3
   resolution: "enhanced-resolve@npm:5.24.3"
   dependencies:
@@ -10901,10 +10796,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"helmet@npm:8.2.0":
-  version: 8.2.0
-  resolution: "helmet@npm:8.2.0"
-  checksum: 10/bc34f2e04369625ab7c441273a1f44ee80548ee6da5fcec8b073f351daa930b02809f9fb186c7f3f80a12a3e0944f05c24eebaa642e1b5e805325ce13042d164
+"helmet@npm:8.3.0":
+  version: 8.3.0
+  resolution: "helmet@npm:8.3.0"
+  checksum: 10/077db98df8f8ea749aeab0f56eabe1f37d0ca2ae475c095bc30adf850fe714ea67469dc94b6a6e1b786cde25a40452784e20b728e59c63baa2b18ba12518a6fe
   languageName: node
   linkType: hard
 
@@ -12612,10 +12507,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.3":
-  version: 6.2.3
-  resolution: "jose@npm:6.2.3"
-  checksum: 10/876974613c5ee988d43b65a34c96ce440dbf7706a2f07f465b8874af16ee532102e224459a7068d2c6ef044affe49690667d23ca12770c279804baec95a09608
+"jose@npm:6.2.4":
+  version: 6.2.4
+  resolution: "jose@npm:6.2.4"
+  checksum: 10/ae4e247817d8b06bab500c5cc4606ad4d0c8149a31ea34bf3c294458606ec29f67bb3411096f72fd6382fe6f5a0de60cb7f0e29db178ddffb3efeca3454fb832
   languageName: node
   linkType: hard
 
@@ -12862,13 +12757,13 @@ __metadata:
     "@navikt/fnrvalidator": "npm:2.2.1"
     "@pmmmwh/react-refresh-webpack-plugin": "npm:0.6.2"
     "@reduxjs/toolkit": "npm:2.12.0"
-    "@sentry/cli": "npm:3.6.1"
+    "@sentry/cli": "npm:3.6.2"
     "@sentry/react": "npm:10.67.0"
     "@storybook/addon-webpack5-compiler-swc": "npm:4.0.3"
     "@storybook/react": "npm:10.5.3"
     "@storybook/react-webpack5": "npm:10.5.3"
     "@tailwindcss/postcss": "npm:4.3.3"
-    "@tanstack/react-query": "npm:5.101.3"
+    "@tanstack/react-query": "npm:5.101.4"
     "@testing-library/cypress": "npm:10.1.3"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/jest-dom": "npm:6.9.1"
@@ -12892,7 +12787,7 @@ __metadata:
     cross-env: "npm:10.1.0"
     css-loader: "npm:7.1.4"
     css-minimizer-webpack-plugin: "npm:8.0.0"
-    cypress: "npm:15.18.1"
+    cypress: "npm:15.19.0"
     cypress-wait-until: "npm:3.0.2"
     date-fns: "npm:4.4.0"
     dayjs: "npm:1.11.21"
@@ -12915,13 +12810,13 @@ __metadata:
     jest-css-modules: "npm:2.1.0"
     jest-environment-jsdom: "npm:30.4.1"
     jest-mock: "npm:30.4.1"
-    lint-staged: "npm:17.1.0"
+    lint-staged: "npm:17.2.0"
     lodash: "npm:4.18.1"
     mini-css-extract-plugin: "npm:2.10.2"
     msw: "npm:2.15.0"
     mustache-express: "npm:1.3.2"
     object-hash: "npm:3.0.0"
-    postcss: "npm:8.5.20"
+    postcss: "npm:8.5.22"
     postcss-import: "npm:16.1.1"
     postcss-loader: "npm:8.2.1"
     prettier: "npm:3.9.6"
@@ -12949,7 +12844,7 @@ __metadata:
     typescript-eslint: "npm:8.65.0"
     typescript-string-operations: "npm:1.6.1"
     uuid: "npm:14.0.1"
-    webpack: "npm:5.107.0"
+    webpack: "npm:5.108.4"
     webpack-dev-server: "npm:5.2.6"
     yup: "npm:1.7.1"
   languageName: unknown
@@ -13164,9 +13059,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:17.1.0":
-  version: 17.1.0
-  resolution: "lint-staged@npm:17.1.0"
+"lint-staged@npm:17.2.0":
+  version: 17.2.0
+  resolution: "lint-staged@npm:17.2.0"
   dependencies:
     picomatch: "npm:^4.0.5"
     string-argv: "npm:^0.3.2"
@@ -13177,7 +13072,7 @@ __metadata:
       optional: true
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10/050d8ce1f6c2cf218ebc0b693de6d1754b333f04e263ecbee230b1aa742fd684667d0f42beee48c3bb11cbcc4e50c4995289c82c36bb08f6bd0f8157816514e1
+  checksum: 10/7c26129d6dd27f20d8fc8d70b13252f15baf569124721d7f5e9ed289e054ed43f5cc2a35de4129b65a7c7f1ad4a5900859a7488f8a1f0b96428b995b29ec2ba8
   languageName: node
   linkType: hard
 
@@ -13709,6 +13604,45 @@ __metadata:
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 10/908491b6cc15a6c440ba5b22780a0ba89b9810e1aea684e253e43c4e3b8d56ec1dcdd7ea96dde119c29df59c936cde16062159eae4225c691e19c70b432b6e6f
+  languageName: node
+  linkType: hard
+
+"minimizer-webpack-plugin@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "minimizer-webpack-plugin@npm:5.6.1"
+  dependencies:
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
+    jest-worker: "npm:^27.4.5"
+    schema-utils: "npm:^4.3.0"
+    terser: "npm:^5.31.1"
+  peerDependencies:
+    webpack: ^5.1.0
+  peerDependenciesMeta:
+    "@minify-html/node":
+      optional: true
+    "@swc/core":
+      optional: true
+    "@swc/css":
+      optional: true
+    "@swc/html":
+      optional: true
+    clean-css:
+      optional: true
+    cssnano:
+      optional: true
+    csso:
+      optional: true
+    esbuild:
+      optional: true
+    html-minifier-terser:
+      optional: true
+    lightningcss:
+      optional: true
+    postcss:
+      optional: true
+    uglify-js:
+      optional: true
+  checksum: 10/c9168bea57cdcd338721068996735b68e5660bab775011710e524d8b7673db249b410641e89d8f3f88c0807c4d954f9b874a2b5ba4795e75af9d08c91ed4c40a
   languageName: node
   linkType: hard
 
@@ -15219,7 +15153,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.5.20, postcss@npm:^8.4.33, postcss@npm:^8.4.40, postcss@npm:^8.5.16":
+"postcss@npm:8.5.22":
+  version: 8.5.22
+  resolution: "postcss@npm:8.5.22"
+  dependencies:
+    nanoid: "npm:^3.3.16"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10/7944444f267f2d94c7caeed66f3da56d5b947bd4a7e57a166a5161af25c6006dd73f40e2a1a6822f3d7fccc2fa005778c03058368eb7efca1b5038aec55abd14
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.33, postcss@npm:^8.4.40, postcss@npm:^8.5.16":
   version: 8.5.20
   resolution: "postcss@npm:8.5.20"
   dependencies:
@@ -17444,7 +17389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:5.6.1, terser-webpack-plugin@npm:^5.5.0":
+"terser-webpack-plugin@npm:5.6.1":
   version: 5.6.1
   resolution: "terser-webpack-plugin@npm:5.6.1"
   dependencies:
@@ -18345,6 +18290,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"watchpack@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "watchpack@npm:2.5.2"
+  dependencies:
+    graceful-fs: "npm:^4.1.2"
+  checksum: 10/203a41249b20521da0d86d9449510b66764440a189351eb3d2f84257bfddd4713ba984b7a1e1c1ef5938d987f7df37ee960ec0e2606a204d372f6366ea816e25
+  languageName: node
+  linkType: hard
+
 "wbuf@npm:^1.1.0, wbuf@npm:^1.7.3":
   version: 1.7.3
   resolution: "wbuf@npm:1.7.3"
@@ -18468,10 +18422,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-sources@npm:^3.4.1":
-  version: 3.5.0
-  resolution: "webpack-sources@npm:3.5.0"
-  checksum: 10/e5af4245dbe52bb1520c7c373d73042fe091e273ff94269b877725a7873481e544ba4e71722df13e278f88069de900052764d98b99f9910be634826ec2f6e67d
+"webpack-sources@npm:^3.5.0":
+  version: 3.5.1
+  resolution: "webpack-sources@npm:3.5.1"
+  checksum: 10/50b9699a3ab9a698e117d8a6b816235576f17e60aeca0a44269041773f960c3beb2ad10d07bc5f2ef8eebde3db5275c6a23566dad475db8f840a34a7bfabd2c3
   languageName: node
   linkType: hard
 
@@ -18519,9 +18473,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5.107.0":
-  version: 5.107.0
-  resolution: "webpack@npm:5.107.0"
+"webpack@npm:5.108.4":
+  version: 5.108.4
+  resolution: "webpack@npm:5.108.4"
   dependencies:
     "@types/estree": "npm:^1.0.8"
     "@types/json-schema": "npm:^7.0.15"
@@ -18532,26 +18486,25 @@ __metadata:
     acorn-import-phases: "npm:^1.0.3"
     browserslist: "npm:^4.28.1"
     chrome-trace-event: "npm:^1.0.2"
-    enhanced-resolve: "npm:^5.21.4"
+    enhanced-resolve: "npm:^5.22.2"
     es-module-lexer: "npm:^2.1.0"
     eslint-scope: "npm:5.1.1"
     events: "npm:^3.2.0"
-    glob-to-regexp: "npm:^0.4.1"
     graceful-fs: "npm:^4.2.11"
     loader-runner: "npm:^4.3.2"
     mime-db: "npm:^1.54.0"
+    minimizer-webpack-plugin: "npm:^5.6.1"
     neo-async: "npm:^2.6.2"
     schema-utils: "npm:^4.3.3"
     tapable: "npm:^2.3.0"
-    terser-webpack-plugin: "npm:^5.5.0"
-    watchpack: "npm:^2.5.1"
-    webpack-sources: "npm:^3.4.1"
+    watchpack: "npm:^2.5.2"
+    webpack-sources: "npm:^3.5.0"
   peerDependenciesMeta:
     webpack-cli:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10/d5ed403764927a09f6e9618e0ae84b6c8c47c9ead9b01afbfb70134a348a3f27aa93d55ff579ad96db2022dde39d38965f36a4b751d2b86754414a6e96fdb403
+  checksum: 10/f93cbd33e76a0ba8b708600ca0be66f172dda8f3eff5d201e4a1021af38a5c5d6b57a5d7eaf9a525fbd383907a05d92c2a04b21839e509a03bcbd61f13fa6093
   languageName: node
   linkType: hard
 
