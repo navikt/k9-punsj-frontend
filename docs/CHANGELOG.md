@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Kritiske security overrides for tar og websocket-driver (2026-07-30)
+
+- La inn målrettede `resolutions` for `tar@7.5.21` og `websocket-driver@0.7.5` for å lukke to åpne kritiske advisories i transitive dependencies, uten å dra inn bredere oppgraderinger i build- eller dev-server-stakken.
+- `tar` løftes her kun som transitiv dependency under `node-gyp`, mens `websocket-driver` løftes for pathene via `sockjs` og `faye-websocket`.
+- Verifiserte etterpå med ny `yarn npm audit` at de to opprinnelige `critical` funnene er borte fra lockfile-grafen, og lot `tar` lande på `7.5.21` fordi `7.5.22` fra 24.07.2026 fortsatt lå innenfor repoets 7 dagers cooldown da oppdateringen ble gjort 30.07.2026.
+
 ### Weekly package maintenance follow up (2026-07-30)
 
 - Løftet et kontrollert sett patch- og minor-oppdateringer i dependency-runden, blant annet rundt `Aksel`, `Faro`, `Sentry`, `react-hook-form`, `react-query`, `Storybook`, `Cypress`, `postcss` og annet frontend-tooling, uten å trekke inn egne major-spor.
