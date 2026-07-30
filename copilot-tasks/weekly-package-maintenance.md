@@ -3,8 +3,7 @@
 ## Task
 
 - Title: Weekly package maintenance with 7 day cooldown precheck
-- Branch: `chore/weekly-package-maintenance`
-- Suggested agent: `@k9-punsj-front-research-agent`
+- Branch: `pkgUpd`
 - Prompt language: `English`
 
 ## Goal
@@ -61,8 +60,9 @@
     - `yarn tsc --noEmit`
     - `yarn test --maxWorkers=2`
     - `yarn build`
-    - `yarn test:e2e` only when updated packages touch runtime critical paths such as `react`, `react-dom`, `react-router`, form libraries, Aksel, webpack, dev server, auth, or proxy behavior
+    - `yarn test:e2e` only when updated packages touch runtime critical paths such as `react`, `react-dom`, `react-router`, form libraries, Aksel, webpack, dev server, auth, or proxy behavior, and only after explicit user approval
 - Skip or limitation note:
+    - If `yarn test:e2e` looks relevant, stop and ask the user before running it.
     - If a command is skipped or fails for a pre existing reason, record that clearly in `Outcome` instead of broadening scope silently.
 
 ## Prompt for Copilot
@@ -71,7 +71,7 @@ Follow this task file. First update `Plan`, then work in staged passes. Read `.y
 
 Start with direct dependency and devDependency patch updates, then review existing `resolutions` for patch level bumps or safe removals, and run the full validation list. In the patch pass, only update packages whose highest eligible tier is patch. If a package already has an eligible minor or major outside the cooldown window, skip it in the patch pass and leave it for the later tier instead of updating it twice. After the patch pass, update `Outcome` with exact versions chosen, versions skipped because of the cooldown window, packages intentionally deferred to minor or major, changed files, validation results, and remaining risks, then stop and ask the user whether to commit the patch pass. Do not commit unless the user explicitly asks.
 
-Only after explicit user approval, continue with a minor pass under the same rules and run validation again. In the minor pass, update only packages whose highest eligible tier is minor. If an eligible major already exists, leave that package unchanged and record it as a separate follow up. After the minor pass, stop and summarize any major candidates that deserve their own focused task. Do not attempt major upgrades in this weekly pass.
+Only after explicit user approval, continue with a minor pass under the same rules and run validation again. In the minor pass, update only packages whose highest eligible tier is minor. If an eligible major already exists, leave that package unchanged and record it as a separate follow up. After the minor pass, stop and summarize any major candidates that deserve their own focused task. Do not attempt major upgrades in this weekly pass. Do not run `yarn test:e2e` without asking the user first, even when the updated packages match the runtime critical path rule.
 
 Suggested starter prompt:
 
@@ -82,6 +82,7 @@ Suggested starter prompt:
 - Keep `webpack` pinned to `5.107.0` until the PSB country-list regression is resolved. `5.107.2` and `5.108.3` can emit `i18n-iso-countries/codes.json` as an empty payload in production style bundles.
 - For future `webpack` updates, do not rely only on local dev or a successful local build. Verify in Q or another production-like environment that PSB countries are shown for `utenlandsopphold`, and explicitly check that the country dropdown is populated.
 - Avoid forcing transitive major jumps through broad `resolutions`. A previous `uuid@npm:^8.3.2 -> 14.0.1` override looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested.
+- Do not attempt `webpack-dev-server@6` inside the normal weekly pass while the repo baseline and CI still target Node `20.x`. Treat that upgrade as a separate task that first decides the repo Node baseline, then rechecks Fast Refresh and the custom dev server startup script.
 - Current targeted security overrides that should be revisited in later runs are `form-data@4.0.6`, `http-proxy-middleware@2.0.10`, `undici@6.27.0`, and `@opentelemetry/core@2.8.0`. Remove them once the graph naturally resolves to equal or newer safe versions.
 - Recheck whether a direct bump of `@sentry/cli` can replace the temporary `undici` override after the newer CLI version is outside the 7 day cooldown window.
 - `npm view` for some `@navikt/*` packages can return `401` from the configured registry in this shell.
@@ -99,14 +100,8 @@ Suggested starter prompt:
 
 ## Progress notes
 
-- Add dated notes during the next run.
+- Record the fresh cutoff timestamp, chosen package tiers, validation results, and explicit stop points here for each new run.
 
 ## Outcome
 
-- Changed files:
-- Patch pass:
-- Minor pass:
-- Major follow ups:
-- Validation:
-- Skipped versions still inside cooldown:
-- Remaining risks or follow ups:
+- Fill in changed files, exact selected versions, skipped cooldown candidates, validation results, and remaining risks for the current run.

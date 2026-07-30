@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance follow up (2026-07-30)
+
+- Løftet et kontrollert sett patch- og minor-oppdateringer i dependency-runden, blant annet rundt `Aksel`, `Faro`, `Sentry`, `react-hook-form`, `react-query`, `Storybook`, `Cypress`, `postcss` og annet frontend-tooling, uten å trekke inn egne major-spor.
+- Tok også med den tilhørende `msw@2.15.0`-oppfølgingen ved å oppdatere generert `mockServiceWorker.js`, inkludert den nye håndteringen for `text/event-stream` i worker-filen.
+- Ryddet samtidig `copilot-tasks/weekly-package-maintenance.md` tilbake til neste kjørbare utgave og presiserte at `yarn test:e2e` skal godkjennes eksplisitt før Copilot kjører den.
+- Lot `webpack-dev-server` bli stående på `5.2.5` i denne runden. `v6` krever en egen oppfølging fordi repoet fortsatt bruker Node `20.x` som baseline i CI og lokal oppstart.
+
 ### Stabilisering av delvis fravær i korrigering av inntektsmelding (2026-07-07)
 
 - Fikset `Korrigering av inntektsmelding` slik at feltet `Timer` i `delvis fravær` ikke lenger sender ugyldige mellomtilstander som `.` eller andre ufullstendige desimalverdier videre til `PUT /api/omsorgspenger-soknad/oppdater`.
