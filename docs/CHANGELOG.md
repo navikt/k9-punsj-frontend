@@ -12,7 +12,9 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Løftet `react-router` og `react-router-dom` fra `7.17.0` til `7.18.0`, og `webpack-dev-server` fra `5.2.5` til `5.2.6`, fordi disse versjonene lå utenfor repoets 7 dagers cooldown og lukket åpne advisories uten å kreve nye major-spor.
 - La samtidig inn målrettede `resolutions` for `body-parser`, `fast-uri`, `js-yaml`, `shell-quote` og `svgo`, og tok `brace-expansion` så langt cooldown-vinduet tillot for `1.x`- og `2.x`-pathene.
-- Verifiserte med ny `yarn npm audit` at disse advisories er borte. Åpne rester etter passet er `react-router`-advisory som først lukkes i `8.3.0`, `uuid` under `sockjs`, og `brace-expansion`-fikser som fortsatt lå innenfor cooldown-vinduet da denne runden ble gjort.
+- Verifiserte med ny `yarn npm audit` at disse advisories er borte.
+- Lot `react-router` stoppe på `7.18.0` i denne runden. Videre løft til `8.3.0` ble ikke gjort, fordi den åpne advisoriesporet peker på `react-router@8.3.0`, mens `react-router-dom` fortsatt bare finnes på `7.x` i registry. Et slikt løft blir derfor en egen migreringsoppgave med importopprydding og kontroll av `@sentry/react`-integrasjonen, ikke en vanlig dependency-bump.
+- Åpne rester etter passet er dermed `react-router`-sporet som krever egen migrering, `uuid` under `sockjs` der det ikke finnes noen nyere `sockjs`-utgave å løfte til, og `brace-expansion`-fikser som fortsatt lå innenfor cooldown-vinduet da denne runden ble gjort.
 
 ### Weekly package maintenance follow up (2026-07-30)
 
