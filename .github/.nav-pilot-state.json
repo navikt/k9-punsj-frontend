@@ -1,21 +1,21 @@
 {
   "collection": "frontend",
-  "version": "2026.06.03-174942-badb737",
+  "version": "2026.07.28-231319-60ee4d7",
   "scope": "repo",
-  "source_sha": "add16ce",
+  "source_sha": "60ee4d7",
   "installed_at": "2026-06-05T11:44:43Z",
   "files": [
     {
       "path": ".github/agents/accessibility.agent.md",
-      "hash": "243143499e16befb"
+      "hash": "67b453f152c4f663"
     },
     {
       "path": ".github/agents/aksel.agent.md",
-      "hash": "7103fb8df66fb0b1"
+      "hash": "d190246642818387"
     },
     {
       "path": ".github/agents/code-review.agent.md",
-      "hash": "3f32b4e215bca95d"
+      "hash": "ba64c6ac567371bb"
     },
     {
       "path": ".github/agents/forfatter.agent.md",
@@ -23,21 +23,19 @@
     },
     {
       "path": ".github/agents/nav-pilot.agent.md",
-      "hash": "1a77f9c4ecf37af8"
+      "hash": "09c7351bf3ceb03b"
     },
     {
       "path": ".github/skills/aksel-spacing/",
-      "hash": "98c352b8bbec7656",
-      "status": "conflict"
+      "hash": "177594fc5ae8d7e3"
     },
     {
       "path": ".github/skills/conventional-commit/",
-      "hash": "cf51dc6ec0835cc3",
-      "status": "conflict"
+      "hash": "0c21beaedabd1e39"
     },
     {
       "path": ".github/skills/playwright-testing/",
-      "hash": "d8991a8ed8a5e0b5"
+      "hash": "5c618cd99c79df64"
     },
     {
       "path": ".github/skills/readme-review/",
@@ -85,26 +83,23 @@
     },
     {
       "path": ".github/instructions/testing.instructions.md",
-      "hash": "4a6a7547a3701ce1"
+      "hash": "ca2a23744bef3a2c"
     },
     {
       "path": ".github/instructions/testing-typescript.instructions.md",
-      "hash": "d3fd7e7d5f2ee256"
+      "hash": "6c6055340a9d075c"
     },
     {
       "path": ".github/instructions/accessibility.instructions.md",
-      "hash": "5fc2f56be86bef0e",
-      "status": "conflict"
+      "hash": "986ef7aa27d8a1d9"
     },
     {
       "path": ".github/instructions/github-actions.instructions.md",
-      "hash": "605f572c153e242c",
-      "status": "conflict"
+      "hash": "bbef6f3e56b8b3b3"
     },
     {
       "path": ".github/instructions/docker.instructions.md",
-      "hash": "a10bc11b237a2ff4",
-      "status": "conflict"
+      "hash": "32db7a2f8aaab2ac"
     },
     {
       "path": ".github/instructions/security-owasp.instructions.md",
@@ -112,8 +107,7 @@
     },
     {
       "path": ".github/prompts/aksel-component.prompt.md",
-      "hash": "f59d98047c307d76",
-      "status": "conflict"
+      "hash": "721f879cfd8e89da"
     },
     {
       "path": ".github/prompts/nais-manifest.prompt.md",

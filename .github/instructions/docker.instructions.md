@@ -2,126 +2,269 @@
 applyTo: "**/Dockerfile"
 ---
 
-# Dockerfiles
+# Dockerfile Standards
 
-> Merk: Denne instruksjonen er tilpasset `k9-punsj-frontend`.
-> Kilde: `https://raw.githubusercontent.com/navikt/copilot/main/.github/instructions/docker.instructions.md`
-> Innholdet er strammet inn for dette repoet, med vekt på dagens runtime-image, build-flyt i GitHub Actions og Nais deploy.
-> Generiske eksempler for JVM, Go, Python, nginx og en mer normativ Chainguard-strategi er fjernet med vilje.
-> Hvis filen gjenbrukes i et annet repo, oppdater base image-praksis, artifact-flyt, entrypoint og deploy-kontekst først.
+Standarder for Dockerfile i Nav: Chainguard base images, multi-stage builds og sikkerhetspraksis.
 
-Docker-endringer i dette repoet skal følge den etablerte container-flyten: applikasjonen bygges normalt utenfor Dockerfile, og Dockerfile brukes først og fremst til å pakke runtime-artifakter for deploy.
+Reference: [Chainguard base images — sikkerhet.nav.no](https://sikkerhet.nav.no/docs/verktoy/chainguard-dockerimages)
 
-## Repo Docker context
+## Base Images — Chainguard
 
-- Repoet har én hoved-`Dockerfile`.
-- Produksjonsbildet bygges i GitHub Actions med `nais/docker-build-push`.
-- Dagens Dockerfile bruker en distroless Node runtime og kjører som non-root.
-- Build-artifakter som `dist/`, `server.js` og runtime-filer kopieres inn i bildet etter at build er gjort utenfor Dockerfile.
-- Docker er også i bruk lokalt gjennom `dev/docker-compose.yml`, men den filen er et lokalt hjelpesett, ikke produksjonscontaineren.
+Nav pays for [Chainguard base images](https://sikkerhet.nav.no/docs/verktoy/chainguard-dockerimages) with minimal vulnerabilities. Use these instead of Google distroless or full OS images.
 
-## Keep the current repo pattern
+### Nav's private registry (JVM, Node, Python)
 
-- Følg eksisterende repo-mønster før du foreslår en stor Docker-omlegging.
-- Behandle Dockerfile som runtime packaging-lag med mindre oppgaven eksplisitt handler om container hardening eller build-flyt.
-- Ikke innfør multi-stage build bare fordi det er et generelt mønster hvis oppgaven ikke ber om Docker-refaktor.
-- Ikke bytt base image-strategi uten at oppgaven faktisk handler om det.
+```
+europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/<image>:<tag>
+```
 
-## Base image and runtime
+Available images: `jdk`, `jre`, `node`, `python`, `airflow-core`.
 
-- Behold non-root runtime.
-- Følg eksisterende base image-praksis for små og mellomstore endringer.
-- Hvis oppgaven eksplisitt gjelder hardening av container-bildet, kan base image-strategi vurderes som en egen bevisst endring.
-- Ikke introduser full OS-images som `ubuntu`, `debian` eller lignende når runtime kan holdes slankere.
+### Free Chainguard images (Go, nginx)
 
-## Copy only what runtime needs
+```
+cgr.dev/chainguard/<image>:<tag>
+```
+
+For Go and nginx, good free alternatives exist in Chainguard's public registry.
+
+### Tags and updates
+
+- Use major version (e.g. `openjdk-21`, `22-slim`) — **Chainguard does not backport** to minor/patch
+- Recommendation: don't pin SHA. Set up a workflow to rebuild regularly instead
+- Use [digestabot](https://github.com/navikt/digestabot) if you want to pin SHA and get automatic PRs
 
 ```dockerfile
-# ✅ Foretrekk målrettet kopiering
-COPY ./dist ./dist
-COPY ./node_modules ./node_modules
-COPY server ./
+# ✅ Chainguard fra Navs registry
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
 
-# ❌ Unngå brede kopier i final image
+# ✅ Free Chainguard for Go and nginx
+FROM cgr.dev/chainguard/go:latest
+FROM cgr.dev/chainguard/static:latest
+FROM cgr.dev/chainguard/nginx:latest
+
+# ⚠️ Google distroless works, but Chainguard is preferred at Nav
+FROM gcr.io/distroless/java21-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot
+
+# ❌ Avoid full OS images
+FROM ubuntu:22.04
+FROM openjdk:21
+```
+
+## Multi-Stage Builds
+
+All Nav apps must use multi-stage builds for minimal image size.
+
+### JVM applications (build outside Dockerfile)
+
+```dockerfile
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+ENV TZ="Europe/Oslo"
+COPY target/app.jar app.jar
+CMD ["-jar","app.jar"]
+```
+
+### JVM with build in Dockerfile (Kotlin/Java)
+
+```dockerfile
+FROM gradle:8-jdk21 AS build
+WORKDIR /app
+COPY build.gradle.kts settings.gradle.kts ./
+COPY gradle ./gradle
+RUN gradle dependencies --no-daemon
+COPY src ./src
+RUN gradle shadowJar --no-daemon
+
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+WORKDIR /app
+COPY --from=build /app/build/libs/*-all.jar app.jar
+CMD ["-jar", "app.jar"]
+```
+
+### Spring Boot
+
+```dockerfile
+FROM gradle:8-jdk21 AS build
+WORKDIR /app
+COPY . .
+RUN gradle bootJar --no-daemon
+
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### Go
+
+```dockerfile
+FROM cgr.dev/chainguard/go:latest AS builder
+ENV GOOS=linux
+ENV CGO_ENABLED=0
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -a -installsuffix cgo -o /bin/app .
+
+FROM cgr.dev/chainguard/static:latest
+WORKDIR /app
+COPY --from=builder /bin/app /app/app
+ENTRYPOINT ["/app/app"]
+```
+
+### Node.js
+
+```dockerfile
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
+ENV NODE_ENV=production
+ENV NPM_CONFIG_CACHE=/tmp
+WORKDIR /app
+COPY dist dist/
+COPY server server/
+EXPOSE 8080
+CMD ["server/dist/index.js"]
+```
+
+### Node.js with build in Dockerfile
+
+```dockerfile
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-dev AS builder
+WORKDIR /app
+COPY . /app
+RUN npm ci
+RUN npm run build
+
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:22-slim
+WORKDIR /app
+COPY --from=builder /app /app
+CMD ["build/server.js"]
+```
+
+### Python with build in Dockerfile
+
+```dockerfile
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:3.12-dev AS builder
+WORKDIR /app
+RUN python3 -m venv venv
+ENV PATH=/app/venv/bin:$PATH
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:3.12 AS runner
+WORKDIR /app
+COPY src/ .
+COPY --from=builder /app/venv /app/venv
+ENV PATH="/app/venv/bin:$PATH"
+ENTRYPOINT ["python", "main.py"]
+```
+
+### Nginx
+
+```dockerfile
+FROM cgr.dev/chainguard/node:latest-dev AS build
+USER root
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM cgr.dev/chainguard/nginx AS production
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 8080
+```
+
+## Security
+
+```dockerfile
+# ✅ Chainguard images run as non-root by default
+# No USER instruction needed for Chainguard
+
+# ✅ For other base images — run as non-root
+USER nonroot                          # distroless
+USER 1001                            # numerisk UID
+RUN adduser --system --uid 1001 app  # Alpine
+
+# ✅ Minimal COPY — never COPY entire context into final stage
+COPY --from=build /app/build/libs/app.jar .
+
+# ❌ Wrong — copies secrets, test files, .git
 COPY . .
 ```
 
-- Kopier bare det runtime faktisk trenger.
-- Ikke bruk `COPY . .` i final image.
-- Ikke kopier testfiler, `.git`, lokale notater eller annet som ikke trengs i runtime.
-- Vær ekstra forsiktig med filer som gjør build-konteksten unødvendig stor.
-
-## Secrets and safety
-
-- Ikke legg secrets, tokens eller interne verdier i Dockerfile gjennom `ENV`, `ARG` eller hardkodede filer.
-- Ikke bake inn miljøspesifikke hemmeligheter i containeren.
-- Hold runtime-konfigurasjon og secrets i Nais eller GitHub Secrets der det allerede er repoets mønster.
-- Hvis Dockerfile endres sammen med workflow eller deploy, vurder lekkasjerisiko i hele flyten samlet.
-
-## Build and deploy coupling
-
-- Dockerfile, `nais/docker-build-push`, Nais-manifest og deploy-workflows må sees i sammenheng.
-- Når Dockerfile endres, vurder også:
-  - artifact-strukturen fra build-steget
-  - entrypoint og runtime-filplassering
-  - `nais/**`
-  - relevante workflows i `.github/workflows/`
-- Ikke endre container-layout uten å sjekke hvordan workflowene forventer at bildet bygges og deployes.
-
-## Current repo shape
-
-Den nåværende Dockerfile-strukturen bygger på at repoet allerede har produsert runtime-artifakter før container-build:
-
-```dockerfile
-FROM gcr.io/distroless/nodejs22-debian12:nonroot
-
-ENV TZ="Europe/Oslo"
-ENV NODE_ENV=production
-
-WORKDIR /app
-
-COPY ./dist ./dist
-COPY ./src/build/webpack/faroConfig.js ./dist/js/nais.js
-COPY ./node_modules ./node_modules
-COPY server ./
-
-EXPOSE 8080
-CMD ["./server.js"]
-```
-
-- Følg denne formen ved mindre justeringer.
-- Hvis oppgaven krever en annen artifact-flyt eller ny entrypoint, kall det ut eksplisitt som en strukturendring.
-
 ## .dockerignore
 
-- En `.dockerignore` er ønskelig hvis Docker-konteksten begynner å vokse eller Docker-arbeid er en del av oppgaven.
-- Ikke legg til eller endre `.dockerignore` som sideeffekt av en helt annen feature uten at det gir tydelig verdi og er innenfor scope.
+Always create a `.dockerignore`:
 
-## Validation
+```
+.git
+.github
+node_modules
+.next
+build
+target
+*.md
+docker-compose*.yml
+.env*
+```
 
-- Når Dockerfile endres, vurder om `build-and-deploy-gcp.yml`, `deploy-preprod-gcp.yml` eller andre workflow-filer også må leses.
-- Vurder om endringen påvirker image-innhold, startup, logging, Faro runtime-fil eller deploy-oppsett.
-- Hvis Docker-endringen er sikkerhetsrelevant, vurder også workflow review og image/build review sammen.
+## Layer Caching
+
+```dockerfile
+# ✅ Copy dependency files first for better caching
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+
+# ❌ Wrong — invalidates cache on any file change
+COPY . .
+RUN go mod download && go build
+```
+
+## CI — Chainguard Authentication
+
+Use `nais/docker-build-push` in GitHub Actions — it handles authentication to Nav's Chainguard registry automatically:
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: <myteam>
+```
 
 ## Boundaries
 
-### Always
+### ✅ Always
 
-- Hold runtime-bildet så smalt som praktisk mulig
-- Behold non-root runtime
-- Kopier bare nødvendige runtime-filer
-- Se Dockerfile, workflow og Nais i sammenheng når Docker endres
+- Chainguard base images fra Navs registry (JVM/Node/Python) eller `cgr.dev` (Go/nginx)
+- Multi-stage builds
+- `.dockerignore`-fil
+- Copy dependencies separately for layer caching
+- `nais/docker-build-push` for CI
 
-### Ask first
+### ⚠️ Ask First
 
-- Bytte base image-strategi
-- Innføre multi-stage build der repoet i dag bygger utenfor Dockerfile
-- Endre artifact-layout eller entrypoint
-- Legge til `.dockerignore` som en del av en bredere containeropprydding
+- Custom base images
+- `--privileged` or extra Linux capabilities
+- Mounting secrets in build
+- Google distroless instead of Chainguard
 
-### Never
+### 🚫 Never
 
-- `COPY . .` i final image
-- Secrets i Dockerfile
-- Root-bruker i produksjonsbilde uten eksplisitt grunn
-- Store Docker-refaktorer utenfor oppgavens scope
+- `COPY . .` in final stage
+- Root user in production
+- Secrets in Dockerfile (`ENV SECRET=...`, `ARG PASSWORD=...`)
+- `latest` tag on Nav registry images (use specific major version)
+- Full OS images (`ubuntu`, `debian`, `openjdk`)

@@ -1,148 +1,65 @@
 ---
 name: aksel-component
-description: Create or update a React component in k9-punsj-frontend using Aksel, repo spacing rules, and existing UI patterns
+description: Scaffold en responsiv React-komponent med Aksel Design System, riktige tokens og props verifisert via Aksel MCP / aksel-builder-skillen
+model: Gemini 3.6 Flash
 ---
 
-> Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Basert på upstream prompten `aksel-component.prompt.md` fra `navikt/copilot`:
-> `https://raw.githubusercontent.com/navikt/copilot/main/.github/prompts/aksel-component.prompt.md`
-> Hvis prompten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, UI regler og komponentmønstre først.
+You scaffold a new React component using Nav's Aksel design system (`@navikt/ds-react`, v8+).
 
-You are working in `k9-punsj-frontend`.
+## How to work
 
-Your job is to create or update a React component using the repo's existing Aksel, Tailwind, and `react-intl` patterns.
+**Follow the `aksel-builder` skill** — it holds the full workflow, decision tree, token/prop
+conventions, layout primitives, and accessibility rules. This prompt only adds the
+scaffolding-specific steps below; defer to the skill instead of restating it.
 
-## First, clarify the task
+Verify every component, prop, token, and icon via the MCP (`aksel_get_component_info`,
+`aksel_get_token_details`, `aksel_find_icons`) — never from memory. No MCP? Fall back to
+`https://aksel.nav.no/llm.md`. Never invent an API.
 
-If the user has not already specified them, ask for:
+## Ask the user first
 
-1. Target component or file path
-2. Whether this is a new component or an update to an existing one
-3. The purpose of the change
-4. Whether the task includes text changes, interaction changes, or only visual changes
-5. Whether there is an existing nearby component or screen that should be followed
+1. **Component name** (PascalCase)?
+2. **Purpose** — what does it do?
+3. **Layout** — card, list item, form, dashboard section?
+4. **Responsive** — should the layout change across screen sizes?
 
-## Repo specific rules
+## v8 gotchas (safety net)
 
-1. Prefer editing an existing component or following a nearby repo pattern before introducing a new component shape.
-2. Prefer Aksel components, layout primitives, and spacing tokens for UI work.
-3. Prefer the styling order used in the repo: Aksel props first, Tailwind utilities selectively, local component CSS when needed.
-4. Do not use Tailwind padding or margin utilities on Aksel components.
-5. Tailwind is acceptable for wrapper level layout when Aksel props or primitives are not a good fit.
-6. Keep future Aksel v8 migration cost low. Avoid adding new v7 specific workaround patterns unless the task requires them.
-7. Preserve existing `react-intl` ids, placeholders, and interpolation variables unless the task explicitly includes translation key changes.
-8. Use Norwegian names for domain specific identifiers when the touched code already follows that pattern.
-9. Use English names for generic technical helpers and cross cutting code.
-10. Do not add new dependencies unless the task explicitly requires them.
+The skill carries the full detail; keep just these so you don't ship a stale API even before loading it:
 
-## Before writing code
+- Spacing/gap use `space-` tokens (`gap="space-16"`, not `gap="4"`); responsive props are mobile-first `{ xs, sm, md, lg, xl, 2xl }`.
+- Color on `data-color`, emphasis on `variant` — destructive button is `variant="primary" data-color="danger"`.
+- `borderRadius` uses the scale (`"8"`, `"full"`); `background` drops the `bg-` prefix (`"raised"`); no v7 `surface-*`.
+- `Alert` is legacy → `LocalAlert` / `GlobalAlert` / `InfoCard` / `InlineMessage` (confirm via MCP).
 
-Inspect the touched area for:
-
-- existing Aksel component usage
-- existing spacing and layout patterns
-- nearby Tailwind usage
-- local CSS files
-- `react-intl` usage
-- existing tests or stories for the touched component
-
-Follow the existing pattern in the touched area unless the task explicitly asks for cleanup or redesign.
-
-## Prefer these patterns
-
-### Section wrapper
+## Starter template
 
 ```tsx
-import { Box, VStack } from '@navikt/ds-react';
+import { Box, VStack, Heading, BodyShort } from "@navikt/ds-react";
 
-export function Section({ children }: { children: React.ReactNode }) {
-  return (
-    <Box padding={{ xs: 'space-4', md: 'space-6' }}>
-      <VStack gap={{ xs: 'space-4', md: 'space-6' }}>{children}</VStack>
-    </Box>
-  );
-}
-```
-
-### Card like content
-
-```tsx
-import { Box, Heading, VStack } from '@navikt/ds-react';
-
-interface ExampleCardProps {
+interface {ComponentName}Props {
   title: string;
-  children: React.ReactNode;
+  description?: string;
 }
 
-export function ExampleCard({ title, children }: ExampleCardProps) {
+export function {ComponentName}({ title, description }: {ComponentName}Props) {
   return (
-    <Box borderWidth="1" borderRadius="large" padding={{ xs: 'space-4', md: 'space-6' }}>
-      <VStack gap="space-4">
-        <Heading size="small" level="2">
+    <Box background="raised" padding={{ xs: "space-16", md: "space-24" }} borderRadius="12">
+      <VStack gap="space-16">
+        <Heading size="medium" level="2">
           {title}
         </Heading>
-        {children}
+        {description && <BodyShort>{description}</BodyShort>}
       </VStack>
     </Box>
   );
 }
 ```
 
-### Responsive columns
+## Before finishing
 
-```tsx
-import { Box, HGrid } from '@navikt/ds-react';
-
-export function TwoColumnLayout({
-  left,
-  right
-}: {
-  left: React.ReactNode;
-  right: React.ReactNode;
-}) {
-  return (
-    <HGrid columns={{ xs: 1, md: 2 }} gap="space-6">
-      <Box>{left}</Box>
-      <Box>{right}</Box>
-    </HGrid>
-  );
-}
-```
-
-## Avoid
-
-```tsx
-// Avoid Tailwind spacing utilities on Aksel components
-<Box className="p-4 md:p-6 mb-4" />
-
-// Prefer Aksel spacing props
-<Box padding={{ xs: 'space-4', md: 'space-6' }} marginBlock="space-4" />
-```
-
-```tsx
-// Avoid renaming translation ids in a visual only task
-<FormattedMessage id="existing.key" />
-```
-
-## Do not do these things
-
-- Do not start an Aksel v8 migration
-- Do not invent a new design direction if the task is only implementation focused
-- Do not pull visual decisions from Figma unless the task explicitly asks for design alignment
-- Do not rename `react-intl` ids casually
-- Do not rewrite unrelated components in the same area
-
-## Testing and validation
-
-- Add or update the smallest relevant test when the change affects behavior or regression risk.
-- If the task is purely visual and the repo has no useful test pattern for that change, say so clearly instead of inventing a heavy test setup.
-- Mention which files were changed and which checks were run.
-
-## Expected output
-
-When you answer:
-
-1. Keep the change scoped to the task
-2. Reuse existing repo patterns
-3. Call out any assumptions
-4. Mention validation or missing validation clearly
+Add `{component-name}.test.tsx`, then confirm: spacing via `space-` token-props (no Tailwind
+spacing); Aksel primitives over raw `<div>`; mobile-first responsive props; v8 patterns
+(`data-color`, `borderRadius` scale, `background` without `surface-`); every component, prop,
+token and icon verified via MCP; accessible markup (heading levels, labels); TypeScript props;
+component exported.
