@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### React Router 7.18.2 security follow up (2026-08-03)
+
+- Løftet `react-router` og `react-router-dom` fra `7.18.0` til `7.18.2` som en smal oppfølging for den åpne `react-router`-advisoryen, uten å starte den større `v8`-migreringen i samme pass.
+- Kjørte løftet som en bevisst exception til repoets `npmMinimalAgeGate: 7d`, siden `7.18.2` ble publisert 28.07.2026 og brukeren ønsket å ta den inn før cooldown-vinduet var helt ute.
+- Lot resten av `react-router`-migreringsvurderingen stå uendret. Appen bruker fortsatt declarative routing på `7.x`, og en eventuell overgang til `8.x` blir fortsatt et eget spor med importopprydding fra `react-router-dom` og kontroll av Sentry-routingintegrasjonen.
+
 ### webpack-dev-server 6 uten React Fast Refresh (2026-08-03)
 
 - Løftet `webpack-dev-server` fra `5.2.6` til `6.0.0` etter at repoets Node-baseline allerede var flyttet til `22.22.3`.
