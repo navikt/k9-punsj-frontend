@@ -9,8 +9,6 @@ import path, { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
-
 const webpackConfig = {
     entry: [`${__dirname}/../../app/App.tsx`],
     output: {
@@ -32,9 +30,6 @@ const webpackConfig = {
                 use: [
                     {
                         loader: 'babel-loader',
-                        options: {
-                            plugins: [isDevelopment && 'react-refresh/babel'].filter(Boolean),
-                        },
                     },
                 ],
             },
