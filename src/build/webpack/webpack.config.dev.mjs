@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -29,7 +28,6 @@ webpackConfig.plugins.push(
     new HtmlWebpackHarddiskPlugin({
         outputPath: path.resolve(__dirname, '../../../dist'),
     }),
-    new ReactRefreshWebpackPlugin(),
     new webpack.EnvironmentPlugin({ MSW_MODE: 'development' }),
 );
 

@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### webpack-dev-server 6 uten React Fast Refresh (2026-08-03)
+
+- Løftet `webpack-dev-server` fra `5.2.6` til `6.0.0` etter at repoets Node-baseline allerede var flyttet til `22.22.3`.
+- Fjernet `@pmmmwh/react-refresh-webpack-plugin` og `react-refresh`, og tok samtidig bort `react-refresh/babel` og plugin-hooken i webpack dev-configen.
+- Bakgrunnen er at `react-refresh-webpack-plugin` fortsatt dokumenterer støtte for `webpack-dev-server` `4.8+` og `5.x`, mens `webpack-dev-server@6` har fjernet SockJS-transporten som pluginen prøver å koble seg mot i denne setupen. Dev-serveren kjøres derfor videre uten Fast Refresh, men med stabil vanlig reload.
+
 ### Node 22 baseline i CI og repo-workflows (2026-08-03)
 
 - Løftet GitHub Actions-workflows fra `node-version: 20.x` til `22.22.3`, slik at CI-baselinen følger repoets valgte Node 22-spor og ikke lenger ligger bak produksjonsruntime på Node 22.
