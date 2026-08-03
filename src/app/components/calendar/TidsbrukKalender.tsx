@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import dayjs from 'dayjs';
@@ -60,13 +60,13 @@ export const TidsbrukKalender = ({
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('keyup', onKeyUp);
         };
-    }, []);
+    }, [setSelectedDates]);
 
     const toggleKalender = () => {
         setVisKalender(!visKalender);
     };
 
-    const formatDate = (date: string | Date) => dayjs(date).format('YYYY-MM-DD');
+    const formatDate = useCallback((date: string | Date) => dayjs(date).format('YYYY-MM-DD'), []);
 
     const datoerIGyldigePerioder = useMemo(
         () =>
@@ -75,7 +75,7 @@ export const TidsbrukKalender = ({
                     Array.from(getDatesInDateRange(gyldigPeriode)).map(formatDate),
                 ),
             ),
-        [gyldigePerioder],
+        [gyldigePerioder, formatDate],
     );
     const disabledDates = useMemo(() => {
         if (!førsteGyldigePeriode) {
@@ -124,7 +124,7 @@ export const TidsbrukKalender = ({
             kalenderdager
                 ?.map((kalenderdag) => formatDate(kalenderdag.date))
                 .filter((date) => datoerIGyldigePerioder.has(date)),
-        [kalenderdager, datoerIGyldigePerioder],
+        [kalenderdager, datoerIGyldigePerioder, formatDate],
     );
     const valgteDagerIMåned = useMemo(
         () =>

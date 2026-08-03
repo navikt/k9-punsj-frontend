@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
@@ -53,7 +53,7 @@ const TidsbrukKalenderContainer = ({
                 .sort((a, b) => (a.fom > b.fom ? 1 : -1)),
         [dateRanges],
     );
-    const formatDate = (date: string | Date) => dayjs(date).format('YYYY-MM-DD');
+    const formatDate = useCallback((date: string | Date) => dayjs(date).format('YYYY-MM-DD'), []);
     const clearSelectedDates = () => {
         setSelectedDates([]);
     };
@@ -89,11 +89,11 @@ const TidsbrukKalenderContainer = ({
     );
     const datoerIGyldigePerioder = useMemo(
         () => new Set(dateRanges.flatMap((dateRange) => getDatesInDateRange(dateRange).map(formatDate))),
-        [dateRanges],
+        [dateRanges, formatDate],
     );
     const datoerMedInnhold = useMemo(
         () => new Set(kalenderdager.map((kalenderdag) => formatDate(kalenderdag.date))),
-        [kalenderdager],
+        [kalenderdager, formatDate],
     );
     const someSelectedDaysHaveContent = selectedDates.some((selectedDate) =>
         datoerMedInnhold.has(formatDate(selectedDate)),
