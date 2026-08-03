@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 
-import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
-import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
+import { getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
 import DateRange from '../../models/types/DateRange';
 import CalendarGrid from './CalendarGrid';
 
@@ -19,28 +17,25 @@ export interface ModalContentProps {
 
 interface OwnProps {
     gyldigePerioder: DateRange[];
-    ModalContent: React.ReactElement<ModalContentProps>;
-    slettPeriode: (dates?: Date[]) => void;
     disableWeekends?: boolean;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
     kalenderdager?: KalenderDag[];
     tittelRenderer?: (date: Date) => React.ReactNode;
+    selectedDates: Date[];
+    setSelectedDates: React.Dispatch<React.SetStateAction<Date[]>>;
 }
 
 export const TidsbrukKalender = ({
     gyldigePerioder,
-    ModalContent,
-    slettPeriode,
     dateContentRenderer,
     kalenderdager,
     disableWeekends = true,
     tittelRenderer = getMonthAndYear,
+    selectedDates,
+    setSelectedDates,
 }: OwnProps) => {
-    const kalenderRef = useRef<HTMLDivElement>(null);
     const [shiftKeydown, setShiftKeydown] = useState(false);
-    const [selectedDates, setSelectedDates] = useState<Date[]>([]);
     const [visKalender, setVisKalender] = useState<boolean>(false);
-    const [visModal, setVisModal] = useState<boolean>(false);
     const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
     const førsteGyldigePeriode = gyldigePerioder[0];
 
@@ -67,34 +62,9 @@ export const TidsbrukKalender = ({
         };
     }, []);
 
-    const clearSelectedDates = () => {
-        setSelectedDates([]);
-    };
-
     const toggleKalender = () => {
         setVisKalender(!visKalender);
-        if (selectedDates.length) {
-            setSelectedDates([]);
-        }
     };
-
-    useOnClickOutside(kalenderRef, (event) => {
-        if (visModal) {
-            return;
-        }
-
-        const target = event.target;
-        if (!(target instanceof Element)) {
-            clearSelectedDates();
-            return;
-        }
-
-        if (!target.closest('.exempt-from-click-outside, .ReactModal__Overlay')) {
-            clearSelectedDates();
-        }
-    });
-
-    const toggleModal = () => setVisModal(!visModal);
 
     const formatDate = (date: string | Date) => dayjs(date).format('YYYY-MM-DD');
 
@@ -124,17 +94,17 @@ export const TidsbrukKalender = ({
     }, [førsteGyldigePeriode, gyldigePerioder, disableWeekends]);
 
     const toggleDay = (date: Date) => {
-        if (selectedDates.some((v) => dayjs(v).isSame(date))) {
-            setSelectedDates(selectedDates.filter((v) => !dayjs(v).isSame(date)));
-        } else {
-            setSelectedDates([...selectedDates, date]);
-        }
+        setSelectedDates((currentSelectedDates) =>
+            currentSelectedDates.some((v) => dayjs(v).isSame(date))
+                ? currentSelectedDates.filter((v) => !dayjs(v).isSame(date))
+                : [...currentSelectedDates, date],
+        );
         setPreviouslySelectedDate(date);
     };
 
     const selectDates = (dates: Date[]) => {
-        setSelectedDates(
-            uniq([...selectedDates, ...dates]).filter((date) =>
+        setSelectedDates((currentSelectedDates) =>
+            uniq([...currentSelectedDates, ...dates]).filter((date) =>
                 disabledDates.every((disabledDate) => !dayjs(disabledDate).isSame(date)),
             ),
         );
@@ -149,16 +119,6 @@ export const TidsbrukKalender = ({
         selectDates(getDatesInDateRange({ fom: dates[0], tom: dates[1] }));
     };
 
-    const someSelectedDaysHaveContent = kalenderdager
-        ?.map((kalenderdag) => dayjs(kalenderdag.date).format(formats.DDMMYYYY))
-        .some((date) =>
-            selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date),
-        );
-    const hasSelectedDisabledDate = disabledDates
-        .map((date) => dayjs(date).format(formats.DDMMYYYY))
-        .some((date) =>
-            selectedDates.map((selectedDate) => dayjs(selectedDate).format(formats.DDMMYYYY)).includes(date),
-        );
     const kalenderdagerIGyldigePerioder = useMemo(
         () =>
             kalenderdager
@@ -166,9 +126,13 @@ export const TidsbrukKalender = ({
                 .filter((date) => datoerIGyldigePerioder.has(date)),
         [kalenderdager, datoerIGyldigePerioder],
     );
-
-    const kanRegistrereTid = !!selectedDates.length && !hasSelectedDisabledDate && !someSelectedDaysHaveContent;
-    const kanSletteTid = selectedDates.length > 0 && someSelectedDaysHaveContent;
+    const valgteDagerIMåned = useMemo(
+        () =>
+            selectedDates.filter((date) =>
+                førsteGyldigePeriode ? dayjs(date).isSame(førsteGyldigePeriode.fom, 'month') : false,
+            ),
+        [førsteGyldigePeriode, selectedDates],
+    );
 
     if (!førsteGyldigePeriode) {
         return null;
@@ -190,7 +154,6 @@ export const TidsbrukKalender = ({
             open={visKalender}
             onToggle={toggleKalender}
             aria-labelledby={førsteGyldigePeriode.fom.toISOString()}
-            ref={kalenderRef}
             className="mt-3"
         >
             <ExpansionCard.Header>
@@ -207,49 +170,14 @@ export const TidsbrukKalender = ({
                             dateContentRenderer={dateContentRenderer}
                             selectedDates={selectedDates}
                         />
-                        <div style={{ marginTop: '1.875rem' }}>
-                            <Button
-                                variant="primary"
-                                style={{ display: kanRegistrereTid ? 'inherit' : 'none' }}
-                                onClick={toggleModal}
-                            >
-                                Registrer tid
-                            </Button>
-                            {kanSletteTid && (
-                                <Button
-                                    icon={<TrashIcon />}
-                                    size="small"
-                                    variant="tertiary"
-                                    className="slett"
-                                    onClick={() => {
-                                        slettPeriode(selectedDates);
-                                        clearSelectedDates();
-                                    }}
-                                >
-                                    Slett registrert tid
-                                </Button>
-                            )}
-                        </div>
-                        <Provider rootElement={kalenderRef.current || undefined}>
-                            <Modal
-                                className="venstrestilt max-w-112.5 exempt-from-click-outside"
-                                open={visModal}
-                                onClose={() => {
-                                    setVisModal(false);
-                                    clearSelectedDates();
-                                }}
-                                aria-label="Modal"
-                            >
-                                <Modal.Body>
-                                    {visModal &&
-                                        React.cloneElement<ModalContentProps>(ModalContent, {
-                                            selectedDates,
-                                            toggleModal,
-                                            clearSelectedDates,
-                                        })}
-                                </Modal.Body>
-                            </Modal>
-                        </Provider>
+                        {selectedDates.length > 0 && (
+                            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                                {valgteDagerIMåned.length > 0 && (
+                                    <BodyShort>{`Valgt i denne måneden: ${valgteDagerIMåned.length} ${valgteDagerIMåned.length === 1 ? 'dag' : 'dager'}`}</BodyShort>
+                                )}
+                                <BodyShort>Fortsett nederst for å registrere</BodyShort>
+                            </div>
+                        )}
                     </div>
                 )}
             </ExpansionCard.Content>

@@ -5,24 +5,24 @@ import { ExpansionCard, Heading } from '@navikt/ds-react';
 import { KalenderDag } from 'app/models/KalenderDag';
 import DateRange from 'app/models/types/DateRange';
 
-import TidsbrukKalender, { type ModalContentProps } from './TidsbrukKalender';
+import TidsbrukKalender from './TidsbrukKalender';
 
 type Props = {
     aar: number;
     perioder: DateRange[][];
     kalenderdager: KalenderDag[];
-    ModalContent: React.ReactElement<ModalContentProps>;
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
-    slettPeriode: (dates?: Date[]) => void;
+    selectedDates: Date[];
+    setSelectedDates: React.Dispatch<React.SetStateAction<Date[]>>;
 };
 
 const TidsbrukKalenderÅr = ({
     aar,
     perioder,
-    ModalContent,
     dateContentRenderer,
     kalenderdager,
-    slettPeriode,
+    selectedDates,
+    setSelectedDates,
 }: Props) => {
     const [ekspandert, setEkspandert] = useState<boolean>(false);
     const toggleEkspandert = () => {
@@ -45,10 +45,10 @@ const TidsbrukKalenderÅr = ({
                             <div key={periode?.[0].fom.toString()}>
                                 <TidsbrukKalender
                                     gyldigePerioder={periode}
-                                    ModalContent={ModalContent}
                                     dateContentRenderer={dateContentRenderer}
                                     kalenderdager={filteredKalenderdager}
-                                    slettPeriode={slettPeriode}
+                                    selectedDates={selectedDates}
+                                    setSelectedDates={setSelectedDates}
                                 />
                             </div>
                         );
