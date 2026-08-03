@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Node 22 baseline i CI og repo-workflows (2026-08-03)
+
+- Løftet GitHub Actions-workflows fra `node-version: 20.x` til `22.22.3`, slik at CI-baselinen følger repoets valgte Node 22-spor og ikke lenger ligger bak produksjonsruntime på Node 22.
+- Oppdaterte den tilhørende Copilot-tasknoten for package maintenance, siden `webpack-dev-server@6` ikke lenger er blokkert av den gamle Node 20-baselinen i CI. Selve dev-server-løftet holdes fortsatt som en separat oppfølging.
+
 ### Kritiske security overrides for tar og websocket-driver (2026-07-30)
 
 - La inn målrettede `resolutions` for `tar@7.5.21` og `websocket-driver@0.7.5` for å lukke to åpne kritiske advisories i transitive dependencies, uten å dra inn bredere oppgraderinger i build- eller dev-server-stakken.

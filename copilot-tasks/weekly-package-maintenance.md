@@ -82,7 +82,7 @@ Suggested starter prompt:
 - Keep `webpack` pinned to `5.107.0` until the PSB country-list regression is resolved. `5.107.2` and `5.108.3` can emit `i18n-iso-countries/codes.json` as an empty payload in production style bundles.
 - For future `webpack` updates, do not rely only on local dev or a successful local build. Verify in Q or another production-like environment that PSB countries are shown for `utenlandsopphold`, and explicitly check that the country dropdown is populated.
 - Avoid forcing transitive major jumps through broad `resolutions`. A previous `uuid@npm:^8.3.2 -> 14.0.1` override looked tidy in `yarn why`, but it overrode `sockjs` onto a different major than requested.
-- Do not attempt `webpack-dev-server@6` inside the normal weekly pass while the repo baseline and CI still target Node `20.x`. Treat that upgrade as a separate task that first decides the repo Node baseline, then rechecks Fast Refresh and the custom dev server startup script.
+- The repo baseline and CI now target Node `22.22.3`, so `webpack-dev-server@6` is no longer blocked by the old Node `20.x` floor. Keep that upgrade as a separate task anyway, and recheck Fast Refresh plus the custom dev server startup script before merging it.
 - Current targeted security overrides that should be revisited in later runs are `form-data@4.0.6`, `http-proxy-middleware@2.0.10`, `undici@6.27.0`, and `@opentelemetry/core@2.8.0`. Remove them once the graph naturally resolves to equal or newer safe versions.
 - Recheck whether a direct bump of `@sentry/cli` can replace the temporary `undici` override after the newer CLI version is outside the 7 day cooldown window.
 - `npm view` for some `@navikt/*` packages can return `401` from the configured registry in this shell.
