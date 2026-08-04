@@ -2,11 +2,10 @@ import React from 'react';
 
 import { FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading } from '@navikt/ds-react';
+import { Box, Button, Heading, VStack } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
-import VerticalSpacer from 'app/components/VerticalSpacer';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import Utenlandsopphold from './Utenlandsopphold';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
@@ -42,29 +41,29 @@ const UtenlandsoppholdContainer = () => {
                 checked={values.metadata.harUtenlandsopphold}
             />
             {values.metadata.harUtenlandsopphold === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="8" background="neutral-soft" className="mt-4">
+                <div className="mt-4">
                     <FieldArray
                         name="utenlandsopphold"
                         render={(arrayHelpers) => (
-                            <>
+                            <VStack gap="space-16">
                                 {values.utenlandsopphold?.map((_, index) => (
                                     <Utenlandsopphold key={index} arrayHelpers={arrayHelpers} fieldArrayIndex={index} />
                                 ))}
 
-                                <VerticalSpacer sixteenPx />
-
-                                <Button
-                                    variant="tertiary"
-                                    size="small"
-                                    onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<PlusCircleIcon />}
-                                >
-                                    <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
-                                </Button>
-                            </>
+                                <div className="flex flex-wrap">
+                                    <Button
+                                        variant="tertiary"
+                                        size="small"
+                                        onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
+                                        icon={<PlusCircleIcon />}
+                                    >
+                                        <FormattedMessage id="skjema.utenlandsopphold.utenlandsoppholdContainer.leggTil.btn" />
+                                    </Button>
+                                </div>
+                            </VStack>
                         )}
                     />
-                </Box>
+                </div>
             )}
         </Box>
     );

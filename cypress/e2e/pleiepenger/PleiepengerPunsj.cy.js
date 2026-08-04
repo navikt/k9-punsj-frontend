@@ -76,7 +76,7 @@ describe('Pleiepenger punsj', () => {
                 .clear({ force: true })
                 .type('11.11.21');
 
-            cy.findByRole('button', { name: /Legg til periode/i }).click();
+            cy.findByRole('button', { name: /Legg til ny periode/i }).click();
 
             cy.findAllByLabelText(/Fra og med/i)
                 .eq(1)

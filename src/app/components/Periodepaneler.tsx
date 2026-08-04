@@ -2,9 +2,9 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Button } from '@navikt/ds-react';
+import { Box, Button, VStack } from '@navikt/ds-react';
 
-import { PeriodInput } from 'app/components/period-input/PeriodInput';
+import Periodevelger from 'app/components/period-input/Periodevelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { GetErrorMessage, GetUhaandterteFeil } from 'app/models/types';
 import { createPeriodInputIds, periodKeyFromPeriode } from 'app/søknader/pleiepenger/utils/errorAnchorUtils';
@@ -106,82 +106,93 @@ export const Periodepaneler: React.FC<Props> = ({
     };
 
     return (
-        <Box padding="space-16" borderRadius="8" background="neutral-soft" className="periodepanel">
-            {localPeriods.map((p, i) => {
-                const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
-                const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
+        <div className="periodepanel">
+            <VStack gap="space-16">
+                {localPeriods.map((p, i) => {
+                    const periodKey = periodKeyFromPeriode({ fom: p.fom, tom: p.tom });
+                    const periodInputIds = createPeriodInputIds(feilkodeprefiks, periodKey, `index-${i}`);
 
-                return (
-                    <div className="flex items-start" key={(p as any).__clientId || i} data-testid={`periodpaneler_${i}`}>
-                        <PeriodInput
-                            periode={p || {}}
-                            intl={intl}
-                            onChange={(periode) => {
-                                if (editSoknadState) {
-                                    editSoknadState(editPeriode(i, periode));
+                    return (
+                        <Box
+                            key={(p as any).__clientId || i}
+                            padding="space-16"
+                            borderRadius="8"
+                            background="neutral-soft"
+                            data-testid={`periodpaneler_${i}`}
+                        >
+                            <Periodevelger
+                                periode={p || {}}
+                                intl={intl}
+                                onChange={(periode) => {
+                                    if (editSoknadState) {
+                                        editSoknadState(editPeriode(i, periode));
+                                    }
+                                }}
+                                onBlur={(periode) => editSoknad(editPeriode(i, periode))}
+                                errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
+                                errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
+                                errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
+                                inputIdFom={periodInputIds.fomId}
+                                inputIdTom={periodInputIds.tomId}
+                                action={
+                                    <Button
+                                        id="slett"
+                                        className={
+                                            getErrorMessage!(feilkodeprefiks!, i)
+                                                ? 'fjern-feil '
+                                                : 'slett-knapp-med-icon-for-input'
+                                        }
+                                        type="button"
+                                        onClick={() => {
+                                            const newArray: IPeriode[] = removeItem(i);
+                                            if (editSoknadState) {
+                                                editSoknadState(newArray);
+                                            }
+                                            editSoknad(newArray);
+                                            if (onRemove) {
+                                                onRemove();
+                                            }
+                                        }}
+                                        icon={<TrashIcon title="slettPeriode" />}
+                                        variant="tertiary"
+                                        data-color="danger"
+                                    >
+                                        <FormattedMessage id={textFjern || 'skjema.perioder.fjern'} />
+                                    </Button>
                                 }
-                            }}
-                            onBlur={(periode) => editSoknad(editPeriode(i, periode))}
-                            errorMessage={feilkodeprefiks && getErrorMessage!(`${feilkodeprefiks}.perioder[${i}]`, i)}
-                            errorMessageFom={getErrorMessage!(`[${i}].periode.fom`, i)}
-                            errorMessageTom={getErrorMessage!(`[${i}].periode.tom`, i)}
-                            inputIdFom={periodInputIds.fomId}
-                            inputIdTom={periodInputIds.tomId}
-                        />
-
+                            />
+                        </Box>
+                    );
+                })}
+                {feilkodeprefiks && (
+                    <UhaanderteFeilmeldinger
+                        getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
+                    />
+                )}
+                {kanHaFlere && (
+                    <div className="flex flex-wrap">
                         <Button
-                            id="slett"
-                            className={
-                                getErrorMessage!(feilkodeprefiks!, i) ? 'fjern-feil ' : 'slett-knapp-med-icon-for-input'
-                            }
+                            id="leggtilperiode"
                             type="button"
                             onClick={() => {
-                                const newArray: IPeriode[] = removeItem(i);
+                                const newArray: IPeriode[] = addItem();
                                 if (editSoknadState) {
                                     editSoknadState(newArray);
                                 }
                                 editSoknad(newArray);
-                                if (onRemove) {
-                                    onRemove();
+                                if (onAdd) {
+                                    onAdd();
                                 }
                             }}
-                            icon={<TrashIcon title="slettPeriode" />}
+                            icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                            size="small"
                             variant="tertiary"
                         >
-                            <FormattedMessage id={textFjern || 'skjema.liste.fjern'} />
+                            <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
                         </Button>
                     </div>
-                );
-            })}
-            {feilkodeprefiks && (
-                <UhaanderteFeilmeldinger
-                    getFeilmeldinger={() => (getUhaandterteFeil && getUhaandterteFeil(feilkodeprefiks)) || []}
-                />
-            )}
-            {kanHaFlere && (
-                <div className="flex flex-wrap">
-                    <Button
-                        id="leggtilperiode"
-                        className="leggtilperiode"
-                        type="button"
-                        onClick={() => {
-                            const newArray: IPeriode[] = addItem();
-                            if (editSoknadState) {
-                                editSoknadState(newArray);
-                            }
-                            editSoknad(newArray);
-                            if (onAdd) {
-                                onAdd();
-                            }
-                        }}
-                        icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
-                        size="small"
-                        variant="tertiary"
-                    >
-                        <FormattedMessage id={textLeggTil || 'skjema.periodepanel.legg_til'} />
-                    </Button>
-                </div>
-            )}
-        </Box>
+                )}
+            </VStack>
+        </div>
     );
 };

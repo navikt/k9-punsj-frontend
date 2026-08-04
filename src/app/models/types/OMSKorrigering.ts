@@ -1,4 +1,5 @@
 import { KorrigeringAvInntektsmeldingFormValues } from 'app/søknader/korrigeringAvInntektsmelding/types/KorrigeringAvInntektsmeldingFormFieldsValues';
+import { normaliserDelvisFraværTimer } from 'app/søknader/korrigeringAvInntektsmelding/tidUtils';
 
 import { IPeriode } from './Periode';
 
@@ -10,28 +11,38 @@ export interface Fravaersperioder {
 const lagFraværsperioder = (values: KorrigeringAvInntektsmeldingFormValues) => {
     const fraværsperioder: Fravaersperioder[] = [];
 
-    if (values.Trekkperioder.length > 0 && values.Trekkperioder[0].fom) {
+    if (values.Trekkperioder.length > 0) {
         values.Trekkperioder.forEach((trekkperiode) => {
+            if (!trekkperiode.fom) {
+                return;
+            }
+
             fraværsperioder.push({
                 periode: trekkperiode,
                 faktiskTidPrDag: '0',
             });
         });
     }
-    if (values.PerioderMedRefusjonskrav.length > 0 && values.PerioderMedRefusjonskrav[0].fom) {
+    if (values.PerioderMedRefusjonskrav.length > 0) {
         values.PerioderMedRefusjonskrav.forEach((periodeMedRefusjonskrav) => {
+            if (!periodeMedRefusjonskrav.fom) {
+                return;
+            }
+
             fraværsperioder.push({
                 periode: periodeMedRefusjonskrav,
                 faktiskTidPrDag: null,
             });
         });
     }
-    if (values.DagerMedDelvisFravær.length > 0 && values.DagerMedDelvisFravær[0].dato) {
+    if (values.DagerMedDelvisFravær.length > 0) {
         values.DagerMedDelvisFravær.forEach((dagMedDelvisFravær) => {
-            if (dagMedDelvisFravær.dato || dagMedDelvisFravær.timer) {
+            const normalisertTimer = normaliserDelvisFraværTimer(dagMedDelvisFravær.timer);
+
+            if (dagMedDelvisFravær.dato && normalisertTimer) {
                 fraværsperioder.push({
                     periode: { fom: dagMedDelvisFravær.dato, tom: dagMedDelvisFravær.dato },
-                    faktiskTidPrDag: dagMedDelvisFravær.timer,
+                    faktiskTidPrDag: normalisertTimer,
                 });
             }
         });

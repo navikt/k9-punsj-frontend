@@ -125,7 +125,7 @@ const ArbeidstidPeriodeListe = (props: Props) => {
                                     }}
                                     icon={<PlusCircleIcon />}
                                 >
-                                    Legg til periode
+                                    Legg til ny periode
                                 </Button>
                             </div>
                             <div style={{ display: 'flex' }}>

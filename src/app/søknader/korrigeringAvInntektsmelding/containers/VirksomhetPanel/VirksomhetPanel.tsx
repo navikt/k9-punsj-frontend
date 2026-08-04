@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Box, Fieldset, Heading, Label, Link, Select, TextField } from '@navikt/ds-react';
+import { Box, Heading, Label, Link, Select, TextField, VStack } from '@navikt/ds-react';
 
 import { finnArbeidsgivere } from 'app/api/api';
 import Feilmelding from 'app/components/Feilmelding';
@@ -20,8 +20,6 @@ import {
     KorrigeringAvInntektsmeldingFormValues,
 } from '../../types/KorrigeringAvInntektsmeldingFormFieldsValues';
 import { arbeidsforholdIdFieldId, virksomhetFieldId } from '../formFieldIds';
-
-import './virksomhetPanel.css';
 
 interface Props {
     søkerId: string;
@@ -94,48 +92,51 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
     };
 
     return (
-        <Fieldset
-            legend={
+        <Box padding="space-16" borderWidth="1" borderRadius="8" className="korrigering__seksjon pb-6">
+            <VStack gap="space-16">
                 <Heading size="small" level="3">
                     <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.legend" />
                 </Heading>
-            }
-            className="korrigering__seksjon"
-        >
-            <Box
-                borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel virksomhetPanel"
-            >
-                <Label>Årstallet korrigeringen gjelder for</Label>
-                <TextField
-                    className="w-18 mt-2"
-                    label="Årstallet korrigeringen gjelder for"
-                    hideLabel
-                    onChange={(event) => {
-                        const targetValue = event.target.value;
-                        if (targetValue.length === 4) {
-                            setÅrstallForKorrigering(targetValue);
-                        }
-                    }}
-                />
 
-                {hasFetchArbeidsgiverIdError && (
-                    <div className="virksomhetPanel feilmelding">
-                        <Feilmelding
-                            feil={intlHelper(
-                                intl,
-                                'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
-                            )}
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                        <Label>Årstallet korrigeringen gjelder for</Label>
+                        <TextField
+                            className="w-18 mt-2"
+                            label="Årstallet korrigeringen gjelder for"
+                            hideLabel
+                            onChange={(event) => {
+                                const targetValue = event.target.value;
+                                if (targetValue.length === 4) {
+                                    setÅrstallForKorrigering(targetValue);
+                                }
+                            }}
                         />
                     </div>
+
+                    <Link className="mt-1 shrink-0" href={AAREG_URL}>
+                        <span>
+                            <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
+                        </span>
+
+                        <ExternalLinkIcon />
+                    </Link>
+                </div>
+
+                {hasFetchArbeidsgiverIdError && (
+                    <Feilmelding
+                        feil={intlHelper(
+                            intl,
+                            'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.hasFetchArbeidsgiverIdError',
+                        )}
+                    />
                 )}
 
                 <Field name={KorrigeringAvInntektsmeldingFormFields.Virksomhet}>
                     {({ field, meta }: FieldProps) => (
                         <Select
                             id={virksomhetFieldId}
-                            className="w-64 mt-4"
+                            className="w-64"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.velgVirksomhet',
@@ -160,14 +161,6 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     )}
                 </Field>
 
-                <Link className="eksternLenke" href={AAREG_URL}>
-                    <span>
-                        <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.aaRegisteret" />
-                    </span>
-
-                    <ExternalLinkIcon />
-                </Link>
-
                 <Field
                     name={KorrigeringAvInntektsmeldingFormFields.ArbeidsforholdId}
                     validate={validateArbeidsforholdId}
@@ -175,7 +168,7 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                     {({ field, meta }: FieldProps) => (
                         <Select
                             id={arbeidsforholdIdFieldId}
-                            className="w-64 mt-4"
+                            className="w-64"
                             label={intlHelper(
                                 intl,
                                 'omsorgspenger.korrigeringAvInntektsmelding.korrigerFravaer.arbeidsforholdId',
@@ -210,8 +203,8 @@ const VirksomhetPanel = ({ søkerId }: Props) => {
                         </Select>
                     )}
                 </Field>
-            </Box>
-        </Fieldset>
+            </VStack>
+        </Box>
     );
 };
 

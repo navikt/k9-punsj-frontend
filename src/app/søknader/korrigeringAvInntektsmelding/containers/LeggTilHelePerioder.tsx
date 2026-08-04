@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Box, Fieldset } from '@navikt/ds-react';
+import { Alert, Box, Fieldset, Heading } from '@navikt/ds-react';
 
 import PanelProps from 'app/models/types/korrigeringAvInntektsmelding/Paneler';
 import intlHelper from 'app/utils/intlUtils';
@@ -22,14 +22,13 @@ const LeggTilHelePerioder: React.FC<PanelProps> = ({ isPanelOpen, togglePanel })
                 padding="space-16"
                 borderWidth="1"
                 borderRadius="8"
-                background="neutral-soft"
-                className="korrigering__panelsurface listepanel"
+                className="listepanel"
             >
                 <Fieldset
                     legend={
-                        <h4 className="korrigering-legend">
+                        <Heading size="small" level="3">
                             <FormattedMessage id="omsorgspenger.korrigeringAvInntektsmelding.leggTilHeleDager.legend" />
-                        </h4>
+                        </Heading>
                     }
                     className="korrigering__skjemagruppe"
                 >

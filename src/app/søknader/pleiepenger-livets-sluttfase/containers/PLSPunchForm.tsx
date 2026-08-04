@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiIkkeOpplystRadioGroup } from 'app/components/legacy-form-compat/radio';
-import { Arbeidsforhold, JaNei } from 'app/models/enums';
+import { Arbeidsforhold, FordelingDokumenttype, JaNei } from 'app/models/enums';
 import {
     IInputError,
     ISignaturState,
@@ -60,6 +61,7 @@ import {
 import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 import { IPLSSoknadUt, PLSSoknadUt } from '../types/PLSSoknadUt';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
 import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSoknad';
 import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
@@ -82,6 +84,7 @@ export interface IPunchPLSFormStateProps {
     identState: IIdentState;
     søkersIdent?: string;
     pleietrengendeIdent?: string;
+    k9saksnummer?: string;
 }
 
 export interface IPunchPLSFormDispatchProps {
@@ -199,7 +202,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
     }
 
     componentDidMount(): void {
-        const { id, søkersIdent, pleietrengendeIdent } = this.props;
+        const { id, søkersIdent, k9saksnummer } = this.props;
 
         if (id) {
             this.props.getSoknad(id);
@@ -207,8 +210,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         trackPlsStartedFromJournalpost(this.props.journalpostid);
 
-        if (søkersIdent && pleietrengendeIdent) {
-            this.props.hentPerioder(søkersIdent, pleietrengendeIdent);
+        if (søkersIdent && k9saksnummer) {
+            this.props.hentPerioder(søkersIdent, k9saksnummer);
         }
     }
 
@@ -218,6 +221,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             journalpostid,
             søkersIdent,
             pleietrengendeIdent,
+            k9saksnummer,
             identState,
             setIdentAction,
             hentPerioder,
@@ -240,8 +244,15 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             }
         }
 
+        if (
+            (prevProps.søkersIdent !== søkersIdent || prevProps.k9saksnummer !== k9saksnummer) &&
+            søkersIdent &&
+            k9saksnummer
+        ) {
+            hentPerioder(søkersIdent, k9saksnummer);
+        }
+
         if (!prevProps.søkersIdent && !prevProps.pleietrengendeIdent && søkersIdent && pleietrengendeIdent) {
-            hentPerioder(søkersIdent, pleietrengendeIdent);
             if (!identState.søkerId || !identState.pleietrengendeId) {
                 setIdentAction(søkersIdent, pleietrengendeIdent);
             }
@@ -626,10 +637,12 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
         }
 
-        if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-            if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-                return intlHelper(this.props.intl, 'skjema.feil.ikketom');
-            }
+        if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
+        }
+
+        if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+            return intlHelper(this.props.intl, 'skjema.feil.ikketom');
         }
 
         if (attribute === 'mottattDato' && !!mottattDato && erFremITid(mottattDato)) {
@@ -861,6 +874,8 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 {this.statusetikett()}
 
                 <VerticalSpacer sixteenPx />
+                <PunchFormTitle titleId={FordelingDokumenttype.PLEIEPENGER_I_LIVETS_SLUTTFASE} />
+                <VerticalSpacer sixteenPx />
 
                 <Soknadsperioder
                     updateSoknadState={this.updateSoknadStateCallbackFunction}
@@ -877,6 +892,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
                 <OpplysningerOmPLSSoknad
                     signert={signert}
                     soknad={soknad}
+                    showValidationErrors={this.state.harForsoektAaSendeInn}
                     changeAndBlurUpdatesSoknad={this.changeAndBlurUpdatesSoknad}
                     getErrorMessage={this.getErrorMessage}
                     setSignaturAction={this.props.setSignaturAction}
@@ -1246,6 +1262,11 @@ const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
     const pleietrengendeIdent =
         state.identState.pleietrengendeId ||
         state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad?.pleietrengende?.norskIdent;
+    const k9saksnummer = resolveK9saksnummer(
+        { fagsak: state.fordelingState.fagsak },
+        state.felles.journalpost,
+        state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState.soknad,
+    );
     return {
         punchFormState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.punchFormState,
         signaturState: state.PLEIEPENGER_I_LIVETS_SLUTTFASE.signaturState,
@@ -1253,13 +1274,13 @@ const mapStateToProps = (state: RootStateType): IPunchPLSFormStateProps => {
         identState: state.identState,
         søkersIdent,
         pleietrengendeIdent,
+        k9saksnummer,
     };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
     getSoknad: (id: string) => dispatch(getPLSSoknad(id)),
-    hentPerioder: (søkerId: string, pleietrengendeId: string) =>
-        dispatch(hentPLSPerioderFraK9Sak(søkerId, pleietrengendeId)),
+    hentPerioder: (søkerId: string, saksnummer: string) => dispatch(hentPLSPerioderFraK9Sak(søkerId, saksnummer)),
     updateSoknad: (soknad: Partial<IPLSSoknadUt>) => dispatch(updatePLSSoknad(soknad)),
     validateSoknad: (soknad: IPLSSoknadUt, erMellomlagring?: boolean) =>
         dispatch(validerPLSSoknad(soknad, erMellomlagring)),

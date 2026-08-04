@@ -145,6 +145,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                 <>
                     {harArbeidsgivere && (
                         <SelectFormik
+                            className="max-w-[24rem]"
                             value={selectedArbeidsgiver}
                             label="Velg hvilken arbeidsgiver det gjelder"
                             options={[{ value: '', label: '' }].concat(
@@ -154,6 +155,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                                 })),
                             )}
                             name={`${name}.organisasjonsnummer`}
+                            size="small"
                             onChange={(event) => {
                                 const { value } = event.target;
                                 dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });
@@ -172,6 +174,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     <VerticalSpacer eightPx />
                     {harArbeidsgivere && (
                         <Checkbox
+                            size="small"
                             onChange={() => {
                                 dispatch({
                                     type: ActionType.TOGGLE_GJELDER_ANNEN_ARBEIDSGIVER,
@@ -195,6 +198,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                                     <TextFieldFormik
                                         label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                                         name={`${name}.organisasjonsnummer`}
+                                        size="small"
                                         className="arbeidstaker-organisasjonsnummer"
                                         onChange={(event) => {
                                             const valueWithoutWhitespaces = event.target.value.replace(/\s/g, '');
@@ -232,18 +236,18 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                     )}
                 </>
             )}
-            <div className="flex flex-wrap">
-                <div className="input-row">
-                    {selectedType === 'p' && (
+            {selectedType === 'p' && (
+                <div className="flex flex-wrap">
+                    <div className="input-row">
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.ident')}
                             name={`${name}.norskIdent`}
                             className="arbeidstaker-norskIdent"
                             filterPattern={kunTall}
                         />
-                    )}
+                    </div>
                 </div>
-            </div>
+            )}
             <FraværKalender
                 søknadsperioder={søknadsperioder}
                 updateSoknad={(perioder) => {

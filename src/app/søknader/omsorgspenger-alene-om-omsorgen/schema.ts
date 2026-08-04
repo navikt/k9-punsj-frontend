@@ -7,7 +7,7 @@ const OMPAOSchema = yup.object({
     mottattDato: passertDato,
     klokkeslett: passertKlokkeslettPaaMottattDato,
     periode: yup.object({
-        fom: datoYYYYMMDD,
+        fom: datoYYYYMMDD.label('Søker er alene om omsorgen fra og med'),
     }),
     barn,
 });

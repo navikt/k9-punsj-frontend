@@ -4,7 +4,6 @@ import { IError, Periode } from 'app/models/types';
 import { IInputError } from 'app/models/types/InputError';
 import { convertResponseToError, get, post, put } from 'app/utils';
 
-import { IHentPerioder } from '../../../../models/types/RequestBodies';
 import { ISendSoknad } from '../../../../models/types/SendSoknad';
 import { IPLSSoknad } from '../../types/PLSSoknad';
 import { IPLSSoknadKvittering } from '../../types/IPLSSoknadKvittering';
@@ -381,20 +380,21 @@ export function validerPLSSoknad(soknad: IPLSSoknadUt, erMellomlagring?: boolean
     };
 }
 
-export function hentPLSPerioderFraK9Sak(norskIdent: string, barnIdent: string) {
+export function hentPLSPerioderFraK9Sak(norskIdent: string, saksnummer: string) {
     return (dispatch: any) => {
-        const requestBody: IHentPerioder = {
-            brukerIdent: norskIdent,
-            barnIdent,
-        };
-
         dispatch(hentPLSPerioderRequestAction());
-        post(ApiPath.PLS_K9SAK_PERIODER, {}, { 'X-Nav-NorskIdent': norskIdent }, requestBody, (response, perioder) => {
-            if (response.ok) {
-                return dispatch(hentPLSPerioderSuccessAction(perioder));
-            }
-            return dispatch(hentPLSPerioderErrorAction(response));
-        });
+        post(
+            ApiPath.SAKER_PERIODER + '?saksnummer=' + saksnummer,
+            {},
+            { 'X-Nav-NorskIdent': norskIdent },
+            undefined,
+            (response, perioder) => {
+                if (response.ok) {
+                    return dispatch(hentPLSPerioderSuccessAction(perioder));
+                }
+                return dispatch(hentPLSPerioderErrorAction(response));
+            },
+        );
     };
 }
 

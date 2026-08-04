@@ -49,14 +49,15 @@ const Reisedager = () => {
                                                 fromDate={fromDate}
                                                 toDate={toDate}
                                                 disabled={disabled}
+                                                size="small"
                                             />
                                             {values.kurs.reise.reisedager?.length > 1 && (
                                                 <Button
                                                     variant="tertiary"
                                                     size="small"
-                                                    className="slett-knapp-med-icon"
                                                     onClick={() => remove(reisedagIndex)}
                                                     icon={<TrashIcon title="slett reisedag" />}
+                                                    data-color="danger"
                                                 >
                                                     Fjern reisedag
                                                 </Button>

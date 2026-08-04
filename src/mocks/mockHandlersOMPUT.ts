@@ -19,6 +19,7 @@ const mockHandlersOMPUT = {
                 {
                     soeknadId: '4e177e4d-922d-4205-a3e9-d3278da2abf7',
                     soekerId: '17420373147',
+                    k9saksnummer: '1DMU93M',
                     mottattDato: '10.03.2022',
                     klokkeslett: null,
                     barn: [],
@@ -127,6 +128,7 @@ const mockHandlersOMPUT = {
             {
                 soeknadId: 'bc12baac-0f0c-427e-a059-b9fbf9a3adff',
                 soekerId: '17420373147',
+                k9saksnummer: '1DMU93M',
                 mottattDato: null,
                 klokkeslett: null,
                 barn: [],
@@ -147,6 +149,7 @@ const mockHandlersOMPUT = {
         HttpResponse.json({
             soeknadId: 'a71cdd21-b84c-4fa1-92ae-3ccb45821e5b',
             soekerId: '17420373147',
+            k9saksnummer: '1DMU93M',
             mottattDato: '2020-10-12',
             klokkeslett: '12:53',
             barn: [],
@@ -162,8 +165,8 @@ const mockHandlersOMPUT = {
     ),
 
     oppdater: http.put(ApiPath.OMP_UT_SOKNAD_UPDATE, () => HttpResponse.json({})),
-    ingenEksisterendePerioder: http.post(ApiPath.OMP_UT_K9_PERIODER, () => HttpResponse.json([])),
-    eksisterendePerioderOmsorgspengeutbetaling: http.post(ApiPath.OMP_UT_K9_PERIODER, () =>
+    ingenEksisterendePerioder: http.post(ApiPath.SAKER_PERIODER, () => HttpResponse.json([])),
+    eksisterendePerioderOmsorgspengeutbetaling: http.post(ApiPath.SAKER_PERIODER, () =>
         HttpResponse.json([
             {
                 fom: '2022-09-01',

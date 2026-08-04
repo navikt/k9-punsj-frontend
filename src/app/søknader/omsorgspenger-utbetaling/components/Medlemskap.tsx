@@ -3,15 +3,15 @@ import React, { useEffect } from 'react';
 import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { TrashIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Box, Button, Heading } from '@navikt/ds-react';
+import { Box, Button, Heading, VStack } from '@navikt/ds-react';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiIkkeOpplystRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiIkkeOpplystRadioGroupFormik';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import intlHelper from 'app/utils/intlUtils';
 import { utenlandsoppholdInitialValue } from '../initialValues';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const Medlemskap: React.FC = () => {
     const intl = useIntl();
@@ -40,78 +40,65 @@ const Medlemskap: React.FC = () => {
             />
             <VerticalSpacer twentyPx />
             {values.metadata.medlemskap === JaNeiIkkeOpplyst.JA && (
-                <Box padding="space-16" borderRadius="8" background="neutral-soft">
-                    <FieldArray
-                        name="bosteder"
-                        render={(arrayHelpers) => (
-                            <>
-                                {values.bosteder?.map((_, bostedIndex, array) => (
-                                    <div key={bostedIndex} className="mb-6">
-                                        <div className="flex items-start">
-                                            <DatoInputFormikNew
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.medlemskap.fom.tittel',
-                                                )}
-                                                name={`bosteder[${bostedIndex}].periode.fom`}
-                                            />
-
-                                            <DatoInputFormikNew
-                                                label={intlHelper(
-                                                    intl,
-                                                    'omsorgspenger.utbetaling.medlemskap.tom.tittel',
-                                                )}
-                                                name={`bosteder[${bostedIndex}].periode.tom`}
-                                                className="ml-4"
-                                            />
-
-                                            {array.length > 1 && (
+                <FieldArray
+                    name="bosteder"
+                    render={(arrayHelpers) => (
+                        <VStack gap="space-16">
+                            {values.bosteder?.map((_, bostedIndex, array) => (
+                                <Box key={bostedIndex} padding="space-16" borderRadius="8" background="neutral-soft">
+                                    <PeriodevelgerFormik
+                                        name={`bosteder[${bostedIndex}].periode`}
+                                        size="small"
+                                        action={
+                                            array.length > 1 ? (
                                                 <Button
                                                     variant="tertiary"
-                                                    className="slett-knapp-med-icon-for-input !mt-10"
+                                                    size="small"
+                                                    className="slett-knapp-med-icon-for-input"
                                                     onClick={() => arrayHelpers.remove(bostedIndex)}
                                                     icon={<TrashIcon title="slett periode" />}
-                                                    size="small"
+                                                    data-color="danger"
                                                 >
-                                                    <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.fjernPeriode.btn" />
+                                                    <FormattedMessage id="skjema.perioder.fjern" />
                                                 </Button>
+                                            ) : undefined
+                                        }
+                                    />
+
+                                    <VerticalSpacer sixteenPx />
+
+                                    <div style={{ maxWidth: '25%' }}>
+                                        <Field name={`bosteder[${bostedIndex}].land`}>
+                                            {({ field }: FieldProps<string>) => (
+                                                <CountrySelect
+                                                    label
+                                                    size="small"
+                                                    selectedcountry={field.value}
+                                                    unselectedoption={intlHelper(
+                                                        intl,
+                                                        'omsorgspenger.utbetaling.medlemskap.unselectedoption',
+                                                    )}
+                                                    {...field}
+                                                />
                                             )}
-                                        </div>
-
-                                        <VerticalSpacer sixteenPx />
-
-                                        <div style={{ maxWidth: '25%' }}>
-                                            <Field name={`bosteder[${bostedIndex}].land`}>
-                                                {({ field }: FieldProps<string>) => (
-                                                    <CountrySelect
-                                                        label
-                                                        selectedcountry={field.value}
-                                                        unselectedoption={intlHelper(
-                                                            intl,
-                                                            'omsorgspenger.utbetaling.medlemskap.unselectedoption',
-                                                        )}
-                                                        {...field}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </div>
+                                        </Field>
                                     </div>
-                                ))}
+                                </Box>
+                            ))}
 
-                                <VerticalSpacer sixteenPx />
-
+                            <div className="flex flex-wrap">
                                 <Button
                                     variant="tertiary"
                                     size="small"
                                     onClick={() => arrayHelpers.push(utenlandsoppholdInitialValue)}
-                                    icon={<PlusCircleIcon />}
+                                    icon={<PlusCircleIcon title="legg til periode" />}
                                 >
                                     <FormattedMessage id="omsorgspenger.utbetaling.medlemskap.leggTilPeriode.btn" />
                                 </Button>
-                            </>
-                        )}
-                    />
-                </Box>
+                            </div>
+                        </VStack>
+                    )}
+                />
             )}
         </Box>
     );

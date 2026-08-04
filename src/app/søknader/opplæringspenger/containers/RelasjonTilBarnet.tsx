@@ -21,6 +21,7 @@ const RelasjonTilBarnet = () => {
                 value={values.omsorg.relasjonTilBarnet}
                 label="Relasjon til barnet"
                 name="omsorg.relasjonTilBarnet"
+                size="small"
                 options={Object.values(RelasjonTilBarnetEnum).map((rel) => ({ value: rel, label: rel }))}
             />
 

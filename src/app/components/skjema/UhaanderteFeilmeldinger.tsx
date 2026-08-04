@@ -1,6 +1,5 @@
 import React from 'react';
-
-import Feilmelding from '../Feilmelding';
+import { ErrorMessage } from '@navikt/ds-react';
 
 interface IUhaandterteFeilmeldingerProps {
     getFeilmeldinger: () => (string | undefined)[];
@@ -21,7 +20,11 @@ export default function UhaanderteFeilmeldinger({
                 if (!feilmelding) {
                     return null;
                 }
-                return <Feilmelding key={feilmelding + index} feil={feilmelding} />;
+                return (
+                    <ErrorMessage key={feilmelding + index} showIcon>
+                        {feilmelding}
+                    </ErrorMessage>
+                );
             })}
         </>
     );

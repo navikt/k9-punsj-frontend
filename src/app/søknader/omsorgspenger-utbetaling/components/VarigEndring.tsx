@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Field, FieldProps } from 'formik';
 import { useIntl } from 'react-intl';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import TextAreaFormik from 'app/components/formikInput/TextAreaFormik';
@@ -9,7 +10,6 @@ import TextFieldFormik from 'app/components/formikInput/TextFieldFormik';
 import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
 import { kunTall } from 'app/utils/patterns';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 const VarigEndring: React.FC = () => {
     const intl = useIntl();
@@ -29,9 +29,10 @@ const VarigEndring: React.FC = () => {
                         <>
                             <VerticalSpacer twentyPx />
 
-                            <DatoInputFormikNew
+                            <DatovelgerFormik
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
+                                size="small"
                             />
 
                             <VerticalSpacer twentyPx />

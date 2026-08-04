@@ -12,7 +12,9 @@ import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/Fo
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
+import PunchFormTitle from 'app/components/PunchFormTitle';
 import VentModal from 'app/components/ventModal/VentModal';
+import { FordelingDokumenttype } from 'app/models/enums';
 import { Periode, PersonEnkel } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
@@ -188,6 +190,7 @@ const OMPUTPunchForm: React.FC<Props> = ({
             <JournalposterSync journalposter={values.journalposter} />
             <MellomlagringEtikett lagrer={mellomlagrer} lagret={harMellomlagret} error={!!mellomlagringError} />
             <VStack gap="space-16" className="mt-4">
+                <PunchFormTitle titleId={FordelingDokumenttype.OMSORGSPENGER_UT} />
                 <OpplysningerOmOMPUTSoknad />
 
                 <Box padding="space-16" borderWidth="1" borderRadius="8">

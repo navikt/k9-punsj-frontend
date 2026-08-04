@@ -5,6 +5,7 @@ import { capitalize } from 'lodash';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { PersonPlusIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading, Label } from '@navikt/ds-react';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
@@ -19,7 +20,6 @@ import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
 import Fravaersperiode from './Fravaersperiode';
 import VarigEndring from './VarigEndring';
-import DatoInputFormikNew from 'app/components/formikInput/DatoInputFormikNew';
 
 enum Virksomhetstyper {
     FISKE = 'Fiske',
@@ -112,11 +112,13 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                             </>
                         )}
 
-                        <TextFieldFormik
-                            name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
-                            label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
-                            size="small"
-                        />
+                        <div className="max-w-[24rem]">
+                            <TextFieldFormik
+                                name="opptjeningAktivitet.selvstendigNaeringsdrivende.virksomhetNavn"
+                                label={intlHelper(intl, 'skjema.arbeid.sn.virksomhetsnavn')}
+                                size="small"
+                            />
+                        </div>
 
                         <VerticalSpacer twentyPx />
                     </>
@@ -141,6 +143,7 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                             <div style={{ maxWidth: '25%' }}>
                                 <CountrySelect
                                     label
+                                    size="small"
                                     selectedcountry={field.value}
                                     unselectedoption={intlHelper(
                                         intl,
@@ -207,17 +210,12 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                     <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.startDato.spm'} />
                 </Label>
 
-                <div className="fom-tom-rad">
-                    <DatoInputFormikNew
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                    />
-
-                    <DatoInputFormikNew
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                    />
-                </div>
+                <PeriodevelgerFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
+                    size="small"
+                    labelFom={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    labelTom={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                />
 
                 <VerticalSpacer twentyPx />
 
@@ -245,6 +243,8 @@ const SelvstendigNaeringsdrivende: React.FC = () => {
                 <Heading size="small">
                     <FormattedMessage id={'omsorgspenger.utbetaling.selvstendig.fraværsperioder.tittel'} />
                 </Heading>
+
+                <VerticalSpacer twentyPx />
 
                 <FieldArray
                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.fravaersperioder"

@@ -30,7 +30,12 @@ const LovbestemtFerie = () => {
                 checked={!!values.lovbestemtFerie.length}
             />
             {!!values.lovbestemtFerie.length && (
-                <Periodepaneler fieldName="lovbestemtFerie" periods={values.lovbestemtFerie} kanHaFlere />
+                <Periodepaneler
+                    fieldName="lovbestemtFerie"
+                    periods={values.lovbestemtFerie}
+                    kanHaFlere
+                    separateCards
+                />
             )}
             <VerticalSpacer eightPx />
         </>

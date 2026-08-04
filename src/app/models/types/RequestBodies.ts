@@ -21,11 +21,6 @@ export class SoknadPeriode implements Required<ISoknadPeriode> {
     }
 }
 
-export interface IHentPerioder {
-    brukerIdent: string;
-    barnIdent: string;
-}
-
 export interface ISkalTilK9 {
     brukerIdent: string;
     barnIdent: string | null;

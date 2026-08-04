@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Field, FieldProps, useFormikContext } from 'formik';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Accordion, Alert, Box } from '@navikt/ds-react';
+import { Accordion, Alert, Box, Heading, Label } from '@navikt/ds-react';
 import FraværKalender from 'app/components/fravaer/FraværKalender';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
@@ -18,13 +18,14 @@ import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsd
 import intlHelper from 'app/utils/intlUtils';
 
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
+import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
 import TextAreaFormik from '../../../../components/formikInput/TextAreaFormik';
 import TextFieldFormik from '../../../../components/formikInput/TextFieldFormik';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
-import DatovelgerFormik from '../../../../components/skjema/Datovelger/DatovelgerFormik';
 
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -85,6 +86,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 className="frilanser-startdato"
                 name="opptjeningAktivitet.frilanser.startdato"
                 label={intlHelper(intl, 'skjema.frilanserdato')}
+                size="small"
             />
 
             <Field name="opptjeningAktivitet.frilanser.jobberFortsattSomFrilans">
@@ -103,6 +105,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                     className="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                    size="small"
                     fromDate={
                         values.opptjeningAktivitet.frilanser?.startdato
                             ? new Date(values.opptjeningAktivitet.frilanser.startdato)
@@ -120,11 +123,15 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 <>
                     <div className="arbeidstidInfo">
                         <hr />
-                        <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
+                        <Heading size="small" level="3">
+                            {intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}
+                        </Heading>
                         <Alert size="small" variant="info">
                             {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                         </Alert>
                     </div>
+
+                    <VerticalSpacer sixteenPx />
 
                     <FraværKalender
                         søknadsperioder={søknadsperioder}
@@ -189,6 +196,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                         <TextFieldFormik
                             label={intlHelper(intl, 'skjema.arbeid.arbeidstaker.orgnr')}
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.organisasjonsnummer"
+                            size="small"
                         />
                         {/* feil={getErrorMessage(
                                 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].organisasjonsnummer.valid'
@@ -199,15 +207,20 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                 {!!opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.registrertIUtlandet && (
                     <Field name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.landkode">
                         {({ field, form, meta }: FieldProps<string>) => (
-                            <CountrySelect
-                                selectedcountry={opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.landkode || ''}
-                                label={intlHelper(intl, 'skjema.sn.registrertLand')}
-                                onChange={(event) => {
-                                    form.setFieldValue(field.name, event.target.value);
-                                    form.setFieldTouched(field.name, true);
-                                }}
-                                error={meta.touched && meta.error}
-                            />
+                            <div className="max-w-[24rem]">
+                                <CountrySelect
+                                    selectedcountry={
+                                        opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.landkode || ''
+                                    }
+                                    label={intlHelper(intl, 'skjema.sn.registrertLand')}
+                                    size="small"
+                                    onChange={(event) => {
+                                        form.setFieldValue(field.name, event.target.value);
+                                        form.setFieldTouched(field.name, true);
+                                    }}
+                                    error={meta.touched && meta.error}
+                                />
+                            </div>
                         )}
                     </Field>
                 )}
@@ -233,6 +246,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 <TextFieldFormik
                                     label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførernavn')}
                                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerNavn"
+                                    size="small"
                                     className="regnskapsførerNavn"
                                 />
                             </div>
@@ -243,6 +257,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 <TextFieldFormik
                                     label={intlHelper(intl, 'skjema.arbeid.sn.regnskapsførertlf')}
                                     name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.regnskapsførerTlf"
+                                    size="small"
                                     className="sn-regskasførertlf"
                                     type="number"
                                 />
@@ -253,37 +268,16 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <VerticalSpacer sixteenPx />
 
-                <h3>{intlHelper(intl, 'skjema.arbeid.sn.når')}</h3>
+                <Label size="small">{intlHelper(intl, 'skjema.arbeid.sn.når')}</Label>
 
                 <VerticalSpacer sixteenPx />
 
-                <div className="sn-startdatocontainer">
-                    <DatovelgerFormik
-                        className="fom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom"
-                    />
-
-                    {/* errorMessage={getErrorMessage(
-                            'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder'
-                        )} */}
-
-                    <DatovelgerFormik
-                        className="tom"
-                        label={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
-                        name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.tom"
-                        fromDate={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                        defaultMonth={
-                            opptjeningAktivitet.selvstendigNaeringsdrivende?.info?.periode?.fom
-                                ? new Date(opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode.fom)
-                                : undefined
-                        }
-                    />
-                </div>
+                <PeriodevelgerFormik
+                    name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.periode"
+                    size="small"
+                    labelFom={intlHelper(intl, 'skjema.arbeid.sn.startdato')}
+                    labelTom={intlHelper(intl, 'skjema.arbeid.sn.sluttdato')}
+                />
 
                 <VerticalSpacer sixteenPx />
 
@@ -324,6 +318,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                                 className="endringdato"
                                 label={intlHelper(intl, 'skjema.sn.varigendringdato')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringDato"
+                                size="small"
                             />
                         </div>
                         <VerticalSpacer sixteenPx />
@@ -331,6 +326,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                             <TextFieldFormik
                                 label={intlHelper(intl, 'skjema.sn.endringinntekt')}
                                 name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringInntekt"
+                                size="small"
                                 className="endringinntekt"
                                 type="number"
                             />
@@ -340,6 +336,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
                             label={intlHelper(intl, 'skjema.sn.endringbegrunnelse')}
                             className="endringbegrunnelse"
                             name="opptjeningAktivitet.selvstendigNaeringsdrivende.info.endringBegrunnelse"
+                            size="small"
                         />
                         <VerticalSpacer sixteenPx />
                     </>
@@ -347,8 +344,9 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
 
                 <div className="arbeidstidInfo">
                     <hr />
-                    <h3>{intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}</h3>
-
+                    <Heading size="small" level="3">
+                        {intlHelper(intl, 'skjema.arbeidstid.info.overskrift')}
+                    </Heading>
                     <Alert size="small" variant="info">
                         {intlHelper(intl, 'skjema.arbeidstid.info.olp')}
                     </Alert>

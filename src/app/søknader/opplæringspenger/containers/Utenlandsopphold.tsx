@@ -2,11 +2,10 @@ import React from 'react';
 
 import { Field, FieldArrayRenderProps, FieldProps, useFormikContext } from 'formik';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Button, ErrorMessage } from '@navikt/ds-react';
-import VerticalSpacer from 'app/components/VerticalSpacer';
+import { Box, Button, ErrorMessage } from '@navikt/ds-react';
 import { CountrySelect } from 'app/components/country-select/CountrySelect';
 import { OLPSoknad } from 'app/models/types/OLPSoknad';
-import Periodevelger from 'app/components/skjema/Datovelger/Periodevelger';
+import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import { useDatoRestriksjoner } from 'app/hooks/useTillattePerioder';
 
 interface Props {
@@ -19,50 +18,50 @@ const Utenlandsopphold: React.FC<Props> = ({ arrayHelpers, fieldArrayIndex }: Pr
     const { fromDate, toDate, disabled } = useDatoRestriksjoner();
 
     return (
-        <div>
-            <VerticalSpacer thirtyTwoPx />
-
-            <div className="flex gap-2 justify-between">
-                <div className="flex gap-2">
-                    <Periodevelger
-                        name={`utenlandsopphold[${fieldArrayIndex}].periode`}
-                        fromDate={fromDate}
-                        toDate={toDate}
-                        disabled={disabled}
-                    />
-                </div>
-                {values.utenlandsopphold.length > 1 && (
-                    <div className="block content-center">
+        <Box padding="space-16" borderRadius="8" background="neutral-soft">
+            <PeriodevelgerFormik
+                name={`utenlandsopphold[${fieldArrayIndex}].periode`}
+                fromDate={fromDate}
+                toDate={toDate}
+                disabled={disabled}
+                size="small"
+                action={
+                    values.utenlandsopphold.length > 1 ? (
                         <Button
                             variant="tertiary"
                             size="small"
                             onClick={() => arrayHelpers.remove(fieldArrayIndex)}
                             icon={<TrashIcon />}
-                            className="slett-knapp-med-icon-for-input !mt-10"
+                            className="slett-knapp-med-icon-for-input"
+                            data-color="danger"
                         >
                             Fjern periode
                         </Button>
-                    </div>
-                )}
-            </div>
-
-            <VerticalSpacer sixteenPx />
+                    ) : undefined
+                }
+            />
 
             <div style={{ maxWidth: '50%' }}>
                 <Field name={`utenlandsopphold[${fieldArrayIndex}].land`}>
                     {({ field, meta }: FieldProps<string>) => (
                         <>
-                        <CountrySelect label {...field} selectedcountry={field.value} unselectedoption="Velg land" />
-                        {meta.touched && meta.error && (
-                            <ErrorMessage role="alert" showIcon>
-                                {meta.error}
-                            </ErrorMessage>
-                        )}
+                            <CountrySelect
+                                label
+                                size="small"
+                                {...field}
+                                selectedcountry={field.value}
+                                unselectedoption="Velg land"
+                            />
+                            {meta.touched && meta.error && (
+                                <ErrorMessage role="alert" showIcon>
+                                    {meta.error}
+                                </ErrorMessage>
+                            )}
                         </>
                     )}
                 </Field>
             </div>
-        </div>
+        </Box>
     );
 };
 

@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { IPeriode, Periode } from 'app/models/types';
+import { Periode } from 'app/models/types';
 import { ValideringResponse } from 'app/models/types/ValideringResponse';
 import { get, post, put } from 'app/utils';
 import { manglerK9saksnummerMessage, normalizeK9saksnummer } from 'app/utils/k9saksnummerUtils';
@@ -32,12 +32,14 @@ export const validerSoeknad = async (
     return response.json();
 };
 
-export const hentEksisterendePerioder = async (ident: string, periode?: IPeriode): Promise<Periode[]> => {
+export const hentEksisterendePerioderForSaksnummer = async (
+    ident: string,
+    saksnummer: string,
+): Promise<Periode[]> => {
     const response = await post(
-        ApiPath.OMP_UT_K9_PERIODER,
+        ApiPath.SAKER_PERIODER + '?saksnummer=' + saksnummer,
         {},
         { 'X-Nav-NorskIdent': ident },
-        { brukerIdent: ident, periode },
     );
     if (!response.ok) {
         throw Error('Kunne ikke hente eksisterende perioder');

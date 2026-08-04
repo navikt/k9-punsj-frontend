@@ -2,6 +2,110 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### React Router 7.18.2 security follow up (2026-08-03)
+
+- Løftet `react-router` og `react-router-dom` fra `7.18.0` til `7.18.2` som en smal oppfølging for den åpne `react-router`-advisoryen, uten å starte den større `v8`-migreringen i samme pass.
+- Kjørte løftet som en bevisst exception til repoets `npmMinimalAgeGate: 7d`, siden `7.18.2` ble publisert 28.07.2026 og brukeren ønsket å ta den inn før cooldown-vinduet var helt ute.
+- Lot resten av `react-router`-migreringsvurderingen stå uendret. Appen bruker fortsatt declarative routing på `7.x`, og en eventuell overgang til `8.x` blir fortsatt et eget spor med importopprydding fra `react-router-dom` og kontroll av Sentry-routingintegrasjonen.
+
+### webpack-dev-server 6 uten React Fast Refresh (2026-08-03)
+
+- Løftet `webpack-dev-server` fra `5.2.6` til `6.0.0` etter at repoets Node-baseline allerede var flyttet til `22.22.3`.
+- Fjernet `@pmmmwh/react-refresh-webpack-plugin` og `react-refresh`, og tok samtidig bort `react-refresh/babel` og plugin-hooken i webpack dev-configen.
+- Ryddet samtidig bort stale `resolutions` for gamle `sockjs` og eldre dev-server-paths som ikke lenger finnes i lockfilen etter løftet til `webpack-dev-server@6`.
+- Bakgrunnen er at `react-refresh-webpack-plugin` fortsatt dokumenterer støtte for `webpack-dev-server` `4.8+` og `5.x`, mens `webpack-dev-server@6` har fjernet SockJS-transporten som pluginen prøver å koble seg mot i denne setupen. Dev-serveren kjøres derfor videre uten React Fast Refresh, men med vanlig webpack HMR der det støttes, og full reload som fallback.
+
+### Node 22 baseline i CI og repo-workflows (2026-08-03)
+
+- Løftet GitHub Actions-workflows fra `node-version: 20.x` til `22.22.3`, slik at CI-baselinen følger repoets valgte Node 22-spor og ikke lenger ligger bak produksjonsruntime på Node 22.
+- Oppdaterte den tilhørende Copilot-tasknoten for package maintenance, siden `webpack-dev-server@6` ikke lenger er blokkert av den gamle Node 20-baselinen i CI. Selve dev-server-løftet holdes fortsatt som en separat oppfølging.
+
+### Kritiske security overrides for tar og websocket-driver (2026-07-30)
+
+- La inn målrettede `resolutions` for `tar@7.5.21` og `websocket-driver@0.7.5` for å lukke to åpne kritiske advisories i transitive dependencies, uten å dra inn bredere oppgraderinger i build- eller dev-server-stakken.
+- `tar` løftes her kun som transitiv dependency under `node-gyp`, mens `websocket-driver` løftes for pathene via `sockjs` og `faye-websocket`.
+- Verifiserte etterpå med ny `yarn npm audit` at de to opprinnelige `critical` funnene er borte fra lockfile-grafen, og lot `tar` lande på `7.5.21` fordi `7.5.22` fra 24.07.2026 fortsatt lå innenfor repoets 7 dagers cooldown da oppdateringen ble gjort 30.07.2026.
+
+### Videre dependency alert-opprydding uten major-løft (2026-07-30)
+
+- Løftet `react-router` og `react-router-dom` fra `7.17.0` til `7.18.0`, og `webpack-dev-server` fra `5.2.5` til `5.2.6`, fordi disse versjonene lå utenfor repoets 7 dagers cooldown og lukket åpne advisories uten å kreve nye major-spor.
+- La samtidig inn målrettede `resolutions` for `body-parser`, `fast-uri`, `js-yaml`, `shell-quote` og `svgo`, og tok `brace-expansion` så langt cooldown-vinduet tillot for `1.x`- og `2.x`-pathene.
+- Verifiserte med ny `yarn npm audit` at disse advisories er borte.
+- Lot `react-router` stoppe på `7.18.0` i denne runden. Videre løft til `8.3.0` ble ikke gjort, fordi den åpne advisoriesporet peker på `react-router@8.3.0`, mens `react-router-dom` fortsatt bare finnes på `7.x` i registry. Et slikt løft blir derfor en egen migreringsoppgave med importopprydding og kontroll av `@sentry/react`-integrasjonen, ikke en vanlig dependency-bump.
+- Åpne rester etter passet er dermed `react-router`-sporet som krever egen migrering, `uuid` under `sockjs` der det ikke finnes noen nyere `sockjs`-utgave å løfte til, og `brace-expansion`-fikser som fortsatt lå innenfor cooldown-vinduet da denne runden ble gjort.
+
+### Weekly package maintenance follow up (2026-07-30)
+
+- Løftet et kontrollert sett patch- og minor-oppdateringer i dependency-runden, blant annet rundt `Aksel`, `Faro`, `Sentry`, `react-hook-form`, `react-query`, `Storybook`, `Cypress`, `postcss` og annet frontend-tooling, uten å trekke inn egne major-spor.
+- Tok også med den tilhørende `msw@2.15.0`-oppfølgingen ved å oppdatere generert `mockServiceWorker.js`, inkludert den nye håndteringen for `text/event-stream` i worker-filen.
+- Ryddet samtidig `copilot-tasks/weekly-package-maintenance.md` tilbake til neste kjørbare utgave og presiserte at `yarn test:e2e` skal godkjennes eksplisitt før Copilot kjører den.
+- Lot `webpack-dev-server` bli stående på `5.2.5` i selve denne weekly-runden. `v6` krever en egen oppfølging fordi repoet fortsatt bruker Node `20.x` som baseline i CI og lokal oppstart. Pakken ble senere samme dag løftet videre til `5.2.6` i en egen dependency alert-oppfølging.
+
+### Stabilisering av delvis fravær i korrigering av inntektsmelding (2026-07-07)
+
+- Fikset `Korrigering av inntektsmelding` slik at feltet `Timer` i `delvis fravær` ikke lenger sender ugyldige mellomtilstander som `.` eller andre ufullstendige desimalverdier videre til `PUT /api/omsorgspenger-soknad/oppdater`.
+- La inn lokal validering og serialiseringsguard som holder feltet til timer og desimaltimer i gyldig format, slik at ugyldig mellominput stoppes i frontend i stedet for å gi backend-feil som `Ugyldig tid`.
+- Strammet samtidig inn formatstøtten i feltet til vanlige timer- og desimaltimerverdier, og la til målrettede unit tester for payload-bygging og validering av delvis fravær.
+
+### UI-opprydding i punchskjemaer (2026-07-03)
+
+- La inn felles toppnivå-titler i punchskjemaene basert på samme dokumenttypenavn som i `Fordeling`, blant annet for `PSB`, `PLS`, `OMPKS`, `OMPMA`, `OMPUT`, `OMPAO`, `OLP` og `Korrigering av inntektsmelding`, og strammet samtidig inn vertikal rytme rundt disse overskriftene.
+- Fjernet en ekstra ytre innrykning i `Korrigering av inntektsmelding`, slik at seksjonene flukter bedre med `PSB` i stedet for å se unødvendig innskjøvet ut i formen.
+- Strammet samtidig inn strukturen i `Korrigering av inntektsmelding` ved å la seksjonene styres av felles `VStack`-spacing i stedet for lokale `toggleSection`-marginer og andre eldre layout-hjelpere.
+- Ryddet opp i periodepanelene på tvers av skjemaene, slik at hver periode nå ligger i sin egen `neutral-soft` boks med luft mellom kortene og `Legg til ny periode` utenfor kortflaten. Dette ble brukt i shared `Periodepaneler` og fulgt opp i berørte flyter som `PSB`, `OMPUT`, `Korrigering av inntektsmelding` og øvrige periodebaserte lister.
+- Standardiserte add- og delete-knapper i punchskjemaene mot Aksel `Button`. Gamle link-lignende add-knapper og gammel `slett-knapp-med-icon` ble fjernet, delete-handlinger ble flyttet til `variant="tertiary"` med `data-color="danger"`, og resterende layoutklasse for feltlinjer ble beholdt kun for plassering.
+- Strammet inn `Opplysninger om søknaden`-panelene mot samme visuelle mønster som `PSB`, inkludert manglende seksjonstitler, ens `borderRadius`, jevnere spacing og fjerning av lokal panel-CSS som ikke lenger trengtes.
+- Samlet like `Fjern periode`-tekster på shared `skjema.perioder.fjern`, oppdaterte brukere som tidligere pekte til egne duplikatnøkler i `PSB`, `OMPUT` og `Korrigering av inntektsmelding`, og fjernet overflødige i18n-nøkler fra `nb.json`.
+- Justerte også ikon-only delete-knapper i periodmodals, blant annet `Periode med jobb` i `PSB`, slik at de bruker vanlig Aksel-styling og riktig størrelse i forhold til feltene. `PSB`-lignende periodrader bruker nå standard knappestørrelse, mens `OLP` beholdt `small` der selve periodefeltene også er små.
+- Ryddet videre i `Korrigering av inntektsmelding` ved å gjøre seksjonene `Trekk perioder`, `Refusjon av dag skal endres til timer` og submit-området mer like `PSB`, inkludert jevnere bunnluft, submit-spacing og en feilvisning for `Dato` og `Timer` som nå ligger i en egen reservert meldingsrad i stedet for å dytte kortlayouten ved valideringsfeil.
+- Fulgt opp samme UI-spor i `OMPMA` og `OMPUT` ved å gi `Barn` og `Annen forelder` tydeligere seksjonsrammer, rette opp add-knappplassering og ikonbruk i `Medlemskap` og `Utenlandsopphold`, samt legge inn manglende luft under `Informasjon om fraværsperioder` i frilans- og selvstendig-blokkene. Oppdaterte samtidig en berørt Cypress-selector i `PleiepengerPunsj.cy.js` til nytt knappetekstnivå.
+- Tok deretter et eget oppfølgingspass i `OLP`, der `ferie`, `utenlandsopphold` og `bosted` nå viser én grå kortflate per periode med mellomrom imellom og `Legg til` utenfor kortene. Samtidig ble flere felt i `arbeidsforhold`, `fravær` og omsorgsrelasjon strammet inn til mindre eller mer passende bredder der feltene tidligere ble stående for brede.
+- Harmoniserte også flere enkeltdetaljer i `PSB` og `PLS`, blant annet bredde på `Land`-felt, bredde på `Relasjon til barnet` i `PSB`, og overskriften `Når startet virksomheten?` i shared `arbeidsforhold`, slik at disse feltene følger samme visuelle rytme bedre og ikke ser større ut enn resten av skjemaet.
+
+### Resolution cleanup for transitive uuid major override (2026-07-03)
+
+- Fjernet `uuid@npm:^8.3.2 -> 14.0.1` fra `resolutions`, fordi overstyringen tvang `sockjs` over på en annen major enn pakken selv ba om.
+- Lot root beholde direkte `uuid@14.0.1`, mens `sockjs` igjen resolver sin egen `uuid@8.3.2`. Lokal audit etterpå viste ikke noe nytt `uuid`-varsel.
+- Lot resten av `resolutions` stå urørt i denne runden, fordi de fortsatt oppfører seg som bevisste security- eller lockfile-pins. Åpent audit-spor er fortsatt `webpack-dev-server < 5.2.5`.
+- Løftet samtidig `webpack-dev-server` fra `5.2.4` til `5.2.5` som en separat dev-server oppfølging. `webpack` ble ikke rørt i samme steg, siden PSB-regresjonen fortsatt er knyttet til production bundling på `webpack >= 5.107.2`.
+- La deretter inn målrettede `resolutions` for `form-data@4.0.6`, `http-proxy-middleware@2.0.10`, `undici@6.27.0` og `@opentelemetry/core@2.8.0`, slik at de åpne security-funnene i transitive dev- og observability-spor lukkes uten å presse inn nye direct dependency-bumps.
+- Lot `@sentry/cli` stå på `3.5.1`, fordi `3.6.0` fortsatt lå innenfor repoets 7 dagers cooldown da denne runden ble gjort. `undici` ble derfor løftet via targeted override i stedet for direkte package bump.
+
+### Opprydding i legacy dato og periodeadaptere (2026-06-30)
+
+- Fjernet gamle wrappers som `DatoInputFormikNew`, `NewDateInput`, `PeriodInput`, gammel `PeriodevelgerControlled` og gammel `skjema/Datovelger/Periodevelger`, og samlet aktiv bruk rundt `Datovelger`, `DatovelgerFormik`, `Periodevelger` og `PeriodevelgerFormik`.
+- Flyttet resterende skjemaer over på de aktive adapterne, inkludert berørte flyter i `pleiepenger`, `pleiepenger livets sluttfase`, `omsorgspenger kronisk sykt barn`, `omsorgspenger midlertidig alene`, `omsorgspenger utbetaling`, `opplæringspenger` og `korrigering av inntektsmelding`.
+- Stabiliserte feilvisning for dato, klokkeslett og perioder slik at feltfeil og periodemeldinger vises under feltene uten å dra layouten ut av posisjon, samtidig som submit-drevne backend-feil fortsatt vises i samme flyt.
+
+### Felles k9sak perioder endepunkt for PSB, OLP, PLS og OMP_UT (2026-06-23)
+
+- Flyttet periodoppslagene i `PSB`, `OLP`, `PLS` og `OMP_UT` fra søknadstype-spesifikke `k9sak/info`-endepunkter til ett felles frontend path, `POST /api/k9-punsj/saker/perioder?saksnummer=...`.
+- Frontend bruker nå samme proxy-path for alle disse flytene, mens backend mottar kallene på `POST /api/saker/perioder?saksnummer=...`.
+- Fjernet de gamle route-konstantene og den utgåtte request-bodyen for periodoppslag, siden kallene nå bruker `saksnummer` som query-parameter og `X-Nav-NorskIdent` som header.
+- Oppdaterte testmocks og OMP_UT-korrigeringstesten slik at de følger det nye felles perioder-endepunktet.
+
+### Rollback av buildkjeden etter tom landliste i PSB (2026-06-23)
+
+- Rullet tilbake `@babel/runtime`, sentrale `@babel/*` buildpakker, `webpack` og `terser-webpack-plugin` til de forrige versjonene etter at `PSB` fikk tom landliste i `utenlandsopphold` i bygd runtime.
+- Feilen slo ut ved at `i18n-iso-countries` fortsatt lastet locale-data, men mistet codedata i production bundle, slik at landfeltet bare viste `Velg land`.
+- Verifiserte rollback-sporet med grønn `yarn build`, og deploy-test viste at landlisten kom tilbake.
+
+### Dependency security follow up with safe lockfile fixes (2026-06-18)
+
+- Løftet `js-yaml` til `4.2.0` i `resolutions` og ryddet samtidig flere sårbare transitive avhengigheter i lockfile, blant annet `tar`, `launch-editor`, `ws`, `brace-expansion` og eldre `@babel/core`-grener.
+- Lot `form-data` og `webpack-dev-server` stå urørt i denne runden, fordi fix-versjonene fortsatt ligger innenfor repoets 7 dagers cooldown og derfor krever en eksplisitt security exception hvis de skal tas før vinduet passerer.
+
+### Package updates follow up for missed cooldown eligible bumps (2026-06-18)
+
+- Løftet den åpne Aksel-gruppen fra `8.10.6` til `8.12.1` for `@navikt/aksel`, `@navikt/aksel-icons`, `@navikt/ds-css`, `@navikt/ds-react` og `@navikt/ds-tailwind`, fordi disse versjonene allerede var utenfor repoets 7 dagers cooldown.
+- Tok samtidig opp den åpne patch- og minor-gruppen som var blitt stående igjen, med `storybook`, `@storybook/react`, `@storybook/react-webpack5`, `helmet` og `morgan`.
+- Verifiserte follow up-passet med grønn `yarn lint`, grønn `yarn tsc --noEmit`, grønn `yarn test --maxWorkers=2` og grønn `yarn build`. `yarn test:e2e` ble bevisst ikke kjørt i denne runden.
+
+### Weekly package maintenance: patch + minor + sentry-cli alignment (2026-06-18)
+
+- Løftet et større sett direkte avhengigheter i patch- og minor-pass innenfor repoets 7 dagers cooldown-regel, inkludert blant annet `react`, `react-dom`, `react-router`, `react-router-dom`, `@sentry/react`, `@sentry/cli`, `cypress`, `storybook` og `webpack`.
+- Harmoniserte `@sentry/cli` i `server/package.json` til samme versjon som root-workspace (`3.5.0`) for konsistent deploy- og release-oppsett.
+
 ### tmp security override for CVE-2026-44705 (2026-05-27)
 
 - La inn targeted `resolutions` for `tmp` til `0.2.7`, fordi lockfile fortsatt holdt `0.2.5` mens et nytt path traversal-problem i `prefix` og `postfix` ble publisert samme dag. Dette er en bevisst security exception til repoets normale 7 dagers cooldown.

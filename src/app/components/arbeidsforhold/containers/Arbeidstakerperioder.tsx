@@ -135,12 +135,12 @@ const Arbeidstakerperioder = ({
 
                                 <Button
                                     id="slett"
-                                    className="slett-knapp-med-icon"
                                     type="button"
                                     onClick={() => removeItemHandler(currentItemIndex)}
                                     tabIndex={0}
                                     icon={<TrashIcon title="slett" />}
                                     variant="tertiary"
+                                    data-color="danger"
                                 >
                                     <FormattedMessage id="skjema.arbeid.arbeidstaker.fjernarbeidsgiver" />
                                 </Button>
@@ -175,10 +175,12 @@ const Arbeidstakerperioder = ({
             })}
             <Button
                 id="leggtillisteelementknapp"
-                className="leggtillisteelementknapp"
+                className="mt-4"
                 type="button"
                 onClick={addItemHandler}
                 icon={<PlusCircleIcon title="leggTill" fontSize="2rem" color="#0067C5" />}
+                size="small"
+                variant="tertiary"
             >
                 <FormattedMessage id="skjema.arbeid.arbeidstaker.leggtilperiode" />
             </Button>

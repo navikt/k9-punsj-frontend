@@ -1,14 +1,23 @@
 {
-  "domain": "repo-workflow",
-  "tags": ["git", "commit", "conventional-commits", "workflow", "copilot"],
+  "description": "Generer conventional commit-meldinger med Nav-relevante scopes og breaking change-format",
+  "domain": "general",
+  "tags": ["git", "commit", "conventional-commits", "changelog"],
   "examples": [
     {
-      "prompt": "Suggest a commit message for these staged Copilot setup changes",
-      "scenario": "Repo tooling and Copilot setup"
+      "scenario": "Commit-melding",
+      "prompt": "Lag en commit-melding for endringene mine"
     },
     {
-      "prompt": "Write a dry Norwegian conventional commit for this README and workflow update",
-      "scenario": "Documentation and CI changes"
+      "scenario": "Bugfix-commit",
+      "prompt": "Skriv en conventional commit for denne fiksen"
+    },
+    {
+      "scenario": "Breaking change",
+      "prompt": "Lag en breaking change commit-melding"
+    },
+    {
+      "scenario": "Klassifisering",
+      "prompt": "Hva slags type commit er denne endringen?"
     }
   ]
 }

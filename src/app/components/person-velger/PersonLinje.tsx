@@ -53,11 +53,11 @@ const PersonLinje = ({ index, handleBlur, name, slett }: OwnProps) => {
                     </div>
 
                     <Button
-                        className="slett-knapp-med-icon"
                         variant="tertiary"
                         size="small"
                         icon={<TrashIcon title="slett" />}
                         onClick={slettHandler}
+                        data-color="danger"
                     >
                         Slett
                     </Button>

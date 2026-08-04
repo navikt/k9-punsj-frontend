@@ -1,126 +1,107 @@
 ---
 name: conventional-commit
-description: Conventional commit messages for k9-punsj-frontend with dry wording, Norwegian by default, and repo specific commit rules
+description: Generer conventional commit-meldinger med Nav-relevante scopes og breaking change-format
+license: MIT
+metadata:
+  domain: general
+  tags: git commit conventional-commits changelog
 ---
 
-# Conventional commit skill
+# Conventional Commit Skill
 
-> Merk: Denne varianten er tilpasset `k9-punsj-frontend`.
-> Kilde: `https://raw.githubusercontent.com/navikt/copilot/main/.github/skills/conventional-commit/SKILL.md`
-> Innholdet er tilpasset repoets faktiske commit-praksis og reglene i `AGENTS.md`.
-> Scope er valgfritt i dette repoet. Tørre conventional prefixes er viktigere enn å presse inn scope hver gang.
-> Hvis skillen skal gjenbrukes i et annet repo, oppdater språkvalg, commit-regler og eksempler først.
+Generate commit messages following the Conventional Commits specification, adapted for Nav projects.
 
-Use this skill when you need to generate a commit message for `k9-punsj-frontend`.
+## Format
 
-## Repo rules
-
-- Use a conventional prefix such as `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `build:` or `ci:`.
-- Use Norwegian by default for the commit message.
-- Keep the message ASCII only. Do not use `æ`, `ø` or `å`.
-- Keep the wording dry and professional.
-- Do not add AI attribution.
-- Scope is optional. Use it only when it makes the message clearer.
-- Avoid strong or promotional wording.
-
-## Preferred format
-
-```text
-<type>: <description>
 ```
-
-Scope can be used when it helps:
-
-```text
 <type>(<scope>): <description>
-```
 
-Examples:
+[optional body]
 
-```text
-chore: legg til repo skills for copilot
-docs: oppdater readme for arbeidsflyt og copilot
-fix(forms): handter tom soeknadId ved korrigering
-chore(nais): oppdater deployflyt for preprod
+[optional footer]
 ```
 
 ## Types
 
 | Type | Usage |
-| --- | --- |
+|---|---|
 | `feat` | New functionality |
 | `fix` | Bug fix |
-| `docs` | Documentation only changes |
-| `refactor` | Code cleanup without new behavior |
-| `test` | New or updated tests |
+| `docs` | Documentation-only changes |
+| `style` | Formatting, semicolons, etc. (no code change) |
+| `refactor` | Code that neither fixes a bug nor adds a feature |
+| `perf` | Performance changes |
+| `test` | Adding or fixing tests |
 | `build` | Build system or dependency changes |
-| `ci` | CI or workflow changes |
-| `chore` | Repo setup, tooling or other maintenance changes |
+| `ci` | CI configuration changes |
+| `chore` | Other changes that don't affect code |
 
-## Description rules
+## Nav-relevant scopes
 
-- Keep the first line short and easy to scan.
-- Prefer imperative form.
-- Do not end the first line with a period.
-- Use the actual area of change, not a vague summary.
-- If the repo uses Norwegian wording for the domain, keep it Norwegian.
-- If an identifier must stay ASCII, transliterate naturally, for example `soeknad` instead of `søknad`.
-
-## Scope guidance
-
-Use scope only when it genuinely adds clarity:
-
-```text
-fix(auth): handter utlop ved tokenfornyelse
-docs(readme): oppdater lokal utviklingsflyt
-chore(copilot): legg til repo instrukser for utvalgte filer
+```
+feat(vedtak): add support for complaint decisions
+fix(auth): fix token validation for TokenX
+docs(api): update OpenAPI spec for the vedtak endpoint
+refactor(repository): use CTE for better readability
+test(controller): add integration test with MockOAuth2Server
+build(deps): upgrade Spring Boot to 3.4.1
+ci(deploy): add prod deploy step
+perf(db): add index on bruker_id
+chore(nais): update resource limits
 ```
 
-Skip scope when the change is already clear without it:
+## Breaking Changes
 
-```text
-chore: legg til repo skills for copilot
-docs: oppdater readme for arbeidsflyt og copilot
+```
+feat(api)!: change response format for the vedtak endpoint
+
+BREAKING CHANGE: The `vedtakDato` field has been changed to `opprettetDato`.
+Consumers must update their parsing.
 ```
 
-## Body and footer
+## Rules
 
-- Add a body only when the change needs extra context.
-- Add a footer only when the task or team practice clearly needs one.
-- Do not force issue references if the repo does not consistently use them.
+- First line: max 72 characters
+- Use imperative form: "add", not "added" or "adds"
+- Don't end with a period
+- Use Norwegian or English consistently within the project
+- Reference Jira/GitHub issue in footer: `Closes #123` or `Refs NAV-1234`
 
-Example with body:
-
-```text
-fix: handter manglende journalpost ved mocket e2e-kjoring
-
-Sikrer at fallback-mock brukes nar journalpostnummeret
-ikke har en egen fixture i testoppsettet.
-```
-
-## Breaking changes
-
-Use `!` and a `BREAKING CHANGE:` footer only when the change really breaks consumers or established behavior.
-
-```text
-feat(api)!: endre format pa runtime config
-
-BREAKING CHANGE: klienter ma lese config fra nytt feltoppsett.
-```
-
-## Analyze the staged diff
-
-Before suggesting a commit message, inspect the staged changes:
+## Examples
 
 ```bash
-git diff --cached --stat
-git diff --cached
+# Simple feature
+git commit -m "feat(søknad): add validation of national identity number"
+
+# Bugfix with reference
+git commit -m "fix(auth): handle expired refresh token
+
+The refresh token was not renewed upon expiration, which caused
+users to be logged out without warning.
+
+Fixes #456"
+
+# Dependency update
+git commit -m "build(deps): upgrade postgresql driver to 42.7.4"
+
+# Breaking change
+git commit -m "feat(api)!: remove deprecated /api/v1/vedtak endpoint
+
+BREAKING CHANGE: /api/v1/vedtak has been removed. Use /api/v2/vedtak."
 ```
 
-Then:
+## Analyzing Staged Changes
 
-1. Identify the main type.
-2. Decide whether scope adds clarity.
-3. Write a short Norwegian description in dry wording.
-4. Add body only if the change needs explanation.
-5. Add breaking footer only if behavior or contract actually breaks.
+To generate a commit message, analyze staged changes:
+
+```bash
+git diff --cached --stat        # Overview of changed files
+git diff --cached               # Detailed diff
+```
+
+Based on the diff:
+1. Identify **type** (feat/fix/refactor/etc.)
+2. Identify **scope** (which module/domain)
+3. Write short, precise description
+4. Add body if the change needs explanation
+5. Add `BREAKING CHANGE` footer if the API changes

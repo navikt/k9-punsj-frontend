@@ -272,10 +272,12 @@ export const getPSBErrorMessage = ({
 }: GetPSBErrorMessageParams): string | undefined => {
     const erFremITid = (dato: string) => new Date() < new Date(dato);
 
-    if (attribute === 'klokkeslett' || attribute === 'mottattDato') {
-        if (klokkeslett === null || klokkeslett === '' || mottattDato === null || mottattDato === '') {
-            return intlHelper(intl, 'skjema.feil.ikketom');
-        }
+    if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
+        return intlHelper(intl, 'skjema.feil.ikketom');
+    }
+
+    if (attribute === 'klokkeslett' && (klokkeslett === null || klokkeslett === '')) {
+        return intlHelper(intl, 'skjema.feil.ikketom');
     }
 
     if (attribute === 'mottattDato' && mottattDato && erFremITid(mottattDato)) {
