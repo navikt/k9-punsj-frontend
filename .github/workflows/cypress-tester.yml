@@ -2,9 +2,6 @@ name: Cypress-tester
 
 on:
     workflow_call:
-        secrets:
-            READER_TOKEN:
-                required: true
 
 permissions:
     contents: read
@@ -40,7 +37,7 @@ jobs:
             - name: Installere moduler
               run: yarn install --immutable
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Installere Cypress
               run: npx cypress install
@@ -48,7 +45,7 @@ jobs:
             - name: Start E2E-server
               uses: cypress-io/github-action@fa4a118725a8f001170d49631ea89e5d66fee626 # v7.4.1
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   start: yarn start:e2e
                   wait-on: 'http://localhost:8080'

@@ -2,9 +2,6 @@ name: Lint
 
 on:
     workflow_call:
-        secrets:
-            READER_TOKEN:
-                required: true
 
 permissions:
     contents: read
@@ -32,6 +29,6 @@ jobs:
             - name: Installere moduler
               run: yarn install --immutable
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Sjekke opp mot Lint-regler
               run: yarn run lint

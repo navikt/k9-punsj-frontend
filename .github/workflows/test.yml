@@ -2,9 +2,6 @@ name: Test
 
 on:
     workflow_call:
-        secrets:
-            READER_TOKEN:
-                required: true
 
 permissions:
     contents: read
@@ -33,6 +30,6 @@ jobs:
             - name: Installere moduler
               run: yarn install --immutable
               env:
-                  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Kjøre tester
               run: yarn test --maxWorkers=2
