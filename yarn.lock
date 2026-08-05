@@ -3611,23 +3611,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.15.0":
-  version: 8.15.0
-  resolution: "@navikt/aksel@npm:8.15.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.15.0%2Fcdf496a2babeb3df9123525cc5f1c9570ecd6ae4"
+"@navikt/aksel@npm:8.16.1":
+  version: 8.16.1
+  resolution: "@navikt/aksel@npm:8.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.16.1%2F989edb69f2fe8b00e8b7a2609c51e95b069dfdec"
   dependencies:
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
     clipboardy: "npm:5.3.1"
-    commander: "npm:14.0.3"
+    commander: "npm:15.0.0"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
     figlet: "npm:1.11.0"
     is-git-clean: "npm:1.1.0"
-    jscodeshift: "npm:17.3.0"
+    jscodeshift: "npm:17.4.0"
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/27adac651e9e36541f0bf99a153b76743ce1020b73e837129b1e3b913dfa83229ce26dec804cd867a788051f7b8c2053453e1741ff83bde269561a84bfc08dbe
+  checksum: 10/d3f3ad082a0c1cef570a16ba81260260bd75246779512d7704e437ab2c14e6d8c7e46ae3613a984f3ce4a79163f2bdce53500ff465f78daff87a7160c26167f6
   languageName: node
   linkType: hard
 
@@ -7711,10 +7711,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:14.0.3, commander@npm:^14.0.0":
-  version: 14.0.3
-  resolution: "commander@npm:14.0.3"
-  checksum: 10/dfa9ebe2a433d277de5cb0252d23b10a543d245d892db858d23b516336a835c50fd4f52bee4cd13c705cc8acb6f03dc632c73dd806f7d06d3353eb09953dd17a
+"commander@npm:15.0.0":
+  version: 15.0.0
+  resolution: "commander@npm:15.0.0"
+  checksum: 10/a5dab1f5c3f1bf2ea19e8089f650f7fb65c3ed88e13ddde62e490d34b20057bcb2cd3de5b6ddc8aae93286083f8256ca0b812df842f574cbebe0e40f5b2f98f7
   languageName: node
   linkType: hard
 
@@ -7722,6 +7722,13 @@ __metadata:
   version: 11.1.0
   resolution: "commander@npm:11.1.0"
   checksum: 10/66bd2d8a0547f6cb1d34022efb25f348e433b0e04ad76a65279b1b09da108f59a4d3001ca539c60a7a46ea38bcf399fc17d91adad76a8cf43845d8dcbaf5cda1
+  languageName: node
+  linkType: hard
+
+"commander@npm:^14.0.0":
+  version: 14.0.3
+  resolution: "commander@npm:14.0.3"
+  checksum: 10/dfa9ebe2a433d277de5cb0252d23b10a543d245d892db858d23b516336a835c50fd4f52bee4cd13c705cc8acb6f03dc632c73dd806f7d06d3353eb09953dd17a
   languageName: node
   linkType: hard
 
@@ -12440,9 +12447,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jscodeshift@npm:17.3.0":
-  version: 17.3.0
-  resolution: "jscodeshift@npm:17.3.0"
+"jscodeshift@npm:17.4.0":
+  version: 17.4.0
+  resolution: "jscodeshift@npm:17.4.0"
   dependencies:
     "@babel/core": "npm:^7.24.7"
     "@babel/parser": "npm:^7.24.7"
@@ -12456,9 +12463,9 @@ __metadata:
     "@babel/register": "npm:^7.24.6"
     flow-parser: "npm:0.*"
     graceful-fs: "npm:^4.2.4"
-    micromatch: "npm:^4.0.7"
     neo-async: "npm:^2.5.0"
     picocolors: "npm:^1.0.1"
+    picomatch: "npm:^4.0.2"
     recast: "npm:^0.23.11"
     tmp: "npm:^0.2.3"
     write-file-atomic: "npm:^5.0.1"
@@ -12469,7 +12476,7 @@ __metadata:
       optional: true
   bin:
     jscodeshift: bin/jscodeshift.js
-  checksum: 10/bafd2b296d545ce363b594499d18a2165532463ebf16d5be2ea65206c0a486da3dc07ab410f0fefc32f232c2a51ade790b9f28f52916db690a9edf1fd4b34966
+  checksum: 10/098d733003f54e66e93ab4ae92dd29f5d3212e82285a60a17c1398aaaa1cbb38651f19b4587328c9ba42919fc87357aec0f59d084dd5115c9a01789661986c2b
   languageName: node
   linkType: hard
 
@@ -12643,7 +12650,7 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.8.2"
     "@jest/globals": "npm:30.4.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel": "npm:8.15.0"
+    "@navikt/aksel": "npm:8.16.1"
     "@navikt/aksel-icons": "npm:8.15.0"
     "@navikt/ds-css": "npm:8.15.0"
     "@navikt/ds-react": "npm:8.15.0"
@@ -13356,7 +13363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.2, micromatch@npm:^4.0.7, micromatch@npm:^4.0.8":
+"micromatch@npm:^4.0.2, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
