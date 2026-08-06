@@ -23,7 +23,7 @@ observability:
             - id: loki
             - id: elastic
 env:
-    APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.dev.intern.nav.no/k9/web/fagsak/
+    APP_K9SAK_FAGSAK_FRONTEND_URL: https://k9.intern.dev.nav.no/k9/web/fagsak/
     K9_LOS_URL: https://k9-los-web.intern.dev.nav.no/
     OMP_KS_ENABLED: 'true'
     PLS_ENABLED: 'true'
