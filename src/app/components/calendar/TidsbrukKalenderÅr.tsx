@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ExpansionCard, Heading } from '@navikt/ds-react';
+import { BodyShort, ExpansionCard, Heading } from '@navikt/ds-react';
 
 import { KalenderDag } from 'app/models/KalenderDag';
 import DateRange from 'app/models/types/DateRange';
@@ -25,6 +25,11 @@ const TidsbrukKalenderÅr = ({
     setSelectedDates,
 }: Props) => {
     const [ekspandert, setEkspandert] = useState<boolean>(false);
+    const registrerteDagerTekst =
+        kalenderdager.length === 0
+            ? 'Ingen dager registrert i år'
+            : `${kalenderdager.length} ${kalenderdager.length === 1 ? 'dag' : 'dager'} registrert i år`;
+
     const toggleEkspandert = () => {
         setEkspandert(!ekspandert);
     };
@@ -32,7 +37,10 @@ const TidsbrukKalenderÅr = ({
     return (
         <ExpansionCard open={ekspandert} onToggle={toggleEkspandert} aria-labelledby="tidsbruk-kalender-år">
             <ExpansionCard.Header>
-                <Heading size="small">{aar}</Heading>
+                <>
+                    <Heading size="small">{aar}</Heading>
+                    <BodyShort>{registrerteDagerTekst}</BodyShort>
+                </>
             </ExpansionCard.Header>
             <ExpansionCard.Content>
                 {ekspandert &&
