@@ -35,7 +35,6 @@ export const TidsbrukKalender = ({
     setSelectedDates,
 }: OwnProps) => {
     const [shiftKeydown, setShiftKeydown] = useState(false);
-    const [visKalender, setVisKalender] = useState<boolean>(false);
     const [previouslySelectedDate, setPreviouslySelectedDate] = useState<Date | null>(null);
     const førsteGyldigePeriode = gyldigePerioder[0];
 
@@ -61,10 +60,6 @@ export const TidsbrukKalender = ({
             document.removeEventListener('keyup', onKeyUp);
         };
     }, [setSelectedDates]);
-
-    const toggleKalender = () => {
-        setVisKalender(!visKalender);
-    };
 
     const formatDate = useCallback((date: string | Date) => dayjs(date).format('YYYY-MM-DD'), []);
 
@@ -126,6 +121,9 @@ export const TidsbrukKalender = ({
                 .filter((date) => datoerIGyldigePerioder.has(date)),
         [kalenderdager, datoerIGyldigePerioder, formatDate],
     );
+    const harRegistrerteDager = Boolean(kalenderdagerIGyldigePerioder?.length);
+    const [visKalender, setVisKalender] = useState<boolean>(harRegistrerteDager);
+    const [harBrukerToggled, setHarBrukerToggled] = useState(false);
     const valgteDagerIMåned = useMemo(
         () =>
             selectedDates.filter((date) =>
@@ -134,6 +132,17 @@ export const TidsbrukKalender = ({
         [førsteGyldigePeriode, selectedDates],
     );
 
+    useEffect(() => {
+        if (!harBrukerToggled && harRegistrerteDager) {
+            setVisKalender(true);
+        }
+    }, [harBrukerToggled, harRegistrerteDager]);
+
+    const toggleKalender = () => {
+        setHarBrukerToggled(true);
+        setVisKalender(!visKalender);
+    };
+
     if (!førsteGyldigePeriode) {
         return null;
     }
@@ -141,8 +150,10 @@ export const TidsbrukKalender = ({
     const tittel = (
         <>
             <Heading size="xsmall">{tittelRenderer(førsteGyldigePeriode.fom)}</Heading>
-            {kalenderdagerIGyldigePerioder?.length ? (
-                <BodyShort>{`${kalenderdagerIGyldigePerioder?.length} dager registrert`}</BodyShort>
+            {harRegistrerteDager ? (
+                <BodyShort>
+                    {`${kalenderdagerIGyldigePerioder?.length} ${kalenderdagerIGyldigePerioder?.length === 1 ? 'dag' : 'dager'} registrert`}
+                </BodyShort>
             ) : (
                 <BodyShort>Ingen dager registrert</BodyShort>
             )}

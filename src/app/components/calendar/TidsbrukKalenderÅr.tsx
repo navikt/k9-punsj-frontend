@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BodyShort, ExpansionCard, Heading } from '@navikt/ds-react';
 
@@ -24,13 +24,22 @@ const TidsbrukKalenderÅr = ({
     selectedDates,
     setSelectedDates,
 }: Props) => {
-    const [ekspandert, setEkspandert] = useState<boolean>(false);
+    const harRegistrerteDager = kalenderdager.length > 0;
+    const [ekspandert, setEkspandert] = useState<boolean>(harRegistrerteDager);
+    const [harBrukerToggled, setHarBrukerToggled] = useState(false);
     const registrerteDagerTekst =
         kalenderdager.length === 0
             ? 'Ingen dager registrert i år'
             : `${kalenderdager.length} ${kalenderdager.length === 1 ? 'dag' : 'dager'} registrert i år`;
 
+    useEffect(() => {
+        if (!harBrukerToggled && harRegistrerteDager) {
+            setEkspandert(true);
+        }
+    }, [harBrukerToggled, harRegistrerteDager]);
+
     const toggleEkspandert = () => {
+        setHarBrukerToggled(true);
         setEkspandert(!ekspandert);
     };
 

@@ -19,6 +19,32 @@ const clickExpansionCardByText = async (text: string) => {
 };
 
 describe('TidsbrukKalenderContainer', () => {
+    it('åpner år og måneder automatisk når de har registrerte dager', () => {
+        renderWithIntl(
+            <TidsbrukKalenderContainer
+                gyldigePerioder={[
+                    { fom: '2026-01-15', tom: '2026-01-16' },
+                    { fom: '2026-02-16', tom: '2026-02-17' },
+                ]}
+                kalenderdager={[
+                    {
+                        date: new Date('2026-01-15T00:00:00.000Z'),
+                        tid: { timer: '4', minutter: '0' },
+                        tidOpprinnelig: { timer: '7', minutter: '30' },
+                    },
+                ]}
+                ModalContent={<TestModalContent />}
+                dateContentRenderer={() => () => null}
+                slettPeriode={() => undefined}
+            />,
+        );
+
+        expect(screen.getByText('1 dag registrert i år')).toBeInTheDocument();
+        expect(screen.getByText('1 dag registrert')).toBeInTheDocument();
+        expect(screen.getByTestId('calendar-grid-date-2026-01-15')).toBeInTheDocument();
+        expect(screen.queryByTestId('calendar-grid-date-2026-02-16')).not.toBeInTheDocument();
+    });
+
     it('beholder markerte dager når en annen måned åpnes', async () => {
         renderWithIntl(
             <TidsbrukKalenderContainer
