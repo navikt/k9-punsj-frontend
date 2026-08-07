@@ -14,6 +14,7 @@ type Props = {
     dateContentRenderer: (date: Date, isDisabled?: boolean) => React.ReactNode;
     selectedDates: Date[];
     setSelectedDates: React.Dispatch<React.SetStateAction<Date[]>>;
+    visÅrWrapper?: boolean;
 };
 
 const TidsbrukKalenderÅr = ({
@@ -23,6 +24,7 @@ const TidsbrukKalenderÅr = ({
     kalenderdager,
     selectedDates,
     setSelectedDates,
+    visÅrWrapper = true,
 }: Props) => {
     const harRegistrerteDager = kalenderdager.length > 0;
     const [ekspandert, setEkspandert] = useState<boolean>(harRegistrerteDager);
@@ -43,6 +45,29 @@ const TidsbrukKalenderÅr = ({
         setEkspandert(!ekspandert);
     };
 
+    const renderMåneder = () =>
+        perioder.map((periode) => {
+            const filteredKalenderdager = kalenderdager.filter((kalenderdag) => {
+                const date = new Date(kalenderdag.date);
+                return date.getMonth() === periode[0].fom.getMonth();
+            });
+            return (
+                <div key={periode?.[0].fom.toString()}>
+                    <TidsbrukKalender
+                        gyldigePerioder={periode}
+                        dateContentRenderer={dateContentRenderer}
+                        kalenderdager={filteredKalenderdager}
+                        selectedDates={selectedDates}
+                        setSelectedDates={setSelectedDates}
+                    />
+                </div>
+            );
+        });
+
+    if (!visÅrWrapper) {
+        return <>{renderMåneder()}</>;
+    }
+
     return (
         <ExpansionCard open={ekspandert} onToggle={toggleEkspandert} aria-labelledby="tidsbruk-kalender-år">
             <ExpansionCard.Header>
@@ -51,26 +76,7 @@ const TidsbrukKalenderÅr = ({
                     <BodyShort>{registrerteDagerTekst}</BodyShort>
                 </>
             </ExpansionCard.Header>
-            <ExpansionCard.Content>
-                {ekspandert &&
-                    perioder.map((periode) => {
-                        const filteredKalenderdager = kalenderdager.filter((kalenderdag) => {
-                            const date = new Date(kalenderdag.date);
-                            return date.getMonth() === periode[0].fom.getMonth();
-                        });
-                        return (
-                            <div key={periode?.[0].fom.toString()}>
-                                <TidsbrukKalender
-                                    gyldigePerioder={periode}
-                                    dateContentRenderer={dateContentRenderer}
-                                    kalenderdager={filteredKalenderdager}
-                                    selectedDates={selectedDates}
-                                    setSelectedDates={setSelectedDates}
-                                />
-                            </div>
-                        );
-                    })}
-            </ExpansionCard.Content>
+            <ExpansionCard.Content>{ekspandert && renderMåneder()}</ExpansionCard.Content>
         </ExpansionCard>
     );
 };

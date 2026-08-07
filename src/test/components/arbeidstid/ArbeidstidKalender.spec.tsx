@@ -18,7 +18,8 @@ describe('ArbeidstidKalender', () => {
 
         expect(screen.getByText('Arbeidstid i søknadsperioden')).toBeInTheDocument();
         expect(screen.getByText('Registrer arbeidstid for en lengre periode')).toBeInTheDocument();
-        expect(screen.getByText('Ingen dager registrert i år')).toBeInTheDocument();
+        expect(screen.queryByText('Ingen dager registrert i år')).not.toBeInTheDocument();
+        expect(screen.getByText('Ingen dager registrert')).toBeInTheDocument();
 
         await userEvent.click(screen.getByRole('button', { name: /Vis mer/i }));
         expect(screen.getByText('Ingen dager registrert')).toBeInTheDocument();

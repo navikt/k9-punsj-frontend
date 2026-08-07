@@ -87,6 +87,7 @@ const TidsbrukKalenderContainer = ({
                 .sort((a, b) => b.aar - a.aar),
         [gyldigePerioderPerMåned],
     );
+    const skalSkjuleÅrWrapper = gyldigePerioderPerÅr.length === 1 && gyldigePerioderPerÅr[0].perioder.length <= 6;
     const datoerIGyldigePerioder = useMemo(
         () => new Set(dateRanges.flatMap((dateRange) => getDatesInDateRange(dateRange).map(formatDate))),
         [dateRanges, formatDate],
@@ -135,6 +136,7 @@ const TidsbrukKalenderContainer = ({
                             kalenderdager={kalenderdagerIÅr}
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
+                            visÅrWrapper={!skalSkjuleÅrWrapper}
                         />
                     </div>
                 );

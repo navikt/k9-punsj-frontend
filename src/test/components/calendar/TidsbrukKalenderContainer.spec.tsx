@@ -19,6 +19,44 @@ const clickExpansionCardByText = async (text: string) => {
 };
 
 describe('TidsbrukKalenderContainer', () => {
+    it('skjuler år-wrapper når det bare finnes ett år med seks eller færre måneder', () => {
+        renderWithIntl(
+            <TidsbrukKalenderContainer
+                gyldigePerioder={[
+                    { fom: '2026-01-15', tom: '2026-01-16' },
+                    { fom: '2026-02-16', tom: '2026-02-17' },
+                ]}
+                kalenderdager={[]}
+                ModalContent={<TestModalContent />}
+                dateContentRenderer={() => () => null}
+                slettPeriode={() => undefined}
+            />,
+        );
+
+        expect(screen.queryByText('Ingen dager registrert i år')).not.toBeInTheDocument();
+        expect(screen.getByText('Januar 2026')).toBeInTheDocument();
+        expect(screen.getByText('Februar 2026')).toBeInTheDocument();
+    });
+
+    it('beholder år-wrapper når periodene spenner over flere år', () => {
+        renderWithIntl(
+            <TidsbrukKalenderContainer
+                gyldigePerioder={[
+                    { fom: '2025-12-15', tom: '2025-12-16' },
+                    { fom: '2026-01-16', tom: '2026-01-17' },
+                ]}
+                kalenderdager={[]}
+                ModalContent={<TestModalContent />}
+                dateContentRenderer={() => () => null}
+                slettPeriode={() => undefined}
+            />,
+        );
+
+        expect(screen.getByText('2026')).toBeInTheDocument();
+        expect(screen.getByText('2025')).toBeInTheDocument();
+        expect(screen.getAllByText('Ingen dager registrert i år')).toHaveLength(2);
+    });
+
     it('åpner år og måneder automatisk når de har registrerte dager', () => {
         renderWithIntl(
             <TidsbrukKalenderContainer
@@ -39,7 +77,6 @@ describe('TidsbrukKalenderContainer', () => {
             />,
         );
 
-        expect(screen.getByText('1 dag registrert i år')).toBeInTheDocument();
         expect(screen.getByText('1 dag registrert')).toBeInTheDocument();
         expect(screen.getByTestId('calendar-grid-date-2026-01-15')).toBeInTheDocument();
         expect(screen.queryByTestId('calendar-grid-date-2026-02-16')).not.toBeInTheDocument();
@@ -59,7 +96,6 @@ describe('TidsbrukKalenderContainer', () => {
             />,
         );
 
-        await clickExpansionCardByText('2026');
         await clickExpansionCardByText('Januar 2026');
 
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
@@ -92,7 +128,6 @@ describe('TidsbrukKalenderContainer', () => {
             />,
         );
 
-        await clickExpansionCardByText('2026');
         await clickExpansionCardByText('Januar 2026');
 
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
