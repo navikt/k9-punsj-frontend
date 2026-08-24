@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Valgte majorløft for test og build tooling (2026-08-24)
+
+- Løftet `postcss-import` fra `16.2.0` til `17.0.0`, `@types/node` fra `25.9.5` til `26.2.0`, og `@testing-library/jest-dom` fra `6.10.0` til `7.0.1` i en kontrollert major-runde på egen branch.
+- Rettet samtidig `tsconfig.spec.json` slik at testkonfigen igjen inkluderer `globals.d.ts` og `src/@types/**/*.d.ts`, etter at en smal TypeScript-kontroll viste at testsporet manglet `JSX`, `window.nais` og `*.css`-deklarasjoner selv om hovedkonfigen var grønn.
+- Holdt `react-router`, `eslint` og `typescript` utenfor denne runden, fordi de fortsatt krever egne migrerings- eller økosystemavklaringer i repoet.
+
 ### Dependabot lockfile follow up (2026-08-24)
 
 - La inn en smal lockfile-oppfølging for åpne Dependabot-funn ved å løfte transitive spor for `brace-expansion`, `fast-uri`, `js-yaml`, `postcss` og `undici`.
