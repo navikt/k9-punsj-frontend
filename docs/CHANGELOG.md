@@ -2,28 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Weekly package maintenance eligibility recheck (2026-08-24)
+### Weekly package maintenance (2026-08-24)
 
-- Korrigerte den forrige pakkenrunden med nærmeste cooldown-eligible oppdateringer for Aksel `8.16.1`, React Hook Form `7.85.0`, React Intl `10.1.22`, Jest DOM `6.10.0`, Day.js `1.11.22`, typepakker og ESLint `9.39.5`.
-- Brukte eldre kompatible FormatJS-versjoner (`@formatjs/intl@4.1.18`, `intl-messageformat@11.2.13`, parser `3.5.16`) fordi React Intl sin nyeste transitive kjede fortsatt var innenfor cooldown. `@navikt/oasis` kunne ikke verifiseres fra tilgjengelig registry og ble stående urørt.
-
-### Weekly package maintenance minor pass (2026-08-24)
-
-- Løftet Faro SDK/tracing til `2.9.0`, Sentry React til `10.70.0`, TypeScript ESLint parser/meta til `8.67.0`, Cypress til `15.20.1`, lint-staged til `17.3.0` og postcss-import til `16.2.0` etter at versjonene passerte 7 dagers cooldown.
-- Lot nyere Faro-, Cypress- og postcss-import-versjoner stå urørt på grunn av cooldown, og lot major-spor stå som egne oppfølginger.
-
-### Weekly package maintenance patch pass (2026-08-24)
-
-- Løftet `@storybook/react`, `@storybook/react-webpack5` og `storybook` fra `10.5.5` til `10.5.8`, `@testing-library/user-event` fra `14.6.1` til `14.6.4`, `postcss` fra `8.5.24` til `8.5.26`, `webpack` fra `5.109.1` til `5.109.2` og `server/jose` fra `6.2.4` til `6.2.9` etter at versjonene passerte 7 dagers cooldown.
-- Lot nyere cooldown-blokkerte patcher stå urørt: Storybook `10.5.9`/`10.5.10`, user-event `14.6.5`/`14.6.6` og jose `6.2.10`. Minor-pakker og major-spor er utsatt til egne pass.
-
-### Weekly package maintenance task refresh (2026-08-24)
-
-- Oppdaterte `copilot-tasks/weekly-package-maintenance.md` slik at weekly dependency-passet nå eksplisitt dekker både root og `server` workspace, krever ny vurdering av tidligere cooldown-blokkerte pakker mot dagens registry-data, og forbyr brede `yarn up`-løft uten eksplisitte pakkelister.
-- Presiserte også at tasken først skal inventere hele settet av tilgjengelige oppdateringer, og deretter velge høyeste tillatte non major-versjon per pakke. Når både patch og minor er utenfor cooldown-vinduet, skal minor velges direkte.
-- Strammet videre inn regelen for cooldown-tilfeller der nyeste minor fortsatt er for fersk. Tasken krever nå å lete etter nærmeste eldre minor utenfor cooldown før den eventuelt faller tilbake til patch.
-- La også inn at Copilot skal bruke åpne Dependabot alerts som primær GitHub-kontroll før og etter dependency-passet, med åpne dependency-PR-er bare som sekundær overlappssjekk.
-- Strammet samtidig inn tasken til å kreve egen `resolutions`-gjennomgang etter både patch- og minor-pass, og å holde `docs/CHANGELOG.md`-oppdateringene korte og faktiske.
+- Kjørte en samlet dependency-runde i root og `server` med cooldown-eligible patch- og minorløft, blant annet for Storybook, `@testing-library/user-event`, `postcss`, `webpack`, `server/jose`, Faro, Sentry React, TypeScript ESLint, Cypress, lint-staged, Aksel, React Hook Form, React Intl, Jest DOM, Day.js, typepakker og ESLint.
+- Brukte nærmeste tillatte versjon utenfor repoets 7 dagers cooldown, inkludert eldre eligible minorer i samme major og målrettede FormatJS-resolutions for React Intl (`@formatjs/intl@4.1.18`, `intl-messageformat@11.2.13`, `@formatjs/icu-messageformat-parser@3.5.16`).
+- Lot nyere cooldown-blokkerte patch- og minorversjoner stå urørt, lot major-spor bli egne oppfølginger, og lot `@navikt/oasis` stå fordi tilgjengelig registry-metadata ikke kunne verifiseres i denne runden.
 
 ### React Router 7.18.2 security follow up (2026-08-03)
 
