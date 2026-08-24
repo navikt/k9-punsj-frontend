@@ -2,11 +2,7 @@ import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { configureStore } from '@reduxjs/toolkit';
 import * as Sentry from '@sentry/react';
-import {
-    breadcrumbsIntegration,
-    reactRouterV6BrowserTracingIntegration,
-    withSentryReactRouterV6Routing,
-} from '@sentry/react';
+import { breadcrumbsIntegration, reactRouterBrowserTracingIntegration, wrapReactRouterRouting } from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -19,7 +15,7 @@ import {
     matchRoutes,
     useLocation,
     useNavigationType,
-} from 'react-router-dom';
+} from 'react-router';
 import logger from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
@@ -89,7 +85,7 @@ const prepare = async () => {
             tracesSampleRate: 1.0,
             integrations: [
                 breadcrumbsIntegration({ console: false }),
-                reactRouterV6BrowserTracingIntegration({
+                reactRouterBrowserTracingIntegration({
                     useEffect: React.useEffect,
                     useLocation,
                     useNavigationType,
@@ -143,7 +139,7 @@ queryClient.setDefaultOptions({
         refetchOnWindowFocus: false,
     },
 });
-const SentryRoutes = withSentryReactRouterV6Routing(Routes);
+const SentryRoutes = wrapReactRouterRouting(Routes);
 
 export const App: React.FC = () => {
     const [locale] = React.useState<Locale>(localeFromSessionStorage);

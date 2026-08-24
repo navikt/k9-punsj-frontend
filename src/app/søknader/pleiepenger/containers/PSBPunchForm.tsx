@@ -55,7 +55,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
 import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import { Periodepaneler } from '../../../components/Periodepaneler';
 import VerticalSpacer from '../../../components/VerticalSpacer';
@@ -1483,7 +1483,12 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
                                 <>
                                     <VerticalSpacer twentyPx />
 
-                                    <Box padding="space-16" borderRadius="8" background="neutral-soft" className="listepanel">
+                                    <Box
+                                        padding="space-16"
+                                        borderRadius="8"
+                                        background="neutral-soft"
+                                        className="listepanel"
+                                    >
                                         <TilsynKalender
                                             nyeSoknadsperioder={soknad.soeknadsperiode}
                                             eksisterendeSoknadsperioder={eksisterendePerioder}

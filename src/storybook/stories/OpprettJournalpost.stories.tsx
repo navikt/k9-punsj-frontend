@@ -1,10 +1,10 @@
 import React from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
-import OpprettJournalpost from '../../app/opprett-journalpost/OpprettJournalpost';
-import { MemoryRouter } from 'react-router-dom';
-import { IntlProvider } from 'react-intl';
 import messages from 'app/i18n/nb.json';
+import { IntlProvider } from 'react-intl';
+import { MemoryRouter } from 'react-router';
+import OpprettJournalpost from '../../app/opprett-journalpost/OpprettJournalpost';
 
 import { hentFagsaker, hentFagsakerMedFeil, hentFagsakerTomtArray } from '../mocks/hentFagsaker';
 import { opprettNottat, opprettNottatMedFeil } from '../mocks/opprettNottat';

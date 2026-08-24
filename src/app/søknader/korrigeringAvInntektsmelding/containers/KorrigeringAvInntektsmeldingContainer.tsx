@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '@navikt/ds-react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
 
+import { ROUTES } from 'app/constants/routes';
 import { IPSBSoknad } from 'app/models/types';
 import { RootStateType } from 'app/state/RootState';
 import { createOMSKorrigering, hentOMSSøknad } from 'app/state/actions/OMSPunchFormActions';
-import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
-import { ROUTES } from 'app/constants/routes';
 import { manglerK9saksnummerMessage, resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
+import KorrigeringAvInntektsmeldingForm from './KorrigeringAvInntektsmeldingForm';
 
 const KorrigeringAvInntektsmeldingContainer: React.FC = () => {
     const { id } = useParams<{ id: string }>();

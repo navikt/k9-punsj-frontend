@@ -1,8 +1,8 @@
 import React, { ComponentType } from 'react';
 
+import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Accordion, Alert, Button, Checkbox, HelpText, Loader, Tag } from '@navikt/ds-react';
 
 import { Periodepaneler } from 'app/components/Periodepaneler';
 import PunchFormTitle from 'app/components/PunchFormTitle';
@@ -21,18 +21,22 @@ import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
 
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
-import { ROUTES } from 'app/constants/routes';
-import JournalposterSync from 'app/components/JournalposterSync';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import ArbeidsforholdPanel from '../../../components/arbeidsforhold/containers/ArbeidsforholdPanel';
-import Feilmelding from '../../../components/Feilmelding';
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import JournalposterSync from 'app/components/JournalposterSync';
+import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
 import { PeriodeinfoPaneler } from 'app/components/periodeinfoPaneler/PeriodeinfoPaneler';
 import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
+import { ROUTES } from 'app/constants/routes';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
+import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
+import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
+import { NavigateFunction, useNavigate, useParams } from 'react-router';
+import Feilmelding from '../../../components/Feilmelding';
+import VerticalSpacer from '../../../components/VerticalSpacer';
+import ArbeidsforholdPanel from '../../../components/arbeidsforhold/containers/ArbeidsforholdPanel';
 import { JaNeiIkkeOpplyst } from '../../../models/enums/JaNeiIkkeOpplyst';
 import { JaNeiIkkeRelevant } from '../../../models/enums/JaNeiIkkeRelevant';
 import { PunchFormPaneler } from '../../../models/enums/PunchFormPaneler';
@@ -61,16 +65,12 @@ import {
 import { IPLSSoknad, PLSSoknad } from '../types/PLSSoknad';
 import { IPLSSoknadUt, PLSSoknadUt } from '../types/PLSSoknadUt';
 import { IPunchPLSFormState } from '../types/PunchPLSFormState';
-import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import EndringAvSoknadsperioder from './EndringAvSøknadsperioder/EndringAvSoknadsperioder';
 import OpplysningerOmPLSSoknad from './OpplysningerOmSoknad/OpplysningerOmPLSSoknad';
-import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
 import PLSKvitteringContainer from './SoknadKvittering/PLSKvitteringContainer';
+import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
-import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
-import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
-import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
