@@ -7,7 +7,7 @@ module.exports = (api) => {
         overrides: isTest
             ? [
                   {
-                      test: /node_modules\/react-router\/dist\/.*\/routeModules\.js$/,
+                      test: /[\\/]node_modules[\\/]react-router[\\/]dist[\\/].*[\\/]routeModules\.js$/,
                       plugins: [
                           () => ({
                               visitor: {
