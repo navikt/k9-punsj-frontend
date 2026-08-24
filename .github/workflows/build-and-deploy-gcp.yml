@@ -73,7 +73,7 @@ jobs:
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-            - uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
+            - uses: nais/docker-build-push@8e41f1f58749b9248e376c25d33bfbdd2b1163c0 # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -91,7 +91,7 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod gcp
-              uses: nais/deploy/actions/deploy@fc3eae3edebabdf67f7592102ae16176d5ba3b5f # v2
+              uses: nais/deploy/actions/deploy@849e900e3cfa7faf7ad1532bb3a3e6499c932199 # v2
               env:
                   CLUSTER: prod-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
