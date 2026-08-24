@@ -2,6 +2,18 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance patch pass (2026-08-24)
+
+- Løftet `@storybook/react`, `@storybook/react-webpack5` og `storybook` fra `10.5.5` til `10.5.8`, `@testing-library/user-event` fra `14.6.1` til `14.6.4`, `postcss` fra `8.5.24` til `8.5.26`, `webpack` fra `5.109.1` til `5.109.2` og `server/jose` fra `6.2.4` til `6.2.9` etter at versjonene passerte 7 dagers cooldown.
+- Lot nyere cooldown-blokkerte patcher stå urørt: Storybook `10.5.9`/`10.5.10`, user-event `14.6.5`/`14.6.6` og jose `6.2.10`. Minor-pakker og major-spor er utsatt til egne pass.
+
+### Weekly package maintenance task refresh (2026-08-24)
+
+- Oppdaterte `copilot-tasks/weekly-package-maintenance.md` slik at weekly dependency-passet nå eksplisitt dekker både root og `server` workspace, krever ny vurdering av tidligere cooldown-blokkerte pakker mot dagens registry-data, og forbyr brede `yarn up`-løft uten eksplisitte pakkelister.
+- Presiserte også at tasken først skal inventere hele settet av tilgjengelige oppdateringer, og deretter velge høyeste tillatte non major-versjon per pakke. Når både patch og minor er utenfor cooldown-vinduet, skal minor velges direkte.
+- La også inn at Copilot skal bruke åpne Dependabot alerts som primær GitHub-kontroll før og etter dependency-passet, med åpne dependency-PR-er bare som sekundær overlappssjekk.
+- Strammet samtidig inn tasken til å kreve egen `resolutions`-gjennomgang etter både patch- og minor-pass, og å holde `docs/CHANGELOG.md`-oppdateringene korte og faktiske.
+
 ### React Router 7.18.2 security follow up (2026-08-03)
 
 - Løftet `react-router` og `react-router-dom` fra `7.18.0` til `7.18.2` som en smal oppfølging for den åpne `react-router`-advisoryen, uten å starte den større `v8`-migreringen i samme pass.
