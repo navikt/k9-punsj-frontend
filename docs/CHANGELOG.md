@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Dependabot lockfile follow up (2026-08-24)
+
+- La inn en smal lockfile-oppfølging for åpne Dependabot-funn ved å løfte transitive spor for `brace-expansion`, `fast-uri`, `js-yaml`, `postcss` og `undici`.
+- Fjernet samtidig den gamle `postcss@8.5.20 -> nanoid@3.3.16`-pathen ved å tvinge de berørte postcss-pathene over på `8.5.26`.
+
 ### Weekly package maintenance (2026-08-24)
 
 - Kjørte en samlet dependency-runde i root og `server` med cooldown-eligible patch- og minorløft, blant annet for Storybook, `@testing-library/user-event`, `postcss`, `webpack`, `server/jose`, Faro, Sentry React, TypeScript ESLint, Cypress, lint-staged, Aksel, React Hook Form, React Intl, Jest DOM, Day.js, typepakker og ESLint.
