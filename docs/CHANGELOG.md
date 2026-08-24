@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance eligibility recheck (2026-08-24)
+
+- Korrigerte den forrige pakkenrunden med nærmeste cooldown-eligible oppdateringer for Aksel `8.16.1`, React Hook Form `7.85.0`, React Intl `10.1.22`, Jest DOM `6.10.0`, Day.js `1.11.22`, typepakker og ESLint `9.39.5`.
+- Brukte eldre kompatible FormatJS-versjoner (`@formatjs/intl@4.1.18`, `intl-messageformat@11.2.13`, parser `3.5.16`) fordi React Intl sin nyeste transitive kjede fortsatt var innenfor cooldown. `@navikt/oasis` kunne ikke verifiseres fra tilgjengelig registry og ble stående urørt.
+
 ### Weekly package maintenance minor pass (2026-08-24)
 
 - Løftet Faro SDK/tracing til `2.9.0`, Sentry React til `10.70.0`, TypeScript ESLint parser/meta til `8.67.0`, Cypress til `15.20.1`, lint-staged til `17.3.0` og postcss-import til `16.2.0` etter at versjonene passerte 7 dagers cooldown.
