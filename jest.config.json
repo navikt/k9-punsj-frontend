@@ -15,15 +15,11 @@
     "testEnvironment": "jest-environment-jsdom",
     "testRegex": "(<rootDir>/test/.*|(\\.|/)(spec))\\.tsx?$",
     "transform": {
-        "^.+\\.[t|j]sx?$": "babel-jest"
+        "^.+\\.(?:[tj]sx?|mjs)$": "babel-jest"
     },
     "transformIgnorePatterns": [
-        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat).*).*$"
+        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat|react-router|cookie-es).*).*$"
     ],
-    "unmockedModulePathPatterns": [
-        "<rootDir>/node_modules/react",
-        "<rootDir>/node_modules/react-router",
-        "<rootDir>/node_modules/react-router-dom"
-    ],
+    "unmockedModulePathPatterns": ["<rootDir>/node_modules/react", "<rootDir>/node_modules/react-router"],
     "setupFilesAfterEnv": ["<rootDir>/src/test/testConfig.js"]
 }

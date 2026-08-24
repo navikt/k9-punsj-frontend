@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
+import { Alert, Button, Loader } from '@navikt/ds-react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Formik, yupToFormErrors } from 'formik';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Loader } from '@navikt/ds-react';
+import { useNavigate, useParams } from 'react-router';
 
+import { ROUTES } from 'app/constants/routes';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { ROUTES } from 'app/constants/routes';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
+import { trackOmpaoStartedFromJournalpost, trackOmpaoSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { Dispatch } from 'redux';
 import { hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema from '../schema';
-import OMPAOPunchForm from './OMPAOPunchForm';
 import { IOMPAOSoknadKvittering } from '../types/OMPAOSoknadKvittering';
+import OMPAOPunchForm from './OMPAOPunchForm';
 import KvitteringContainer from './SoknadKvittering/KvitteringContainer';
-import { Dispatch } from 'redux';
-import { trackOmpaoStartedFromJournalpost, trackOmpaoSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface Props {
     journalpostid: string;

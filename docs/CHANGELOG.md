@@ -2,6 +2,16 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Opprydding i resolutions (2026-08-24)
+
+- Fjernet 15 overstyringer der underliggende versjonsområder nå resolver til samme eller nyere trygge versjon, blant annet for `body-parser`, `form-data`, `brace-expansion`, `postcss`, `undici` og `tmp`.
+- Beholdt FormatJS-pinnene som hindrer et utilgjengelig parser-versjonskrav, `@opentelemetry/core` for å unngå splittet versjonsgraf, `js-yaml` og `qs` som sikkerhetsgulv, samt den eksplisitte kritiske `tar`-overstyringen.
+
+### React Router 8-migrering (2026-08-24)
+
+- Løftet `react-router` fra `7.18.2` til `8.3.0`, fjernet `react-router-dom` og flyttet app-, Storybook- og testimporter til `react-router`.
+- Byttet Sentry til versjonsuavhengige routing-API-er og oppdaterte Jest-transformen for React Router og den ESM-baserte `cookie-es`-avhengigheten.
+
 ### Valgte majorløft for test og build tooling (2026-08-24)
 
 - Løftet `postcss-import` fra `16.2.0` til `17.0.0`, `@types/node` fra `25.9.5` til `26.2.0`, og `@testing-library/jest-dom` fra `6.10.0` til `7.0.1` i en kontrollert major-runde på egen branch.

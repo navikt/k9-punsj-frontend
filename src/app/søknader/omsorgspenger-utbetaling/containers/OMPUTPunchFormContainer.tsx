@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Formik, yupToFormErrors } from 'formik';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 
 import { Periode, PersonEnkel } from 'app/models/types';
 
+import { ROUTES } from 'app/constants/routes';
 import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
-import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { ROUTES } from 'app/constants/routes';
+import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
+import { trackOmputStartedFromJournalpost, trackOmputSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { Dispatch } from 'redux';
 import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';
 import schema, { getSchemaContext } from '../schema';
+import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
 import { backendTilFrontendMapping } from '../utils';
 import OMPUTPunchForm from './OMPUTPunchForm';
 import OMPUTSoknadKvitteringContainer from './SoknadKvittering/OMPUTSoknadKvitteringContainer';
-import { IOMPUTSoknadKvittering } from '../types/OMPUTSoknadKvittering';
-import { Dispatch } from 'redux';
-import { trackOmputStartedFromJournalpost, trackOmputSubmitFromJournalpost } from 'app/utils/faroEvents';
 
 interface Props {
     journalpostid: string;

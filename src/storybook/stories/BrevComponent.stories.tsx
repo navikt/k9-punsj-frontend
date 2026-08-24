@@ -1,15 +1,15 @@
 import React from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
-import BrevComponent from '../../app/components/brev/brevComponent/BrevComponent';
-import { MemoryRouter } from 'react-router-dom';
-import { IntlProvider } from 'react-intl';
 import messages from 'app/i18n/nb.json';
-import { hentBrevmaler } from '../mocks/hentBrevmaler';
-import { hentArbeidsgivere } from '../mocks/hentArbeidsgivere';
+import { IntlProvider } from 'react-intl';
+import { MemoryRouter } from 'react-router';
+import BrevComponent from '../../app/components/brev/brevComponent/BrevComponent';
 import { hentAktørId } from '../mocks/hentAktørId';
-import { sendBrev, sendBrevMedFeil } from '../mocks/sendBrev';
+import { hentArbeidsgivere } from '../mocks/hentArbeidsgivere';
+import { hentBrevmaler } from '../mocks/hentBrevmaler';
 import { hentPerson } from '../mocks/hentPerson';
+import { sendBrev, sendBrevMedFeil } from '../mocks/sendBrev';
 
 import '@navikt/ds-css/dist/index.css';
 import '../../app/styles/globals.css';
