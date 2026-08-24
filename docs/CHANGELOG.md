@@ -2,17 +2,17 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Felles handlinger for månedskalender i arbeidstid, tilsyn og fravær (2026-08-03)
-
-- Rettet månedskalenderen slik at markering av dager ikke lenger forsvinner når brukeren åpner en annen måned i samme kalenderflyt.
-- Flyttet `Registrer` og `Slett` ut fra hvert enkelt månedskort og ned i én felles action bar under kalenderen, siden markering nå kan gå på tvers av flere måneder og dermed ikke lenger hører naturlig til én bestemt måned.
-- La samtidig inn lokal hjelpetekst i hver åpen måned som viser hvor mange dager som er valgt i den måneden og peker videre ned til den felles action baren, for å gjøre den nye plasseringen lettere å oppdage når mange måneder er åpne.
-
 ### Weekly package maintenance (2026-08-24)
 
 - Kjørte en samlet dependency-runde i root og `server` med cooldown-eligible patch- og minorløft, blant annet for Storybook, `@testing-library/user-event`, `postcss`, `webpack`, `server/jose`, Faro, Sentry React, TypeScript ESLint, Cypress, lint-staged, Aksel, React Hook Form, React Intl, Jest DOM, Day.js, typepakker og ESLint.
 - Brukte nærmeste tillatte versjon utenfor repoets 7 dagers cooldown, inkludert eldre eligible minorer i samme major og målrettede FormatJS-resolutions for React Intl (`@formatjs/intl@4.1.18`, `intl-messageformat@11.2.13`, `@formatjs/icu-messageformat-parser@3.5.16`).
 - Lot nyere cooldown-blokkerte patch- og minorversjoner stå urørt, lot major-spor bli egne oppfølginger, og lot `@navikt/oasis` stå fordi tilgjengelig registry-metadata ikke kunne verifiseres i denne runden.
+
+### Felles handlinger for månedskalender i arbeidstid, tilsyn og fravær (2026-08-03)
+
+- Rettet månedskalenderen slik at markering av dager ikke lenger forsvinner når brukeren åpner en annen måned i samme kalenderflyt.
+- Flyttet `Registrer` og `Slett` ut fra hvert enkelt månedskort og ned i én felles action bar under kalenderen, siden markering nå kan gå på tvers av flere måneder og dermed ikke lenger hører naturlig til én bestemt måned.
+- La samtidig inn lokal hjelpetekst i hver åpen måned som viser hvor mange dager som er valgt i den måneden og peker videre ned til den felles action baren, for å gjøre den nye plasseringen lettere å oppdage når mange måneder er åpne.
 
 ### React Router 7.18.2 security follow up (2026-08-03)
 
