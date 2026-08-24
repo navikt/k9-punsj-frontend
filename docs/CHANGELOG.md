@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance minor pass (2026-08-24)
+
+- Løftet Faro SDK/tracing til `2.9.0`, Sentry React til `10.70.0`, TypeScript ESLint parser/meta til `8.67.0`, Cypress til `15.20.1`, lint-staged til `17.3.0` og postcss-import til `16.2.0` etter at versjonene passerte 7 dagers cooldown.
+- Lot nyere Faro-, Cypress- og postcss-import-versjoner stå urørt på grunn av cooldown, og lot major-spor stå som egne oppfølginger.
+
 ### Weekly package maintenance patch pass (2026-08-24)
 
 - Løftet `@storybook/react`, `@storybook/react-webpack5` og `storybook` fra `10.5.5` til `10.5.8`, `@testing-library/user-event` fra `14.6.1` til `14.6.4`, `postcss` fra `8.5.24` til `8.5.26`, `webpack` fra `5.109.1` til `5.109.2` og `server/jose` fra `6.2.4` til `6.2.9` etter at versjonene passerte 7 dagers cooldown.
@@ -11,6 +16,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Oppdaterte `copilot-tasks/weekly-package-maintenance.md` slik at weekly dependency-passet nå eksplisitt dekker både root og `server` workspace, krever ny vurdering av tidligere cooldown-blokkerte pakker mot dagens registry-data, og forbyr brede `yarn up`-løft uten eksplisitte pakkelister.
 - Presiserte også at tasken først skal inventere hele settet av tilgjengelige oppdateringer, og deretter velge høyeste tillatte non major-versjon per pakke. Når både patch og minor er utenfor cooldown-vinduet, skal minor velges direkte.
+- Strammet videre inn regelen for cooldown-tilfeller der nyeste minor fortsatt er for fersk. Tasken krever nå å lete etter nærmeste eldre minor utenfor cooldown før den eventuelt faller tilbake til patch.
 - La også inn at Copilot skal bruke åpne Dependabot alerts som primær GitHub-kontroll før og etter dependency-passet, med åpne dependency-PR-er bare som sekundær overlappssjekk.
 - Strammet samtidig inn tasken til å kreve egen `resolutions`-gjennomgang etter både patch- og minor-pass, og å holde `docs/CHANGELOG.md`-oppdateringene korte og faktiske.
 
