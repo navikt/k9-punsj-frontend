@@ -6,7 +6,7 @@
         "@navikt/ds-css": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/userContent": "<rootDir>/node_modules/jest-css-modules",
         "\\.\\/systemsStyles": "<rootDir>/node_modules/jest-css-modules",
-        "\\.\\/header": "<rootDir>/node_modules/jest-css-modules",
+        "^\\.\\/header$": "<rootDir>/node_modules/jest-css-modules",
         "^app/(.*)": "<rootDir>/src/app/$1",
         "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js"
     },
@@ -17,7 +17,9 @@
     "transform": {
         "^.+\\.[t|j]sx?$": "babel-jest"
     },
-    "transformIgnorePatterns": ["<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat).*).*$"],
+    "transformIgnorePatterns": [
+        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat).*).*$"
+    ],
     "unmockedModulePathPatterns": [
         "<rootDir>/node_modules/react",
         "<rootDir>/node_modules/react-router",
