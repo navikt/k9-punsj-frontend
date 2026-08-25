@@ -3,7 +3,7 @@ import { Formik, yupToFormErrors } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { Alert, Button, Loader } from '@navikt/ds-react';
 

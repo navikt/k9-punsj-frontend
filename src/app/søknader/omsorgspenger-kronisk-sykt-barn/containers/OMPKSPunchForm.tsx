@@ -20,7 +20,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/faroEvents';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router';
 import Feilmelding from '../../../components/Feilmelding';
 import VerticalSpacer from '../../../components/VerticalSpacer';
 import { FordelingDokumenttype } from '../../../models/enums/FordelingDokumenttype';

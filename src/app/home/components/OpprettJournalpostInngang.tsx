@@ -2,7 +2,7 @@ import React from 'react';
 
 import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const OpprettJournalpostInngang = () => {
     return (

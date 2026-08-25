@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 
-import { BrowserRouter as Router } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Button, InternalHeader, Spacer } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router';
 import { Dispatch } from 'redux';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
-import AppContainer from '../../containers/AppContainer';
-import { getEnvironmentVariable } from '../../utils';
 import IntlProvider from 'app/components/intl-provider/IntlProvider';
 import { Locale } from 'app/models/types/Locale';
 import { RootStateType } from 'app/state/RootState';
 import { checkAuth } from 'app/state/actions';
+import AppContainer from '../../containers/AppContainer';
+import { getEnvironmentVariable } from '../../utils';
 
 interface Props {
     locale: Locale;

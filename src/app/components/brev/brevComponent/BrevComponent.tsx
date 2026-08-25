@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import hash from 'object-hash';
-import { FormattedMessage } from 'react-intl';
-import { Alert, Button, ErrorMessage, Tag } from '@navikt/ds-react';
 import { FileSearchIcon, PaperplaneIcon } from '@navikt/aksel-icons';
+import { Alert, Button, ErrorMessage, Tag } from '@navikt/ds-react';
+import hash from 'object-hash';
+import { useForm } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
+import { useNavigate } from 'react-router';
 
 import { ApiPath } from 'app/apiConfig';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { Person } from 'app/models/types';
 import { ArbeidsgivereResponse } from 'app/models/types/ArbeidsgivereResponse';
 import Organisasjon from 'app/models/types/Organisasjon';
 import { get, post } from 'app/utils';
 import { finnArbeidsgivere } from '../../../api/api';
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import VerticalSpacer from '../../VerticalSpacer';
-import { createBrev, defaultValuesBrev, getDokumentdata, previewMessage } from '../utils';
 import MottakerVelger from '../MottakerVelger';
 import { BrevFormKeys, Brevmal, DokumentMalType, IBrevForm, IBrevMottakerType } from '../types';
-import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRulesBrev } from '../useValidationRules';
+import { createBrev, defaultValuesBrev, getDokumentdata, previewMessage } from '../utils';
 
 import './brevComponent.css';
 

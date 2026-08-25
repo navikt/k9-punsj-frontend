@@ -3,5 +3,12 @@
     "compilerOptions": {
         "types": ["node", "jest"]
     },
-    "include": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/test/jest-dom.d.ts", "src/test/testConfig.js"]
+    "include": [
+        "globals.d.ts",
+        "src/@types/**/*.d.ts",
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx",
+        "src/test/jest-dom.d.ts",
+        "src/test/testConfig.js"
+    ]
 }

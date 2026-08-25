@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import { Alert, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import { Dispatch } from 'redux';
 
-import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
+import { ConflictErrorComponent } from '../components/ConflictErrorComponent';
 import { JournalpostConflictTyper } from '../models/enums/Journalpost/JournalpostConflictTyper';
 import { RootStateType } from '../state/RootState';
 import { lukkOppgaveResetAction } from '../state/actions';
 import { getJournalpost as getJournalpostAction } from '../state/reducers/FellesReducer';
-import { lukkDebuggJp } from 'app/utils/JournalpostLoaderUtils';
 
 interface Props {
     renderOnLoadComplete: () => React.ReactNode;

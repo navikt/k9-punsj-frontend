@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 
+import { Alert, Box, Button, Heading } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Alert, Box, Button, Heading } from '@navikt/ds-react';
+import { useLocation, useNavigate } from 'react-router';
 
-import { RootStateType } from 'app/state/RootState';
-import { ROUTES } from 'app/constants/routes';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import { utledSakstypeForBehandletJournalpostBrev } from 'app/components/brev/brevSakstypeUtils';
+import { ROUTES } from 'app/constants/routes';
+import { RootStateType } from 'app/state/RootState';
 
 const SendBrevBehandletJp: React.FC = () => {
     const navigate = useNavigate();

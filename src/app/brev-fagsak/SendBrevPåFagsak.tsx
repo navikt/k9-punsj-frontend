@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-import { FormattedMessage } from 'react-intl';
-import { Dispatch } from 'redux';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, Button, Heading } from '@navikt/ds-react';
+import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
+import { ROUTES } from 'app/constants/routes';
 import { RootStateType } from 'app/state/RootState';
 import { lukkJournalpostOppgave as lukkJournalpostOppgaveAction, lukkOppgaveResetAction } from 'app/state/actions';
 import { finnForkortelseForDokumenttype } from 'app/utils';
-import { ROUTES } from 'app/constants/routes';
-import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
-import OkGåTilLosModal from 'app/components/okGåTilLosModal/OkGåTilLosModal';
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
+import { Dispatch } from 'redux';
 
 const SendBrevPåFagsakLukkOppgave: React.FC = () => {
     const navigate = useNavigate();
