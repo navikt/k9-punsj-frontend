@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useQueries } from '@tanstack/react-query';
 import { Box } from '@navikt/ds-react';
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
+import { PunsjDialogProvider } from 'app/components/PunsjDialog';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
@@ -25,6 +26,12 @@ export const JournalpostOgPdfVisning = (props: Props) => {
     const { journalposter, children } = props;
     const intl = useIntl();
     const leftPanelRef = useRef<HTMLDivElement>(null);
+    const [leftPanelElement, setLeftPanelElement] = useState<HTMLDivElement | null>(null);
+
+    const setLeftPanelRef = useCallback((element: HTMLDivElement | null) => {
+        leftPanelRef.current = element;
+        setLeftPanelElement(element);
+    }, []);
 
     useEffect(() => {
         const updateLeftPanelWidth = () => {
@@ -68,12 +75,14 @@ export const JournalpostOgPdfVisning = (props: Props) => {
           })
         : [];
     const left = () => (
-        <Box ref={leftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="space-16">
-            <div className="max-w-screen-lg">
-                <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
-            </div>
+        <Box ref={setLeftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="space-16">
+            <PunsjDialogProvider rootElement={leftPanelElement}>
+                <div className="max-w-screen-lg">
+                    <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
+                </div>
 
-            <div className="max-w-screen-lg">{children}</div>
+                <div className="max-w-screen-lg">{children}</div>
+            </PunsjDialogProvider>
         </Box>
     );
 
