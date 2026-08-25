@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -22,7 +23,7 @@ const renderDialog = (interactionMode?: 'blocking' | 'reference') => {
     return rootElement;
 };
 
-const renderReferenceDialogWithPdfTab = (onPdfTabClick: () => void) => {
+const renderReferenceDialogWithPanelControls = (onLeftControlClick: () => void, onPdfTabClick: () => void) => {
     const rootElement = document.createElement('div');
     rootElement.className = 'punsj-dialog-test-root';
     document.body.append(rootElement);
@@ -36,6 +37,12 @@ const renderReferenceDialogWithPdfTab = (onPdfTabClick: () => void) => {
                     </PunsjDialog.Body>
                 </PunsjDialog>
             </PunsjDialogProvider>
+            {createPortal(
+                <button type="button" onClick={onLeftControlClick}>
+                    Venstre kontroll
+                </button>,
+                rootElement,
+            )}
             <button type="button" onClick={onPdfTabClick}>
                 PDF-fane
             </button>
@@ -66,7 +73,7 @@ describe('PunsjDialog', () => {
     it('allows PDF pointer interaction while the reference date popover is open', async () => {
         const user = userEvent.setup();
         const onPdfTabClick = jest.fn();
-        renderReferenceDialogWithPdfTab(onPdfTabClick);
+        renderReferenceDialogWithPanelControls(jest.fn(), onPdfTabClick);
 
         const pdfTab = screen.getByRole('button', { name: 'PDF-fane' });
         await user.click(pdfTab);
@@ -78,5 +85,20 @@ describe('PunsjDialog', () => {
 
         await user.click(pdfTab);
         expect(onPdfTabClick).toHaveBeenCalledTimes(2);
+    });
+
+    it('blocks the left panel while keeping PDF controls interactive in reference mode', async () => {
+        const user = userEvent.setup();
+        const onLeftControlClick = jest.fn();
+        const onPdfTabClick = jest.fn();
+        const rootElement = renderReferenceDialogWithPanelControls(onLeftControlClick, onPdfTabClick);
+
+        const overlay = rootElement.querySelector('.journalpost-reference-overlay') as HTMLDivElement;
+        await user.click(overlay);
+
+        expect(onLeftControlClick).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole('button', { name: 'PDF-fane' }));
+        expect(onPdfTabClick).toHaveBeenCalledTimes(1);
     });
 });

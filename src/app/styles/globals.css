@@ -113,6 +113,17 @@ body {
     translate: -50% -50%;
 }
 
+.journalpost-reference-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--left-panel-width, var(--left-panel-width-fallback));
+    background-color: var(--ax-bg-overlay);
+    pointer-events: auto;
+    z-index: 999;
+}
+
 @keyframes journalpost-modal-fade-in {
     0% {
         opacity: 0.0001;

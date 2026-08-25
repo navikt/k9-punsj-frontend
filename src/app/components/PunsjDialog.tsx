@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react';
+import { createPortal } from 'react-dom';
 
 import { Dialog, type DialogPopupProps } from '@navikt/ds-react';
 
@@ -28,6 +29,14 @@ export const PunsjDialogProvider = ({ rootElement, children }: PunsjDialogProvid
 
 export const usePunsjDialogInteractionMode = () => useContext(PunsjDialogInteractionModeContext);
 
+const ReferenceOverlay = ({ rootElement }: { rootElement: HTMLElement | null }) => {
+    if (!rootElement) {
+        return null;
+    }
+
+    return createPortal(<div className="journalpost-reference-overlay" aria-hidden="true" />, rootElement);
+};
+
 const PunsjDialogRoot = ({
     open,
     onOpenChange,
@@ -41,6 +50,7 @@ const PunsjDialogRoot = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
+            {isReference && open && <ReferenceOverlay rootElement={rootElement} />}
             <Dialog.Popup
                 {...popupProps}
                 rootElement={rootElement}
