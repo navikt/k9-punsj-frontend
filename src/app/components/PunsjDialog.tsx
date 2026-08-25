@@ -9,8 +9,10 @@ interface PunsjDialogProviderProps {
     children: React.ReactNode;
 }
 
-interface PunsjDialogProps
-    extends Omit<DialogPopupProps, 'children' | 'closeOnOutsideClick' | 'modal' | 'rootElement' | 'withBackdrop'> {
+interface PunsjDialogProps extends Omit<
+    DialogPopupProps,
+    'children' | 'closeOnOutsideClick' | 'modal' | 'rootElement' | 'withBackdrop'
+> {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     interactionMode?: InteractionMode;
@@ -18,10 +20,13 @@ interface PunsjDialogProps
 }
 
 const PunsjDialogContext = createContext<HTMLElement | null>(null);
+const PunsjDialogInteractionModeContext = createContext<InteractionMode>('blocking');
 
 export const PunsjDialogProvider = ({ rootElement, children }: PunsjDialogProviderProps) => (
     <PunsjDialogContext.Provider value={rootElement}>{children}</PunsjDialogContext.Provider>
 );
+
+export const usePunsjDialogInteractionMode = () => useContext(PunsjDialogInteractionModeContext);
 
 const PunsjDialogRoot = ({
     open,
@@ -44,7 +49,9 @@ const PunsjDialogRoot = ({
                 closeOnOutsideClick={!isReference}
                 className={['journalpost-dialog-popup', className].filter(Boolean).join(' ')}
             >
-                {children}
+                <PunsjDialogInteractionModeContext.Provider value={interactionMode}>
+                    {children}
+                </PunsjDialogInteractionModeContext.Provider>
             </Dialog.Popup>
         </Dialog>
     );
