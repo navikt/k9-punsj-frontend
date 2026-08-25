@@ -64,8 +64,8 @@ Follow the delivery phases in this task file. Keep one branch and make a separat
 
 - [Completed] Complete phase 1: add `PunsjDialog` with `blocking` as the default and explicit `reference` mode, then migrate one blocking dialog and review the diff before committing.
 - [Completed] Complete phase 2: migrate `KalenderMedModal` and `TidsbrukKalender` to explicit `reference` mode, then review the diff before committing. Manual PDF interaction verification remains.
-- [Planned] Confirm the workflow inventory before starting phase 3. Keep fordeling, submit and confirmation dialogs in `blocking` mode unless classified otherwise.
-- [Planned] Complete phase 4: add focused coverage for both modes, retain the old Modal CSS fallback, then review the diff before committing.
+- [Completed] No phase-3 dialogs were classified. Fordeling, submit and confirmation dialogs remain blocking.
+- [Completed] Focused coverage verifies both adapter modes and the calendar reference dialog. The old Modal CSS fallback remains.
 
 ## Progress notes
 
@@ -75,6 +75,6 @@ Follow the delivery phases in this task file. Keep one branch and make a separat
 
 ## Outcome
 
-- Changed files:
-- Validation:
-- Remaining follow ups:
+- Changed files: `PunsjDialog`, journalpost panel portal context, scoped dialog placement CSS, both work-time calendar dialog patterns and focused tests.
+- Validation: `yarn test src/test/components/PunsjDialog.spec.tsx src/test/components/calendar/TidsbrukKalender.spec.tsx` passed with 2 suites and 6 tests.
+- Remaining follow ups: Manually verify that PDF document tabs and controls remain clickable while each calendar dialog is open.
