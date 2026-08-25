@@ -43,7 +43,13 @@ const KalenderMedModal = ({
             <VerticalSpacer twentyPx />
 
             {open && (
-                <PunsjDialog open onOpenChange={(nextOpen) => !nextOpen && close()} aria-label={modalLabel} className="max-w-[550px] min-w-[550px]">
+                <PunsjDialog
+                    open
+                    onOpenChange={(nextOpen) => !nextOpen && close()}
+                    interactionMode="reference"
+                    aria-label={modalLabel}
+                    className="max-w-[550px] min-w-[550px]"
+                >
                     <PunsjDialog.Body>{periodeListeModal(close)}</PunsjDialog.Body>
                 </PunsjDialog>
             )}

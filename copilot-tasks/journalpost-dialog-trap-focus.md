@@ -16,32 +16,32 @@
 - Allowed files: `src/app/components/JournalpostOgPdfVisning.tsx`, existing journalpost dialog components, directly related local CSS and focused tests.
 - Out of scope: business logic, API calls, navigation, i18n copy, dependency changes and dialogs outside the journalpost flow.
 - Constraints:
-  - Use Aksel `Dialog` already available in `@navikt/ds-react` 8.16.1.
-  - The adapter must expose an explicit `interactionMode`: `blocking` by default and `reference` only when passed by a data entry dialog.
-  - `blocking` uses Aksel's normal `Dialog.Popup modal={true}` with its regular backdrop. The PDF remains visible as context but cannot be interacted with.
-  - `reference` uses `Dialog.Popup modal="trap-focus"`, `withBackdrop={false}` and `closeOnOutsideClick={false}`. Use it only where the caseworker needs to interact with the PDF while entering data.
-  - Do not use Aksel `withBackdrop` in `reference` mode. It would disable the required pointer interaction outside the popup.
-  - Preserve blocking modal behavior for shared dialogs outside `JournalpostOgPdfVisning`.
-  - Do not use an iframe.
-  - Prefer a narrow context plus a compound adapter, for example `PunsjDialog` with `Header`, `Body` and `Footer`, over threading a new prop through every punch form.
-  - Preserve the current compact modal appearance, centered within the left work area. Do not replace it with a left drawer.
-  - `Dialog.Popup position="center"` centers in the viewport. Add a custom popup class and narrowly scoped CSS to center it in the left panel. Use the CSS `translate` property rather than overriding Aksel's `transform` animation.
-  - `rootElement` changes only the portal target. Do not use it as a positioning solution.
+    - Use Aksel `Dialog` already available in `@navikt/ds-react` 8.16.1.
+    - The adapter must expose an explicit `interactionMode`: `blocking` by default and `reference` only when passed by a data entry dialog.
+    - `blocking` uses Aksel's normal `Dialog.Popup modal={true}` with its regular backdrop. The PDF remains visible as context but cannot be interacted with.
+    - `reference` uses `Dialog.Popup modal="trap-focus"`, `withBackdrop={false}` and `closeOnOutsideClick={false}`. Use it only where the caseworker needs to interact with the PDF while entering data.
+    - Do not use Aksel `withBackdrop` in `reference` mode. It would disable the required pointer interaction outside the popup.
+    - Preserve blocking modal behavior for shared dialogs outside `JournalpostOgPdfVisning`.
+    - Do not use an iframe.
+    - Prefer a narrow context plus a compound adapter, for example `PunsjDialog` with `Header`, `Body` and `Footer`, over threading a new prop through every punch form.
+    - Preserve the current compact modal appearance, centered within the left work area. Do not replace it with a left drawer.
+    - `Dialog.Popup position="center"` centers in the viewport. Add a custom popup class and narrowly scoped CSS to center it in the left panel. Use the CSS `translate` property rather than overriding Aksel's `transform` animation.
+    - `rootElement` changes only the portal target. Do not use it as a positioning solution.
 
 ## Delivery phases
 
 Keep one branch, but use small logical commits. Do not combine phases in a single commit.
 
 1. `refactor: add journalpost dialog modes`
-   - Add the journalpost scoped configuration, `PunsjDialog` adapter with `blocking` and `reference` modes and scoped placement CSS.
-   - Migrate one small representative dialog and add focused adapter coverage.
+    - Add the journalpost scoped configuration, `PunsjDialog` adapter with `blocking` and `reference` modes and scoped placement CSS.
+    - Migrate one small representative dialog and add focused adapter coverage.
 2. `refactor: migrate work time dialogs to reference mode`
-   - Migrate both calendar patterns: `KalenderMedModal` and the selected day modal in `TidsbrukKalender`.
+    - Migrate both calendar patterns: `KalenderMedModal` and the selected day modal in `TidsbrukKalender`.
 3. `refactor: classify selected punch dialogs`
-   - Migrate only additional data entry dialogs that need PDF interaction.
-   - Keep fordeling, submit and confirmation dialogs in `blocking` mode unless explicitly classified otherwise.
+    - Migrate only additional data entry dialogs that need PDF interaction.
+    - Keep fordeling, submit and confirmation dialogs in `blocking` mode unless explicitly classified otherwise.
 4. `test: cover journalpost dialog modes`
-   - Add focused coverage for both modes. Keep the old Modal CSS fallback until a separate full migration.
+    - Add focused coverage for both modes. Keep the old Modal CSS fallback until a separate full migration.
 
 ## Validation
 
@@ -63,7 +63,7 @@ Follow the delivery phases in this task file. Keep one branch and make a separat
 ## Plan
 
 - [Completed] Complete phase 1: add `PunsjDialog` with `blocking` as the default and explicit `reference` mode, then migrate one blocking dialog and review the diff before committing.
-- [Planned] Complete phase 2: migrate `KalenderMedModal` and `TidsbrukKalender` to explicit `reference` mode, manually verify document tab and PDF control interaction, then review the diff before committing.
+- [Completed] Complete phase 2: migrate `KalenderMedModal` and `TidsbrukKalender` to explicit `reference` mode, then review the diff before committing. Manual PDF interaction verification remains.
 - [Planned] Confirm the workflow inventory before starting phase 3. Keep fordeling, submit and confirmation dialogs in `blocking` mode unless classified otherwise.
 - [Planned] Complete phase 4: add focused coverage for both modes, retain the old Modal CSS fallback, then review the diff before committing.
 
@@ -71,6 +71,7 @@ Follow the delivery phases in this task file. Keep one branch and make a separat
 
 - Phase 1 started. `blocking` is the default; `reference` is opt-in only for PDF-assisted data entry.
 - Phase 1 validated with `PunsjDialog.spec.tsx` and is ready to commit.
+- Phase 2 validated with focused adapter and calendar tests. Manual PDF tab and control interaction remains.
 
 ## Outcome
 
