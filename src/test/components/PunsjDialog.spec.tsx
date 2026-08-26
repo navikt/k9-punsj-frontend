@@ -6,6 +6,8 @@ import userEvent from '@testing-library/user-event';
 
 import { PunsjDialog, PunsjDialogProvider } from 'app/components/PunsjDialog';
 import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
+import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
+import { renderWithIntl } from '../testUtils';
 
 const renderDialog = (
     interactionMode?: 'blocking' | 'reference',
@@ -90,6 +92,22 @@ describe('PunsjDialog', () => {
 
         expect(rootElement.querySelector('.aksel-dialog__backdrop')).toBeInTheDocument();
         expect(rootElement.querySelector('.journalpost-reference-overlay')).not.toBeInTheDocument();
+    });
+
+    it('lets ErrorModal inherit reference behavior from the provider', () => {
+        const rootElement = document.createElement('div');
+        rootElement.className = 'punsj-dialog-test-root';
+        document.body.append(rootElement);
+
+        renderWithIntl(
+            <PunsjDialogProvider rootElement={rootElement} defaultInteractionMode="reference">
+                <ErrorModal onClose={() => undefined} />
+            </PunsjDialogProvider>,
+        );
+
+        expect(rootElement.querySelector('[data-test-id="errorModal"]')).toBeInTheDocument();
+        expect(rootElement.querySelector('.aksel-dialog__backdrop')).not.toBeInTheDocument();
+        expect(rootElement.querySelector('.journalpost-reference-overlay')).toBeInTheDocument();
     });
 
     it('allows PDF pointer interaction while the reference date popover is open', async () => {

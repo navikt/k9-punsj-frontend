@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Alert, AlertProps, Button, Heading, Loader, Modal } from '@navikt/ds-react';
+import { Alert, AlertProps, Button, Heading, Loader } from '@navikt/ds-react';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import {
 } from 'app/api/api';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import {
     dokumenttyperMedBehandlingsår,
     dokumenttyperMedBehandlingsårValg,
@@ -238,14 +239,19 @@ const KlassifiserModal = ({ toSøkere, fortsett, behandlingsAar, lukkModal, setF
     const reservertFagsakIdForBrev = journalførJournalpost?.data?.saksnummer as string;
 
     return (
-        <Modal open onClose={lukkModal} aria-labelledby="modal-heading" data-test-id="klassifiserModal">
-            <Modal.Header closeButton={false}>
+        <PunsjDialog
+            open
+            onOpenChange={(open) => !open && lukkModal()}
+            aria-labelledby="modal-heading"
+            data-test-id="klassifiserModal"
+        >
+            <PunsjDialog.Header withClosebutton={false}>
                 <Heading level="1" size="small" id="modal-heading" data-test-id="klassifiserModalHeader">
                     <FormattedMessage id={`fordeling.klassifiserModal.tittel${fortsett ? '' : '.settPåVent'}`} />
                 </Heading>
-            </Modal.Header>
+            </PunsjDialog.Header>
 
-            <Modal.Body>
+            <PunsjDialog.Body>
                 <div className="max-w-xl">
                     <KlassifiseringInfo />
 
@@ -377,9 +383,9 @@ const KlassifiserModal = ({ toSøkere, fortsett, behandlingsAar, lukkModal, setF
                         </div>
                     )}
                 </div>
-            </Modal.Body>
+            </PunsjDialog.Body>
 
-            <Modal.Footer>
+            <PunsjDialog.Footer>
                 {visGåTilLosBtn || getJournalpost.isError ? (
                     <Button
                         size="small"
@@ -464,8 +470,8 @@ const KlassifiserModal = ({ toSøkere, fortsett, behandlingsAar, lukkModal, setF
                         <FormattedMessage id="fordeling.klassifiserModal.btn.settPåVent" />
                     </Button>
                 )}
-            </Modal.Footer>
-        </Modal>
+            </PunsjDialog.Footer>
+        </PunsjDialog>
     );
 };
 

@@ -102,7 +102,8 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - [Completed] Complete phase 6: block and dim only the left work area while keeping PDF interaction enabled.
 - [Completed] Complete phase 7: make `reference` the journalpost provider default while preserving blocking outside it.
 - [Completed] Complete phase 8: migrate the shared journalpost modal components.
-- [Pending] Complete phases 9 and 10 in separate reviewable passes.
+- [Pending] Complete phase 9 in a separate reviewable pass.
+- [Completed] Complete phase 10: migrate the four Fordeling modal shells to inherit the provider interaction mode.
 - [Pending] Complete phase 11 only after the journalpost Modal inventory is empty.
 
 ## Progress notes
@@ -119,9 +120,10 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - Phase 7: `JournalpostOgPdfVisning` configures `reference` as the provider default; explicit `blocking` remains available per dialog.
 - Phase 8: migrated `ErDuSikkerModal`, `ForhåndsvisSøknadModal`, `SettPåVentModal` and `OkGåTilLosModal` to the shared adapter.
 - Review follow-up: the reference overlay is provider-scoped and remains singular while one or more reference dialogs are open.
+- Phase 10: migrated ErrorModal, KlassifiserModal, KopierModal and VentLukkBrevModal to inherit PunsjDialog interaction mode; representative ErrorModal coverage verifies reference mode without an Aksel backdrop.
 
 ## Outcome
 
-- Changed files: `PunsjDialog`, journalpost provider configuration, the four shared modal components, focused dialog coverage and Cypress confirmation-dialog selectors.
+- Changed files: `PunsjDialog`, journalpost provider configuration, the shared and Fordeling modal components, focused dialog coverage and Cypress confirmation-dialog selectors.
 - Validation: Full Jest-suite passed: 65 suites and 465 tests. Focused dialog, shared-confirmation and standalone calendar coverage passed.
-- Remaining follow ups: Validate the provider-scoped overlay and phase 5 manually, then complete phases 9 to 11 in reviewable passes.
+- Remaining follow ups: Validate the provider-scoped overlay and phase 5 manually, then complete phases 9 and 11 in reviewable passes.
