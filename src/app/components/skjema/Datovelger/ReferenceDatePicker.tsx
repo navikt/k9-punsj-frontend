@@ -11,7 +11,10 @@ interface ReferenceDatePickerProps {
 const ReferenceDatePicker = ({ datepickerProps, onSelect, children }: ReferenceDatePickerProps) => {
     const [open, setOpen] = useState(false);
     const [anchorElement, setAnchorElement] = useState<HTMLDivElement | null>(null);
-    const { open: _open, onClose: _onClose, onOpenToggle: _onOpenToggle, ...standaloneProps } = datepickerProps;
+    const standaloneProps = { ...datepickerProps };
+    delete standaloneProps.open;
+    delete standaloneProps.onClose;
+    delete standaloneProps.onOpenToggle;
 
     return (
         <>

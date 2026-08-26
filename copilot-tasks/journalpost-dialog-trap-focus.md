@@ -100,8 +100,8 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - [Completed] Focused coverage verifies both adapter modes and the calendar reference dialog. The old Modal CSS fallback remains.
 - [Completed] Implement phase 5 with context-based renderer selection and PDF pointer coverage. Validation of the follow-up remains pending.
 - [Completed] Complete phase 6: block and dim only the left work area while keeping PDF interaction enabled.
-- [Pending] Complete phase 7: make `reference` the journalpost provider default while preserving blocking outside it.
-- [Pending] Complete phase 8: migrate the shared journalpost modal components.
+- [Completed] Complete phase 7: make `reference` the journalpost provider default while preserving blocking outside it.
+- [Completed] Complete phase 8: migrate the shared journalpost modal components.
 - [Pending] Complete phases 9 and 10 in separate reviewable passes.
 - [Pending] Complete phase 11 only after the journalpost Modal inventory is empty.
 
@@ -116,9 +116,12 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - Phase 6 decision: use a custom left-panel overlay because Aksel `withBackdrop` also disables pointer interaction with the PDF.
 - Phase 6 implementation: the reference overlay uses the measured left-panel width and sits below Aksel Popover and Dialog layers.
 - Product decision after phase 6: PDF pointer interaction should remain available for every dialog inside `JournalpostOgPdfVisning`, not only data-entry dialogs.
+- Phase 7: `JournalpostOgPdfVisning` configures `reference` as the provider default; explicit `blocking` remains available per dialog.
+- Phase 8: migrated `ErDuSikkerModal`, `ForhåndsvisSøknadModal`, `SettPåVentModal` and `OkGåTilLosModal` to the shared adapter.
+- Review follow-up: the reference overlay is provider-scoped and remains singular while one or more reference dialogs are open.
 
 ## Outcome
 
-- Changed files: `PunsjDialog`, journalpost dialog placement CSS, both `Datovelger` variants, the reference date picker renderer and focused pointer coverage.
-- Validation: Earlier focused dialog and calendar tests passed. Phase-5 and phase-6 checks have not been rerun after the follow-up implementations.
-- Remaining follow ups: Validate phases 5 and 6, then complete phases 7 to 11 in reviewable passes.
+- Changed files: `PunsjDialog`, journalpost provider configuration, the four shared modal components, focused dialog coverage and Cypress confirmation-dialog selectors.
+- Validation: Full Jest-suite passed: 65 suites and 465 tests. Focused dialog, shared-confirmation and standalone calendar coverage passed.
+- Remaining follow ups: Validate the provider-scoped overlay and phase 5 manually, then complete phases 9 to 11 in reviewable passes.

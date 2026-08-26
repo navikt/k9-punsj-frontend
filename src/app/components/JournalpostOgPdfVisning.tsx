@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useQueries } from '@tanstack/react-query';
 import { Box } from '@navikt/ds-react';
+import { useQueries } from '@tanstack/react-query';
 import { ApiPath } from 'app/apiConfig';
 import { JournalpostPanel } from 'app/components/journalpost-panel/JournalpostPanel';
-import { PunsjDialogProvider } from 'app/components/PunsjDialog';
 import Page from 'app/components/page/Page';
 import PdfVisning from 'app/components/pdf/PdfVisning';
+import { PunsjDialogProvider } from 'app/components/PunsjDialog';
 import { IJournalpostDokumenter } from 'app/models/enums/Journalpost/JournalpostDokumenter';
 import { get } from 'app/utils';
 import intlHelper from 'app/utils/intlUtils';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import './punchPage.css';
 
@@ -76,7 +76,7 @@ export const JournalpostOgPdfVisning = (props: Props) => {
         : [];
     const left = () => (
         <Box ref={setLeftPanelRef} className="omsorgspenger_punch_form min-w-min" padding="space-16">
-            <PunsjDialogProvider rootElement={leftPanelElement}>
+            <PunsjDialogProvider rootElement={leftPanelElement} defaultInteractionMode="reference">
                 <div className="max-w-screen-lg">
                     <JournalpostPanel journalposter={journalpostDokumenter.map((v) => v.journalpostid)} />
                 </div>

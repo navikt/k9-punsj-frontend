@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { FormattedMessage } from 'react-intl';
-import { Button, Modal } from '@navikt/ds-react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
+import { Button } from '@navikt/ds-react';
+import { FormattedMessage } from 'react-intl';
+
+import { PunsjDialog } from 'app/components/PunsjDialog';
 
 import { redirectToLos } from '../../utils';
 import { initializeDate } from '../../utils/timeUtils';
@@ -25,14 +27,14 @@ const utledMelding = (mld: string) => {
 
 const OkGåTilLosModal = ({ meldingId, onClose }: Props) => {
     return (
-        <Modal
+        <PunsjDialog
             key="settpaaventokmodal"
-            onClose={onClose}
+            onOpenChange={(nextOpen) => !nextOpen && onClose()}
             aria-label="settpaaventokmodal"
             data-test-id="okGåTilLosModal"
             open
         >
-            <Modal.Body>
+            <PunsjDialog.Body>
                 <div className="ok-gaa-til-los" data-testid="ok-gaa-til-los-modal">
                     <CheckmarkCircleFillIcon className="successIcon-gå-to-los" title="check" />
 
@@ -55,8 +57,8 @@ const OkGåTilLosModal = ({ meldingId, onClose }: Props) => {
                         <FormattedMessage id="modal.okgaatillos.ok" />
                     </Button>
                 </div>
-            </Modal.Body>
-        </Modal>
+            </PunsjDialog.Body>
+        </PunsjDialog>
     );
 };
 

@@ -46,7 +46,6 @@ const KalenderMedModal = ({
                 <PunsjDialog
                     open
                     onOpenChange={(nextOpen) => !nextOpen && close()}
-                    interactionMode="reference"
                     aria-label={modalLabel}
                     className="max-w-[550px] min-w-[550px]"
                 >

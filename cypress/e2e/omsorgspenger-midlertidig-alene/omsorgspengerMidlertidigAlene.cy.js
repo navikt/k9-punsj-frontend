@@ -120,7 +120,7 @@ describe('Eksisterende søknader midlertidig alene', () => {
 
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 

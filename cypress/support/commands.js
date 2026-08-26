@@ -52,7 +52,7 @@ Cypress.Commands.add('sendInnSoknad', () => {
         .should('exist')
         .click();
 
-    cy.get('.aksel-modal').within(() => {
+    cy.findByTestId('erdusikkermodal').within(() => {
         cy.findByRole('button', { name: /send inn/i })
             .should('exist')
             .click();
