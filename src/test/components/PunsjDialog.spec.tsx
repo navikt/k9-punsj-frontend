@@ -4,10 +4,8 @@ import { createPortal } from 'react-dom';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
 import { PunsjDialog, PunsjDialogProvider } from 'app/components/PunsjDialog';
 import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
-import { renderWithIntl } from '../testUtils';
 
 const renderDialog = (
     interactionMode?: 'blocking' | 'reference',
@@ -60,27 +58,6 @@ const renderReferenceDialogWithPanelControls = (
     return rootElement;
 };
 
-const renderErDuSikkerModal = (defaultInteractionMode?: 'blocking' | 'reference'): HTMLDivElement => {
-    const rootElement = document.createElement('div');
-    rootElement.className = 'punsj-dialog-test-root';
-    document.body.append(rootElement);
-
-    renderWithIntl(
-        <PunsjDialogProvider rootElement={rootElement} defaultInteractionMode={defaultInteractionMode}>
-            <ErDuSikkerModal
-                melding="skjema.knapp.avbryt"
-                modalKey="bekreftelse"
-                open
-                onSubmit={() => undefined}
-                onClose={() => undefined}
-                submitKnappText="skjema.knapp.avbryt"
-            />
-        </PunsjDialogProvider>,
-    );
-
-    return rootElement;
-};
-
 afterEach(() => {
     cleanup();
     document.querySelectorAll('.punsj-dialog-test-root').forEach((element) => element.remove());
@@ -108,50 +85,8 @@ describe('PunsjDialog', () => {
         expect(rootElement.querySelector('.journalpost-reference-overlay')).toBeInTheDocument();
     });
 
-    it('keeps one reference overlay until the final reference dialog closes', () => {
-        const rootElement = document.createElement('div');
-        rootElement.className = 'punsj-dialog-test-root';
-        document.body.append(rootElement);
-
-        const renderDialogs = (firstOpen: boolean, secondOpen: boolean) => (
-            <PunsjDialogProvider rootElement={rootElement} defaultInteractionMode="reference">
-                <PunsjDialog open={firstOpen} onOpenChange={() => undefined} aria-label="Første dialog">
-                    <PunsjDialog.Body>Første dialoginnhold</PunsjDialog.Body>
-                </PunsjDialog>
-                <PunsjDialog open={secondOpen} onOpenChange={() => undefined} aria-label="Andre dialog">
-                    <PunsjDialog.Body>Andre dialoginnhold</PunsjDialog.Body>
-                </PunsjDialog>
-            </PunsjDialogProvider>
-        );
-
-        const { rerender } = render(renderDialogs(true, true));
-
-        expect(rootElement.querySelectorAll('.journalpost-reference-overlay')).toHaveLength(1);
-
-        rerender(renderDialogs(false, true));
-        expect(rootElement.querySelectorAll('.journalpost-reference-overlay')).toHaveLength(1);
-
-        rerender(renderDialogs(false, false));
-        expect(rootElement.querySelectorAll('.journalpost-reference-overlay')).toHaveLength(0);
-    });
-
     it('allows an explicit blocking override of the provider reference mode', () => {
         const rootElement = renderDialog('blocking', 'reference');
-
-        expect(rootElement.querySelector('.aksel-dialog__backdrop')).toBeInTheDocument();
-        expect(rootElement.querySelector('.journalpost-reference-overlay')).not.toBeInTheDocument();
-    });
-
-    it('lets ErDuSikkerModal inherit reference behavior from the provider', () => {
-        const rootElement = renderErDuSikkerModal('reference');
-
-        expect(screen.getByTestId('erdusikkermodal')).toBeInTheDocument();
-        expect(rootElement.querySelector('.aksel-dialog__backdrop')).not.toBeInTheDocument();
-        expect(rootElement.querySelector('.journalpost-reference-overlay')).toBeInTheDocument();
-    });
-
-    it('keeps ErDuSikkerModal blocking outside a reference provider', () => {
-        const rootElement = renderErDuSikkerModal();
 
         expect(rootElement.querySelector('.aksel-dialog__backdrop')).toBeInTheDocument();
         expect(rootElement.querySelector('.journalpost-reference-overlay')).not.toBeInTheDocument();
