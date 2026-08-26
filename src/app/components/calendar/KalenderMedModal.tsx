@@ -47,7 +47,7 @@ const KalenderMedModal = ({
                     open
                     onOpenChange={(nextOpen) => !nextOpen && close()}
                     aria-label={modalLabel}
-                    className="max-w-[550px] min-w-[550px]"
+                    width="550px"
                 >
                     <PunsjDialog.Body>{periodeListeModal(close)}</PunsjDialog.Body>
                 </PunsjDialog>
