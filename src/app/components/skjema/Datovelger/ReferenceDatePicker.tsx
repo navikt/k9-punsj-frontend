@@ -29,7 +29,7 @@ const ReferenceDatePicker = ({ datepickerProps, onSelect, children }: ReferenceD
                 </DatePicker>
             </div>
             <Popover
-                open={open}
+                open={open && !!anchorElement}
                 onClose={() => setOpen(false)}
                 anchorEl={anchorElement}
                 placement="bottom-start"
