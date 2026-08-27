@@ -49,7 +49,7 @@ const KalenderMedModal = ({
                     aria-label={modalLabel}
                     width="550px"
                 >
-                    <PunsjDialog.Body>{periodeListeModal(close)}</PunsjDialog.Body>
+                    <PunsjDialog.Body className="flex justify-center">{periodeListeModal(close)}</PunsjDialog.Body>
                 </PunsjDialog>
             )}
 
