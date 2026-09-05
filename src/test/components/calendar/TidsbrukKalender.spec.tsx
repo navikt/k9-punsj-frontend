@@ -11,7 +11,9 @@ const gyldigPeriode = {
     tom: new Date('2026-01-16T00:00:00.000Z'),
 };
 
-const TestModalContent = ({ selectedDates = [] }: { selectedDates?: Date[] }) => <div>{`Valgte dager: ${selectedDates.length}`}</div>;
+const TestModalContent = ({ selectedDates = [] }: { selectedDates?: Date[] }) => (
+    <div>{`Valgte dager: ${selectedDates.length}`}</div>
+);
 
 const renderKalender = () =>
     renderWithIntl(
@@ -89,9 +91,10 @@ describe('TidsbrukKalender', () => {
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
         await userEvent.click(screen.getByRole('button', { name: 'Registrer tid' }));
 
-        const dialog = document.querySelector('dialog[open]');
+        const dialog = screen.getByRole('dialog', { name: 'Modal' });
 
         expect(dialog).toBeInTheDocument();
-        expect(dialog).toHaveAttribute('aria-label', 'Modal');
+        expect(dialog).toHaveClass('journalpost-dialog-popup');
+        expect(document.querySelector('.aksel-dialog__backdrop')).not.toBeInTheDocument();
     });
 });

@@ -104,6 +104,26 @@ body {
     animation: journalpost-modal-fade-in 0.7s cubic-bezier(0.15, 1, 0.3, 1);
 }
 
+.journalpost-modal .journalpost-dialog-popup[data-position='center'] {
+    left: calc(var(--left-panel-width, var(--left-panel-width-fallback)) / 2);
+    right: auto;
+    top: 50%;
+    margin: 0;
+    max-width: calc(var(--left-panel-width, var(--left-panel-width-fallback)) - 2rem);
+    translate: -50% -50%;
+}
+
+.journalpost-reference-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--left-panel-width, var(--left-panel-width-fallback));
+    background-color: var(--ax-bg-overlay);
+    pointer-events: auto;
+    z-index: 999;
+}
+
 @keyframes journalpost-modal-fade-in {
     0% {
         opacity: 0.0001;

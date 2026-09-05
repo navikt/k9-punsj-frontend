@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Alert, Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Heading } from '@navikt/ds-react';
 import { useMutation } from '@tanstack/react-query';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { lukkJournalpostEtterKopiering } from 'app/api/api';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import { kopierJournalpostRedux } from 'app/state/reducers/FellesReducer';
 import { RootStateType } from 'app/state/RootState';
 import { getForkortelseFraFordelingDokumenttype, redirectToLos } from 'app/utils';
@@ -57,14 +58,14 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, fagsakId
     const disabled = lukkJournalpost.isPending;
 
     return (
-        <Modal open onClose={lukkModal} aria-labelledby="modal-heading">
-            <Modal.Header closeButton={false}>
+        <PunsjDialog open onOpenChange={(open) => !open && lukkModal()} aria-labelledby="modal-heading">
+            <PunsjDialog.Header withClosebutton={false}>
                 <Heading level="1" size="small" id="modal-heading">
                     <FormattedMessage id="fordeling.kopiereJournalpostTilSammeSøker.kopierModal.tittel" />
                 </Heading>
-            </Modal.Header>
+            </PunsjDialog.Header>
 
-            <Modal.Body>
+            <PunsjDialog.Body>
                 <div className="space-y-4">
                     <div>
                         <FormattedMessage
@@ -91,9 +92,9 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, fagsakId
                         </div>
                     )}
                 </div>
-            </Modal.Body>
+            </PunsjDialog.Body>
 
-            <Modal.Footer>
+            <PunsjDialog.Footer>
                 {fellesState.kopierJournalpostSuccess ? (
                     <>
                         <Button
@@ -142,8 +143,8 @@ const KopierLukkJpModal = ({ søkerId, pleietrengendeId, journalpostId, fagsakId
                         </Button>
                     </>
                 )}
-            </Modal.Footer>
-        </Modal>
+            </PunsjDialog.Footer>
+        </PunsjDialog>
     );
 };
 

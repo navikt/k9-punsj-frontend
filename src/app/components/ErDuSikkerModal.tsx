@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { FormattedMessage } from 'react-intl';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import VerticalSpacer from 'app/components/VerticalSpacer';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
     melding: string;
@@ -16,8 +17,14 @@ interface Props {
 }
 
 const ErDuSikkerModal = ({ melding, modalKey, open, onSubmit, onClose, submitKnappText, extraInfo }: Props) => (
-    <Modal key={modalKey} onClose={onClose} aria-label={modalKey} open={open} data-testid="erdusikkermodal">
-        <Modal.Body>
+    <PunsjDialog
+        key={modalKey}
+        onOpenChange={(nextOpen) => !nextOpen && onClose()}
+        aria-label={modalKey}
+        open={open}
+        data-testid="erdusikkermodal"
+    >
+        <PunsjDialog.Body>
             <FormattedMessage id={melding} />
 
             {extraInfo && (
@@ -26,9 +33,9 @@ const ErDuSikkerModal = ({ melding, modalKey, open, onSubmit, onClose, submitKna
                     <FormattedMessage id={extraInfo} />
                 </div>
             )}
-        </Modal.Body>
+        </PunsjDialog.Body>
 
-        <Modal.Footer>
+        <PunsjDialog.Footer>
             <Button
                 size="small"
                 onClick={() => {
@@ -43,8 +50,8 @@ const ErDuSikkerModal = ({ melding, modalKey, open, onSubmit, onClose, submitKna
             <Button variant="secondary" size="small" onClick={() => onClose()} type="button">
                 <FormattedMessage id="skjema.knapp.avbryt" />
             </Button>
-        </Modal.Footer>
-    </Modal>
+        </PunsjDialog.Footer>
+    </PunsjDialog>
 );
 
 export default ErDuSikkerModal;

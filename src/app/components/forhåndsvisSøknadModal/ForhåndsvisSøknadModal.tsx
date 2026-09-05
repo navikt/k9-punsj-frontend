@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { Button } from '@navikt/ds-react';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import { FormattedMessage } from 'react-intl';
-import { Button, Heading, Modal } from '@navikt/ds-react';
 
 interface Props {
     children: JSX.Element | null;
@@ -11,16 +12,22 @@ interface Props {
 }
 
 const ForhåndsvisSøknadModal = ({ children, dataTestId, videre, avbryt }: Props) => (
-    <Modal key="validertSoknadModal" aria-label="validertSoknadModal" data-testid={dataTestId} onClose={avbryt} open>
-        <Modal.Header closeButton={false}>
-            <Heading size="medium" level="1">
+    <PunsjDialog
+        key="validertSoknadModal"
+        aria-label="validertSoknadModal"
+        data-testid={dataTestId}
+        onOpenChange={(nextOpen) => !nextOpen && avbryt()}
+        open
+    >
+        <PunsjDialog.Header withClosebutton={false}>
+            <PunsjDialog.Title>
                 <FormattedMessage id="skjema.kvittering.oppsummering" />
-            </Heading>
-        </Modal.Header>
+            </PunsjDialog.Title>
+        </PunsjDialog.Header>
 
-        <Modal.Body>{children}</Modal.Body>
+        <PunsjDialog.Body>{children}</PunsjDialog.Body>
 
-        <Modal.Footer>
+        <PunsjDialog.Footer>
             <Button size="small" onClick={videre} data-testid="videreKnapp">
                 <FormattedMessage id="skjema.knapp.videre" />
             </Button>
@@ -28,8 +35,8 @@ const ForhåndsvisSøknadModal = ({ children, dataTestId, videre, avbryt }: Prop
             <Button variant="secondary" size="small" onClick={avbryt} data-testid="avbrytKnapp">
                 <FormattedMessage id="skjema.knapp.avbryt" />
             </Button>
-        </Modal.Footer>
-    </Modal>
+        </PunsjDialog.Footer>
+    </PunsjDialog>
 );
 
 export default ForhåndsvisSøknadModal;

@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Alert, Button, Heading, Modal, Table, Link } from '@navikt/ds-react';
 import { EyeFillIcon } from '@navikt/aksel-icons';
+import { Alert, Button, Heading, Link, Table } from '@navikt/ds-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
+import { PunsjDialog } from 'app/components/PunsjDialog';
 
 import { ApiPath } from '../../apiConfig';
 import { IJournalpostInfo } from '../../models/types';
@@ -36,15 +38,18 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
     const { submit, onClose, journalposter, soknadId, children } = props;
 
     return (
-        <Modal
+        <PunsjDialog
             key="settpaaventmodal"
-            onClose={onClose}
+            onOpenChange={(nextOpen) => !nextOpen && onClose()}
             aria-label="settpaaventmodal"
-            header={{ heading: intlHelper(intl, 'skjema.knapp.settpaavent'), closeButton: false }}
             data-testid="settpaaventmodal"
             open
         >
-            <Modal.Body>
+            <PunsjDialog.Header withClosebutton={false}>
+                <PunsjDialog.Title>{intlHelper(intl, 'skjema.knapp.settpaavent')}</PunsjDialog.Title>
+            </PunsjDialog.Header>
+
+            <PunsjDialog.Body>
                 <>
                     <FormattedMessage id="skjema.settpaavent.periode" />
 
@@ -116,9 +121,9 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                         </div>
                     )}
                 </>
-            </Modal.Body>
+            </PunsjDialog.Body>
 
-            <Modal.Footer>
+            <PunsjDialog.Footer>
                 <Button onClick={submit} size="small">
                     <FormattedMessage id="skjema.knapp.settpaavent" />
                 </Button>
@@ -126,8 +131,8 @@ const SettPaaVentModal: React.FC<Props> = (props) => {
                 <Button variant="secondary" onClick={onClose} size="small">
                     <FormattedMessage id="skjema.knapp.avbryt" />
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </PunsjDialog.Footer>
+        </PunsjDialog>
     );
 };
 
