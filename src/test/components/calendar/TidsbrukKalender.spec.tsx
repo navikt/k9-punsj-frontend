@@ -11,62 +11,45 @@ const gyldigPeriode = {
     tom: new Date('2026-01-16T00:00:00.000Z'),
 };
 
-const TestModalContent = ({ selectedDates = [] }: { selectedDates?: Date[] }) => <div>{`Valgte dager: ${selectedDates.length}`}</div>;
+const ControlledTidsbrukKalender = ({ gyldigePerioder = [gyldigPeriode] }: { gyldigePerioder?: typeof gyldigPeriode[] }) => {
+    const [selectedDates, setSelectedDates] = React.useState<Date[]>([]);
+
+    return (
+        <TidsbrukKalender
+            gyldigePerioder={gyldigePerioder}
+            dateContentRenderer={() => null}
+            tittelRenderer={() => 'Test month'}
+            selectedDates={selectedDates}
+            setSelectedDates={setSelectedDates}
+        />
+    );
+};
 
 const renderKalender = () =>
-    renderWithIntl(
-        <div>
-            <TidsbrukKalender
-                gyldigePerioder={[gyldigPeriode]}
-                ModalContent={<TestModalContent />}
-                slettPeriode={() => undefined}
-                dateContentRenderer={() => null}
-                tittelRenderer={() => 'Test month'}
-            />
-            <button type="button" data-testid="outside">
-                Outside
-            </button>
-        </div>,
-    );
+    renderWithIntl(<ControlledTidsbrukKalender />);
 
 const åpneKalender = async () => {
     await userEvent.click(screen.getByRole('button', { name: /Vis mer/i }));
 };
 
-const hentRegistrerTidKnapp = () => screen.getByText('Registrer tid').closest('button') as HTMLButtonElement;
-
 describe('TidsbrukKalender', () => {
     it('renders nothing when gyldigePerioder is empty', () => {
         const { container } = renderWithIntl(
-            <TidsbrukKalender
-                gyldigePerioder={[]}
-                ModalContent={<TestModalContent />}
-                slettPeriode={() => undefined}
-                dateContentRenderer={() => null}
-                tittelRenderer={() => 'Test month'}
-            />,
+            <ControlledTidsbrukKalender gyldigePerioder={[]} />,
         );
 
         expect(container).toBeEmptyDOMElement();
     });
 
-    it('clears selected dates on escape and outside click', async () => {
+    it('clears selected dates on escape', async () => {
         renderKalender();
         await åpneKalender();
 
-        const registrerTidKnapp = hentRegistrerTidKnapp();
-
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
-        expect(registrerTidKnapp).toBeVisible();
+        expect(screen.getByTestId('calendar-grid-date-2026-01-15')).toHaveClass('calendarGrid__day--selected');
 
         fireEvent.keyDown(document, { key: 'Escape' });
-        expect(registrerTidKnapp).not.toBeVisible();
-
-        fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
-        expect(registrerTidKnapp).toBeVisible();
-
-        await userEvent.click(screen.getByTestId('outside'));
-        expect(registrerTidKnapp).not.toBeVisible();
+        expect(screen.getByTestId('calendar-grid-date-2026-01-15')).not.toHaveClass('calendarGrid__day--selected');
     });
 
     it('selects a date range with shift', async () => {
@@ -82,16 +65,15 @@ describe('TidsbrukKalender', () => {
         expect(screen.getByTestId('calendar-grid-date-2026-01-16')).toHaveClass('calendarGrid__day--selected');
     });
 
-    it('opens modal when a selected date is registered', async () => {
+    it('renders selection without local action buttons', async () => {
         renderKalender();
         await åpneKalender();
 
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
-        await userEvent.click(screen.getByRole('button', { name: 'Registrer tid' }));
 
-        const dialog = document.querySelector('dialog[open]');
-
-        expect(dialog).toBeInTheDocument();
-        expect(dialog).toHaveAttribute('aria-label', 'Modal');
+        expect(screen.getByTestId('calendar-grid-date-2026-01-15')).toHaveClass('calendarGrid__day--selected');
+        expect(screen.getByText('Valgt i denne måneden: 1 dag')).toBeInTheDocument();
+        expect(screen.getByText('Fortsett nederst for å registrere')).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Registrer tid' })).not.toBeInTheDocument();
     });
 });
