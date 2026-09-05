@@ -1,0 +1,19 @@
+name: "Configure Yarn for GitHub Packages"
+description: "Configures the @navikt scope registry and auth token in the home yarnrc"
+inputs:
+  token:
+    description: "Auth token for npm.pkg.github.com"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Configure Yarn for GitHub Packages
+      shell: bash
+      run: |
+        yarn config set --home npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
+        yarn config set --home npmScopes.navikt.npmAlwaysAuth true
+        yarn config set --home npmScopes.navikt.npmAuthToken "${{ inputs.token }}"
