@@ -319,6 +319,13 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
     private handleSubmit = () => {
         const navarandeSoknad: IPLSSoknad = this.state.soknad;
+        const frilanser = navarandeSoknad.opptjeningAktivitet.frilanser;
+
+        if (frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato) {
+            this.setState({ harForsoektAaSendeInn: true });
+            return;
+        }
+
         const journalposter = {
             journalposter: Array.from(
                 navarandeSoknad && navarandeSoknad.journalposter ? navarandeSoknad?.journalposter : [],
