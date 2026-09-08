@@ -443,6 +443,31 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 
+    it('validerer ikke hos backend når frilanser slutter før startdato', () => {
+        const validateSoknad = jest.fn();
+
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        frilanser: {
+                            startdato: '2022-10-10',
+                            sluttdato: '2022-10-01',
+                            jobberFortsattSomFrilans: false,
+                        },
+                    },
+                },
+            },
+            { validateSoknad },
+        );
+
+        fireEvent.click(screen.getByTestId('sendKnapp'));
+
+        expect(validateSoknad).not.toHaveBeenCalled();
+    });
+
     it('Viser melding om valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 
