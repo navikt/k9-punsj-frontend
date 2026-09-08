@@ -1113,11 +1113,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
         }
 
-        if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter }, true);
+        const soknadForValidering = { ...this.getSoknadFromStore(), ...soknad, journalposter };
+        const frilanser = soknadForValidering.opptjeningAktivitet?.frilanser;
+
+        if (
+            this.state.harForsoektAaSendeInn &&
+            !(frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato)
+        ) {
+            this.props.validateSoknad(soknadForValidering, true);
         }
 
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter });
+        return this.props.updateSoknad(soknadForValidering);
     };
 
     private handleStartButtonClick = () => {

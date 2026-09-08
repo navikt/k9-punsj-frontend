@@ -3,7 +3,9 @@ import { PunchFormComponent } from 'app/søknader/pleiepenger-livets-sluttfase/c
 describe('PLSPunchForm', () => {
     test('validerer ikke hos backend når frilanser slutter før startdato', () => {
         const validateSoknad = jest.fn();
-        const component = new PunchFormComponent({ validateSoknad } as ConstructorParameters<typeof PunchFormComponent>[0]);
+        const component = new PunchFormComponent({ validateSoknad } as ConstructorParameters<
+            typeof PunchFormComponent
+        >[0]);
         const setState = jest.fn();
 
         component.state = {
@@ -27,5 +29,50 @@ describe('PLSPunchForm', () => {
 
         expect(setState).toHaveBeenCalledWith({ harForsoektAaSendeInn: true });
         expect(validateSoknad).not.toHaveBeenCalled();
+    });
+
+    test('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
+        const validateSoknad = jest.fn();
+        const updateSoknad = jest.fn();
+        const component = new PunchFormComponent({
+            validateSoknad,
+            updateSoknad,
+            journalpostid: '200',
+        } as ConstructorParameters<typeof PunchFormComponent>[0]);
+        const invalidFrilanser = {
+            startdato: '2022-10-10',
+            sluttdato: '2022-10-01',
+            jobberFortsattSomFrilans: false,
+        };
+
+        component.state = {
+            ...component.state,
+            soknad: {
+                ...component.state.soknad,
+                opptjeningAktivitet: { ...component.state.soknad.opptjeningAktivitet, frilanser: invalidFrilanser },
+            },
+        };
+        component.setState = jest.fn() as typeof component.setState;
+        Reflect.set(component, 'getSoknadFromStore', () => ({
+            journalposter: new Set(),
+            opptjeningAktivitet: { frilanser: invalidFrilanser },
+        }));
+
+        (Reflect.get(component, 'handleSubmit') as () => void).call(component);
+        component.state = { ...component.state, harForsoektAaSendeInn: true };
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: object) => void).call(component, {
+            mottattDato: '2022-10-11',
+        });
+
+        expect(validateSoknad).not.toHaveBeenCalled();
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: object) => void).call(component, {
+            opptjeningAktivitet: {
+                frilanser: { ...invalidFrilanser, sluttdato: '2022-10-10' },
+            },
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 });

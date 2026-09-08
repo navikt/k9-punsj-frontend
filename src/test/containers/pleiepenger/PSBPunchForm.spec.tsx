@@ -468,6 +468,53 @@ describe('PunchForm', () => {
         expect(validateSoknad).not.toHaveBeenCalled();
     });
 
+    it('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
+        const validateSoknad = jest.fn();
+        const updateSoknad = jest.fn();
+        const component = new PunchFormComponent({
+            validateSoknad,
+            updateSoknad,
+            journalpostid,
+            punchFormState: { soknad: { soeknadsperiode: [] } },
+        } as ConstructorParameters<typeof PunchFormComponent>[0]);
+        const setState = jest.fn();
+        const invalidFrilanser = {
+            startdato: '2022-10-10',
+            sluttdato: '2022-10-01',
+            jobberFortsattSomFrilans: false,
+        };
+
+        component.state = {
+            ...component.state,
+            soknad: {
+                ...component.state.soknad,
+                opptjeningAktivitet: { ...component.state.soknad.opptjeningAktivitet, frilanser: invalidFrilanser },
+            },
+        };
+        component.setState = setState as typeof component.setState;
+        Reflect.set(component, 'getSoknadFromStore', () => ({
+            journalposter: new Set(),
+            opptjeningAktivitet: { frilanser: invalidFrilanser },
+        }));
+
+        (Reflect.get(component, 'handleSubmit') as () => void).call(component);
+        component.state = { ...component.state, harForsoektAaSendeInn: true };
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: Partial<IPSBSoknad>) => void).call(component, {
+            mottattDato: '2022-10-11',
+        });
+
+        expect(validateSoknad).not.toHaveBeenCalled();
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: Partial<IPSBSoknad>) => void).call(component, {
+            opptjeningAktivitet: {
+                frilanser: { ...invalidFrilanser, sluttdato: '2022-10-10' },
+            },
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+    });
+
     it('Viser melding om valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 
