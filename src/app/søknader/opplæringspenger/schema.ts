@@ -168,7 +168,14 @@ const frilanser = () =>
             .string()
             .when('jobberFortsattSomFrilans', {
                 is: false,
-                then: (schema) => schema.test(påkrevdDato),
+                then: (schema) =>
+                    schema
+                        .test(påkrevdDato)
+                        .test(
+                            'sluttdato-etter-startdato',
+                            'Sluttdato kan ikke være før startdato.',
+                            (sluttdato, context) => !sluttdato || sluttdato >= context.parent.startdato,
+                        ),
                 otherwise: (schema) => schema.nullable(),
             })
             .label('Sluttdato'),
