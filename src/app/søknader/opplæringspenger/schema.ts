@@ -34,16 +34,14 @@ export const getSchemaContext = (soknad: IOLPSoknadBackend, eksisterendePerioder
 const hentTillattePerioder = (context: any): IPeriode[] => {
     const kursperioder = context?.kursperioder as Kursperiode[] | undefined;
     const eksisterendePerioder = context?.eksisterendePerioder as IPeriode[] | undefined;
-    return [
-        ...(kursperioder?.map((k) => k.periode) || []),
-        ...(eksisterendePerioder || []),
-    ].filter((p): p is IPeriode => !!p?.fom && !!p?.tom);
+    return [...(kursperioder?.map((k) => k.periode) || []), ...(eksisterendePerioder || [])].filter(
+        (p): p is IPeriode => !!p?.fom && !!p?.tom,
+    );
 };
 
 // Yup tester for OLP-skjema
 const periodeErInnenforAnnenPeriode = lagPeriodeInnenforTest(hentTillattePerioder);
 const datoInnenforPeriode = lagDatoInnenforTest(hentTillattePerioder);
-
 
 const fravaersperioder = ({ medSoknadAarsak }: { medSoknadAarsak: boolean }) =>
     yup.array().of(
@@ -82,11 +80,10 @@ const selvstendigNaeringsdrivende = () =>
             })
             .label('Organisasjonsnummer'),
         info: yup.object({
-            periode: yup
-                .object({
-                    fom: yup.string().label('Fra og med').test(påkrevdDato),
-                    tom: yup.string().label('Til og med').test(ikkePåkrevdDato)
-                }),
+            periode: yup.object({
+                fom: yup.string().label('Fra og med').test(påkrevdDato),
+                tom: yup.string().label('Til og med').test(ikkePåkrevdDato),
+            }),
             virksomhetstyper: yup
                 .array()
                 .of(yup.string())
@@ -199,29 +196,36 @@ const OLPSchema = yup.object({
     }),
     bosteder: yup.array().when('metadata.harBoddIUtlandet', {
         is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
-        then: (schema) => schema.of(yup.object().shape({
-    periode: yup
-        .object()
-        .shape({
-            fom: yup.string().label('Fra og med').test(påkrevdDato),
-            tom: yup.string().label('Til og med').test(påkrevdDato),
-        }),
-    land: yup.string().required().label('Land')})),
+        then: (schema) =>
+            schema.of(
+                yup.object().shape({
+                    periode: yup.object().shape({
+                        fom: yup.string().label('Fra og med').test(påkrevdDato),
+                        tom: yup.string().label('Til og med').test(påkrevdDato),
+                    }),
+                    land: yup.string().required().label('Land'),
+                }),
+            ),
     }),
     utenlandsopphold: yup.array().when('metadata.harUtenlandsopphold', {
         is: (value: JaNeiIkkeOpplyst) => value === JaNeiIkkeOpplyst.JA,
-        then: (schema) => schema.of(yup.object().shape({
-    periode: yup
-        .object()
-        .shape({
-            fom: yup.string().label('Fra og med').test(påkrevdDato),
-            tom: yup.string().label('Til og med').test(påkrevdDato),
-        }).test(periodeErInnenforAnnenPeriode),
-    land: yup.string().required().label('Land')})),
+        then: (schema) =>
+            schema.of(
+                yup.object().shape({
+                    periode: yup
+                        .object()
+                        .shape({
+                            fom: yup.string().label('Fra og med').test(påkrevdDato),
+                            tom: yup.string().label('Til og med').test(påkrevdDato),
+                        })
+                        .test(periodeErInnenforAnnenPeriode),
+                    land: yup.string().required().label('Land'),
+                }),
+            ),
     }),
     lovbestemtFerie: yup.array().of(
-            yup
-                .object({
+        yup
+            .object({
                 fom: yup.string().label('Fra og med').test(påkrevdDato),
                 tom: yup.string().label('Til og med').test(påkrevdDato),
             })

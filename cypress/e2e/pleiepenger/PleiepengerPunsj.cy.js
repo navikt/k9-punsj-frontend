@@ -36,11 +36,7 @@ describe('Pleiepenger punsj', () => {
             );
         });
 
-        cy.findByTestId('mottattDato')
-            .should('exist')
-            .clear({ force: true })
-            .type(nyMottattDato)
-            .blur();
+        cy.findByTestId('mottattDato').should('exist').clear({ force: true }).type(nyMottattDato).blur();
 
         cy.wrap(null).should(() => {
             expect(oppdatertSoknad).to.not.equal(undefined);

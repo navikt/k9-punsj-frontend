@@ -264,7 +264,9 @@ const ArbeidsforholdPanel = ({
                             label: v,
                             value: v,
                             onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some(
+                                (vt) => vt === v,
+                            ),
                         }))}
                     />
                 </div>
