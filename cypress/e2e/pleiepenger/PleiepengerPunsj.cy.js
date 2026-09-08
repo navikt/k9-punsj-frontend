@@ -49,6 +49,15 @@ describe('Pleiepenger punsj', () => {
         cy.findByTestId('mottattDato').should('have.value', nyMottattDato);
     });
 
+    it('viser feil når frilanser slutter før frilanserperioden starter', () => {
+        cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+        cy.findByLabelText('Frilanser').click();
+        cy.findByLabelText('Når startet søker som frilanser?').type('10.10.2022');
+        cy.findByLabelText('Når sluttet søker som frilanser?').type('01.10.2022').blur();
+
+        cy.findByLabelText('Når sluttet søker som frilanser?').should('have.attr', 'aria-invalid', 'true');
+    });
+
     it('kan fylle inn lengre perioder i arbeidstid', () => {
         cy.get('.soknadsperiodecontainer').within(() => {
             cy.findByRole('button', { name: /Legg til ny periode/i }).click();
