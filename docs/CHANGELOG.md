@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Validering av frilanserperiode (2026-09-08)
+
+- Hindrer at en frilanserperiode med sluttdato før startdato kan valideres eller sendes i PSB og PLS, også etter at brukeren har forsøkt innsending.
+- La inn tilsvarende skjemavalidering i OLP og omsorgspenger utbetaling, slik at brukeren får feltfeil før forhåndsvisning eller innsending.
+
 ### Opprydding i resolutions (2026-08-24)
 
 - Fjernet 15 overstyringer der underliggende versjonsområder nå resolver til samme eller nyere trygge versjon, blant annet for `body-parser`, `form-data`, `brace-expansion`, `postcss`, `undici` og `tmp`.
