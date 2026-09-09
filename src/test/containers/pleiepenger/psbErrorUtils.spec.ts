@@ -91,6 +91,24 @@ describe('psbErrorUtils', () => {
         expect(result).toBe('Feltet kan ikke være tomt');
     });
 
+    it('maps freelancer date-order validation to the end-date field', () => {
+        const result = getPSBErrorMessage({
+            attribute: 'ytelse.opptjeningAktivitet.frilanser.sluttdato',
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato',
+                    feilmelding: 'Sluttdato kan ikke være før startdato.',
+                },
+            ],
+            mottattDato: '2024-01-01',
+            klokkeslett: '10:00',
+            erFremITidKlokkeslett: () => false,
+            intl,
+        });
+
+        expect(result).toBe('Sluttdato kan ikke være før startdato.');
+    });
+
     it('matches period path with dotted bracket notation from backend', () => {
         const result = getPSBErrorMessage({
             attribute: "ytelse.bosteder.perioder['../2026-02-24'].land",
@@ -224,12 +242,15 @@ describe('psbErrorUtils', () => {
             feilmelding: '',
         });
 
-        expect(result).toBe('landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.');
+        expect(result).toBe(
+            'landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.',
+        );
     });
 
     it('maps legacy valideringRegistrertUtlandet payload to landkode field path', () => {
         const result = getPSBErrorMessage({
-            attribute: 'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[2026-02-02/2026-02-20].landkode',
+            attribute:
+                'ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder[2026-02-02/2026-02-20].landkode',
             inputErrors: [
                 {
                     felt: "ytelse.opptjeningAktivitet.selvstendigNæringsdrivende[0].perioder['2026-02-02/2026-02-20'].valideringRegistrertUtlandet",
@@ -244,7 +265,9 @@ describe('psbErrorUtils', () => {
             intl,
         });
 
-        expect(result).toBe('landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.');
+        expect(result).toBe(
+            'landkode må være satt, og kan ikke være null, dersom virksomhet er registrert i utlandet.',
+        );
     });
 
     it('does not return legacy valideringRegistrertUtlandet as unhandled when mapped landkode path is already handled', () => {
