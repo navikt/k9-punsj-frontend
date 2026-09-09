@@ -3611,9 +3611,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.16.1":
-  version: 8.16.1
-  resolution: "@navikt/aksel@npm:8.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.16.1%2F989edb69f2fe8b00e8b7a2609c51e95b069dfdec"
+"@navikt/aksel@npm:8.16.2":
+  version: 8.16.2
+  resolution: "@navikt/aksel@npm:8.16.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.16.2%2F7c8ea024799a5c86be278954185e045e4451e230"
   dependencies:
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
@@ -3627,7 +3627,7 @@ __metadata:
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/d3f3ad082a0c1cef570a16ba81260260bd75246779512d7704e437ab2c14e6d8c7e46ae3613a984f3ce4a79163f2bdce53500ff465f78daff87a7160c26167f6
+  checksum: 10/e339a49af22d7aefbe6ef3de43dd9011ddbe4993ca3f2cf3d4202dd15ea457391e389b9655c117e0c0caa33c6b77f75b0db0d91fca9c63e2187940357cd1a9f8
   languageName: node
   linkType: hard
 
@@ -12674,7 +12674,7 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.9.0"
     "@jest/globals": "npm:30.4.1"
     "@k9-punsj-frontend/server": "workspace:"
-    "@navikt/aksel": "npm:8.16.1"
+    "@navikt/aksel": "npm:8.16.2"
     "@navikt/aksel-icons": "npm:8.16.1"
     "@navikt/ds-css": "npm:8.16.1"
     "@navikt/ds-react": "npm:8.16.1"
