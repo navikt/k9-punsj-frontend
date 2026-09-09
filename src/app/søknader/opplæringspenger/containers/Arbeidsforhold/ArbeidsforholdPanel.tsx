@@ -1,11 +1,9 @@
 import React from 'react';
 
-import { Field, FieldProps, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Heading, Label } from '@navikt/ds-react';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import FraværKalender from 'app/components/fravaer/FraværKalender';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
-import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
@@ -16,10 +14,12 @@ import { FrilanserOpptjening } from 'app/models/types/FrilanserOpptjening';
 import { IPeriode } from 'app/models/types/Periode';
 import { SelvstendigNaerinsdrivende } from 'app/models/types/SelvstendigNaerinsdrivende';
 import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
 
-import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import PeriodevelgerFormik from 'app/components/period-input/PeriodevelgerFormik';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
+import { OLPSoknad } from 'app/models/types/OLPSoknad';
 import VerticalSpacer from '../../../../components/VerticalSpacer';
 import { CountrySelect } from '../../../../components/country-select/CountrySelect';
 import CheckboxGroupFormik from '../../../../components/formikInput/CheckboxGroupFormik';
@@ -103,6 +103,7 @@ const ArbeidsforholdPanel = ({ isOpen, onPanelClick, søknadsperioder }: Arbeids
             {!values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans && (
                 <DatovelgerFormik
                     className="frilanser-sluttdato"
+                    id="frilanser-sluttdato"
                     name="opptjeningAktivitet.frilanser.sluttdato"
                     label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
                     size="small"

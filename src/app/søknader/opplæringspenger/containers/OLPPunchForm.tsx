@@ -1,13 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { FormikErrors, getIn, setNestedObjectValues, useFormikContext } from 'formik';
-import { debounce } from 'lodash';
-import { useMutation } from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Button, Checkbox, ErrorSummary } from '@navikt/ds-react';
-import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
+import { useMutation } from '@tanstack/react-query';
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
+import JournalposterSync from 'app/components/JournalposterSync';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import PunchFormTitle from 'app/components/PunchFormTitle';
 import VentModal from 'app/components/ventModal/VentModal';
@@ -20,24 +16,39 @@ import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import { IdentActionKeys } from 'app/state/actions/IdentActions';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
-import JournalposterSync from 'app/components/JournalposterSync';
+import { FormikErrors, getIn, setNestedObjectValues, useFormikContext } from 'formik';
+import { debounce } from 'lodash';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import ArbeidsforholdPanel from './Arbeidsforhold/ArbeidsforholdPanel';
 
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import { TillattePeriodeProvider } from 'app/hooks/useTillattePerioder';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 import { RootStateType } from '../../../state/RootState';
 import { oppdaterSoeknad, validerSoeknad } from '../api';
+import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import schema, { getSchemaContext } from '../schema';
 import Bosteder from './Bosteder';
 import EndringAvSøknadsperioder from './EndringAvSøknadsperioder/EndringAvSøknadsperioder';
 import Kurs from './Kurs';
+import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
 import LovbestemtFerie from './LovbestemtFerie';
 import OpplysningerOmSoknad from './OpplysningerOmSoknad/OpplysningerOmSoknad';
-import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
-import OLPSoknadKvittering from './kvittering/OLPSoknadKvittering';
-import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import Reisedager from './Reisedager';
 import RelasjonTilBarnet from './RelasjonTilBarnet';
-import { TillattePeriodeProvider } from 'app/hooks/useTillattePerioder';
+import UtenlandsoppholdContainer from './UtenlandsoppholdContainer';
+
+const frilanserSluttdatoFørStartdato = 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato';
+const frilanserSluttdato = 'opptjeningAktivitet.frilanser.sluttdato';
+
+export const mapOLPValidationErrorPath = (felt: string): string => {
+    if (felt === frilanserSluttdatoFørStartdato) {
+        return frilanserSluttdato;
+    }
+
+    return felt.replace('ytelse.', '').replace('.<list element>', '');
+};
 
 interface OwnProps {
     journalpostid: string;
@@ -144,10 +155,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
                     setKvittering(undefined);
                 }
                 const feilmeldinger = getFormaterteFeilmeldinger(data.feil).map((uhaandtertFeilmelding) => {
-                    const feilmeldingKey = uhaandtertFeilmelding.felt
-                        .replace('ytelse.', '')
-                        // støgg fiks for validering av reisedager
-                        .replace('.<list element>', '');
+                    const feilmeldingKey = mapOLPValidationErrorPath(uhaandtertFeilmelding.felt);
                     return {
                         felt: feilmeldingKey,
                         feilkode: uhaandtertFeilmelding.feilkode,
@@ -357,9 +365,20 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
             <VerticalSpacer thirtyTwoPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading="Du må fikse disse feilene før du kan sende inn punsjemeldingen.">
-                    {getFormaterteFeilmeldinger(k9FormatErrors).map((feil) => (
-                        <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
-                    ))}
+                    {getFormaterteFeilmeldinger(k9FormatErrors).map((feil) => {
+                        const erSynligFrilanserSluttdato =
+                            feil.felt === frilanserSluttdato &&
+                            !values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans;
+
+                        return (
+                            <ErrorSummary.Item
+                                key={feil.felt}
+                                href={erSynligFrilanserSluttdato ? '#frilanser-sluttdato' : undefined}
+                            >
+                                {erSynligFrilanserSluttdato ? feil.feilmelding : `${feil.felt}: ${feil.feilmelding}`}
+                            </ErrorSummary.Item>
+                        );
+                    })}
                     {/* Denne bør byttes ut med errors fra formik */}
                     {feilFraYup(schema, values, getSchemaContext(values, eksisterendePerioder))?.map(
                         (error: { message: string; path: string }) => (
