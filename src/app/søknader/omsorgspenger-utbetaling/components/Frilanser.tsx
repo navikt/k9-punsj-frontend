@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Box, Button, Heading } from '@navikt/ds-react';
+import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import DatovelgerFormik from 'app/components/skjema/Datovelger/DatovelgerFormik';
 import VerticalSpacer from 'app/components/VerticalSpacer';
-import LegacyJaNeiRadioGroupFormik from 'app/components/formikInput/LegacyJaNeiRadioGroupFormik';
 import { JaNei } from 'app/models/enums';
 import intlHelper from 'app/utils/intlUtils';
+import { Field, FieldArray, FieldProps, useFormikContext } from 'formik';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { fravaersperiodeInitialValue } from '../initialValues';
 import { aktivitetsFravær } from '../konstanter';
 import { IOMPUTSoknad } from '../types/OMPUTSoknad';
@@ -70,6 +70,7 @@ export default function Frilanser() {
                 {!frilanser.jobberFortsattSomFrilans && (
                     <>
                         <DatovelgerFormik
+                            id="frilanser-sluttdato"
                             label={intlHelper(intl, 'omsorgspenger.utbetaling.frilanser.sluttDato.spm')}
                             name="opptjeningAktivitet.frilanser.sluttdato"
                             size="small"

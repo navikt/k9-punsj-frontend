@@ -3,13 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FormikErrors, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 
-import { FormattedMessage, useIntl } from 'react-intl';
 import { useMutation } from '@tanstack/react-query';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Alert, Box, Button, ErrorSummary, Heading, VStack } from '@navikt/ds-react';
 
 import ForhåndsvisSøknadModal from 'app/components/forhåndsvisSøknadModal/ForhåndsvisSøknadModal';
 import IkkeRegistrerteOpplysninger from 'app/components/ikkeRegisterteOpplysninger/IkkeRegistrerteOpplysninger';
+import JournalposterSync from 'app/components/JournalposterSync';
 import MellomlagringEtikett from 'app/components/mellomlagringEtikett/MellomlagringEtikett';
 import Personvelger from 'app/components/person-velger/Personvelger';
 import PunchFormTitle from 'app/components/PunchFormTitle';
@@ -19,10 +20,9 @@ import { Periode, PersonEnkel } from 'app/models/types';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
 import intlHelper from 'app/utils/intlUtils';
 import { feilFraYup } from 'app/utils/validationHelpers';
-import JournalposterSync from 'app/components/JournalposterSync';
 
-import VerticalSpacer from '../../../components/VerticalSpacer';
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
+import VerticalSpacer from '../../../components/VerticalSpacer';
 
 import { oppdaterSoeknad, validerSoeknad } from '../api';
 import EksisterendePerioder from '../components/EksisterendePerioder';
@@ -36,6 +36,12 @@ import { filtrerVerdierFoerInnsending, frontendTilBackendMapping, korrigeringFil
 import ArbeidsforholdVelger from './ArbeidsforholdVelger';
 import OpplysningerOmOMPUTSoknad from './OpplysningerOmSoknad/OpplysningerOmOMPUTSoknad';
 import { OMPUTSoknadKvittering } from './SoknadKvittering/OMPUTSoknadKvittering';
+
+const frilanserSluttdatoFørStartdato = 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato';
+const frilanserSluttdato = 'opptjeningAktivitet.frilanser.sluttdato';
+
+export const getOMPUTFrilanserSluttdatoFeilmelding = (errors: Feil[]): string | undefined =>
+    errors.find((error) => error.felt === frilanserSluttdatoFørStartdato)?.feilmelding;
 
 interface Props {
     journalpostid: string;
@@ -76,7 +82,7 @@ const OMPUTPunchForm: React.FC<Props> = ({
     const [visErDuSikkerModal, setVisErDuSikkerModal] = useState(false);
     const [harForsoektAaSendeInn, setHarForsoektAaSendeInn] = useState(false);
 
-    const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue } =
+    const { values, errors, setTouched, handleSubmit, isValid, validateForm, setFieldValue, setFieldError } =
         useFormikContext<IOMPUTSoknad>();
 
     // OBS: SkalForhaandsviseSoeknad brukes i onSuccess
@@ -102,6 +108,10 @@ const OMPUTPunchForm: React.FC<Props> = ({
             }
             if ('feil' in data && data?.feil?.length) {
                 setK9FormatErrors(data.feil);
+                const feilmelding = getOMPUTFrilanserSluttdatoFeilmelding(data.feil);
+                if (feilmelding) {
+                    setFieldError(frilanserSluttdato, feilmelding);
+                }
                 if (setKvittering) {
                     setKvittering(undefined);
                 } else {
@@ -218,9 +228,20 @@ const OMPUTPunchForm: React.FC<Props> = ({
             <VerticalSpacer twentyPx />
             {harForsoektAaSendeInn && harFeilISkjema(errors) && (
                 <ErrorSummary heading={intlHelper(intl, 'omsorgspenger.utbetaling.punchForm.errorSummary.header')}>
-                    {k9FormatErrors.map((feil) => (
-                        <ErrorSummary.Item key={feil.felt}>{`${feil.felt}: ${feil.feilmelding}`}</ErrorSummary.Item>
-                    ))}
+                    {k9FormatErrors.map((feil) => {
+                        const erSynligFrilanserSluttdato =
+                            feil.felt === frilanserSluttdatoFørStartdato &&
+                            !values.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans;
+
+                        return (
+                            <ErrorSummary.Item
+                                key={feil.felt}
+                                href={erSynligFrilanserSluttdato ? '#frilanser-sluttdato' : undefined}
+                            >
+                                {erSynligFrilanserSluttdato ? feil.feilmelding : `${feil.felt}: ${feil.feilmelding}`}
+                            </ErrorSummary.Item>
+                        );
+                    })}
 
                     {/* Denne bør byttes ut med errors fra formik */}
                     {feilFraYup(schema, values, getSchemaContext(values, eksisterendePerioder))?.map(
