@@ -4,7 +4,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Visning av frilanserfeil for sluttdato (2026-09-09)
 
-- Viser servervalideringen for sluttdato før startdato på Freelancer Sluttdato i PSB, PLS, opplæringspenger og omsorgspenger-utbetaling.
+- Viser servervalideringen for sluttdato før startdato på frilanserens sluttdato i PSB, PLS, opplæringspenger og omsorgspenger-utbetaling.
 
 ### Opprydding i resolutions (2026-08-24)
 
