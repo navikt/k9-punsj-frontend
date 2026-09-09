@@ -72,6 +72,20 @@ import PLSSoknadKvittering from './SoknadKvittering/PLSSoknadKvittering';
 import Soknadsperioder from './Soknadsperioder';
 import { sjekkHvisArbeidstidErAngitt } from './arbeidstidOgPerioderHjelpfunksjoner';
 
+const frilanserSluttdato = 'ytelse.opptjeningAktivitet.frilanser.sluttdato';
+const frilanserSluttdatoFørStartdato = `${frilanserSluttdato}FørStartdato`;
+
+export const getPLSFrilanserSluttdatoFeilmelding = (
+    attribute: string,
+    inputErrors?: IInputError[],
+): string | undefined => {
+    if (attribute !== frilanserSluttdato) {
+        return undefined;
+    }
+
+    return inputErrors?.find((error) => error.felt === frilanserSluttdatoFørStartdato)?.feilmelding;
+};
+
 export interface IPunchPLSFormComponentProps {
     journalpostid: string;
     id: string;
@@ -636,6 +650,11 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         if (!this.state.feilmeldingStier.has(attribute)) {
             this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
         }
+        if (attribute === frilanserSluttdato && !this.state.feilmeldingStier.has(frilanserSluttdatoFørStartdato)) {
+            this.setState((prevState) => ({
+                feilmeldingStier: prevState.feilmeldingStier.add(frilanserSluttdatoFørStartdato),
+            }));
+        }
 
         if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
             return intlHelper(this.props.intl, 'skjema.feil.ikketom');
@@ -651,6 +670,14 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         if (attribute === 'klokkeslett' && !!klokkeslett && this.erFremITidKlokkeslett(klokkeslett)) {
             return intlHelper(this.props.intl, 'skjema.feil.ikkefremitid');
+        }
+
+        const frilanserSluttdatoFeilmelding = getPLSFrilanserSluttdatoFeilmelding(
+            attribute,
+            this.getManglerFromStore(),
+        );
+        if (frilanserSluttdatoFeilmelding) {
+            return frilanserSluttdatoFeilmelding;
         }
 
         const errorMsg = this.getManglerFromStore()?.filter((m: IInputError) => m.felt === attribute)?.[indeks || 0]
