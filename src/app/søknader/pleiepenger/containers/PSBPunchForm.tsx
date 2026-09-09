@@ -885,6 +885,13 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             return `#${ENDRING_BEGRUNNELSE_INPUT_ID}`;
         }
 
+        if (
+            felt === 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato' &&
+            !this.state.soknad.opptjeningAktivitet.frilanser?.jobberFortsattSomFrilans
+        ) {
+            return '#frilanser-sluttdato';
+        }
+
         const normalizedFelt = felt.startsWith('ytelse.uttak.perioder')
             ? felt.replace('ytelse.uttak.perioder', 'ytelse.søknadsperiode.perioder')
             : felt;

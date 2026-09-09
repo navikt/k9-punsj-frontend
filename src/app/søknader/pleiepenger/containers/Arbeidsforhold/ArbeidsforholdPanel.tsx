@@ -128,6 +128,7 @@ const ArbeidsforholdPanel = ({
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                        errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.sluttdato')}
                         fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(

@@ -30,7 +30,7 @@ interface LegacyFeilPayload {
  * These path and message normalizers compensate for unstable validation paths
  * returned from backend/k9-format. Remove after backend exposes canonical field paths.
  */
-const canonicalizeSnOrgnummerPath = (path: string): string =>
+const mapValidationFieldPath = (path: string): string =>
     path
         .replace(
             /^(ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+])\.okOrganisasjonsnummer$/,
@@ -39,12 +39,16 @@ const canonicalizeSnOrgnummerPath = (path: string): string =>
         .replace(
             /^(ytelse\.opptjeningAktivitet\.selvstendigNæringsdrivende\[\d+])\.organisasjonsnummer\.(valid|verdi)$/,
             '$1.organisasjonsnummer',
+        )
+        .replace(
+            /^ytelse\.opptjeningAktivitet\.frilanser\.sluttdatoFørStartdato$/,
+            'ytelse.opptjeningAktivitet.frilanser.sluttdato',
         );
 
 const normalizePath = (path?: string): string | undefined => {
     if (!path) return undefined;
 
-    return canonicalizeSnOrgnummerPath(path.trim())
+    return mapValidationFieldPath(path.trim())
         .replace(/\.?\[(?:'[^']*'|"[^"]*"|[^[\]]+)\]/g, '[*]')
         .replace(/^\.+|\.+$/g, '');
 };
@@ -52,7 +56,7 @@ const normalizePath = (path?: string): string | undefined => {
 const canonicalizePath = (path?: string): string | undefined => {
     if (!path) return undefined;
 
-    return canonicalizeSnOrgnummerPath(path.trim())
+    return mapValidationFieldPath(path.trim())
         .replace(/\.?\[(?:'([^']*)'|"([^"]*)"|([^[\]]+))\]/g, (_match, singleQuoted, doubleQuoted, raw) => {
             const segment = (singleQuoted || doubleQuoted || raw || '').trim();
             const normalizedSegment = segment.replace(/\/9999-12-31$/i, '/..');
@@ -73,9 +77,7 @@ const parseLegacyFeilPayload = (feilkode: unknown): LegacyFeilPayload | undefine
 
     // TEMPORARY: k9-format can serialize nested validation errors into `feilkode`
     // as a string like Feil{felt='...', feilkode='...', feilmelding='...'}.
-    const match = feilkode
-        .trim()
-        .match(/^Feil\{felt='([^']*)',\s*feilkode='([^']*)',\s*feilmelding='([\s\S]*)'\}$/);
+    const match = feilkode.trim().match(/^Feil\{felt='([^']*)',\s*feilkode='([^']*)',\s*feilmelding='([\s\S]*)'\}$/);
 
     if (!match) {
         return undefined;
@@ -181,9 +183,7 @@ function resolveUnhandledErrorEntries({
     // Remove after backend publishes canonical, non-overlapping field paths.
     const normalizedAttribute = normalizePath(attribute) || '';
     const normalizedHandledPaths = new Set(
-        [...feilmeldingStier]
-            .map((path) => normalizePath(path))
-            .filter((path): path is string => !!path),
+        [...feilmeldingStier].map((path) => normalizePath(path)).filter((path): path is string => !!path),
     );
 
     const unhandledErrors = inputErrors?.filter((m: IInputError) => {

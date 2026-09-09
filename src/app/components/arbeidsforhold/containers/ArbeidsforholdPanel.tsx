@@ -1,25 +1,25 @@
 import * as React from 'react';
 
-import { cloneDeep, set } from 'lodash';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Accordion, Alert, Box, Label, TextField, Textarea } from '@navikt/ds-react';
+import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
+import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
 import { LegacyCheckbox, LegacyCheckboxGroup } from 'app/components/legacy-form-compat/checkbox';
 import { LegacyJaNeiRadioGroup } from 'app/components/legacy-form-compat/radio';
-import ArbeidstidKalender from 'app/components/arbeidstid/ArbeidstidKalender';
-import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import Periodevelger from 'app/components/period-input/Periodevelger';
+import Datovelger from 'app/components/skjema/Datovelger/Datovelger';
 import UhaanderteFeilmeldinger from 'app/components/skjema/UhaanderteFeilmeldinger';
 import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
 import intlHelper from 'app/utils/intlUtils';
-import VerticalSpacer from '../../VerticalSpacer';
-import { CountrySelect } from '../../country-select/CountrySelect';
-import { arbeidstidInformasjon } from 'app/components/ArbeidstidInfo';
+import { cloneDeep, set } from 'lodash';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Arbeidstaker } from '../../../models/types';
 import { IPeriode } from '../../../models/types/Periode';
 import { IPLSSoknad } from '../../../søknader/pleiepenger-livets-sluttfase/types/PLSSoknad';
+import VerticalSpacer from '../../VerticalSpacer';
+import { CountrySelect } from '../../country-select/CountrySelect';
 import Arbeidstakerperioder from './Arbeidstakerperioder';
 const erYngreEnn4år = (dato: string) => {
     const fireAarSiden = new Date();
@@ -129,6 +129,7 @@ const ArbeidsforholdPanel = ({
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
+                        errorMessage={getErrorMessage('ytelse.opptjeningAktivitet.frilanser.sluttdato')}
                         fromDate={limitFromDate}
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
@@ -247,7 +248,9 @@ const ArbeidsforholdPanel = ({
                             label: v,
                             value: v,
                             onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some(
+                                (vt) => vt === v,
+                            ),
                         }))}
                     />
                 </div>
