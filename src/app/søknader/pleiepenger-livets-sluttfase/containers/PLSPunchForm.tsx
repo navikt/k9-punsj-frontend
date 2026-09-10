@@ -19,6 +19,7 @@ import {
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
@@ -321,7 +322,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
         const navarandeSoknad: IPLSSoknad = this.state.soknad;
         const frilanser = navarandeSoknad.opptjeningAktivitet.frilanser;
 
-        if (frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato) {
+        if (isDateBefore(frilanser?.sluttdato, frilanser?.startdato)) {
             this.setState({ harForsoektAaSendeInn: true });
             return;
         }
@@ -715,7 +716,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
 
         if (
             this.state.harForsoektAaSendeInn &&
-            !(frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato)
+            !isDateBefore(frilanser?.sluttdato, frilanser?.startdato)
         ) {
             this.props.validateSoknad(soknadForValidering, true);
         }

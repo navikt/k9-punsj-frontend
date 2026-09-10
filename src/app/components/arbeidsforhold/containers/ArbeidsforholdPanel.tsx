@@ -13,6 +13,7 @@ import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from '../../VerticalSpacer';
 import { CountrySelect } from '../../country-select/CountrySelect';
@@ -32,9 +33,6 @@ const erEldreEnn4år = (dato: string) => {
     fireAarSiden.setFullYear(fireAarSiden.getFullYear() - 4);
     return new Date(dato) < fireAarSiden;
 };
-
-export const erFrilanserSluttdatoFørStartdato = (startdato: string, sluttdato: string) =>
-    !!startdato && !!sluttdato && sluttdato < startdato;
 
 interface ArbeidsforholdPanelProps {
     isOpen: boolean;
@@ -72,7 +70,7 @@ const ArbeidsforholdPanel = ({
 
     const frilanserStartdato = soknad.opptjeningAktivitet.frilanser?.startdato || '';
     const frilanserSluttdato = soknad.opptjeningAktivitet.frilanser?.sluttdato || '';
-    const frilanserSlutterFørStartdato = erFrilanserSluttdatoFørStartdato(frilanserStartdato, frilanserSluttdato);
+    const frilanserSlutterFørStartdato = isDateBefore(frilanserSluttdato, frilanserStartdato);
 
     const limitFromDate = new Date();
     limitFromDate.setFullYear(limitFromDate.getFullYear() - 60);

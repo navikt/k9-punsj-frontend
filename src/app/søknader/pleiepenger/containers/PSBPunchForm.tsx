@@ -39,6 +39,7 @@ import {
     validerSoknadResetAction,
 } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import {
     filtrerPerioderVedEndringAvSoknadsperiode,
@@ -320,7 +321,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         const navarandeSoknad: IPSBSoknad = this.state.soknad;
         const frilanser = navarandeSoknad.opptjeningAktivitet.frilanser;
 
-        if (frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato) {
+        if (isDateBefore(frilanser?.sluttdato, frilanser?.startdato)) {
             this.setState({ harForsoektAaSendeInn: true });
             return;
         }
@@ -1118,7 +1119,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
 
         if (
             this.state.harForsoektAaSendeInn &&
-            !(frilanser?.startdato && frilanser.sluttdato && frilanser.sluttdato < frilanser.startdato)
+            !isDateBefore(frilanser?.sluttdato, frilanser?.startdato)
         ) {
             this.props.validateSoknad(soknadForValidering, true);
         }

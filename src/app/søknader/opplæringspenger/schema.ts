@@ -17,6 +17,7 @@ import nb from '../../i18n/nb.json';
 import { JaNeiIkkeOpplyst } from 'app/models/enums/JaNeiIkkeOpplyst';
 import { IOLPSoknadBackend } from 'app/models/types/OLPSoknad';
 import { erYngreEnn4år } from 'app/utils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import { JaNei } from 'app/models/enums';
 import { Kursperiode } from 'app/models/types/Kurs';
 
@@ -171,7 +172,7 @@ const frilanser = () =>
                         .test(
                             'sluttdato-etter-startdato',
                             'Sluttdato kan ikke være før startdato.',
-                            (sluttdato, context) => !sluttdato || sluttdato >= context.parent.startdato,
+                            (sluttdato, context) => !isDateBefore(sluttdato, context.parent.startdato),
                         ),
                 otherwise: (schema) => schema.nullable(),
             })

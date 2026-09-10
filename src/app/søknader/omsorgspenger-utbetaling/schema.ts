@@ -9,6 +9,7 @@ import yup, {
     utenlandsperiode,
 } from 'app/validation/yup';
 import { erYngreEnn4år } from 'app/utils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 
 import nb from '../../i18n/nb.json';
 import { IOMPUTSoknad } from './types/OMPUTSoknad';
@@ -148,7 +149,7 @@ const frilanser = () =>
                         .test(
                             'sluttdato-etter-startdato',
                             'Sluttdato kan ikke være før startdato.',
-                            (sluttdato, context) => !sluttdato || sluttdato >= context.parent.startdato,
+                            (sluttdato, context) => !isDateBefore(sluttdato, context.parent.startdato),
                         ),
             })
             .label('Sluttdato'),
