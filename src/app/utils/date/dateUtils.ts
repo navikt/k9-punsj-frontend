@@ -28,6 +28,14 @@ export function isSameOrBeforeDate(date: Dayjs, otherDate: Dayjs) {
     return dateInQuestion.isBefore(formattedOtherDate) || dateInQuestion.isSame(formattedOtherDate);
 }
 
+export function isDateBefore(date?: string, otherDate?: string): boolean {
+    if (!date || !otherDate) {
+        return false;
+    }
+
+    return initializeDate(date).isBefore(initializeDate(otherDate));
+}
+
 export function dateSorter(date1: Dayjs, date2: Dayjs) {
     if (date1.isBefore(date2)) {
         return -1;

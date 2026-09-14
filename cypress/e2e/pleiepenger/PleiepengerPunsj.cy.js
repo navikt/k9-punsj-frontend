@@ -36,17 +36,22 @@ describe('Pleiepenger punsj', () => {
             );
         });
 
-        cy.findByTestId('mottattDato')
-            .should('exist')
-            .clear({ force: true })
-            .type(nyMottattDato)
-            .blur();
+        cy.findByTestId('mottattDato').should('exist').clear({ force: true }).type(nyMottattDato).blur();
 
         cy.wrap(null).should(() => {
             expect(oppdatertSoknad).to.not.equal(undefined);
             expect(oppdatertSoknad).to.have.property('mottattDato', '2020-03-14');
         });
         cy.findByTestId('mottattDato').should('have.value', nyMottattDato);
+    });
+
+    it('viser feil når frilanser slutter før frilanserperioden starter', () => {
+        cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+        cy.findByLabelText('Frilanser').click();
+        cy.findByLabelText('Når startet søker som frilanser?').type('10.10.2022');
+        cy.findByLabelText('Når sluttet søker som frilanser?').type('01.10.2022').blur();
+
+        cy.findByLabelText('Når sluttet søker som frilanser?').should('have.attr', 'aria-invalid', 'true');
     });
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {

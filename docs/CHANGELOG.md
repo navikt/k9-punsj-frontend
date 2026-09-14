@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Validering av frilanserperiode (2026-09-08)
+
+- Validerer at en frilanserperiode ikke har sluttdato før startdato i PSB, PLS, OLP og omsorgspenger utbetaling. Like datoer er gyldige, og sluttdato kan være tom når frilanser fortsatt jobber.
+- Lar PSB, PLS og OLP sende til backendvalidering ved innsending selv om frontend har funnet en ugyldig periode. PSB og PLS venter med automatisk ny validering til datoene er korrigert.
+- Viser fortsatt frontendfeil i skjemaet før forhåndsvisning eller innsending.
+
 ### Opprydding i resolutions (2026-08-24)
 
 - Fjernet 15 overstyringer der underliggende versjonsområder nå resolver til samme eller nyere trygge versjon, blant annet for `body-parser`, `form-data`, `brace-expansion`, `postcss`, `undici` og `tmp`.

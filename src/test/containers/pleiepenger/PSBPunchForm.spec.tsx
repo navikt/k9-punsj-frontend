@@ -443,6 +443,93 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 
+    it('validerer hos backend når frilanser slutter før startdato', () => {
+        const validateSoknad = jest.fn();
+
+        setupPunchForm(
+            {
+                soknad: {
+                    ...initialSoknad,
+                    opptjeningAktivitet: {
+                        ...initialSoknad.opptjeningAktivitet,
+                        frilanser: {
+                            startdato: '2022-10-10',
+                            sluttdato: '2022-10-01',
+                            jobberFortsattSomFrilans: false,
+                        },
+                    },
+                },
+            },
+            { validateSoknad },
+        );
+
+        fireEvent.click(screen.getByTestId('sendKnapp'));
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+    });
+
+    it('viser serverfeil for ugyldig frilanserperiode i ErrorSummary', async () => {
+        setupPunchForm({
+            soknad: initialSoknad,
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato',
+                    feilkode: 'ugyldigPeriode',
+                    feilmelding: 'Sluttdato kan ikke være før startdato.',
+                },
+            ],
+        });
+
+        expect(await screen.findByText('Sluttdato kan ikke være før startdato.')).toBeDefined();
+    });
+
+    it('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
+        const validateSoknad = jest.fn();
+        const updateSoknad = jest.fn();
+        const component = new PunchFormComponent({
+            validateSoknad,
+            updateSoknad,
+            journalpostid,
+            punchFormState: { soknad: { soeknadsperiode: [] } },
+        } as unknown as ConstructorParameters<typeof PunchFormComponent>[0]);
+        const setState = jest.fn();
+        const invalidFrilanser = {
+            startdato: '2022-10-10',
+            sluttdato: '2022-10-01',
+            jobberFortsattSomFrilans: false,
+        };
+
+        component.state = {
+            ...component.state,
+            soknad: {
+                ...component.state.soknad,
+                opptjeningAktivitet: { ...component.state.soknad.opptjeningAktivitet, frilanser: invalidFrilanser },
+            },
+        };
+        component.setState = setState as typeof component.setState;
+        Reflect.set(component, 'getSoknadFromStore', () => ({
+            journalposter: new Set(),
+            opptjeningAktivitet: { frilanser: invalidFrilanser },
+        }));
+
+        (Reflect.get(component, 'handleSubmit') as () => void).call(component);
+        component.state = { ...component.state, harForsoektAaSendeInn: true };
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: Partial<IPSBSoknad>) => void).call(component, {
+            mottattDato: '2022-10-11',
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+
+        (Reflect.get(component, 'updateSoknad') as (soknad: Partial<IPSBSoknad>) => void).call(component, {
+            opptjeningAktivitet: {
+                frilanser: { ...invalidFrilanser, sluttdato: '2022-10-10' },
+            },
+        });
+
+        expect(validateSoknad).toHaveBeenCalledTimes(2);
+    });
+
     it('Viser melding om valideringsfeil', async () => {
         const validateSoknad = jest.fn();
 

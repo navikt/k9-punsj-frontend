@@ -19,6 +19,7 @@ import {
 import { ArbeidstidInfo } from 'app/models/types/ArbeidstidInfo';
 import { resetPunchFormAction, setSignaturAction } from 'app/state/actions';
 import { nummerPrefiks } from 'app/utils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import intlHelper from 'app/utils/intlUtils';
 
 import ErDuSikkerModal from 'app/components/ErDuSikkerModal';
@@ -703,11 +704,17 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             journalposter.push(this.props.journalpostid);
         }
 
-        if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter }, true);
+        const soknadForValidering = { ...this.getSoknadFromStore(), ...soknad, journalposter };
+        const frilanser = soknadForValidering.opptjeningAktivitet?.frilanser;
+
+        if (
+            this.state.harForsoektAaSendeInn &&
+            !isDateBefore(frilanser?.sluttdato, frilanser?.startdato)
+        ) {
+            this.props.validateSoknad(soknadForValidering, true);
         }
 
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter });
+        return this.props.updateSoknad(soknadForValidering);
     };
 
     private handleStartButtonClick = () => {

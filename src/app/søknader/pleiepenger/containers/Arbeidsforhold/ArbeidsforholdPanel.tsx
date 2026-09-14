@@ -66,6 +66,11 @@ const ArbeidsforholdPanel = ({
 
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
 
+    const frilanserStartdato = soknad.opptjeningAktivitet.frilanser?.startdato || '';
+    const frilanserSluttdato = soknad.opptjeningAktivitet.frilanser?.sluttdato || '';
+    const frilanserSlutterFørStartdato =
+        !!frilanserStartdato && !!frilanserSluttdato && frilanserSluttdato < frilanserStartdato;
+
     const limitFromDate = new Date();
     limitFromDate.setFullYear(limitFromDate.getFullYear() - 60);
 
@@ -128,7 +133,17 @@ const ArbeidsforholdPanel = ({
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
-                        fromDate={limitFromDate}
+                        errorMessage={frilanserSlutterFørStartdato && 'Sluttdato kan ikke være før startdato.'}
+                        fromDate={
+                            soknad.opptjeningAktivitet.frilanser?.startdato
+                                ? new Date(soknad.opptjeningAktivitet.frilanser.startdato)
+                                : limitFromDate
+                        }
+                        defaultMonth={
+                            soknad.opptjeningAktivitet.frilanser?.startdato
+                                ? new Date(soknad.opptjeningAktivitet.frilanser.startdato)
+                                : undefined
+                        }
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
