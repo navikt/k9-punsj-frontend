@@ -1,7 +1,7 @@
 import { PunchFormComponent } from 'app/søknader/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
 
 describe('PLSPunchForm', () => {
-    test('validerer ikke hos backend når frilanser slutter før startdato', () => {
+    test('validerer hos backend når frilanser slutter før startdato', () => {
         const validateSoknad = jest.fn();
         const component = new PunchFormComponent({ validateSoknad } as ConstructorParameters<
             typeof PunchFormComponent
@@ -28,7 +28,7 @@ describe('PLSPunchForm', () => {
         handleSubmit.call(component);
 
         expect(setState).toHaveBeenCalledWith({ harForsoektAaSendeInn: true });
-        expect(validateSoknad).not.toHaveBeenCalled();
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 
     test('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
@@ -65,7 +65,7 @@ describe('PLSPunchForm', () => {
             mottattDato: '2022-10-11',
         });
 
-        expect(validateSoknad).not.toHaveBeenCalled();
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
 
         (Reflect.get(component, 'updateSoknad') as (soknad: object) => void).call(component, {
             opptjeningAktivitet: {
@@ -73,6 +73,6 @@ describe('PLSPunchForm', () => {
             },
         });
 
-        expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(validateSoknad).toHaveBeenCalledTimes(2);
     });
 });
