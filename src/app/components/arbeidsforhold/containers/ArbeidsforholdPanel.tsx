@@ -13,6 +13,7 @@ import { periodeSpenn } from 'app/components/skjema/skjemaUtils';
 import { Arbeidsforhold, JaNei } from 'app/models/enums';
 import { PunchFormPaneler } from 'app/models/enums/PunchFormPaneler';
 import { Virksomhetstyper } from 'app/models/enums/Virksomhetstyper';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import intlHelper from 'app/utils/intlUtils';
 import VerticalSpacer from '../../VerticalSpacer';
 import { CountrySelect } from '../../country-select/CountrySelect';
@@ -66,6 +67,10 @@ const ArbeidsforholdPanel = ({
 }: ArbeidsforholdPanelProps): JSX.Element => {
     const intl = useIntl();
     const [harRegnskapsfører, setHasRegnskapsfører] = React.useState(false);
+
+    const frilanserStartdato = soknad.opptjeningAktivitet.frilanser?.startdato || '';
+    const frilanserSluttdato = soknad.opptjeningAktivitet.frilanser?.sluttdato || '';
+    const frilanserSlutterFørStartdato = isDateBefore(frilanserSluttdato, frilanserStartdato);
 
     const limitFromDate = new Date();
     limitFromDate.setFullYear(limitFromDate.getFullYear() - 60);
@@ -129,7 +134,17 @@ const ArbeidsforholdPanel = ({
                         value={soknad.opptjeningAktivitet.frilanser?.sluttdato || ''}
                         className="frilanser-sluttdato"
                         label={intlHelper(intl, 'skjema.frilanserdato.slutt')}
-                        fromDate={limitFromDate}
+                        errorMessage={frilanserSlutterFørStartdato && 'Sluttdato kan ikke være før startdato.'}
+                        fromDate={
+                            soknad.opptjeningAktivitet.frilanser?.startdato
+                                ? new Date(soknad.opptjeningAktivitet.frilanser.startdato)
+                                : limitFromDate
+                        }
+                        defaultMonth={
+                            soknad.opptjeningAktivitet.frilanser?.startdato
+                                ? new Date(soknad.opptjeningAktivitet.frilanser.startdato)
+                                : undefined
+                        }
                         onChange={(selectedDate: any) => {
                             updateSoknadState(
                                 {
@@ -247,7 +262,9 @@ const ArbeidsforholdPanel = ({
                             label: v,
                             value: v,
                             onChange: (e) => updateVirksomhetstyper(v, e.target.checked),
-                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some((vt) => vt === v),
+                            checked: opptjening.selvstendigNaeringsdrivende?.info?.virksomhetstyper?.some(
+                                (vt) => vt === v,
+                            ),
                         }))}
                     />
                 </div>

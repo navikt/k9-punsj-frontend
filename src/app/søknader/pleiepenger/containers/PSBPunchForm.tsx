@@ -39,6 +39,7 @@ import {
     validerSoknadResetAction,
 } from 'app/state/actions';
 import intlHelper from 'app/utils/intlUtils';
+import { isDateBefore } from 'app/utils/date/dateUtils';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import {
     filtrerPerioderVedEndringAvSoknadsperiode,
@@ -1106,11 +1107,17 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
         }
 
-        if (this.state.harForsoektAaSendeInn) {
-            this.props.validateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter }, true);
+        const soknadForValidering = { ...this.getSoknadFromStore(), ...soknad, journalposter };
+        const frilanser = soknadForValidering.opptjeningAktivitet?.frilanser;
+
+        if (
+            this.state.harForsoektAaSendeInn &&
+            !isDateBefore(frilanser?.sluttdato, frilanser?.startdato)
+        ) {
+            this.props.validateSoknad(soknadForValidering, true);
         }
 
-        return this.props.updateSoknad({ ...this.getSoknadFromStore(), ...soknad, journalposter });
+        return this.props.updateSoknad(soknadForValidering);
     };
 
     private handleStartButtonClick = () => {
