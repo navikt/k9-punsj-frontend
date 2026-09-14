@@ -29,7 +29,7 @@
     - The custom overlay must use `pointer-events: auto`, remain below the dialog popup and date popover, follow the measured left-panel width and cover the visible work area. Do not implement it with Aksel `withBackdrop` or a full-page overlay.
     - Preserve blocking modal behavior for shared dialogs outside `JournalpostOgPdfVisning`.
     - Preserve the existing component APIs, callbacks, close behavior, business conditions and user-facing copy while replacing legacy `Modal` markup.
-    - Stacked confirmation flows must not multiply overlay opacity or place the overlay above the active dialog.
+    - Current journalpost flows render one active reference dialog. Do not add counting or coordination for hypothetical parallel reference dialogs.
     - Do not use an iframe.
     - Prefer a narrow context plus a compound adapter, for example `PunsjDialog` with `Header`, `Body` and `Footer`, over threading a new prop through every punch form.
     - Preserve the current compact modal appearance, centered within the left work area. Do not replace it with a left drawer.
@@ -98,13 +98,13 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - [Completed] Complete phase 2: migrate `KalenderMedModal` and `TidsbrukKalender` to explicit `reference` mode, then review the diff before committing. Manual PDF interaction verification remains.
 - [Completed] Phase 3 made no additional migrations. Its blocking policy is superseded by the phase-7 product decision.
 - [Completed] Focused coverage verifies both adapter modes and the calendar reference dialog. The old Modal CSS fallback remains.
-- [Completed] Implement phase 5 with context-based renderer selection and PDF pointer coverage. Validation of the follow-up remains pending.
+- [Completed] Implement phase 5 with context-based renderer selection and PDF pointer coverage. Focused coverage validates date selection and popover closing, and manual PDF pointer verification is complete.
 - [Completed] Complete phase 6: block and dim only the left work area while keeping PDF interaction enabled.
 - [Completed] Complete phase 7: make `reference` the journalpost provider default while preserving blocking outside it.
 - [Completed] Complete phase 8: migrate the shared journalpost modal components.
-- [Pending] Complete phase 9 in a separate reviewable pass.
+- [Completed] Complete phase 9: migrate the three direct søknad preview dialogs in separate reviewable commits.
 - [Completed] Complete phase 10: migrate the four Fordeling modal shells to inherit the provider interaction mode.
-- [Pending] Complete phase 11 only after the journalpost Modal inventory is empty.
+- [Completed] Complete phase 11: confirm that journalpost routes no longer use legacy `Modal`, remove their unused CSS and finish focused coverage.
 
 ## Progress notes
 
@@ -119,11 +119,15 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - Product decision after phase 6: PDF pointer interaction should remain available for every dialog inside `JournalpostOgPdfVisning`, not only data-entry dialogs.
 - Phase 7: `JournalpostOgPdfVisning` configures `reference` as the provider default; explicit `blocking` remains available per dialog.
 - Phase 8: migrated `ErDuSikkerModal`, `ForhåndsvisSøknadModal`, `SettPåVentModal` and `OkGåTilLosModal` to the shared adapter.
-- Review follow-up: the reference overlay is provider-scoped and remains singular while one or more reference dialogs are open.
+- Product decision: current flows have one active reference dialog. The overlay remains local to each dialog until a real parallel-dialog flow requires provider-level coordination.
 - Phase 10: migrated ErrorModal, KlassifiserModal, KopierModal and VentLukkBrevModal to inherit PunsjDialog interaction mode; representative ErrorModal coverage verifies reference mode without an Aksel backdrop.
+- Phase 9: migrated the direct preview dialogs in OMPMA, OMPKS and korrigering in three commits while preserving their validation, confirmation and close behavior.
+- Phase 11: removed unused journalpost legacy Modal CSS after the route inventory confirmed that only `SendBrevIAvsluttetSak`, outside `JournalpostOgPdfVisning`, still uses legacy `Modal`.
+- Review follow-up: focused coverage now selects a date through `ReferenceDatePicker`, verifies the callback and confirms that the popover closes. Browser hit testing for the overlay remains a manual verification because jsdom does not model layout or pointer interception.
 
 ## Outcome
 
-- Changed files: `PunsjDialog`, journalpost provider configuration, the shared and Fordeling modal components, focused dialog coverage and Cypress confirmation-dialog selectors.
-- Validation: Full Jest-suite passed: 65 suites and 465 tests. Focused dialog, shared-confirmation and standalone calendar coverage passed.
-- Remaining follow ups: Validate the provider-scoped overlay and phase 5 manually, then complete phases 9 and 11 in reviewable passes.
+- Status: completed.
+- Changed files: `PunsjDialog`, journalpost provider configuration, shared, direct preview and Fordeling dialog components, nonmodal reference date picker, left-panel overlay, focused coverage, Cypress confirmation-dialog selectors and journalpost legacy Modal CSS cleanup.
+- Validation: `yarn lint`, `yarn lint:css`, `yarn tsc --noEmit` and `yarn test` passed. The final Jest run reported 69 suites and 476 tests. Manual verification confirmed PDF interaction with reference dialogs and date popovers.
+- Deliberate limits: `SendBrevIAvsluttetSak` remains blocking outside the journalpost flow. Browser hit testing of the left overlay is kept as a manual check because Jest does not render browser layout.
