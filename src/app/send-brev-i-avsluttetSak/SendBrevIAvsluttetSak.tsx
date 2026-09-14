@@ -1,10 +1,11 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Button, Heading, Loader, Modal, Select, TextField } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Select, TextField } from '@navikt/ds-react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 
 import { finnFagsaker } from 'app/api/api';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import Fagsak from 'app/types/Fagsak';
 import { IdentRules } from 'app/validation';
 import { finnVisningsnavnForSakstype, redirectToLos } from 'app/utils';
@@ -165,14 +166,14 @@ const SendBrevIAvsluttetSak = () => {
             )}
 
             {visLosModal && (
-                <Modal open aria-label="Gå til LOS-modal" className="losModal" onClose={() => null}>
+                <PunsjDialog open aria-label="Gå til LOS-modal" className="losModal" onOpenChange={() => undefined}>
                     <div className="modalContent">
                         <CheckmarkCircleFillIcon className="successIcon" title="checkIcon" />
                         <Heading spacing size="xsmall" level="3">
                             <FormattedMessage id="sendBrevIAvsluttetSak.gåTilLOSModal.header" />
                         </Heading>
                     </div>
-                </Modal>
+                </PunsjDialog>
             )}
         </div>
     );

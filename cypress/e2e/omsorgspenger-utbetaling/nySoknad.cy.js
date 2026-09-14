@@ -30,7 +30,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -54,7 +54,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -89,7 +89,7 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findAllByText('Ikke opplyst').eq(1).click();
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 

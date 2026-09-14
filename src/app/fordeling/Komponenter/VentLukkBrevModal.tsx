@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import { FormattedMessage } from 'react-intl';
+import { Alert, Button, ErrorMessage, Heading } from '@navikt/ds-react';
 import { useMutation } from '@tanstack/react-query';
+import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { Alert, Button, ErrorMessage, Heading, Modal } from '@navikt/ds-react';
 
 import { lukkJournalpostEtterKopiering, settJournalpostPaaVentUtenSøknadId } from 'app/api/api';
-import { RootStateType } from 'app/state/RootState';
-import { finnForkortelseForDokumenttype, initializeDate, redirectToLos } from 'app/utils';
 import BrevComponent from 'app/components/brev/brevComponent/BrevComponent';
 import BrevContainer from 'app/components/brev/BrevContainer';
+import { PunsjDialog } from 'app/components/PunsjDialog';
+import { RootStateType } from 'app/state/RootState';
+import { finnForkortelseForDokumenttype, initializeDate, redirectToLos } from 'app/utils';
 
 interface Props {
     open: boolean;
@@ -57,22 +58,27 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
 
     if (jpLukket) {
         return (
-            <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
-                <Modal.Header closeButton={false}>
+            <PunsjDialog
+                open={open}
+                onOpenChange={(isOpen) => !isOpen && onClose()}
+                aria-labelledby="modal-heading"
+                data-test-id="brevModal"
+            >
+                <PunsjDialog.Header withClosebutton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.tittel" />
                     </Heading>
-                </Modal.Header>
+                </PunsjDialog.Header>
 
-                <Modal.Body>
+                <PunsjDialog.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
                             <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukket.info" />
                         </Alert>
                     </div>
-                </Modal.Body>
+                </PunsjDialog.Body>
 
-                <Modal.Footer>
+                <PunsjDialog.Footer>
                     <Button
                         type="button"
                         onClick={() => {
@@ -83,21 +89,26 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     >
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukket.gåTilLosBtn" />
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </PunsjDialog.Footer>
+            </PunsjDialog>
         );
     }
 
     if (visLukkOppgave) {
         return (
-            <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
-                <Modal.Header closeButton={false}>
+            <PunsjDialog
+                open={open}
+                onOpenChange={(isOpen) => !isOpen && onClose()}
+                aria-labelledby="modal-heading"
+                data-test-id="brevModal"
+            >
+                <PunsjDialog.Header withClosebutton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.tittel" />
                     </Heading>
-                </Modal.Header>
+                </PunsjDialog.Header>
 
-                <Modal.Body>
+                <PunsjDialog.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.info" />
 
@@ -109,9 +120,9 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                             </div>
                         )}
                     </div>
-                </Modal.Body>
+                </PunsjDialog.Body>
 
-                <Modal.Footer>
+                <PunsjDialog.Footer>
                     <Button
                         type="button"
                         onClick={() => lukkJournalpost.mutate()}
@@ -130,21 +141,26 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     >
                         <FormattedMessage id="fordeling.journalført.brevModal.avbryt.btn" />
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </PunsjDialog.Footer>
+            </PunsjDialog>
         );
     }
 
     if (sattPåVent) {
         return (
-            <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
-                <Modal.Header closeButton={false}>
+            <PunsjDialog
+                open={open}
+                onOpenChange={(isOpen) => !isOpen && onClose()}
+                aria-labelledby="modal-heading"
+                data-test-id="brevModal"
+            >
+                <PunsjDialog.Header withClosebutton={false}>
                     <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.sattPåVent.tittel" />
                     </Heading>
-                </Modal.Header>
+                </PunsjDialog.Header>
 
-                <Modal.Body>
+                <PunsjDialog.Body>
                     <div className="min-w-[500px] max-w-[500px]">
                         <Alert variant="success" size="small" data-test-id="brevModalInfoSattPåVent">
                             <FormattedMessage
@@ -153,9 +169,9 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                             />
                         </Alert>
                     </div>
-                </Modal.Body>
+                </PunsjDialog.Body>
 
-                <Modal.Footer>
+                <PunsjDialog.Footer>
                     <Button
                         type="button"
                         onClick={() => {
@@ -166,20 +182,25 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                     >
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.sattPåVent.gåTilLosBtn" />
                     </Button>
-                </Modal.Footer>
-            </Modal>
+                </PunsjDialog.Footer>
+            </PunsjDialog>
         );
     }
 
     return (
-        <Modal open={open} onClose={onClose} aria-labelledby="modal-heading" data-test-id="brevModal">
-            <Modal.Header closeButton={true}>
+        <PunsjDialog
+            open={open}
+            onOpenChange={(isOpen) => !isOpen && onClose()}
+            aria-labelledby="modal-heading"
+            data-test-id="brevModal"
+        >
+            <PunsjDialog.Header withClosebutton>
                 <Heading level="1" size="small" id="modal-heading" data-test-id="brevModalHeader">
                     <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.tittel" />
                 </Heading>
-            </Modal.Header>
+            </PunsjDialog.Header>
 
-            <Modal.Body>
+            <PunsjDialog.Body>
                 <div className="min-w-[500px] max-w-[500px]">
                     <Alert variant="info" size="small" data-test-id="brevModalInfo">
                         <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.alert" />
@@ -204,9 +225,9 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                         </div>
                     )}
                 </div>
-            </Modal.Body>
+            </PunsjDialog.Body>
 
-            <Modal.Footer>
+            <PunsjDialog.Footer>
                 <Button
                     type="button"
                     onClick={() => settPåVent.mutate()}
@@ -225,8 +246,8 @@ const VentLukkBrevModal: React.FC<Props> = ({ open, onClose }: Props) => {
                 >
                     <FormattedMessage id="fordeling.journalført.åpneVentLukkBrevModal.lukk.btn" />
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </PunsjDialog.Footer>
+        </PunsjDialog>
     );
 };
 

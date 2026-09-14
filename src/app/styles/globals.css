@@ -81,42 +81,24 @@ body {
     --left-panel-width-fallback: 40vw;
 }
 
-.journalpost-modal dialog::backdrop {
-    width: var(--left-panel-width, var(--left-panel-width-fallback));
-}
-
-.journalpost-modal :is(.navds-modal, .aksel-modal) {
+.journalpost-modal .journalpost-dialog-popup[data-position='center'] {
     left: calc(var(--left-panel-width, var(--left-panel-width-fallback)) / 2);
-    margin: 0 !important;
+    right: auto;
+    top: 50%;
+    margin: 0;
     max-width: calc(var(--left-panel-width, var(--left-panel-width-fallback)) - 2rem);
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
 }
 
-.journalpost-modal :is(.navds-modal, .aksel-modal):not(.aksel-modal--polyfilled) {
-    top: 50%;
-}
-
-.journalpost-modal .aksel-modal--polyfilled {
-    top: 50%;
-}
-
-.journalpost-modal .aksel-modal[open] {
-    animation: journalpost-modal-fade-in 0.7s cubic-bezier(0.15, 1, 0.3, 1);
-}
-
-@keyframes journalpost-modal-fade-in {
-    0% {
-        opacity: 0.0001;
-        transform: translate(-50%, calc(-50% + 4px));
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(-50%, -50%);
-    }
+.journalpost-reference-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--left-panel-width, var(--left-panel-width-fallback));
+    background-color: var(--ax-bg-overlay);
+    pointer-events: auto;
+    z-index: 999;
 }
 
 .pleietrengende-select .aksel-select__container {

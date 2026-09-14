@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, ExpansionCard, Heading, Label, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, Button, ExpansionCard, Heading, Label } from '@navikt/ds-react';
 import dayjs from 'dayjs';
 import { uniq } from 'lodash';
 
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { formats, getDatesInDateRange, getDatesInMonth, getMonthAndYear, isDateInDates, isWeekend } from 'app/utils';
@@ -230,26 +231,27 @@ export const TidsbrukKalender = ({
                                 </Button>
                             )}
                         </div>
-                        <Provider rootElement={kalenderRef.current || undefined}>
-                            <Modal
-                                className="venstrestilt max-w-112.5 exempt-from-click-outside"
-                                open={visModal}
-                                onClose={() => {
+                        <PunsjDialog
+                            className="max-w-112.5 exempt-from-click-outside"
+                            open={visModal}
+                            onOpenChange={(nextOpen) => {
+                                if (!nextOpen) {
                                     setVisModal(false);
                                     clearSelectedDates();
-                                }}
-                                aria-label="Modal"
-                            >
-                                <Modal.Body>
-                                    {visModal &&
-                                        React.cloneElement<ModalContentProps>(ModalContent, {
-                                            selectedDates,
-                                            toggleModal,
-                                            clearSelectedDates,
-                                        })}
-                                </Modal.Body>
-                            </Modal>
-                        </Provider>
+                                }
+                            }}
+                            interactionMode="reference"
+                            aria-label="Modal"
+                        >
+                            <PunsjDialog.Body>
+                                {visModal &&
+                                    React.cloneElement<ModalContentProps>(ModalContent, {
+                                        selectedDates,
+                                        toggleModal,
+                                        clearSelectedDates,
+                                    })}
+                            </PunsjDialog.Body>
+                        </PunsjDialog>
                     </div>
                 )}
             </ExpansionCard.Content>

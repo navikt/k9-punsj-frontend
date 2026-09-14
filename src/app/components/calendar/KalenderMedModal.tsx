@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import { Button, Modal } from '@navikt/ds-react';
+import { Button } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
 
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
 
@@ -42,9 +43,14 @@ const KalenderMedModal = ({
             <VerticalSpacer twentyPx />
 
             {open && (
-                <Modal open onClose={close} aria-label={modalLabel} className="max-w-[550px] min-w-[550px]">
-                    <Modal.Body>{periodeListeModal(close)}</Modal.Body>
-                </Modal>
+                <PunsjDialog
+                    open
+                    onOpenChange={(nextOpen) => !nextOpen && close()}
+                    aria-label={modalLabel}
+                    width="550px"
+                >
+                    <PunsjDialog.Body className="flex justify-center">{periodeListeModal(close)}</PunsjDialog.Body>
+                </PunsjDialog>
             )}
 
             {!!gyldigePerioder.length && (
