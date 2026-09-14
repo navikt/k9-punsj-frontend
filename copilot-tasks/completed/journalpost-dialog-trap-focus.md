@@ -124,10 +124,11 @@ Before executing tests, lint, type checks or build, ask the user whether to run 
 - Phase 9: migrated the direct preview dialogs in OMPMA, OMPKS and korrigering in three commits while preserving their validation, confirmation and close behavior.
 - Phase 11: removed unused journalpost legacy Modal CSS after the route inventory confirmed that only `SendBrevIAvsluttetSak`, outside `JournalpostOgPdfVisning`, still uses legacy `Modal`.
 - Review follow-up: focused coverage now selects a date through `ReferenceDatePicker`, verifies the callback and confirms that the popover closes. Browser hit testing for the overlay remains a manual verification because jsdom does not model layout or pointer interception.
+- Follow-up outside the original journalpost scope: migrated `SendBrevIAvsluttetSak` to the same blocking `PunsjDialog` adapter. It does not use reference mode or the PDF overlay.
 
 ## Outcome
 
 - Status: completed.
-- Changed files: `PunsjDialog`, journalpost provider configuration, shared, direct preview and Fordeling dialog components, nonmodal reference date picker, left-panel overlay, focused coverage, Cypress confirmation-dialog selectors and journalpost legacy Modal CSS cleanup.
+- Changed files: `PunsjDialog`, journalpost provider configuration, shared, direct preview and Fordeling dialog components, `SendBrevIAvsluttetSak`, nonmodal reference date picker, left-panel overlay, focused coverage, Cypress confirmation-dialog selectors and journalpost legacy Modal CSS cleanup.
 - Validation: `yarn lint`, `yarn lint:css`, `yarn tsc --noEmit` and `yarn test` passed. The final Jest run reported 69 suites and 476 tests. Manual verification confirmed PDF interaction with reference dialogs and date popovers.
-- Deliberate limits: `SendBrevIAvsluttetSak` remains blocking outside the journalpost flow. Browser hit testing of the left overlay is kept as a manual check because Jest does not render browser layout.
+- Deliberate limits: browser hit testing of the left overlay is kept as a manual check because Jest does not render browser layout.
