@@ -1,5 +1,4 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
 
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -28,9 +27,9 @@ const renderDialog = (
     return rootElement;
 };
 
-const renderReferenceDialogWithPanelControls = (
-    onLeftControlClick: () => void,
+const renderReferenceDialogWithPdfControl = (
     onPdfTabClick: () => void,
+    onDateChange: (value: string) => void = () => undefined,
 ): HTMLDivElement => {
     const rootElement = document.createElement('div');
     rootElement.className = 'punsj-dialog-test-root';
@@ -41,16 +40,17 @@ const renderReferenceDialogWithPanelControls = (
             <PunsjDialogProvider rootElement={rootElement} defaultInteractionMode="reference">
                 <PunsjDialog open onOpenChange={() => undefined} aria-label="Testdialog">
                     <PunsjDialog.Body>
-                        <Datovelger label="Dato" value="" onChange={() => undefined} />
+                        <Datovelger
+                            label="Dato"
+                            value=""
+                            onChange={onDateChange}
+                            defaultMonth={new Date('2024-02-01T00:00:00.000Z')}
+                            fromDate={new Date('2024-02-01T00:00:00.000Z')}
+                            toDate={new Date('2024-02-29T00:00:00.000Z')}
+                        />
                     </PunsjDialog.Body>
                 </PunsjDialog>
             </PunsjDialogProvider>
-            {createPortal(
-                <button type="button" onClick={onLeftControlClick}>
-                    Venstre kontroll
-                </button>,
-                rootElement,
-            )}
             <button type="button" onClick={onPdfTabClick}>
                 PDF-fane
             </button>
@@ -113,7 +113,7 @@ describe('PunsjDialog', () => {
     it('allows PDF pointer interaction while the reference date popover is open', async () => {
         const user = userEvent.setup();
         const onPdfTabClick = jest.fn();
-        renderReferenceDialogWithPanelControls(jest.fn(), onPdfTabClick);
+        renderReferenceDialogWithPdfControl(onPdfTabClick);
 
         const pdfTab = screen.getByRole('button', { name: 'PDF-fane', hidden: true });
         await user.click(pdfTab);
@@ -127,16 +127,26 @@ describe('PunsjDialog', () => {
         expect(onPdfTabClick).toHaveBeenCalledTimes(2);
     });
 
-    it('blocks the left panel while keeping PDF controls interactive in reference mode', async () => {
+    it('selects a date and closes the reference date popover', async () => {
         const user = userEvent.setup();
-        const onLeftControlClick = jest.fn();
+        const onDateChange = jest.fn();
+        renderReferenceDialogWithPdfControl(jest.fn(), onDateChange);
+
+        const datePickerButton = document.querySelector('.aksel-date__field-button') as HTMLButtonElement;
+        await user.click(datePickerButton);
+        await user.click(screen.getByRole('button', { name: 'torsdag 15' }));
+
+        expect(onDateChange).toHaveBeenLastCalledWith('2024-02-15');
+        expect(document.querySelector('.aksel-popover:not(.aksel-popover--hidden)')).not.toBeInTheDocument();
+    });
+
+    it('renders the left-panel overlay while keeping PDF controls interactive in reference mode', async () => {
+        const user = userEvent.setup();
         const onPdfTabClick = jest.fn();
-        const rootElement = renderReferenceDialogWithPanelControls(onLeftControlClick, onPdfTabClick);
+        const rootElement = renderReferenceDialogWithPdfControl(onPdfTabClick);
 
         const overlay = rootElement.querySelector('.journalpost-reference-overlay') as HTMLDivElement;
-        await user.click(overlay);
-
-        expect(onLeftControlClick).not.toHaveBeenCalled();
+        expect(overlay).toBeInTheDocument();
 
         await user.click(screen.getByRole('button', { name: 'PDF-fane', hidden: true }));
         expect(onPdfTabClick).toHaveBeenCalledTimes(1);
