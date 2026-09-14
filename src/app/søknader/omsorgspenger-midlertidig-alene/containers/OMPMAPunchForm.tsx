@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import * as yup from 'yup';
 
-import { Alert, Box, Button, ErrorSummary, Heading, HelpText, Loader, Modal, Tag, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, HelpText, Loader, Tag, VStack } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import Personvelger from 'app/components/person-velger/Personvelger';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import { IInputError } from 'app/models/types';
 import { setSignaturAction } from 'app/state/actions';
 import { capitalize } from 'app/utils';
@@ -366,28 +367,28 @@ export const OMPMAPunchForm: React.FC<Props> = ({
             {!!punchFormState.settPaaVentError && <ErrorModal onClose={() => settPåventResetAction()} />}
 
             {punchFormState.isValid && !visErDuSikkerModal && punchFormState.validertSoknad && (
-                <Modal
+                <PunsjDialog
                     key="validertSoknadModal"
-                    onClose={() => validerSoknadReset()}
+                    onOpenChange={(nextOpen) => !nextOpen && validerSoknadReset()}
                     open={!!punchFormState.isValid}
                     aria-label="validertSoknadModal"
                     data-test-id="validertSoknadModal"
                 >
-                    <Modal.Header closeButton={false}>
+                    <PunsjDialog.Header withClosebutton={false}>
                         <Heading size="medium" level="1" data-test-id="OMPMAPunchFormKvitteringHeader">
                             <FormattedMessage id="skjema.kvittering.oppsummering" />
                         </Heading>
-                    </Modal.Header>
+                    </PunsjDialog.Header>
 
-                    <Modal.Body>
+                    <PunsjDialog.Body>
                         <OMPMASoknadKvittering
                             response={punchFormState.validertSoknad}
                             kopierJournalpostSuccess={kopierJournalpostSuccess}
                             annenSokerIdent={annenSokerIdent}
                         />
-                    </Modal.Body>
+                    </PunsjDialog.Body>
 
-                    <Modal.Footer>
+                    <PunsjDialog.Footer>
                         <Button
                             size="small"
                             className="validertSoknadOppsummeringContainer_knappVidere"
@@ -404,8 +405,8 @@ export const OMPMAPunchForm: React.FC<Props> = ({
                         >
                             <FormattedMessage id="skjema.knapp.avbryt" />
                         </Button>
-                    </Modal.Footer>
-                </Modal>
+                    </PunsjDialog.Footer>
+                </PunsjDialog>
             )}
 
             {visErDuSikkerModal && (
