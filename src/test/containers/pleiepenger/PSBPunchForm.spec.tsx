@@ -443,7 +443,7 @@ describe('PunchForm', () => {
         expect(validateSoknad).toHaveBeenCalledTimes(1);
     });
 
-    it('validerer ikke hos backend når frilanser slutter før startdato', () => {
+    it('validerer hos backend når frilanser slutter før startdato', () => {
         const validateSoknad = jest.fn();
 
         setupPunchForm(
@@ -465,7 +465,22 @@ describe('PunchForm', () => {
 
         fireEvent.click(screen.getByTestId('sendKnapp'));
 
-        expect(validateSoknad).not.toHaveBeenCalled();
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
+    });
+
+    it('viser serverfeil for ugyldig frilanserperiode i ErrorSummary', async () => {
+        setupPunchForm({
+            soknad: initialSoknad,
+            inputErrors: [
+                {
+                    felt: 'ytelse.opptjeningAktivitet.frilanser.sluttdatoFørStartdato',
+                    feilkode: 'ugyldigPeriode',
+                    feilmelding: 'Sluttdato kan ikke være før startdato.',
+                },
+            ],
+        });
+
+        expect(await screen.findByText('Sluttdato kan ikke være før startdato.')).toBeDefined();
     });
 
     it('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
@@ -504,7 +519,7 @@ describe('PunchForm', () => {
             mottattDato: '2022-10-11',
         });
 
-        expect(validateSoknad).not.toHaveBeenCalled();
+        expect(validateSoknad).toHaveBeenCalledTimes(1);
 
         (Reflect.get(component, 'updateSoknad') as (soknad: Partial<IPSBSoknad>) => void).call(component, {
             opptjeningAktivitet: {
@@ -512,7 +527,7 @@ describe('PunchForm', () => {
             },
         });
 
-        expect(validateSoknad).toHaveBeenCalledTimes(1);
+        expect(validateSoknad).toHaveBeenCalledTimes(2);
     });
 
     it('Viser melding om valideringsfeil', async () => {
