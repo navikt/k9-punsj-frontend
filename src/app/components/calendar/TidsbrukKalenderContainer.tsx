@@ -3,7 +3,8 @@ import { groupBy } from 'lodash';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Modal, Provider } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import useOnClickOutside from 'app/hooks/useOnClickOutside';
 import { KalenderDag } from 'app/models/KalenderDag';
 import { IPeriode } from 'app/models/types';
@@ -165,26 +166,27 @@ const TidsbrukKalenderContainer = ({
                     )}
                 </div>
             )}
-            <Provider rootElement={kalenderContainerRef.current || undefined}>
-                <Modal
-                    className="venstrestilt max-w-112.5 exempt-from-click-outside"
-                    open={visModal}
-                    onClose={() => {
+            <PunsjDialog
+                className="max-w-112.5 exempt-from-click-outside"
+                open={visModal}
+                onOpenChange={(nextOpen) => {
+                    if (!nextOpen) {
                         setVisModal(false);
                         clearSelectedDates();
-                    }}
-                    aria-label="Modal"
-                >
-                    <Modal.Body>
-                        {visModal &&
-                            React.cloneElement<ModalContentProps>(ModalContent, {
-                                selectedDates,
-                                toggleModal,
-                                clearSelectedDates,
-                            })}
-                    </Modal.Body>
-                </Modal>
-            </Provider>
+                    }
+                }}
+                interactionMode="reference"
+                aria-label="Modal"
+            >
+                <PunsjDialog.Body>
+                    {visModal &&
+                        React.cloneElement<ModalContentProps>(ModalContent, {
+                            selectedDates,
+                            toggleModal,
+                            clearSelectedDates,
+                        })}
+                </PunsjDialog.Body>
+            </PunsjDialog>
         </div>
     );
 };

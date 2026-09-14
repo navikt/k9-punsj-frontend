@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import React, { ComponentType } from 'react';
 
-import { Alert, Button, Heading, HelpText, Loader, Modal, Tag } from '@navikt/ds-react';
+import { Alert, Button, Heading, HelpText, Loader, Tag } from '@navikt/ds-react';
 import { LegacyCheckbox } from 'app/components/legacy-form-compat/checkbox';
 
 import JournalposterSync from 'app/components/JournalposterSync';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import PunchFormTitle from 'app/components/PunchFormTitle';
 import { IInputError, ISignaturState } from 'app/models/types';
 import { setSignaturAction } from 'app/state/actions';
@@ -536,28 +537,28 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                 {this.props.punchFormState.isValid &&
                     !this.state.visErDuSikkerModal &&
                     this.props.punchFormState.validertSoknad && (
-                        <Modal
-                            onClose={() => this.props.validerSoknadReset()}
+                        <PunsjDialog
+                            onOpenChange={(nextOpen) => !nextOpen && this.props.validerSoknadReset()}
                             open={this.props.punchFormState.isValid}
                             key="validertOMPKSSoknadModal"
                             aria-label="validertOMPKSSoknadModal"
                             data-test-id="validertOMPKSSoknadModal"
                         >
-                            <Modal.Header closeButton={false}>
+                            <PunsjDialog.Header withClosebutton={false}>
                                 <Heading size="medium" level="1" data-test-id="OMPKSPunchFormKvitteringHeader">
                                     <FormattedMessage id="skjema.kvittering.oppsummering" />
                                 </Heading>
-                            </Modal.Header>
+                            </PunsjDialog.Header>
 
-                            <Modal.Body>
+                            <PunsjDialog.Body>
                                 <OMPKSSoknadKvittering
                                     response={this.props.punchFormState.validertSoknad}
                                     annenSokerIdent={this.props.identState.annenSokerIdent}
                                     kopierJournalpostSuccess={this.props.kopierJournalpostSuccess}
                                 />
-                            </Modal.Body>
+                            </PunsjDialog.Body>
 
-                            <Modal.Footer>
+                            <PunsjDialog.Footer>
                                 <Button
                                     size="small"
                                     className="validertSoknadOppsummeringContainer_knappVidere"
@@ -574,8 +575,8 @@ export class PunchOMPKSFormComponent extends React.Component<IPunchOMPKSFormProp
                                 >
                                     <FormattedMessage id="skjema.knapp.avbryt" />
                                 </Button>
-                            </Modal.Footer>
-                        </Modal>
+                            </PunsjDialog.Footer>
+                        </PunsjDialog>
                     )}
 
                 {this.state.visErDuSikkerModal && (

@@ -133,9 +133,10 @@ describe('TidsbrukKalenderContainer', () => {
         fireEvent.click(screen.getByTestId('calendar-grid-date-2026-01-15'));
         await userEvent.click(screen.getByRole('button', { name: 'Registrer tid' }));
 
-        const dialog = document.querySelector('dialog[open]');
+        const dialog = screen.getByRole('dialog', { name: 'Modal' });
 
         expect(dialog).toBeInTheDocument();
-        expect(dialog).toHaveAttribute('aria-label', 'Modal');
+        expect(dialog).toHaveClass('journalpost-dialog-popup');
+        expect(document.querySelector('.aksel-dialog__backdrop')).not.toBeInTheDocument();
     });
 });

@@ -33,14 +33,14 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Normal arbeidstid per dag').type('7');
         cy.findByLabelText('Timer fravær per dag').type('7');
 
-        cy.findByText(
-            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
-        ).should('not.exist');
+        cy.findByText('Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig').should(
+            'not.exist',
+        );
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -62,14 +62,14 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Normal arbeidstid per dag').type('7');
         cy.findByLabelText('Timer fravær per dag').type('7');
 
-        cy.findByText(
-            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
-        ).should('not.exist');
+        cy.findByText('Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig').should(
+            'not.exist',
+        );
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 
@@ -97,14 +97,14 @@ describe('Omsorgspengeutbetaling - ny søknad', () => {
         cy.findByLabelText('Normal arbeidstid per dag').type('7');
         cy.findByLabelText('Timer fravær per dag').type('7');
 
-        cy.findByText(
-            'Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig',
-        ).should('not.exist');
+        cy.findByText('Hvis søker er under 18 år må søknad være signert av forelder/verge/fullmektig').should(
+            'not.exist',
+        );
         cy.findByText('Medlemskap').should('not.exist');
         cy.findByText('Utenlandsopphold').should('not.exist');
         cy.findByRole('button', { name: 'Send inn' }).click();
         cy.findByRole('button', { name: 'Videre' }).click();
-        cy.get('.aksel-modal').within(() => {
+        cy.findByTestId('erdusikkermodal').within(() => {
             cy.findByRole('button', { name: 'Send inn' }).click();
         });
 

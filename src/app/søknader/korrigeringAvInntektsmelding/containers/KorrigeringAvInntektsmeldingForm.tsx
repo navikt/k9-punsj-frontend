@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 
-import { Alert, Box, Button, ErrorSummary, Heading, List, Modal, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, ErrorSummary, Heading, List, VStack } from '@navikt/ds-react';
 import Feilmelding from 'app/components/Feilmelding';
+import { PunsjDialog } from 'app/components/PunsjDialog';
 import { FordelingDokumenttype } from 'app/models/enums';
 import { OMSKorrigering } from 'app/models/types/OMSKorrigering';
 import { Feil, ValideringResponse } from 'app/models/types/ValideringResponse';
@@ -501,14 +502,16 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                         </Form>
                         <VerticalSpacer sixteenPx />
                         {visBekreftelsemodal && (
-                            <Modal
+                            <PunsjDialog
                                 key="validertSoknadModal"
-                                onClose={() => dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })}
+                                onOpenChange={(nextOpen) =>
+                                    !nextOpen && dispatch({ type: ActionType.SKJUL_BEKREFTELSEMODAL })
+                                }
                                 aria-label="validertSoknadModal"
                                 data-test-id="validertSoknadModal"
                                 open
                             >
-                                <Modal.Header closeButton={false}>
+                                <PunsjDialog.Header withClosebutton={false}>
                                     <Heading
                                         size="medium"
                                         level="1"
@@ -516,13 +519,13 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                     >
                                         <FormattedMessage id="skjema.kvittering.oppsummering" />
                                     </Heading>
-                                </Modal.Header>
+                                </PunsjDialog.Header>
 
-                                <Modal.Body>
+                                <PunsjDialog.Body>
                                     <OMSKvittering feltverdier={values} />
-                                </Modal.Body>
+                                </PunsjDialog.Body>
 
-                                <Modal.Footer>
+                                <PunsjDialog.Footer>
                                     <Button
                                         size="small"
                                         onClick={() => dispatch({ type: ActionType.VIS_ER_DU_SIKKER_MODAL })}
@@ -537,8 +540,8 @@ const KorrigeringAvInntektsmeldingForm: React.FC<Props> = ({ søkerId, søknadId
                                     >
                                         <FormattedMessage id="skjema.knapp.avbryt" />
                                     </Button>
-                                </Modal.Footer>
-                            </Modal>
+                                </PunsjDialog.Footer>
+                            </PunsjDialog>
                         )}
                         {visErDuSikkerModal && (
                             <ErDuSikkerModal

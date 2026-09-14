@@ -1,4 +1,3 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { DateInputProps, DatePicker, DatePickerProps, useDatepicker } from '@navikt/ds-react';
 import {
     dateToISODateString,
@@ -8,6 +7,10 @@ import {
     ISODateStringToUTCDate,
 } from 'app/utils/date/dateFormat';
 import { offsetDateByYears } from 'app/utils/date/dateUtils';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { usePunsjDialogInteractionMode } from '../../PunsjDialog';
+import ReferenceDatePicker from './ReferenceDatePicker';
 
 export type DatovelgerProps = Pick<DatePickerProps, 'defaultMonth' | 'fromDate' | 'toDate' | 'className'> &
     Pick<DateInputProps, 'hideLabel' | 'size' | 'label' | 'description' | 'id'> & {
@@ -46,6 +49,7 @@ const Datovelger = ({
     size = 'medium',
     id,
 }: DatovelgerProps) => {
+    const interactionMode = usePunsjDialogInteractionMode();
     const [isInvalidDate, setIsInvalidDate] = useState(false);
     const [showLocalError, setShowLocalError] = useState(false);
     const previousValueRef = useRef<string | undefined>(undefined);
@@ -143,39 +147,48 @@ const Datovelger = ({
         }
     };
 
+    const input = (
+        <DatePicker.Input
+            {...inputProps}
+            hideLabel={hideLabel}
+            id={id}
+            label={label}
+            description={description}
+            error={error}
+            disabled={disabled}
+            onBlur={handleInputBlur}
+            onChange={(event) => {
+                setShowLocalError(false);
+                inputProps.onChange?.(event);
+            }}
+            ref={inputRef}
+            data-testid={dataTestId || 'datePickerInput'}
+            size={size}
+            aria-describedby={errorAriaDescribedBy}
+        />
+    );
+    const sharedDatepickerProps = {
+        ...(datepickerProps as any),
+        showWeekNumber: true,
+        onSelect: handleSelect,
+        mode: 'single' as const,
+        inputDisabled: disabled,
+        dropdownCaption: true,
+        fromDate: fromDate || fromDateDefault,
+        toDate: toDate || toDateDefault,
+        disabled: disabledDates,
+        size,
+    };
+
     return (
         <div className={className}>
-            <DatePicker
-                {...(datepickerProps as any)}
-                showWeekNumber={true}
-                onSelect={handleSelect}
-                mode="single"
-                inputDisabled={disabled}
-                dropdownCaption={true}
-                fromDate={fromDate || fromDateDefault}
-                toDate={toDate || toDateDefault}
-                disabled={disabledDates}
-                size={size}
-            >
-                <DatePicker.Input
-                    {...inputProps}
-                    hideLabel={hideLabel}
-                    id={id}
-                    label={label}
-                    description={description}
-                    error={error}
-                    disabled={disabled}
-                    onBlur={handleInputBlur}
-                    onChange={(event) => {
-                        setShowLocalError(false);
-                        inputProps.onChange?.(event);
-                    }}
-                    ref={inputRef}
-                    data-testid={dataTestId || 'datePickerInput'}
-                    size={size}
-                    aria-describedby={errorAriaDescribedBy}
-                />
-            </DatePicker>
+            {interactionMode === 'reference' ? (
+                <ReferenceDatePicker datepickerProps={sharedDatepickerProps} onSelect={handleSelect}>
+                    {input}
+                </ReferenceDatePicker>
+            ) : (
+                <DatePicker {...sharedDatepickerProps}>{input}</DatePicker>
+            )}
         </div>
     );
 };
