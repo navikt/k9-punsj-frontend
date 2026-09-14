@@ -3,7 +3,7 @@ import { PunchFormComponent } from 'app/søknader/pleiepenger-livets-sluttfase/c
 describe('PLSPunchForm', () => {
     test('validerer hos backend når frilanser slutter før startdato', () => {
         const validateSoknad = jest.fn();
-        const component = new PunchFormComponent({ validateSoknad } as ConstructorParameters<
+        const component = new PunchFormComponent({ validateSoknad } as unknown as ConstructorParameters<
             typeof PunchFormComponent
         >[0]);
         const setState = jest.fn();
@@ -38,7 +38,7 @@ describe('PLSPunchForm', () => {
             validateSoknad,
             updateSoknad,
             journalpostid: '200',
-        } as ConstructorParameters<typeof PunchFormComponent>[0]);
+        } as unknown as ConstructorParameters<typeof PunchFormComponent>[0]);
         const invalidFrilanser = {
             startdato: '2022-10-10',
             sluttdato: '2022-10-01',

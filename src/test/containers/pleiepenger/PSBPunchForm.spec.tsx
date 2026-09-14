@@ -491,7 +491,7 @@ describe('PunchForm', () => {
             updateSoknad,
             journalpostid,
             punchFormState: { soknad: { soeknadsperiode: [] } },
-        } as ConstructorParameters<typeof PunchFormComponent>[0]);
+        } as unknown as ConstructorParameters<typeof PunchFormComponent>[0]);
         const setState = jest.fn();
         const invalidFrilanser = {
             startdato: '2022-10-10',
