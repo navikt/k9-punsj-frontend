@@ -5,7 +5,8 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### Weekly package maintenance (2026-09-15)
 
 - Løftet cooldown-eligible patch-versjoner i root og `server`, inkludert Aksel, React Intl, React Router, test- og CSS-verktøy, `jose` og `uuid`, uten å ta inn minor- eller majorløft.
-- Oppdaterte fortsatt nødvendige FormatJS- og `tar`-overstyringer til neste patch. Lot `js-yaml` stå fordi neste eligible løft er major, og lot `qs` og OpenTelemetry core stå til en egen minor-pass.
+- Løftet deretter eligible minor-versjoner for Faro, Sentry, React Query, React Hook Form, Storybook, Jest, TypeScript ESLint, Webpack og serverpakkene Oasis og Morgan.
+- Oppdaterte FormatJS- og `tar`-overstyringer til neste patch, og `qs` og OpenTelemetry core til neste minor. Lot `js-yaml` stå fordi neste eligible løft er major.
 
 ### Validering av frilanserperiode (2026-09-08)
 
