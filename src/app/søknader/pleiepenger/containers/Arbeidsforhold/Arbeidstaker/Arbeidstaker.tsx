@@ -142,7 +142,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                         <Select
                             value={selectedArbeidsgiver}
                             className="w-64"
-                            label="Velg hvilken arbeidsgiver det gjelder"
+                            label={<span className="whitespace-nowrap">Velg hvilken arbeidsgiver det gjelder</span>}
                             onChange={(event) => {
                                 const { value } = event.target;
                                 dispatch({ type: ActionType.SELECT_ARBEIDSGIVER, selectedArbeidsgiver: value });

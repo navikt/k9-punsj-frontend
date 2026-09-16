@@ -416,6 +416,8 @@
     "skjema.arbeid.sn.virksomhetsnavn": "Hva heter virksomheten?",
 
     "skjema.arbeid.arbeidstidKalender.header": "Arbeidstid i søknadsperioden",
+    "skjema.arbeid.arbeidstidKalender.info.lengrePeriode": "Ved lik arbeidstid for en lengre periode, bruk knappen under og fyll inn perioden du vil registrere arbeidstid.",
+    "skjema.arbeid.arbeidstidKalender.info.maanedsvisning": "Ved variabel arbeidstid per dag eller uke, bruk kalender under månedsvisning for å velge dagene du vil registrere arbeidstid.",
 
     "skjema.sn.info": "Dersom søker etterrapporterer opplysninger om arbeidstid skal du kun fylle ut organisasjonsnummer og informasjon om arbeidstid.",
     "skjema.harSoekerDekketOmsorgsdager": "Har søker dekket 10 omsorgsdager?",
