@@ -4,7 +4,7 @@
 
 - Title: Weekly package maintenance
 - Branch: `package-update`
-- Suggested agent: `@k9-punsj-front-research-agent`
+- Suggested agent: default coding agent
 - Prompt language: `English`
 
 ## Goal
