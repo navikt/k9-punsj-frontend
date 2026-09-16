@@ -25,20 +25,20 @@
 - Out of scope:
     - new dependencies, majors, broad refactors, automatic commits or pushes
     - weakening `.yarnrc.yml` `npmMinimalAgeGate: 7d`
-    - broad `yarn up` commands, globs, `@latest`, Python scripts, custom registry scripts, or tarball inspection
+    - broad `yarn up` commands, globs, `@latest`, or tarball inspection
 
 ## Method
 
 - Read `.yarnrc.yml`, both manifests, the current `resolutions`, and the latest dependency entry in `docs/CHANGELOG.md` first.
-- Run `yarn npm whoami --scope navikt` before audit. If it fails, record the limitation once and do not retry audit commands until the user refreshes the token.
+- Run `yarn npm audit --all --json`. If registry authentication or another external service blocks it, record the limitation and continue without repeated retries.
 - If GitHub MCP is available, check open Dependabot alerts before package changes and again after each pass.
-- Compute and record the UTC cutoff, `now - 7 days`, before any package update. Use only `node -e "const cutoff=new Date(Date.now()-7*24*60*60*1000); console.log(cutoff.toISOString())"` as an ad hoc script.
+- Compute and record the UTC cutoff, `now - 7 days`, before any package update. Prefer the shortest built in Yarn or npm command. Use a small Node, shell, or Python command only when the package tools cannot provide the needed date or metadata directly.
 - Discover candidates with `npm outdated --json` and verify each selected version with `npm view <package> time --json`.
 - Record a compact matrix for each changed package: current version, eligible target, skipped newer version, and reason. Do not enumerate unchanged packages.
 - Choose the highest eligible non major version. Prefer an eligible minor over a patch. If the newest minor is inside the cooldown, choose the nearest eligible older minor.
 - Use explicit package lists in every `yarn up` command. Verify root and `server` manifest diffs after each command.
 - Review each `resolution` after each pass. Keep only overrides with a concrete current transitive reason.
-- Treat OpenTelemetry as a synchronized runtime graph. Faro `2.11.0` uses instrumentation `^0.221.0`, which uses OpenTelemetry `2.10.0`. Do not raise `@opentelemetry/core` alone or move this graph to `2.11.0` until Faro supports instrumentation `0.222.x`. When a single version is required, align `core`, `resources`, `sdk-trace`, `sdk-trace-base`, and `sdk-trace-web`, then verify with `yarn why`.
+- Treat closely coupled packages as one compatibility group. Before changing a resolution, inspect its dependants with `yarn why`, confirm that their declared ranges support the target, and update the smallest compatible set. Do not force a newer transitive version merely because it is available.
 - Update the existing top changelog entry for the same dependency run. Keep it factual and short.
 - Stop after the patch pass and ask the user before continuing to minor updates. Do not commit unless the user asks.
 
@@ -46,7 +46,7 @@
 
 - Run the following only after asking the user whether to run checks here or locally:
     - `yarn install --immutable`
-    - `yarn npm audit --all --json` when registry authentication works
+    - `yarn npm audit --all --json`
     - `yarn explain peer-requirements`
     - `yarn lint`
     - `yarn tsc --noEmit`
@@ -57,7 +57,7 @@
 
 ## Prompt for Copilot
 
-Follow this task file. First update `Plan`. Use Yarn and npm commands only, except for the stated Node cutoff command. Verify GitHub Packages authentication with `yarn npm whoami --scope navikt` before audit, record one authentication limitation if it fails, and continue without repeated audit attempts. Respect the 7 day cooldown and use publish timestamps for every selected version. Work in an explicit patch pass first, stop for user approval, then run an explicit minor pass. Do not use broad upgrades, major versions, custom scripts, Python, or tarball inspection. Review resolutions after each pass, including the OpenTelemetry and Faro compatibility rule. Keep `Progress notes` and `Outcome` short, current, and free of stale data. Do not commit or push unless the user explicitly asks.
+Follow this task file. First update `Plan`. Run the audit directly, record a single external authentication or service limitation if it fails, and continue without repeated retries. Respect the 7 day cooldown and use publish timestamps for every selected version. Prefer Yarn and npm commands, but use a small Node, shell, or Python command when it is the simpler reliable way to obtain information the package tools do not expose. Work in an explicit patch pass first, stop for user approval, then run an explicit minor pass. Do not use broad upgrades, major versions, or tarball inspection. Review resolutions after each pass and keep coupled dependencies within their declared compatible ranges. Keep `Progress notes` and `Outcome` short, current, and free of stale data. Do not commit or push unless the user explicitly asks.
 
 ## Plan
 
