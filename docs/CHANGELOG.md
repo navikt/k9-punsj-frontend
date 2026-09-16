@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### OpenTelemetry i utviklingsmodus (2026-09-16)
+
+- Lar Webpack dev server bygge Faro og OpenTelemetry uten feil fra manglende source maps og extensionless ESM-importer.
+
 ### Weekly package maintenance (2026-09-15)
 
 - Løftet cooldown-eligible patch-versjoner i root og `server`, inkludert Aksel, React Intl, React Router, test- og CSS-verktøy, `jose` og `uuid`, uten å ta inn minor- eller majorløft.

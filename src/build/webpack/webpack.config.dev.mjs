@@ -35,7 +35,14 @@ webpackConfig.module.rules.push({
     test: /\.js$/,
     use: 'source-map-loader',
     enforce: 'pre',
-    exclude: /@babel(?:\/|\\{1,2})runtime|@mswjs/,
+    exclude: /@babel(?:\/|\\{1,2})runtime|@mswjs|@grafana(?:\/|\\{1,2})faro-web-tracing|@opentelemetry/,
+});
+
+webpackConfig.module.rules.push({
+    test: /\.m?js$/,
+    include: /node_modules[\\/]@opentelemetry[\\/]core/,
+    // OpenTelemetry 2.10 bruker en extensionless ESM-import som Webpack ellers avviser.
+    resolve: { fullySpecified: false },
 });
 
 webpackConfig.ignoreWarnings = [/Failed to parse source map/];
