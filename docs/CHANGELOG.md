@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance (2026-09-15)
+
+- Løftet cooldown-eligible patch-versjoner i root og `server`, inkludert Aksel, React Intl, React Router, test- og CSS-verktøy, `jose` og `uuid`, uten å ta inn minor- eller majorløft.
+- Løftet deretter eligible minor-versjoner for Faro, Sentry, React Query, React Hook Form, Storybook, Jest, TypeScript ESLint, Webpack og serverpakkene Oasis og Morgan.
+- Oppdaterte FormatJS- og `tar`-overstyringer til neste patch og `qs` til neste minor. Holder OpenTelemetry tracing-grafen på `2.10.0`, som matcher Faro sin fortsatt gjeldende `0.221.x` instrumentation-serie. Lot `js-yaml` stå fordi neste eligible løft er major.
+
 ### Validering av frilanserperiode (2026-09-08)
 
 - Validerer at en frilanserperiode ikke har sluttdato før startdato i PSB, PLS, OLP og omsorgspenger utbetaling. Like datoer er gyldige, og sluttdato kan være tom når frilanser fortsatt jobber.
