@@ -9,71 +9,48 @@
 
 ## Goal
 
-- Run one controlled weekly dependency pass for the root workspace and `server`.
-- Take eligible patch and minor updates only. Leave majors for focused follow ups.
+- Update eligible patch and minor dependencies in the root workspace and `server`.
+- Keep majors, new dependencies, broad refactors, and automatic commits or pushes out of scope.
 
-## Scope
+## Rules
 
-- Allowed files:
-    - `package.json`
-    - `server/package.json`
-    - `yarn.lock`
-    - `docs/CHANGELOG.md`
-    - directly affected source, test, or config files only when required by an allowed update
-    - `src/mocks/mockServiceWorker.js` only when an `msw` update regenerates it
-    - this task file for its working sections
-- Out of scope:
-    - new dependencies, majors, broad refactors, automatic commits or pushes
-    - weakening `.yarnrc.yml` `npmMinimalAgeGate: 7d`
-    - broad `yarn up` commands, globs, `@latest`, or tarball inspection
-
-## Method
-
-- Read `.yarnrc.yml`, both manifests, the current `resolutions`, and the latest dependency entry in `docs/CHANGELOG.md` first.
-- Run `yarn npm audit --all --json`. If registry authentication or another external service blocks it, record the limitation and continue without repeated retries.
-- If GitHub MCP is available, check open Dependabot alerts before package changes and again after each pass.
-- Compute and record the UTC cutoff, `now - 7 days`, before any package update. Prefer the shortest built in Yarn or npm command. Use a small Node, shell, or Python command only when the package tools cannot provide the needed date or metadata directly.
-- Run `npm outdated --json` once in the root and once in `server`, then make one decision table before changing anything. Do not repeat discovery in the minor pass.
-- Give every candidate exactly one action: patch, minor, or defer. If an eligible minor exists, put the package only in the minor pass. Never install its patch first. Defer major-only candidates without registry time lookups.
-- For a package that may change, use one `npm view <package> time --json` call to choose the highest stable version outside the cutoff. If the newest minor is too fresh, choose the nearest eligible older minor.
-- Record only packages with an action: current version, selected target, skipped newer version, and reason. Do not enumerate unchanged packages.
-- Use one explicit `yarn up` command per pass, with its complete selected package list. Verify root and `server` manifest diffs after each command.
-- Review each `resolution` after each pass. Keep only overrides with a concrete current transitive reason.
-- Treat closely coupled packages as one compatibility group. Before changing a resolution, inspect its dependants with `yarn why`, confirm that their declared ranges support the target, and update the smallest compatible set. Do not force a newer transitive version merely because it is available.
-- Update the existing top changelog entry for the same dependency run. Keep it factual and short.
-- Stop after the patch pass and ask the user before continuing to minor updates. Do not commit unless the user asks.
+- Read `.yarnrc.yml`, both manifests, `resolutions`, and the latest dependency changelog entry first. Keep `npmMinimalAgeGate: 7d` unchanged.
+- Run `yarn npm audit --all --json`. If it fails because of an external service or authentication, note it once and continue.
+- Record the UTC cutoff, `now - 7 days`, before changing packages.
+- Run `npm outdated --json` once in root and once in `server`. Make one decision per package before installing anything: patch, minor, or defer.
+- If an eligible minor exists, update it in the minor pass only. Do not install its patch first. Defer major-only candidates without further investigation.
+- Check publish dates only for packages that can change. Select the newest stable version outside the cutoff.
+- Use one explicit `yarn up` command per pass. No globs, `@latest`, broad upgrades, or tarball inspection.
+- Before changing a resolution, inspect its dependants with `yarn why`. Keep coupled dependencies within declared compatible ranges and update the smallest compatible set.
+- Update the existing top changelog entry with one short line: eligible patch and minor updates. Add a second line only for a meaningful compatibility issue, blocked check, or deferred security follow up.
+- Stop after the patch pass for user approval. Do not commit or push unless the user asks.
 
 ## Validation
 
-- Run the following only after asking the user whether to run checks here or locally:
+- Ask the user whether to run checks here or locally before running:
     - `yarn install --immutable`
-    - `yarn npm audit --all --json`
     - `yarn explain peer-requirements`
     - `yarn lint`
     - `yarn tsc --noEmit`
     - `yarn test --maxWorkers=2`
     - `yarn build`
-- `yarn test:e2e` needs separate explicit approval when updates touch runtime critical paths such as React, routing, forms, Aksel, auth, proxy, webpack, or dev server.
-- Record skipped checks and relevant failures in `Outcome`. Do not broaden scope to fix unrelated pre existing failures.
+- `yarn test:e2e` requires separate explicit approval.
 
 ## Prompt for Copilot
 
-Follow this task file. First update `Plan`. Run the audit directly, record a single external authentication or service limitation if it fails, and continue without repeated retries. Respect the 7 day cooldown and use publish timestamps for every selected version. Run one `npm outdated --json` discovery per workspace, decide one action per package before any install, and query publish time only for packages that can change. A package with an eligible minor belongs only to the minor pass, never to the patch pass first. Use one explicit `yarn up` command per pass. Prefer Yarn and npm commands, but use a small Node, shell, or Python command when it is the simpler reliable way to obtain information the package tools do not expose. Do not use broad upgrades, major versions, or tarball inspection. Review resolutions after each pass and keep coupled dependencies within their declared compatible ranges. Keep `Progress notes` and `Outcome` short, current, and free of stale data. Do not commit or push unless the user explicitly asks.
+Follow this task file. First update `Plan`. Use the rules above and keep commands to the minimum needed to select and apply the updates. Do not rediscover candidates between patch and minor passes. Keep `Progress notes` and `Outcome` short. Do not commit or push unless the user explicitly asks.
 
 ## Plan
 
-- [ ] Read manifests, Yarn configuration, resolutions, and changelog context.
-- [ ] Verify registry authentication and record the cutoff.
-- [ ] Discover candidates and record selected targets.
-- [ ] Run the patch pass and review resolutions.
-- [ ] Update changelog and request approval for the minor pass.
-- [ ] Run the approved minor pass and review resolutions.
-- [ ] Run approved validation and summarize remaining majors or risks.
+- [ ] Read context, audit, and record the cutoff.
+- [ ] Discover candidates and select one action per package.
+- [ ] Run patch pass and request approval for minor pass.
+- [ ] Run approved minor pass, validate, and summarize follow ups.
 
 ## Progress notes
 
-- Record the cutoff, selected packages, resolution decisions, Dependabot status, and validation limitations here.
+- Record selected packages, exceptions, and skipped validation only.
 
 ## Outcome
 
-- Record changed files, selected and skipped versions, validation results, alert status, and remaining follow ups here.
+- Record changed files, validation, and remaining follow ups only.
