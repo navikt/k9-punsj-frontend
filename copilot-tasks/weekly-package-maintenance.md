@@ -33,10 +33,11 @@
 - Run `yarn npm audit --all --json`. If registry authentication or another external service blocks it, record the limitation and continue without repeated retries.
 - If GitHub MCP is available, check open Dependabot alerts before package changes and again after each pass.
 - Compute and record the UTC cutoff, `now - 7 days`, before any package update. Prefer the shortest built in Yarn or npm command. Use a small Node, shell, or Python command only when the package tools cannot provide the needed date or metadata directly.
-- Discover candidates with `npm outdated --json` and verify each selected version with `npm view <package> time --json`.
-- Record a compact matrix for each changed package: current version, eligible target, skipped newer version, and reason. Do not enumerate unchanged packages.
-- Choose the highest eligible non major version. Prefer an eligible minor over a patch. If the newest minor is inside the cooldown, choose the nearest eligible older minor.
-- Use explicit package lists in every `yarn up` command. Verify root and `server` manifest diffs after each command.
+- Run `npm outdated --json` once in the root and once in `server`, then make one decision table before changing anything. Do not repeat discovery in the minor pass.
+- Give every candidate exactly one action: patch, minor, or defer. If an eligible minor exists, put the package only in the minor pass. Never install its patch first. Defer major-only candidates without registry time lookups.
+- For a package that may change, use one `npm view <package> time --json` call to choose the highest stable version outside the cutoff. If the newest minor is too fresh, choose the nearest eligible older minor.
+- Record only packages with an action: current version, selected target, skipped newer version, and reason. Do not enumerate unchanged packages.
+- Use one explicit `yarn up` command per pass, with its complete selected package list. Verify root and `server` manifest diffs after each command.
 - Review each `resolution` after each pass. Keep only overrides with a concrete current transitive reason.
 - Treat closely coupled packages as one compatibility group. Before changing a resolution, inspect its dependants with `yarn why`, confirm that their declared ranges support the target, and update the smallest compatible set. Do not force a newer transitive version merely because it is available.
 - Update the existing top changelog entry for the same dependency run. Keep it factual and short.
@@ -57,7 +58,7 @@
 
 ## Prompt for Copilot
 
-Follow this task file. First update `Plan`. Run the audit directly, record a single external authentication or service limitation if it fails, and continue without repeated retries. Respect the 7 day cooldown and use publish timestamps for every selected version. Prefer Yarn and npm commands, but use a small Node, shell, or Python command when it is the simpler reliable way to obtain information the package tools do not expose. Work in an explicit patch pass first, stop for user approval, then run an explicit minor pass. Do not use broad upgrades, major versions, or tarball inspection. Review resolutions after each pass and keep coupled dependencies within their declared compatible ranges. Keep `Progress notes` and `Outcome` short, current, and free of stale data. Do not commit or push unless the user explicitly asks.
+Follow this task file. First update `Plan`. Run the audit directly, record a single external authentication or service limitation if it fails, and continue without repeated retries. Respect the 7 day cooldown and use publish timestamps for every selected version. Run one `npm outdated --json` discovery per workspace, decide one action per package before any install, and query publish time only for packages that can change. A package with an eligible minor belongs only to the minor pass, never to the patch pass first. Use one explicit `yarn up` command per pass. Prefer Yarn and npm commands, but use a small Node, shell, or Python command when it is the simpler reliable way to obtain information the package tools do not expose. Do not use broad upgrades, major versions, or tarball inspection. Review resolutions after each pass and keep coupled dependencies within their declared compatible ranges. Keep `Progress notes` and `Outcome` short, current, and free of stale data. Do not commit or push unless the user explicitly asks.
 
 ## Plan
 
