@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Dependabot alert follow up (2026-09-16)
+
+- Oppdaterte transitive patch- og minoravhengigheter for åpne Dependabot alerts, blant annet Browserslist, fast-uri, Colord, HumanFS, postcss-selector-parser og SVGO.
+
 ### OpenTelemetry i utviklingsmodus (2026-09-16)
 
 - Lar Webpack dev server bygge Faro og OpenTelemetry uten feil fra manglende source maps og extensionless ESM-importer.
