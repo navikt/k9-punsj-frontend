@@ -45,7 +45,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - uses: nais/docker-build-push@8e41f1f58749b9248e376c25d33bfbdd2b1163c0 # v0
+            - uses: nais/docker-build-push@0e73849f69ff260ee27597553c0a7848ca4e9795 # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -62,7 +62,7 @@ jobs:
               run: echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til dev
-              uses: nais/deploy/actions/deploy@849e900e3cfa7faf7ad1532bb3a3e6499c932199 # v2
+              uses: nais/deploy/actions/deploy@1de80da70ad26556ecdc5964a8b7ec3bbed98120 # v2
               env:
                   CLUSTER: dev-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
