@@ -3601,7 +3601,7 @@ __metadata:
     "@sentry/cli": "npm:3.8.0"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
-    dotenv: "npm:17.4.2"
+    dotenv: "npm:18.0.0"
     express: "npm:5.2.1"
     express-http-proxy: "npm:2.1.2"
     helmet: "npm:8.3.0"
@@ -9140,10 +9140,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:17.4.2":
-  version: 17.4.2
-  resolution: "dotenv@npm:17.4.2"
-  checksum: 10/ca1b6f54d58e39914901e1518958e86083aca8deb5aa2e7f2a51acd53291d97852479b0ab26ed949b6a45a0e9adcc7b0d1c3c72375e8ea670f7005e341c6daba
+"dotenv@npm:18.0.0":
+  version: 18.0.0
+  resolution: "dotenv@npm:18.0.0"
+  bin:
+    dotenv: dist/index.cjs
+  checksum: 10/9092cef80bf6b2d2a76e06a21d9f6368307df6da0273bebfe54e2bf6753bfe69be9c994347c6004e8194997aff6f087a5ee043a3be8c420c4955e0a3d03821b5
   languageName: node
   linkType: hard
 
@@ -13045,7 +13047,7 @@ __metadata:
     cypress-wait-until: "npm:3.0.2"
     date-fns: "npm:4.4.0"
     dayjs: "npm:1.11.23"
-    dotenv: "npm:17.4.2"
+    dotenv: "npm:18.0.0"
     eslint: "npm:9.39.5"
     eslint-config-prettier: "npm:10.1.8"
     eslint-import-resolver-node: "npm:0.4.0"
