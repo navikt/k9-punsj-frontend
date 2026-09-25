@@ -9,7 +9,6 @@
         "^\\.\\/header$": "<rootDir>/node_modules/jest-css-modules",
         "^app/(.*)": "<rootDir>/src/app/$1",
         "^@nais/apm$": "<rootDir>/node_modules/@nais/apm/dist/index.js",
-        "^@nais/apm/react$": "<rootDir>/node_modules/@nais/apm/dist/react/ErrorBoundary.js",
         "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js"
     },
     "setupFiles": ["<rootDir>/testSetup.js"],

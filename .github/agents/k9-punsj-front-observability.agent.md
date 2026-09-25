@@ -39,7 +39,7 @@ yarn build
 yarn test
 
 # Search observability related code and config
-rg -n "filterTelemetry|telemetryCollectorURL|window\\.nais|ApmErrorBoundary|morgan|winston|observability:|autoInstrumentation|logging:" src server nais .github
+rg -n "filterTelemetry|telemetryCollectorURL|window\\.nais|SourceMappedErrorBoundary|morgan|winston|observability:|autoInstrumentation|logging:" src server nais .github
 
 # If the app is running locally, verify basic health endpoints
 curl -sf http://localhost:8080/health/isAlive
@@ -60,7 +60,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 ## Repo observability context
 
 - `src/app/App.tsx` initializes Nais APM once when `window.nais` contains app and telemetry collector config, using `filterTelemetry` as the outgoing privacy gate.
-- `src/app/App.tsx` and the journalpost router use `ApmErrorBoundary` for render errors.
+- `src/app/App.tsx` and the journalpost router use `SourceMappedErrorBoundary` for render errors.
 - `src/app/index.html` dynamically loads `/dist/js/nais.js` to populate `window.nais`.
 - `src/build/webpack/faroConfig.js` provides local Faro config for development.
 - `server/src/log.js` uses JSON logging through `winston` and request logging through `morgan`.
@@ -107,7 +107,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 ### APM and CDN
 
-- Review `init`, `ApmErrorBoundary`, release naming, and environment mapping together.
+- Review `init`, `SourceMappedErrorBoundary`, release naming, and environment mapping together.
 - Check that source maps are uploaded next to their content-hashed JS files.
 - Treat changes to propagation origins, environment gating, or `beforeSend` as high risk.
 - Ensure production only behavior stays production only when intended.

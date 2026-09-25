@@ -1,15 +1,20 @@
-import { captureException } from '@nais/apm';
-import { ApmErrorBoundary } from '@nais/apm/react';
-import type { ErrorInfo } from 'react';
+import { captureException, markErrorCaptured } from '@nais/apm';
+import { Component, type ReactNode } from 'react';
 
 /** Behold den opprinnelige JS-stakken slik at Nais kan slå opp CDN-sourcemaps. */
-export class SourceMappedErrorBoundary extends ApmErrorBoundary {
-    override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        const { context, fingerprint, onError } = this.props;
-        captureException(error, {
-            context,
-            fingerprint: typeof fingerprint === 'function' ? fingerprint(error) : fingerprint,
-        });
-        onError?.(error, errorInfo);
+export class SourceMappedErrorBoundary extends Component<{ children: ReactNode; fallback?: ReactNode }, { hasError: boolean }> {
+    state = { hasError: false };
+
+    static getDerivedStateFromError(error: Error): { hasError: boolean } {
+        markErrorCaptured(error);
+        return { hasError: true };
+    }
+
+    componentDidCatch(error: Error): void {
+        captureException(error);
+    }
+
+    render(): ReactNode {
+        return this.state.hasError ? (this.props.fallback ?? <div role="alert">Det oppstod en feil.</div>) : this.props.children;
     }
 }

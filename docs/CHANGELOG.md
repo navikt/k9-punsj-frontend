@@ -7,6 +7,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
 - Beholdt CDN-scripts med tilhørende sourcemaps og pod-hostet `nais.js`. Personvernfilter og offentlige sourcemaps må gjennomgås av teamet før deploy.
 - Beholder opprinnelig JS-stakk for fangede React-feil, slik at CDN-sourcemaps kan brukes. CDN-opplasting omfatter bare JS og tilhørende sourcemaps; HTML blir i poden.
+- Avgrenser CSP for scripts til appens CDN-mappe. React-feilgrensen bruker SDK-ets grunnleggende API direkte, slik at valgfri React Router-integrasjon ikke må lastes.
 
 ### Klargjøring for Nais APM og CDN (2026-09-25)
 
