@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### js-yaml security fix (2026-09-25)
+
+- Løftet den tvungne `js-yaml`-versjonen fra `4.3.1` til patched `4.3.2` for å lukke Dependabot-funnet.
+
 ### React Router 8.4-kompatibilitet (2026-09-25)
 
 - Løftet `react-router` til `8.4.0` og lot Jest transformere den nye `@remix-run`-ESM-avhengigheten, slik at testsuiten fortsatt kan laste routeren.

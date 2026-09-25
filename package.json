@@ -167,7 +167,7 @@
         "@opentelemetry/sdk-trace-base": "2.10.0",
         "@opentelemetry/sdk-trace-web": "2.10.0",
         "intl-messageformat": "11.2.14",
-        "js-yaml": "4.3.1",
+        "js-yaml": "4.3.2",
         "qs": "6.16.0",
         "tar@npm:^7.5.2": "7.5.22"
     }
