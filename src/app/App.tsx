@@ -1,5 +1,4 @@
 import { init, pushEvent } from '@nais/apm';
-import { ApmErrorBoundary } from '@nais/apm/react';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
@@ -9,6 +8,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router';
 import logger from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
+import { SourceMappedErrorBoundary } from './components/SourceMappedErrorBoundary';
 import { ROUTES } from './constants/routes';
 import JournalpostLoader from './containers/JournalpostLoader';
 import JournalpostRouter from './containers/JournalpostRouter';
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
     const [locale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
-        <ApmErrorBoundary>
+        <SourceMappedErrorBoundary>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ApplicationWrapper locale={locale}>
@@ -125,7 +125,7 @@ export const App: React.FC = () => {
                     </ApplicationWrapper>
                 </QueryClientProvider>
             </Provider>
-        </ApmErrorBoundary>
+        </SourceMappedErrorBoundary>
     );
 };
 

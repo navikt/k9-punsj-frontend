@@ -74,7 +74,7 @@ describe('filterTelemetry', () => {
         ).toBeNull();
     });
 
-    it('retains only known error types and fixed safe messages or HTTP status', () => {
+    it('beholder trygge feilkategorier og status, men ikke vilkårlige feiltekster', () => {
         const exception = (type: string, value: string) =>
             filterTelemetry({
                 type: TransportItemType.EXCEPTION,
@@ -91,7 +91,28 @@ describe('filterTelemetry', () => {
             type: 'Error',
             value: '[redacted]',
         });
+        expect(
+            exception('TypeError', "Cannot read properties of undefined (reading 'synthetic-secret')")?.payload,
+        ).toMatchObject({
+            value: 'Cannot read properties of undefined',
+        });
+        expect(
+            exception('ChunkLoadError', 'Loading chunk synthetic-secret failed (https://example.nav.no/private)')
+                ?.payload,
+        ).toMatchObject({
+            value: 'Loading chunk failed',
+        });
         expect(JSON.stringify(exception('Error', 'HTTP 503'))).not.toContain('synthetic-secret');
+        expect(
+            JSON.stringify(exception('TypeError', "Cannot read properties of undefined (reading 'synthetic-secret')")),
+        ).not.toContain('synthetic-secret');
+        expect(exception('TypeError', 'private free-form message with synthetic-secret')?.payload).toMatchObject({
+            value: '[redacted]',
+        });
+        expect(exception('Error', 'HTTP 503')?.meta?.app).toMatchObject({
+            version: process.env.APP_VERSION || 'unknown',
+            release: process.env.APP_VERSION || 'unknown',
+        });
     });
 
     it('retains only a classified API method and route on outgoing HTTP failures', () => {

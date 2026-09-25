@@ -1,13 +1,15 @@
 import { init } from '@nais/apm';
-import { ApmErrorBoundary } from '@nais/apm/react';
 import { BaseTransport, TransportItemType, type TransportItem } from '@grafana/faro-web-sdk';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { filterTelemetry } from '../../app/utils/telemetryPrivacy';
+import { SourceMappedErrorBoundary } from '../../app/components/SourceMappedErrorBoundary';
 
 const BrokenComponent = (): React.ReactNode => {
     const error = new TypeError('HTTP 503');
     Object.assign(error, { cause: new Error('synthetic-journalpost-id?token=synthetic-token') });
+    error.stack =
+        'TypeError: HTTP 503\n    at BrokenComponent (https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/main.abc123.js:17:23)';
     throw error;
 };
 
@@ -17,7 +19,7 @@ class TestTransport extends BaseTransport {
     send = jest.fn();
 }
 
-it('sends one safe render error through the SDK and privacy filter with the nested fallback', () => {
+it('sender én renderfeil med CDN-stakk gjennom SDK og personvernfilter, og viser reservevisningen', () => {
     const filteredItems: TransportItem[] = [];
     const transport = new TestTransport();
     init({
@@ -34,16 +36,28 @@ it('sends one safe render error through the SDK and privacy filter with the nest
     const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
     try {
         render(
-            <ApmErrorBoundary fallback={<div role="alert">Journalpost error</div>}>
+            <SourceMappedErrorBoundary fallback={<div role="alert">Journalpost error</div>}>
                 <BrokenComponent />
-            </ApmErrorBoundary>,
+            </SourceMappedErrorBoundary>,
         );
 
         expect(screen.getByRole('alert')).toHaveTextContent('Journalpost error');
         expect(filteredItems).toHaveLength(1);
         expect(filteredItems[0]).toMatchObject({
             type: TransportItemType.EXCEPTION,
-            payload: { type: 'TypeError', value: 'HTTP 503' },
+            payload: {
+                type: 'TypeError',
+                value: 'HTTP 503',
+                stacktrace: {
+                    frames: [
+                        {
+                            filename: 'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/main.abc123.js',
+                            lineno: 17,
+                            colno: 23,
+                        },
+                    ],
+                },
+            },
         });
         expect(transport.send).toHaveBeenCalledTimes(1);
         expect(transport.send).toHaveBeenCalledWith(filteredItems[0]);

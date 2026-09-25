@@ -35,7 +35,7 @@ const ERROR_TYPES = new Set([
     'NetworkError',
     'ChunkLoadError',
 ]);
-const SAFE_MESSAGES = new Set(['Failed to fetch', 'Load failed', 'Network request failed']);
+const SAFE_MESSAGES = new Set(['Failed to fetch', 'Load failed', 'Network request failed', 'Script error.']);
 const HTTP_METHODS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']);
 const API_ROUTES = Object.values(ApiPath).filter((path) => path.startsWith('/api/'));
 export const apiRouteTemplate = (rawUrl: string): string | null => {
@@ -61,7 +61,13 @@ const safeErrorType = (type: string): string => {
 };
 const safeErrorMessage = (value: string): string => {
     if (/^HTTP (?:4|5)\d{2}$/.test(value)) return value;
-    return SAFE_MESSAGES.has(value) ? value : '[redacted]';
+    if (SAFE_MESSAGES.has(value)) return value;
+    const propertyError = value.match(/^Cannot (read|set) propert(?:y|ies) of (undefined|null)\b/);
+    if (propertyError) return `Cannot ${propertyError[1]} properties of ${propertyError[2]}`;
+    if (/^Loading chunk .+ failed\b/.test(value)) return 'Loading chunk failed';
+    if (/^.+ is not a function$/.test(value)) return 'Value is not a function';
+    if (/^.+ is not defined$/.test(value)) return 'Reference is not defined';
+    return '[redacted]';
 };
 const EVENT_KEYS: Record<string, string[]> = {
     [MANUAL_JOURNALPOST_FLOW_STARTED_EVENT]: ['source', 'route', 'phase'],
@@ -114,6 +120,7 @@ const safeMeta = (): TransportItem['meta'] => ({
         name: 'k9-punsj-frontend',
         namespace: 'k9saksbehandling',
         version: process.env.APP_VERSION || 'unknown',
+        release: process.env.APP_VERSION || 'unknown',
         environment: window.location.hostname,
     },
     page: { url: window.location.origin + '/' },

@@ -58,8 +58,9 @@ jobs:
               uses: nais/deploy/actions/cdn-upload/v2@1de80da70ad26556ecdc5964a8b7ec3bbed98120 # v2
               with:
                   team: k9saksbehandling
-                  source: dist
-                  destination: /k9-punsj-frontend
+                  source: dist/js
+                  destination: /k9-punsj-frontend/dist
+                  source_keep_parent_name: true
 
             - name: Installere moduler
               run: yarn workspaces focus @k9-punsj-frontend/server --production
