@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@sentry/react';
+import { ApmErrorBoundary } from '@nais/apm/react';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes, useParams } from 'react-router';
@@ -23,7 +23,6 @@ import { PLSPunchForm } from 'app/søknader/pleiepenger-livets-sluttfase/contain
 import { PLSRegistreringsValg } from 'app/søknader/pleiepenger-livets-sluttfase/containers/PLSRegistreringsValg';
 import { PSBPunchForm } from 'app/søknader/pleiepenger/containers/PSBPunchForm';
 import { PSBRegistreringsValg } from 'app/søknader/pleiepenger/containers/RegistreringsValg/PSBRegistreringsValg';
-import { logError } from 'app/utils/logUtils';
 import Fordeling from '../fordeling/Fordeling';
 import BehandlingAvJournaførtJp from '../fordeling/Komponenter/BehandlingAvJournaførtJp';
 import ErrorFallback from './ErrorFallback';
@@ -40,7 +39,7 @@ const JournalpostRouter: React.FC = () => {
         <JournalpostOgPdfVisning
             journalposter={journalposterIAapenSoknad?.length ? journalposterIAapenSoknad : [journalpostid]}
         >
-            <ErrorBoundary fallback={<ErrorFallback />} onError={logError}>
+            <ApmErrorBoundary fallback={<ErrorFallback />}>
                 <Routes>
                     <Route path={ROUTES.PSB_ROOT} element={<BehandlingAvJournaførtJp />} />
                     <Route path={ROUTES.PSB_ROOT}>
@@ -144,7 +143,7 @@ const JournalpostRouter: React.FC = () => {
                     <Route path={ROUTES.BREV_BEHANDLET_JP} element={<SendBrevBehandletJp />} />
                     <Route path="/" element={<Fordeling />} />
                 </Routes>
-            </ErrorBoundary>
+            </ApmErrorBoundary>
         </JournalpostOgPdfVisning>
     );
 };

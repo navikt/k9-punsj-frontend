@@ -41,11 +41,7 @@ async function startApp() {
                     directives: {
                         'default-src': ["'self'", "'unsafe-inline'"],
                         'base-uri': ["'self'"],
-                        'connect-src': [
-                            "'self'",
-                            'https://sentry.gc.nav.no',
-                            process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
-                        ],
+                        'connect-src': ["'self'", process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
                         'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
                         'img-src': ["'self'", 'data:', 'blob:'],

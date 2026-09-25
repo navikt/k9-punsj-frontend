@@ -1,21 +1,11 @@
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
-import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+import { init, pushEvent } from '@nais/apm';
+import { ApmErrorBoundary } from '@nais/apm/react';
 import { configureStore } from '@reduxjs/toolkit';
-import * as Sentry from '@sentry/react';
-import { breadcrumbsIntegration, reactRouterBrowserTracingIntegration, wrapReactRouterRouting } from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import {
-    Navigate,
-    Route,
-    Routes,
-    createRoutesFromChildren,
-    matchRoutes,
-    useLocation,
-    useNavigationType,
-} from 'react-router';
+import { Navigate, Route, Routes, useLocation } from 'react-router';
 import logger from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
@@ -29,12 +19,21 @@ import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import { getLocaleFromSessionStorage } from './utils';
-import { logError } from './utils/logUtils';
+import { filterTelemetry, routeTemplate } from './utils/telemetryPrivacy';
 
 import '@navikt/ds-css';
 import './styles/globals.css';
 
-const environment = window.location.hostname;
+const RouteTelemetry = () => {
+    const { pathname } = useLocation();
+    React.useEffect(() => {
+        const route = routeTemplate(pathname);
+        if (route && window.nais?.telemetryCollectorURL) {
+            pushEvent('punsj_route_change', { route });
+        }
+    }, [pathname]);
+    return null;
+};
 
 const waitForNaisConfig = async (): Promise<void> => {
     const naisReady = window.__naisReady;
@@ -48,53 +47,17 @@ const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
         await waitForNaisConfig();
 
-        if (window.nais?.app && window.nais?.telemetryCollectorURL) {
-            initializeFaro({
-                url: window.nais?.telemetryCollectorURL,
-                app: {
-                    ...window.nais.app,
-                    version: process.env.SENTRY_RELEASE || 'local',
-                },
-                instrumentations: [
-                    ...getWebInstrumentations({ captureConsole: true }),
-                    new TracingInstrumentation({
-                        instrumentationOptions: {
-                            propagateTraceHeaderCorsUrls: [/https:\/\/[^/]+\.nav\.no\/.*/],
-                        },
-                    }),
-                ],
-                beforeSend: (item) => {
-                    // Strip query parametere fra URL for å unngå PII-lekkasjer (fnr, tokens m.m.)
-                    if (item.meta?.page?.url) {
-                        try {
-                            const url = new URL(item.meta.page.url);
-                            url.search = '';
-                            item.meta.page.url = url.toString();
-                        } catch {
-                            /* ignore */
-                        }
-                    }
-                    return item;
-                },
+        if (window.nais?.app?.name && window.nais?.telemetryCollectorURL) {
+            init({
+                app: window.nais.app.name,
+                namespace: 'k9saksbehandling',
+                telemetryUrl: window.nais.telemetryCollectorURL,
+                version: process.env.APP_VERSION || window.nais.app.version || 'unknown',
+                environment: window.location.hostname,
+                beforeSend: filterTelemetry,
+                tracing: false,
             });
         }
-        Sentry.init({
-            dsn: 'https://574f7b8c024448b9b4e36c58f4bb3161@sentry.gc.nav.no/105',
-            release: process.env.SENTRY_RELEASE || 'unknown',
-            environment,
-            tracesSampleRate: 1.0,
-            integrations: [
-                breadcrumbsIntegration({ console: false }),
-                reactRouterBrowserTracingIntegration({
-                    useEffect: React.useEffect,
-                    useLocation,
-                    useNavigationType,
-                    createRoutesFromChildren,
-                    matchRoutes,
-                }),
-            ],
-            beforeSend: (event) => event,
-        });
     }
 
     if (process.env.NODE_ENV !== 'production') {
@@ -139,17 +102,16 @@ queryClient.setDefaultOptions({
         refetchOnWindowFocus: false,
     },
 });
-const SentryRoutes = wrapReactRouterRouting(Routes);
-
 export const App: React.FC = () => {
     const [locale] = React.useState<Locale>(localeFromSessionStorage);
 
     return (
-        <Sentry.ErrorBoundary onError={logError}>
+        <ApmErrorBoundary>
             <Provider store={store}>
                 <QueryClientProvider client={queryClient}>
                     <ApplicationWrapper locale={locale}>
-                        <SentryRoutes>
+                        <RouteTelemetry />
+                        <Routes>
                             <Route
                                 path={ROUTES.JOURNALPOST_ROOT}
                                 element={<JournalpostLoader renderOnLoadComplete={() => <JournalpostRouter />} />}
@@ -159,11 +121,11 @@ export const App: React.FC = () => {
                             <Route path={ROUTES.HOME} element={<Home />} />
                             <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
                             <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
-                        </SentryRoutes>
+                        </Routes>
                     </ApplicationWrapper>
                 </QueryClientProvider>
             </Provider>
-        </Sentry.ErrorBoundary>
+        </ApmErrorBoundary>
     );
 };
 

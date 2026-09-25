@@ -1,3 +1,4 @@
+import { captureException } from '@nais/apm';
 import { ApiPath } from '../../app/apiConfig';
 import {
     apiUrl,
@@ -13,6 +14,7 @@ import {
 
 jest.mock('app/utils/envUtils');
 jest.mock('app/utils/browserUtils');
+jest.mock('@nais/apm', () => ({ captureException: jest.fn() }));
 
 global.fetch = jest.fn();
 
@@ -27,6 +29,30 @@ describe('apiUrl', () => {
 describe('get', () => {
     beforeEach(() => {
         jest.resetAllMocks();
+    });
+
+    it('reports API failures with status and a route template, without response content', async () => {
+        const path = ApiPath.PSB_SOKNAD_GET;
+        global.fetch = jest.fn().mockResolvedValue({
+            ok: false,
+            status: 503,
+            statusText: 'synthetic-private-message',
+            url: `${window.location.origin}${apiUrl(path, { id: 'synthetic-private-id' })}?token=synthetic-token`,
+        });
+        const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+        try {
+            await get(path, { id: 'synthetic-private-id' });
+            expect(captureException).toHaveBeenCalledTimes(1);
+            expect(captureException).toHaveBeenCalledWith(expect.objectContaining({ message: 'HTTP 503' }), {
+                context: { method: 'GET', route: path },
+            });
+            expect(JSON.stringify((captureException as jest.Mock).mock.calls)).not.toMatch(
+                /synthetic-private|synthetic-token/,
+            );
+            expect(consoleError).not.toHaveBeenCalled();
+        } finally {
+            consoleError.mockRestore();
+        }
     });
 
     it('Performs a GET request', async () => {
