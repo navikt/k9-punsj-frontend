@@ -18,7 +18,7 @@
         "^.+\\.(?:[tj]sx?|mjs)$": "babel-jest"
     },
     "transformIgnorePatterns": [
-        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat|react-router|cookie-es).*).*$"
+        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat|react-router|@remix-run|cookie-es).*).*$"
     ],
     "unmockedModulePathPatterns": ["<rootDir>/node_modules/react", "<rootDir>/node_modules/react-router"],
     "setupFilesAfterEnv": ["<rootDir>/src/test/testConfig.js"]

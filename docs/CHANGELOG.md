@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance (2026-09-25)
+
+- Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet React, React Intl, Sentry, testverktøy, typepakker, Webpack og Morgan. Lot majorløft og cooldown-blokkerte versjoner stå.
+- Løftet deretter `react-router` til `8.4.0` og lot Jest transformere den nye `@remix-run/route-pattern`-avhengigheten.
+- Samordnet FormatJS-overstyringene og lockfilen med de eksakte avhengighetene i `react-intl@10.2.2`.
+- Løftet `js-yaml`-overstyringen fra `4.3.1` til `4.3.2` for å lukke Dependabot-funnet.
+
 ### Dependabot alert follow up (2026-09-16)
 
 - Oppdaterte transitive patch- og minoravhengigheter for åpne Dependabot alerts, blant annet Browserslist, fast-uri, Colord, HumanFS, postcss-selector-parser og SVGO.
