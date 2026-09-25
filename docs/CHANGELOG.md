@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance (2026-09-25)
+
+- Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet React, React Intl, Sentry, testverktøy, typepakker, Webpack og Morgan. Lot majorløft, cooldown-blokkerte versjoner og React Router 8.4 stå.
+
 ### Dependabot alert follow up (2026-09-16)
 
 - Oppdaterte transitive patch- og minoravhengigheter for åpne Dependabot alerts, blant annet Browserslist, fast-uri, Colord, HumanFS, postcss-selector-parser og SVGO.
