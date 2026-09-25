@@ -2,6 +2,19 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Nais APM erstatter Sentry (2026-09-25)
+
+- Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
+- Beholdt CDN-scripts med tilhørende sourcemaps og pod-hostet `nais.js`. Personvernfilter og offentlige sourcemaps må gjennomgås av teamet før deploy.
+- Beholder opprinnelig JS-stakk for fangede React-feil, slik at CDN-sourcemaps kan brukes. CDN-opplasting omfatter bare JS og tilhørende sourcemaps; HTML blir i poden.
+- Avgrenser CSP for scripts til appens CDN-mappe. React-feilgrensen bruker SDK-ets grunnleggende API direkte, slik at valgfri React Router-integrasjon ikke må lastes.
+
+### Klargjøring for Nais APM og CDN (2026-09-25)
+
+- La til `@nais/apm@0.6.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
+- Lar produksjonsbygget bruke innholdsbaserte filnavn og CDN-adresser for JavaScript, med tilhørende sourcemaps. La inn CDN-opplasting før prod- og preprod-deploy og åpnet CSP for CDN-scripts.
+- På dette tidspunktet gjensto Sentry-migrering, personvernkontroll av telemetri og gjennomgang av offentlige sourcemaps før deploy.
+
 ### Weekly package maintenance (2026-09-25)
 
 - Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet React, React Intl, Sentry, testverktøy, typepakker, Webpack og Morgan. Lot majorløft og cooldown-blokkerte versjoner stå.

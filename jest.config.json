@@ -8,6 +8,7 @@
         "\\.\\/systemsStyles": "<rootDir>/node_modules/jest-css-modules",
         "^\\.\\/header$": "<rootDir>/node_modules/jest-css-modules",
         "^app/(.*)": "<rootDir>/src/app/$1",
+        "^@nais/apm$": "<rootDir>/node_modules/@nais/apm/dist/index.js",
         "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js"
     },
     "setupFiles": ["<rootDir>/testSetup.js"],
@@ -18,7 +19,7 @@
         "^.+\\.(?:[tj]sx?|mjs)$": "babel-jest"
     },
     "transformIgnorePatterns": [
-        "<rootDir>.*(node_modules)(?!.*(nav|uuid|react-intl|@formatjs|intl-messageformat|react-router|@remix-run|cookie-es).*).*$"
+        "<rootDir>.*(node_modules)(?!.*(nav|@nais/apm|uuid|react-intl|@formatjs|intl-messageformat|react-router|@remix-run|cookie-es).*).*$"
     ],
     "unmockedModulePathPatterns": ["<rootDir>/node_modules/react", "<rootDir>/node_modules/react-router"],
     "setupFilesAfterEnv": ["<rootDir>/src/test/testConfig.js"]
