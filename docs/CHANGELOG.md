@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Klargjøring for Nais APM og CDN (2026-09-25)
+
+- La til `@nais/apm@0.6.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
+- Lar produksjonsbygget bruke innholdsbaserte filnavn og CDN-adresser for JavaScript, med tilhørende sourcemaps. La inn CDN-opplasting før prod- og preprod-deploy og åpnet CSP for CDN-scripts.
+- Sentry-migrering, personvernkontroll av telemetri og gjennomgang av offentlige sourcemaps gjenstår før deploy.
+
 ### Weekly package maintenance (2026-09-25)
 
 - Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet React, React Intl, Sentry, testverktøy, typepakker, Webpack og Morgan. Lot majorløft og cooldown-blokkerte versjoner stå.

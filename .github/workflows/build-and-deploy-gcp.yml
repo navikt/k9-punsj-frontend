@@ -54,6 +54,13 @@ jobs:
                   name: dist
                   path: ./dist
 
+            - name: Last opp nettleserfiler til CDN
+              uses: nais/deploy/actions/cdn-upload/v2@1de80da70ad26556ecdc5964a8b7ec3bbed98120 # v2
+              with:
+                  team: k9saksbehandling
+                  source: dist
+                  destination: /k9-punsj-frontend
+
             - name: Installere moduler
               run: yarn workspaces focus @k9-punsj-frontend/server --production
               env:

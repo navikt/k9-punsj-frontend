@@ -9,6 +9,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 webpackConfig.mode = 'production';
+webpackConfig.output = {
+    ...webpackConfig.output,
+    filename: 'js/[name].[contenthash].js',
+    chunkFilename: 'js/[name].[contenthash].js',
+    publicPath: 'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/',
+    clean: true,
+};
 
 webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
