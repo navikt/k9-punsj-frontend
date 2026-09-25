@@ -14,7 +14,7 @@
 
 ## Scope
 
-- Change `package.json`, `server/package.json`, `yarn.lock`, and a dated entry near the top of `docs/CHANGELOG.md`. Change source, tests, or config only if an eligible update requires it. Update this reusable task file only in `Plan`, `Progress notes`, and `Outcome`; do not create another task file.
+- Change `package.json`, `server/package.json`, `yarn.lock`, and a dated entry near the top of `docs/CHANGELOG.md`. Change source, tests, or config only if an eligible update requires it. During routine runs, update this reusable task file only in `Plan`, `Progress notes`, and `Outcome`. Change its lasting instructions only when the user explicitly requests it; do not create another task file.
 - Keep `.yarnrc.yml`, new dependencies, broad refactors, and automatic commits or pushes out of scope.
 
 ## Rules
