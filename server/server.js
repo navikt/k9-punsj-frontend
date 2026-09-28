@@ -41,7 +41,11 @@ async function startApp() {
                     directives: {
                         'default-src': ["'self'", "'unsafe-inline'"],
                         'base-uri': ["'self'"],
-                        'connect-src': ["'self'", process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL],
+                        'connect-src': [
+                            "'self'",
+                            process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
+                            'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/',
+                        ],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
                         'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/'],
                         'img-src': ["'self'", 'data:', 'blob:'],

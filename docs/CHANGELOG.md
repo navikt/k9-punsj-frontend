@@ -2,18 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Nais APM erstatter Sentry (2026-09-25)
+### Nais APM og CDN erstatter Sentry-oppsettet (2026-09-28)
 
 - Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
-- Beholdt CDN-scripts med tilhørende sourcemaps og pod-hostet `nais.js`. Personvernfilter og offentlige sourcemaps må gjennomgås av teamet før deploy.
-- Beholder opprinnelig JS-stakk for fangede React-feil, slik at CDN-sourcemaps kan brukes. CDN-opplasting omfatter bare JS og tilhørende sourcemaps; HTML blir i poden.
-- Avgrenser CSP for scripts til appens CDN-mappe. React-feilgrensen bruker SDK-ets grunnleggende API direkte, slik at valgfri React Router-integrasjon ikke må lastes.
-
-### Klargjøring for Nais APM og CDN (2026-09-25)
-
-- La til `@nais/apm@0.6.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
-- Lar produksjonsbygget bruke innholdsbaserte filnavn og CDN-adresser for JavaScript, med tilhørende sourcemaps. La inn CDN-opplasting før prod- og preprod-deploy og åpnet CSP for CDN-scripts.
-- På dette tidspunktet gjensto Sentry-migrering, personvernkontroll av telemetri og gjennomgang av offentlige sourcemaps før deploy.
+- La til `@nais/apm@0.7.0-beta.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
+- Produksjonsbygget lager JavaScript med innholdsbaserte filnavn og tilhørende sourcemaps. Begge deploy-workflows laster filene opp til CDN før pod-deploy; HTML og `nais.js` blir i poden.
+- Avgrenset CSP for scripts og sourcemap-tilkoblinger til appens JS-mappe på CDN. React-feilgrensen bruker SDK-ets grunnleggende API direkte og beholder opprinnelig JS-stakk for sourcemap-oppslag.
+- Personvernfilter og offentlige sourcemaps må gjennomgås av teamet. Levering av telemetri og sourcemap-oppslag må verifiseres i Grafana etter deploy.
 
 ### Weekly package maintenance (2026-09-25)
 
