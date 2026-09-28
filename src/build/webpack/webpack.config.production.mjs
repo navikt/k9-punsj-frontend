@@ -14,6 +14,7 @@ webpackConfig.output = {
     filename: 'js/[name].[contenthash].js',
     chunkFilename: 'js/[name].[contenthash].js',
     publicPath: 'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/',
+    crossOriginLoading: 'anonymous',
     clean: true,
 };
 
@@ -23,6 +24,18 @@ webpackConfig.plugins.push(
         inject: 'body',
         hash: true,
     }),
+    {
+        apply(compiler) {
+            compiler.hooks.compilation.tap('CdnScriptCors', (compilation) => {
+                HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tap('CdnScriptCors', (data) => {
+                    for (const script of data.assetTags.scripts) {
+                        script.attributes.crossorigin = 'anonymous';
+                    }
+                    return data;
+                });
+            });
+        },
+    },
 );
 
 webpackConfig.optimization = {

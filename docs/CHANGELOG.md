@@ -8,6 +8,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til `@nais/apm@0.7.0-beta.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
 - Produksjonsbygget lager JavaScript med innholdsbaserte filnavn og tilhørende sourcemaps. Begge deploy-workflows laster filene opp til CDN før pod-deploy; HTML og `nais.js` blir i poden.
 - Avgrenset CSP for scripts og sourcemap-tilkoblinger til appens JS-mappe på CDN. React-feilgrensen bruker SDK-ets grunnleggende API direkte og beholder opprinnelig JS-stakk for sourcemap-oppslag.
+- Laster CDN-scripts med `crossorigin="anonymous"`, slik at nettleseren kan rapportere detaljerte feil og stakker også for uhåndterte feil.
 - Personvernfilter og offentlige sourcemaps må gjennomgås av teamet. Levering av telemetri og sourcemap-oppslag må verifiseres i Grafana etter deploy.
 
 ### Weekly package maintenance (2026-09-25)
