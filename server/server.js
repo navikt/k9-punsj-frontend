@@ -41,12 +41,9 @@ async function startApp() {
                     directives: {
                         'default-src': ["'self'", "'unsafe-inline'"],
                         'base-uri': ["'self'"],
-                        'connect-src': [
-                            "'self'",
-                            'https://sentry.gc.nav.no',
-                            process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL,
-                        ],
+                        'connect-src': ["'self'", process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL, 'https://cdn.nav.no'],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
+                        'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
                         'img-src': ["'self'", 'data:', 'blob:'],
                         'style-src': ["'self'", "'unsafe-inline'"],
                         'frame-src': ["'self'"],
@@ -116,7 +113,6 @@ async function startApp() {
                 res.redirect('/oauth2/logout');
             }
         });
-
 
         server.get('/envVariables', (req, res) => {
             res.json(envVariables());

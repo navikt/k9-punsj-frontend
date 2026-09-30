@@ -48,7 +48,7 @@ const webpackConfig = {
         new CopyPlugin({
             patterns: [{ from: 'src/app/favicon.png' }],
         }),
-        new webpack.EnvironmentPlugin({ SENTRY_RELEASE: null }),
+        new webpack.EnvironmentPlugin({ APP_VERSION: null }),
     ],
     externals: { '../build/webpack/faroConfig': 'false' },
     stats: {

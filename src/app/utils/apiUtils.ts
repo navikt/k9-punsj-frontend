@@ -71,7 +71,7 @@ export function get(
         }
 
         if (!response.ok) {
-            logApiError(response);
+            logApiError(response, 'GET');
         }
 
         if (callbackIfAuth) {
@@ -103,7 +103,7 @@ export function post<BodyType>(
         }
 
         if (!response.ok) {
-            logApiError(response);
+            logApiError(response, 'POST');
         }
         if (callbackIfAuth) {
             const data = await response.text();
@@ -133,7 +133,7 @@ export function put(
         }
 
         if (!response.ok) {
-            logApiError(response);
+            logApiError(response, 'PUT');
         }
 
         if (callbackIfAuth) {
@@ -220,10 +220,7 @@ export function convertProblemDetailToError(response: Partial<Response>, respons
 
     const problemDetail = parseProblemDetail(responseData);
     const message =
-        normalizeText(problemDetail?.detail) ||
-        normalizeText(problemDetail?.title) ||
-        statusText ||
-        'Ukjent feil';
+        normalizeText(problemDetail?.detail) || normalizeText(problemDetail?.title) || statusText || 'Ukjent feil';
 
     const problemType = normalizeText(problemDetail?.type);
 

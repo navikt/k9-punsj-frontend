@@ -2,25 +2,25 @@
 name: k9-punsj-front-research-agent
 description: Research specialist for k9-punsj-frontend, focused on codebase investigation, pattern analysis, and context gathering before implementation
 tools:
-  - read
-  - search
-  - web
-  - ms-vscode.vscode-websearchforcopilot/websearch
-  - io.github.navikt/github-mcp/get_file_contents
-  - io.github.navikt/github-mcp/search_code
-  - io.github.navikt/github-mcp/search_repositories
-  - io.github.navikt/github-mcp/list_commits
-  - io.github.navikt/github-mcp/get_commit
-  - io.github.navikt/github-mcp/issue_read
-  - io.github.navikt/github-mcp/list_issues
-  - io.github.navikt/github-mcp/search_issues
-  - io.github.navikt/github-mcp/pull_request_read
-  - io.github.navikt/github-mcp/list_pull_requests
-  - io.github.navikt/github-mcp/search_pull_requests
-  - io.github.navikt/github-mcp/get_latest_release
-  - io.github.navikt/github-mcp/list_releases
-  - io.github.navikt/github-mcp/list_tags
-  - io.github.navikt/github-mcp/list_branches
+    - read
+    - search
+    - web
+    - ms-vscode.vscode-websearchforcopilot/websearch
+    - io.github.navikt/github-mcp/get_file_contents
+    - io.github.navikt/github-mcp/search_code
+    - io.github.navikt/github-mcp/search_repositories
+    - io.github.navikt/github-mcp/list_commits
+    - io.github.navikt/github-mcp/get_commit
+    - io.github.navikt/github-mcp/issue_read
+    - io.github.navikt/github-mcp/list_issues
+    - io.github.navikt/github-mcp/search_issues
+    - io.github.navikt/github-mcp/pull_request_read
+    - io.github.navikt/github-mcp/list_pull_requests
+    - io.github.navikt/github-mcp/search_pull_requests
+    - io.github.navikt/github-mcp/get_latest_release
+    - io.github.navikt/github-mcp/list_releases
+    - io.github.navikt/github-mcp/list_tags
+    - io.github.navikt/github-mcp/list_branches
 ---
 
 # Research agent
@@ -52,7 +52,7 @@ Your role is to:
 - `react-intl` usage and text flow
 - Node proxy and frontend to backend request flow
 - Azure, Wonderwall, OBO and Nais integration points
-- Faro, Sentry and logging setup
+- Nais APM, Faro transport and logging setup
 - Workflow, MCP, Copilot and repo customization files
 - Historical context in commits, PRs and issues when relevant
 
@@ -65,19 +65,19 @@ Your role is to:
 - Aksel is the default UI system, with selective Tailwind usage and local CSS.
 - `react-intl` is used for much of the user facing text.
 - The repo uses Nais, Azure sidecar and a Node based reverse proxy to reach downstream services.
-- Observability is based on Faro, Sentry, Nais runtime config, and structured server logging.
+- Observability uses Nais APM, a Faro transport privacy filter, Nais runtime config, and structured server logging.
 - When frontend behavior depends on backend contracts, mock flows, or endpoint behavior, inspect the companion backend repo `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
 
 ## Related agents
 
-| Agent | Delegate for |
-| --- | --- |
-| `@k9-punsj-front-aksel-agent` | Aksel components, spacing, accessibility, styling decisions |
-| `@k9-punsj-front-forfatter-agent` | Norwegian UI copy, `react-intl`, wording and labels |
-| `@k9-punsj-front-auth-agent` | Azure, Wonderwall, callback, token, OBO and auth boundaries |
-| `@k9-punsj-front-nais-agent` | `nais/**`, deploy workflows, access policy, runtime config |
-| `@k9-punsj-front-observability-agent` | Faro, Sentry, logging, release and telemetry behavior |
-| `@k9-punsj-front-security-agent` | Secrets, workflows, threat review and client side security risk |
+| Agent                                 | Delegate for                                                      |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| `@k9-punsj-front-aksel-agent`         | Aksel components, spacing, accessibility, styling decisions       |
+| `@k9-punsj-front-forfatter-agent`     | Norwegian UI copy, `react-intl`, wording and labels               |
+| `@k9-punsj-front-auth-agent`          | Azure, Wonderwall, callback, token, OBO and auth boundaries       |
+| `@k9-punsj-front-nais-agent`          | `nais/**`, deploy workflows, access policy, runtime config        |
+| `@k9-punsj-front-observability-agent` | Nais APM, Faro transport, logging, release and telemetry behavior |
+| `@k9-punsj-front-security-agent`      | Secrets, workflows, threat review and client side security risk   |
 
 ## Research methodology
 
@@ -159,14 +159,17 @@ Layer 4, history:
 
 ```markdown
 ## Summary
+
 [One short overview]
 
 ## Key findings
+
 - Finding 1
 - Finding 2
 - Finding 3
 
 ## Recommended next step
+
 - Next step
 ```
 
@@ -174,24 +177,31 @@ Layer 4, history:
 
 ```markdown
 ## Research topic
+
 [What was investigated]
 
 ## Relevant files
+
 - `path/to/file`
 - `path/to/file`
 
 ## Findings
+
 ### Area 1
+
 [What was found]
 
 ### Area 2
+
 [What was found]
 
 ## Recommendations
+
 - Recommendation 1
 - Recommendation 2
 
 ## Open questions
+
 - Question 1
 ```
 
