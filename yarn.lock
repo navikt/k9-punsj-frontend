@@ -3648,7 +3648,7 @@ __metadata:
     "@navikt/oasis": "npm:4.2.2"
     connect-timeout: "npm:1.9.1"
     cors: "npm:2.8.6"
-    dotenv: "npm:17.4.2"
+    dotenv: "npm:18.0.3"
     express: "npm:5.2.1"
     express-http-proxy: "npm:2.1.2"
     helmet: "npm:8.3.0"
@@ -9050,10 +9050,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:17.4.2":
-  version: 17.4.2
-  resolution: "dotenv@npm:17.4.2"
-  checksum: 10/ca1b6f54d58e39914901e1518958e86083aca8deb5aa2e7f2a51acd53291d97852479b0ab26ed949b6a45a0e9adcc7b0d1c3c72375e8ea670f7005e341c6daba
+"dotenv@npm:18.0.3":
+  version: 18.0.3
+  resolution: "dotenv@npm:18.0.3"
+  bin:
+    dotenv: dist/index.cjs
+  checksum: 10/20743855e5f2a778d96208dc2fbe620312904518943ca1e8bee25813087c7640302135bc94f1959a783295d9feca8264fe5591a89f2ee97674928e07e1db7881
   languageName: node
   linkType: hard
 
@@ -12960,7 +12962,7 @@ __metadata:
     cypress-wait-until: "npm:3.0.2"
     date-fns: "npm:4.4.0"
     dayjs: "npm:1.11.23"
-    dotenv: "npm:17.4.2"
+    dotenv: "npm:18.0.3"
     eslint: "npm:9.39.5"
     eslint-config-prettier: "npm:10.1.8"
     eslint-import-resolver-node: "npm:0.4.0"
