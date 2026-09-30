@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const distDir = path.join(rootDir, 'dist');
 const cdnBase = 'https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/';
+const cdnBaseUrl = new URL(cdnBase);
 const deployWorkflows = ['build-and-deploy-gcp.yml', 'deploy-preprod-gcp.yml'];
 
 const errors = [];
@@ -20,26 +21,49 @@ check(existsSync(path.join(distDir, 'favicon.png')), 'dist/favicon.png mangler')
 
 if (existsSync(htmlPath)) {
     const html = readFileSync(htmlPath, 'utf8');
-    const tags = html.match(/<(?:script|link)\b[^>]*>/g) ?? [];
-    const cdnTags = tags.filter((tag) => tag.includes(cdnBase));
+    const tags = html.match(/<(?:script|link)\b[^>]*>/gi) ?? [];
+    const attribute = (tag, name) => new RegExp(`\\b${name}\\s*=\\s*"([^"]+)"`, 'i').exec(tag)?.[1];
+    const assetTags = tags.filter(
+        (tag) =>
+            (/^<script\b/i.test(tag) && attribute(tag, 'src')) ||
+            (/^<link\b/i.test(tag) && /\bstylesheet\b/i.test(attribute(tag, 'rel') ?? '')),
+    );
 
-    check(cdnTags.length > 0, 'index.html refererer ikke til noen filer på CDN');
+    check(assetTags.length > 0, 'index.html refererer ikke til noen filer på CDN');
     check(
-        cdnTags.some((tag) => tag.startsWith('<script') && tag.includes('type="module"')),
+        assetTags.some((tag) => /^<script\b/i.test(tag) && attribute(tag, 'type') === 'module'),
         'index.html mangler modulscript fra CDN',
     );
     check(
-        cdnTags.some((tag) => tag.startsWith('<link') && tag.includes('rel="stylesheet"')),
+        assetTags.some((tag) => /^<link\b/i.test(tag) && /\bstylesheet\b/i.test(attribute(tag, 'rel') ?? '')),
         'index.html mangler uttrukket CSS fra CDN',
     );
 
-    cdnTags.forEach((tag) => {
-        check(tag.includes('crossorigin="anonymous"'), `CDN-referanse mangler crossorigin="anonymous": ${tag}`);
-        const url = /(?:src|href)="([^"]+)"/.exec(tag)?.[1] ?? '';
-        const relativePath = url.slice(cdnBase.length);
+    assetTags.forEach((tag) => {
+        check(attribute(tag, 'crossorigin') === 'anonymous', `CDN-referanse mangler crossorigin="anonymous": ${tag}`);
+        const rawUrl = attribute(tag, /^<script\b/i.test(tag) ? 'src' : 'href') ?? '';
+        let assetUrl;
+        try {
+            assetUrl = new URL(rawUrl);
+        } catch {
+            check(false, `Ugyldig CDN-adresse: ${rawUrl}`);
+            return;
+        }
 
-        check(/^js\/[^/]+\.[A-Za-z0-9_-]{8,}\.(js|css)$/.test(relativePath), `Uventet CDN-filnavn: ${url}`);
-        check(existsSync(path.join(distDir, relativePath)), `Referert CDN-fil finnes ikke i dist: ${url}`);
+        const onCdn =
+            assetUrl.origin === cdnBaseUrl.origin &&
+            assetUrl.pathname.startsWith(cdnBaseUrl.pathname) &&
+            !assetUrl.username &&
+            !assetUrl.password &&
+            !assetUrl.search &&
+            !assetUrl.hash;
+        check(onCdn, `Uventet CDN-adresse: ${rawUrl}`);
+        if (!onCdn) return;
+
+        const relativePath = assetUrl.pathname.slice(cdnBaseUrl.pathname.length);
+
+        check(/^js\/[^/]+\.[A-Za-z0-9_-]{8,}\.(js|css)$/.test(relativePath), `Uventet CDN-filnavn: ${rawUrl}`);
+        check(existsSync(path.join(distDir, relativePath)), `Referert CDN-fil finnes ikke i dist: ${rawUrl}`);
         if (relativePath.endsWith('.js')) {
             check(existsSync(path.join(distDir, `${relativePath}.map`)), `Sourcemap mangler for ${relativePath}`);
         }
