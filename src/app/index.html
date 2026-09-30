@@ -3,10 +3,10 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" type="image/png" href="/dist/favicon.png" />
-        <script type="module">
-            // Dynamically import nais.js. Workaround til vi kan importere nais.js direkte i app.tsx via relative path når vi bytter til vite
+        <script>
+            // nais.js må lastes fra appens egen origin, ikke fra CDN-bunten, derfor et vanlig inline-script.
             // https://docs.nais.io/explanation/observability/frontend/?h=faro#tracing-opentelemetry
-            window.__naisReady = import('/dist/js/nais.js')
+            window.__naisReady = import(/* @vite-ignore */ '/dist/js/nais.js')
                 .then((naisModule) => {
                     const faroConfig = naisModule.default;
                     window.nais = faroConfig;
@@ -21,5 +21,6 @@
         <div id="appContainer">
             <div id="app"></div>
         </div>
+        <script type="module" src="/App.tsx"></script>
     </body>
 </html>

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
-import logger from 'redux-logger';
+import { logger } from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import { SourceMappedErrorBoundary } from './components/SourceMappedErrorBoundary';
