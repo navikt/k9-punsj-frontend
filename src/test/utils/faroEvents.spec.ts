@@ -1,4 +1,4 @@
-import { faro } from '@grafana/faro-web-sdk';
+import { pushEvent } from '@nais/apm';
 import Ytelse from '../../app/models/types/Ytelse';
 import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
@@ -48,16 +48,10 @@ import { IOMPUTSoknadKvittering } from '../../app/søknader/omsorgspenger-utbeta
 import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
-jest.mock('@grafana/faro-web-sdk', () => ({
-    faro: {
-        api: {
-            pushEvent: jest.fn(),
-        },
-    },
-}));
+jest.mock('@nais/apm', () => ({ pushEvent: jest.fn() }));
 
 describe('faroEvents', () => {
-    const pushEventMock = faro.api.pushEvent as jest.Mock;
+    const pushEventMock = pushEvent as jest.Mock;
     const journalpostId = 'jp-123';
 
     const enableFaro = () => {
@@ -399,16 +393,16 @@ describe('faroEvents', () => {
         expect(pushEventMock).not.toHaveBeenCalled();
     });
 
-    it('Skal videresende Faro-event options til SDK-et', () => {
+    it('Skal sende event via APM SDK-et', () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
             app: { name: 'k9-punsj-frontend', version: 'test' },
         };
 
-        const result = pushFaroEvent('test_event', { source: 'test' }, { skipDedupe: true });
+        const result = pushFaroEvent('test_event', { source: 'test' });
 
         expect(result).toBeTruthy();
-        expect(pushEventMock).toHaveBeenCalledWith('test_event', { source: 'test' }, undefined, { skipDedupe: true });
+        expect(pushEventMock).toHaveBeenCalledWith('test_event', { source: 'test' });
     });
 
     it('Skal sende custom Faro-event for manuelt opprettet journalpost med trygge attributter', () => {
@@ -424,7 +418,7 @@ describe('faroEvents', () => {
             source: 'opprett_journalpost',
             route: '/opprett-journalpost',
             phase: 'page_opened',
-        }, undefined, { skipDedupe: true });
+        });
     });
 
     it('Skal lagre og rydde manuelt opprettet journalpost som kilde for senere punsjflyt', () => {
@@ -463,31 +457,33 @@ describe('faroEvents', () => {
     });
 
     it('Skal ikke gi feltgrupper for tomme PSB-seksjoner', () => {
-        expect(getPsbSubmittedFieldGroups({
-            ...psbKvittering,
-            ytelse: {
-                ...psbKvittering.ytelse,
-                søknadsperiode: [],
-                bosteder: { perioder: {} },
-                utenlandsopphold: { perioder: {} },
-                beredskap: { perioder: {} },
-                nattevåk: { perioder: {} },
-                tilsynsordning: { perioder: {} },
-                lovbestemtFerie: { perioder: {} },
-                arbeidstid: {
-                    arbeidstakerList: [],
-                    frilanserArbeidstidInfo: null,
-                    selvstendigNæringsdrivendeArbeidstidInfo: null,
+        expect(
+            getPsbSubmittedFieldGroups({
+                ...psbKvittering,
+                ytelse: {
+                    ...psbKvittering.ytelse,
+                    søknadsperiode: [],
+                    bosteder: { perioder: {} },
+                    utenlandsopphold: { perioder: {} },
+                    beredskap: { perioder: {} },
+                    nattevåk: { perioder: {} },
+                    tilsynsordning: { perioder: {} },
+                    lovbestemtFerie: { perioder: {} },
+                    arbeidstid: {
+                        arbeidstakerList: [],
+                        frilanserArbeidstidInfo: null,
+                        selvstendigNæringsdrivendeArbeidstidInfo: null,
+                    },
+                    uttak: { perioder: {} },
+                    omsorg: {
+                        relasjonTilBarnet: null,
+                        beskrivelseAvOmsorgsrollen: '',
+                    },
+                    opptjeningAktivitet: {},
+                    trekkKravPerioder: [],
                 },
-                uttak: { perioder: {} },
-                omsorg: {
-                    relasjonTilBarnet: null,
-                    beskrivelseAvOmsorgsrollen: '',
-                },
-                opptjeningAktivitet: {},
-                trekkKravPerioder: [],
-            },
-        })).toEqual([]);
+            }),
+        ).toEqual([]);
     });
 
     it('Skal mappe PLS-kvittering til forventede feltgrupper', () => {
@@ -503,23 +499,25 @@ describe('faroEvents', () => {
     });
 
     it('Skal ikke mappe tomme PLS-seksjoner til feltgrupper', () => {
-        expect(getPlsSubmittedFieldGroups({
-            ...plsKvittering,
-            ytelse: {
-                ...plsKvittering.ytelse,
-                søknadsperiode: [],
-                arbeidstid: {
-                    arbeidstakerList: [],
-                    frilanserArbeidstidInfo: null,
-                    selvstendigNæringsdrivendeArbeidstidInfo: null,
+        expect(
+            getPlsSubmittedFieldGroups({
+                ...plsKvittering,
+                ytelse: {
+                    ...plsKvittering.ytelse,
+                    søknadsperiode: [],
+                    arbeidstid: {
+                        arbeidstakerList: [],
+                        frilanserArbeidstidInfo: null,
+                        selvstendigNæringsdrivendeArbeidstidInfo: null,
+                    },
+                    opptjeningAktivitet: {},
+                    lovbestemtFerie: { perioder: {} },
+                    bosteder: { perioder: {} },
+                    utenlandsopphold: { perioder: {} },
+                    trekkKravPerioder: [],
                 },
-                opptjeningAktivitet: {},
-                lovbestemtFerie: { perioder: {} },
-                bosteder: { perioder: {} },
-                utenlandsopphold: { perioder: {} },
-                trekkKravPerioder: [],
-            },
-        })).toEqual([]);
+            }),
+        ).toEqual([]);
     });
 
     it('Skal mappe OMPKS-kvittering til forventede feltgrupper', () => {
@@ -580,7 +578,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -598,19 +596,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PSB',
             field_group: PSB_FIELD_GROUPS.ARBEIDSTID,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -623,7 +621,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'PSB',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -641,7 +639,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -659,19 +657,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'PLS',
             field_group: PLS_FIELD_GROUPS.ARBEIDSTID,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -684,7 +682,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'PLS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -702,7 +700,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -720,19 +718,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPKS',
             field_group: OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -745,7 +743,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'OMPKS',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -763,7 +761,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -781,19 +779,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPMA',
             field_group: OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -806,7 +804,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'OMPMA',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -824,7 +822,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -842,19 +840,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OLP',
             field_group: OLP_FIELD_GROUPS.KURS,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -867,7 +865,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'OLP',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -885,7 +883,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -903,19 +901,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPUT',
             field_group: OMPUT_FIELD_GROUPS.FRILANSER,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -928,7 +926,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'OMPUT',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 
@@ -946,7 +944,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_STARTED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('opprett_journalpost');
     });
 
@@ -964,19 +962,19 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenNthCalledWith(1, PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenNthCalledWith(2, PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
             used_field_groups: fieldGroups.join(','),
             used_field_group_count: String(fieldGroups.length),
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(2 + fieldGroups.length);
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             source: 'opprett_journalpost',
             sakstype: 'OMPAO',
             field_group: OMPAO_FIELD_GROUPS.PERIODE,
-        }, undefined, { skipDedupe: true });
+        });
         expect(getPunsjSourceForJournalpost(journalpostId)).toBe('unknown');
     });
 
@@ -989,7 +987,7 @@ describe('faroEvents', () => {
         expect(pushEventMock).toHaveBeenCalledWith(PUNSJ_SUBMIT_COMPLETED_EVENT, {
             source: 'other',
             sakstype: 'OMPAO',
-        }, undefined, { skipDedupe: true });
+        });
         expect(pushEventMock).toHaveBeenCalledTimes(1);
     });
 });

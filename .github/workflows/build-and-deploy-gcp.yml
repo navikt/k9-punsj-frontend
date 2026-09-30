@@ -54,15 +54,18 @@ jobs:
                   name: dist
                   path: ./dist
 
+            - name: Last opp nettleserfiler til CDN
+              uses: nais/deploy/actions/cdn-upload/v2@1de80da70ad26556ecdc5964a8b7ec3bbed98120 # v2
+              with:
+                  team: k9saksbehandling
+                  source: dist/js
+                  destination: /k9-punsj-frontend/dist
+                  source_keep_parent_name: true
+
             - name: Installere moduler
               run: yarn workspaces focus @k9-punsj-frontend/server --production
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Opprett release med Sentry
-              run: yarn sentry-release
-              env:
-                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
             - uses: nais/docker-build-push@8e41f1f58749b9248e376c25d33bfbdd2b1163c0 # v0
               id: docker-push

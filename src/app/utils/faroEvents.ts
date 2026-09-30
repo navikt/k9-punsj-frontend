@@ -1,4 +1,5 @@
-import { EventAttributes, faro } from '@grafana/faro-web-sdk';
+import { pushEvent } from '@nais/apm';
+import { EventAttributes } from '@grafana/faro-web-sdk';
 import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
 import { IPSBSoknadKvittering } from 'app/models/types/PSBSoknadKvittering';
@@ -98,9 +99,6 @@ type PunsjFieldGroup =
     | OlpFieldGroup
     | OmputFieldGroup
     | OmpaoFieldGroup;
-type FaroEventOptions = {
-    skipDedupe?: boolean;
-};
 
 type KvitteringWithArbeidstid = {
     ytelse: {
@@ -153,10 +151,7 @@ const PLS_FIELD_GROUP_ORDER: PlsFieldGroup[] = [
 
 const OMPKS_FIELD_GROUP_ORDER: OmpksFieldGroup[] = [OMPKS_FIELD_GROUPS.KRONISK_ELLER_FUNKSJONSHEMMING];
 
-const OMPMA_FIELD_GROUP_ORDER: OmpmaFieldGroup[] = [
-    OMPMA_FIELD_GROUPS.BARN,
-    OMPMA_FIELD_GROUPS.ANNEN_FORELDER,
-];
+const OMPMA_FIELD_GROUP_ORDER: OmpmaFieldGroup[] = [OMPMA_FIELD_GROUPS.BARN, OMPMA_FIELD_GROUPS.ANNEN_FORELDER];
 
 const OLP_FIELD_GROUP_ORDER: OlpFieldGroup[] = [
     OLP_FIELD_GROUPS.ARBEIDSTID,
@@ -178,10 +173,7 @@ const OMPUT_FIELD_GROUP_ORDER: OmputFieldGroup[] = [
     OMPUT_FIELD_GROUPS.SELVSTENDIG,
 ];
 
-const OMPAO_FIELD_GROUP_ORDER: OmpaoFieldGroup[] = [
-    OMPAO_FIELD_GROUPS.BARN,
-    OMPAO_FIELD_GROUPS.PERIODE,
-];
+const OMPAO_FIELD_GROUP_ORDER: OmpaoFieldGroup[] = [OMPAO_FIELD_GROUPS.BARN, OMPAO_FIELD_GROUPS.PERIODE];
 
 const getSessionStorage = (): Storage | undefined => {
     if (typeof window === 'undefined') {
@@ -285,13 +277,13 @@ const hasOpptjeningAktivitet = (innsentSoknad: KvitteringWithOpptjeningAktivitet
     return !!opptjeningAktivitet.frilanser || (opptjeningAktivitet.selvstendigNæringsdrivende?.length || 0) > 0;
 };
 
-export const pushFaroEvent = (name: string, attributes?: EventAttributes, options?: FaroEventOptions): boolean => {
+export const pushFaroEvent = (name: string, attributes?: EventAttributes): boolean => {
     if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL) {
         return false;
     }
 
     try {
-        faro.api.pushEvent(name, attributes, undefined, options);
+        pushEvent(name, attributes);
         return true;
     } catch {
         return false;
@@ -303,7 +295,7 @@ export const trackManualJournalpostFlowStarted = (): boolean =>
         source: OPPRETT_JOURNALPOST_SOURCE,
         route: ROUTES.OPPRETT_JOURNALPOST,
         phase: 'page_opened',
-    }, { skipDedupe: true });
+    });
 
 export const setManualJournalpostFlowSource = (journalpostId: string): boolean => {
     const normalizedJournalpostId = normalizeJournalpostId(journalpostId);
@@ -338,7 +330,9 @@ export const clearManualJournalpostFlowSource = (journalpostId: string): boolean
     }
 
     return writeManualJournalpostSourceIds(
-        readManualJournalpostSourceIds().filter((storedJournalpostId) => storedJournalpostId !== normalizedJournalpostId),
+        readManualJournalpostSourceIds().filter(
+            (storedJournalpostId) => storedJournalpostId !== normalizedJournalpostId,
+        ),
     );
 };
 
@@ -407,7 +401,7 @@ const trackPunsjStartedFromJournalpost = (journalpostId: string, sakstype: strin
     return pushFaroEvent(PUNSJ_STARTED_EVENT, {
         source,
         sakstype,
-    }, { skipDedupe: true });
+    });
 };
 
 const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
@@ -421,7 +415,7 @@ const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
     pushFaroEvent(PUNSJ_SUBMIT_COMPLETED_EVENT, {
         source: submitSource,
         sakstype,
-    }, { skipDedupe: true });
+    });
 
     if (source === UNKNOWN_SOURCE) {
         return [];
@@ -436,13 +430,13 @@ const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
         ...sharedAttributes,
         used_field_groups: fieldGroups.join(',') || 'none',
         used_field_group_count: String(fieldGroups.length),
-    }, { skipDedupe: true });
+    });
 
     fieldGroups.forEach((fieldGroup) => {
         pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             ...sharedAttributes,
             field_group: fieldGroup,
-        }, { skipDedupe: true });
+        });
     });
 
     clearManualJournalpostFlowSource(journalpostId);

@@ -39,7 +39,7 @@ Review these areas together when they are touched:
 - `.github/workflows/**`
 - `src/app/App.tsx`
 - `src/app/index.html`
-- `src/build/scripts/sentry-release.js`
+- `src/app/utils/telemetryPrivacy.ts`
 
 ## What to look for
 
@@ -63,7 +63,7 @@ Review these areas together when they are touched:
 
 ### Telemetry and observability
 
-- Sentry and Faro setup do not expose user sensitive data.
+- Nais APM and the Faro transport filter do not expose user sensitive data.
 - Errors, tags, or custom metadata avoid personopplysninger.
 - Release or deploy scripts do not leak secrets into logs.
 
