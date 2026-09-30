@@ -1,4 +1,4 @@
-import { pushEvent } from '@nais/apm';
+import { isInitialized, pushEvent } from '@nais/apm';
 import { EventAttributes } from '@grafana/faro-web-sdk';
 import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
@@ -278,7 +278,7 @@ const hasOpptjeningAktivitet = (innsentSoknad: KvitteringWithOpptjeningAktivitet
 };
 
 export const pushFaroEvent = (name: string, attributes?: EventAttributes): boolean => {
-    if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL) {
+    if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL || !isInitialized()) {
         return false;
     }
 

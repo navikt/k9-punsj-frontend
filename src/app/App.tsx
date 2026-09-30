@@ -1,4 +1,4 @@
-import { init, pushEvent } from '@nais/apm';
+import { init, isInitialized, pushEvent } from '@nais/apm';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
@@ -28,7 +28,7 @@ const RouteTelemetry = () => {
     const { pathname } = useLocation();
     React.useEffect(() => {
         const route = routeTemplate(pathname);
-        if (route && window.nais?.telemetryCollectorURL) {
+        if (route && window.nais?.telemetryCollectorURL && isInitialized()) {
             pushEvent('punsj_route_change', { route });
         }
     }, [pathname]);
