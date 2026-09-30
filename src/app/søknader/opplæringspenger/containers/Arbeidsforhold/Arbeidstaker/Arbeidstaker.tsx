@@ -147,7 +147,7 @@ const ArbeidstakerComponent: React.FC<Props> = ({
                         <SelectFormik
                             className="max-w-[24rem]"
                             value={selectedArbeidsgiver}
-                            label="Velg hvilken arbeidsgiver det gjelder"
+                            label={<span className="whitespace-nowrap">Velg hvilken arbeidsgiver det gjelder</span>}
                             options={[{ value: '', label: '' }].concat(
                                 arbeidsgivere.map((arbeidsgiver) => ({
                                     label: `${arbeidsgiver.navn} - ${arbeidsgiver.organisasjonsnummer}`,
