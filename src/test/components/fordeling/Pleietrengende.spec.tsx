@@ -5,7 +5,7 @@ import { renderWithIntl } from '../../testUtils';
 
 describe('Pleietrengende', () => {
     it('renders controlled select without controlled or uncontrolled warning', () => {
-        const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+        const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
         renderWithIntl(
             <Pleietrengende

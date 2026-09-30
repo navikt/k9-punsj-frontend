@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { pushEvent } from '@nais/apm';
 import Ytelse from '../../app/models/types/Ytelse';
 import {
@@ -48,10 +49,10 @@ import { IOMPUTSoknadKvittering } from '../../app/søknader/omsorgspenger-utbeta
 import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
-jest.mock('@nais/apm', () => ({ pushEvent: jest.fn() }));
+vi.mock('@nais/apm', () => ({ pushEvent: vi.fn() }));
 
 describe('faroEvents', () => {
-    const pushEventMock = pushEvent as jest.Mock;
+    const pushEventMock = pushEvent as Mock;
     const journalpostId = 'jp-123';
 
     const enableFaro = () => {

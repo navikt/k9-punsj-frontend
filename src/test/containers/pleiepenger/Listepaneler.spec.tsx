@@ -6,10 +6,9 @@ import { TextField } from '@navikt/ds-react';
 import { IntlShape, createIntl } from 'react-intl';
 import intlHelper from '../../../app/utils/intlUtils';
 import { IListepanelerProps, ListeComponent, Listepaneler } from '../../../app/components/Listepaneler';
-import '@testing-library/jest-dom';
 
-jest.mock('react-intl');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-intl');
+vi.mock('app/utils/intlUtils');
 
 interface ITestItem {
     test: string;
@@ -50,14 +49,14 @@ const renderListepaneler = (propsPartial: Partial<IListepanelerProps<ITestItem>>
         initialItem: initialitemtest,
         panelid: (index: number) => `testitem_${index}`,
         component: testkomponent,
-        editSoknad: jest.fn(),
-        editSoknadState: jest.fn(),
+        editSoknad: vi.fn(),
+        editSoknadState: vi.fn(),
         kanHaFlere: true,
         medSlettKnapp: true,
         ...propsPartial,
     };
 
-    jest.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return render(<Listepaneler {...props} />);
 };
@@ -69,8 +68,8 @@ describe('Listepaneler', () => {
     });
 
     it('adds a list element', async () => {
-        const editSoknadState = jest.fn();
-        const editSoknad = jest.fn();
+        const editSoknadState = vi.fn();
+        const editSoknad = vi.fn();
         renderListepaneler({ editSoknadState, editSoknad });
         const addButton = screen.getByTestId('leggtillisteelementknapp');
 
@@ -81,8 +80,8 @@ describe('Listepaneler', () => {
     });
 
     it('removes a list element', async () => {
-        const editSoknadState = jest.fn();
-        const editSoknad = jest.fn();
+        const editSoknadState = vi.fn();
+        const editSoknad = vi.fn();
         const { container } = renderListepaneler({ editSoknadState, editSoknad });
 
         const element = container.querySelector('#testitem_1');
@@ -113,7 +112,7 @@ describe('Listepaneler', () => {
     });
 
     it('calls updateListeinfoInSoknadState with a new value', async () => {
-        const editSoknadState = jest.fn();
+        const editSoknadState = vi.fn();
         const { container } = renderListepaneler({ editSoknadState });
 
         const input = container.querySelector(`#${testinputid(1)}`) as HTMLInputElement;
@@ -133,7 +132,7 @@ describe('Listepaneler', () => {
     // it('adds a custom class name to all panels', () => {
 
     it('calls onAdd when a list element is added', async () => {
-        const onAdd = jest.fn();
+        const onAdd = vi.fn();
         renderListepaneler({ onAdd });
 
         const addButton = screen.getByTestId('leggtillisteelementknapp');
@@ -143,7 +142,7 @@ describe('Listepaneler', () => {
     });
 
     it('calls onRemove when a list element is removed', async () => {
-        const onRemove = jest.fn();
+        const onRemove = vi.fn();
         const { container } = renderListepaneler({ onRemove });
         const element = container.querySelector('#testitem_1');
 

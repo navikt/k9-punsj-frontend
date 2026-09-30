@@ -2,20 +2,19 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import VisningAvPerioderSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSoknadKvittering';
 import { formattereTimerForArbeidstakerPerioder } from '../../../app/utils/soknadKvitteringUtils';
-import { mocked } from 'jest-mock';
 import intlHelper from '../../../app/utils/intlUtils';
 import { ISoknadKvitteringArbeidstidInfo } from '../../../app/models/types/KvitteringTyper';
 import { IntlShape } from 'react-intl';
 
 // Mocks and data
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
+vi.mock('react-intl', async () => ({
+    ...(await vi.importActual('react-intl')),
     FormattedMessage: ({ id }: { id: string }) => id,
 }));
-jest.mock('react-router');
-jest.mock('app/utils/browserUtils');
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-router');
+vi.mock('app/utils/browserUtils');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
 
 const enPeriode: ISoknadKvitteringArbeidstidInfo = {
     '2021-06-01/2021-06-30': {
@@ -36,7 +35,7 @@ const flerePerioder: ISoknadKvitteringArbeidstidInfo = {
 };
 
 const setupVisningAvPerioderSoknadKvittering = (response: ISoknadKvitteringArbeidstidInfo) => {
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return render(
         <VisningAvPerioderSoknadKvittering

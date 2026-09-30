@@ -1,14 +1,15 @@
+import type { Mock } from 'vitest';
 import { ApiPath } from '../../../app/apiConfig';
 import { OMSKorrigering } from '../../../app/models/types/OMSKorrigering';
 import { updateOMSKorrigering, validerOMSKorrigering } from '../../../app/state/actions/OMSPunchFormActions';
 
-const mockGet = jest.fn();
-const mockPost = jest.fn();
-const mockPut = jest.fn();
-const mockApiUrl = jest.fn((...args: unknown[]) => args[0] as string);
-const mockInitializeDate = jest.fn();
+const mockGet = vi.fn();
+const mockPost = vi.fn();
+const mockPut = vi.fn();
+const mockApiUrl = vi.fn((...args: unknown[]) => args[0] as string);
+const mockInitializeDate = vi.fn();
 
-jest.mock('app/utils', () => ({
+vi.mock('app/utils', () => ({
     apiUrl: (path: string, pathParameters?: unknown) => mockApiUrl(path, pathParameters),
     get: (...args: unknown[]) => mockGet(...args),
     initializeDate: (...args: unknown[]) => mockInitializeDate(...args),
@@ -31,8 +32,8 @@ const minimalKorrigering = (overrides: Partial<OMSKorrigering> = {}): OMSKorrige
 
 describe('OMSPunchFormActions', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
-        global.fetch = jest.fn().mockResolvedValue({ status: 202 }) as jest.Mock;
+        vi.clearAllMocks();
+        global.fetch = vi.fn().mockResolvedValue({ status: 202 }) as Mock;
     });
 
     it('uses soekerId in X-Nav-NorskIdent header for valider request', async () => {

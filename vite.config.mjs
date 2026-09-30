@@ -32,6 +32,13 @@ export default defineConfig(({ command, mode }) => {
             'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION ?? null),
             'process.env.MSW_MODE': JSON.stringify(process.env.MSW_MODE ?? 'development'),
         },
+        test: {
+            root: rootDir,
+            environment: 'jsdom',
+            globals: true,
+            include: ['src/**/*.spec.{ts,tsx}'],
+            setupFiles: ['./testSetup.js', './src/test/testConfig.js'],
+        },
         server: {
             host: '127.0.0.1',
             port: 8080,

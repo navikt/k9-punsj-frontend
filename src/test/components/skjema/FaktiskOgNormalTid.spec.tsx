@@ -5,9 +5,9 @@ import { renderWithIntl } from '../../testUtils';
 import FaktiskOgNormalTid from '../../../app/components/timefoering/FaktiskOgNormalTid';
 
 describe('FaktiskOgNormalTid', () => {
-    const mockLagre = jest.fn();
-    const mockToggleModal = jest.fn();
-    const mockClearSelectedDates = jest.fn();
+    const mockLagre = vi.fn();
+    const mockToggleModal = vi.fn();
+    const mockClearSelectedDates = vi.fn();
 
     it('renderWithIntls without crashing', () => {
         renderWithIntl(<FaktiskOgNormalTid lagre={mockLagre} toggleModal={mockToggleModal} selectedDates={[]} />);

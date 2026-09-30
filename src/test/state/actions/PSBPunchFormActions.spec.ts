@@ -3,15 +3,15 @@ import { IInputError } from '../../../app/models/types';
 import { IPSBSoknadUt } from '../../../app/models/types/PSBSoknadUt';
 import { validerSoknad } from '../../../app/state/actions/PSBPunchFormActions';
 
-const mockPost = jest.fn();
-const mockConvertProblemDetailToError = jest.fn();
-const mockGetValidationErrorsFromProblemDetail = jest.fn();
+const mockPost = vi.fn();
+const mockConvertProblemDetailToError = vi.fn();
+const mockGetValidationErrorsFromProblemDetail = vi.fn();
 
-jest.mock('app/utils', () => ({
-    get: jest.fn(),
+vi.mock('app/utils', () => ({
+    get: vi.fn(),
     post: (...args: unknown[]) => mockPost(...args),
-    put: jest.fn(),
-    convertResponseToError: jest.fn(),
+    put: vi.fn(),
+    convertResponseToError: vi.fn(),
     convertProblemDetailToError: (...args: unknown[]) => mockConvertProblemDetailToError(...args),
     getValidationErrorsFromProblemDetail: (...args: unknown[]) => mockGetValidationErrorsFromProblemDetail(...args),
 }));
@@ -25,12 +25,12 @@ const minimalSoknad = (): IPSBSoknadUt => ({
 
 describe('PSBPunchFormActions.validerSoknad', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         mockConvertProblemDetailToError.mockReturnValue({ status: 500, message: 'Ukjent feil' });
     });
 
     it('dispatches uncomplete action for 400 ProblemDetail with feil', () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const responseData = { feil: [{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }] };
         const errors: IInputError[] = [{ felt: 'ytelse.søknadsperiode', feilmelding: 'Mangler verdi' }];
 
@@ -50,7 +50,7 @@ describe('PSBPunchFormActions.validerSoknad', () => {
     });
 
     it('dispatches generic valider error for 400 ProblemDetail without feil', () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const responseData = { title: 'Ugyldig søknad for validering', detail: 'Ingen feilliste' };
         const problemDetailError = { status: 400, message: 'Ingen feilliste' };
 
@@ -70,7 +70,7 @@ describe('PSBPunchFormActions.validerSoknad', () => {
     });
 
     it('dispatches error from ProblemDetail for non-400 status', () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const responseData = { title: 'Feil ved validering av søknad', detail: 'Backend message' };
         const problemDetailError = { status: 500, message: 'Backend message' };
 
@@ -90,7 +90,7 @@ describe('PSBPunchFormActions.validerSoknad', () => {
     });
 
     it('does not send X-Nav-NorskIdent header for valider request', () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         mockPost.mockImplementation((_path, _params, _headers, _body, callback) =>
             callback({ status: 202 } as Response, {}),
