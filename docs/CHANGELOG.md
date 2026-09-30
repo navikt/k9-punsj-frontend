@@ -7,6 +7,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - `yarn test` kjører nå `vitest run` (`vitest@5.0.1`, `jsdom@30.1.1`) med konfigurasjonen i `vite.config.mjs`. Samme 71 testfiler og 484 tester kjøres; CI beholder `--maxWorkers=2`.
 - Testfilene bruker `vi.*` i stedet for `jest.*`. Delvise mocks av `react-intl` og `react-redux` bruker `vi.importActual`. Fjernet `jest.config.json` og `babel.config.cjs`.
 - Fjernet Jest- og Babel-pakker, `jest-css-modules`, `regenerator-runtime` og `@babel/runtime` som direkte avhengigheter. `@testing-library/jest-dom` beholdes via `@testing-library/jest-dom/vitest`. Dev GCP-sjekkene fra fase 1 gjenstår etter deploy.
+- E2E-skriptet stopper nå hele Yarn/Vite-prosessgruppen etter kjøring, slik at port 8080 ikke blir stående opptatt av en foreldreløs testserver.
 
 ### Vite erstatter Webpack for app og Storybook (2026-09-30)
 

@@ -35,13 +35,14 @@ const cypressCommandMap = {
     'cypress:open:chrome': ['cypress', 'open', '--e2e', '--browser', 'chrome'],
 };
 
-const spawnYarnScript = (scriptName, args = []) => {
+const spawnYarnScript = (scriptName, args = [], detached = false) => {
     const cypressCommand = cypressCommandMap[scriptName];
 
     if (cypressCommand) {
         return spawn(yarnCommand, [...cypressCommand, ...args], {
             stdio: 'inherit',
             env: process.env,
+            detached,
         });
     }
 
@@ -54,26 +55,43 @@ const spawnYarnScript = (scriptName, args = []) => {
     return spawn(yarnCommand, commandArgs, {
         stdio: 'inherit',
         env: process.env,
+        detached,
     });
 };
 
-const terminateProcess = (childProcess) =>
-    new Promise((resolve) => {
-        if (!childProcess || childProcess.exitCode !== null || childProcess.killed) {
-            resolve();
-            return;
-        }
+const terminateProcess = async (childProcess) => {
+    if (!childProcess?.pid) return;
 
-        const finish = () => resolve();
-        childProcess.once('exit', finish);
-        childProcess.kill('SIGTERM');
-
-        setTimeout(() => {
-            if (childProcess.exitCode === null && !childProcess.killed) {
-                childProcess.kill('SIGKILL');
+    if (process.platform !== 'win32') {
+        // Yarn oppretter flere underprosesser; stopp hele gruppen slik at Vite ikke blir igjen.
+        const signalGroup = (signal) => {
+            try {
+                process.kill(-childProcess.pid, signal);
+                return true;
+            } catch (error) {
+                if (error.code === 'ESRCH') return false;
+                throw error;
             }
-        }, 5000).unref();
-    });
+        };
+
+        if (!signalGroup('SIGTERM')) return;
+        const deadline = Date.now() + 5000;
+        while (Date.now() < deadline) {
+            await delay(100);
+            if (!signalGroup(0)) return;
+        }
+        signalGroup('SIGKILL');
+        return;
+    }
+
+    if (childProcess.exitCode !== null) return;
+    childProcess.kill('SIGTERM');
+    const deadline = Date.now() + 5000;
+    while (childProcess.exitCode === null && Date.now() < deadline) {
+        await delay(100);
+    }
+    if (childProcess.exitCode === null) childProcess.kill('SIGKILL');
+};
 
 const waitForReady = async (childProcess) => {
     const deadline = Date.now() + readyTimeoutMs;
@@ -102,7 +120,7 @@ const waitForReady = async (childProcess) => {
 };
 
 const run = async () => {
-    const startProcess = spawnYarnScript('start:e2e');
+    const startProcess = spawnYarnScript('start:e2e', [], process.platform !== 'win32');
 
     const handleSignal = async (signal) => {
         await terminateProcess(startProcess);
