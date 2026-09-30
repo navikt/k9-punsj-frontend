@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### APM-hendelser sendes uten sesjonssporing (2026-09-30)
+
+- Deaktiverer Faros sesjonssporing fordi personvernfilteret fjerner sesjonsmetadata. Uten dette ble også godkjente hendelser og feil stoppet før sending til Nais APM.
+
 ### Vitest erstatter Jest for enhets- og komponenttester (2026-09-30)
 
 - `yarn test` kjører nå `vitest run` (`vitest@5.0.1`, `jsdom@30.1.1`) med konfigurasjonen i `vite.config.mjs`. Samme 71 testfiler og 484 tester kjøres; CI beholder `--maxWorkers=2`.

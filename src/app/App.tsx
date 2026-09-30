@@ -19,7 +19,7 @@ import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import { getLocaleFromSessionStorage } from './utils';
-import { filterTelemetry, routeTemplate } from './utils/telemetryPrivacy';
+import { apmFaroOptions, filterTelemetry, routeTemplate } from './utils/telemetryPrivacy';
 
 import '@navikt/ds-css';
 import './styles/globals.css';
@@ -56,6 +56,7 @@ const prepare = async () => {
                 environment: window.location.hostname,
                 beforeSend: filterTelemetry,
                 tracing: false,
+                faro: apmFaroOptions,
             });
         }
     }
