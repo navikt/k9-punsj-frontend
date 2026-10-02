@@ -6,31 +6,19 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Deaktiverer Faros sesjonssporing fordi personvernfilteret fjerner sesjonsmetadata. Uten dette ble også godkjente hendelser og feil stoppet før sending til Nais APM.
 
-### Vitest erstatter Jest for enhets- og komponenttester (2026-09-30)
+### Vite og Vitest erstatter Webpack og Jest (2026-09-30)
 
-- `yarn test` kjører nå `vitest run` (`vitest@5.0.1`, `jsdom@30.1.1`) med konfigurasjonen i `vite.config.mjs`. Samme 71 testfiler og 484 tester kjøres; CI beholder `--maxWorkers=2`.
-- Testfilene bruker `vi.*` i stedet for `jest.*`. Delvise mocks av `react-intl` og `react-redux` bruker `vi.importActual`. Fjernet `jest.config.json` og `babel.config.cjs`.
-- Fjernet Jest- og Babel-pakker, `jest-css-modules`, `regenerator-runtime` og `@babel/runtime` som direkte avhengigheter. `@testing-library/jest-dom` beholdes via `@testing-library/jest-dom/vitest`. Dev GCP-sjekkene fra fase 1 gjenstår etter deploy.
-- E2E-skriptet stopper nå hele Yarn/Vite-prosessgruppen etter kjøring, slik at port 8080 ikke blir stående opptatt av en foreldreløs testserver.
-
-### Vite erstatter Webpack for app og Storybook (2026-09-30)
-
-- Bytter app-bygg, lokal dev-server og Storybook fra Webpack til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`). Jest og Babel for Jest er uendret.
-- Produksjonsbygget beholder CDN-navnerommet: hashede JS-filer, uttrukket CSS og sourcemaps ligger i `dist/js`, mens `index.html` og `favicon.png` blir i poden. `nais.js` lastes fortsatt fra appens egen origin, og Vite gir CDN-scripts og CSS `crossorigin` (anonym CORS).
-- Felles build-workflow kontrollerer CDN-referanser i HTML, pod-lokal `nais.js` og sourcemaps før deploy-workflowene laster opp `dist/js`.
-- Lokal dev-server på port 8080 gjenskaper proxy mot `/api/k9-punsj`, `/envVariables`, `/me`, helsesjekker, `/mockServiceWorker.js`, test-PDF og SPA-fallback. Bare `NODE_ENV`, `APP_VERSION` og `MSW_MODE` bygges inn i nettleserbunten.
-- Tillater `https://cdn.nav.no` i `style-src` i CSP, siden CSS nå lastes fra CDN.
-- Fjernet en ugyldig CSS-regel (`::before:not(:first-child)`) i kalenderrutenettet som nettlesere allerede ignorerte, og som stoppet Vite-minifiseringen.
-- Fjernet Webpack-pluginer og -loadere, `mustache-express` og Storybook-Webpack-pakkene. Dev GCP-sjekk av login, API-kall, `nais.js`, Nais APM, CSS og sourcemap-stakker gjenstår etter deploy.
+- Byttet app-bygg, lokal dev-server og Storybook til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`) og enhets- og komponenttester til Vitest (`vitest@5.0.1`, `jsdom@30.1.1`). Fjernet Webpack-, Jest- og Babel-oppsett og tilhørende avhengigheter.
+- Vite legger uttrukket CSS i `dist/js` sammen med JavaScript og sourcemaps. CSP tillater CSS fra CDN, og felles build-workflow kontrollerer CDN-referansene.
+- Lokal dev-server på port 8080 beholder API-proxy, lokale endepunkter og MSW-oppsett for Cypress. E2E-skriptet stopper hele Yarn/Vite-prosessgruppen etter kjøring.
+- `yarn test` kjører Vitest med `vi.*`-mocks og `@testing-library/jest-dom/vitest`; CI beholder `--maxWorkers=2`. Fjernet også en ugyldig CSS-regel som stoppet Vite-minifiseringen.
 
 ### Nais APM og CDN erstatter Sentry-oppsettet (2026-09-28)
 
 - Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
 - La til `@nais/apm@0.7.0-beta.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
-- Produksjonsbygget lager JavaScript med innholdsbaserte filnavn og tilhørende sourcemaps. Begge deploy-workflows laster filene opp til CDN før pod-deploy; HTML og `nais.js` blir i poden.
-- Tillater `https://cdn.nav.no` i CSP for scripts og sourcemap-tilkoblinger. React-feilgrensen bruker SDK-ets grunnleggende API direkte og beholder opprinnelig JS-stakk for sourcemap-oppslag.
-- Laster CDN-scripts med `crossorigin` (anonym CORS), slik at nettleseren kan rapportere detaljerte feil og stakker også for uhåndterte feil.
-- Personvernfilter og offentlige sourcemaps må gjennomgås av teamet. Levering av telemetri og sourcemap-oppslag må verifiseres i Grafana etter deploy.
+- Begge deploy-workflows laster JavaScript med innholdsbaserte filnavn og sourcemaps opp til CDN før pod-deploy; HTML og `nais.js` blir i poden. CSP tillater CDN-scripts og sourcemap-tilkoblinger, og scripts lastes med anonym CORS.
+- React-feilgrensen beholder opprinnelig JS-stakk for sourcemap-oppslag.
 
 ### Weekly package maintenance (2026-09-25)
 
