@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { captureException } from '@nais/apm';
 import { ApiPath } from '../../app/apiConfig';
 import {
@@ -12,11 +13,11 @@ import {
     put,
 } from '../../app/utils/apiUtils';
 
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/browserUtils');
-jest.mock('@nais/apm', () => ({ captureException: jest.fn() }));
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/browserUtils');
+vi.mock('@nais/apm', () => ({ captureException: vi.fn() }));
 
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 describe('apiUrl', () => {
     it('Generates a URL with parameters', () => {
@@ -28,25 +29,25 @@ describe('apiUrl', () => {
 
 describe('get', () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it('reports API failures with status and a route template, without response content', async () => {
         const path = ApiPath.PSB_SOKNAD_GET;
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: false,
             status: 503,
             statusText: 'synthetic-private-message',
             url: `${window.location.origin}${apiUrl(path, { id: 'synthetic-private-id' })}?token=synthetic-token`,
         });
-        const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
         try {
             await get(path, { id: 'synthetic-private-id' });
             expect(captureException).toHaveBeenCalledTimes(1);
             expect(captureException).toHaveBeenCalledWith(expect.objectContaining({ message: 'HTTP 503' }), {
                 context: { method: 'GET', route: path },
             });
-            expect(JSON.stringify((captureException as jest.Mock).mock.calls)).not.toMatch(
+            expect(JSON.stringify((captureException as Mock).mock.calls)).not.toMatch(
                 /synthetic-private|synthetic-token/,
             );
             expect(consoleError).not.toHaveBeenCalled();
@@ -61,9 +62,9 @@ describe('get', () => {
         const url = apiUrl(path, { id });
 
         // Mock the fetch implementation
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
-            json: jest.fn().mockResolvedValue({}),
+            json: vi.fn().mockResolvedValue({}),
         });
 
         await get(path, { id });
@@ -77,13 +78,13 @@ describe('get', () => {
     it('Handles the GET response', async () => {
         const path = ApiPath.PSB_SOKNAD_GET;
         const id = 'abc123';
-        const callback = jest.fn();
+        const callback = vi.fn();
 
         const mockResponseData = JSON.stringify({ key: 'value' });
 
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
-            text: jest.fn().mockResolvedValue(mockResponseData), // Mock response.text()
+            text: vi.fn().mockResolvedValue(mockResponseData), // Mock response.text()
         });
 
         await get(path, { id }, {}, callback);
@@ -98,7 +99,7 @@ describe('get', () => {
 
 describe('post', () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it('Performs a POST request', async () => {
@@ -106,9 +107,9 @@ describe('post', () => {
         const body = { test: 'Lorem ipsum dolor sit amet.' };
         const url = apiUrl(path);
 
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
-            text: jest.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
+            text: vi.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
         });
 
         await post(path, undefined, undefined, body);
@@ -129,11 +130,11 @@ describe('post', () => {
     it('Handles the POST response', async () => {
         const path = ApiPath.PSB_SOKNAD_CREATE;
         const body = { test: 'Lorem ipsum dolor sit amet.' };
-        const callback = jest.fn();
+        const callback = vi.fn();
 
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
-            text: jest.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
+            text: vi.fn().mockResolvedValue(JSON.stringify({ message: 'Hello' })),
         });
 
         await post(path, undefined, undefined, body, callback);
@@ -148,7 +149,7 @@ describe('post', () => {
 
 describe('put', () => {
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it('Performs a PUT request', async () => {
@@ -157,7 +158,7 @@ describe('put', () => {
         const url = apiUrl(path, { id });
         const body = { test: 'Lorem ipsum dolor sit amet.' };
 
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
         });
 
@@ -178,9 +179,9 @@ describe('put', () => {
         const id = 'abc123';
 
         const body = { test: 'Lorem ipsum dolor sit amet.' };
-        const callback = jest.fn();
+        const callback = vi.fn();
 
-        global.fetch = jest.fn().mockResolvedValue({
+        global.fetch = vi.fn().mockResolvedValue({
             ok: true,
         });
 
@@ -205,12 +206,12 @@ describe('convertResponseToError', () => {
             headers: new Headers(),
             body: null,
             bodyUsed: false,
-            clone: jest.fn(),
-            arrayBuffer: jest.fn(),
-            blob: jest.fn(),
-            formData: jest.fn(),
-            json: jest.fn(),
-            text: jest.fn(),
+            clone: vi.fn(),
+            arrayBuffer: vi.fn(),
+            blob: vi.fn(),
+            formData: vi.fn(),
+            json: vi.fn(),
+            text: vi.fn(),
         };
         expect(convertResponseToError(respons)).toEqual({
             url,

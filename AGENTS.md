@@ -6,7 +6,7 @@ These instructions apply to agents working in this repository.
 
 - This repository contains the frontend for `k9-punsj`.
 - Related backend context often lives in the companion repository `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
-- Main stack: React 18, TypeScript, Redux Toolkit, React Query, Yarn 4 and Webpack.
+- Main stack: React 19, TypeScript, Redux Toolkit, React Query, Yarn 4, Vite and Vitest.
 - Use Aksel components, typography and design tokens by default.
 - Keep personal notes, machine specific paths and editor specific workflow outside the repository.
 
@@ -63,7 +63,7 @@ These instructions apply to agents working in this repository.
 
 - Assess whether each code change needs a test or test update.
 - Prefer the smallest reliable test for the changed behavior or regression risk.
-- Use Jest or Testing Library for localized logic and Cypress for end to end behavior.
+- Use Vitest or Testing Library for localized logic and Cypress for end to end behavior.
 - Run the most relevant checks before completion. If local checks cannot be run, state that clearly and explain why.
 - If a non trivial change ships without a new or updated test, call that out explicitly.
 - Summarize changed files and likely impact when handing work back.

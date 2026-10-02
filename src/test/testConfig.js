@@ -1,6 +1,3 @@
-/** Brukes i jest.config.json */
-
-import '@testing-library/jest-dom';
-import 'regenerator-runtime/runtime.js';
+import '@testing-library/jest-dom/vitest';
 
 window.appSettings = { OIDC_AUTH_PROXY: 'undefined', K9_LOS_URL: 'undefined' };

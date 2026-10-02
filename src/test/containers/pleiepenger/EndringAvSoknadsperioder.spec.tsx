@@ -25,11 +25,11 @@ const renderComponent = (trekkKravPerioder: IPeriode[] | undefined, eksisterende
             </Accordion.Item>
             <EndringAvSøknadsperioder
                 isOpen
-                onClick={jest.fn()}
+                onClick={vi.fn()}
                 getErrorMessage={() => undefined}
                 soknad={new PSBSoknad({ ...baseSoknad, trekkKravPerioder })}
-                updateSoknad={jest.fn()}
-                updateSoknadState={jest.fn()}
+                updateSoknad={vi.fn()}
+                updateSoknadState={vi.fn()}
                 eksisterendePerioder={eksisterendePerioder}
             />
         </Accordion>,

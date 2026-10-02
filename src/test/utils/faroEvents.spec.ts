@@ -1,4 +1,5 @@
-import { pushEvent } from '@nais/apm';
+import type { Mock } from 'vitest';
+import { isInitialized, pushEvent } from '@nais/apm';
 import Ytelse from '../../app/models/types/Ytelse';
 import {
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
@@ -48,10 +49,11 @@ import { IOMPUTSoknadKvittering } from '../../app/søknader/omsorgspenger-utbeta
 import { IOLPSoknadKvittering } from '../../app/søknader/opplæringspenger/OLPSoknadKvittering';
 import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-sluttfase/types/IPLSSoknadKvittering';
 
-jest.mock('@nais/apm', () => ({ pushEvent: jest.fn() }));
+vi.mock('@nais/apm', () => ({ isInitialized: vi.fn(), pushEvent: vi.fn() }));
 
 describe('faroEvents', () => {
-    const pushEventMock = pushEvent as jest.Mock;
+    const isInitializedMock = isInitialized as Mock;
+    const pushEventMock = pushEvent as Mock;
     const journalpostId = 'jp-123';
 
     const enableFaro = () => {
@@ -381,6 +383,7 @@ describe('faroEvents', () => {
     };
 
     beforeEach(() => {
+        isInitializedMock.mockReturnValue(true);
         pushEventMock.mockClear();
         delete window.nais;
         window.sessionStorage.clear();
@@ -390,6 +393,14 @@ describe('faroEvents', () => {
         const result = pushFaroEvent('test_event', { source: 'test' });
 
         expect(result).toBeFalsy();
+        expect(pushEventMock).not.toHaveBeenCalled();
+    });
+
+    it('Skal ikke sende event før APM er initialisert', () => {
+        enableFaro();
+        isInitializedMock.mockReturnValue(false);
+
+        expect(pushFaroEvent('test_event', { source: 'test' })).toBeFalsy();
         expect(pushEventMock).not.toHaveBeenCalled();
     });
 

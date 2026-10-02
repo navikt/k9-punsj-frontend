@@ -4,9 +4,9 @@ import React from 'react';
 import PdfVisning from '../../../app/components/pdf/PdfVisning';
 import { renderWithIntl } from '../../testUtils';
 
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
-jest.mock('app/hooks/useQuery', () => () => ({ get: () => '1' }));
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
+vi.mock('app/hooks/useQuery', () => () => ({ get: () => '1' }));
 
 describe('<PdfVisning>', () => {
     it('Henter journalpost og viser dokument', () => {

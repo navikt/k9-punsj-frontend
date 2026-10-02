@@ -39,7 +39,7 @@ describe('LegacyCheckboxGroupFormik', () => {
 
     it('supports custom onChange callback', async () => {
         const user = userEvent.setup();
-        const onChange = jest.fn();
+        const onChange = vi.fn();
 
         render(
             <Formik initialValues={{ typer: [] as string[] }} onSubmit={() => undefined}>

@@ -1,7 +1,7 @@
+import type { Mock } from 'vitest';
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
-import { mocked } from 'jest-mock';
 import { useSelector } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
@@ -9,18 +9,18 @@ import PSBSoknadKvittering from '../../../app/søknader/pleiepenger/containers/S
 import intlHelper from '../../../app/utils/intlUtils';
 import messages from '../../../app/i18n/nb.json';
 
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
+vi.mock('react-intl', async () => ({
+    ...(await vi.importActual('react-intl')),
 }));
 
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux'),
-    useSelector: jest.fn(),
+vi.mock('react-redux', async () => ({
+    ...(await vi.importActual('react-redux')),
+    useSelector: vi.fn(),
 }));
 
-jest.mock('app/utils/browserUtils');
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
+vi.mock('app/utils/browserUtils');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
 
 const fullResponse: IPSBSoknadKvittering = {
     journalposter: [
@@ -197,7 +197,7 @@ const minimalResponse: IPSBSoknadKvittering = {
 
 describe('SoknadKvittering', () => {
     beforeAll(() => {
-        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+        (useSelector as unknown as Mock).mockImplementation((callback) =>
             callback({
                 identState: {
                     annenSokerIdent: '12345678901', // mock the annenSokerIdent value
@@ -206,11 +206,11 @@ describe('SoknadKvittering', () => {
             }),
         );
 
-        mocked(intlHelper).mockImplementation((intl, id) => id);
+        vi.mocked(intlHelper).mockImplementation((intl, id) => id);
     });
 
     const setupSoknadKvittering = (response: IPSBSoknadKvittering) => {
-        mocked(intlHelper).mockImplementation((intl, id) => id);
+        vi.mocked(intlHelper).mockImplementation((intl, id) => id);
         return render(
             <IntlProvider locale="en" messages={messages}>
                 <PSBSoknadKvittering innsendtSøknad={response} />

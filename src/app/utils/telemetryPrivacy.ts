@@ -126,6 +126,9 @@ const safeMeta = (): TransportItem['meta'] => ({
     page: { url: window.location.origin + '/' },
 });
 
+// Personvernfilteret fjerner sesjonsmetadata; Faros sesjonsfilter ville ellers forkastet alle signaler.
+export const apmFaroOptions = { sessionTracking: { enabled: false } } as const;
+
 export const filterTelemetry: BeforeSendHook = (item) => {
     if (!item.payload || typeof item.payload !== 'object') {
         return null;

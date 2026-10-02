@@ -16,7 +16,7 @@ const BrokenComponent = (): React.ReactNode => {
 class TestTransport extends BaseTransport {
     readonly name = 'test';
     readonly version = '1';
-    send = jest.fn();
+    send = vi.fn();
 }
 
 it('sender én renderfeil med CDN-stakk gjennom SDK og personvernfilter, og viser reservevisningen', () => {
@@ -33,7 +33,7 @@ it('sender én renderfeil med CDN-stakk gjennom SDK og personvernfilter, og vise
         },
         faro: { url: undefined, instrumentations: [], transports: [transport] },
     });
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     try {
         render(
             <SourceMappedErrorBoundary fallback={<div role="alert">Journalpost error</div>}>

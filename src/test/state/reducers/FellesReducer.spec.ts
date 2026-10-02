@@ -1,21 +1,21 @@
-const mockGet = jest.fn();
+const mockGet = vi.fn();
 
-jest.mock('app/utils', () => ({
+vi.mock('app/utils', () => ({
     get: (...args: unknown[]) => mockGet(...args),
-    post: jest.fn(),
-    put: jest.fn(),
-    convertResponseToError: jest.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    convertResponseToError: vi.fn(),
 }));
 
 import FellesReducer, { getJournalpost, getJournalpostLoadAction } from 'app/state/reducers/FellesReducer';
 
 describe('FellesReducer.getJournalpost', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it('dispatches request error when get rejects on network failure', async () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         mockGet.mockRejectedValue(new TypeError('Failed to fetch'));
 
