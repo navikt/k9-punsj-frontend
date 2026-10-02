@@ -43,6 +43,7 @@ const spawnYarnScript = (scriptName, args = [], detached = false) => {
             stdio: 'inherit',
             env: process.env,
             detached,
+            shell: process.platform === 'win32',
         });
     }
 
@@ -56,6 +57,7 @@ const spawnYarnScript = (scriptName, args = [], detached = false) => {
         stdio: 'inherit',
         env: process.env,
         detached,
+        shell: process.platform === 'win32',
     });
 };
 
@@ -85,12 +87,15 @@ const terminateProcess = async (childProcess) => {
     }
 
     if (childProcess.exitCode !== null) return;
-    childProcess.kill('SIGTERM');
-    const deadline = Date.now() + 5000;
-    while (childProcess.exitCode === null && Date.now() < deadline) {
-        await delay(100);
-    }
-    if (childProcess.exitCode === null) childProcess.kill('SIGKILL');
+    // Windows-signaler stopper bare yarn.cmd; taskkill tar også Vite-prosessen.
+    await new Promise((resolve, reject) => {
+        const killer = spawn('taskkill.exe', ['/PID', String(childProcess.pid), '/T', '/F'], { stdio: 'ignore' });
+        killer.once('error', reject);
+        killer.once('exit', (code) => {
+            if (code === 0 || childProcess.exitCode !== null) resolve();
+            else reject(new Error(`Failed to stop Vite process tree (taskkill exit code ${code})`));
+        });
+    });
 };
 
 const waitForReady = async (childProcess) => {

@@ -22,13 +22,18 @@ const sendFile = async (res, filePath, headers) => {
     res.end(content);
 };
 
-// Erstatter Express-middleware fra den gamle webpack-dev-serveren; produksjonsserveren i server/ er uendret.
 export const localServer = () => ({
     name: 'k9-punsj:local-server',
     apply: 'serve',
     transformIndexHtml() {
         // Statisk modulscript holder load-hendelsen tilbake, slik at Cypress finner window.msw etter cy.visit
-        return [{ tag: 'script', attrs: { type: 'module', src: `/@fs${mswBrowserPath}` }, injectTo: 'body' }];
+        return [
+            {
+                tag: 'script',
+                attrs: { type: 'module', src: `/@fs/${mswBrowserPath.replaceAll('\\', '/')}` },
+                injectTo: 'body',
+            },
+        ];
     },
     configureServer(server) {
         const mockPdfBytes = createMockPdfBytes();
