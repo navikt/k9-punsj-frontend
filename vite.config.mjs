@@ -18,7 +18,6 @@ export default defineConfig(({ command, mode }) => {
         root: appDir,
         base: isBuild ? CDN_BASE : '/',
         publicDir: false,
-        envDir: rootDir,
         plugins: [react(), podAssets(), localServer()],
         resolve: {
             alias: { app: appDir },
@@ -54,7 +53,6 @@ export default defineConfig(({ command, mode }) => {
             emptyOutDir: true,
             assetsDir: 'js',
             sourcemap: true,
-            chunkSizeWarningLimit: 2000,
             rolldownOptions: {
                 output: {
                     entryFileNames: 'js/[name].[hash].js',
