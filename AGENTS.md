@@ -6,7 +6,7 @@ These instructions apply to agents working in this repository.
 
 - This repository contains the frontend for `k9-punsj`.
 - Related backend context often lives in the companion repository `navikt/k9-punsj`: `https://github.com/navikt/k9-punsj`.
-- Main stack: React 18, TypeScript, Redux Toolkit, React Query, Yarn 4 and Webpack.
+- Main stack: React 19, TypeScript, Redux Toolkit, React Query, Yarn 4, Vite and Vitest.
 - Use Aksel components, typography and design tokens by default.
 - Keep personal notes, machine specific paths and editor specific workflow outside the repository.
 
