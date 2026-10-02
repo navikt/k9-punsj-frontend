@@ -16,7 +16,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### Vite erstatter Webpack for app og Storybook (2026-09-30)
 
 - Bytter app-bygg, lokal dev-server og Storybook fra Webpack til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`). Jest og Babel for Jest er uendret.
-- Produksjonsbygget beholder CDN-navnerommet: hashede JS-filer, uttrukket CSS og sourcemaps ligger i `dist/js`, mens `index.html` og `favicon.png` blir i poden. `nais.js` lastes fortsatt fra appens egen origin, og CDN-scripts og CSS har `crossorigin="anonymous"`.
+- Produksjonsbygget beholder CDN-navnerommet: hashede JS-filer, uttrukket CSS og sourcemaps ligger i `dist/js`, mens `index.html` og `favicon.png` blir i poden. `nais.js` lastes fortsatt fra appens egen origin, og Vite gir CDN-scripts og CSS `crossorigin` (anonym CORS).
 - Felles build-workflow kontrollerer CDN-referanser i HTML, pod-lokal `nais.js` og sourcemaps før deploy-workflowene laster opp `dist/js`.
 - Lokal dev-server på port 8080 gjenskaper proxy mot `/api/k9-punsj`, `/envVariables`, `/me`, helsesjekker, `/mockServiceWorker.js`, test-PDF og SPA-fallback. Bare `NODE_ENV`, `APP_VERSION` og `MSW_MODE` bygges inn i nettleserbunten.
 - Tillater `https://cdn.nav.no` i `style-src` i CSP, siden CSS nå lastes fra CDN.
@@ -29,7 +29,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til `@nais/apm@0.7.0-beta.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
 - Produksjonsbygget lager JavaScript med innholdsbaserte filnavn og tilhørende sourcemaps. Begge deploy-workflows laster filene opp til CDN før pod-deploy; HTML og `nais.js` blir i poden.
 - Tillater `https://cdn.nav.no` i CSP for scripts og sourcemap-tilkoblinger. React-feilgrensen bruker SDK-ets grunnleggende API direkte og beholder opprinnelig JS-stakk for sourcemap-oppslag.
-- Laster CDN-scripts med `crossorigin="anonymous"`, slik at nettleseren kan rapportere detaljerte feil og stakker også for uhåndterte feil.
+- Laster CDN-scripts med `crossorigin` (anonym CORS), slik at nettleseren kan rapportere detaljerte feil og stakker også for uhåndterte feil.
 - Personvernfilter og offentlige sourcemaps må gjennomgås av teamet. Levering av telemetri og sourcemap-oppslag må verifiseres i Grafana etter deploy.
 
 ### Weekly package maintenance (2026-09-25)

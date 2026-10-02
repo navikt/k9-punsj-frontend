@@ -13,11 +13,4 @@ export const podAssets = () => ({
     generateBundle() {
         this.emitFile({ type: 'asset', fileName: 'favicon.png', source: readFileSync(faviconPath) });
     },
-    transformIndexHtml: {
-        order: 'post',
-        handler(html) {
-            // Eksplisitt anonym CORS slik at nettleseren gir full feilinfo for CDN-scripts
-            return html.replace(/\scrossorigin(?=[\s>])/g, ' crossorigin="anonymous"');
-        },
-    },
 });
