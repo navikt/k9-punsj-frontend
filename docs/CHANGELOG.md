@@ -17,7 +17,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Bytter app-bygg, lokal dev-server og Storybook fra Webpack til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`). Jest og Babel for Jest er uendret.
 - Produksjonsbygget beholder CDN-navnerommet: hashede JS-filer, uttrukket CSS og sourcemaps ligger i `dist/js`, mens `index.html` og `favicon.png` blir i poden. `nais.js` lastes fortsatt fra appens egen origin, og CDN-scripts og CSS har `crossorigin="anonymous"`.
-- Ny `yarn build:check` (kjøres av `yarn build`) kontrollerer at HTML kun refererer til filer som finnes i `dist/js`, at sourcemaps finnes, og at begge deploy-workflows laster opp `dist/js` til CDN.
+- Felles build-workflow kontrollerer CDN-referanser i HTML, pod-lokal `nais.js` og sourcemaps før deploy-workflowene laster opp `dist/js`.
 - Lokal dev-server på port 8080 gjenskaper proxy mot `/api/k9-punsj`, `/envVariables`, `/me`, helsesjekker, `/mockServiceWorker.js`, test-PDF og SPA-fallback. Bare `NODE_ENV`, `APP_VERSION` og `MSW_MODE` bygges inn i nettleserbunten.
 - Tillater `https://cdn.nav.no` i `style-src` i CSP, siden CSS nå lastes fra CDN.
 - Fjernet en ugyldig CSS-regel (`::before:not(:first-child)`) i kalenderrutenettet som nettlesere allerede ignorerte, og som stoppet Vite-minifiseringen.

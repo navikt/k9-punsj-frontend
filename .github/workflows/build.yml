@@ -32,6 +32,13 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Bygge kode
               run: yarn build
+            - name: Verifisere CDN-bygg
+              run: |
+                  test -f dist/index.html
+                  grep -Fq 'src="https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/' dist/index.html
+                  grep -Fq 'href="https://cdn.nav.no/k9saksbehandling/k9-punsj-frontend/dist/js/' dist/index.html
+                  grep -Fq "'/dist/js/nais.js'" dist/index.html
+                  test -n "$(find dist/js -maxdepth 1 -name '*.js.map' -print -quit)"
             - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: dist
