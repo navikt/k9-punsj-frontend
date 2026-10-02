@@ -27,10 +27,11 @@ export const localServer = () => ({
     apply: 'serve',
     transformIndexHtml() {
         // Statisk modulscript holder load-hendelsen tilbake, slik at Cypress finner window.msw etter cy.visit
+        // Bruk samme /@fs-URL som appimporten, ellers får Cypress en annen MSW-instans.
         return [
             {
                 tag: 'script',
-                attrs: { type: 'module', src: `/@fs/${mswBrowserPath.replaceAll('\\', '/')}` },
+                attrs: { type: 'module', src: `/@fs/${mswBrowserPath.replaceAll('\\', '/').replace(/^\//, '')}` },
                 injectTo: 'body',
             },
         ];
