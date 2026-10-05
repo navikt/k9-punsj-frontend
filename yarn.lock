@@ -3759,9 +3759,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.16.2":
-  version: 8.16.2
-  resolution: "@navikt/aksel@npm:8.16.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.16.2%2F7c8ea024799a5c86be278954185e045e4451e230"
+"@navikt/aksel@npm:8.17.2":
+  version: 8.17.2
+  resolution: "@navikt/aksel@npm:8.17.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.17.2%2Fd47e6fd2ef6087b56b1b0bd443dae97528c10dc9"
   dependencies:
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
@@ -3775,7 +3775,7 @@ __metadata:
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/e339a49af22d7aefbe6ef3de43dd9011ddbe4993ca3f2cf3d4202dd15ea457391e389b9655c117e0c0caa33c6b77f75b0db0d91fca9c63e2187940357cd1a9f8
+  checksum: 10/0b3b64eba27eb8c33d0196aca4f72861e76eb4e7ac67dfdd719e2c0a71f4dfee518d5128ca3b72f4538d0d6584eb4c4b5938b0c08b1765cffe42e533349274f0
   languageName: node
   linkType: hard
 
@@ -12921,7 +12921,7 @@ __metadata:
     "@jest/globals": "npm:30.5.1"
     "@k9-punsj-frontend/server": "workspace:"
     "@nais/apm": "npm:0.7.0-beta.3"
-    "@navikt/aksel": "npm:8.16.2"
+    "@navikt/aksel": "npm:8.17.2"
     "@navikt/aksel-icons": "npm:8.16.2"
     "@navikt/ds-css": "npm:8.16.2"
     "@navikt/ds-react": "npm:8.16.2"
