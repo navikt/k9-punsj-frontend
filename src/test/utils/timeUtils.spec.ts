@@ -6,8 +6,8 @@ import {
     minutesFromString,
 } from '../../app/utils/timeUtils';
 
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/apiUtils');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/apiUtils');
 
 describe('durationToString', () => {
     it('Skal konvertere timer og minutter til ISO 8601-format', () => {

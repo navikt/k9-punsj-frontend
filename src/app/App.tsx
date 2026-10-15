@@ -1,11 +1,11 @@
-import { init, pushEvent } from '@nais/apm';
+import { init, isInitialized, pushEvent } from '@nais/apm';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
-import logger from 'redux-logger';
+import { logger } from 'redux-logger';
 import AuthCallback from './auth/AuthCallback';
 import ApplicationWrapper from './components/application-wrapper/ApplicationWrapper';
 import { SourceMappedErrorBoundary } from './components/SourceMappedErrorBoundary';
@@ -19,7 +19,7 @@ import OpprettJournalpost from './opprett-journalpost/OpprettJournalpost';
 import SendBrevIAvsluttetSak from './send-brev-i-avsluttetSak/SendBrevIAvsluttetSak';
 import { rootReducer } from './state/RootState';
 import { getLocaleFromSessionStorage } from './utils';
-import { filterTelemetry, routeTemplate } from './utils/telemetryPrivacy';
+import { apmFaroOptions, filterTelemetry, routeTemplate } from './utils/telemetryPrivacy';
 
 import '@navikt/ds-css';
 import './styles/globals.css';
@@ -28,7 +28,7 @@ const RouteTelemetry = () => {
     const { pathname } = useLocation();
     React.useEffect(() => {
         const route = routeTemplate(pathname);
-        if (route && window.nais?.telemetryCollectorURL) {
+        if (route && window.nais?.telemetryCollectorURL && isInitialized()) {
             pushEvent('punsj_route_change', { route });
         }
     }, [pathname]);
@@ -56,6 +56,7 @@ const prepare = async () => {
                 environment: window.location.hostname,
                 beforeSend: filterTelemetry,
                 tracing: false,
+                faro: apmFaroOptions,
             });
         }
     }

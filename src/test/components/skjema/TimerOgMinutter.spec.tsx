@@ -3,9 +3,9 @@ import { render, fireEvent } from '@testing-library/react';
 import TimerOgMinutter from '../../../app/components/timefoering/TimerOgMinutter';
 
 describe('TimerOgMinutter', () => {
-    const mockOnChangeTimer = jest.fn();
-    const mockOnChangeMinutter = jest.fn();
-    const mockOnBlur = jest.fn();
+    const mockOnChangeTimer = vi.fn();
+    const mockOnChangeMinutter = vi.fn();
+    const mockOnBlur = vi.fn();
 
     it('renders without crashing', () => {
         render(

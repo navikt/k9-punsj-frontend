@@ -45,7 +45,7 @@ async function startApp() {
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
                         'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
                         'img-src': ["'self'", 'data:', 'blob:'],
-                        'style-src': ["'self'", "'unsafe-inline'"],
+                        'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
                         'frame-src': ["'self'"],
                         'child-src': ["'self'"],
                         'media-src': ["'none'"],

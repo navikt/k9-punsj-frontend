@@ -112,7 +112,7 @@ describe('PunsjDialog', () => {
 
     it('allows PDF pointer interaction while the reference date popover is open', async () => {
         const user = userEvent.setup();
-        const onPdfTabClick = jest.fn();
+        const onPdfTabClick = vi.fn();
         renderReferenceDialogWithPdfControl(onPdfTabClick);
 
         const pdfTab = screen.getByRole('button', { name: 'PDF-fane', hidden: true });
@@ -129,8 +129,8 @@ describe('PunsjDialog', () => {
 
     it('selects a date and closes the reference date popover', async () => {
         const user = userEvent.setup();
-        const onDateChange = jest.fn();
-        renderReferenceDialogWithPdfControl(jest.fn(), onDateChange);
+        const onDateChange = vi.fn();
+        renderReferenceDialogWithPdfControl(vi.fn(), onDateChange);
 
         const datePickerButton = document.querySelector('.aksel-date__field-button') as HTMLButtonElement;
         await user.click(datePickerButton);
@@ -142,7 +142,7 @@ describe('PunsjDialog', () => {
 
     it('renders the left-panel overlay while keeping PDF controls interactive in reference mode', async () => {
         const user = userEvent.setup();
-        const onPdfTabClick = jest.fn();
+        const onPdfTabClick = vi.fn();
         const rootElement = renderReferenceDialogWithPdfControl(onPdfTabClick);
 
         const overlay = rootElement.querySelector('.journalpost-reference-overlay') as HTMLDivElement;
