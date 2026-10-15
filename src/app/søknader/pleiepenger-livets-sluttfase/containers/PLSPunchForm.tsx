@@ -115,7 +115,6 @@ export interface IPunchPLSFormComponentState {
     aapnePaneler: PunchFormPaneler[];
     showSettPaaVentModal: boolean;
     visErDuSikkerModal: boolean;
-    feilmeldingStier: Set<string>;
     harForsoektAaSendeInn: boolean;
 }
 
@@ -144,6 +143,8 @@ function withIntl<P extends IntlProps>(Component: ComponentType<P>) {
 }
 
 export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPunchPLSFormComponentState> {
+    private feilmeldingStier = new Set<string>();
+
     private initialPeriode: IPeriode = { fom: '', tom: '' };
 
     private initialArbeidstaker = new Arbeidstaker({
@@ -197,7 +198,6 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             aapnePaneler: [],
             showSettPaaVentModal: false,
             visErDuSikkerModal: false,
-            feilmeldingStier: new Set(),
             harForsoektAaSendeInn: false,
         };
     }
@@ -610,7 +610,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             const felter = m.felt?.split('.') || [];
             for (let index = felter.length - 1; index >= -1; index--) {
                 const felt = felter.slice(0, index + 1).join('.');
-                const andreFeilmeldingStier = new Set(this.state.feilmeldingStier);
+                const andreFeilmeldingStier = new Set(this.feilmeldingStier);
                 andreFeilmeldingStier.delete(attribute);
                 if (attribute === felt) {
                     return true;
@@ -634,9 +634,7 @@ export class PunchFormComponent extends React.Component<IPunchPLSFormProps, IPun
             const naa = new Date();
             return naa < new Date(dato);
         };
-        if (!this.state.feilmeldingStier.has(attribute)) {
-            this.setState((prevState) => ({ feilmeldingStier: prevState.feilmeldingStier.add(attribute) }));
-        }
+        this.feilmeldingStier.add(attribute);
 
         if (attribute === 'mottattDato' && (mottattDato === null || mottattDato === '')) {
             return intlHelper(this.props.intl, 'skjema.feil.ikketom');
