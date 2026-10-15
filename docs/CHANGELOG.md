@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Feilvisning uten state-oppdatering under rendering i PLS (2026-10-15)
+
+- Flyttet registrering av feilstier ut av React-state, slik at feltvalidering i PLS ikke utløser en state-oppdatering under rendering. Beholdt rutingen av feltfeil og uhåndterte feil.
+
 ### Nais APM og CDN erstatter Sentry-oppsettet (2026-09-28)
 
 - Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
