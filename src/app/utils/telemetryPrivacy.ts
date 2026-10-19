@@ -20,7 +20,7 @@ import {
     PUNSJ_SUBMIT_COMPLETED_EVENT,
     PUNSJ_SUBMIT_FIELD_GROUP_EVENT,
     PUNSJ_SUBMIT_SNAPSHOT_EVENT,
-} from './faroEvents';
+} from './apmEvents';
 import { ROUTES } from 'app/constants/routes';
 
 const CDN_BUNDLE_PATH = /^\/k9saksbehandling\/k9-punsj-frontend\/dist\/js\/[a-zA-Z0-9_.-]+\.js$/;

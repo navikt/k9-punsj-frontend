@@ -8,7 +8,7 @@ import { faviconPath } from './pod-assets.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const mockServiceWorkerPath = path.resolve(__dirname, '../../mocks/mockServiceWorker.js');
 const mswBrowserPath = path.resolve(__dirname, '../../mocks/browser.ts');
-const faroConfigPath = path.resolve(__dirname, '../webpack/faroConfig.js');
+const naisConfigPath = path.resolve(__dirname, '../naisConfig.js');
 const mockPdfPath = /^\/api\/k9-punsj\/journalpost\/[^/]+\/dokument\/[^/]+\/?$/;
 
 const sendJson = (res, body) => {
@@ -63,7 +63,7 @@ export const localServer = () => ({
                         });
                         return;
                     case '/dist/js/nais.js':
-                        await sendFile(res, faroConfigPath, { 'content-type': 'application/javascript' });
+                        await sendFile(res, naisConfigPath, { 'content-type': 'application/javascript' });
                         return;
                     case '/dist/favicon.png':
                         await sendFile(res, faviconPath, { 'content-type': 'image/png' });

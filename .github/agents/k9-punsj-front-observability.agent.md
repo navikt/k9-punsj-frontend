@@ -62,7 +62,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 - `src/app/App.tsx` initializes Nais APM once when `window.nais` contains app and telemetry collector config, using `filterTelemetry` as the outgoing privacy gate.
 - `src/app/App.tsx` and the journalpost router use `SourceMappedErrorBoundary` for render errors.
 - `src/app/index.html` dynamically loads `/dist/js/nais.js` to populate `window.nais`.
-- `src/build/webpack/faroConfig.js` provides local Faro config for development.
+- `src/build/naisConfig.js` provides local Nais config for development.
 - `server/src/log.js` uses JSON logging through `winston` and request logging through `morgan`.
 - `nais/dev-gcp.yml` enables `observability.autoInstrumentation` for `nodejs` and sends logs to `loki` and `elastic`.
 - `nais/prod-gcp.yml` configures logging destinations for production.
@@ -129,7 +129,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 ## Validation before completion
 
 - Run the most relevant checks for the touched area when possible.
-- When observability code changes, inspect `src/app/App.tsx`, `src/app/index.html`, `src/build/webpack/faroConfig.js`, `server/src/log.js`, relevant `nais/**` files, and deploy workflows together.
+- When observability code changes, inspect `src/app/App.tsx`, `src/app/index.html`, `src/build/naisConfig.js`, `server/src/log.js`, relevant `nais/**` files, and deploy workflows together.
 - If checks are not run, say that clearly and explain why.
 - Summarize user visible impact, telemetry impact, and risk of missing diagnostics or leaking sensitive data.
 - If no observability issue is found, say that explicitly and mention any remaining runtime blind spots.
@@ -138,7 +138,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 - `src/app/App.tsx`
 - `src/app/index.html`
-- `src/build/webpack/faroConfig.js`
+- `src/build/naisConfig.js`
 - `server/src/log.js`
 - `nais/dev-gcp.yml`
 - `nais/prod-gcp.yml`

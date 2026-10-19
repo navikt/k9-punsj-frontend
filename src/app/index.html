@@ -5,11 +5,11 @@
         <link rel="icon" type="image/png" href="/dist/favicon.png" />
         <script>
             // nais.js må lastes fra appens egen origin, ikke fra CDN-bunten, derfor et vanlig inline-script.
-            // https://docs.nais.io/explanation/observability/frontend/?h=faro#tracing-opentelemetry
+            // https://docs.nais.io/observability/frontend/
             window.__naisReady = import(/* @vite-ignore */ '/dist/js/nais.js')
                 .then((naisModule) => {
-                    const faroConfig = naisModule.default;
-                    window.nais = faroConfig;
+                    const naisConfig = naisModule.default;
+                    window.nais = naisConfig;
                 })
                 .catch((error) => {
                     console.error('Failed to load nais.js:', error);

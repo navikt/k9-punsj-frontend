@@ -3,7 +3,7 @@ import {
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
     trackPsbStartedFromJournalpost,
-} from '../../app/utils/faroEvents';
+} from '../../app/utils/apmEvents';
 import { apmFaroOptions, filterTelemetry } from '../../app/utils/telemetryPrivacy';
 
 it('sender tillatte rute- og journalposthendelser uten sesjonsmetadata eller journalpost-ID', async () => {

@@ -13,7 +13,7 @@ import { finnVisningsnavnForSakstype, post } from 'app/utils';
 import { IOpprettJournalpostForm, IOpprettJournalpostResponse, OpprettJournalpostFormKeys } from './types';
 import { getTypedFormComponents } from 'app/components/form/getTypedFormComponents';
 import { useValidationRules } from './useValidationRules';
-import { setManualJournalpostFlowSource, trackManualJournalpostFlowStarted } from 'app/utils/faroEvents';
+import { setManualJournalpostFlowSource, trackManualJournalpostFlowStarted } from 'app/utils/apmEvents';
 import { RootStateType } from 'app/state/RootState';
 
 import './opprettJournalpost.css';

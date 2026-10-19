@@ -23,7 +23,7 @@ import {
     getPlsSubmittedFieldGroups,
     getPsbSubmittedFieldGroups,
     getPunsjSourceForJournalpost,
-    pushFaroEvent,
+    pushApmEvent,
     setManualJournalpostFlowSource,
     trackManualJournalpostFlowStarted,
     trackOlpStartedFromJournalpost,
@@ -40,7 +40,7 @@ import {
     trackPlsSubmitFromJournalpost,
     trackPsbStartedFromJournalpost,
     trackPsbSubmitFromJournalpost,
-} from '../../app/utils/faroEvents';
+} from '../../app/utils/apmEvents';
 import { IPSBSoknadKvittering } from '../../app/models/types/PSBSoknadKvittering';
 import { IOMPKSSoknadKvittering } from '../../app/søknader/omsorgspenger-kronisk-sykt-barn/types/OMPKSSoknadKvittering';
 import { IOMPAOSoknadKvittering } from '../../app/søknader/omsorgspenger-alene-om-omsorgen/types/OMPAOSoknadKvittering';
@@ -51,12 +51,12 @@ import { IPLSSoknadKvittering } from '../../app/søknader/pleiepenger-livets-slu
 
 vi.mock('@nais/apm', () => ({ isInitialized: vi.fn(), pushEvent: vi.fn() }));
 
-describe('faroEvents', () => {
+describe('apmEvents', () => {
     const isInitializedMock = isInitialized as Mock;
     const pushEventMock = pushEvent as Mock;
     const journalpostId = 'jp-123';
 
-    const enableFaro = () => {
+    const enableApm = () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
             app: { name: 'k9-punsj-frontend', version: 'test' },
@@ -390,17 +390,17 @@ describe('faroEvents', () => {
     });
 
     it('Skal ikke sende event når collector url ikke er tilgjengelig', () => {
-        const result = pushFaroEvent('test_event', { source: 'test' });
+        const result = pushApmEvent('test_event', { source: 'test' });
 
         expect(result).toBeFalsy();
         expect(pushEventMock).not.toHaveBeenCalled();
     });
 
     it('Skal ikke sende event før APM er initialisert', () => {
-        enableFaro();
+        enableApm();
         isInitializedMock.mockReturnValue(false);
 
-        expect(pushFaroEvent('test_event', { source: 'test' })).toBeFalsy();
+        expect(pushApmEvent('test_event', { source: 'test' })).toBeFalsy();
         expect(pushEventMock).not.toHaveBeenCalled();
     });
 
@@ -410,13 +410,13 @@ describe('faroEvents', () => {
             app: { name: 'k9-punsj-frontend', version: 'test' },
         };
 
-        const result = pushFaroEvent('test_event', { source: 'test' });
+        const result = pushApmEvent('test_event', { source: 'test' });
 
         expect(result).toBeTruthy();
         expect(pushEventMock).toHaveBeenCalledWith('test_event', { source: 'test' });
     });
 
-    it('Skal sende custom Faro-event for manuelt opprettet journalpost med trygge attributter', () => {
+    it('Skal sende custom Nais APM-event for manuelt opprettet journalpost med trygge attributter', () => {
         window.nais = {
             telemetryCollectorURL: 'https://collector.example/collect',
             app: { name: 'k9-punsj-frontend', version: 'test' },
@@ -624,7 +624,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende PSB submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
 
@@ -685,7 +685,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende PLS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
 
@@ -746,7 +746,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende OMPKS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
 
@@ -807,7 +807,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende OMPMA submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
 
@@ -868,7 +868,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende OLP submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
 
@@ -929,7 +929,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende OMPUT submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
 
@@ -990,7 +990,7 @@ describe('faroEvents', () => {
     });
 
     it('Skal sende OMPAO submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableFaro();
+        enableApm();
 
         const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
 
