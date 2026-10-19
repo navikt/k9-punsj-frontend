@@ -44,7 +44,7 @@ async function startApp() {
                         'connect-src': ["'self'", process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL, 'https://cdn.nav.no'],
                         'font-src': ["'self'", 'https://cdn.nav.no', 'data:'],
                         'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
-                        'img-src': ["'self'", 'data:', 'blob:'],
+                        'img-src': ["'self'", 'https://cdn.nav.no', 'data:', 'blob:'],
                         'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.nav.no'],
                         'frame-src': ["'self'"],
                         'child-src': ["'self'"],

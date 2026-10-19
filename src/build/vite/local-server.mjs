@@ -3,7 +3,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { envVariables } from '@k9-punsj-frontend/server/envVariables.js';
 import { createMockPdfBytes } from '../../mocks/mockPdf.js';
-import { faviconPath } from './pod-assets.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const mockServiceWorkerPath = path.resolve(__dirname, '../../mocks/mockServiceWorker.js');
@@ -64,9 +63,6 @@ export const localServer = () => ({
                         return;
                     case '/dist/js/nais.js':
                         await sendFile(res, naisConfigPath, { 'content-type': 'application/javascript' });
-                        return;
-                    case '/dist/favicon.png':
-                        await sendFile(res, faviconPath, { 'content-type': 'image/png' });
                         return;
                     default:
                         break;

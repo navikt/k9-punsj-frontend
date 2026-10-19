@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { localServer } from './src/build/vite/local-server.mjs';
-import { podAssets } from './src/build/vite/pod-assets.mjs';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const appDir = path.resolve(rootDir, 'src/app');
@@ -18,7 +17,7 @@ export default defineConfig(({ command, mode }) => {
         root: appDir,
         base: isBuild ? CDN_BASE : '/',
         publicDir: false,
-        plugins: [react(), podAssets(), localServer()],
+        plugins: [react(), localServer()],
         resolve: {
             alias: { app: appDir },
         },
