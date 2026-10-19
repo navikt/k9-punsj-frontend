@@ -10,7 +10,6 @@ it('sender tillatte rute- og journalposthendelser uten sesjonsmetadata eller jou
     const collector = 'https://collector.example/collect';
     const fetchMock = vi.fn().mockResolvedValue({ status: 202, ok: true, headers: new Headers() });
     vi.stubGlobal('fetch', fetchMock);
-    window.nais = { app: { name: 'k9-punsj-frontend', version: 'test' }, telemetryCollectorURL: collector };
 
     const faro = init({
         app: 'k9-punsj-frontend',

@@ -28,37 +28,24 @@ const RouteTelemetry = () => {
     const { pathname } = useLocation();
     React.useEffect(() => {
         const route = routeTemplate(pathname);
-        if (route && window.nais?.telemetryCollectorURL && isInitialized()) {
+        if (route && isInitialized()) {
             pushEvent('punsj_route_change', { route });
         }
     }, [pathname]);
     return null;
 };
 
-const waitForNaisConfig = async (): Promise<void> => {
-    const naisReady = window.__naisReady;
-
-    if (naisReady) {
-        await naisReady;
-    }
-};
-
 const prepare = async () => {
     if (window.location.hostname.includes('nav.no')) {
-        await waitForNaisConfig();
-
-        if (window.nais?.app?.name && window.nais?.telemetryCollectorURL) {
-            init({
-                app: window.nais.app.name,
-                namespace: 'k9saksbehandling',
-                telemetryUrl: window.nais.telemetryCollectorURL,
-                version: process.env.APP_VERSION || window.nais.app.version || 'unknown',
-                environment: window.location.hostname,
-                beforeSend: filterTelemetry,
-                tracing: false,
-                faro: apmFaroOptions,
-            });
-        }
+        init({
+            app: 'k9-punsj-frontend',
+            namespace: 'k9saksbehandling',
+            version: process.env.APP_VERSION || 'unknown',
+            environment: window.location.hostname,
+            beforeSend: filterTelemetry,
+            tracing: false,
+            faro: apmFaroOptions,
+        });
     }
 
     if (process.env.NODE_ENV !== 'production') {

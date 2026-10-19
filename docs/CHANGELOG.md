@@ -2,16 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### APM-hendelser sendes uten sesjonssporing (2026-09-30)
-
-- Deaktiverer Faros sesjonssporing fordi personvernfilteret fjerner sesjonsmetadata. Uten dette ble også godkjente hendelser og feil stoppet før sending til Nais APM.
-
-### Vite og Vitest erstatter Webpack og Jest (2026-09-30)
+### Vite og Vitest erstatter Webpack og Jest (2026-10-19)
 
 - Byttet app-bygg, lokal dev-server og Storybook til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`) og enhets- og komponenttester til Vitest (`vitest@5.0.1`, `jsdom@30.1.1`). Fjernet Webpack-, Jest- og Babel-oppsett og tilhørende avhengigheter.
-- Vite legger uttrukket CSS i `dist/js` sammen med JavaScript og sourcemaps. CSP tillater CSS fra CDN, og felles build-workflow kontrollerer CDN-referansene.
+- Vite-bygget er tilpasset det eksisterende CDN-oppsettet: JavaScript, uttrukket CSS og sourcemaps legges i `dist/js`. CSP tillater CSS fra CDN.
 - Lokal dev-server på port 8080 beholder API-proxy, lokale endepunkter og MSW-oppsett for Cypress. E2E-skriptet stopper hele Yarn/Vite-prosessgruppen etter kjøring.
 - `yarn test` kjører Vitest med `vi.*`-mocks og `@testing-library/jest-dom/vitest`; CI beholder `--maxWorkers=2`. Fjernet også en ugyldig CSS-regel som stoppet Vite-minifiseringen.
+- Nais APM initialiseres direkte uten `nais.js`. SDK-et velger kollektor ut fra appens adresse, og CSP tillater dev- og prod-kollektorene. Personvernfilteret beholdes, mens sesjonssporing er deaktivert slik at tillatte feil og journalposthendelser sendes.
 
 ### Nais APM og CDN erstatter Sentry-oppsettet (2026-09-28)
 

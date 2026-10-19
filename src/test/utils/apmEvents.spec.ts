@@ -56,12 +56,6 @@ describe('apmEvents', () => {
     const pushEventMock = pushEvent as Mock;
     const journalpostId = 'jp-123';
 
-    const enableApm = () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-    };
     const psbKvittering: IPSBSoknadKvittering = {
         journalposter: [],
         mottattDato: '2026-04-17T10:00:00.000Z',
@@ -385,19 +379,10 @@ describe('apmEvents', () => {
     beforeEach(() => {
         isInitializedMock.mockReturnValue(true);
         pushEventMock.mockClear();
-        delete window.nais;
         window.sessionStorage.clear();
     });
 
-    it('Skal ikke sende event når collector url ikke er tilgjengelig', () => {
-        const result = pushApmEvent('test_event', { source: 'test' });
-
-        expect(result).toBeFalsy();
-        expect(pushEventMock).not.toHaveBeenCalled();
-    });
-
     it('Skal ikke sende event før APM er initialisert', () => {
-        enableApm();
         isInitializedMock.mockReturnValue(false);
 
         expect(pushApmEvent('test_event', { source: 'test' })).toBeFalsy();
@@ -405,11 +390,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende event via APM SDK-et', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         const result = pushApmEvent('test_event', { source: 'test' });
 
         expect(result).toBeTruthy();
@@ -417,11 +397,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende custom Nais APM-event for manuelt opprettet journalpost med trygge attributter', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         const result = trackManualJournalpostFlowStarted();
 
         expect(result).toBeTruthy();
@@ -576,11 +551,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PSB start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackPsbStartedFromJournalpost(journalpostId);
@@ -594,11 +564,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PSB submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
@@ -624,8 +589,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PSB submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackPsbSubmitFromJournalpost(journalpostId, psbKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -637,11 +600,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PLS start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackPlsStartedFromJournalpost(journalpostId);
@@ -655,11 +613,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PLS submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
@@ -685,8 +638,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende PLS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackPlsSubmitFromJournalpost(journalpostId, plsKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -698,11 +649,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPKS start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackOmpksStartedFromJournalpost(journalpostId);
@@ -716,11 +662,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPKS submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
@@ -746,8 +687,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPKS submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackOmpksSubmitFromJournalpost(journalpostId, ompksKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -759,11 +698,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPMA start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackOmpmaStartedFromJournalpost(journalpostId);
@@ -777,11 +711,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPMA submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
@@ -807,8 +736,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPMA submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackOmpmaSubmitFromJournalpost(journalpostId, ompmaKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -820,11 +747,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OLP start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackOlpStartedFromJournalpost(journalpostId);
@@ -838,11 +760,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OLP submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
@@ -868,8 +785,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OLP submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackOlpSubmitFromJournalpost(journalpostId, olpKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -881,11 +796,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPUT start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackOmputStartedFromJournalpost(journalpostId);
@@ -899,11 +809,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPUT submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
@@ -929,8 +834,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPUT submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackOmputSubmitFromJournalpost(journalpostId, omputKvittering);
 
         expect(fieldGroups).toEqual([]);
@@ -942,11 +845,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPAO start-event for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const result = trackOmpaoStartedFromJournalpost(journalpostId);
@@ -960,11 +858,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPAO submit snapshot og feltgruppe-events for manuell journalpostflyt', () => {
-        window.nais = {
-            telemetryCollectorURL: 'https://collector.example/collect',
-            app: { name: 'k9-punsj-frontend', version: 'test' },
-        };
-
         setManualJournalpostFlowSource(journalpostId);
 
         const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
@@ -990,8 +883,6 @@ describe('apmEvents', () => {
     });
 
     it('Skal sende OMPAO submit completed uten snapshot når journalposten ikke kommer fra manuell opprettelse', () => {
-        enableApm();
-
         const fieldGroups = trackOmpaoSubmitFromJournalpost(journalpostId, ompaoKvittering);
 
         expect(fieldGroups).toEqual([]);

@@ -7,7 +7,6 @@ import { createMockPdfBytes } from '../../mocks/mockPdf.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const mockServiceWorkerPath = path.resolve(__dirname, '../../mocks/mockServiceWorker.js');
 const mswBrowserPath = path.resolve(__dirname, '../../mocks/browser.ts');
-const naisConfigPath = path.resolve(__dirname, '../naisConfig.js');
 const mockPdfPath = /^\/api\/k9-punsj\/journalpost\/[^/]+\/dokument\/[^/]+\/?$/;
 
 const sendJson = (res, body) => {
@@ -60,9 +59,6 @@ export const localServer = () => ({
                             'content-type': 'application/javascript',
                             'service-worker-allowed': '/',
                         });
-                        return;
-                    case '/dist/js/nais.js':
-                        await sendFile(res, naisConfigPath, { 'content-type': 'application/javascript' });
                         return;
                     default:
                         break;

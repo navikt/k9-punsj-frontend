@@ -278,7 +278,7 @@ const hasOpptjeningAktivitet = (innsentSoknad: KvitteringWithOpptjeningAktivitet
 };
 
 export const pushApmEvent = (name: string, attributes?: EventAttributes): boolean => {
-    if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL || !isInitialized()) {
+    if (typeof window === 'undefined' || !isInitialized()) {
         return false;
     }
 

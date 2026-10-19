@@ -6,7 +6,6 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY ./dist ./dist
-COPY ./src/build/naisConfig.js ./dist/js/nais.js
 COPY ./node_modules ./node_modules
 COPY server ./
 
