@@ -29,7 +29,7 @@ export const localServer = () => ({
         return [
             {
                 tag: 'script',
-                attrs: { type: 'module', src: `/@fs/${mswBrowserPath.replaceAll('\\', '/').replace(/^\//, '')}` },
+                attrs: { type: 'module', src: `/@fs${mswBrowserPath}` },
                 injectTo: 'body',
             },
         ];

@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process';
 
-const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 const readyUrl = process.env.E2E_READY_URL ?? 'http://127.0.0.1:8080/health/isReady';
 const defaultReadyTimeoutMs = 60000;
 const parseReadyTimeoutMs = (value) => {
@@ -39,11 +38,10 @@ const spawnYarnScript = (scriptName, args = [], detached = false) => {
     const cypressCommand = cypressCommandMap[scriptName];
 
     if (cypressCommand) {
-        return spawn(yarnCommand, [...cypressCommand, ...args], {
+        return spawn('yarn', [...cypressCommand, ...args], {
             stdio: 'inherit',
             env: process.env,
             detached,
-            shell: process.platform === 'win32',
         });
     }
 
@@ -53,49 +51,34 @@ const spawnYarnScript = (scriptName, args = [], detached = false) => {
         commandArgs.push('--', ...args);
     }
 
-    return spawn(yarnCommand, commandArgs, {
+    return spawn('yarn', commandArgs, {
         stdio: 'inherit',
         env: process.env,
         detached,
-        shell: process.platform === 'win32',
     });
 };
 
 const terminateProcess = async (childProcess) => {
     if (!childProcess?.pid) return;
 
-    if (process.platform !== 'win32') {
-        // Yarn oppretter flere underprosesser; stopp hele gruppen slik at Vite ikke blir igjen.
-        const signalGroup = (signal) => {
-            try {
-                process.kill(-childProcess.pid, signal);
-                return true;
-            } catch (error) {
-                if (error.code === 'ESRCH') return false;
-                throw error;
-            }
-        };
-
-        if (!signalGroup('SIGTERM')) return;
-        const deadline = Date.now() + 5000;
-        while (Date.now() < deadline) {
-            await delay(100);
-            if (!signalGroup(0)) return;
+    // Yarn oppretter flere underprosesser; stopp hele gruppen slik at Vite ikke blir igjen.
+    const signalGroup = (signal) => {
+        try {
+            process.kill(-childProcess.pid, signal);
+            return true;
+        } catch (error) {
+            if (error.code === 'ESRCH') return false;
+            throw error;
         }
-        signalGroup('SIGKILL');
-        return;
-    }
+    };
 
-    if (childProcess.exitCode !== null) return;
-    // Windows-signaler stopper bare yarn.cmd; taskkill tar også Vite-prosessen.
-    await new Promise((resolve, reject) => {
-        const killer = spawn('taskkill.exe', ['/PID', String(childProcess.pid), '/T', '/F'], { stdio: 'ignore' });
-        killer.once('error', reject);
-        killer.once('exit', (code) => {
-            if (code === 0 || childProcess.exitCode !== null) resolve();
-            else reject(new Error(`Failed to stop Vite process tree (taskkill exit code ${code})`));
-        });
-    });
+    if (!signalGroup('SIGTERM')) return;
+    const deadline = Date.now() + 5000;
+    while (Date.now() < deadline) {
+        await delay(100);
+        if (!signalGroup(0)) return;
+    }
+    signalGroup('SIGKILL');
 };
 
 const waitForReady = async (childProcess) => {
@@ -125,7 +108,7 @@ const waitForReady = async (childProcess) => {
 };
 
 const run = async () => {
-    const startProcess = spawnYarnScript('start:e2e', [], process.platform !== 'win32');
+    const startProcess = spawnYarnScript('start:e2e', [], true);
 
     const handleSignal = async (signal) => {
         await terminateProcess(startProcess);
