@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdaterte GitHub Actions-pinner (2026-10-20)
+
+- Oppdaterte pinnen for `actions/setup-node` til v7.1.0, artifact-handlingenes pinninger til v7.0.2 og v8.0.2, Cypress-handlingen til v7.4.6, Nais-handlingene og `navikt/sif-gha-workflows` til verifiserte upstream-commits. Oppdaterte også checkout-kommentaren til v7.0.1; SHA-en var allerede lik.
+- Beholdt applikasjonens Node-versjon 22.22.3, eksisterende artifact-overlevering og deploy-rekkefølge.
+- Lot `nais/deploy` v3 stå utenfor denne oppdateringen. Overgangen fra Docker-handling til composite med Nais CLI må verifiseres separat.
+
 ### Rydding av oppgaver og utvikleroppsett (2026-10-20)
 
 - Fjernet tidligere oppgavefiler og mappen `copilot-tasks/completed/`. Beholdt ukentlig pakkevedlikehold og forenklet oppgavemalen.
