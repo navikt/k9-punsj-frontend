@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Weekly package maintenance (2026-10-20)
+
+- Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet Aksel 8.19.2, Faro 2.12.1, React Query 5.104.2, React Hook Form 7.90.0, Vite 8.3.4 og Express 5.3.0.
+- Lot majorløft for Cypress, ESLint, MSW, React Intl og TypeScript stå til egne oppgaver.
+- Oppdaterte `@nais/apm` til 0.7.3 for å samle Faro på 2.12.1 og løftet OpenTelemetry-overstyringene til 2.11.0, slik at de samsvarer med Faro sin OTLP-transformer.
+- Oppdaterte sårbare transitive versjoner av `brace-expansion`, `fast-uri`, `http-cache-semantics`, `ip-address` og alle berørte `source-map-js`-stier. `braces` står igjen fordi det ikke finnes en fikset versjon i major 3.
+
 ### Vite og Vitest erstatter Webpack og Jest (2026-10-19)
 
 - Byttet app-bygg, lokal dev-server og Storybook til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`) og enhets- og komponenttester til Vitest (`vitest@5.0.1`, `jsdom@30.1.1`). Fjernet Webpack-, Jest- og Babel-oppsett og tilhørende avhengigheter.
