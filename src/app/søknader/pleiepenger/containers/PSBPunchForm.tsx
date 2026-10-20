@@ -55,7 +55,7 @@ import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { IFellesState } from 'app/state/reducers/FellesReducer';
-import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackPsbStartedFromJournalpost, trackPsbSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { NavigateFunction, useNavigate, useParams } from 'react-router';
 import ErDuSikkerModal from '../../../components/ErDuSikkerModal';
 import { Periodepaneler } from '../../../components/Periodepaneler';

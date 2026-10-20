@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { expect } from '@jest/globals';
 import { screen } from '@testing-library/react';
 
 import { renderWithIntl } from '../../testUtils';
 import UtregningArbeidstid from '../../../app/components/timefoering/UtregningArbeidstid';
 
-jest.mock('app/utils/envUtils');
+vi.mock('app/utils/envUtils');
 
 describe('utregning av arbeidstid', () => {
     renderWithIntl(<UtregningArbeidstid arbeidstid={{ timer: '7', minutter: '30' }} />);

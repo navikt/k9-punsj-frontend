@@ -1,11 +1,10 @@
-import { mocked } from 'jest-mock';
 import { IntlShape, createIntl } from 'react-intl';
 
 import { IPeriode, Periode } from 'app/models/types';
 import intlHelper from 'app/utils/intlUtils';
 
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
 
 describe('Periode', () => {
     const fom = '2020-01-01';
@@ -18,7 +17,7 @@ describe('Periode', () => {
             ...periodePartial,
         };
 
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => {
+        vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => {
             if (id === 'tidsformat.DATE_SHORT') {
                 return 'DD.MM.YYYY';
             }

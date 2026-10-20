@@ -12,7 +12,7 @@ import { Feil } from 'app/models/types/ValideringResponse';
 import { RootStateType } from 'app/state/RootState';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
-import { trackOmpaoStartedFromJournalpost, trackOmpaoSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackOmpaoStartedFromJournalpost, trackOmpaoSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { Dispatch } from 'redux';
 import { hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';

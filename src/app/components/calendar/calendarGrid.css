@@ -92,13 +92,6 @@
   padding: 0.5rem;
 }
 
-.calendarGrid--grid > *::before:not(:first-child) {
-  content: '';
-  display: inline-block;
-  height: 0;
-  padding-bottom: 100%;
-}
-
 .calendarGrid--grid > *.today {
   color: white;
   border: 0.1em solid white;

@@ -49,9 +49,6 @@ spec:
       {{#each outboundExternalHosts as |host|}}
        - host: {{host}}
       {{/each}}
-  frontend:
-    generatedConfig:
-      mountPath: /app/dist/js/nais.js
   ingresses:
   {{#each ingresses as |url|}}
      - {{url}}

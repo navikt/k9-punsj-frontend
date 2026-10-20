@@ -1,7 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mocked } from 'jest-mock';
 import { createIntl, IntlShape } from 'react-intl';
 import { pfTilleggsinformasjon } from '../../../app/søknader/pleiepenger/components/pfTilleggsinformasjon';
 import { ITilleggsinformasjon } from '../../../app/models/types/PSBSoknad';
@@ -13,7 +12,7 @@ import {
 import { GetErrorMessage } from '../../../app/models/types/Error';
 import intlHelper from '../../../app/utils/intlUtils';
 
-jest.mock('app/utils/intlUtils');
+vi.mock('app/utils/intlUtils');
 
 const testTekst = 'Lorem ipsum dolor sit amet';
 const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {
@@ -21,10 +20,10 @@ const testPeriodeinfo: Periodeinfo<ITilleggsinformasjon> = {
     tilleggsinformasjon: testTekst,
 };
 const testPeriodeindex = 0;
-const testUpdatePeriodeinfoInSoknad = jest.fn();
-const testUpdatePeriodeinfoInSoknadState = jest.fn();
+const testUpdatePeriodeinfoInSoknad = vi.fn();
+const testUpdatePeriodeinfoInSoknadState = vi.fn();
 const testFeilprefiks = 'feilprefiks';
-const testGetErrorMessage = jest.fn();
+const testGetErrorMessage = vi.fn();
 const testIntl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 const testKodeord = 'kodeord';
 
@@ -38,7 +37,7 @@ const renderPfTilleggsinformasjon = (
     optionalIntl?: IntlShape,
     optionalKodeord?: string,
 ) => {
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     const Component = pfTilleggsinformasjon(optionalKodeord || testKodeord)(
         optionalPeriodeinfo || testPeriodeinfo,
@@ -54,7 +53,7 @@ const renderPfTilleggsinformasjon = (
 };
 
 describe('pfTilleggsinformasjon', () => {
-    beforeEach(() => jest.resetAllMocks());
+    beforeEach(() => vi.resetAllMocks());
 
     it('renders the component', () => {
         renderPfTilleggsinformasjon();

@@ -18,7 +18,7 @@ import SettPaaVentModal from 'app/components/settPåVentModal/SettPåVentModal';
 import { ROUTES } from 'app/constants/routes';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
-import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackOmpksStartedFromJournalpost, trackOmpksSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { NavigateFunction, useNavigate, useParams } from 'react-router';

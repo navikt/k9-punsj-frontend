@@ -1,13 +1,13 @@
+import type { Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mocked } from 'jest-mock';
 import React from 'react';
 import { IntlShape, createIntl } from 'react-intl';
 import Periodevelger, { PeriodevelgerProps } from '../../../app/components/period-input/Periodevelger';
 import intlHelper from '../../../app/utils/intlUtils';
 
-jest.mock('react-intl');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-intl');
+vi.mock('app/utils/intlUtils');
 
 const inputIdFom = 'fom';
 const inputIdTom = 'tom';
@@ -16,14 +16,14 @@ const setupPeriodevelger = (propsPartial?: Partial<PeriodevelgerProps>) => {
     const props: PeriodevelgerProps = {
         periode: {},
         intl: createIntl({ locale: 'nb', defaultLocale: 'nb' }),
-        onChange: propsPartial?.onChange || jest.fn(),
-        onBlur: propsPartial?.onBlur || jest.fn(),
+        onChange: propsPartial?.onChange || vi.fn(),
+        onBlur: propsPartial?.onBlur || vi.fn(),
         inputIdFom,
         inputIdTom,
         ...propsPartial,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return render(<Periodevelger {...props} />);
 };
@@ -32,8 +32,8 @@ const testDateChange = async (
     inputId: string,
     newDate: string,
     newDateFormatted: string,
-    onChange: jest.Mock,
-    onBlur: jest.Mock,
+    onChange: Mock,
+    onBlur: Mock,
 ) => {
     const input = screen.getByTestId(inputId) as HTMLInputElement;
     expect(input).toBeInTheDocument();
@@ -83,8 +83,8 @@ describe('Periodevelger', () => {
         const tom = '2020-02-01';
         const newFraOgMed = '01.03.2020';
         const newFraOgMedFormatted = '2020-03-01';
-        const onChange = jest.fn();
-        const onBlur = jest.fn();
+        const onChange = vi.fn();
+        const onBlur = vi.fn();
 
         setupPeriodevelger({ periode: { fom, tom }, onChange, onBlur });
 
@@ -92,7 +92,7 @@ describe('Periodevelger', () => {
     });
 
     it('should call onChange with the correct final value when a complete date is typed', async () => {
-        const onChange = jest.fn();
+        const onChange = vi.fn();
 
         setupPeriodevelger({ periode: {}, onChange });
 
@@ -106,8 +106,8 @@ describe('Periodevelger', () => {
         const tom = '2020-02-01';
         const newTilOgMed = '01.03.2020';
         const newTilOgMedFormatted = '2020-03-01';
-        const onChange = jest.fn();
-        const onBlur = jest.fn();
+        const onChange = vi.fn();
+        const onBlur = vi.fn();
 
         setupPeriodevelger({ periode: { fom, tom }, onChange, onBlur });
 
@@ -124,8 +124,8 @@ describe('Periodevelger', () => {
             <Periodevelger
                 periode={{ fom: '2020-03-01', tom: '2020-04-01' }}
                 intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
-                onChange={jest.fn()}
-                onBlur={jest.fn()}
+                onChange={vi.fn()}
+                onBlur={vi.fn()}
                 inputIdFom={inputIdFom}
                 inputIdTom={inputIdTom}
             />,
@@ -145,8 +145,8 @@ describe('Periodevelger', () => {
             <Periodevelger
                 periode={{ fom: '', tom: '' }}
                 intl={createIntl({ locale: 'nb', defaultLocale: 'nb' })}
-                onChange={jest.fn()}
-                onBlur={jest.fn()}
+                onChange={vi.fn()}
+                onBlur={vi.fn()}
                 inputIdFom={inputIdFom}
                 inputIdTom={inputIdTom}
             />,

@@ -2,18 +2,36 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Feilvisning uten state-oppdatering under rendering i PLS (2026-10-15)
+### Delt månedskalender i arbeidstid, tilsyn og fravær (2026-10-20)
 
-- Flyttet registrering av feilstier ut av React-state, slik at feltvalidering i PLS ikke utløser en state-oppdatering under rendering. Beholdt rutingen av feltfeil og uhåndterte feil.
+- Beholder markerte dager på tvers av måneder og samler registrering og sletting i én felles handlingsrad. Gjelder arbeidstid i PSB og PLS, omsorgstilbud i PSB og fravær i OLP.
+- La til hjelpetekst over arbeidstidskalenderen og i månedene, og fremhevet faktisk tid i kalenderdagene.
+- Viser antall registrerte dager per år og åpner paneler med registreringer automatisk. Skjuler årsnivået når kalenderen bare inneholder ett år med høyst seks måneder.
+- Rettet linjebryting i arbeidsgivervalg og fjernet state-oppdatering under rendering ved feilvisning i PLS.
+
+### Pakkevedlikehold og Copilot-ferdighet (2026-10-20)
+
+- Oppdaterte tillatte patch- og minorversjoner i root og `server` og rettet transitive sikkerhetsfunn.
+- Samordnet `@nais/apm` 0.7.3, Faro 2.12.1 og OpenTelemetry-overstyringene på 2.11.0.
+- La til Copilot-ferdigheten `package-maintenance` med et skript for versjonsvalg ut fra publiseringsdatoer og Yarn-konfigurasjonen, rekursiv sikkerhetskontroll og en kort oppgavemal. Utfylte arbeidsnotater beholdes lokalt og nullstilles bare på forespørsel.
+- Lot majorløft for Cypress, ESLint, MSW, React Intl og TypeScript stå til egne oppgaver.
+- Beholdt React 19.3.0 og fast-uri 3.1.8 fordi henholdsvis 19.3.1 og 3.1.9 fortsatt var innenfor sju dagers nedkjølingstid ved denne kjøringen.
+- Gjenværende sikkerhetsfunn: `braces@3.0.3` via `micromatch@4.0.8` (GHSA-vfj7-8cjw-p6xm, high), uten fikset versjon i major 3. Lukking av GitHub-varsler må bekreftes etter merge og ny image-skanning; den lokale audit-kontrollen bekrefter ikke dette.
+
+### Vite og Vitest erstatter Webpack og Jest (2026-10-19)
+
+- Byttet app-bygg, lokal dev-server og Storybook til Vite (`vite@8.3.0`, `@storybook/react-vite@10.6.0`) og enhets- og komponenttester til Vitest (`vitest@5.0.1`, `jsdom@30.1.1`). Fjernet Webpack-, Jest- og Babel-oppsett og tilhørende avhengigheter.
+- Vite-bygget er tilpasset det eksisterende CDN-oppsettet: JavaScript, uttrukket CSS og sourcemaps legges i `dist/js`. CSP tillater CSS fra CDN.
+- Lokal dev-server på port 8080 beholder API-proxy, lokale endepunkter og MSW-oppsett for Cypress. E2E-skriptet stopper hele Yarn/Vite-prosessgruppen etter kjøring.
+- `yarn test` kjører Vitest med `vi.*`-mocks og `@testing-library/jest-dom/vitest`; CI beholder `--maxWorkers=2`. Fjernet også en ugyldig CSS-regel som stoppet Vite-minifiseringen.
+- Nais APM initialiseres direkte uten `nais.js`. SDK-et velger kollektor ut fra appens adresse, og CSP tillater dev- og prod-kollektorene. Personvernfilteret beholdes, mens sesjonssporing er deaktivert slik at tillatte feil og journalposthendelser sendes.
 
 ### Nais APM og CDN erstatter Sentry-oppsettet (2026-09-28)
 
 - Byttet til én Nais APM-initialisering med personvernfilter for feil, produkt- og ruteeventer. Fjernet Sentry fra runtime, bygg og deploy, og beholdt SHA-basert versjon. Nettlesersporing er deaktivert inntil trace-headere kan avgrenses til relevante API-kall.
 - La til `@nais/apm@0.7.0-beta.3` og GitHub Packages-oppsett for `@nais` i Yarn og CI.
-- Produksjonsbygget lager JavaScript med innholdsbaserte filnavn og tilhørende sourcemaps. Begge deploy-workflows laster filene opp til CDN før pod-deploy; HTML og `nais.js` blir i poden.
-- Tillater `https://cdn.nav.no` i CSP for scripts og sourcemap-tilkoblinger. React-feilgrensen bruker SDK-ets grunnleggende API direkte og beholder opprinnelig JS-stakk for sourcemap-oppslag.
-- Laster CDN-scripts med `crossorigin="anonymous"`, slik at nettleseren kan rapportere detaljerte feil og stakker også for uhåndterte feil.
-- Personvernfilter og offentlige sourcemaps må gjennomgås av teamet. Levering av telemetri og sourcemap-oppslag må verifiseres i Grafana etter deploy.
+- Begge deploy-workflows laster JavaScript med innholdsbaserte filnavn og sourcemaps opp til CDN før pod-deploy; HTML og `nais.js` blir i poden. CSP tillater CDN-scripts og sourcemap-tilkoblinger, og scripts lastes med anonym CORS.
+- React-feilgrensen beholder opprinnelig JS-stakk for sourcemap-oppslag.
 
 ### Weekly package maintenance (2026-09-25)
 
@@ -68,12 +86,6 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Kjørte en samlet dependency-runde i root og `server` med cooldown-eligible patch- og minorløft, blant annet for Storybook, `@testing-library/user-event`, `postcss`, `webpack`, `server/jose`, Faro, Sentry React, TypeScript ESLint, Cypress, lint-staged, Aksel, React Hook Form, React Intl, Jest DOM, Day.js, typepakker og ESLint.
 - Brukte nærmeste tillatte versjon utenfor repoets 7 dagers cooldown, inkludert eldre eligible minorer i samme major og målrettede FormatJS-resolutions for React Intl (`@formatjs/intl@4.1.18`, `intl-messageformat@11.2.13`, `@formatjs/icu-messageformat-parser@3.5.16`).
 - Lot nyere cooldown-blokkerte patch- og minorversjoner stå urørt, lot major-spor bli egne oppfølginger, og lot `@navikt/oasis` stå fordi tilgjengelig registry-metadata ikke kunne verifiseres i denne runden.
-
-### Felles handlinger for månedskalender i arbeidstid, tilsyn og fravær (2026-08-03)
-
-- Rettet månedskalenderen slik at markering av dager ikke lenger forsvinner når brukeren åpner en annen måned i samme kalenderflyt.
-- Flyttet `Registrer` og `Slett` ut fra hvert enkelt månedskort og ned i én felles action bar under kalenderen, siden markering nå kan gå på tvers av flere måneder og dermed ikke lenger hører naturlig til én bestemt måned.
-- La samtidig inn lokal hjelpetekst i hver åpen måned som viser hvor mange dager som er valgt i den måneden og peker videre ned til den felles action baren, for å gjøre den nye plasseringen lettere å oppdage når mange måneder er åpne.
 
 ### React Router 7.18.2 security follow up (2026-08-03)
 

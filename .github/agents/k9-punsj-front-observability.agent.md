@@ -53,20 +53,18 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 | Agent                            | Use for                                                           |
 | -------------------------------- | ----------------------------------------------------------------- |
-| `@k9-punsj-front-nais-agent`     | Nais observability config, runtime config mount, deploy workflows |
+| `@k9-punsj-front-nais-agent`     | Nais observability config and deploy workflows                    |
 | `@k9-punsj-front-security-agent` | Sensitive data leakage in logs, traces, errors, screenshots       |
 | `@k9-punsj-front-auth-agent`     | Auth failures, login callback issues, OBO related diagnostics     |
 
 ## Repo observability context
 
-- `src/app/App.tsx` initializes Nais APM once when `window.nais` contains app and telemetry collector config, using `filterTelemetry` as the outgoing privacy gate.
+- `src/app/App.tsx` initializes Nais APM on Nais hosts with an explicit app and namespace; the SDK derives the collector from the hostname. `filterTelemetry` remains the outgoing privacy gate.
 - `src/app/App.tsx` and the journalpost router use `SourceMappedErrorBoundary` for render errors.
-- `src/app/index.html` dynamically loads `/dist/js/nais.js` to populate `window.nais`.
-- `src/build/webpack/faroConfig.js` provides local Faro config for development.
 - `server/src/log.js` uses JSON logging through `winston` and request logging through `morgan`.
 - `nais/dev-gcp.yml` enables `observability.autoInstrumentation` for `nodejs` and sends logs to `loki` and `elastic`.
 - `nais/prod-gcp.yml` configures logging destinations for production.
-- The deploy workflows upload hashed JS and adjacent sourcemaps to the CDN before pod deployment; `nais.js` remains pod-hosted.
+- The deploy workflows upload hashed JS and adjacent sourcemaps to the CDN before pod deployment.
 - This repo does not currently define a custom `/metrics` endpoint. Do not assume Prometheus style instrumentation exists unless the task introduces it explicitly.
 
 ## Review boundaries
@@ -77,7 +75,7 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 - Check that errors, logs, and telemetry do not expose personopplysninger, tokens, raw backend payloads, or other sensitive values.
 - Check that APM initialization depends on the intended runtime conditions and environment data.
 - Check that CDN JS and sourcemaps match the build and that the app version is stable.
-- Check that `window.nais` loading and generated runtime config remain compatible with frontend startup.
+- Check that the SDK resolves the correct collector for both dev and prod hostnames.
 - Prefer small and explicit observability changes over broad instrumentation rewrites.
 
 ### Ask first
@@ -100,8 +98,8 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 ### Frontend telemetry
 
-- Review `@nais/apm` initialization, trace propagation, `filterTelemetry`, and `window.nais` usage together.
-- Check that Faro only starts when runtime config is available and expected.
+- Review `@nais/apm` initialization, trace propagation, and `filterTelemetry` together.
+- Check that APM initializes only on intended hosts and the collector is allowed by CSP.
 - Review browser side error reporting for accidental leakage of sensitive route, query, or payload data.
 - Be careful with Redux, form, and API related logging so user data is not echoed to console or telemetry.
 
@@ -122,14 +120,14 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 ### Nais and deploy wiring
 
 - Review `observability:` blocks in `nais/**` together with frontend startup and server logging changes.
-- Check that `autoInstrumentation`, logging destinations, and runtime config still align with the deployed app.
+- Check that `autoInstrumentation` and logging destinations align with the deployed app.
 - Review CDN upload order and access when build or deploy logic changes.
-- Treat `nais.js` loading, generated config mount path, and telemetry collector values as part of the runtime contract.
+- Treat hostname-based collector resolution and CSP `connect-src` as part of the runtime contract.
 
 ## Validation before completion
 
 - Run the most relevant checks for the touched area when possible.
-- When observability code changes, inspect `src/app/App.tsx`, `src/app/index.html`, `src/build/webpack/faroConfig.js`, `server/src/log.js`, relevant `nais/**` files, and deploy workflows together.
+- When observability code changes, inspect `src/app/App.tsx`, `src/app/utils/apmEvents.ts`, `server/server.js`, `server/src/log.js`, relevant `nais/**` files, and deploy workflows together.
 - If checks are not run, say that clearly and explain why.
 - Summarize user visible impact, telemetry impact, and risk of missing diagnostics or leaking sensitive data.
 - If no observability issue is found, say that explicitly and mention any remaining runtime blind spots.
@@ -137,8 +135,8 @@ kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 ## Useful files
 
 - `src/app/App.tsx`
-- `src/app/index.html`
-- `src/build/webpack/faroConfig.js`
+- `src/app/utils/apmEvents.ts`
+- `server/server.js`
 - `server/src/log.js`
 - `nais/dev-gcp.yml`
 - `nais/prod-gcp.yml`

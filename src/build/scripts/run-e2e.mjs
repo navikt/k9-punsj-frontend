@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process';
 
-const yarnCommand = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
 const readyUrl = process.env.E2E_READY_URL ?? 'http://127.0.0.1:8080/health/isReady';
 const defaultReadyTimeoutMs = 60000;
 const parseReadyTimeoutMs = (value) => {
@@ -35,13 +34,14 @@ const cypressCommandMap = {
     'cypress:open:chrome': ['cypress', 'open', '--e2e', '--browser', 'chrome'],
 };
 
-const spawnYarnScript = (scriptName, args = []) => {
+const spawnYarnScript = (scriptName, args = [], detached = false) => {
     const cypressCommand = cypressCommandMap[scriptName];
 
     if (cypressCommand) {
-        return spawn(yarnCommand, [...cypressCommand, ...args], {
+        return spawn('yarn', [...cypressCommand, ...args], {
             stdio: 'inherit',
             env: process.env,
+            detached,
         });
     }
 
@@ -51,29 +51,35 @@ const spawnYarnScript = (scriptName, args = []) => {
         commandArgs.push('--', ...args);
     }
 
-    return spawn(yarnCommand, commandArgs, {
+    return spawn('yarn', commandArgs, {
         stdio: 'inherit',
         env: process.env,
+        detached,
     });
 };
 
-const terminateProcess = (childProcess) =>
-    new Promise((resolve) => {
-        if (!childProcess || childProcess.exitCode !== null || childProcess.killed) {
-            resolve();
-            return;
+const terminateProcess = async (childProcess) => {
+    if (!childProcess?.pid) return;
+
+    // Yarn oppretter flere underprosesser; stopp hele gruppen slik at Vite ikke blir igjen.
+    const signalGroup = (signal) => {
+        try {
+            process.kill(-childProcess.pid, signal);
+            return true;
+        } catch (error) {
+            if (error.code === 'ESRCH') return false;
+            throw error;
         }
+    };
 
-        const finish = () => resolve();
-        childProcess.once('exit', finish);
-        childProcess.kill('SIGTERM');
-
-        setTimeout(() => {
-            if (childProcess.exitCode === null && !childProcess.killed) {
-                childProcess.kill('SIGKILL');
-            }
-        }, 5000).unref();
-    });
+    if (!signalGroup('SIGTERM')) return;
+    const deadline = Date.now() + 5000;
+    while (Date.now() < deadline) {
+        await delay(100);
+        if (!signalGroup(0)) return;
+    }
+    signalGroup('SIGKILL');
+};
 
 const waitForReady = async (childProcess) => {
     const deadline = Date.now() + readyTimeoutMs;
@@ -102,7 +108,7 @@ const waitForReady = async (childProcess) => {
 };
 
 const run = async () => {
-    const startProcess = spawnYarnScript('start:e2e');
+    const startProcess = spawnYarnScript('start:e2e', [], true);
 
     const handleSignal = async (signal) => {
         await terminateProcess(startProcess);
