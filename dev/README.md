@@ -13,6 +13,8 @@ docker login ghcr.io -u x-access-token
 # Passord: GitHub personal access token med kun read:packages-tilgang
 ```
 
+Miljøvariablene for `oidc-auth-proxy` ligger i [dev/.oidc-auth-proxy.env](.oidc-auth-proxy.env) og leses av Docker Compose.
+
 ### Start Docker-tjenester
 
 Fra rot av repo:

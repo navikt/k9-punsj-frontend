@@ -1,7 +1,7 @@
 ---
 name: TypeScript Testing
 description: "TypeScript-spesifikke testmønstre for Nav: Vitest, mocking, async og React-komponenttesting."
-applyTo: "**/*.test.{ts,tsx}"
+applyTo: "**/*.{spec,test}.{ts,tsx}"
 ---
 
 # TypeScript Testing (Vitest)
@@ -96,5 +96,4 @@ describe("MetricCard", () => {
 
 ```bash
 yarn test
-yarn test --coverage
 ```

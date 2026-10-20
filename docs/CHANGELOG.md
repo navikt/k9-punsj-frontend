@@ -2,6 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Rydding av oppgaver og utvikleroppsett (2026-10-20)
+
+- Fjernet tidligere oppgavefiler og mappen `copilot-tasks/completed/`. Beholdt ukentlig pakkevedlikehold og forenklet oppgavemalen.
+- Oppdaterte Copilot-instruksjonene til Aksel v8, Vitest og Cypress, rettet filmaskene for testinstruksjoner og samordnet changelog-reglene.
+- Fjernet ubrukt Tailwind-konfigurasjon og Prettier-innstillinger uten tilhørende plugin.
+- Presiserte hvor Docker Compose henter miljøvariablene for lokal autentisering.
+
 ### Pakkevedlikehold og Copilot-ferdighet (2026-10-20)
 
 - Oppdaterte tillatte patch- og minorversjoner i root og `server` og rettet transitive sikkerhetsfunn.
