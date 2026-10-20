@@ -1,13 +1,11 @@
 # Copilot task
 
-Keep task files short. Put long reasoning in local notes, not here.
+Follow `AGENTS.md`. Keep the task short and scoped.
 
 ## Task
 
 - Title:
-- Branch:
-  - refresh this for every new task
-  - this is a desired branch hint, GitHub cloud may still create its own `copilot/...` branch
+- Branch (refresh per task; GitHub cloud may create its own):
 - Suggested agent:
 - Prompt language:
 
@@ -19,10 +17,7 @@ Keep task files short. Put long reasoning in local notes, not here.
 
 - Allowed files:
 - Out of scope:
-- Constraints:
-  - keep the change scoped
-  - reuse existing patterns
-  - follow `AGENTS.md`
+- Task-specific constraints:
 
 ## Validation
 
@@ -31,19 +26,7 @@ Keep task files short. Put long reasoning in local notes, not here.
 
 ## Prompt for Copilot
 
-Write the exact prompt text here, ready to paste into Copilot chat.
-
-Keep it short, but complete:
-
-- what to change
-- allowed scope
-- important constraints
-- validation to run
-- how to update `Plan`, `Progress notes`, and `Outcome`
-
-Suggested starter prompt:
-
-- `Follow this task file. First update Plan, then implement, keep Progress notes short, and finish by updating Outcome.`
+Replace this paragraph with a complete copy-paste prompt covering the goal, scope, constraints, and validation. Ask Copilot to update `Plan` first, implement, keep `Progress notes` short, and finish `Outcome`.
 
 ## Plan
 
