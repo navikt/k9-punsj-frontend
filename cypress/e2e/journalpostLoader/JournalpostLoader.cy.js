@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 import journalpost from '../../fixtures/jpPSB300.json';
 
 const journalpostId = journalpost.journalpostId;
@@ -17,9 +17,7 @@ const setupError = (status, response) => {
     });
 };
 
-describe(`Journalpost loader`, () => {
-    Cypress.config('viewportWidth', 1280);
-    Cypress.config('viewportHeight', 1450);
+describe(`Journalpost loader`, { viewportWidth: 1280, viewportHeight: 1450 }, () => {
 
     beforeEach(() => {
         cy.visit(`/journalpost/${journalpostId}`);

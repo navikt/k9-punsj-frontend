@@ -1,4 +1,5 @@
-import { http, HttpResponse, delay } from 'msw';
+import { http, HttpResponse } from 'msw/http';
+import { delay } from 'msw/utils/delay';
 import { ApiPath } from 'app/apiConfig';
 import arbeidsgivere from '../../cypress/fixtures/arbeidsgivere.json';
 import journalpost from '../../cypress/fixtures/journalpost.json';

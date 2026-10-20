@@ -53,7 +53,7 @@ const prepare = async () => {
             const { worker } = await import('../mocks/browser');
 
             await worker.start({
-                onUnhandledRequest: 'bypass',
+                onUnhandledFrame: 'bypass',
                 serviceWorker: {
                     url: '/mockServiceWorker.js',
                     options: {

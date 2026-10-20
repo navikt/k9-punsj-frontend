@@ -14,11 +14,9 @@ const ugyldigIdentTekst = 'Dette er ikke et gyldig fødsels- eller D-nummer elle
 const korrigerPartsforholdTekst =
     'Du korrigerer partsforholdet på en journalført journalpost. Kopien opprettes med annen søker som søker og nåværende søker som pleietrengende. Original journalpost endres ikke.';
 
-describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false }, () => {
+describe(`Fordeling Journalpost allerede behandlet`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
     });
 
     it('Skjul dokument vindu', () => {

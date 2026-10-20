@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpPSB300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
@@ -12,11 +12,9 @@ const klassifiserModalAlertFeilKopiering = 'Det oppstod en feil ved kopiering av
 const klassifiserModalAlertFeilSetPåVent = 'Det oppstod en feil når journalpost skulle settes på vent.';
 const alertJournalført = 'Journalposten er journalført. Sakstype, søker og saksnummer er lagret til journalpost.';
 
-describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: false }, () => {
+describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it('PSB Åpne journalpost 300 fra LOS', () => {
         cy.visit('/journalpost/300');
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
         cy.findByText(/Skjul/i).should('exist').click();
     });
 
@@ -167,11 +165,9 @@ describe('Test klassifisering PSB feilmeldingene i modal', { testIsolation: fals
     });
 });
 
-describe('Test klassifisering PSB', { testIsolation: false }, () => {
+describe('Test klassifisering PSB', { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it('PSB Åpne journalpost 300 fra LOS', () => {
         cy.visit('/journalpost/300');
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
         cy.findByText(/Skjul/i).should('exist').click();
     });
 
