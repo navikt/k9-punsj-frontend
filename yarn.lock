@@ -1835,23 +1835,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.16.2":
-  version: 8.16.2
-  resolution: "@navikt/aksel@npm:8.16.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.16.2%2F7c8ea024799a5c86be278954185e045e4451e230"
+"@navikt/aksel@npm:8.19.1":
+  version: 8.19.1
+  resolution: "@navikt/aksel@npm:8.19.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.19.1%2Fbc5adebbaa325b3e5c2790a9f4132e22500aa2a9"
   dependencies:
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
-    clipboardy: "npm:5.3.1"
+    clipboardy: "npm:5.3.2"
     commander: "npm:15.0.0"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
-    figlet: "npm:1.11.0"
+    figlet: "npm:1.11.3"
     is-git-clean: "npm:1.1.0"
     jscodeshift: "npm:17.4.0"
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/e339a49af22d7aefbe6ef3de43dd9011ddbe4993ca3f2cf3d4202dd15ea457391e389b9655c117e0c0caa33c6b77f75b0db0d91fca9c63e2187940357cd1a9f8
+  checksum: 10/1973abcae6724c95494846eb64d2067aee246e9c5cd199d80ef781388b54a0bb2065191f85b460a07b96bdd9cab2f11a03d97e105687224b30d1a664d8b77b10
   languageName: node
   linkType: hard
 
@@ -4584,9 +4584,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clipboardy@npm:5.3.1":
-  version: 5.3.1
-  resolution: "clipboardy@npm:5.3.1"
+"clipboardy@npm:5.3.2":
+  version: 5.3.2
+  resolution: "clipboardy@npm:5.3.2"
   dependencies:
     clipboard-image: "npm:^0.1.0"
     execa: "npm:^9.6.1"
@@ -4594,7 +4594,7 @@ __metadata:
     is-wsl: "npm:^3.1.0"
     is64bit: "npm:^2.0.0"
     powershell-utils: "npm:^0.2.0"
-  checksum: 10/027325dd58b6f10e84704116a461212816b420b74b44fe1c6d518a358e73525273a72d8848d358ac73ee229a35309215e803ae5f1f539c5fe51564564840ebe0
+  checksum: 10/9ae0f091179372a82ca850f9b638577d4816632cec5e4647d1fc984a7af54ac96246e88e40183d40094b1147b408f5134a5f8649b87dad431e7e1174058db349
   languageName: node
   linkType: hard
 
@@ -6339,14 +6339,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"figlet@npm:1.11.0":
-  version: 1.11.0
-  resolution: "figlet@npm:1.11.0"
+"figlet@npm:1.11.3":
+  version: 1.11.3
+  resolution: "figlet@npm:1.11.3"
   dependencies:
     commander: "npm:^14.0.0"
   bin:
     figlet: bin/index.js
-  checksum: 10/ed78dd3dcd7cd23daf43b84c53af9befc19c9e9e413ff061191d2b08413e5db1d97a9c383df7b1c488996c220e131c0e4dd8a1c8431257a3c97c761540b02025
+  checksum: 10/8bf77e217513b8df2d2a2d2b991486dfcec8208bf2d87bdb4b8afe7e18db1630e4ba82389294ef8e9fd03b5734f8c126811763f8fedf481d86cbfbfaab9439e2
   languageName: node
   linkType: hard
 
@@ -8038,7 +8038,7 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:2.11.0"
     "@k9-punsj-frontend/server": "workspace:"
     "@nais/apm": "npm:0.7.0-beta.3"
-    "@navikt/aksel": "npm:8.16.2"
+    "@navikt/aksel": "npm:8.19.1"
     "@navikt/aksel-icons": "npm:8.16.2"
     "@navikt/ds-css": "npm:8.16.2"
     "@navikt/ds-react": "npm:8.16.2"

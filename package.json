@@ -61,7 +61,7 @@
     },
     "devDependencies": {
         "@eslint/js": "10.0.1",
-        "@navikt/aksel": "8.16.2",
+        "@navikt/aksel": "8.19.1",
         "@navikt/ds-tailwind": "8.16.2",
         "@storybook/react": "10.6.0",
         "@storybook/react-vite": "10.6.0",
