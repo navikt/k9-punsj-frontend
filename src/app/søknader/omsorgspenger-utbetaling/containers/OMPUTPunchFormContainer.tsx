@@ -17,7 +17,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { setIdentFellesAction } from 'app/state/actions/IdentActions';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
-import { trackOmputStartedFromJournalpost, trackOmputSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackOmputStartedFromJournalpost, trackOmputSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { Dispatch } from 'redux';
 import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
 import { initialValues } from '../initialValues';

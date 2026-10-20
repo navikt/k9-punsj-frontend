@@ -1,19 +1,17 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { createIntl, IntlShape } from 'react-intl';
 
 import VisningAvPerioderSNSoknadKvittering from '../../../app/components/soknadKvittering/VisningAvPerioderSNSoknadKvittering';
 
 import intlHelper from '../../../app/utils/intlUtils';
-import { mocked } from 'jest-mock';
 import { SelvstendigNaeringsdrivendeAktivitet } from '../../../app/models/types/KvitteringTyper';
 
-jest.mock('react-intl');
-jest.mock('react-router');
-jest.mock('app/utils/browserUtils');
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-intl');
+vi.mock('react-router');
+vi.mock('app/utils/browserUtils');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
 
 const fullstendigResponse: SelvstendigNaeringsdrivendeAktivitet[] = [
     {
@@ -60,7 +58,7 @@ const varigEndring: SelvstendigNaeringsdrivendeAktivitet[] = [
 const setupVisningAvPerioderSNSoknadKvittering = (response: SelvstendigNaeringsdrivendeAktivitet[]) => {
     const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return render(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={response} />);
 };
@@ -101,7 +99,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
         expect(screen.getByText('Ja')).toBeInTheDocument();
 
         const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
         rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
         expect(screen.getByText('skjema.sn.registrertINorge')).toBeInTheDocument();
@@ -112,7 +110,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     it('Viser att virksomheten er registrert i annet land', () => {
         const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
         const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
         rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
         expect(screen.getByText('skjema.sn.registrertINorge')).toBeInTheDocument();
         expect(screen.getByText('Nei')).toBeInTheDocument();
@@ -122,7 +120,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     it('Viser om ikke informasjon av varig endring da det ikke eksisterer', () => {
         const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
         const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
         rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
 
         expect(screen.getByText('skjema.sn.varigendring')).toBeInTheDocument();
@@ -132,7 +130,7 @@ describe('VisningAvPerioderSNSoknadKvittering', () => {
     it('Viser om informasjon om varig endring', () => {
         const { rerender } = setupVisningAvPerioderSNSoknadKvittering(fullstendigResponse);
         const intlMock = createIntl({ locale: 'nb', defaultLocale: 'nb' });
-        mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+        vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
         rerender(<VisningAvPerioderSNSoknadKvittering intl={intlMock} perioder={varigEndring} />);
 
         expect(screen.getByText('skjema.sn.varigendring')).toBeInTheDocument();

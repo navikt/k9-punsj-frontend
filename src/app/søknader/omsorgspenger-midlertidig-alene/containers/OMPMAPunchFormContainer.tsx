@@ -11,7 +11,7 @@ import { RootStateType } from 'app/state/RootState';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { hentBarn } from 'app/state/reducers/HentBarn';
 import { redirectToLos } from 'app/utils';
-import { trackOmpmaStartedFromJournalpost, trackOmpmaSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackOmpmaStartedFromJournalpost, trackOmpmaSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { useNavigate, useParams } from 'react-router';
 import { Dispatch } from 'redux';
 import OMPMASoknadKvittering from '../components/OMPMASoknadKvittering';

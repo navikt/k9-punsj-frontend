@@ -43,7 +43,7 @@ kubectl get pods -n k9saksbehandling -l app=k9-punsj-frontend
 kubectl logs -n k9saksbehandling -l app=k9-punsj-frontend --tail=100
 
 # Inspect Nais and workflow files
-rg -n "azure:|accessPolicy:|frontend:|generatedConfig:|ingresses:|replicas:|PROXY_CONFIG|autoLogin" nais .github/workflows
+rg -n "azure:|accessPolicy:|ingresses:|replicas:|PROXY_CONFIG|autoLogin" nais .github/workflows
 rg --files nais .github/workflows
 
 # Local validation when repo config changes
@@ -65,7 +65,7 @@ zizmor .github/workflows/
 - Environment specific variables live in `nais/dev-gcp.yml` and `nais/prod-gcp.yml`.
 - The app runs in namespace `k9saksbehandling`.
 - Azure application auth and Azure sidecar are enabled in the manifest.
-- `frontend.generatedConfig.mountPath` is used to expose runtime config into the built frontend.
+- Frontend APM derives its collector from the Nais ingress hostname; `server/server.js` allows the dev and prod collector origins in CSP.
 - `PROXY_CONFIG` is injected through the manifest and controls downstream proxy targets and scopes.
 - Deployments are handled through GitHub Actions, especially `.github/workflows/build-and-deploy-gcp.yml` and related workflows.
 - Image build and deploy use Nais actions and workload identity, not manual kubectl apply from developer machines.
@@ -77,7 +77,7 @@ zizmor .github/workflows/
 - Review manifest and workflow changes together. A safe manifest can still be deployed unsafely through workflow changes.
 - Check `azure.application`, `azure.sidecar`, `autoLogin`, and ignored paths when auth relevant behavior is touched.
 - Check `accessPolicy.outbound` against the proxy destinations and actual app integrations.
-- Check `frontend.generatedConfig` and env injection changes for runtime compatibility and secret safety.
+- Check browser telemetry CSP and server env changes for runtime compatibility and secret safety.
 - Check health endpoints, resource settings, replicas, and ingress changes for rollout risk.
 - Prefer small manifest changes with clear intent over broad platform reshaping.
 
@@ -115,7 +115,7 @@ zizmor .github/workflows/
 
 ### Frontend runtime config
 
-- Review `frontend.generatedConfig.mountPath` and runtime env changes for compatibility with the built assets.
+- Review ingress hostnames and runtime env changes for compatibility with APM collector resolution.
 - Check that `PROXY_CONFIG` stays structurally valid and aligned with proxy code in `server/src/reverse-proxy.js`.
 - Avoid putting secrets into generated frontend config or client visible env.
 - When env values change, think through both browser and server side impact.

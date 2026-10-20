@@ -32,7 +32,7 @@ import { ROUTES } from 'app/constants/routes';
 import ErrorModal from 'app/fordeling/Komponenter/ErrorModal';
 import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { pfLand } from 'app/søknader/pleiepenger/components/pfLand';
-import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackPlsStartedFromJournalpost, trackPlsSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 import { NavigateFunction, useNavigate, useParams } from 'react-router';
 import Feilmelding from '../../../components/Feilmelding';

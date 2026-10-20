@@ -48,7 +48,7 @@ describe('LegacyCheckboxGroup', () => {
 
     it('calls onChange with value and checked values', async () => {
         const user = userEvent.setup();
-        const onChange = jest.fn();
+        const onChange = vi.fn();
 
         render(
             <LegacyCheckboxGroup

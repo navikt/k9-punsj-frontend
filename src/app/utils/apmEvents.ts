@@ -1,4 +1,4 @@
-import { pushEvent } from '@nais/apm';
+import { isInitialized, pushEvent } from '@nais/apm';
 import { EventAttributes } from '@grafana/faro-web-sdk';
 import { ROUTES } from 'app/constants/routes';
 import { ISoknadKvitteringArbeidstid } from 'app/models/types/KvitteringTyper';
@@ -277,8 +277,8 @@ const hasOpptjeningAktivitet = (innsentSoknad: KvitteringWithOpptjeningAktivitet
     return !!opptjeningAktivitet.frilanser || (opptjeningAktivitet.selvstendigNæringsdrivende?.length || 0) > 0;
 };
 
-export const pushFaroEvent = (name: string, attributes?: EventAttributes): boolean => {
-    if (typeof window === 'undefined' || !window.nais?.telemetryCollectorURL) {
+export const pushApmEvent = (name: string, attributes?: EventAttributes): boolean => {
+    if (typeof window === 'undefined' || !isInitialized()) {
         return false;
     }
 
@@ -291,7 +291,7 @@ export const pushFaroEvent = (name: string, attributes?: EventAttributes): boole
 };
 
 export const trackManualJournalpostFlowStarted = (): boolean =>
-    pushFaroEvent(MANUAL_JOURNALPOST_FLOW_STARTED_EVENT, {
+    pushApmEvent(MANUAL_JOURNALPOST_FLOW_STARTED_EVENT, {
         source: OPPRETT_JOURNALPOST_SOURCE,
         route: ROUTES.OPPRETT_JOURNALPOST,
         phase: 'page_opened',
@@ -398,7 +398,7 @@ const trackPunsjStartedFromJournalpost = (journalpostId: string, sakstype: strin
         return false;
     }
 
-    return pushFaroEvent(PUNSJ_STARTED_EVENT, {
+    return pushApmEvent(PUNSJ_STARTED_EVENT, {
         source,
         sakstype,
     });
@@ -412,7 +412,7 @@ const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
     const source = getPunsjSourceForJournalpost(journalpostId);
     const submitSource: PunsjSubmitSource = source === UNKNOWN_SOURCE ? OTHER_SOURCE : source;
 
-    pushFaroEvent(PUNSJ_SUBMIT_COMPLETED_EVENT, {
+    pushApmEvent(PUNSJ_SUBMIT_COMPLETED_EVENT, {
         source: submitSource,
         sakstype,
     });
@@ -426,14 +426,14 @@ const trackPunsjSubmitFromJournalpost = <FieldGroup extends PunsjFieldGroup>(
         sakstype,
     };
 
-    pushFaroEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
+    pushApmEvent(PUNSJ_SUBMIT_SNAPSHOT_EVENT, {
         ...sharedAttributes,
         used_field_groups: fieldGroups.join(',') || 'none',
         used_field_group_count: String(fieldGroups.length),
     });
 
     fieldGroups.forEach((fieldGroup) => {
-        pushFaroEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
+        pushApmEvent(PUNSJ_SUBMIT_FIELD_GROUP_EVENT, {
             ...sharedAttributes,
             field_group: fieldGroup,
         });

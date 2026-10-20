@@ -2,11 +2,11 @@ import { PunchFormComponent } from 'app/søknader/pleiepenger-livets-sluttfase/c
 
 describe('PLSPunchForm', () => {
     test('validerer hos backend når frilanser slutter før startdato', () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         const component = new PunchFormComponent({ validateSoknad } as unknown as ConstructorParameters<
             typeof PunchFormComponent
         >[0]);
-        const setState = jest.fn();
+        const setState = vi.fn();
 
         component.state = {
             ...component.state,
@@ -32,8 +32,8 @@ describe('PLSPunchForm', () => {
     });
 
     test('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
-        const validateSoknad = jest.fn();
-        const updateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
+        const updateSoknad = vi.fn();
         const component = new PunchFormComponent({
             validateSoknad,
             updateSoknad,
@@ -52,7 +52,7 @@ describe('PLSPunchForm', () => {
                 opptjeningAktivitet: { ...component.state.soknad.opptjeningAktivitet, frilanser: invalidFrilanser },
             },
         };
-        component.setState = jest.fn() as typeof component.setState;
+        component.setState = vi.fn() as typeof component.setState;
         Reflect.set(component, 'getSoknadFromStore', () => ({
             journalposter: new Set(),
             opptjeningAktivitet: { frilanser: invalidFrilanser },

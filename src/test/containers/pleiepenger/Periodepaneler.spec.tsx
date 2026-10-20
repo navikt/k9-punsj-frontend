@@ -1,6 +1,5 @@
 import { TextField } from '@navikt/ds-react';
 import { render, screen } from '@testing-library/react';
-import { mocked } from 'jest-mock';
 import * as React from 'react';
 import { IntlShape } from 'react-intl';
 
@@ -12,8 +11,8 @@ import {
 import { IPeriodeinfoExtension, Periodeinfo } from '../../../app/models/types/Periodeinfo';
 import intlHelper from '../../../app/utils/intlUtils';
 
-jest.mock('react-intl');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-intl');
+vi.mock('app/utils/intlUtils');
 
 interface ITestperiodeinfo extends IPeriodeinfoExtension {
     test: string;
@@ -70,15 +69,15 @@ const setupPeriodepaneler = (periodepanelerPropsPartial?: Partial<IPeriodeinfopa
         initialPeriodeinfo: initialperiodetest,
         panelid: (index: number) => `testperiode_${index}`,
         component: testkomponent,
-        editSoknad: jest.fn(),
-        editSoknadState: jest.fn(),
+        editSoknad: vi.fn(),
+        editSoknadState: vi.fn(),
         kanHaFlere: true,
         medSlettKnapp: true,
-        getErrorMessage: jest.fn(),
+        getErrorMessage: vi.fn(),
         ...periodepanelerPropsPartial,
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
     return render(<PeriodeinfoPaneler {...periodepanelerProps} />);
 };

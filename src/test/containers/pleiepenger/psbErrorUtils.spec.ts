@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { createIntl } from 'react-intl';
 
 import { IInputError } from '../../../app/models/types';
@@ -8,14 +9,14 @@ import {
 } from '../../../app/søknader/pleiepenger/containers/psbErrorUtils';
 import intlHelper from '../../../app/utils/intlUtils';
 
-jest.mock('../../../app/utils/intlUtils');
+vi.mock('../../../app/utils/intlUtils');
 
 describe('psbErrorUtils', () => {
     const intl = createIntl({ locale: 'nb', defaultLocale: 'nb' });
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        (intlHelper as jest.Mock).mockImplementation((_intl, id: string) => id);
+        vi.clearAllMocks();
+        (intlHelper as Mock).mockImplementation((_intl, id: string) => id);
     });
 
     it('returns unhandled errors for selected attribute only', () => {

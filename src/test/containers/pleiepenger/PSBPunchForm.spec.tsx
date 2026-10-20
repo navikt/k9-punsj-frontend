@@ -1,8 +1,7 @@
+import type { Mock } from 'vitest';
 import React from 'react';
 
-import { expect } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { mocked } from 'jest-mock';
 
 import { createIntl, IntlProvider, IntlShape } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,18 +29,18 @@ import {
 } from '../../../app/søknader/pleiepenger/utils/errorAnchorUtils';
 import { Tidsformat } from '../../../app/utils/timeUtils';
 
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
+vi.mock('react-intl', async () => ({
+    ...(await vi.importActual('react-intl')),
     FormattedMessage: ({ id }: { id: string }) => id,
 }));
-jest.mock('react-router');
-jest.mock('app/utils/envUtils');
-jest.mock('app/utils/intlUtils');
+vi.mock('react-router');
+vi.mock('app/utils/envUtils');
+vi.mock('app/utils/intlUtils');
 
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux'),
-    useSelector: jest.fn(),
-    useDispatch: jest.fn(),
+vi.mock('react-redux', async () => ({
+    ...(await vi.importActual('react-redux')),
+    useSelector: vi.fn(),
+    useDispatch: vi.fn(),
 }));
 
 const soknadId = 'abc';
@@ -133,20 +132,20 @@ const setupPunchForm = (
     };
 
     const punchFormDispatchProps: IPunchFormDispatchProps = {
-        getSoknad: jest.fn(),
-        hentPerioder: jest.fn(),
-        resetSoknadAction: jest.fn(),
-        undoChoiceOfEksisterendeSoknadAction: jest.fn(),
-        resetPunchFormAction: jest.fn(),
-        submitSoknad: jest.fn(),
-        updateSoknad: punchFormDispatchPropsSetup?.updateSoknad || jest.fn(),
-        setSignaturAction: jest.fn(),
-        settJournalpostPaaVent: jest.fn(),
-        settPaaventResetAction: jest.fn(),
-        setIdentAction: jest.fn(),
-        validateSoknad: jest.fn(),
-        validerSoknadReset: jest.fn(),
-        resetAllStateAction: jest.fn(),
+        getSoknad: vi.fn(),
+        hentPerioder: vi.fn(),
+        resetSoknadAction: vi.fn(),
+        undoChoiceOfEksisterendeSoknadAction: vi.fn(),
+        resetPunchFormAction: vi.fn(),
+        submitSoknad: vi.fn(),
+        updateSoknad: punchFormDispatchPropsSetup?.updateSoknad || vi.fn(),
+        setSignaturAction: vi.fn(),
+        settJournalpostPaaVent: vi.fn(),
+        settPaaventResetAction: vi.fn(),
+        setIdentAction: vi.fn(),
+        validateSoknad: vi.fn(),
+        validerSoknadReset: vi.fn(),
+        resetAllStateAction: vi.fn(),
         ...punchFormDispatchPropsSetup,
     };
 
@@ -198,18 +197,18 @@ const setupPunchForm = (
     const punchFormComponentProps: IPunchFormComponentProps = {
         journalpostid,
         id: soknadId,
-        navigate: jest.fn(),
+        navigate: vi.fn(),
     };
 
-    mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
+    vi.mocked(intlHelper).mockImplementation((intl: IntlShape, id: string) => id);
 
-    (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+    (useSelector as unknown as Mock).mockImplementation((callback) =>
         callback({
             felles: { journalposterIAapenSoknad: [] },
             identState,
         }),
     );
-    (useDispatch as unknown as jest.Mock).mockReturnValue(jest.fn());
+    (useDispatch as unknown as Mock).mockReturnValue(vi.fn());
 
     return render(
         <IntlProvider locale="en" messages={{}}>
@@ -231,7 +230,7 @@ describe('PunchForm', () => {
     });
 
     it('Henter søknadsinformasjon', () => {
-        const getSoknad = jest.fn();
+        const getSoknad = vi.fn();
         setupPunchForm({}, { getSoknad });
         expect(getSoknad).toHaveBeenCalledTimes(1);
         expect(getSoknad).toHaveBeenCalledWith(soknadId);
@@ -252,7 +251,7 @@ describe('PunchForm', () => {
     });
 
     it('Oppdaterer søknad når mottakelsesdato endres', async () => {
-        const updateSoknad = jest.fn();
+        const updateSoknad = vi.fn();
         const newDato = '11.02.2020';
 
         setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
@@ -295,7 +294,7 @@ describe('PunchForm', () => {
 
     it('Viser dato for å legge til søknadsperiode når det ikke finnes en søknadsperiode fra før', () => {
         setupPunchForm({ soknad: initialSoknad }, {});
-        (useSelector as unknown as jest.Mock).mockImplementation((callback) =>
+        (useSelector as unknown as Mock).mockImplementation((callback) =>
             callback({
                 PLEIEPENGER_SYKT_BARN: {
                     punchFormState: {},
@@ -397,7 +396,7 @@ describe('PunchForm', () => {
     });
 
     it('Fjerner tilsynsordning når avhuking på tilsyn fjernes', async () => {
-        const updateSoknad = jest.fn();
+        const updateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -432,7 +431,7 @@ describe('PunchForm', () => {
     });
 
     it('Validerer søknad når saksbehandler trykker på "Send inn"', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
 
@@ -444,7 +443,7 @@ describe('PunchForm', () => {
     });
 
     it('validerer hos backend når frilanser slutter før startdato', () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -484,15 +483,15 @@ describe('PunchForm', () => {
     });
 
     it('revaliderer ikke ugyldige frilanserdatoer før de er korrigert', () => {
-        const validateSoknad = jest.fn();
-        const updateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
+        const updateSoknad = vi.fn();
         const component = new PunchFormComponent({
             validateSoknad,
             updateSoknad,
             journalpostid,
             punchFormState: { soknad: { soeknadsperiode: [] } },
         } as unknown as ConstructorParameters<typeof PunchFormComponent>[0]);
-        const setState = jest.fn();
+        const setState = vi.fn();
         const invalidFrilanser = {
             startdato: '2022-10-10',
             sluttdato: '2022-10-01',
@@ -531,7 +530,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser melding om valideringsfeil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -556,7 +555,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser fallback melding i ErrorSummary når validering feiler uten feltfeil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -577,7 +576,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til søknadsperiodefelt for uttak-valideringsfeil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         const periodKey = '../2029-02-15';
         const { fomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
 
@@ -611,7 +610,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til TOM-felt ved søknadsperiode list-element-feil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         const periodKey = '2026-02-02/..';
         const { tomId } = createPeriodInputIds('ytelse.søknadsperiode', periodKey);
 
@@ -645,7 +644,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til trekkKrav-perioder via endringAvSøknadsperioder-id', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         const periodKey = '../2026-02-11';
         const { fomId } = createPeriodInputIds('endringAvSøknadsperioder', periodKey);
 
@@ -683,7 +682,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser ikke duplikat av begrunnelse-feil i endringsblokk', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -714,7 +713,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til begrunnelsefelt og dedupliserer samme melding', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -750,7 +749,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser ikke duplikat av periodemelding i medlemskap-blokk', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -778,7 +777,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til utenlandsopphold landfelt når backend sender 9999-12-31 i periodesti', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         const landId = createLandInputId('ytelse.utenlandsopphold', '2026-02-02/..');
 
         setupPunchForm(
@@ -812,7 +811,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser lovbestemt ferie valideringsfeil under periodfelt ved periodesti fra backend', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -842,7 +841,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for okOrganisasjonsnummer-feil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -869,7 +868,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til selvstendig næringsdrivende organisasjonsnummer for organisasjonsnummer.verdi-feil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -896,7 +895,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser bruttoinntekt-feil på feltet og lenker ErrorSummary til bruttoinntekt-feltet', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -942,7 +941,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser virksomhetstyper-feil på feltet, dedupliserer duplikater og lenker ErrorSummary til feltgruppen', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -993,7 +992,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser frilanser arbeidstid-feil under kalenderseksjonen', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -1031,7 +1030,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser selvstendig arbeidstid-feil under kalenderseksjonen', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -1073,7 +1072,7 @@ describe('PunchForm', () => {
     });
 
     it('Lenker ErrorSummary til registrert land for legacy valideringRegistrertUtlandet-feil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm(
             {
@@ -1116,7 +1115,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser modal når saksbehandler trykker på "Send inn" og det er ingen valideringsfeil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
 
         setupPunchForm({ soknad: initialSoknad, validertSoknad, isValid: true }, { validateSoknad });
 
@@ -1140,7 +1139,7 @@ describe('PunchForm', () => {
     });
 
     it('Viser modal når saksbehandler trykker på "Sett på vent" og det er ingen valideringsfeil', async () => {
-        const validateSoknad = jest.fn();
+        const validateSoknad = vi.fn();
         setupPunchForm({ soknad: initialSoknad }, { validateSoknad });
 
         const ventKnapp = screen.getByTestId('ventKnapp');

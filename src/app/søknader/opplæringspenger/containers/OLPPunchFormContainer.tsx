@@ -16,7 +16,7 @@ import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import intlHelper from 'app/utils/intlUtils';
 import { resolveK9saksnummer } from 'app/utils/k9saksnummerUtils';
 
-import { trackOlpStartedFromJournalpost, trackOlpSubmitFromJournalpost } from 'app/utils/faroEvents';
+import { trackOlpStartedFromJournalpost, trackOlpSubmitFromJournalpost } from 'app/utils/apmEvents';
 import { ValidationError } from 'yup';
 import { IOLPSoknadKvittering } from '../OLPSoknadKvittering';
 import { hentEksisterendePerioderForSaksnummer, hentSoeknad, sendSoeknad } from '../api';
