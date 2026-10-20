@@ -2,19 +2,13 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Gjenbrukbar oppgave for pakkevedlikehold (2026-10-20)
+### Pakkevedlikehold og Copilot-ferdighet (2026-10-20)
 
-- La til Copilot-ferdigheten `package-maintenance` med et skript som bare leser metadata og velger tillatte versjoner ut fra publiseringsdatoer og Yarn-konfigurasjonen. Kortet ned vedlikeholdsoppgaven til en gjenbrukbar mal med plan og resultatfelt.
-- Ferdigheten krever rekursiv sikkerhetskontroll og skiller GitHub-varsler fra PR-er og saker. Versjonsvelgeren er testet separat; en full vedlikeholdsrunde med ferdigheten gjenstår.
-- Utfylte plan- og resultatfelt beholdes lokalt gjennom mellomliggende commits og nullstilles bare på forespørsel. Utsatte oppdateringer og årsakene føres i vedlikeholdsrundens eksisterende changelog-oppføring.
-
-### Weekly package maintenance (2026-10-20)
-
-- Oppdaterte eligible patch- og minorversjoner i root og `server`, blant annet Aksel 8.19.2, Faro 2.12.1, React Query 5.104.2, React Hook Form 7.90.0, Vite 8.3.4 og Express 5.3.0.
+- Oppdaterte tillatte patch- og minorversjoner i root og `server` og rettet transitive sikkerhetsfunn.
+- Samordnet `@nais/apm` 0.7.3, Faro 2.12.1 og OpenTelemetry-overstyringene på 2.11.0.
+- La til Copilot-ferdigheten `package-maintenance` med et skript for versjonsvalg ut fra publiseringsdatoer og Yarn-konfigurasjonen, rekursiv sikkerhetskontroll og en kort oppgavemal. Utfylte arbeidsnotater beholdes lokalt og nullstilles bare på forespørsel.
 - Lot majorløft for Cypress, ESLint, MSW, React Intl og TypeScript stå til egne oppgaver.
 - Beholdt React 19.3.0 og fast-uri 3.1.8 fordi henholdsvis 19.3.1 og 3.1.9 fortsatt var innenfor sju dagers nedkjølingstid ved denne kjøringen.
-- Oppdaterte `@nais/apm` til 0.7.3 for å samle Faro på 2.12.1 og løftet OpenTelemetry-overstyringene til 2.11.0, slik at de samsvarer med Faro sin OTLP-transformer.
-- Oppdaterte sårbare transitive versjoner av `brace-expansion`, `fast-uri`, `http-cache-semantics`, `ip-address` og alle berørte `source-map-js`-stier.
 - Gjenværende sikkerhetsfunn: `braces@3.0.3` via `micromatch@4.0.8` (GHSA-vfj7-8cjw-p6xm, high), uten fikset versjon i major 3. Lukking av GitHub-varsler må bekreftes etter merge og ny image-skanning; den lokale audit-kontrollen bekrefter ikke dette.
 
 ### Vite og Vitest erstatter Webpack og Jest (2026-10-19)
