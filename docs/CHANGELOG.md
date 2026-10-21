@@ -4,10 +4,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Majoroppdateringer av pakker (2026-10-20)
 
-- Oppdaterte dotenv til 18.0.7 i root og server, React Intl til 12.1.4 med samsvarende FormatJS-overstyringer, Cypress til 16.1.1 og MSW til 3.0.3. Respekterte sju dagers nedkjølingstid.
-- Tilpasset MSW-importer og oppstart, regenererte service worker, flyttet viewport-størrelser til testgruppenes konfigurasjon og fjernet Cypress-innstillingen `allowCypressEnv`, som er fjernet i v16.
+- Oppdaterte dotenv til 18.0.7 i root og server, React Intl til 12.1.4 med samsvarende FormatJS-overstyringer og MSW til 3.0.3. Respekterte sju dagers nedkjølingstid.
+- Tilpasset MSW-importer og oppstart, regenererte service worker og flyttet viewport-størrelser til testgruppenes konfigurasjon.
 - Beholdt ESLint 9.39.5 fordi React- og import-pluginene ikke støtter v10, og TypeScript 6.0.3 fordi typescript-eslint krever TypeScript <6.1. Redux Logger 4.0.0 ligger på beta-taggen og ble ikke tatt inn.
-- Eksisterende sikkerhetsfunn i `braces@3.0.3` via `micromatch@4.0.8` (GHSA-vfj7-8cjw-p6xm, high) består. Cypress 16 støtter fortsatt Electron, men nettleseren er nå deprecated; bytte av testnettleser gjenstår.
+- Beholdt Cypress 15.21.1. Oppgraderingen til 16.1.1 utsettes på grunn av ustabile fokusfeil i `select` og `type` som krever egen oppfølging.
+- Eksisterende sikkerhetsfunn i `braces@3.0.3` via `micromatch@4.0.8` (GHSA-vfj7-8cjw-p6xm, high) består.
 
 ### Oppdaterte GitHub Actions-pinner (2026-10-20)
 
