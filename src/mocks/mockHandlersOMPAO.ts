@@ -1,4 +1,4 @@
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 import { ApiPath } from 'app/apiConfig';
 
 const mockHandlersOMPAO = {
