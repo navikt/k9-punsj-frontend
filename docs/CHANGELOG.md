@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Sikkerhetsoppdatering av Node.js (2026-10-23)
+
+- Oppdaterte CI til Node.js 26.12.1 for å rette Node2Shell (CVE-2026-111497) og samordnet CI og produksjon på Node.js 26.
+
 ### Majoroppdateringer av pakker (2026-10-20)
 
 - Oppdaterte dotenv til 18.0.7 i root og server, React Intl til 12.1.4 med samsvarende FormatJS-overstyringer og MSW til 3.0.3. Respekterte sju dagers nedkjølingstid.
