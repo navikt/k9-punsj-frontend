@@ -1,4 +1,5 @@
-import { HttpResponse, delay, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
+import { delay } from 'msw/utils/delay';
 
 import PunsjInnsendingType from 'app/models/enums/PunsjInnsendingType';
 import { ApiPath } from 'app/apiConfig';

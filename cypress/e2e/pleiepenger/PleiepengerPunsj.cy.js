@@ -1,15 +1,13 @@
 import { ApiPath } from 'app/apiConfig';
 import initialState from '../../state/PleiepengerPunsjInitialState';
 
-describe('Pleiepenger punsj', () => {
+describe('Pleiepenger punsj', { viewportWidth: 1280, viewportHeight: 1450 }, () => {
     beforeEach(() => {
         cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe', {
             onBeforeLoad: (window) => {
                 window.__initialState__ = initialState;
             },
         });
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
     });
 
     it('kan sende inn søknad om pleiepenger', () => {
@@ -49,9 +47,12 @@ describe('Pleiepenger punsj', () => {
         cy.findByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
         cy.findByLabelText('Frilanser').click();
         cy.findByLabelText('Når startet søker som frilanser?').type('10.10.2022');
-        cy.findByLabelText('Når sluttet søker som frilanser?').type('01.10.2022').blur();
+        cy.findByLabelText('Når sluttet søker som frilanser?').type('01.10.2022');
+        cy.findByLabelText('Når startet søker som frilanser?').click();
 
-        cy.findByLabelText('Når sluttet søker som frilanser?').should('have.attr', 'aria-invalid', 'true');
+        cy.findByLabelText('Når sluttet søker som frilanser?')
+            .should('have.value', '01.10.2022')
+            .and('have.attr', 'aria-invalid', 'true');
     });
 
     it('kan fylle inn lengre perioder i arbeidstid', () => {

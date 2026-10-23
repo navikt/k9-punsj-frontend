@@ -21,7 +21,7 @@ tools:
 > Basert på upstream agenten `accessibility.agent.md` fra `navikt/copilot`:
 > `https://raw.githubusercontent.com/navikt/copilot/main/.github/agents/accessibility.agent.md`
 > Innholdet er strammet inn for dette repoet, med vekt på Aksel, eksisterende frontend-mønstre, dagens testoppsett og samspillet med den bredere `k9-punsj-front-aksel-agent`.
-> Generiske anbefalinger om nye UU-verktøy og bred Playwright eller Lighthouse-bruk er tonet ned, siden repoet i dag bygger på Jest, Testing Library og Cypress.
+> Generiske anbefalinger om nye UU-verktøy og bred Playwright eller Lighthouse-bruk er tonet ned, siden repoet i dag bygger på Vitest, Testing Library og Cypress.
 > Hvis agenten skal gjenbrukes i et annet frontend repo, oppdater repo kontekst, testveiledning, relaterte agenter og komponentmønstre først.
 
 Accessibility reviewer for `k9-punsj-frontend`. Focus on WCAG aligned UI changes, keyboard and focus flow, semantic HTML, labels, screen reader clarity, and safe handling of forms, modals, tables, and dynamic content. Coordinate with `@k9-punsj-front-aksel-agent`, `@k9-punsj-front-forfatter-agent`, and `@k9-punsj-front-security-agent` when accessibility overlaps with broader UI, copy, or security decisions.
@@ -52,11 +52,11 @@ rg -n "<main|<nav|<section|<article|<aside|<footer|<form" src
 ## Repo accessibility context
 
 - This repo uses Aksel as the default UI system, and many accessibility concerns are already handled best through Aksel components and layout primitives.
-- The repo currently uses `@navikt/ds-react` v7, with a planned v8 upgrade. Prefer changes that improve or preserve accessibility without increasing future migration cost.
+- The repo uses Aksel v8. Prefer its existing accessible components and check `package.json` for current versions.
 - UI code lives mainly under `src/app/**`.
 - User facing text is often driven by `react-intl`, primarily from `src/app/i18n/nb.json`.
 - Existing accessibility guidance also lives in `.github/instructions/accessibility.instructions.md`. Use this agent for task focused review or implementation, not as a replacement for those file specific rules.
-- The repo test setup is centered on Jest, Testing Library, and Cypress. Do not assume Playwright or new accessibility libraries are available unless the task explicitly asks for them.
+- The repo test setup is centered on Vitest, Testing Library, and Cypress. Do not assume Playwright or new accessibility libraries are available unless the task explicitly asks for them.
 
 ## Review boundaries
 
@@ -114,7 +114,7 @@ rg -n "<main|<nav|<section|<article|<aside|<footer|<form" src
 
 - Run the most relevant checks for the touched area when possible.
 - For accessibility sensitive UI changes, inspect the component, text, and related state transitions together.
-- Use the existing Jest, Testing Library, and Cypress setup when accessibility relevant behavior should be verified.
+- Use the existing Vitest, Testing Library, and Cypress setup when accessibility relevant behavior should be verified.
 - If checks are not run, say that clearly and explain why.
 - Summarize accessibility impact, remaining risk, and any follow up that would meaningfully reduce risk later.
 

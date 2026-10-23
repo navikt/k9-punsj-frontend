@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 import journalpost from '../../fixtures/jpOMPUT305.json';
 
 const dokumenttype = 'Omsorgspenger';
@@ -8,9 +8,7 @@ const journalpostId = journalpost.journalpostId;
 const annenSøkerFnr = '02918496664';
 const fosterBarnFnr = '09418531220';
 
-describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false }, () => {
-    Cypress.config('viewportWidth', 1280);
-    Cypress.config('viewportHeight', 1450);
+describe(`Journalføring ${dokumenttype} med fosterbarn`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     beforeEach(() => {
         cy.visit(`/journalpost/${journalpostId}`);
 

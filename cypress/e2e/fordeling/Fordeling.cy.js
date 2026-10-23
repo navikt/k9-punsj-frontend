@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 
 describe('Fordeling', () => {
     beforeEach(() => {

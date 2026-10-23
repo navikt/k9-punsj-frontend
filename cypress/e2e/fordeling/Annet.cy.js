@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 import { ApiPath } from 'app/apiConfig';
 import journalpost from '../../fixtures/jpOMPUT305.json';
 
@@ -8,11 +8,9 @@ const valgteDokumentType = 'Annet';
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
 
-describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
+describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
         cy.findByText(/Skjul/i).should('exist').click();
         cy.findByText(valgteDokumentType).should('exist').click();
     });

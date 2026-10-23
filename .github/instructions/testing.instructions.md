@@ -1,112 +1,39 @@
 ---
 name: Testing Standards
-description: "Felles testprinsipper for Nav. Språkspesifikke eksempler finnes i egne instruksjoner for Kotlin og TypeScript."
-applyTo: "**/*.test.{ts,tsx,kt,kts}"
+description: "Testprinsipper for k9-punsj-frontend: Vitest, Testing Library og Cypress."
+applyTo: "**/*.{spec,test}.{ts,tsx}"
 ---
 
-# Testing Standards
+# Testing standards
 
-Common testing principles for Nav. Language-specific examples can be found in separate instructions for [Kotlin](testing-kotlin.instructions.md) and [TypeScript](testing-typescript.instructions.md).
+Follow `AGENTS.md` and the [TypeScript test patterns](testing-typescript.instructions.md). Unit and component tests use Vitest and Testing Library; end to end tests use Cypress.
 
-## Test Coverage
+## Test strategy
 
-### Coverage Requirements
+Choose the smallest reliable test for the behavior being changed:
 
-- **Utilities in `lib/`**: 80%+ coverage required
-- **Business logic**: 70%+ coverage required
-- **API routes**: Test happy path + error cases
-- **Repositories**: Test CRUD operations
-- **Event handlers**: Test event processing + publishing
+| What to test | Tools |
+|---|---|
+| Pure functions, validation, and data transformations | Vitest |
+| Component behavior and form interactions | Vitest and Testing Library |
+| Critical user workflows | Cypress with the existing MSW mocks |
 
-## Test Naming
+- Keep unit and component tests in `src/test/` as `*.spec.ts` or `*.spec.tsx`, following adjacent tests.
+- Use Norwegian test descriptions that explain observable behavior.
+- Cover relevant success, error, and edge cases without testing implementation details.
+- Keep test state isolated and restore mocks when needed.
+- Use existing test helpers and fixtures before introducing new ones.
+- Check keyboard flow, focus, accessible names, and error presentation when the changed behavior affects accessibility.
 
-```kotlin
-// ✅ Good - describes behavior
-`should create user when valid data provided`
-`should throw exception when email is invalid`
-`should publish event after successful processing`
+## Validation
 
-// ❌ Bad - not descriptive
-`test1`
-`createUserTest`
-`testValidation`
-```
-
-## Test Strategy
-
-Choose test type based on what you're verifying:
-
-| What to test | Test type | Tools |
-|---|---|---|
-| Pure functions, utils | Unit test | Kotest / Vitest |
-| Controller + validation | Slice test | `@WebMvcTest` + MockkBean |
-| Repository + SQL | Slice test | `@DataJpaTest` + Testcontainers |
-| Full API flow | Integration test | `@SpringBootTest` + Testcontainers |
-| User workflows | E2E test | Playwright |
-| Accessibility | E2E test | Playwright + axe-core |
-
-### When to use what
-
-- **Unit**: Business logic, data transformations, formatting
-- **Slice** (`@WebMvcTest`, `@DataJpaTest`): Faster than full integration, tests one layer
-- **Integration** (`@SpringBootTest`): Auth flow, multi-layer, real DB
-- **E2E** (Playwright): Critical user journeys, form submission, navigation
-
-## Playwright E2E Tests
-
-```typescript
-import { test, expect } from "@playwright/test";
-
-test.describe("Oversikt", () => {
-  test("should display vedtak list", async ({ page }) => {
-    await page.goto("/oversikt");
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("table")).toBeVisible();
-  });
-
-  test("should filter by status", async ({ page }) => {
-    await page.goto("/oversikt");
-    await page.getByRole("combobox", { name: /status/i }).selectOption("aktiv");
-    await expect(page.getByRole("row")).toHaveCount(await page.getByRole("row").count());
-  });
-});
-```
-
-### Accessibility in E2E
-
-```typescript
-import AxeBuilder from "@axe-core/playwright";
-
-test("should have no a11y violations", async ({ page }) => {
-  await page.goto("/oversikt");
-  const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa"])
-    .analyze();
-  expect(results.violations).toEqual([]);
-});
-```
+- Run the narrowest relevant tests first with `yarn test <path>`.
+- Use `yarn test:e2e` for headless Cypress checks or `yarn test:e2eUI` for interactive checks when the change needs end to end coverage.
+- Both Cypress commands start the frontend in test mode with MSW mocks; they do not require the backend repository.
+- Summarize what was checked and explain any checks that could not be run.
 
 ## Boundaries
 
-### ✅ Always
-
-- Write tests for new code before committing
-- Test both success and error cases
-- Use descriptive test names
-- Clean up test data after each test
-- Run full test suite before pushing
-
-### ⚠️ Ask First
-
-- Changing test framework or structure
-- Adding complex test fixtures
-- Modifying shared test utilities
-- Disabling or skipping tests
-
-### 🚫 Never
-
-- Commit failing tests
-- Skip tests without good reason
-- Test implementation details
-- Share mutable state between tests
-- Commit without running tests
+- Do not add a test framework or dependency unless the task requires it.
+- Ask before changing shared test infrastructure or disabling tests.
+- Do not commit failing tests or share mutable state between tests.

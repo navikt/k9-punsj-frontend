@@ -2,12 +2,37 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Sikkerhetsoppdatering av Node.js (2026-10-23)
+
+- Oppdaterte CI til Node.js 26.12.1 for å rette Node2Shell (CVE-2026-111497) og samordnet CI og produksjon på Node.js 26.
+
 ### Delt månedskalender i arbeidstid, tilsyn og fravær (2026-10-20)
 
 - Beholder markerte dager på tvers av måneder og samler registrering og sletting i én felles handlingsrad. Gjelder arbeidstid i PSB og PLS, omsorgstilbud i PSB og fravær i OLP.
 - La til hjelpetekst over arbeidstidskalenderen og i månedene, og fremhevet faktisk tid i kalenderdagene.
 - Viser antall registrerte dager per år og åpner paneler med registreringer automatisk. Skjuler årsnivået når kalenderen bare inneholder ett år med høyst seks måneder.
 - Rettet linjebryting i arbeidsgivervalg og fjernet state-oppdatering under rendering ved feilvisning i PLS.
+
+### Majoroppdateringer av pakker (2026-10-20)
+
+- Oppdaterte dotenv til 18.0.7 i root og server, React Intl til 12.1.4 med samsvarende FormatJS-overstyringer og MSW til 3.0.3. Respekterte sju dagers nedkjølingstid.
+- Tilpasset MSW-importer og oppstart, regenererte service worker og flyttet viewport-størrelser til testgruppenes konfigurasjon.
+- Beholdt ESLint 9.39.5 fordi React- og import-pluginene ikke støtter v10, og TypeScript 6.0.3 fordi typescript-eslint krever TypeScript <6.1. Redux Logger 4.0.0 ligger på beta-taggen og ble ikke tatt inn.
+- Beholdt Cypress 15.21.1. Oppgraderingen til 16.1.1 utsettes på grunn av ustabile fokusfeil i `select` og `type` som krever egen oppfølging.
+- Eksisterende sikkerhetsfunn i `braces@3.0.3` via `micromatch@4.0.8` (GHSA-vfj7-8cjw-p6xm, high) består.
+
+### Oppdaterte GitHub Actions-pinner (2026-10-20)
+
+- Oppdaterte pinnen for `actions/setup-node` til v7.1.0, artifact-handlingenes pinninger til v7.0.2 og v8.0.2, Cypress-handlingen til v7.4.6, Nais-handlingene og `navikt/sif-gha-workflows` til verifiserte upstream-commits. Oppdaterte også checkout-kommentaren til v7.0.1; SHA-en var allerede lik.
+- Beholdt applikasjonens Node-versjon 22.22.3, eksisterende artifact-overlevering og deploy-rekkefølge.
+- Lot `nais/deploy` v3 stå utenfor denne oppdateringen. Overgangen fra Docker-handling til composite med Nais CLI må verifiseres separat.
+
+### Rydding av oppgaver og utvikleroppsett (2026-10-20)
+
+- Fjernet tidligere oppgavefiler og mappen `copilot-tasks/completed/`. Beholdt ukentlig pakkevedlikehold og forenklet oppgavemalen.
+- Oppdaterte Copilot-instruksjonene til Aksel v8, Vitest og Cypress, rettet filmaskene for testinstruksjoner og samordnet changelog-reglene.
+- Fjernet ubrukt Tailwind-konfigurasjon og Prettier-innstillinger uten tilhørende plugin.
+- Presiserte hvor Docker Compose henter miljøvariablene for lokal autentisering.
 
 ### Pakkevedlikehold og Copilot-ferdighet (2026-10-20)
 

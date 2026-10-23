@@ -1,5 +1,5 @@
 import { ApiPath } from 'app/apiConfig';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw/http';
 import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpOMPAO303.json';
 import fagsaker from '../../fixtures/fagsaker.json';
@@ -25,11 +25,9 @@ const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til j
 
 const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
 
-describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
+describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
     });
 
     it('Skjul dokument vindu', () => {
@@ -795,11 +793,9 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false }, () => {
     });
 });
 
-describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: false }, () => {
+describe(`Fordeling ${dokumenttype} søker uten fagsaker`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it('Intercept hent fagsaker', () => {
         cy.visit(`/journalpost/${journalpostId}`);
-        Cypress.config('viewportWidth', 1280);
-        Cypress.config('viewportHeight', 1450);
 
         cy.findByText(/Skjul/i).should('exist').click();
 
