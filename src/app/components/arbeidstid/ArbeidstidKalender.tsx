@@ -2,7 +2,7 @@ import React from 'react';
 
 import dayjs from 'dayjs';
 import { FormattedMessage } from 'react-intl';
-import { Heading } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading } from '@navikt/ds-react';
 import {
     ArbeidstidPeriodeMedTimer,
     IArbeidstidPeriodeMedTimer,
@@ -66,6 +66,17 @@ const ArbeidstidKalender = ({
             <Heading size="xsmall" className="mb-4">
                 <FormattedMessage id="skjema.arbeid.arbeidstidKalender.header" />
             </Heading>
+
+            <Alert size="small" variant="info" className="mb-4">
+                <div className="space-y-3">
+                    <BodyShort>
+                        <FormattedMessage id="skjema.arbeid.arbeidstidKalender.info.lengrePeriode" />
+                    </BodyShort>
+                    <BodyShort>
+                        <FormattedMessage id="skjema.arbeid.arbeidstidKalender.info.maanedsvisning" />
+                    </BodyShort>
+                </div>
+            </Alert>
 
             <KalenderMedModal
                 gyldigePerioder={søknadsperioder}

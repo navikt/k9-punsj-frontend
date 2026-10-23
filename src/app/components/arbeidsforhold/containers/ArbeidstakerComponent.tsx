@@ -141,7 +141,7 @@ const ArbeidstakerComponent: React.FC<ArbeidstakerComponentProps> = ({
                     {harArbeidsgivere && (
                         <Select
                             value={selectedArbeidsgiver}
-                            label="Velg hvilken arbeidsgiver det gjelder"
+                            label={<span className="whitespace-nowrap">Velg hvilken arbeidsgiver det gjelder</span>}
                             className="w-72"
                             onChange={(event) => {
                                 const { value } = event.target;

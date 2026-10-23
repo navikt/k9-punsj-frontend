@@ -6,6 +6,13 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Oppdaterte CI til Node.js 26.12.1 for å rette Node2Shell (CVE-2026-111497) og samordnet CI og produksjon på Node.js 26.
 
+### Delt månedskalender i arbeidstid, tilsyn og fravær (2026-10-20)
+
+- Beholder markerte dager på tvers av måneder og samler registrering og sletting i én felles handlingsrad. Gjelder arbeidstid i PSB og PLS, omsorgstilbud i PSB og fravær i OLP.
+- La til hjelpetekst over arbeidstidskalenderen og i månedene, og fremhevet faktisk tid i kalenderdagene.
+- Viser antall registrerte dager per år og åpner paneler med registreringer automatisk. Skjuler årsnivået når kalenderen bare inneholder ett år med høyst seks måneder.
+- Rettet linjebryting i arbeidsgivervalg og fjernet state-oppdatering under rendering ved feilvisning i PLS.
+
 ### Majoroppdateringer av pakker (2026-10-20)
 
 - Oppdaterte dotenv til 18.0.7 i root og server, React Intl til 12.1.4 med samsvarende FormatJS-overstyringer og MSW til 3.0.3. Respekterte sju dagers nedkjølingstid.
