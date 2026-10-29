@@ -1851,9 +1851,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.19.2":
-  version: 8.19.2
-  resolution: "@navikt/aksel@npm:8.19.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.19.2%2F9bb530235521167e436dca4f06d9d99d9c9e1cab"
+"@navikt/aksel@npm:8.20.0":
+  version: 8.20.0
+  resolution: "@navikt/aksel@npm:8.20.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.20.0%2F91a4f5f369e6506dfffcd4158620e8af631cbe50"
   dependencies:
     chalk: "npm:5.6.2"
     cli-progress: "npm:3.12.0"
@@ -1861,13 +1861,13 @@ __metadata:
     commander: "npm:15.0.0"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
-    figlet: "npm:1.11.3"
+    figlet: "npm:1.12.0"
     is-git-clean: "npm:1.1.0"
     jscodeshift: "npm:17.4.0"
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/922ff9cfc7cac5912563caba3374f331f5a0ba0def4601a1aa9edad51fce677bd01be34f593d850d6e7665f08fbbdd4aa901fc4fdde6e406d16e67126e59a66e
+  checksum: 10/84385ee7dd538ef11e493f668aac6a2b37c65cf7b90454311b1f0c443975725e6c15e97196f8601745eabeee7763a9f05fcf4baa1aa745b57f849ef7c6265f38
   languageName: node
   linkType: hard
 
@@ -6337,14 +6337,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"figlet@npm:1.11.3":
-  version: 1.11.3
-  resolution: "figlet@npm:1.11.3"
+"figlet@npm:1.12.0":
+  version: 1.12.0
+  resolution: "figlet@npm:1.12.0"
   dependencies:
     commander: "npm:^14.0.0"
   bin:
     figlet: bin/index.js
-  checksum: 10/8bf77e217513b8df2d2a2d2b991486dfcec8208bf2d87bdb4b8afe7e18db1630e4ba82389294ef8e9fd03b5734f8c126811763f8fedf481d86cbfbfaab9439e2
+  checksum: 10/1f2805189f243d5e04ea42132c37e6ac41f7b2cf5f9970fae0950041f7cd91e5948c0b7e87e9c908b274b5c0df1b6e12fd6f1e6b7609db7a6ee390f8b88ec3dd
   languageName: node
   linkType: hard
 
@@ -8029,7 +8029,7 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:2.12.1"
     "@k9-punsj-frontend/server": "workspace:"
     "@nais/apm": "npm:0.7.3"
-    "@navikt/aksel": "npm:8.19.2"
+    "@navikt/aksel": "npm:8.20.0"
     "@navikt/aksel-icons": "npm:8.19.2"
     "@navikt/ds-css": "npm:8.19.2"
     "@navikt/ds-react": "npm:8.19.2"
