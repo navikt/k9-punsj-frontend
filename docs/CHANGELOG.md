@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Ukentlig pakkevedlikehold (2026-11-03)
+
+- Oppdaterte tillatte patch- og minorversjoner i root og `server`. Nyere versjoner innenfor nedkjølingstiden og majorløft ble utsatt.
+- Rettet sårbarheter i body-parser, undici, fast-uri, qs, systeminformation og zod. Funn i glob og minimatch gjenstår fordi fiksene krever majorløft og fortsatt er innenfor nedkjølingstiden. GitHub-varsler må bekreftes etter merge og ny image-skanning.
+- Beholdt Faro og OpenTelemetry på grunn av versjonskravene i APM- og tracing-pakkene.
+
 ### Sikkerhetsoppdatering av Node.js (2026-10-23)
 
 - Oppdaterte CI til Node.js 26.12.1 for å rette Node2Shell (CVE-2026-111497) og samordnet CI og produksjon på Node.js 26.
