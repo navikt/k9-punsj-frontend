@@ -59,6 +59,9 @@ yarn build
 yarn lint:css
 ```
 
+`yarn lint` kjører ESLint og TypeScript-kontroll og viser bare feil.
+Bruk `yarn lintNq` for å se ESLint-advarsler.
+
 ## Tester
 
 Alle enhetstester er plassert i [src/test](src/test).
