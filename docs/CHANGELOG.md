@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Stabiliserte oppstarten av Cypress i CI (2026-11-03)
+
+- Samlet serveroppstart og Cypress i samme steg med readiness-sjekk, overvåking av serverprosessen og opprydding ved feil eller avbrudd. Beholdt fire testgrupper.
+
 ### Oppdaterte GitHub Actions-pinner (2026-11-03)
 
 - Oppdaterte Nais- og Trivy-pinner og Cypress-handlingen til v7.4.7. CI- og deploy-oppsettet er uendret; deploy og skanning må bekreftes i GitHub CI.

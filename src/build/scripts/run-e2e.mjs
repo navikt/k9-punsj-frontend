@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { setTimeout as wait } from 'node:timers/promises';
 
 const readyUrl = process.env.E2E_READY_URL ?? 'http://127.0.0.1:8080/health/isReady';
 const defaultReadyTimeoutMs = 60000;
@@ -81,18 +82,17 @@ const terminateProcess = async (childProcess) => {
     signalGroup('SIGKILL');
 };
 
-const waitForReady = async (childProcess) => {
+const waitForReady = async (signal) => {
     const deadline = Date.now() + readyTimeoutMs;
 
     while (Date.now() < deadline) {
-        if (childProcess.exitCode !== null) {
-            throw new Error(`start:e2e exited before ${readyUrl} became ready`);
-        }
+        signal.throwIfAborted();
 
         try {
             const response = await fetch(readyUrl, {
-                signal: AbortSignal.timeout(pollIntervalMs),
+                signal: AbortSignal.any([signal, AbortSignal.timeout(pollIntervalMs)]),
             });
+            await response.body?.cancel();
 
             if (response.ok) {
                 return;
@@ -101,49 +101,61 @@ const waitForReady = async (childProcess) => {
             // Poll until timeout. Startup can legitimately fail the first requests.
         }
 
-        await delay(pollIntervalMs);
+        await wait(pollIntervalMs, undefined, { signal });
     }
 
     throw new Error(`Timed out waiting for ${readyUrl} after ${readyTimeoutMs}ms`);
 };
 
-const run = async () => {
-    const startProcess = spawnYarnScript('start:e2e', [], true);
-
-    const handleSignal = async (signal) => {
-        await terminateProcess(startProcess);
-        process.exit(signal === 'SIGINT' ? 130 : 143);
-    };
-
-    process.once('SIGINT', () => void handleSignal('SIGINT'));
-    process.once('SIGTERM', () => void handleSignal('SIGTERM'));
-
-    const startProcessReady = new Promise((resolve, reject) => {
-        startProcess.once('error', (err) =>
-            reject(new Error(`Failed to start dev server: ${err.message}`)),
-        );
-        waitForReady(startProcess).then(resolve, reject);
+const waitForExit = (childProcess, name) =>
+    new Promise((resolve, reject) => {
+        childProcess.once('exit', (code, signal) => resolve({ code, signal }));
+        childProcess.once('error', (error) => reject(new Error(`Failed to spawn ${name}: ${error.message}`)));
     });
 
+const run = async () => {
+    const startProcess = spawnYarnScript('start:e2e', [], true);
+    const serverFailure = waitForExit(startProcess, 'start:e2e').then(({ code, signal }) => {
+        throw new Error(`E2E server exited unexpectedly (code: ${code}, signal: ${signal}, URL: ${readyUrl})`);
+    });
+    const readiness = new AbortController();
+    let cypressProcess;
+    let rejectInterrupted;
+    const interrupted = new Promise((resolve, reject) => {
+        rejectInterrupted = reject;
+    });
+
+    const handleSignal = (signal) => {
+        process.exitCode = signal === 'SIGINT' ? 130 : 143;
+        rejectInterrupted(new Error(`E2E run interrupted by ${signal}`));
+    };
+    const handleSigint = () => handleSignal('SIGINT');
+    const handleSigterm = () => handleSignal('SIGTERM');
+    process.once('SIGINT', handleSigint);
+    process.once('SIGTERM', handleSigterm);
+
     try {
-        await startProcessReady;
-
-        const cypressProcess = spawnYarnScript(cypressScript, forwardedArgs);
-        const exitCode = await new Promise((resolve, reject) => {
-            cypressProcess.once('exit', (code) => resolve(code ?? 1));
-            cypressProcess.once('error', (err) =>
-                reject(new Error(`Failed to spawn Cypress: ${err.message}`)),
-            );
-        });
-
-        process.exitCode = exitCode;
+        await Promise.race([waitForReady(readiness.signal), serverFailure, interrupted]);
+        cypressProcess = spawnYarnScript(cypressScript, forwardedArgs, true);
+        const { code, signal } = await Promise.race([
+            waitForExit(cypressProcess, 'Cypress'),
+            serverFailure,
+            interrupted,
+        ]);
+        if (signal) {
+            throw new Error(`Cypress exited after receiving ${signal}`);
+        }
+        process.exitCode = code ?? 1;
     } finally {
-        await terminateProcess(startProcess);
+        readiness.abort();
+        await Promise.all([terminateProcess(cypressProcess), terminateProcess(startProcess)]);
+        process.off('SIGINT', handleSigint);
+        process.off('SIGTERM', handleSigterm);
     }
 };
 
 run().catch(async (error) => {
     // eslint-disable-next-line no-console
     console.error(error);
-    process.exitCode = 1;
+    if (!process.exitCode) process.exitCode = 1;
 });
