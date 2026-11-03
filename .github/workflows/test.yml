@@ -33,3 +33,5 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Kjøre tester
               run: yarn test --maxWorkers=2
+            - name: Teste prosesshåndtering for Cypress
+              run: node --test src/build/scripts/run-e2e.test.mjs
