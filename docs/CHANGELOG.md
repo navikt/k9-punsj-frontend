@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdaterte GitHub Actions-pinner (2026-11-03)
+
+- Oppdaterte Nais- og Trivy-pinner og Cypress-handlingen til v7.4.7. CI- og deploy-oppsettet er uendret; deploy og skanning må bekreftes i GitHub CI.
+
 ### Ukentlig pakkevedlikehold (2026-11-03)
 
 - Oppdaterte tillatte patch- og minorversjoner i root og `server`. Nyere versjoner innenfor nedkjølingstiden og majorløft ble utsatt.
