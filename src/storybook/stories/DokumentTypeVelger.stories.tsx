@@ -28,10 +28,10 @@ const applyAppSettings = (overrides?: Record<string, string>) => {
     };
 };
 
-const renderInteractive = (
-    args: React.ComponentProps<typeof DokumentTypeVelger>,
-    appSettingsOverrides?: Record<string, string>,
-) => {
+const RenderInteractive = ({
+    appSettingsOverrides,
+    ...args
+}: React.ComponentProps<typeof DokumentTypeVelger> & { appSettingsOverrides?: Record<string, string> }) => {
     applyAppSettings(appSettingsOverrides);
     const [valgtDokumentType, setValgtDokumentType] = React.useState(args.valgtDokumentType);
 
@@ -77,14 +77,14 @@ export default meta;
 type Story = StoryObj<typeof DokumentTypeVelger>;
 
 export const Default: Story = {
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };
 
 export const OmsorgspengerSelected: Story = {
     args: {
         valgtDokumentType: FordelingDokumenttype.OMSORGSPENGER,
     },
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };
 
 export const Disabled: Story = {
@@ -92,9 +92,9 @@ export const Disabled: Story = {
         valgtDokumentType: FordelingDokumenttype.PLEIEPENGER,
         disableRadios: true,
     },
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };
 
 export const NoOlp: Story = {
-    render: (args) => renderInteractive(args, { OLP_ENABLED: 'false' }),
+    render: (args) => <RenderInteractive {...args} appSettingsOverrides={{ OLP_ENABLED: 'false' }} />,
 };

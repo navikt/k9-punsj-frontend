@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { FormikErrors, getIn, setNestedObjectValues, useFormikContext } from 'formik';
 import { debounce } from 'lodash';
@@ -189,10 +189,7 @@ export const OLPPunchForm: React.FC<OwnProps> = (props) => {
         return mellomlagreSoeknad({ submitSoknad });
     };
 
-    const debounceCallback = useCallback(
-        debounce(() => updateSoknad({ submitSoknad: false }), 1000),
-        [],
-    );
+    const debounceCallback = useMemo(() => debounce(() => updateSoknad({ submitSoknad: false }), 1000), []);
 
     useEffect(() => {
         debounceCallback();

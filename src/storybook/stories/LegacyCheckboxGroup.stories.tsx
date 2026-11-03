@@ -27,7 +27,7 @@ export default meta;
 
 type Story = StoryObj<typeof LegacyCheckboxGroup>;
 
-const renderInteractive = (args: React.ComponentProps<typeof LegacyCheckboxGroup>) => {
+const RenderInteractive = (args: React.ComponentProps<typeof LegacyCheckboxGroup>) => {
     const [checked, setChecked] = React.useState(args.checked ?? args.defaultChecked ?? []);
 
     return (
@@ -43,7 +43,7 @@ const renderInteractive = (args: React.ComponentProps<typeof LegacyCheckboxGroup
 };
 
 export const VerticalThree: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-checkbox-group-vertical-three',
         legend: 'Velg arbeidssituasjon',
@@ -53,7 +53,7 @@ export const VerticalThree: Story = {
 };
 
 export const VerticalTwo: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-checkbox-group-vertical-two',
         legend: 'Velg alternativer',
@@ -63,7 +63,7 @@ export const VerticalTwo: Story = {
 };
 
 export const Error: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-checkbox-group-error',
         legend: 'Velg minst ett alternativ',

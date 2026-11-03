@@ -8,19 +8,35 @@ export interface PunsjFormProviderProps<TFieldValues extends FieldValues> {
     onSubmit?: (data: TFieldValues) => void;
 }
 
-export function PunsjFormProvider<TFieldValues extends FieldValues>({
+type FormWithMethodsProps<TFieldValues extends FieldValues> = Omit<PunsjFormProviderProps<TFieldValues>, 'form'> & {
+    form: UseFormReturn<TFieldValues>;
+};
+
+function FormWithMethods<TFieldValues extends FieldValues>({
     children,
-    formProps,
     form,
     onSubmit,
-}: PunsjFormProviderProps<TFieldValues>) {
-    const methods = form || useForm<TFieldValues>(formProps);
-
+}: FormWithMethodsProps<TFieldValues>) {
     return (
-        <FormProvider {...methods}>
-            <form onSubmit={onSubmit ? methods.handleSubmit(onSubmit) : undefined}>
-                {typeof children === 'function' ? children(methods) : children}
+        <FormProvider {...form}>
+            <form onSubmit={onSubmit ? form.handleSubmit(onSubmit) : undefined}>
+                {typeof children === 'function' ? children(form) : children}
             </form>
         </FormProvider>
     );
+}
+
+function FormWithInternalMethods<TFieldValues extends FieldValues>({
+    formProps,
+    ...props
+}: Omit<PunsjFormProviderProps<TFieldValues>, 'form'>) {
+    const form = useForm<TFieldValues>(formProps);
+    return <FormWithMethods {...props} form={form} />;
+}
+
+export function PunsjFormProvider<TFieldValues extends FieldValues>({
+    form,
+    ...props
+}: PunsjFormProviderProps<TFieldValues>) {
+    return form ? <FormWithMethods {...props} form={form} /> : <FormWithInternalMethods {...props} />;
 }

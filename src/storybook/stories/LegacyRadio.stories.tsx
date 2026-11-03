@@ -48,7 +48,7 @@ export const Error: Story = {
 };
 
 export const Interactive: Story = {
-    render: (args) => {
+    render: function InteractiveRadio(args) {
         const [checked, setChecked] = React.useState(Boolean(args.checked));
 
         return (
