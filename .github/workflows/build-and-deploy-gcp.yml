@@ -55,7 +55,7 @@ jobs:
                   path: ./dist
 
             - name: Last opp nettleserfiler til CDN
-              uses: nais/deploy/actions/cdn-upload/v2@f93637de5533a1bb573f940ceb7527a5b3b0dea0 # v2
+              uses: nais/deploy/actions/cdn-upload/v2@7b60caaded00332e9aa117a8342daa0876851dfe # v2
               with:
                   team: k9saksbehandling
                   source: dist/js
@@ -85,14 +85,14 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod gcp
-              uses: nais/deploy/actions/deploy@f93637de5533a1bb573f940ceb7527a5b3b0dea0 # v2
+              uses: nais/deploy/actions/deploy@7b60caaded00332e9aa117a8342daa0876851dfe # v2
               env:
                   CLUSTER: prod-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
                   VARS: nais/prod-gcp.yml
     trivy:
         needs: [deploy]
-        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@91170838949ba4132c4442e4a1163a8cbeb6ab24 # main at 2026-10-23
+        uses: navikt/sif-gha-workflows/.github/workflows/trivy.yml@cb2d8a237714c848b24fc54f1e3368670aa9d072 # main at 2026-10-23
         permissions:
             contents: write
             security-events: write
