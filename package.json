@@ -5,7 +5,7 @@
     "repository": "https://github.com/navikt/k9-punsj-frontend",
     "license": "MIT",
     "dependencies": {
-        "@grafana/faro-web-sdk": "2.12.1",
+        "@grafana/faro-web-sdk": "2.13.0",
         "@k9-punsj-frontend/server": "workspace:",
         "@nais/apm": "0.7.3",
         "@navikt/aksel-icons": "8.21.0",
