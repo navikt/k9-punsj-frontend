@@ -34,7 +34,7 @@ export default meta;
 
 type Story = StoryObj<typeof LegacyRadioGroup>;
 
-const renderInteractive = (args: React.ComponentProps<typeof LegacyRadioGroup>) => {
+const RenderInteractive = (args: React.ComponentProps<typeof LegacyRadioGroup>) => {
     const [checked, setChecked] = React.useState(args.checked ?? args.defaultChecked ?? '');
 
     return (
@@ -50,7 +50,7 @@ const renderInteractive = (args: React.ComponentProps<typeof LegacyRadioGroup>) 
 };
 
 export const HorizontalThree: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-radio-group-horizontal-three',
         legend: 'Har søker opphold i utlandet?',
@@ -61,7 +61,7 @@ export const HorizontalThree: Story = {
 };
 
 export const HorizontalFour: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-radio-group-horizontal-four',
         legend: 'Hva gjelder saken?',
@@ -72,7 +72,7 @@ export const HorizontalFour: Story = {
 };
 
 export const VerticalTwo: Story = {
-    render: renderInteractive,
+    render: RenderInteractive,
     args: {
         name: 'legacy-radio-group-vertical-two',
         legend: 'Er dokumentet signert?',

@@ -1,13 +1,8 @@
 import { ApiPath } from 'app/apiConfig';
-import initialState from '../../state/PleiepengerPunsjInitialState';
 
 describe('Pleiepenger punsj', { viewportWidth: 1280, viewportHeight: 1450 }, () => {
     beforeEach(() => {
-        cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe');
     });
 
     it('kan sende inn søknad om pleiepenger', () => {

@@ -256,7 +256,12 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                             {ytelse.arbeidstid?.arbeidstakerList.map((arbeidstakerperiode) => {
                                 const skalOrgNummerVises = arbeidstakerperiode.organisasjonsnummer !== null;
                                 return (
-                                    <>
+                                    <React.Fragment
+                                        key={
+                                            arbeidstakerperiode.organisasjonsnummer ??
+                                            arbeidstakerperiode.norskIdentitetsnummer
+                                        }
+                                    >
                                         <p className={classNames('soknadKvitteringUnderTittel')}>
                                             <b>
                                                 {`${intlHelper(
@@ -284,7 +289,7 @@ export const OLPSoknadKvittering: React.FunctionComponent<IOwnProps> = ({ kvitte
                                             ]}
                                             properties={['jobberNormaltTimerPerDag', 'fraværTimerPerDag']}
                                         />
-                                    </>
+                                    </React.Fragment>
                                 );
                             })}
                         </div>

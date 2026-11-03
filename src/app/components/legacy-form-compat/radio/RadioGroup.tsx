@@ -89,8 +89,8 @@ const LegacyRadioGroup = ({
 
                 return (
                     <LegacyRadio
-                        {...radioProps}
                         key={`${name}-${value}`}
+                        {...radioProps}
                         internalInGroup
                         className={classNames('legacy-radio-group__item', optionClassName)}
                         name={name}

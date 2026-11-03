@@ -62,6 +62,32 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
         !!gosysGjelderKategorier &&
         Object.keys(gosysGjelderKategorier).length > 0;
 
+    useEffect(() => {
+        if (kanJournalforingsoppgaveOpprettesiGosys && !harKategorierBlivitHentet) {
+            hentGjelderKategorier();
+        }
+    }, [kanJournalforingsoppgaveOpprettesiGosys, harKategorierBlivitHentet, hentGjelderKategorier]);
+
+    const identErrorMessage = useMemo(() => {
+        if (identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)) {
+            return intlHelper(intl, 'ident.feil.ugyldigident');
+        }
+
+        return undefined;
+    }, [identState.søkerId, intl]);
+
+    const under18WarningMessage = useMemo(() => {
+        if (identState.søkerId && erYngreEnn18år(identState.søkerId)) {
+            return intlHelper(intl, 'ident.warning.søkerUnder18');
+        }
+        return undefined;
+    }, [identState.søkerId, intl]);
+
+    const isSubmitDisabled = useMemo(
+        () => IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori,
+        [identState.søkerId, fordelingState.valgtGosysKategori],
+    );
+
     if (!kanJournalforingsoppgaveOpprettesiGosys) {
         return (
             <div>
@@ -79,32 +105,6 @@ const InnholdForDokumenttypeAnnet: React.FC<Props> = ({
             </div>
         );
     }
-
-    useEffect(() => {
-        if (!harKategorierBlivitHentet) {
-            hentGjelderKategorier();
-        }
-    }, [harKategorierBlivitHentet]);
-
-    const identErrorMessage = useMemo(() => {
-        if (identState.søkerId && IdentRules.erUgyldigIdent(identState.søkerId)) {
-            return intlHelper(intl, 'ident.feil.ugyldigident');
-        }
-
-        return undefined;
-    }, [identState.søkerId]);
-
-    const under18WarningMessage = useMemo(() => {
-        if (identState.søkerId && erYngreEnn18år(identState.søkerId)) {
-            return intlHelper(intl, 'ident.warning.søkerUnder18');
-        }
-        return undefined;
-    }, [identState.søkerId]);
-
-    const isSubmitDisabled = useMemo(
-        () => IdentRules.erUgyldigIdent(identState.søkerId) || !fordelingState.valgtGosysKategori,
-        [identState.søkerId, fordelingState.valgtGosysKategori],
-    );
 
     return (
         <div className="fordeling-page__innholdForDokumenttypeAnnet">

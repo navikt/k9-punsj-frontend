@@ -1,13 +1,8 @@
-import initialState from '../../state/PleiepengerPunsjInitialState';
 import { ApiPath } from '../../../src/app/apiConfig';
 
 describe('Håndtering av inntektsmelding uten krav', () => {
     it('skal vise radioknapper basert på innsendingstype', () => {
-        cy.visit('/journalpost/202', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/202');
         cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
@@ -16,11 +11,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
     });
 
     it('skal vise mulighet for å sende brev', () => {
-        cy.visit('/journalpost/202', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/202');
         cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
@@ -36,11 +27,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
     });
 
     it('skal vise modal etter knappen send er trykk på', () => {
-        cy.visit('/journalpost/202', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/202');
         cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');
@@ -66,11 +53,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
     });
 
     it('skal sende brev med GENERELL_SAK når journalposten ikke har fagsak', () => {
-        cy.visit('/journalpost/202', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/202');
 
         cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
@@ -100,11 +83,7 @@ describe('Håndtering av inntektsmelding uten krav', () => {
     });
 
     it('skal vise infoboks dersom brev er fylt ut men ikke sendt', () => {
-        cy.visit('/journalpost/202', {
-            onBeforeLoad: (window) => {
-                window.__initialState__ = initialState;
-            },
-        });
+        cy.visit('/journalpost/202');
         cy.findByText('Stemmer det at søkers fødselsnummer er 17420373147?').should('exist');
         cy.findByText('Ja').should('exist').click();
         cy.findByText('Ferdigstill journalpost').should('exist');

@@ -59,7 +59,7 @@ const getProxyConfig = () => {
     const config = configValueAsJson({ name: 'PROXY_CONFIG' });
     if (!config.apis) {
         logger.error("Config: 'PROXY_CONFIG' mangler 'apis' entry.");
-        exit(1);
+        process.exit(1);
     }
     config.apis.forEach((entry, index) => {
         if (!entry.path) {
