@@ -42,21 +42,12 @@ jobs:
             - name: Installere Cypress
               run: npx cypress install
 
-            - name: Start E2E-server
-              uses: cypress-io/github-action@bc982daf1fc26474fa0cf2c355d6c910616ce411 # v7.4.7
+            - name: Kjør Cypress tester
+              run: node src/build/scripts/run-e2e.mjs cypress:headless --spec "$(node split.mjs)"
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  start: yarn start:e2e
-                  wait-on: 'http://localhost:8080'
-                  wait-on-timeout: 60
-                  runTests: false
-
-            - name: Kjør Cypress tester
-              run: yarn cypress run --spec "$(node split.mjs)"
-              env:
                   CI_TOTAL: ${{ matrix.ci_total }}
                   CI_INDEX: ${{ matrix.ci_index }}
-                  CI: 1
+                  CI: true
                   TERM: xterm
                   DBUS_SESSION_BUS_ADDRESS: /dev/null
