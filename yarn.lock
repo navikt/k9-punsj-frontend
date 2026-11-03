@@ -1851,23 +1851,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel@npm:8.19.2":
-  version: 8.19.2
-  resolution: "@navikt/aksel@npm:8.19.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.19.2%2F9bb530235521167e436dca4f06d9d99d9c9e1cab"
+"@navikt/aksel@npm:8.20.1":
+  version: 8.20.1
+  resolution: "@navikt/aksel@npm:8.20.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel%2F8.20.1%2F75191856a24c4cad9dbaedf647411ef6b562edf0"
   dependencies:
-    chalk: "npm:5.6.2"
+    chalk: "npm:6.0.1"
     cli-progress: "npm:3.12.0"
     clipboardy: "npm:5.3.2"
     commander: "npm:15.0.0"
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.3"
-    figlet: "npm:1.11.3"
+    figlet: "npm:1.12.0"
     is-git-clean: "npm:1.1.0"
     jscodeshift: "npm:17.4.0"
     lodash: "npm:4.18.1"
   bin:
     aksel: dist/index.js
-  checksum: 10/922ff9cfc7cac5912563caba3374f331f5a0ba0def4601a1aa9edad51fce677bd01be34f593d850d6e7665f08fbbdd4aa901fc4fdde6e406d16e67126e59a66e
+  checksum: 10/5ffa6b255efd19373d037b6a86a97d6bb0366d8a7a756a3bf5f3cc77fa8e8659ffd7954b176e673a322bc73f63b4749ec7e4123e6faf3dfbe97d6bec15f97c67
   languageName: node
   linkType: hard
 
@@ -4471,10 +4471,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:5.6.2":
-  version: 5.6.2
-  resolution: "chalk@npm:5.6.2"
-  checksum: 10/1b2f48f6fba1370670d5610f9cd54c391d6ede28f4b7062dd38244ea5768777af72e5be6b74fb6c6d54cb84c4a2dff3f3afa9b7cb5948f7f022cfd3d087989e0
+"chalk@npm:6.0.1":
+  version: 6.0.1
+  resolution: "chalk@npm:6.0.1"
+  checksum: 10/1457692e6327f299da7d7cd6a7774fe1de25bda6c0e33791901d6762a6c0f2409bd3d92bf7695519825c2fbb405c104a0a73fd489e4e9f88af3ef2a1d97455c9
   languageName: node
   linkType: hard
 
@@ -6337,14 +6337,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"figlet@npm:1.11.3":
-  version: 1.11.3
-  resolution: "figlet@npm:1.11.3"
+"figlet@npm:1.12.0":
+  version: 1.12.0
+  resolution: "figlet@npm:1.12.0"
   dependencies:
     commander: "npm:^14.0.0"
   bin:
     figlet: bin/index.js
-  checksum: 10/8bf77e217513b8df2d2a2d2b991486dfcec8208bf2d87bdb4b8afe7e18db1630e4ba82389294ef8e9fd03b5734f8c126811763f8fedf481d86cbfbfaab9439e2
+  checksum: 10/1f2805189f243d5e04ea42132c37e6ac41f7b2cf5f9970fae0950041f7cd91e5948c0b7e87e9c908b274b5c0df1b6e12fd6f1e6b7609db7a6ee390f8b88ec3dd
   languageName: node
   linkType: hard
 
@@ -8029,7 +8029,7 @@ __metadata:
     "@grafana/faro-web-sdk": "npm:2.12.1"
     "@k9-punsj-frontend/server": "workspace:"
     "@nais/apm": "npm:0.7.3"
-    "@navikt/aksel": "npm:8.19.2"
+    "@navikt/aksel": "npm:8.20.1"
     "@navikt/aksel-icons": "npm:8.19.2"
     "@navikt/ds-css": "npm:8.19.2"
     "@navikt/ds-react": "npm:8.19.2"
