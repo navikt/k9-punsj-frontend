@@ -18,6 +18,4 @@ export * from 'app/models/types/UtenlandsOpphold';
 export * from 'app/models/types/SignaturState';
 export * from 'app/models/types/PSBSoknad';
 export * from 'app/models/types/Ukedag';
-export * from 'app/models/types/FordelingSettPaaVentState';
-export * from 'app/models/types/FordelingFerdigstillJournalpostState';
 export * from 'app/models/types/Person';

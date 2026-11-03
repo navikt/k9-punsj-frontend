@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### ESLint 10 og React Hooks-regler (2026-11-03)
+
+- Oppdaterte ESLint til 10.13.0 med kompatible React- og import-pluginer og aktiverte React Hooks-regler og TypeScript-kontroll i lint.
+- Rettet avdekkede kode- og testfeil. Eksisterende advarsler følges opp separat; state-oppdateringer i effekter varsles foreløpig fordi endringer krever gjennomgang av skjemaatferd.
+
 ### Stabiliserte oppstarten av Cypress i CI (2026-11-03)
 
 - Samlet serveroppstart og Cypress i samme steg med readiness-sjekk, overvåking av serverprosessen og opprydding ved feil eller avbrudd. Beholdt fire testgrupper.

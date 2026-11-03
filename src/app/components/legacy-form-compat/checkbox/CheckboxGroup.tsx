@@ -88,8 +88,8 @@ const LegacyCheckboxGroup = ({
 
                 return (
                     <LegacyCheckbox
-                        {...checkboxProps}
                         key={`${name ?? 'legacy-checkbox-group'}-${value}`}
+                        {...checkboxProps}
                         internalInGroup
                         name={name}
                         value={value}

@@ -19,10 +19,10 @@ const applyAppSettings = (overrides?: Record<string, string>) => {
     };
 };
 
-const renderInteractive = (
-    args: React.ComponentProps<typeof DokumentTypeVelgerForKopiering>,
-    appSettingsOverrides?: Record<string, string>,
-) => {
+const RenderInteractive = ({
+    appSettingsOverrides,
+    ...args
+}: React.ComponentProps<typeof DokumentTypeVelgerForKopiering> & { appSettingsOverrides?: Record<string, string> }) => {
     applyAppSettings(appSettingsOverrides);
     const [valgtDokumentType, setValgtDokumentType] = React.useState(args.valgtDokumentType);
 
@@ -68,23 +68,23 @@ export default meta;
 type Story = StoryObj<typeof DokumentTypeVelgerForKopiering>;
 
 export const Default: Story = {
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };
 
 export const OmsorgspengerSelected: Story = {
     args: {
         valgtDokumentType: FordelingDokumenttype.OMSORGSPENGER,
     },
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };
 
 export const NoOlp: Story = {
-    render: (args) => renderInteractive(args, { OLP_ENABLED: 'false' }),
+    render: (args) => <RenderInteractive {...args} appSettingsOverrides={{ OLP_ENABLED: 'false' }} />,
 };
 
 export const Hidden: Story = {
     args: {
         visComponent: false,
     },
-    render: (args) => renderInteractive(args),
+    render: (args) => <RenderInteractive {...args} />,
 };

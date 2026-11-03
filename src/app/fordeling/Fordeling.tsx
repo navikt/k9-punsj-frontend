@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Alert, Button, ErrorMessage, Heading, Loader } from '@navikt/ds-react';
 import { FormattedMessage } from 'react-intl';
@@ -112,7 +112,7 @@ const Fordeling: React.FC = () => {
     const setAnnenPart = (annenPart: string) => dispatch(setAnnenPartAction(annenPart));
     const setErSøkerIdBekreftet = (erBekreftet: boolean) => dispatch(setErSøkerIdBekreftetAction(erBekreftet));
     const setFosterbarn = (fosterbarn?: string[]) => dispatch(setFosterbarnAction(fosterbarn));
-    const hentGjelderKategorier = () => dispatch(hentGjelderKategorierFraGosys());
+    const hentGjelderKategorier = useCallback(() => dispatch(hentGjelderKategorierFraGosys()), [dispatch]);
     const setValgtGosysKategori = (valgtKategori: string) => dispatch(setValgtGosysKategoriAction(valgtKategori));
     const henteBarn = (søkerId: string) => dispatch(hentBarn(søkerId));
     const setFosterbarnIdentState = (updatedBarn?: string[]) => {
