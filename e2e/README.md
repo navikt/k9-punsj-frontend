@@ -19,6 +19,58 @@ yarn test:pw:ui
 
 Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
 
+## Brevtester og historier
+
+Kjør brevtestene og den ene Playwright-reisen fra repository-roten:
+
+```sh
+yarn test src/test/components/brev
+yarn test:pw e2e/tests/send-brev.spec.ts
+yarn test:pw e2e/tests/send-brev.spec.ts --workers=1
+yarn test:pw -g "viser inngangen"
+yarn test:pw:ui e2e/tests/send-brev.spec.ts --ui-host=127.0.0.1 --ui-port=9323
+yarn exec playwright show-report
+yarn storybook --host 127.0.0.1
+```
+
+Storybook bruker syntetiske testverdier: søker `08438323288`, aktør `81549300`, PSB-sak `1DMU93A`, arbeidsgiver `979312059`, tredjepart `889640782` og malen `GENERELT_FRITEKSTBREV`. Brevhistoriene returnerer samme faste PDF med teksten **Test letter preview**. PDF-en er kun en mock; skjema- og saksverdiene verifiseres separat i request-assertions.
+
+Storybook bruker `msw-storybook-addon` sin CSF 3-loader. Hvis en preview-iframe ennå ikke styres av service worker-en, lastes bare den iframen automatisk på nytt før historien vises. Du trenger ikke laste Storybook-siden på nytt manuelt.
+
+| Gruppe | Story | Link |
+|---|---|---|
+| Brevkomponent | Tomt skjema | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--vanlig-brev) |
+| Brevkomponent | Mal med bare fritekst | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--bare-fritekst) |
+| Brevkomponent | Mal uten fritekst | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-fritekst) |
+| Brevkomponent | Arbeidsgiver som mottaker | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--arbeidsgiver) |
+| Brevkomponent | Tredjepart med navneoppslag | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--tredjepart) |
+| Brevkomponent | Sendefeil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--sending-feiler-med-nytt-fors%C3%B8k) |
+| Brevkomponent | Sending uten bekreftelsesdialog | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-bekreftelsesdialog) |
+| Brevkomponent | Brev i annen modal | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--brev-i-annen-modal) |
+| Brevkomponent | Malhenting feiler | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--malhenting-feiler) |
+| Brevkomponent | Forhåndsvisning av PDF | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning) |
+| Brevkomponent | Preview-feil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning-feiler-med-nytt-fors%C3%B8k) |
+| Avsluttet sak | Tomt skjema | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--tomt-skjema) |
+| Avsluttet sak | Laster fagsaker | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--laster-fagsaker) |
+| Avsluttet sak | Ingen fagsaker | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--ingen-fagsaker) |
+| Avsluttet sak | Oppslagsfeil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--oppslagsfeil-med-nytt-fors%C3%B8k) |
+| Avsluttet sak | Valgt PSB-sak | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--valgt-sak) |
+| Avsluttet sak | Brev bestilt og LOS-modal | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--brev-bestilt) |
+| Særtilstand | Brev i vent/lukk-modal | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-i-modal) |
+| Særtilstand | Varsel om usendt brev | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--varsel-om-usendt-brev) |
+| Særtilstand | Guard ved uavklart sakstype | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--uavklart-sakstype) |
+| Særtilstand | Brev etter klassifisering | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-etter-klassifisering) |
+
+Manuell gjennomgang:
+
+1. **Tomt skjema** er den eneste brevkomponenthistorien som starter uten utfylte felt. De andre positive historiene klargjør skjemaet automatisk: fritekstmalen har mottaker og innhold, malen uten fritekst har mottaker, og arbeidsgiver- og tredjepartshistoriene har mottaker, tittel og innhold. I **Tredjepart med navneoppslag** skal organisasjonsnummer `889640782` gi navnet **Test Navn**. Feltene kan fortsatt redigeres.
+2. I **Tomt skjema**, **Arbeidsgiver som mottaker**, **Tredjepart med navneoppslag**, **Sending uten bekreftelsesdialog** og **Brev i modal** kan du teste den gjenværende sendehandlingen. I standardhistoriene kontrollerer du først at bekreftelsesdialogen kan avbrytes uten bestilling, og sender deretter brevet. Historien uten bekreftelsesdialog sender direkte.
+3. **Forhåndsvisning av PDF** klargjør et gyldig brev uten å åpne PDF-en. Velg **Forhåndsvis brev** for å åpne mock-PDF-en i et separat `blob:`-vindu. **Preview-feil med nytt forsøk** starter med feilmelding og beholdte verdier; velg nytt forsøk for å få PDF-en. **Sendefeil med nytt forsøk** starter med feilmelding og beholdte verdier; prøv sendingen på nytt for å fullføre.
+4. I **Tomt skjema** under **SendBrevIAvsluttetSak**, skriv `08438323288`, velg `1DMU93A`, og fullfør et brev. Kontroller også historiene for lasting, ingen saker og oppslagsfeil/forsøk. LOS er isolert til Storybook; suksess skal ikke navigere bort.
+5. I wrapper-historiene kontrollerer du modalåpning/-avbrytelse, varsel etter usendt brev og guard ved uavklart sakstype. **Brev etter klassifisering** viser brevtilbudet med returnert reservert saksnummer. Gå tilbake til standardhistoriene etter feilvariantene for å kontrollere at handlers og skjema ikke lekker mellom historier.
+
+Den automatiske Playwright-reisen dekker kun representativ hovedsideflyt med tredjepart, PDF, 500-feil og vellykket nytt forsøk. De øvrige fullflytene, inkludert sending fra fagsak, uavklart sakstype og vent/lukk/ferdigstilling, ligger fortsatt i Cypress; Vitest dekker lokale brevregler og tilkoblingskontrakter.
+
 ## Journalpost stories and tests
 
 Run the focused checks from the repository root:

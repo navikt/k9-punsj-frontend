@@ -2,11 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
-### Playwright-smoketest (2026-11-04)
+### Playwright og komponenttester (2026-11-04)
 
 - La til en separat Chromium-smoketest i MSW-testmodus, med egen TypeScript-kontroll og rapportering.
 - La til åtte journalpostscenarier i Storybook, med manuell oppretting og synlig navigasjon i normaltilstanden, 14 fokuserte komponenttester og to Playwright-reiser. Fjernet den gamle Cypress-spesifikasjonen for journalpostoppretting etter kontroll av tilsvarende dekning, samt ubrukte Storybook-eksporter og testattributter. Øvrige Cypress-tester og delte fixtures er uendret.
 - Avgrenset opprettingstesten til en egen ferdigstilt journalpost med komplett fagsak og kontroll av ferdig skjermbilde. Sentrerte lasteindikatoren ved fagsaksvalget og ga den norsk beskrivelse.
+- La til målrettede brevtester for felles skjema og seks innganger, klargjorte Storybook-historier med fast PDF-mock og én Playwright-reise med forhåndsvisning og nytt sendeforsøk. Fjernet erstattede story-mocks og sikret MSW-kontroll ved første åpning av preview-iframe. Eksisterende Cypress-flyter er beholdt.
 
 ### ESLint 10 og React Hooks-regler (2026-11-03)
 
