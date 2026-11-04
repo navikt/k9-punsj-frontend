@@ -15,6 +15,8 @@ export default defineConfig(
         'src/app/build/**',
         '.storybook/**',
         'storybook-static/**',
+        'playwright-report/**',
+        'test-results/**',
         'src/mocks/mockServiceWorker.js',
     ]),
     {

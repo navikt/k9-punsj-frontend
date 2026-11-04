@@ -177,7 +177,9 @@ const OpprettJournalpost: React.FC = () => {
                             ))}
                         </TypedFormSelect>
 
-                        {isFetchingFagsaker && <Loader size="small" />}
+                        <div className="fagsakLoader" role="status">
+                            {isFetchingFagsaker && <Loader size="small" title="Henter fagsaker" />}
+                        </div>
                     </div>
 
                     {fetchFagsakError && (

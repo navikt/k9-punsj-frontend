@@ -1,21 +1,10 @@
-export const opprettNottat = {
-    matcher: {
-        url: 'path:/api/k9-punsj/notat/opprett',
-        method: 'POST',
-    },
-    response: {
-        status: 201,
-        body: { journalpostId: '200' },
-    },
-};
+import { http, HttpResponse } from 'msw/http';
+import { ApiPath } from 'app/apiConfig';
 
-export const opprettNottatMedFeil = {
-    matcher: {
-        url: 'path:/api/k9-punsj/notat/opprett',
-        method: 'POST',
-    },
-    response: {
-        status: 400,
-        body: {},
-    },
-};
+export const opprettNottat = http.post(ApiPath.OPPRETT_NOTAT, () =>
+    HttpResponse.json({ journalpostId: '200' }, { status: 201 }),
+);
+
+export const opprettNottatMedFeil = http.post(ApiPath.OPPRETT_NOTAT, () =>
+    HttpResponse.json({}, { status: 400 }),
+);
