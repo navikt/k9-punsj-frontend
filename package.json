@@ -28,7 +28,7 @@
         "react-hook-form": "7.91.0",
         "react-intl": "12.1.5",
         "react-redux": "9.3.0",
-        "react-router": "8.5.0",
+        "react-router": "8.5.1",
         "redux": "5.0.1",
         "redux-logger": "3.0.6",
         "tailwindcss": "4.3.3",
