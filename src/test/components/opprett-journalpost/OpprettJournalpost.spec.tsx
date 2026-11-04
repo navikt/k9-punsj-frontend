@@ -110,6 +110,11 @@ describe('OpprettJournalpost', () => {
         await enterIdent(user, '11111111111');
         expect(await screen.findByText('Søkers fødselsnummer er ugyldig.')).toBeVisible();
         expect(requestsFor(ApiPath.HENT_FAGSAK_PÅ_IDENT)).toHaveLength(0);
+
+        await user.clear(identInput);
+        await enterIdent(user);
+        await screen.findByRole('option', { name: /ABC123/ });
+        expect(screen.queryByText('Søkers fødselsnummer er ugyldig.')).not.toBeInTheDocument();
     });
 
     it('viser innlasting mens fagsakoppslaget venter', async () => {
@@ -149,7 +154,10 @@ describe('OpprettJournalpost', () => {
         renderForm(false);
 
         await enterIdent(user);
-        expect(await screen.findByRole('option', { name: /HIST001/ })).toBeDisabled();
+        const historiskFagsak = await screen.findByRole('option', { name: /HIST001/ });
+        expect(historiskFagsak).toBeDisabled();
+        expect(historiskFagsak).toHaveTextContent('(historisk)');
+        expect(screen.getByRole('option', { name: /ABC123/ })).toBeEnabled();
     });
 
     it('aktiverer historisk fagsak med historisk tilgang', async () => {

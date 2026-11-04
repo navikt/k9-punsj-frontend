@@ -27,8 +27,4 @@ export const fagsaker = [
 
 export const hentFagsaker = http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json(fagsaker));
 
-export const hentFagsakerMedFeil = http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () =>
-    HttpResponse.json({}, { status: 400 }),
-);
-
 export const hentFagsakerTomtArray = http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, () => HttpResponse.json([]));
