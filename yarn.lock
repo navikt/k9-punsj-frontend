@@ -2569,6 +2569,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@playwright/test@npm:1.64.1":
+  version: 1.64.1
+  resolution: "@playwright/test@npm:1.64.1"
+  dependencies:
+    playwright: "npm:1.64.1"
+  bin:
+    playwright: cli.js
+  checksum: 10/589855c5fbc9ebbfb072e77e4b24a646f302ca9823d56ac3ff08a8e4ecf7ee13a390fe19236f4f9737e9a736194324f244f90c409a10edeb480c5f99ce77d10e
+  languageName: node
+  linkType: hard
+
 "@prometheus-io/client@npm:^0.16.1":
   version: 0.16.1
   resolution: "@prometheus-io/client@npm:0.16.1"
@@ -7484,6 +7495,7 @@ __metadata:
     "@navikt/ds-react": "npm:8.21.0"
     "@navikt/ds-tailwind": "npm:8.21.0"
     "@navikt/fnrvalidator": "npm:2.2.1"
+    "@playwright/test": "npm:1.64.1"
     "@reduxjs/toolkit": "npm:2.13.0"
     "@storybook/react": "npm:10.6.4"
     "@storybook/react-vite": "npm:10.6.4"
@@ -9006,6 +9018,26 @@ __metadata:
   dependencies:
     find-up: "npm:^3.0.0"
   checksum: 10/70c9476ffefc77552cc6b1880176b71ad70bfac4f367604b2b04efd19337309a4eec985e94823271c7c0e83946fa5aeb18cd360d15d10a5d7533e19344bfa808
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:1.64.1":
+  version: 1.64.1
+  resolution: "playwright-core@npm:1.64.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10/4a173590bc784d8d5bfe2cace53ccc31316dac11475660b59cea24a2e833875d87183d41a957a20355301ac2b339a17940faaf0b42217156fa9c0c3cfdd4633c
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.64.1":
+  version: 1.64.1
+  resolution: "playwright@npm:1.64.1"
+  dependencies:
+    playwright-core: "npm:1.64.1"
+  bin:
+    playwright: cli.js
+  checksum: 10/1096fa91e433f84c8677433a26052aa4f269bf0811aa793fe667d7053feb1c2852e9f10f9f0cced77fa2678f8580ed47192f29adbc9c027efa5ba87b38e23e50
   languageName: node
   linkType: hard
 

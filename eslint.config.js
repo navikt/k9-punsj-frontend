@@ -44,13 +44,14 @@ export default defineConfig(
             'src/build/**/*.{js,mjs,cjs}',
             '.github/**/*.{js,mjs,cjs}',
             'cypress/plugins/**/*.{js,mjs,cjs}',
+            'playwright.config.ts',
         ],
         languageOptions: { globals: globals.node },
         settings: { 'import-x/resolver-next': [createNodeResolver()] },
     },
     {
         name: 'browser',
-        files: ['src/**/*.{js,jsx,ts,tsx}', 'cypress/**/*.{js,ts}'],
+        files: ['src/**/*.{js,jsx,ts,tsx}', 'cypress/**/*.{js,ts}', 'e2e/**/*.{ts,tsx}'],
         languageOptions: { globals: globals.browser },
     },
     {

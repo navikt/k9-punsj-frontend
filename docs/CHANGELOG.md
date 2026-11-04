@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Playwright-smoketest (2026-11-04)
+
+- La til en separat Chromium-smoketest i MSW-testmodus, med egen TypeScript-kontroll og rapportering.
+
 ### ESLint 10 og React Hooks-regler (2026-11-03)
 
 - Oppdaterte ESLint til 10.13.0 med kompatible React- og import-pluginer og aktiverte React Hooks-regler og TypeScript-kontroll i lint.
