@@ -68,10 +68,7 @@ const renderBrev = (props: Partial<React.ComponentProps<typeof BrevComponent>> =
 const requestFor = (path: string) => requests.find((request) => request.url.startsWith(path));
 const requestsFor = (path: string) => requests.filter((request) => request.url.startsWith(path));
 
-const velgMalOgMottaker = async (
-    user: ReturnType<typeof userEvent.setup>,
-    mal = 'GENERELT_FRITEKSTBREV',
-) => {
+const velgMalOgMottaker = async (user: ReturnType<typeof userEvent.setup>, mal = 'GENERELT_FRITEKSTBREV') => {
     await screen.findByRole('option', { name: `Ola Test - ${TEST_IDENT}` });
     await user.selectOptions(screen.getByRole('combobox', { name: 'Velg mal' }), mal);
     await user.selectOptions(screen.getByRole('combobox', { name: 'Velg mottaker' }), AKTØR_ID);
@@ -93,7 +90,10 @@ const bekreftSending = async (user: ReturnType<typeof userEvent.setup>) => {
 
 const stubPreviewWindow = () => {
     const createObjectURL = vi.fn(() => 'blob:brev-preview');
-    vi.stubGlobal('URL', Object.assign(function URLMock() {}, { createObjectURL }));
+    vi.stubGlobal(
+        'URL',
+        Object.assign(function URLMock() {}, { createObjectURL }),
+    );
     const open = vi.spyOn(window, 'open').mockImplementation(() => null);
     return { createObjectURL, open };
 };
@@ -153,10 +153,12 @@ describe('BrevComponent', () => {
         expect(await screen.findByText('Du må velge mal.')).toBeVisible();
 
         await user.selectOptions(screen.getByRole('combobox', { name: 'Velg mal' }), 'GENERELT_FRITEKSTBREV');
+        expect(screen.queryByText('Du må velge mal.')).not.toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
         expect(await screen.findByText('Du må velge mottaker.')).toBeVisible();
 
         await user.selectOptions(screen.getByRole('combobox', { name: 'Velg mottaker' }), AKTØR_ID);
+        expect(screen.queryByText('Du må velge mottaker.')).not.toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
         expect(await screen.findByText('Du må skrive inn tittel.')).toBeVisible();
         expect(screen.getByText('Du må skrive inn innhold.')).toBeVisible();
@@ -216,7 +218,9 @@ describe('BrevComponent', () => {
         expect(screen.queryByRole('textbox', { name: 'Innhold i brev' }) !== null).toBe(harInnhold);
 
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
-        await screen.findByText('Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.');
+        await screen.findByText(
+            'Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.',
+        );
         expect(requestFor(ApiPath.BREV_BESTILL)?.body).toEqual({
             soekerId: TEST_IDENT,
             mottaker: { type: 'AKTØRID', id: AKTØR_ID },
@@ -232,10 +236,7 @@ describe('BrevComponent', () => {
         renderBrev({ sendBrevUtenModal: true });
 
         await velgMalOgMottaker(user);
-        await user.selectOptions(
-            screen.getByRole('combobox', { name: 'Velg mottaker' }),
-            '979312059',
-        );
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Velg mottaker' }), '979312059');
         await fyllInnFritekstbrev(user);
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
 
@@ -256,11 +257,17 @@ describe('BrevComponent', () => {
 
         await velgMalOgMottaker(user);
         await user.click(screen.getByRole('checkbox', { name: 'Send til tredjepart' }));
+        const orgField = screen.getByRole('textbox', { name: 'Organisasjonsnummer' });
         await user.click(screen.getByRole('button', { name: 'Send brev' }));
         expect(await screen.findByText('Du må skrive inn organisasjonsnummer.')).toBeVisible();
         expect(requestsFor(ApiPath.BREV_BESTILL)).toHaveLength(0);
 
-        const orgField = screen.getByRole('textbox', { name: 'Organisasjonsnummer' });
+        await user.type(orgField, '1');
+        await user.click(screen.getByRole('button', { name: 'Send brev' }));
+        expect(await screen.findByText('Organisasjonsnummeret er ugyldig.')).toBeVisible();
+        expect(requestsFor(ApiPath.BREV_BESTILL)).toHaveLength(0);
+
+        await user.clear(orgField);
         await user.type(orgField, '111111111');
         expect(await screen.findByText('Organisasjonsnummeret er ugyldig.')).toBeVisible();
         expect(requests.filter(({ url }) => url.startsWith(`${ApiPath.SØK_ORGNUMMER}?`))).toHaveLength(0);
@@ -322,7 +329,8 @@ describe('BrevComponent', () => {
             if (url.startsWith(ApiPath.BREV_MALER)) return malReply.clone();
             if (url === ApiPath.FINN_ARBEIDSGIVERE) return jsonResponse({ organisasjoner: [] });
             if (url === ApiPath.BREV_AKTØRID) return jsonResponse(AKTØR_ID);
-            if (url === ApiPath.PERSON) return jsonResponse({ identitetsnummer: TEST_IDENT, sammensattNavn: 'Ola Test' });
+            if (url === ApiPath.PERSON)
+                return jsonResponse({ identitetsnummer: TEST_IDENT, sammensattNavn: 'Ola Test' });
             if (url.startsWith(ApiPath.SØK_ORGNUMMER)) return pending;
             if (url === ApiPath.BREV_BESTILL) return new Response(null, { status: 200 });
             throw new Error(`Uventet API-kall: ${url}`);

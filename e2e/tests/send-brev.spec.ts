@@ -43,6 +43,7 @@ test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', a
     await test.step('Åpne brev i avsluttet sak og velge fagsak', async () => {
         await page.getByTestId('brev-avsluttet-sak-inngang').click();
         await expect(page).toHaveURL(/\/brev-avsluttet-sak/);
+        await expect(page.getByRole('heading', { name: 'Send brev i avsluttet sak' })).toBeVisible();
 
         const fagsakRequest = page.waitForRequest(
             (request) =>
@@ -62,8 +63,7 @@ test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', a
 
         const templateRequestPromise = page.waitForRequest(
             (templateRequest) =>
-                templateRequest.method() === 'GET' &&
-                requestPath(templateRequest.url()) === ApiPath.BREV_MALER,
+                templateRequest.method() === 'GET' && requestPath(templateRequest.url()) === ApiPath.BREV_MALER,
         );
         await page.getByRole('combobox', { name: 'Velg fagsak' }).selectOption(FAGSAK_ID);
         const templateRequest = await templateRequestPromise;
@@ -96,8 +96,7 @@ test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', a
         await page.getByRole('textbox', { name: 'Innhold i brev' }).fill(TEST_INNHOLD);
         const previewResponsePromise = page.waitForResponse(
             (response) =>
-                requestPath(response.url()) === ApiPath.BREV_FORHAANDSVIS &&
-                response.request().method() === 'POST',
+                requestPath(response.url()) === ApiPath.BREV_FORHAANDSVIS && response.request().method() === 'POST',
         );
         const previewPopupPromise = page.waitForEvent('popup');
         await page.getByRole('button', { name: 'Forhåndsvis brev' }).click();
