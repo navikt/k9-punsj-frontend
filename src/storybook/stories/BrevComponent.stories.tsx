@@ -112,38 +112,62 @@ const fillText = async (element: HTMLElement, value: string) => {
     await userEvent.type(element, value);
 };
 
+type Canvas = ReturnType<typeof within>;
+type Brevmalkode = keyof typeof brevmaler;
+
+const selectTemplate = async (canvas: Canvas, kode: Brevmalkode) => {
+    await canvas.findByRole('option', { name: brevmaler[kode].navn });
+    const malVelger = canvas.getByRole('combobox', { name: 'Velg mal' });
+    await userEvent.selectOptions(malVelger, kode);
+    await expect(malVelger).toHaveValue(kode);
+};
+
+const selectRecipient = async (canvas: Canvas, optionName: string, value: string) => {
+    await canvas.findByRole('option', { name: optionName });
+    const mottakerVelger = canvas.getByRole('combobox', { name: 'Velg mottaker' });
+    await userEvent.selectOptions(mottakerVelger, value);
+    await expect(mottakerVelger).toHaveValue(value);
+};
+
+const fillTitleAndContent = async (canvas: Canvas) => {
+    await fillText(await canvas.findByRole('textbox', { name: 'Tittel' }), TEST_TITTEL);
+    await fillText(await canvas.findByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+};
+
 const fillLetter = async (container: HTMLElement) => {
     const canvas = within(container);
-    await canvas.findByRole('option', { name: `Ola Test - ${TEST_IDENT}` });
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mal' }), 'GENERELT_FRITEKSTBREV');
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mottaker' }), AKTØR_ID);
-    await fillText(canvas.getByRole('textbox', { name: 'Tittel' }), TEST_TITTEL);
-    await fillText(canvas.getByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+    await selectTemplate(canvas, 'GENERELT_FRITEKSTBREV');
+    await selectRecipient(canvas, `Ola Test - ${TEST_IDENT}`, AKTØR_ID);
+    await fillTitleAndContent(canvas);
 };
 
 const fillOnlyFreeTextLetter = async (container: HTMLElement) => {
     const canvas = within(container);
-    await canvas.findByRole('option', { name: `Ola Test - ${TEST_IDENT}` });
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mal' }), 'INNHEN');
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mottaker' }), AKTØR_ID);
-    await fillText(canvas.getByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+    await selectTemplate(canvas, 'INNHEN');
+    await selectRecipient(canvas, `Ola Test - ${TEST_IDENT}`, AKTØR_ID);
+    await fillText(await canvas.findByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+    await expect(canvas.queryByRole('textbox', { name: 'Tittel' })).not.toBeInTheDocument();
 };
 
 const fillNoTextLetter = async (container: HTMLElement) => {
     const canvas = within(container);
-    await canvas.findByRole('option', { name: `Ola Test - ${TEST_IDENT}` });
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mal' }), 'UTEN_FRITEKST');
-    await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mottaker' }), AKTØR_ID);
+    await selectTemplate(canvas, 'UTEN_FRITEKST');
+    await selectRecipient(canvas, `Ola Test - ${TEST_IDENT}`, AKTØR_ID);
+    await expect(canvas.queryByRole('textbox', { name: 'Tittel' })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('textbox', { name: 'Innhold i brev' })).not.toBeInTheDocument();
 };
 
 const prepareFailedSend = async (container: HTMLElement) => {
     await fillLetter(container);
     const canvas = within(container);
     await userEvent.click(canvas.getByRole('button', { name: 'Send brev' }));
-    await userEvent.click(await within(document.body).findByRole('button', { name: 'Fortsett' }));
+    const body = within(document.body);
+    const bekreftelse = await body.findByRole('dialog', { name: 'erdusikkerpåatsendebrevmodal' });
+    await userEvent.click(within(bekreftelse).getByRole('button', { name: 'Fortsett' }));
     await expect(canvas.findByText('Sending av brev feilet.')).resolves.toBeVisible();
-    await expect(canvas.getByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
-    await expect(canvas.getByRole('textbox', { name: 'Innhold i brev' })).toHaveValue(TEST_INNHOLD);
+    // Vent til dialogen har frigitt skjemafeltene i tilgjengelighetstreet.
+    await expect(await canvas.findByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
+    await expect(await canvas.findByRole('textbox', { name: 'Innhold i brev' })).toHaveValue(TEST_INNHOLD);
 };
 
 const prepareFailedPreview = async (container: HTMLElement) => {
@@ -221,11 +245,9 @@ export const Arbeidsgiver: Story = {
     name: 'Arbeidsgiver som mottaker',
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('option', { name: `Test Arbeidsgiver - 979312059` });
-        await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mal' }), 'GENERELT_FRITEKSTBREV');
-        await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mottaker' }), '979312059');
-        await fillText(canvas.getByRole('textbox', { name: 'Tittel' }), TEST_TITTEL);
-        await fillText(canvas.getByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+        await selectTemplate(canvas, 'GENERELT_FRITEKSTBREV');
+        await selectRecipient(canvas, 'Test Arbeidsgiver - 979312059', '979312059');
+        await fillTitleAndContent(canvas);
     },
 };
 
@@ -233,14 +255,14 @@ export const Tredjepart: Story = {
     name: 'Tredjepart med navneoppslag',
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('option', { name: `Ola Test - ${TEST_IDENT}` });
-        await userEvent.selectOptions(canvas.getByRole('combobox', { name: 'Velg mal' }), 'GENERELT_FRITEKSTBREV');
-        await userEvent.click(canvas.getByRole('checkbox', { name: 'Send til tredjepart' }));
-        const organizationField = canvas.getByRole('textbox', { name: 'Organisasjonsnummer' });
+        await selectTemplate(canvas, 'GENERELT_FRITEKSTBREV');
+        const tredjepartValg = await canvas.findByRole('checkbox', { name: 'Send til tredjepart' });
+        await userEvent.click(tredjepartValg);
+        await expect(tredjepartValg).toBeChecked();
+        const organizationField = await canvas.findByRole('textbox', { name: 'Organisasjonsnummer' });
         await fillText(organizationField, ORGNUMMER);
         await expect(canvas.findByText('Test Navn')).resolves.toBeVisible();
-        await fillText(canvas.getByRole('textbox', { name: 'Tittel' }), TEST_TITTEL);
-        await fillText(canvas.getByRole('textbox', { name: 'Innhold i brev' }), TEST_INNHOLD);
+        await fillTitleAndContent(canvas);
     },
 };
 

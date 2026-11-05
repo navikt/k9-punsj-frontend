@@ -102,7 +102,7 @@ yarn test:pw:ui e2e/tests/opprett-journalpost.spec.ts --ui-host=127.0.0.1 --ui-p
 
 Open `http://127.0.0.1:9323`, run the tests, select **oppretter journalpost fra hovedsiden og åpner den opprettede journalposten**, and select its final **Expect "toBeVisible"** action and **After** snapshot. Expect the completed screen described above with **Journalpostnummer: 920001**. Reuse an already running UI instead of starting another on the same ports.
 
-Storybook runs at `http://localhost:6006`. On a fresh browser origin, open the Storybook root first, wait for the preview to load, then choose a story from the sidebar. The MSW service worker may not control the preview iframe if an API-backed story is opened directly on the first visit.
+Storybook runs at `http://localhost:6006`. Stories can be opened from the sidebar or directly. The CSF 3 loader waits for MSW startup and, if the preview is not yet controlled by the service worker, reloads only the preview iframe once before rendering the story. A manual page reload is not required.
 
 The eight stories use synthetic data: fnr `08438323288`, ordinary cases `ABC123` and `DEF456`, historical case `HIST001`, and in-memory creation result `200`. Storybook navigation only updates a location display; it does **not** render the full application destination verified by Playwright. The API calls are handled by Storybook MSW; no backend is needed. The 14 component tests and two Playwright journeys are independent of the story count.
 
