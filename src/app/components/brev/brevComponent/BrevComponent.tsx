@@ -324,9 +324,11 @@ const BrevComponent: React.FC<Props> = ({
                             </Button>
                         </div>
 
-                        {isValid && previewMessageFeil && (
+                        {isValid && previewMessageFeil !== undefined && (
                             <Alert variant="error" size="medium" fullWidth inline>
-                                {previewMessageFeil}
+                                {previewMessageFeil.trim() || (
+                                    <FormattedMessage id="brevComponent.alert.forhåndsvisBrevFeilet" />
+                                )}
                             </Alert>
                         )}
                     </div>

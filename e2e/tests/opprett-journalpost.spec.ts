@@ -12,7 +12,16 @@ const TEST_NOTAT = 'Eksempel på notat';
 const isApiResponse = (response: import('@playwright/test').Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
 
-test('oppretter journalpost fra hovedsiden og åpner den opprettede journalposten', async ({ page }) => {
+test('oppretter journalpost fra hovedsiden etter feil og nytt forsøk, og åpner den opprettede journalposten', async ({
+    page,
+}) => {
+    const expectedRequest = {
+        søkerIdentitetsnummer: TEST_FNR,
+        fagsakId: TEST_FAGSAK_ID,
+        tittel: TEST_TITTEL,
+        notat: TEST_NOTAT,
+    };
+
     await page.goto('/');
     await page.getByRole('button', { name: 'Opprett journalpost' }).click();
     await expect(page).toHaveURL(/\/opprett-journalpost$/);
@@ -34,30 +43,46 @@ test('oppretter journalpost fra hovedsiden og åpner den opprettede journalposte
     await page.getByRole('textbox', { name: 'Tittel' }).fill(TEST_TITTEL);
     await page.getByRole('textbox', { name: 'Notat' }).fill(TEST_NOTAT);
 
-    await installCreationHandler(page);
-    const createResponsePromise = page.waitForResponse((response) =>
+    await installCreationHandler(page, true);
+
+    const firstAttemptPromise = page.waitForResponse((response) =>
         isApiResponse(response, 'POST', ApiPath.OPPRETT_NOTAT),
     );
     await page.getByRole('button', { name: 'Opprett journalpost' }).click();
+    const firstAttempt = await firstAttemptPromise;
 
-    const createResponse = await createResponsePromise;
-    expect(createResponse.status()).toBe(201);
-    expect(createResponse.fromServiceWorker()).toBe(true);
-    expect(createResponse.request().postDataJSON()).toEqual({
-        søkerIdentitetsnummer: TEST_FNR,
-        fagsakId: TEST_FAGSAK_ID,
-        tittel: TEST_TITTEL,
-        notat: TEST_NOTAT,
-    });
+    expect(firstAttempt.status()).toBe(500);
+    expect(firstAttempt.fromServiceWorker()).toBe(true);
+    expect(firstAttempt.request().postDataJSON()).toEqual(expectedRequest);
+    await expect(page.getByText('Kunne ikke opprette journalpost')).toBeVisible();
+    await expect(page.getByText('Opprettet. Journalpost-ID:', { exact: false })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Gå til journalpost' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Opprett journalpost', exact: true })).toBeEnabled();
+    await expect(page.getByRole('textbox', { name: 'Søkers fødselsnummer' })).toHaveValue(TEST_FNR);
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue(TEST_FAGSAK_ID);
+    await expect(page.getByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
+    await expect(page.getByRole('textbox', { name: 'Notat' })).toHaveValue(TEST_NOTAT);
 
-    const { journalpostId }: IOpprettJournalpostResponse = await createResponse.json();
+    const secondAttemptPromise = page.waitForResponse((response) =>
+        isApiResponse(response, 'POST', ApiPath.OPPRETT_NOTAT),
+    );
+    await page.getByRole('button', { name: 'Opprett journalpost' }).click();
+    const secondAttempt = await secondAttemptPromise;
+
+    expect(secondAttempt.status()).toBe(201);
+    expect(secondAttempt.fromServiceWorker()).toBe(true);
+    expect(secondAttempt.request().postDataJSON()).toEqual(expectedRequest);
+
+    const { journalpostId }: IOpprettJournalpostResponse = await secondAttempt.json();
     expect(journalpostId).toEqual(expect.any(String));
     expect(journalpostId).not.toBe('');
-    expect(await createResponse.json()).toEqual({ journalpostId: createdJournalpost.journalpostId });
+    expect(await secondAttempt.json()).toEqual({ journalpostId: createdJournalpost.journalpostId });
     await expect(page.getByText(`Opprettet. Journalpost-ID: ${journalpostId}`)).toBeVisible();
+    await expect(page.getByText('Kunne ikke opprette journalpost')).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Opprett journalpost', exact: true })).toHaveCount(0);
     const openJournalpostButton = page.getByRole('button', { name: 'Gå til journalpost' });
     await expect(openJournalpostButton).toBeVisible();
+
     await installCreatedJournalpostHandler(page);
     const journalpostResponsePromise = page.waitForResponse((response) =>
         isApiResponse(response, 'GET', ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpostId)),
@@ -81,66 +106,4 @@ test('oppretter journalpost fra hovedsiden og åpner den opprettede journalposte
     await expect(page.getByRole('button', { name: 'Sett på vent', exact: true })).toBeVisible();
     const journalpostNumber = page.getByText('Journalpostnummer:', { exact: true }).locator('..');
     await expect(journalpostNumber.getByText(journalpostId, { exact: true })).toBeVisible();
-});
-
-test('beholder utfylt skjema etter opprettingsfeil og lykkes ved nytt forsøk', async ({ page }) => {
-    await page.goto('/opprett-journalpost');
-    const lookupResponsePromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT),
-    );
-    await page.getByRole('textbox', { name: 'Søkers fødselsnummer' }).fill(TEST_FNR);
-    expect((await lookupResponsePromise).status()).toBe(200);
-    await page
-        .getByLabel('Velg fagsak')
-        .locator(`option[value="${TEST_FAGSAK_ID}"]`)
-        .waitFor({ state: 'attached' });
-    await page.getByLabel('Velg fagsak').selectOption(TEST_FAGSAK_ID);
-    await page.getByRole('textbox', { name: 'Tittel' }).fill('Tittel etter feil');
-    await page.getByRole('textbox', { name: 'Notat' }).fill('Notat som beholdes etter feil');
-
-    await installCreationHandler(page, true);
-
-    const firstAttemptPromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'POST', ApiPath.OPPRETT_NOTAT),
-    );
-    await page.getByRole('button', { name: 'Opprett journalpost' }).click();
-    const firstAttempt = await firstAttemptPromise;
-
-    expect(firstAttempt.status()).toBe(500);
-    expect(firstAttempt.fromServiceWorker()).toBe(true);
-    expect(firstAttempt.request().postDataJSON()).toEqual({
-        søkerIdentitetsnummer: TEST_FNR,
-        fagsakId: TEST_FAGSAK_ID,
-        tittel: 'Tittel etter feil',
-        notat: 'Notat som beholdes etter feil',
-    });
-    await expect(page.getByText('Kunne ikke opprette journalpost')).toBeVisible();
-    await expect(page.getByText('Opprettet. Journalpost-ID:', { exact: false })).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Gå til journalpost' })).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Opprett journalpost', exact: true })).toBeEnabled();
-    await expect(page.getByRole('textbox', { name: 'Søkers fødselsnummer' })).toHaveValue(TEST_FNR);
-    await expect(page.getByLabel('Velg fagsak')).toHaveValue(TEST_FAGSAK_ID);
-    await expect(page.getByRole('textbox', { name: 'Tittel' })).toHaveValue('Tittel etter feil');
-    await expect(page.getByRole('textbox', { name: 'Notat' })).toHaveValue('Notat som beholdes etter feil');
-
-    const secondAttemptPromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'POST', ApiPath.OPPRETT_NOTAT),
-    );
-    await page.getByRole('button', { name: 'Opprett journalpost' }).click();
-    const secondAttempt = await secondAttemptPromise;
-
-    expect(secondAttempt.status()).toBe(201);
-    expect(secondAttempt.fromServiceWorker()).toBe(true);
-    expect(secondAttempt.request().postDataJSON()).toEqual({
-        søkerIdentitetsnummer: TEST_FNR,
-        fagsakId: TEST_FAGSAK_ID,
-        tittel: 'Tittel etter feil',
-        notat: 'Notat som beholdes etter feil',
-    });
-    const { journalpostId }: IOpprettJournalpostResponse = await secondAttempt.json();
-    expect(await secondAttempt.json()).toEqual({ journalpostId: createdJournalpost.journalpostId });
-    await expect(page.getByText(`Opprettet. Journalpost-ID: ${journalpostId}`)).toBeVisible();
-    await expect(page.getByText('Kunne ikke opprette journalpost')).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Opprett journalpost', exact: true })).toHaveCount(0);
-    await expect(page.getByRole('button', { name: 'Gå til journalpost' })).toBeVisible();
 });

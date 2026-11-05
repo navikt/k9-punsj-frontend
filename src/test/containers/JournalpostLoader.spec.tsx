@@ -77,7 +77,7 @@ afterEach(() => {
 });
 
 describe('JournalpostLoader', () => {
-    it('viser lasting til journalposten er hentet', async () => {
+    it('viser lasting til journalposten er hentet med GET og viser deretter innholdet', async () => {
         let resolveJournalpost: (response: Response) => void = () => {
             throw new Error('Journalpostresponsen er ikke klargjort.');
         };
@@ -93,23 +93,16 @@ describe('JournalpostLoader', () => {
         expect(screen.queryByTestId('journalpostinnhold')).not.toBeInTheDocument();
         await waitFor(() => expect(requests).toHaveLength(1));
         expect(requests[0]).toMatchObject({ url: journalpostPath });
+        expect(requests[0]?.init?.method).toBeUndefined();
 
         await act(async () => {
             resolveJournalpost(apiResponse(journalpostFixture, 200));
         });
 
         expect(await screen.findByTestId('journalpostinnhold')).toBeVisible();
+        expect(screen.getByText('Journalpostinnhold lastet')).toBeVisible();
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-    });
-
-    it('viser innhold etter en vellykket GET med journalposten', async () => {
-        replies.push(apiResponse(journalpostFixture, 200));
-
-        renderJournalpostLoader();
-
-        expect(await screen.findByTestId('journalpostinnhold')).toBeVisible();
-        expect(requests[0]).toMatchObject({ url: journalpostPath });
-        expect(requests[0]?.init?.method).toBeUndefined();
+        expect(requests).toHaveLength(1);
     });
 
     it.each([

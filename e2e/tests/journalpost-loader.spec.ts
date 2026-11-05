@@ -55,6 +55,11 @@ test('åpner gyldig journalpost direkte og beholder Skjul-handlingen ved omlasti
     const reloadResponse = await reloadResponsePromise;
     expectJournalpostResponse(reloadResponse, journalpostId, 200);
     await expect(journalpostNumber.getByText(journalpostId, { exact: true })).toBeVisible();
+    await expect(pdf).toBeVisible();
+    const skjulAfterReload = page.getByRole('button', { name: 'Skjul', exact: true });
+    await expect(skjulAfterReload).toBeEnabled();
+    await skjulAfterReload.click();
+    await expect(pdf).toBeHidden();
 });
 
 test('viser generell feil for ukjent 409 gjennom loaderens Redux-flyt', async ({ page }) => {

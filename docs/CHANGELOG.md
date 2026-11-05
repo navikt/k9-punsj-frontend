@@ -4,6 +4,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-05 — Oppfølging av testdekning
+
+- Forhåndsvisning av brev som feiler uten statustekst viser nå «Forhåndsvisning av brev feilet.». La til test for LOS-redirect tre sekunder etter sending i avsluttet sak.
+- Kontrollerte PDF-visning og **Skjul** etter reload. Samlet journalpostoppretting, feil, nytt forsøk og åpning i én Playwright-reise og lasting/suksess i én Vitest-test for JournalpostLoader.
+- Forenklet Home-historiene ved å fjerne store-registeret; hver historie beholder egen store.
+
 #### 2026-11-05 — Home
 
 - Dekket Home-søket med Vitest, seks interaktive Storybook-historier og én Playwright-reise. Fjernet erstattet Forside-Cypress-spesifikasjon etter assertion-paritet og viste generell feil ved ukjent eller manglende 409-type.

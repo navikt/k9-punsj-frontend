@@ -14,7 +14,6 @@ import { ApiPath } from 'app/apiConfig';
 import messages from 'app/i18n/nb.json';
 import { Home } from 'app/home/Home';
 import { rootReducer } from 'app/state/RootState';
-import { resetAllStateAction } from 'app/state/actions/GlobalActions';
 import { redirectToLos } from 'app/utils/envUtils';
 import journalpostFixture from '../../../cypress/fixtures/jpPSB300.json';
 import { JOURNALPOST_LOADER_TEST_SCENARIOS } from '../../mocks/journalpostLoaderTestScenarios';
@@ -50,13 +49,6 @@ const closeSuccessHandler = http.get(closeUrl(closeSuccessId), () =>
 );
 
 const goToLosAction = fn().mockName('Gå til LOS');
-const createHomeStoryStore = () => configureStore({ reducer: rootReducer });
-type HomeStoryStore = ReturnType<typeof createHomeStoryStore>;
-const homeStoryStores = new Map<string, HomeStoryStore>();
-
-const resetHomeStoryStore = (storyId: string) => {
-    homeStoryStores.get(storyId)?.dispatch(resetAllStateAction());
-};
 
 const searchFor = async (canvasElement: HTMLElement, journalpostId: string) => {
     const canvas = within(canvasElement);
@@ -78,21 +70,8 @@ const LocalJournalpostDestination = () => {
     );
 };
 
-const HomeStoryProviders: React.FC<React.PropsWithChildren<{ storyId: string }>> = ({ children, storyId }) => {
-    const [store] = React.useState(() => {
-        const newStore = createHomeStoryStore();
-        homeStoryStores.set(storyId, newStore);
-        return newStore;
-    });
-
-    React.useEffect(
-        () => () => {
-            if (homeStoryStores.get(storyId) === store) {
-                homeStoryStores.delete(storyId);
-            }
-        },
-        [store, storyId],
-    );
+const HomeStoryProviders: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [store] = React.useState(() => configureStore({ reducer: rootReducer }));
 
     return (
         <Provider store={store}>
@@ -119,7 +98,7 @@ const meta: Meta<typeof Home> = {
     decorators: [
         (Story, context) => {
             return (
-                <HomeStoryProviders key={context.id} storyId={context.id}>
+                <HomeStoryProviders key={context.id}>
                     <Story />
                 </HomeStoryProviders>
             );
@@ -136,8 +115,7 @@ export const TomtSok: Story = {
     parameters: {
         msw: { handlers: { journalpost: [validSearchHandler], close: [] } },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
+    play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await expect(canvas.getByRole('textbox', { name: 'Journalpost-ID' })).toHaveValue('');
         await expect(canvas.getByRole('button', { name: 'Søk' })).toBeDisabled();
@@ -149,8 +127,7 @@ export const Laster: Story = {
     parameters: {
         msw: { handlers: { journalpost: [loadingHandler], close: [] } },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
+    play: async ({ canvasElement }) => {
         await searchFor(canvasElement, loadingId);
         const canvas = within(canvasElement);
         await expect(canvas.getByRole('textbox', { name: 'Journalpost-ID' })).toBeDisabled();
@@ -163,8 +140,7 @@ export const IkkeFunnet: Story = {
     parameters: {
         msw: { handlers: { journalpost: [notFoundHandler, validSearchHandler], close: [] } },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
+    play: async ({ canvasElement }) => {
         await searchFor(canvasElement, notFoundId);
         const canvas = within(canvasElement);
         await expect(
@@ -179,8 +155,7 @@ export const IngenTilgang: Story = {
     parameters: {
         msw: { handlers: { journalpost: [forbiddenHandler, validSearchHandler], close: [] } },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
+    play: async ({ canvasElement }) => {
         await searchFor(canvasElement, forbiddenId);
         const canvas = within(canvasElement);
         await expect(
@@ -195,8 +170,7 @@ export const GenerellFeil: Story = {
     parameters: {
         msw: { handlers: { journalpost: [serverErrorHandler, validSearchHandler], close: [] } },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
+    play: async ({ canvasElement }) => {
         await searchFor(canvasElement, serverErrorId);
         const canvas = within(canvasElement);
         await expect(canvas.findByText('Noe gikk galt', { exact: true })).resolves.toBeVisible();
@@ -214,10 +188,7 @@ export const Kjent409: Story = {
             },
         },
     },
-    play: async ({ canvasElement, id }) => {
-        resetHomeStoryStore(id);
-        mocked(redirectToLos).mockClear();
-        goToLosAction.mockClear();
+    play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await searchFor(canvasElement, closeSuccessId);
         await expect(canvas.findByText(/Journalposten har blitt feilregistrert/)).resolves.toBeVisible();

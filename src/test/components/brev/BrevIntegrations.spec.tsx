@@ -270,6 +270,46 @@ describe('brevtilkoblinger', () => {
         }
     });
 
+    it('sender til LOS først etter tre sekunder når brevet er sendt fra avsluttet sak', async () => {
+        const storyWindow = window as Window & { appSettings?: Record<string, string | undefined> };
+        const previousSettings = storyWindow.appSettings;
+        const startUrl = window.location.href;
+        // Fragmentnavigasjon støttes av jsdom og viser at den ekte redirecten ble utført.
+        const losUrl = `${startUrl.split('#')[0]}#los-test`;
+        storyWindow.appSettings = { ...previousSettings, K9_LOS_URL: losUrl };
+        try {
+            const user = userEvent.setup();
+            renderAtRoute(<SendBrevIAvsluttetSak />, '/brev-avsluttet-sak');
+
+            await user.type(screen.getByRole('textbox', { name: 'Søkers fødselsnummer' }), TEST_IDENT);
+            await user.selectOptions(await screen.findByRole('combobox', { name: 'Velg fagsak' }), FAGSAK_ID);
+            await sendLetter(user);
+            await user.click(screen.getByRole('button', { name: 'Send brev' }));
+
+            vi.useFakeTimers();
+            await act(async () => {
+                fireEvent.click(screen.getByRole('button', { name: 'Fortsett' }));
+                await vi.advanceTimersByTimeAsync(0);
+            });
+            expect(screen.getByRole('dialog', { name: 'Gå til LOS-modal' })).toBeVisible();
+            expect(screen.getByText('Brevet er sendt. Du blir nå tatt til LOS.')).toBeVisible();
+
+            await act(async () => {
+                await vi.advanceTimersByTimeAsync(2999);
+            });
+            expect(window.location.href).toBe(startUrl);
+
+            await act(async () => {
+                await vi.advanceTimersByTimeAsync(1);
+            });
+            expect(window.location.href).toBe(losUrl);
+        } finally {
+            window.history.replaceState(null, '', startUrl);
+            if (previousSettings === undefined) delete storyWindow.appSettings;
+            else storyWindow.appSettings = previousSettings;
+        }
+    });
+
     it('kobler fagsak, journalpost og sakstype-fallback fra Redux uten å lukke oppgaven', async () => {
         const user = userEvent.setup();
         const state = {

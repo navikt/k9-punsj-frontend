@@ -14,12 +14,14 @@ afterEach(() => {
 });
 
 describe('previewMessage', () => {
-    it('returnerer statusfeil for en annen HTTP-feil enn 500', async () => {
-        const notFound = new Response(null, { status: 404 });
-        const fetchMock = vi.fn().mockResolvedValue(notFound);
+    it.each([
+        { name: 'tom statusText', statusText: '', expected: '' },
+        { name: 'statusText fra serveren', statusText: 'Not Found', expected: 'Not Found' },
+    ])('returnerer feiltekst for 404 med $name', async ({ statusText, expected }) => {
+        const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 404, statusText }));
         vi.stubGlobal('fetch', fetchMock);
 
-        await expect(previewMessage(values, '81549300', 'PSB')).resolves.toBe(notFound.statusText);
+        await expect(previewMessage(values, '81549300', 'PSB')).resolves.toBe(expected);
         expect(fetchMock).toHaveBeenCalledWith(
             ApiPath.BREV_FORHAANDSVIS,
             expect.objectContaining({ method: 'post', credentials: 'include' }),

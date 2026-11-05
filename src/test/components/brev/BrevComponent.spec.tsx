@@ -467,6 +467,24 @@ describe('BrevComponent', () => {
         expect(requestsFor(ApiPath.BREV_FORHAANDSVIS)).toHaveLength(2);
     });
 
+    it.each([
+        { name: 'uten statusText', statusText: '', message: 'Forhåndsvisning av brev feilet.' },
+        { name: 'med statusText', statusText: 'Not Found', message: 'Not Found' },
+    ])('viser preview-feil for 404 $name uten å åpne forhåndsvisning', async ({ statusText, message }) => {
+        const user = userEvent.setup();
+        previewReplies = [new Response(null, { status: 404, statusText })];
+        const { open } = stubPreviewWindow();
+        renderBrev();
+        await velgMalOgMottaker(user);
+        await fyllInnFritekstbrev(user);
+
+        await user.click(screen.getByRole('button', { name: 'Forhåndsvis brev' }));
+
+        expect(await screen.findByText(message, { exact: true })).toBeVisible();
+        expect(open).not.toHaveBeenCalled();
+        expect(screen.getByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
+    });
+
     it('bruker journalpost som ekstern referanse og GENERELL_SAK når fagsak mangler', async () => {
         const user = userEvent.setup();
         const { open } = stubPreviewWindow();
