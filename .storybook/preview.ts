@@ -1,7 +1,10 @@
 import type { Preview } from '@storybook/react';
 import { setupWorker } from 'msw/browser';
 import { mswLoader } from 'msw-storybook-addon/csf3';
+import { sb } from 'storybook/test';
 import './preview.css';
+
+sb.mock(import('../src/app/utils/envUtils.ts'), { spy: true });
 
 const setupMsw = async () => {
     const worker = setupWorker();

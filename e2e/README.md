@@ -130,3 +130,54 @@ Manual click-through:
 7. In **Henter fagsaker**, expect the disabled Aksel select with the loader immediately to its right, vertically centred on the control rather than its label. Its accessible description is **Henter fagsaker**. The loader slot remains reserved when switching back to a non-loading story, so the control and fields below do not shift.
 
 Playwright and Cypress share port 8080 with local development. Stop the server you started before running either suite if that port is occupied.
+
+## JournalpostLoader
+
+Kjør testene og bygg Storybook fra repository-roten:
+
+```sh
+yarn test src/test/containers/JournalpostLoader.spec.tsx
+yarn test:pw e2e/tests/journalpost-loader.spec.ts --workers=1
+yarn test:pw e2e/tests/journalpost-loader.spec.ts
+yarn test:pw:ui e2e/tests/journalpost-loader.spec.ts --ui-host=127.0.0.1 --ui-port=9324
+yarn lint
+yarn build-storybook
+yarn storybook --host 127.0.0.1
+yarn exec playwright show-report
+```
+
+Playwright starter appen på port 8080 og stopper den etter en CLI-kjøring; Playwright UI holder den oppe mens UI-et kjører. Playwright UI bruker port 9324. Storybook kjører på port 6006. Ikke start en ny server hvis den aktuelle porten allerede brukes.
+
+Stories bruker ekte `JournalpostLoader`, en fersk Redux-store per rendering, router og norske meldinger. Lukkeflytene bruker ekte knapphandlinger i `play`, viser lukkestatusen og klikker deretter på **Gå til LOS**. Storybook erstatter redirect-funksjonen med en Actions-mock, så klikket vises i Actions-panelet uten å navigere bort fra historien. MSW-addon registrerer de komplette, navngitte handlergruppene på nytt ved storybytte; last historien på nytt for å starte med ny store og ferske handlere. Åpne direkte:
+
+| Story | Link |
+|---|---|
+| Laster | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--laster) |
+| 403 – ingen tilgang | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-tilgang) |
+| 404 – ikke funnet | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-funnet) |
+| Ingen dokumenter | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ingen-dokumenter) |
+| Generell feil (representativ 500) | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--serverfeil) |
+| Kjent 409 og vellykket lukking | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--kjent-409) |
+| Lukking – 404 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-404) |
+| Lukking – 400 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-400) |
+| Lukking – 500 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-500) |
+
+Testmodus registrerer disse syntetiske scenarioene før første app-render; direkte appvisning er tilgjengelig på `http://127.0.0.1:8080/journalpost/{id}` når `yarn start:e2e` kjører. Alle journalpostkall bruker `GET /api/k9-punsj/journalpost/{id}`; lukking bruker `GET /api/k9-punsj/journalpost/lukkDebugg/{id}` uten body. `930002` holder lasting åpen til siden lastes på nytt eller navigeres bort fra.
+
+| ID | Scenario |
+|---|---|
+| `930001` | Gyldig journalpost, 200 |
+| `930002` | Uavsluttet lasting |
+| `930003` | Manglende tilgang, 403 |
+| `930004` | Ikke funnet, 404 |
+| `930005` | Tom dokumentliste, 200 |
+| `930006` | Støttet konflikt, 409 |
+| `930007` | Serverfeil ved lasting, 500 |
+| `930008` | Ukjent konflikttype, 409 |
+| `930009` | Konflikt uten type, 409 |
+| `930101` | Lukking: journalpost ikke funnet, 404 |
+| `930102` | Lukking: ferdig behandlet, 400 |
+| `930103` | Lukking: generell serverfeil, 500 |
+| `930104` | Lukking vellykket, 200 |
+
+Komponentmatrisen ligger i Vitest, inkludert vellykket lasting, lukkesuksess og alle tre generelle feiltilfellene: 500, ukjent 409 og 409 uten type. Storybook viser lasting, feil og interaktive lukkeflyter. Playwright beholder direkte lasting/reload, ukjent 409 gjennom appens Redux-flyt og kjent 409 med GET-lukking og reell kontrollert redirect. Gammel Cypress-spesifikasjon beholdes for separat paritetsgjennomgang. Storybook-innhold og alle MSW-svar bruker den eksisterende syntetiske `jpPSB300`-fixturen.

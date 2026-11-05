@@ -102,6 +102,10 @@ const JournalpostLoader: React.FC<Props> = ({ renderOnLoadComplete }: Props) => 
         );
     }
 
+    if (journalpostConflict) {
+        return renderErrorAlert('startPage.feil.internalServerError');
+    }
+
     if (journalpostRequestError) {
         return renderErrorAlert('startPage.feil.internalServerError');
     }
