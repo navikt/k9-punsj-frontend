@@ -181,3 +181,36 @@ Testmodus registrerer disse syntetiske scenarioene før første app-render; dire
 | `930104` | Lukking vellykket, 200 |
 
 Komponentmatrisen ligger i Vitest, inkludert vellykket lasting, lukkesuksess og alle tre generelle feiltilfellene: 500, ukjent 409 og 409 uten type. Storybook viser lasting, feil og interaktive lukkeflyter. Playwright beholder direkte lasting/reload, ukjent 409 gjennom appens Redux-flyt og kjent 409 med GET-lukking og reell kontrollert redirect. Gammel Cypress-spesifikasjon beholdes for separat paritetsgjennomgang. Storybook-innhold og alle MSW-svar bruker den eksisterende syntetiske `jpPSB300`-fixturen.
+
+## Home journalpostsøk
+
+Kjør Home-testene og bygg Storybook fra repository-roten:
+
+```sh
+yarn test src/test/components/home/Home.spec.tsx
+yarn test:pw e2e/tests/home.spec.ts --workers=1
+yarn test:pw e2e/tests/home.spec.ts
+yarn lint
+yarn build-storybook
+yarn storybook --host 127.0.0.1
+```
+
+Storyene bruker en fersk Redux-store og router per visning, ekte Home-inntasting og navngitte MSW-grupper. Åpne dem direkte:
+
+| Story | Scenario | Link |
+|---|---|---|
+| Tomt søk | Manuell søking; `930001` gir en lokal rutedestinasjon | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--tomt-sok) |
+| Laster | `930002`, uavsluttet svar | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--laster) |
+| Ikke funnet | `930004`, 404 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ikke-funnet) |
+| Ingen tilgang | `930003`, 403 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ingen-tilgang) |
+| Generell feil | `930007`, 500 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--generell-feil) |
+| Kjent 409 | `930104`, vellykket GET-lukking og trygg LOS Actions-feedback | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--kjent-409) |
+
+Manuell gjennomgang:
+
+1. Åpne **Tomt søk** direkte. Feltet skal være tomt og Søk deaktivert. Skriv `930001` og velg **Søk**; historien viser den merkede lokale destinasjonen `/journalpost/930001`.
+2. Åpne de fire feilhistoriene direkte. `play` skriver inn scenario-ID og søker. Kontroller riktig melding og at journalpostfeltet fortsatt kan redigeres. Endre ID til `930001` og søk igjen; du skal komme til den lokale destinasjonen. Bytt deretter til **Tomt søk** og kontroller at feltet er tomt.
+3. I **Laster** skal `930002` holde søket i lasting, med deaktivert felt og knapp. Bytt historie eller last preview-iframe på nytt for å starte fra en fersk tilstand.
+4. I **Kjent 409** søker `play` opp `930104`, lukker oppgaven med GET og klikker **Gå til LOS**. Handlingen skal vises i Actions-panelet uten å navigere bort. Bruk **Interactions → Rerun** for å gjenta hele flyten; last siden på nytt for en ny gjennomgang.
+
+Playwright bruker den eksisterende `930001`-fixturen. Den venter på den eksakte journalpost-GET-en før Søk klikkes, forventer 200 og kontrollerer navigasjon til `/journalpost/930001` og synlig journalpostnummer. Reisen stopper før handlinger i Fordeling. `cypress/e2e/forside/Forside.cy.js` beholdes uendret for separat paritetsgjennomgang.

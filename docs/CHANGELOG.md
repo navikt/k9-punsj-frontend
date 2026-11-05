@@ -4,6 +4,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-05 — Home
+
+- Dekket Home-søket med Vitest, seks interaktive Storybook-historier og én Playwright-reise. Beholdt Forside-Cypress-spesifikasjonen og viste generell feil ved ukjent eller manglende 409-type.
+
 #### 2026-11-05 — JournalpostLoader
 
 - La komponentmatrisen for lasting, feilvisninger og GET-basert lukking i Vitest; beholdt tre Playwright-integrasjoner og ni Storybook-historier med `play`-handlinger og komplette MSW-grupper ved storybytte. Fjernet egne suksess- og LOS-destinasjonshistorier; LOS-knappen gir trygg Actions-feedback uten å navigere bort. Samlet generelle feilvisninger og kjente 409-/200-lukkeflyter. Forenklet det manuelle lasting-scenariet og fjernet skjult browser-event-synkronisering. Rettet fallback ved ukjent eller manglende 409-type.
