@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Rettet backend-adressen i dev-proxyen (2026-11-06)
+
+- La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
+
 ### Migrering fra Cypress til Playwright og komponenttester
 
 #### 2026-11-05 — Oppfølging av testdekning
