@@ -1,6 +1,6 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw/http';
-import { getFagsakNavnForSelect, getBarnInfoForSelect } from '../../utils/utils';
+import { getFagsakNavnForSelect } from '../../utils/utils';
 import journalpost from '../../fixtures/jpPSB300.json';
 import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
@@ -13,24 +13,36 @@ const observedRequestsProperty = '__fordelingObservedRequests';
 const lukkDebuggPath = ApiPath.JOURNALPOST_LUKK_DEBUGG.replace('{journalpostId}', journalpost.journalpostId);
 
 const observer = (appWindow, method, getResponse) => ({ request }) => {
-    appWindow[observedRequestsProperty].push({
+    const observedRequest = {
         method,
         path: new URL(request.url).pathname,
-    });
+    };
+    const norskIdent = request.headers.get('X-Nav-NorskIdent');
+    if (norskIdent) {
+        observedRequest.norskIdent = norskIdent;
+    }
+    appWindow[observedRequestsProperty].push(observedRequest);
     return getResponse(request);
 };
 
-const installTestHandlers = () => {
+const installTestHandlers = ({ tommeLister = false } = {}) => {
     cy.window().then((window) => {
         window[observedRequestsProperty] = [];
         window.msw.worker.use(
             http.get(ApiPath.HENT_FAGSAK_PÅ_IDENT, observer(window, 'GET', ({ headers }) =>
                 HttpResponse.json(
-                    headers.get('X-Nav-NorskIdent') === fnrNySøker ? [] : fagsaker,
+                    tommeLister || headers.get('X-Nav-NorskIdent') === fnrNySøker ? [] : fagsaker,
                     { status: 200 },
                 ),
             )),
-            http.get(ApiPath.BARN_GET, observer(window, 'GET', () => HttpResponse.json(barnFraApi, { status: 200 }))),
+            http.get(
+                ApiPath.BARN_GET,
+                observer(
+                    window,
+                    'GET',
+                    () => HttpResponse.json(tommeLister ? { ...barnFraApi, barn: [] } : barnFraApi, { status: 200 }),
+                ),
+            ),
             http.get(ApiPath.GOSYS_GJELDER, observer(window, 'GET', () =>
                 HttpResponse.json({ Annet: 'Gjelder noe annet, må velges i Gosys' }, { status: 200 }),
             )),
@@ -75,10 +87,10 @@ const installTestHandlers = () => {
     });
 };
 
-const visitFordeling = () => {
+const visitFordeling = (options) => {
     cy.visit(`/journalpost/${journalpost.journalpostId}`);
     cy.findByText(/Skjul/i).should('exist').click();
-    installTestHandlers();
+    installTestHandlers(options);
 };
 
 const velgManglendeFnr = () => {
@@ -125,11 +137,26 @@ describe(
 
             cy.findByText(/^Nei$/i).click();
             cy.findByLabelText('Søkers fødselsnummer eller D-nummer:').type(fnrNySøker);
+            cy.window()
+                .its(observedRequestsProperty)
+                .should((requests) => {
+                    expect(requests).to.deep.include({
+                        method: 'GET',
+                        path: ApiPath.HENT_FAGSAK_PÅ_IDENT,
+                        norskIdent: fnrNySøker,
+                    });
+                    expect(requests).to.deep.include({
+                        method: 'GET',
+                        path: ApiPath.BARN_GET,
+                        norskIdent: fnrNySøker,
+                    });
+                });
             cy.findByLabelText('Velg hvilket barn det gjelder')
-                .select(getBarnInfoForSelect(barnFraListe))
-                .should('have.value', barnFraListe.identitetsnummer);
+                .should('exist');
+            cy.get('[data-test-id="journalførOgVent"]').should('be.visible').and('be.disabled');
 
             cy.findByText(/^Ja$/i).click();
+            cy.findByLabelText('Velg fagsak').should('exist');
             cy.get('.journalpostpanel').within(() => {
                 cy.findByText(fnrNySøker).should('not.exist');
                 cy.findByText(/Barnets ID/i).should('not.exist');
@@ -147,19 +174,18 @@ describe(
         });
 
         it('nullstiller tillatelsen ved dokumenttypebytte', () => {
-            visitFordeling();
+            visitFordeling({ tommeLister: true });
             cy.findByText(/^Ja$/i).click();
-            cy.findByLabelText('Velg fagsak')
-                .select(getFagsakNavnForSelect(fagsakMedBarn.fagsakId, dokumenttype))
-                .should('have.value', fagsakMedBarn.fagsakId);
-            velgManglendeFnr();
+            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('exist').check();
+            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('be.checked');
+            cy.findByLabelText('Pleietrengendes fødselsnummer:').should('be.disabled');
+            cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
+            cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
 
             cy.get('[data-test-id="dokumenttypeRadioPanelOmsorgspenger"]').click();
             cy.get('[data-test-id="dokumenttypeRadioPanelPleiepenger"]').click();
-            cy.findByLabelText('Velg fagsak').should('exist');
-            cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
-            cy.findByLabelText('Det gjelder et annet barn').check();
 
+            cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('exist');
             cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('not.be.checked');
             cy.findByLabelText('Pleietrengendes fødselsnummer:').should('not.be.disabled');
             cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('not.exist');
@@ -177,12 +203,12 @@ describe(
 
             cy.findByLabelText('Reserver saksnummer til ny fagsak').uncheck();
             cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
-            cy.findByLabelText('Det gjelder et annet barn').check();
+            cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
 
+            cy.findByLabelText('Det gjelder et annet barn').check();
             cy.findByLabelText('Pleietrengende har ikke fødselsnummer').should('not.be.checked');
             cy.findByLabelText('Pleietrengendes fødselsnummer:').should('not.be.disabled');
             cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('not.exist');
-            cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
             assertNoObservedRequests();
         });
     },
