@@ -20,6 +20,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 #### 2026-11-06 — Fordeling uten fagsaker og oppslagsfeil
 
 - La til Playwright-reiser for tomme og filtrerte saksresultater, barnelister og feil ved fagsak- og barnesøk. La til avbrutte modaltilfeller uten fagsak i Vitest og to interaktive Storybook-historier. Cypress og produksjonskode er uendret.
+- Porterte Cypress-gjenopprettingsreisene for 403 og 500 ved barnesøk til Playwright: Nei → Ja henter barnelisten på nytt, viser barnet fra listen og bevarer manuell registrering.
 
 #### 2026-11-06 — Fordeling-PSB-pilot
 

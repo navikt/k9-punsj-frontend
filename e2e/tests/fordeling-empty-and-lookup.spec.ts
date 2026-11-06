@@ -100,6 +100,43 @@ const installLookupOverrides = async (page: Page, overrides: LookupOverrides) =>
     );
 };
 
+const installChildLookupRecoveryOverrides = async (page: Page, failureStatus: number) => {
+    await page.evaluate(
+        ({ applicantId, casesPath, childPath, children, failureStatus: initialFailureStatus }) => {
+            const msw = window.msw;
+            if (!msw) {
+                throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+            }
+
+            let childRequestCount = 0;
+            msw.worker.use(
+                msw.http.get(casesPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json([]);
+                }),
+                msw.http.get(childPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    childRequestCount += 1;
+                    if (childRequestCount === 1) {
+                        return msw.HttpResponse.json(
+                            { error: 'Child lookup failed' },
+                            { status: initialFailureStatus },
+                        );
+                    }
+                    return msw.HttpResponse.json(children);
+                }),
+            );
+        },
+        {
+            applicantId: SØKER_ID,
+            casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
+            childPath: ApiPath.BARN_GET,
+            children: barnFixture,
+            failureStatus,
+        },
+    );
+};
+
 const openPsbJournalpost = async (page: Page, journalpostId: string) => {
     const responsePromise = page.waitForResponse((response) =>
         isApiResponse(response, 'GET', journalpostPath(journalpostId)),
@@ -501,23 +538,34 @@ for (const { journalpostId, status } of [
     { journalpostId: FORDELING_PSB_SCENARIOS.childLookupForbidden, status: 403 },
     { journalpostId: FORDELING_PSB_SCENARIOS.childLookupError, status: 500 },
 ]) {
-    test(`bruker manuelt barnefelt ved barnesøk med status ${status}`, async ({ page }) => {
+    test(`gjenoppretter barnelisten etter barnesøk med status ${status}`, async ({ page }) => {
         const mutations = recordMutationRequests(page, journalpostId);
 
         await openPsbJournalpost(page, journalpostId);
-        await installLookupOverrides(page, { cases: [], children: { barn: [] }, childStatus: status });
-        const { casesResponse, childrenResponse } = await confirmApplicant(page, journalpostId);
-        await expectLookupResponse(casesResponse, ApiPath.HENT_FAGSAK_PÅ_IDENT, 200, []);
-        await expectLookupResponse(childrenResponse, ApiPath.BARN_GET, status);
+        await installChildLookupRecoveryOverrides(page, status);
+
+        const firstCasesResponsePromise = waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT);
+        const firstChildrenResponsePromise = waitForLookup(page, ApiPath.BARN_GET);
+        await page.getByRole('radio', { name: 'Ja' }).check();
+        const [firstCasesResponse, firstChildrenResponse] = await Promise.all([
+            firstCasesResponsePromise,
+            firstChildrenResponsePromise,
+        ]);
+        await expectLookupResponse(firstCasesResponse, ApiPath.HENT_FAGSAK_PÅ_IDENT, 200, []);
+        await expectLookupResponse(firstChildrenResponse, ApiPath.BARN_GET, status, {
+            error: 'Child lookup failed',
+        });
 
         const manualChild = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
         const panel = page.locator('.journalpostpanel');
         const continueButton = page.locator('[data-test-id="journalførOgFortsett"]');
         const holdButton = page.locator('[data-test-id="journalførOgVent"]');
+        const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+        const otherChild = page.getByLabel('Det gjelder et annet barn');
+        const noChildId = page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true });
 
-        await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveCount(0);
-        await expect(page.getByLabel('Det gjelder et annet barn')).toHaveCount(0);
         await expect(manualChild).toBeVisible();
+        await expect(childSelect).toHaveCount(0);
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeDisabled();
 
@@ -528,10 +576,53 @@ for (const { journalpostId, status } of [
         await expect(holdButton).toBeEnabled();
 
         await holdButton.click();
-        const dialog = await expectNoCaseModal(page, false, MANUELL_BARN_ID);
-        await cancelModal(dialog);
+        const holdDialog = await expectNoCaseModal(page, false, MANUELL_BARN_ID);
+        await cancelModal(holdDialog);
         await expect(manualChild).toHaveValue(MANUELL_BARN_ID);
         await expect(panel).toContainText(MANUELL_BARN_ID);
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+
+        await page.getByRole('radio', { name: 'Nei' }).check();
+        const recoveryCasesResponsePromise = waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT);
+        const recoveryChildrenResponsePromise = waitForLookup(page, ApiPath.BARN_GET);
+        await page.getByRole('radio', { name: 'Ja' }).check();
+        const [recoveryCasesResponse, recoveryChildrenResponse] = await Promise.all([
+            recoveryCasesResponsePromise,
+            recoveryChildrenResponsePromise,
+        ]);
+        await expectLookupResponse(recoveryCasesResponse, ApiPath.HENT_FAGSAK_PÅ_IDENT, 200, []);
+        await expectLookupResponse(recoveryChildrenResponse, ApiPath.BARN_GET, 200, barnFixture);
+
+        await expect(childSelect).toBeVisible();
+        await expect(otherChild).not.toBeChecked();
+        await expect(manualChild).toHaveCount(0);
+        await expect(noChildId).toHaveCount(0);
+        await expect(continueButton).toBeDisabled();
+        await expect(holdButton).toBeDisabled();
+
+        await childSelect.selectOption(BARN_FRA_LISTE_ID);
+        await expect(childSelect).toHaveValue(BARN_FRA_LISTE_ID);
+        await expect(panel).toContainText('Barnets ID');
+        await expect(panel).toContainText(BARN_FRA_LISTE_ID);
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+
+        await childSelect.selectOption(GAMMELT_BARN_ID);
+        await expect(childSelect).toHaveValue(GAMMELT_BARN_ID);
+        await expect(panel).toContainText(GAMMELT_BARN_ID);
+        await expect(panel).not.toContainText(BARN_FRA_LISTE_ID);
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+
+        await otherChild.check();
+        await expect(childSelect).toBeDisabled();
+        await expect(manualChild).toBeVisible();
+        await manualChild.fill(MANUELL_BARN_ID);
+        await expectPersonInfo(page);
+        await expect(panel).toContainText(MANUELL_BARN_ID);
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
 
         expectNoMutations(mutations);
         await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${journalpostId}`);
