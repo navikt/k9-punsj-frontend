@@ -401,6 +401,8 @@ export default function FellesReducer(
                 ...state,
                 barn: action.barn,
                 isAwaitingHentBarnResponse: false,
+                hentBarnError: undefined,
+                hentBarnForbidden: undefined,
                 hentBarnSuccess: true,
                 harHentBarnResponse: true,
             };
@@ -419,6 +421,8 @@ export default function FellesReducer(
                 ...state,
                 barn: undefined,
                 isAwaitingHentBarnResponse: undefined,
+                hentBarnError: undefined,
+                hentBarnForbidden: undefined,
                 hentBarnSuccess: undefined,
                 harHentBarnResponse: undefined,
             };
