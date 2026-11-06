@@ -8,6 +8,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-06 — Fordeling-knappregler
+
+- La til Vitest-beslutningstabeller for Fordeling-reglene for behandlingsår, journalføring og videreføring. Beholdt Cypress for UI-wiring og faktiske brukerflyter.
+
 #### 2026-11-05 — Oppfølging av testdekning
 
 - Forhåndsvisning av brev som feiler uten statustekst viser nå «Forhåndsvisning av brev feilet.». La til test for LOS-redirect tre sekunder etter sending i avsluttet sak.
