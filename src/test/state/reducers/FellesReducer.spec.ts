@@ -7,7 +7,8 @@ vi.mock('app/utils', () => ({
     convertResponseToError: vi.fn(),
 }));
 
-import FellesReducer, { getJournalpost, getJournalpostLoadAction } from 'app/state/reducers/FellesReducer';
+import FellesReducer, { getJournalpost, getJournalpostLoadAction, resetBarnAction } from 'app/state/reducers/FellesReducer';
+import { getHentBarnErrorAction, getHentBarnForbiddenAction, getHentBarnSuccessAction } from 'app/state/reducers/HentBarn';
 
 describe('FellesReducer.getJournalpost', () => {
     beforeEach(() => {
@@ -36,6 +37,49 @@ describe('FellesReducer.getJournalpost', () => {
 });
 
 describe('FellesReducer', () => {
+    it.each([
+        ['oppslagsfeil', getHentBarnErrorAction()],
+        ['tilgangsavslag', getHentBarnForbiddenAction()],
+    ])('nullstiller %s etter vellykket oppslag av barn', (_, failureAction) => {
+        const failedState = FellesReducer(undefined, failureAction);
+        const barn = [
+            {
+                fornavn: 'Test',
+                etternavn: 'Barn',
+                identitetsnummer: '18410162721',
+                fødselsdato: '2018-01-01',
+                sammensattNavn: 'Test Barn',
+            },
+        ];
+
+        const nextState = FellesReducer(failedState, getHentBarnSuccessAction(barn));
+
+        expect(nextState).toEqual(
+            expect.objectContaining({
+                barn,
+                hentBarnError: undefined,
+                hentBarnForbidden: undefined,
+                hentBarnSuccess: true,
+            }),
+        );
+    });
+
+    it('nullstiller feilstatus ved nullstilling av barn', () => {
+        const failedState = FellesReducer(
+            FellesReducer(undefined, getHentBarnErrorAction()),
+            getHentBarnForbiddenAction(),
+        );
+
+        const nextState = FellesReducer(failedState, resetBarnAction());
+
+        expect(nextState).toEqual(
+            expect.objectContaining({
+                hentBarnError: undefined,
+                hentBarnForbidden: undefined,
+            }),
+        );
+    });
+
     it('clears previous journalpost status flags on new load', () => {
         const previousState = {
             journalpostNotFound: true,
