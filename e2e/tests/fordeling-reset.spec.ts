@@ -178,6 +178,7 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
         const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
         await expect(childSelect).toBeVisible();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
         await childSelect.selectOption({ label: `Geir-Paco Gundersen - ${BARN_ID}` });
 
         const journalpostPanel = page.locator('.journalpostpanel');
@@ -219,6 +220,7 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         await page.getByRole('radio', { name: 'Ja' }).check();
         await expectSakerLookup(await lookupPromise, SØKER_ID, [FAGSAK_UTEN_BARN_ID, GAMMEL_FAGSAK_ID]);
 
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
         const journalpostPanel = page.locator('.journalpostpanel');
         await expect(journalpostPanel).toContainText(SØKER_ID);
         await expect(journalpostPanel).not.toContainText(NY_SØKER_ID);
@@ -240,7 +242,6 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toHaveCount(0);
         expect(mutations).toEqual([]);
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeVisible();
-        test.fail(true, 'B27: Vent er aktiv med foreldet parent-flagg selv om barnet og synlig checkbox er nullstilt.');
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
     });
 });

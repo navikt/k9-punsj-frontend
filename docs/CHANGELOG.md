@@ -23,7 +23,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 #### 2026-11-06 — Fordeling-nullstilling
 
-- La til Playwright-reiser for nullstilling ved bytte av søker og dokumenttype, med assertion-mapping til Cypress. Dokumenterte reset-gap for foreldet Vent-flagg som avgrenset forventet feil; B27 er ikke ferdig.
+- La til Playwright-reiser for nullstilling ved bytte av søker og dokumenttype, med assertion-mapping til Cypress. Etter fiksen i #3973 passerer regresjonen normalt: Vent er deaktivert etter søkerbytte, før barn velges eller «Det gjelder et annet barn» klikkes, og etter kontroll av nullstilt checkbox. Beholdt modalavbryt og kontroll av at ingen mutasjoner sendes; begge reset- og begge PSB-testene passerer. Øvrig Fordeling-migrering gjenstår.
 
 #### 2026-11-05 — Oppfølging av testdekning
 
