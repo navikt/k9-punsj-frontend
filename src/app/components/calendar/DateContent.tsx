@@ -17,11 +17,11 @@ const DateContent = (kalenderdager: KalenderDag[]) => (date: Date) => {
 
     return (
         <>
-            <div>
+            <div style={{ fontWeight: 'bold' }}>
                 {verdiOgTekstHvisVerdi(kalenderdag?.tid?.timer, 't ')}
                 {verdiOgTekstHvisVerdi(kalenderdag?.tid?.minutter, 'min')}
             </div>
-            <div style={{ fontWeight: 'bold' }}>
+            <div>
                 {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.timer, 't ')}
                 {verdiOgTekstHvisVerdi(kalenderdag?.tidOpprinnelig?.minutter, 'min')}
             </div>
