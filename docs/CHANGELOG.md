@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Fjernet foreldet manuell barneregistrering etter vellykket oppslag (2026-11-06)
+
+- Nullstiller feilstatus for barn ved vellykket oppslag og nullstilling.
+
 ### Nullstilte valg om manglende fødselsnummer ved kontekstbytte (2026-11-06)
 
 - Knyttet checkbox, identfelt og informasjon til samme state som Vent-regelen. Nullstiller tillatelsen ved relevante bytter av søker, dokumenttype, sak og barn.
