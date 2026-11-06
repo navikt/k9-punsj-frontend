@@ -73,6 +73,29 @@ Reisene bruker `930302` og `930303`. Sakslisten for ny søker installeres med si
 
 Begge nye reisene avbryter modalene og kontrollerer at mottak, Vent, kopiering, behandlingsår, Gosys og lukking ikke kalles, også GET-basert lukking.
 
+## Fordeling uten fagsaker og med oppslagsfeil
+
+Kjør tomresultat- og feilreisene alene eller sammen med de tidligere Fordeling-testene:
+
+```sh
+yarn test:pw e2e/tests/fordeling-empty-and-lookup.spec.ts --workers=1
+yarn test:pw e2e/tests/fordeling-empty-and-lookup.spec.ts e2e/tests/fordeling-reset.spec.ts e2e/tests/fordeling-psb.spec.ts
+yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
+```
+
+| Eksisterende `cypress/e2e/fordeling/PSB.cy.js`-assertion | Automatisk dekning |
+| --- | --- |
+| 833–862: Tom fagsakliste med barn fra listen, panelinformasjon, informasjonsvarsel og aktiverte handlinger | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomt saksoppslag med barn fra listen og manuell ident` |
+| 864–884: Bytt til annet barn, skriv gyldig ident og vis barn i panelet | Samme reise; barnelisten deaktiveres mens manuelt felt og personinformasjon vises, og Fortsett-modalens barnedata oppdateres |
+| 886–901: Manglende fødselsnummer fjerner barn fra panelet, viser informasjon og deaktiverer Fortsett, men ikke Vent | Samme reise; avbryter også Vent-modal uten saks- eller barnedata og kontrollerer at valget beholdes |
+| 903–941: Tomme fagsak- og barnelister viser manuelt felt uten valg for annet barn; gyldig ident og manglende fødselsnummer gir forventede knappetilstander | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomme saks- og barnelister uten å be om annet barn` |
+| 944–988: Eksisterende sak med tom barneliste, bytte til ny sak, manuell ident og manglende fødselsnummer | `fordeling-empty-and-lookup.spec.ts` — `bytter fra eksisterende sak til ny sak når barnelisten er tom` |
+| Modalinnhold og avbrytelse uten fagsak, med og uten barn | `KlassifiserModal.spec.tsx`; de to tilhørende interaktive historiene kontrolleres separat i Storybook |
+
+Tillegg utover Cypress dekker 200 med bare andre ytelsers saker, samt 403 og 500 for både fagsak- og barnesøk. Sakssøkfeil viser den eksisterende feilmeldingen og forblir forskjellig fra et vellykket tomt svar. Barnesøkfeil bruker komponentens eksisterende manuelle fallback uten å påstå at barnet finnes i registeret. Alle reisene kontrollerer metode, sti, søkerheader, status og relevante svar, avbryter eventuelle modalvinduer og verifiserer at ingen journalførings-, vent-, kopierings-, behandlingsår-, Gosys- eller lukkemutasjoner sendes.
+
+Reisene bruker test-ID-ene `930304`–`930311`. Browser-MSW-overstyringene er avgrenset til søker `17420373147`; andre svar og standardhandlere endres ikke. Ingen av reisene forsøker å journalføre eller reservere et saksnummer.
+
 ### Rettet reset-regresjon (B27)
 
 Feilen med foreldet `barnetHarIkkeFnr` er rettet i #3973 og integrert fra master. Checkbox, identfelt, informasjon og Vent-regelen bruker nå samme state, og tillatelsen nullstilles ved relevante kontekstbytter.

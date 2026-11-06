@@ -45,7 +45,14 @@ const FAGSAK_MED_BARN: Fagsak = {
     pleietrengendeIdent: BARNE_ID,
     gyldigPeriode: { fom: '2024-04-15', tom: '2024-04-15' },
 };
-type StoryScenario = 'fortsett' | 'vent-med-barn' | 'vent-uten-barn' | 'journalfor-feil' | 'vent-feil';
+type StoryScenario =
+    | 'fortsett'
+    | 'vent-med-barn'
+    | 'vent-uten-barn'
+    | 'fortsett-uten-sak'
+    | 'vent-uten-sak'
+    | 'journalfor-feil'
+    | 'vent-feil';
 
 const journalpost = (): IJournalpost => ({
     journalpostId: JOURNALPOST_ID,
@@ -57,12 +64,12 @@ const journalpost = (): IJournalpost => ({
     erFerdigstilt: false,
 });
 
-const createStore = (fagsak: Fagsak) => {
+const createStore = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.pleietrengendeIdent) => {
     const store = configureStore({ reducer: rootReducer });
     store.dispatch(setJournalpostAction(journalpost()));
     store.dispatch(setDokumenttypeAction(FordelingDokumenttype.PLEIEPENGER));
     store.dispatch(setFagsakAction(fagsak));
-    store.dispatch(setIdentFellesAction(SØKER_ID, fagsak.pleietrengendeIdent));
+    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent));
     return store;
 };
 
@@ -88,8 +95,10 @@ const KlassifiserModalStory = ({
     lukkModal: () => void;
     setFagsak: (sak: Fagsak) => void;
 }) => {
-    const fagsak = scenario === 'vent-uten-barn' ? FAGSAK_UTEN_BARN : FAGSAK_MED_BARN;
-    const [store] = useState(() => createStore(fagsak));
+    const utenFagsak = scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak';
+    const fagsak = utenFagsak ? undefined : scenario === 'vent-uten-barn' ? FAGSAK_UTEN_BARN : FAGSAK_MED_BARN;
+    const pleietrengendeIdent = scenario === 'fortsett-uten-sak' ? BARNE_ID : undefined;
+    const [store] = useState(() => createStore(fagsak, pleietrengendeIdent));
     const [queryClient] = useState(
         () => new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } }),
     );
@@ -100,7 +109,8 @@ const KlassifiserModalStory = ({
         setOpen(false);
     }, [lukkModal]);
 
-    const fortsett = scenario === 'fortsett' || scenario === 'journalfor-feil';
+    const fortsett =
+        scenario === 'fortsett' || scenario === 'fortsett-uten-sak' || scenario === 'journalfor-feil';
 
     return (
         <Provider store={store}>
@@ -210,24 +220,52 @@ const goToLosAction = fn().mockName('Gå til LOS');
 const lukkModalAction = fn().mockName('Lukk klassifiseringsmodal');
 const setFagsakActionSpy = fn().mockName('Oppdater valgt fagsak');
 
-const makeHandlers = (fagsak: Fagsak, classifyHandlers = [classify(fagsak)], ventHandlers = [setOnHold]) => ({
-    journalpost: [journalpostGet(fagsak)],
+const makeHandlers = (
+    fagsak: Fagsak | undefined,
+    classifyHandlers = fagsak ? [classify(fagsak)] : [],
+    ventHandlers = [setOnHold],
+) => ({
+    journalpost: fagsak ? [journalpostGet(fagsak)] : [],
     klassifisering: classifyHandlers,
-    vent: ventHandlers,
+    vent: fagsak ? ventHandlers : [],
     brev: letterHandlers,
 });
 
 const expectDialogSummary = async (scenario: StoryScenario) => {
     const dialog = await within(document.body).findByRole('dialog');
+    const infoElement = dialog.querySelector('[data-test-id="klassifiseringInfo"]');
+    if (!(infoElement instanceof HTMLElement)) throw new Error('Klassifiseringsinformasjonen mangler i dialogen.');
+    const info = within(infoElement);
+    const utenFagsak = scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak';
+    const utenBarn = scenario === 'vent-uten-barn' || scenario === 'vent-uten-sak';
     await expect(
         within(dialog).getByRole('heading', {
             name:
-                scenario === 'fortsett' || scenario === 'journalfor-feil'
+                scenario === 'fortsett' || scenario === 'fortsett-uten-sak' || scenario === 'journalfor-feil'
                     ? 'Vil du lagre følgende informasjon til journalposten?'
                     : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
         }),
     ).toBeVisible();
-    await expect(within(dialog).getByText(FAGSAK_MED_BARN.fagsakId, { exact: true })).toBeVisible();
+    await expect(info.getByText('Pleiepenger sykt barn', { exact: true })).toBeVisible();
+    await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    if (utenFagsak) {
+        await expect(info.queryByText('Saksnummer:', { exact: true })).not.toBeInTheDocument();
+        await expect(info.queryByText('Periode:', { exact: true })).not.toBeInTheDocument();
+    } else {
+        const fagsakId = scenario === 'vent-uten-barn' ? FAGSAK_UTEN_BARN.fagsakId : FAGSAK_MED_BARN.fagsakId;
+        await expect(info.getByText(fagsakId, { exact: true })).toBeVisible();
+        await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
+    }
+
+    if (scenario === 'fortsett-uten-sak' || (!utenFagsak && !utenBarn)) {
+        await expect(info.getByText(BARNE_ID, { exact: true })).toBeVisible();
+    } else {
+        await expect(info.queryByText('Pleietrengendes ID:', { exact: true })).not.toBeInTheDocument();
+    }
+    await expect(
+        within(dialog).getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+    ).toBeVisible();
+    await expect(within(dialog).queryByRole('button', { name: 'Gå til LOS' })).not.toBeInTheDocument();
     return dialog;
 };
 
@@ -281,6 +319,34 @@ export const VentUtenBarn: Story = {
         await expect(within(dialog).getByText(FAGSAK_UTEN_BARN.fagsakId, { exact: true })).toBeVisible();
         await expect(within(dialog).queryByText('Pleietrengendes ID:')).not.toBeInTheDocument();
         await expect(within(dialog).getByRole('button', { name: 'Journalfør og sett på vent' })).toBeEnabled();
+    },
+};
+
+export const FortsettUtenFagsakMedBarn: Story = {
+    name: 'Fortsett uten fagsak med barn',
+    args: { scenario: 'fortsett-uten-sak' },
+    parameters: { msw: { handlers: makeHandlers(undefined) } },
+    play: async () => {
+        const dialog = await expectDialogSummary('fortsett-uten-sak');
+        await expect(within(dialog).getByRole('button', { name: 'Journalfør journalposten' })).toBeEnabled();
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+        await expect(dialog).not.toBeInTheDocument();
+        await expect(lukkModalAction).toHaveBeenCalledOnce();
+        await expect(setFagsakActionSpy).not.toHaveBeenCalled();
+    },
+};
+
+export const VentUtenFagsakEllerBarn: Story = {
+    name: 'Vent uten fagsak eller barn',
+    args: { scenario: 'vent-uten-sak' },
+    parameters: { msw: { handlers: makeHandlers(undefined) } },
+    play: async () => {
+        const dialog = await expectDialogSummary('vent-uten-sak');
+        await expect(within(dialog).getByRole('button', { name: 'Journalfør og sett på vent' })).toBeEnabled();
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+        await expect(dialog).not.toBeInTheDocument();
+        await expect(lukkModalAction).toHaveBeenCalledOnce();
+        await expect(setFagsakActionSpy).not.toHaveBeenCalled();
     },
 };
 

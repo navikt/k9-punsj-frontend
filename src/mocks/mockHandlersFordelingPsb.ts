@@ -58,6 +58,14 @@ const mockHandlersFordelingPsb = [
     ...scenario(FORDELING_PSB_SCENARIOS.classify, 2),
     ...scenario(FORDELING_PSB_SCENARIOS.resetApplicant, 0),
     ...scenario(FORDELING_PSB_SCENARIOS.resetDocumentType, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.emptyCasesWithChildren, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.emptyCasesWithoutChildren, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.matchingCasesWithoutChildren, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.otherBenefitCases, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.caseLookupForbidden, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.caseLookupError, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.childLookupForbidden, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.childLookupError, 0),
 ];
 
 export default mockHandlersFordelingPsb;

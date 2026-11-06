@@ -13,6 +13,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-06 — Fordeling uten fagsaker og oppslagsfeil
+
+- La til Playwright-reiser for tomme og filtrerte saksresultater, barnelister og feil ved fagsak- og barnesøk. La til avbrutte modaltilfeller uten fagsak i Vitest og to interaktive Storybook-historier. Cypress og produksjonskode er uendret.
+
 #### 2026-11-06 — Fordeling-PSB-pilot
 
 - La til modaltester, fem interaktive Storybook-historier og to Playwright-reiser for eksisterende PSB-saker med og uten barn. Beholdt Cypress og brevtilkoblingstestene.

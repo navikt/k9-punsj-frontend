@@ -59,7 +59,7 @@ const Location = () => {
     return <output aria-label="Gjeldende adresse">{location.pathname}</output>;
 };
 
-const createStore = (fagsak: Fagsak) => {
+const createStore = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.pleietrengendeIdent) => {
     const store = configureStore({ reducer: rootReducer });
     store.dispatch(
         setJournalpostAction({
@@ -74,12 +74,12 @@ const createStore = (fagsak: Fagsak) => {
     );
     store.dispatch(setDokumenttypeAction(FordelingDokumenttype.PLEIEPENGER));
     store.dispatch(setFagsakAction(fagsak));
-    store.dispatch(setIdentFellesAction(SØKER_ID, fagsak.pleietrengendeIdent));
+    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent));
     return store;
 };
 
-const renderModal = (fagsak: Fagsak, fortsett: boolean) => {
-    const store = createStore(fagsak);
+const renderModal = (fagsak: Fagsak | undefined, fortsett: boolean, pleietrengendeIdent?: string) => {
+    const store = createStore(fagsak, pleietrengendeIdent ?? fagsak?.pleietrengendeIdent);
     const queryClient = new QueryClient({
         defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
     });
@@ -111,7 +111,7 @@ const renderModal = (fagsak: Fagsak, fortsett: boolean) => {
     return { store, queryClient, lukkModal, setFagsak, dialogRoot };
 };
 
-const expectModalInfo = (fagsak: Fagsak) => {
+const expectModalInfo = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.pleietrengendeIdent) => {
     const infoElement = screen.getByRole('dialog').querySelector('[data-test-id="klassifiseringInfo"]');
     if (!(infoElement instanceof HTMLElement)) throw new Error('Klassifiseringsinformasjonen mangler i dialogen.');
     const info = within(infoElement);
@@ -119,20 +119,32 @@ const expectModalInfo = (fagsak: Fagsak) => {
     expect(info.getByText('Pleiepenger sykt barn')).toBeVisible();
     expect(info.getByText('Søkers ID:')).toBeVisible();
     expect(info.getByText(SØKER_ID)).toBeVisible();
-    expect(info.getByText('Saksnummer:')).toBeVisible();
-    expect(info.getByText(fagsak.fagsakId)).toBeVisible();
-    expect(info.getByText('Periode:')).toBeVisible();
-    expect(infoElement).toHaveTextContent('15.04.2024');
+    if (fagsak) {
+        expect(info.getByText('Saksnummer:')).toBeVisible();
+        expect(info.getByText(fagsak.fagsakId)).toBeVisible();
+        expect(info.getByText('Periode:')).toBeVisible();
+        expect(infoElement).toHaveTextContent('15.04.2024');
+    } else {
+        expect(info.queryByText('Saksnummer:')).not.toBeInTheDocument();
+        expect(info.queryByText('Periode:')).not.toBeInTheDocument();
+    }
 
-    if (fagsak.pleietrengendeIdent) {
+    if (pleietrengendeIdent) {
         expect(info.getByText('Pleietrengendes ID:')).toBeVisible();
-        expect(info.getByText(fagsak.pleietrengendeIdent)).toBeVisible();
+        expect(info.getByText(pleietrengendeIdent)).toBeVisible();
     } else {
         expect(info.queryByText('Pleietrengendes ID:')).not.toBeInTheDocument();
     }
 
     expect(screen.getByText('Informasjonen kan ikke endres etter journalposten er journalført.')).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Gå til LOS' })).not.toBeInTheDocument();
+};
+
+const expectNoMutationCalls = () => {
+    expect(klassifiserDokument).not.toHaveBeenCalled();
+    expect(kopierJournalpostNotRedux).not.toHaveBeenCalled();
+    expect(postBehandlingsAar).not.toHaveBeenCalled();
+    expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
 };
 
 beforeEach(() => {
@@ -173,8 +185,46 @@ describe('KlassifiserModal', () => {
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
 
         expect(lukkModal).toHaveBeenCalledOnce();
-        expect(klassifiserDokument).not.toHaveBeenCalled();
-        expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
+        expectNoMutationCalls();
+    });
+
+    it('viser modal for Fortsett uten fagsak med barn og avbryter uten mutasjon', async () => {
+        const user = userEvent.setup();
+        const barnId = '53488838241';
+        const { lukkModal, setFagsak } = renderModal(undefined, true, barnId);
+
+        expect(
+            screen.getByRole('heading', { name: 'Vil du lagre følgende informasjon til journalposten?' }),
+        ).toBeVisible();
+        expectModalInfo(undefined, barnId);
+        expect(
+            screen.getByRole('button', { name: 'Journalfør journalposten' }),
+        ).toBeEnabled();
+
+        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
+
+        expect(lukkModal).toHaveBeenCalledOnce();
+        expect(setFagsak).not.toHaveBeenCalled();
+        expectNoMutationCalls();
+    });
+
+    it('viser modal for Vent uten fagsak eller barn og avbryter uten mutasjon', async () => {
+        const user = userEvent.setup();
+        const { lukkModal, setFagsak } = renderModal(undefined, false);
+
+        expect(
+            screen.getByRole('heading', {
+                name: 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+            }),
+        ).toBeVisible();
+        expectModalInfo(undefined);
+        expect(screen.getByRole('button', { name: 'Journalfør og sett på vent' })).toBeEnabled();
+
+        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
+
+        expect(lukkModal).toHaveBeenCalledOnce();
+        expect(setFagsak).not.toHaveBeenCalled();
+        expectNoMutationCalls();
     });
 
     it('journalfører, oppdaterer Redux fra samme journalpost og navigerer etter vellykket refresh', async () => {
