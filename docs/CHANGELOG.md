@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Nullstilte valg om manglende fødselsnummer ved kontekstbytte (2026-11-06)
+
+- Knyttet checkbox, identfelt og informasjon til samme state som Vent-regelen. Nullstiller tillatelsen ved relevante bytter av søker, dokumenttype, sak og barn.
+- La til en isolert regresjonstest for søkerbytte og komponentdekning for remount.
+
 ### Rettet backend-adressen i dev-proxyen (2026-11-06)
 
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.

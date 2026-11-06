@@ -20,6 +20,7 @@ export interface Props {
     skalHenteBarn?: boolean;
     visPleietrengende?: boolean;
     jpErFerdigstiltOgUtenPleietrengende?: boolean;
+    barnetHarIkkeFnr?: boolean;
 
     setIdentAction: (søkerId: string, pleietrengendeId?: string | null, annenSokerIdent?: string | null) => void;
     henteBarn: (søkerId: string) => void;
@@ -34,15 +35,14 @@ const Pleietrengende: React.FC<Props> = ({
     visPleietrengende,
     skalHenteBarn,
     jpErFerdigstiltOgUtenPleietrengende,
+    barnetHarIkkeFnr = false,
 
     setIdentAction,
     henteBarn,
     setBarnetHarIkkeFnr,
 }: Props) => {
     const intl = useIntl();
-
     const [pleietrengendeIdent, setPleietrengendeIdent] = useState<string>('');
-    const [pleietrengendeHarIkkeFnr, setPleietrengendeHarIkkeFnr] = useState<boolean>(false);
     const [gjelderAnnenPleietrengende, setGjelderAnnenPleietrengende] = useState<boolean>(false);
     const [pleietrengendeInfo, setPleietrengendeInfo] = useState<Person | undefined>(undefined);
     const [pleietrengendeInfoLoading, setPleietrengendeInfoLoading] = useState<boolean>(false);
@@ -105,12 +105,12 @@ const Pleietrengende: React.FC<Props> = ({
         setPleietrengendeIdent('');
         setPleietrengendeInfo(undefined);
         setIdentAction(søkerId, '', annenSokerIdent);
+        setBarnetHarIkkeFnr?.(false);
     };
 
     const pleietrengendeHarIkkeFnrCheckboks = (checked: boolean) => {
-        setPleietrengendeHarIkkeFnr(checked);
         setPleietrengendeInfo(undefined);
-        if (setBarnetHarIkkeFnr) setBarnetHarIkkeFnr(checked);
+        setBarnetHarIkkeFnr?.(checked);
         if (checked) {
             setPleietrengendeIdent('');
             setIdentAction(søkerId, '', annenSokerIdent);
@@ -130,9 +130,9 @@ const Pleietrengende: React.FC<Props> = ({
 
     const visPleietrengendeHarIkkeFnrCheckbox = !!setBarnetHarIkkeFnr;
     const visPleietrengendeHarIkkeFnrInfo =
-        !toSokereIJournalpost && pleietrengendeHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende;
+        !toSokereIJournalpost && barnetHarIkkeFnr && !jpErFerdigstiltOgUtenPleietrengende;
     const visPleietrengendeHarIkkeFnrInfoFerdistiltJp =
-        pleietrengendeHarIkkeFnr && !!jpErFerdigstiltOgUtenPleietrengende;
+        barnetHarIkkeFnr && !!jpErFerdigstiltOgUtenPleietrengende;
 
     return (
         <div>
@@ -145,6 +145,7 @@ const Pleietrengende: React.FC<Props> = ({
                         label={intlHelper(intl, 'ident.identifikasjon.velgBarn')}
                         onChange={(e) => {
                             setPleietrengendeIdent(e.target.value);
+                            setBarnetHarIkkeFnr?.(false);
                             oppdaterStateMedPleietrengendeFnr(e);
                         }}
                         value={pleietrengendeId}
@@ -189,7 +190,7 @@ const Pleietrengende: React.FC<Props> = ({
                                 ? intlHelper(intl, 'ident.feil.ugyldigident')
                                 : undefined
                         }
-                        disabled={pleietrengendeHarIkkeFnr}
+                        disabled={barnetHarIkkeFnr}
                         onChange={pleietrengendeIdentInputFieldOnChange}
                     />
 
@@ -197,7 +198,10 @@ const Pleietrengende: React.FC<Props> = ({
 
                     {visPleietrengendeHarIkkeFnrCheckbox && (
                         <>
-                            <Checkbox onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}>
+                            <Checkbox
+                                checked={barnetHarIkkeFnr}
+                                onChange={(e) => pleietrengendeHarIkkeFnrCheckboks(e.target.checked)}
+                            >
                                 <FormattedMessage id="ident.identifikasjon.pleietrengendeHarIkkeFnr" />
                             </Checkbox>
 
