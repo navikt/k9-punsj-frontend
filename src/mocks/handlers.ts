@@ -11,6 +11,7 @@ import mockHandlersOLP from './mockHandlersOLP';
 import mockHandlersOMPUT from './mockHandlersOMPUT';
 import mockHandlersOMPUTKorrigering from './mockHandlersOMPUTKorrigering';
 import mockHandlersJournalpostLoader from './mockHandlersJournalpostLoader';
+import mockHandlersFordelingPsb from './mockHandlersFordelingPsb';
 import mockHandlersTest from './mockHandlersTest';
 
 let handlers = [
@@ -576,6 +577,7 @@ if (process.env.MSW_MODE === 'test') {
         .concat(Object.values(mockHandlersOLP))
         .concat(Object.values(mockHandlersOMPUTKorrigering))
         .concat(Object.values(mockHandlersJournalpostLoader))
+        .concat(mockHandlersFordelingPsb)
         .concat(Object.values(mockHandlersTest));
 }
 

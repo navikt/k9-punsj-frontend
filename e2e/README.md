@@ -19,6 +19,36 @@ yarn test:pw:ui
 
 Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
 
+## Fordeling PSB pilot
+
+Run the focused modal test, preserve the existing letter integration, and run both independent browser journeys with one and the default worker count:
+
+```sh
+yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
+yarn test src/test/components/brev/BrevIntegrations.spec.tsx
+yarn test:pw e2e/tests/fordeling-psb.spec.ts --workers=1
+yarn test:pw e2e/tests/fordeling-psb.spec.ts
+yarn lint
+yarn build-storybook
+```
+
+The modal spec covers the Fortsett/Vent summary for an existing PSB case with a child and Vent without a child, cancellation, successful classification and Redux refresh, Vent ordering, classification retry, Vent-only retry, and the current 403 refresh-error behavior. The Playwright journeys use test-only journalpost IDs `930300` and `930301`, with existing synthetic applicant, child, and case data from `jpPSB300.json` and `fagsaker.json`.
+
+If the post-classification journalpost refresh returns 403, the current modal shows the access warning, stays on the journalpost, and offers **Gå til LOS**. It has no in-modal refresh retry; the pilot records this existing behavior without changing production.
+
+| Existing `cypress/e2e/fordeling/PSB.cy.js` assertion                                                                                                           | Automatic destination                                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| PSB is selected, the two-applicant checkbox is visible and unchecked, and both journalfør buttons start disabled                                               | `fordeling-psb.spec.ts` — `velger saker med og uten barn, og åpner riktig modal uten å utføre handlingen` |
+| Confirm the applicant; select the existing case without a child; verify its link, “Barn: ikke satt”, journalpost panel and button states; open and cancel Vent | The same Playwright journey                                                                               |
+| Change to the existing case with a child; verify the child name/ID and journalpost panel update; open and cancel both Fortsett and Vent                        | The same Playwright journey                                                                               |
+| Confirm the selected child case, verify the classification request and refreshed journalpost, then display the PSB registration choice                         | `fordeling-psb.spec.ts` — `journalfører valgt PSB-sak og går til riktig registreringsvalg`                |
+| Modal summary fields, warning, action callbacks, error/retry behavior and Redux update after refresh                                                           | `KlassifiserModal.spec.tsx`                                                                               |
+| Document-type option list, reserved/new cases, multiple applicants and the remaining PSB variants                                                              | Still in Cypress or later migration scope; not replaced by this pilot                                     |
+
+Five manual modal stories are available at [Fortsett med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--fortsett-med-eksisterende-sak-og-barn), [Vent med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-med-eksisterende-sak-og-barn), [Vent uten barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-uten-barn), [Journalfør-feil med vellykket nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--journalfor-feil-med-vellykket-nytt-forsok), and [Vent-feil med vellykket retry](http://localhost:6006/?path=/story/components-klassifisermodal--vent-feil-med-vellykket-retry). They use isolated stores, routers, query clients and named MSW groups; the LOS action is local Storybook feedback.
+
+For browser review, start Storybook with `yarn storybook --host 127.0.0.1` and the [Playwright UI](http://127.0.0.1:9324/) with `yarn test:pw:ui e2e/tests/fordeling-psb.spec.ts --ui-host=127.0.0.1 --ui-port=9324`. For direct app links, start `yarn start:e2e` on port 8080 only when Playwright is not running tests; the two processes cannot share that port. Open [journalpost 930300](http://127.0.0.1:8080/journalpost/930300) to switch from the case without a child to the case with a child and cancel each modal. Open [journalpost 930301](http://127.0.0.1:8080/journalpost/930301), choose the existing case with a child, confirm journalføring, then choose **Registrere opplysninger til K9**. Stop manually started servers with Ctrl+C in their terminals. The pilot stops at the registration choice: it does not create, edit, validate or submit a PSB application.
+
 ## Brevtester og historier
 
 Kjør brevtestene og den ene Playwright-reisen fra repository-roten:
@@ -37,29 +67,29 @@ Storybook bruker syntetiske testverdier: søker `08438323288`, aktør `81549300`
 
 Storybook bruker `msw-storybook-addon` sin CSF 3-loader. Hvis en preview-iframe ennå ikke styres av service worker-en, lastes bare den iframen automatisk på nytt før historien vises. Du trenger ikke laste Storybook-siden på nytt manuelt.
 
-| Gruppe | Story | Link |
-|---|---|---|
-| Brevkomponent | Tomt skjema | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--vanlig-brev) |
-| Brevkomponent | Mal med bare fritekst | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--bare-fritekst) |
-| Brevkomponent | Mal uten fritekst | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-fritekst) |
-| Brevkomponent | Arbeidsgiver som mottaker | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--arbeidsgiver) |
-| Brevkomponent | Tredjepart med navneoppslag | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--tredjepart) |
-| Brevkomponent | Sendefeil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--sending-feiler-med-nytt-fors%C3%B8k) |
-| Brevkomponent | Sending uten bekreftelsesdialog | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-bekreftelsesdialog) |
-| Brevkomponent | Brev i annen modal | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--brev-i-annen-modal) |
-| Brevkomponent | Malhenting feiler | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--malhenting-feiler) |
-| Brevkomponent | Forhåndsvisning av PDF | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning) |
-| Brevkomponent | Preview-feil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning-feiler-med-nytt-fors%C3%B8k) |
-| Avsluttet sak | Tomt skjema | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--tomt-skjema) |
-| Avsluttet sak | Laster fagsaker | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--laster-fagsaker) |
-| Avsluttet sak | Ingen fagsaker | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--ingen-fagsaker) |
-| Avsluttet sak | Oppslagsfeil med nytt forsøk | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--oppslagsfeil-med-nytt-fors%C3%B8k) |
-| Avsluttet sak | Valgt PSB-sak | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--valgt-sak) |
-| Avsluttet sak | Brev bestilt og LOS-modal | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--brev-bestilt) |
-| Særtilstand | Brev i vent/lukk-modal | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-i-modal) |
-| Særtilstand | Varsel om usendt brev | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--varsel-om-usendt-brev) |
-| Særtilstand | Guard ved uavklart sakstype | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--uavklart-sakstype) |
-| Særtilstand | Brev etter klassifisering | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-etter-klassifisering) |
+| Gruppe        | Story                           | Link                                                                                                                        |
+| ------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Brevkomponent | Tomt skjema                     | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--vanlig-brev)                                  |
+| Brevkomponent | Mal med bare fritekst           | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--bare-fritekst)                                |
+| Brevkomponent | Mal uten fritekst               | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-fritekst)                                |
+| Brevkomponent | Arbeidsgiver som mottaker       | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--arbeidsgiver)                                 |
+| Brevkomponent | Tredjepart med navneoppslag     | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--tredjepart)                                   |
+| Brevkomponent | Sendefeil med nytt forsøk       | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--sending-feiler-med-nytt-fors%C3%B8k)          |
+| Brevkomponent | Sending uten bekreftelsesdialog | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--uten-bekreftelsesdialog)                      |
+| Brevkomponent | Brev i annen modal              | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--brev-i-annen-modal)                           |
+| Brevkomponent | Malhenting feiler               | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--malhenting-feiler)                            |
+| Brevkomponent | Forhåndsvisning av PDF          | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning)                             |
+| Brevkomponent | Preview-feil med nytt forsøk    | [Åpne historien](http://localhost:6006/?path=/story/components-brevcomponent--forhaandsvisning-feiler-med-nytt-fors%C3%B8k) |
+| Avsluttet sak | Tomt skjema                     | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--tomt-skjema)                          |
+| Avsluttet sak | Laster fagsaker                 | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--laster-fagsaker)                      |
+| Avsluttet sak | Ingen fagsaker                  | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--ingen-fagsaker)                       |
+| Avsluttet sak | Oppslagsfeil med nytt forsøk    | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--oppslagsfeil-med-nytt-fors%C3%B8k)    |
+| Avsluttet sak | Valgt PSB-sak                   | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--valgt-sak)                            |
+| Avsluttet sak | Brev bestilt og LOS-modal       | [Åpne historien](http://localhost:6006/?path=/story/components-sendbreviavsluttetsak--brev-bestilt)                         |
+| Særtilstand   | Brev i vent/lukk-modal          | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-i-modal)                          |
+| Særtilstand   | Varsel om usendt brev           | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--varsel-om-usendt-brev)                 |
+| Særtilstand   | Guard ved uavklart sakstype     | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--uavklart-sakstype)                     |
+| Særtilstand   | Brev etter klassifisering       | [Åpne historien](http://localhost:6006/?path=/story/components-brevspecialscenarios--brev-etter-klassifisering)             |
 
 Manuell gjennomgang:
 
@@ -108,16 +138,16 @@ The eight stories use synthetic data: fnr `08438323288`, ordinary cases `ABC123`
 
 The component's `msw.handlers` defaults provide named `lookup` and `creation` groups. Each exceptional story overrides only its affected group; Storybook merges these objects by key, whereas handler arrays replace inherited arrays. The addon resets handlers when switching stories. Run `yarn exec msw init` to update both configured worker directories, `src/mocks` and `.storybook/public`, from the installed MSW version.
 
-| Story | Link |
-|---|---|
-| Tomt skjema | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--tomt-skjema) |
-| Henter fagsaker | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--henter-fagsaker) |
-| Fagsaker funnet uten historisk tilgang | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--fagsaker-funnet) |
-| Historisk fagsak med tilgang | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--historisk-med-tilgang) |
-| Ingen fagsaker | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--ingen-fagsaker) |
-| Feil ved henting med nytt forsøk | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--henting-feiler-med-ny-forsøk) |
-| Feil ved oppretting med nytt forsøk | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--opprettelse-feiler-med-nytt-forsøk) |
-| Opprettelse vellykket | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--opprettelse-vellykket) |
+| Story                                  | Link                                                                                                               |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Tomt skjema                            | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--tomt-skjema)                        |
+| Henter fagsaker                        | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--henter-fagsaker)                    |
+| Fagsaker funnet uten historisk tilgang | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--fagsaker-funnet)                    |
+| Historisk fagsak med tilgang           | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--historisk-med-tilgang)              |
+| Ingen fagsaker                         | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--ingen-fagsaker)                     |
+| Feil ved henting med nytt forsøk       | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--henting-feiler-med-ny-forsøk)       |
+| Feil ved oppretting med nytt forsøk    | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--opprettelse-feiler-med-nytt-forsøk) |
+| Opprettelse vellykket                  | [Open story](http://localhost:6006/?path=/story/components-opprettjournalpost--opprettelse-vellykket)              |
 
 Manual click-through:
 
@@ -150,35 +180,35 @@ Playwright starter appen på port 8080 og stopper den etter en CLI-kjøring; Pla
 
 Stories bruker ekte `JournalpostLoader`, en fersk Redux-store per rendering, router og norske meldinger. Lukkeflytene bruker ekte knapphandlinger i `play`, viser lukkestatusen og klikker deretter på **Gå til LOS**. Storybook erstatter redirect-funksjonen med en Actions-mock, så klikket vises i Actions-panelet uten å navigere bort fra historien. MSW-addon registrerer de komplette, navngitte handlergruppene på nytt ved storybytte; last historien på nytt for å starte med ny store og ferske handlere. Åpne direkte:
 
-| Story | Link |
-|---|---|
-| Laster | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--laster) |
-| 403 – ingen tilgang | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-tilgang) |
-| 404 – ikke funnet | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-funnet) |
-| Ingen dokumenter | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ingen-dokumenter) |
-| Generell feil (representativ 500) | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--serverfeil) |
-| Kjent 409 og vellykket lukking | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--kjent-409) |
-| Lukking – 404 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-404) |
-| Lukking – 400 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-400) |
-| Lukking – 500 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-500) |
+| Story                             | Link                                                                                                |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Laster                            | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--laster)           |
+| 403 – ingen tilgang               | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-tilgang)     |
+| 404 – ikke funnet                 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ikke-funnet)      |
+| Ingen dokumenter                  | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--ingen-dokumenter) |
+| Generell feil (representativ 500) | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--serverfeil)       |
+| Kjent 409 og vellykket lukking    | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--kjent-409)        |
+| Lukking – 404                     | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-404)      |
+| Lukking – 400                     | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-400)      |
+| Lukking – 500                     | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-journalpostloader--lukking-500)      |
 
 Testmodus registrerer disse syntetiske scenarioene før første app-render; direkte appvisning er tilgjengelig på `http://127.0.0.1:8080/journalpost/{id}` når `yarn start:e2e` kjører. Alle journalpostkall bruker `GET /api/k9-punsj/journalpost/{id}`; lukking bruker `GET /api/k9-punsj/journalpost/lukkDebugg/{id}` uten body. `930002` holder lasting åpen til siden lastes på nytt eller navigeres bort fra.
 
-| ID | Scenario |
-|---|---|
-| `930001` | Gyldig journalpost, 200 |
-| `930002` | Uavsluttet lasting |
-| `930003` | Manglende tilgang, 403 |
-| `930004` | Ikke funnet, 404 |
-| `930005` | Tom dokumentliste, 200 |
-| `930006` | Støttet konflikt, 409 |
-| `930007` | Serverfeil ved lasting, 500 |
-| `930008` | Ukjent konflikttype, 409 |
-| `930009` | Konflikt uten type, 409 |
+| ID       | Scenario                              |
+| -------- | ------------------------------------- |
+| `930001` | Gyldig journalpost, 200               |
+| `930002` | Uavsluttet lasting                    |
+| `930003` | Manglende tilgang, 403                |
+| `930004` | Ikke funnet, 404                      |
+| `930005` | Tom dokumentliste, 200                |
+| `930006` | Støttet konflikt, 409                 |
+| `930007` | Serverfeil ved lasting, 500           |
+| `930008` | Ukjent konflikttype, 409              |
+| `930009` | Konflikt uten type, 409               |
 | `930101` | Lukking: journalpost ikke funnet, 404 |
-| `930102` | Lukking: ferdig behandlet, 400 |
-| `930103` | Lukking: generell serverfeil, 500 |
-| `930104` | Lukking vellykket, 200 |
+| `930102` | Lukking: ferdig behandlet, 400        |
+| `930103` | Lukking: generell serverfeil, 500     |
+| `930104` | Lukking vellykket, 200                |
 
 Komponentmatrisen ligger i Vitest, inkludert vellykket lasting, lukkesuksess og alle tre generelle feiltilfellene: 500, ukjent 409 og 409 uten type. Storybook viser lasting, feil og interaktive lukkeflyter. Playwright beholder direkte lasting/reload med synlig PDF og fungerende **Skjul** etter omlasting, ukjent 409 gjennom appens Redux-flyt og kjent 409 med GET-lukking og reell kontrollert redirect. Den erstattede Cypress-spesifikasjonen er fjernet etter kontroll av assertion-paritet. Storybook-innhold og alle MSW-svar bruker den eksisterende syntetiske `jpPSB300`-fixturen.
 
@@ -197,14 +227,14 @@ yarn storybook --host 127.0.0.1
 
 Storyene bruker en fersk Redux-store og router per visning, ekte Home-inntasting og navngitte MSW-grupper. Åpne dem direkte:
 
-| Story | Scenario | Link |
-|---|---|---|
-| Tomt søk | Manuell søking; `930001` gir en lokal rutedestinasjon | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--tomt-sok) |
-| Laster | `930002`, uavsluttet svar | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--laster) |
-| Ikke funnet | `930004`, 404 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ikke-funnet) |
-| Ingen tilgang | `930003`, 403 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ingen-tilgang) |
-| Generell feil | `930007`, 500 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--generell-feil) |
-| Kjent 409 | `930104`, vellykket GET-lukking og trygg LOS Actions-feedback | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--kjent-409) |
+| Story         | Scenario                                                      | Link                                                                                |
+| ------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Tomt søk      | Manuell søking; `930001` gir en lokal rutedestinasjon         | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--tomt-sok)      |
+| Laster        | `930002`, uavsluttet svar                                     | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--laster)        |
+| Ikke funnet   | `930004`, 404                                                 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ikke-funnet)   |
+| Ingen tilgang | `930003`, 403                                                 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--ingen-tilgang) |
+| Generell feil | `930007`, 500                                                 | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--generell-feil) |
+| Kjent 409     | `930104`, vellykket GET-lukking og trygg LOS Actions-feedback | [Åpne historien](http://127.0.0.1:6006/?path=/story/components-home--kjent-409)     |
 
 Manuell gjennomgang:
 

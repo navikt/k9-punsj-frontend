@@ -8,6 +8,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-06 — Fordeling-PSB-pilot
+
+- La til modaltester, fem interaktive Storybook-historier og to Playwright-reiser for eksisterende PSB-saker med og uten barn. Beholdt Cypress og brevtilkoblingstestene.
+
 #### 2026-11-06 — Fordeling-knappregler
 
 - La til Vitest-beslutningstabeller for Fordeling-reglene for behandlingsår, journalføring og videreføring. Beholdt Cypress for UI-wiring og faktiske brukerflyter.
