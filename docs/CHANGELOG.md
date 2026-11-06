@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Rettet backend-adressen i dev-proxyen (2026-11-06)
+
+- La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
+
 ### ESLint 10 og React Hooks-regler (2026-11-03)
 
 - Oppdaterte ESLint til 10.13.0 med kompatible React- og import-pluginer og aktiverte React Hooks-regler og TypeScript-kontroll i lint.
