@@ -16,6 +16,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - La til Vitest-beslutningstabeller for Fordeling-reglene for behandlingsår, journalføring og videreføring. Beholdt Cypress for UI-wiring og faktiske brukerflyter.
 
+#### 2026-11-06 — Fordeling-nullstilling
+
+- La til Playwright-reiser for nullstilling ved bytte av søker og dokumenttype, med assertion-mapping til Cypress. Dokumenterte reset-gap for foreldet Vent-flagg som avgrenset forventet feil; B27 er ikke ferdig.
+
 #### 2026-11-05 — Oppfølging av testdekning
 
 - Forhåndsvisning av brev som feiler uten statustekst viser nå «Forhåndsvisning av brev feilet.». La til test for LOS-redirect tre sekunder etter sending i avsluttet sak.

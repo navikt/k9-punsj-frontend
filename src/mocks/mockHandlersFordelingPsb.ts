@@ -56,6 +56,8 @@ const scenario = (journalpostId: string, fagsakIndex: 0 | 2) => {
 const mockHandlersFordelingPsb = [
     ...scenario(FORDELING_PSB_SCENARIOS.selection, 0),
     ...scenario(FORDELING_PSB_SCENARIOS.classify, 2),
+    ...scenario(FORDELING_PSB_SCENARIOS.resetApplicant, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.resetDocumentType, 0),
 ];
 
 export default mockHandlersFordelingPsb;

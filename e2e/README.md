@@ -49,6 +49,38 @@ Five manual modal stories are available at [Fortsett med eksisterende sak og bar
 
 For browser review, start Storybook with `yarn storybook --host 127.0.0.1` and the [Playwright UI](http://127.0.0.1:9324/) with `yarn test:pw:ui e2e/tests/fordeling-psb.spec.ts --ui-host=127.0.0.1 --ui-port=9324`. For direct app links, start `yarn start:e2e` on port 8080 only when Playwright is not running tests; the two processes cannot share that port. Open [journalpost 930300](http://127.0.0.1:8080/journalpost/930300) to switch from the case without a child to the case with a child and cancel each modal. Open [journalpost 930301](http://127.0.0.1:8080/journalpost/930301), choose the existing case with a child, confirm journalføring, then choose **Registrere opplysninger til K9**. Stop manually started servers with Ctrl+C in their terminals. The pilot stops at the registration choice: it does not create, edit, validate or submit a PSB application.
 
+## Fordeling nullstilling
+
+Kjør de to reset-reisene alene og sammen med PSB-piloten:
+
+```sh
+yarn test:pw e2e/tests/fordeling-reset.spec.ts --workers=1
+yarn test:pw e2e/tests/fordeling-reset.spec.ts e2e/tests/fordeling-psb.spec.ts
+```
+
+Validering 2026-11-06 mot eksisterende MSW-testserver, med midlertidig konfigurasjon utenfor repoet: reset alene ga én bestått og én forventet feil. Kombinert kjøring med standard workers (2) ga tre bestått og samme forventede feil; eksisterende PSB-tester er 2/2. `yarn lint` og `git diff --check` bestod. Playwright avslutter med kode 0 fordi gapet nedenfor er eksplisitt markert som forventet feil, ikke fordi B27 er ferdig.
+
+| Eksisterende `cypress/e2e/fordeling/PSB.cy.js`-assertion                                                                                 | Automatisk dekning                                                                                                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 354–364: Ny-sak-modus fjerner gammel sak fra panelet og deaktiverer handlingene | Søkerreisen, steget «Bytt til ny fagsak og fjern tidligere valg», kontrollerer også tom/deaktivert select og fjernet saksinformasjon |
+| 627–637: Nei fjerner saksvalg, reservasjon, pleietrengende-input, «har ikke fødselsnummer» og informasjon, og deaktiverer begge handlinger | `fordeling-reset.spec.ts` — `nullstiller søker og barn når søkeridenten endres`, steget «Bytt til ny fagsak og fjern tidligere valg»             |
+| 638–657: Ny søker og barn vises i panelet og aktiverer handlingene                                                                        | Samme reise, steget «Velg ny søker og barn, og avbryt begge modalene»; lookup-header og eget, avgrenset saksdatasett kontrolleres også            |
+| 659–719: Fortsett- og Vent-modal for ny søker/barn uten saksnummer eller periode, med avbryt                                               | Samme reise og steg; felles modaltekst og handlinger dekkes også av `KlassifiserModal.spec.tsx` — `$name viser valgt sak og avbryter uten å journalføre` (Fortsett med eksisterende sak og barn / Vent med eksisterende sak og barn / Vent med eksisterende sak uten barn) |
+| 721–737: Ja gjenoppretter journalpostens søker og fjerner ny søker/barn                                                                    | Samme reise, steget «Bekreft opprinnelig søker på nytt»; panel og Fortsett er verifisert. Deaktivert Vent er et bekreftet gap, markert som forventet feil nedenfor |
+| PLS mellom PSB-valg, deretter nytt PSB-valg uten gammel sak/barn                                                                           | `fordeling-reset.spec.ts` — `nullstiller sak og barn ved bytte av dokumenttype`; tilleggsdekning utover gammel Cypress                         |
+
+Reisene bruker `930302` og `930303`. Sakslisten for ny søker installeres med sidens eksisterende `window.msw.worker.use` før søkerbyttet, bare i den første reset-testen. Andre journalposter, Cypress og MSW-defaults beholder opprinnelige data. URL-kontrollen sammenligner pathname og tillater dokumentparameteren `?dok=1`. Dokumenttypebyttene verifiserer GET, søkerheader, 200 og synlig saksliste; Ja etter retur til PSB kontrollerer synlig resultat uten å kreve et ekstra lookup når søkeridenten er uendret.
+
+Begge nye reisene avbryter modalene og kontrollerer at mottak, Vent, kopiering, behandlingsår, Gosys og lukking ikke kalles, også GET-basert lukking.
+
+### Bekreftet reset-gap (B27)
+
+Reproduser i `930302`: bekreft søker, velg sak med barn, velg **Reserver saksnummer til ny fagsak**, deretter **Det gjelder et annet barn** og **Pleietrengende har ikke fødselsnummer**. Velg Nei, oppgi ny testident, velg et barn, avbryt Fortsett-/Vent-modalene og velg Ja igjen. Panel og barnevalg er tømt og Fortsett er deaktivert, men Vent er aktiv. Åpne **Det gjelder et annet barn** igjen: checkboxen **Pleietrengende har ikke fødselsnummer** er synlig og ikke valgt, feltet er aktivt og infoteksten mangler. Den gamle README-forklaringen om at checkboxen fortsatt er valgt var feil.
+
+`Fordeling.tsx` beholder `barnetHarIkkeFnr` (initialisering rundt linje 125, knappregel rundt 435), mens `Pleietrengende` avmonteres under saksoppslag (`visPleietrengendeComponent` rundt 337). Barnets lokale flagg starter på nytt som `false` (`Pleietrengende.tsx` rundt 46), uten å nullstille parent-flagget. `isJournalførKnapperDisabled` hopper derfor over manglende barneident når parent-flagget fortsatt er `true`.
+
+Søkerreisen markerer først den siste `toBeDisabled()`-assertionen som forventet feil med `test.fail`, etter at alle andre reset-/checkbox-/request-assertions har bestått. Den tester fortsatt ønsket oppførsel; den godtar ikke aktiv Vent som korrekt. Dokumenttypereisen er uavhengig og passerer. B27 er ikke ferdig, og Cypress beholdes. Et separat, avgrenset produksjonsfix bør synkronisere/nullstille parent-flagget når barnevalget nullstilles eller komponenten avmonteres, med regresjonstest; det er ikke startet her.
+
 ## Brevtester og historier
 
 Kjør brevtestene og den ene Playwright-reisen fra repository-roten:
