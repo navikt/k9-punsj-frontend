@@ -865,6 +865,7 @@
     "brevComponent.btn.tilbake": "Tilbake",
     "brevComponent.alert.visSammeBrevError": " Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.",
     "brevComponent.alert.sendBrevFeilet": "Sending av brev feilet.",
+    "brevComponent.alert.forhåndsvisBrevFeilet": "Forhåndsvisning av brev feilet.",
     "brevComponent.alert.brevErSendt": "Brev sendt! Du kan nå sende nytt brev til annen mottaker.",
     "brevComponent.alert.brevErSendt.etterKlassifisering": "Brevet er sendt. Du kan nå sende nytt brev til annen mottaker eller gå tilbake til LOS.",
     "brevComponent.error.hentBrevmalerError": "Henting av brevmaler feilet.",

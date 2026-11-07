@@ -15,6 +15,46 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
 
+### Migrering fra Cypress til Playwright og komponenttester
+
+#### 2026-11-06 — Fordeling uten fagsaker og oppslagsfeil
+
+- La til Playwright-reiser for tomme og filtrerte saksresultater, barnelister og feil ved fagsak- og barnesøk. La til avbrutte modaltilfeller uten fagsak i Vitest og to interaktive Storybook-historier. Cypress og produksjonskode er uendret.
+- Porterte Cypress-gjenopprettingsreisene for 403 og 500 ved barnesøk til Playwright: Nei → Ja henter barnelisten på nytt, viser barnet fra listen og bevarer manuell registrering.
+
+#### 2026-11-06 — Fordeling-PSB-pilot
+
+- La til modaltester, fem interaktive Storybook-historier og to Playwright-reiser for eksisterende PSB-saker med og uten barn. Beholdt Cypress og brevtilkoblingstestene.
+
+#### 2026-11-06 — Fordeling-knappregler
+
+- La til Vitest-beslutningstabeller for Fordeling-reglene for behandlingsår, journalføring og videreføring. Beholdt Cypress for UI-wiring og faktiske brukerflyter.
+
+#### 2026-11-06 — Fordeling-nullstilling
+
+- La til Playwright-reiser for nullstilling ved bytte av søker og dokumenttype, med assertion-mapping til Cypress. Etter fiksen i #3973 passerer regresjonen normalt: Vent er deaktivert etter søkerbytte, før barn velges eller «Det gjelder et annet barn» klikkes, og etter kontroll av nullstilt checkbox. Beholdt modalavbryt og kontroll av at ingen mutasjoner sendes; begge reset- og begge PSB-testene passerer. Øvrig Fordeling-migrering gjenstår.
+
+#### 2026-11-05 — Oppfølging av testdekning
+
+- Forhåndsvisning av brev som feiler uten statustekst viser nå «Forhåndsvisning av brev feilet.». La til test for LOS-redirect tre sekunder etter sending i avsluttet sak.
+- Kontrollerte PDF-visning og **Skjul** etter reload. Samlet journalpostoppretting, feil, nytt forsøk og åpning i én Playwright-reise og lasting/suksess i én Vitest-test for JournalpostLoader.
+- Forenklet Home-historiene ved å fjerne store-registeret; hver historie beholder egen store.
+
+#### 2026-11-05 — Home
+
+- Dekket Home-søket med Vitest, seks interaktive Storybook-historier og én Playwright-reise. Fjernet erstattet Forside-Cypress-spesifikasjon etter assertion-paritet og viste generell feil ved ukjent eller manglende 409-type.
+
+#### 2026-11-05 — JournalpostLoader
+
+- La komponentmatrisen for lasting, feilvisninger og GET-basert lukking i Vitest; beholdt tre Playwright-integrasjoner og ni Storybook-historier med `play`-handlinger og komplette MSW-grupper ved storybytte. Fjernet erstattet Cypress-spesifikasjon etter assertion-paritet, egne suksess- og LOS-destinasjonshistorier samt ubrukte test-ID-er. LOS-knappen gir trygg Actions-feedback uten å navigere bort. Samlet generelle feilvisninger og kjente 409-/200-lukkeflyter. Forenklet det manuelle lasting-scenariet og fjernet skjult browser-event-synkronisering. Rettet fallback ved ukjent eller manglende 409-type.
+
+#### 2026-11-04 — Testoppsett, journalpostoppretting og brev
+
+- La til en separat Chromium-smoketest i MSW-testmodus, med egen TypeScript-kontroll og rapportering.
+- La til åtte journalpostscenarier i Storybook, med manuell oppretting og synlig navigasjon i normaltilstanden, 14 fokuserte komponenttester og to Playwright-reiser. Fjernet den gamle Cypress-spesifikasjonen for journalpostoppretting etter kontroll av tilsvarende dekning, samt ubrukte Storybook-eksporter og testattributter. Øvrige Cypress-tester og delte fixtures er uendret.
+- Avgrenset opprettingstesten til en egen ferdigstilt journalpost med komplett fagsak og kontroll av ferdig skjermbilde. Sentrerte lasteindikatoren ved fagsaksvalget og ga den norsk beskrivelse.
+- La til målrettede brevtester for felles skjema og seks innganger, klargjorte Storybook-historier med fast PDF-mock og én Playwright-reise med forhåndsvisning og nytt sendeforsøk. Fjernet utdaterte Storybook-mocks og sikret MSW-kontroll ved første åpning av preview-iframe. Fjernet den erstattede Cypress-flyten for brev i avsluttet sak etter kontroll mot komponent-, integrasjons- og Playwright-dekningen. Beholdt øvrige Cypress-flyter, delte MSW-handlere og fixtures.
+
 ### ESLint 10 og React Hooks-regler (2026-11-03)
 
 - Oppdaterte ESLint til 10.13.0 med kompatible React- og import-pluginer og aktiverte React Hooks-regler og TypeScript-kontroll i lint.

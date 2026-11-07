@@ -1,0 +1,15 @@
+export const JOURNALPOST_LOADER_TEST_SCENARIOS = {
+    valid: '930001',
+    loading: '930002',
+    forbidden: '930003',
+    notFound: '930004',
+    noDocuments: '930005',
+    supportedConflict: '930006',
+    serverError: '930007',
+    unknownConflict: '930008',
+    missingConflictType: '930009',
+    closeNotFound: '930101',
+    closeAlreadyClosed: '930102',
+    closeServerError: '930103',
+    closeSuccess: '930104',
+} as const;

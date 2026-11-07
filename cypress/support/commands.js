@@ -26,12 +26,6 @@
 import '@testing-library/cypress/add-commands';
 import 'cypress-wait-until';
 
-Cypress.Commands.add('soekPaaJournalpost', (journalpostId = '200') => {
-    const input = cy.findByLabelText(/journalpost-id/i).should('exist');
-    input.type(journalpostId);
-    cy.findByRole('button', { name: /søk/i }).click();
-});
-
 Cypress.Commands.add('soknadperioderInput', () => {
     cy.get('.soknadsperiodecontainer').within(() => {
         cy.findByLabelText(/Fra og med/i)

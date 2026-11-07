@@ -129,12 +129,7 @@ const SendBrevIAvsluttetSak = () => {
                     </div>
 
                     {fetchFagsakerError && (
-                        <Alert
-                            size="small"
-                            variant="error"
-                            className="mb-4"
-                            data-test-id="sendBrevIAvsluttetSakAlertFetchFagsakerError"
-                        >
+                        <Alert size="small" variant="error" className="mb-4">
                             <FormattedMessage id="sendBrevIAvsluttetSak.alert.fetchFagsaker.error" />
 
                             <Button type="button" size="small" variant="tertiary" onClick={() => hentFagsaker(søkerId)}>
@@ -144,12 +139,7 @@ const SendBrevIAvsluttetSak = () => {
                     )}
 
                     {!isFetchingFagsaker && !fetchFagsakerError && fagsaker.length === 0 && (
-                        <Alert
-                            size="small"
-                            variant="warning"
-                            className="mb-4"
-                            data-test-id="sendBrevIAvsluttetSakAlertIngenFagsak"
-                        >
+                        <Alert size="small" variant="warning" className="mb-4">
                             <FormattedMessage id="sendBrevIAvsluttetSak.alert.hentFagsaker.ingenFagsak" />
                         </Alert>
                     )}
