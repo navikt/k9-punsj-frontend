@@ -2,6 +2,25 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Tilgangsavslag ved fagsakoppslag (2026-11-10)
+
+- Viser en egen melding ved manglende tilgang til å hente fagsaker i Fordeling, Opprett journalpost og Send brev i avsluttet sak.
+
+### Ukentlig pakkevedlikehold (2026-11-10)
+
+- Oppdaterte 20 kvalifiserte patch- og minorversjoner i root og `server`, med samordnede Aksel-, Storybook- og Tailwind-pakker.
+- Beholdt Faro 2.12.1 fordi `@nais/apm` 0.7.3 låser Faro SDK og tracing til 2.12.1.
+- Oppdaterte den direkte `glob`-avhengigheten til 14.0.3. Revisjonen viser fortsatt sårbare transitive versjoner av `glob` og `minimatch`, som avhengighetene fortsatt krever.
+
+### Fjernet foreldet manuell barneregistrering etter vellykket oppslag (2026-11-06)
+
+- Nullstiller feilstatus for barn ved vellykket oppslag og nullstilling.
+
+### Nullstilte valg om manglende fødselsnummer ved kontekstbytte (2026-11-06)
+
+- Knyttet checkbox, identfelt og informasjon til samme state som Vent-regelen. Nullstiller tillatelsen ved relevante bytter av søker, dokumenttype, sak og barn.
+- La til en isolert regresjonstest for søkerbytte og komponentdekning for remount.
+
 ### Rettet backend-adressen i dev-proxyen (2026-11-06)
 
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.

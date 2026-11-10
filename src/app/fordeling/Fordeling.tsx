@@ -126,7 +126,7 @@ const Fordeling: React.FC = () => {
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
-    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
+    const [fagsakFeilStatus, setFagsakFeilStatus] = useState<number | undefined>(undefined);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [valgtFagsakLokal, setValgtFagsakLokal] = useState<FagsakForSelect | undefined>(undefined);
     const [fagsaker, setFagsaker] = useState<FagsakForSelect[]>([]);
@@ -137,6 +137,11 @@ const Fordeling: React.FC = () => {
     const [ingenInfoOmPleitrengende, setIngenInfoOmPleitrengende] = useState<boolean>(false);
     const [toSokereIJournalpost, setToSokereIJournalpost] = useState<boolean>(false);
     const [åpneBrevModal, setÅpenBrevModal] = useState(false);
+
+    const handleToSokereIJournalpost = (toSokere: boolean) => {
+        setBarnetHarIkkeFnr(false);
+        setToSokereIJournalpost(toSokere);
+    };
 
     const harFagsaker = fagsaker?.length > 0;
 
@@ -405,7 +410,7 @@ const Fordeling: React.FC = () => {
             dokumenttype &&
             gjelderPsbOmsOlp
         ) {
-            setHenteFagsakFeilet(false);
+            setFagsakFeilStatus(undefined);
             setIsFetchingFagsaker(true);
             setFagsak(undefined);
             finnFagsaker(identState.søkerId, (response, data: FagsakForSelect[]) => {
@@ -423,7 +428,7 @@ const Fordeling: React.FC = () => {
                         setReserverSaksnummerTilNyFagsak(true);
                     }
                 } else {
-                    setHenteFagsakFeilet(true);
+                    setFagsakFeilStatus(response.status);
                 }
             });
         }
@@ -451,6 +456,7 @@ const Fordeling: React.FC = () => {
 
     const handleSøkerIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ident = event.target.value.replace(/\D+/, '');
+        setBarnetHarIkkeFnr(false);
 
         if (identState.søkerId.length > 0 && ident.length < sokersIdent.length) {
             setIdentAction('', identState.pleietrengendeId, identState.annenSokerIdent);
@@ -501,6 +507,8 @@ const Fordeling: React.FC = () => {
     );
 
     const handleDokumenttype = (type: FordelingDokumenttype) => {
+        setBarnetHarIkkeFnr(false);
+
         if (type === FordelingDokumenttype.ANNET) {
             if (!identState.søkerId && !!journalpost?.norskIdent) {
                 setSokersIdent(journalpost?.norskIdent); // lokal useState
@@ -527,6 +535,7 @@ const Fordeling: React.FC = () => {
     };
 
     const setValgtFagsak = (fagsakId: string) => {
+        setBarnetHarIkkeFnr(false);
         const selectedFagsak = fagsaker.find((f) => f.fagsakId === fagsakId);
 
         setIdentAction(
@@ -682,7 +691,10 @@ const Fordeling: React.FC = () => {
                                     setIdentAction={setIdentAction}
                                     setErSøkerIdBekreftet={setErSøkerIdBekreftet}
                                     riktigIdentIJournalposten={riktigIdentIJournalposten}
-                                    setRiktigIdentIJournalposten={setRiktigIdentIJournalposten}
+                                    setRiktigIdentIJournalposten={(riktigIdent) => {
+                                        setBarnetHarIkkeFnr(false);
+                                        setRiktigIdentIJournalposten(riktigIdent);
+                                    }}
                                     erInntektsmeldingUtenKrav={erInntektsmeldingUtenKrav}
                                     disableRadios={disableRadios}
                                 />
@@ -695,7 +707,7 @@ const Fordeling: React.FC = () => {
                                 dokumenttype={dokumenttype}
                                 disabled={disableRadios}
                                 setIdentAction={setIdentAction}
-                                setToSokereIJournalpost={setToSokereIJournalpost}
+                                setToSokereIJournalpost={handleToSokereIJournalpost}
                             />
 
                             {erInntektsmeldingUtenKrav && identState.søkerId ? (
@@ -713,7 +725,10 @@ const Fordeling: React.FC = () => {
                                     fagsaker={fagsaker}
                                     identState={identState}
                                     ingenInfoOmBarnIDokument={ingenInfoOmPleitrengende}
-                                    setReserverSaksnummerTilNyFagsak={setReserverSaksnummerTilNyFagsak}
+                                    setReserverSaksnummerTilNyFagsak={(reserver) => {
+                                        setBarnetHarIkkeFnr(false);
+                                        setReserverSaksnummerTilNyFagsak(reserver);
+                                    }}
                                     setIdentAction={setIdentAction}
                                     setValgtFagsak={setValgtFagsak}
                                     valgtFagsak={valgtFagsakLokal}
@@ -737,9 +752,15 @@ const Fordeling: React.FC = () => {
                             {visValgAvBehandlingsaar && (
                                 <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
                             )}
-                            {henteFagsakFeilet && (
+                            {fagsakFeilStatus !== undefined && (
                                 <ErrorMessage>
-                                    <FormattedMessage id="fordeling.error.henteFagsakFeilet" />
+                                    <FormattedMessage
+                                        id={
+                                            fagsakFeilStatus === 403
+                                                ? 'fagsak.hentIngenTilgang'
+                                                : 'fordeling.error.henteFagsakFeilet'
+                                        }
+                                    />
                                 </ErrorMessage>
                             )}
                             {isFetchingFagsaker && <Loader />}
@@ -760,6 +781,7 @@ const Fordeling: React.FC = () => {
                                     jpErFerdigstiltOgUtenPleietrengende={jpErFerdigstiltOgUtenPleietrengende}
                                     setIdentAction={setIdentAction}
                                     henteBarn={henteBarn}
+                                    barnetHarIkkeFnr={barnetHarIkkeFnr}
                                     setBarnetHarIkkeFnr={setBarnetHarIkkeFnr}
                                 />
                             )}
