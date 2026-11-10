@@ -123,6 +123,7 @@
     "fordeling.error.pleietrengendeHarFagsak.tillatGåVidere": "Pleietrengende med fødselsnummer {pleietrengendeId} har allerede en fagsak {fagsakId}. Er du sikker på at du vil reservere et nytt saksnummer? Hvis ikke, velg fagsak {fagsakId}.",
     "fordeling.error.pleietrengendeHarFerdistiltFagsak": "Det finnes allerede en fagsak knyttet til dette barnet (ID: {pleietrengendeId}). Hvis barnet er riktig må du kopiere journalposten og koble ny journalpost til eksisterende fagsak {fagsakId}. Denne journalposten vil bli lukket etter du kopierer.",
     "fordeling.error.henteFagsakFeilet": "Henting av fagsak feilet",
+    "fordeling.error.henteFagsakIngenTilgang": "Du har ikke tilgang til å hente fagsaker for denne søkeren.",
     "fordeling.alert.toSøkere.ingenPleietrengende": "Du må velge pleietrengende eller fagsak for å gå videre, når journalposten gjelder to søkere.",
     "fordeling.alert.toSøkere.ingenAnnenSøker": "Du må fylle ut fødselsnummer til annen søker for å gå videre, når journalposten gjelder to søkere.",
     "fordeling.alert.toSøkere.ingenBehandlingÅr": "Du må velge fagsak eller behandlingsår for å gå videre, når journalposten gjelder to søkere.",
