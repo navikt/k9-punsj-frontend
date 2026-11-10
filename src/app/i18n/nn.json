@@ -5,6 +5,7 @@
 
     "locale.nb": "Bokmål - norsk",
     "locale.nn": "Nynorsk - norsk",
+    "fagsak.hentIngenTilgang": "Du har ikkje tilgang til å hente fagsaker for denne søkjaren.",
 
     "startPage.tittel": "K9-punsj"
 }

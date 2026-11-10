@@ -16,21 +16,22 @@ const SendBrevIAvsluttetSak = () => {
     const [søkerId, setSøkerId] = useState('');
     const [søkerIdError, setSøkerIdError] = useState<ReactNode>('');
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [fetchFagsakerError, setFetchFagsakerError] = useState(false);
+    const [fetchFagsakerErrorStatus, setFetchFagsakerErrorStatus] = useState<number | undefined>(undefined);
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [fagsakId, setFagsakId] = useState('');
     const [visLosModal, setVisLosModal] = useState(false);
 
     const hentFagsaker = (søkersFødselsnummer: string) => {
-        setFetchFagsakerError(false);
+        setFetchFagsakerErrorStatus(undefined);
         setIsFetchingFagsaker(true);
 
         finnFagsaker(søkersFødselsnummer, (response, data) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
+                setFetchFagsakerErrorStatus(undefined);
                 setFagsaker(data);
             } else {
-                setFetchFagsakerError(true);
+                setFetchFagsakerErrorStatus(response.status);
             }
         });
     };
@@ -52,6 +53,7 @@ const SendBrevIAvsluttetSak = () => {
         const value = event.target.value.replace(/[^0-9]/g, '');
         setSøkerId(value);
         setFagsakId('');
+        setFetchFagsakerErrorStatus(undefined);
 
         const error = validateSøkerId(value);
         setSøkerIdError(error);
@@ -128,14 +130,20 @@ const SendBrevIAvsluttetSak = () => {
                         {isFetchingFagsaker && <Loader variant="neutral" size="small" title="venter..." />}
                     </div>
 
-                    {fetchFagsakerError && (
+                    {fetchFagsakerErrorStatus !== undefined && (
                         <Alert
                             size="small"
                             variant="error"
                             className="mb-4"
                             data-test-id="sendBrevIAvsluttetSakAlertFetchFagsakerError"
                         >
-                            <FormattedMessage id="sendBrevIAvsluttetSak.alert.fetchFagsaker.error" />
+                            <FormattedMessage
+                                id={
+                                    fetchFagsakerErrorStatus === 403
+                                        ? 'fagsak.hentIngenTilgang'
+                                        : 'sendBrevIAvsluttetSak.alert.fetchFagsaker.error'
+                                }
+                            />
 
                             <Button type="button" size="small" variant="tertiary" onClick={() => hentFagsaker(søkerId)}>
                                 <FormattedMessage id="sendBrevIAvsluttetSak.btn.hentFagsaker" />
@@ -143,7 +151,7 @@ const SendBrevIAvsluttetSak = () => {
                         </Alert>
                     )}
 
-                    {!isFetchingFagsaker && !fetchFagsakerError && fagsaker.length === 0 && (
+                    {!isFetchingFagsaker && fetchFagsakerErrorStatus === undefined && fagsaker.length === 0 && (
                         <Alert
                             size="small"
                             variant="warning"

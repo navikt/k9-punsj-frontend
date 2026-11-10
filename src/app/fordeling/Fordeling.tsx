@@ -757,7 +757,7 @@ const Fordeling: React.FC = () => {
                                     <FormattedMessage
                                         id={
                                             fagsakFeilStatus === 403
-                                                ? 'fordeling.error.henteFagsakIngenTilgang'
+                                                ? 'fagsak.hentIngenTilgang'
                                                 : 'fordeling.error.henteFagsakFeilet'
                                         }
                                     />

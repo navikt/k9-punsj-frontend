@@ -37,7 +37,7 @@ const OpprettJournalpost: React.FC = () => {
     const [opprettJpError, setOpprettJpError] = useState<string>('');
     const [fagsaker, setFagsaker] = useState<Fagsak[]>([]);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
-    const [fetchFagsakError, setFetchFagsakError] = useState(false);
+    const [fetchFagsakErrorStatus, setFetchFagsakErrorStatus] = useState<number | undefined>(undefined);
     const harHistoriskTilgang = useSelector(
         (state: RootStateType) => state.authState.tilganger?.harHistoriskTilgang ?? false,
     );
@@ -66,22 +66,23 @@ const OpprettJournalpost: React.FC = () => {
     const søkersFødselsnummer = watch(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
 
     const hentFagsaker = (fnr: string) => {
+        setFetchFagsakErrorStatus(undefined);
         setIsFetchingFagsaker(true);
 
         finnFagsaker(fnr, (response, data) => {
             setIsFetchingFagsaker(false);
             if (response.status === 200) {
-                setFetchFagsakError(false);
+                setFetchFagsakErrorStatus(undefined);
                 setFagsaker(data);
             } else {
-                setFetchFagsakError(true);
+                setFetchFagsakErrorStatus(response.status);
             }
         });
     };
 
     const handleSøkerIdentitetsnummerChange = async (event: ChangeEvent<HTMLInputElement>) => {
         clearErrors(OpprettJournalpostFormKeys.søkerIdentitetsnummer);
-        setFetchFagsakError(false);
+        setFetchFagsakErrorStatus(undefined);
 
         if (fagsaker.length > 0) {
             setFagsaker([]);
@@ -100,7 +101,7 @@ const OpprettJournalpost: React.FC = () => {
     };
 
     const visIngenFagsakAlert =
-        !fetchFagsakError &&
+        fetchFagsakErrorStatus === undefined &&
         søkersFødselsnummer.length === 11 &&
         !errors.søkerIdentitetsnummer &&
         !isFetchingFagsaker &&
@@ -180,14 +181,20 @@ const OpprettJournalpost: React.FC = () => {
                         {isFetchingFagsaker && <Loader size="small" />}
                     </div>
 
-                    {fetchFagsakError && (
+                    {fetchFagsakErrorStatus !== undefined && (
                         <Alert
                             size="small"
                             variant="error"
                             className="mb-4"
                             data-test-id="opprettJournalpostAlertHentFagsakerError"
                         >
-                            <FormattedMessage id="opprettJournalpost.alert.hentFagsaker.error" />
+                            <FormattedMessage
+                                id={
+                                    fetchFagsakErrorStatus === 403
+                                        ? 'fagsak.hentIngenTilgang'
+                                        : 'opprettJournalpost.alert.hentFagsaker.error'
+                                }
+                            />
 
                             <div className="mt-4">
                                 <Button
