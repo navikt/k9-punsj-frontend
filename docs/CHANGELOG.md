@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Tilgangsavslag ved fagsakoppslag (2026-11-10)
+
+- Viser en egen melding ved manglende tilgang til å hente fagsaker i Fordeling, Opprett journalpost og Send brev i avsluttet sak.
+
 ### Ukentlig pakkevedlikehold (2026-11-10)
 
 - Oppdaterte 20 kvalifiserte patch- og minorversjoner i root og `server`, med samordnede Aksel-, Storybook- og Tailwind-pakker.
