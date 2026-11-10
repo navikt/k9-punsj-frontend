@@ -9,7 +9,7 @@ type Option = {
 };
 
 export interface FormikSelectProps extends Partial<SelectProps> {
-    label: string;
+    label: React.ReactNode;
     name: string;
     options: Option[];
     customError?: string;

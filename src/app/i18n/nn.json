@@ -7,5 +7,8 @@
     "locale.nn": "Nynorsk - norsk",
     "fagsak.hentIngenTilgang": "Du har ikkje tilgang til å hente fagsaker for denne søkjaren.",
 
-    "startPage.tittel": "K9-punsj"
+    "startPage.tittel": "K9-punsj",
+
+    "skjema.arbeid.arbeidstidKalender.info.lengrePeriode": "Ved lik arbeidstid i ein lengre periode, bruk knappen under og fyll inn perioden du vil registrere arbeidstid for.",
+    "skjema.arbeid.arbeidstidKalender.info.maanedsvisning": "Ved variabel arbeidstid per dag eller veke, bruk kalenderen under månadsvising for å velje dagane du vil registrere arbeidstid for."
 }

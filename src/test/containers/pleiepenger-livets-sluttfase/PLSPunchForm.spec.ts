@@ -1,6 +1,32 @@
 import { PunchFormComponent } from 'app/søknader/pleiepenger-livets-sluttfase/containers/PLSPunchForm';
 
 describe('PLSPunchForm', () => {
+    test('viser feltfeil uten å oppdatere React-state og beholder uhåndterte feil i oppsummeringen', () => {
+        const component = new PunchFormComponent({
+            intl: { formatMessage: ({ id }: { id: string }) => id },
+            punchFormState: {
+                inputErrors: [
+                    { felt: 'ytelse.lovbestemtFerie.perioder[0]', feilmelding: 'Ugyldig ferieperiode' },
+                    { felt: 'ytelse.ukjent', feilmelding: 'Ukjent feil' },
+                ],
+            },
+        } as unknown as ConstructorParameters<typeof PunchFormComponent>[0]);
+        const setState = vi.fn();
+        component.setState = setState as typeof component.setState;
+        const getErrorMessage = Reflect.get(component, 'getErrorMessage') as (attribute: string) => string | undefined;
+        const getUhaandterteFeil = Reflect.get(component, 'getUhaandterteFeil') as (attribute: string) => string[];
+
+        expect(getErrorMessage('ytelse.lovbestemtFerie.perioder[0]')).toBe(
+            'skjema.feil.ytelse.lovbestemtFerie.perioder[].Ugyldig ferieperiode',
+        );
+        expect(getErrorMessage('ytelse.lovbestemtFerie.perioder[0]')).toBe(
+            'skjema.feil.ytelse.lovbestemtFerie.perioder[].Ugyldig ferieperiode',
+        );
+        expect(getUhaandterteFeil('ytelse.lovbestemtFerie')).toEqual([]);
+        expect(getUhaandterteFeil('')).toEqual(['ytelse.ukjent: Ukjent feil']);
+        expect(setState).not.toHaveBeenCalled();
+    });
+
     test('validerer hos backend når frilanser slutter før startdato', () => {
         const validateSoknad = vi.fn();
         const component = new PunchFormComponent({ validateSoknad } as unknown as ConstructorParameters<
