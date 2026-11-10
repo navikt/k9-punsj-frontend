@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Ukentlig pakkevedlikehold (2026-11-10)
+
+- Oppdaterte 20 kvalifiserte patch- og minorversjoner i root og `server`, med samordnede Aksel-, Storybook- og Tailwind-pakker.
+- Beholdt Faro 2.12.1 fordi `@nais/apm` 0.7.3 låser Faro SDK og tracing til 2.12.1.
+- Oppdaterte den direkte `glob`-avhengigheten til 14.0.3. Revisjonen viser fortsatt sårbare transitive versjoner av `glob` og `minimatch`, som avhengighetene fortsatt krever.
+
 ### Fjernet foreldet manuell barneregistrering etter vellykket oppslag (2026-11-06)
 
 - Nullstiller feilstatus for barn ved vellykket oppslag og nullstilling.
