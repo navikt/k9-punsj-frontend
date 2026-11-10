@@ -83,7 +83,7 @@
         "@vitejs/plugin-react": "6.2.1",
         "autoprefixer": "10.6.2",
         "cross-env": "10.1.0",
-        "cypress": "15.21.1",
+        "cypress": "16.2.1",
         "cypress-wait-until": "3.0.2",
         "eslint": "10.14.0",
         "eslint-config-prettier": "10.1.8",
