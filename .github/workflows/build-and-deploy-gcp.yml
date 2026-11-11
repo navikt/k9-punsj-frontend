@@ -55,7 +55,7 @@ jobs:
                   path: ./dist
 
             - name: Last opp nettleserfiler til CDN
-              uses: nais/deploy/actions/cdn-upload/v2@7b60caaded00332e9aa117a8342daa0876851dfe # v2
+              uses: nais/deploy/actions/cdn-upload/v2@6a9dcd6df697ec2d38edc78cadb0b9acd1232f50 # v3
               with:
                   team: k9saksbehandling
                   source: dist/js
@@ -67,7 +67,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - uses: nais/docker-build-push@dd7421d5068057a020ca46ead966c26190c516b1 # v0
+            - uses: nais/docker-build-push@588f76a6f45aeb1e75d5e8417ec6ef6d79b2b39f # v0
               id: docker-push
               with:
                   tag: 'latest'
@@ -85,7 +85,7 @@ jobs:
                   echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_ENV
 
             - name: Deploye til prod gcp
-              uses: nais/deploy/actions/deploy@7b60caaded00332e9aa117a8342daa0876851dfe # v2
+              uses: nais/deploy/actions/deploy@6a9dcd6df697ec2d38edc78cadb0b9acd1232f50 # v3
               env:
                   CLUSTER: prod-gcp
                   RESOURCE: nais/k9-punsj-frontend.yml
