@@ -196,20 +196,23 @@ Can an actor deny performing an action?
 **Detection patterns:**
 
 ```kotlin
-// ✅ Correct — structured audit log with actor, action, resource
-logger.info(
+// ✅ Correct — dedicated, access-controlled audit channel configured separately
+// auditLogger must write to the approved audit destination, not ordinary application logs.
+auditLogger.info(
     "Vedtak fattet",
     kv("action", "vedtak.opprettet"),
     kv("actor", saksbehandler.navIdent),
     kv("vedtakId", vedtak.id),
     kv("sakId", sak.id),
     kv("correlationId", MDC.get("x-correlation-id")),
-    // Never log PII — fnr, name, address
+    // Actor and resource identifiers are personal data: include only required audit fields.
 )
 
-// ❌ Insufficient — no actor, no correlation, PII leaked
+// ❌ Incorrect — personal data in ordinary application logs; insufficient audit trail
 logger.info("Vedtak opprettet for bruker ${bruker.fnr}")
 ```
+
+Employee identifiers such as Nav-ident are personal data. Record identity in the dedicated audit trail when required for traceability, with appropriate access controls and retention. Do not duplicate audit records or their identifiers in ordinary application logs. Naming a logger `auditLogger` does not configure a separate destination.
 
 #### I — Information Disclosure (Data Leaks)
 

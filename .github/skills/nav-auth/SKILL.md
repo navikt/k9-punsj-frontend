@@ -57,14 +57,20 @@ azure:
 **Kotlin/Ktor**:
 
 ```kotlin
+import com.auth0.jwk.JwkProviderBuilder
+import java.net.URI
+import java.util.Date
+
+val jwkProvider = JwkProviderBuilder(URI(azureAdConfiguration.jwks_uri).toURL()).build()
+
 install(Authentication) {
     jwt("azureAd") {
-        verifier(azureAdConfiguration.jwksUri)
+        verifier(jwkProvider, azureAdConfiguration.issuer)
         validate { credential ->
             val audience = credential.payload.audience
-            val roles = credential.payload.getClaim("roles")?.asList(String::class.java)
+            val expiresAt = credential.payload.expiresAt
 
-            if (audience.contains(expectedAudience)) {
+            if (audience.contains(expectedAudience) && expiresAt?.after(Date()) == true) {
                 JWTPrincipal(credential.payload)
             } else null
         }
@@ -188,15 +194,23 @@ ID-porten sidecar handles authentication. Application receives validated JWT wit
 
 ### 4. Maskinporten (External Organizations)
 
-**Use when**: External organizations need machine-to-machine access.
+**Use when**: External organizations need machine-to-machine access to your API.
 
 ```yaml
-maskinporten:
-  enabled: true
-  scopes:
-    consumes:
-      - name: "nav:example/scope"
+spec:
+  maskinporten:
+    enabled: true
+    scopes:
+      exposes:
+        - enabled: true
+          product: "example"
+          separator: "/"
+          name: "scope" # Full scope: nav:example/scope
+          consumers:
+            - orgno: "123456789" # Replace with the approved consumer organization
 ```
+
+Validate incoming Maskinporten tokens, including signature, issuer and lifetime, and require the expected scope in the space-separated `scope` claim before granting access. Scope registration does not replace runtime validation or resource authorization. Use `scopes.consumes` when your application calls an external API instead. See [Secure your API with Maskinporten](https://doc.nais.io/auth/maskinporten/how-to/secure/).
 
 ## JWT Validation Pattern
 
@@ -219,9 +233,15 @@ data class OpenIdConfiguration(
 ### Full validation: issuer, audience, expiration
 
 ```kotlin
+import com.auth0.jwk.JwkProviderBuilder
+import java.net.URI
+import java.util.Date
+
+val jwkProvider = JwkProviderBuilder(URI(azureAdConfiguration.jwks_uri).toURL()).build()
+
 install(Authentication) {
     jwt("azureAd") {
-        verifier(JwkProvider(azureAdConfiguration.jwks_uri))
+        verifier(jwkProvider, azureAdConfiguration.issuer)
 
         validate { credential ->
             // Validate issuer
@@ -236,7 +256,7 @@ install(Authentication) {
             }
 
             // Validate expiration
-            if (credential.payload.expiresAt?.before(Date()) == true) {
+            if (credential.payload.expiresAt?.after(Date()) != true) {
                 return@validate null
             }
 
@@ -249,15 +269,15 @@ install(Authentication) {
 **TypeScript/Next.js with `@navikt/oasis`**:
 
 ```typescript
-import { validateToken, parseAzureUserToken } from "@navikt/oasis";
+import { validateAzureToken, parseAzureUserToken } from "@navikt/oasis";
 
-// Simple validation (any issuer configured in Nais)
-const validation = await validateToken(token);
+// Validate the token issued by Entra ID, including when multiple providers are configured
+const validation = await validateAzureToken(token);
 if (!validation.ok) {
   return new Response("Invalid token", { status: 401 });
 }
 
-// Azure-specific validation with user info parsing
+// Parse user information only after token validation
 const azure = await parseAzureUserToken(token);
 if (!azure.ok) {
   return new Response("Invalid Azure token", { status: 401 });
