@@ -26,6 +26,7 @@ import { redirectToLos } from 'app/utils/envUtils';
 import messages from 'app/i18n/nb.json';
 import { createMockPdfBytes } from '../../mocks/mockPdf.js';
 import journalpostFixture from '../../../cypress/fixtures/jpPSB300.json';
+import fagsaker from '../../../cypress/fixtures/fagsaker.json';
 
 import '@navikt/ds-css/dist/index.css';
 import '../../app/styles/globals.css';
@@ -45,6 +46,14 @@ const FAGSAK_MED_BARN: Fagsak = {
     pleietrengendeIdent: BARNE_ID,
     gyldigPeriode: { fom: '2024-04-15', tom: '2024-04-15' },
 };
+const RESERVERT_MED_BARN: Fagsak = {
+    fagsakId: fagsaker[3].fagsakId,
+    sakstype: DokumenttypeForkortelse.PSB,
+    pleietrengendeIdent: fagsaker[3].pleietrengende!.identitetsnummer,
+    gyldigPeriode: fagsaker[3].gyldigPeriode,
+    reservert: true,
+    reservertSaksnummer: true,
+};
 type StoryScenario =
     | 'fortsett'
     | 'vent-med-barn'
@@ -52,7 +61,9 @@ type StoryScenario =
     | 'fortsett-uten-sak'
     | 'vent-uten-sak'
     | 'journalfor-feil'
-    | 'vent-feil';
+    | 'vent-feil'
+    | 'reservert-med-barn'
+    | 'ny-sak-konflikt';
 
 const journalpost = (): IJournalpost => ({
     journalpostId: JOURNALPOST_ID,
@@ -95,9 +106,17 @@ const KlassifiserModalStory = ({
     lukkModal: () => void;
     setFagsak: (sak: Fagsak) => void;
 }) => {
-    const utenFagsak = scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak';
-    const fagsak = utenFagsak ? undefined : scenario === 'vent-uten-barn' ? FAGSAK_UTEN_BARN : FAGSAK_MED_BARN;
-    const pleietrengendeIdent = scenario === 'fortsett-uten-sak' ? BARNE_ID : undefined;
+    const utenFagsak =
+        scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak' || scenario === 'ny-sak-konflikt';
+    const fagsak = utenFagsak
+        ? undefined
+        : scenario === 'reservert-med-barn'
+          ? RESERVERT_MED_BARN
+          : scenario === 'vent-uten-barn'
+            ? FAGSAK_UTEN_BARN
+            : FAGSAK_MED_BARN;
+    const pleietrengendeIdent =
+        scenario === 'fortsett-uten-sak' || scenario === 'ny-sak-konflikt' ? BARNE_ID : undefined;
     const [store] = useState(() => createStore(fagsak, pleietrengendeIdent));
     const [queryClient] = useState(
         () => new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } }),
@@ -110,7 +129,11 @@ const KlassifiserModalStory = ({
     }, [lukkModal]);
 
     const fortsett =
-        scenario === 'fortsett' || scenario === 'fortsett-uten-sak' || scenario === 'journalfor-feil';
+        scenario === 'fortsett' ||
+        scenario === 'fortsett-uten-sak' ||
+        scenario === 'journalfor-feil' ||
+        scenario === 'reservert-med-barn' ||
+        scenario === 'ny-sak-konflikt';
 
     return (
         <Provider store={store}>
@@ -147,7 +170,7 @@ const updatedJournalpost = (fagsak: Fagsak) => ({
         gyldigPeriode: fagsak.gyldigPeriode,
         pleietrengendeIdent: fagsak.pleietrengendeIdent,
         relatertPersonIdent: null,
-        reservertSaksnummer: false,
+        reservertSaksnummer: fagsak.reservertSaksnummer ?? false,
     },
 });
 
@@ -219,6 +242,30 @@ const ventRetry = createRetryHandlers(
 const goToLosAction = fn().mockName('Gå til LOS');
 const lukkModalAction = fn().mockName('Lukk klassifiseringsmodal');
 const setFagsakActionSpy = fn().mockName('Oppdater valgt fagsak');
+const newCaseRequest = fn().mockName('Ny PSB-sak avvist med 409');
+const reservedCaseRequest = fn().mockName('Journalfør valgt reservert PSB-sak');
+const conflictHandler = http.post(ApiPath.JOURNALPOST_MOTTAK, async ({ request }) => {
+    const body = (await request.json()) as { journalpostId?: string };
+    if (body.journalpostId !== JOURNALPOST_ID) return;
+    newCaseRequest(body, request.headers.get('X-Nav-NorskIdent'));
+    return HttpResponse.json(
+        {
+            type: '/problem-details/post-mottak',
+            status: 409,
+            title: 'Konflikt ved postmottak',
+            detail: 'Det finnes allerede en fagsak for barnet og ytelsen.',
+            instance: '/api/journalpost/mottak',
+            correlationId: 'psb-story-conflict',
+        },
+        { status: 409 },
+    );
+});
+const reservedHandler = http.post(ApiPath.JOURNALPOST_MOTTAK, async ({ request }) => {
+    const body = (await request.json()) as { journalpostId?: string };
+    if (body.journalpostId !== JOURNALPOST_ID) return;
+    reservedCaseRequest(body);
+    return HttpResponse.json({ saksnummer: RESERVERT_MED_BARN.fagsakId });
+});
 
 const makeHandlers = (
     fagsak: Fagsak | undefined,
@@ -236,12 +283,17 @@ const expectDialogSummary = async (scenario: StoryScenario) => {
     const infoElement = dialog.querySelector('[data-test-id="klassifiseringInfo"]');
     if (!(infoElement instanceof HTMLElement)) throw new Error('Klassifiseringsinformasjonen mangler i dialogen.');
     const info = within(infoElement);
-    const utenFagsak = scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak';
+    const utenFagsak =
+        scenario === 'fortsett-uten-sak' || scenario === 'vent-uten-sak' || scenario === 'ny-sak-konflikt';
     const utenBarn = scenario === 'vent-uten-barn' || scenario === 'vent-uten-sak';
     await expect(
         within(dialog).getByRole('heading', {
             name:
-                scenario === 'fortsett' || scenario === 'fortsett-uten-sak' || scenario === 'journalfor-feil'
+                scenario === 'fortsett' ||
+                scenario === 'fortsett-uten-sak' ||
+                scenario === 'journalfor-feil' ||
+                scenario === 'reservert-med-barn' ||
+                scenario === 'ny-sak-konflikt'
                     ? 'Vil du lagre følgende informasjon til journalposten?'
                     : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
         }),
@@ -252,13 +304,22 @@ const expectDialogSummary = async (scenario: StoryScenario) => {
         await expect(info.queryByText('Saksnummer:', { exact: true })).not.toBeInTheDocument();
         await expect(info.queryByText('Periode:', { exact: true })).not.toBeInTheDocument();
     } else {
-        const fagsakId = scenario === 'vent-uten-barn' ? FAGSAK_UTEN_BARN.fagsakId : FAGSAK_MED_BARN.fagsakId;
+        const fagsakId =
+            scenario === 'reservert-med-barn'
+                ? RESERVERT_MED_BARN.fagsakId
+                : scenario === 'vent-uten-barn'
+                  ? FAGSAK_UTEN_BARN.fagsakId
+                  : FAGSAK_MED_BARN.fagsakId;
         await expect(info.getByText(fagsakId, { exact: true })).toBeVisible();
         await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
     }
 
-    if (scenario === 'fortsett-uten-sak' || (!utenFagsak && !utenBarn)) {
-        await expect(info.getByText(BARNE_ID, { exact: true })).toBeVisible();
+    if (scenario === 'fortsett-uten-sak' || scenario === 'ny-sak-konflikt' || (!utenFagsak && !utenBarn)) {
+        await expect(
+            info.getByText(scenario === 'reservert-med-barn' ? RESERVERT_MED_BARN.pleietrengendeIdent! : BARNE_ID, {
+                exact: true,
+            }),
+        ).toBeVisible();
     } else {
         await expect(info.queryByText('Pleietrengendes ID:', { exact: true })).not.toBeInTheDocument();
     }
@@ -279,6 +340,8 @@ const meta: Meta<typeof KlassifiserModalStory> = {
         lukkModalAction.mockClear();
         setFagsakActionSpy.mockClear();
         goToLosAction.mockClear();
+        newCaseRequest.mockClear();
+        reservedCaseRequest.mockClear();
         mocked(redirectToLos).mockReset();
         mocked(redirectToLos).mockImplementation(goToLosAction);
     },
@@ -347,6 +410,57 @@ export const VentUtenFagsakEllerBarn: Story = {
         await expect(dialog).not.toBeInTheDocument();
         await expect(lukkModalAction).toHaveBeenCalledOnce();
         await expect(setFagsakActionSpy).not.toHaveBeenCalled();
+    },
+};
+
+export const ReservertSakMedBarn: Story = {
+    name: 'Reservert sak med barn',
+    args: { scenario: 'reservert-med-barn' },
+    parameters: { msw: { handlers: makeHandlers(RESERVERT_MED_BARN, [reservedHandler]) } },
+    play: async () => {
+        const dialog = await expectDialogSummary('reservert-med-barn');
+        await expect(dialog).toHaveTextContent('15.04.2024');
+        await expect(within(dialog).queryByText(FAGSAK_MED_BARN.fagsakId, { exact: true })).not.toBeInTheDocument();
+        await expect(within(dialog).getByRole('button', { name: 'Journalfør journalposten' })).toBeEnabled();
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+        await expect(dialog).not.toBeInTheDocument();
+        await expect(lukkModalAction).toHaveBeenCalledOnce();
+        await expect(setFagsakActionSpy).not.toHaveBeenCalled();
+        await expect(reservedCaseRequest).not.toHaveBeenCalled();
+    },
+};
+
+export const NySakMedBackendkonflikt: Story = {
+    name: 'Ny sak med backendkonflikt (409)',
+    args: { scenario: 'ny-sak-konflikt' },
+    parameters: { msw: { handlers: makeHandlers(undefined, [conflictHandler]) } },
+    play: async () => {
+        const dialog = await expectDialogSummary('ny-sak-konflikt');
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Journalfør journalposten' }));
+        await expect(within(dialog).findByText('Det oppstod en feil ved klassifisering.')).resolves.toBeVisible();
+        await expect(newCaseRequest).toHaveBeenCalledOnce();
+        await expect(newCaseRequest).toHaveBeenCalledWith(
+            {
+                journalpostId: JOURNALPOST_ID,
+                brukerIdent: SØKER_ID,
+                pleietrengendeIdent: BARNE_ID,
+                fagsakYtelseTypeKode: 'PSB',
+                relatertPersonIdent: '',
+            },
+            SØKER_ID,
+        );
+        await expect(
+            within(dialog).queryByText('Det finnes allerede en fagsak for barnet og ytelsen.'),
+        ).not.toBeInTheDocument();
+        await expect(within(dialog).queryByText(/Journalposten er journalført/)).not.toBeInTheDocument();
+        await expect(within(dialog).getByRole('button', { name: 'Journalfør journalposten' })).toBeEnabled();
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+        await expect(dialog).not.toBeInTheDocument();
+        await expect(lukkModalAction).toHaveBeenCalledOnce();
+        await expect(setFagsakActionSpy).not.toHaveBeenCalled();
+        await expect(
+            within(document.body).queryByRole('region', { name: 'Lokal registreringsdestinasjon' }),
+        ).not.toBeInTheDocument();
     },
 };
 

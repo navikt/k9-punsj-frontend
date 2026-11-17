@@ -27,6 +27,8 @@ import { rootReducer } from 'app/state/RootState';
 import type Fagsak from 'app/types/Fagsak';
 import messages from 'app/i18n/nb.json';
 import { setJournalpostAction } from 'app/state/reducers/FellesReducer';
+import fagsaker from '../../../../cypress/fixtures/fagsaker.json';
+import journalpostFixture from '../../../../cypress/fixtures/jpPSB300.json';
 
 vi.mock('app/api/api', async (importOriginal) => {
     const actual = await importOriginal<typeof import('app/api/api')>();
@@ -52,6 +54,19 @@ const SAK_MED_BARN: Fagsak = {
     sakstype: DokumenttypeForkortelse.PSB,
     pleietrengendeIdent: '24420167209',
     gyldigPeriode: { fom: '2024-04-15', tom: '2024-04-15' },
+};
+const RESERVERT_MED_BARN: Fagsak = {
+    fagsakId: fagsaker[3].fagsakId,
+    sakstype: DokumenttypeForkortelse.PSB,
+    pleietrengendeIdent: fagsaker[3].pleietrengende!.identitetsnummer,
+    gyldigPeriode: fagsaker[3].gyldigPeriode,
+    reservert: true,
+};
+const RESERVERT_UTEN_BARN: Fagsak = {
+    fagsakId: fagsaker[4].fagsakId,
+    sakstype: DokumenttypeForkortelse.PSB,
+    gyldigPeriode: fagsaker[4].gyldigPeriode,
+    reservert: true,
 };
 
 const Location = () => {
@@ -160,13 +175,22 @@ afterEach(() => {
 });
 
 describe('KlassifiserModal', () => {
-    it.each([
+    it.each<{
+        name: string;
+        fagsak?: Fagsak;
+        fortsett: boolean;
+        pleietrengendeIdent?: string;
+    }>([
         { name: 'Fortsett med eksisterende sak og barn', fagsak: SAK_MED_BARN, fortsett: true },
         { name: 'Vent med eksisterende sak og barn', fagsak: SAK_MED_BARN, fortsett: false },
         { name: 'Vent med eksisterende sak uten barn', fagsak: SAK_UTEN_BARN, fortsett: false },
-    ])('$name viser valgt sak og avbryter uten å journalføre', async ({ fagsak, fortsett }) => {
+        { name: 'Fortsett med reservert sak og barn', fagsak: RESERVERT_MED_BARN, fortsett: true },
+        { name: 'Vent med reservert sak og barn', fagsak: RESERVERT_MED_BARN, fortsett: false },
+        { name: 'Vent med reservert sak uten barn', fagsak: RESERVERT_UTEN_BARN, fortsett: false },
+        { name: 'Vent uten fagsak med barn', fortsett: false, pleietrengendeIdent: '18410162721' },
+    ])('$name viser valgt sak og avbryter uten å journalføre', async ({ fagsak, fortsett, pleietrengendeIdent }) => {
         const user = userEvent.setup();
-        const { lukkModal } = renderModal(fagsak, fortsett);
+        const { lukkModal, setFagsak } = renderModal(fagsak, fortsett, pleietrengendeIdent);
 
         expect(
             screen.getByRole('heading', {
@@ -175,7 +199,7 @@ describe('KlassifiserModal', () => {
                     : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
             }),
         ).toBeVisible();
-        expectModalInfo(fagsak);
+        expectModalInfo(fagsak, pleietrengendeIdent ?? fagsak?.pleietrengendeIdent);
         expect(
             screen.getByRole('button', {
                 name: fortsett ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
@@ -185,6 +209,7 @@ describe('KlassifiserModal', () => {
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
 
         expect(lukkModal).toHaveBeenCalledOnce();
+        expect(setFagsak).not.toHaveBeenCalled();
         expectNoMutationCalls();
     });
 
@@ -197,9 +222,7 @@ describe('KlassifiserModal', () => {
             screen.getByRole('heading', { name: 'Vil du lagre følgende informasjon til journalposten?' }),
         ).toBeVisible();
         expectModalInfo(undefined, barnId);
-        expect(
-            screen.getByRole('button', { name: 'Journalfør journalposten' }),
-        ).toBeEnabled();
+        expect(screen.getByRole('button', { name: 'Journalfør journalposten' })).toBeEnabled();
 
         await user.click(screen.getByRole('button', { name: 'Avbryt' }));
 
@@ -265,6 +288,54 @@ describe('KlassifiserModal', () => {
         expect(postBehandlingsAar).not.toHaveBeenCalled();
         expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
 
+        queryClient.clear();
+    });
+
+    it('bruker det returnerte nye nummeret i callback, oppdaterer journalpost og navigerer til PSB', async () => {
+        const user = userEvent.setup();
+        const nyttNummer = 'NYPSB12';
+        const barnId = '18410162721';
+        expect(fagsaker.map((sak) => sak.fagsakId)).not.toContain(nyttNummer);
+        const nyFagsak: Fagsak = {
+            fagsakId: nyttNummer,
+            sakstype: DokumenttypeForkortelse.PSB,
+            pleietrengendeIdent: barnId,
+            gyldigPeriode: { fom: '', tom: '' },
+            reservertSaksnummer: true,
+        };
+        const refreshed: IJournalpost = {
+            ...journalpostFixture,
+            venter: undefined,
+            journalpostId: JOURNALPOST_ID,
+            journalpostStatus: journalpostStatus.JOURNALFOERT,
+            erFerdigstilt: true,
+            sak: nyFagsak,
+        };
+        vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: nyttNummer });
+        vi.mocked(getJournalpostEtterKopiering).mockResolvedValue(refreshed);
+        const { store, queryClient, setFagsak } = renderModal(undefined, true, barnId);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        await waitFor(() =>
+            expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(/^\/pleiepenger-sykt-barn\/$/),
+        );
+
+        expect(klassifiserDokument).toHaveBeenCalledExactlyOnceWith({
+            brukerIdent: SØKER_ID,
+            pleietrengendeIdent: barnId,
+            relatertPersonIdent: '',
+            journalpostId: JOURNALPOST_ID,
+            fagsakYtelseTypeKode: DokumenttypeForkortelse.PSB,
+            periode: undefined,
+            saksnummer: undefined,
+            barnAktørIder: undefined,
+        });
+        expect(setFagsak).toHaveBeenCalledExactlyOnceWith({ ...nyFagsak, behandlingsår: undefined });
+        expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID);
+        expect(store.getState().felles.journalpost).toEqual(refreshed);
+        expect(kopierJournalpostNotRedux).not.toHaveBeenCalled();
+        expect(postBehandlingsAar).not.toHaveBeenCalled();
+        expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
         queryClient.clear();
     });
 

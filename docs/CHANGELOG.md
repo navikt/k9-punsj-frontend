@@ -42,6 +42,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-17 — Nye og reserverte PSB-saker
+
+- La til fem isolerte Playwright-tester for reserverte saksvalg, ny-sak-modus med begge frontendflaggverdier, ny reservasjon og backendformet 409. Kontrollerer request-felter, returnert nummer, full journalpostrefresh og PSB-registreringsvalg.
+- Utvidet modaltestene med reserverte sammendrag, Vent med barn uten fagsak og callback med nytt nummer. La til to interaktive historier, kjørt og kjørt på nytt i nettleser, og assertion-mapping i Playwright-README. Produksjonskode, Cypress og delt infrastruktur er uendret; full B25/B26/B34-paritet gjenstår.
+
 #### 2026-11-17 — Tilpasning etter oppdatering fra master
 
 - Beholdt tilgangsmeldingen ved fagsakoppslag fra master og utvidet komponent- og nettlesertester for 403 og øvrige feil. Oppdaterte Home-testen til å tillate PDF-parametre i URL-en og samordnet Storybook-serviceworkeren med MSW-versjonen.

@@ -45,7 +45,8 @@ If the post-classification journalpost refresh returns 403, the current modal sh
 | Change to the existing case with a child; verify the child name/ID and journalpost panel update; open and cancel both Fortsett and Vent                        | The same Playwright journey                                                                               |
 | Confirm the selected child case, verify the classification request and refreshed journalpost, then display the PSB registration choice                         | `fordeling-psb.spec.ts` — `journalfører valgt PSB-sak og går til riktig registreringsvalg`                |
 | Modal summary fields, warning, action callbacks, error/retry behavior and Redux update after refresh                                                           | `KlassifiserModal.spec.tsx`                                                                               |
-| Document-type option list, reserved/new cases, multiple applicants and the remaining PSB variants                                                              | Still in Cypress or later migration scope; not replaced by this pilot                                     |
+| Reserved/new single-applicant PSB cases                                                                                                                      | See the bounded new/reserved mapping below; not replaced by this pilot alone                               |
+| Document-type option list, multiple applicants and the remaining PSB variants                                                                                 | Still in Cypress or later migration scope; not replaced by this pilot                                     |
 
 Five manual modal stories are available at [Fortsett med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--fortsett-med-eksisterende-sak-og-barn), [Vent med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-med-eksisterende-sak-og-barn), [Vent uten barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-uten-barn), [Journalfør-feil med vellykket nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--journalfor-feil-med-vellykket-nytt-forsok), and [Vent-feil med vellykket retry](http://localhost:6006/?path=/story/components-klassifisermodal--vent-feil-med-vellykket-retry). They use isolated stores, routers, query clients and named MSW groups; the LOS action is local Storybook feedback.
 
@@ -105,6 +106,41 @@ Reisene bruker test-ID-ene `930304`–`930311`. Browser-MSW-overstyringene er av
 Feilen med foreldet `barnetHarIkkeFnr` er rettet i #3973 og integrert fra master. Checkbox, identfelt, informasjon og Vent-regelen bruker nå samme state, og tillatelsen nullstilles ved relevante kontekstbytter.
 
 Søkerreisen i `930302` passerer normalt uten `test.fail`. Den velger **Pleietrengende har ikke fødselsnummer**, bytter søker og kontrollerer deaktivert Vent etter at ny søker er lastet, før et barn velges. Etter barnevalg og avbrutte Fortsett-/Vent-modaler bytter den tilbake til opprinnelig søker og kontrollerer deaktivert Vent før **Det gjelder et annet barn** klikkes. Dermed kan ikke barnevalg eller checkbox-handlinger maskere en feil i søkerreset. Til slutt verifiseres tomt barnevalg, synlig og ikke valgt checkbox, aktivt identfelt, manglende infotekst og fortsatt deaktivert Vent. Begge reset-reisene beholder kontrollen av at ingen mutasjoner sendes. Øvrig Fordeling-dekning og Cypress-migrering gjenstår.
+
+## Fordeling med nye og reserverte PSB-saker
+
+Fem uavhengige tester i `fordeling-psb-new-and-reserved.spec.ts` bruker journalpostene `930312`–`930316` og eksisterende syntetiske person- og saksfixtures. Frontendflagget settes separat i hver nettleserkontekst før søker-/saksvalg. Avkrysning for **Reserver saksnummer til ny fagsak** sender ingen mutasjon; først bekreftet journalføring sender mottakskallet.
+
+| Kilde i `cypress/e2e/fordeling/PSB.cy.js` / kontrakt | Navngitt automatisk dekning |
+| --- | --- |
+| 215–353: Reserverte option-etiketter, valgt verdi, barnets navn/ID eller «ikke satt», ingen K9-lenke, journalpostpanel og Fortsett/Vent-tilstander | `velger reserverte saker og journalfører valgt nummer med barn til PSB` velger begge reserverte fixtures |
+| 215–353: Fortsett/Vent med barn og Vent uten barn, sammendrag, periode, advarsel, handling og avbrytelse uten mutasjon | Samme nettlesertest; modaltabellen i `KlassifiserModal.spec.tsx` har radene `Fortsett med reservert sak og barn`, `Vent med reservert sak og barn` og `Vent med reservert sak uten barn` |
+| 354–369: Reserver nullstiller gammel sak/barn og saksnummer i panelet; begge handlingene er deaktivert før nytt barnevalg | `ny-sak-modus respekterer frontendflagget false uten mutasjoner` og den uavhengige `true`-varianten |
+| 370–420: Barn med eksisterende PSB-sak gir identifiserende advarsel; frontendflagget tillater eller blokkerer begge handlinger | De samme to flaggtestene gjennom faktisk Fordeling-UI; ingen innsending |
+| 421–498: Barn uten matchende sak fra listen, panel, informasjon, aktive handlinger og Fortsett/Vent-sammendrag uten sak/periode, med avbrytelse | `false`-varianten og `journalfører ny PSB-sak uten gammelt nummer og viser returnert reservasjon`; eksisterende komponenttest `viser modal for Fortsett uten fagsak med barn og avbryter uten mutasjon` og ny tabellrad `Vent uten fagsak med barn` dekker felles modalinnhold |
+| 499–620: Eksplisitt annet barn, gyldig manuell fixture-ident og manglende fødselsnummer; panel, informasjon, knappetilstander og modalavbryt | `false`-varianten gjør alle overgangene med ikke-tom saksliste og avbryter begge modalene for manuelt barn samt Vent uten ident. Tilsvarende tomliste-/reset-assertions beholdes i `håndterer tomt saksoppslag med barn fra listen og manuell ident` og `nullstiller søker og barn når søkeridenten endres`; eksisterende komponenttest `viser modal for Vent uten fagsak eller barn og avbryter uten mutasjon` dekker felles sammendrag uten barn |
+| B34 utover åpning/avbrytelse: Valgt reservert nummer sendes med barn og periode; 200, komplett journalpostrefresh og riktig PSB-destinasjon | `velger reserverte saker og journalfører valgt nummer med barn til PSB` kontrollerer request, søkerheader, returnert nummer, full refresh og reservert suksessinformasjon |
+| B34: Ny reservasjon utelater `saksnummer` og `periode` på wire og bruker et nytt returnert nummer, ikke tidligere valgt fixture-sak | `journalfører ny PSB-sak uten gammelt nummer og viser returnert reservasjon`; komponenttesten `bruker det returnerte nye nummeret i callback, oppdaterer journalpost og navigerer til PSB` kontrollerer `setFagsak`, barn, PSB, tom periode, `reservertSaksnummer`, Redux og navigasjon |
+| Tillegg utover Cypress: Backendformet 409 selv om frontendflagget tillater ny sak | `viser generisk feil ved backendkonflikt og beholder ny-sak-valgene etter avbryt` kontrollerer ProblemDetail, request/header/status, generisk klassifiseringsfeil, mulig nytt forsøk/avbrytelse, beholdte valg, ingen refresh, suksess eller navigasjon |
+
+Begge suksessreisene velger **Registrere opplysninger til K9** og kontrollerer aktiv **Bekreft**, men klikker ikke. Request-lyttere registreres før første sideåpning og kontrollerer at bare tilsiktet mottak sendes; Vent, kopiering, behandlingsår, Gosys, lukking og oppretting/innsending av søknad skal ikke kalles. Refresh verifiseres som full journalpost for samme ID, med endelig SAF-status, riktig barn og `sak.reservertSaksnummer: true`, uten å telle nøyaktig antall GET-kall. URL-assertions tillater `?dok=1`.
+
+Backendkontrakten er den verifiserte kontrakten i oppgave 12: mottak returnerer 200 med saksnummer. Frontenden sender periode for valgt sak, men backend-DTO-en har ikke dette feltet. Frontendflagget styrer bare UI-et; backendens `ENABLE_SAK_SPLITT_PSB` er uavhengig. MSW beviser frontendkontrakten, ikke faktisk reservasjon, journalføring eller PDL-/K9-/LOS-sideeffekter.
+
+### Validering 2026-11-17
+
+| Sjekk | Resultat |
+| --- | --- |
+| `yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx` | 15 bestått |
+| `yarn test:pw e2e/tests/fordeling-psb-new-and-reserved.spec.ts --workers=1` | 5 bestått |
+| `yarn test:pw e2e/tests/fordeling-psb.spec.ts e2e/tests/fordeling-reset.spec.ts e2e/tests/fordeling-empty-and-lookup.spec.ts e2e/tests/fordeling-psb-new-and-reserved.spec.ts` | 17 bestått med standard workers (4) |
+| `yarn lint` | Bestått, inkludert begge TypeScript-kontrollene |
+| `yarn build-storybook` | Bestått; dette alene er ikke interaksjonsbevis |
+| `git diff --check` | Bestått |
+
+Runtime ble kontrollert separat i nettleserens Storybook Interactions-panel på det ferdige bygget: [Reservert sak med barn](http://localhost:6006/?path=/story/components-klassifisermodal--reservert-sak-med-barn) fikk PASS for 17 steg og [Ny sak med backendkonflikt (409)](http://localhost:6006/?path=/story/components-klassifisermodal--ny-sak-med-backendkonflikt) fikk PASS for 22 steg. Begge ble kjørt på nytt med **Reload story** i samme nettleser og fikk samme resultat uten feilede steg. Historiene kontrollerer sammendrag/avbrytelse og feil/avbrytelse med fungerende callbacks og nullstilte request-spioner.
+
+Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-advarsler om duplikat barne-ID som key; de er ikke endret. Testserverne ble startet bare på ledige porter og stoppet etter kontrollene. Ingen backend- eller full Cypress-kjøring er utført. Dette dekker bare de kartlagte delene av B25/B26/B34; to søkere, øvrige Fordeling-familier, full paritet og Cypress-sletting gjenstår.
 
 ## Brevtester og historier
 

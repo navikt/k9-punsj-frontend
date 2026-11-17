@@ -11,4 +11,9 @@ export const FORDELING_PSB_SCENARIOS = {
     caseLookupError: '930309',
     childLookupForbidden: '930310',
     childLookupError: '930311',
+    reservedCase: '930312',
+    newCaseFlagFalse: '930313',
+    newCaseFlagTrue: '930314',
+    newCaseSuccess: '930315',
+    newCaseConflict: '930316',
 };
