@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdatering av Nais-actions (2026-11-17)
+
+- Oppdaterte Nais deploy og CDN-upload til v3-referansen og Docker build/push til ny v0-referanse i prod- og preprod-workflowene.
+
 ### Ukentlig pakkevedlikehold (2026-11-17)
 
 - Oppdaterte kvalifiserte patch- og minorversjoner i root og `server`, inkludert samordnede Aksel-, Storybook- og Tailwind-pakker, og regenererte MSW-serviceworkeren. Nyere versjoner innenfor nedkjølingstiden ble utsatt.
