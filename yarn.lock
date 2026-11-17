@@ -7340,17 +7340,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.17":
+"jose@npm:6.2.17, jose@npm:^6.2.10":
   version: 6.2.17
   resolution: "jose@npm:6.2.17"
   checksum: 10/df6ae5da42e71a4c3bd1483534c5579ed32f5806ec362ea472f309e8e57aef42afa1dbac62289596975d3587f7ac38deefe4313e1434ce76972ea0f029070bc9
-  languageName: node
-  linkType: hard
-
-"jose@npm:^6.2.10":
-  version: 6.2.12
-  resolution: "jose@npm:6.2.12"
-  checksum: 10/42ef7b598d22fe4ed0a4d0407f9dd9ae9f56dabd31cbad6cb4f67e296953a46b5d63603f8a599a3ee4c5659bf29bb14e846237f0381ea679116520b53e71e4ea
   languageName: node
   linkType: hard
 
