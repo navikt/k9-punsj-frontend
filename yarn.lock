@@ -1590,6 +1590,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@grafana/faro-core@npm:^2.14.0":
+  version: 2.14.0
+  resolution: "@grafana/faro-core@npm:2.14.0"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.9.0"
+    "@opentelemetry/otlp-transformer": "npm:^0.223.0"
+  checksum: 10/eff6e812e434495c83f1c49bf614a1c7a0a7de709132be910271b8c543a42b8528e4a17ce81b0cd0343db80d5f504e32da7b636c1692c33b3d61f089a4a1f76b
+  languageName: node
+  linkType: hard
+
 "@grafana/faro-web-sdk@npm:2.12.1, @grafana/faro-web-sdk@npm:^2.12.1":
   version: 2.12.1
   resolution: "@grafana/faro-web-sdk@npm:2.12.1"
@@ -1598,6 +1608,17 @@ __metadata:
     ua-parser-js: "npm:1.0.41"
     web-vitals: "npm:^6.0.0"
   checksum: 10/e35d0a4896450b5c6e6d2d854a1ee5c3f16eb1a107634f507ba92d55a7b498771493191c18636f20897d407fb82a515f0d04ac7294fc2eb61acc7a6ffd05536c
+  languageName: node
+  linkType: hard
+
+"@grafana/faro-web-sdk@npm:2.14.0":
+  version: 2.14.0
+  resolution: "@grafana/faro-web-sdk@npm:2.14.0"
+  dependencies:
+    "@grafana/faro-core": "npm:^2.14.0"
+    ua-parser-js: "npm:1.0.41"
+    web-vitals: "npm:^6.0.0"
+  checksum: 10/a7d59c526ffdc12199dca07eff5b0e5d5deff53ee994aa840cfe64f5e1b4bea8ed3515b7736ec46008b7b38912dae998e09b2b8e6908b1de678eab4112dbd460
   languageName: node
   linkType: hard
 
@@ -2122,6 +2143,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/api-logs@npm:0.223.1":
+  version: 0.223.1
+  resolution: "@opentelemetry/api-logs@npm:0.223.1"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.3.0"
+  checksum: 10/025e3231effb5b5a99b27949d8f20d9257750b5a24f6c28af16675d1d7c38c439b4e44ebe6fd75a07c7d4648960a4b637dbebf1d6215c6d9af73c74fe1619126
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/api@npm:^1.3.0, @opentelemetry/api@npm:^1.4.0, @opentelemetry/api@npm:^1.9.0, @opentelemetry/api@npm:^1.9.1":
   version: 1.9.1
   resolution: "@opentelemetry/api@npm:1.9.1"
@@ -2222,6 +2252,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/otlp-transformer@npm:^0.223.0":
+  version: 0.223.1
+  resolution: "@opentelemetry/otlp-transformer@npm:0.223.1"
+  dependencies:
+    "@opentelemetry/api-logs": "npm:0.223.1"
+    "@opentelemetry/core": "npm:2.12.1"
+    "@opentelemetry/resources": "npm:2.12.1"
+    "@opentelemetry/sdk-logs": "npm:0.223.1"
+    "@opentelemetry/sdk-metrics": "npm:2.12.1"
+    "@opentelemetry/sdk-trace": "npm:2.12.1"
+  peerDependencies:
+    "@opentelemetry/api": ^1.3.0
+  checksum: 10/fc965c1be729e436e9c89e743581f5a06e78a9859a3e0aa8b44df6bfecc2e647e33ae99a79accf3dad45bf1a5b99f6bdac607cd2be3565a75f1cc3a97bf4f4b3
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/resources@npm:2.11.0":
   version: 2.11.0
   resolution: "@opentelemetry/resources@npm:2.11.0"
@@ -2248,6 +2294,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/sdk-logs@npm:0.223.1":
+  version: 0.223.1
+  resolution: "@opentelemetry/sdk-logs@npm:0.223.1"
+  dependencies:
+    "@opentelemetry/api-logs": "npm:0.223.1"
+    "@opentelemetry/core": "npm:2.12.1"
+    "@opentelemetry/resources": "npm:2.12.1"
+    "@opentelemetry/semantic-conventions": "npm:^1.29.0"
+  peerDependencies:
+    "@opentelemetry/api": ">=1.4.0 <1.10.0"
+  checksum: 10/92352ac593a61d90f2b954d97df6a03d1c27f7d42eaae32b0ba1f2c74a8e879882fae4a1c8deb0ef4c0a44594566d5e4d32913a88a70608092e234abef7e766a
+  languageName: node
+  linkType: hard
+
 "@opentelemetry/sdk-metrics@npm:2.11.0":
   version: 2.11.0
   resolution: "@opentelemetry/sdk-metrics@npm:2.11.0"
@@ -2257,6 +2317,18 @@ __metadata:
   peerDependencies:
     "@opentelemetry/api": ">=1.9.0 <1.10.0"
   checksum: 10/78282cda3482ebf23c1a60526e28afbf1307319160f641c1a4eff94dad418541040199dfd1d4e97bce51fe38ebcbc759b38775a913da8ac0a07166857f1d89b9
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/sdk-metrics@npm:2.12.1":
+  version: 2.12.1
+  resolution: "@opentelemetry/sdk-metrics@npm:2.12.1"
+  dependencies:
+    "@opentelemetry/core": "npm:2.12.1"
+    "@opentelemetry/resources": "npm:2.12.1"
+  peerDependencies:
+    "@opentelemetry/api": ">=1.9.0 <1.10.0"
+  checksum: 10/f37535bdd5ad70ec9a69b825536054d5157497e736362615d5275604504fa19650baeb1427df525e8c1fe0c2634bad38fa77e63702f6b1ef54833a8c0df0f127
   languageName: node
   linkType: hard
 
@@ -7536,7 +7608,7 @@ __metadata:
   dependencies:
     "@eslint-react/eslint-plugin": "npm:5.30.1"
     "@eslint/js": "npm:10.0.1"
-    "@grafana/faro-web-sdk": "npm:2.12.1"
+    "@grafana/faro-web-sdk": "npm:2.14.0"
     "@k9-punsj-frontend/server": "workspace:"
     "@nais/apm": "npm:0.7.3"
     "@navikt/aksel": "npm:8.23.0"
