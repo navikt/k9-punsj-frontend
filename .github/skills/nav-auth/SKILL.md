@@ -130,11 +130,14 @@ accessPolicy:
 **TypeScript with `@navikt/oasis`**:
 
 ```typescript
-import { requestOboToken, getToken } from "@navikt/oasis";
+import { requestOboToken, getToken, validateTokenxToken } from "@navikt/oasis";
 
 export async function GET(request: Request) {
   const token = getToken(request);
   if (!token) return new Response("Unauthorized", { status: 401 });
+
+  const validation = await validateTokenxToken(token);
+  if (!validation.ok) return new Response("Invalid token", { status: 401 });
 
   // TokenX audience: "cluster:namespace:app-name"
   const obo = await requestOboToken(token, "dev-gcp:team-namespace:downstream-service");
@@ -148,7 +151,7 @@ export async function GET(request: Request) {
 }
 ```
 
-> **Note**: `@navikt/oasis` auto-caches OBO tokens. Entra ID audience uses different format: `"api://dev-gcp.namespace.app-name/.default"`
+> **Note**: This example accepts incoming TokenX tokens. For incoming ID-porten tokens, use `validateIdportenToken` before exchange instead. `getToken` only extracts the token; it does not validate it. `@navikt/oasis` auto-caches OBO tokens. Entra ID audience uses different format: `"api://dev-gcp.namespace.app-name/.default"`
 
 **Kotlin Token Exchange**:
 
@@ -260,8 +263,7 @@ if (!azure.ok) {
   return new Response("Invalid Azure token", { status: 401 });
 }
 
-const { name, NAVident, preferred_username } = azure;
-console.log(`User: ${name} (${NAVident})`);
+// Use the parsed claims where needed; do not log names or user identifiers.
 ```
 
 ## Authorization Patterns

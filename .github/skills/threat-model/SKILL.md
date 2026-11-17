@@ -240,17 +240,21 @@ fun getVedtak(@PathVariable id: UUID) = vedtakRepository.findById(id)
 ```
 
 ```yaml
-# ✅ Correct — app-specific Kafka ACL
+# ✅ Correct — app-specific Kafka ACL in a separate Topic resource
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: soknad.v1
+  namespace: dp
 spec:
-  kafka:
-    pool: nav-prod
-    streams: true
-    topics:
-      - topic: dp.soknad.v1
-        access: readwrite  # only this app
-
-# ❌ Vulnerable — overly broad topic access
+  pool: nav-prod
+  acl:
+    - team: dp
+      application: dp-soknad-api
+      access: readwrite
 ```
+
+Configure Kafka access for the application separately with `spec.kafka.pool` in its Application resource. Topic permissions belong in the Topic resource's `spec.acl`; avoid wildcard teams or applications unless broader access is required.
 
 #### D — Denial of Service (Availability)
 
@@ -388,7 +392,7 @@ Document every identified threat in this format:
 |----|---------|--------|--------|----------|------------|--------|
 | T1 | API Gateway | S | Forged JWT bypasses auth | Critical | Validate `iss`, `aud`, `exp`, `azp` claims | ☐ |
 | T2 | dp-soknad-api | T | Unvalidated request body | High | Add `@Valid` + request DTO with constraints | ☐ |
-| T3 | Kafka producer | T | Unsigned messages | Medium | Enable schema registry validation | ☐ |
+| T3 | Kafka producer | T | Messages violate the expected schema | Medium | Validate messages against the registered schema | ☐ |
 | T4 | dp-soknad-api | R | No audit trail for vedtak | High | Add structured audit logging with actor + correlationId | ☐ |
 | T5 | API response | I | PII in error responses | High | Use ProblemDetail, strip stack traces in prod | ☐ |
 | T6 | PostgreSQL | I | Overly broad query results | Medium | Return DTOs with only required fields | ☐ |
@@ -441,8 +445,10 @@ Ordered list of mitigations, grouped by priority:
 ### P2 — Fix Soon
 - [ ] T7: Add rate limiting on public endpoints
 - [ ] T9: Implement idempotency key pattern for POST /soknad
-- [ ] T3: Enable Kafka schema registry validation
+- [ ] T3: Validate produced and consumed messages against the registered schema
 ```
+
+Schema validation checks message structure, not sender identity or message signatures. Authenticate Kafka clients and restrict topic access with application-specific ACLs. If end-to-end message authenticity is required, define signature creation and verification separately.
 
 ### 4. Residual Risk Summary
 
