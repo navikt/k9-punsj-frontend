@@ -2,6 +2,12 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Ukentlig pakkevedlikehold (2026-11-17)
+
+- Oppdaterte kvalifiserte patch- og minorversjoner i root og `server`, inkludert samordnede Aksel-, Storybook- og Tailwind-pakker, og regenererte MSW-serviceworkeren. Nyere versjoner innenfor nedkjølingstiden ble utsatt.
+- Samordnet `jose` til 6.2.17 for server og `@navikt/oasis`.
+- Beholdt Faro fordi `@nais/apm` låser versjonen. Sårbarheter i transitive `glob` og `minimatch` gjenstår fordi avhengighetene krever eldre majorversjoner.
+
 ### Tilgangsavslag ved fagsakoppslag (2026-11-10)
 
 - Viser en egen melding ved manglende tilgang til å hente fagsaker i Fordeling, Opprett journalpost og Send brev i avsluttet sak.
