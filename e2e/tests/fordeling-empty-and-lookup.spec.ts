@@ -70,7 +70,7 @@ const installLookupOverrides = async (page: Page, overrides: LookupOverrides) =>
             const caseHandler = msw.http.get(casesPath, ({ request }) => {
                 if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
                 if (caseStatus === 200) return msw.HttpResponse.json(cases);
-                return new msw.HttpResponse(null, { status: caseStatus });
+                return msw.HttpResponse.json({ reason: 'Teknisk årsak fra backend' }, { status: caseStatus });
             });
 
             if (childStatus === undefined && children === undefined) {
@@ -520,7 +520,11 @@ for (const { journalpostId, status } of [
         await expectLookupResponse(casesResponse, ApiPath.HENT_FAGSAK_PÅ_IDENT, status);
 
         const panel = page.locator('.journalpostpanel');
-        await expect(page.getByText('Henting av fagsak feilet', { exact: true })).toBeVisible();
+        const accessMessage = 'Du har ikke tilgang til å hente fagsaker for denne søkeren.';
+        const genericMessage = 'Henting av fagsak feilet';
+        await expect(page.getByText(status === 403 ? accessMessage : genericMessage, { exact: true })).toBeVisible();
+        await expect(page.getByText(status === 403 ? genericMessage : accessMessage, { exact: true })).toHaveCount(0);
+        await expect(page.getByText('Teknisk årsak fra backend', { exact: true })).toHaveCount(0);
         await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
         await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toHaveCount(0);
         await expect(panel).not.toContainText(FAGSAK_UTEN_BARN_ID);

@@ -126,7 +126,7 @@ const Fordeling: React.FC = () => {
     const [visSokersBarn, setVisSokersBarn] = useState<boolean>(false);
     const [riktigIdentIJournalposten, setRiktigIdentIJournalposten] = useState<JaNei>();
     const [visGaaTilLos, setVisGaaTilLos] = useState(false);
-    const [henteFagsakFeilet, setHenteFagsakFeilet] = useState(false);
+    const [fagsakFeilStatus, setFagsakFeilStatus] = useState<number | undefined>(undefined);
     const [isFetchingFagsaker, setIsFetchingFagsaker] = useState(false);
     const [valgtFagsakLokal, setValgtFagsakLokal] = useState<FagsakForSelect | undefined>(undefined);
     const [fagsaker, setFagsaker] = useState<FagsakForSelect[]>([]);
@@ -410,7 +410,7 @@ const Fordeling: React.FC = () => {
             dokumenttype &&
             gjelderPsbOmsOlp
         ) {
-            setHenteFagsakFeilet(false);
+            setFagsakFeilStatus(undefined);
             setIsFetchingFagsaker(true);
             setFagsak(undefined);
             finnFagsaker(identState.søkerId, (response, data: FagsakForSelect[]) => {
@@ -428,7 +428,7 @@ const Fordeling: React.FC = () => {
                         setReserverSaksnummerTilNyFagsak(true);
                     }
                 } else {
-                    setHenteFagsakFeilet(true);
+                    setFagsakFeilStatus(response.status);
                 }
             });
         }
@@ -752,9 +752,15 @@ const Fordeling: React.FC = () => {
                             {visValgAvBehandlingsaar && (
                                 <ValgAvBehandlingsÅr behandlingsAar={behandlingsAar} onChange={setBehandlingsAar} />
                             )}
-                            {henteFagsakFeilet && (
+                            {fagsakFeilStatus !== undefined && (
                                 <ErrorMessage>
-                                    <FormattedMessage id="fordeling.error.henteFagsakFeilet" />
+                                    <FormattedMessage
+                                        id={
+                                            fagsakFeilStatus === 403
+                                                ? 'fagsak.hentIngenTilgang'
+                                                : 'fordeling.error.henteFagsakFeilet'
+                                        }
+                                    />
                                 </ErrorMessage>
                             )}
                             {isFetchingFagsaker && <Loader />}

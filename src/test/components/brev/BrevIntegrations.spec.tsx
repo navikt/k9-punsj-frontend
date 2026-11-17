@@ -217,20 +217,24 @@ describe('brevtilkoblinger', () => {
         expect(screen.getByRole('combobox', { name: 'Velg fagsak' })).toHaveValue('');
     });
 
-    it('viser feil ved fagsakoppslag og henter på nytt etter handling', async () => {
+    it.each([400, 403, 500])('viser riktig oppslagsfeil ved status %s og henter på nytt etter handling', async (status) => {
         fagsakReplies = [
-            response({}, 400),
+            response({ reason: 'Teknisk årsak fra backend' }, status),
             response([{ fagsakId: FAGSAK_ID, sakstype: 'PSB' }]),
         ];
         const user = userEvent.setup();
         renderAtRoute(<SendBrevIAvsluttetSak />, '/brev-avsluttet-sak');
 
         await user.type(screen.getByRole('textbox', { name: 'Søkers fødselsnummer' }), '05508239132');
-        expect(
-            await screen.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.'),
-        ).toBeVisible();
+        const accessMessage = 'Du har ikke tilgang til å hente fagsaker for denne søkeren.';
+        const genericMessage = 'Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.';
+        expect(await screen.findByText(status === 403 ? accessMessage : genericMessage)).toBeVisible();
+        expect(screen.queryByText(status === 403 ? genericMessage : accessMessage)).not.toBeInTheDocument();
+        expect(screen.queryByText('Teknisk årsak fra backend')).not.toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Hent fagsaker på nytt' }));
         expect(await screen.findByRole('option', { name: new RegExp(FAGSAK_ID) })).toBeVisible();
+        expect(screen.queryByText(accessMessage)).not.toBeInTheDocument();
+        expect(screen.queryByText(genericMessage)).not.toBeInTheDocument();
         expect(requests.filter(({ url }) => url === ApiPath.HENT_FAGSAK_PÅ_IDENT)).toHaveLength(2);
     });
 

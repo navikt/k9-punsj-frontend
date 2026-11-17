@@ -200,20 +200,23 @@ describe('OpprettJournalpost', () => {
         ).toBeVisible();
     });
 
-    it('lar saksbehandler hente fagsaker på nytt etter en oppslagsfeil', async () => {
-        lookupReplies = [jsonResponse({}, 400), jsonResponse(fagsaker)];
+    it.each([400, 403, 500])('viser riktig melding og lar saksbehandler prøve på nytt etter status %s', async (status) => {
+        lookupReplies = [jsonResponse({ reason: 'Teknisk årsak fra backend' }, status), jsonResponse(fagsaker)];
         const user = userEvent.setup();
         renderForm();
 
         await enterIdent(user, SECOND_TEST_FNR);
-        expect(
-            await screen.findByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.'),
-        ).toBeVisible();
+        const accessMessage = 'Du har ikke tilgang til å hente fagsaker for denne søkeren.';
+        const genericMessage = 'Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.';
+        expect(await screen.findByText(status === 403 ? accessMessage : genericMessage)).toBeVisible();
+        expect(screen.queryByText(status === 403 ? genericMessage : accessMessage)).not.toBeInTheDocument();
+        expect(screen.queryByText('Teknisk årsak fra backend')).not.toBeInTheDocument();
 
         await user.click(screen.getByRole('button', { name: 'Hent fagsaker på nytt' }));
 
         expect(await screen.findByRole('option', { name: /ABC123/ })).toBeVisible();
-        expect(screen.queryByText('Noe gikk galt ved henting av fagsaker. Prøv å hente fagsaker på nytt.')).toBeNull();
+        expect(screen.queryByText(genericMessage)).not.toBeInTheDocument();
+        expect(screen.queryByText(accessMessage)).not.toBeInTheDocument();
         expect(requestsFor(ApiPath.HENT_FAGSAK_PÅ_IDENT)).toHaveLength(2);
     });
 

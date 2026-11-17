@@ -2,6 +2,31 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdatering av Nais-actions (2026-11-17)
+
+- Oppdaterte Nais deploy og CDN-upload til v3-referansen og Docker build/push til ny v0-referanse i prod- og preprod-workflowene.
+
+### Ukentlig pakkevedlikehold (2026-11-17)
+
+- Oppdaterte kvalifiserte patch- og minorversjoner i root og `server`, inkludert samordnede Aksel-, Storybook- og Tailwind-pakker, og regenererte MSW-serviceworkeren. Nyere versjoner innenfor nedkjølingstiden ble utsatt.
+- Samordnet `jose` til 6.2.17 for server og `@navikt/oasis`.
+- Beholdt Faro fordi `@nais/apm` låser versjonen. Sårbarheter i transitive `glob` og `minimatch` gjenstår fordi avhengighetene krever eldre majorversjoner.
+
+### Sikkerhetsskills for gjennomgang (2026-11-11)
+
+- La til Nav-skillene `threat-model` og `nav-auth` i `.github/skills/` fra `navikt/copilot` (commit `12943d7`) som forberedelse til sikkerhetsgjennomgang av kategori B-frontenden.
+- Installert manuelt, så de er ikke registrert i `.github/.nav-pilot-state.json`.
+
+### Tilgangsavslag ved fagsakoppslag (2026-11-10)
+
+- Viser en egen melding ved manglende tilgang til å hente fagsaker i Fordeling, Opprett journalpost og Send brev i avsluttet sak.
+
+### Ukentlig pakkevedlikehold (2026-11-10)
+
+- Oppdaterte 20 kvalifiserte patch- og minorversjoner i root og `server`, med samordnede Aksel-, Storybook- og Tailwind-pakker.
+- Beholdt Faro 2.12.1 fordi `@nais/apm` 0.7.3 låser Faro SDK og tracing til 2.12.1.
+- Oppdaterte den direkte `glob`-avhengigheten til 14.0.3. Revisjonen viser fortsatt sårbare transitive versjoner av `glob` og `minimatch`, som avhengighetene fortsatt krever.
+
 ### Fjernet foreldet manuell barneregistrering etter vellykket oppslag (2026-11-06)
 
 - Nullstiller feilstatus for barn ved vellykket oppslag og nullstilling.
@@ -16,6 +41,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
 
 ### Migrering fra Cypress til Playwright og komponenttester
+
+#### 2026-11-17 — Tilpasning etter oppdatering fra master
+
+- Beholdt tilgangsmeldingen ved fagsakoppslag fra master og utvidet komponent- og nettlesertester for 403 og øvrige feil. Oppdaterte Home-testen til å tillate PDF-parametre i URL-en og samordnet Storybook-serviceworkeren med MSW-versjonen.
 
 #### 2026-11-06 — Fordeling uten fagsaker og oppslagsfeil
 

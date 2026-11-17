@@ -2,6 +2,8 @@
 
 The Chromium smoke suite runs the frontend with its existing MSW test handlers. It does not call the backend.
 
+After the master update on 2026-11-17, case lookup tests distinguish access denial (403) from other errors. The Fordeling browser tests and the creation/letter component tests also verify that backend reasons are not displayed. The new Cypress lookup regressions from master are retained until their assertion parity is reviewed separately. Home routing assertions allow the PDF document query parameter.
+
 Install Chromium once:
 
 ```sh

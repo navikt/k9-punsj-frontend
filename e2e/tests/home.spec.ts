@@ -19,7 +19,7 @@ test('søker opp journalpost fra Home', async ({ page }) => {
     expect(response.status()).toBe(200);
     expect(response.fromServiceWorker()).toBe(true);
     expect(await response.json()).toMatchObject({ journalpostId });
-    await expect(page).toHaveURL(new RegExp(`/journalpost/${journalpostId}$`));
+    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${journalpostId}`);
 
     const journalpostNumber = page.getByText('Journalpostnummer:', { exact: true }).locator('..');
     await expect(journalpostNumber.getByText(journalpostId, { exact: true })).toBeVisible();
