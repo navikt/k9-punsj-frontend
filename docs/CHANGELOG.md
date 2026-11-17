@@ -2,6 +2,21 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdatering av Nais-actions (2026-11-17)
+
+- Oppdaterte Nais deploy og CDN-upload til v3-referansen og Docker build/push til ny v0-referanse i prod- og preprod-workflowene.
+
+### Ukentlig pakkevedlikehold (2026-11-17)
+
+- Oppdaterte kvalifiserte patch- og minorversjoner i root og `server`, inkludert samordnede Aksel-, Storybook- og Tailwind-pakker, og regenererte MSW-serviceworkeren. Nyere versjoner innenfor nedkjølingstiden ble utsatt.
+- Samordnet `jose` til 6.2.17 for server og `@navikt/oasis`.
+- Beholdt Faro fordi `@nais/apm` låser versjonen. Sårbarheter i transitive `glob` og `minimatch` gjenstår fordi avhengighetene krever eldre majorversjoner.
+
+### Sikkerhetsskills for gjennomgang (2026-11-11)
+
+- La til Nav-skillene `threat-model` og `nav-auth` i `.github/skills/` fra `navikt/copilot` (commit `12943d7`) som forberedelse til sikkerhetsgjennomgang av kategori B-frontenden.
+- Installert manuelt, så de er ikke registrert i `.github/.nav-pilot-state.json`.
+
 ### Tilgangsavslag ved fagsakoppslag (2026-11-10)
 
 - Viser en egen melding ved manglende tilgang til å hente fagsaker i Fordeling, Opprett journalpost og Send brev i avsluttet sak.
