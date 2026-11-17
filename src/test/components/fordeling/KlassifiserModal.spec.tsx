@@ -2,7 +2,7 @@ import React from 'react';
 
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
@@ -16,6 +16,7 @@ import {
     postBehandlingsAar,
     settJournalpostPaaVentUtenSøknadId,
 } from 'app/api/api';
+import { ApiPath } from 'app/apiConfig';
 import { PunsjDialogProvider } from 'app/components/PunsjDialog';
 import KlassifiserModal from 'app/fordeling/Komponenter/KlassifiserModal';
 import { DokumenttypeForkortelse, FordelingDokumenttype } from 'app/models/enums';
@@ -44,6 +45,7 @@ vi.mock('app/api/api', async (importOriginal) => {
 
 const JOURNALPOST_ID = '300';
 const SØKER_ID = '17420373147';
+const ANNEN_SØKER_ID = '02918496664';
 const SAK_UTEN_BARN: Fagsak = {
     fagsakId: '1DMU93A',
     sakstype: DokumenttypeForkortelse.PSB,
@@ -68,13 +70,40 @@ const RESERVERT_UTEN_BARN: Fagsak = {
     gyldigPeriode: fagsaker[4].gyldigPeriode,
     reservert: true,
 };
+const TO_SØKERE = { toSøkere: true, kanKopieres: true, annenSøkerIdent: ANNEN_SØKER_ID };
+const JOURNALFØRT_MED_BARN: IJournalpost = {
+    ...journalpostFixture,
+    venter: undefined,
+    journalpostId: JOURNALPOST_ID,
+    journalpostStatus: journalpostStatus.JOURNALFOERT,
+    erFerdigstilt: true,
+    sak: { ...SAK_MED_BARN, reservertSaksnummer: false },
+};
+
+type ModalOptions = {
+    toSøkere?: boolean;
+    kanKopieres?: boolean;
+    annenSøkerIdent?: string;
+};
+
+const deferred = <T,>() => {
+    let resolve!: (value: T) => void;
+    const promise = new Promise<T>((complete) => {
+        resolve = complete;
+    });
+    return { promise, resolve };
+};
 
 const Location = () => {
     const location = useLocation();
     return <output aria-label="Gjeldende adresse">{location.pathname}</output>;
 };
 
-const createStore = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.pleietrengendeIdent) => {
+const createStore = (
+    fagsak: Fagsak | undefined,
+    pleietrengendeIdent = fagsak?.pleietrengendeIdent,
+    options: ModalOptions = {},
+) => {
     const store = configureStore({ reducer: rootReducer });
     store.dispatch(
         setJournalpostAction({
@@ -83,18 +112,24 @@ const createStore = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.p
             dokumenter: [],
             journalpostStatus: journalpostStatus.MOTTATT,
             kanSendeInn: true,
+            kanKopieres: options.kanKopieres,
             erSaksbehandler: true,
             erFerdigstilt: false,
         }),
     );
     store.dispatch(setDokumenttypeAction(FordelingDokumenttype.PLEIEPENGER));
     store.dispatch(setFagsakAction(fagsak));
-    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent));
+    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent, options.annenSøkerIdent));
     return store;
 };
 
-const renderModal = (fagsak: Fagsak | undefined, fortsett: boolean, pleietrengendeIdent?: string) => {
-    const store = createStore(fagsak, pleietrengendeIdent ?? fagsak?.pleietrengendeIdent);
+const renderModal = (
+    fagsak: Fagsak | undefined,
+    fortsett: boolean,
+    pleietrengendeIdent?: string,
+    options: ModalOptions = {},
+) => {
+    const store = createStore(fagsak, pleietrengendeIdent ?? fagsak?.pleietrengendeIdent, options);
     const queryClient = new QueryClient({
         defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
     });
@@ -111,7 +146,7 @@ const renderModal = (fagsak: Fagsak | undefined, fortsett: boolean, pleietrengen
                         <PunsjDialogProvider rootElement={dialogRoot}>
                             <Location />
                             <KlassifiserModal
-                                toSøkere={false}
+                                toSøkere={options.toSøkere ?? false}
                                 fortsett={fortsett}
                                 lukkModal={lukkModal}
                                 setFagsak={setFagsak}
@@ -162,6 +197,33 @@ const expectNoMutationCalls = () => {
     expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
 };
 
+const expectCopyCalls = (count: number) => {
+    expect(klassifiserDokument).toHaveBeenCalledExactlyOnceWith({
+        brukerIdent: SØKER_ID,
+        pleietrengendeIdent: SAK_MED_BARN.pleietrengendeIdent,
+        relatertPersonIdent: '',
+        journalpostId: JOURNALPOST_ID,
+        fagsakYtelseTypeKode: DokumenttypeForkortelse.PSB,
+        periode: SAK_MED_BARN.gyldigPeriode,
+        saksnummer: SAK_MED_BARN.fagsakId,
+        barnAktørIder: undefined,
+    });
+    expect(kopierJournalpostNotRedux).toHaveBeenCalledTimes(count);
+    for (let call = 1; call <= count; call++) {
+        expect(kopierJournalpostNotRedux).toHaveBeenNthCalledWith(
+            call,
+            ANNEN_SØKER_ID,
+            JOURNALPOST_ID,
+            DokumenttypeForkortelse.PSB,
+            SAK_MED_BARN.pleietrengendeIdent,
+            undefined,
+            undefined,
+        );
+    }
+    expect(postBehandlingsAar).not.toHaveBeenCalled();
+    expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
+};
+
 beforeEach(() => {
     vi.mocked(getJournalpostEtterKopiering).mockReset();
     vi.mocked(klassifiserDokument).mockReset();
@@ -172,6 +234,7 @@ beforeEach(() => {
 
 afterEach(() => {
     cleanup();
+    vi.unstubAllGlobals();
 });
 
 describe('KlassifiserModal', () => {
@@ -421,6 +484,146 @@ describe('KlassifiserModal', () => {
         expect(settJournalpostPaaVentUtenSøknadId).toHaveBeenCalledTimes(2);
         expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
 
+        queryClient.clear();
+    });
+
+    it('journalfører, kopierer og oppdaterer originalen før brukeren går videre', async () => {
+        const user = userEvent.setup();
+        const classification = deferred<{ saksnummer: string }>();
+        const copy = deferred<void>();
+        const refresh = deferred<IJournalpost>();
+        vi.mocked(klassifiserDokument).mockReturnValue(classification.promise);
+        vi.mocked(kopierJournalpostNotRedux).mockReturnValue(copy.promise);
+        vi.mocked(getJournalpostEtterKopiering).mockReturnValue(refresh.promise);
+        const { store, queryClient, lukkModal, setFagsak } = renderModal(SAK_MED_BARN, true, undefined, TO_SØKERE);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeDisabled();
+        expect(kopierJournalpostNotRedux).not.toHaveBeenCalled();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+
+        await act(async () => classification.resolve({ saksnummer: SAK_MED_BARN.fagsakId }));
+        await waitFor(() => expect(kopierJournalpostNotRedux).toHaveBeenCalledOnce());
+        expect(screen.getByRole('button', { name: 'Videre' })).toBeDisabled();
+        expect(screen.getByText('Journalpost kopieres....')).toBeVisible();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+
+        await act(async () => copy.resolve());
+        await waitFor(() => expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID));
+        expect(screen.getByRole('button', { name: 'Videre' })).toBeDisabled();
+        expect(screen.getByText('Sjekker journalposten for tilgangsrettigheter ....')).toBeVisible();
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+
+        await act(async () => refresh.resolve(JOURNALFØRT_MED_BARN));
+        expect(await screen.findByText(/Kopi av journalposten er opprettet/)).toHaveTextContent(ANNEN_SØKER_ID);
+        expect(screen.getByText(/Kopi av journalposten er opprettet/)).toHaveTextContent(
+            SAK_MED_BARN.pleietrengendeIdent!,
+        );
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Videre' })).toBeEnabled());
+        expect(store.getState().felles.journalpost).toEqual(JOURNALFØRT_MED_BARN);
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+        expectCopyCalls(1);
+        expect(lukkModal).not.toHaveBeenCalled();
+        expect(setFagsak).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole('button', { name: 'Videre' }));
+        await waitFor(() =>
+            expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(/^\/pleiepenger-sykt-barn\/$/),
+        );
+        expect(getJournalpostEtterKopiering).toHaveBeenCalledOnce();
+        queryClient.clear();
+    });
+
+    it('prøver bare kopiering på nytt etter feil og krever at brukeren går videre', async () => {
+        const user = userEvent.setup();
+        const retry = deferred<void>();
+        vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: SAK_MED_BARN.fagsakId });
+        vi.mocked(kopierJournalpostNotRedux)
+            .mockRejectedValueOnce(new Error('Det oppstod en feil ved kopiering av journalpost.'))
+            .mockReturnValueOnce(retry.promise);
+        vi.mocked(getJournalpostEtterKopiering).mockResolvedValue(JOURNALFØRT_MED_BARN);
+        const { store, queryClient, setFagsak } = renderModal(SAK_MED_BARN, true, undefined, TO_SØKERE);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        expect(await screen.findByText('Det oppstod en feil ved kopiering av journalpost.')).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Videre' })).toBeEnabled();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole('button', { name: 'Kopier journalpost' }));
+        expect(screen.getByRole('button', { name: 'Videre' })).toBeDisabled();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+        await act(async () => retry.resolve());
+        await waitFor(() => expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID));
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Videre' })).toBeEnabled());
+        expect(screen.queryByText('Det oppstod en feil ved kopiering av journalpost.')).not.toBeInTheDocument();
+        expect(screen.getByText(/Kopi av journalposten er opprettet/)).toBeVisible();
+        expect(store.getState().felles.journalpost).toEqual(JOURNALFØRT_MED_BARN);
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+        expectCopyCalls(2);
+        expect(setFagsak).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole('button', { name: 'Videre' }));
+        await waitFor(() =>
+            expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(/^\/pleiepenger-sykt-barn\/$/),
+        );
+        expect(getJournalpostEtterKopiering).toHaveBeenCalledOnce();
+        queryClient.clear();
+    });
+
+    it('går videre med originalen etter kopieringsfeil uten å prøve kopiering på nytt', async () => {
+        const user = userEvent.setup();
+        const refresh = deferred<IJournalpost>();
+        vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: SAK_MED_BARN.fagsakId });
+        vi.mocked(kopierJournalpostNotRedux).mockRejectedValue(
+            new Error('Det oppstod en feil ved kopiering av journalpost.'),
+        );
+        vi.mocked(getJournalpostEtterKopiering).mockReturnValue(refresh.promise);
+        const { store, queryClient, setFagsak } = renderModal(SAK_MED_BARN, true, undefined, TO_SØKERE);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        expect(await screen.findByText('Det oppstod en feil ved kopiering av journalpost.')).toBeVisible();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+        await user.click(screen.getByRole('button', { name: 'Videre' }));
+        await waitFor(() => expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID));
+        expect(screen.getByRole('button', { name: 'Videre' })).toBeDisabled();
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+
+        await act(async () => refresh.resolve(JOURNALFØRT_MED_BARN));
+        await waitFor(() =>
+            expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(/^\/pleiepenger-sykt-barn\/$/),
+        );
+        expect(store.getState().felles.journalpost).toEqual(JOURNALFØRT_MED_BARN);
+        expectCopyCalls(1);
+        expect(setFagsak).not.toHaveBeenCalled();
+        queryClient.clear();
+    });
+
+    it('viser tilgangsfeil og LOS ved 403 etter vellykket kopi uten å navigere', async () => {
+        const user = userEvent.setup();
+        vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: SAK_MED_BARN.fagsakId });
+        vi.mocked(kopierJournalpostNotRedux).mockResolvedValue();
+        const api = await vi.importActual<typeof import('app/api/api')>('app/api/api');
+        vi.mocked(getJournalpostEtterKopiering).mockImplementation(api.getJournalpostEtterKopiering);
+        const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 403 }));
+        vi.stubGlobal('fetch', fetchMock);
+        const { store, queryClient, setFagsak } = renderModal(SAK_MED_BARN, true, undefined, TO_SØKERE);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        expect(await screen.findByText('Du har ikke tilgang til å jobbe videre med journalposten.')).toBeVisible();
+        expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+            ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID),
+            expect.objectContaining({ credentials: 'include' }),
+        );
+        expect(screen.getByText(/Kopi av journalposten er opprettet/)).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Gå til LOS' })).toBeEnabled();
+        expect(screen.queryByRole('button', { name: 'Videre' })).not.toBeInTheDocument();
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+        expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID);
+        expect(store.getState().felles.journalpost?.norskIdent).toBe(SØKER_ID);
+        expect(store.getState().felles.journalpost?.journalpostId).toBe(JOURNALPOST_ID);
+        expectCopyCalls(1);
+        expect(setFagsak).not.toHaveBeenCalled();
         queryClient.clear();
     });
 

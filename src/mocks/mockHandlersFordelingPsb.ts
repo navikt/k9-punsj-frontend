@@ -109,6 +109,20 @@ const mockHandlersFordelingPsb = [
     ...scenario(FORDELING_PSB_SCENARIOS.newCaseFlagTrue, 0),
     ...reservedNumberScenario(FORDELING_PSB_SCENARIOS.newCaseSuccess, 'NYPSB12', '18410162721', { fom: '', tom: '' }),
     ...scenario(FORDELING_PSB_SCENARIOS.newCaseConflict, 0),
+    ...scenario(FORDELING_PSB_SCENARIOS.twoApplicants, 2),
+    http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', FORDELING_PSB_SCENARIOS.twoApplicants), () =>
+        HttpResponse.json(
+            {
+                nyJournalpostId: '9303171',
+                saksnummer: 'KOPI123',
+                til: '02918496664',
+                pleietrengende: fagsaker[2].pleietrengende!.identitetsnummer,
+                annenPart: null,
+                ytelse: 'PSB',
+            },
+            { status: 201 },
+        ),
+    ),
 ];
 
 export default mockHandlersFordelingPsb;

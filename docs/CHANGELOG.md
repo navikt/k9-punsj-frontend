@@ -42,6 +42,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-17 — PSB med to søkere
+
+- La til en Playwright-reise for journalføring, kopiering til annen søker og eksplisitt videreføring av originalen, samt modaltester for kopieringsfeil og refresh. La til en interaktiv historie med nytt forsøk og avgrenset dekningen i Playwright-README.
+
 #### 2026-11-17 — Nye og reserverte PSB-saker
 
 - La til fem isolerte Playwright-tester for reserverte saksvalg, ny-sak-modus med begge frontendflaggverdier, ny reservasjon og backendformet 409. Kontrollerer request-felter, returnert nummer, full journalpostrefresh og PSB-registreringsvalg.

@@ -46,7 +46,7 @@ If the post-classification journalpost refresh returns 403, the current modal sh
 | Confirm the selected child case, verify the classification request and refreshed journalpost, then display the PSB registration choice                         | `fordeling-psb.spec.ts` — `journalfører valgt PSB-sak og går til riktig registreringsvalg`                |
 | Modal summary fields, warning, action callbacks, error/retry behavior and Redux update after refresh                                                           | `KlassifiserModal.spec.tsx`                                                                               |
 | Reserved/new single-applicant PSB cases                                                                                                                      | See the bounded new/reserved mapping below; not replaced by this pilot alone                               |
-| Document-type option list, multiple applicants and the remaining PSB variants                                                                                 | Still in Cypress or later migration scope; not replaced by this pilot                                     |
+| Document-type option list and remaining PSB variants                                                                                                           | Still in Cypress or later migration scope; see the bounded two-applicant mapping below                    |
 
 Five manual modal stories are available at [Fortsett med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--fortsett-med-eksisterende-sak-og-barn), [Vent med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-med-eksisterende-sak-og-barn), [Vent uten barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-uten-barn), [Journalfør-feil med vellykket nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--journalfor-feil-med-vellykket-nytt-forsok), and [Vent-feil med vellykket retry](http://localhost:6006/?path=/story/components-klassifisermodal--vent-feil-med-vellykket-retry). They use isolated stores, routers, query clients and named MSW groups; the LOS action is local Storybook feedback.
 
@@ -140,7 +140,32 @@ Backendkontrakten er den verifiserte kontrakten i oppgave 12: mottak returnerer 
 
 Runtime ble kontrollert separat i nettleserens Storybook Interactions-panel på det ferdige bygget: [Reservert sak med barn](http://localhost:6006/?path=/story/components-klassifisermodal--reservert-sak-med-barn) fikk PASS for 17 steg og [Ny sak med backendkonflikt (409)](http://localhost:6006/?path=/story/components-klassifisermodal--ny-sak-med-backendkonflikt) fikk PASS for 22 steg. Begge ble kjørt på nytt med **Reload story** i samme nettleser og fikk samme resultat uten feilede steg. Historiene kontrollerer sammendrag/avbrytelse og feil/avbrytelse med fungerende callbacks og nullstilte request-spioner.
 
-Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-advarsler om duplikat barne-ID som key; de er ikke endret. Testserverne ble startet bare på ledige porter og stoppet etter kontrollene. Ingen backend- eller full Cypress-kjøring er utført. Dette dekker bare de kartlagte delene av B25/B26/B34; to søkere, øvrige Fordeling-familier, full paritet og Cypress-sletting gjenstår.
+Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-advarsler om duplikat barne-ID som key; de er ikke endret. Testserverne ble startet bare på ledige porter og stoppet etter kontrollene. Ingen backend- eller full Cypress-kjøring er utført. Dette dekker bare de kartlagte delene av B25/B26/B34; øvrige to-søker-varianter, andre Fordeling-familier, full paritet og Cypress-sletting gjenstår.
+
+## Fordeling PSB med to søkere
+
+`fordeling-psb-two-applicants.spec.ts` bruker en egen journalpost (`930317`) og en eksisterende PSB-sak med barn. Oppslaget for annen søker og kopieringsresponsen er avgrenset til denne nettleserkonteksten og scenario-ID-en.
+
+| Kilde i `cypress/e2e/fordeling/PSB.cy.js` / kontrakt | Dekning eller gjenstående gap |
+| --- | --- |
+| 739–750: Registreringsinformasjon, advarsel om manglende annen søker og personoppslag | Den nye nettleserreisen bekrefter opprinnelig søker, krysser av for to søkere og kontrollerer informasjon, advarsel og oppslagsheader/svar |
+| 751–774: Advarsel om manglende barn, deaktiverte handlinger, barnevalg, panel og aktiverte handlinger | Samme reise kontrollerer advarsel og knapper før og etter valg av en eksisterende sak med barn. `fordelingUtils.spec.ts` beskytter også manglende/ugyldig annen søker, identkollisjoner og manglende barn |
+| 776–802: Fortsett-sammendrag, advarsel og avbryt | Samme reise kontrollerer sammendrag og beholdte valg uten mutasjoner for eksisterende sak med barn. `KlassifiserModal.spec.tsx` beskytter felles sammendrag og avbryt uten fagsak; `fordeling-psb-new-and-reserved.spec.ts` dekker nummerhåndtering for én søker. Den eksakte to-søker-koblingen med barn fra liste og nytt nummer gjenstår |
+| 804–830: Vent-sammendrag, advarsel og avbryt | Eksisterende modaltester beskytter felles Vent-sammendrag og avbryt med og uten sak/barn. Den eksakte to-søker-flyten med barn fra liste og nytt nummer er ikke dekket |
+| Tillegg: mottak, kopi og refresh av original før eksplisitt Videre | Nettleserreisen kontrollerer rekkefølge, pending-tilstand, request/response, opprinnelig søker og journalpost, ingen navigasjon før klikk og PSB-skjermen etterpå. Den oppretter eller sender ikke søknad |
+| Tillegg: kopieringsfeil og tilgangsfeil | `KlassifiserModal.spec.tsx` dekker nytt kopieringsforsøk uten nytt mottak, Videre uten nytt kopieringsforsøk og representativ tilgangsfeil (403) ved refresh etter vellykket kopi |
+
+Mottak sender i dag `relatertPersonIdent: ""` også for PSB; backend behandler blank verdi som fraværende. Øvrige ubrukte, udefinerte felt utelates. Kopikallet sender bare mottaker, barn og PSB. MSW kontrollerer frontendflyten, ikke faktiske sideeffekter i SAF, Dokarkiv, PDL, K9 Sak eller LOS.
+
+Den interaktive historien [To søkere: kopieringsfeil og nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--to-sokere-kopier-feil-med-vellykket-nytt-forsok) viser generisk kopieringsfeil, nytt forsøk og aktiv **Videre**. Den lokale destinasjonen er bare en demonstrasjon; Playwright kontrollerer applikasjonsskjermen.
+
+To-søker-Vent med faktisk utførelse og samtidighet, behandling av kopiert journalpost, allerede behandlede journalposter og kopier-og-lukk (`PSB.cy.js:1054–1124`) gjenstår. Dette gir ikke full B25/B26/B34-paritet og erstatter ikke de gjenværende Cypress-testene.
+
+```sh
+yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
+yarn test:pw e2e/tests/fordeling-psb-two-applicants.spec.ts --workers=1
+yarn test:pw e2e/tests/fordeling*.spec.ts
+```
 
 ## Brevtester og historier
 

@@ -9,7 +9,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { MemoryRouter, useLocation } from 'react-router';
 import { HttpResponse, http } from 'msw/http';
-import { expect, fn, mocked, userEvent, within } from 'storybook/test';
+import { expect, fn, mocked, userEvent, waitFor, within } from 'storybook/test';
 
 import { ApiPath } from 'app/apiConfig';
 import { PunsjDialogProvider } from 'app/components/PunsjDialog';
@@ -33,6 +33,7 @@ import '../../app/styles/globals.css';
 
 const JOURNALPOST_ID = '930301';
 const SØKER_ID = journalpostFixture.norskIdent;
+const ANNEN_SØKER_ID = '02918496664';
 const BARNE_ID = '24420167209';
 const PDF_BYTES = createMockPdfBytes('Test letter preview');
 const FAGSAK_UTEN_BARN: Fagsak = {
@@ -63,24 +64,30 @@ type StoryScenario =
     | 'journalfor-feil'
     | 'vent-feil'
     | 'reservert-med-barn'
-    | 'ny-sak-konflikt';
+    | 'ny-sak-konflikt'
+    | 'to-søkere-kopier-feil';
 
-const journalpost = (): IJournalpost => ({
+const journalpost = (kanKopieres = false): IJournalpost => ({
     journalpostId: JOURNALPOST_ID,
     norskIdent: SØKER_ID,
     dokumenter: journalpostFixture.dokumenter,
     journalpostStatus: journalpostStatus.MOTTATT,
     kanSendeInn: true,
+    kanKopieres,
     erSaksbehandler: true,
     erFerdigstilt: false,
 });
 
-const createStore = (fagsak: Fagsak | undefined, pleietrengendeIdent = fagsak?.pleietrengendeIdent) => {
+const createStore = (
+    fagsak: Fagsak | undefined,
+    pleietrengendeIdent = fagsak?.pleietrengendeIdent,
+    toSøkere = false,
+) => {
     const store = configureStore({ reducer: rootReducer });
-    store.dispatch(setJournalpostAction(journalpost()));
+    store.dispatch(setJournalpostAction(journalpost(toSøkere)));
     store.dispatch(setDokumenttypeAction(FordelingDokumenttype.PLEIEPENGER));
     store.dispatch(setFagsakAction(fagsak));
-    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent));
+    store.dispatch(setIdentFellesAction(SØKER_ID, pleietrengendeIdent, toSøkere ? ANNEN_SØKER_ID : undefined));
     return store;
 };
 
@@ -90,6 +97,7 @@ const Destination = ({ children }: React.PropsWithChildren) => {
     return location.pathname.includes('pleiepenger-sykt-barn') ? (
         <section aria-label="Lokal registreringsdestinasjon">
             <h2>Registreringsvalg for pleiepenger sykt barn</h2>
+            <p>Demonstrasjonsdestinasjon, ikke applikasjonsskjermen.</p>
             <p>Journalpost-ID: {JOURNALPOST_ID}</p>
         </section>
     ) : (
@@ -117,7 +125,8 @@ const KlassifiserModalStory = ({
             : FAGSAK_MED_BARN;
     const pleietrengendeIdent =
         scenario === 'fortsett-uten-sak' || scenario === 'ny-sak-konflikt' ? BARNE_ID : undefined;
-    const [store] = useState(() => createStore(fagsak, pleietrengendeIdent));
+    const toSøkere = scenario === 'to-søkere-kopier-feil';
+    const [store] = useState(() => createStore(fagsak, pleietrengendeIdent, toSøkere));
     const [queryClient] = useState(
         () => new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } }),
     );
@@ -133,7 +142,8 @@ const KlassifiserModalStory = ({
         scenario === 'fortsett-uten-sak' ||
         scenario === 'journalfor-feil' ||
         scenario === 'reservert-med-barn' ||
-        scenario === 'ny-sak-konflikt';
+        scenario === 'ny-sak-konflikt' ||
+        toSøkere;
 
     return (
         <Provider store={store}>
@@ -145,7 +155,7 @@ const KlassifiserModalStory = ({
                             <Destination>
                                 {open && (
                                     <KlassifiserModal
-                                        toSøkere={false}
+                                        toSøkere={toSøkere}
                                         fortsett={fortsett}
                                         lukkModal={closeModal}
                                         setFagsak={setFagsak}
@@ -160,8 +170,8 @@ const KlassifiserModalStory = ({
     );
 };
 
-const updatedJournalpost = (fagsak: Fagsak) => ({
-    ...journalpost(),
+const updatedJournalpost = (fagsak: Fagsak, kanKopieres = false) => ({
+    ...journalpost(kanKopieres),
     erFerdigstilt: true,
     journalpostStatus: 'JOURNALFOERT',
     sak: {
@@ -266,6 +276,51 @@ const reservedHandler = http.post(ApiPath.JOURNALPOST_MOTTAK, async ({ request }
     reservedCaseRequest(body);
     return HttpResponse.json({ saksnummer: RESERVERT_MED_BARN.fagsakId });
 });
+const copyPath = ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', JOURNALPOST_ID);
+const copyRequests = fn().mockName('Kopier til annen søker');
+const twoApplicantsClassification = fn().mockName('Journalfør originalen');
+const twoApplicantsRefresh = fn().mockName('Hent originalen etter kopiering');
+const copyFailure = http.post(
+    copyPath,
+    async ({ request }) => {
+        copyRequests(await request.json());
+        return HttpResponse.json({ detail: 'Kopiering er ikke tilgjengelig.' }, { status: 409 });
+    },
+    { once: true },
+);
+const copySuccess = http.post(copyPath, async ({ request }) => {
+    copyRequests(await request.json());
+    return HttpResponse.json(
+        {
+            nyJournalpostId: '9303011',
+            saksnummer: 'KOPI123',
+            til: ANNEN_SØKER_ID,
+            pleietrengende: BARNE_ID,
+            annenPart: null,
+            ytelse: 'PSB',
+        },
+        { status: 201 },
+    );
+});
+const twoApplicantsHandlers = {
+    klassifisering: [
+        http.post(ApiPath.JOURNALPOST_MOTTAK, async ({ request }) => {
+            const body = (await request.json()) as { journalpostId?: string };
+            if (body.journalpostId !== JOURNALPOST_ID) return;
+            twoApplicantsClassification(body);
+            return HttpResponse.json({ saksnummer: FAGSAK_MED_BARN.fagsakId });
+        }),
+    ],
+    kopiering: [copyFailure, copySuccess],
+    journalpost: [
+        http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID), () => {
+            twoApplicantsRefresh();
+            return HttpResponse.json(updatedJournalpost(FAGSAK_MED_BARN, true));
+        }),
+    ],
+    vent: [],
+    brev: [],
+};
 
 const makeHandlers = (
     fagsak: Fagsak | undefined,
@@ -293,7 +348,8 @@ const expectDialogSummary = async (scenario: StoryScenario) => {
                 scenario === 'fortsett-uten-sak' ||
                 scenario === 'journalfor-feil' ||
                 scenario === 'reservert-med-barn' ||
-                scenario === 'ny-sak-konflikt'
+                scenario === 'ny-sak-konflikt' ||
+                scenario === 'to-søkere-kopier-feil'
                     ? 'Vil du lagre følgende informasjon til journalposten?'
                     : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
         }),
@@ -337,11 +393,15 @@ const meta: Meta<typeof KlassifiserModalStory> = {
     beforeEach: () => {
         journalforRetry.reset();
         ventRetry.reset();
+        copyFailure.restore();
         lukkModalAction.mockClear();
         setFagsakActionSpy.mockClear();
         goToLosAction.mockClear();
         newCaseRequest.mockClear();
         reservedCaseRequest.mockClear();
+        copyRequests.mockClear();
+        twoApplicantsClassification.mockClear();
+        twoApplicantsRefresh.mockClear();
         mocked(redirectToLos).mockReset();
         mocked(redirectToLos).mockImplementation(goToLosAction);
     },
@@ -495,5 +555,36 @@ export const VentFeilMedVellykketRetry: Story = {
             within(dialog).findByText('Det oppstod en feil når journalpost skulle settes på vent.'),
         ).resolves.toBeVisible();
         await expect(within(dialog).getByRole('button', { name: 'Sett på vent' })).toBeEnabled();
+    },
+};
+
+export const ToSokereKopierFeilMedVellykketNyttForsok: Story = {
+    name: 'To søkere: kopieringsfeil og nytt forsøk',
+    args: { scenario: 'to-søkere-kopier-feil' },
+    parameters: { msw: { handlers: twoApplicantsHandlers } },
+    play: async () => {
+        copyFailure.restore();
+        const dialog = await expectDialogSummary('to-søkere-kopier-feil');
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Journalfør journalposten' }));
+        await expect(
+            within(dialog).findByText('Det oppstod en feil ved kopiering av journalpost.'),
+        ).resolves.toBeVisible();
+        await expect(within(dialog).queryByText('Kopiering er ikke tilgjengelig.')).not.toBeInTheDocument();
+        await expect(twoApplicantsClassification).toHaveBeenCalledOnce();
+        await expect(copyRequests).toHaveBeenCalledOnce();
+        await expect(twoApplicantsRefresh).not.toHaveBeenCalled();
+        await userEvent.click(within(dialog).getByRole('button', { name: 'Kopier journalpost' }));
+        await expect(within(dialog).findByText(/Kopi av journalposten er opprettet/)).resolves.toHaveTextContent(
+            `${ANNEN_SØKER_ID} med pleietrengende: ${BARNE_ID}`,
+        );
+        await waitFor(() => expect(twoApplicantsRefresh).toHaveBeenCalledOnce());
+        await waitFor(() => expect(within(dialog).getByRole('button', { name: 'Videre' })).toBeEnabled());
+        await expect(twoApplicantsClassification).toHaveBeenCalledOnce();
+        await expect(copyRequests).toHaveBeenCalledTimes(2);
+        await expect(copyRequests).toHaveBeenNthCalledWith(1, { til: ANNEN_SØKER_ID, barn: BARNE_ID, ytelse: 'PSB' });
+        await expect(copyRequests).toHaveBeenNthCalledWith(2, { til: ANNEN_SØKER_ID, barn: BARNE_ID, ytelse: 'PSB' });
+        await expect(
+            within(document.body).queryByRole('region', { name: 'Lokal registreringsdestinasjon' }),
+        ).not.toBeInTheDocument();
     },
 };
