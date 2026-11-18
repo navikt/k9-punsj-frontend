@@ -544,6 +544,12 @@ for (const { journalpostId, status } of [
 ]) {
     test(`gjenoppretter barnelisten etter barnesøk med status ${status}`, async ({ page }) => {
         const mutations = recordMutationRequests(page, journalpostId);
+        page.on('request', (request) => {
+            const path = new URL(request.url()).pathname;
+            if (path.startsWith('/api/k9-punsj/') && !['GET', 'HEAD'].includes(request.method())) {
+                mutations.push(`${request.method()} ${path}`);
+            }
+        });
 
         await openPsbJournalpost(page, journalpostId);
         await installChildLookupRecoveryOverrides(page, status);

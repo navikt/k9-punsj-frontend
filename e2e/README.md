@@ -94,12 +94,23 @@ yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
 | 903–941: Tomme fagsak- og barnelister viser manuelt felt uten valg for annet barn; gyldig ident og manglende fødselsnummer gir forventede knappetilstander | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomme saks- og barnelister uten å be om annet barn` |
 | 944–988: Eksisterende sak med tom barneliste, bytte til ny sak, manuell ident og manglende fødselsnummer | `fordeling-empty-and-lookup.spec.ts` — `bytter fra eksisterende sak til ny sak når barnelisten er tom` |
 | Modalinnhold og avbrytelse uten fagsak, med og uten barn | `KlassifiserModal.spec.tsx`; de to tilhørende interaktive historiene kontrolleres separat i Storybook |
-| `cypress/e2e/fordeling/ChildLookupRecovery.cy.js`: gjenoppretting etter første barnesøk med 403 | `fordeling-empty-and-lookup.spec.ts` — `gjenoppretter barnelisten etter barnesøk med status 403` |
-| `cypress/e2e/fordeling/ChildLookupRecovery.cy.js`: gjenoppretting etter første barnesøk med 500 | `fordeling-empty-and-lookup.spec.ts` — `gjenoppretter barnelisten etter barnesøk med status 500` |
 
 Tillegg utover Cypress dekker 200 med bare andre ytelsers saker, samt 403 og 500 for både fagsak- og barnesøk. Sakssøkfeil viser den eksisterende feilmeldingen og forblir forskjellig fra et vellykket tomt svar. Barnesøkfeil viser først den eksisterende manuelle fallbacken; gyldig ident, person- og panelinformasjon samt Fortsett/Vent-tilstander kontrolleres før Vent-modalens avbrytelse og beholdte verdier. Nei → Ja utløser deretter et nytt oppslag, og en vellykket barneliste erstatter fallbacken. Begge gjenopprettingsreisene velger barn fra listen, bytter eksplisitt til et annet barn og kontrollerer at manuell registrering fortsatt fungerer. Alle reisene kontrollerer metode, sti, søkerheader, status og relevante svar, avbryter eventuelle modalvinduer og verifiserer at ingen journalførings-, vent-, kopierings-, behandlingsår-, Gosys- eller lukkemutasjoner sendes.
 
 Reisene bruker test-ID-ene `930304`–`930311`. Browser-MSW-overstyringene er avgrenset til søker `17420373147`; andre svar og standardhandlere endres ikke. Ingen av reisene forsøker å journalføre eller reservere et saksnummer.
+
+### Gjenoppretting etter feil ved barnesøk
+
+`ChildLookupRecovery.cy.js` er fjernet etter kartleggingen under. Linjenumrene viser filen før sletting. Begge gjenopprettingsreisene i `fordeling-empty-and-lookup.spec.ts` dekker henholdsvis 403 og 500.
+
+| Tidligere Cypress-kontroll | Automatisk dekning |
+| --- | --- |
+| 91–93: Åpne journalpost og skjul PDF | `journalpost-loader.spec.ts` bruker samme journalpost-fixture, klikker Skjul og verifiserer at PDF-en skjules. Gjenopprettingsreisene bruker samme visning med PDF-en åpen |
+| 119–153: Første barnesøk feiler, sakssøk returnerer tom liste, og Nei → Ja gir vellykket barnesøk | Gjenopprettingsreisene kontrollerer GET, sti, søkerheader, status og svarinnhold for begge oppslagene |
+| 138, 156–172: Fallback, nullstilte valg, barnevalg, panel, knapper og annet barn | Reisene kontrollerer at fallbacken forsvinner, valgene nullstilles, barnet vises i panelet og handlingene aktiveres. De bytter også til annet barn og fyller ut identen |
+| 96–103, 173: Ingen mutasjoner eller debug-lukking | Reisene kontrollerer ingen skrivende K9 Punsj-kall, uavhengig av journalpost-ID, og ingen debug-lukking for journalposten |
+
+Cypress sjekket ett barnesøk ved første feil og mer enn ett ved gjenoppretting. MSW-håndteren gir feil bare ved første treff, og Playwright venter separat på feilen og et nytt 200-svar etter Nei → Ja. Det viser rekkefølgen og minst to oppslag, men fastsetter ingen øvre grense for ekstra oppslag.
 
 ### Rettet reset-regresjon (B27)
 
