@@ -158,7 +158,7 @@ Fem uavhengige tester i `fordeling-psb-new-and-reserved.spec.ts` bruker journalp
 | B34: Ny reservasjon utelater `saksnummer` og `periode` på wire og bruker et nytt returnert nummer, ikke tidligere valgt fixture-sak | `journalfører ny PSB-sak uten gammelt nummer og viser returnert reservasjon`; komponenttesten `bruker det returnerte nye nummeret i callback, oppdaterer journalpost og navigerer til PSB` kontrollerer `setFagsak`, barn, PSB, tom periode, `reservertSaksnummer`, Redux og navigasjon |
 | Tillegg utover Cypress: Backendformet 409 selv om frontendflagget tillater ny sak | `viser generisk feil ved backendkonflikt og beholder ny-sak-valgene etter avbryt` kontrollerer ProblemDetail, request/header/status, generisk klassifiseringsfeil, mulig nytt forsøk/avbrytelse, beholdte valg, ingen refresh, suksess eller navigasjon |
 
-Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. De tre modalblokkene for reserverte saker er senere fjernet etter kartleggingen under; linjenumrene her viser filen rett før denne oppryddingen. Begge `it`-blokkene for valg av reservert sak og resten av kjeden for ny sak og to søkere er beholdt i Cypress.
+Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. De tre modalblokkene for reserverte saker er senere fjernet etter kartleggingen under; linjenumrene her viser filen rett før den oppryddingen. Begge `it`-blokkene for valg av reservert sak er beholdt i Cypress.
 
 | Fjernet Cypress-blokk | Assertions | Automatisk dekning |
 | --- | --- | --- |
@@ -167,6 +167,18 @@ Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. De tre mod
 | 224–253: reservert sak uten barn, Vent | Vent-overskrift; sammendrag med reservert saksnummer og periode uten Pleietrengendes ID; advarsel; ingen Gå til LOS; aktiv bekreft og Avbryt; «Journalfør og sett på vent»; modalen lukkes | Samme reise, første sak i løkken, med kontroll av beholdt saksvalg. `KlassifiserModal.spec.tsx` — `Vent med reservert sak uten barn` |
 
 De utvidede kontrollene i `expectSummary` gjelder også modalene i ny-sak- og 409-reisene i samme fil.
+
+De fem modalblokkene for ny sak og én søker er fjernet etter kartleggingen under. Linjenumrene viser `PSB.cy.js` rett før denne oppryddingen. Testene for ny-sak-modus, barnevalg, manuell ident, manglende fødselsnummer, søkerbytte og to søkere er beholdt.
+
+Alle fem dekkes av `ny-sak-modus respekterer frontendflagget false uten mutasjoner`: `expectSummary` kontrollerer overskrift, sakstype og søker med etiketter og verdier, ingen saksnummer eller periode, varsel, fravær av Gå til LOS og aktive knapper med riktig handlingstekst. `cancelSummary` kontrollerer at modalen fjernes. Reisen kontrollerer beholdte valg og at ingen mutasjoner sendes.
+
+| Fjernet Cypress-blokk | Automatisk dekning |
+| --- | --- |
+| 241–270: barn fra liste, Fortsett | Reisen kontrollerer barnets etikett og ident i sammendraget og beholdt barnevalg etter avbryt. `KlassifiserModal.spec.tsx`: `viser modal for Fortsett uten fagsak med barn og avbryter uten mutasjon` |
+| 272–301: barn fra liste, Vent | Samme reise kontrollerer barnets etikett og ident og beholdt barnevalg. `KlassifiserModal.spec.tsx`: `Vent uten fagsak med barn` |
+| 327–356: annet barn, Fortsett | Samme reise kontrollerer manuell barneident i sammendraget og at valget og identen beholdes. Komponenttesten for Fortsett uten fagsak bruker også manuell barneident |
+| 358–387: annet barn, Vent | Samme reise kontrollerer manuell barneident i sammendraget og beholdt valg og ident. Komponenttesten for Vent uten fagsak med barn dekker det felles sammendraget |
+| 403–431: manglende fødselsnummer, Vent | Samme reise kontrollerer at barnets etikett og tidligere barneidenter mangler i sammendraget og at valget beholdes. `KlassifiserModal.spec.tsx`: `viser modal for Vent uten fagsak eller barn og avbryter uten mutasjon` |
 
 Begge suksessreisene velger **Registrere opplysninger til K9** og kontrollerer aktiv **Bekreft**, men klikker ikke. Request-lyttere registreres før første sideåpning og kontrollerer at bare tilsiktet mottak sendes; Vent, kopiering, behandlingsår, Gosys, lukking og oppretting/innsending av søknad skal ikke kalles. Refresh verifiseres som full journalpost for samme ID, med endelig SAF-status, riktig barn og `sak.reservertSaksnummer: true`, uten å telle nøyaktig antall GET-kall. URL-assertions tillater `?dok=1`.
 

@@ -118,12 +118,16 @@ const expectSummary = async (page: Page, continueAction: boolean, childId?: stri
     } else {
         await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
         await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+        await expect(info).not.toContainText(/Saksnummer|Periode/i);
     }
     if (childId) {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
         await expect(info.getByText(childId, { exact: true })).toBeVisible();
     } else {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
+        await expect(info).not.toContainText(/Pleietrengendes ID/i);
+        await expect(info).not.toContainText(BARN_ID);
+        await expect(info).not.toContainText(MANUELT_BARN_ID);
     }
     await expect(
         dialog
@@ -131,6 +135,7 @@ const expectSummary = async (page: Page, continueAction: boolean, childId?: stri
             .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
     ).toBeVisible();
     await expect(dialog.getByRole('button', { name: 'Gå til LOS' })).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
     await expect(
         dialog.getByRole('button', {
             name: continueAction ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
@@ -145,6 +150,7 @@ const cancelSummary = async (page: Page, continueAction: boolean, childId?: stri
     const dialog = await expectSummary(page, continueAction, childId, caseId);
     await dialog.getByRole('button', { name: 'Avbryt' }).click();
     await expect(dialog).toBeHidden();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
 };
 
 const expectNewChild = async (page: Page, childId: string) => {
@@ -306,6 +312,7 @@ for (const flag of [false, true]) {
             await expectNewChild(page, MANUELT_BARN_ID);
             for (const action of [true, false]) {
                 await cancelSummary(page, action, MANUELT_BARN_ID);
+                await expect(page.getByLabel('Det gjelder et annet barn')).toBeChecked();
                 await expect(manual).toHaveValue(MANUELT_BARN_ID);
             }
             const noId = page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true });
@@ -317,6 +324,7 @@ for (const flag of [false, true]) {
             await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
             await expectButtons(page, false, true);
             await cancelSummary(page, false);
+            await expect(page.getByLabel('Det gjelder et annet barn')).toBeChecked();
             await expect(noId).toBeChecked();
         }
         await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
