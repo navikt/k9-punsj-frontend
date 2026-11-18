@@ -94,7 +94,7 @@ For browser review, start Storybook with `yarn storybook --host 127.0.0.1` and t
 
 ## Fordeling nullstilling
 
-Kjør de to reset-reisene alene og sammen med PSB-piloten:
+Kjør reset-testene alene og sammen med PSB-piloten:
 
 ```sh
 yarn test:pw e2e/tests/fordeling-reset.spec.ts --workers=1
@@ -112,9 +112,19 @@ Validering 2026-11-06 etter integrering av #3973: kombinert kjøring av reset- o
 | 721–737: Ja gjenoppretter journalpostens søker og fjerner ny søker/barn                                                                    | Samme reise, steget «Bekreft opprinnelig søker på nytt»; panel og Fortsett er verifisert. Vent er deaktivert rett etter søkerbyttet og fortsatt deaktivert etter at «Det gjelder et annet barn» åpnes med nullstilt checkbox |
 | PLS mellom PSB-valg, deretter nytt PSB-valg uten gammel sak/barn                                                                           | `fordeling-reset.spec.ts` — `nullstiller sak og barn ved bytte av dokumenttype`; tilleggsdekning utover gammel Cypress                         |
 
-Reisene bruker `930302` og `930303`. Sakslisten for ny søker installeres med sidens eksisterende `window.msw.worker.use` før søkerbyttet, bare i den første reset-testen. Andre journalposter, Cypress og MSW-defaults beholder opprinnelige data. URL-kontrollen sammenligner pathname og tillater dokumentparameteren `?dok=1`. Dokumenttypebyttene verifiserer GET, søkerheader, 200 og synlig saksliste; Ja etter retur til PSB kontrollerer synlig resultat uten å kreve et ekstra lookup når søkeridenten er uendret.
+### Erstattede kontroller fra `NullstillingPleietrengende.cy.js`
 
-Begge nye reisene avbryter modalene og kontrollerer at mottak, Vent, kopiering, behandlingsår, Gosys og lukking ikke kalles, også GET-basert lukking.
+| Cypress-test | Dekning i [`fordeling-reset.spec.ts`](tests/fordeling-reset.spec.ts) |
+| --- | --- |
+| Nullstiller tillatelsen ved søkerbytte før annet barn velges | Velger PSB-sak med barn, går til ny sak, velger annet barn og krysser av for manglende fødselsnummer. Fortsett er deaktivert, Vent følger av/på, og Vent-modalen åpnes og avbrytes. Nei og ny søker gir tomt saksoppslag og en barneliste for riktig ident, med Vent deaktivert. Ja gjenoppretter opprinnelig søker. Før barnevalg er den nye søkeren og barn borte fra panelet, og begge handlingene er deaktivert. «Det gjelder et annet barn» viser uvalgt avkrysningsboks, aktivt identfelt og ingen infotekst; Vent forblir deaktivert. |
+| Nullstiller tillatelsen ved dokumenttypebytte | PSB med tom saks- og barneliste: avkrysset manglende fødselsnummer gir deaktivert identfelt, synlig informasjon og aktiv Vent. Etter PSB → Omsorgspenger → PSB er boksen uvalgt, identfeltet aktivt, informasjonen borte og Vent deaktivert. |
+| Nullstiller tillatelsen ved bytte mellom ny og eksisterende sak | Velger sak med barn, går til ny sak og aktiverer manglende fødselsnummer. Etter ny → eksisterende → ny er Vent deaktivert før «Det gjelder et annet barn» klikkes. Deretter er boksen uvalgt, identfeltet aktivt og informasjonen borte. |
+
+Testene bruker `930302` og `930303`. Oppslag med avvikende data settes med `window.msw.worker.use` i den enkelte nettleserkonteksten, og testene verifiserer status, søkerheader og data fra service worker. Alle fem reset-testene observerer fra før navigasjon og avviser andre metoder enn GET og HEAD mot K9 Punsj, samt GET til debugglukking for alle journalpost-ID-er.
+
+[`journalpost-loader.spec.ts`](tests/journalpost-loader.spec.ts) dekker **Skjul** og at PDF-en faktisk skjules, også etter omlasting. Den manuelle Gosys-GET-proben kontrollerte Cypress-oppsettet og var ingen brukerhandling; den er ikke gjenskapt.
+
+Validering 2026-11-18: 5 bestått med én worker og 7 bestått sammen med PSB-piloten med standard workers (2). De tre reset-testene fra Cypress er erstattet. Søkerreisen med én sak og barnevalg og PSB → PLS → PSB er beholdt. Øvrig Fordeling-migrering gjenstår.
 
 ## Fordeling uten fagsaker og med oppslagsfeil
 

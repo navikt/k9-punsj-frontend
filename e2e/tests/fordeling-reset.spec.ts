@@ -1,5 +1,6 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
+import barnFixture from '../../cypress/fixtures/barn.json' with { type: 'json' };
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 import { FORDELING_PSB_SCENARIOS } from '../../src/mocks/fordelingPsbTestScenarioIds';
@@ -16,24 +17,25 @@ const isApiResponse = (response: Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
 
 const journalpostPath = (journalpostId: string) => ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpostId);
-const ventPath = (journalpostId: string) => ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', journalpostId);
-const behandlingAarPath = (journalpostId: string) =>
-    ApiPath.JOURNALPOST_SETT_BEHANDLINGSÅR.replace('{journalpostId}', journalpostId);
-const copyPath = (journalpostId: string) => ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', journalpostId);
-const closePath = (journalpostId: string) => ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', journalpostId);
 
-const waitForSakerLookup = (page: Page, norskIdent: string) =>
+const waitForLookup = (page: Page, path: string, norskIdent: string) =>
     page.waitForResponse(
         (response) =>
-            isApiResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            isApiResponse(response, 'GET', path) &&
             response.request().headers()['x-nav-norskident'] === norskIdent,
     );
 
-const expectSakerLookup = async (response: Response, norskIdent: string, fagsakIds: string[]) => {
+const waitForSakerLookup = (page: Page, norskIdent: string) =>
+    waitForLookup(page, ApiPath.HENT_FAGSAK_PÅ_IDENT, norskIdent);
+
+const expectLookup = (response: Response, norskIdent: string) => {
     expect(response.status()).toBe(200);
     expect(response.fromServiceWorker()).toBe(true);
     expect(response.request().headers()['x-nav-norskident']).toBe(norskIdent);
+};
 
+const expectSakerLookup = async (response: Response, norskIdent: string, fagsakIds: string[]) => {
+    expectLookup(response, norskIdent);
     const data = await response.json();
     if (fagsakIds.length === 0) {
         expect(data).toEqual([]);
@@ -60,26 +62,96 @@ const openPsbJournalpost = async (page: Page, journalpostId: string) => {
     });
 };
 
-const recordMutationRequests = (page: Page, journalpostId: string) => {
-    const paths = new Set([
-        ApiPath.JOURNALPOST_MOTTAK,
-        ventPath(journalpostId),
-        copyPath(journalpostId),
-        behandlingAarPath(journalpostId),
-        ApiPath.OPPRETT_GOSYS_OPPGAVE,
-        closePath(journalpostId),
-        ApiPath.JOURNALPOST_LUKK_DEBUGG.replace('{journalpostId}', journalpostId),
-    ]);
-    const mutations: string[] = [];
+const recordSideEffects = (page: Page) => {
+    const debugClosePrefix = ApiPath.JOURNALPOST_LUKK_DEBUGG.replace('{journalpostId}', '');
+    const sideEffects: string[] = [];
 
-    page.on('request', (request) => {
+    page.context().on('request', (request) => {
         const path = new URL(request.url()).pathname;
-        if (paths.has(path)) {
-            mutations.push(`${request.method()} ${path}`);
+        const method = request.method();
+        if (
+            ((path === '/api/k9-punsj' || path.startsWith('/api/k9-punsj/')) && !['GET', 'HEAD'].includes(method)) ||
+            (method === 'GET' && path.startsWith(debugClosePrefix))
+        ) {
+            sideEffects.push(`${method} ${path}`);
         }
     });
 
-    return mutations;
+    return sideEffects;
+};
+
+const installLookupOverrides = async (
+    page: Page,
+    søkerIdent: string,
+    fagsakliste: typeof fagsaker,
+    barneliste?: typeof barnFixture,
+) => {
+    await page.evaluate(
+        ({ casePath, childPath, norskIdent, saker, barn }) => {
+            const msw = window.msw;
+            if (!msw) {
+                throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+            }
+
+            msw.worker.use(
+                msw.http.get(casePath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') === norskIdent) {
+                        return msw.HttpResponse.json(saker, { status: 200 });
+                    }
+                    return;
+                }),
+            );
+            if (barn) {
+                msw.worker.use(
+                    msw.http.get(childPath, ({ request }) => {
+                        if (request.headers.get('X-Nav-NorskIdent') === norskIdent) {
+                            return msw.HttpResponse.json(barn, { status: 200 });
+                        }
+                        return;
+                    }),
+                );
+            }
+        },
+        {
+            casePath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
+            childPath: ApiPath.BARN_GET,
+            norskIdent: søkerIdent,
+            saker: fagsakliste,
+            barn: barneliste,
+        },
+    );
+};
+
+const getHoldButton = (page: Page) => page.locator('[data-test-id="journalførOgVent"]');
+const getContinueButton = (page: Page) => page.locator('[data-test-id="journalførOgFortsett"]');
+const noChildIdCheckbox = (page: Page) => page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true });
+const childIdField = (page: Page) => page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+const noChildIdInfo = (page: Page) => page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]');
+const reserveCase = (page: Page) => page.getByLabel('Reserver saksnummer til ny fagsak');
+const otherChildCheckbox = (page: Page) => page.getByLabel('Det gjelder et annet barn');
+
+const selectCaseWithChild = async (page: Page) => {
+    const lookupPromise = waitForSakerLookup(page, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja' }).check();
+    await expectSakerLookup(await lookupPromise, SØKER_ID, [GAMMEL_FAGSAK_ID]);
+    const caseSelect = page.getByLabel('Velg fagsak');
+    await caseSelect.selectOption(GAMMEL_FAGSAK_ID);
+    await expect(caseSelect).toHaveValue(GAMMEL_FAGSAK_ID);
+    await expect(page.locator('.fagsakSelectedInfo')).toContainText(GAMMELT_BARN_ID);
+};
+
+const selectNoChildId = async (page: Page) => {
+    await noChildIdCheckbox(page).check();
+    await expect(noChildIdCheckbox(page)).toBeChecked();
+    await expect(childIdField(page)).toBeDisabled();
+    await expect(noChildIdInfo(page)).toBeVisible();
+};
+
+const expectChildIdReset = async (page: Page) => {
+    await expect(noChildIdCheckbox(page)).toBeVisible();
+    await expect(noChildIdCheckbox(page)).not.toBeChecked();
+    await expect(childIdField(page)).toBeEnabled();
+    await expect(noChildIdInfo(page)).toHaveCount(0);
 };
 
 const expectApplicantModal = async (page: Page, applicantId: string, childId: string) => {
@@ -99,27 +171,10 @@ const expectApplicantModal = async (page: Page, applicantId: string, childId: st
 
 test('nullstiller søker og barn når søkeridenten endres', async ({ page }) => {
     const journalpostId = FORDELING_PSB_SCENARIOS.resetApplicant;
-    const mutations = recordMutationRequests(page, journalpostId);
+    const sideEffects = recordSideEffects(page);
 
     await openPsbJournalpost(page, journalpostId);
-    await page.evaluate(
-        ({ path, applicantId, cases }) => {
-            const msw = window.msw;
-            if (!msw) {
-                throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
-            }
-
-            msw.worker.use(
-                msw.http.get(path, ({ request }) => {
-                    if (request.headers.get('X-Nav-NorskIdent') === applicantId) {
-                        return msw.HttpResponse.json(cases);
-                    }
-                    return;
-                }),
-            );
-        },
-        { path: ApiPath.HENT_FAGSAK_PÅ_IDENT, applicantId: NY_SØKER_ID, cases: [fagsaker[0]] },
-    );
+    await installLookupOverrides(page, NY_SØKER_ID, [fagsaker[0]]);
 
     await test.step('Velg opprinnelig søker og sak med barn', async () => {
         const lookupPromise = waitForSakerLookup(page, SØKER_ID);
@@ -240,15 +295,16 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         await expect(noChildId).not.toBeChecked();
         await expect(page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true })).toBeEnabled();
         await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toHaveCount(0);
-        expect(mutations).toEqual([]);
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeVisible();
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
     });
+
+    expect(sideEffects).toEqual([]);
 });
 
 test('nullstiller sak og barn ved bytte av dokumenttype', async ({ page }) => {
     const journalpostId = FORDELING_PSB_SCENARIOS.resetDocumentType;
-    const mutations = recordMutationRequests(page, journalpostId);
+    const sideEffects = recordSideEffects(page);
 
     await openPsbJournalpost(page, journalpostId);
 
@@ -328,5 +384,109 @@ test('nullstiller sak og barn ved bytte av dokumenttype', async ({ page }) => {
         await expect(journalpostPanel).not.toContainText(GAMMELT_BARN_ID);
     });
 
-    expect(mutations).toEqual([]);
+    expect(sideEffects).toEqual([]);
+});
+
+test('nullstiller manglende fødselsnummer ved søkerbytte med tomt saksoppslag', async ({ page }) => {
+    const sideEffects = recordSideEffects(page);
+    await openPsbJournalpost(page, FORDELING_PSB_SCENARIOS.resetApplicant);
+    await installLookupOverrides(page, NY_SØKER_ID, [], barnFixture);
+
+    await test.step('Velg ny sak uten fødselsnummer og avbryt Vent', async () => {
+        await selectCaseWithChild(page);
+        await reserveCase(page).check();
+        await otherChildCheckbox(page).check();
+        await selectNoChildId(page);
+        await expect(getContinueButton(page)).toBeDisabled();
+
+        await noChildIdCheckbox(page).uncheck();
+        await expect(getHoldButton(page)).toBeDisabled();
+        await noChildIdCheckbox(page).check();
+        await expect(getHoldButton(page)).toBeEnabled();
+        await getHoldButton(page).click();
+        const dialog = page.locator('[data-test-id="klassifiserModal"]');
+        await expect(dialog).toBeVisible();
+        await dialog.getByRole('button', { name: 'Avbryt' }).click();
+        await expect(dialog).toHaveCount(0);
+    });
+
+    await test.step('Bytt søker og tilbake uten å velge barn fra listen', async () => {
+        await page.getByRole('radio', { name: 'Nei' }).check();
+        const saker = waitForSakerLookup(page, NY_SØKER_ID);
+        const barn = waitForLookup(page, ApiPath.BARN_GET, NY_SØKER_ID);
+        await page.getByLabel('Søkers fødselsnummer eller D-nummer:').fill(NY_SØKER_ID);
+        await expectSakerLookup(await saker, NY_SØKER_ID, []);
+        const barnResponse = await barn;
+        expectLookup(barnResponse, NY_SØKER_ID);
+        expect(await barnResponse.json()).toEqual(barnFixture);
+        await expect(page.getByLabel('Velg hvilket barn det gjelder')).toBeVisible();
+        await expect(getHoldButton(page)).toBeVisible();
+        await expect(getHoldButton(page)).toBeDisabled();
+
+        const panel = page.locator('.journalpostpanel');
+        await expect(panel).toContainText(NY_SØKER_ID);
+        const originalSaker = waitForSakerLookup(page, SØKER_ID);
+        await page.getByRole('radio', { name: 'Ja' }).check();
+        await expectSakerLookup(await originalSaker, SØKER_ID, [GAMMEL_FAGSAK_ID]);
+        await expect(page.getByLabel('Velg fagsak')).toBeVisible();
+        await expect(panel).toContainText(SØKER_ID);
+        await expect(panel).not.toContainText(NY_SØKER_ID);
+        await expect(panel).not.toContainText(/Barnets ID/i);
+        await expect(panel).not.toContainText(BARN_ID);
+        await expect(panel).not.toContainText(GAMMELT_BARN_ID);
+        await expect(getContinueButton(page)).toBeDisabled();
+        await expect(getHoldButton(page)).toBeDisabled();
+
+        await expect(otherChildCheckbox(page)).not.toBeChecked();
+        await otherChildCheckbox(page).check();
+        await expectChildIdReset(page);
+        await expect(getHoldButton(page)).toBeDisabled();
+    });
+
+    expect(sideEffects).toEqual([]);
+});
+
+test('nullstiller manglende fødselsnummer ved bytte fra PSB til Omsorgspenger og tilbake', async ({ page }) => {
+    const sideEffects = recordSideEffects(page);
+    await openPsbJournalpost(page, FORDELING_PSB_SCENARIOS.resetDocumentType);
+    const tomBarneliste = { ...barnFixture, barn: [] };
+    await installLookupOverrides(page, SØKER_ID, [], tomBarneliste);
+
+    const saker = waitForSakerLookup(page, SØKER_ID);
+    const barn = waitForLookup(page, ApiPath.BARN_GET, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja' }).check();
+    await expectSakerLookup(await saker, SØKER_ID, []);
+    const barnResponse = await barn;
+    expectLookup(barnResponse, SØKER_ID);
+    expect(await barnResponse.json()).toEqual(tomBarneliste);
+    await selectNoChildId(page);
+    await expect(getHoldButton(page)).toBeEnabled();
+
+    const omsorgspenger = page.getByRole('radio', { name: 'Omsorgspenger/omsorgsdager', exact: true });
+    await omsorgspenger.check();
+    await expect(omsorgspenger).toBeChecked();
+    await page.getByRole('radio', { name: 'Pleiepenger sykt barn', exact: true }).check();
+
+    await expectChildIdReset(page);
+    await expect(getHoldButton(page)).toBeDisabled();
+    expect(sideEffects).toEqual([]);
+});
+
+test('nullstiller manglende fødselsnummer ved bytte mellom ny og eksisterende sak', async ({ page }) => {
+    const sideEffects = recordSideEffects(page);
+    await openPsbJournalpost(page, FORDELING_PSB_SCENARIOS.resetApplicant);
+    await selectCaseWithChild(page);
+    await reserveCase(page).check();
+    await otherChildCheckbox(page).check();
+    await selectNoChildId(page);
+    await expect(getHoldButton(page)).toBeEnabled();
+
+    await reserveCase(page).uncheck();
+    await expect(page.getByLabel('Velg fagsak')).toBeEnabled();
+    await reserveCase(page).check();
+    await expect(getHoldButton(page)).toBeDisabled();
+
+    await otherChildCheckbox(page).check();
+    await expectChildIdReset(page);
+    expect(sideEffects).toEqual([]);
 });

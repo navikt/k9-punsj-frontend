@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Nullstilling i Fordeling
+
+- Flyttet tre kontroller for manglende fødselsnummer til Playwright: søkerbytte med tomt saksoppslag, PSB → Omsorgspenger → PSB og bytte mellom ny og eksisterende sak. Fjernet Cypress-filen etter å ha sjekket tilsvarende dekning.
+
 #### 2026-11-18 — Fjernet erstattede Cypress-kontroller
 
 - Fjernet ni tester for fagsakoppslag i journalpostoppretting og brev etter kartlegging mot komponenttestene. Beholdt kontroll av tomme svar og feilnullstilling ved endret ident.
