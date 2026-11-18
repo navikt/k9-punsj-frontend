@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Rettet tomme outbound-regler i prod (2026-11-18)
+
+- Utelater `accessPolicy.outbound.rules` når `outboundRules` mangler eller er tom, slik at prod-manifestet ikke inneholder `rules: null`. Eksisterende nettverkstilgang er uendret.
+
 ### Oppdatering av Nais-actions (2026-11-17)
 
 - Oppdaterte Nais deploy og CDN-upload til v3-referansen og Docker build/push til ny v0-referanse i prod- og preprod-workflowene.
