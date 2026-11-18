@@ -236,6 +236,7 @@ const expectNoMutations = (mutations: string[]) => {
 test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async ({ page }) => {
     const journalpostId = FORDELING_PSB_SCENARIOS.emptyCasesWithChildren;
     const mutations = recordMutationRequests(page, journalpostId);
+    const listedChild = barnFixture.barn[0];
 
     await openPsbJournalpost(page, journalpostId);
     await installLookupOverrides(page, { cases: [] });
@@ -260,10 +261,14 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeDisabled();
 
-        await childSelect.selectOption(BARN_FRA_LISTE_ID);
+        await childSelect.selectOption({
+            label: `${listedChild.fornavn} ${listedChild.etternavn} - ${listedChild.identitetsnummer}`,
+        });
         await expect(childSelect).toHaveValue(BARN_FRA_LISTE_ID);
         await expect(panel).toContainText('Barnets ID');
         await expect(panel).toContainText(BARN_FRA_LISTE_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(BARN_FRA_LISTE_ID, { exact: true })).toBeVisible();
         await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
         await expect(page.locator('[data-test-id="jornalførUtenFagsak"]').getByRole('button')).toHaveCount(0);
         await expect(continueButton).toBeEnabled();
@@ -291,6 +296,8 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         const manualChild = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
         await expect(manualChild).toBeVisible();
         await expect(manualChild).toHaveValue('');
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(BARN_FRA_LISTE_ID, { exact: true })).toHaveCount(0);
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeDisabled();
 
@@ -298,6 +305,8 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         await expectPersonInfo(page);
         await expect(panel).toContainText(MANUELL_BARN_ID);
         await expect(panel).not.toContainText(BARN_FRA_LISTE_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toBeVisible();
         await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
         await expect(continueButton).toBeEnabled();
         await expect(holdButton).toBeEnabled();
@@ -316,6 +325,7 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         await expect(manualChild).toBeDisabled();
         await expect(manualChild).toHaveValue('');
         await expect(panel.getByText('Barnets ID', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
         await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toHaveCount(0);
         await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
         await expect(continueButton).toBeDisabled();
@@ -340,6 +350,56 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         await expectPersonInfo(page);
         await expect(panel).toContainText(MANUELL_BARN_ID);
         await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+    });
+
+    await test.step('Bytt fra utfylt barneliste til tom liste via Nei og Ja etter valg uten fødselsnummer', async () => {
+        const noChildId = page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true });
+        const manualChild = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+        const noChildIdInfo = page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]');
+        await noChildId.check();
+        await expect(noChildId).toBeChecked();
+        await expect(noChildIdInfo).toBeVisible();
+        await expect(continueButton).toBeDisabled();
+        await expect(holdButton).toBeEnabled();
+
+        await installLookupOverrides(page, { cases: [], children: { barn: [] } });
+        await page.getByRole('radio', { name: 'Nei' }).check();
+        const { casesResponse: emptyCasesResponse, childrenResponse: emptyChildrenResponse } = await confirmApplicant(
+            page,
+            journalpostId,
+        );
+        await expectLookupResponse(emptyCasesResponse, ApiPath.HENT_FAGSAK_PÅ_IDENT, 200, []);
+        await expectLookupResponse(emptyChildrenResponse, ApiPath.BARN_GET, 200, { barn: [] });
+        await expect(caseSelect).toHaveCount(0);
+        await expect(childSelect).toHaveCount(0);
+        await expect(page.getByLabel('Det gjelder et annet barn')).toHaveCount(0);
+        await expect(manualChild).toBeVisible();
+        await expect(manualChild).toBeEnabled();
+        await expect(manualChild).toHaveValue('');
+        await expect(noChildId).not.toBeChecked();
+        await expect(noChildIdInfo).toHaveCount(0);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(BARN_FRA_LISTE_ID, { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toHaveCount(0);
+        await expect(continueButton).toBeDisabled();
+        await expect(holdButton).toBeDisabled();
+
+        await manualChild.fill(MANUELL_BARN_ID);
+        await expectPersonInfo(page);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toBeVisible();
+        await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+
+        await noChildId.check();
+        await expect(manualChild).toBeDisabled();
+        await expect(manualChild).toHaveValue('');
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toHaveCount(0);
+        await expect(noChildIdInfo).toBeVisible();
+        await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeEnabled();
     });
 
@@ -376,6 +436,8 @@ test('håndterer tomme saks- og barnelister uten å be om annet barn', async ({ 
         await manualChild.fill(MANUELL_BARN_ID);
         await expectPersonInfo(page);
         await expect(panel).toContainText(MANUELL_BARN_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toBeVisible();
         await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
         await expect(continueButton).toBeEnabled();
         await expect(holdButton).toBeEnabled();
@@ -393,6 +455,9 @@ test('håndterer tomme saks- og barnelister uten å be om annet barn', async ({ 
         await expect(manualChild).toBeDisabled();
         await expect(manualChild).toHaveValue('');
         await expect(panel.getByText('Barnets ID', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toHaveCount(0);
+        await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeEnabled();
         await noChildId.uncheck();
@@ -429,6 +494,8 @@ test('bytter fra eksisterende sak til ny sak når barnelisten er tom', async ({ 
         await expect(page.locator('.fagsakSelectedInfo')).toContainText(GAMMELT_BARN_ID);
         await expect(panel).toContainText(GAMMEL_FAGSAK_ID);
         await expect(panel).toContainText(GAMMELT_BARN_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(GAMMELT_BARN_ID, { exact: true })).toBeVisible();
     });
 
     await test.step('Fjern eksisterende sak og bruk manuell ident', async () => {
@@ -440,6 +507,7 @@ test('bytter fra eksisterende sak til ny sak når barnelisten er tom', async ({ 
         await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
         await expect(panel).not.toContainText(GAMMEL_FAGSAK_ID);
         await expect(panel).not.toContainText(GAMMELT_BARN_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
         await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveCount(0);
         await expect(page.getByLabel('Det gjelder et annet barn')).toHaveCount(0);
         await expect(manualChild).toBeVisible();
@@ -449,6 +517,8 @@ test('bytter fra eksisterende sak til ny sak når barnelisten er tom', async ({ 
         await manualChild.fill(MANUELL_BARN_ID);
         await expectPersonInfo(page);
         await expect(panel).toContainText(MANUELL_BARN_ID);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toBeVisible();
         await expect(continueButton).toBeEnabled();
         await expect(holdButton).toBeEnabled();
 
@@ -468,6 +538,8 @@ test('bytter fra eksisterende sak til ny sak når barnelisten er tom', async ({ 
         await expect(manualChild).toBeDisabled();
         await expect(manualChild).toHaveValue('');
         await expect(panel.getByText('Barnets ID', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
+        await expect(panel.getByText(MANUELL_BARN_ID, { exact: true })).toHaveCount(0);
         await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeEnabled();

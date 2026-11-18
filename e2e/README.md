@@ -86,14 +86,20 @@ yarn test:pw e2e/tests/fordeling-empty-and-lookup.spec.ts e2e/tests/fordeling-re
 yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
 ```
 
-| Eksisterende `cypress/e2e/fordeling/PSB.cy.js`-assertion | Automatisk dekning |
+De to Cypress-blokkene «søker uten fagsaker» og «søker uten liste med barn» er fjernet etter kartleggingen under. Linjenumrene viser `cypress/e2e/fordeling/PSB.cy.js` før denne oppryddingen.
+
+| Tidligere Cypress-assertion | Automatisk dekning |
 | --- | --- |
-| 833–862: Tom fagsakliste med barn fra listen, panelinformasjon, informasjonsvarsel og aktiverte handlinger | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomt saksoppslag med barn fra listen og manuell ident` |
-| 864–884: Bytt til annet barn, skriv gyldig ident og vis barn i panelet | Samme reise; barnelisten deaktiveres mens manuelt felt og personinformasjon vises, og Fortsett-modalens barnedata oppdateres |
-| 886–901: Manglende fødselsnummer fjerner barn fra panelet, viser informasjon og deaktiverer Fortsett, men ikke Vent | Samme reise; avbryter også Vent-modal uten saks- eller barnedata og kontrollerer at valget beholdes |
-| 903–941: Tomme fagsak- og barnelister viser manuelt felt uten valg for annet barn; gyldig ident og manglende fødselsnummer gir forventede knappetilstander | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomme saks- og barnelister uten å be om annet barn` |
-| 944–988: Eksisterende sak med tom barneliste, bytte til ny sak, manuell ident og manglende fødselsnummer | `fordeling-empty-and-lookup.spec.ts` — `bytter fra eksisterende sak til ny sak når barnelisten er tom` |
+| 834–836 og 945–947: Åpne journalpost og klikk Skjul | `journalpost-loader.spec.ts` kontrollerer samme journalpost-fixture, synlig PDF, Skjul og skjult PDF, også etter omlasting |
+| 832–862: Tom fagsakliste, barnevalg med etikett og verdi, panelinformasjon, informasjonsvarsel og aktiverte handlinger | `fordeling-empty-and-lookup.spec.ts` — `håndterer tomt saksoppslag med barn fra listen og manuell ident`; kontrollerer også eksakt «Barnets ID:» og ident i panelet |
+| 864–886: Bytt til annet barn, fjern tidligere barn fra panelet, deaktiver handlingene og oppgi gyldig ident | Samme reise kontrollerer at både etiketten og tidligere ident mangler før inntasting. Manuell ident gjenoppretter etikett, panelinformasjon, varsel og aktive handlinger |
+| 888–900: Manglende fødselsnummer fjerner etikett og ident, viser informasjon og deaktiverer Fortsett, men ikke Vent | Samme reise; avbryter også Vent-modal uten saks- eller barnedata og kontrollerer at valget beholdes |
+| 902–940: Etter valgt manglende fødselsnummer: Nei → Ja erstatter fylt barneliste med tom liste; manuell ident og nytt valg uten fødselsnummer | Samme reise, steget «Bytt fra utfylt barneliste til tom liste via Nei og Ja etter valg uten fødselsnummer», verifiserer begge nye 200-svar, nullstilte kontroller, panel, informasjon og Fortsett/Vent |
+| 943–988: Eksisterende sak med tom barneliste, bytte til ny sak, manuell ident og manglende fødselsnummer | `bytter fra eksisterende sak til ny sak når barnelisten er tom` kontrollerer eksakt paneletikett og ident, fjerning av tidligere ident, informasjon og Fortsett/Vent |
+| Tillegg: Tomme saks- og barnelister allerede ved første bekreftelse av søker | `håndterer tomme saks- og barnelister uten å be om annet barn` kontrollerer manuell ident uten valg for annet barn, eksakt panelinformasjon og no-ID-tilstander |
 | Modalinnhold og avbrytelse uten fagsak, med og uten barn | `KlassifiserModal.spec.tsx`; de to tilhørende interaktive historiene kontrolleres separat i Storybook |
+
+Overgangen fra fylt til tom barneliste kjøres uten ny sideåpning og med manglende fødselsnummer valgt før Nei → Ja. Den uavhengige reisen som starter med tomme lister erstatter ikke denne overgangen. Eksisterende modalavbrytelser, kontraktkontroller og vern mot mutasjoner er beholdt.
 
 Tillegg utover Cypress dekker 200 med bare andre ytelsers saker, samt 403 og 500 for både fagsak- og barnesøk. Sakssøkfeil viser den eksisterende feilmeldingen og forblir forskjellig fra et vellykket tomt svar. Barnesøkfeil viser først den eksisterende manuelle fallbacken; gyldig ident, person- og panelinformasjon samt Fortsett/Vent-tilstander kontrolleres før Vent-modalens avbrytelse og beholdte verdier. Nei → Ja utløser deretter et nytt oppslag, og en vellykket barneliste erstatter fallbacken. Begge gjenopprettingsreisene velger barn fra listen, bytter eksplisitt til et annet barn og kontrollerer at manuell registrering fortsatt fungerer. Alle reisene kontrollerer metode, sti, søkerheader, status og relevante svar, avbryter eventuelle modalvinduer og verifiserer at ingen journalførings-, vent-, kopierings-, behandlingsår-, Gosys- eller lukkemutasjoner sendes.
 

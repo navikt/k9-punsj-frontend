@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Tomme PSB-oppslag og manuell ident
+
+- Utvidet de tre eksisterende Playwright-reisene med eksakt panelinformasjon og overgangen fra fylt barneliste til tom liste via Nei → Ja etter valgt manglende fødselsnummer. Fjernet de to tilsvarende Cypress-blokkene etter kartlegging.
+
 #### 2026-11-18 — Feilmeldinger ved fagsakoppslag
 
 - Kontrollerte at tomt fagsaksvar ikke viser feilmeldinger, og fjernet `fordeling/FagsakLookupErrors.cy.js` etter kartlegging mot Playwright. Den separate Cypress-filen er beholdt.
