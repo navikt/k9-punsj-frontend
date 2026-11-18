@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — To søkere med ny PSB-sak
+
+- La til en selvstendig Playwright-reise for to søkere, ny sak og barn fra listen. Fjernet de tre dekkede Cypress-blokkene; faktisk Vent med to søkere gjenstår.
+
 #### 2026-11-18 — Nullstilling i Fordeling
 
 - Flyttet tre kontroller for manglende fødselsnummer til Playwright: søkerbytte med tomt saksoppslag, PSB → Omsorgspenger → PSB og bytte mellom ny og eksisterende sak. Fjernet Cypress-filen etter å ha sjekket tilsvarende dekning.

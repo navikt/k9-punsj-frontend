@@ -1,5 +1,6 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
+import barnFixture from '../../cypress/fixtures/barn.json' with { type: 'json' };
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import journalpostFixture from '../../cypress/fixtures/jpPSB300.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
@@ -10,6 +11,7 @@ const KOPIERT_JOURNALPOST_ID = '9303171';
 const KOPIERT_SAKSNUMMER = 'KOPI123';
 const SØKER_ID = journalpostFixture.norskIdent;
 const ANNEN_SØKER_ID = '02918496664';
+const BARN_FRA_LISTE = barnFixture.barn[0];
 const FAGSAK = fagsaker[2];
 const BARN = FAGSAK.pleietrengende!;
 const journalpostPath = (id: string) => ApiPath.JOURNALPOST_GET.replace('{journalpostId}', id);
@@ -25,18 +27,12 @@ type NetworkEvent = {
 const isResponse = (response: Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
 
-const installScenarioHandlers = async (page: Page) => {
+const installPersonLookupHandler = async (page: Page) => {
     await page.evaluate(
-        ({ path, personPath, applicant }) => {
+        ({ personPath, applicant }) => {
             const msw = window.msw;
             if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
-            const copyPending = new Promise<void>((resolve) => {
-                (window as Window & { releasePsbCopy?: () => void }).releasePsbCopy = resolve;
-            });
             msw.worker.use(
-                msw.http.post(path, async () => {
-                    await copyPending;
-                }),
                 msw.http.get(personPath, ({ request }) => {
                     if (request.headers.get('X-Nav-NorskIdent') !== applicant) return;
                     return msw.HttpResponse.json({
@@ -50,9 +46,196 @@ const installScenarioHandlers = async (page: Page) => {
                 }),
             );
         },
-        { path: copyPath, personPath: ApiPath.PERSON, applicant: ANNEN_SØKER_ID },
+        { personPath: ApiPath.PERSON, applicant: ANNEN_SØKER_ID },
     );
 };
+
+const installScenarioHandlers = async (page: Page) => {
+    await page.evaluate(
+        ({ path }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+            const copyPending = new Promise<void>((resolve) => {
+                (window as Window & { releasePsbCopy?: () => void }).releasePsbCopy = resolve;
+            });
+            msw.worker.use(
+                msw.http.post(path, async () => {
+                    await copyPending;
+                }),
+            );
+        },
+        { path: copyPath },
+    );
+    await installPersonLookupHandler(page);
+};
+
+const expectNewCaseSummary = async (page: Page, continueAction: boolean) => {
+    const dialog = page.getByRole('dialog');
+    const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+    await expect(
+        dialog.getByRole('heading', {
+            name: continueAction
+                ? 'Vil du lagre følgende informasjon til journalposten?'
+                : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+        }),
+    ).toBeVisible();
+    await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+    await expect(info.getByText('Pleiepenger sykt barn', { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText(ANNEN_SØKER_ID, { exact: true })).toHaveCount(0);
+    await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(BARN_FRA_LISTE.identitetsnummer, { exact: true })).toBeVisible();
+    await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+    await expect(dialog.getByRole('button', { name: 'Gå til LOS' })).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+    ).toBeVisible();
+    await expect(
+        dialog.getByRole('button', {
+            name: continueAction ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
+        }),
+    ).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt' })).toBeEnabled();
+    return dialog;
+};
+
+const expectTwoApplicantNewCaseSelection = async (page: Page) => {
+    await expect(
+        page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)'),
+    ).toBeChecked();
+    await expect(page.getByLabel('Fødselsnummer annen søker:')).toHaveValue(ANNEN_SØKER_ID);
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
+    await expect(page.getByLabel('Velg hvilket barn det gjelder')).toHaveValue(BARN_FRA_LISTE.identitetsnummer);
+    await expect(page.locator('.journalpostpanel')).toContainText(SØKER_ID);
+    await expect(page.locator('.journalpostpanel')).toContainText(BARN_FRA_LISTE.identitetsnummer);
+    await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeEnabled();
+    await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled();
+};
+
+test('avbryter Fortsett og Vent for PSB med to søkere og ny sak', async ({ page }) => {
+    const mutations: string[] = [];
+    const debugCloseRequests: string[] = [];
+    const debugClosePrefix = ApiPath.JOURNALPOST_LUKK_DEBUGG.split('{journalpostId}')[0];
+
+    page.on('request', (request) => {
+        const path = new URL(request.url()).pathname;
+        const method = request.method();
+        if (path.startsWith('/api/k9-punsj/') && method !== 'GET' && method !== 'HEAD') {
+            mutations.push(`${method} ${path}`);
+        }
+        if (method === 'GET' && path.startsWith(debugClosePrefix)) {
+            debugCloseRequests.push(`${method} ${path}`);
+        }
+    });
+
+    const initial = page.waitForResponse((response) => isResponse(response, 'GET', journalpostPath(JOURNALPOST_ID)));
+    await page.goto(`/journalpost/${JOURNALPOST_ID}`);
+    const initialResponse = await initial;
+    expect(initialResponse.status()).toBe(200);
+    expect(initialResponse.fromServiceWorker()).toBe(true);
+    expect(await initialResponse.json()).toEqual({ ...journalpostFixture, journalpostId: JOURNALPOST_ID });
+
+    await installPersonLookupHandler(page);
+    const caseLookup = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === SØKER_ID,
+    );
+    await page.getByRole('radio', { name: 'Ja' }).check();
+    const caseResponse = await caseLookup;
+    expect(caseResponse.status()).toBe(200);
+    expect(caseResponse.fromServiceWorker()).toBe(true);
+    expect(caseResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+    expect(await caseResponse.json()).toEqual(fagsaker);
+
+    const panel = page.locator('.journalpostpanel');
+    const continueButton = page.locator('[data-test-id="journalførOgFortsett"]');
+    const holdButton = page.locator('[data-test-id="journalførOgVent"]');
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    await expect(page.getByRole('radio', { name: 'Ja' })).toBeChecked();
+    await expect(panel).toContainText(SØKER_ID);
+    await twoApplicants.check();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toContainText(
+        'Du skal registrere informasjon for en søker av gangen i Punsj.',
+    );
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toContainText(
+        'Du må fylle ut fødselsnummer til annen søker',
+    );
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    const personLookup = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:');
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    const personResponse = await personLookup;
+    expect(personResponse.status()).toBe(200);
+    expect(personResponse.fromServiceWorker()).toBe(true);
+    expect(personResponse.request().headers()['x-nav-norskident']).toBe(ANNEN_SØKER_ID);
+    expect(await personResponse.json()).toMatchObject({
+        identitetsnummer: ANNEN_SØKER_ID,
+        fornavn: 'TUNGSINDIG',
+        etternavn: 'KAKE',
+    });
+    await expect(page.getByText('Navn: TUNGSINDIG KAKE')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toContainText(
+        'Du må velge pleietrengende eller fagsak',
+    );
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toContainText(
+        'Du må velge pleietrengende eller fagsak',
+    );
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
+    await childSelect.selectOption(BARN_FRA_LISTE.identitetsnummer);
+    await expect(childSelect).toHaveValue(BARN_FRA_LISTE.identitetsnummer);
+    await expect(panel.getByText('Barnets ID:', { exact: true })).toBeVisible();
+    await expect(panel).toContainText(BARN_FRA_LISTE.identitetsnummer);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(continueButton).toBeEnabled();
+    await expect(holdButton).toBeEnabled();
+
+    await continueButton.click();
+    const continueDialog = await expectNewCaseSummary(page, true);
+    await continueDialog.getByRole('button', { name: 'Avbryt' }).click();
+    await expect(continueDialog).toBeHidden();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+    await expectTwoApplicantNewCaseSelection(page);
+    expect(mutations).toEqual([]);
+    expect(debugCloseRequests).toEqual([]);
+
+    await holdButton.click();
+    const holdDialog = await expectNewCaseSummary(page, false);
+    await holdDialog.getByRole('button', { name: 'Avbryt' }).click();
+    await expect(holdDialog).toBeHidden();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+    await expectTwoApplicantNewCaseSelection(page);
+    expect(mutations).toEqual([]);
+    expect(debugCloseRequests).toEqual([]);
+});
 
 test('journalfører PSB og kopierer til annen søker før originalen behandles videre', async ({ page }) => {
     const events: NetworkEvent[] = [];

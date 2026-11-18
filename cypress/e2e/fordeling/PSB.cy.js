@@ -5,12 +5,10 @@ import barnFraApi from '../../fixtures/barn.json';
 
 const dokumenttype = 'Pleiepenger sykt barn';
 const journalpostId = journalpost.journalpostId;
-const norskIdent = journalpost.norskIdent;
 const barn1FraApi = barnFraApi.barn[0];
 const barn3FraApi = barnFraApi.barn[2];
 const fnrBarnIkkeFraList = '53488838241';
 const fnrNySøker = '12448325820';
-const annenSøkerFnr = '02918496664';
 const fagsakUtenBarn = fagsaker[0];
 const fagsakMedBarn = fagsaker[2];
 const fagsakMedBarnReservert = fagsaker[3];
@@ -361,97 +359,4 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         // cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('Test to søkere i journalposten', () => {
-        cy.findByLabelText('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)')
-            .should('exist')
-            .check();
-
-        cy.get('[data-test-id="infoOmRegisteringAvToSokere"]').should('exist');
-        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('exist');
-
-        cy.findByLabelText('Fødselsnummer annen søker:').should('exist').type(annenSøkerFnr);
-
-        cy.get('[data-test-id="toSøkereIngenAnnenSøker"]').should('not.exist');
-        cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-        cy.findByLabelText('Velg hvilket barn det gjelder')
-            .select(getBarnInfoForSelect(barn1FraApi))
-            .should('have.value', barn1FraApi.identitetsnummer);
-
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Barnets ID/i).should('exist');
-            cy.findByText(barn1FraApi.identitetsnummer).should('exist');
-        });
-        cy.get('[data-test-id="toSøkereIngenPleietrengende"]').should('not.exist');
-
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
-    it('Åpne klassifiser modal fortsett med med 2 søkere, reserver fagsak og barn fra liste', () => {
-        cy.get('[data-test-id="journalførOgFortsett"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(norskIdent).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-                cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør journalposten');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-    });
-
-    it('Åpne klassifiser modal sett på vent med 2 søkere, reserver fagsak og barn fra liste', () => {
-        cy.get('[data-test-id="journalførOgVent"]').click();
-
-        cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
-        cy.get('[data-test-id="klassifiseringInfo"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(/Sakstype/i).should('exist');
-                cy.findByText(dokumenttype).should('exist');
-                cy.findByText(/Søkers ID/i).should('exist');
-                cy.findByText(norskIdent).should('exist');
-                cy.findByText(/Saksnummer/i).should('not.exist');
-                cy.findByText(/Periode/i).should('not.exist');
-                cy.findByText(/Pleietrengendes ID/i).should('exist');
-                cy.findByText(barn1FraApi.identitetsnummer).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalAlertBlokk"]')
-            .should('exist')
-            .within(() => {
-                cy.findByText(klassifiserModalAlertInfoKanIkkeEndres).should('exist');
-            });
-
-        cy.get('[data-test-id="klassifiserModalGåTilLos"]').should('not.exist');
-
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('not.be.disabled');
-        cy.get('[data-test-id="klassifiserModalJournalfør"]').should('contain', 'Journalfør og sett på vent');
-        cy.get('[data-test-id="klassifiserModalAvbryt"]').should('not.be.disabled').click();
-        cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
-    });
 });

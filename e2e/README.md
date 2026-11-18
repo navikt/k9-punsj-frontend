@@ -243,14 +243,13 @@ Ingen krav ble blokkert av en produksjonsfeil. Eksisterende fixtures gir React-a
 
 ## Fordeling PSB med to søkere
 
-`fordeling-psb-two-applicants.spec.ts` bruker en egen journalpost (`930317`) og en eksisterende PSB-sak med barn. Oppslaget for annen søker og kopieringsresponsen er avgrenset til denne nettleserkonteksten og scenario-ID-en.
+`fordeling-psb-two-applicants.spec.ts` har to selvstendige reiser for scenario `930317`: avbrudd med to søkere og ny sak, og journalføring med kopiering til en annen søker. Personoppslaget for annen søker er lokalt i nettleserkonteksten. Bare kopieringsreisen installerer en blokkert kopieringsrespons.
 
 | Kilde i `cypress/e2e/fordeling/PSB.cy.js` / kontrakt | Dekning eller gjenstående gap |
 | --- | --- |
-| 739–750: Registreringsinformasjon, advarsel om manglende annen søker og personoppslag | Den nye nettleserreisen bekrefter opprinnelig søker, krysser av for to søkere og kontrollerer informasjon, advarsel og oppslagsheader/svar |
-| 751–774: Advarsel om manglende barn, deaktiverte handlinger, barnevalg, panel og aktiverte handlinger | Samme reise kontrollerer advarsel og knapper før og etter valg av en eksisterende sak med barn. `fordelingUtils.spec.ts` beskytter også manglende/ugyldig annen søker, identkollisjoner og manglende barn |
-| 776–802: Fortsett-sammendrag, advarsel og avbryt | Samme reise kontrollerer sammendrag og beholdte valg uten mutasjoner for eksisterende sak med barn. `KlassifiserModal.spec.tsx` beskytter felles sammendrag og avbryt uten fagsak; `fordeling-psb-new-and-reserved.spec.ts` dekker nummerhåndtering for én søker. Den eksakte to-søker-koblingen med barn fra liste og nytt nummer gjenstår |
-| 804–830: Vent-sammendrag, advarsel og avbryt | Eksisterende modaltester beskytter felles Vent-sammendrag og avbryt med og uten sak/barn. Den eksakte to-søker-flyten med barn fra liste og nytt nummer er ikke dekket |
+| `Test to søkere i journalposten` (linje 364–394 før migrering): registreringsinformasjon, advarsel før og etter personoppslag, manglende barn, deaktiverte handlinger, barnevalg, panel og aktiverte handlinger | Avbruddsreisen bekrefter opprinnelig søker, annen søkers header og vellykkede service-worker-svar, advarsler og knapper før og etter valg av første barn fra `barn.json`. `fordelingUtils.spec.ts` beskytter også manglende/ugyldig annen søker og identkollisjoner |
+| `Åpne klassifiser modal fortsett med med 2 søkere, reserver fagsak og barn fra liste` (linje 396–425 før migrering): Fortsett-sammendrag, advarsel og avbryt | Avbruddsreisen kontrollerer feltetiketter og verdier uten saksnummer/periode, fravær av Gå til LOS, advarselen, aktive knapper, avbrudd, beholdte valg og fravær av mutasjoner |
+| `Åpne klassifiser modal sett på vent med 2 søkere, reserver fagsak og barn fra liste` (linje 427–457 før migrering): Vent-sammendrag, advarsel og avbryt | Avbruddsreisen kontrollerer samme sammendrag og avbryter Vent-modalen uten mutasjoner. Faktisk Vent-handling med to søkere gjenstår |
 | Tillegg: mottak, kopi og refresh av original før eksplisitt Videre | Nettleserreisen kontrollerer rekkefølge, pending-tilstand, request/response, opprinnelig søker og journalpost, ingen navigasjon før klikk og PSB-skjermen etterpå. Den oppretter eller sender ikke søknad |
 | Tillegg: kopieringsfeil og tilgangsfeil | `KlassifiserModal.spec.tsx` dekker nytt kopieringsforsøk uten nytt mottak, Videre uten nytt kopieringsforsøk og representativ tilgangsfeil (403) ved refresh etter vellykket kopi |
 
@@ -258,7 +257,7 @@ Mottak sender i dag `relatertPersonIdent: ""` også for PSB; backend behandler b
 
 Den interaktive historien [To søkere: kopieringsfeil og nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--to-sokere-kopier-feil-med-vellykket-nytt-forsok) viser generisk kopieringsfeil, nytt forsøk og aktiv **Videre**. Den lokale destinasjonen er bare en demonstrasjon; Playwright kontrollerer applikasjonsskjermen.
 
-To-søker-Vent med faktisk utførelse og samtidighet, behandling av kopiert journalpost og allerede behandlede journalposter gjenstår. Kopier-og-lukk er kartlagt separat nedenfor. Dette gir ikke full B25/B26/B34-paritet og erstatter ikke de gjenværende Cypress-testene.
+To-søker-Vent med faktisk utførelse og samtidighet, behandling av kopiert journalpost og allerede behandlede journalposter gjenstår. Avbruddsreisen journalfører, kopierer eller setter ikke journalposten på vent. Kopier-og-lukk er kartlagt separat nedenfor. Dette gir ikke full B25/B26/B34-paritet og erstatter ikke de gjenværende Cypress-testene.
 
 ```sh
 yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
