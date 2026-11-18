@@ -76,11 +76,11 @@ If the post-classification journalpost refresh returns 403, the current modal sh
 | Confirm the selected child case, verify the classification request and refreshed journalpost, then display the PSB registration choice                         | `fordeling-psb.spec.ts` — `journalfører valgt PSB-sak og går til riktig registreringsvalg`                |
 | Modal summary fields, warning, action callbacks, error/retry behavior and Redux update after refresh                                                           | `KlassifiserModal.spec.tsx`                                                                               |
 | Reserved/new single-applicant PSB cases                                                                                                                      | See the bounded new/reserved mapping below; not replaced by this pilot alone                               |
-| Document-type option list and remaining PSB variants                                                                                                           | Still in Cypress or later migration scope; see the bounded two-applicant mapping below                    |
+| Document-type option list                                                                                                                                      | The same selection journey checks the radio group under “Dette gjelder:”                                   |
 
-The four assertion-only Cypress blocks for the initial journalpost panel, selected document type, two-applicant checkbox and disabled journalfør buttons have also been removed. The selection journey above checks the same panel labels/values, selected PSB radio, visible unchecked checkbox and both disabled buttons before applicant confirmation. Opening the journalpost, hiding the PDF and the subsequent state-changing selection chain remain in Cypress.
+The selection journey also replaces the four initial Cypress checks for the journalpost panel, selected document type, two-applicant checkbox and disabled journalfør buttons. See [the final 13 blocks](#de-siste-13-blokkene-i-fordeling-psb) for the opening, PDF and selection checks.
 
-The three modal `it` blocks for existing cases have been removed from `PSB.cy.js` after the mapping below. Line numbers refer to the file before this cleanup. Applicant confirmation, both case-selection blocks and the subsequent reserved/new/two-applicant chain remain in Cypress.
+The table below maps the three modal blocks for existing cases. Line numbers refer to the Cypress file before those blocks were removed.
 
 | Removed Cypress block | Assertions | Automatic replacement |
 | --- | --- | --- |
@@ -91,6 +91,26 @@ The three modal `it` blocks for existing cases have been removed from `PSB.cy.js
 Five manual modal stories are available at [Fortsett med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--fortsett-med-eksisterende-sak-og-barn), [Vent med eksisterende sak og barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-med-eksisterende-sak-og-barn), [Vent uten barn](http://localhost:6006/?path=/story/components-klassifisermodal--vent-uten-barn), [Journalfør-feil med vellykket nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--journalfor-feil-med-vellykket-nytt-forsok), and [Vent-feil med vellykket retry](http://localhost:6006/?path=/story/components-klassifisermodal--vent-feil-med-vellykket-retry). They use isolated stores, routers, query clients and named MSW groups; the LOS action is local Storybook feedback.
 
 For browser review, start Storybook with `yarn storybook --host 127.0.0.1` and the [Playwright UI](http://127.0.0.1:9324/) with `yarn test:pw:ui e2e/tests/fordeling-psb.spec.ts --ui-host=127.0.0.1 --ui-port=9324`. For direct app links, start `yarn start:e2e` on port 8080 only when Playwright is not running tests; the two processes cannot share that port. Open [journalpost 930300](http://127.0.0.1:8080/journalpost/930300) to switch from the case without a child to the case with a child and cancel each modal. Open [journalpost 930301](http://127.0.0.1:8080/journalpost/930301), choose the existing case with a child, confirm journalføring, then choose **Registrere opplysninger til K9**. Stop manually started servers with Ctrl+C in their terminals. The pilot stops at the registration choice: it does not create, edit, validate or submit a PSB application.
+
+### De siste 13 blokkene i Fordeling PSB
+
+Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.js`. Bare denne Cypress-filen er fjernet. Kartleggingen gjelder ikke øvrige PSB- eller Fordeling-scenarier.
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 17: Åpne journalpost fra LOS | [`fordeling-psb.spec.ts`](tests/fordeling-psb.spec.ts): åpner PSB-journalposten direkte på `/journalpost/:id` og sjekker respons og panel. Cypress åpnet også URL-en direkte, uten å starte i LOS. |
+| 21: Skjul dokumentvindu | [`journalpost-loader.spec.ts`](tests/journalpost-loader.spec.ts): viser PDF, klikker Skjul og sjekker at PDF-en er borte mens panelet fortsatt vises. Gjentar etter omlasting. |
+| 25: Dokumentvalg | Saksvalgreisen i `fordeling-psb.spec.ts`: sjekker de fire dokumentvalgene i radiogruppen under «Dette gjelder:». |
+| 33: Bekreft søker og velg ordinær sak uten barn | Samme reise: bekrefter søker og sjekker valgt verdi, saksnummer, «Barn: ikke satt», fravær av Barnets ID, K9-lenke og bare aktiv Vent. |
+| 56: Velg ordinær sak med barn | Samme reise: sjekker valgt verdi, saksnummer, barnets navn og ID, K9-lenke og begge handlingene aktive. |
+| 81: Velg reservert sak med barn | [`fordeling-psb-new-and-reserved.spec.ts`](tests/fordeling-psb-new-and-reserved.spec.ts), reisen «velger reserverte saker og journalfører valgt nummer med barn til PSB»: sjekker valgt verdi, saksnummer, navn og ID, ingen K9-lenke og begge handlingene aktive. |
+| 104: Velg reservert sak uten barn | Samme reise: sjekker valgt verdi, saksnummer, «Barn: ikke satt», fravær av Barnets ID og K9-lenke, og bare aktiv Vent. |
+| 125: Reserver saksnummer til ny fagsak | Samme reise, steget «Bytt fra reservert sak uten barn til ny sak»: sjekker at tidligere sak og Saksnummer-feltet forsvinner, og at begge handlingene deaktiveres. Flaggtestene dekker også ordinær sak med barn → ny sak. |
+| 137: Velg barn med sak, flagg `true` | `fordeling-psb-new-and-reserved.spec.ts`, flaggtesten for `true`: sjekker listeverdi, Barnets ID, varsel med saks- og barne-ID og begge handlingene aktive. |
+| 162: Velg barn med sak, flagg `false` | Flaggtesten for `false`: bytter fra barn uten treff til barn med treff og tilbake. Sjekker listeverdi, Barnets ID, varsel med saks- og barne-ID og begge handlingene deaktivert ved treff. |
+| 191: Velg barn uten treff fra liste | Samme `false`-reise: sjekker listeverdi, Barnets ID, informasjon om journalføring uten fagsak, fravær av treffvarsel og begge handlingene aktive. |
+| 206: Det gjelder et annet barn | Samme reise: fjerner forrige barn og deaktiverer begge handlingene, fyller ut gyldig manuell ident og sjekker panel, informasjon og begge handlingene aktive. |
+| 230: Pleietrengende har ikke fødselsnummer | Samme reise: fjerner Barnets ID og manuell ident, viser informasjon og holder bare Vent aktiv. Reisen avbryter modalene og sjekker at ingen mutasjoner sendes. |
 
 ## Fordeling nullstilling
 
@@ -113,7 +133,7 @@ Validering 2026-11-06 etter integrering av #3973: kombinert kjøring av reset- o
 | Fjernet: `Test bekreft søker på nytt og pleietrengende fjernet fra state` | Samme reise, steget «Bekreft opprinnelig søker på nytt»: Søkers ID og opprinnelig søker vises; ny søker, Barnets ID og tidligere barn er borte. Begge handlinger er deaktivert før nytt barnevalg; no-ID-checkbox, identfelt og informasjon er nullstilt |
 | PLS mellom PSB-valg, deretter nytt PSB-valg uten gammel sak/barn                                                                           | `fordeling-reset.spec.ts` — `nullstiller sak og barn ved bytte av dokumenttype`; tilleggsdekning utover gammel Cypress                         |
 
-De fem siste Cypress-blokkene for søkerbytte ble fjernet 2026-11-18 etter bekreftet Playwright-dekning. Kjeden til og med «Test Pleietrengende har ikke fødselsnummer» er beholdt. Reisen avviser mutasjoner og GET-debugglukking; varianten med tomt saksoppslag er fortsatt en egen reset-test.
+De fem siste Cypress-blokkene for søkerbytte ble fjernet 2026-11-18 etter bekreftet Playwright-dekning. Se [De siste 13 blokkene i Fordeling PSB](#de-siste-13-blokkene-i-fordeling-psb) for Playwright-dekningen av den tidligere valgkjeden. Reisen avviser mutasjoner og GET-debugglukking; varianten med tomt saksoppslag er fortsatt en egen reset-test.
 
 ### Erstattede kontroller fra `NullstillingPleietrengende.cy.js`
 
@@ -195,7 +215,7 @@ Fem uavhengige tester i `fordeling-psb-new-and-reserved.spec.ts` bruker journalp
 | --- | --- |
 | 215–353: Reserverte option-etiketter, valgt verdi, barnets navn/ID eller «ikke satt», ingen K9-lenke, journalpostpanel og Fortsett/Vent-tilstander | `velger reserverte saker og journalfører valgt nummer med barn til PSB` velger begge reserverte fixtures |
 | 215–353: Fortsett/Vent med barn og Vent uten barn, sammendrag, periode, advarsel, handling og avbrytelse uten mutasjon | Samme nettlesertest; modaltabellen i `KlassifiserModal.spec.tsx` har radene `Fortsett med reservert sak og barn`, `Vent med reservert sak og barn` og `Vent med reservert sak uten barn` |
-| 354–369: Reserver nullstiller gammel sak/barn og saksnummer i panelet; begge handlingene er deaktivert før nytt barnevalg | `ny-sak-modus respekterer frontendflagget false uten mutasjoner` og den uavhengige `true`-varianten |
+| 354–369: Reserver nullstiller gammel sak/barn og saksnummer i panelet; begge handlingene er deaktivert før nytt barnevalg | Reisen for reserverte saker starter overgangen fra reservert sak uten barn. Begge flaggtestene starter den fra ordinær sak med barn. |
 | 370–420: Barn med eksisterende PSB-sak gir identifiserende advarsel; frontendflagget tillater eller blokkerer begge handlinger | De samme to flaggtestene gjennom faktisk Fordeling-UI; ingen innsending |
 | 421–498: Barn uten matchende sak fra listen, panel, informasjon, aktive handlinger og Fortsett/Vent-sammendrag uten sak/periode, med avbrytelse | `false`-varianten og `journalfører ny PSB-sak uten gammelt nummer og viser returnert reservasjon`; eksisterende komponenttest `viser modal for Fortsett uten fagsak med barn og avbryter uten mutasjon` og ny tabellrad `Vent uten fagsak med barn` dekker felles modalinnhold |
 | 499–620: Eksplisitt annet barn, gyldig manuell fixture-ident og manglende fødselsnummer; panel, informasjon, knappetilstander og modalavbryt | `false`-varianten gjør alle overgangene med ikke-tom saksliste og avbryter begge modalene for manuelt barn samt Vent uten ident. Tilsvarende tomliste-/reset-assertions beholdes i `håndterer tomt saksoppslag med barn fra listen og manuell ident` og `nullstiller søker og barn når søkeridenten endres`; eksisterende komponenttest `viser modal for Vent uten fagsak eller barn og avbryter uten mutasjon` dekker felles sammendrag uten barn |
@@ -203,7 +223,7 @@ Fem uavhengige tester i `fordeling-psb-new-and-reserved.spec.ts` bruker journalp
 | B34: Ny reservasjon utelater `saksnummer` og `periode` på wire og bruker et nytt returnert nummer, ikke tidligere valgt fixture-sak | `journalfører ny PSB-sak uten gammelt nummer og viser returnert reservasjon`; komponenttesten `bruker det returnerte nye nummeret i callback, oppdaterer journalpost og navigerer til PSB` kontrollerer `setFagsak`, barn, PSB, tom periode, `reservertSaksnummer`, Redux og navigasjon |
 | Tillegg utover Cypress: Backendformet 409 selv om frontendflagget tillater ny sak | `viser generisk feil ved backendkonflikt og beholder ny-sak-valgene etter avbryt` kontrollerer ProblemDetail, request/header/status, generisk klassifiseringsfeil, mulig nytt forsøk/avbrytelse, beholdte valg, ingen refresh, suksess eller navigasjon |
 
-Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. De tre modalblokkene for reserverte saker er senere fjernet etter kartleggingen under; linjenumrene her viser filen rett før den oppryddingen. Begge `it`-blokkene for valg av reservert sak er beholdt i Cypress.
+Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. Tabellen under viser linjenumrene før de tre modalblokkene for reserverte saker ble fjernet. Selve saksvalgene er kartlagt under [de siste 13 blokkene](#de-siste-13-blokkene-i-fordeling-psb).
 
 | Fjernet Cypress-blokk | Assertions | Automatisk dekning |
 | --- | --- | --- |
@@ -213,7 +233,7 @@ Linjenumrene i tabellen over gjelder en eldre versjon av `PSB.cy.js`. De tre mod
 
 De utvidede kontrollene i `expectSummary` gjelder også modalene i ny-sak- og 409-reisene i samme fil.
 
-De fem modalblokkene for ny sak og én søker er fjernet etter kartleggingen under. Linjenumrene viser `PSB.cy.js` rett før denne oppryddingen. Testene for ny-sak-modus, barnevalg, manuell ident, manglende fødselsnummer, søkerbytte og to søkere er beholdt.
+De fem modalblokkene for ny sak og én søker er fjernet etter kartleggingen under. Linjenumrene viser `PSB.cy.js` før disse blokkene ble fjernet. [De siste 13 blokkene](#de-siste-13-blokkene-i-fordeling-psb) viser hvor valgkjeden dekkes.
 
 Alle fem dekkes av `ny-sak-modus respekterer frontendflagget false uten mutasjoner`: `expectSummary` kontrollerer overskrift, sakstype og søker med etiketter og verdier, ingen saksnummer eller periode, varsel, fravær av Gå til LOS og aktive knapper med riktig handlingstekst. `cancelSummary` kontrollerer at modalen fjernes. Reisen kontrollerer beholdte valg og at ingen mutasjoner sendes.
 

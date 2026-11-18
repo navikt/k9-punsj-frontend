@@ -27,6 +27,14 @@ const isResponse = (response: Response, method: string, path: string) =>
 const fortsett = (page: Page) => page.locator('[data-test-id="journalførOgFortsett"]');
 const vent = (page: Page) => page.locator('[data-test-id="journalførOgVent"]');
 const panel = (page: Page) => page.locator('.journalpostpanel');
+const panelCaseNumber = (page: Page) => panel(page).getByText('Saksnummer:', { exact: true });
+const panelChildId = (page: Page) => panel(page).getByText('Barnets ID:', { exact: true });
+
+const expectPanelChild = async (page: Page, childId: string) => {
+    const label = panelChildId(page);
+    await expect(label).toBeVisible();
+    await expect(label.locator('..').getByText(childId, { exact: true })).toBeVisible();
+};
 
 const recordRequests = (page: Page, id: string) => {
     const mutations: string[] = [];
@@ -81,19 +89,24 @@ const expectButtons = async (page: Page, continueEnabled: boolean, holdEnabled =
     await expect(vent(page)).toBeEnabled({ enabled: holdEnabled });
 };
 
-const enterNewMode = async (page: Page) => {
-    await page.getByLabel('Velg fagsak').selectOption(EKSISTERENDE_SAK.fagsakId);
-    await expect(panel(page)).toContainText(EKSISTERENDE_SAK.fagsakId);
-    await expect(panel(page)).toContainText(EKSISTERENDE_SAK.pleietrengende!.identitetsnummer);
+const switchToNewCase = async (page: Page, previousCaseId: string) => {
     await page.getByLabel('Reserver saksnummer til ny fagsak').check();
     await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
     await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
     await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
-    await expect(panel(page).getByText(/Saksnummer/)).toHaveCount(0);
-    await expect(panel(page)).not.toContainText(EKSISTERENDE_SAK.fagsakId);
-    await expect(panel(page)).not.toContainText(EKSISTERENDE_SAK.pleietrengende!.identitetsnummer);
+    await expect(panelCaseNumber(page)).toHaveCount(0);
+    await expect(panel(page)).not.toContainText(previousCaseId);
     await expectButtons(page, false);
     await expect(page.getByLabel('Velg hvilket barn det gjelder')).toBeVisible();
+};
+
+const enterNewMode = async (page: Page) => {
+    const childId = EKSISTERENDE_SAK.pleietrengende!.identitetsnummer;
+    await page.getByLabel('Velg fagsak').selectOption(EKSISTERENDE_SAK.fagsakId);
+    await expect(panel(page)).toContainText(EKSISTERENDE_SAK.fagsakId);
+    await expectPanelChild(page, childId);
+    await switchToNewCase(page, EKSISTERENDE_SAK.fagsakId);
+    await expect(panel(page)).not.toContainText(childId);
 };
 
 const expectSummary = async (page: Page, continueAction: boolean, childId?: string, caseId?: string) => {
@@ -154,7 +167,7 @@ const cancelSummary = async (page: Page, continueAction: boolean, childId?: stri
 };
 
 const expectNewChild = async (page: Page, childId: string) => {
-    await expect(panel(page)).toContainText(childId);
+    await expectPanelChild(page, childId);
     await expect(panel(page).getByText(/Saksnummer/)).toHaveCount(0);
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expect(page.locator('[data-test-id="pleietrengendeHarFagsak"]')).toHaveCount(0);
@@ -251,23 +264,33 @@ test('velger reserverte saker og journalfører valgt nummer med barn til PSB', a
         await expect(panel(page)).toContainText(id);
         await expect(panel(page)).toContainText(SØKER_ID);
         await expect(panel(page)).toContainText('Pleiepenger sykt barn');
-        await expect(panel(page)).toContainText(sak.fagsakId);
+        const caseNumber = panelCaseNumber(page);
+        await expect(caseNumber).toBeVisible();
+        await expect(caseNumber.locator('..').getByText(sak.fagsakId, { exact: true })).toBeVisible();
         const child = sak.pleietrengende;
         if (child) {
             await expect(info).toContainText(`Navn: ${child.navn}`);
             await expect(info).toContainText(`Id: ${child.identitetsnummer}`);
-            await expect(panel(page)).toContainText(child.identitetsnummer);
+            await expectPanelChild(page, child.identitetsnummer);
             await expectButtons(page, true);
             await cancelSummary(page, true, child.identitetsnummer, sak.fagsakId);
             await expect(select).toHaveValue(sak.fagsakId);
         } else {
             await expect(info).toContainText('ikke satt');
-            await expect(panel(page).getByText('Barnets ID', { exact: true })).toHaveCount(0);
+            await expect(panelChildId(page)).toHaveCount(0);
             await expectButtons(page, false, true);
         }
         await cancelSummary(page, false, child?.identitetsnummer, sak.fagsakId);
         await expect(select).toHaveValue(sak.fagsakId);
         expect(mutations).toEqual([]);
+        if (!child) {
+            await test.step('Bytt fra reservert sak uten barn til ny sak', async () => {
+                await switchToNewCase(page, sak.fagsakId);
+                await page.getByLabel('Reserver saksnummer til ny fagsak').uncheck();
+                await expect(select).toBeEnabled();
+                expect(mutations).toEqual([]);
+            });
+        }
     }
     await confirmAndExpectDestination(
         page,
@@ -287,14 +310,23 @@ for (const flag of [false, true]) {
         await enterNewMode(page);
         expect(mutations).toEqual([]);
         const childSelect = page.getByLabel('Velg hvilket barn det gjelder');
-        await childSelect.selectOption(EKSISTERENDE_SAK.pleietrengende!.identitetsnummer);
+        if (!flag) {
+            await childSelect.selectOption(BARN_ID);
+            await expect(childSelect).toHaveValue(BARN_ID);
+            await expectNewChild(page, BARN_ID);
+        }
+        const childWithCase = EKSISTERENDE_SAK.pleietrengende!.identitetsnummer;
+        await childSelect.selectOption(childWithCase);
+        await expect(childSelect).toHaveValue(childWithCase);
         const warning = page.locator('[data-test-id="pleietrengendeHarFagsak"]');
+        await expect(warning).toBeVisible();
         await expect(warning).toContainText(EKSISTERENDE_SAK.fagsakId);
-        await expect(warning).toContainText(EKSISTERENDE_SAK.pleietrengende!.identitetsnummer);
-        await expect(panel(page)).toContainText(EKSISTERENDE_SAK.pleietrengende!.identitetsnummer);
+        await expect(warning).toContainText(childWithCase);
+        await expectPanelChild(page, childWithCase);
         await expectButtons(page, flag);
         if (!flag) {
             await childSelect.selectOption(BARN_ID);
+            await expect(childSelect).toHaveValue(BARN_ID);
             await expectNewChild(page, BARN_ID);
             for (const action of [true, false]) {
                 await cancelSummary(page, action, BARN_ID);
@@ -303,9 +335,11 @@ for (const flag of [false, true]) {
             }
             await page.getByLabel('Det gjelder et annet barn').check();
             await expect(childSelect).toBeDisabled();
+            await expect(panelChildId(page)).toHaveCount(0);
             await expect(panel(page)).not.toContainText(BARN_ID);
             await expectButtons(page, false);
             const manual = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+            await expect(manual).toBeEnabled();
             await expect(manual).toHaveValue('');
             await manual.fill(MANUELT_BARN_ID);
             await expect(page.getByText('Navn: TUNGSINDIG KAKE')).toBeVisible();
@@ -319,7 +353,7 @@ for (const flag of [false, true]) {
             await noId.check();
             await expect(manual).toBeDisabled();
             await expect(manual).toHaveValue('');
-            await expect(panel(page).getByText('Barnets ID', { exact: true })).toHaveCount(0);
+            await expect(panelChildId(page)).toHaveCount(0);
             await expect(panel(page)).not.toContainText(MANUELT_BARN_ID);
             await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
             await expectButtons(page, false, true);

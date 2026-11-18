@@ -80,7 +80,15 @@ test('velger saker med og uten barn, og åpner riktig modal uten å utføre hand
     });
 
     await openPsbJournalpost(page, FORDELING_PSB_SCENARIOS.selection);
-    await expect(page.locator('input[value="PLEIEPENGER"]')).toBeChecked();
+    const documentHeading = page.getByRole('heading', { name: 'Dette gjelder:', exact: true });
+    await expect(documentHeading).toBeVisible();
+    const documentChoices = documentHeading.locator('../..').getByRole('radiogroup');
+    const psbChoice = documentChoices.getByRole('radio', { name: 'Pleiepenger sykt barn', exact: true });
+    await expect(psbChoice).toBeVisible();
+    await expect(psbChoice).toBeChecked();
+    for (const name of ['Omsorgspenger/omsorgsdager', 'Pleiepenger i livets sluttfase', 'Annet']) {
+        await expect(documentChoices.getByRole('radio', { name, exact: true })).toBeVisible();
+    }
     const toApplicants = page.locator('input[data-test-id="toSokereCheckbox"]');
     await expect(toApplicants).toBeVisible();
     await expect(toApplicants).not.toBeChecked();
@@ -97,16 +105,21 @@ test('velger saker med og uten barn, og åpner riktig modal uten å utføre hand
     await expect(journalpostPanel).toContainText(SØKER_ID);
     await expect(journalpostPanel).toContainText('Sakstype');
     await expect(journalpostPanel).toContainText('Pleiepenger sykt barn');
+    const caseNumber = journalpostPanel.getByText('Saksnummer:', { exact: true });
+    const childId = journalpostPanel.getByText('Barnets ID:', { exact: true });
 
     await test.step('Velg eksisterende sak uten barn og avbryt Vent-modal', async () => {
         await confirmApplicantAndSelectCase(page, SAK_UTEN_BARN.id);
+        await expect(page.getByLabel('Velg fagsak')).toHaveValue(SAK_UTEN_BARN.id);
         const selectedInfo = page.locator('.fagsakSelectedInfo');
         await expect(selectedInfo).toContainText('Barn:');
         await expect(selectedInfo).toContainText('ikke satt');
         const caseLink = selectedInfo.getByRole('link', { name: 'Se fagsak i K9' });
-        await expect(caseLink).toHaveAttribute('href', new RegExp(SAK_UTEN_BARN.id));
-        await expect(journalpostPanel).toContainText(SAK_UTEN_BARN.id);
-        await expect(journalpostPanel.getByText('Barnets ID', { exact: false })).toHaveCount(0);
+        await expect(caseLink).toBeVisible();
+        await expect(caseLink).toHaveAttribute('href', new RegExp(`/${SAK_UTEN_BARN.id}$`));
+        await expect(caseNumber).toBeVisible();
+        await expect(caseNumber.locator('..').getByText(SAK_UTEN_BARN.id, { exact: true })).toBeVisible();
+        await expect(childId).toHaveCount(0);
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeEnabled();
 
@@ -127,11 +140,18 @@ test('velger saker med og uten barn, og åpner riktig modal uten å utføre hand
 
     await test.step('Bytt til sak med barn og åpne Fortsett- og Vent-modalene', async () => {
         await page.getByLabel('Velg fagsak').selectOption(SAK_MED_BARN.id);
+        await expect(page.getByLabel('Velg fagsak')).toHaveValue(SAK_MED_BARN.id);
         const selectedInfo = page.locator('.fagsakSelectedInfo');
+        await expect(selectedInfo).toContainText('Barn:');
         await expect(selectedInfo).toContainText(`Navn: ${SAK_MED_BARN.barnNavn}`);
         await expect(selectedInfo).toContainText(`Id: ${SAK_MED_BARN.barnId}`);
-        await expect(journalpostPanel).toContainText(SAK_MED_BARN.id);
-        await expect(journalpostPanel).toContainText(SAK_MED_BARN.barnId);
+        const caseLink = selectedInfo.getByRole('link', { name: 'Se fagsak i K9' });
+        await expect(caseLink).toBeVisible();
+        await expect(caseLink).toHaveAttribute('href', new RegExp(`/${SAK_MED_BARN.id}$`));
+        await expect(caseNumber).toBeVisible();
+        await expect(caseNumber.locator('..').getByText(SAK_MED_BARN.id, { exact: true })).toBeVisible();
+        await expect(childId).toBeVisible();
+        await expect(childId.locator('..').getByText(SAK_MED_BARN.barnId, { exact: true })).toBeVisible();
         await expect(continueButton).toBeEnabled();
         await expect(holdButton).toBeEnabled();
 

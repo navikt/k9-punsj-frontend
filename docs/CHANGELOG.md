@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Saks- og barnevalg i Fordeling PSB
+
+- Kompletterte eksisterende Playwright-reiser med dokumentvalg, saks- og barnevalg, overgang til ny sak og begge flaggverdier. Fjernet `cypress/e2e/fordeling/PSB.cy.js` etter å ha kartlagt alle 13 gjenværende blokker, inkludert PDF-handlingen Skjul. Øvrige Cypress-spesifikasjoner er uendret.
+
 #### 2026-11-18 — Søkerbytte i PSB
 
 - Utvidet den eksisterende Playwright-reisen med panel- og modaletiketter, handlingstekster og beholdt søker/barn etter avbrytelse. Fjernet de fem dekkede Cypress-blokkene for søkerbytte; den tidligere valgkjeden og reset-varianten med tomt saksoppslag er beholdt.
