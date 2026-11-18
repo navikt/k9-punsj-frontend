@@ -16,6 +16,8 @@ yarn test:storybook
 
 The isolated Vitest config renders every discovered story in headless Chromium and executes its `play` function, using the Storybook preview annotations and MSW handlers. It does not start the application server or run ordinary unit tests. The command writes `storybook-junit.xml`; the PR job uploads that report for seven days. These are render and interaction checks, not visual snapshot comparisons.
 
+Ordinary Vitest remains a single unsharded PR job with two workers. Sharding is deferred until comparable GitHub Actions timings show that the latency savings justify the duplicated job setup.
+
 After the master update on 2026-11-17, case lookup tests distinguish access denial (403) from other errors. The Fordeling browser tests and the creation/letter component tests also verify that backend reasons are not displayed. The new Cypress lookup regressions from master are retained until their assertion parity is reviewed separately. Home routing assertions allow the PDF document query parameter.
 
 Install Chromium once:
