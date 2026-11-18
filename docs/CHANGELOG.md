@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Klassifiseringsmodal for reserverte PSB-saker
+
+- Utvidet sammendragskontrollen i Playwright-filen for nye og reserverte saker med feltetiketter, varselblokk, aktiv Avbryt og beholdt saksvalg. Fjernet de tre tilsvarende modalblokkene for reserverte saker i `PSB.cy.js`; saksvalgene er beholdt.
+
 #### 2026-11-18 — Klassifiseringsmodal for eksisterende PSB-saker
 
 - Utvidet modalkontrollen i den eksisterende Playwright-reisen for saksvalg med feltetiketter, varselblokk og aktiverte knapper. Fjernet de tre tilsvarende modalblokkene i `PSB.cy.js` etter kartlegging; søkerbekreftelse og saksvalg er beholdt.

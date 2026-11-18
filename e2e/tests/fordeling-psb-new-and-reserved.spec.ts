@@ -106,9 +106,12 @@ const expectSummary = async (page: Page, continueAction: boolean, childId?: stri
                 : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
         }),
     ).toBeVisible();
+    await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
     await expect(info.getByText('Pleiepenger sykt barn', { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
     await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
     if (caseId) {
+        await expect(info.getByText('Saksnummer:', { exact: true })).toBeVisible();
         await expect(info.getByText(caseId, { exact: true })).toBeVisible();
         await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
         await expect(info).toContainText('15.04.2024');
@@ -117,17 +120,23 @@ const expectSummary = async (page: Page, continueAction: boolean, childId?: stri
         await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
     }
     if (childId) {
+        await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
         await expect(info.getByText(childId, { exact: true })).toBeVisible();
     } else {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
     }
-    await expect(dialog.getByText('Informasjonen kan ikke endres etter journalposten er journalført.')).toBeVisible();
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+    ).toBeVisible();
     await expect(dialog.getByRole('button', { name: 'Gå til LOS' })).toHaveCount(0);
     await expect(
         dialog.getByRole('button', {
             name: continueAction ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
         }),
     ).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt' })).toBeEnabled();
     return dialog;
 };
 
@@ -244,6 +253,7 @@ test('velger reserverte saker og journalfører valgt nummer med barn til PSB', a
             await expect(panel(page)).toContainText(child.identitetsnummer);
             await expectButtons(page, true);
             await cancelSummary(page, true, child.identitetsnummer, sak.fagsakId);
+            await expect(select).toHaveValue(sak.fagsakId);
         } else {
             await expect(info).toContainText('ikke satt');
             await expect(panel(page).getByText('Barnets ID', { exact: true })).toHaveCount(0);
