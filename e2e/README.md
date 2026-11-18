@@ -171,12 +171,14 @@ yarn test:pw e2e/tests/fordeling*.spec.ts
 
 `fordeling-psb-copy-and-close.spec.ts` bruker en isolert ferdigstilt kilde med reservert saksnummer og en annen, eksisterende sak for valgt barn.
 
+Deler av den siste Cypress-blokken er fjernet etter kartleggingen. Cypress beholder oppsettet og kontrollene av søkerens radioknapper, første barnevalg og kopiering med 202, som ikke er fullt dekket av task 14-testene. Linjenumrene i tabellen viser `PSB.cy.js` før oppryddingen.
+
 | Kilde i `cypress/e2e/fordeling/PSB.cy.js` | Dekning eller gjenstående gap |
 | --- | --- |
-| 991–1041: Ferdigstilt-varsel, låste valg, bekreftet søker, fraværende journalfør-knapper og valg av barn uten treff | Playwright kontrollerer koblingen og knappetilstandene. `fordelingUtils.spec.ts` beskytter rene identitets- og toggle-regler. Selve videreføringen, brevet og Vent for barn uten treff er ikke dekket her |
+| 991–1041: Ferdigstilt-varsel, låste valg, bekreftet søker, fraværende journalfør-knapper og valg av barn uten treff | Playwright kontrollerer varsel, dokumenttype, valgt Ja, deaktivert Nei og handlinger. Cypress beholder kontrollene av aktiv Ja, ikke valgt Nei og verdien til første barnevalg. `fordelingUtils.spec.ts` beskytter rene identitets- og toggle-regler. Selve videreføringen, brevet og Vent for barn uten treff er ikke dekket her |
 | 1042–1057: Barn med eksisterende sak, skjulte vanlige handlinger, advarsel og kopieringsknapp | Playwright kontrollerer barn, sak, advarsel og handlinger |
 | 1058–1067: Modaltittel, forklaring, barn, knapper og kopieringsfeil | Playwright kontrollerer sammendrag og avbryt; `KopierModal.spec.tsx` dekker generisk feil og nytt forsøk med backendformet 201, ikke Cypress-mockens 202 |
-| 1068–1095: Opprettet kopi, lukkefeil og tilgjengelig nytt forsøk eller retur | Modaltestene og [Lukkefeil med nytt forsøk](http://localhost:6006/?path=/story/components-kopiermodal--lukkefeil-med-nytt-fors%C3%B8k) dekker begge valgene |
+| 1068–1095: Opprettet kopi, lukkefeil og tilgjengelig nytt forsøk eller retur | Modaltestene og [Lukkefeil med nytt forsøk](http://localhost:6006/?path=/story/components-kopiermodal--lukkefeil-med-nytt-fors%C3%B8k) dekker begge valgene med kopisvar 201. Cypress beholder forløpet med 202 etter kopieringsfeil |
 | 1096–1124: Nytt lukkeforsøk, suksess og eksplisitt LOS-retur | Modaltestene og historien dekker nytt forsøk; Playwright kontrollerer faktisk toppnivånavigasjon etter direkte vellykket lukking |
 
 Tillegg til Cypress: kontrakter og rekkefølge for kopi og lukking, kildesak mot målsak, avbryt uten mutasjoner, første visning av 403/409, ingen automatisk navigasjon og antall kall ved nytt lukkeforsøk. Modaltesten kontrollerer at «Tilbake til LOS» er deaktivert under pågående lukking. «Lukk journalpost» vises bare etter lukkefeil, forsvinner når nytt forsøk fjerner feiltilstanden og vises igjen dersom lukking feiler på nytt. Denne oppførselen er akseptert.

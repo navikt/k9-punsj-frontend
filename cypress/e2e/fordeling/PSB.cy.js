@@ -997,36 +997,9 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
         cy.findByText(/Skjul/i).should('exist').click();
     });
 
-    it('Test vises info om at journalpost ferdistilt uten pleietrengende', () => {
-        cy.findByText(/Journalposten er journalført, men mangler opplysninger om pleietrengende./i).should('exist');
-    });
-
-    it('Test at det valgte riktig dokumenttype', () => {
-        cy.get('[data-test-id="dokumenttypeRadioPanelPleiepenger"]').should('not.be.disabled').should('be.checked');
-    });
-
-    it('Test at andre dokumenttyper er disabled', () => {
-        cy.get('[data-test-id="dokumenttypeRadioPanelOmsorgspenger"]').should('be.disabled');
-        cy.get('[data-test-id="dokumenttypeRadioPanelPleiepengerILivetsSluttfase"]').should('be.disabled');
-        cy.get('[data-test-id="dokumenttypeRadioPanelAnnet"]').should('be.disabled');
-        // cy.get('[data-test-id="dokumenttypeRadioPanelOpplæringspenger"]').should('be.disabled');
-    });
-
     it('Test at søker bekrefted', () => {
         cy.get('[data-test-id="bekreftSøker-ja"]').should('not.be.disabled').should('be.checked');
         cy.get('[data-test-id="bekreftSøker-nei"]').should('be.disabled').should('not.be.checked');
-    });
-
-    it('Test at det vises ikke knapper jornalfør', () => {
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.exist');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.exist');
-    });
-
-    it('Test at det ikke er mulig å gå videre uten pleietrengende', () => {
-        cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('exist').should('be.disabled');
-        cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"]')
-            .should('exist')
-            .should('not.be.disabled');
     });
 
     it('Test at det er mulig å gå videre med pleietrengende', () => {
@@ -1045,10 +1018,6 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
             .should('have.value', barn3FraApi.identitetsnummer);
         cy.get('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]').should('not.exist');
         cy.get('[data-test-id="ferdistiltJpReservertSaksnummeråpneVentLukkBrevModalBtn"]').should('not.exist');
-    });
-
-    it('Test at det vises alert ved valg av pleietrengende som er i eksisterende fagsak', () => {
-        cy.get('[data-test-id="pleietrengendeHarFagsakFerdistiltJpWarning"]').should('exist');
     });
 
     it('Test at det vises kopier/lukk knapp ved valg av pleietrengende som er i eksisterende fagsak', () => {
@@ -1091,35 +1060,5 @@ describe(`Fordeling ${dokumenttype} - ferdistilt jp uten pleietrengende`, { test
 
         cy.get('[data-test-id="kopierLukkBtn"]').should('exist').should('not.be.disabled');
         cy.get('[data-test-id="kopierTilbakeTilLosBtn"]').should('exist').should('not.be.disabled');
-    });
-
-    it('Test kopier/lukk jp', () => {
-        cy.window().then((window) => {
-            const { worker } = window.msw;
-            worker.use(
-                http.post(
-                    ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace(
-                        '{journalpostId}',
-                        ferdistiltJournalpostUtenBarn.journalpostId,
-                    ),
-                    () =>
-                        HttpResponse.json(
-                            {
-                                saksnummer: '1DQAW94',
-                            },
-                            { status: 200 },
-                        ),
-                ),
-            );
-        });
-        cy.get('[data-test-id="kopierLukkBtn"]').click();
-
-        cy.get('[data-test-id="kopierModalLukkError"]').should('not.exist');
-        cy.get('[data-test-id="kopierLukkBtn"]').should('not.exist');
-        cy.get('[data-test-id="kopierModalLukkSuccess"]').should('exist');
-
-        cy.get('[data-test-id="kopierTilbakeTilLosBtn"]').should('exist').should('not.be.disabled').click();
-
-        cy.findByText(/Vil du kopiere og lukke journalposten?/i).should('not.exist');
     });
 });
