@@ -1,6 +1,7 @@
 import { ApiPath } from 'app/apiConfig';
 import { http, HttpResponse } from 'msw/http';
 import journalpostFixture from '../../cypress/fixtures/jpPSB300.json';
+import completedJournalpostFixture from '../../cypress/fixtures/jpPSB312.json';
 import fagsaker from '../../cypress/fixtures/fagsaker.json';
 import { FORDELING_PSB_SCENARIOS } from './fordelingPsbTestScenarioIds';
 
@@ -110,6 +111,26 @@ const mockHandlersFordelingPsb = [
     ...reservedNumberScenario(FORDELING_PSB_SCENARIOS.newCaseSuccess, 'NYPSB12', '18410162721', { fom: '', tom: '' }),
     ...scenario(FORDELING_PSB_SCENARIOS.newCaseConflict, 0),
     ...scenario(FORDELING_PSB_SCENARIOS.twoApplicants, 2),
+    http.get(ApiPath.JOURNALPOST_GET.replace('{journalpostId}', FORDELING_PSB_SCENARIOS.copyAndClose), () =>
+        HttpResponse.json({ ...completedJournalpostFixture, journalpostId: FORDELING_PSB_SCENARIOS.copyAndClose }),
+    ),
+    http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', FORDELING_PSB_SCENARIOS.copyAndClose), () =>
+        HttpResponse.json(
+            {
+                nyJournalpostId: '9303181',
+                saksnummer: fagsaker[2].fagsakId,
+                til: completedJournalpostFixture.norskIdent,
+                pleietrengende: fagsaker[2].pleietrengende!.identitetsnummer,
+                annenPart: null,
+                ytelse: 'PSB',
+            },
+            { status: 201 },
+        ),
+    ),
+    http.post(
+        ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', FORDELING_PSB_SCENARIOS.copyAndClose),
+        () => new HttpResponse(null, { status: 200 }),
+    ),
     http.post(ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', FORDELING_PSB_SCENARIOS.twoApplicants), () =>
         HttpResponse.json(
             {

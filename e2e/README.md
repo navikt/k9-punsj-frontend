@@ -159,12 +159,33 @@ Mottak sender i dag `relatertPersonIdent: ""` også for PSB; backend behandler b
 
 Den interaktive historien [To søkere: kopieringsfeil og nytt forsøk](http://localhost:6006/?path=/story/components-klassifisermodal--to-sokere-kopier-feil-med-vellykket-nytt-forsok) viser generisk kopieringsfeil, nytt forsøk og aktiv **Videre**. Den lokale destinasjonen er bare en demonstrasjon; Playwright kontrollerer applikasjonsskjermen.
 
-To-søker-Vent med faktisk utførelse og samtidighet, behandling av kopiert journalpost, allerede behandlede journalposter og kopier-og-lukk (`PSB.cy.js:1054–1124`) gjenstår. Dette gir ikke full B25/B26/B34-paritet og erstatter ikke de gjenværende Cypress-testene.
+To-søker-Vent med faktisk utførelse og samtidighet, behandling av kopiert journalpost og allerede behandlede journalposter gjenstår. Kopier-og-lukk er kartlagt separat nedenfor. Dette gir ikke full B25/B26/B34-paritet og erstatter ikke de gjenværende Cypress-testene.
 
 ```sh
 yarn test src/test/components/fordeling/KlassifiserModal.spec.tsx
 yarn test:pw e2e/tests/fordeling-psb-two-applicants.spec.ts --workers=1
 yarn test:pw e2e/tests/fordeling*.spec.ts
+```
+
+## Ferdigstilt PSB uten barn: kopier og lukk
+
+`fordeling-psb-copy-and-close.spec.ts` bruker en isolert ferdigstilt kilde med reservert saksnummer og en annen, eksisterende sak for valgt barn.
+
+| Kilde i `cypress/e2e/fordeling/PSB.cy.js` | Dekning eller gjenstående gap |
+| --- | --- |
+| 991–1041: Ferdigstilt-varsel, låste valg, bekreftet søker, fraværende journalfør-knapper og valg av barn uten treff | Playwright kontrollerer koblingen og knappetilstandene. `fordelingUtils.spec.ts` beskytter rene identitets- og toggle-regler. Selve videreføringen, brevet og Vent for barn uten treff er ikke dekket her |
+| 1042–1057: Barn med eksisterende sak, skjulte vanlige handlinger, advarsel og kopieringsknapp | Playwright kontrollerer barn, sak, advarsel og handlinger |
+| 1058–1067: Modaltittel, forklaring, barn, knapper og kopieringsfeil | Playwright kontrollerer sammendrag og avbryt; `KopierModal.spec.tsx` dekker generisk feil og nytt forsøk med backendformet 201, ikke Cypress-mockens 202 |
+| 1068–1095: Opprettet kopi, lukkefeil og tilgjengelig nytt forsøk eller retur | Modaltestene og [Lukkefeil med nytt forsøk](http://localhost:6006/?path=/story/components-kopiermodal--lukkefeil-med-nytt-fors%C3%B8k) dekker begge valgene |
+| 1096–1124: Nytt lukkeforsøk, suksess og eksplisitt LOS-retur | Modaltestene og historien dekker nytt forsøk; Playwright kontrollerer faktisk toppnivånavigasjon etter direkte vellykket lukking |
+
+Tillegg til Cypress: kontrakter og rekkefølge for kopi og lukking, kildesak mot målsak, avbryt uten mutasjoner, første visning av 403/409, ingen automatisk navigasjon og antall kall ved nytt lukkeforsøk. Modaltesten kontrollerer at «Tilbake til LOS» er deaktivert under pågående lukking. «Lukk journalpost» vises bare etter lukkefeil, forsvinner når nytt forsøk fjerner feiltilstanden og vises igjen dersom lukking feiler på nytt. Denne oppførselen er akseptert.
+
+Dette er ikke task 13 sin refresh av originalen og videreføring til PSB. Gjenstående gap er vern mot flere kopieringsklikk og avbryt under kopiering, gjenoppretting etter 403/409 og foreldede flagg, transporttvetydighet og reload/remount, alternative ruter for barn uten treff, allerede behandlede journalposter, behandling av kopi-ID og to-søker-Vent. MSW viser frontendflyten, ikke faktiske effekter i SAF, Dokarkiv, K9 Sak, Gosys eller LOS. Dette er ikke full Fordeling-paritet; Cypress beholdes.
+
+```sh
+yarn test src/test/components/fordeling/KopierModal.spec.tsx
+yarn test:pw e2e/tests/fordeling-psb-copy-and-close.spec.ts --workers=1
 ```
 
 ## Brevtester og historier

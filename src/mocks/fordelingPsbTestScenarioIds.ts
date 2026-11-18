@@ -17,4 +17,5 @@ export const FORDELING_PSB_SCENARIOS = {
     newCaseSuccess: '930315',
     newCaseConflict: '930316',
     twoApplicants: '930317',
+    copyAndClose: '930318',
 };

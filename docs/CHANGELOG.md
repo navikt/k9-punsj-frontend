@@ -42,6 +42,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Ferdigstilt PSB: kopier og lukk
+
+- La til en Playwright-reise, modaltester og en interaktiv historie for kopiering til eksisterende barnesak og lukking av originalen. Beskrev at lukkeknappen vises ved feil og at retur er deaktivert mens lukking pågår.
+
 #### 2026-11-17 — PSB med to søkere
 
 - La til en Playwright-reise for journalføring, kopiering til annen søker og eksplisitt videreføring av originalen, samt modaltester for kopieringsfeil og refresh. La til en interaktiv historie med nytt forsøk og avgrenset dekningen i Playwright-README.
