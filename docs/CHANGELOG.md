@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Feilmeldinger ved fagsakoppslag
+
+- Kontrollerte at tomt fagsaksvar ikke viser feilmeldinger, og fjernet `fordeling/FagsakLookupErrors.cy.js` etter kartlegging mot Playwright. Den separate Cypress-filen er beholdt.
+
 #### 2026-11-18 — Gjenoppretting etter barnesøk
 
 - Fjernet `ChildLookupRecovery.cy.js` etter kartlegging mot Playwright. Utvidet kontrollen av mutasjoner til alle journalpost-ID-er.

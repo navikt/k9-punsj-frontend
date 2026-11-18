@@ -99,6 +99,16 @@ Tillegg utover Cypress dekker 200 med bare andre ytelsers saker, samt 403 og 500
 
 Reisene bruker test-ID-ene `930304`–`930311`. Browser-MSW-overstyringene er avgrenset til søker `17420373147`; andre svar og standardhandlere endres ikke. Ingen av reisene forsøker å journalføre eller reservere et saksnummer.
 
+### Feilmeldinger ved fagsakoppslag
+
+`cypress/e2e/fordeling/FagsakLookupErrors.cy.js` er fjernet etter kartleggingen under. Linjenumrene viser filen før sletting. Den separate `cypress/e2e/fagsakLookupErrors.cy.js` er beholdt.
+
+| Tidligere Cypress-kontroll | Automatisk dekning i `fordeling-empty-and-lookup.spec.ts` |
+| --- | --- |
+| 19–24: 403 viser tilgangsmelding, uten generell feil eller backendårsak | `viser fagsakoppslagsfeil ved status 403 uten å starte ny sak` |
+| 27–31: 500 viser generell feil, uten tilgangsmelding | `viser fagsakoppslagsfeil ved status 500 uten å starte ny sak` kontrollerer også at backendårsaken ikke vises |
+| 34–38: 200 med tom liste viser ingen av feilmeldingene | `håndterer tomt saksoppslag med barn fra listen og manuell ident` kontrollerer svaret og at begge meldingene mangler |
+
 ### Gjenoppretting etter feil ved barnesøk
 
 `ChildLookupRecovery.cy.js` er fjernet etter kartleggingen under. Linjenumrene viser filen før sletting. Begge gjenopprettingsreisene i `fordeling-empty-and-lookup.spec.ts` dekker henholdsvis 403 og 500.

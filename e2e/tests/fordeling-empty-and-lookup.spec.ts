@@ -253,6 +253,10 @@ test('håndterer tomt saksoppslag med barn fra listen og manuell ident', async (
         await expect(caseSelect).toHaveCount(0);
         await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toHaveCount(0);
         await expect(childSelect).toBeVisible();
+        await expect(page.getByText('Henting av fagsak feilet', { exact: true })).toHaveCount(0);
+        await expect(
+            page.getByText('Du har ikke tilgang til å hente fagsaker for denne søkeren.', { exact: true }),
+        ).toHaveCount(0);
         await expect(continueButton).toBeDisabled();
         await expect(holdButton).toBeDisabled();
 
