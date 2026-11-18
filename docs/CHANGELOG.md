@@ -50,6 +50,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - Kjører hele Playwright-suiten i en egen PR-jobb ved åpning og synkronisering av pull requests. Feilrapporter lastes opp som Actions-artifact i sju dager.
 
+#### 2026-11-18 — Storybook-interaksjonstester i PR
+
+- Bygger Storybook og kjører rendering og eksisterende `play`-assertions i Chromium via en egen Vitest-konfigurasjon i PR-jobben.
+
 #### 2026-11-18 — Klassifiseringsmodal for ny PSB-sak
 
 - Styrket kontrollene ved avbrutt klassifisering og fjernet fem tilsvarende Cypress-modaltester etter kartlegging. Testene for valg og søkerbytte er beholdt.
