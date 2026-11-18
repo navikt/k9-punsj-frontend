@@ -45,19 +45,28 @@ const expectModalCase = async (page: import('@playwright/test').Page, caseId: st
     const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
     await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
     await expect(info.getByText('Pleiepenger sykt barn', { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
     await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+    await expect(info.getByText('Saksnummer:', { exact: true })).toBeVisible();
     await expect(info.getByText(caseId, { exact: true })).toBeVisible();
     await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
     await expect(info).toContainText('15.04.2024');
 
     if (childId) {
+        await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
         await expect(info.getByText(childId, { exact: true })).toBeVisible();
     } else {
         await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
     }
 
-    await expect(dialog.getByText('Informasjonen kan ikke endres etter journalposten er journalført.')).toBeVisible();
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+    ).toBeVisible();
     await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalJournalfør"]')).toBeEnabled();
+    await expect(dialog.locator('[data-test-id="klassifiserModalAvbryt"]')).toBeEnabled();
     return dialog;
 };
 

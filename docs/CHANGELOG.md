@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Klassifiseringsmodal for eksisterende PSB-saker
+
+- Utvidet modalkontrollen i den eksisterende Playwright-reisen for saksvalg med feltetiketter, varselblokk og aktiverte knapper. Fjernet de tre tilsvarende modalblokkene i `PSB.cy.js` etter kartlegging; søkerbekreftelse og saksvalg er beholdt.
+
 #### 2026-11-18 — Tomme PSB-oppslag og manuell ident
 
 - Utvidet de tre eksisterende Playwright-reisene med eksakt panelinformasjon og overgangen fra fylt barneliste til tom liste via Nei → Ja etter valgt manglende fødselsnummer. Fjernet de to tilsvarende Cypress-blokkene etter kartlegging.
