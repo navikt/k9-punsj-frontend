@@ -198,6 +198,7 @@ describe('OpprettJournalpost', () => {
                 'Det finnes ingen fagsaker for denne søkeren. Du kan ikke opprette journalpost uten fagsak.',
             ),
         ).toBeVisible();
+        expect(screen.queryByText('Du har ikke tilgang til å hente fagsaker for denne søkeren.')).not.toBeInTheDocument();
     });
 
     it.each([400, 403, 500])('viser riktig melding og lar saksbehandler prøve på nytt etter status %s', async (status) => {

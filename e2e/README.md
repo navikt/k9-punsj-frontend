@@ -18,7 +18,7 @@ The isolated Vitest config renders every discovered story in headless Chromium a
 
 Ordinary Vitest remains a single unsharded PR job with two workers. Sharding is deferred until comparable GitHub Actions timings show that the latency savings justify the duplicated job setup.
 
-After the master update on 2026-11-17, case lookup tests distinguish access denial (403) from other errors. The Fordeling browser tests and the creation/letter component tests also verify that backend reasons are not displayed. The new Cypress lookup regressions from master are retained until their assertion parity is reviewed separately. Home routing assertions allow the PDF document query parameter.
+After the master update on 2026-11-17, case lookup tests distinguish access denial (403) from other errors. The Fordeling browser tests and the creation/letter component tests also verify that backend reasons are not displayed. The replaced Cypress lookup regressions have been removed after assertion mapping. Home routing assertions allow the PDF document query parameter.
 
 Install Chromium once:
 
@@ -36,6 +36,20 @@ yarn test:pw:ui
 ```
 
 Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
+
+## Replaced Cypress lookup regressions
+
+All nine tests in `cypress/e2e/fagsakLookupErrors.cy.js` have been replaced by the component tests below. These tests render the actual creation and letter entry components; successful application navigation remains covered by `opprett-journalpost.spec.ts` and `send-brev.spec.ts`.
+
+| Removed Cypress assertions | Automatic replacement |
+| --- | --- |
+| Creation: 403 access message, hidden backend reason and retry button; 500 generic message without access message; successful retry clears the error and lists cases | `OpprettJournalpost.spec.tsx`: parameterized lookup test for 400/403/500 |
+| Creation: empty case list shows the existing warning without access message | `OpprettJournalpost.spec.tsx`: `viser varsel når søkeren ikke har fagsaker` |
+| Letter: 403 access message, hidden backend reason and retry button; 500 generic message without access message; successful retry clears the error and lists cases | `BrevIntegrations.spec.tsx`: parameterized lookup test for 400/403/500 |
+| Letter: empty case list shows the existing warning without access message | `BrevIntegrations.spec.tsx`: lookup/loading and applicant-change test |
+| Letter: deleting the last ident digit clears both access message and retry button | `BrevIntegrations.spec.tsx`: `fjerner tilgangsmelding og retry-knapp når fødselsnummeret endres` |
+
+The component fixtures use their own synthetic case IDs instead of the Cypress fixture IDs; each test verifies that a successful lookup makes the returned case available.
 
 ## Fordeling PSB pilot
 
@@ -63,6 +77,8 @@ If the post-classification journalpost refresh returns 403, the current modal sh
 | Modal summary fields, warning, action callbacks, error/retry behavior and Redux update after refresh                                                           | `KlassifiserModal.spec.tsx`                                                                               |
 | Reserved/new single-applicant PSB cases                                                                                                                      | See the bounded new/reserved mapping below; not replaced by this pilot alone                               |
 | Document-type option list and remaining PSB variants                                                                                                           | Still in Cypress or later migration scope; see the bounded two-applicant mapping below                    |
+
+The four assertion-only Cypress blocks for the initial journalpost panel, selected document type, two-applicant checkbox and disabled journalfør buttons have also been removed. The selection journey above checks the same panel labels/values, selected PSB radio, visible unchecked checkbox and both disabled buttons before applicant confirmation. Opening the journalpost, hiding the PDF and the subsequent state-changing selection chain remain in Cypress.
 
 The three modal `it` blocks for existing cases have been removed from `PSB.cy.js` after the mapping below. Line numbers refer to the file before this cleanup. Applicant confirmation, both case-selection blocks and the subsequent reserved/new/two-applicant chain remain in Cypress.
 

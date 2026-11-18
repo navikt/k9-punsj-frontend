@@ -214,7 +214,26 @@ describe('brevtilkoblinger', () => {
         expect(
             await screen.findByText('Det finnes ingen fagsaker for denne søkeren. Du kan ikke sende brev uten fagsak.'),
         ).toBeVisible();
+        expect(screen.queryByText('Du har ikke tilgang til å hente fagsaker for denne søkeren.')).not.toBeInTheDocument();
         expect(screen.getByRole('combobox', { name: 'Velg fagsak' })).toHaveValue('');
+    });
+
+    it('fjerner tilgangsmelding og retry-knapp når fødselsnummeret endres', async () => {
+        fagsakReplies = [response({ reason: 'Teknisk årsak fra backend' }, 403)];
+        const user = userEvent.setup();
+        renderAtRoute(<SendBrevIAvsluttetSak />, '/brev-avsluttet-sak');
+
+        const ident = screen.getByRole('textbox', { name: 'Søkers fødselsnummer' });
+        await user.type(ident, TEST_IDENT);
+        const accessMessage = 'Du har ikke tilgang til å hente fagsaker for denne søkeren.';
+        expect(await screen.findByText(accessMessage)).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Hent fagsaker på nytt' })).toBeVisible();
+
+        await user.type(ident, '{backspace}');
+
+        expect(screen.queryByText(accessMessage)).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Hent fagsaker på nytt' })).not.toBeInTheDocument();
+        expect(requests.filter(({ url }) => url === ApiPath.HENT_FAGSAK_PÅ_IDENT)).toHaveLength(1);
     });
 
     it.each([400, 403, 500])('viser riktig oppslagsfeil ved status %s og henter på nytt etter handling', async (status) => {

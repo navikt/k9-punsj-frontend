@@ -4,8 +4,6 @@ import fagsaker from '../../fixtures/fagsaker.json';
 import barnFraApi from '../../fixtures/barn.json';
 
 const dokumenttype = 'Pleiepenger sykt barn';
-const valgteDokumentType = 'Pleiepenger sykt barn';
-const valgteDokumentTypeKode = 'PLEIEPENGER';
 const journalpostId = journalpost.journalpostId;
 const norskIdent = journalpost.norskIdent;
 const barn1FraApi = barnFraApi.barn[0];
@@ -32,37 +30,12 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.findByText(/Skjul/i).should('exist').click();
     });
 
-    it('Journalpost pannel med riktig data', () => {
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Journalpostnummer/i).should('exist');
-            cy.findByText(journalpostId).should('exist');
-            cy.findByText(/Søkers ID/i).should('exist');
-            cy.findByText(norskIdent).should('exist');
-            cy.findByText(/Sakstype/i).should('exist');
-            cy.findByText(dokumenttype).should('exist');
-        });
-    });
-
     it('Viser dokumentvalg', () => {
         cy.contains(/Dette gjelder:?/i).should('exist');
         cy.contains('Pleiepenger').should('exist');
         cy.contains('Omsorgspenger/omsorgsdager').should('exist');
         cy.contains('Pleiepenger i livets sluttfase').should('exist');
         cy.contains('Annet').should('exist');
-    });
-
-    it('Test checked riktig dokumenttype', () => {
-        cy.contains(valgteDokumentType).should('exist');
-        cy.get(`input[value="${valgteDokumentTypeKode}"]`).should('exist').should('be.checked');
-    });
-
-    it('Test ytelse har checkboks for 2 søkere', () => {
-        cy.get('[data-test-id="toSokereCheckbox"]').should('exist');
-    });
-
-    it('Test journalfør buttons disabled ved start', () => {
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
     it('Test bekreft søker og velg fagsak uten barn', () => {

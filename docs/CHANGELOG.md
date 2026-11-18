@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Fjernet erstattede Cypress-kontroller
+
+- Fjernet ni tester for fagsakoppslag i journalpostoppretting og brev etter kartlegging mot komponenttestene. Beholdt kontroll av tomme svar og feilnullstilling ved endret ident.
+- Fjernet fire PSB-startkontroller som dekkes av Playwright, og sikret feltetikettene i journalpostpanelet. Den gjenværende Cypress-valgkjeden er beholdt.
+
 #### 2026-11-18 — Playwright i PR-kontroller
 
 - Kjører hele Playwright-suiten i en egen PR-jobb ved åpning og synkronisering av pull requests. Feilrapporter lastes opp som Actions-artifact i sju dager.

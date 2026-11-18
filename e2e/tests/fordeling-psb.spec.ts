@@ -93,7 +93,9 @@ test('velger saker med og uten barn, og åpner riktig modal uten å utføre hand
     const journalpostPanel = page.locator('.journalpostpanel');
     await expect(journalpostPanel).toContainText('Journalpostnummer');
     await expect(journalpostPanel).toContainText(FORDELING_PSB_SCENARIOS.selection);
+    await expect(journalpostPanel).toContainText('Søkers ID');
     await expect(journalpostPanel).toContainText(SØKER_ID);
+    await expect(journalpostPanel).toContainText('Sakstype');
     await expect(journalpostPanel).toContainText('Pleiepenger sykt barn');
 
     await test.step('Velg eksisterende sak uten barn og avbryt Vent-modal', async () => {
