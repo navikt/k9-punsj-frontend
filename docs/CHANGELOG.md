@@ -49,7 +49,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 #### 2026-11-18 — Ferdigstilt PSB: kopier og lukk
 
 - La til en Playwright-reise, modaltester og en interaktiv historie for kopiering til eksisterende barnesak og lukking av originalen. Beskrev at lukkeknappen vises ved feil og at retur er deaktivert mens lukking pågår.
-- Fjernet kartlagte deler av Cypress-blokken for ferdigstilt PSB uten barn. Beholdt kontroller av søker, første barnevalg og kopiering med 202.
+- Utvidet tester for søkervalg, første barnevalg og kopifeil med 202 ved nytt forsøk og påfølgende lukkefeil. Fjernet Cypress-blokken for ferdigstilt PSB uten barn etter kartlegging av assertions.
 
 #### 2026-11-17 — PSB med to søkere
 

@@ -9,6 +9,7 @@ import { FORDELING_PSB_SCENARIOS } from '../../src/mocks/fordelingPsbTestScenari
 const sourceId = FORDELING_PSB_SCENARIOS.copyAndClose;
 const copiedId = '9303181';
 const target = fagsaker[2];
+const firstChild = barn.barn[0];
 const selectedChild = barn.barn[2];
 const copyPath = ApiPath.JOURNALPOST_KOPIERE.replace('{journalpostId}', sourceId);
 const closePath = ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', sourceId);
@@ -61,7 +62,8 @@ test('kopierer ferdigstilt PSB til barnets sak, lukker originalen og går til LO
     expect(await source.json()).toEqual({ ...journalpost, journalpostId: sourceId });
 
     const hidePdf = page.getByText('Skjul', { exact: true });
-    if (await hidePdf.isVisible()) await hidePdf.click();
+    await expect(hidePdf).toBeVisible();
+    await hidePdf.click();
     await expect(
         page.getByText('Journalposten er journalført, men mangler opplysninger om pleietrengende.'),
     ).toBeVisible();
@@ -76,7 +78,9 @@ test('kopierer ferdigstilt PSB til barnets sak, lukker originalen og går til LO
         await expect(page.locator(`[data-test-id="${id}"]`)).toBeDisabled();
     }
     await expect(page.locator('[data-test-id="bekreftSøker-ja"]')).toBeChecked();
+    await expect(page.locator('[data-test-id="bekreftSøker-ja"]')).toBeEnabled();
     await expect(page.locator('[data-test-id="bekreftSøker-nei"]')).toBeDisabled();
+    await expect(page.locator('[data-test-id="bekreftSøker-nei"]')).not.toBeChecked();
     await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toHaveCount(0);
     await expect(page.locator('[data-test-id="journalførOgVent"]')).toHaveCount(0);
     const videre = page.locator('[data-test-id="ferdistiltJpReservertSaksnummerVidereBtn"]');
@@ -84,10 +88,15 @@ test('kopierer ferdigstilt PSB til barnets sak, lukker originalen og går til LO
     await expect(videre).toBeDisabled();
     await expect(actions).toBeEnabled();
     const children = page.getByLabel('Velg hvilket barn det gjelder');
-    await children.selectOption(barn.barn[0].identitetsnummer);
+    await children.selectOption({
+        label: `${firstChild.fornavn} ${firstChild.etternavn} - ${firstChild.identitetsnummer}`,
+    });
+    await expect(children).toHaveValue(firstChild.identitetsnummer);
     await expect(videre).toBeEnabled();
     await expect(actions).toBeEnabled();
-    await children.selectOption(selectedChild.identitetsnummer);
+    await children.selectOption({
+        label: `${selectedChild.fornavn} ${selectedChild.etternavn} - ${selectedChild.identitetsnummer}`,
+    });
     await expect(videre).toHaveCount(0);
     await expect(actions).toHaveCount(0);
     const warning = page.locator('[data-test-id="pleietrengendeHarFagsakFerdistiltJpWarning"]');

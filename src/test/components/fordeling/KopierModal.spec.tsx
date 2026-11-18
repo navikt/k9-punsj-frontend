@@ -186,6 +186,30 @@ describe('Kopier og lukk journalpost', () => {
         expectCall(fetchMock, 2, closePath, closeBody);
     });
 
+    it('viser opprettet kopi og lukkefeil når nytt kopieringsforsøk svarer 202', async () => {
+        const { user, fetchMock } = setup([
+            Promise.resolve(new Response(null, { status: 500 })),
+            Promise.resolve(Response.json({ saksnummer: target.fagsakId }, { status: 202 })),
+            Promise.resolve(new Response(null, { status: 500 })),
+        ]);
+        await user.click(screen.getByRole('button', { name: 'Kopier' }));
+        expect(await screen.findByText('Noe gikk galt. Prøv igjen senere.')).toBeVisible();
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(redirectToLos).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole('button', { name: 'Kopier' }));
+        expect(await screen.findByText('Error ved lukking av journalpost. Prøv igjen eller gå til LOS.')).toBeVisible();
+        expect(screen.getByText('Kopi av journalpost opprettet.')).toBeVisible();
+        expect(screen.queryByText('Noe gikk galt. Prøv igjen senere.')).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Lukk journalpost' })).toBeEnabled();
+        expect(screen.getByRole('button', { name: 'Tilbake til LOS' })).toBeEnabled();
+        expect(fetchMock).toHaveBeenCalledTimes(3);
+        expectCall(fetchMock, 0, copyPath, copyBody);
+        expectCall(fetchMock, 1, copyPath, copyBody);
+        expectCall(fetchMock, 2, closePath, closeBody);
+        expect(redirectToLos).not.toHaveBeenCalled();
+    });
+
     it.each([
         [403, 'Mangler rettigheter for opprettelse av kopi av journalpost.'],
         [409, 'Journalpost kan ikke kopieres.'],
