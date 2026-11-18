@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Søkerbytte i PSB
+
+- Utvidet den eksisterende Playwright-reisen med panel- og modaletiketter, handlingstekster og beholdt søker/barn etter avbrytelse. Fjernet de fem dekkede Cypress-blokkene for søkerbytte; den tidligere valgkjeden og reset-varianten med tomt saksoppslag er beholdt.
+
 #### 2026-11-18 — To søkere med ny PSB-sak
 
 - La til en selvstendig Playwright-reise for to søkere, ny sak og barn fra listen. Fjernet de tre dekkede Cypress-blokkene; faktisk Vent med to søkere gjenstår.

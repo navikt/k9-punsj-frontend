@@ -159,12 +159,24 @@ const expectApplicantModal = async (page: Page, applicantId: string, childId: st
     const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
 
     await expect(dialog).toBeVisible();
-    await expect(info).toContainText(applicantId);
-    await expect(info).toContainText(childId);
+    await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+    await expect(info.getByText('Pleiepenger sykt barn', { exact: true })).toBeVisible();
+    await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(applicantId, { exact: true })).toBeVisible();
+    await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+    await expect(info.getByText(childId, { exact: true })).toBeVisible();
     await expect(info.getByText(/Saksnummer/i)).toHaveCount(0);
     await expect(info.getByText(/Periode/i)).toHaveCount(0);
     await expect(info).not.toContainText(GAMMEL_FAGSAK_ID);
     await expect(info).not.toContainText(GAMMELT_BARN_ID);
+    await expect(
+        dialog
+            .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+    ).toBeVisible();
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalJournalfør"]')).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt', exact: true })).toBeEnabled();
 
     return dialog;
 };
@@ -235,11 +247,14 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         await expect(childSelect).toBeVisible();
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
         await childSelect.selectOption({ label: `Geir-Paco Gundersen - ${BARN_ID}` });
+        await expect(childSelect).toHaveValue(BARN_ID);
 
         const journalpostPanel = page.locator('.journalpostpanel');
         const continueButton = page.locator('[data-test-id="journalførOgFortsett"]');
         const holdButton = page.locator('[data-test-id="journalførOgVent"]');
+        await expect(journalpostPanel.getByText('Søkers ID:', { exact: true })).toBeVisible();
         await expect(journalpostPanel).toContainText(NY_SØKER_ID);
+        await expect(journalpostPanel.getByText('Barnets ID:', { exact: true })).toBeVisible();
         await expect(journalpostPanel).toContainText(BARN_ID);
         await expect(journalpostPanel).not.toContainText(GAMMEL_FAGSAK_ID);
         await expect(journalpostPanel).not.toContainText(GAMMELT_BARN_ID);
@@ -251,8 +266,12 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
         const continueDialog = await expectApplicantModal(page, NY_SØKER_ID, BARN_ID);
         await expect(continueDialog.getByRole('heading', { name: 'Vil du lagre følgende informasjon til journalposten?' }))
             .toBeVisible();
+        await expect(continueDialog.locator('[data-test-id="klassifiserModalJournalfør"]')).toHaveText(
+            'Journalfør journalposten',
+        );
         await continueDialog.getByRole('button', { name: 'Avbryt' }).click();
-        await expect(continueDialog).toBeHidden();
+        await expect(continueDialog).toHaveCount(0);
+        await expect(journalpostPanel).toContainText(NY_SØKER_ID);
         await expect(journalpostPanel).toContainText(BARN_ID);
         await expect(childSelect).toHaveValue(BARN_ID);
         await expect(page.getByLabel('Søkers fødselsnummer eller D-nummer:')).toHaveValue(NY_SØKER_ID);
@@ -264,10 +283,15 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
                 name: 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
             }),
         ).toBeVisible();
+        await expect(holdDialog.locator('[data-test-id="klassifiserModalJournalfør"]')).toHaveText(
+            'Journalfør og sett på vent',
+        );
         await holdDialog.getByRole('button', { name: 'Avbryt' }).click();
-        await expect(holdDialog).toBeHidden();
+        await expect(holdDialog).toHaveCount(0);
+        await expect(journalpostPanel).toContainText(NY_SØKER_ID);
         await expect(journalpostPanel).toContainText(BARN_ID);
         await expect(childSelect).toHaveValue(BARN_ID);
+        await expect(page.getByLabel('Søkers fødselsnummer eller D-nummer:')).toHaveValue(NY_SØKER_ID);
     });
 
     await test.step('Bekreft opprinnelig søker på nytt', async () => {
@@ -277,8 +301,10 @@ test('nullstiller søker og barn når søkeridenten endres', async ({ page }) =>
 
         await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
         const journalpostPanel = page.locator('.journalpostpanel');
+        await expect(journalpostPanel.getByText('Søkers ID:', { exact: true })).toBeVisible();
         await expect(journalpostPanel).toContainText(SØKER_ID);
         await expect(journalpostPanel).not.toContainText(NY_SØKER_ID);
+        await expect(journalpostPanel.getByText('Barnets ID:', { exact: true })).toHaveCount(0);
         await expect(journalpostPanel).not.toContainText(BARN_ID);
         await expect(journalpostPanel).not.toContainText(GAMMELT_BARN_ID);
         await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
