@@ -7,6 +7,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const SØKER_ID = journalpostFixture.norskIdent;
 const ALTERNATIV_SØKER_ID = '12448325820';
+const ANNEN_SØKER_ID = '02918496664';
 const MANUELL_PLEIETRENGENDES_ID = '24420167209';
 const FAGSAK = fagsaker[5];
 const PLEIETRENGENDES_ID = FAGSAK.pleietrengende!.identitetsnummer;
@@ -285,6 +286,122 @@ test.describe('PLS-klassifiseringsmodaler for én søker', () => {
             expect(mutations).toEqual([]);
             expect(closeRequests).toEqual([]);
         });
+    }
+});
+
+test('avbryter Fortsett og Vent for PLS med to søkere og ny sak', async ({ page }) => {
+    const { mutations, closeRequests } = recordMutations(page);
+    await openPilsJournalpost(page);
+
+    const originalApplicantLookup = waitForCasesLookup(page, SØKER_ID);
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    const originalApplicantResponse = await originalApplicantLookup;
+    expect(originalApplicantResponse.status()).toBe(200);
+    expect(originalApplicantResponse.fromServiceWorker()).toBe(true);
+    expect(originalApplicantResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+    expect(await originalApplicantResponse.json()).toEqual(fagsaker);
+
+    const panel = page.locator('.journalpostpanel');
+    const caseSelect = page.getByLabel('Velg fagsak');
+    const reserveCase = page.getByLabel('Reserver saksnummer til ny fagsak');
+    const continueButton = page.locator('[data-test-id="journalførOgFortsett"]');
+    const holdButton = page.locator('[data-test-id="journalførOgVent"]');
+    await expect(panel).toContainText(SØKER_ID);
+    await expect(caseSelect).toHaveValue('');
+    await expect(reserveCase).not.toBeChecked();
+    await expect(panel.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(panel.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    const twoApplicants = page.getByLabel(
+        'Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)',
+    );
+    await twoApplicants.check();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    const secondApplicantLookup = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.PERSON) &&
+            response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:');
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    const secondApplicantResponse = await secondApplicantLookup;
+    expect(secondApplicantResponse.status()).toBe(200);
+    expect(secondApplicantResponse.fromServiceWorker()).toBe(true);
+    expect(secondApplicantResponse.request().headers()['x-nav-norskident']).toBe(ANNEN_SØKER_ID);
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toBeVisible();
+    await expect(continueButton).toBeDisabled();
+    await expect(holdButton).toBeDisabled();
+
+    await reserveCase.check();
+    const careRecipient = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+    await careRecipient.fill(MANUELL_PLEIETRENGENDES_ID);
+    await expect(panel).toContainText(SØKER_ID);
+    await expect(panel.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+    await expect(panel).toContainText(MANUELL_PLEIETRENGENDES_ID);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenPleietrengende"]')).toHaveCount(0);
+    await expect(continueButton).toBeEnabled();
+    await expect(holdButton).toBeEnabled();
+
+    const expectNewCaseSelection = async () => {
+        await expect(twoApplicants).toBeChecked();
+        await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+        await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+        await expect(reserveCase).toBeChecked();
+        await expect(caseSelect).toBeDisabled();
+        await expect(caseSelect).toHaveValue('');
+        await expect(careRecipient).toHaveValue(MANUELL_PLEIETRENGENDES_ID);
+        await expect(panel).toContainText(SØKER_ID);
+        await expect(panel).toContainText(MANUELL_PLEIETRENGENDES_ID);
+        await expect(panel.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+        await expect(continueButton).toBeEnabled();
+        await expect(holdButton).toBeEnabled();
+    };
+
+    for (const [action, header, confirmButton] of [
+        [
+            'Fortsett',
+            'Vil du lagre følgende informasjon til journalposten?',
+            'Journalfør journalposten',
+        ],
+        [
+            'Vent',
+            'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+            'Journalfør og sett på vent',
+        ],
+    ]) {
+        await page.locator(`[data-test-id="journalførOg${action}"]`).click();
+        const dialog = page.locator('[data-test-id="klassifiserModal"]');
+        const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+        await expect(dialog).toBeVisible();
+        await expect(dialog.locator('[data-test-id="klassifiserModalHeader"]')).toContainText(header);
+        await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+        await expect(info.getByText('Pleiepenger i livets sluttfase', { exact: true })).toBeVisible();
+        await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+        await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+        await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+        await expect(info.getByText(MANUELL_PLEIETRENGENDES_ID, { exact: true })).toBeVisible();
+        await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+        await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+        await expect(dialog.getByRole('button', { name: 'Gå til LOS' })).toHaveCount(0);
+        await expect(
+            dialog
+                .locator('[data-test-id="klassifiserModalAlertBlokk"]')
+                .getByText('Informasjonen kan ikke endres etter journalposten er journalført.'),
+        ).toBeVisible();
+        await expect(dialog.getByRole('button', { name: confirmButton, exact: true })).toBeEnabled();
+        await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+        await expect(dialog).toHaveCount(0);
+        await expectNewCaseSelection();
+        expect(mutations).toEqual([]);
+        expect(closeRequests).toEqual([]);
     }
 });
 

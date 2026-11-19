@@ -52,6 +52,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Fjernet de fem erstattede Cypress-blokkene og la nødvendig oppsett for opprinnelig søker inn i den beholdte testen med to søkere.
 - Validering: Playwright bestod med 12 tester, Cypress med 13 tester, og `yarn lint` samt `git diff --check` bestod.
 
+#### 2026-11-19 — To søkere for PLS
+
+- La til én Playwright-reise for klargjøring av to søkere med manuelt registrert pleietrengende og avbrytelse av Fortsett- og Vent-dialogene.
+- Fjernet de tre erstattede Cypress-blokkene ved startlinje 60, 103 og 134. Beholdt de sju åpningstestene og testen for tomt fagsakoppslag.
+- Validering: Playwright bestod med 13 tester, Cypress med 10 tester, og `yarn lint` samt `git diff --check` bestod.
+
 #### 2026-11-19 — Saksvalg for PLS
 
 - La til to selvstendige Playwright-reiser for de fire eksisterende og reserverte PLS-sakene og manuell pleietrengende i ny sak, inkludert valg uten fødselsnummer.
