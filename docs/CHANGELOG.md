@@ -50,6 +50,7 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 - La til Playwright-reiser for Vent med nytt forsøk og Fortsett fram til automatisk opprettet PLS-skjema. Gjenbrukte modal- og Storybook-dekning for klassifiserings- og kopieringsfeil.
 - Fjernet PLS-klassifiseringens Cypress-fil etter å ha kartlagt alle sju blokkene. Vent med to søkere gjenstår.
+- Samlet valideringsfeil fra backend nederst i PLS-skjemaet med norske feilmeldinger. Lokal validering vises ved feltene.
 
 #### 2026-11-19 — Gosys-oppgave for Annet
 
