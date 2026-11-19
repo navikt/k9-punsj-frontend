@@ -156,7 +156,23 @@ The nine single-applicant modal blocks in `cypress/e2e/fordeling/PILS.cy.js` are
 
 Each journey checks the PLS benefit and applicant, and verifies whether the case number, period and care-recipient ID should appear. It uses **Avbryt**, checks that the modal closes, and asserts that no mutation or debug-close request was sent. The existing PLS Fortsett journey continues to verify the summary and successful classification for an existing case with a care recipient; `KlassifiserModal.spec.tsx` covers shared headings, actions and cancellation.
 
-The first retained reset block now starts by confirming the applicant, selecting new-case mode and checking the no-ID option. Applicant switching, two-applicant and empty-lookup flows remain in Cypress.
+Applicant-switch coverage is mapped below. The two-applicant and empty-lookup flows remain in Cypress.
+
+### PLS applicant-switch Cypress migration
+
+The five mapped applicant-switch and reset blocks in `cypress/e2e/fordeling/PILS.cy.js` are replaced as follows. Line numbers refer to the file before removal.
+
+| Cypress block | Playwright replacement |
+| --- | --- |
+| 64: Reset the original applicant after new-case/no-ID selection | `fordeling-pls-classification.spec.ts` — `bytter til alternativ søker for PLS og nullstiller panelet ved retur`; checks the notice before **Nei**, then verifies the case, reservation and care-recipient controls are gone and both actions are disabled. |
+| 79: Select a PLS case for the alternate applicant | The same journey waits for the lookup by alternate applicant ID, exits new-case mode, selects `fagsaker[5]` and verifies applicant, case, care-recipient ID and enabled actions in the journalpost panel. |
+| 101: Open and cancel **Fortsett** for the alternate applicant | The same journey checks the PLS benefit, alternate applicant, case, period and care-recipient ID in the dialog, cancels and verifies no mutation. |
+| 133: Open and cancel **Vent** for the alternate applicant | The same journey checks the same summary in the Vent dialog, cancels and verifies no mutation. |
+| 165: Return to the original applicant | The same journey waits for the original applicant's case lookup and verifies the panel no longer contains the alternate applicant, case or care recipient; both actions are disabled. |
+
+**Known issue.** After returning to the original applicant, **Velg fagsak** can still display the previous case even though the journalpost panel clears the case and care-recipient details and both actions are disabled. The journey covers the panel and action reset. Clearing the select is a separate fix.
+
+The Playwright journey starts from a fresh page. The retained two-applicant Cypress block now confirms the original applicant and verifies no selected case, care recipient or new-case mode before enabling two-applicant mode. The opening checks, two-applicant modals and empty-lookup blocks remain in Cypress.
 
 ### De siste 13 blokkene i Fordeling PSB
 

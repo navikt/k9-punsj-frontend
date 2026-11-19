@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const SØKER_ID = journalpostFixture.norskIdent;
+const ALTERNATIV_SØKER_ID = '12448325820';
 const MANUELL_PLEIETRENGENDES_ID = '24420167209';
 const FAGSAK = fagsaker[5];
 const PLEIETRENGENDES_ID = FAGSAK.pleietrengende!.identitetsnummer;
@@ -17,6 +18,13 @@ const PLS_CREATE_PATH = ApiPath.PLS_SOKNAD_CREATE;
 
 const isResponse = (response: Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
+
+const waitForCasesLookup = (page: Page, applicantId: string) =>
+    page.waitForResponse(
+        (response) =>
+            isResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === applicantId,
+    );
 
 type NetworkEvent = {
     kind: 'request' | 'response';
@@ -99,6 +107,113 @@ const recordMutations = (page: Page) => {
 };
 
 test.describe('PLS-klassifiseringsmodaler for én søker', () => {
+    test('bytter til alternativ søker for PLS og nullstiller panelet ved retur', async ({ page }) => {
+        const { mutations, closeRequests } = recordMutations(page);
+        await openPilsJournalpost(page);
+
+        const originalApplicantLookup = waitForCasesLookup(page, SØKER_ID);
+        await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+        const originalApplicantResponse = await originalApplicantLookup;
+        expect(originalApplicantResponse.status()).toBe(200);
+        expect(originalApplicantResponse.fromServiceWorker()).toBe(true);
+        expect(originalApplicantResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+
+        await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+        await page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true }).check();
+        await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
+        await page.getByRole('radio', { name: 'Nei', exact: true }).check();
+
+        await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+        await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toHaveCount(0);
+        await expect(page.getByLabel('Pleietrengendes fødselsnummer:')).toHaveCount(0);
+        await expect(page.getByLabel('Pleietrengende har ikke fødselsnummer')).toHaveCount(0);
+        await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toHaveCount(0);
+        await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeDisabled();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
+
+        const alternateApplicantLookup = waitForCasesLookup(page, ALTERNATIV_SØKER_ID);
+        await page.getByLabel('Søkers fødselsnummer eller D-nummer:').fill(ALTERNATIV_SØKER_ID);
+        const alternateApplicantResponse = await alternateApplicantLookup;
+        expect(alternateApplicantResponse.status()).toBe(200);
+        expect(alternateApplicantResponse.fromServiceWorker()).toBe(true);
+        expect(alternateApplicantResponse.request().headers()['x-nav-norskident']).toBe(ALTERNATIV_SØKER_ID);
+        expect(await alternateApplicantResponse.json()).toEqual(
+            expect.arrayContaining([expect.objectContaining({ fagsakId: FAGSAK.fagsakId })]),
+        );
+
+        const reserveCase = page.getByLabel('Reserver saksnummer til ny fagsak');
+        await reserveCase.check();
+        await expect(reserveCase).toBeChecked();
+        await reserveCase.uncheck();
+        const caseSelect = page.getByLabel('Velg fagsak');
+        await expect(caseSelect).toBeVisible();
+        await caseSelect.selectOption(FAGSAK.fagsakId);
+        await expect(caseSelect).toHaveValue(FAGSAK.fagsakId);
+
+        const panel = page.locator('.journalpostpanel');
+        await expect(panel.getByText('Søkers ID:', { exact: true })).toBeVisible();
+        await expect(panel).toContainText(ALTERNATIV_SØKER_ID);
+        await expect(panel.getByText('Saksnummer:', { exact: true })).toBeVisible();
+        await expect(panel).toContainText(FAGSAK.fagsakId);
+        await expect(panel.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+        await expect(panel).toContainText(PLEIETRENGENDES_ID);
+        await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeEnabled();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled();
+
+        for (const [action, header, confirmButton] of [
+            [
+                'Fortsett',
+                'Vil du lagre følgende informasjon til journalposten?',
+                'Journalfør journalposten',
+            ],
+            [
+                'Vent',
+                'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+                'Journalfør og sett på vent',
+            ],
+        ]) {
+            await page.locator(`[data-test-id="journalførOg${action}"]`).click();
+            const dialog = page.locator('[data-test-id="klassifiserModal"]');
+            const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+            await expect(dialog).toBeVisible();
+            await expect(dialog.locator('[data-test-id="klassifiserModalHeader"]')).toContainText(header);
+            await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+            await expect(info.getByText('Pleiepenger i livets sluttfase', { exact: true })).toBeVisible();
+            await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+            await expect(info.getByText(ALTERNATIV_SØKER_ID, { exact: true })).toBeVisible();
+            await expect(info.getByText('Saksnummer:', { exact: true })).toBeVisible();
+            await expect(info.getByText(FAGSAK.fagsakId, { exact: true })).toBeVisible();
+            await expect(info.getByText('Periode:', { exact: true })).toBeVisible();
+            await expect(info).toContainText('15.04.2024');
+            await expect(info.getByText('Pleietrengendes ID:', { exact: true })).toBeVisible();
+            await expect(info.getByText(PLEIETRENGENDES_ID, { exact: true })).toBeVisible();
+            await expect(dialog.getByRole('button', { name: confirmButton, exact: true })).toBeEnabled();
+            await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+            await expect(dialog).toHaveCount(0);
+            expect(mutations).toEqual([]);
+            expect(closeRequests).toEqual([]);
+        }
+
+        const returnLookup = waitForCasesLookup(page, SØKER_ID);
+        await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+        const returnResponse = await returnLookup;
+        expect(returnResponse.status()).toBe(200);
+        expect(returnResponse.fromServiceWorker()).toBe(true);
+        expect(returnResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+
+        await expect(panel).toContainText(SØKER_ID);
+        await expect(panel).not.toContainText(ALTERNATIV_SØKER_ID);
+        await expect(panel.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+        await expect(panel).not.toContainText(FAGSAK.fagsakId);
+        await expect(panel.getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
+        await expect(panel).not.toContainText(PLEIETRENGENDES_ID);
+        await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).not.toBeChecked();
+        await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeDisabled();
+        await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeDisabled();
+        expect(mutations).toEqual([]);
+        expect(closeRequests).toEqual([]);
+    });
+
     for (const scenario of classificationModalScenarios) {
         test(`viser og avbryter modal for ${scenario.title}`, async ({ page }) => {
             const { mutations, closeRequests } = recordMutations(page);

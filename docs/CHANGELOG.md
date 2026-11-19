@@ -46,6 +46,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Søkerbytte for PLS
+
+- La til én Playwright-reise for nullstilling av journalpostpanelet, PLS-sak for alternativ søker, avbrutte Fortsett- og Vent-dialoger og retur til opprinnelig søker. Dialogene kontrollerer søker- og saksdetaljer, og avbrytelse sender ingen mutasjon.
+- Fjernet de fem erstattede Cypress-blokkene og la nødvendig oppsett for opprinnelig søker inn i den beholdte testen med to søkere.
+- Validering: Playwright bestod med 12 tester, Cypress med 13 tester, og `yarn lint` samt `git diff --check` bestod.
+
 #### 2026-11-19 — Saksvalg for PLS
 
 - La til to selvstendige Playwright-reiser for de fire eksisterende og reserverte PLS-sakene og manuell pleietrengende i ny sak, inkludert valg uten fødselsnummer.
