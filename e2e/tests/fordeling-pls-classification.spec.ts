@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const SØKER_ID = journalpostFixture.norskIdent;
+const MANUELL_PLEIETRENGENDES_ID = '24420167209';
 const FAGSAK = fagsaker[5];
 const PLEIETRENGENDES_ID = FAGSAK.pleietrengende!.identitetsnummer;
 const JOURNALPOST_PATH = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);
@@ -42,6 +43,25 @@ const selectPpnCase = async (page: Page) => {
     await expect(caseSelect).toHaveValue(FAGSAK.fagsakId);
 };
 
+type ClassificationModalScenario = {
+    title: string;
+    action: 'Fortsett' | 'Vent';
+    fagsak?: (typeof fagsaker)[number];
+    newCase?: 'manual-care-recipient' | 'no-care-recipient-id';
+};
+
+const classificationModalScenarios: ClassificationModalScenario[] = [
+    { title: 'eksisterende sak uten pleietrengende, Vent', action: 'Vent', fagsak: fagsaker[6] },
+    { title: 'eksisterende sak med pleietrengende, Fortsett', action: 'Fortsett', fagsak: FAGSAK },
+    { title: 'eksisterende sak med pleietrengende, Vent', action: 'Vent', fagsak: FAGSAK },
+    { title: 'reservert sak med pleietrengende, Fortsett', action: 'Fortsett', fagsak: fagsaker[7] },
+    { title: 'reservert sak med pleietrengende, Vent', action: 'Vent', fagsak: fagsaker[7] },
+    { title: 'reservert sak uten pleietrengende, Vent', action: 'Vent', fagsak: fagsaker[8] },
+    { title: 'ny sak med manuelt registrert pleietrengende, Fortsett', action: 'Fortsett', newCase: 'manual-care-recipient' },
+    { title: 'ny sak med manuelt registrert pleietrengende, Vent', action: 'Vent', newCase: 'manual-care-recipient' },
+    { title: 'ny sak uten fødselsnummer for pleietrengende, Vent', action: 'Vent', newCase: 'no-care-recipient-id' },
+];
+
 const recordMutations = (page: Page) => {
     const mutations: string[] = [];
     const closeRequests: string[] = [];
@@ -77,6 +97,81 @@ const recordMutations = (page: Page) => {
 
     return { mutations, closeRequests, events };
 };
+
+test.describe('PLS-klassifiseringsmodaler for én søker', () => {
+    for (const scenario of classificationModalScenarios) {
+        test(`viser og avbryter modal for ${scenario.title}`, async ({ page }) => {
+            const { mutations, closeRequests } = recordMutations(page);
+            await openPilsJournalpost(page);
+            await page.getByRole('radio', { name: 'Ja' }).check();
+
+            if (scenario.fagsak) {
+                const caseSelect = page.getByLabel('Velg fagsak');
+                await caseSelect.selectOption(scenario.fagsak.fagsakId);
+                await expect(caseSelect).toHaveValue(scenario.fagsak.fagsakId);
+            } else {
+                await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+                if (scenario.newCase === 'manual-care-recipient') {
+                    await page
+                        .getByLabel('Pleietrengendes fødselsnummer:', { exact: true })
+                        .fill(MANUELL_PLEIETRENGENDES_ID);
+                } else {
+                    await page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true }).check();
+                }
+            }
+
+            const actionButton =
+                scenario.action === 'Fortsett'
+                    ? page.locator('[data-test-id="journalførOgFortsett"]')
+                    : page.locator('[data-test-id="journalførOgVent"]');
+            await actionButton.click();
+
+            const dialog = page.locator('[data-test-id="klassifiserModal"]');
+            const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+            await expect(dialog).toBeVisible();
+            await expect(dialog.locator('[data-test-id="klassifiserModalHeader"]')).toContainText(
+                scenario.action === 'Fortsett'
+                    ? 'Vil du lagre følgende informasjon til journalposten?'
+                    : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+            );
+            await expect(info.getByText('Sakstype:', { exact: true })).toBeVisible();
+            await expect(info.getByText('Pleiepenger i livets sluttfase', { exact: true })).toBeVisible();
+            await expect(info.getByText('Søkers ID:', { exact: true })).toBeVisible();
+            await expect(info.getByText(SØKER_ID, { exact: true })).toBeVisible();
+
+            const caseNumber = info.getByText('Saksnummer:', { exact: true });
+            const period = info.getByText('Periode:', { exact: true });
+            if (scenario.fagsak) {
+                await expect(caseNumber).toBeVisible();
+                await expect(info.getByText(scenario.fagsak.fagsakId, { exact: true })).toBeVisible();
+                await expect(period).toBeVisible();
+                await expect(info).toContainText('15.04.2024');
+            } else {
+                await expect(caseNumber).toHaveCount(0);
+                await expect(period).toHaveCount(0);
+            }
+
+            const careRecipientId =
+                scenario.fagsak?.pleietrengende?.identitetsnummer ??
+                (scenario.newCase === 'manual-care-recipient' ? MANUELL_PLEIETRENGENDES_ID : undefined);
+            const careRecipientLabel = info.getByText('Pleietrengendes ID:', { exact: true });
+            if (careRecipientId) {
+                await expect(careRecipientLabel).toBeVisible();
+                await expect(info.getByText(careRecipientId, { exact: true })).toBeVisible();
+            } else {
+                await expect(careRecipientLabel).toHaveCount(0);
+            }
+
+            const confirmButtonName =
+                scenario.action === 'Fortsett' ? 'Journalfør journalposten' : 'Journalfør og sett på vent';
+            await expect(dialog.getByRole('button', { name: confirmButtonName, exact: true })).toBeEnabled();
+            await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+            await expect(dialog).toHaveCount(0);
+            expect(mutations).toEqual([]);
+            expect(closeRequests).toEqual([]);
+        });
+    }
+});
 
 const installVentHandlers = async (page: Page) => {
     await page.evaluate(

@@ -136,7 +136,27 @@ The seven mapped selection blocks in `cypress/e2e/fordeling/PILS.cy.js` are repl
 | 361: Enter a manual care-recipient ID | The same new-case journey checks the journalpost summary, reservation notice and both enabled actions. |
 | 444: No care-recipient ID | The same journey checks that the ID clears, the explanatory notice appears and only Vent remains enabled. |
 
-The retained Cypress modal tests now select the case they need locally. The retained new-case modal flow keeps the case selection, new-case switch and manual ID entry; its Vent modal test checks the no-ID option before opening the modal. Applicant switching, reset, two-applicant and empty-lookup coverage remains in Cypress.
+Both Playwright case-selection tests stop before opening the classification modal.
+
+### PLS classification modal Cypress migration
+
+The nine single-applicant modal blocks in `cypress/e2e/fordeling/PILS.cy.js` are replaced as follows. Line numbers refer to the file before removal.
+
+| Cypress block | Playwright replacement |
+| --- | --- |
+| 75: Existing case without a care recipient, Vent | `fordeling-pls-classification.spec.ts` — `viser og avbryter modal for eksisterende sak uten pleietrengende, Vent` |
+| 108: Existing case with a care recipient, Fortsett | The same spec — `viser og avbryter modal for eksisterende sak med pleietrengende, Fortsett` |
+| 141: Existing case with a care recipient, Vent | The same spec — `viser og avbryter modal for eksisterende sak med pleietrengende, Vent` |
+| 174: Reserved case with a care recipient, Fortsett | The same spec — `viser og avbryter modal for reservert sak med pleietrengende, Fortsett` |
+| 207: Reserved case with a care recipient, Vent | The same spec — `viser og avbryter modal for reservert sak med pleietrengende, Vent` |
+| 240: Reserved case without a care recipient, Vent | The same spec — `viser og avbryter modal for reservert sak uten pleietrengende, Vent` |
+| 272: New case with a manually entered care-recipient ID, Fortsett | The same spec — `viser og avbryter modal for ny sak med manuelt registrert pleietrengende, Fortsett` |
+| 308: New case with a manually entered care-recipient ID, Vent | The same spec — `viser og avbryter modal for ny sak med manuelt registrert pleietrengende, Vent` |
+| 339: New case without a care-recipient ID, Vent | The same spec — `viser og avbryter modal for ny sak uten fødselsnummer for pleietrengende, Vent` |
+
+Each journey checks the PLS benefit and applicant, and verifies whether the case number, period and care-recipient ID should appear. It uses **Avbryt**, checks that the modal closes, and asserts that no mutation or debug-close request was sent. The existing PLS Fortsett journey continues to verify the summary and successful classification for an existing case with a care recipient; `KlassifiserModal.spec.tsx` covers shared headings, actions and cancellation.
+
+The first retained reset block now starts by confirming the applicant, selecting new-case mode and checking the no-ID option. Applicant switching, two-applicant and empty-lookup flows remain in Cypress.
 
 ### De siste 13 blokkene i Fordeling PSB
 

@@ -51,6 +51,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til to selvstendige Playwright-reiser for de fire eksisterende og reserverte PLS-sakene og manuell pleietrengende i ny sak, inkludert valg uten fødselsnummer.
 - Fjernet de sju erstattede saksvalgsblokkene fra `cypress/e2e/fordeling/PILS.cy.js`. Beholdt modal-, søkerbytte-, reset-, to-søker- og tomt-oppslag-dekning med nødvendig oppsett i modaltestene.
 
+#### 2026-11-19 — Klassifiseringsmodaler for PLS
+
+- La til ni Playwright-scenarioer som åpner og avbryter PLS-modalene for eksisterende, reserverte og nye saker. De kontrollerer sammendragsfeltene og at avbrytelse ikke sender mutasjoner.
+- Fjernet de ni erstattede blokkene fra `cypress/e2e/fordeling/PILS.cy.js` og la til eksplisitt startoppsett for den beholdte reset-testen.
+- Validering: PLS Playwright-spesifikasjonen bestod med 11 tester, og den beholdte Cypress-spesifikasjonen bestod med 18 tester.
+
 #### 2026-11-19 — Klassifisering av PLS
 
 - La til Playwright-reiser for Vent med nytt forsøk og Fortsett fram til automatisk opprettet PLS-skjema. Gjenbrukte modal- og Storybook-dekning for klassifiserings- og kopieringsfeil.
