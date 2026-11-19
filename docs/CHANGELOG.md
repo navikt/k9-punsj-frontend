@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-18 — Klassifisering av PSB
+
+- Erstattet de sju Cypress-blokkene med Playwright-, Vitest- og Storybook-dekning. Vent med to søkere gjenstår; LOS er kontrollert mot en lokal testdestinasjon.
+
 #### 2026-11-18 — Saks- og barnevalg i Fordeling PSB
 
 - Kompletterte eksisterende Playwright-reiser med dokumentvalg, saks- og barnevalg, overgang til ny sak og begge flaggverdier. Fjernet `cypress/e2e/fordeling/PSB.cy.js` etter å ha kartlagt alle 13 gjenværende blokker, inkludert PDF-handlingen Skjul. Øvrige Cypress-spesifikasjoner er uendret.

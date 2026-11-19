@@ -138,25 +138,35 @@ const renderModal = (
     const lukkModal = vi.fn();
     const setFagsak = vi.fn();
 
-    render(
-        <Provider store={store}>
-            <QueryClientProvider client={queryClient}>
-                <IntlProvider messages={messages} locale="nb">
-                    <MemoryRouter initialEntries={[`/journalpost/${JOURNALPOST_ID}/`]}>
-                        <PunsjDialogProvider rootElement={dialogRoot}>
-                            <Location />
-                            <KlassifiserModal
-                                toSøkere={options.toSøkere ?? false}
-                                fortsett={fortsett}
-                                lukkModal={lukkModal}
-                                setFagsak={setFagsak}
-                            />
-                        </PunsjDialogProvider>
-                    </MemoryRouter>
-                </IntlProvider>
-            </QueryClientProvider>
-        </Provider>,
-    );
+    const Modal = () => {
+        const [open, setOpen] = React.useState(true);
+        return (
+            <Provider store={store}>
+                <QueryClientProvider client={queryClient}>
+                    <IntlProvider messages={messages} locale="nb">
+                        <MemoryRouter initialEntries={[`/journalpost/${JOURNALPOST_ID}/`]}>
+                            <PunsjDialogProvider rootElement={dialogRoot}>
+                                <Location />
+                                {open && (
+                                    <KlassifiserModal
+                                        toSøkere={options.toSøkere ?? false}
+                                        fortsett={fortsett}
+                                        lukkModal={() => {
+                                            lukkModal();
+                                            setOpen(false);
+                                        }}
+                                        setFagsak={setFagsak}
+                                    />
+                                )}
+                            </PunsjDialogProvider>
+                        </MemoryRouter>
+                    </IntlProvider>
+                </QueryClientProvider>
+            </Provider>
+        );
+    };
+
+    render(<Modal />);
 
     return { store, queryClient, lukkModal, setFagsak, dialogRoot };
 };
@@ -467,6 +477,30 @@ describe('KlassifiserModal', () => {
         queryClient.clear();
     });
 
+    it('avbryter etter klassifiseringsfeil uten å starte nye handlinger', async () => {
+        const user = userEvent.setup();
+        vi.mocked(klassifiserDokument).mockRejectedValue(new Error('Det oppstod en feil ved klassifisering.'));
+        const { lukkModal, setFagsak, queryClient } = renderModal(SAK_MED_BARN, true);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+        expect(await screen.findByText('Det oppstod en feil ved klassifisering.')).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Avbryt' })).toBeEnabled();
+
+        await user.click(screen.getByRole('button', { name: 'Avbryt' }));
+
+        await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+        expect(screen.getByLabelText('Gjeldende adresse')).toHaveTextContent(`/journalpost/${JOURNALPOST_ID}/`);
+        expect(lukkModal).toHaveBeenCalledOnce();
+        expect(setFagsak).not.toHaveBeenCalled();
+        expect(klassifiserDokument).toHaveBeenCalledOnce();
+        expect(kopierJournalpostNotRedux).not.toHaveBeenCalled();
+        expect(postBehandlingsAar).not.toHaveBeenCalled();
+        expect(settJournalpostPaaVentUtenSøknadId).not.toHaveBeenCalled();
+        expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
+
+        queryClient.clear();
+    });
+
     it('prøver bare vent på nytt etter ventefeil', async () => {
         const user = userEvent.setup();
         vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: SAK_MED_BARN.fagsakId });
@@ -548,6 +582,7 @@ describe('KlassifiserModal', () => {
         await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
         expect(await screen.findByText('Det oppstod en feil ved kopiering av journalpost.')).toBeVisible();
         expect(screen.getByRole('button', { name: 'Videre' })).toBeEnabled();
+        expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
         expect(getJournalpostEtterKopiering).not.toHaveBeenCalled();
 
         await user.click(screen.getByRole('button', { name: 'Kopier journalpost' }));
@@ -596,6 +631,31 @@ describe('KlassifiserModal', () => {
         expect(store.getState().felles.journalpost).toEqual(JOURNALFØRT_MED_BARN);
         expectCopyCalls(1);
         expect(setFagsak).not.toHaveBeenCalled();
+        queryClient.clear();
+    });
+
+    it('beholder kopisuksess og søkeridenter når refresh etter kopi feiler med 500', async () => {
+        const user = userEvent.setup();
+        vi.mocked(klassifiserDokument).mockResolvedValue({ saksnummer: SAK_MED_BARN.fagsakId });
+        vi.mocked(kopierJournalpostNotRedux).mockResolvedValue();
+        vi.mocked(getJournalpostEtterKopiering).mockRejectedValue(
+            new Error('Error fetching journalpost, status: 500. Oppdater siden.'),
+        );
+        const { queryClient } = renderModal(SAK_MED_BARN, true, undefined, TO_SØKERE);
+
+        await user.click(screen.getByRole('button', { name: 'Journalfør journalposten' }));
+
+        const copySuccess = await screen.findByText(/Kopi av journalposten er opprettet/);
+        expect(copySuccess).toHaveTextContent(ANNEN_SØKER_ID);
+        expect(copySuccess).toHaveTextContent(SAK_MED_BARN.pleietrengendeIdent!);
+        expect(await screen.findByText('Error fetching journalpost, status: 500. Oppdater siden.')).toBeVisible();
+        const refreshedCopySuccess = screen.getByText(/Kopi av journalposten er opprettet/);
+        expect(refreshedCopySuccess).toBeVisible();
+        expect(refreshedCopySuccess).toHaveTextContent(ANNEN_SØKER_ID);
+        expect(refreshedCopySuccess).toHaveTextContent(SAK_MED_BARN.pleietrengendeIdent!);
+        expect(getJournalpostEtterKopiering).toHaveBeenCalledExactlyOnceWith(JOURNALPOST_ID);
+        expect(klassifiserDokument).toHaveBeenCalledOnce();
+        expect(kopierJournalpostNotRedux).toHaveBeenCalledOnce();
         queryClient.clear();
     });
 
