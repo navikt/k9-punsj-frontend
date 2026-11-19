@@ -126,6 +126,21 @@ Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.j
 | 206: Det gjelder et annet barn | Samme reise: fjerner forrige barn og deaktiverer begge handlingene, fyller ut gyldig manuell ident og sjekker panel, informasjon og begge handlingene aktive. |
 | 230: Pleietrengende har ikke fødselsnummer | Samme reise: fjerner Barnets ID og manuell ident, viser informasjon og holder bare Vent aktiv. Reisen avbryter modalene og sjekker at ingen mutasjoner sendes. |
 
+## Gosys-oppgave for Annet
+
+[`fordeling-gosys-annet.spec.ts`](tests/fordeling-gosys-annet.spec.ts) erstatter alle seks blokkene i `cypress/e2e/fordeling/Annet.cy.js`:
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| Åpne journalpost og velg Annet | Åpner journalpost 305, sjekker GET fra service worker og skjuler PDF-en før Annet velges. |
+| Journalpostpanel | Sjekker journalpostnummer, søker og sakstype med etiketter og verdier. |
+| To søkere | Sjekker at checkboxen mangler for Annet. |
+| Dokumentvalg | Sjekker «Dette gjelder» og de fire opprinnelige alternativene. |
+| Gosys-feil | Sjekker kategorioppslag, deaktivert knapp, POST-innhold, HTTP 500, feilmelding og beholdte verdier for nytt forsøk. |
+| Gosys-suksess | Sjekker samme POST med HTTP 200 og tomt svar, rekkefølge og dialog, og returnerer til lokal LOS først etter OK. |
+
+Gosys-svarene er lokale MSW-svar; LOS-destinasjonen er den lokale startsiden, ikke en faktisk LOS-tjeneste. Reisen kontrollerer også at ingen andre mutasjoner eller debugglukking sendes.
+
 ## Allerede behandlet journalpost
 
 `fordeling-already-processed.spec.ts` erstatter alle 12 blokkene i `cypress/e2e/fordeling/JpAlleredeBehandlet.cy.js`. Oppstartsblokkene er samlet i én test; de sju dokumentvariantene kjører i separate Playwright-kontekster. Alle testene verifiserer at Kopier ikke sendes og at ruten forblir på journalposten.
