@@ -1,6 +1,6 @@
 # Playwright
 
-The Chromium smoke suite runs the frontend with its existing MSW test handlers. It does not call the backend.
+The Chromium Playwright suite runs the frontend with its existing MSW test handlers. It does not call the backend.
 
 The PR workflow runs the full suite when a pull request is opened or synchronized. To inspect a run, download its `playwright-<run-id>-<attempt>` artifact from the Actions run summary. It contains the HTML report and failure results, including traces and screenshots when available. Run `yarn exec playwright show-report playwright-report` after extracting the artifact to view the report locally.
 
@@ -141,6 +141,22 @@ Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.j
 
 Gosys-svarene er lokale MSW-svar; LOS-destinasjonen er den lokale startsiden, ikke en faktisk LOS-tjeneste. Reisen kontrollerer også at ingen andre mutasjoner eller debugglukking sendes.
 
+## Inngang til Fordeling
+
+[`fordeling-entry.spec.ts`](tests/fordeling-entry.spec.ts) erstatter de sju aktive blokkene i `cypress/e2e/fordeling/Fordeling.cy.js`. De fire dokumentvalgene på toppnivå gjenbruker dekningen i [`fordeling-gosys-annet.spec.ts`](tests/fordeling-gosys-annet.spec.ts).
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 9: Dokumentvalg på toppnivå | `fordeling-gosys-annet.spec.ts`: sjekker de fire alternativene under «Dette gjelder». |
+| 31: Underalternativer for Omsorgspenger | `fordeling-entry.spec.ts`: sjekker at de tre underalternativene først mangler, deretter vises, og at korrigering er valgt. |
+| 65: Midlertidig alene om omsorgen | Samme spec velger undertype og Ja, kontrollerer søkeroppslaget og blir på `/journalpost/200`. |
+| 76: Alene om omsorgen | Samme spec velger undertype og Ja, kontrollerer søkeroppslaget og blir på `/journalpost/200`. |
+| 87: Direkte utbetaling uten fagsaker | Samme spec bruker et lokalt, ident-avgrenset tomt saksoppslag. Den kontrollerer Ja, tomt svar, fravær av «Velg fagsak» og synlig behandlingsår når reservert ny sak er aktiv. Den gamle blokkens tittel sier at behandlingsår vises, men eneste aktive Cypress-assertion var at «Velg fagsak» manglet; kontrollen av behandlingsår var kommentert ut. |
+| 105: Direkte utbetaling | Samme spec velger undertype og blir på `/journalpost/200`; den aktive Cypress-blokken bekreftet ikke Ja eller navigerte videre. |
+| 139: Gyldig søkeridentitet | Samme spec velger PSB og Nei, validerer den syntetiske identiteten, sjekker at feltverdien beholdes og at ugyldig-ident-meldingen mangler. |
+
+De tre blokkene om eksisterende søknader utførte bare forberedelse av valg og bekreftelse; videre navigering og søknadsskjema var kommentert ut. Playwright-testene bevarer denne grensen og utfører ikke journalføring eller videreføring.
+
 ## Allerede behandlet journalpost
 
 `fordeling-already-processed.spec.ts` erstatter alle 12 blokkene i `cypress/e2e/fordeling/JpAlleredeBehandlet.cy.js`. Oppstartsblokkene er samlet i én test; de sju dokumentvariantene kjører i separate Playwright-kontekster. Alle testene verifiserer at Kopier ikke sendes og at ruten forblir på journalposten.
@@ -228,7 +244,7 @@ Reisene bruker test-ID-ene `930304`–`930311`. Browser-MSW-overstyringene er av
 
 ### Feilmeldinger ved fagsakoppslag
 
-`cypress/e2e/fordeling/FagsakLookupErrors.cy.js` er fjernet etter kartleggingen under. Linjenumrene viser filen før sletting. Den separate `cypress/e2e/fagsakLookupErrors.cy.js` er beholdt.
+`cypress/e2e/fordeling/FagsakLookupErrors.cy.js` er fjernet etter kartleggingen under. Linjenumrene viser filen før sletting. Oppslagskontrollene fra den separate Cypress-filen er kartlagt under [Replaced Cypress lookup regressions](#replaced-cypress-lookup-regressions).
 
 | Tidligere Cypress-kontroll | Automatisk dekning i `fordeling-empty-and-lookup.spec.ts` |
 | --- | --- |
