@@ -22,6 +22,14 @@ const klassifiserModalHeaderFortsett = 'Vil du lagre følgende informasjon til j
 
 const klassifiserModalAlertInfoKanIkkeEndres = 'Informasjonen kan ikke endres etter journalposten er journalført.';
 
+const velgFagsak = (fagsak, reservert = false) => {
+    cy.findByText(/Ja/i).should('exist').click();
+    cy.findByLabelText('Velg fagsak')
+        .should('exist')
+        .select(getFagsakNavnForSelect(fagsak.fagsakId, dokumenttype, reservert))
+        .should('have.value', fagsak.fagsakId);
+};
+
 describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 1280, viewportHeight: 1450 }, () => {
     it(`Åpne journalpost ${journalpostId} fra LOS`, () => {
         cy.visit(`/journalpost/${journalpostId}`);
@@ -64,30 +72,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
     });
 
-    it('Test bekreft søker og velg fagsak uten pleietrengende', () => {
-        cy.findByText(/Ja/i).should('exist').click();
-
-        cy.findByLabelText('Velg fagsak')
-            .should('exist')
-            .select(getFagsakNavnForSelect(fagsakUtenPleietrengende.fagsakId, dokumenttype))
-            .should('have.value', fagsakUtenPleietrengende.fagsakId);
-        cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Pleietrengende:').should('exist');
-            cy.findByText('ikke satt').should('exist');
-            cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', fagsakUtenPleietrengende.fagsakId);
-        });
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsakUtenPleietrengende.fagsakId).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('not.exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('Åpne klassifiser modal med fagsak uten pleietrengende - sett på vent', () => {
+        velgFagsak(fagsakUtenPleietrengende);
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -119,31 +105,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Test velg fagsak med pleietrengende', () => {
-        cy.contains('Velg fagsak').should('exist');
-
-        cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakMedPleietrengende.fagsakId, dokumenttype))
-            .should('have.value', fagsakMedPleietrengende.fagsakId);
-        cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Pleietrengende:').should('exist');
-            cy.findByText(`Navn: ${fagsakMedPleietrengende.pleietrengende.navn}`).should('exist');
-            cy.findByText(`Id: ${fagsakMedPleietrengende.pleietrengende.identitetsnummer}`).should('exist');
-            cy.findByText('Se fagsak i K9').should('exist');
-            cy.get('a').invoke('attr', 'href').should('contain', fagsakMedPleietrengende.fagsakId);
-        });
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsakMedPleietrengende.fagsakId).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsakMedPleietrengende.pleietrengende.identitetsnummer).should('exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('Åpne klassifiser modal med fagsak og pleietrengende fortsett', () => {
+        velgFagsak(fagsakMedPleietrengende);
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -176,6 +139,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
     });
 
     it('Åpne klassifiser modal med fagsak og pleietrengende - sett på vent', () => {
+        velgFagsak(fagsakMedPleietrengende);
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -207,30 +171,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Test velg reservert fagsak med pleietrengende', () => {
-        cy.contains('Velg fagsak').should('exist');
-
-        cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakMedPleietrengendeReservert.fagsakId, dokumenttype, true))
-            .should('have.value', fagsakMedPleietrengendeReservert.fagsakId);
-        cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Pleietrengende:').should('exist');
-            cy.findByText(`Navn: ${fagsakMedPleietrengendeReservert.pleietrengende.navn}`).should('exist');
-            cy.findByText(`Id: ${fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer}`).should('exist');
-            cy.findByText('Se fagsak i K9').should('not.exist');
-        });
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsakMedPleietrengendeReservert.fagsakId).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(fagsakMedPleietrengendeReservert.pleietrengende.identitetsnummer).should('exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('Åpne klassifiser modal med reservert fagsak og pleietrengende fortsett', () => {
+        velgFagsak(fagsakMedPleietrengendeReservert, true);
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -263,6 +205,7 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
     });
 
     it('Åpne klassifiser modal med reservert fagsak og pleietrengende - sett på vent', () => {
+        velgFagsak(fagsakMedPleietrengendeReservert, true);
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -294,28 +237,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Test velg reservert fagsak uten pleietrengende', () => {
-        cy.contains('Velg fagsak').should('exist');
-
-        cy.findByLabelText('Velg fagsak')
-            .select(getFagsakNavnForSelect(fagsakUtenPleietrengendeReservert.fagsakId, dokumenttype, true))
-            .should('have.value', fagsakUtenPleietrengendeReservert.fagsakId);
-        cy.get('.fagsakSelectedInfo').within(() => {
-            cy.findByText('Pleietrengende:').should('exist');
-            cy.findByText('ikke satt').should('exist');
-            cy.findByText('Se fagsak i K9').should('not.exist');
-        });
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('exist');
-            cy.findByText(fagsakUtenPleietrengendeReservert.fagsakId).should('exist');
-            cy.findByText(/Pleietrengendes ID/i).should('not.exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('PSB Åpne klassifiser modal med reservert fagsak uten pleietrengende - sett på vent', () => {
+        velgFagsak(fagsakUtenPleietrengendeReservert, true);
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);
@@ -346,40 +269,12 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Reserver saksnummer til ny fagsak', () => {
-        cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
-
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Saksnummer/i).should('not.exist');
-            cy.findByText(fagsakUtenPleietrengendeReservert.fagsakId).should('not.exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-    });
-
-    it('Test reserver fagsak med pleietrengende', () => {
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Pleietrengendes ID/i).should('not.exist');
-        });
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('be.disabled');
-
-        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(pleietrengende);
-
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Pleietrengendes ID/i).should('exist');
-            cy.findByText(pleietrengende).should('exist');
-        });
-
-        cy.get('[data-test-id="jornalførUtenFagsak"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('not.be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('Åpne klassifiser modal fortsett med reserver fagsak og pleietrengende', () => {
+        velgFagsak(fagsakUtenPleietrengendeReservert, true);
+        cy.findByLabelText('Reserver saksnummer til ny fagsak').check();
+        cy.findByLabelText('Pleietrengendes fødselsnummer:').should('exist').type(pleietrengende);
+        cy.get('.journalpostpanel').should('contain', pleietrengende);
+
         cy.get('[data-test-id="journalførOgFortsett"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderFortsett);
@@ -441,21 +336,8 @@ describe(`Fordeling ${dokumenttype}`, { testIsolation: false, viewportWidth: 128
         cy.get('[data-test-id="klassifiserModal"]').should('not.exist');
     });
 
-    it('Test Pleietrengende har ikke fødselsnummer', () => {
-        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
-
-        cy.get('.journalpostpanel').within(() => {
-            cy.findByText(/Pleietrengendes ID/i).should('not.exist');
-            cy.findByText(pleietrengende).should('not.exist');
-        });
-
-        cy.get('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]').should('exist');
-
-        cy.get('[data-test-id="journalførOgFortsett"]').should('be.disabled');
-        cy.get('[data-test-id="journalførOgVent"]').should('not.be.disabled');
-    });
-
     it('Åpne klassifiser modal sett på vent med reserver fagsak og Pleietrengende har ikke fødselsnummer ', () => {
+        cy.findByLabelText('Pleietrengende har ikke fødselsnummer').check();
         cy.get('[data-test-id="journalførOgVent"]').click();
 
         cy.get('[data-test-id="klassifiserModalHeader"]').should('contain', klassifiserModalHeaderVent);

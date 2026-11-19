@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Saksvalg for PLS
+
+- La til to selvstendige Playwright-reiser for de fire eksisterende og reserverte PLS-sakene og manuell pleietrengende i ny sak, inkludert valg uten fødselsnummer.
+- Fjernet de sju erstattede saksvalgsblokkene fra `cypress/e2e/fordeling/PILS.cy.js`. Beholdt modal-, søkerbytte-, reset-, to-søker- og tomt-oppslag-dekning med nødvendig oppsett i modaltestene.
+
 #### 2026-11-19 — Klassifisering av PLS
 
 - La til Playwright-reiser for Vent med nytt forsøk og Fortsett fram til automatisk opprettet PLS-skjema. Gjenbrukte modal- og Storybook-dekning for klassifiserings- og kopieringsfeil.

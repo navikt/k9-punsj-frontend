@@ -122,6 +122,22 @@ The seven blocks in `cypress/e2e/klassifisering/PILS.cy.js` are replaced as foll
 
 The journeys use journalpost 301 and the existing fixtures. Local MSW handlers are isolated to each browser context and match the journalpost ID. The classification and draft contracts are checked against the selected PPN case; no form edits, validation or submission are performed.
 
+### PLS case selection Cypress migration
+
+The seven mapped selection blocks in `cypress/e2e/fordeling/PILS.cy.js` are replaced as follows. Line numbers refer to the file before removal.
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 67: Existing case without a care recipient | `fordeling-pls-case-selection.spec.ts` selects the case and checks the selected-case information, journalpost summary, K9 link and Vent/Fortsett states. |
+| 122: Existing case with a care recipient | The same journey checks the care recipient's name and ID, journalpost summary, K9 link and both enabled actions. |
+| 210: Reserved case with a care recipient | The same journey checks the care recipient's name and ID, journalpost summary, absence of the K9 link and both enabled actions. |
+| 297: Reserved case without a care recipient | The same journey checks `ikke satt`, the journalpost summary, absence of the K9 link and only Vent enabled. |
+| 349: Switch to a new case | `fordeling-pls-case-selection.spec.ts` switches from a reserved case, clears its number and disables both actions. |
+| 361: Enter a manual care-recipient ID | The same new-case journey checks the journalpost summary, reservation notice and both enabled actions. |
+| 444: No care-recipient ID | The same journey checks that the ID clears, the explanatory notice appears and only Vent remains enabled. |
+
+The retained Cypress modal tests now select the case they need locally. The retained new-case modal flow keeps the case selection, new-case switch and manual ID entry; its Vent modal test checks the no-ID option before opening the modal. Applicant switching, reset, two-applicant and empty-lookup coverage remains in Cypress.
+
 ### De siste 13 blokkene i Fordeling PSB
 
 Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.js`. Bare denne Cypress-filen er fjernet. Kartleggingen gjelder ikke øvrige PSB- eller Fordeling-scenarier.
