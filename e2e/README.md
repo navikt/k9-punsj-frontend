@@ -106,6 +106,22 @@ Five manual modal stories are available at [Fortsett med eksisterende sak og bar
 
 For browser review, start Storybook with `yarn storybook --host 127.0.0.1` and the [Playwright UI](http://127.0.0.1:9324/) with `yarn test:pw:ui e2e/tests/fordeling-psb.spec.ts --ui-host=127.0.0.1 --ui-port=9324`. For direct app links, start `yarn start:e2e` on port 8080 only when Playwright is not running tests; the two processes cannot share that port. Open [journalpost 930300](http://127.0.0.1:8080/journalpost/930300) to switch from the case without a child to the case with a child and cancel each modal. Open [journalpost 930301](http://127.0.0.1:8080/journalpost/930301), choose the existing case with a child, confirm journalføring, then choose **Registrere opplysninger til K9** and click **Bekreft**. The empty lookup opens a new draft without editing, validating, or submitting it. Stop manually started servers with Ctrl+C in their terminals.
 
+### PLS classification Cypress migration
+
+The seven blocks in `cypress/e2e/klassifisering/PILS.cy.js` are replaced as follows:
+
+| Cypress block | Replacement coverage | Remaining gap |
+| --- | --- | --- |
+| 21: Direct opening and **Skjul** | Both journeys in `fordeling-pls-classification.spec.ts` verify the direct PLS GET; `journalpost-loader.spec.ts` checks **Skjul** hides the PDF. | None for the block's assertions. |
+| 26: Classification 500 and cancel | `KlassifiserModal.spec.tsx` — `avbryter etter klassifiseringsfeil uten å starte nye handlinger`; Storybook `JournalforFeilMedVellykketNyttForsok` checks the generic error. | No separate PLS error handling exists. |
+| 56: Copy error and retry with two applicants | `KlassifiserModal.spec.tsx` covers retry, hidden **Avbryt**, explicit **Videre** and refresh failure; `ToSokereKopierFeilMedVellykketNyttForsok` covers the generic copy error and successful identities. | No PLS-specific copy behavior; successful copy returns 201. |
+| 112: Vent failure and retry | `fordeling-pls-classification.spec.ts` checks the PPN mottak body, Vent 500 then empty 200 response, retry and local LOS navigation. | The original block reloads without reselecting two applicants; actual Vent with two applicants remains uncovered. |
+| 174: Duplicate direct opening and **Skjul** | Same direct GET and loader coverage as block 21. | No additional gap. |
+| 179: Successful classification | The Fortsett journey checks the PPN request, selected case, care recipient, period and refreshed journalpost. | None for the block's assertions. |
+| 191: Journalført panel and form opening | The Fortsett journey checks panel labels and values, the journalført alert, choices, disabled **Bekreft**, the empty lookup, one draft POST and the PLS form route. | Stops at form opening; form editing and submission are outside scope. |
+
+The journeys use journalpost 301 and the existing fixtures. Local MSW handlers are isolated to each browser context and match the journalpost ID. The classification and draft contracts are checked against the selected PPN case; no form edits, validation or submission are performed.
+
 ### De siste 13 blokkene i Fordeling PSB
 
 Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.js`. Bare denne Cypress-filen er fjernet. Kartleggingen gjelder ikke øvrige PSB- eller Fordeling-scenarier.

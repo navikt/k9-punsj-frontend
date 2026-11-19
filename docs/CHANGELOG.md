@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Klassifisering av PLS
+
+- La til Playwright-reiser for Vent med nytt forsøk og Fortsett fram til automatisk opprettet PLS-skjema. Gjenbrukte modal- og Storybook-dekning for klassifiserings- og kopieringsfeil.
+- Fjernet PLS-klassifiseringens Cypress-fil etter å ha kartlagt alle sju blokkene. Vent med to søkere gjenstår.
+
 #### 2026-11-19 — Gosys-oppgave for Annet
 
 - Flyttet alle seks Cypress-blokkene til én Playwright-reise med Gosys-feil, nytt forsøk og eksplisitt retur til lokal LOS. Fjernet Cypress-filen etter bekreftet dekning.
