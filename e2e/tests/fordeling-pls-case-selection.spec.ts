@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import journalpostFixture from '../../cypress/fixtures/jpPILS301.json' with { type: 'json' };
+import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const SØKER_ID = journalpostFixture.norskIdent;
@@ -95,6 +96,62 @@ test('registrerer manuelt pleietrengende for ny PLS-sak', async ({ page }) => {
     const careRecipientId = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
     await careRecipientId.fill(MANUELL_PLEIETRENGENDES_ID);
     await expect(careRecipientId).toHaveValue(MANUELL_PLEIETRENGENDES_ID);
+    await expectPanelField(page, 'Pleietrengendes ID:', MANUELL_PLEIETRENGENDES_ID);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expect(fortsett(page)).toBeEnabled();
+    await expect(vent(page)).toBeEnabled();
+
+    await page.getByLabel('Pleietrengende har ikke fødselsnummer', { exact: true }).check();
+    await expect(careRecipientId).toBeDisabled();
+    await expect(careRecipientId).toHaveValue('');
+    await expect(journalpostpanel(page).getByText('Pleietrengendes ID:', { exact: true })).toHaveCount(0);
+    await expect(page.locator('[data-test-id="pleietrengendeHarIkkeFnrInformasjon"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeEnabled();
+});
+
+test('viser PLS-starttilstand og håndterer tomt fagsakoppslag', async ({ page }) => {
+    await openJournalpost(page);
+    await expectPanelField(page, 'Journalpostnummer:', JOURNALPOST_ID);
+    await expectPanelField(page, 'Søkers ID:', SØKER_ID);
+    await expectPanelField(page, 'Sakstype:', 'Pleiepenger i livets sluttfase');
+    await expect(page.getByRole('radio', { name: 'Pleiepenger i livets sluttfase', exact: true })).toBeChecked();
+    await expect(page.locator('[data-test-id="toSokereCheckbox"]')).toBeVisible();
+    await expect(fortsett(page)).toBeDisabled();
+    await expect(vent(page)).toBeDisabled();
+
+    await page.evaluate(
+        ({ applicantId, casesPath }) => {
+            const msw = window.msw;
+            if (!msw) {
+                throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+            }
+
+            msw.worker.use(
+                msw.http.get(casesPath, ({ request }) => {
+                    if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                    return msw.HttpResponse.json([]);
+                }),
+            );
+        },
+        { applicantId: SØKER_ID, casesPath: ApiPath.HENT_FAGSAK_PÅ_IDENT },
+    );
+
+    const lookupResponsePromise = page.waitForResponse(
+        (response) =>
+            response.request().method() === 'GET' &&
+            new URL(response.url()).pathname === ApiPath.HENT_FAGSAK_PÅ_IDENT &&
+            response.request().headers()['x-nav-norskident'] === SØKER_ID,
+    );
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    const lookupResponse = await lookupResponsePromise;
+    expect(lookupResponse.status()).toBe(200);
+    expect(lookupResponse.fromServiceWorker()).toBe(true);
+    expect(await lookupResponse.json()).toEqual([]);
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+
+    const careRecipientId = page.getByLabel('Pleietrengendes fødselsnummer:', { exact: true });
+    await careRecipientId.fill(MANUELL_PLEIETRENGENDES_ID);
     await expectPanelField(page, 'Pleietrengendes ID:', MANUELL_PLEIETRENGENDES_ID);
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expect(fortsett(page)).toBeEnabled();

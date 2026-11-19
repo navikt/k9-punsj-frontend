@@ -136,7 +136,22 @@ The seven mapped selection blocks in `cypress/e2e/fordeling/PILS.cy.js` are repl
 | 361: Enter a manual care-recipient ID | The same new-case journey checks the journalpost summary, reservation notice and both enabled actions. |
 | 444: No care-recipient ID | The same journey checks that the ID clears, the explanatory notice appears and only Vent remains enabled. |
 
-Both Playwright case-selection tests stop before opening the classification modal.
+The case-selection journeys stop before opening the classification modal.
+
+### PLS opening and empty-lookup Cypress migration
+
+The final ten opening and empty-lookup blocks in `cypress/e2e/fordeling/PILS.cy.js` are replaced as follows. Line numbers refer to the file before removal.
+
+| Cypress block | Playwright replacement |
+| --- | --- |
+| 13: Direct opening | `fordeling-pls-case-selection.spec.ts` opens journalpost 301 directly as the first step of the PLS start-state and empty-lookup journey. |
+| 17: **Skjul** | `journalpost-loader.spec.ts` verifies that **Skjul** hides the PDF while keeping the journalpost visible. |
+| 32: Document choices | `fordeling-gosys-annet.spec.ts` checks the shared document radio group, including PLS. |
+| 21, 40, 45, 49: PLS initial state | `fordeling-pls-case-selection.spec.ts` checks journalpost 301, the fixture applicant and PLS benefit in the panel, selected PLS radio, two-applicant checkbox, and disabled **Fortsett** and **Vent**. |
+| 57: Empty case lookup | The same journey installs a browser-context MSW override for the fixture applicant, verifies the service-worker response is 200 with `[]`, and checks that **Velg fagsak** is absent. |
+| 72, 86: Manual care-recipient ID and no ID | The same journey checks the manually entered ID, reservation notice and enabled actions, then verifies that selecting **Pleietrengende har ikke fødselsnummer** clears the ID and leaves only **Vent** enabled. |
+
+The journey uses the existing journalpost 301 fixture, manual care-recipient ID and case-selection locators. It stops at the button state; the separate stale case-select fix, actual two-applicant Vent and form submission remain outside scope.
 
 ### PLS classification modal Cypress migration
 
@@ -156,7 +171,7 @@ The nine single-applicant modal blocks in `cypress/e2e/fordeling/PILS.cy.js` are
 
 Each journey checks the PLS benefit and applicant, and verifies whether the case number, period and care-recipient ID should appear. It uses **Avbryt**, checks that the modal closes, and asserts that no mutation or debug-close request was sent. The existing PLS Fortsett journey continues to verify the summary and successful classification for an existing case with a care recipient; `KlassifiserModal.spec.tsx` covers shared headings, actions and cancellation.
 
-Applicant-switch coverage is mapped below. Two-applicant preparation and cancellation coverage is mapped in [PLS two-applicant Cypress migration](#pls-two-applicant-cypress-migration). The remaining PLS Cypress spec covers the seven opening checks and the empty-lookup group.
+Applicant-switch coverage is mapped below. Two-applicant preparation and cancellation coverage is mapped in [PLS two-applicant Cypress migration](#pls-two-applicant-cypress-migration). The final opening and empty-lookup blocks are mapped in [PLS opening and empty-lookup Cypress migration](#pls-opening-and-empty-lookup-cypress-migration).
 
 ### PLS applicant-switch Cypress migration
 
@@ -172,7 +187,7 @@ The five mapped applicant-switch and reset blocks in `cypress/e2e/fordeling/PILS
 
 **Known issue.** After returning to the original applicant, **Velg fagsak** can still display the previous case even though the journalpost panel clears the case and care-recipient details and both actions are disabled. The journey covers the panel and action reset. Clearing the select is a separate fix.
 
-The Playwright journey starts from a fresh page. The Cypress spec retains its seven opening checks and a separate empty-lookup group. The two-applicant preparation and cancellation blocks are mapped below.
+The Playwright journey starts from a fresh page. Its ten remaining opening and empty-lookup Cypress blocks are mapped in [PLS opening and empty-lookup Cypress migration](#pls-opening-and-empty-lookup-cypress-migration). The two-applicant preparation and cancellation blocks are mapped below.
 
 ### PLS two-applicant Cypress migration
 
@@ -184,7 +199,7 @@ The three blocks in `cypress/e2e/fordeling/PILS.cy.js` are replaced as follows. 
 | 103: Open and cancel **Fortsett** | The same journey checks the PLS benefit, original applicant and care-recipient ID, absence of case number, period and **Gå til LOS**, and the non-editable-information warning. Cancel closes the dialog and preserves the selection without a mutation or debug-close request. |
 | 134: Open and cancel **Vent** | The same journey checks the Vent heading and confirmation, then verifies cancellation preserves the selection without a mutation or debug-close request. |
 
-The seven opening Cypress checks and the separate empty-lookup group remain. Actual two-applicant classification, copying and Vent execution are outside this migration.
+The final opening and empty-lookup Cypress blocks are mapped in [PLS opening and empty-lookup Cypress migration](#pls-opening-and-empty-lookup-cypress-migration). Actual two-applicant classification, copying and Vent execution are outside this migration.
 
 ### De siste 13 blokkene i Fordeling PSB
 

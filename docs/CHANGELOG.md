@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Starttilstand og tomt fagsakoppslag for PLS
+
+- La til én Playwright-reise for PLS-starttilstand, tomt fagsakoppslag, manuell pleietrengende og valg uten fødselsnummer. Fjernet den siste kartlagte Fordeling PLS-Cypress-filen og beholdt de delte JSON-fixturene.
+
 #### 2026-11-19 — Søkerbytte for PLS
 
 - La til én Playwright-reise for nullstilling av journalpostpanelet, PLS-sak for alternativ søker, avbrutte Fortsett- og Vent-dialoger og retur til opprinnelig søker. Dialogene kontrollerer søker- og saksdetaljer, og avbrytelse sender ingen mutasjon.
