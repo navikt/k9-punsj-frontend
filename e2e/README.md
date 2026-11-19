@@ -126,6 +126,25 @@ Playwright erstatter alle de siste 13 blokkene i `cypress/e2e/fordeling/PSB.cy.j
 | 206: Det gjelder et annet barn | Samme reise: fjerner forrige barn og deaktiverer begge handlingene, fyller ut gyldig manuell ident og sjekker panel, informasjon og begge handlingene aktive. |
 | 230: Pleietrengende har ikke fødselsnummer | Samme reise: fjerner Barnets ID og manuell ident, viser informasjon og holder bare Vent aktiv. Reisen avbryter modalene og sjekker at ingen mutasjoner sendes. |
 
+## Allerede behandlet journalpost
+
+`fordeling-already-processed.spec.ts` erstatter alle 12 blokkene i `cypress/e2e/fordeling/JpAlleredeBehandlet.cy.js`. Oppstartsblokkene er samlet i én test; de sju dokumentvariantene kjører i separate Playwright-kontekster. Alle testene verifiserer at Kopier ikke sendes og at ruten forblir på journalposten.
+
+| Cypress-blokk | Playwright-dekning |
+| --- | --- |
+| Åpne journalpost 310 | Oppstartstesten åpner `/journalpost/310` og kontrollerer GET-status 201 og svar fra service worker. |
+| Skjul dokumentvindu | Oppstartstesten viser PDF-en, klikker **Skjul** og sjekker at PDF-en skjules. |
+| Journalpostpanel | Oppstartstesten sjekker journalpostnummer, søkeretikett og -identitet, og at Sakstype mangler. |
+| Kopieringsinformasjon | Oppstartstesten sjekker varselet for en allerede behandlet journalpost. |
+| Dokumentvalg | Oppstartstesten sjekker Pleiepenger, Omsorgspenger og Pleiepenger i livets sluttfase, alle fem underalternativene, fravær av **Annet** og deaktivert Kopier før et konkret valg. |
+| Pleiepenger | Den parameteriserte reisen sjekker barn nummer tre, manuell ident med overgang tilbake til barnelisten og kopiering til annen søker. |
+| Ekstra omsorgsdager ved kronisk sykdom eller funksjonshemming | Samme barneliste-, manuell ident- og annen søker-reise for dette underalternativet. |
+| Ekstra omsorgsdager når søker er alene om omsorgen | Samme barneliste-, manuell ident- og annen søker-reise for dette underalternativet. |
+| Ekstra omsorgsdager når søker er midlertidig alene om omsorgen | Sjekker deaktivert Kopier, annen part, informasjonen for to søkere, annen søker og at annen part beholdes. |
+| Direkte utbetaling av omsorgspenger | Sjekker deaktivert Kopier, et tilgjengelig behandlingsår, annen søker og at året beholdes. |
+| Korrigering av inntektsmelding omsorgspenger AG | Sjekker deaktivert Kopier, et tilgjengelig behandlingsår, annen søker og at året beholdes. |
+| Pleiepenger i livets sluttfase | Sjekker manuell pleietrengende, annen søker og korrigering av partsforhold når søker også er pleietrengende. |
+
 ## Fordeling nullstilling
 
 Kjør reset-testene alene og sammen med PSB-piloten:

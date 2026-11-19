@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Allerede behandlet journalpost
+
+- Flyttet fem oppstarts-/UI-blokker og sju ytelsesvarianter til en Playwright-spesifikasjon. Testene kontrollerer når Kopier aktiveres uten å sende en kopi. Fjernet Cypress-filen etter å ha kartlagt alle 12 blokkene.
+- Validering: alle åtte Playwright-testene, `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-18 — Klassifisering av PSB
 
 - Erstattet de sju Cypress-blokkene med Playwright-, Vitest- og Storybook-dekning. Vent med to søkere gjenstår; LOS er kontrollert mot en lokal testdestinasjon.
