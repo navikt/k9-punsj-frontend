@@ -49,6 +49,16 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | B41, line 18: Longer work-time periods | `registrerer arbeidstid for lengre perioder og konverterer tidsformat` verifies both periods and the 10 registered days. |
 | B42, line 65: Time-format conversion | The same work-time test verifies decimal conversion, conversion back to hours and minutes, and the saved values on each day in both periods. |
 
+## OMPAO form save and submission
+
+`ompao-punch-form.spec.ts` replaces all three active checks in `nySoknad.cy.js`.
+
+| Cypress block (B43) | Playwright coverage |
+| --- | --- |
+| Line 16: Successful submission | `sender inn OMPAO-søknaden og viser kvitteringen` verifies the fixture, validation and save payloads, the saved-date receipt, and that `/send` starts only after the final save succeeds. |
+| Line 27: Client validation | `viser klientfeil når signatur og startdato mangler` verifies both missing-field errors, no preview or confirmation, and no `/send`; the existing `/valider` call remains. |
+| Line 35: Backend validation | `viser backendfeil uten å åpne preview eller sende inn` verifies the validation body and backend error, no preview or confirmation, and no `/send`. |
+
 ## Replaced Cypress lookup regressions
 
 All nine tests in `cypress/e2e/fagsakLookupErrors.cy.js` have been replaced by the component tests below. These tests render the actual creation and letter entry components; successful application navigation remains covered by `opprett-journalpost.spec.ts` and `send-brev.spec.ts`.
