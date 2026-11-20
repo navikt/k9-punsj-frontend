@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdaterte Playwright-veiledningen for agenter (2026-11-20)
+
+- Playwright-skillen viser til prosjektets eksisterende testoppsett, kjørekommandoer og PR-workflow.
+
 ### Rettet tomme outbound-regler i prod (2026-11-18)
 
 - Utelater `accessPolicy.outbound.rules` når `outboundRules` mangler eller er tom, slik at prod-manifestet ikke inneholder `rules: null`. Eksisterende nettverkstilgang er uendret.
