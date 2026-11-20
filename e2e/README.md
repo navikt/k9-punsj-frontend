@@ -39,12 +39,15 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 
 ## PSB form save and submission
 
-`psb-punch-form.spec.ts` replaces the first two blocks in `cypress/e2e/pleiepenger/PleiepengerPunsj.cy.js`.
+`psb-punch-form.spec.ts` replaces all five mapped checks from `cypress/e2e/pleiepenger/PleiepengerPunsj.cy.js`.
 
-| Cypress block (start line before removal) | Playwright coverage |
+| Cypress block (migration baseline) | Playwright coverage |
 | --- | --- |
-| 8: Submit PSB application | The journey verifies the edited date in the validation request and final receipt, plus the applicant and application IDs in the submit request. |
-| 18: Save updated received date on blur | The journey verifies the prefilled date, the edited date in the successful save request, and that the field retains the edit. |
+| Earlier migration, line 8: Submit PSB application | The journey verifies the edited date in the validation request and final receipt, plus the applicant and application IDs in the submit request. |
+| Earlier migration, line 18: Save updated received date on blur | The journey verifies the prefilled date, the edited date in the successful save request, and that the field retains the edit. |
+| B40, line 6: Freelancer validation | `viser valideringsfeil når frilanserens sluttdato er før startdato` verifies the end date remains and is invalid. |
+| B41, line 18: Longer work-time periods | `registrerer arbeidstid for lengre perioder og konverterer tidsformat` verifies both periods and the 10 registered days. |
+| B42, line 65: Time-format conversion | The same work-time test verifies decimal conversion, conversion back to hours and minutes, and the saved values on each day in both periods. |
 
 ## Replaced Cypress lookup regressions
 

@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Arbeidstid for PSB
+
+- Flyttet B40–B42 til to Playwright-tester: frilanservalidering og én arbeidstidsreise som kontrollerer to perioder, tidsformat og lagrede dager. Fjernet den erstattede Cypress-spesifikasjonen etter at hele PSB-spesifikasjonen bestod.
+- Validering: `yarn test:pw e2e/tests/psb-punch-form.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — Endret mottaksdato i PSB-skjema
 
 - La til én Playwright-reise som kontrollerer lagring på blur, validering, innsending med søker- og søknads-ID og datoen på kvitteringen. Fjernet de to erstattede Cypress-testene og beholdt de tre øvrige.

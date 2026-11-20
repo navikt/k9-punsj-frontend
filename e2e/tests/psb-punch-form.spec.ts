@@ -138,3 +138,86 @@ test('lagrer og sender inn endret mottaksdato i PSB-skjemaet', async ({ page }) 
     await expect(page.getByRole('button', { name: /tilbake til los/i })).toBeVisible();
     await expect(page.getByTestId('mottakelsesdato')).toContainText(REDIGERT_DATO);
 });
+
+test('viser valideringsfeil når frilanserens sluttdato er før startdato', async ({ page }) => {
+    await page.goto(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/skjema/${SØKNAD_ID}`);
+    await page.getByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+    await page.getByLabel('Frilanser').check();
+
+    const startDate = page.getByLabel('Når startet søker som frilanser?');
+    const endDate = page.getByLabel('Når sluttet søker som frilanser?');
+    await startDate.fill('10.10.2022');
+    await startDate.press('Tab');
+    await endDate.fill('01.10.2022');
+    await endDate.press('Tab');
+
+    await expect(endDate).toHaveValue('01.10.2022');
+    await expect(endDate).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByText('Sluttdato kan ikke være før startdato.')).toBeVisible();
+});
+
+test('registrerer arbeidstid for lengre perioder og konverterer tidsformat', async ({ page }) => {
+    await page.goto(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/skjema/${SØKNAD_ID}`);
+
+    const applicationPeriods = page.getByTestId('søknadsperioder');
+    await applicationPeriods.getByRole('button', { name: /Legg til ny periode/i }).click();
+    const applicationStartDate = applicationPeriods.getByLabel('Fra og med').nth(1);
+    await applicationStartDate.fill('20.11.2021');
+    await applicationStartDate.press('Tab');
+    const applicationEndDate = applicationPeriods.getByLabel('Til og med').nth(1);
+    await applicationEndDate.fill('25.11.2021');
+    await applicationEndDate.press('Tab');
+
+    await page.getByRole('button', { name: /Arbeidsforhold og arbeidstid i søknadsperioden/i }).click();
+    await page.getByLabel('Arbeidstaker').check();
+    await page.getByRole('button', { name: /Registrer arbeidstid for en lengre periode/i }).click();
+
+    const periodList = page.locator('[data-test-id="arbeidstid-periode-liste"]');
+    const firstStartDate = periodList.getByLabel('Fra og med').first();
+    await firstStartDate.fill('08.11.2021');
+    await firstStartDate.press('Tab');
+    const firstEndDate = periodList.getByLabel('Til og med').first();
+    await firstEndDate.fill('11.11.2021');
+    await firstEndDate.press('Tab');
+
+    await periodList.getByLabel('Timer').nth(0).fill('7');
+    await periodList.getByLabel('Minutter').nth(0).fill('30');
+    await periodList.getByLabel('Timer').nth(1).fill('2');
+    await page.getByRole('radio', { name: /Desimaltall/i }).click();
+    await expect(page.getByLabel('Normal arbeidstid')).toHaveValue('7.5');
+    await expect(page.getByLabel('Faktisk arbeidstid')).toHaveValue('2');
+
+    await page.getByLabel('Normal arbeidstid').fill('5.75');
+    await page.getByLabel('Faktisk arbeidstid').fill('4');
+    await page.getByRole('radio', { name: /Timer og minutter/i }).click();
+    await expect(periodList.getByLabel('Timer').nth(0)).toHaveValue('5');
+    await expect(periodList.getByLabel('Minutter').nth(0)).toHaveValue('45');
+    await expect(periodList.getByLabel('Timer').nth(1)).toHaveValue('4');
+
+    await periodList.getByRole('button', { name: /Legg til ny periode/i }).click();
+    const secondStartDate = periodList.getByLabel('Fra og med').nth(1);
+    await secondStartDate.fill('20.11.2021');
+    await secondStartDate.press('Tab');
+    const secondEndDate = periodList.getByLabel('Til og med').nth(1);
+    await secondEndDate.fill('25.11.2021');
+    await secondEndDate.press('Tab');
+    await periodList.getByLabel('Timer').nth(2).fill('7');
+    await periodList.getByLabel('Timer').nth(3).fill('2');
+
+    await periodList.getByRole('button', { name: 'Lagre', exact: true }).click();
+    await page.getByRole('button', { name: /Vis mer/i }).click();
+    await expect(page.getByText('10 dager registrert')).toBeVisible();
+    await page.getByRole('button', { name: /Vis mer/i }).last().click();
+
+    for (const date of ['08', '09', '10', '11']) {
+        const calendarDay = page.getByTestId(`calendar-grid-date-2021-11-${date}`);
+        await expect(calendarDay).toContainText('4 t');
+        await expect(calendarDay).toContainText('5 t 45 min');
+    }
+
+    for (const date of ['20', '21', '22', '23', '24', '25']) {
+        const calendarDay = page.getByTestId(`calendar-grid-date-2021-11-${date}`);
+        await expect(calendarDay).toContainText('2 t');
+        await expect(calendarDay).toContainText('7 t');
+    }
+});
