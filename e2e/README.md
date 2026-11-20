@@ -76,6 +76,20 @@ Testen bruker nettleserkontekstbaserte MSW-svar for klassifisering, brev og lukk
 | 19: Åpne brev-ruten direkte uten avklart ytelse | `hindrer brev for uavklart ytelse til PSB er valgt på journalposten` kontrollerer journalpostsvaret fra MSW, sperren og retur til oversikten. |
 | 6: Velg ytelse og åpne brevskjema | Samme reise kontrollerer varselet og deaktivert knapp, velger PSB og verifiserer malforespørselen med `sakstype=PSB` og `avsenderApplikasjon=K9PUNSJ`. |
 
+### Brev for inntektsmelding uten krav
+
+`send-brev.spec.ts` erstatter de fem blokkene i `cypress/e2e/inntektsmeldingUtenKrav/inntektsmeldingUtenKrav.cy.js`.
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 4: Åpne journalpost 202 og kontroller tilgjengelige handlinger | Steg 1 verifiserer journalpostsvaret, bekrefter søker og kontrollerer de tre valgene. |
+| 13: Åpne brevskjema og velg mal | Steg 2 kontrollerer feltene for `INNHEN` og `GENERELT_FRITEKSTBREV`, velger søker som mottaker og fyller ut brevet. |
+| 29: Avbryt sending | Steg 3 avbryter bekreftelsen og kontrollerer at ingen bestilling ble sendt. |
+| 85: Avbryt Sett på vent | Steg 4 kontrollerer advarselen om usendt brev, avbryter og verifiserer at utkastet er beholdt uten Vent-bestilling. |
+| 55: Send brev uten fagsak | Steg 5 kontrollerer én HTTP 200-bestilling med `GENERELL_SAK`, journalpost 202, OMP, søker som `AKTØRID`, valgt mal og ferdig tittel og innhold. |
+
+Validering før sletting og på endelig diff: `yarn test:pw e2e/tests/send-brev.spec.ts` bestod med fire tester. `yarn lint` og `git diff --check` bestod.
+
 ## Fordeling PSB pilot
 
 Run the focused modal test, preserve the existing letter integration, and run both independent browser journeys with one and the default worker count:

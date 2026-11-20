@@ -57,6 +57,162 @@ test('hindrer brev for uavklart ytelse til PSB er valgt på journalposten', asyn
     expect(templateUrl.searchParams.get('avsenderApplikasjon')).toBe('K9PUNSJ');
 });
 
+test('sender brev uten fagsak etter avbrutt bestilling og vent', async ({ page }) => {
+    const journalpostId = '202';
+    const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpostId);
+    const sendPath = ApiPath.BREV_BESTILL;
+    const ventPath = ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', journalpostId);
+    let applicantActorId = '';
+    const finalBody = `${TEST_INNHOLD} oppdatert`;
+    const bestillinger: Array<Record<string, unknown>> = [];
+    const ventForespørsler: Array<Record<string, unknown>> = [];
+
+    page.on('request', (request) => {
+        const path = requestPath(request.url());
+        if (request.method() === 'POST' && path === sendPath) bestillinger.push(request.postDataJSON());
+        if (request.method() === 'POST' && path === ventPath) ventForespørsler.push(request.postDataJSON());
+    });
+
+    const journalpostResponsePromise = page.waitForResponse(
+        (response) =>
+            response.request().method() === 'GET' && requestPath(response.url()) === journalpostPath,
+    );
+    await page.goto(`/journalpost/${journalpostId}`);
+
+    const journalpostResponse = await journalpostResponsePromise;
+    expect(journalpostResponse.status()).toBe(200);
+    expect(journalpostResponse.fromServiceWorker()).toBe(true);
+    const journalpostData = await journalpostResponse.json();
+    expect(journalpostData).toMatchObject({
+        journalpostId,
+        punsjInnsendingType: { kode: 'INNTEKTSMELDING_UTGÅTT' },
+        kanSendeInn: true,
+    });
+
+    await test.step('Bekreft søker og kontroller tilgjengelige handlinger', async () => {
+        await expect(
+            page.getByText(`Stemmer det at søkers fødselsnummer er ${journalpostData.norskIdent}?`),
+        ).toBeVisible();
+        await page.getByRole('radio', { name: 'Ja' }).check();
+        await expect(page.getByRole('radio', { name: 'Ferdigstill journalpost' })).toBeVisible();
+        await expect(page.getByRole('radio', { name: 'Opprett journalføringsoppgave i Gosys' })).toBeVisible();
+        await expect(page.getByRole('radio', { name: 'Sett på vent' })).toBeVisible();
+    });
+
+    await test.step('Kontroller brevmalene og avbryt første bestilling', async () => {
+        const templateResponsePromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' && requestPath(response.url()) === ApiPath.BREV_MALER,
+        );
+        const actorIdResponsePromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' && requestPath(response.url()) === ApiPath.BREV_AKTØRID,
+        );
+        const personResponsePromise = page.waitForResponse(
+            (response) => response.request().method() === 'GET' && requestPath(response.url()) === ApiPath.PERSON,
+        );
+        await page.getByRole('checkbox', { name: 'Send brev til søker, arbeidsgiver eller tredjepart' }).check();
+        const [templateResponse, actorIdResponse, personResponse] = await Promise.all([
+            templateResponsePromise,
+            actorIdResponsePromise,
+            personResponsePromise,
+        ]);
+        expect(templateResponse.status()).toBe(200);
+        expect(actorIdResponse.status()).toBe(200);
+        expect(personResponse.status()).toBe(200);
+        applicantActorId = String(await actorIdResponse.json());
+        const personData = await personResponse.json();
+
+        const templateSelect = page.getByRole('combobox', { name: 'Velg mal' });
+        const recipientSelect = page.getByRole('combobox', { name: 'Velg mottaker' });
+        const bodyField = page.getByRole('textbox', { name: 'Innhold i brev' });
+
+        await expect(templateSelect).toBeVisible();
+        await templateSelect.selectOption('INNHEN');
+        await expect(recipientSelect).toBeVisible();
+        await expect(bodyField).toBeVisible();
+        await expect(page.getByRole('textbox', { name: 'Tittel' })).toHaveCount(0);
+
+        await templateSelect.selectOption('GENERELT_FRITEKSTBREV');
+        await expect(page.getByRole('textbox', { name: 'Tittel' })).toBeVisible();
+        await expect(page.getByRole('checkbox', { name: 'Send til tredjepart' })).toBeVisible();
+        await expect(
+            recipientSelect.getByRole('option', {
+                name: `${personData.sammensattNavn} - ${personData.identitetsnummer}`,
+            }),
+        ).toBeAttached();
+        await recipientSelect.selectOption(applicantActorId);
+        await expect(recipientSelect).toHaveValue(applicantActorId);
+
+        await page.getByRole('textbox', { name: 'Tittel' }).fill(TEST_TITTEL);
+        await bodyField.fill(TEST_INNHOLD);
+    });
+
+    await test.step('Avbryt sending uten å bestille brevet', async () => {
+        const bodyField = page.getByRole('textbox', { name: 'Innhold i brev' });
+        await page.getByRole('button', { name: 'Send brev', exact: true }).click();
+
+        const sendConfirmation = page.getByRole('dialog');
+        await expect(sendConfirmation.getByText('Er du sikker på at du vil sende brevet?')).toBeVisible();
+        await sendConfirmation.getByRole('button', { name: 'Avbryt', exact: true }).click();
+        await expect(page.getByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
+        await expect(bodyField).toHaveValue(TEST_INNHOLD);
+        expect(bestillinger).toHaveLength(0);
+    });
+
+    await test.step('Avbryt Sett på vent-advarselen og behold utkastet', async () => {
+        const bodyField = page.getByRole('textbox', { name: 'Innhold i brev' });
+        await bodyField.fill(finalBody);
+        await page.getByRole('radio', { name: 'Sett på vent' }).check();
+        await page.getByRole('button', { name: 'Sett på vent', exact: true }).click();
+
+        const ventDialog = page.getByRole('dialog');
+        await expect(
+            ventDialog.getByText(
+                'Det er et påbegynt brev som ikke er sendt. Hvis du fortsetter, vil brevet bli slettet. Avbryt for å gå tilbake og sende brevet.',
+            ),
+        ).toBeVisible();
+        await ventDialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+        await expect(page.getByRole('textbox', { name: 'Tittel' })).toHaveValue(TEST_TITTEL);
+        await expect(bodyField).toHaveValue(finalBody);
+        expect(bestillinger).toHaveLength(0);
+        expect(ventForespørsler).toHaveLength(0);
+    });
+
+    await page.evaluate((path) => {
+        const msw = window.msw;
+        if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+        msw.worker.use(msw.http.post(path, () => new msw.HttpResponse(null, { status: 200 })));
+    }, sendPath);
+
+    await test.step('Send utkastet til generell sak', async () => {
+        const sendResponsePromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'POST' && requestPath(response.url()) === sendPath,
+        );
+        await page.getByRole('button', { name: 'Send brev', exact: true }).click();
+        const sendConfirmation = page.getByRole('dialog');
+        await expect(sendConfirmation.getByText('Er du sikker på at du vil sende brevet?')).toBeVisible();
+        await sendConfirmation.getByRole('button', { name: 'Fortsett', exact: true }).click();
+
+        const sendResponse = await sendResponsePromise;
+        expect(sendResponse.status()).toBe(200);
+        expect(sendResponse.fromServiceWorker()).toBe(true);
+        expect(sendResponse.request().postDataJSON()).toEqual({
+            soekerId: journalpostData.norskIdent,
+            mottaker: { type: 'AKTØRID', id: applicantActorId },
+            fagsakYtelseType: 'OMP',
+            dokumentMal: 'GENERELT_FRITEKSTBREV',
+            dokumentdata: { fritekstbrev: { overskrift: TEST_TITTEL, brødtekst: finalBody } },
+            journalpostId,
+            saksnummer: 'GENERELL_SAK',
+        });
+        await expect(page.getByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.')).toBeVisible();
+        expect(bestillinger).toHaveLength(1);
+        expect(ventForespørsler).toHaveLength(0);
+    });
+});
+
 test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', async ({ page }) => {
     const bestillinger: Array<{ body: Record<string, unknown> }> = [];
     const bestillingsresponser: number[] = [];

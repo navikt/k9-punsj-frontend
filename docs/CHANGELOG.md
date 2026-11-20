@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Brev for inntektsmelding uten krav
+
+- Erstattet fem Cypress-blokker med én trinnvis Playwright-reise som kontrollerer brevskjema, avbrutt sending og Vent-advarsel før en vellykket bestilling til generell sak.
+- Verifiserte før sletting og på endelig diff med fire beståtte Playwright-tester, `yarn lint` og `git diff --check`.
+
 #### 2026-11-20 — Brev for journalpost med uavklart ytelse
 
 - Erstattet to Cypress-blokker med én skrivefri Playwright-reise som verifiserer sperren for direkte brevtilgang og malforespørselen etter valg av PSB. Beholdt fixturen.
