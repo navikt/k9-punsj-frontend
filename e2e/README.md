@@ -61,6 +61,16 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | Commented: start a new registration | `starter manuell PSB-registrering fra en liste med eksisterende søknader` verifies the create payload, 201 response ID, form GET and visible form. |
 | Commented: continue an existing application | `viser eksisterende PSB-søknader, avbryter og fortsetter på en kompatibel søknad` verifies the list data and compatibility gates, cancel without fetching the application, then resume through its ID without creating an application. |
 
+## PLS existing applications
+
+`pls-existing-applications.spec.ts` covers the three nonempty-list journeys through real Fordeling and registration choice. The existing empty-list auto-create journey remains in `fordeling-pls-classification.spec.ts`.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Resume an existing application | `viser eksisterende PLS-søknader, avbryter og fortsetter på en kompatibel søknad` checks the list values, case and child compatibility, suppression of new registration when the current journalpost is listed, cancellation without a form GET or write, and resume through the selected application's ID. |
+| Create from a nonempty list | `starter manuell PLS-registrering fra en liste med eksisterende søknader` checks the available button, exact create payload, 201 response ID, form GET and visible form. |
+| Go back | `går tilbake fra PLS-søknadslisten uten å opprette en søknad` checks the preceding registration-choice screen without fetching a form or creating, validating or submitting an application. |
+
 ## OMPAO existing applications
 
 `ompao-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-alene-om-omsorgen/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; eight Cypress specifications remain, down from nine.

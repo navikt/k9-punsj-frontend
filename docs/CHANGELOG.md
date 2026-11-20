@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Eksisterende PLS-søknader
+
+- La til tre Playwright-reiser for liste og videreføring, manuell oppretting fra en full liste og retur til registreringsvalget. Beholdt tom-liste auto-oppretting i eksisterende Fordeling-test; ingen Cypress-spesifikasjon eller produksjonskode ble endret.
+- Validering: `yarn test:pw e2e/tests/pls-existing-applications.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — Eksisterende OMPUT-søknader
 
 - Flyttet journalpostpanelet og fem kommenterte sjekker til fire uavhengige Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; sju gjenstår.
