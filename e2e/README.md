@@ -76,6 +76,21 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 
 The table's informational alert may still say that a new registration is unavailable when its button is present: the parent does not pass its computed availability flag to the table. The test checks the actual button state and does not treat the contradictory alert as expected behavior.
 
+## OMPUT existing applications
+
+`omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.
+
+| Cypress check | Playwright coverage |
+| --- | --- |
+| Active: journalpost and applicant panel values | All four journeys verify the panel through journalpost classification and the registration-choice screen, including the selected case. |
+| Commented: empty-list information | The old manual-click expectation is obsolete: an empty lookup automatically creates an application. `oppretter OMPUT-søknad automatisk når listen er tom` verifies lookup-before-create order, the exact create payload, returned ID, form GET and visible form. |
+| Commented: continue an existing application | `viser eksisterende OMPUT-søknader, avbryter og fortsetter på en kompatibel søknad` checks the list columns and case compatibility, cancels without fetching the application, then resumes by ID without creating, validating or submitting. The same journey checks the legacy metadata case fallback. |
+| Commented: back to Fordeling | `går tilbake fra OMPUT-søknadslisten uten å opprette en søknad` uses the application's **Tilbake** button and verifies the preceding registration-choice screen without writes or a selected-application GET. |
+| Commented: start a new registration | `starter manuell OMPUT-registrering fra en liste med eksisterende søknader` verifies the exact create payload, 201 DTO, form GET and visible form. It also checks that the informational text agrees with the available button. |
+| Commented: hide new registration when the current journalpost is listed | The resume journey verifies that **Start ny registrering** is absent when a listed application includes the current journalpost. |
+
+OMPUT has no child column or child-based row gate. The list still emits the existing React missing-key warning for its confirmation modals; this migration does not change production code or suppress the warning. The MSW responses verify frontend behavior, not backend persistence.
+
 ## OMPAO form save and submission
 
 `ompao-punch-form.spec.ts` replaces all three active checks in `nySoknad.cy.js`.

@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Eksisterende OMPUT-søknader
+
+- Flyttet journalpostpanelet og fem kommenterte sjekker til fire uavhengige Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; sju gjenstår.
+- Validering før fjerning: `yarn test:pw e2e/tests/omput-existing-applications.spec.ts` bestod med 4 tester.
+
 #### 2026-11-20 — Eksisterende OMPAO-søknader
 
 - Gjenopprettet fire Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; åtte gjenstår.
