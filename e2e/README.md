@@ -49,6 +49,18 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | B41, line 18: Longer work-time periods | `registrerer arbeidstid for lengre perioder og konverterer tidsformat` verifies both periods and the 10 registered days. |
 | B42, line 65: Time-format conversion | The same work-time test verifies decimal conversion, conversion back to hours and minutes, and the saved values on each day in both periods. |
 
+## PSB existing applications
+
+`psb-existing-applications.spec.ts` replaces the active journalpost-panel check and four commented journeys in `cypress/e2e/pleiepenger/EksisterendeSoknader.cy.js`. The Cypress spec was removed after the three Playwright journeys passed; nine Cypress specifications remain, down from ten.
+
+| Cypress check | Playwright coverage |
+| --- | --- |
+| Active: journalpost, applicant and child panel values | All three journeys verify the panel through the real Fordeling and registration-choice flow. |
+| Commented: empty-list information and manual-create button | The old expectation is obsolete: an empty lookup automatically creates an application. `fordeling-psb.spec.ts`, `journalfører valgt PSB-sak og går til riktig registreringsvalg`, verifies the empty lookup, exact create payload, returned ID and visible form. |
+| Commented: back to Fordeling | `går tilbake fra eksisterende PSB-søknader til journalposten` verifies the panel after returning without creating, validating or submitting an application. |
+| Commented: start a new registration | `starter manuell PSB-registrering fra en liste med eksisterende søknader` verifies the create payload, 201 response ID, form GET and visible form. |
+| Commented: continue an existing application | `viser eksisterende PSB-søknader, avbryter og fortsetter på en kompatibel søknad` verifies the list data and compatibility gates, cancel without fetching the application, then resume through its ID without creating an application. |
+
 ## OMPAO form save and submission
 
 `ompao-punch-form.spec.ts` replaces all three active checks in `nySoknad.cy.js`.

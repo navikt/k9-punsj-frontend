@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Eksisterende PSB-søknader
+
+- Gjenopprettet tre Playwright-reiser for eksisterende PSB-søknader: liste og videreføring, manuell oppretting fra en full liste og tilbake til Fordeling. Tom-listen er dokumentert mot eksisterende auto-opprettingsdekning. Fjernet bare den erstattede Cypress-spesifikasjonen; ni gjenstår.
+- Validering: `yarn test:pw e2e/tests/psb-existing-applications.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — OMPAO-skjema
 
 - Flyttet B43s tre OMPAO-sjekker til uavhengige Playwright-tester med kontrollert kvittering, payload-assertions og verifisert lagring før innsending. Fjernet bare den erstattede `nySoknad.cy.js`; 12 Cypress-spesifikasjoner gjenstår.
