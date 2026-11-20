@@ -37,6 +37,15 @@ yarn test:pw:ui
 
 Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the server after the run. The app uses port 8080, which it shares with local development and Cypress; only one server can use that port at a time. If the port is occupied, stop the server you started before running the suite.
 
+## PSB form save and submission
+
+`psb-punch-form.spec.ts` replaces the first two blocks in `cypress/e2e/pleiepenger/PleiepengerPunsj.cy.js`.
+
+| Cypress block (start line before removal) | Playwright coverage |
+| --- | --- |
+| 8: Submit PSB application | The journey verifies the edited date in the validation request and final receipt, plus the applicant and application IDs in the submit request. |
+| 18: Save updated received date on blur | The journey verifies the prefilled date, the edited date in the successful save request, and that the field retains the edit. |
+
 ## Replaced Cypress lookup regressions
 
 All nine tests in `cypress/e2e/fagsakLookupErrors.cy.js` have been replaced by the component tests below. These tests render the actual creation and letter entry components; successful application navigation remains covered by `opprett-journalpost.spec.ts` and `send-brev.spec.ts`.

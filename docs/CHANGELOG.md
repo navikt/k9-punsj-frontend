@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Endret mottaksdato i PSB-skjema
+
+- La til én Playwright-reise som kontrollerer lagring på blur, validering, innsending med søker- og søknads-ID og datoen på kvitteringen. Fjernet de to erstattede Cypress-testene og beholdt de tre øvrige.
+- Validering: Playwright bestod med én test, Cypress med tre tester, og `yarn lint` samt `git diff --check` bestod.
+
 #### 2026-11-20 — Brev for inntektsmelding uten krav
 
 - Erstattet fem Cypress-blokker med én trinnvis Playwright-reise som kontrollerer brevskjema, avbrutt sending og Vent-advarsel før en vellykket bestilling til generell sak.

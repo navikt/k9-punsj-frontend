@@ -1,41 +1,6 @@
-import { ApiPath } from 'app/apiConfig';
-
 describe('Pleiepenger punsj', { viewportWidth: 1280, viewportHeight: 1450 }, () => {
     beforeEach(() => {
         cy.visit('/journalpost/200/pleiepenger-sykt-barn/skjema/0416e1a2-8d80-48b1-a56e-ab4f4b4821fe');
-    });
-
-    it('kan sende inn søknad om pleiepenger', () => {
-        cy.sendInnSoknad();
-
-        cy.findByText(
-            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
-        ).should('exist');
-        cy.findByText('Oppsummering').should('exist');
-        cy.findByRole('button', { name: /tilbake til los/i }).should('exist');
-    });
-
-    it('lagrer oppdatert mottatt dato på blur', () => {
-        const nyMottattDato = '14.03.2020';
-        let oppdatertSoknad;
-
-        cy.window().then((win) => {
-            const { worker, http, HttpResponse } = win.msw;
-            worker.use(
-                http.put(ApiPath.PSB_SOKNAD_UPDATE, async ({ request }) => {
-                    oppdatertSoknad = await request.json();
-                    return HttpResponse.json(oppdatertSoknad, { status: 200 });
-                }),
-            );
-        });
-
-        cy.findByTestId('mottattDato').should('exist').clear({ force: true }).type(nyMottattDato).blur();
-
-        cy.wrap(null).should(() => {
-            expect(oppdatertSoknad).to.not.equal(undefined);
-            expect(oppdatertSoknad).to.have.property('mottattDato', '2020-03-14');
-        });
-        cy.findByTestId('mottattDato').should('have.value', nyMottattDato);
     });
 
     it('viser feil når frilanser slutter før frilanserperioden starter', () => {
