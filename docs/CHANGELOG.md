@@ -46,6 +46,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Brev på fagsak og lukking av oppgave
+
+- Erstattet sju Cypress-blokker med én Playwright-reise som kontrollerer brevbestilling, duplikatvern, nytt forsøk på lukking og lokal LOS-navigering. Beholdt fixturene.
+
 #### 2026-11-19 — Fosterbarn i direkte utbetaling
 
 - Flyttet de sju blokkene fra `TestFosterbarn.cy.js` til seks isolerte scenarioer i den eksisterende Fordeling-spesifikasjonen. Utvidet OMPMA- og KorrigeringIM-inngangstestene, og beholdt de delte fixturene.

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
+import journalpost from '../../cypress/fixtures/jpPSB300.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 import { createMockPdfBytes } from '../../src/mocks/mockPdf.js';
 import { installBrevHandlers } from './helpers/brev';
@@ -10,6 +12,10 @@ const FAGSAK_ID = '1DMU93A';
 const ORGNUMMER = '889640782';
 const TEST_TITTEL = 'Eksempel på tittel';
 const TEST_INNHOLD = 'Eksempel på brevtekst';
+const JOURNALPOST_ID = journalpost.journalpostId;
+const SØKER_ID = journalpost.norskIdent;
+const FAGSAK = fagsaker[2];
+const ARBEIDSGIVER_ID = '979312059';
 
 const requestPath = (url: string) => new URL(url).pathname;
 
@@ -158,5 +164,252 @@ test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', a
         dokumentMal: 'GENERELT_FRITEKSTBREV',
         dokumentdata: { fritekstbrev: { overskrift: TEST_TITTEL, brødtekst: TEST_INNHOLD } },
         saksnummer: FAGSAK_ID,
+    });
+});
+
+test('sender brev på valgt fagsak, hindrer duplikat og lukker oppgaven etter nytt forsøk', async ({ page }) => {
+    const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', JOURNALPOST_ID);
+    const classifyPath = ApiPath.JOURNALPOST_MOTTAK;
+    const sendPath = ApiPath.BREV_BESTILL;
+    const closePath = ApiPath.JOURNALPOST_LUKK_OPPGAVE.replace('{journalpostId}', JOURNALPOST_ID);
+    const bestillinger: Array<Record<string, unknown>> = [];
+    const lukkeforspørsler: Array<Record<string, unknown>> = [];
+
+    page.on('request', (request) => {
+        const path = requestPath(request.url());
+        if (path === sendPath) bestillinger.push(request.postDataJSON());
+        if (path === closePath) lukkeforspørsler.push(request.postDataJSON());
+    });
+
+    await test.step('Åpne journalpost 300, bekreft søker og journalfør valgt PSB-sak', async () => {
+        const initialJournalpostPromise = page.waitForResponse(
+            (response) => response.request().method() === 'GET' && requestPath(response.url()) === journalpostPath,
+        );
+        await page.goto(`/journalpost/${JOURNALPOST_ID}`);
+        const initialJournalpost = await initialJournalpostPromise;
+        expect(initialJournalpost.status()).toBe(201);
+        expect(initialJournalpost.fromServiceWorker()).toBe(true);
+        expect(await initialJournalpost.json()).toEqual(journalpost);
+
+        await page.getByText('Skjul', { exact: true }).click();
+        await page.getByRole('radio', { name: 'Ja' }).check();
+        const caseSelect = page.getByLabel('Velg fagsak');
+        await caseSelect.selectOption(FAGSAK.fagsakId);
+        await expect(caseSelect).toHaveValue(FAGSAK.fagsakId);
+
+        await page.evaluate(
+            ({ paths, sourceJournalpost, selectedCase }) => {
+                const msw = window.msw;
+                if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+                let classificationSucceeded = false;
+                let closeAttempts = 0;
+                const refreshedJournalpost = {
+                    ...sourceJournalpost,
+                    erFerdigstilt: true,
+                    journalpostStatus: 'JOURNALFOERT',
+                    sak: {
+                        ...sourceJournalpost.sak,
+                        fagsakId: selectedCase.fagsakId,
+                        sakstype: selectedCase.sakstype,
+                        pleietrengendeIdent: selectedCase.pleietrengende?.identitetsnummer ?? null,
+                    },
+                };
+
+                msw.worker.use(
+                    msw.http.post(paths.classify, () => {
+                        classificationSucceeded = true;
+                        return msw.HttpResponse.json({ saksnummer: selectedCase.fagsakId }, { status: 200 });
+                    }),
+                    msw.http.get(paths.journalpost, () => {
+                        if (!classificationSucceeded) return;
+                        return msw.HttpResponse.json(refreshedJournalpost, { status: 200 });
+                    }),
+                    msw.http.post(paths.send, () => new msw.HttpResponse(null, { status: 200 })),
+                    msw.http.post(paths.close, () => {
+                        closeAttempts += 1;
+                        return new msw.HttpResponse(null, { status: closeAttempts === 1 ? 500 : 200 });
+                    }),
+                );
+            },
+            {
+                paths: { classify: classifyPath, journalpost: journalpostPath, send: sendPath, close: closePath },
+                sourceJournalpost: journalpost,
+                selectedCase: FAGSAK,
+            },
+        );
+
+        await page.locator('[data-test-id="journalførOgFortsett"]').click();
+        const classificationDialog = page.locator('[data-test-id="klassifiserModal"]');
+        await expect(classificationDialog).toBeVisible();
+        const classificationResponsePromise = page.waitForResponse(
+            (response) => response.request().method() === 'POST' && requestPath(response.url()) === classifyPath,
+        );
+        const refreshedJournalpostPromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' && requestPath(response.url()) === journalpostPath,
+        );
+        await classificationDialog.locator('[data-test-id="klassifiserModalJournalfør"]').click();
+
+        const classificationResponse = await classificationResponsePromise;
+        expect(classificationResponse.status()).toBe(200);
+        expect(classificationResponse.fromServiceWorker()).toBe(true);
+        expect(classificationResponse.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
+        expect(classificationResponse.request().postDataJSON()).toEqual({
+            journalpostId: JOURNALPOST_ID,
+            brukerIdent: SØKER_ID,
+            pleietrengendeIdent: FAGSAK.pleietrengende?.identitetsnummer,
+            relatertPersonIdent: '',
+            fagsakYtelseTypeKode: FAGSAK.sakstype,
+            periode: FAGSAK.gyldigPeriode,
+            saksnummer: FAGSAK.fagsakId,
+        });
+        expect(await classificationResponse.json()).toEqual({ saksnummer: FAGSAK.fagsakId });
+
+        const refreshedJournalpost = await refreshedJournalpostPromise;
+        expect(refreshedJournalpost.status()).toBe(200);
+        expect(refreshedJournalpost.fromServiceWorker()).toBe(true);
+        expect(await refreshedJournalpost.json()).toMatchObject({
+            journalpostId: JOURNALPOST_ID,
+            erFerdigstilt: true,
+            sak: {
+                fagsakId: FAGSAK.fagsakId,
+                sakstype: FAGSAK.sakstype,
+                pleietrengendeIdent: FAGSAK.pleietrengende?.identitetsnummer,
+            },
+        });
+
+        await page.getByRole('radio', { name: 'Send brev og lukk oppgave i LOS', exact: true }).check();
+        await page.locator('[data-test-id="bekreftKnapp"]').click();
+        await expect(page).toHaveURL(
+            new RegExp(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/send-brev-fagsak/?$`),
+        );
+    });
+
+    await test.step('Kontroller brevskjemaet og velg arbeidsgiver og fritekstmal', async () => {
+        await expect(page.getByRole('heading', { name: 'Send brev og lukk oppgave i LOS' })).toBeVisible();
+        const templateSelect = page.getByRole('combobox', { name: 'Velg mal' });
+        const recipientSelect = page.getByRole('combobox', { name: 'Velg mottaker' });
+        await expect(templateSelect).toBeVisible();
+        await expect(recipientSelect).toBeVisible();
+        await expect(page.getByRole('checkbox', { name: 'Send til tredjepart' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'Send brev' })).toBeVisible();
+
+        await recipientSelect.selectOption(ARBEIDSGIVER_ID);
+        await templateSelect.selectOption('GENERELT_FRITEKSTBREV');
+        await expect(recipientSelect).toHaveValue(ARBEIDSGIVER_ID);
+        await expect(templateSelect).toHaveValue('GENERELT_FRITEKSTBREV');
+        await page.getByRole('textbox', { name: 'Tittel' }).fill(TEST_TITTEL);
+        await page.getByRole('textbox', { name: 'Innhold i brev' }).fill(TEST_INNHOLD);
+    });
+
+    await test.step('Send brevet og kontroller én vellykket forespørsel for valgt sak', async () => {
+        const sendResponsePromise = page.waitForResponse(
+            (response) => requestPath(response.url()) === sendPath && response.request().method() === 'POST',
+        );
+        await page.getByRole('button', { name: 'Send brev' }).click();
+        await expect(page.getByText('Er du sikker på at du vil sende brevet?')).toBeVisible();
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        const sendResponse = await sendResponsePromise;
+        expect(sendResponse.status()).toBe(200);
+        expect(sendResponse.fromServiceWorker()).toBe(true);
+        expect(sendResponse.request().postDataJSON()).toEqual({
+            soekerId: SØKER_ID,
+            mottaker: { type: 'ORGNR', id: ARBEIDSGIVER_ID },
+            fagsakYtelseType: 'PSB',
+            dokumentMal: 'GENERELT_FRITEKSTBREV',
+            dokumentdata: { fritekstbrev: { overskrift: TEST_TITTEL, brødtekst: TEST_INNHOLD } },
+            journalpostId: JOURNALPOST_ID,
+            saksnummer: FAGSAK.fagsakId,
+        });
+        await expect(page.getByText('Brev sendt! Du kan nå sende nytt brev til annen mottaker.')).toBeVisible();
+        expect(bestillinger).toHaveLength(1);
+    });
+
+    await test.step('Blokker identisk brev uten en ny bestillingsforespørsel', async () => {
+        await page.getByRole('button', { name: 'Send brev' }).click();
+        await expect(page.getByText('Er du sikker på at du vil sende brevet?')).toBeVisible();
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+        await expect(
+            page.getByText('Brevet er sendt. Du må endre mottaker eller innhold for å sende nytt brev.'),
+        ).toBeVisible();
+        expect(bestillinger).toHaveLength(1);
+    });
+
+    await test.step('Vis feil når første forsøk på å lukke oppgaven gir HTTP 500', async () => {
+        await page.getByRole('button', { name: 'Lukk oppgave i LOS' }).click();
+        await expect(page.getByText('Er du sikker på at du vil lukke oppgaven?')).toBeVisible();
+        const closeResponsePromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'POST' &&
+                requestPath(response.url()) === closePath &&
+                response.status() === 500,
+        );
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        const closeResponse = await closeResponsePromise;
+        expect(closeResponse.fromServiceWorker()).toBe(true);
+        expect(closeResponse.request().postDataJSON()).toEqual({
+            norskIdent: SØKER_ID,
+            sak: { fagsakId: FAGSAK.fagsakId, sakstype: 'FAGSAK' },
+        });
+        await expect(page.getByText('Noe gikk galt ved lukking av oppgave')).toBeVisible();
+        expect(lukkeforspørsler).toHaveLength(1);
+        expect(bestillinger).toHaveLength(1);
+    });
+
+    await test.step('Prøv lukking på nytt og kontroller HTTP 200 med tomt svar', async () => {
+        await page.getByRole('button', { name: 'Lukk oppgave i LOS' }).click();
+        await expect(page.getByText('Er du sikker på at du vil lukke oppgaven?')).toBeVisible();
+        const closeResponsePromise = page.waitForResponse(
+            (response) =>
+                response.request().method() === 'POST' &&
+                requestPath(response.url()) === closePath &&
+                response.status() === 200,
+        );
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        const closeResponse = await closeResponsePromise;
+        expect(closeResponse.fromServiceWorker()).toBe(true);
+        expect(closeResponse.request().postDataJSON()).toEqual({
+            norskIdent: SØKER_ID,
+            sak: { fagsakId: FAGSAK.fagsakId, sakstype: 'FAGSAK' },
+        });
+        expect(await closeResponse.text()).toBe('');
+        await expect(page.getByText('Oppgaven er lukket')).toBeVisible();
+        await expect(page.getByText('Du blir nå tatt tilbake til oppgavekøen i LOS')).toBeVisible();
+        expect(lukkeforspørsler).toHaveLength(2);
+        expect(lukkeforspørsler[0]).toEqual(lukkeforspørsler[1]);
+        expect(bestillinger).toHaveLength(1);
+    });
+
+    await test.step('Naviger til den konfigurerte lokale LOS-destinasjonen', async () => {
+        const destinationUrl = 'http://127.0.0.1:8081/los-test-destination';
+        await page.route(destinationUrl, (route) =>
+            route.fulfill({
+                status: 200,
+                contentType: 'text/html',
+                body: '<!doctype html><title>Kontrollert LOS-destinasjon</title>',
+            }),
+        );
+        await page.evaluate((losUrl) => {
+            const appWindow = window as Window & {
+                appSettings?: Record<string, string | undefined>;
+            };
+            if (!appWindow.appSettings) throw new Error('Appinnstillingene er ikke tilgjengelige.');
+            appWindow.appSettings.K9_LOS_URL = losUrl;
+        }, destinationUrl);
+
+        const destinationRequestPromise = page.waitForRequest(
+            (request) => request.isNavigationRequest() && request.url() === destinationUrl,
+        );
+        const destinationPromise = page.waitForURL(destinationUrl);
+        await page.getByRole('button', { name: 'OK' }).click();
+        const destinationRequest = await destinationRequestPromise;
+
+        expect(destinationRequest.url()).toBe(destinationUrl);
+        await destinationPromise;
+        expect(page.url()).toBe(destinationUrl);
     });
 });

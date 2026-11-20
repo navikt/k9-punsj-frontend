@@ -51,6 +51,22 @@ All nine tests in `cypress/e2e/fagsakLookupErrors.cy.js` have been replaced by t
 
 The component fixtures use their own synthetic case IDs instead of the Cypress fixture IDs; each test verifies that a successful lookup makes the returned case available.
 
+## Brev på fagsak og lukking av oppgave
+
+[`send-brev.spec.ts`](tests/send-brev.spec.ts) erstatter de sju aktive blokkene i `cypress/e2e/sendBrevPåFagsak/sendBrevPåFagsak.js`.
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 10: Åpne journalpost, bekreft søker, velg sak og journalfør | Steg 1 kontrollerer start-GET, valgt fagsak i klassifisering og oppfrisking med samme sak. Velger deretter sending av brev og kontrollerer `/send-brev-fagsak/`-ruten. |
+| 23: Vis brevskjema | Steg 2 kontrollerer mal, mottaker, tredjepartsvalg og sendeknapp. |
+| 31: Velg mottaker og mal, fyll ut fritekst | Steg 2 velger arbeidsgiver og fritekstmal og fyller ut tittel og innhold. |
+| 38: Send brev | Steg 3 kontrollerer HTTP 200, suksessmeldingen og hele forespørselen for journalpost og valgt fagsak. |
+| 72: Stans identisk brev | Steg 4 kontrollerer duplikatmeldingen uten en ny bestillingsforespørsel. |
+| 80: Feil ved lukking | Steg 5 kontrollerer HTTP 500 og feilmeldingen. |
+| 103: Nytt forsøk på lukking | Steg 6 kontrollerer samme lukkepayload, HTTP 200 med tomt svar og lukket-oppgave-dialogen. Steg 7 bekrefter navigering til en kontrollert lokal LOS-destinasjon. |
+
+Testen bruker nettleserkontekstbaserte MSW-svar for klassifisering, brev og lukking. LOS-trafikken går bare til lokal testdestinasjon. Detaljert skjemavalidering og komponentkobling dekkes av Vitest.
+
 ## Fordeling PSB pilot
 
 Run the focused modal test, preserve the existing letter integration, and run both independent browser journeys with one and the default worker count:
@@ -262,8 +278,8 @@ De tre blokkene om eksisterende søknader utførte bare forberedelse av valg og 
 | 42: Fosterbarn, én søker, oppfrisking med 403 | Kontrollerer journalført status, tilgangsavslag, aktiv **Gå til LOS** og fravær av registrering. |
 | 77: Fosterbarn, to søkere, vellykket oppfrisking | Kontrollerer fosterbarn-ID, klassifiseringsforespørselen, kopi til søker nummer to og **Videre** til registrering. |
 | 123: Fosterbarn, to søkere, oppfrisking med 403 | Beholder journalførings- og kopibekreftelsen og viser tilgangsavslag med aktiv **Gå til LOS**. |
-| 172: Uten fosterbarn, to søkere | Kontrollerer tilgjengelig fosterbarn-kontroll, tom modalrad, kopi og **Videre** til registrering. |
-| 218: Uten fosterbarn, én søker | Kontrollerer tilgjengelig fosterbarn-kontroll, tom modalrad og direkteutbetalingsregistrering. |
+| 172: Uten fosterbarn, to søkere | Kontrollerer tilgjengelig fosterbarn-kontroll, fravær av fosterbarn-raden i modalen, kopi og **Videre** til registrering. |
+| 218: Uten fosterbarn, én søker | Kontrollerer tilgjengelig fosterbarn-kontroll, fravær av fosterbarn-raden i modalen og direkteutbetalingsregistrering. |
 | 252: Fosterbarn-kontroll for OMPMA og KorrigeringIM | De eksisterende inngangstestene bekrefter søker og ny sak, og kontrollerer at fosterbarn-kontrollen vises. |
 
 Scenarioene bruker separate Playwright-kontekster og et behandlingsår valgt fra aktive UI-valg. Testene kontrollerer at behandlingsåret lagres før klassifisering, at `JOURNALPOST_MOTTAK` sender `OMP` og fosterbarn-ID-ene (eller utelater feltet uten fosterbarn), og at oppfriskingen returnerer en journalpost med sakstype `OMP`. Kopieringsforespørselen bruker `OMP_UT`; HTTP 201-svaret returnerer `OMP`. Fortsett går fortsatt til registrering av direkte utbetaling.
