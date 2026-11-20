@@ -12,55 +12,14 @@ metadata:
 
 Generate Playwright tests for Nav web applications. Covers page object pattern, authentication fixtures, accessibility testing, and CI configuration.
 
-## Getting Started
+## Existing project setup
 
-1. Install Playwright and configure `playwright.config.ts`
-2. Create page objects for your app's pages
-3. Set up auth fixtures for Azure AD / MockOAuth2Server
-4. Write tests: navigation, forms, responsive, accessibility
-5. Add CI workflow in GitHub Actions
+- Start with [the E2E guide](../../../e2e/README.md), the existing [Playwright config](../../../playwright.config.ts), and a nearby spec in `e2e/tests/`.
+- Reuse the project’s MSW handlers, fixtures, and test helpers. The existing config starts the frontend with `yarn start:e2e`.
+- Use `yarn test:pw e2e/tests/<file>.spec.ts` for a focused run or `yarn test:pw` for the suite. If Chromium is missing, follow the install command in the E2E guide.
+- Use the examples below as references when they fit the task. Follow existing specs for project structure and auth setup.
 
-## 1. Project Setup
-
-```bash
-# Install Playwright
-yarn add -D @playwright/test
-yarn exec playwright install --with-deps chromium
-
-# Create configuration
-yarn exec playwright init
-```
-
-### playwright.config.ts
-
-```typescript
-import { defineConfig, devices } from "@playwright/test";
-
-export default defineConfig({
-  testDir: "./e2e",
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [["html", { open: "never" }]],
-  use: {
-    baseURL: process.env.BASE_URL ?? "http://localhost:3000",
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
-  },
-  projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["Pixel 7"] } },
-  ],
-  webServer: {
-    command: "yarn dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-  },
-});
-```
-
-## 2. Page Object Pattern
+## Page Object Pattern
 
 ```typescript
 // e2e/pages/oversikt.page.ts
@@ -95,7 +54,7 @@ export class OversiktPage {
 }
 ```
 
-## 3. Auth Fixture (Azure AD / MockOAuth2Server)
+## Auth Fixture (Azure AD / MockOAuth2Server)
 
 ```typescript
 // e2e/fixtures/auth.ts
@@ -123,7 +82,7 @@ export const test = base.extend<AuthFixtures>({
 export { expect } from "@playwright/test";
 ```
 
-## 4. Test Examples
+## Test Examples
 
 ### Page Navigation
 
@@ -201,7 +160,7 @@ test.describe("Responsive", () => {
 });
 ```
 
-## 5. Accessibility Testing med axe
+## Accessibility Testing med axe
 
 ```typescript
 // e2e/tests/accessibility.spec.ts
@@ -224,28 +183,9 @@ test.describe("Accessibility", () => {
 });
 ```
 
-## 6. CI Configuration (GitHub Actions)
+## CI
 
-```yaml
-# .github/workflows/e2e.yml
-e2e:
-  runs-on: ubuntu-latest
-  timeout-minutes: 10
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22
-        cache: yarn
-    - run: yarn install --immutable
-    - run: yarn exec playwright install --with-deps chromium
-    - run: yarn exec playwright test
-    - uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: playwright-report
-        path: playwright-report/
-```
+The existing [PR workflow](../../workflows/valid-pull-request.yml) runs the Playwright suite. Use the E2E guide for the report and failure artifacts.
 
 ## Locator Strategies
 

@@ -2,6 +2,10 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Oppdaterte Playwright-veiledningen for agenter (2026-11-20)
+
+- Playwright-skillen viser til prosjektets eksisterende testoppsett, kjørekommandoer og PR-workflow.
+
 ### Rettet tomme outbound-regler i prod (2026-11-18)
 
 - Utelater `accessPolicy.outbound.rules` når `outboundRules` mangler eller er tom, slik at prod-manifestet ikke inneholder `rules: null`. Eksisterende nettverkstilgang er uendret.
@@ -43,6 +47,238 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 ### Rettet backend-adressen i dev-proxyen (2026-11-06)
 
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
+
+### Migrering fra Cypress til Playwright og komponenttester
+
+#### 2026-11-20 — Eksisterende PLS-søknader
+
+- La til tre Playwright-reiser for liste og videreføring, manuell oppretting fra en full liste og retur til registreringsvalget. Beholdt tom-liste auto-oppretting i eksisterende Fordeling-test; ingen Cypress-spesifikasjon eller produksjonskode ble endret.
+- Validering: `yarn test:pw e2e/tests/pls-existing-applications.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Eksisterende OMPUT-søknader
+
+- Flyttet journalpostpanelet og fem kommenterte sjekker til fire uavhengige Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; sju gjenstår.
+- Validering før fjerning: `yarn test:pw e2e/tests/omput-existing-applications.spec.ts` bestod med 4 tester.
+
+#### 2026-11-20 — Eksisterende OMPAO-søknader
+
+- Gjenopprettet fire Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; åtte gjenstår.
+- Validering: `yarn test:pw e2e/tests/ompao-existing-applications.spec.ts` bestod med 4 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Eksisterende OMPKS-søknader
+
+- La til fire Playwright-reiser for kompatibilitet, avbrutt og bekreftet videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Beholdt delte mocks, Cypress-dekning og produksjonskode.
+- Validering: `yarn test:pw e2e/tests/ompks-existing-applications.spec.ts` bestod med 4 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Eksisterende OMPMA-søknader
+
+- La til fire Playwright-reiser for kompatibilitet etter sak og annen part, avbrutt og bekreftet videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Beholdt delte mocks, OMPMA Fordeling-Cypress-dekning og produksjonskode.
+- Validering: `yarn test:pw e2e/tests/ompma-existing-applications.spec.ts` bestod med 4 tester; `yarn lint`, `git diff --check` og whitespace-kontroll av untracked filer bestod.
+
+#### 2026-11-20 — Eksisterende PSB-søknader
+
+- Gjenopprettet tre Playwright-reiser for eksisterende PSB-søknader: liste og videreføring, manuell oppretting fra en full liste og tilbake til Fordeling. Tom-listen er dokumentert mot eksisterende auto-opprettingsdekning. Fjernet bare den erstattede Cypress-spesifikasjonen; ni gjenstår.
+- Validering: `yarn test:pw e2e/tests/psb-existing-applications.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — OMPAO-skjema
+
+- Flyttet B43s tre OMPAO-sjekker til uavhengige Playwright-tester med kontrollert kvittering, payload-assertions og verifisert lagring før innsending. Fjernet bare den erstattede `nySoknad.cy.js`; 12 Cypress-spesifikasjoner gjenstår.
+- Validering: `yarn test:pw e2e/tests/ompao-punch-form.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — OMPUT-skjema
+
+- Flyttet B44s åtte aktive OMPUT-sjekker til seks uavhengige nye søknads- og korrigeringsløp og to valideringstester. Fjernet bare de to erstattede Cypress-spesifikasjonene; 10 gjenstår.
+- Validering: `yarn test:pw e2e/tests/omput-punch-form.spec.ts` bestod med 8 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Arbeidstid for PSB
+
+- Flyttet B40–B42 til to Playwright-tester: frilanservalidering og én arbeidstidsreise som kontrollerer to perioder, tidsformat og lagrede dager. Fjernet den erstattede Cypress-spesifikasjonen etter at hele PSB-spesifikasjonen bestod.
+- Validering: `yarn test:pw e2e/tests/psb-punch-form.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Endret mottaksdato i PSB-skjema
+
+- La til én Playwright-reise som kontrollerer lagring på blur, validering, innsending med søker- og søknads-ID og datoen på kvitteringen. Fjernet de to erstattede Cypress-testene og beholdt de tre øvrige.
+- Validering: Playwright bestod med én test, Cypress med tre tester, og `yarn lint` samt `git diff --check` bestod.
+
+#### 2026-11-20 — Brev for inntektsmelding uten krav
+
+- Erstattet fem Cypress-blokker med én trinnvis Playwright-reise som kontrollerer brevskjema, avbrutt sending og Vent-advarsel før en vellykket bestilling til generell sak.
+- Verifiserte før sletting og på endelig diff med fire beståtte Playwright-tester, `yarn lint` og `git diff --check`.
+
+#### 2026-11-20 — Brev for journalpost med uavklart ytelse
+
+- Erstattet to Cypress-blokker med én skrivefri Playwright-reise som verifiserer sperren for direkte brevtilgang og malforespørselen etter valg av PSB. Beholdt fixturen.
+- Validering før fjerning av Cypress-fila: `yarn test:pw e2e/tests/send-brev.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-20 — Brev på fagsak og lukking av oppgave
+
+- Erstattet sju Cypress-blokker med én Playwright-reise som kontrollerer brevbestilling, duplikatvern, nytt forsøk på lukking og lokal LOS-navigering. Beholdt fixturene.
+
+#### 2026-11-19 — Fosterbarn i direkte utbetaling
+
+- Flyttet de sju blokkene fra `TestFosterbarn.cy.js` til seks isolerte scenarioer i den eksisterende Fordeling-spesifikasjonen. Utvidet OMPMA- og KorrigeringIM-inngangstestene, og beholdt de delte fixturene.
+- Verifiserer mottak med `OMP`, oppfrisket sak med `OMP`, og kopieringskontrakten med `OMP_UT` i forespørselen og `OMP` i HTTP 201-svaret. Fortsett går til direkteutbetalingsregistreringen.
+- Validering: `yarn test:pw e2e/tests/fordeling-entry.spec.ts` bestod med 12 tester; `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-19 — Starttilstand og tomt fagsakoppslag for PLS
+
+- La til én Playwright-reise for PLS-starttilstand, tomt fagsakoppslag, manuell pleietrengende og valg uten fødselsnummer. Fjernet den siste kartlagte Fordeling PLS-Cypress-filen og beholdt de delte JSON-fixturene.
+
+#### 2026-11-19 — Søkerbytte for PLS
+
+- La til én Playwright-reise for nullstilling av journalpostpanelet, PLS-sak for alternativ søker, avbrutte Fortsett- og Vent-dialoger og retur til opprinnelig søker. Dialogene kontrollerer søker- og saksdetaljer, og avbrytelse sender ingen mutasjon.
+- Fjernet de fem erstattede Cypress-blokkene og la nødvendig oppsett for opprinnelig søker inn i den beholdte testen med to søkere.
+- Validering: Playwright bestod med 12 tester, Cypress med 13 tester, og `yarn lint` samt `git diff --check` bestod.
+
+#### 2026-11-19 — To søkere for PLS
+
+- La til én Playwright-reise for klargjøring av to søkere med manuelt registrert pleietrengende og avbrytelse av Fortsett- og Vent-dialogene.
+- Fjernet de tre erstattede Cypress-blokkene ved startlinje 60, 103 og 134. Beholdt de sju åpningstestene og testen for tomt fagsakoppslag.
+- Validering: Playwright bestod med 13 tester, Cypress med 10 tester, og `yarn lint` samt `git diff --check` bestod.
+
+#### 2026-11-19 — Saksvalg for PLS
+
+- La til to selvstendige Playwright-reiser for de fire eksisterende og reserverte PLS-sakene og manuell pleietrengende i ny sak, inkludert valg uten fødselsnummer.
+- Fjernet de sju erstattede saksvalgsblokkene fra `cypress/e2e/fordeling/PILS.cy.js`. Beholdt modal-, søkerbytte-, reset-, to-søker- og tomt-oppslag-dekning med nødvendig oppsett i modaltestene.
+
+#### 2026-11-19 — Klassifiseringsmodaler for PLS
+
+- La til ni Playwright-scenarioer som åpner og avbryter PLS-modalene for eksisterende, reserverte og nye saker. De kontrollerer sammendragsfeltene og at avbrytelse ikke sender mutasjoner.
+- Fjernet de ni erstattede blokkene fra `cypress/e2e/fordeling/PILS.cy.js` og la til eksplisitt startoppsett for den beholdte reset-testen.
+- Validering: PLS Playwright-spesifikasjonen bestod med 11 tester, og den beholdte Cypress-spesifikasjonen bestod med 18 tester.
+
+#### 2026-11-19 — Klassifisering av PLS
+
+- La til Playwright-reiser for Vent med nytt forsøk og Fortsett fram til automatisk opprettet PLS-skjema. Gjenbrukte modal- og Storybook-dekning for klassifiserings- og kopieringsfeil.
+- Fjernet PLS-klassifiseringens Cypress-fil etter å ha kartlagt alle sju blokkene. Vent med to søkere gjenstår.
+- Samlet valideringsfeil fra backend nederst i PLS-skjemaet med norske feilmeldinger. Lokal validering vises ved feltene.
+
+#### 2026-11-19 — Gosys-oppgave for Annet
+
+- Flyttet alle seks Cypress-blokkene til én Playwright-reise med Gosys-feil, nytt forsøk og eksplisitt retur til lokal LOS. Fjernet Cypress-filen etter bekreftet dekning.
+
+#### 2026-11-19 — Inngang til Fordeling
+
+- Gjenbrukte Gosys-reisen for dokumentvalgene på toppnivå og erstattet de seks øvrige aktive blokkene i `cypress/e2e/fordeling/Fordeling.cy.js` med Playwright-kontroller av Omsorgspenger-valg, søkerbekreftelse, tomt fagsaksoppslag og gyldig identitet. Testene stanser på journalposten; videre navigering og søknadsskjema var ikke aktive i Cypress-blokkene.
+- Den gamle tittelen for tomt fagsaksoppslag hevdet at behandlingsår ble vist, men aktiv Cypress-kode kontrollerte bare at «Velg fagsak» manglet. Playwright kontrollerer behandlingsår etter tomt oppslag og aktiv reservert ny sak.
+
+#### 2026-11-19 — Allerede behandlet journalpost
+
+- Flyttet fem oppstarts-/UI-blokker og sju ytelsesvarianter til en Playwright-spesifikasjon. Testene kontrollerer når Kopier aktiveres uten å sende en kopi. Fjernet Cypress-filen etter å ha kartlagt alle 12 blokkene.
+- Validering: alle åtte Playwright-testene, `yarn lint` og `git diff --check` bestod.
+
+#### 2026-11-18 — Klassifisering av PSB
+
+- Erstattet de sju Cypress-blokkene med Playwright-, Vitest- og Storybook-dekning. Vent med to søkere gjenstår; LOS er kontrollert mot en lokal testdestinasjon.
+
+#### 2026-11-18 — Saks- og barnevalg i Fordeling PSB
+
+- Kompletterte eksisterende Playwright-reiser med dokumentvalg, saks- og barnevalg, overgang til ny sak og begge flaggverdier. Fjernet `cypress/e2e/fordeling/PSB.cy.js` etter å ha kartlagt alle 13 gjenværende blokker, inkludert PDF-handlingen Skjul. Øvrige Cypress-spesifikasjoner er uendret.
+
+#### 2026-11-18 — Søkerbytte i PSB
+
+- Utvidet den eksisterende Playwright-reisen med panel- og modaletiketter, handlingstekster og beholdt søker/barn etter avbrytelse. Fjernet de fem dekkede Cypress-blokkene for søkerbytte; den tidligere valgkjeden og reset-varianten med tomt saksoppslag er beholdt.
+
+#### 2026-11-18 — To søkere med ny PSB-sak
+
+- La til en selvstendig Playwright-reise for to søkere, ny sak og barn fra listen. Fjernet de tre dekkede Cypress-blokkene; faktisk Vent med to søkere gjenstår.
+
+#### 2026-11-18 — Nullstilling i Fordeling
+
+- Flyttet tre kontroller for manglende fødselsnummer til Playwright: søkerbytte med tomt saksoppslag, PSB → Omsorgspenger → PSB og bytte mellom ny og eksisterende sak. Fjernet Cypress-filen etter å ha sjekket tilsvarende dekning.
+
+#### 2026-11-18 — Fjernet erstattede Cypress-kontroller
+
+- Fjernet ni tester for fagsakoppslag i journalpostoppretting og brev etter kartlegging mot komponenttestene. Beholdt kontroll av tomme svar og feilnullstilling ved endret ident.
+- Fjernet fire PSB-startkontroller som dekkes av Playwright, og sikret feltetikettene i journalpostpanelet. Den gjenværende Cypress-valgkjeden er beholdt.
+
+#### 2026-11-18 — Playwright i PR-kontroller
+
+- Kjører hele Playwright-suiten i en egen PR-jobb ved åpning og synkronisering av pull requests. Feilrapporter lastes opp som Actions-artifact i sju dager.
+
+#### 2026-11-18 — Storybook-interaksjonstester i PR
+
+- Bygger Storybook og kjører rendering og eksisterende `play`-assertions i Chromium via en egen Vitest-konfigurasjon i PR-jobben.
+
+#### 2026-11-18 — Klassifiseringsmodal for ny PSB-sak
+
+- Styrket kontrollene ved avbrutt klassifisering og fjernet fem tilsvarende Cypress-modaltester etter kartlegging. Testene for valg og søkerbytte er beholdt.
+
+#### 2026-11-18 — Klassifiseringsmodal for reserverte PSB-saker
+
+- Utvidet sammendragskontrollen i Playwright-filen for nye og reserverte saker med feltetiketter, varselblokk, aktiv Avbryt og beholdt saksvalg. Fjernet de tre tilsvarende modalblokkene for reserverte saker i `PSB.cy.js`; saksvalgene er beholdt.
+
+#### 2026-11-18 — Klassifiseringsmodal for eksisterende PSB-saker
+
+- Utvidet modalkontrollen i den eksisterende Playwright-reisen for saksvalg med feltetiketter, varselblokk og aktiverte knapper. Fjernet de tre tilsvarende modalblokkene i `PSB.cy.js` etter kartlegging; søkerbekreftelse og saksvalg er beholdt.
+
+#### 2026-11-18 — Tomme PSB-oppslag og manuell ident
+
+- Utvidet de tre eksisterende Playwright-reisene med eksakt panelinformasjon og overgangen fra fylt barneliste til tom liste via Nei → Ja etter valgt manglende fødselsnummer. Fjernet de to tilsvarende Cypress-blokkene etter kartlegging.
+
+#### 2026-11-18 — Feilmeldinger ved fagsakoppslag
+
+- Kontrollerte at tomt fagsaksvar ikke viser feilmeldinger, og fjernet `fordeling/FagsakLookupErrors.cy.js` etter kartlegging mot Playwright. Den separate Cypress-filen er beholdt.
+
+#### 2026-11-18 — Gjenoppretting etter barnesøk
+
+- Fjernet `ChildLookupRecovery.cy.js` etter kartlegging mot Playwright. Utvidet kontrollen av mutasjoner til alle journalpost-ID-er.
+
+#### 2026-11-18 — Ferdigstilt PSB: kopier og lukk
+
+- La til en Playwright-reise, modaltester og en interaktiv historie for kopiering til eksisterende barnesak og lukking av originalen. Beskrev at lukkeknappen vises ved feil og at retur er deaktivert mens lukking pågår.
+- Utvidet tester for søkervalg, første barnevalg og kopifeil med 202 ved nytt forsøk og påfølgende lukkefeil. Fjernet Cypress-blokken for ferdigstilt PSB uten barn etter kartlegging av assertions.
+
+#### 2026-11-17 — PSB med to søkere
+
+- La til en Playwright-reise for journalføring, kopiering til annen søker og eksplisitt videreføring av originalen, samt modaltester for kopieringsfeil og refresh. La til en interaktiv historie med nytt forsøk og avgrenset dekningen i Playwright-README.
+
+#### 2026-11-17 — Nye og reserverte PSB-saker
+
+- La til fem isolerte Playwright-tester for reserverte saksvalg, ny-sak-modus med begge frontendflaggverdier, ny reservasjon og backendformet 409. Kontrollerer request-felter, returnert nummer, full journalpostrefresh og PSB-registreringsvalg.
+- Utvidet modaltestene med reserverte sammendrag, Vent med barn uten fagsak og callback med nytt nummer. La til to interaktive historier, kjørt og kjørt på nytt i nettleser, og assertion-mapping i Playwright-README. Produksjonskode, Cypress og delt infrastruktur er uendret; full B25/B26/B34-paritet gjenstår.
+
+#### 2026-11-17 — Tilpasning etter oppdatering fra master
+
+- Beholdt tilgangsmeldingen ved fagsakoppslag fra master og utvidet komponent- og nettlesertester for 403 og øvrige feil. Oppdaterte Home-testen til å tillate PDF-parametre i URL-en og samordnet Storybook-serviceworkeren med MSW-versjonen.
+
+#### 2026-11-06 — Fordeling uten fagsaker og oppslagsfeil
+
+- La til Playwright-reiser for tomme og filtrerte saksresultater, barnelister og feil ved fagsak- og barnesøk. La til avbrutte modaltilfeller uten fagsak i Vitest og to interaktive Storybook-historier. Cypress og produksjonskode er uendret.
+- Porterte Cypress-gjenopprettingsreisene for 403 og 500 ved barnesøk til Playwright: Nei → Ja henter barnelisten på nytt, viser barnet fra listen og bevarer manuell registrering.
+
+#### 2026-11-06 — Fordeling-PSB-pilot
+
+- La til modaltester, fem interaktive Storybook-historier og to Playwright-reiser for eksisterende PSB-saker med og uten barn. Beholdt Cypress og brevtilkoblingstestene.
+
+#### 2026-11-06 — Fordeling-knappregler
+
+- La til Vitest-beslutningstabeller for Fordeling-reglene for behandlingsår, journalføring og videreføring. Beholdt Cypress for UI-wiring og faktiske brukerflyter.
+
+#### 2026-11-06 — Fordeling-nullstilling
+
+- La til Playwright-reiser for nullstilling ved bytte av søker og dokumenttype, med assertion-mapping til Cypress. Etter fiksen i #3973 passerer regresjonen normalt: Vent er deaktivert etter søkerbytte, før barn velges eller «Det gjelder et annet barn» klikkes, og etter kontroll av nullstilt checkbox. Beholdt modalavbryt og kontroll av at ingen mutasjoner sendes; begge reset- og begge PSB-testene passerer. Øvrig Fordeling-migrering gjenstår.
+
+#### 2026-11-05 — Oppfølging av testdekning
+
+- Forhåndsvisning av brev som feiler uten statustekst viser nå «Forhåndsvisning av brev feilet.». La til test for LOS-redirect tre sekunder etter sending i avsluttet sak.
+- Kontrollerte PDF-visning og **Skjul** etter reload. Samlet journalpostoppretting, feil, nytt forsøk og åpning i én Playwright-reise og lasting/suksess i én Vitest-test for JournalpostLoader.
+- Forenklet Home-historiene ved å fjerne store-registeret; hver historie beholder egen store.
+
+#### 2026-11-05 — Home
+
+- Dekket Home-søket med Vitest, seks interaktive Storybook-historier og én Playwright-reise. Fjernet erstattet Forside-Cypress-spesifikasjon etter assertion-paritet og viste generell feil ved ukjent eller manglende 409-type.
+
+#### 2026-11-05 — JournalpostLoader
+
+- La komponentmatrisen for lasting, feilvisninger og GET-basert lukking i Vitest; beholdt tre Playwright-integrasjoner og ni Storybook-historier med `play`-handlinger og komplette MSW-grupper ved storybytte. Fjernet erstattet Cypress-spesifikasjon etter assertion-paritet, egne suksess- og LOS-destinasjonshistorier samt ubrukte test-ID-er. LOS-knappen gir trygg Actions-feedback uten å navigere bort. Samlet generelle feilvisninger og kjente 409-/200-lukkeflyter. Forenklet det manuelle lasting-scenariet og fjernet skjult browser-event-synkronisering. Rettet fallback ved ukjent eller manglende 409-type.
+
+#### 2026-11-04 — Testoppsett, journalpostoppretting og brev
+
+- La til en separat Chromium-smoketest i MSW-testmodus, med egen TypeScript-kontroll og rapportering.
+- La til åtte journalpostscenarier i Storybook, med manuell oppretting og synlig navigasjon i normaltilstanden, 14 fokuserte komponenttester og to Playwright-reiser. Fjernet den gamle Cypress-spesifikasjonen for journalpostoppretting etter kontroll av tilsvarende dekning, samt ubrukte Storybook-eksporter og testattributter. Øvrige Cypress-tester og delte fixtures er uendret.
+- Avgrenset opprettingstesten til en egen ferdigstilt journalpost med komplett fagsak og kontroll av ferdig skjermbilde. Sentrerte lasteindikatoren ved fagsaksvalget og ga den norsk beskrivelse.
+- La til målrettede brevtester for felles skjema og seks innganger, klargjorte Storybook-historier med fast PDF-mock og én Playwright-reise med forhåndsvisning og nytt sendeforsøk. Fjernet utdaterte Storybook-mocks og sikret MSW-kontroll ved første åpning av preview-iframe. Fjernet den erstattede Cypress-flyten for brev i avsluttet sak etter kontroll mot komponent-, integrasjons- og Playwright-dekningen. Beholdt øvrige Cypress-flyter, delte MSW-handlere og fixtures.
 
 ### ESLint 10 og React Hooks-regler (2026-11-03)
 

@@ -17,7 +17,6 @@ These instructions apply to agents working in this repository.
 - For local or IDE Copilot work, do not change `master` by default. Ask the user to create or switch to a feature branch first unless the user explicitly wants `master`. Branch creation and switching belong to the user in local or IDE sessions.
 - Use `copilot-tasks/` for concrete repo task files and `.github/prompts/` for stable reusable prompts.
 - Keep active or next-up Copilot task files in `copilot-tasks/`.
-- Move completed Copilot task files to `copilot-tasks/completed/` when the user explicitly asks to archive or clean up finished tasks.
 - When following `copilot-tasks/*.md`, update `Plan` first, keep `Progress notes` and `Outcome` short and factual, and do not move, rename or delete task files unless the user explicitly asks.
 - Keep Copilot task files minimal. Prefer short `Goal`, `Scope`, `Validation`, and `Prompt` sections. Avoid long rationale, repeated file lists, or long execution reports inside the task file.
 - In `Prompt for Copilot`, write the full copy paste prompt, not just notes about what a prompt should contain.

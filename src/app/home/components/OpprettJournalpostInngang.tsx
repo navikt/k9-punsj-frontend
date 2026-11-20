@@ -16,7 +16,7 @@ const OpprettJournalpostInngang = () => {
             </BodyLong>
 
             <div className="mt-12">
-                <Button as={Link} to="/opprett-journalpost" data-testid="opprett-journalpost-inngang">
+                <Button as={Link} to="/opprett-journalpost">
                     <FormattedMessage id="opprettJournalpostInngang.link" />
                 </Button>
             </div>

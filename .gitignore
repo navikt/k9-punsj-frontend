@@ -42,3 +42,5 @@ cypress/screenshots/
 storybook-static
 *storybook.log
 .playwright-cli/
+playwright-report/
+test-results/
