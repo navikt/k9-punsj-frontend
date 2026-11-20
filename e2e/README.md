@@ -67,6 +67,15 @@ The component fixtures use their own synthetic case IDs instead of the Cypress f
 
 Testen bruker nettleserkontekstbaserte MSW-svar for klassifisering, brev og lukking. LOS-trafikken går bare til lokal testdestinasjon. Detaljert skjemavalidering og komponentkobling dekkes av Vitest.
 
+### Brev for journalpost med uavklart ytelse
+
+`send-brev.spec.ts` erstatter de to blokkene i `cypress/e2e/fordeling/SendBrevUavklartSakstype.cy.js` og beholder fixturen `jpUavklartSakstype315.json`.
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 19: Åpne brev-ruten direkte uten avklart ytelse | `hindrer brev for uavklart ytelse til PSB er valgt på journalposten` kontrollerer journalpostsvaret fra MSW, sperren og retur til oversikten. |
+| 6: Velg ytelse og åpne brevskjema | Samme reise kontrollerer varselet og deaktivert knapp, velger PSB og verifiserer malforespørselen med `sakstype=PSB` og `avsenderApplikasjon=K9PUNSJ`. |
+
 ## Fordeling PSB pilot
 
 Run the focused modal test, preserve the existing letter integration, and run both independent browser journeys with one and the default worker count:

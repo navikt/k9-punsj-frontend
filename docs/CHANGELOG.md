@@ -46,6 +46,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Brev for journalpost med uavklart ytelse
+
+- Erstattet to Cypress-blokker med én skrivefri Playwright-reise som verifiserer sperren for direkte brevtilgang og malforespørselen etter valg av PSB. Beholdt fixturen.
+- Validering før fjerning av Cypress-fila: `yarn test:pw e2e/tests/send-brev.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — Brev på fagsak og lukking av oppgave
 
 - Erstattet sju Cypress-blokker med én Playwright-reise som kontrollerer brevbestilling, duplikatvern, nytt forsøk på lukking og lokal LOS-navigering. Beholdt fixturene.

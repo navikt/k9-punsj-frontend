@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import journalpost from '../../cypress/fixtures/jpPSB300.json' with { type: 'json' };
+import journalpostUavklart from '../../cypress/fixtures/jpUavklartSakstype315.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 import { createMockPdfBytes } from '../../src/mocks/mockPdf.js';
 import { installBrevHandlers } from './helpers/brev';
@@ -18,6 +19,43 @@ const FAGSAK = fagsaker[2];
 const ARBEIDSGIVER_ID = '979312059';
 
 const requestPath = (url: string) => new URL(url).pathname;
+
+test('hindrer brev for uavklart ytelse til PSB er valgt på journalposten', async ({ page }) => {
+    const journalpostId = journalpostUavklart.journalpostId;
+    const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', journalpostId);
+    const initialJournalpostPromise = page.waitForResponse(
+        (response) => response.request().method() === 'GET' && requestPath(response.url()) === journalpostPath,
+    );
+
+    await page.goto(`/journalpost/${journalpostId}/brev-behandlet-journalpost/`);
+
+    const initialJournalpost = await initialJournalpostPromise;
+    expect(initialJournalpost.status()).toBe(201);
+    expect(initialJournalpost.fromServiceWorker()).toBe(true);
+    expect(await initialJournalpost.json()).toEqual(journalpostUavklart);
+    await expect(page.getByText(/Journalposten mangler avklart ytelsestype/i)).toBeVisible();
+    await expect(page.getByRole('combobox', { name: 'Velg mal' })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Tilbake' }).click();
+    await expect(page).toHaveURL(new RegExp(`/journalpost/${journalpostId}/?$`));
+
+    await expect(page.getByText(/Ytelsestypen på journalposten er ikke avklart/i)).toBeVisible();
+    const sendBrevButton = page.getByRole('button', { name: 'Send brev', exact: true });
+    await expect(sendBrevButton).toBeDisabled();
+    await page.getByRole('radio', { name: 'Pleiepenger sykt barn', exact: true }).check();
+    await expect(sendBrevButton).toBeEnabled();
+
+    const templateRequestPromise = page.waitForRequest(
+        (request) => request.method() === 'GET' && requestPath(request.url()) === ApiPath.BREV_MALER,
+    );
+    await sendBrevButton.click();
+    await expect(page).toHaveURL(new RegExp(`/journalpost/${journalpostId}/brev-behandlet-journalpost/?$`));
+    await expect(page.getByRole('combobox', { name: 'Velg mal' })).toBeVisible();
+
+    const templateRequest = await templateRequestPromise;
+    const templateUrl = new URL(templateRequest.url());
+    expect(templateUrl.searchParams.get('sakstype')).toBe('PSB');
+    expect(templateUrl.searchParams.get('avsenderApplikasjon')).toBe('K9PUNSJ');
+});
 
 test('bestiller brev fra hovedsiden med PDF-forhåndsvisning og nytt forsøk', async ({ page }) => {
     const bestillinger: Array<{ body: Record<string, unknown> }> = [];
