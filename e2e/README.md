@@ -59,6 +59,23 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | Line 27: Client validation | `viser klientfeil når signatur og startdato mangler` verifies both missing-field errors, no preview or confirmation, and no `/send`; the existing `/valider` call remains. |
 | Line 35: Backend validation | `viser backendfeil uten å åpne preview eller sende inn` verifies the validation body and backend error, no preview or confirmation, and no `/send`. |
 
+## OMPUT form save and submission
+
+`omput-punch-form.spec.ts` replaces all eight active checks in `cypress/e2e/omsorgspenger-utbetaling/nySoknad.cy.js` and `korrigering.cy.js`.
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| New application: employee success | `sender inn ny søknad for arbeidstaker` checks employer and absence values, common fields, validation/save payloads, confirmation ordering, and the receipt. |
+| New application: freelancer success | `sender inn ny søknad for frilanser` checks care-day selection, activity dates, absence values, payloads, confirmation ordering, and the receipt. |
+| New application: self-employed success | `sender inn ny søknad for selvstendig næringsdrivende` checks business and accountant details, absence values, payloads, confirmation ordering, and the receipt. |
+| New application: client validation | `stanser innsending ved klientvalidering uten forhåndsvisning` checks the error summary and confirms there is no preview, confirmation, or `/send`; `/valider` is still called. |
+| New application: backend validation | `viser backendvalideringsfeil uten forhåndsvisning eller innsending` checks the edited validation payload and original backend message without preview, confirmation, or `/send`. |
+| Correction: employee success | `sender inn korrigering for arbeidstaker` checks existing periods, correction selection, hidden common fields, filtered payload, confirmation ordering, and the receipt. |
+| Correction: freelancer success | `sender inn korrigering for frilanser` also checks that the care-day question is hidden and freelancer details remain editable. |
+| Correction: self-employed success | `sender inn korrigering for selvstendig næringsdrivende` also checks hidden care-day, blad B, business-name and accountant fields, and filtered business payload. |
+
+The two startup fixtures use matching route, application, save, validation and submit IDs. The correction fixture returns the existing September periods before the form is used. Each test has its own page and local mutation handlers; the test does not call the backend. The submission response is checked separately from the validation receipt retained by the OMPUT container.
+
 ## Replaced Cypress lookup regressions
 
 All nine tests in `cypress/e2e/fagsakLookupErrors.cy.js` have been replaced by the component tests below. These tests render the actual creation and letter entry components; successful application navigation remains covered by `opprett-journalpost.spec.ts` and `send-brev.spec.ts`.

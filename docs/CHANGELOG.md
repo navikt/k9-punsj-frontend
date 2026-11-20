@@ -51,6 +51,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Flyttet B43s tre OMPAO-sjekker til uavhengige Playwright-tester med kontrollert kvittering, payload-assertions og verifisert lagring før innsending. Fjernet bare den erstattede `nySoknad.cy.js`; 12 Cypress-spesifikasjoner gjenstår.
 - Validering: `yarn test:pw e2e/tests/ompao-punch-form.spec.ts` bestod med 3 tester; `yarn lint` og `git diff --check` bestod.
 
+#### 2026-11-20 — OMPUT-skjema
+
+- Flyttet B44s åtte aktive OMPUT-sjekker til seks uavhengige nye søknads- og korrigeringsløp og to valideringstester. Fjernet bare de to erstattede Cypress-spesifikasjonene; 10 gjenstår.
+- Validering: `yarn test:pw e2e/tests/omput-punch-form.spec.ts` bestod med 8 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — Arbeidstid for PSB
 
 - Flyttet B40–B42 til to Playwright-tester: frilanservalidering og én arbeidstidsreise som kontrollerer to perioder, tidsformat og lagrede dager. Fjernet den erstattede Cypress-spesifikasjonen etter at hele PSB-spesifikasjonen bestod.
