@@ -86,6 +86,17 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 
 The table's informational alert may still say that a new registration is unavailable when its button is present: the parent does not pass its computed availability flag to the table. The test checks the actual button state and does not treat the contradictory alert as expected behavior.
 
+## OMPKS existing applications
+
+`ompks-existing-applications.spec.ts` uses `jpOMPKS302.json` and the OMPKS case with a child at `fagsaker.json[11]`. Its page-local responses use the OMPKS list shape `{ søker, fagsakTypeKode: "OMP_KS", søknader }`; the shared OMPKS map mock has an OMPAO family code and is left unchanged.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Resume an existing application | Checks the journalpost panel and meaningful row values, disables the different-case and different-child rows, hides **Start ny registrering** when the current journalpost is listed, cancels without a form GET or write, then resumes through the selected ID. |
+| Create from a nonempty list | Checks the available button and no premature POST, then verifies one create POST with `pleietrengendeIdent`, its full 201 application DTO, the matching form GET and visible form. |
+| Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
+| Create from an empty list | Adds OMPKS-specific empty-list coverage: verifies the successful lookup response precedes one create POST, checks the same payload, full 201 application DTO and matching form GET, and verifies the visible form. |
+
 ## OMPUT existing applications
 
 `omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.

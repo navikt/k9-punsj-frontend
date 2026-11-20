@@ -65,6 +65,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - Gjenopprettet fire Playwright-reiser for liste, avbrutt og vellykket videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Fjernet bare den erstattede Cypress-spesifikasjonen; åtte gjenstår.
 - Validering: `yarn test:pw e2e/tests/ompao-existing-applications.spec.ts` bestod med 4 tester; `yarn lint` og `git diff --check` bestod.
 
+#### 2026-11-20 — Eksisterende OMPKS-søknader
+
+- La til fire Playwright-reiser for kompatibilitet, avbrutt og bekreftet videreføring, manuell oppretting, tilbakeknapp og automatisk oppretting fra tom liste. Beholdt delte mocks, Cypress-dekning og produksjonskode.
+- Validering: `yarn test:pw e2e/tests/ompks-existing-applications.spec.ts` bestod med 4 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-20 — Eksisterende PSB-søknader
 
 - Gjenopprettet tre Playwright-reiser for eksisterende PSB-søknader: liste og videreføring, manuell oppretting fra en full liste og tilbake til Fordeling. Tom-listen er dokumentert mot eksisterende auto-opprettingsdekning. Fjernet bare den erstattede Cypress-spesifikasjonen; ni gjenstår.
