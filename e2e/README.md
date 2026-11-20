@@ -97,6 +97,17 @@ The table's informational alert may still say that a new registration is unavail
 | Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
 | Create from an empty list | Adds OMPKS-specific empty-list coverage: verifies the successful lookup response precedes one create POST, checks the same payload, full 201 application DTO and matching form GET, and verifies the visible form. |
 
+## OMPMA existing applications
+
+`ompma-existing-applications.spec.ts` uses `jpOMPMA304.json` and the OMPMA case with a related person at `fagsaker.json[18]`. Page-local responses use `{ søker, fagsakTypeKode: "OMP_MA", søknader }` and the OMPMA create contract `{ journalpostId, norskIdent, annenPart, barn: [], k9saksnummer }`; shared mocks and existing OMPMA Fordeling Cypress coverage remain unchanged.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Resume an existing application | Checks the journalpost panel and meaningful row values, disables different-case and different-other-parent rows, hides **Start ny registrering** when the current journalpost is listed, cancels without a form GET or write, then resumes through the selected ID and checks loaded form values. |
+| Create from a nonempty list | Checks the available button and no premature POST, then verifies one create POST with the full 201 application DTO, the matching form GET and visible loaded values. |
+| Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
+| Create from an empty list | Verifies the successful lookup response precedes one automatic create POST, checks the same request and full response DTO, then verifies the matching form GET and visible loaded values. |
+
 ## OMPUT existing applications
 
 `omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.
