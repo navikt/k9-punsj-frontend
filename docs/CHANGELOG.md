@@ -46,6 +46,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-19 — Fosterbarn i direkte utbetaling
+
+- Flyttet de sju blokkene fra `TestFosterbarn.cy.js` til seks isolerte scenarioer i den eksisterende Fordeling-spesifikasjonen. Utvidet OMPMA- og KorrigeringIM-inngangstestene, og beholdt de delte fixturene.
+- Verifiserer mottak med `OMP`, oppfrisket sak med `OMP`, og kopieringskontrakten med `OMP_UT` i forespørselen og `OMP` i HTTP 201-svaret. Fortsett går til direkteutbetalingsregistreringen.
+- Validering: `yarn test:pw e2e/tests/fordeling-entry.spec.ts` bestod med 12 tester; `yarn lint` og `git diff --check` bestod.
+
 #### 2026-11-19 — Starttilstand og tomt fagsakoppslag for PLS
 
 - La til én Playwright-reise for PLS-starttilstand, tomt fagsakoppslag, manuell pleietrengende og valg uten fødselsnummer. Fjernet den siste kartlagte Fordeling PLS-Cypress-filen og beholdt de delte JSON-fixturene.

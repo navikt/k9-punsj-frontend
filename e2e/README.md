@@ -252,6 +252,22 @@ Gosys-svarene er lokale MSW-svar; LOS-destinasjonen er den lokale startsiden, ik
 
 De tre blokkene om eksisterende søknader utførte bare forberedelse av valg og bekreftelse; videre navigering og søknadsskjema var kommentert ut. Playwright-testene bevarer denne grensen og utfører ikke journalføring eller videreføring.
 
+## Fordeling fosterbarn
+
+[`fordeling-entry.spec.ts`](tests/fordeling-entry.spec.ts) erstatter de sju blokkene i `cypress/e2e/fordeling/TestFosterbarn.cy.js`. Bare denne Cypress-filen er fjernet; de delte fixturene er beholdt.
+
+| Cypress-blokk (startlinje før sletting) | Playwright-dekning |
+| --- | --- |
+| 23: Fosterbarn, én søker, vellykket oppfrisking | Én-søker-scenarioet viser fosterbarn-ID i modalen og når direkteutbetalingsregistreringen etter journalføring. |
+| 42: Fosterbarn, én søker, oppfrisking med 403 | Kontrollerer journalført status, tilgangsavslag, aktiv **Gå til LOS** og fravær av registrering. |
+| 77: Fosterbarn, to søkere, vellykket oppfrisking | Kontrollerer fosterbarn-ID, klassifiseringsforespørselen, kopi til søker nummer to og **Videre** til registrering. |
+| 123: Fosterbarn, to søkere, oppfrisking med 403 | Beholder journalførings- og kopibekreftelsen og viser tilgangsavslag med aktiv **Gå til LOS**. |
+| 172: Uten fosterbarn, to søkere | Kontrollerer tilgjengelig fosterbarn-kontroll, tom modalrad, kopi og **Videre** til registrering. |
+| 218: Uten fosterbarn, én søker | Kontrollerer tilgjengelig fosterbarn-kontroll, tom modalrad og direkteutbetalingsregistrering. |
+| 252: Fosterbarn-kontroll for OMPMA og KorrigeringIM | De eksisterende inngangstestene bekrefter søker og ny sak, og kontrollerer at fosterbarn-kontrollen vises. |
+
+Scenarioene bruker separate Playwright-kontekster og et behandlingsår valgt fra aktive UI-valg. Testene kontrollerer at behandlingsåret lagres før klassifisering, at `JOURNALPOST_MOTTAK` sender `OMP` og fosterbarn-ID-ene (eller utelater feltet uten fosterbarn), og at oppfriskingen returnerer en journalpost med sakstype `OMP`. Kopieringsforespørselen bruker `OMP_UT`; HTTP 201-svaret returnerer `OMP`. Fortsett går fortsatt til registrering av direkte utbetaling.
+
 ## Allerede behandlet journalpost
 
 `fordeling-already-processed.spec.ts` erstatter alle 12 blokkene i `cypress/e2e/fordeling/JpAlleredeBehandlet.cy.js`. Oppstartsblokkene er samlet i én test; de sju dokumentvariantene kjører i separate Playwright-kontekster. Alle testene verifiserer at Kopier ikke sendes og at ruten forblir på journalposten.
