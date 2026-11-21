@@ -71,6 +71,19 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | Create from a nonempty list | `starter manuell PLS-registrering fra en liste med eksisterende søknader` checks the available button, exact create payload, 201 response ID, form GET and visible form. |
 | Go back | `går tilbake fra PLS-søknadslisten uten å opprette en søknad` checks the preceding registration-choice screen without fetching a form or creating, validating or submitting an application. |
 
+## OLP existing applications
+
+`olp-existing-applications.spec.ts` covers four isolated browser journeys. It observes requests from journalpost navigation and installs context-local MSW handlers after the initial journalpost response, before classification and OLP list/create requests. Existing applications use `olpSoknad.json`; the separate create response and following GET explicitly model the new-draft DTO defaults and fields assigned during first submission. Its child object has null identity and birth date, with no populated data copied from the existing-application fixture.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Resume an existing application | Checks the applicant header and OLP list response, meaningful row values, hidden new-registration button when the current journalpost is listed, enabled rows with a different case or child, cancellation without a form GET or write, and resume through the selected ID. |
+| Create from a nonempty list | Checks the available button and no premature POST, then verifies one create request with `pleietrengendeId`, the full 201 DTO, matching form GET and visible loaded form. |
+| Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or application write. |
+| Create from an empty list | Verifies that a successful empty-list lookup precedes one automatic create request, then checks the same create-to-form contract. |
+
+The list and registration-choice components share a React Query key, so these checks validate the list response without assuming a fixed lookup count. The backend source trace confirms that the create API accepts `pleietrengendeIdent` (alias `barnIdent`), while the frontend sends `pleietrengendeId`. `førsteInnsendingOlp` maps a null `barnIdent` to a child DTO with null identity and birth date. This is a source-confirmed contract mismatch; the test request and fixture do not hide it. Playwright uses MSW, so backend deserialization, runtime response and persistence are not tested.
+
 ## OMPAO existing applications
 
 `ompao-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-alene-om-omsorgen/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; eight Cypress specifications remain, down from nine.

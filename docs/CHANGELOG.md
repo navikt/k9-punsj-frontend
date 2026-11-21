@@ -50,6 +50,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-20 — Eksisterende OLP-søknader
+
+- La til fire Playwright-reiser for OLP-listen, videreføring, manuell oppretting, retur og automatisk oppretting fra tom liste. Opprettingssvaret og etterfølgende GET bruker et eksplisitt nytt DTO med null identitet og fødselsdato for barnet; skjemaet åpnes fortsatt. Cypress, delte mocks og produksjonskode er uendret.
+- Kildesporet bekrefter at backend godtar `pleietrengendeIdent`/`barnIdent`, mens frontend sender `pleietrengendeId`. `førsteInnsendingOlp` lager et `BarnDto` med null identitet når `barnIdent` mangler. Dette bekrefter en mismatch i kontrakten; MSW-testene verifiserer ikke deserialisering, runtime-svar eller lagring.
+- Validering: `yarn test:pw e2e/tests/olp-existing-applications.spec.ts` bestod med 4 tester; `yarn lint`, `git diff --check` og whitespace-kontrollene bestod.
+
 #### 2026-11-20 — Eksisterende PLS-søknader
 
 - La til tre Playwright-reiser for liste og videreføring, manuell oppretting fra en full liste og retur til registreringsvalget. Beholdt tom-liste auto-oppretting i eksisterende Fordeling-test; ingen Cypress-spesifikasjon eller produksjonskode ble endret.
