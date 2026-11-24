@@ -99,6 +99,21 @@ Codex verified the create response and default withdrawal in the sibling backend
 
 The list and registration-choice components share a React Query key, so these checks validate the list response without assuming a fixed lookup count. The backend source trace confirms that the create API accepts `pleietrengendeIdent` (alias `barnIdent`), while the frontend sends `pleietrengendeId`. `førsteInnsendingOlp` maps a null `barnIdent` to a child DTO with null identity and birth date. This is a source-confirmed contract mismatch; the test request and fixture do not hide it. Playwright uses MSW, so backend deserialization, runtime response and persistence are not tested.
 
+## OLP form saving and submission
+
+`olp-punch-form.spec.ts` covers the OLP form slice of B49 through journalpost classification and the real form. Each journey installs isolated MSW handlers before classification and application requests; the journalpost refresh is matched only after the classification response.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Successful submission | Keeps the real create body and full initial DTO, including a child with null identity; checks the matching GET, then verifies form hydration from the selected child ID in the saved and validation bodies. Checks applicant, child, journalpost, application/case identity, received date and course data; reads back the PUT and successful validation state; reviews the mapper-shaped receipt, confirms once, then checks one send from saved state and the completion receipt. |
+| Backend validation rejection | Sends otherwise valid form values, returns HTTP 400 in the backend `SøknadFeil` shape, checks visible feedback, unchanged saved values and no send. The shape follows the backend source; the example error code/message are synthetic because the source does not define a concrete rejection for these valid values. |
+
+The local MSW store keeps creation, PUT save, validation and send separate. PUT returns the DTO and updates the draft; successful validation maps the incoming values with stored journalposts and the scenario's existing K9 periods, then persists the values before returning 202. Rejected validation does not persist. Send checks the applicant header and request, then builds its 202 receipt from the saved draft, including the mapper's default `PT7H30M` course withdrawal. The tests verify methods, paths, relevant headers, bodies and statuses without pinning autosave or validation counts.
+
+The case ID is checked in the create DTO, initial DTO/form GET and K9-period lookup. MSW stores it separately on the application entity. After PUT and successful validation, GET returns the stored DTO with `k9saksnummer: null`, matching the backend mapper: `utfyllendeInnsendingOlp` stores the incoming DTO JSON, and `tilOlpvisning` does not add the entity's case number back. A rejected validation leaves that saved DTO unchanged.
+
+The backend source confirms that the create endpoint receives `OpprettNySøknad`, while the frontend sends `pleietrengendeId` and the backend DTO reads `pleietrengendeIdent`/`barnIdent`. The test preserves that real frontend request and checks that the form hydrates its missing child identity from the selected journalpost context. These Playwright/MSW journeys do not test backend runtime deserialization, validation, or persistence. Production code, shared fixtures, Cypress and other application families remain unchanged.
+
 ## OMPAO existing applications
 
 `ompao-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-alene-om-omsorgen/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; eight Cypress specifications remain, down from nine.

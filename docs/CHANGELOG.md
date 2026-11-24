@@ -50,6 +50,13 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — OLP-skjema, validering og innsending
+
+- La til to isolerte Playwright-reiser gjennom journalpostklassifisering og OLP-skjema: bekreftet innsending og backendavslag med beholdte verdier uten innsending.
+- Beholdt frontendens reelle opprettingspayload og start-DTO med null barnidentitet. Testen verifiserer identitetshydrering i lagrings- og valideringspayload, separat lagring ved PUT og vellykket validering, avslag uten persistens og kvittering fra lagret utkast ved send.
+- Saksidentiteten verifiseres i opprettings-DTO, initial DTO/form-GET og K9-periodeoppslag. MSW holder saksnummeret separat på applikasjonsentiteten; GET etter PUT og vellykket validering returnerer lagret DTO med `k9saksnummer: null`.
+- Backendkilden bekrefter at `utfyllendeInnsendingOlp` lagrer DTO-en som JSON, mens `tilOlpvisning` ikke legger entitetens saksnummer tilbake i responsen. Avslagsverdiene er syntetiske; MSW-testene verifiserer ikke backendens runtime eller faktiske persistens.
+
 #### 2026-11-24 — PLS-skjema, validering og innsending
 
 - La til to isolerte Playwright-reiser gjennom journalpost og PLS-skjema: lagring, validering, oppsummering, bekreftet innsending og backendavslag med beholdte verdier uten innsending.
