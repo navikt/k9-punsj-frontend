@@ -50,6 +50,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — OMPUT autosavefeil og gjenoppretting
+
+- La til en Playwright-reise som verifiserer synlig lagringsfeil, beholdte skjemaverdier og uendret MSW-utkast etter PUT 500. Neste brukerendring lagres med PUT 200, og feilen forsvinner.
+- Oppdaterte Playwright-veiledningen. Produksjonskode, Cypress-dekning og delte MSW-fixtures er uendret.
+
 #### 2026-11-24 — OMPKS-skjema, validering og innsending
 
 - La til isolerte Playwright-reiser for lagring, bekreftet innsending og syntetisk valideringsavslag gjennom journalpost og skjema. Testene leser lagret utkast etter PUT og vellykket validering; send-kvitteringen bygges fra utkastet.

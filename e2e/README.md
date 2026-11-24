@@ -233,8 +233,11 @@ OMPUT has no child column or child-based row gate. The list still emits the exis
 | Correction: employee success | `sender inn korrigering for arbeidstaker` checks existing periods, correction selection, hidden common fields, filtered payload, confirmation ordering, and the receipt. |
 | Correction: freelancer success | `sender inn korrigering for frilanser` also checks that the care-day question is hidden and freelancer details remain editable. |
 | Correction: self-employed success | `sender inn korrigering for selvstendig næringsdrivende` also checks hidden care-day, blad B, business-name and accountant fields, and filtered business payload. |
+| B50: Autosave failure and recovery | `beholder OMPUT-endringer ved lagringsfeil og lagrer dem ved neste endring` verifies a matching PUT fails with 500 without changing the saved draft, then a later user edit triggers a successful PUT that retains both edits. |
 
 The two startup fixtures use matching route, application, save, validation and submit IDs. The correction fixture returns the existing September periods before the form is used. Each test has its own page and local mutation handlers; the test does not call the backend. The submission response is checked separately from the validation receipt retained by the OMPUT container.
+
+The B50 journey first saves the completed employee form, then returns 500 only for the selected application ID and edited absence value. It checks the visible save error, retained form values, no submission, and an MSW GET readback proving the failed edit was not persisted. A later user edit triggers the next matching PUT, which returns 200; the error clears, **Lagret** appears, and the saved DTO contains both edits. The MSW state is local to this test. The API throws on non-OK PUT responses and the existing mutation renders the save error; no production gap was found. This verifies frontend behavior, not backend persistence.
 
 ## Replaced Cypress lookup regressions
 

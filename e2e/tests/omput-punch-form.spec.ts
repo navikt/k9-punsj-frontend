@@ -62,7 +62,12 @@ type SaveGate = {
     releaseSave?: () => void;
 };
 
-type OMPUTTestWindow = Window & { __omputSaveGate?: SaveGate };
+type SaveFailureGate = { armed: boolean; failed: boolean };
+
+type OMPUTTestWindow = Window & {
+    __omputSaveGate?: SaveGate;
+    __omputSaveFailureGate?: SaveFailureGate;
+};
 
 const scenarios: Scenario[] = [
     { title: 'sender inn ny søknad for arbeidstaker', kind: 'ny', activity: 'arbeidstaker' },
@@ -398,6 +403,53 @@ async function installMutationHandlers(page: Page, kind: FormKind, validationErr
     );
 }
 
+async function installAutosaveFailureHandlers(page: Page, kind: FormKind) {
+    await page.evaluate(
+        ({ updatePath, applicationPath, applicationId, applicantId, journalpostId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            let savedApplication: OMPUTPayload = {
+                soeknadId: applicationId,
+                soekerId: applicantId,
+                mottattDato: '2020-10-12',
+                journalposter: [journalpostId],
+            };
+            const failureGate: SaveFailureGate = { armed: false, failed: false };
+            (window as OMPUTTestWindow).__omputSaveFailureGate = failureGate;
+
+            msw.worker.use(
+                msw.http.put(updatePath, async ({ request }) => {
+                    const application = (await request.json()) as OMPUTPayload;
+                    if (application.soeknadId !== applicationId) {
+                        return msw.HttpResponse.json({ feil: 'Ugyldig søknads-ID' }, { status: 400 });
+                    }
+
+                    const targetSave = application.fravaersperioder?.some(
+                        (period) => period.faktiskTidPrDag === '6',
+                    );
+                    if (failureGate.armed && !failureGate.failed && targetSave) {
+                        failureGate.armed = false;
+                        failureGate.failed = true;
+                        return msw.HttpResponse.json({ feil: 'Syntetisk lagringsfeil' }, { status: 500 });
+                    }
+
+                    savedApplication = application;
+                    return msw.HttpResponse.json(savedApplication, { status: 200 });
+                }),
+                msw.http.get(applicationPath, () => msw.HttpResponse.json(savedApplication, { status: 200 })),
+            );
+        },
+        {
+            updatePath: ApiPath.OMP_UT_SOKNAD_UPDATE,
+            applicationPath: applicationPathFor(kind),
+            applicationId: applicationIdFor(kind),
+            applicantId: APPLICANT_ID,
+            journalpostId: JOURNALPOST_ID,
+        },
+    );
+}
+
 async function fillValidForm(page: Page, scenario: Scenario) {
     if (scenario.kind === 'korrigering') {
         await expect(page.getByRole('heading', { name: 'Eksisterende perioder' })).toBeVisible();
@@ -520,6 +572,25 @@ async function expectEditedSave(save: Response, scenario: Scenario) {
     });
     expect(await save.json()).toEqual(save.request().postDataJSON());
     return save;
+}
+
+async function readSavedApplication(page: Page, kind: FormKind) {
+    const applicationPath = applicationPathFor(kind);
+    const responsePromise = page.waitForResponse((response) =>
+        isResponse(response, 'GET', applicationPath),
+    );
+    await page.evaluate(async ({ path, applicantId }) => {
+        const response = await fetch(path, { headers: { 'X-Nav-NorskIdent': applicantId } });
+        if (!response.ok) throw new Error(`Lesing av lagret OMPUT-utkast feilet: ${response.status}`);
+        await response.json();
+    }, { path: applicationPath, applicantId: APPLICANT_ID });
+
+    const response = await responsePromise;
+    expect(response.status()).toBe(200);
+    expect(response.fromServiceWorker()).toBe(true);
+    expect(response.request().method()).toBe('GET');
+    await expectApplicantHeader(response.request());
+    return (await response.json()) as OMPUTPayload;
 }
 
 async function expectReceiptValues(receipt: Locator, scenario: Scenario) {
@@ -761,5 +832,103 @@ test('viser backendvalideringsfeil uten forhåndsvisning eller innsending', asyn
     await expect(page.getByTestId('validertOMPUTSoknadModal')).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'Videre', exact: true })).toHaveCount(0);
     await expect(page.getByTestId('erdusikkermodal')).toHaveCount(0);
+    expect(submitRequests).toHaveLength(0);
+});
+
+test('beholder OMPUT-endringer ved lagringsfeil og lagrer dem ved neste endring', async ({ page }) => {
+    const scenario: Scenario = { title: '', kind: 'ny', activity: 'arbeidstaker' };
+    const submitRequests: Request[] = [];
+    page.on('request', (request) => {
+        if (isRequest(request, 'POST', ApiPath.OMP_UT_SOKNAD_SUBMIT)) submitRequests.push(request);
+    });
+
+    await openApplication(page, scenario.kind);
+    await installAutosaveFailureHandlers(page, scenario.kind);
+
+    const initialSavePromise = waitForEditedSave(page, scenario);
+    await fillValidForm(page, scenario);
+    const initialSave = await expectEditedSave(await initialSavePromise, scenario);
+    const previouslySaved = (await initialSave.json()) as OMPUTPayload;
+    expect(await readSavedApplication(page, scenario.kind)).toEqual(previouslySaved);
+
+    const failedSavePromise = page.waitForResponse((response) => {
+        if (!isResponse(response, 'PUT', ApiPath.OMP_UT_SOKNAD_UPDATE)) return false;
+        const payload = response.request().postDataJSON() as OMPUTPayload;
+        return (
+            payload.soeknadId === applicationIdFor(scenario.kind) &&
+            payload.fravaersperioder?.some(
+                (period) => period.faktiskTidPrDag === '6' && period.normalArbeidstidPrDag === '7',
+            ) === true
+        );
+    });
+    await page.evaluate(() => {
+        const gate = (window as OMPUTTestWindow).__omputSaveFailureGate;
+        if (!gate) throw new Error('Lagringsfeilporten er ikke tilgjengelig.');
+        gate.armed = true;
+    });
+    await page.getByLabel('Timer fravær per dag').fill('6');
+    await page.getByLabel('Timer fravær per dag').press('Tab');
+
+    const failedSave = await failedSavePromise;
+    expect(failedSave.status()).toBe(500);
+    expect(failedSave.fromServiceWorker()).toBe(true);
+    expect(failedSave.request().method()).toBe('PUT');
+    expect(new URL(failedSave.url()).pathname).toBe(ApiPath.OMP_UT_SOKNAD_UPDATE);
+    const failedPayload = failedSave.request().postDataJSON() as OMPUTPayload;
+    expect(failedPayload).toMatchObject({
+        soeknadId: applicationIdFor(scenario.kind),
+        fravaersperioder: expect.arrayContaining([
+            expect.objectContaining({
+                periode: { fom: ABSENCE_START, tom: ABSENCE_END },
+                faktiskTidPrDag: '6',
+                normalArbeidstidPrDag: '7',
+            }),
+        ]),
+    });
+    await expect(page.getByText('Det oppsto en feil under lagring av endringer.', { exact: true })).toBeVisible();
+    await expect(page.getByText('Lagring feilet', { exact: true })).toBeVisible();
+    await expect(page.getByLabel('Timer fravær per dag')).toHaveValue('6');
+    await expect(page.getByLabel('Normal arbeidstid per dag')).toHaveValue('7');
+    await expect(page.getByLabel('Fra og med').last()).toHaveValue('01.10.2022');
+    expect(await readSavedApplication(page, scenario.kind)).toEqual(previouslySaved);
+    expect(submitRequests).toHaveLength(0);
+
+    const recoveredSavePromise = page.waitForResponse((response) => {
+        if (!isResponse(response, 'PUT', ApiPath.OMP_UT_SOKNAD_UPDATE)) return false;
+        const payload = response.request().postDataJSON() as OMPUTPayload;
+        return (
+            payload.soeknadId === applicationIdFor(scenario.kind) &&
+            payload.fravaersperioder?.some(
+                (period) => period.faktiskTidPrDag === '6' && period.normalArbeidstidPrDag === '8',
+            ) === true
+        );
+    });
+    await page.getByLabel('Normal arbeidstid per dag').fill('8');
+    await page.getByLabel('Normal arbeidstid per dag').press('Tab');
+
+    const recoveredSave = await recoveredSavePromise;
+    expect(recoveredSave.status()).toBe(200);
+    expect(recoveredSave.fromServiceWorker()).toBe(true);
+    expect(recoveredSave.request().method()).toBe('PUT');
+    expect(new URL(recoveredSave.url()).pathname).toBe(ApiPath.OMP_UT_SOKNAD_UPDATE);
+    const recoveredPayload = recoveredSave.request().postDataJSON() as OMPUTPayload;
+    expect(recoveredPayload).toMatchObject({
+        soeknadId: applicationIdFor(scenario.kind),
+        fravaersperioder: expect.arrayContaining([
+            expect.objectContaining({
+                periode: { fom: ABSENCE_START, tom: ABSENCE_END },
+                faktiskTidPrDag: '6',
+                normalArbeidstidPrDag: '8',
+            }),
+        ]),
+    });
+    expect(await recoveredSave.json()).toEqual(recoveredPayload);
+    await expect(page.getByText('Det oppsto en feil under lagring av endringer.', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Lagring feilet', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Lagret', { exact: true })).toBeVisible();
+    await expect(page.getByLabel('Timer fravær per dag')).toHaveValue('6');
+    await expect(page.getByLabel('Normal arbeidstid per dag')).toHaveValue('8');
+    await expect(page.getByLabel('Fra og med').last()).toHaveValue('01.10.2022');
+    expect(await readSavedApplication(page, scenario.kind)).toEqual(recoveredPayload);
     expect(submitRequests).toHaveLength(0);
 });
