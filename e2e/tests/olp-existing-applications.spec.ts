@@ -291,11 +291,16 @@ const reachRegistrationChoice = async (page: Page, scenario: Scenario) => {
 
     const dialog = page.locator('[data-test-id="klassifiserModal"]');
     await expect(dialog.getByText('Saksnummer:', { exact: true })).toBeVisible();
-    const classifyResponsePromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'POST', ApiPath.JOURNALPOST_MOTTAK),
-    );
-    const refreshResponsePromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'GET', journalpostPath),
+    let classificationResponded = false;
+    const classifyResponsePromise = page.waitForResponse((response) => {
+        if (!isApiResponse(response, 'POST', ApiPath.JOURNALPOST_MOTTAK)) return false;
+        classificationResponded = true;
+        return true;
+    });
+    const refreshRequestPromise = page.waitForRequest((request) =>
+        classificationResponded &&
+        request.method() === 'GET' &&
+        new URL(request.url()).pathname === journalpostPath,
     );
     await dialog.getByRole('button', { name: 'Journalfør journalposten' }).click();
 
@@ -311,7 +316,8 @@ const reachRegistrationChoice = async (page: Page, scenario: Scenario) => {
         saksnummer: SAK_ID,
     });
 
-    const refreshResponse = await refreshResponsePromise;
+    const refreshResponse = await (await refreshRequestPromise).response();
+    if (!refreshResponse) throw new Error('Oppfrisking av journalposten mangler svar.');
     expect(refreshResponse.status()).toBe(200);
     expect(refreshResponse.fromServiceWorker()).toBe(true);
     expect(await refreshResponse.json()).toEqual(journalpostEtterJournalføring);
