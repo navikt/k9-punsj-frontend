@@ -50,6 +50,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — OMPKS-skjema, validering og innsending
+
+- La til isolerte Playwright-reiser for lagring, bekreftet innsending og syntetisk valideringsavslag gjennom journalpost og skjema. Testene leser lagret utkast etter PUT og vellykket validering; send-kvitteringen bygges fra utkastet.
+- MSW modellerer backendens separate lagring og bevarer entitetens saksnummer ved GET. Testene kjører ikke backend og verifiserer ikke faktisk persistens. Valideringsheaderen inneholder fortsatt søknads-ID i frontend.
+
 #### 2026-11-24 — OLP-skjema, validering og innsending
 
 - La til to isolerte Playwright-reiser gjennom journalpostklassifisering og OLP-skjema: bekreftet innsending og backendavslag med beholdte verdier uten innsending.

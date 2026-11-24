@@ -140,6 +140,19 @@ The table's informational alert may still say that a new registration is unavail
 | Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
 | Create from an empty list | Adds OMPKS-specific empty-list coverage: verifies the successful lookup response precedes one create POST, checks the same payload, full 201 application DTO and matching form GET, and verifies the visible form. |
 
+## OMPKS form saving and submission
+
+`ompks-punch-form.spec.ts` covers two B49 journeys through journalpost classification and the real form. Scenario-local MSW handlers are installed before classification and application requests; the refresh GET must start after the classification response.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Confirmed submission | Checks the create body, full initial DTO and matching GET; saves date, time and both flags; reads the stored draft after PUT and successful validation; checks the review, confirmation, send body and applicant header, receipt and **Tilbake til LOS**. |
+| Validation rejection | Returns a synthetic 400 `SøknadFeil` for otherwise valid values, verifies that the changed time remains visible while GET still returns the previously saved time, and checks no send. The matching PUT is held until after the readback and released independently in a `finally` block. A third time exercises interim validation after the send attempt. |
+
+The MSW store models PUT and successful validation as separate updates, keeps journalposts and the entity's case number separately, and builds the send receipt from the stored draft. In the successful journey, the final time edit triggers a PUT held until send; the readback and send receipt therefore verify the newer value persisted by validation, independently of that PUT. GET restores the entity's case number, as `tilOmsKSBvisning` does. The public backend service, routes, DTO, mapper and `MappeService` show these paths, including validation against stored journalposts and the mapper's child, flags and `kroniskEllerFunksjonshemming: true`. The initial date and time are modeled. These tests do not verify backend runtime validation or persistence.
+
+Existing frontend gap: validation sends the application ID in `X-Nav-NorskIdent`, while send uses the applicant ID. The test checks the validation body and send header without requiring the incorrect validation header. Production code, Cypress and shared fixtures remain unchanged.
+
 ## OMPMA existing applications
 
 `ompma-existing-applications.spec.ts` uses `jpOMPMA304.json` and the OMPMA case with a related person at `fagsaker.json[18]`. Page-local responses use `{ søker, fagsakTypeKode: "OMP_MA", søknader }` and the OMPMA create contract `{ journalpostId, norskIdent, annenPart, barn: [], k9saksnummer }`; shared mocks and existing OMPMA Fordeling Cypress coverage remain unchanged.
