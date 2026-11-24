@@ -203,7 +203,7 @@ The signature choice **Ikke relevant** is exercised as in the old scenario, but 
 
 These are frontend contract tests with MSW; they do not exercise backend persistence. Save uses `PUT /omsorgspenger-soknad/oppdater` (200), validation uses `POST /omsorgspenger-soknad/valider` (202 K9 DTO or 400 `SøknadFeil`), and send uses `POST /omsorgspenger-soknad/send` (202 K9 DTO). The send mock builds its receipt from the last successful save, not the validation request.
 
-The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/fordeling/KorrigeringIM.cy.js`, lines 56–234, using the existing synthetic cases and page-local MSW:
+The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/fordeling/KorrigeringIM.cy.js`, lines 56–234 at commit `8d83f000`, using the existing synthetic cases and page-local MSW:
 
 | Cypress assertions | Playwright coverage |
 | --- | --- |
@@ -211,7 +211,9 @@ The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/for
 | Ordinary Fortsett and Vent modals, lines 85–145 | The form journey checks and cancels Fortsett before reopening it to continue. The focused Vent test checks and cancels Vent without executing it. |
 | Reserved case selection and both modals, lines 146–234 | The reserved-case test checks the selected case, treatment year, absent K9 link, journalpost panel and enabled actions, then opens and cancels Fortsett and Vent. |
 
-All four modal variants check the heading, case type, applicant, case number, period, immutable-information warning, absent LOS action and enabled confirm/cancel buttons. Cancellation retains the selected case and available actions on Fordeling without classification, treatment-year, hold or application writes. Cypress remains unchanged. New-case year gating, applicant switching and two-applicant flows are deferred.
+All four modal variants check the heading, case type, applicant, case number, period, immutable-information warning, absent LOS action and enabled confirm/cancel buttons. Cancellation retains the selected case and available actions on Fordeling without classification, treatment-year, hold or application writes.
+
+The four Cypress blocks that open and cancel Fortsett and Vent for ordinary and reserved cases have been removed. Both case-selection blocks remain: the suite uses `testIsolation: false`, and the later new-case scenario depends on the selected reserved case. All other Cypress scenarios remain unchanged, including new-case year gating, applicant switching and two-applicant flows; their Playwright migration is deferred.
 
 ## OMPUT existing applications
 
