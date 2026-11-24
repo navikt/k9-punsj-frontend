@@ -68,6 +68,11 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — Fullførte Korrigering IM Fordeling
+
+- Kartla de sju gjenværende Cypress-kontrollene mot Playwright. Papirreisen kontrollerer nå skjuling av dokumentpanelet, dokumentvalg, oppsummering, to-søkerfelt og deaktiverte handlinger før søker bekreftes.
+- Fjernet bare `KorrigeringIM.cy.js` etter at begge berørte Playwright-filer bestod med 21 tester. Eksisterende dekning av ordinær og reservert sak og delte fixtures er beholdt.
+
 #### 2026-11-24 — Korrigering IM med to søkere
 
 - Migrerte årsvalg og avbrudd av Fortsett og Vent for to søkere til Playwright. Fjernet den erstattede Cypress-gruppen og beholdt de øvrige kontrollene.

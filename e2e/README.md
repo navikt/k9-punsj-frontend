@@ -213,7 +213,7 @@ The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/for
 
 All four modal variants check the heading, case type, applicant, case number, period, immutable-information warning, absent LOS action and enabled confirm/cancel buttons. Cancellation retains the selected case and available actions on Fordeling without classification, treatment-year, hold or application writes.
 
-The four Cypress blocks that open and cancel Fortsett and Vent for ordinary and reserved cases have been removed. Both case-selection blocks remain.
+The four Cypress blocks that open and cancel Fortsett and Vent for ordinary and reserved cases were removed first. Both case-selection blocks remained until the [remaining Korrigering IM Fordeling checks](#remaining-korrigering-im-fordeling-checks) below.
 
 The same spec also replaces these checks from `cypress/e2e/fordeling/KorrigeringIM.cy.js` at commit `aeb6a424`:
 
@@ -234,7 +234,7 @@ The applicant-switch journey replaces the following blocks from `cypress/e2e/for
 | 127: New applicant | An applicant-scoped MSW lookup returns a different case; the panel shows the new ID, reservation remains checked, case selection is disabled and both actions are enabled. The previously selected free year remains selected and is free for both applicants. |
 | 142 and 171: Fortsett and Vent without a case | Both dialogs verify the new applicant, case type, headings, warning, absent case number, period and LOS action, and enabled buttons with distinct action labels. Cancelling returns to Fordeling without API writes. |
 
-The four replaced checks and their preparation block were removed from Cypress; the initial, ordinary and reserved case-selection checks remain. The lookup and cancellation checks exercise the frontend with page-local MSW, not backend persistence.
+The four replaced checks and their preparation block were removed from Cypress; the initial, ordinary and reserved case-selection checks remained until the [remaining Korrigering IM Fordeling checks](#remaining-korrigering-im-fordeling-checks) below. The lookup and cancellation checks exercise the frontend with page-local MSW, not backend persistence.
 
 The two-applicant journey replaces the separate describe in `cypress/e2e/fordeling/KorrigeringIM.cy.js` at commit `b98f337a`:
 
@@ -245,6 +245,20 @@ The two-applicant journey replaces the separate describe in `cypress/e2e/fordeli
 | 145 and 174: Fortsett and Vent modals | Each checks the primary applicant, case type, absent case number and period, warning, heading, confirm label, enabled buttons and absent LOS action. Cancellation retains both applicants and the selected year without classification, hold, copy, year or application writes. The Vent title mentions a child, but its assertions do not select one. |
 
 The replaced two-applicant describe was removed after Playwright passed. The test verifies frontend behavior, not backend persistence; neither action is executed.
+
+### Remaining Korrigering IM Fordeling checks
+
+The seven remaining blocks in `cypress/e2e/fordeling/KorrigeringIM.cy.js` at baseline `8a268483` are now replaced. The spec was removed only after both affected Playwright specs passed (21 tests). Shared fixtures and other Cypress specs are unchanged.
+
+| Cypress block at `8a268483` | Exact Playwright coverage |
+| --- | --- |
+| 13: Open paper journalpost and select correction | `korrigering-im-punch-form.spec.ts`, `avbryter Fortsett og Vent for korrigering av inntektsmelding med to søkere og ny sak`: opens `jpOMPUT305` through `/journalpost/:id`, checks the 201 MSW response and full fixture, asserts the PDF is visible, clicks **Skjul** and asserts it is hidden, then checks the correction radio is selected. `fordeling-entry.spec.ts`, `viser underalternativer og velger korrigering av inntektsmelding`, also checks the correction suboption appears after selecting Omsorgspenger and becomes checked. |
+| 19: Journalpost summary | The same paper journey checks visible labels **Journalpostnummer:**, **Søkers ID:** and **Sakstype:** with their exact fixture values and **Omsorgspenger** in each field, before confirming the applicant. |
+| 30: Four document categories | The same paper journey checks the **Dette gjelder:** heading and visible radios **Pleiepenger sykt barn**, **Omsorgspenger/omsorgsdager**, **Pleiepenger i livets sluttfase** and **Annet**. |
+| 38: Two-applicant checkbox | The same paper journey checks **Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)** is visible and unchecked before confirming the applicant, then exercises it later. |
+| 42: Initially disabled actions | The same paper journey calls `expectFordelingActions(page, false)` before checking **Ja**, asserting both Fortsett and Vent are disabled. |
+| 47: Confirm applicant and select ordinary case | `korrigering-im-punch-form.spec.ts`, `avbryter Vent for ordinær sak i fordeling av korrigering av inntektsmelding`: `openCorrectionFordeling` checks the applicant-scoped lookup, 200 MSW response and exact case list; `expectSelectedCase` asserts the selected ordinary case ID, treatment year, visible K9 link whose href contains that ID, exact summary fields including case number, and both enabled actions. |
+| 76: Select reserved case | `korrigering-im-punch-form.spec.ts`, `viser reservert sak og avbryter Fortsett og Vent i fordeling av korrigering av inntektsmelding`: the same lookup checks and `expectSelectedCase` assert the reserved case ID, treatment year, no K9 link, exact summary fields including case number, and both enabled actions. |
 
 ## OMPUT existing applications
 

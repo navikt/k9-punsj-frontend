@@ -885,6 +885,11 @@ test('avbryter Fortsett og Vent for korrigering av inntektsmelding med to søker
     expect(journalpostResponse.fromServiceWorker()).toBe(true);
     expect(await journalpostResponse.json()).toEqual(papirJournalpost);
 
+    const pdf = page.getByTitle('pdf');
+    await expect(pdf).toBeVisible();
+    await page.getByRole('button', { name: 'Skjul', exact: true }).click();
+    await expect(pdf).toBeHidden();
+
     const occupiedYear = await page.evaluate(() => new Date().getFullYear());
     const cases = [{ ...ORDINÆR_SAK, behandlingsår: occupiedYear }];
     await page.evaluate(({ casePath, personPath, primaryId, secondId, saker }) => {
@@ -920,7 +925,30 @@ test('avbryter Fortsett og Vent for korrigering av inntektsmelding med to søker
     });
 
     await page.getByRole('radio', { name: 'Omsorgspenger/omsorgsdager', exact: true }).check();
-    await page.getByRole('radio', { name: 'Korrigering av inntektsmelding omsorgspenger AG', exact: true }).check();
+    const correction = page.getByRole('radio', { name: 'Korrigering av inntektsmelding omsorgspenger AG', exact: true });
+    await correction.check();
+    await expect(correction).toBeChecked();
+
+    await expect(page.getByRole('heading', { name: 'Dette gjelder:', exact: true })).toBeVisible();
+    for (const name of ['Pleiepenger sykt barn', 'Omsorgspenger/omsorgsdager', 'Pleiepenger i livets sluttfase', 'Annet']) {
+        await expect(page.getByRole('radio', { name, exact: true })).toBeVisible();
+    }
+
+    const panel = page.locator('.journalpostpanel');
+    for (const [label, value] of [
+        ['Journalpostnummer:', papirJournalpost.journalpostId],
+        ['Søkers ID:', papirJournalpost.norskIdent],
+        ['Sakstype:', 'Omsorgspenger'],
+    ]) {
+        const field = panel.getByText(label, { exact: true });
+        await expect(field).toBeVisible();
+        await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
+    }
+    const twoApplicants = page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)');
+    await expect(twoApplicants).toBeVisible();
+    await expect(twoApplicants).not.toBeChecked();
+    await expectFordelingActions(page, false);
+
     const caseLookup = page.waitForResponse((response) =>
         isApiResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
         response.request().headers()['x-nav-norskident'] === papirJournalpost.norskIdent,
@@ -931,10 +959,8 @@ test('avbryter Fortsett og Vent for korrigering av inntektsmelding med to søker
     expect(caseResponse.fromServiceWorker()).toBe(true);
     expect(await caseResponse.json()).toEqual(cases);
 
-    const twoApplicants = page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)');
     const secondApplicant = page.getByLabel('Fødselsnummer annen søker:');
     const reserveCase = page.getByLabel('Reserver saksnummer til ny fagsak');
-    const panel = page.locator('.journalpostpanel');
     await expect(panel).toContainText(papirJournalpost.norskIdent);
     await twoApplicants.check();
     await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
