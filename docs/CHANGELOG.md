@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Verifiserte PSB-autosave etter omlasting (2026-11-24)
+
+- B53 verifiserer at PSB-formen etter en reell omlasting henter og viser DTO-en fra vellykket PUT. Testen isolerer MSW-snapshot i sidens `sessionStorage` og kontrollerer at lagringen ikke validerer eller sender søknaden. Dette beviser ikke backend-persistens eller rekkefølgen backend skriver endringer.
+- Validering: `yarn test:pw e2e/tests/psb-punch-form.spec.ts` bestod med 6 tester; `yarn lint`, `git diff --check` og whitespace-kontrollen av task-filen bestod. `sif-code-scan` kjøres i CI.
+
 ### Migrerte bekreftet innsending og retry for OMPUT og PSB (2026-11-24)
 
 - Playwright-reisene dekker 500 etter bekreftelse, reell retry gjennom skjemaets gjennomgang, identisk innsending på nytt og kvittering etter 202.

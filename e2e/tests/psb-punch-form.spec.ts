@@ -345,6 +345,118 @@ test('sender inn PSB-søknaden på nytt etter midlertidig sendefeil', async ({ p
     await expect(page.getByTestId('mottakelsesdato')).toContainText(REDIGERT_DATO);
 });
 
+test('beholder endret PSB-utkast etter omlasting', async ({ page }) => {
+    const applicationPath = ApiPath.PSB_SOKNAD_GET.replace('{id}', SØKNAD_ID);
+    const storageKey = `psb-save-reload:${SØKNAD_ID}`;
+    const validationAndSubmissionRequests: string[] = [];
+    page.on('request', (request) => {
+        const path = new URL(request.url()).pathname;
+        if (
+            request.method() === 'POST' &&
+            (path === ApiPath.PSB_SOKNAD_VALIDER || path === ApiPath.PSB_SOKNAD_SUBMIT)
+        ) {
+            validationAndSubmissionRequests.push(`${request.method()} ${path}`);
+        }
+    });
+
+    await page.addInitScript(
+        ({ applicationPath: getPath, updatePath, applicationId, applicantId, storageKey: key, application }) => {
+            Object.defineProperty(window, 'msw', {
+                configurable: true,
+                set(msw: NonNullable<Window['msw']>) {
+                    Object.defineProperty(window, 'msw', {
+                        configurable: true,
+                        value: msw,
+                        writable: true,
+                    });
+                    msw.worker.use(
+                        msw.http.get(getPath, () => {
+                            const savedApplication = window.sessionStorage.getItem(key);
+                            return msw.HttpResponse.json(
+                                savedApplication ? JSON.parse(savedApplication) : application,
+                                { status: 200 },
+                            );
+                        }),
+                        msw.http.put(updatePath, async ({ request }) => {
+                            const savedApplication = await request.json();
+                            if (
+                                !savedApplication ||
+                                typeof savedApplication !== 'object' ||
+                                Array.isArray(savedApplication) ||
+                                !('soeknadId' in savedApplication) ||
+                                !('soekerId' in savedApplication) ||
+                                savedApplication.soeknadId !== applicationId ||
+                                savedApplication.soekerId !== applicantId
+                            ) {
+                                return msw.HttpResponse.json({ feil: 'Ugyldige søknads-ID-er' }, { status: 400 });
+                            }
+                            window.sessionStorage.setItem(key, JSON.stringify(savedApplication));
+                            return msw.HttpResponse.json(savedApplication, { status: 200 });
+                        }),
+                    );
+                },
+            });
+        },
+        {
+            applicationPath,
+            updatePath: ApiPath.PSB_SOKNAD_UPDATE,
+            applicationId: SØKNAD_ID,
+            applicantId: SØKER_ID,
+            storageKey,
+            application: pleiepengerSoknadSomKanSendesInn,
+        },
+    );
+
+    const initialGetPromise = page.waitForResponse((response) =>
+        isResponse(response, 'GET', applicationPath),
+    );
+    await page.goto(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/skjema/${SØKNAD_ID}`);
+    const initialGet = await initialGetPromise;
+    expect(initialGet.status()).toBe(200);
+    expect(initialGet.fromServiceWorker()).toBe(true);
+    expect(await initialGet.json()).toEqual(pleiepengerSoknadSomKanSendesInn);
+
+    const receivedDate = page.getByTestId('mottattDato');
+    await expect(receivedDate).toHaveValue(OPPRINNELIG_DATO);
+    await expect(page.getByLabel('Mottatt klokkeslett')).toHaveValue('12:53');
+
+    const savedResponsePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.PSB_SOKNAD_UPDATE) &&
+            response.request().postDataJSON().soeknadId === SØKNAD_ID &&
+            response.request().postDataJSON().mottattDato === REDIGERT_DATO_ISO,
+    );
+    await receivedDate.fill(REDIGERT_DATO);
+    await receivedDate.press('Tab');
+    const savedResponse = await savedResponsePromise;
+    expect(savedResponse.status()).toBe(200);
+    expect(savedResponse.fromServiceWorker()).toBe(true);
+    const savedPayload = savedResponse.request().postDataJSON();
+    expect(savedPayload).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        soekerId: SØKER_ID,
+        journalposter: [JOURNALPOST_ID],
+        mottattDato: REDIGERT_DATO_ISO,
+    });
+    expect(await savedResponse.json()).toEqual(savedPayload);
+    await expect(receivedDate).toHaveValue(REDIGERT_DATO);
+    await expect(page.getByText('Lagret', { exact: true })).toBeVisible();
+
+    const reloadedGetPromise = page.waitForResponse((response) =>
+        isResponse(response, 'GET', applicationPath),
+    );
+    await page.reload();
+    const reloadedGet = await reloadedGetPromise;
+    expect(reloadedGet.request().method()).toBe('GET');
+    expect(new URL(reloadedGet.url()).pathname).toBe(applicationPath);
+    expect(reloadedGet.status()).toBe(200);
+    expect(reloadedGet.fromServiceWorker()).toBe(true);
+    const reloadedDraft = await reloadedGet.json();
+    expect(reloadedDraft).toEqual(savedPayload);
+    await expect(page.getByTestId('mottattDato')).toHaveValue(REDIGERT_DATO);
+    expect(validationAndSubmissionRequests).toEqual([]);
+});
+
 test('beholder PSB-endringer ved lagringsfeil og lagrer dem ved neste endring', async ({ page }) => {
     const applicationPath = ApiPath.PSB_SOKNAD_GET.replace('{id}', SØKNAD_ID);
     const submissionRequests: string[] = [];
