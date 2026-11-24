@@ -1,6 +1,7 @@
 import { PunchFormActionKeys } from 'app/models/enums';
 import { IPunchPSBFormState } from 'app/models/types';
 import { IPunchFormActionTypes } from 'app/state/actions/PSBPunchFormActions';
+import { RESET_ALL } from 'app/state/actions/GlobalActions';
 
 const initialState: IPunchPSBFormState = {
     isSoknadLoading: false,
@@ -18,12 +19,16 @@ export function PunchFormReducer(
 ): IPunchPSBFormState {
     switch (action.type) {
         case PunchFormActionKeys.RESET:
+        case RESET_ALL:
             return initialState;
 
         case PunchFormActionKeys.SOKNAD_LOAD:
             return {
                 ...punchFormState,
                 isSoknadLoading: true,
+                updateRequestId: undefined,
+                isAwaitingUpdateResponse: undefined,
+                updateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_REQUEST_ERROR:
@@ -45,6 +50,9 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isSoknadLoading: false,
                 soknad: undefined,
+                updateRequestId: undefined,
+                isAwaitingUpdateResponse: undefined,
+                updateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_REQUEST:
@@ -52,16 +60,24 @@ export function PunchFormReducer(
                 ...punchFormState,
                 isAwaitingUpdateResponse: true,
                 updateSoknadError: undefined,
+                updateRequestId: action.requestId,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_SUCCESS:
+            if (action.requestId && action.requestId !== punchFormState.updateRequestId) {
+                return punchFormState;
+            }
             return {
                 ...punchFormState,
+                ...(action.soknad ? { soknad: action.soknad, isSoknadLoading: false } : {}),
                 isAwaitingUpdateResponse: false,
                 updateSoknadError: undefined,
             };
 
         case PunchFormActionKeys.SOKNAD_UPDATE_ERROR:
+            if (action.requestId && action.requestId !== punchFormState.updateRequestId) {
+                return punchFormState;
+            }
             return {
                 ...punchFormState,
                 isAwaitingUpdateResponse: false,

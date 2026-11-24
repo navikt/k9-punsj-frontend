@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 
-import { cloneDeep, set } from 'lodash';
+import { cloneDeep, isEqual, set } from 'lodash';
 
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -138,7 +138,7 @@ export interface IPunchFormDispatchProps {
     hentPerioder: (søkerId: string, pleietrengendeId: string, saksnummer: string) => void;
     resetSoknadAction: () => void;
     undoChoiceOfEksisterendeSoknadAction: () => void;
-    updateSoknad: (soknad: Partial<IPSBSoknadUt>) => void;
+    updateSoknad: (soknad: Partial<IPSBSoknadUt>, onSaved?: (savedSoknad: IPSBSoknadUt) => void) => void;
     submitSoknad: (ident: string, soeknadid: string) => void;
     resetPunchFormAction: () => void;
     resetAllStateAction: () => void;
@@ -183,6 +183,14 @@ type IPunchFormProps = IPunchFormComponentProps & IntlProps & IPunchFormStatePro
 
 export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchFormComponentState> {
     private harHentetPerioder = false;
+
+    private soknadEndringer: Partial<IPSBSoknad> = {};
+
+    private lagretSoknad?: IPSBSoknadUt;
+
+    private lagringsnummer = 0;
+
+    private sisteBekreftedeLagring = 0;
 
     private initialPeriode: IPeriode = { fom: '', tom: '' };
 
@@ -672,7 +680,8 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
         this.updateSoknad({ harInfoSomIkkeKanPunsjes: !!checked });
     };
 
-    private getSoknadFromStore = () => new PSBSoknadUt(this.props.punchFormState.soknad as IPSBSoknadUt);
+    private getSoknadFromStore = () =>
+        new PSBSoknadUt(this.lagretSoknad || (this.props.punchFormState.soknad as IPSBSoknadUt));
 
     private getManglerFromStore = () => this.props.punchFormState.inputErrors;
 
@@ -1056,7 +1065,7 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
     private updateSoknad = (soknad: Partial<IPSBSoknad>) => {
         this.setState({ showStatus: true });
         const navarandeSoknad: PSBSoknadUt = this.getSoknadFromStore();
-        const navarandeSoknadRaw: IPSBSoknadUt = this.props.punchFormState.soknad as IPSBSoknadUt;
+        const navarandeSoknadRaw = this.lagretSoknad || (this.props.punchFormState.soknad as IPSBSoknadUt);
         const journalposter = Array.from(navarandeSoknad?.journalposter ? navarandeSoknad?.journalposter : []);
 
         if (!journalposter.includes(this.props.journalpostid)) {
@@ -1107,7 +1116,11 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             }
         }
 
-        const soknadForValidering = { ...this.getSoknadFromStore(), ...soknad, journalposter };
+        this.updateSoknadState(soknad, true);
+        this.soknadEndringer = { ...this.soknadEndringer, ...cloneDeep(soknad) };
+        const sendteEndringer = cloneDeep(this.soknadEndringer);
+        const lagringsnummer = ++this.lagringsnummer;
+        const soknadForValidering = { ...this.getSoknadFromStore(), ...this.soknadEndringer, journalposter };
         const frilanser = soknadForValidering.opptjeningAktivitet?.frilanser;
 
         if (
@@ -1117,7 +1130,18 @@ export class PunchFormComponent extends React.Component<IPunchFormProps, IPunchF
             this.props.validateSoknad(soknadForValidering, true);
         }
 
-        return this.props.updateSoknad(soknadForValidering);
+        return this.props.updateSoknad(soknadForValidering, (savedSoknad) => {
+            if (lagringsnummer < this.sisteBekreftedeLagring) {
+                return;
+            }
+            this.sisteBekreftedeLagring = lagringsnummer;
+            this.lagretSoknad = savedSoknad;
+            for (const felt of Object.keys(sendteEndringer) as (keyof IPSBSoknad)[]) {
+                if (isEqual(this.soknadEndringer[felt], sendteEndringer[felt])) {
+                    delete this.soknadEndringer[felt];
+                }
+            }
+        });
     };
 
     private handleStartButtonClick = () => {
@@ -1759,7 +1783,7 @@ const mapDispatchToProps = (dispatch: any): IPunchFormDispatchProps => ({
         dispatch(hentEksisterendePerioderForSaksnummer(søkerId, pleietrengendeId, saksnummer)),
     resetSoknadAction: () => dispatch(resetSoknadAction()),
     undoChoiceOfEksisterendeSoknadAction: () => dispatch(undoChoiceOfEksisterendeSoknadAction()),
-    updateSoknad: (soknad: Partial<IPSBSoknadUt>) => dispatch(updateSoknad(soknad)),
+    updateSoknad: (soknad, onSaved) => dispatch(updateSoknad(soknad, onSaved)),
     submitSoknad: (ident: string, soeknadid: string) => dispatch(submitSoknad(ident, soeknadid)),
     resetPunchFormAction: () => dispatch(resetPunchFormAction()),
     resetAllStateAction: () => dispatch(resetAllStateAction()),
