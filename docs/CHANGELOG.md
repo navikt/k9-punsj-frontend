@@ -2,6 +2,14 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Beholdt ulagrede PSB-endringer ved autosave (2026-11-24)
+
+- Neste autosave beholder bare patcher som er sendt til lagring. Lokal aktivering av arbeidsforhold følger ikke med i urelaterte lagringer. PUT 200 kvitterer sendte verdier, mens nyere patcher beholdes og eldre kvitteringer ikke erstatter den siste lagrede basen.
+- Request-ID hindrer eldre PUT 200/500 i å erstatte nyere Redux-snapshot eller lagringsstatus, også når JSON-lesingen fullføres senere. Snapshot og status oppdateres samlet. Dette sikrer klienttilstanden, ikke rekkefølgen på skriving i backend.
+- Nullstilling av søknad/skjema, global reset og start av innlasting ugyldiggjør forrige lagring og fjerner lagringsstatus og feil.
+- Tester med produksjonens root reducer dekker eldre svar etter nyere PUT 200, etter reset og under/etter innlasting av en annen søknad. Komponenttestene beholder dekning av lokale frilanserfelter, payloadfelter og kvitteringer i feil rekkefølge. B51-reisen krever fortsatt begge endringene i gjenopprettingspayload og lagret utkast, men låser ikke antall PUT-kall.
+- Validering: `yarn test:pw e2e/tests/psb-punch-form.spec.ts` bestod med 4 tester; `yarn test src/test/containers/pleiepenger/PSBPunchForm.spec.tsx src/test/state/actions/PSBPunchFormActions.spec.ts` bestod med 69 tester; `yarn lint`, `git diff --check` og whitespace-kontrollen av task-filen bestod.
+
 ### Oppdaterte Playwright-veiledningen for agenter (2026-11-20)
 
 - Playwright-skillen viser til prosjektets eksisterende testoppsett, kjørekommandoer og PR-workflow.
@@ -49,6 +57,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til `http://` i backend-adressen for dev, slik at proxyen sender API-stien uten tjenestenavnet som prefiks.
 
 ### Migrering fra Cypress til Playwright og komponenttester
+
+#### 2026-11-24 — PSB autosavefeil og gjenoppretting
+
+- La til en isolert Playwright-reise som verifiserer PUT 500, synlig feil, beholdte inputverdier og uendret utkast ved GET. Reisen avdekket en produksjonsfeil som ble rettet separat: neste PUT 200 og lagret utkast beholder nå både dato- og klokkeslettendringen.
 
 #### 2026-11-24 — OMPUT autosavefeil og gjenoppretting
 

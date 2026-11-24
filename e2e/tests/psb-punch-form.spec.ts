@@ -12,6 +12,9 @@ const SØKER_ID = pleiepengerSoknadSomKanSendesInn.soekerId;
 const OPPRINNELIG_DATO = '12.10.2024';
 const REDIGERT_DATO = '14.03.2020';
 const REDIGERT_DATO_ISO = '2020-03-14';
+const FEIL_DATO = '15.03.2020';
+const FEIL_DATO_ISO = '2020-03-15';
+const GJENOPPRETTET_KLOKKESLETT = '13:15';
 
 const isResponse = (response: import('@playwright/test').Response, method: string, path: string) =>
     response.request().method() === method && new URL(response.url()).pathname === path;
@@ -137,6 +140,141 @@ test('lagrer og sender inn endret mottaksdato i PSB-skjemaet', async ({ page }) 
     await expect(page.getByText('Oppsummering', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /tilbake til los/i })).toBeVisible();
     await expect(page.getByTestId('mottakelsesdato')).toContainText(REDIGERT_DATO);
+});
+
+test('beholder PSB-endringer ved lagringsfeil og lagrer dem ved neste endring', async ({ page }) => {
+    const applicationPath = ApiPath.PSB_SOKNAD_GET.replace('{id}', SØKNAD_ID);
+    const submissionRequests: string[] = [];
+    page.on('request', (request) => {
+        const path = new URL(request.url()).pathname;
+        if (
+            request.method() === 'POST' &&
+            (path === ApiPath.PSB_SOKNAD_VALIDER || path === ApiPath.PSB_SOKNAD_SUBMIT)
+        ) {
+            submissionRequests.push(`${request.method()} ${path}`);
+        }
+    });
+
+    const applicationResponsePromise = page.waitForResponse((response) =>
+        isResponse(response, 'GET', applicationPath),
+    );
+    await page.goto(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/skjema/${SØKNAD_ID}`);
+    const applicationResponse = await applicationResponsePromise;
+    expect(applicationResponse.status()).toBe(200);
+    expect(applicationResponse.fromServiceWorker()).toBe(true);
+    expect(await applicationResponse.json()).toEqual(pleiepengerSoknadSomKanSendesInn);
+    const receivedDate = page.getByTestId('mottattDato');
+    const receivedTime = page.getByLabel('Mottatt klokkeslett');
+    await expect(receivedDate).toHaveValue(OPPRINNELIG_DATO);
+    await expect(receivedTime).toHaveValue('12:53');
+
+    await page.evaluate(
+        ({ updatePath, applicationPath: getPath, applicationId, initialApplication, failedDate }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            let savedApplication = initialApplication;
+            let failureReturned = false;
+            msw.worker.use(
+                msw.http.put(updatePath, async ({ request }) => {
+                    const application = (await request.json()) as typeof initialApplication;
+                    if (application.soeknadId !== applicationId) {
+                        return msw.HttpResponse.json({ feil: 'Ugyldig søknads-ID' }, { status: 400 });
+                    }
+                    if (!failureReturned && application.mottattDato === failedDate) {
+                        failureReturned = true;
+                        return msw.HttpResponse.json({ feil: 'Syntetisk lagringsfeil' }, { status: 500 });
+                    }
+                    savedApplication = application;
+                    return msw.HttpResponse.json(savedApplication, { status: 200 });
+                }),
+                msw.http.get(getPath, () => msw.HttpResponse.json(savedApplication, { status: 200 })),
+            );
+        },
+        {
+            updatePath: ApiPath.PSB_SOKNAD_UPDATE,
+            applicationPath,
+            applicationId: SØKNAD_ID,
+            initialApplication: pleiepengerSoknadSomKanSendesInn,
+            failedDate: FEIL_DATO_ISO,
+        },
+    );
+
+    const readSavedApplication = async () => {
+        const responsePromise = page.waitForResponse((response) =>
+            isResponse(response, 'GET', applicationPath),
+        );
+        await page.evaluate(async ({ path, applicantId }) => {
+            const response = await fetch(path, { headers: { 'X-Nav-NorskIdent': applicantId } });
+            if (!response.ok) throw new Error(`Lesing av lagret PSB-utkast feilet: ${response.status}`);
+            await response.json();
+        }, { path: applicationPath, applicantId: SØKER_ID });
+        const response = await responsePromise;
+        expect(response.status()).toBe(200);
+        expect(response.fromServiceWorker()).toBe(true);
+        return response.json();
+    };
+
+    expect(await readSavedApplication()).toEqual(pleiepengerSoknadSomKanSendesInn);
+
+    const failedSavePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.PSB_SOKNAD_UPDATE) &&
+            response.request().postDataJSON().soeknadId === SØKNAD_ID &&
+            response.request().postDataJSON().mottattDato === FEIL_DATO_ISO,
+    );
+    await receivedDate.fill(FEIL_DATO);
+    await receivedDate.press('Tab');
+
+    const failedSave = await failedSavePromise;
+    expect(failedSave.status()).toBe(500);
+    expect(failedSave.fromServiceWorker()).toBe(true);
+    expect(failedSave.request().method()).toBe('PUT');
+    expect(new URL(failedSave.url()).pathname).toBe(ApiPath.PSB_SOKNAD_UPDATE);
+    expect(failedSave.request().postDataJSON()).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        soekerId: SØKER_ID,
+        mottattDato: FEIL_DATO_ISO,
+        klokkeslett: '12:53',
+        journalposter: [JOURNALPOST_ID],
+    });
+    await expect(page.getByText('Det oppsto en feil under lagring av endringer.', { exact: true })).toBeVisible();
+    await expect(page.getByText('Lagring feilet', { exact: true })).toBeVisible();
+    await expect(receivedDate).toHaveValue(FEIL_DATO);
+    await expect(receivedTime).toHaveValue('12:53');
+    expect(await readSavedApplication()).toEqual(pleiepengerSoknadSomKanSendesInn);
+
+    const recoveredSavePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.PSB_SOKNAD_UPDATE) &&
+            response.request().postDataJSON().soeknadId === SØKNAD_ID &&
+            response.request().postDataJSON().klokkeslett === GJENOPPRETTET_KLOKKESLETT,
+    );
+    await receivedTime.fill(GJENOPPRETTET_KLOKKESLETT);
+    await receivedDate.click();
+
+    const recoveredSave = await recoveredSavePromise;
+    expect(recoveredSave.status()).toBe(200);
+    expect(recoveredSave.fromServiceWorker()).toBe(true);
+    expect(recoveredSave.request().method()).toBe('PUT');
+    expect(new URL(recoveredSave.url()).pathname).toBe(ApiPath.PSB_SOKNAD_UPDATE);
+    const recoveredPayload = recoveredSave.request().postDataJSON();
+    expect(await recoveredSave.json()).toEqual(recoveredPayload);
+    await expect(receivedDate).toHaveValue(FEIL_DATO);
+    await expect(receivedTime).toHaveValue(GJENOPPRETTET_KLOKKESLETT);
+    await expect(page.getByText('Det oppsto en feil under lagring av endringer.', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Lagring feilet', { exact: true })).toHaveCount(0);
+    await expect(page.getByText('Lagret', { exact: true })).toBeVisible();
+    const recoveredDraft = await readSavedApplication();
+    expect(recoveredDraft).toEqual(recoveredPayload);
+    expect(submissionRequests).toEqual([]);
+    expect(recoveredPayload).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        soekerId: SØKER_ID,
+        mottattDato: FEIL_DATO_ISO,
+        klokkeslett: GJENOPPRETTET_KLOKKESLETT,
+        journalposter: [JOURNALPOST_ID],
+    });
 });
 
 test('viser valideringsfeil når frilanserens sluttdato er før startdato', async ({ page }) => {

@@ -19,6 +19,7 @@ import { JaNeiIkkeRelevant } from '../../../app/models/enums/JaNeiIkkeRelevant';
 import { IIdentState } from '../../../app/models/types/IdentState';
 import { IJournalposterPerIdentState } from '../../../app/models/types/Journalpost/JournalposterPerIdentState';
 import { IPSBSoknad } from '../../../app/models/types/PSBSoknad';
+import { PSBSoknadUt } from '../../../app/models/types/PSBSoknadUt';
 import { IPSBSoknadKvittering } from '../../../app/models/types/PSBSoknadKvittering';
 import { IPunchPSBFormState } from '../../../app/models/types/PunchPSBFormState';
 import { ISignaturState } from '../../../app/models/types/SignaturState';
@@ -210,16 +211,22 @@ const setupPunchForm = (
     );
     (useDispatch as unknown as Mock).mockReturnValue(vi.fn());
 
-    return render(
+    const renderForm = (state: IPunchPSBFormState) => (
         <IntlProvider locale="en" messages={{}}>
             <PunchFormComponent
                 {...punchFormComponentProps}
                 {...wrappedComponentProps}
                 {...punchFormStateProps}
                 {...punchFormDispatchProps}
+                punchFormState={state}
             />
-        </IntlProvider>,
+        </IntlProvider>
     );
+    const result = render(renderForm(punchFormState));
+    return {
+        ...result,
+        rerenderWithState: (state: IPunchPSBFormState) => result.rerender(renderForm(state)),
+    };
 };
 
 describe('PunchForm', () => {
@@ -263,7 +270,10 @@ describe('PunchForm', () => {
 
         await waitFor(() => {
             expect(updateSoknad).toHaveBeenCalledTimes(1);
-            expect(updateSoknad).toHaveBeenCalledWith(expect.objectContaining({ mottattDato: '2020-02-11' }));
+            expect(updateSoknad).toHaveBeenCalledWith(
+                expect.objectContaining({ mottattDato: '2020-02-11' }),
+                expect.any(Function),
+            );
         });
     });
 
@@ -279,6 +289,123 @@ describe('PunchForm', () => {
         await userEvent.tab();
 
         expect(dateInput.value).toEqual(newDato);
+    });
+
+    it('beholder nyere input og øvrige payloadfelter når et eldre lagringssvar kommer', async () => {
+        const updateSoknad = vi.fn();
+        const soknad = {
+            ...initialSoknad,
+            mottattDato: '2024-10-12',
+            klokkeslett: '12:53',
+            k9saksnummer: 'test-sak',
+            soeknadsperiode: [{ fom: '2021-11-08', tom: '2021-11-11' }],
+            harMedisinskeOpplysninger: true,
+        };
+        const { rerenderWithState } = setupPunchForm({ soknad }, { updateSoknad });
+        const dateInput = screen.getByTestId('mottattDato');
+        const timeInput = screen.getByLabelText('skjema.mottatt.klokkeslett');
+
+        await userEvent.clear(dateInput);
+        await userEvent.type(dateInput, '15.03.2020');
+        fireEvent.blur(dateInput);
+        fireEvent.change(timeInput, { target: { value: '13:15' } });
+        fireEvent.blur(timeInput);
+        fireEvent.change(timeInput, { target: { value: '14:30' } });
+
+        rerenderWithState({ isSoknadLoading: false, soknad: { ...soknad } });
+        expect(dateInput).toHaveValue('15.03.2020');
+        expect(timeInput).toHaveValue('14:30');
+        fireEvent.blur(timeInput);
+
+        expect(updateSoknad).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                soeknadId: soknad.soeknadId,
+                soekerId: soknad.soekerId,
+                barn: expect.objectContaining(soknad.barn),
+                journalposter: [journalpostid],
+                k9saksnummer: soknad.k9saksnummer,
+                soeknadsperiode: soknad.soeknadsperiode,
+                harMedisinskeOpplysninger: true,
+                mottattDato: '2020-03-15',
+                klokkeslett: '14:30',
+            }),
+            expect.any(Function),
+        );
+    });
+
+    it('sender ikke lokale frilanserfelter når mottatt klokkeslett lagres', async () => {
+        const updateSoknad = vi.fn<IPunchFormDispatchProps['updateSoknad']>();
+        setupPunchForm({ soknad: initialSoknad }, { updateSoknad });
+        const arbeidsforhold = screen.getByTestId('accordionItem-arbeidsforholdPanel');
+        await userEvent.click(within(arbeidsforhold).getByRole('button'));
+        const frilanser = within(arbeidsforhold).getByRole('checkbox', { name: 'frilanser' });
+        await userEvent.click(frilanser);
+
+        expect(frilanser).toBeChecked();
+        expect(screen.getByLabelText('skjema.frilanserdato')).toHaveValue('');
+        expect(updateSoknad).not.toHaveBeenCalled();
+
+        const timeInput = screen.getByLabelText('skjema.mottatt.klokkeslett');
+        fireEvent.change(timeInput, { target: { value: '13:15' } });
+        fireEvent.blur(timeInput);
+
+        expect(updateSoknad).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                klokkeslett: '13:15',
+                opptjeningAktivitet: expect.objectContaining({ frilanser: null }),
+                arbeidstid: expect.objectContaining({ frilanserArbeidstidInfo: null }),
+            }),
+            expect.any(Function),
+        );
+        expect(frilanser).toBeChecked();
+    });
+
+    it('kvitterer sendte verdier uten å miste nyere patcher eller gjenbruke eldre svar', async () => {
+        const updateSoknad = vi.fn<IPunchFormDispatchProps['updateSoknad']>();
+        setupPunchForm(
+            { soknad: { ...initialSoknad, mottattDato: '2024-10-12', klokkeslett: '12:53' } },
+            { updateSoknad },
+        );
+        const timeInput = screen.getByLabelText('skjema.mottatt.klokkeslett');
+        const dateInput = screen.getByTestId('mottattDato');
+        const acknowledgeSave = (index: number, time: string) => {
+            const [payload, onSaved] = updateSoknad.mock.calls[index];
+            expect(onSaved).toBeDefined();
+            onSaved?.(
+                new PSBSoknadUt({
+                    ...initialSoknad,
+                    journalposter: [journalpostid],
+                    ...payload,
+                    klokkeslett: time,
+                }),
+            );
+        };
+
+        fireEvent.change(timeInput, { target: { value: '13:15' } });
+        fireEvent.blur(timeInput);
+        fireEvent.change(timeInput, { target: { value: '14:30' } });
+        fireEvent.blur(timeInput);
+        acknowledgeSave(0, '13:15:00');
+
+        await userEvent.clear(dateInput);
+        await userEvent.type(dateInput, '15.03.2020');
+        fireEvent.blur(dateInput);
+        expect(updateSoknad.mock.lastCall?.[0]).toMatchObject({
+            mottattDato: '2020-03-15',
+            klokkeslett: '14:30',
+        });
+        acknowledgeSave(2, '14:30:00');
+        acknowledgeSave(1, '14:30');
+        expect(timeInput).toHaveValue('14:30');
+        expect(dateInput).toHaveValue('15.03.2020');
+
+        await userEvent.clear(dateInput);
+        await userEvent.type(dateInput, '16.03.2020');
+        fireEvent.blur(dateInput);
+        expect(updateSoknad.mock.lastCall?.[0]).toMatchObject({
+            mottattDato: '2020-03-16',
+            klokkeslett: '14:30:00',
+        });
     });
 
     it('Viser lagret mottakelsesdato når søknaden har mottattDato', async () => {
