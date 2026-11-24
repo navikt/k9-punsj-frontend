@@ -2,11 +2,13 @@ import { expect, test, type Page, type Response } from '@playwright/test';
 
 import fagsaker from '../../cypress/fixtures/fagsaker.json' with { type: 'json' };
 import journalpost from '../../cypress/fixtures/journalpost.json' with { type: 'json' };
+import papirJournalpost from '../../cypress/fixtures/jpOMPUT305.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpost.journalpostId;
 const SØKER_ID = journalpost.norskIdent;
 const NY_SØKER_ID = '12448325820';
+const ANNEN_SØKER_ID = '02918496664';
 const SAK_ID = '1DMUDFB';
 const SØKNAD_ID = '6bce0c72-e4b2-44d1-ae8c-9100bce2f4d0';
 const BEHANDLINGSÅR = '2024';
@@ -522,7 +524,13 @@ const selectFreeYear = async (page: Page, occupiedYears: number[]) => {
     return freeYear;
 };
 
-const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: string, applicantId = SØKER_ID) => {
+const cancelNoCaseDialog = async (
+    page: Page,
+    fortsett: boolean,
+    freeYear: string,
+    applicantId = SØKER_ID,
+    journalpostId = JOURNALPOST_ID,
+) => {
     await page.locator(`[data-test-id="${fortsett ? 'journalførOgFortsett' : 'journalførOgVent'}"]`).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByRole('heading', {
@@ -550,7 +558,7 @@ const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: strin
     await expect(cancel).toBeEnabled();
     await cancel.click();
     await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
-    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${JOURNALPOST_ID}`);
+    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${journalpostId}`);
     await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue(freeYear);
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expectFordelingActions(page, true);
@@ -850,6 +858,122 @@ test('nullstiller og bytter søker med reservert ny sak og avbryter begge dialog
         await expect(page.getByLabel('Søkers fødselsnummer eller D-nummer:')).toHaveValue(NY_SØKER_ID);
         expect(writes).toEqual([]);
     });
+});
+
+test('avbryter Fortsett og Vent for korrigering av inntektsmelding med to søkere og ny sak', async ({ page }) => {
+    const writes: string[] = [];
+    const readOnlyPosts = new Set([ApiPath.JOURNALPOST_HENT, ApiPath.SAKER_PERIODER]);
+    page.context().on('request', (request) => {
+        const path = new URL(request.url()).pathname;
+        if (
+            path.startsWith('/api/k9-punsj/') &&
+            !['GET', 'HEAD', 'OPTIONS'].includes(request.method()) &&
+            !(request.method() === 'POST' && readOnlyPosts.has(path))
+        ) {
+            writes.push(`${request.method()} ${path}`);
+        }
+    });
+
+    expect(papirJournalpost.norskIdent).not.toBe(ANNEN_SØKER_ID);
+    const journalpostPath = ApiPath.JOURNALPOST_GET.replace('{journalpostId}', papirJournalpost.journalpostId);
+    const journalpostResponsePromise = page.waitForResponse((response) =>
+        isApiResponse(response, 'GET', journalpostPath),
+    );
+    await page.goto(`/journalpost/${papirJournalpost.journalpostId}`);
+    const journalpostResponse = await journalpostResponsePromise;
+    expect(journalpostResponse.status()).toBe(201);
+    expect(journalpostResponse.fromServiceWorker()).toBe(true);
+    expect(await journalpostResponse.json()).toEqual(papirJournalpost);
+
+    const occupiedYear = await page.evaluate(() => new Date().getFullYear());
+    const cases = [{ ...ORDINÆR_SAK, behandlingsår: occupiedYear }];
+    await page.evaluate(({ casePath, personPath, primaryId, secondId, saker }) => {
+        const msw = window.msw;
+        if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+        msw.worker.use(
+            msw.http.get(casePath, ({ request }) => {
+                if (request.headers.get('X-Nav-NorskIdent') !== primaryId) {
+                    return msw.HttpResponse.json({ error: 'Uventet søker i fagsakoppslag' }, { status: 400 });
+                }
+                return msw.HttpResponse.json(saker, { status: 200 });
+            }),
+            msw.http.get(personPath, ({ request }) => {
+                if (request.headers.get('X-Nav-NorskIdent') !== secondId) {
+                    return msw.HttpResponse.json({ error: 'Uventet søker i personoppslag' }, { status: 400 });
+                }
+                return msw.HttpResponse.json({
+                    etternavn: 'KAKE',
+                    fornavn: 'TUNGSINDIG',
+                    fødselsdato: '1981-12-18',
+                    identitetsnummer: secondId,
+                    mellomnavn: null,
+                    sammensattNavn: 'TUNGSINDIG KAKE',
+                }, { status: 200 });
+            }),
+        );
+    }, {
+        casePath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
+        personPath: ApiPath.PERSON,
+        primaryId: papirJournalpost.norskIdent,
+        secondId: ANNEN_SØKER_ID,
+        saker: cases,
+    });
+
+    await page.getByRole('radio', { name: 'Omsorgspenger/omsorgsdager', exact: true }).check();
+    await page.getByRole('radio', { name: 'Korrigering av inntektsmelding omsorgspenger AG', exact: true }).check();
+    const caseLookup = page.waitForResponse((response) =>
+        isApiResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+        response.request().headers()['x-nav-norskident'] === papirJournalpost.norskIdent,
+    );
+    await page.getByRole('radio', { name: 'Ja', exact: true }).check();
+    const caseResponse = await caseLookup;
+    expect(caseResponse.status()).toBe(200);
+    expect(caseResponse.fromServiceWorker()).toBe(true);
+    expect(await caseResponse.json()).toEqual(cases);
+
+    const twoApplicants = page.getByLabel('Det finnes informasjon om to søkere i journalposten (gjelder kun papirsøknad)');
+    const secondApplicant = page.getByLabel('Fødselsnummer annen søker:');
+    const reserveCase = page.getByLabel('Reserver saksnummer til ny fagsak');
+    const panel = page.locator('.journalpostpanel');
+    await expect(panel).toContainText(papirJournalpost.norskIdent);
+    await twoApplicants.check();
+    await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toBeVisible();
+    await expectFordelingActions(page, false);
+
+    const personLookup = page.waitForResponse((response) =>
+        isApiResponse(response, 'GET', ApiPath.PERSON) &&
+        response.request().headers()['x-nav-norskident'] === ANNEN_SØKER_ID,
+    );
+    await secondApplicant.fill(ANNEN_SØKER_ID);
+    const personResponse = await personLookup;
+    expect(personResponse.status()).toBe(200);
+    expect(personResponse.fromServiceWorker()).toBe(true);
+    expect(await personResponse.json()).toMatchObject({ identitetsnummer: ANNEN_SØKER_ID });
+    await expect(page.locator('[data-test-id="toSøkereIngenAnnenSøker"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="toSøkereIngenBehandlingÅr"]')).toBeVisible();
+    await expectFordelingActions(page, false);
+
+    await reserveCase.check();
+    await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue('');
+    await expectFordelingActions(page, false);
+    const freeYear = await selectFreeYear(page, [occupiedYear]);
+    await expect(page.locator('[data-test-id="toSøkereIngenBehandlingÅr"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expectFordelingActions(page, true);
+
+    for (const fortsett of [true, false]) {
+        await cancelNoCaseDialog(page, fortsett, freeYear, papirJournalpost.norskIdent, papirJournalpost.journalpostId);
+        await expect(twoApplicants).toBeChecked();
+        await expect(page.locator('[data-test-id="infoOmRegisteringAvToSokere"]')).toBeVisible();
+        await expect(secondApplicant).toHaveValue(ANNEN_SØKER_ID);
+        await expect(reserveCase).toBeChecked();
+        await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+        await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+        await expect(panel).toContainText(papirJournalpost.norskIdent);
+        await expect(panel.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+        expect(writes).toEqual([]);
+    }
 });
 
 test('lagrer, validerer, bekrefter og sender korrigering av inntektsmelding', async ({ page }) => {

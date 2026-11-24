@@ -234,7 +234,17 @@ The applicant-switch journey replaces the following blocks from `cypress/e2e/for
 | 127: New applicant | An applicant-scoped MSW lookup returns a different case; the panel shows the new ID, reservation remains checked, case selection is disabled and both actions are enabled. The previously selected free year remains selected and is free for both applicants. |
 | 142 and 171: Fortsett and Vent without a case | Both dialogs verify the new applicant, case type, headings, warning, absent case number, period and LOS action, and enabled buttons with distinct action labels. Cancelling returns to Fordeling without API writes. |
 
-The four replaced checks and their preparation block were removed from Cypress; the initial, ordinary and reserved case-selection checks and the separate two-applicant describe remain. The lookup and cancellation checks exercise the frontend with page-local MSW, not backend persistence.
+The four replaced checks and their preparation block were removed from Cypress; the initial, ordinary and reserved case-selection checks remain. The lookup and cancellation checks exercise the frontend with page-local MSW, not backend persistence.
+
+The two-applicant journey replaces the separate describe in `cypress/e2e/fordeling/KorrigeringIM.cy.js` at commit `b98f337a`:
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 110: Open journalpost | Opens the same paper journalpost and selects the correction document through Fordeling. |
+| 117: Two applicants and new case | Confirms the primary applicant, checks information and missing-applicant warning, then verifies the second applicant lookup, missing-year warning and disabled actions. Reserving a new case and selecting a free year clears the warning and enables both actions with the no-case notice. Case years and person lookup are controlled by page-local MSW. |
+| 145 and 174: Fortsett and Vent modals | Each checks the primary applicant, case type, absent case number and period, warning, heading, confirm label, enabled buttons and absent LOS action. Cancellation retains both applicants and the selected year without classification, hold, copy, year or application writes. The Vent title mentions a child, but its assertions do not select one. |
+
+The replaced two-applicant describe was removed after Playwright passed. The test verifies frontend behavior, not backend persistence; neither action is executed.
 
 ## OMPUT existing applications
 
