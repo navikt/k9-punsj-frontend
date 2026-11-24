@@ -86,6 +86,12 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 - La til tre Playwright-reiser for klientsidefeil, backendens `SøknadFeil` og lagring, validering, bekreftelse og innsending med isolerte, tilstandsbaserte MSW-handlere. Dokumenterte dekningen før jeg fjernet den foreldede, kommenterte Cypress-spesifikasjonen; produksjonskode og delte fixturer er uendret.
 - Validering: `yarn test:pw e2e/tests/ompma-punch-form.spec.ts e2e/tests/ompma-existing-applications.spec.ts` bestod med 7 tester; `yarn lint` og `git diff --check` bestod.
 
+#### 2026-11-24 — Korrigering IM-skjema
+
+- La til tre isolerte Playwright-reiser for full innsending, manglende fravær og nytt forsøk etter backendfeil. Dokumenterte begge gamle scenarioene før jeg fjernet den erstattede Cypress-spesifikasjonen; delte fixtures og produksjonskode er uendret.
+- Kjent produksjonsfeil: første innsending kan sende dupliserte valideringsforespørsler via klikkhandleren og `FormChangeObserver`. Testen krever ikke dette; den bruker 400 under første forsøk og bytter scenarioets MSW-handler til 202 rett før retry.
+- Validering: `yarn test:pw e2e/tests/korrigering-im-punch-form.spec.ts` bestod med 3 tester; `yarn lint` bestod.
+
 #### 2026-11-20 — Eksisterende PSB-søknader
 
 - Gjenopprettet tre Playwright-reiser for eksisterende PSB-søknader: liste og videreføring, manuell oppretting fra en full liste og tilbake til Fordeling. Tom-listen er dokumentert mot eksisterende auto-opprettingsdekning. Fjernet bare den erstattede Cypress-spesifikasjonen; ni gjenstår.

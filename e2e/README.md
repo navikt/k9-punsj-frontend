@@ -139,6 +139,18 @@ The table's informational alert may still say that a new registration is unavail
 
 The signature choice **Ikke relevant** is exercised as in the old scenario, but it is not part of the OMPMA application DTO or K9 receipt.
 
+## Korrigering IM form saving and submission
+
+`korrigering-im-punch-form.spec.ts` replaces both commented scenarios in `cypress/e2e/korrigeringAvInntektsmelding/KorrigeringAvInntektsmeldingPunsj.cy.js`. The tests enter through the journalpost UI and install page-local MSW handlers before classification and application requests.
+
+| Legacy check | Playwright coverage |
+| --- | --- |
+| Submit a correction with received date/time, treatment year, employer and a withdrawal period | `lagrer, validerer, bekrefter og sender korrigering av inntektsmelding` verifies classification and draft IDs, year-based employer and employment lookups, exact save and validation bodies, expanded K9 absence days, review, one confirmed send and the completion receipt. |
+| Show the required-absence error without a withdrawal period or claim | `viser backendvalidering når fraværsperioder mangler uten å sende` verifies that the frontend sends validation with an empty period list, displays the backend's 400 `SøknadFeil`, and does not send. The form has no client-side absence guard. |
+| No legacy scenario: recover after a backend validation error | `beholder verdiene og kan prøve valideringen på nytt etter backendfeil` verifies retained inputs, no send on 400 and a successful retry to review. A known production issue can make the first click issue duplicate validation requests through the click handler and `FormChangeObserver` when `hasSubmitted` changes. The test does not assert request counts: scenario-local MSW returns 400 during the initial attempt and switches to 202 immediately before the explicit retry. |
+
+These are frontend contract tests with MSW; they do not exercise backend persistence. Save uses `PUT /omsorgspenger-soknad/oppdater` (200), validation uses `POST /omsorgspenger-soknad/valider` (202 K9 DTO or 400 `SøknadFeil`), and send uses `POST /omsorgspenger-soknad/send` (202 K9 DTO). The send mock builds its receipt from the last successful save, not the validation request.
+
 ## OMPUT existing applications
 
 `omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.
