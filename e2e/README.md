@@ -71,6 +71,21 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | Create from a nonempty list | `starter manuell PLS-registrering fra en liste med eksisterende søknader` checks the available button, exact create payload, 201 response ID, form GET and visible form. |
 | Go back | `går tilbake fra PLS-søknadslisten uten å opprette en søknad` checks the preceding registration-choice screen without fetching a form or creating, validating or submitting an application. |
 
+## PLS form saving and submission
+
+`pls-punch-form.spec.ts` covers the PLS slice of B49 through journalpost classification, registration choice and the real form. Scenario-local MSW handlers are installed before classification and application requests. The classified journalpost refresh is matched by a GET that starts after the classification POST response.
+
+| Journey | Playwright coverage |
+| --- | --- |
+| Successful submission | Checks the full initial 201 DTO and matching GET; edits the received date/time, signature choice, application period and medical-information flag; checks PUT and validation bodies, the default `PT7H30M` withdrawal in both K9 receipts, review, confirmation, one send with the actual identity body/header, the completion receipt and **Tilbake til LOS**. |
+| Backend validation rejection | Returns a 400 `SøknadFeil` with a synthetic error code for otherwise valid inputs, checks the safe summary fallback and retained values, and verifies there is no preview, confirmation or send. It does not assert whether field errors are present. |
+
+Both journeys observe writes from navigation onward and verify that no validation occurs before the explicit **Send inn** action, without fixing autosave counts. The local store has separate persistence paths for `PUT /pleiepenger-livets-sluttfase-soknad/oppdater` (200) and successful `POST /pleiepenger-livets-sluttfase-soknad/valider` (202); rejected validation does not persist. Read-only browser GET probes verify the stored DTO after PUT and validation, including the differing save/validation shapes. `POST /pleiepenger-livets-sluttfase-soknad/send` (202) loads that store and maps its receipt, rather than reusing the validation response or incoming send body.
+
+Existing frontend gap: validation currently sends the application ID in `X-Nav-NorskIdent`; send uses the applicant ID. The test does not require the incorrect validation header, but checks the send header. Signature is UI state, not part of the application DTO. Production code, shared fixtures, Cypress, OLP and OMPKS remain unchanged.
+
+Codex verified the create response and default withdrawal in the sibling backend source. The public backend service, DTO and mapper source also show `tilPlsvisning()` for create and GET, the default withdrawal, validation using stored journalposts and existing K9 periods, persistence on success, and send mapping the stored entity again. The initial DTO uses modeled values for the journalpost-derived date/time. The rejection code is synthetic, not a verified backend example. These frontend MSW tests do not verify backend runtime deserialization, validation, responses or persistence.
+
 ## OLP existing applications
 
 `olp-existing-applications.spec.ts` covers four isolated browser journeys. It observes requests from journalpost navigation and installs context-local MSW handlers after the initial journalpost response, before classification and OLP list/create requests. Existing applications use `olpSoknad.json`; the separate create response and following GET explicitly model the new-draft DTO defaults and fields assigned during first submission. Its child object has null identity and birth date, with no populated data copied from the existing-application fixture.

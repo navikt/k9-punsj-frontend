@@ -50,6 +50,14 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — PLS-skjema, validering og innsending
+
+- La til to isolerte Playwright-reiser gjennom journalpost og PLS-skjema: lagring, validering, oppsummering, bekreftet innsending og backendavslag med beholdte verdier uten innsending.
+- MSW returnerer hele opprettings-DTO-et og lagrer utkastet separat ved PUT og vellykket validering. GET-kontroller sjekker lagret DTO, og send bygger kvitteringen fra dette utkastet. Kvitteringene har standarduttak `PT7H30M` for søknadsperioden. Produksjonskode, delte fixtures, Cypress og andre ytelsesfamilier er uendret.
+- Frontendsporet viser søknads-ID i valideringens ident-header, men søkerident ved innsending. Testen krever ikke den feilaktige valideringsheaderen. Feilkoden i avslagsscenarioet er syntetisk.
+- Codex verifiserte opprettingssvaret og standarduttaket i backendkilden; offentlig service-, DTO- og mapperkode viser også lagring ved vellykket validering og mapping fra lagret utkast ved send. MSW-testene verifiserer ikke backendens runtime eller faktiske lagring.
+- Validering: `yarn test:pw e2e/tests/pls-punch-form.spec.ts e2e/tests/pls-existing-applications.spec.ts` bestod med 5 tester; `yarn lint` og whitespace-kontrollene bestod.
+
 #### 2026-11-20 — Eksisterende OLP-søknader
 
 - La til fire Playwright-reiser for OLP-listen, videreføring, manuell oppretting, retur og automatisk oppretting fra tom liste. Opprettingssvaret og etterfølgende GET bruker et eksplisitt nytt DTO med null identitet og fødselsdato for barnet; skjemaet åpnes fortsatt. Cypress, delte mocks og produksjonskode er uendret.
