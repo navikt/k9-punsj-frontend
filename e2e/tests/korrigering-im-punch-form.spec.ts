@@ -6,6 +6,7 @@ import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpost.journalpostId;
 const SØKER_ID = journalpost.norskIdent;
+const NY_SØKER_ID = '12448325820';
 const SAK_ID = '1DMUDFB';
 const SØKNAD_ID = '6bce0c72-e4b2-44d1-ae8c-9100bce2f4d0';
 const BEHANDLINGSÅR = '2024';
@@ -393,7 +394,7 @@ const installScenarioHandlers = async (
 const openCorrectionFordeling = async (
     page: Page,
     failFirstValidation = false,
-    lookup: 'standard' | 'occupied' | 'empty' = 'standard',
+    lookup: 'standard' | 'occupied' | 'empty' | 'switch' = 'standard',
 ) => {
     const events = observeNetwork(page);
     const journalpostResponsePromise = page.waitForResponse((response) =>
@@ -408,8 +409,9 @@ const openCorrectionFordeling = async (
     const currentYear = await page.evaluate(() => new Date().getFullYear());
     const saker = lookup === 'empty'
         ? []
-        : lookup === 'occupied'
-          ? FORDELING_SAKER.map((sak) => ({ ...sak, behandlingsår: currentYear }))
+        : lookup === 'occupied' || lookup === 'switch'
+          ? (lookup === 'switch' ? [ORDINÆR_SAK] : FORDELING_SAKER)
+                .map((sak) => ({ ...sak, behandlingsår: currentYear }))
           : FORDELING_SAKER;
     await installScenarioHandlers(page, failFirstValidation, saker);
     await page.getByRole('radio', { name: 'Omsorgspenger/omsorgsdager', exact: true }).check();
@@ -520,7 +522,7 @@ const selectFreeYear = async (page: Page, occupiedYears: number[]) => {
     return freeYear;
 };
 
-const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: string) => {
+const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: string, applicantId = SØKER_ID) => {
     await page.locator(`[data-test-id="${fortsett ? 'journalførOgFortsett' : 'journalførOgVent'}"]`).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByRole('heading', {
@@ -530,7 +532,7 @@ const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: strin
         exact: true,
     })).toBeVisible();
     const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
-    for (const [label, value] of [['Sakstype:', 'Omsorgspenger'], ['Søkers ID:', SØKER_ID]]) {
+    for (const [label, value] of [['Sakstype:', 'Omsorgspenger'], ['Søkers ID:', applicantId]]) {
         const field = info.getByText(label, { exact: true });
         await expect(field).toBeVisible();
         await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
@@ -780,6 +782,74 @@ test('viser årvalg og tillater ledig år når søker ikke har fagsaker', async 
     await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
     await expectFordelingActions(page, true);
     expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+});
+
+test('nullstiller og bytter søker med reservert ny sak og avbryter begge dialogene', async ({ page }) => {
+    const writes: string[] = [];
+    page.context().on('request', (request) => {
+        const path = new URL(request.url()).pathname;
+        if (path.startsWith('/api/k9-punsj/') && !['GET', 'HEAD'].includes(request.method())) {
+            writes.push(`${request.method()} ${path}`);
+        }
+    });
+
+    await openCorrectionFordeling(page, false, 'switch');
+    const occupiedYear = await page.evaluate(() => new Date().getFullYear());
+    const newApplicantCases = [{ ...RESERVERT_SAK, behandlingsår: occupiedYear }];
+    await page.evaluate(({ casePath, applicantId, cases }) => {
+        const msw = window.msw;
+        if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+        msw.worker.use(
+            msw.http.get(casePath, ({ request }) => {
+                if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
+                return msw.HttpResponse.json(cases, { status: 200 });
+            }),
+        );
+    }, { casePath: ApiPath.HENT_FAGSAK_PÅ_IDENT, applicantId: NY_SØKER_ID, cases: newApplicantCases });
+
+    await test.step('Velg opprinnelig sak og reserver ny sak med ledig år', async () => {
+        await page.getByLabel('Velg fagsak').selectOption(ORDINÆR_SAK.fagsakId);
+        await expectSelectedCase(page, { ...ORDINÆR_SAK, behandlingsår: occupiedYear });
+        await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+        await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+        await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    });
+    const freeYear = await selectFreeYear(page, [occupiedYear]);
+    await expectFordelingActions(page, true);
+
+    await test.step('Fjern bekreftelsen og legg inn ny søker', async () => {
+        await page.getByRole('radio', { name: 'Nei', exact: true }).check();
+        await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+        await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toHaveCount(0);
+        await expectFordelingActions(page, false);
+
+        const lookupPromise = page.waitForResponse((response) =>
+            isApiResponse(response, 'GET', ApiPath.HENT_FAGSAK_PÅ_IDENT) &&
+            response.request().headers()['x-nav-norskident'] === NY_SØKER_ID,
+        );
+        await page.getByLabel('Søkers fødselsnummer eller D-nummer:').fill(NY_SØKER_ID);
+        const response = await lookupPromise;
+        expect(response.status()).toBe(200);
+        expect(response.fromServiceWorker()).toBe(true);
+        expect(await response.json()).toEqual(newApplicantCases);
+
+        const panel = page.locator('.journalpostpanel');
+        const applicant = panel.getByText('Søkers ID:', { exact: true });
+        await expect(applicant.locator('..').getByText(NY_SØKER_ID, { exact: true })).toBeVisible();
+        await expect(panel).not.toContainText(ORDINÆR_SAK.fagsakId);
+        await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+        await expect(page.getByLabel('Reserver saksnummer til ny fagsak')).toBeChecked();
+        await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue(freeYear);
+        await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+        await expectFordelingActions(page, true);
+    });
+
+    await test.step('Avbryt Fortsett og Vent uten skriving', async () => {
+        await cancelNoCaseDialog(page, true, freeYear, NY_SØKER_ID);
+        await cancelNoCaseDialog(page, false, freeYear, NY_SØKER_ID);
+        await expect(page.getByLabel('Søkers fødselsnummer eller D-nummer:')).toHaveValue(NY_SØKER_ID);
+        expect(writes).toEqual([]);
+    });
 });
 
 test('lagrer, validerer, bekrefter og sender korrigering av inntektsmelding', async ({ page }) => {

@@ -68,6 +68,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — Korrigering IM søkerbytte
+
+- Migrerte nullstilling, søkerbytte og avbrudd av begge dialogene uten fagsak til Playwright. Beholdt øvrige Korrigering IM-scenarier i Cypress.
+
 #### 2026-11-24 — Korrigering IM ny sak og tomt saksoppslag
 
 - Migrerte reservasjon, årsvalg, avbrutte Fortsett- og Vent-dialoger og tomt saksoppslag til isolerte Playwright-tester. Fjernet erstattede Cypress-kontroller og beholdt oppsettet som søkerbyttet trenger.

@@ -223,7 +223,18 @@ The same spec also replaces these checks from `cypress/e2e/fordeling/Korrigering
 | No-case Fortsett and Vent modals, lines 142–200 | Both dialogs show the heading, case type, applicant and irreversible-information warning, omit case number, period and LOS action, and have enabled confirmation and cancel buttons with distinct confirmation labels. Cancelling returns to Fordeling with the selected year and sends no classification, year, hold or application writes. |
 | Empty case lookup, lines 284–313 | A page-local, applicant-scoped MSW response returns 200 and an empty list. The case selector is absent, the year selector is visible, and both actions change from disabled to enabled with the no-case notice after selecting a free year. |
 
-The replaced modal blocks and empty-lookup describe, including its MSW setup, were removed. Because the main describe uses `testIsolation: false`, it retains reservation and selection of a free year as setup before the applicant-reset block: the subsequent new-applicant checks depend on that year. The case-selection, applicant-switch and two-applicant scenarios remain in Cypress.
+The replaced modal blocks and empty-lookup describe, including its MSW setup, were removed.
+
+The applicant-switch journey replaces the following blocks from `cypress/e2e/fordeling/KorrigeringIM.cy.js` at commit `8b33117b`:
+
+| Cypress block | Playwright coverage |
+| --- | --- |
+| 109: Prepare a new case | Selects the original applicant's case, reserves a new case and chooses a free year from the UI. |
+| 119: Reset applicant | Choosing Nei removes the case and reservation controls and disables Fortsett and Vent. |
+| 127: New applicant | An applicant-scoped MSW lookup returns a different case; the panel shows the new ID, reservation remains checked, case selection is disabled and both actions are enabled. The previously selected free year remains selected and is free for both applicants. |
+| 142 and 171: Fortsett and Vent without a case | Both dialogs verify the new applicant, case type, headings, warning, absent case number, period and LOS action, and enabled buttons with distinct action labels. Cancelling returns to Fordeling without API writes. |
+
+The four replaced checks and their preparation block were removed from Cypress; the initial, ordinary and reserved case-selection checks and the separate two-applicant describe remain. The lookup and cancellation checks exercise the frontend with page-local MSW, not backend persistence.
 
 ## OMPUT existing applications
 
