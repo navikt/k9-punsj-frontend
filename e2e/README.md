@@ -121,6 +121,24 @@ The table's informational alert may still say that a new registration is unavail
 | Go back | Uses **Tilbake** and checks the registration choice and journalpost panel without a form GET or writes. |
 | Create from an empty list | Verifies the successful lookup response precedes one automatic create POST, checks the same request and full response DTO, then verifies the matching form GET and visible loaded values. |
 
+## OMPMA form saving and submission
+
+`ompma-punch-form.spec.ts` replaces the abandoned checks in `cypress/e2e/omsorgspenger-midlertidig-alene/omsorgspengerMidlertidigAlene.cy.js`. The former Cypress file was commented out. B46's `ompma-existing-applications.spec.ts` continues to cover the journalpost and application-list journeys.
+
+| Legacy Cypress check | Playwright coverage |
+| --- | --- |
+| Journalpost and applicant details | B46 checks the journalpost panel and selected case while listing, resuming, creating and returning. |
+| Empty-list information | No longer describes the UI: an empty lookup automatically creates a draft. B46 verifies the lookup, create request, returned DTO and form GET. |
+| Resume an existing application | B46 verifies compatible and incompatible applications, cancels and resumes by application ID, and checks loaded form values. |
+| Return to Fordeling | B46 uses **Tilbake** and verifies the registration choice without writes or a draft GET. |
+| Start a new registration | B46 checks manual creation from a nonempty list and automatic creation from an empty list. |
+| Required fields, other-parent situation, description and period | B47 checks the four current required-field errors and confirms client validation makes no `/valider` or `/send` request. |
+| Backend validation error and retained inputs | B47 returns the existing OMPMA `SøknadFeil` shape (`feil` / `generiskFeil`), checks visible feedback and retained values, and verifies there is no send. |
+| Medical-information checkbox and successful submission | B47 verifies the registered child, other parent, journalpost and medical-information flag in the saved DTO and K9 receipt; it checks saved and validated domain values agree, reviews the summary, confirms, sends once and checks the completion receipt and **Tilbake til LOS**. |
+| Do not offer a new registration for a listed current journalpost | B46 verifies **Start ny registrering** is absent when the current journalpost is listed. |
+
+The signature choice **Ikke relevant** is exercised as in the old scenario, but it is not part of the OMPMA application DTO or K9 receipt.
+
 ## OMPUT existing applications
 
 `omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.
