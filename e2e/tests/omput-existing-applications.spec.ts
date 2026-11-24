@@ -314,11 +314,16 @@ const reachRegistrationChoice = async (page: Page) => {
     const yearResponsePromise = page.waitForResponse((response) =>
         isApiResponse(response, 'POST', treatmentYearPath),
     );
-    const classificationResponsePromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'POST', ApiPath.JOURNALPOST_MOTTAK),
-    );
-    const refreshResponsePromise = page.waitForResponse((response) =>
-        isApiResponse(response, 'GET', journalpostPath),
+    let classificationResponded = false;
+    const classificationResponsePromise = page.waitForResponse((response) => {
+        if (!isApiResponse(response, 'POST', ApiPath.JOURNALPOST_MOTTAK)) return false;
+        classificationResponded = true;
+        return true;
+    });
+    const refreshRequestPromise = page.waitForRequest((request) =>
+        classificationResponded &&
+        request.method() === 'GET' &&
+        new URL(request.url()).pathname === journalpostPath,
     );
     await page.locator('[data-test-id="journalførOgFortsett"]').click();
 
@@ -345,7 +350,8 @@ const reachRegistrationChoice = async (page: Page) => {
     });
     expect(await classificationResponse.json()).toEqual({ saksnummer: CASE_ID });
 
-    const refreshResponse = await refreshResponsePromise;
+    const refreshResponse = await (await refreshRequestPromise).response();
+    if (!refreshResponse) throw new Error('Oppfrisking av journalposten mangler svar.');
     expect(refreshResponse.status()).toBe(200);
     expect(refreshResponse.fromServiceWorker()).toBe(true);
     expect(await refreshResponse.json()).toEqual(classifiedJournalpost);
