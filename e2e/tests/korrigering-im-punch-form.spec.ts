@@ -52,6 +52,8 @@ type NetworkEvent = RequestRecord & {
     status?: number;
 };
 
+type FordelingCase = Omit<(typeof fagsaker)[number], 'behandlingsår'> & { behandlingsår?: number | null };
+
 const initialApplication: Correction = {
     soeknadId: SØKNAD_ID,
     soekerId: SØKER_ID,
@@ -134,10 +136,11 @@ const observeNetwork = (page: Page) => {
     return records;
 };
 
-const installScenarioHandlers = async (page: Page, failFirstValidation: boolean) => {
-    const matchingCase = fagsaker.find((item) => item.fagsakId === SAK_ID);
-    if (!matchingCase) throw new Error(`Testfagsaken ${SAK_ID} mangler.`);
-
+const installScenarioHandlers = async (
+    page: Page,
+    failFirstValidation: boolean,
+    cases: FordelingCase[],
+) => {
     const classifiedJournalpost = {
         ...journalpost,
         erFerdigstilt: true,
@@ -366,7 +369,7 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
             sourceJournalpost: journalpost,
             classifiedJp: classifiedJournalpost,
             casePath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
-            saker: [matchingCase, RESERVERT_SAK],
+            saker: cases,
             behandlingsårPath: BEHANDLINGSÅR_PATH,
             mottakPath: ApiPath.JOURNALPOST_MOTTAK,
             organizationsPath: ApiPath.FINN_ARBEIDSGIVERE,
@@ -387,7 +390,11 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
     );
 };
 
-const openCorrectionFordeling = async (page: Page, failFirstValidation = false) => {
+const openCorrectionFordeling = async (
+    page: Page,
+    failFirstValidation = false,
+    lookup: 'standard' | 'occupied' | 'empty' = 'standard',
+) => {
     const events = observeNetwork(page);
     const journalpostResponsePromise = page.waitForResponse((response) =>
         isApiResponse(response, 'GET', JOURNALPOST_PATH),
@@ -398,7 +405,13 @@ const openCorrectionFordeling = async (page: Page, failFirstValidation = false) 
     expect(journalpostResponse.fromServiceWorker()).toBe(true);
     expect(await journalpostResponse.json()).toEqual(journalpost);
 
-    await installScenarioHandlers(page, failFirstValidation);
+    const currentYear = await page.evaluate(() => new Date().getFullYear());
+    const saker = lookup === 'empty'
+        ? []
+        : lookup === 'occupied'
+          ? FORDELING_SAKER.map((sak) => ({ ...sak, behandlingsår: currentYear }))
+          : FORDELING_SAKER;
+    await installScenarioHandlers(page, failFirstValidation, saker);
     await page.getByRole('radio', { name: 'Omsorgspenger/omsorgsdager', exact: true }).check();
     await page
         .getByRole('radio', { name: 'Korrigering av inntektsmelding omsorgspenger AG', exact: true })
@@ -413,12 +426,12 @@ const openCorrectionFordeling = async (page: Page, failFirstValidation = false) 
     const fagsakResponse = await fagsakResponsePromise;
     expect(fagsakResponse.status()).toBe(200);
     expect(fagsakResponse.fromServiceWorker()).toBe(true);
-    expect(await fagsakResponse.json()).toEqual(FORDELING_SAKER);
+    expect(await fagsakResponse.json()).toEqual(saker);
 
     return events;
 };
 
-const expectSelectedCase = async (page: Page, sak: (typeof fagsaker)[number]) => {
+const expectSelectedCase = async (page: Page, sak: FordelingCase) => {
     await expect(page.getByLabel('Velg fagsak')).toHaveValue(sak.fagsakId);
     const selectedInfo = page.locator('.fagsakSelectedInfo');
     await expect(selectedInfo.getByText(`Behandlings år: ${sak.behandlingsår}`, { exact: true })).toBeVisible();
@@ -445,7 +458,7 @@ const expectSelectedCase = async (page: Page, sak: (typeof fagsaker)[number]) =>
     await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled();
 };
 
-const openClassificationDialog = async (page: Page, sak: (typeof fagsaker)[number], fortsett: boolean) => {
+const openClassificationDialog = async (page: Page, sak: FordelingCase, fortsett: boolean) => {
     await page.locator(`[data-test-id="${fortsett ? 'journalførOgFortsett' : 'journalførOgVent'}"]`).click();
     const dialog = page.getByRole('dialog');
     await expect(
@@ -482,12 +495,63 @@ const openClassificationDialog = async (page: Page, sak: (typeof fagsaker)[numbe
     return dialog;
 };
 
-const cancelClassificationDialog = async (page: Page, sak: (typeof fagsaker)[number], fortsett: boolean) => {
+const cancelClassificationDialog = async (page: Page, sak: FordelingCase, fortsett: boolean) => {
     const dialog = await openClassificationDialog(page, sak, fortsett);
     await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
     await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
     await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${JOURNALPOST_ID}`);
     await expectSelectedCase(page, sak);
+};
+
+const expectFordelingActions = async (page: Page, enabled: boolean) => {
+    await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeEnabled({ enabled });
+    await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled({ enabled });
+};
+
+const selectFreeYear = async (page: Page, occupiedYears: number[]) => {
+    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+    const options = await yearSelect.locator('option').evaluateAll((items) =>
+        items.map((item) => item.getAttribute('value')).filter((value): value is string => !!value),
+    );
+    const freeYear = options.find((year) => !occupiedYears.includes(Number(year)));
+    if (!freeYear) throw new Error('Ingen valgbare ledige behandlingsår i testdataene.');
+    await yearSelect.selectOption(freeYear);
+    await expect(yearSelect).toHaveValue(freeYear);
+    return freeYear;
+};
+
+const cancelNoCaseDialog = async (page: Page, fortsett: boolean, freeYear: string) => {
+    await page.locator(`[data-test-id="${fortsett ? 'journalførOgFortsett' : 'journalførOgVent'}"]`).click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('heading', {
+        name: fortsett
+            ? 'Vil du lagre følgende informasjon til journalposten?'
+            : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+        exact: true,
+    })).toBeVisible();
+    const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+    for (const [label, value] of [['Sakstype:', 'Omsorgspenger'], ['Søkers ID:', SØKER_ID]]) {
+        const field = info.getByText(label, { exact: true });
+        await expect(field).toBeVisible();
+        await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
+    }
+    await expect(info.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(info.getByText('Periode:', { exact: true })).toHaveCount(0);
+    await expect(dialog.locator('[data-test-id="klassifiserModalAlertBlokk"]')
+        .getByText('Informasjonen kan ikke endres etter journalposten er journalført.', { exact: true })).toBeVisible();
+    await expect(dialog.locator('[data-test-id="klassifiserModalGåTilLos"]')).toHaveCount(0);
+    await expect(dialog.getByRole('button', {
+        name: fortsett ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
+        exact: true,
+    })).toBeEnabled();
+    const cancel = dialog.getByRole('button', { name: 'Avbryt', exact: true });
+    await expect(cancel).toBeEnabled();
+    await cancel.click();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${JOURNALPOST_ID}`);
+    await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue(freeYear);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expectFordelingActions(page, true);
 };
 
 const openCorrectionForm = async (page: Page, failFirstValidation = false) => {
@@ -670,6 +734,51 @@ test('viser reservert sak og avbryter Fortsett og Vent i fordeling av korrigerin
     await expectSelectedCase(page, RESERVERT_SAK);
     await cancelClassificationDialog(page, RESERVERT_SAK, true);
     await cancelClassificationDialog(page, RESERVERT_SAK, false);
+    expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+});
+
+test('reserverer ny sak, velger ledig år og avbryter Fortsett og Vent', async ({ page }) => {
+    const events = await openCorrectionFordeling(page, false, 'occupied');
+    const occupiedYear = await page.evaluate(() => new Date().getFullYear());
+    await page.getByLabel('Velg fagsak').selectOption(RESERVERT_SAK.fagsakId);
+    await expectSelectedCase(page, { ...RESERVERT_SAK, behandlingsår: occupiedYear });
+
+    await page.getByLabel('Reserver saksnummer til ny fagsak').check();
+    await expect(page.getByLabel('Velg fagsak')).toBeDisabled();
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue('');
+    await expect(page.locator('.fagsakSelectedInfo')).toHaveCount(0);
+    const panel = page.locator('.journalpostpanel');
+    await expect(panel.getByText('Saksnummer:', { exact: true })).toHaveCount(0);
+    await expect(panel).not.toContainText(RESERVERT_SAK.fagsakId);
+    const yearSelect = page.getByLabel('Hvilket år gjelder dokumentet?');
+    await expect(yearSelect).toBeVisible();
+    await expect(yearSelect).toHaveValue('');
+    await expectFordelingActions(page, false);
+
+    await yearSelect.selectOption(String(occupiedYear));
+    await expect(yearSelect).toHaveValue(String(occupiedYear));
+    await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toBeVisible();
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toHaveCount(0);
+    await expectFordelingActions(page, false);
+
+    const freeYear = await selectFreeYear(page, [occupiedYear]);
+    await expect(page.locator('[data-test-id="alertFagsakMedValgtBehandlingsår"]')).toHaveCount(0);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expectFordelingActions(page, true);
+    await cancelNoCaseDialog(page, true, freeYear);
+    await cancelNoCaseDialog(page, false, freeYear);
+    expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+});
+
+test('viser årvalg og tillater ledig år når søker ikke har fagsaker', async ({ page }) => {
+    const events = await openCorrectionFordeling(page, false, 'empty');
+    await expect(page.getByLabel('Velg fagsak')).toHaveCount(0);
+    await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toBeVisible();
+    await expect(page.getByLabel('Hvilket år gjelder dokumentet?')).toHaveValue('');
+    await expectFordelingActions(page, false);
+    await selectFreeYear(page, []);
+    await expect(page.locator('[data-test-id="jornalførUtenFagsak"]')).toBeVisible();
+    await expectFordelingActions(page, true);
     expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
 });
 

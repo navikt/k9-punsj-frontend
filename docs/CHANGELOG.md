@@ -68,6 +68,10 @@ Kort logg over merkbare repo-endringer og oppsettendringer.
 
 ### Migrering fra Cypress til Playwright og komponenttester
 
+#### 2026-11-24 — Korrigering IM ny sak og tomt saksoppslag
+
+- Migrerte reservasjon, årsvalg, avbrutte Fortsett- og Vent-dialoger og tomt saksoppslag til isolerte Playwright-tester. Fjernet erstattede Cypress-kontroller og beholdt oppsettet som søkerbyttet trenger.
+
 #### 2026-11-24 — PSB autosavefeil og gjenoppretting
 
 - La til en isolert Playwright-reise som verifiserer PUT 500, synlig feil, beholdte inputverdier og uendret utkast ved GET. Reisen avdekket en produksjonsfeil som ble rettet separat: neste PUT 200 og lagret utkast beholder nå både dato- og klokkeslettendringen.

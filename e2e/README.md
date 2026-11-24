@@ -213,7 +213,17 @@ The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/for
 
 All four modal variants check the heading, case type, applicant, case number, period, immutable-information warning, absent LOS action and enabled confirm/cancel buttons. Cancellation retains the selected case and available actions on Fordeling without classification, treatment-year, hold or application writes.
 
-The four Cypress blocks that open and cancel Fortsett and Vent for ordinary and reserved cases have been removed. Both case-selection blocks remain: the suite uses `testIsolation: false`, and the later new-case scenario depends on the selected reserved case. All other Cypress scenarios remain unchanged, including new-case year gating, applicant switching and two-applicant flows; their Playwright migration is deferred.
+The four Cypress blocks that open and cancel Fortsett and Vent for ordinary and reserved cases have been removed. Both case-selection blocks remain.
+
+The same spec also replaces these checks from `cypress/e2e/fordeling/KorrigeringIM.cy.js` at commit `aeb6a424`:
+
+| Cypress assertions | Playwright coverage |
+| --- | --- |
+| Reservation and year gating, lines 113–140 | Selecting a reserved case and reserving a new one clears its number and selection. Both actions are disabled before choosing a year and for an occupied year; a free year shows the no-case notice and enables both actions. MSW case years and selectable years are controlled without fixed calendar years. |
+| No-case Fortsett and Vent modals, lines 142–200 | Both dialogs show the heading, case type, applicant and irreversible-information warning, omit case number, period and LOS action, and have enabled confirmation and cancel buttons with distinct confirmation labels. Cancelling returns to Fordeling with the selected year and sends no classification, year, hold or application writes. |
+| Empty case lookup, lines 284–313 | A page-local, applicant-scoped MSW response returns 200 and an empty list. The case selector is absent, the year selector is visible, and both actions change from disabled to enabled with the no-case notice after selecting a free year. |
+
+The replaced modal blocks and empty-lookup describe, including its MSW setup, were removed. Because the main describe uses `testIsolation: false`, it retains reservation and selection of a free year as setup before the applicant-reset block: the subsequent new-applicant checks depend on that year. The case-selection, applicant-switch and two-applicant scenarios remain in Cypress.
 
 ## OMPUT existing applications
 
