@@ -1,11 +1,12 @@
 import { expect, test, type Page, type Response } from '@playwright/test';
 
 import journalpostFixture from '../../cypress/fixtures/jpPILS301.json' with { type: 'json' };
+import olpSoknad from '../../cypress/fixtures/olp/olpSoknad.json' with { type: 'json' };
 import { ApiPath } from '../../src/app/apiConfig';
 
 const JOURNALPOST_ID = journalpostFixture.journalpostId;
 const SØKER_ID = journalpostFixture.norskIdent;
-const BARN_ID = '01010100050';
+const BARN_ID = olpSoknad.barn.norskIdent;
 const SAK_ID = '1OLP930301';
 const SUCCESS_SØKNAD_ID = 'olp-form-success-930301';
 const REJECTION_SØKNAD_ID = 'olp-form-rejection-930301';
