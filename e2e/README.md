@@ -203,6 +203,16 @@ The signature choice **Ikke relevant** is exercised as in the old scenario, but 
 
 These are frontend contract tests with MSW; they do not exercise backend persistence. Save uses `PUT /omsorgspenger-soknad/oppdater` (200), validation uses `POST /omsorgspenger-soknad/valider` (202 K9 DTO or 400 `SøknadFeil`), and send uses `POST /omsorgspenger-soknad/send` (202 K9 DTO). The send mock builds its receipt from the last successful save, not the validation request.
 
+The same spec covers ordinary and reserved Fordeling cases from `cypress/e2e/fordeling/KorrigeringIM.cy.js`, lines 56–234, using the existing synthetic cases and page-local MSW:
+
+| Cypress assertions | Playwright coverage |
+| --- | --- |
+| Ordinary case selection, lines 56–84 | The existing form journey checks the selected case, treatment year, visible K9 link containing the case ID, journalpost panel and enabled Fortsett/Vent actions before continuing through classification and form opening. |
+| Ordinary Fortsett and Vent modals, lines 85–145 | The form journey checks and cancels Fortsett before reopening it to continue. The focused Vent test checks and cancels Vent without executing it. |
+| Reserved case selection and both modals, lines 146–234 | The reserved-case test checks the selected case, treatment year, absent K9 link, journalpost panel and enabled actions, then opens and cancels Fortsett and Vent. |
+
+All four modal variants check the heading, case type, applicant, case number, period, immutable-information warning, absent LOS action and enabled confirm/cancel buttons. Cancellation retains the selected case and available actions on Fordeling without classification, treatment-year, hold or application writes. Cypress remains unchanged. New-case year gating, applicant switching and two-applicant flows are deferred.
+
 ## OMPUT existing applications
 
 `omput-existing-applications.spec.ts` replaces the active journalpost-panel check and five commented checks in `cypress/e2e/omsorgspenger-utbetaling/eksisterendeSoeknader.cy.js`. The four Playwright journeys passed before the Cypress spec was removed; seven Cypress specifications remain, down from eight.

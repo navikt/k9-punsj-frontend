@@ -9,6 +9,9 @@ const SØKER_ID = journalpost.norskIdent;
 const SAK_ID = '1DMUDFB';
 const SØKNAD_ID = '6bce0c72-e4b2-44d1-ae8c-9100bce2f4d0';
 const BEHANDLINGSÅR = '2024';
+const ORDINÆR_SAK = fagsaker[1];
+const RESERVERT_SAK = fagsaker[9];
+const FORDELING_SAKER = [ORDINÆR_SAK, RESERVERT_SAK];
 const ARBEIDSGIVER_ID = '979312059';
 const ARBEIDSFORHOLD_ID = 'arbeidsforhold-2024-1';
 const MOTTATT_DATO = '2024-11-08';
@@ -84,6 +87,7 @@ const observeNetwork = (page: Page) => {
     const trackedPaths = new Set([
         BEHANDLINGSÅR_PATH,
         ApiPath.JOURNALPOST_MOTTAK,
+        ApiPath.JOURNALPOST_SETT_PAA_VENT.replace('{journalpostId}', JOURNALPOST_ID),
         ApiPath.HENT_FAGSAK_PÅ_IDENT,
         ApiPath.FINN_ARBEIDSGIVERE,
         ApiPath.OMS_FINN_ARBEIDSFORHOLD,
@@ -153,7 +157,7 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
             sourceJournalpost,
             classifiedJp,
             casePath,
-            fagsak,
+            saker,
             behandlingsårPath,
             mottakPath,
             organizationsPath,
@@ -241,7 +245,7 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
                 ),
                 msw.http.get(casePath, ({ request }) => {
                     if (request.headers.get('X-Nav-NorskIdent') !== applicantId) return;
-                    return msw.HttpResponse.json([fagsak], { status: 200 });
+                    return msw.HttpResponse.json(saker, { status: 200 });
                 }),
                 msw.http.post(behandlingsårPath, () =>
                     new msw.HttpResponse(null, { status: 200 }),
@@ -362,7 +366,7 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
             sourceJournalpost: journalpost,
             classifiedJp: classifiedJournalpost,
             casePath: ApiPath.HENT_FAGSAK_PÅ_IDENT,
-            fagsak: matchingCase,
+            saker: [matchingCase, RESERVERT_SAK],
             behandlingsårPath: BEHANDLINGSÅR_PATH,
             mottakPath: ApiPath.JOURNALPOST_MOTTAK,
             organizationsPath: ApiPath.FINN_ARBEIDSGIVERE,
@@ -383,7 +387,8 @@ const installScenarioHandlers = async (page: Page, failFirstValidation: boolean)
     );
 };
 
-const openCorrectionForm = async (page: Page, failFirstValidation = false) => {
+const openCorrectionFordeling = async (page: Page, failFirstValidation = false) => {
+    const events = observeNetwork(page);
     const journalpostResponsePromise = page.waitForResponse((response) =>
         isApiResponse(response, 'GET', JOURNALPOST_PATH),
     );
@@ -408,15 +413,90 @@ const openCorrectionForm = async (page: Page, failFirstValidation = false) => {
     const fagsakResponse = await fagsakResponsePromise;
     expect(fagsakResponse.status()).toBe(200);
     expect(fagsakResponse.fromServiceWorker()).toBe(true);
-    expect(await fagsakResponse.json()).toEqual([fagsaker.find((item) => item.fagsakId === SAK_ID)]);
+    expect(await fagsakResponse.json()).toEqual(FORDELING_SAKER);
 
-    await page.getByLabel('Velg fagsak').selectOption(SAK_ID);
-    await expect(page.getByLabel('Velg fagsak')).toHaveValue(SAK_ID);
+    return events;
+};
+
+const expectSelectedCase = async (page: Page, sak: (typeof fagsaker)[number]) => {
+    await expect(page.getByLabel('Velg fagsak')).toHaveValue(sak.fagsakId);
+    const selectedInfo = page.locator('.fagsakSelectedInfo');
+    await expect(selectedInfo.getByText(`Behandlings år: ${sak.behandlingsår}`, { exact: true })).toBeVisible();
+    const caseLink = selectedInfo.getByRole('link', { name: /^Se fagsak i K9/ });
+    if (sak.reservert) {
+        await expect(caseLink).toHaveCount(0);
+    } else {
+        await expect(caseLink).toBeVisible();
+        await expect(caseLink).toHaveAttribute('href', expect.stringContaining(sak.fagsakId));
+    }
+
+    const panel = page.locator('.journalpostpanel');
+    for (const [label, value] of [
+        ['Journalpostnummer:', JOURNALPOST_ID],
+        ['Søkers ID:', SØKER_ID],
+        ['Sakstype:', 'Omsorgspenger'],
+        ['Saksnummer:', sak.fagsakId],
+    ]) {
+        const field = panel.getByText(label, { exact: true });
+        await expect(field).toBeVisible();
+        await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
+    }
     await expect(page.locator('[data-test-id="journalførOgFortsett"]')).toBeEnabled();
-    await page.locator('[data-test-id="journalførOgFortsett"]').click();
+    await expect(page.locator('[data-test-id="journalførOgVent"]')).toBeEnabled();
+};
 
-    const classificationDialog = page.locator('[data-test-id="klassifiserModal"]');
-    await expect(classificationDialog.getByText('Saksnummer:', { exact: true })).toBeVisible();
+const openClassificationDialog = async (page: Page, sak: (typeof fagsaker)[number], fortsett: boolean) => {
+    await page.locator(`[data-test-id="${fortsett ? 'journalførOgFortsett' : 'journalførOgVent'}"]`).click();
+    const dialog = page.getByRole('dialog');
+    await expect(
+        dialog.getByRole('heading', {
+            name: fortsett
+                ? 'Vil du lagre følgende informasjon til journalposten?'
+                : 'Vil du lagre følgende informasjon til journalposten og sett på vent?',
+            exact: true,
+        }),
+    ).toBeVisible();
+    const info = dialog.locator('[data-test-id="klassifiseringInfo"]');
+    for (const [label, value] of [
+        ['Sakstype:', 'Omsorgspenger'],
+        ['Søkers ID:', SØKER_ID],
+        ['Saksnummer:', sak.fagsakId],
+        ['Periode:', '15.04.2024 - 15.04.2024'],
+    ]) {
+        const field = info.getByText(label, { exact: true });
+        await expect(field).toBeVisible();
+        await expect(field.locator('..').getByText(value, { exact: true })).toBeVisible();
+    }
+    await expect(
+        dialog.locator('[data-test-id="klassifiserModalAlertBlokk"]')
+            .getByText('Informasjonen kan ikke endres etter journalposten er journalført.', { exact: true }),
+    ).toBeVisible();
+    await expect(dialog.getByRole('button', { name: /^Gå til LOS/ })).toHaveCount(0);
+    await expect(
+        dialog.getByRole('button', {
+            name: fortsett ? 'Journalfør journalposten' : 'Journalfør og sett på vent',
+            exact: true,
+        }),
+    ).toBeEnabled();
+    await expect(dialog.getByRole('button', { name: 'Avbryt', exact: true })).toBeEnabled();
+    return dialog;
+};
+
+const cancelClassificationDialog = async (page: Page, sak: (typeof fagsaker)[number], fortsett: boolean) => {
+    const dialog = await openClassificationDialog(page, sak, fortsett);
+    await dialog.getByRole('button', { name: 'Avbryt', exact: true }).click();
+    await expect(page.locator('[data-test-id="klassifiserModal"]')).toHaveCount(0);
+    await expect(page).toHaveURL((url) => url.pathname === `/journalpost/${JOURNALPOST_ID}`);
+    await expectSelectedCase(page, sak);
+};
+
+const openCorrectionForm = async (page: Page, failFirstValidation = false) => {
+    const fordelingEvents = await openCorrectionFordeling(page, failFirstValidation);
+    await page.getByLabel('Velg fagsak').selectOption(SAK_ID);
+    await expectSelectedCase(page, ORDINÆR_SAK);
+    await cancelClassificationDialog(page, ORDINÆR_SAK, true);
+    expect(fordelingEvents.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+    const classificationDialog = await openClassificationDialog(page, ORDINÆR_SAK, true);
 
     let classificationResponded = false;
     const behandlingsårResponsePromise = page.waitForResponse((response) =>
@@ -575,6 +655,23 @@ const expectValidationRequest = (response: Response, expected: Correction) => {
     expect(response.request().headers()['x-nav-norskident']).toBe(SØKER_ID);
     expect(response.request().postDataJSON()).toEqual(expected);
 };
+
+test('avbryter Vent for ordinær sak i fordeling av korrigering av inntektsmelding', async ({ page }) => {
+    const events = await openCorrectionFordeling(page);
+    await page.getByLabel('Velg fagsak').selectOption(ORDINÆR_SAK.fagsakId);
+    await expectSelectedCase(page, ORDINÆR_SAK);
+    await cancelClassificationDialog(page, ORDINÆR_SAK, false);
+    expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+});
+
+test('viser reservert sak og avbryter Fortsett og Vent i fordeling av korrigering av inntektsmelding', async ({ page }) => {
+    const events = await openCorrectionFordeling(page);
+    await page.getByLabel('Velg fagsak').selectOption(RESERVERT_SAK.fagsakId);
+    await expectSelectedCase(page, RESERVERT_SAK);
+    await cancelClassificationDialog(page, RESERVERT_SAK, true);
+    await cancelClassificationDialog(page, RESERVERT_SAK, false);
+    expect(events.filter((event) => event.kind === 'request' && event.method !== 'GET')).toEqual([]);
+});
 
 test('lagrer, validerer, bekrefter og sender korrigering av inntektsmelding', async ({ page }) => {
     const { events } = await openCorrectionForm(page);
