@@ -2,6 +2,11 @@
 
 Kort logg over merkbare repo-endringer og oppsettendringer.
 
+### Migrerte bekreftet innsending og retry for OMPUT og PSB (2026-11-24)
+
+- Playwright-reisene dekker 500 etter bekreftelse, reell retry gjennom skjemaets gjennomgang, identisk innsending på nytt og kvittering etter 202.
+- Validering: `yarn test:pw e2e/tests/omput-punch-form.spec.ts e2e/tests/psb-punch-form.spec.ts`, `yarn lint`, `git diff --check` og pinned sif-code-scan.
+
 ### Beholdt ulagrede PSB-endringer ved autosave (2026-11-24)
 
 - Neste autosave beholder bare patcher som er sendt til lagring. Lokal aktivering av arbeidsforhold følger ikke med i urelaterte lagringer. PUT 200 kvitterer sendte verdier, mens nyere patcher beholdes og eldre kvitteringer ikke erstatter den siste lagrede basen.

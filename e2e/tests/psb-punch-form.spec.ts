@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Request } from '@playwright/test';
 
 import pleiepengerSoknadSomKanSendesInn from '../../cypress/fixtures/pleiepengerSoknadSomKanSendesInn.json' with {
     type: 'json',
@@ -20,6 +20,10 @@ const isResponse = (response: import('@playwright/test').Response, method: strin
     response.request().method() === method && new URL(response.url()).pathname === path;
 const isRequest = (request: import('@playwright/test').Request, method: string, path: string) =>
     request.method() === method && new URL(request.url()).pathname === path;
+
+const expectApplicantHeader = async (request: Request) => {
+    expect(await request.allHeaders()).toMatchObject({ 'x-nav-norskident': SØKER_ID });
+};
 
 test('lagrer og sender inn endret mottaksdato i PSB-skjemaet', async ({ page }) => {
     const applicationPath = ApiPath.PSB_SOKNAD_GET.replace('{id}', SØKNAD_ID);
@@ -131,6 +135,205 @@ test('lagrer og sender inn endret mottaksdato i PSB-skjemaet', async ({ page }) 
         mottattDato: `${REDIGERT_DATO_ISO}T10:53:00.000Z`,
     });
     expect(submitRequests).toEqual([{ norskIdent: SØKER_ID, soeknadId: SØKNAD_ID }]);
+
+    await expect(
+        page.getByText(
+            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
+        ),
+    ).toBeVisible();
+    await expect(page.getByText('Oppsummering', { exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: /tilbake til los/i })).toBeVisible();
+    await expect(page.getByTestId('mottakelsesdato')).toContainText(REDIGERT_DATO);
+});
+
+test('sender inn PSB-søknaden på nytt etter midlertidig sendefeil', async ({ page }) => {
+    const applicationPath = ApiPath.PSB_SOKNAD_GET.replace('{id}', SØKNAD_ID);
+    const submitRequests: Request[] = [];
+    page.on('request', (request) => {
+        if (isRequest(request, 'POST', ApiPath.PSB_SOKNAD_SUBMIT)) submitRequests.push(request);
+    });
+
+    const applicationResponsePromise = page.waitForResponse((response) =>
+        isResponse(response, 'GET', applicationPath),
+    );
+    await page.goto(`/journalpost/${JOURNALPOST_ID}/pleiepenger-sykt-barn/skjema/${SØKNAD_ID}`);
+    const applicationResponse = await applicationResponsePromise;
+    expect(applicationResponse.status()).toBe(200);
+    expect(applicationResponse.fromServiceWorker()).toBe(true);
+    expect(await applicationResponse.json()).toEqual(pleiepengerSoknadSomKanSendesInn);
+
+    await page.evaluate(
+        ({ updatePath, validationPath, submitPath, application, validation, applicationId, applicantId }) => {
+            const msw = window.msw;
+            if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
+
+            let savedApplication = application;
+            let submitAttempts = 0;
+            const receiptFor = (mottattDato: string) => ({
+                ...validation,
+                søknadId: applicationId,
+                mottattDato: `${mottattDato}T10:53:00.000Z`,
+            });
+
+            msw.worker.use(
+                msw.http.put(updatePath, async ({ request }) => {
+                    savedApplication = (await request.json()) as typeof application;
+                    return msw.HttpResponse.json(savedApplication, { status: 200 });
+                }),
+                msw.http.post(validationPath, async ({ request }) => {
+                    savedApplication = (await request.json()) as typeof application;
+                    return msw.HttpResponse.json(receiptFor(savedApplication.mottattDato), { status: 202 });
+                }),
+                msw.http.post(submitPath, async ({ request }) => {
+                    const submission = (await request.json()) as { norskIdent?: string; soeknadId?: string };
+                    if (
+                        request.headers.get('X-Nav-NorskIdent') !== applicantId ||
+                        submission.norskIdent !== applicantId ||
+                        submission.soeknadId !== applicationId
+                    ) {
+                        return msw.HttpResponse.json({ title: 'Not Found', status: 404 }, { status: 404 });
+                    }
+
+                    submitAttempts += 1;
+                    if (submitAttempts === 1) {
+                        return msw.HttpResponse.json(
+                            {
+                                type: '/problem-details/innsending-feil',
+                                title: 'Feil ved innsending av søknad',
+                                status: 500,
+                                detail: 'Midlertidig feil. Prøv igjen.',
+                            },
+                            { status: 500 },
+                        );
+                    }
+
+                    return msw.HttpResponse.json(receiptFor(savedApplication.mottattDato), { status: 202 });
+                }),
+            );
+        },
+        {
+            updatePath: ApiPath.PSB_SOKNAD_UPDATE,
+            validationPath: ApiPath.PSB_SOKNAD_VALIDER,
+            submitPath: ApiPath.PSB_SOKNAD_SUBMIT,
+            application: pleiepengerSoknadSomKanSendesInn,
+            validation: pleiepengerSoknadValidering,
+            applicationId: SØKNAD_ID,
+            applicantId: SØKER_ID,
+        },
+    );
+
+    const receivedDate = page.getByTestId('mottattDato');
+    await expect(receivedDate).toHaveValue(OPPRINNELIG_DATO);
+    const editedSavePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.PSB_SOKNAD_UPDATE) &&
+            response.request().postDataJSON().soeknadId === SØKNAD_ID &&
+            response.request().postDataJSON().mottattDato === REDIGERT_DATO_ISO,
+    );
+    await receivedDate.fill(REDIGERT_DATO);
+    await receivedDate.press('Tab');
+    const editedSave = await editedSavePromise;
+    expect(editedSave.status()).toBe(200);
+    expect(editedSave.fromServiceWorker()).toBe(true);
+    expect(editedSave.request().postDataJSON()).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        mottattDato: REDIGERT_DATO_ISO,
+    });
+
+    const firstValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.PSB_SOKNAD_VALIDER),
+    );
+    await page.getByRole('button', { name: /send inn/i }).click();
+    const firstValidation = await firstValidationPromise;
+    expect(firstValidation.status()).toBe(202);
+    expect(firstValidation.fromServiceWorker()).toBe(true);
+    expect(firstValidation.request().postDataJSON()).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        mottattDato: REDIGERT_DATO_ISO,
+    });
+    expect(await firstValidation.json()).toMatchObject({
+        søknadId: SØKNAD_ID,
+        mottattDato: `${REDIGERT_DATO_ISO}T10:53:00.000Z`,
+    });
+    await expect(page.getByTestId('validertSoknadModal')).toBeVisible();
+    await expect(page.getByTestId('mottattDato')).toHaveValue(REDIGERT_DATO);
+
+    await page.getByRole('button', { name: /videre/i }).click();
+    const firstConfirmation = page.getByTestId('erdusikkermodal');
+    await expect(firstConfirmation).toBeVisible();
+    expect(submitRequests).toHaveLength(0);
+
+    const failedSubmitPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.PSB_SOKNAD_SUBMIT),
+    );
+    await firstConfirmation.getByRole('button', { name: /send inn/i }).click();
+    const failedSubmit = await failedSubmitPromise;
+    expect(failedSubmit.status()).toBe(500);
+    expect(failedSubmit.fromServiceWorker()).toBe(true);
+    await expectApplicantHeader(failedSubmit.request());
+    expect(failedSubmit.request().postDataJSON()).toEqual({
+        norskIdent: SØKER_ID,
+        soeknadId: SØKNAD_ID,
+    });
+    expect(await failedSubmit.json()).toMatchObject({
+        type: '/problem-details/innsending-feil',
+        title: 'Feil ved innsending av søknad',
+        status: 500,
+        detail: 'Midlertidig feil. Prøv igjen.',
+    });
+    await expect(page.getByText('Midlertidig feil. Prøv igjen.', { exact: true })).toBeVisible();
+    await expect(receivedDate).toHaveValue(REDIGERT_DATO);
+    await expect(page.getByTestId('erdusikkermodal')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Oppsummering' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /tilbake til los/i })).toHaveCount(0);
+    await expect(
+        page.getByText(
+            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
+        ),
+    ).toHaveCount(0);
+
+    const retryValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.PSB_SOKNAD_VALIDER),
+    );
+    await page.getByRole('button', { name: /send inn/i }).click();
+    const retryValidation = await retryValidationPromise;
+    expect(retryValidation.status()).toBe(202);
+    expect(retryValidation.fromServiceWorker()).toBe(true);
+    expect(retryValidation.request().postDataJSON()).toMatchObject({
+        soeknadId: SØKNAD_ID,
+        mottattDato: REDIGERT_DATO_ISO,
+    });
+    await expect(page.getByTestId('validertSoknadModal')).toBeVisible();
+
+    await page.getByRole('button', { name: /videre/i }).click();
+    const retryConfirmation = page.getByTestId('erdusikkermodal');
+    await expect(retryConfirmation).toBeVisible();
+    expect(submitRequests).toHaveLength(1);
+
+    const recoveredSubmitPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.PSB_SOKNAD_SUBMIT),
+    );
+    await retryConfirmation.getByRole('button', { name: /send inn/i }).click();
+    const recoveredSubmit = await recoveredSubmitPromise;
+    expect(recoveredSubmit.status()).toBe(202);
+    expect(recoveredSubmit.fromServiceWorker()).toBe(true);
+    await expectApplicantHeader(recoveredSubmit.request());
+    expect(recoveredSubmit.request().postDataJSON()).toEqual(failedSubmit.request().postDataJSON());
+    expect(await recoveredSubmit.json()).toMatchObject({
+        søknadId: SØKNAD_ID,
+        mottattDato: `${REDIGERT_DATO_ISO}T10:53:00.000Z`,
+    });
+
+    expect(submitRequests).toHaveLength(2);
+    expect(submitRequests.map((request) => new URL(request.url()).pathname)).toEqual([
+        ApiPath.PSB_SOKNAD_SUBMIT,
+        ApiPath.PSB_SOKNAD_SUBMIT,
+    ]);
+    expect(submitRequests.map((request) => request.postDataJSON())).toEqual([
+        { norskIdent: SØKER_ID, soeknadId: SØKNAD_ID },
+        { norskIdent: SØKER_ID, soeknadId: SØKNAD_ID },
+    ]);
+    await Promise.all(submitRequests.map(expectApplicantHeader));
 
     await expect(
         page.getByText(

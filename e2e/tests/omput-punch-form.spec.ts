@@ -293,7 +293,12 @@ async function openApplication(page: Page, kind: FormKind) {
     return applicationResponse;
 }
 
-async function installMutationHandlers(page: Page, kind: FormKind, validationError = false) {
+async function installMutationHandlers(
+    page: Page,
+    kind: FormKind,
+    validationError = false,
+    failFirstSubmit = false,
+) {
     await page.evaluate(
         ({
             updatePath,
@@ -304,10 +309,12 @@ async function installMutationHandlers(page: Page, kind: FormKind, validationErr
             journalpostId,
             genericBackendError,
             shouldReturnValidationError,
+            shouldFailFirstSubmit,
         }) => {
             const msw = window.msw;
             if (!msw) throw new Error('MSW-testarbeideren er ikke tilgjengelig.');
 
+            let submitAttempts = 0;
             let savedApplication: OMPUTPayload = {
                 soeknadId: applicationId,
                 soekerId: applicantId,
@@ -385,9 +392,23 @@ async function installMutationHandlers(page: Page, kind: FormKind, validationErr
                     }
                     return msw.HttpResponse.json(receiptFor(application), { status: 202 });
                 }),
-                msw.http.post(submitPath, () =>
-                    msw.HttpResponse.json(receiptFor(savedApplication), { status: 202 }),
-                ),
+                msw.http.post(submitPath, async ({ request }) => {
+                    const submission = (await request.json()) as { norskIdent?: string; soeknadId?: string };
+                    if (
+                        request.headers.get('X-Nav-NorskIdent') !== applicantId ||
+                        submission.norskIdent !== applicantId ||
+                        submission.soeknadId !== applicationId
+                    ) {
+                        return msw.HttpResponse.json({ title: 'Not Found', status: 404 }, { status: 404 });
+                    }
+
+                    submitAttempts += 1;
+                    if (shouldFailFirstSubmit && submitAttempts === 1) {
+                        return msw.HttpResponse.text('Syntetisk feil ved innsending', { status: 500 });
+                    }
+
+                    return msw.HttpResponse.json(receiptFor(savedApplication), { status: 202 });
+                }),
             );
         },
         {
@@ -399,6 +420,7 @@ async function installMutationHandlers(page: Page, kind: FormKind, validationErr
             journalpostId: JOURNALPOST_ID,
             genericBackendError: GENERIC_BACKEND_ERROR,
             shouldReturnValidationError: validationError,
+            shouldFailFirstSubmit: failFirstSubmit,
         },
     );
 }
@@ -769,6 +791,178 @@ for (const scenario of scenarios) {
         await submitSuccessfulScenario(page, scenario);
     });
 }
+
+test('sender inn OMPUT-søknaden på nytt etter midlertidig sendefeil', async ({ page }) => {
+    const scenario: Scenario = { title: '', kind: 'ny', activity: 'arbeidstaker' };
+    const submitRequests: Request[] = [];
+    const submitRequestOrders: number[] = [];
+    const finalSaveResponseOrders: number[] = [];
+    let eventOrder = 0;
+    let confirming = false;
+
+    page.on('request', (request) => {
+        if (isRequest(request, 'POST', ApiPath.OMP_UT_SOKNAD_SUBMIT)) {
+            submitRequests.push(request);
+            submitRequestOrders.push(++eventOrder);
+        }
+    });
+    page.on('response', (response) => {
+        if (
+            confirming &&
+            isResponse(response, 'PUT', ApiPath.OMP_UT_SOKNAD_UPDATE) &&
+            isCompleteApplicationPayload(response.request().postDataJSON() as OMPUTPayload, scenario)
+        ) {
+            finalSaveResponseOrders.push(++eventOrder);
+            confirming = false;
+        }
+    });
+
+    await openApplication(page, scenario.kind);
+    await installMutationHandlers(page, scenario.kind, false, true);
+    const editedSavePromise = waitForEditedSave(page, scenario);
+    await fillValidForm(page, scenario);
+    const editedSave = await expectEditedSave(await editedSavePromise, scenario);
+    expect(editedSave.status()).toBe(200);
+
+    const previewValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_VALIDER),
+    );
+    await page.getByRole('button', { name: 'Send inn', exact: true }).click();
+    const previewValidation = await previewValidationPromise;
+    expect(previewValidation.status()).toBe(202);
+    await expectApplicantHeader(previewValidation.request());
+    expectPayload(previewValidation.request().postDataJSON() as OMPUTPayload, scenario);
+    const preview = page.getByTestId('validertOMPUTSoknadModal');
+    await expect(preview).toBeVisible();
+    await expectReceiptValues(preview, scenario);
+
+    await page.getByRole('button', { name: 'Videre', exact: true }).click();
+    const firstConfirmation = page.getByTestId('erdusikkermodal');
+    await expect(firstConfirmation).toBeVisible();
+    expect(submitRequests).toHaveLength(0);
+
+    const firstValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_VALIDER),
+    );
+    const firstSavePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.OMP_UT_SOKNAD_UPDATE) &&
+            isCompleteApplicationPayload(response.request().postDataJSON() as OMPUTPayload, scenario),
+    );
+    const failedSubmitPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_SUBMIT),
+    );
+    confirming = true;
+    await firstConfirmation.getByRole('button', { name: 'Send inn', exact: true }).click();
+
+    const [firstValidation, firstSave, failedSubmit] = await Promise.all([
+        firstValidationPromise,
+        firstSavePromise,
+        failedSubmitPromise,
+    ]);
+    expect(firstValidation.status()).toBe(202);
+    expect(firstSave.status()).toBe(200);
+    expect(failedSubmit.status()).toBe(500);
+    expect(failedSubmit.fromServiceWorker()).toBe(true);
+    expect(failedSubmit.request().method()).toBe('POST');
+    expect(new URL(failedSubmit.url()).pathname).toBe(ApiPath.OMP_UT_SOKNAD_SUBMIT);
+    await expectApplicantHeader(failedSubmit.request());
+    expect(failedSubmit.request().postDataJSON()).toEqual({
+        norskIdent: APPLICANT_ID,
+        soeknadId: NEW_APPLICATION_ID,
+    });
+    expect(await failedSubmit.text()).toBe('Syntetisk feil ved innsending');
+    await expect(
+        page.getByText('Det oppsto en feil under innsending av søknad. Prøv igjen senere.', { exact: true }),
+    ).toBeVisible();
+    await expect(page.getByLabel('Timer fravær per dag')).toHaveValue('7');
+    await expect(page.getByLabel('Normal arbeidstid per dag')).toHaveValue('7');
+    await expect(page.getByTestId('validertOMPUTSoknadModal')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Oppsummering' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Tilbake til LOS' })).toHaveCount(0);
+
+    const retryPreviewValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_VALIDER),
+    );
+    await page.getByRole('button', { name: 'Send inn', exact: true }).click();
+    const retryPreviewValidation = await retryPreviewValidationPromise;
+    expect(retryPreviewValidation.status()).toBe(202);
+    await expectApplicantHeader(retryPreviewValidation.request());
+    expectPayload(retryPreviewValidation.request().postDataJSON() as OMPUTPayload, scenario);
+    const retryPreview = page.getByTestId('validertOMPUTSoknadModal');
+    await expect(retryPreview).toBeVisible();
+    await expectReceiptValues(retryPreview, scenario);
+
+    await page.getByRole('button', { name: 'Videre', exact: true }).click();
+    const retryConfirmation = page.getByTestId('erdusikkermodal');
+    await expect(retryConfirmation).toBeVisible();
+    expect(submitRequests).toHaveLength(1);
+
+    const retryValidationPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_VALIDER),
+    );
+    const retrySavePromise = page.waitForResponse(
+        (response) =>
+            isResponse(response, 'PUT', ApiPath.OMP_UT_SOKNAD_UPDATE) &&
+            isCompleteApplicationPayload(response.request().postDataJSON() as OMPUTPayload, scenario),
+    );
+    const recoveredSubmitPromise = page.waitForResponse((response) =>
+        isResponse(response, 'POST', ApiPath.OMP_UT_SOKNAD_SUBMIT),
+    );
+    confirming = true;
+    await retryConfirmation.getByRole('button', { name: 'Send inn', exact: true }).click();
+
+    const [retryValidation, retrySave, recoveredSubmit] = await Promise.all([
+        retryValidationPromise,
+        retrySavePromise,
+        recoveredSubmitPromise,
+    ]);
+    expect(retryValidation.status()).toBe(202);
+    expect(retrySave.status()).toBe(200);
+    expect(recoveredSubmit.status()).toBe(202);
+    expect(recoveredSubmit.fromServiceWorker()).toBe(true);
+    await expectApplicantHeader(recoveredSubmit.request());
+    expect(recoveredSubmit.request().postDataJSON()).toEqual(failedSubmit.request().postDataJSON());
+    expect(await recoveredSubmit.json()).toMatchObject({
+        søknadId: NEW_APPLICATION_ID,
+        mottattDato: '2020-10-12T10:53:00.000Z',
+        søker: { norskIdentitetsnummer: APPLICANT_ID },
+        ytelse: {
+            type: 'OMP_UT',
+            fraværsperioder: [
+                {
+                    periode: `${ABSENCE_START}/${ABSENCE_END}`,
+                    arbeidsgiverOrgNr: EMPLOYER_ORG_NUMBER,
+                },
+            ],
+        },
+        journalposter: [{ journalpostId: JOURNALPOST_ID }],
+    });
+
+    expect(submitRequests).toHaveLength(2);
+    expect(submitRequests.map((request) => new URL(request.url()).pathname)).toEqual([
+        ApiPath.OMP_UT_SOKNAD_SUBMIT,
+        ApiPath.OMP_UT_SOKNAD_SUBMIT,
+    ]);
+    expect(submitRequests.map((request) => request.postDataJSON())).toEqual([
+        { norskIdent: APPLICANT_ID, soeknadId: NEW_APPLICATION_ID },
+        { norskIdent: APPLICANT_ID, soeknadId: NEW_APPLICATION_ID },
+    ]);
+    await Promise.all(submitRequests.map(expectApplicantHeader));
+    expect(finalSaveResponseOrders).toHaveLength(2);
+    expect(submitRequestOrders).toHaveLength(2);
+    expect(submitRequestOrders[0]).toBeGreaterThan(finalSaveResponseOrders[0]);
+    expect(submitRequestOrders[1]).toBeGreaterThan(finalSaveResponseOrders[1]);
+
+    await expect(
+        page.getByText(
+            'Opplysningene er sendt til behandling. Vær oppmerksom på at det kan ta litt tid før opplysningene er synlige på behandlingen i K9-sak.',
+        ),
+    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Oppsummering' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Tilbake til LOS' })).toBeVisible();
+    await expect(page.getByText(/Fraværsperiode:.*01\.10\.2022.*10\.10\.2022/)).toBeVisible();
+});
 
 test('stanser innsending ved klientvalidering uten forhåndsvisning', async ({ page }) => {
     const submitRequests: Request[] = [];

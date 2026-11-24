@@ -44,11 +44,14 @@ Playwright starts `yarn start:e2e`, waits for `/health/isReady`, and stops the s
 | Cypress block (migration baseline) | Playwright coverage |
 | --- | --- |
 | Earlier migration, line 8: Submit PSB application | The journey verifies the edited date in the validation request and final receipt, plus the applicant and application IDs in the submit request. |
+| B52: Confirmed-send failure and retry | `sender inn PSB-søknaden på nytt etter midlertidig sendefeil` verifies the first confirmed POST fails with 500, the actionable error and edited date remain, then the actual review/confirmation flow retries the identical request and shows the 202 receipt. |
 | Earlier migration, line 18: Save updated received date on blur | The journey verifies the prefilled date, the edited date in the successful save request, and that the field retains the edit. |
 | B51: Autosave failure and recovery | The journey verifies the visible PUT 500 error, retained inputs, and unchanged draft on GET. The next user-triggered PUT 200 and GET readback preserve both date and time edits; the error clears and the saved status appears without validation or submission. Only the intended save fails; other valid saves follow the normal mock path without a fixed PUT count. |
 | B40, line 6: Freelancer validation | `viser valideringsfeil når frilanserens sluttdato er før startdato` verifies the end date remains and is invalid. |
 | B41, line 18: Longer work-time periods | `registrerer arbeidstid for lengre perioder og konverterer tidsformat` verifies both periods and the 10 registered days. |
 | B42, line 65: Time-format conversion | The same work-time test verifies decimal conversion, conversion back to hours and minutes, and the saved values on each day in both periods. |
+
+The B52 journey installs its own MSW handlers after loading the approved draft fixture. It checks successful save and validation independently from the first confirmed-send 500, observes the modal closing and the user-facing backend problem detail, then retries through the form's normal validation and confirmation flow. Both navigation-observed send requests must have the same path, applicant header and exact body; the 202 response and completion receipt retain the edited date.
 
 PSB autosave retains only patches passed for persistence, not local-only form edits such as enabling an employment type. Successful PUT responses acknowledge sent values without clearing newer patches. Request IDs guard responses before Redux dispatch and again after JSON decoding; snapshot and save status update together. Draft/form resets, global reset, and load entry invalidate the previous save and clear its status/error. Tests using the production root reducer cover older 200 and 500 responses after a newer 200, after reset, and during/after loading another draft, plus delayed JSON decoding and clearing completed save status. Component tests retain coverage of local-only edits and acknowledgement reconciliation. These client-side guards do not establish backend write ordering.
 
@@ -237,10 +240,13 @@ OMPUT has no child column or child-based row gate. The list still emits the exis
 | Correction: freelancer success | `sender inn korrigering for frilanser` also checks that the care-day question is hidden and freelancer details remain editable. |
 | Correction: self-employed success | `sender inn korrigering for selvstendig næringsdrivende` also checks hidden care-day, blad B, business-name and accountant fields, and filtered business payload. |
 | B50: Autosave failure and recovery | `beholder OMPUT-endringer ved lagringsfeil og lagrer dem ved neste endring` verifies a matching PUT fails with 500 without changing the saved draft, then a later user edit triggers a successful PUT that retains both edits. |
+| B52: Confirmed-send failure and retry | `sender inn OMPUT-søknaden på nytt etter midlertidig sendefeil` verifies the first confirmed POST fails with 500 after the normal save/validation path, then a user-triggered retry completes with 202 and the meaningful receipt. |
 
 The two startup fixtures use matching route, application, save, validation and submit IDs. The correction fixture returns the existing September periods before the form is used. Each test has its own page and local mutation handlers; the test does not call the backend. The submission response is checked separately from the validation receipt retained by the OMPUT container.
 
 The B50 journey first saves the completed employee form, then returns 500 only for the selected application ID and edited absence value. It checks the visible save error, retained form values, no submission, and an MSW GET readback proving the failed edit was not persisted. A later user edit triggers the next matching PUT, which returns 200; the error clears, **Lagret** appears, and the saved DTO contains both edits. The MSW state is local to this test. The API throws on non-OK PUT responses and the existing mutation renders the save error; no production gap was found. This verifies frontend behavior, not backend persistence.
+
+The B52 journey uses a local MSW handler matched by applicant and application ID. It keeps the initial preview validation and each confirmation-triggered save/validation response separate from the send result. After the first confirmed send returns a backend-shaped 500, the real form error remains visible with entered values and no completion receipt. The user starts submission again through the form, reviews and confirms it, and the second 202 send uses the same path, applicant header and exact body. Its completion receipt contains the submitted absence period; no production code or shared mock is changed.
 
 ## Replaced Cypress lookup regressions
 
